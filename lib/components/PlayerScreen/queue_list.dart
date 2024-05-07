@@ -75,19 +75,20 @@ class QueueList extends StatefulWidget {
 
 void scrollToKey({
   required GlobalKey key,
-  Duration? duration,
+  required Duration duration,
 }) {
-  if (duration == null) {
-    Scrollable.ensureVisible(
-      key.currentContext!,
-    );
-  } else {
-    Scrollable.ensureVisible(
-      key.currentContext!,
-      duration: duration,
-      curve: Curves.easeInOutCubic,
-    );
+  var queueList =
+      key.currentContext?.findAncestorStateOfType<_QueueListState>();
+  if (queueList != null && queueList.widget.previousTracksHeaderKey == key) {
+    Future.delayed(Duration(milliseconds: duration.inMilliseconds + 10), () {
+      queueList._currentTrackScroll = queueList.widget.scrollController.offset;
+    });
   }
+  Scrollable.ensureVisible(
+    key.currentContext!,
+    duration: duration,
+    curve: Curves.easeInOutCubic,
+  );
 }
 
 class _QueueListState extends State<QueueList> {
@@ -119,16 +120,6 @@ class _QueueListState extends State<QueueList> {
           offset > screenSize.height * 0.5 || offset < -screenSize.height;
       widget.jumpToCurrentKey.currentState?.showJumpToTop = showJump;
     });
-  }
-
-  void scrollToCurrentTrack() {
-    if (widget.previousTracksHeaderKey.currentContext != null) {
-      Scrollable.ensureVisible(
-        widget.previousTracksHeaderKey.currentContext!,
-        // duration: const Duration(milliseconds: 200),
-        // curve: Curves.decelerate,
-      );
-    }
   }
 
   @override
@@ -426,7 +417,6 @@ class _PreviousTracksListState extends State<PreviousTracksList>
             onReorder: (oldIndex, newIndex) {
               int draggingOffset = -(_previousTracks!.length - oldIndex);
               int newPositionOffset = -(_previousTracks!.length - newIndex);
-              print("$draggingOffset -> $newPositionOffset");
               if (mounted) {
                 FeedbackHelper.feedback(FeedbackType.impact);
                 setState(() {
