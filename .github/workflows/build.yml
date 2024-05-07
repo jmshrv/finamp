@@ -11,10 +11,14 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v4
-    - uses: actions/setup-java@v2
+    - uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '17'
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
