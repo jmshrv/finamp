@@ -238,9 +238,10 @@ class _SongListTileState extends ConsumerState<SongListTile>
           onRemoveFromList: widget.onRemoveFromList,
           cachedImage: _thumbnail,
           themeProvider: _menuTheme,
-                confirmPlaylistRemoval: false,
-              );
-            }}
+          confirmPlaylistRemoval: false,
+        );
+      }
+    }
 
     return GestureDetector(
       onTapDown: (_) {

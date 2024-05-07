@@ -101,9 +101,12 @@ Future<bool> removeFromPlaylist(
       await showDialog(
         context: context,
         builder: (context) => ConfirmationPromptDialog(
-          promptText: "Remove '${item.name}' from playlist '${parent.name}'?",
-          confirmButtonText: "Sure.",
-          abortButtonText: "nope",
+          promptText: AppLocalizations.of(context)!.removeFromPlaylistPrompt(
+              item.name ?? "item", parent.name ?? "playlist"),
+          confirmButtonText:
+              AppLocalizations.of(context)!.removeFromPlaylistConfirm,
+          abortButtonText:
+              AppLocalizations.of(context)!.removeFromPlaylistCancel,
           onConfirmed: callback,
           onAborted: () {},
         ),

@@ -1452,5 +1452,19 @@
       }
     },
     "description": "Displays duration of unplayed tracks"
+  },
+  "removeFromPlaylistConfirm": "Remove",
+  "removeFromPlaylistCancel": "Cancel",
+  "removeFromPlaylistPrompt": "Remove '{itemName}' from playlist '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
   }
 }

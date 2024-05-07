@@ -323,13 +323,32 @@ class QueueService {
           ((info.currentTrack == null) ? [] : [info.currentTrack!]) +
           info.nextUp +
           info.queue;
-      List<String> uniqueIds = allIds.toSet().toList();
       Map<String, jellyfin_models.BaseItemDto> idMap = {};
+      Set<String> playlistIds = {};
+
+      // If queue source is playlist, fetch via parent to retrieve metadata needed
+      // for removal from playlist via queueItem
+      if (!FinampSettingsHelper.finampSettings.isOffline &&
+          info.source?.type == QueueItemSourceType.playlist &&
+          info.source?.item != null) {
+        var itemList = await _jellyfinApiHelper.getItems(
+              parentItem: info.source!.item!,
+              sortBy: "ParentIndexNumber,IndexNumber,SortName",
+              includeItemTypes: "Audio",
+            ) ??
+            [];
+        for (var d2 in itemList) {
+          idMap[d2.id] = d2;
+        }
+        playlistIds = itemList.map((e) => e.id).toSet();
+      }
+
+      List<String> uniqueIds = allIds.toSet().difference(playlistIds).toList();
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in uniqueIds) {
           jellyfin_models.BaseItemDto? item =
-              (await _isarDownloader.getSongDownload(id: id))?.baseItem;
+              _isarDownloader.getSongDownload(id: id)?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }

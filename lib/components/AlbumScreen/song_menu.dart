@@ -135,7 +135,6 @@ class SongMenu extends ConsumerStatefulWidget {
     required this.canGoToGenre,
     required this.onRemoveFromList,
     required this.confirmPlaylistRemoval,
-    this.playerScreenTheme,
     this.parentItem,
     this.cachedImage,
     this.themeProvider,
