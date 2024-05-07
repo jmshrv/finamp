@@ -21,26 +21,26 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
     # - run: flutter test
-    - run: flutter build apk --release --no-pub
-    - run: flutter build appbundle --release --no-pub
+    - run: flutter build apk --debug --no-pub
+    - uses: actions/upload-artifact@v4
+      with:
+        name: finamp-android-debug.apk
+        path: build/app/outputs/flutter-apk/app-debug.apk
+        compression-level: 0 # no compression
+    - run: flutter build appbundle --debug --no-pub
     - run: flutter --suppress-analytics build linux --release --no-pub
     - run: |
-        tar -czf finamp-linux-bundle.tar.gz --directory build/linux/x64/release/ bundle \
-        && sha256sum finamp-linux-bundle.tar.gz > finamp-linux-bundle.tar.gz.sha256sum
+        tar -czf finamp-linux-release-bundle.tar.gz --directory build/linux/x64/release/ bundle \
+        && sha256sum finamp-linux-release-bundle.tar.gz > finamp-linux-release-bundle.tar.gz.sha256sum
     - uses: actions/upload-artifact@v4
       with:
-        name: finamp-android.apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        name: finamp-linux-release-bundle.tar.gz
+        path: finamp-linux-release-bundle.tar.gz
         compression-level: 0 # no compression
     - uses: actions/upload-artifact@v4
       with:
-        name: finamp-linux-bundle.tar.gz
-        path: finamp-linux-bundle.tar.gz
-        compression-level: 0 # no compression
-    - uses: actions/upload-artifact@v4
-      with:
-        name: finamp-linux-bundle.tar.gz.sha256sum
-        path: finamp-linux-bundle.tar.gz.sha256sum
+        name: finamp-linux-release-bundle.tar.gz.sha256sum
+        path: finamp-linux-release-bundle.tar.gz.sha256sum
         compression-level: 0 # no compression
   build-windows:
     name: Build for Windows
@@ -60,13 +60,8 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
     # - run: flutter test
-    - run: dart run msix:create
+    - run: dart run msix:create --install-certificate false
     #TODO would be nice to have an old-school installer here that can take the .exe + libraries and install them to the device + create a shortcut
-    - uses: actions/upload-artifact@v4
-      with:
-        name: finamp-android.apk
-        path: build/app/outputs/flutter-apk/app-release.apk
-        compression-level: 0 # no compression
     - uses: actions/upload-artifact@v4
       with:
         name: finamp-windows.msix
@@ -85,4 +80,4 @@ jobs:
     - run: flutter pub get
     # - run: flutter test
     - run: flutter build ios --release --no-pub --no-codesign
-    - run: flutter build macos --release --no-pub --no-codesign
+    - run: flutter build macos --release --no-pub
