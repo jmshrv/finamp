@@ -25,8 +25,8 @@ jobs:
     - run: flutter build appbundle --release --no-pub
     - run: flutter --suppress-analytics build linux --release --no-pub
     - run: |
-      tar -czf finamp-linux-bundle.tar.gz --directory build/linux/x64/release/ bundle \
-      && sha256sum finamp-linux-bundle.tar.gz > finamp-linux-bundle.tar.gz.sha256sum
+        tar -czf finamp-linux-bundle.tar.gz --directory build/linux/x64/release/ bundle \
+        && sha256sum finamp-linux-bundle.tar.gz > finamp-linux-bundle.tar.gz.sha256sum
     - uses: actions/upload-artifact@v4
       with:
         name: finamp-android.apk
