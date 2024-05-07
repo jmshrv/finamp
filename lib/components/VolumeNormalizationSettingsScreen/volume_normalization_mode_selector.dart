@@ -32,14 +32,17 @@ class VolumeNormalizationModeSelector extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
-        VolumeNormalizationMode? volumeNormalizationMode = box.get("FinampSettings")?.volumeNormalizationMode;
+        VolumeNormalizationMode? volumeNormalizationMode =
+            box.get("FinampSettings")?.volumeNormalizationMode;
         return ListTile(
-          title: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorTitle),
+          title: Text(AppLocalizations.of(context)!
+              .volumeNormalizationModeSelectorTitle),
           subtitle: RichText(
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: AppLocalizations.of(context)!.volumeNormalizationModeSelectorSubtitle,
+                  text: AppLocalizations.of(context)!
+                      .volumeNormalizationModeSelectorSubtitle,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const TextSpan(text: "\n"),
@@ -52,20 +55,25 @@ class VolumeNormalizationModeSelector extends StatelessWidget {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      showGeneralDialog(context: context, pageBuilder: (context, anim1, anim2) {
-                        return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorTitle),
-                          content: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorDescription),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(AppLocalizations.of(context)!.close),
-                            ),
-                          ],
-                        );
-                      });
+                      showGeneralDialog(
+                          context: context,
+                          pageBuilder: (context, anim1, anim2) {
+                            return AlertDialog(
+                              title: Text(AppLocalizations.of(context)!
+                                  .volumeNormalizationModeSelectorTitle),
+                              content: Text(AppLocalizations.of(context)!
+                                  .volumeNormalizationModeSelectorDescription),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child:
+                                      Text(AppLocalizations.of(context)!.close),
+                                ),
+                              ],
+                            );
+                          });
                     },
                 ),
               ],
@@ -81,10 +89,9 @@ class VolumeNormalizationModeSelector extends StatelessWidget {
                 .toList(),
             onChanged: (value) {
               if (value != null) {
-                FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.volumeNormalizationMode = value;
-                  box.put("FinampSettings", finampSettingsTemp);
+                FinampSettings finampSettingsTemp = box.get("FinampSettings")!;
+                finampSettingsTemp.volumeNormalizationMode = value;
+                box.put("FinampSettings", finampSettingsTemp);
               }
             },
           ),

@@ -33,7 +33,8 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
             Expanded(
               child: TextFormField(
                 controller: _textController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.minutes),
@@ -51,7 +52,8 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
                   final valueDouble = double.parse(value!);
                   final durationInSeconds = (valueDouble * 60).round();
 
-                  _audioHandler.setSleepTimer(Duration(seconds: durationInSeconds));
+                  _audioHandler
+                      .setSleepTimer(Duration(seconds: durationInSeconds));
                   FinampSettingsHelper.setSleepTimerSeconds(durationInSeconds);
                 },
               ),

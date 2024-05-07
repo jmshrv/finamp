@@ -1,4 +1,11 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:finamp/components/PlayerScreen/player_split_screen_scaffold.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
@@ -13,7 +20,7 @@ typedef ImageProviderCallback = void Function(ImageProvider? imageProvider);
 /// through [AlbumImageProvider.init].
 class AlbumImage extends ConsumerWidget {
   const AlbumImage({
-    Key? key,
+    super.key,
     this.item,
     this.imageListenable,
     this.imageProviderCallback,
@@ -21,12 +28,12 @@ class AlbumImage extends ConsumerWidget {
     this.placeholderBuilder,
     this.disabled = false,
     this.autoScale = true,
-  }) : super(key: key);
+  });
 
   /// The item to get an image for.
   final BaseItemDto? item;
 
-  final ProviderListenable<AsyncValue<ImageProvider?>>? imageListenable;
+  final ProviderListenable<ImageProvider?>? imageListenable;
 
   /// A callback to get the image provider once it has been fetched.
   final ImageProviderCallback? imageProviderCallback;
@@ -48,10 +55,6 @@ class AlbumImage extends ConsumerWidget {
 
     assert(item == null || imageListenable == null);
     if ((item == null || item!.imageId == null) && imageListenable == null) {
-      if (imageProviderCallback != null) {
-        imageProviderCallback!(null);
-      }
-
       return ClipRRect(
         borderRadius: borderRadius,
         child: const AspectRatio(
@@ -79,6 +82,17 @@ class AlbumImage extends ConsumerWidget {
                 (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
             physicalHeight =
                 (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+            // If using grid music screen view without fixed size tiles, and if the view is resizable due
+            // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
+            if ((!(Platform.isIOS || Platform.isAndroid) ||
+                    usingPlayerSplitScreen) &&
+                !FinampSettingsHelper.finampSettings.useFixedSizeGridTiles &&
+                FinampSettingsHelper.finampSettings.contentViewType ==
+                    ContentViewType.grid) {
+              physicalWidth = exp((log(physicalWidth) * 3).ceil() / 3).toInt();
+              physicalHeight =
+                  exp((log(physicalHeight) * 3).ceil() / 3).toInt();
+            }
           }
 
           var image = BareAlbumImage(
@@ -89,8 +103,14 @@ class AlbumImage extends ConsumerWidget {
                   maxHeight: physicalHeight,
                 )),
             imageProviderCallback: imageProviderCallback,
-            placeholderBuilder:
-                placeholderBuilder ?? BareAlbumImage.defaultPlaceholderBuilder,
+            placeholderBuilder: placeholderBuilder ??
+                (item?.blurHash != null
+                    ? (_) => Image(
+                        fit: BoxFit.cover,
+                        image: BlurHashImage(
+                          item!.blurHash!,
+                        ))
+                    : BareAlbumImage.defaultPlaceholderBuilder),
           );
           return disabled
               ? Opacity(
@@ -107,16 +127,16 @@ class AlbumImage extends ConsumerWidget {
 }
 
 /// An [AlbumImage] without any of the padding or media size detection.
-class BareAlbumImage extends ConsumerStatefulWidget {
+class BareAlbumImage extends ConsumerWidget {
   const BareAlbumImage({
-    Key? key,
+    super.key,
     required this.imageListenable,
     this.imageProviderCallback,
     this.errorBuilder = defaultErrorBuilder,
     this.placeholderBuilder = defaultPlaceholderBuilder,
-  }) : super(key: key);
+  });
 
-  final ProviderListenable<AsyncValue<ImageProvider?>> imageListenable;
+  final ProviderListenable<ImageProvider?> imageListenable;
   final WidgetBuilder placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
@@ -130,45 +150,32 @@ class BareAlbumImage extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<BareAlbumImage> createState() => _BareAlbumImageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    ImageProvider? image = ref.watch(imageListenable);
 
-class _BareAlbumImageState extends ConsumerState<BareAlbumImage> {
-  @override
-  Widget build(BuildContext context) {
-    AsyncValue<ImageProvider?> image = ref.watch(widget.imageListenable);
-
-    if (image.hasValue && image.value != null) {
-      if (widget.imageProviderCallback != null) {
-        widget.imageProviderCallback!(image.value);
+    if (image != null) {
+      if (imageProviderCallback != null) {
+        imageProviderCallback!(image);
       }
-
-      return OctoImage(
-        image: ScrollAwareImageProvider(
-            context: DisposableBuildContext(this), imageProvider: image.value!),
-        fit: BoxFit.contain,
-        placeholderBuilder: widget.placeholderBuilder,
-        errorBuilder: widget.errorBuilder,
-      );
+      return LayoutBuilder(builder: (context, constraints) {
+        return OctoImage(
+          image: image,
+          filterQuality: FilterQuality.medium,
+          fadeOutDuration: const Duration(milliseconds: 0),
+          fadeInDuration: const Duration(milliseconds: 0),
+          fit: BoxFit.contain,
+          placeholderBuilder: placeholderBuilder,
+          errorBuilder: errorBuilder,
+        );
+      });
     }
 
-    if (image.hasError) {
-      if (widget.imageProviderCallback != null) {
-        widget.imageProviderCallback!(null);
-      }
-      return const _AlbumImageErrorPlaceholder();
-    }
-
-    if (widget.imageProviderCallback != null) {
-      widget.imageProviderCallback!(null);
-    }
-
-    return Builder(builder: widget.placeholderBuilder);
+    return Builder(builder: placeholderBuilder);
   }
 }
 
 class _AlbumImageErrorPlaceholder extends StatelessWidget {
-  const _AlbumImageErrorPlaceholder({Key? key}) : super(key: key);
+  const _AlbumImageErrorPlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {

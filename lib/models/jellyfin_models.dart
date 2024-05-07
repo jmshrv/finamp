@@ -2770,6 +2770,7 @@ class MediaStream {
   explicitToJson: true,
   anyMap: true,
 )
+@HiveType(typeId: 47)
 class MediaUrl {
   MediaUrl({this.url, this.name});
 
@@ -2787,6 +2788,7 @@ class MediaUrl {
   explicitToJson: true,
   anyMap: true,
 )
+@HiveType(typeId: 48)
 class BaseItemPerson {
   BaseItemPerson({
     this.name,
@@ -3778,4 +3780,122 @@ class ClientDiscoveryResponse {
 
   factory ClientDiscoveryResponse.fromJson(Map<String, dynamic> json) =>
       _$ClientDiscoveryResponseFromJson(json);
+}
+
+/// LyricMetadata model.
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 44)
+class LyricMetadata {
+  LyricMetadata({
+    this.artist,
+    this.album,
+    this.title,
+    this.author,
+    this.length,
+    this.by,
+    this.offset,
+    this.creator,
+    this.version,
+    this.isSynced,
+  });
+
+  /// Gets or sets the song artist.
+  @HiveField(0)
+  String? artist;
+
+  /// Gets or sets the album this song is on.
+  @HiveField(1)
+  String? album;
+
+  /// Gets or sets the title of the song.
+  @HiveField(2)
+  String? title;
+
+  /// Gets or sets the author of the lyric data.
+  @HiveField(3)
+  String? author;
+
+  /// Gets or sets the length of the song in ticks.
+  @HiveField(4)
+  int? length;
+
+  /// Gets or sets who the LRC file was created by.
+  @HiveField(5)
+  String? by;
+
+  /// Gets or sets the lyric offset compared to audio in ticks.
+  @HiveField(6)
+  int? offset;
+
+  /// Gets or sets the software used to create the LRC file.
+  @HiveField(7)
+  String? creator;
+
+  /// Gets or sets the version of the creator used.
+  @HiveField(8)
+  String? version;
+
+  /// Gets or sets a value indicating whether this lyric is synced.
+  @HiveField(9)
+  bool? isSynced;
+
+  factory LyricMetadata.fromJson(Map<String, dynamic> json) =>
+      _$LyricMetadataFromJson(json);
+  Map<String, dynamic> toJson() => _$LyricMetadataToJson(this);
+}
+
+/// Lyric model.
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 45)
+class LyricLine {
+  LyricLine({
+    this.text,
+    this.start,
+  });
+
+  /// Gets the text of this lyric line.
+  @HiveField(0)
+  String? text;
+
+  /// Gets the start time in ticks.
+  @HiveField(1)
+  int? start;
+
+  factory LyricLine.fromJson(Map<String, dynamic> json) =>
+      _$LyricLineFromJson(json);
+  Map<String, dynamic> toJson() => _$LyricLineToJson(this);
+}
+
+/// LyricResponse model.
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 46)
+class LyricDto {
+  LyricDto({
+    this.metadata,
+    this.lyrics,
+  });
+
+  /// Gets or sets Metadata for the lyrics.
+  @HiveField(0)
+  LyricMetadata? metadata;
+
+  /// Gets or sets a collection of individual lyric lines.
+  @HiveField(1)
+  List<LyricLine>? lyrics;
+
+  factory LyricDto.fromJson(Map<String, dynamic> json) =>
+      _$LyricDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$LyricDtoToJson(this);
 }

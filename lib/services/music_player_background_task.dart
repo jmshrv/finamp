@@ -9,6 +9,7 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
 
 import 'finamp_settings_helper.dart';
@@ -50,6 +51,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
 
+    if (Platform.isWindows || Platform.isLinux) {
+      _audioServiceBackgroundTaskLogger
+          .info("Initializing media-kit for Windows/Linux");
+      JustAudioMediaKit.title = "Finamp";
+      JustAudioMediaKit.prefetchPlaylist = true; // cache upcoming tracks
+      JustAudioMediaKit.ensureInitialized(
+        linux: true,
+        windows: true,
+        macOS: false,
+        iOS: false,
+        android: false,
+      );
+    }
+
     _androidAudioEffects = [];
     _iosAudioEffects = [];
 
@@ -82,13 +97,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       audioPipeline: _audioPipeline,
     );
 
-    _loudnessEnhancerEffect
-        ?.setEnabled(FinampSettingsHelper.finampSettings.volumeNormalizationActive);
+    _loudnessEnhancerEffect?.setEnabled(
+        FinampSettingsHelper.finampSettings.volumeNormalizationActive);
     _loudnessEnhancerEffect?.setTargetGain(0.0 /
         10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
     // calculate base volume gain for iOS as a linear factor, because just_audio doesn't yet support AudioEffect on iOS
-    iosBaseVolumeGainFactor = pow(10.0,
-            FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain / 20.0)
+    iosBaseVolumeGainFactor = pow(
+            10.0,
+            FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain /
+                20.0)
         as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
     if (!Platform.isAndroid) {
       _volumeNormalizationLogger.info(
@@ -102,8 +119,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       // update replay gain settings every time settings are changed
-      iosBaseVolumeGainFactor = pow(10.0,
-              FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain / 20.0)
+      iosBaseVolumeGainFactor = pow(
+              10.0,
+              FinampSettingsHelper
+                      .finampSettings.volumeNormalizationIOSBaseGain /
+                  20.0)
           as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
       if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
         _loudnessEnhancerEffect?.setEnabled(true);
@@ -170,6 +190,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> play() {
     return _player.play();
+  }
+
+  @override
+  Future<void> setSpeed(final double speed) async {
+    return _player.setSpeed(speed);
   }
 
   @override
@@ -409,13 +434,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       final baseItem = jellyfin_models.BaseItemDto.fromJson(
           currentTrack.extras?["itemJson"]);
 
-      double? effectiveGainChange = getEffectiveGainChange(currentTrack, baseItem);
+      double? effectiveGainChange =
+          getEffectiveGainChange(currentTrack, baseItem);
 
       _volumeNormalizationLogger.info(
           "normalization gain for '${baseItem.name}': $effectiveGainChange (track gain change: ${baseItem.normalizationGain})");
       if (effectiveGainChange != null) {
-        _volumeNormalizationLogger.info(
-            "Gain change: $effectiveGainChange");
+        _volumeNormalizationLogger.info("Gain change: $effectiveGainChange");
         if (Platform.isAndroid) {
           _loudnessEnhancerEffect?.setTargetGain(effectiveGainChange /
               10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
@@ -519,15 +544,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Duration get playbackPosition => _player.position;
 }
 
-double? getEffectiveGainChange(MediaItem currentTrack, jellyfin_models.BaseItemDto? item) {
-  final baseItem = item ?? jellyfin_models.BaseItemDto.fromJson(
-        currentTrack.extras?["itemJson"]);
+double? getEffectiveGainChange(
+    MediaItem currentTrack, jellyfin_models.BaseItemDto? item) {
+  final baseItem = item ??
+      jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
   double? effectiveGainChange;
   switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
     case VolumeNormalizationMode.hybrid:
-    // case VolumeNormalizationMode.albumBased: // we use the context normalization gain for album-based because we don't have the album item here
+      // case VolumeNormalizationMode.albumBased: // we use the context normalization gain for album-based because we don't have the album item here
       // use context normalization gain if available, otherwise use track normalization gain
-      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"] ?? baseItem.normalizationGain;
+      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"] ??
+          baseItem.normalizationGain;
       break;
     case VolumeNormalizationMode.trackBased:
       // only ever use track normalization gain

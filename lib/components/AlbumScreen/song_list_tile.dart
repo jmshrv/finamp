@@ -21,6 +21,7 @@ import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/process_artist.dart';
+import '../../services/theme_provider.dart';
 import '../album_image.dart';
 import '../favourite_button.dart';
 import '../print_duration.dart';
@@ -42,7 +43,7 @@ enum SongListTileMenuItems {
 
 class SongListTile extends ConsumerStatefulWidget {
   const SongListTile({
-    Key? key,
+    super.key,
     required this.item,
 
     /// Children that are related to this list tile, such as the other songs in
@@ -67,7 +68,7 @@ class SongListTile extends ConsumerStatefulWidget {
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
     this.isShownInSearch = false,
-  }) : super(key: key);
+  });
 
   final jellyfin_models.BaseItemDto item;
   final Future<List<jellyfin_models.BaseItemDto>>? children;
@@ -90,6 +91,15 @@ class _SongListTileState extends ConsumerState<SongListTile>
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+  ImageProvider? _thumbnail;
+  ThemeProvider? _menuTheme;
+
+  @override
+  void dispose() {
+    _menuTheme?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +125,11 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       widget.parentItem?.id;
 
           return ListTile(
-            leading: AlbumImage(item: widget.item, disabled: !playable),
+            leading: AlbumImage(
+              item: widget.item,
+              disabled: !playable,
+              imageProviderCallback: (x) => _thumbnail = x,
+            ),
             title: Opacity(
               opacity: playable ? 1.0 : 0.5,
               child: RichText(
@@ -183,7 +197,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     if (widget.showPlayCount)
                       TextSpan(
                         text:
-                            "· ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
+                            " · ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
                         style:
                             TextStyle(color: Theme.of(context).disabledColor),
                       ),
@@ -213,20 +227,30 @@ class _SongListTileState extends ConsumerState<SongListTile>
           );
         });
 
-    return GestureDetector(
-      onLongPressStart: !playable
-          ? null
-          : (details) async {
-              unawaited(Feedback.forLongPress(context));
-              await showModalSongMenu(
-                context: context,
-                item: widget.item,
-                isInPlaylist: widget.isInPlaylist,
-                parentItem: widget.parentItem,
-                onRemoveFromList: widget.onRemoveFromList,
+    void menuCallback() async {
+      if (playable) {
+        unawaited(Feedback.forLongPress(context));
+        await showModalSongMenu(
+          context: context,
+          item: widget.item,
+          isInPlaylist: widget.isInPlaylist,
+          parentItem: widget.parentItem,
+          onRemoveFromList: widget.onRemoveFromList,
+          cachedImage: _thumbnail,
+          themeProvider: _menuTheme,
                 confirmPlaylistRemoval: false,
               );
-            },
+            }}
+
+    return GestureDetector(
+      onTapDown: (_) {
+        if (_thumbnail != null) {
+          _menuTheme ??=
+              ThemeProvider(_thumbnail!, Theme.of(context).brightness);
+        }
+      },
+      onLongPressStart: (details) => menuCallback(),
+      onSecondaryTapDown: (details) => menuCallback(),
       onTap: () async {
         if (!playable) return;
         var children = await widget.children;

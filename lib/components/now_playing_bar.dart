@@ -5,7 +5,10 @@ import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/player_screen_theme_provider.dart';
+import 'package:finamp/services/theme_provider.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
+import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -22,6 +25,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/media_state_stream.dart';
 import '../services/music_player_background_task.dart';
 import '../services/process_artist.dart';
+import 'PlayerScreen/player_split_screen_scaffold.dart';
 import 'album_image.dart';
 
 class NowPlayingBar extends ConsumerWidget {
@@ -509,6 +513,9 @@ class NowPlayingBar extends ConsumerWidget {
     var imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
 
+    ref.listen(currentTrackMetadataProvider,
+        (metadataOrNull, metadata) {}); // keep provider alive
+
     return Hero(
         tag: "nowplaying",
         createRectTween: (from, to) => RectTween(begin: from, end: from),
@@ -527,14 +534,17 @@ class NowPlayingBar extends ConsumerWidget {
               initialData: queueService.getQueue(),
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
-                    snapshot.data!.saveState == SavedQueueState.loading) {
+                    snapshot.data!.saveState == SavedQueueState.loading &&
+                    !usingPlayerSplitScreen) {
                   return buildLoadingQueueBar(context, null);
                 } else if (snapshot.hasData &&
-                    snapshot.data!.saveState == SavedQueueState.failed) {
+                    snapshot.data!.saveState == SavedQueueState.failed &&
+                    !usingPlayerSplitScreen) {
                   return buildLoadingQueueBar(
                       context, queueService.retryQueueLoad);
                 } else if (snapshot.hasData &&
-                    snapshot.data!.currentTrack != null) {
+                    snapshot.data!.currentTrack != null &&
+                    !usingPlayerSplitScreen) {
                   return buildNowPlayingBar(
                       context, snapshot.data!.currentTrack!);
                 } else {

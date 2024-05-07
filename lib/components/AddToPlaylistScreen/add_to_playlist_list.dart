@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -42,43 +42,43 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
       future: addToPlaylistListFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Scrollbar(
-            child: ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return AlbumItem(
-                  album: snapshot.data![index],
-                  parentType: snapshot.data![index].type,
-                  isPlaylist: true,
-                  onTap: () async {
-                    try {
-                      await jellyfinApiHelper.addItemstoPlaylist(
-                        playlistId: snapshot.data![index].id,
-                        ids: [widget.itemToAddId],
-                      );
-                      final downloadsService =
-                          GetIt.instance<DownloadsService>();
-                      unawaited(downloadsService.resync(
-                          DownloadStub.fromItem(
-                              type: DownloadItemType.collection,
-                              item: snapshot.data![index]),
-                          null,
-                          keepSlow: true));
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return AlbumItem(
+                album: snapshot.data![index],
+                parentType: snapshot.data![index].type,
+                isPlaylist: true,
+                onTap: () async {
+                  try {
+                    await jellyfinApiHelper.addItemstoPlaylist(
+                      playlistId: snapshot.data![index].id,
+                      ids: [widget.itemToAddId],
+                    );
+                    final downloadsService = GetIt.instance<DownloadsService>();
+                    unawaited(downloadsService.resync(
+                        DownloadStub.fromItem(
+                            type: DownloadItemType.collection,
+                            item: snapshot.data![index]),
+                        null,
+                        keepSlow: true));
 
-                      if (!mounted) return;
-                      GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmAddedToPlaylist, isConfirmation: true);
-                      Navigator.pop(context);
-                    } catch (e) {
-                      errorSnackbar(e, context);
-                      return;
-                    }
-                  },
-                );
-              },
-            ),
+                    if (!context.mounted) return;
+                    GlobalSnackbar.message(
+                        (scaffold) => AppLocalizations.of(context)!
+                            .confirmAddedToPlaylist,
+                        isConfirmation: true);
+                    Navigator.pop(context);
+                  } catch (e) {
+                    GlobalSnackbar.error(e);
+                    return;
+                  }
+                },
+              );
+            },
           );
         } else if (snapshot.hasError) {
-          errorSnackbar(snapshot.error, context);
+          GlobalSnackbar.error(snapshot.error);
           return const Center(
             child: Icon(Icons.error, size: 64),
           );

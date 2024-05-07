@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -10,6 +11,7 @@ import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/audio_service_smtc.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -29,9 +31,11 @@ import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
+import 'components/PlayerScreen/player_split_screen_scaffold.dart';
 import 'components/global_snackbar.dart';
 import 'models/finamp_models.dart';
 import 'models/jellyfin_models.dart';
@@ -43,6 +47,7 @@ import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
+import 'screens/customization_settings_screen.dart';
 import 'screens/downloads_location_screen.dart';
 import 'screens/downloads_screen.dart';
 import 'screens/language_selection_screen.dart';
@@ -50,12 +55,12 @@ import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
 import 'screens/music_screen.dart';
 import 'screens/player_screen.dart';
-import 'screens/volume_normalization_settings_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/tabs_settings_screen.dart';
 import 'screens/transcoding_settings_screen.dart';
 import 'screens/view_selector.dart';
+import 'screens/volume_normalization_settings_screen.dart';
 import 'services/audio_service_helper.dart';
 import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
@@ -101,6 +106,23 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     await initializeDateFormatting(localeString, null);
+
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      WidgetsFlutterBinding.ensureInitialized();
+      await windowManager.ensureInitialized();
+      WindowOptions windowOptions = const WindowOptions(
+        size: Size(1200, 800),
+        center: true,
+        backgroundColor: Colors.transparent,
+        skipTaskbar: false,
+        titleBarStyle: TitleBarStyle.normal,
+        minimumSize: Size(400, 250),
+      );
+      unawaited(WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.show();
+        await windowManager.focus();
+      }));
+    }
 
     runApp(const Finamp());
   }
@@ -173,11 +195,14 @@ Future<void> setupHive() async {
   Hive.registerAdapter(BaseItemAdapter());
   Hive.registerAdapter(QueueItemAdapter());
   Hive.registerAdapter(ExternalUrlAdapter());
+  Hive.registerAdapter(MediaUrlAdapter());
+  Hive.registerAdapter(BaseItemPersonAdapter());
   Hive.registerAdapter(NameLongIdPairAdapter());
   Hive.registerAdapter(TabContentTypeAdapter());
   Hive.registerAdapter(SortByAdapter());
   Hive.registerAdapter(SortOrderAdapter());
   Hive.registerAdapter(ContentViewTypeAdapter());
+  Hive.registerAdapter(PlaybackSpeedVisibilityAdapter());
   Hive.registerAdapter(DownloadedImageAdapter());
   Hive.registerAdapter(ThemeModeAdapter());
   Hive.registerAdapter(LocaleAdapter());
@@ -192,12 +217,20 @@ Future<void> setupHive() async {
   Hive.registerAdapter(DownloadLocationTypeAdapter());
   Hive.registerAdapter(FinampTranscodingCodecAdapter());
   Hive.registerAdapter(TranscodeDownloadsSettingAdapter());
+  Hive.registerAdapter(LyricMetadataAdapter());
+  Hive.registerAdapter(LyricLineAdapter());
+  Hive.registerAdapter(LyricDtoAdapter());
+
+  final dir = (Platform.isAndroid || Platform.isIOS)
+      ? await getApplicationDocumentsDirectory()
+      : await getApplicationSupportDirectory();
+
   await Future.wait([
-    Hive.openBox<FinampSettings>("FinampSettings"),
-    Hive.openBox<ThemeMode>("ThemeMode"),
-    Hive.openBox<FinampStorableQueueInfo>("Queues"),
-    Hive.openBox<Locale?>(LocaleHelper.boxName),
-    Hive.openBox<OfflineListen>("OfflineListens")
+    Hive.openBox<FinampSettings>("FinampSettings", path: dir.path),
+    Hive.openBox<ThemeMode>("ThemeMode", path: dir.path),
+    Hive.openBox<FinampStorableQueueInfo>("Queues", path: dir.path),
+    Hive.openBox<Locale?>(LocaleHelper.boxName, path: dir.path),
+    Hive.openBox<OfflineListen>("OfflineListens", path: dir.path)
   ]);
 
   // If the settings box is empty, we add an initial settings value here.
@@ -211,9 +244,13 @@ Future<void> setupHive() async {
   Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
   if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
 
-  final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
-    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
+    [
+      DownloadItemSchema,
+      IsarTaskDataSchema,
+      FinampUserSchema,
+      DownloadedLyricsSchema
+    ],
     directory: dir.path,
     name: isarDatabaseName,
   );
@@ -221,8 +258,11 @@ Future<void> setupHive() async {
 }
 
 Future<void> _setupPlaybackServices() async {
+  if (Platform.isWindows) {
+    AudioServiceSMTC.registerWith();
+  }
   final session = await AudioSession.instance;
-  session.configure(const AudioSessionConfiguration.music());
+  await session.configure(const AudioSessionConfiguration.music());
 
   final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
@@ -304,9 +344,34 @@ Future<void> _setupFinampUserHelper() async {
   await GetIt.instance<FinampUserHelper>().setAuthHeader();
 }
 
-class Finamp extends StatelessWidget {
+class Finamp extends ConsumerStatefulWidget {
   const Finamp({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<Finamp> createState() => _FinampState();
+}
+
+class _FinampState extends ConsumerState<Finamp> with WindowListener {
+
+  static final Logger windowManagerLogger = Logger("WindowManager");
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      WindowManager.instance.addListener(this);
+      windowManager.setPreventClose(true);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      WindowManager.instance.removeListener(this);
+    }
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
@@ -339,7 +404,8 @@ class Finamp extends StatelessWidget {
                     ArtistScreen.routeName: (context) => const ArtistScreen(),
                     AddToPlaylistScreen.routeName: (context) =>
                         const AddToPlaylistScreen(),
-                    PlayerScreen.routeName: (context) => const PlayerScreen(),
+                    PlayerScreen.routeName: (context) => const PlayerScreen(
+                        key: ValueKey(PlayerScreen.routeName)),
                     DownloadsScreen.routeName: (context) =>
                         const DownloadsScreen(),
                     ActiveDownloadsScreen.routeName: (context) =>
@@ -369,12 +435,15 @@ class Finamp extends StatelessWidget {
                         const TabsSettingsScreen(),
                     LayoutSettingsScreen.routeName: (context) =>
                         const LayoutSettingsScreen(),
+                    CustomizationSettingsScreen.routeName: (context) =>
+                        const CustomizationSettingsScreen(),
                     PlayerSettingsScreen.routeName: (context) =>
                         const PlayerSettingsScreen(),
                     LanguageSelectionScreen.routeName: (context) =>
                         const LanguageSelectionScreen(),
                   },
                   initialRoute: SplashScreen.routeName,
+                  builder: buildPlayerSplitScreenScaffold,
                   theme: ThemeData(
                     brightness: Brightness.light,
                     colorScheme: lightColorScheme,
@@ -415,6 +484,7 @@ class Finamp extends StatelessWidget {
                       dismissDirection: DismissDirection.horizontal,
                     ),
                   ),
+                  scrollBehavior: FinampScrollBehavior(),
                   themeMode: box.get("ThemeMode"),
                   localizationsDelegates: const [
                     AppLocalizations.delegate,
@@ -440,6 +510,48 @@ class Finamp extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void onWindowEvent(String eventName) {
+    windowManagerLogger.finer("[WindowManager] onWindowEvent: $eventName");
+  }
+
+  @override
+  void onWindowClose() async {
+    if (!(Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      return;
+    }
+    
+    bool isPreventClose = await windowManager.isPreventClose();
+    if (isPreventClose && mounted) {
+      await windowManager.destroy();
+      //TODO try to stop the playback session here, stalling the closing and shutting down after the request finished?
+      // await showDialog(
+      //   context: context,
+      //   builder: (_) {
+      //     return AlertDialog(
+      //       title: Text('Are you sure you want to close this window?'),
+      //       actions: [
+      //         TextButton(
+      //           child: Text('No'),
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //           },
+      //         ),
+      //         TextButton(
+      //           child: Text('Yes'),
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //             await windowManager.destroy();
+      //           },
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
+    }
+  }
+  
 }
 
 class FinampErrorApp extends StatelessWidget {
@@ -483,5 +595,33 @@ class ErrorScreen extends StatelessWidget {
         children: [ShareLogsButton(), CopyLogsButton()],
       ),
     );
+  }
+}
+
+// Show scrollbars on all vertically scrolling widgets by default
+class FinampScrollBehavior extends MaterialScrollBehavior {
+  const FinampScrollBehavior(
+      {this.interactive = false, this.scrollbars = true});
+
+  final bool interactive;
+  final bool scrollbars;
+
+  @override
+  Widget buildScrollbar(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    if (!scrollbars) {
+      return child;
+    }
+    switch (axisDirectionToAxis(details.direction)) {
+      case Axis.horizontal:
+        return child;
+      case Axis.vertical:
+        assert(details.controller != null);
+        return Scrollbar(
+          controller: details.controller,
+          interactive: interactive,
+          child: child,
+        );
+    }
   }
 }

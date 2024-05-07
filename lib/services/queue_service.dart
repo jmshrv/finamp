@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
@@ -50,6 +49,7 @@ class QueueService {
 
   FinampPlaybackOrder _playbackOrder = FinampPlaybackOrder.linear;
   FinampLoopMode _loopMode = FinampLoopMode.none;
+  double _playbackSpeed = 1.0;
 
   final _currentTrackStream = BehaviorSubject<FinampQueueItem?>.seeded(null);
   final _queueStream = BehaviorSubject<FinampQueueInfo?>.seeded(null);
@@ -58,6 +58,7 @@ class QueueService {
       BehaviorSubject<FinampPlaybackOrder>.seeded(FinampPlaybackOrder.linear);
   final _loopModeStream =
       BehaviorSubject<FinampLoopMode>.seeded(FinampLoopMode.none);
+  final _playbackSpeedStream = BehaviorSubject<double>.seeded(1.0);
 
   // external queue state
 
@@ -80,6 +81,10 @@ class QueueService {
 
     loopMode = finampSettings.loopMode;
     _queueServiceLogger.info("Restored loop mode to $loopMode from settings");
+
+    playbackSpeed = finampSettings.playbackSpeed;
+    _queueServiceLogger
+        .info("Restored playback speed to $playbackSpeed from settings");
 
     _shuffleOrder = NextUpShuffleOrder(queueService: this);
     _queueAudioSource = ConcatenatingAudioSource(
@@ -465,8 +470,10 @@ class QueueService {
         }
       }
 
-      await stopPlayback(); //TODO is this really needed?
+      //await stopPlayback(); //TODO is this really needed?
       // await _audioHandler.initializeAudioSource(_queueAudioSource);
+      await _audioHandler.stopPlayback();
+      await _queueAudioSource.clear();
 
       List<AudioSource> audioSources = [];
 
@@ -545,7 +552,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextNormalizationGain),
+          item:
+              await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ?? _order.originalSource,
           type: QueueItemQueueType.queue,
         ));
@@ -577,7 +585,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextNormalizationGain),
+          item:
+              await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -617,7 +626,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item: await _generateMediaItem(item, source?.contextNormalizationGain),
+          item:
+              await _generateMediaItem(item, source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -756,6 +766,10 @@ class QueueService {
     return _loopModeStream;
   }
 
+  BehaviorSubject<double> getPlaybackSpeedStream() {
+    return _playbackSpeedStream;
+  }
+
   BehaviorSubject<FinampQueueItem?> getCurrentTrackStream() {
     return _currentTrackStream;
   }
@@ -763,6 +777,17 @@ class QueueService {
   FinampQueueItem? getCurrentTrack() {
     return _currentTrack;
   }
+
+  set playbackSpeed(double speed) {
+    _playbackSpeed = speed;
+    _playbackSpeedStream.add(speed);
+    _audioHandler.setSpeed(speed);
+    FinampSettingsHelper.setPlaybackSpeed(playbackSpeed);
+    _queueServiceLogger.fine(
+        "Playback speed set to ${FinampSettingsHelper.finampSettings.playbackSpeed}");
+  }
+
+  double get playbackSpeed => _playbackSpeed;
 
   set loopMode(FinampLoopMode mode) {
     _loopMode = mode;
@@ -866,8 +891,8 @@ class QueueService {
 
   /// [contextNormalizationGain] is the normalization gain of the context that the song is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
-  Future<MediaItem> _generateMediaItem(
-      jellyfin_models.BaseItemDto item, double? contextNormalizationGain) async {
+  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item,
+      double? contextNormalizationGain) async {
     const uuid = Uuid();
 
     final downloadedSong = await _isarDownloader.getSongDownload(item: item);
@@ -884,7 +909,9 @@ class QueueService {
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: downloadedImage?.file?.uri ??
-          _jellyfinApiHelper.getImageUrl(item: item),
+          (!FinampSettingsHelper.finampSettings.isOffline
+              ? _jellyfinApiHelper.getImageUrl(item: item)
+              : null),
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(),
@@ -932,10 +959,6 @@ class QueueService {
   }
 
   Future<Uri> _songUri(MediaItem mediaItem) async {
-    // We need the platform to be Android or iOS to get device info
-    assert(Platform.isAndroid || Platform.isIOS,
-        "_songUri() only supports Android and iOS");
-
     // When creating the MediaItem (usually in AudioServiceHelper), we specify
     // whether or not to transcode. We used to pull from FinampSettings here,
     // but since audio_service runs in an isolate (or at least, it does until

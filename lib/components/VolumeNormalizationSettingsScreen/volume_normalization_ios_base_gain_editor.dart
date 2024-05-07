@@ -14,14 +14,16 @@ class VolumeNormalizationIOSBaseGainEditor extends StatefulWidget {
 class _VolumeNormalizationIOSBaseGainEditorState
     extends State<VolumeNormalizationIOSBaseGainEditor> {
   final _controller = TextEditingController(
-      text:
-          FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain.toString());
+      text: FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain
+          .toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.volumeNormalizationIOSBaseGainEditorTitle),
-      subtitle: Text(AppLocalizations.of(context)!.volumeNormalizationIOSBaseGainEditorSubtitle),
+      title: Text(AppLocalizations.of(context)!
+          .volumeNormalizationIOSBaseGainEditorTitle),
+      subtitle: Text(AppLocalizations.of(context)!
+          .volumeNormalizationIOSBaseGainEditorSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -32,7 +34,8 @@ class _VolumeNormalizationIOSBaseGainEditorState
             final valueDouble = double.tryParse(value);
 
             if (valueDouble != null) {
-              FinampSettingsHelper.setVolumeNormalizationIOSBaseGain(valueDouble);
+              FinampSettingsHelper.setVolumeNormalizationIOSBaseGain(
+                  valueDouble);
             }
           },
         ),

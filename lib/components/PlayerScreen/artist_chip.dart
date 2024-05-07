@@ -13,6 +13,7 @@ const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
 const _height = 24.0; // I'm sure this magic number will work on all devices
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
+final Map<String, BaseItemDto> _artistCache = {};
 
 class ArtistChips extends StatelessWidget {
   const ArtistChips({
@@ -105,6 +106,7 @@ class _ArtistChipState extends State<ArtistChip> {
               .getCollectionInfo(id: albumArtistId)
               .then((value) => value!.baseItem!)
           : _jellyfinApiHelper.getItemById(albumArtistId);
+      _artistChipFuture?.then((value) => _artistCache[value.id] = value);
     }
   }
 
@@ -112,6 +114,7 @@ class _ArtistChipState extends State<ArtistChip> {
   Widget build(BuildContext context) {
     return FutureBuilder<BaseItemDto>(
         future: _artistChipFuture,
+        initialData: _artistCache[widget.artist?.id],
         builder: (context, snapshot) {
           final backgroundColor =
               widget.backgroundColor ?? _defaultBackgroundColour;

@@ -5,7 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class PeriodicPlaybackSessionUpdateFrequencyEditor extends StatefulWidget {
-  const PeriodicPlaybackSessionUpdateFrequencyEditor({Key? key}) : super(key: key);
+  const PeriodicPlaybackSessionUpdateFrequencyEditor({Key? key})
+      : super(key: key);
 
   @override
   State<PeriodicPlaybackSessionUpdateFrequencyEditor> createState() =>
@@ -15,18 +16,21 @@ class PeriodicPlaybackSessionUpdateFrequencyEditor extends StatefulWidget {
 class _PeriodicPlaybackSessionUpdateFrequencyEditorState
     extends State<PeriodicPlaybackSessionUpdateFrequencyEditor> {
   final _controller = TextEditingController(
-      text:
-          FinampSettingsHelper.finampSettings.periodicPlaybackSessionUpdateFrequencySeconds.toString());
+      text: FinampSettingsHelper
+          .finampSettings.periodicPlaybackSessionUpdateFrequencySeconds
+          .toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequency),
+      title: Text(
+          AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequency),
       subtitle: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-              text: AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequencySubtitle,
+              text: AppLocalizations.of(context)!
+                  .periodicPlaybackSessionUpdateFrequencySubtitle,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const TextSpan(text: "\n"),
@@ -39,20 +43,24 @@ class _PeriodicPlaybackSessionUpdateFrequencyEditorState
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  showGeneralDialog(context: context, pageBuilder: (context, anim1, anim2) {
-                    return AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequency),
-                      content: Text(AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequencyDetails),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(AppLocalizations.of(context)!.close),
-                        ),
-                      ],
-                    );
-                  });
+                  showGeneralDialog(
+                      context: context,
+                      pageBuilder: (context, anim1, anim2) {
+                        return AlertDialog(
+                          title: Text(AppLocalizations.of(context)!
+                              .periodicPlaybackSessionUpdateFrequency),
+                          content: Text(AppLocalizations.of(context)!
+                              .periodicPlaybackSessionUpdateFrequencyDetails),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(AppLocalizations.of(context)!.close),
+                            ),
+                          ],
+                        );
+                      });
                 },
             ),
           ],
@@ -68,7 +76,8 @@ class _PeriodicPlaybackSessionUpdateFrequencyEditorState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null) {
-              FinampSettingsHelper.setPeriodicPlaybackSessionUpdateFrequencySeconds(valueInt);
+              FinampSettingsHelper
+                  .setPeriodicPlaybackSessionUpdateFrequencySeconds(valueInt);
             }
           },
         ),

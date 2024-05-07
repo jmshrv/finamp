@@ -129,14 +129,17 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setVolumeNormalizationIOSBaseGain(double volumeNormalizationIOSBaseGain) {
+  static void setVolumeNormalizationIOSBaseGain(
+      double volumeNormalizationIOSBaseGain) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.volumeNormalizationIOSBaseGain = volumeNormalizationIOSBaseGain;
+    finampSettingsTemp.volumeNormalizationIOSBaseGain =
+        volumeNormalizationIOSBaseGain;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setVolumeNormalizationMode(VolumeNormalizationMode volumeNormalizationMode) {
+  static void setVolumeNormalizationMode(
+      VolumeNormalizationMode volumeNormalizationMode) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.volumeNormalizationMode = volumeNormalizationMode;
     Hive.box<FinampSettings>("FinampSettings")
@@ -168,6 +171,14 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setPlaybackSpeedVisibility(
+      PlaybackSpeedVisibility playbackSpeedVisibility) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playbackSpeedVisibility = playbackSpeedVisibility;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setShowTextOnGridView(bool showTextOnGridView) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.showTextOnGridView = showTextOnGridView;
@@ -189,13 +200,13 @@ class FinampSettingsHelper {
 
   static void setUseCoverAsBackground(bool useCoverAsBackground) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.useCoverAsBackground =
-        useCoverAsBackground;
+    finampSettingsTemp.useCoverAsBackground = useCoverAsBackground;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setPlayerScreenCoverMinimumPadding(double playerScreenCoverMinimumPadding) {
+  static void setPlayerScreenCoverMinimumPadding(
+      double playerScreenCoverMinimumPadding) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.playerScreenCoverMinimumPadding =
         playerScreenCoverMinimumPadding;
@@ -257,6 +268,14 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  /// Set the playbackSpeed property
+  static void setPlaybackSpeed(double speed) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playbackSpeed = speed;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setHasCompletedBlurhashImageMigrationIdFix(
       bool hasCompletedBlurhashImageMigrationIdFix) {
     FinampSettings finampSettingsTemp = finampSettings;
@@ -301,6 +320,14 @@ class FinampSettingsHelper {
     );
   }
 
+  static void resetCustomizationSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.playbackSpeedVisibility =
+        PlaybackSpeedVisibility.automatic;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setSwipeInsertQueueNext(bool swipeInsertQueueNext) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.swipeInsertQueueNext = swipeInsertQueueNext;
@@ -322,9 +349,11 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setPeriodicPlaybackSessionUpdateFrequencySeconds(int periodicPlaybackSessionUpdateFrequencySeconds) {
+  static void setPeriodicPlaybackSessionUpdateFrequencySeconds(
+      int periodicPlaybackSessionUpdateFrequencySeconds) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.periodicPlaybackSessionUpdateFrequencySeconds = periodicPlaybackSessionUpdateFrequencySeconds;
+    finampSettingsTemp.periodicPlaybackSessionUpdateFrequencySeconds =
+        periodicPlaybackSessionUpdateFrequencySeconds;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

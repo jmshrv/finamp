@@ -113,8 +113,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           var songs = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
 
-          return Scrollbar(
-              child: CustomScrollView(slivers: <Widget>[
+          return CustomScrollView(slivers: <Widget>[
             SliverAppBar(
               title: Text(widget.parent.name ??
                   AppLocalizations.of(context)!.unknownName),
@@ -180,7 +179,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 height: MediaQuery.paddingOf(context).bottom,
               ),
             )
-          ]));
+          ]);
         });
   }
 }

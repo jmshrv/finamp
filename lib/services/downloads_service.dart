@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -200,7 +202,7 @@ class DownloadsService {
                               listener.file?.path.replaceFirst(
                                       RegExp(r'\.image$'), extension) ==
                                   await event.task.filePath()),
-                      "${listener.name} ${listener.path} ${listener.fileDownloadLocation} ${listener.file?.path} ${await event.task.filePath()} $extension");
+                      "${listener.name} ${listener.path} ${listener.fileDownloadLocation?.baseDirectory} ${listener.file?.path} ${await event.task.filePath()} $extension");
                 });
                 if (extension != null &&
                     listener.file!.path.endsWith(".image")) {
@@ -681,18 +683,64 @@ class DownloadsService {
     await resyncAll();
     forceFullSync = false;
 
-    // Step 4 - Make sure there are no unanchored nodes in metadata.
+    // Step 4 - Fetch all missing lyrics
     _downloadsLogger.info("Starting downloads repair step 4");
     downloadCounts[repairStepTrackingName] = 4;
+    final Map<int, LyricDto?> idsWithLyrics = HashMap();
+    var allItems = _isar.downloadItems
+        .where()
+        .stateNotEqualTo(DownloadItemState.notDownloaded)
+        .filter()
+        .typeEqualTo(DownloadItemType.song)
+        .findAllSync();
+    final JellyfinApiHelper _jellyfinApiData =
+        GetIt.instance<JellyfinApiHelper>();
+    for (var item in allItems) {
+      if (item.baseItem?.mediaStreams
+              ?.any((stream) => stream.type == "Lyric") ??
+          false) {
+        // check if lyrics are already downloaded
+        if (_isar.downloadedLyrics
+                .where()
+                .isarIdEqualTo(item.isarId)
+                .countSync() >
+            0) {
+          continue;
+        }
+        idsWithLyrics[item.isarId] = null;
+        LyricDto? lyrics;
+        try {
+          lyrics = await _jellyfinApiData.getLyrics(itemId: item.id);
+          _downloadsLogger.finer("Fetched lyrics for ${item.name}");
+          idsWithLyrics[item.isarId] = lyrics;
+        } catch (e) {
+          _downloadsLogger.warning("Failed to fetch lyrics for ${item.name}.");
+        }
+      }
+    }
+    _isar.writeTxnSync(() {
+      for (var id in idsWithLyrics.keys) {
+        var canonItem = _isar.downloadItems.getSync(id);
+        if (canonItem != null && idsWithLyrics[id] != null) {
+          final lyricsItem = DownloadedLyrics.fromItem(
+              isarId: canonItem.isarId, item: idsWithLyrics[id]!);
+          _isar.downloadedLyrics.putSync(lyricsItem);
+        }
+      }
+    });
+
+    // Step 5 - Make sure there are no unanchored nodes in metadata.
+    _downloadsLogger.info("Starting downloads repair step 5");
+    downloadCounts[repairStepTrackingName] = 5;
     var allIds = _isar.downloadItems.where().isarIdProperty().findAllSync();
     for (var id in allIds) {
       await deleteBuffer.syncDelete(id);
     }
     await deleteBuffer.executeDeletes();
 
-    // Step 5 - Make sure there are no orphan files in song directory.
-    _downloadsLogger.info("Starting downloads repair step 5");
-    downloadCounts[repairStepTrackingName] = 5;
+    // Step 6 - Make sure there are no orphan files in song directory.
+    _downloadsLogger.info("Starting downloads repair step 6");
+    downloadCounts[repairStepTrackingName] = 6;
     // This cleans internalSupport/images
     var imageFilePaths = Directory(path_helper.join(
             FinampSettingsHelper.finampSettings.internalSongDir.currentPath,
@@ -744,15 +792,15 @@ class DownloadsService {
   /// Verify a download is complete and the associated file exists.  Update
   /// the item to be notDownloaded otherwise.  Used by [getSongDownload] and
   /// [getImageDownload].
-  Future<bool> _verifyDownload(DownloadItem item) async {
+  bool _verifyDownload(DownloadItem item) {
     assert(item.type.hasFiles);
     if (!item.state.isComplete) return false;
-    if (await item.file?.exists() ?? false) return true;
+    if (item.file?.existsSync() ?? false) return true;
     if (item.path != null) {
       for (var location
           in FinampSettingsHelper.finampSettings.downloadLocationsMap.values) {
         var path = path_helper.join(location.currentPath, item.path);
-        if (await File(path).exists()) {
+        if (File(path).existsSync()) {
           _isar.writeTxnSync(() {
             var canonItem = _isar.downloadItems.getSync(item.isarId);
             canonItem!.fileTranscodingProfile!.downloadLocationId = location.id;
@@ -1316,7 +1364,7 @@ class DownloadsService {
   /// verification and should only be used when the downloaded file is actually
   /// needed, such as when building MediaItems.  Otherwise, [getSongInfo] should
   /// be used instead.  Exactly one of the two arguments should be provided.
-  Future<DownloadItem?> getSongDownload({BaseItemDto? item, String? id}) {
+  DownloadItem? getSongDownload({BaseItemDto? item, String? id}) {
     assert((item == null) != (id == null));
     return _getDownloadByID(id ?? item!.id, DownloadItemType.song);
   }
@@ -1325,19 +1373,28 @@ class DownloadsService {
   /// verification and should only be used when the downloaded file is actually
   /// needed, such as when building ImageProviders.  Exactly one of the two arguments
   /// should be provided.
-  Future<DownloadItem?> getImageDownload(
-      {BaseItemDto? item, String? blurHash}) {
+  DownloadItem? getImageDownload({BaseItemDto? item, String? blurHash}) {
     assert((item?.blurHash == null) != (blurHash == null));
-    return _getDownloadByID(
-        blurHash ?? item!.blurHash ?? item!.imageId!, DownloadItemType.image);
+    String? imageId = blurHash ?? item!.blurHash ?? item!.imageId;
+    if (imageId == null) {
+      return null;
+    }
+    return _getDownloadByID(imageId, DownloadItemType.image);
+  }
+
+  /// Get DownloadedLyrics by the corresponding track's BaseItemDto.
+  Future<DownloadedLyrics?> getLyricsDownload(
+      {required BaseItemDto baseItem}) async {
+    var item = _isar.downloadedLyrics
+        .getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.song));
+    return item;
   }
 
   /// Get a downloadItem with verified files by id.
-  Future<DownloadItem?> _getDownloadByID(
-      String id, DownloadItemType type) async {
+  DownloadItem? _getDownloadByID(String id, DownloadItemType type) {
     assert(type.hasFiles);
     var item = _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
-    if (item != null && await _verifyDownload(item)) {
+    if (item != null && _verifyDownload(item)) {
       return item;
     }
     return null;

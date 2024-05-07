@@ -20,7 +20,6 @@ class ConfirmationPromptDialog extends AlertDialog {
   final void Function()? onConfirmed;
   final void Function()? onAborted;
 
-  
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -41,7 +40,8 @@ class ConfirmationPromptDialog extends AlertDialog {
             maxWidth: 150.0,
           ),
           child: TextButton(
-            child: Text(abortButtonText,
+            child: Text(
+              abortButtonText,
               textAlign: TextAlign.center,
             ),
             onPressed: () {
@@ -55,7 +55,8 @@ class ConfirmationPromptDialog extends AlertDialog {
             maxWidth: 150.0,
           ),
           child: TextButton(
-            child: Text(confirmButtonText,
+            child: Text(
+              confirmButtonText,
               textAlign: TextAlign.center,
               softWrap: true,
             ),

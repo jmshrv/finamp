@@ -69,7 +69,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center),
               Padding(
-                padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: SimpleButton(

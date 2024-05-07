@@ -14,14 +14,16 @@ class PlayerScreenMinimumCoverPaddingEditor extends StatefulWidget {
 class _PlayerScreenMinimumCoverPaddingEditorState
     extends State<PlayerScreenMinimumCoverPaddingEditor> {
   final _controller = TextEditingController(
-      text:
-          FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding.toString());
+      text: FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding
+          .toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.playerScreenMinimumCoverPaddingEditorTitle),
-      subtitle: Text(AppLocalizations.of(context)!.playerScreenMinimumCoverPaddingEditorSubtitle),
+      title: Text(AppLocalizations.of(context)!
+          .playerScreenMinimumCoverPaddingEditorTitle),
+      subtitle: Text(AppLocalizations.of(context)!
+          .playerScreenMinimumCoverPaddingEditorSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -32,7 +34,8 @@ class _PlayerScreenMinimumCoverPaddingEditorState
             final valueDouble = double.tryParse(value);
 
             if (valueDouble != null) {
-              FinampSettingsHelper.setPlayerScreenCoverMinimumPadding(valueDouble);
+              FinampSettingsHelper.setPlayerScreenCoverMinimumPadding(
+                  valueDouble);
             }
           },
         ),

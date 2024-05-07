@@ -71,6 +71,7 @@ const _volumeNormalizationActiveDefault = true;
 const _volumeNormalizationIOSBaseGainDefault = -5.0;
 const _volumeNormalizationModeDefault = VolumeNormalizationMode.hybrid;
 const _contentViewType = ContentViewType.list;
+const _playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
 const _contentGridViewCrossAxisCountPortrait = 2;
 const _contentGridViewCrossAxisCountLandscape = 3;
 const _showTextOnGridView = true;
@@ -85,10 +86,13 @@ const _bufferDurationSeconds = 600;
 const _tabOrder = TabContentType.values;
 const _swipeInsertQueueNext = true;
 const _defaultLoopMode = FinampLoopMode.none;
+const _defaultPlaybackSpeed = 1.0;
 const _autoLoadLastQueueOnStartup = true;
 const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
+const _fixedGridTileSizeDefault = 150;
+const _defaultSplitScreenPlayerWidth = 400.0;
 const _enableVibration = true;
 const _prioritizeCoverFactor = 8.0;
 const _suppressPlayerPadding = false;
@@ -114,9 +118,11 @@ class FinampSettings {
     this.sortOrder = SortOrder.ascending,
     this.songShuffleItemCount = _songShuffleItemCountDefault,
     this.volumeNormalizationActive = _volumeNormalizationActiveDefault,
-    this.volumeNormalizationIOSBaseGain = _volumeNormalizationIOSBaseGainDefault,
+    this.volumeNormalizationIOSBaseGain =
+        _volumeNormalizationIOSBaseGainDefault,
     this.volumeNormalizationMode = _volumeNormalizationModeDefault,
     this.contentViewType = _contentViewType,
+    this.playbackSpeedVisibility = _playbackSpeedVisibility,
     this.contentGridViewCrossAxisCountPortrait =
         _contentGridViewCrossAxisCountPortrait,
     this.contentGridViewCrossAxisCountLandscape =
@@ -133,6 +139,7 @@ class FinampSettings {
     required this.tabSortBy,
     required this.tabSortOrder,
     this.loopMode = _defaultLoopMode,
+    this.playbackSpeed = _defaultPlaybackSpeed,
     this.tabOrder = _tabOrder,
     this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
     this.hasCompletedBlurhashImageMigration = true,
@@ -151,6 +158,10 @@ class FinampSettings {
     this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
     this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
     this.swipeInsertQueueNext = _swipeInsertQueueNext,
+    this.useFixedSizeGridTiles = false,
+    this.fixedGridTileSize = _fixedGridTileSizeDefault,
+    this.allowSplitScreen = true,
+    this.splitScreenPlayerWidth = _defaultSplitScreenPlayerWidth,
     this.enableVibration = _enableVibration,
     this.prioritizeCoverFactor = _prioritizeCoverFactor,
     this.suppressPlayerPadding = _suppressPlayerPadding,
@@ -331,6 +342,8 @@ class FinampSettings {
 
   @HiveField(53,
       defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+  @HiveField(53,
+      defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
   @HiveField(54, defaultValue: _showArtistsTopSongs)
@@ -339,12 +352,35 @@ class FinampSettings {
   @HiveField(55, defaultValue: _showArtistChipImage)
   bool showArtistChipImage;
 
+  @HiveField(56, defaultValue: _defaultPlaybackSpeed)
+  double playbackSpeed;
+
+  /// The content playback speed type defining how and whether to display the playback speed controls in the song menu
+  @HiveField(57, defaultValue: _playbackSpeedVisibility)
+  PlaybackSpeedVisibility playbackSpeedVisibility;
+
+  @HiveField(58, defaultValue: null)
+  String? defaultDownloadLocation;
+
+  @HiveField(59, defaultValue: false)
+  bool useFixedSizeGridTiles;
+
+  @HiveField(60, defaultValue: _fixedGridTileSizeDefault)
+  int fixedGridTileSize;
+
+  @HiveField(61, defaultValue: true)
+  bool allowSplitScreen;
+
+  @HiveField(62, defaultValue: _defaultSplitScreenPlayerWidth)
+  double splitScreenPlayerWidth;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
-      // TODO update backup exclusions on iOS and make sure support dir is covered
       // default download location moved to support dir based on existing comment
-      baseDirectory: DownloadLocationType.internalSupport,
+      baseDirectory: (Platform.isIOS || Platform.isAndroid)
+          ? DownloadLocationType.internalSupport
+          : DownloadLocationType.cache,
     );
     return FinampSettings(
       downloadLocations: [],
@@ -357,6 +393,7 @@ class FinampSettings {
       downloadLocationsMap: {downloadLocation.id: downloadLocation},
       tabSortBy: {},
       tabSortOrder: {},
+      useFixedSizeGridTiles: !(Platform.isIOS || Platform.isAndroid),
     );
   }
 
@@ -368,7 +405,10 @@ class FinampSettings {
   /// technically throw a StateError, but that should never happen™.
   DownloadLocation get internalSongDir =>
       downloadLocationsMap.values.firstWhere((element) =>
-          element.baseDirectory == DownloadLocationType.internalSupport);
+          element.baseDirectory ==
+          ((Platform.isIOS || Platform.isAndroid)
+              ? DownloadLocationType.internalSupport
+              : DownloadLocationType.cache));
 
   Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
 
@@ -415,7 +455,6 @@ class DownloadLocation {
   bool? legacyUseHumanReadableNames;
 
   bool get useHumanReadableNames => baseDirectory.useHumanReadableNames;
-  bool get needsPermission => baseDirectory.needsPermission;
 
   /// If true, the user can delete this storage location. It's a bit of a hack,
   /// but the only undeletable location is the internal storage dir, so we can
@@ -465,7 +504,10 @@ class DownloadLocation {
         _currentPath = relativePath!;
       case DownloadLocationType.custom:
         _currentPath = relativePath!;
-      case _:
+      case DownloadLocationType.cache:
+        _currentPath = (await getApplicationCacheDirectory()).path;
+      case DownloadLocationType.none:
+      case DownloadLocationType.migrated:
         throw StateError("Bad basedirectory");
     }
   }
@@ -774,9 +816,7 @@ class DownloadStub {
         // TODO create an enum or somthing for this if more custom collections happen
         return baseItem == null &&
             baseItemType == BaseItemDtoType.unknown &&
-            (id == "Favorites" ||
-                id == "All Playlists" ||
-                id == "5 Latest Albums");
+            finampCollection != null;
       case DownloadItemType.anchor:
         return baseItem == null &&
             baseItemType == BaseItemDtoType.unknown &&
@@ -819,6 +859,18 @@ class DownloadStub {
         baseItemType: BaseItemDtoType.unknown);
   }
 
+  factory DownloadStub.fromFinampCollection(
+      {required FinampCollection collection, required String? name}) {
+    String id = collection.id;
+    return DownloadStub._build(
+        id: id,
+        isarId: getHash(id, DownloadItemType.finampCollection),
+        jsonItem: jsonEncode(collection.toJson()),
+        type: DownloadItemType.finampCollection,
+        name: name ?? "Unlocalized Finamp Collection $id",
+        baseItemType: BaseItemDtoType.unknown);
+  }
+
   /// The integer iD used as a database key by Isar
   final Id isarId;
 
@@ -840,10 +892,22 @@ class DownloadStub {
   final String? jsonItem;
 
   @ignore
-  BaseItemDto? get baseItem => _baseItemCached ??=
-      ((jsonItem == null) ? null : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
+  BaseItemDto? get baseItem =>
+      _baseItemCached ??= ((jsonItem == null || !type.requiresItem)
+          ? null
+          : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
+
   @ignore
   BaseItemDto? _baseItemCached;
+
+  @ignore
+  FinampCollection? get finampCollection => _finampCollectionCached ??=
+      ((jsonItem == null || type != DownloadItemType.finampCollection)
+          ? null
+          : FinampCollection.fromJson(jsonDecode(jsonItem!)));
+
+  @ignore
+  FinampCollection? _finampCollectionCached;
 
   /// FNV-1a 64bit hash algorithm optimized for Dart Strings
   /// Provided by Isar documentation
@@ -1005,14 +1069,15 @@ class DownloadItem extends DownloadStub {
       if (item.id != id) {
         throw "Could not update $name - incompatible new item $item";
       }
-      // Not all BaseItemDto are requested with mediasources or childcount.  Do not
+      // Not all BaseItemDto are requested with mediaSources, mediaStreams or childCount.  Do not
       // overwrite with null if the new item does not have them.
       item.mediaSources ??= baseItem?.mediaSources;
+      item.mediaStreams ??= baseItem?.mediaStreams;
       item.childCount ??= baseItem?.childCount;
     }
     assert(item == null ||
-        item.mediaSources == null ||
-        item.mediaSources!.isNotEmpty);
+        ((item.mediaSources == null || item.mediaSources!.isNotEmpty) &&
+            (item.mediaStreams == null || item.mediaStreams!.isNotEmpty)));
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
     if (viewId == null || viewId == this.viewId) {
       if (item == null || baseItem!.mostlyEqual(item)) {
@@ -1466,6 +1531,33 @@ class FinampQueueInfo {
 
   @HiveField(6)
   String id;
+
+  int get currentTrackIndex =>
+      previousTracks.length + (currentTrack == null ? 0 : 1);
+  int get remainingTrackCount => nextUp.length + queue.length;
+  int get trackCount => currentTrackIndex + remainingTrackCount;
+
+  /// Remaining duration of queue.  Does not consider position in current track.
+  Duration get remainingDuration {
+    var remaining = 0;
+    for (var item in CombinedIterableView([nextUp, queue])) {
+      remaining += item.item.duration?.inMicroseconds ?? 0;
+    }
+    return Duration(microseconds: remaining);
+  }
+
+  Duration get totalDuration {
+    var total = 0;
+    for (var item in CombinedIterableView([
+      previousTracks,
+      [currentTrack],
+      nextUp,
+      queue
+    ])) {
+      total += item?.item.duration?.inMicroseconds ?? 0;
+    }
+    return Duration(microseconds: total);
+  }
 }
 
 @HiveType(typeId: 60)
@@ -1584,24 +1676,26 @@ enum VolumeNormalizationMode {
 @HiveType(typeId: 64)
 enum DownloadLocationType {
   @HiveField(0)
-  internalDocuments(false, false, false, BaseDirectory.applicationDocuments),
+  internalDocuments(false, false, BaseDirectory.applicationDocuments),
   @HiveField(1)
-  internalSupport(false, false, false, BaseDirectory.applicationSupport),
+  internalSupport(false, false, BaseDirectory.applicationSupport),
   @HiveField(2)
-  external(true, false, false, BaseDirectory.root),
+  external(true, false, BaseDirectory.root),
   @HiveField(3)
-  custom(true, false, true, BaseDirectory.root),
+  custom(true, true, BaseDirectory.root),
   @HiveField(4)
-  none(false, false, false, BaseDirectory.root),
+  none(false, false, BaseDirectory.root),
   @HiveField(5)
-  migrated(true, false, false, BaseDirectory.root);
+  migrated(true, false, BaseDirectory.root),
+  @HiveField(6)
+  cache(false, false, BaseDirectory.root);
 
-  const DownloadLocationType(this.needsPath, this.needsPermission,
-      this.useHumanReadableNames, this.baseDirectory);
+  const DownloadLocationType(
+      this.needsPath, this.useHumanReadableNames, this.baseDirectory);
 
+  /// true if the download location path must be supplied in the constructer,
+  /// false if it is calculated from the baseDirectory
   final bool needsPath;
-  // TODO this isn't used anymore.  Investigate permission stuff.
-  final bool needsPermission;
   final bool useHumanReadableNames;
   final BaseDirectory baseDirectory;
 }
@@ -1710,4 +1804,114 @@ enum TranscodeDownloadsSetting {
   never,
   @HiveField(2)
   ask;
+}
+
+/// TODO
+@collection
+class DownloadedLyrics {
+  DownloadedLyrics({
+    required this.jsonItem,
+    required this.isarId,
+  });
+
+  factory DownloadedLyrics.fromItem({
+    required LyricDto item,
+    required int isarId,
+  }) {
+    return DownloadedLyrics(
+      isarId: isarId,
+      jsonItem: jsonEncode(item.toJson()),
+    );
+  }
+
+  /// The integer ID used as a database key by Isar
+  final Id isarId;
+
+  /// The LyricDto as a JSON string for storage in isar.
+  /// Use [lyricDto] to retrieve.
+  final String? jsonItem;
+
+  @ignore
+  LyricDto? get lyricDto => _lyricDtoCached ??=
+      ((jsonItem == null) ? null : LyricDto.fromJson(jsonDecode(jsonItem!)));
+  @ignore
+  LyricDto? _lyricDtoCached;
+}
+
+@HiveType(typeId: 67)
+enum PlaybackSpeedVisibility {
+  @HiveField(0)
+  automatic,
+  @HiveField(1)
+  visible,
+  @HiveField(2)
+  hidden;
+
+  /// Human-readable version of this enum. I've written longer descriptions on
+  /// enums like [TabContentType], and I can't be bothered to copy and paste it
+  /// again.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(PlaybackSpeedVisibility playbackSpeedVisibility) {
+    switch (playbackSpeedVisibility) {
+      case PlaybackSpeedVisibility.automatic:
+        return "Automatic";
+      case PlaybackSpeedVisibility.visible:
+        return "On";
+      case PlaybackSpeedVisibility.hidden:
+        return "Off";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      PlaybackSpeedVisibility playbackSpeedVisibility, BuildContext context) {
+    switch (playbackSpeedVisibility) {
+      case PlaybackSpeedVisibility.automatic:
+        return AppLocalizations.of(context)!.automatic;
+      case PlaybackSpeedVisibility.visible:
+        return AppLocalizations.of(context)!.shown;
+      case PlaybackSpeedVisibility.hidden:
+        return AppLocalizations.of(context)!.hidden;
+    }
+  }
+}
+
+enum FinampCollectionType {
+  favorites,
+  allPlaylists,
+  latest5Albums,
+  libraryImages;
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+  includeIfNull: false,
+)
+class FinampCollection {
+  FinampCollection({required this.type, this.library}) {
+    assert(type == FinampCollectionType.libraryImages || library == null);
+    assert(type != FinampCollectionType.libraryImages || library != null);
+  }
+
+  final FinampCollectionType type;
+  final BaseItemDto? library;
+
+  String get id => switch (type) {
+        FinampCollectionType.favorites => "Favorites",
+        FinampCollectionType.allPlaylists => "All Playlists",
+        FinampCollectionType.latest5Albums => "5 Latest Albums",
+        FinampCollectionType.libraryImages =>
+          "Cache Library Images:${library!.id}",
+      };
+
+  factory FinampCollection.fromJson(Map<String, dynamic> json) =>
+      _$FinampCollectionFromJson(json);
+  Map<String, dynamic> toJson() => _$FinampCollectionToJson(this);
 }

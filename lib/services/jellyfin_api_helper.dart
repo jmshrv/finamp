@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
@@ -55,7 +56,9 @@ class JellyfinApiHelper {
     BackgroundIsolateBinaryMessenger.ensureInitialized(input.$2);
     ReceivePort requestPort = ReceivePort();
     input.$1.send(requestPort.sendPort);
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = (Platform.isAndroid || Platform.isIOS)
+        ? await getApplicationDocumentsDirectory()
+        : await getApplicationSupportDirectory();
     final isar = await Isar.open(
       [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
       directory: dir.path,
@@ -533,9 +536,8 @@ class JellyfinApiHelper {
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromId(
-            id: "Favorites",
-            type: DownloadItemType.finampCollection,
+        DownloadStub.fromFinampCollection(
+            collection: FinampCollection(type: FinampCollectionType.favorites),
             name: null),
         null,
         keepSlow: true));
@@ -550,9 +552,8 @@ class JellyfinApiHelper {
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromId(
-            id: "Favorites",
-            type: DownloadItemType.finampCollection,
+        DownloadStub.fromFinampCollection(
+            collection: FinampCollection(type: FinampCollectionType.favorites),
             name: null),
         null,
         keepSlow: true));
@@ -632,6 +633,17 @@ class JellyfinApiHelper {
         fields: "Chapters");
 
     return (QueryResult_BaseItemDto.fromJson(response).items);
+  }
+
+  /// Gets the lyrics for an item.
+  Future<LyricDto> getLyrics({
+    required String itemId,
+  }) async {
+    final response = await jellyfinApi.getLyrics(
+      itemId: itemId,
+    );
+
+    return LyricDto.fromJson(response);
   }
 
   /// Removes the current user from the DB and revokes the token on Jellyfin
@@ -761,7 +773,8 @@ class JellyfinApiHelper {
       // Jellyfin). Once https://github.com/jellyfin/jellyfin/pull/9192 lands,
       // we could use M4A/AAC.
 
-      assert(transcodingProfile.codec.container != null, "Missing container for codec while trying to download transcoded track!");
+      assert(transcodingProfile.codec.container != null,
+          "Missing container for codec while trying to download transcoded track!");
 
       queryParameters.addAll({
         "transcodingContainer": transcodingProfile.codec.container!,

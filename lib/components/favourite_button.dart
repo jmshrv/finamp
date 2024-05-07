@@ -40,7 +40,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-    
+
     if (widget.item == null) {
       return const SizedBox.shrink();
     }
@@ -64,42 +64,45 @@ class _FavoriteButtonState extends State<FavoriteButton> {
           size: widget.size ?? 24.0,
         ),
         color: widget.color ?? IconTheme.of(context).color,
-        disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
+        disabledColor:
+            (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
         visualDensity: widget.visualDensity ?? VisualDensity.compact,
         tooltip: AppLocalizations.of(context)!.favourite,
-        onPressed: isOffline ? null : () async {
+        onPressed: isOffline
+            ? null
+            : () async {
+                if (isOffline) {
+                  FeedbackHelper.feedback(FeedbackType.error);
+                  GlobalSnackbar.message((context) =>
+                      AppLocalizations.of(context)!.notAvailableInOfflineMode);
+                  return;
+                }
 
-          if (isOffline) {
-            FeedbackHelper.feedback(FeedbackType.error);
-            GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
-            return;
-          }
-          
-          try {
-            UserItemDataDto? newUserData;
-            if (isFav) {
-              newUserData =
-                  await jellyfinApiHelper.removeFavourite(widget.item!.id);
-            } else {
-              newUserData =
-                  await jellyfinApiHelper.addFavourite(widget.item!.id);
-            }
-            setState(() {
-              widget.item!.userData = newUserData;
-              if (widget.inPlayer) {
-                audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] =
-                    widget.item!.toJson();
-              }
-            });
+                try {
+                  UserItemDataDto? newUserData;
+                  if (isFav) {
+                    newUserData = await jellyfinApiHelper
+                        .removeFavourite(widget.item!.id);
+                  } else {
+                    newUserData =
+                        await jellyfinApiHelper.addFavourite(widget.item!.id);
+                  }
+                  setState(() {
+                    widget.item!.userData = newUserData;
+                    if (widget.inPlayer) {
+                      audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] =
+                          widget.item!.toJson();
+                    }
+                  });
 
-            if (widget.onToggle != null) {
-              FeedbackHelper.feedback(FeedbackType.success);
-              widget.onToggle!(widget.item!.userData!.isFavorite);
-            }
-          } catch (e) {
-            GlobalSnackbar.error(e);
-          }
-        },
+                  if (widget.onToggle != null) {
+                    FeedbackHelper.feedback(FeedbackType.success);
+                    widget.onToggle!(widget.item!.userData!.isFavorite);
+                  }
+                } catch (e) {
+                  GlobalSnackbar.error(e);
+                }
+              },
       );
     }
   }
