@@ -33,11 +33,7 @@ class SongNameContent extends StatelessWidget {
 
         final currentTrack = snapshot.data!.currentTrack!;
 
-        final jellyfin_models.BaseItemDto? songBaseItemDto =
-            currentTrack.item.extras!["itemJson"] != null
-                ? jellyfin_models.BaseItemDto.fromJson(
-                    currentTrack.item.extras!["itemJson"])
-                : null;
+        final jellyfin_models.BaseItemDto? songBaseItemDto = currentTrack.baseItem;
 
         return LayoutBuilder(builder: (context, constraints) {
           double padding = ((constraints.maxWidth - 260) / 4).clamp(0, 20);
