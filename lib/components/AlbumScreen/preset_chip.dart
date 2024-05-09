@@ -60,7 +60,7 @@ class _PresetChipsState extends State<PresetChips> {
     } else {
       _controller!.animateTo(
         offset,
-        duration: Duration(milliseconds: 350),
+        duration: const Duration(milliseconds: 350),
         curve: Curves.easeOutCubic,
       );
     }
