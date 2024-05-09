@@ -611,6 +611,26 @@
   "@removeFromPlaylistTooltip": {},
   "removeFromPlaylistTitle": "Remove from Playlist",
   "@removeFromPlaylistTitle": {},
+  "removeFromPlaylistNamedTooltip": "Remove from playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a song from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Songs"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Remove from Playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a song from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Songs"
+      }
+    }
+  },
   "newPlaylist": "New Playlist",
   "@newPlaylist": {},
   "createButtonLabel": "CREATE",
@@ -1466,5 +1486,9 @@
       }
     },
     "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
   }
 }

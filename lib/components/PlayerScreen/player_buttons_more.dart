@@ -1,14 +1,17 @@
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/add_to_playlist_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/finamp_models.dart';
 
@@ -29,10 +32,24 @@ class PlayerButtonsMore extends ConsumerWidget {
         size: 24,
       ),
       child: GestureDetector(
-        onLongPress: () {
-          FeedbackHelper.feedback(FeedbackType.medium);
-          Navigator.of(context)
-              .pushNamed(AddToPlaylistScreen.routeName, arguments: item!.id);
+        onLongPress: () async {
+          if (FinampSettingsHelper.finampSettings.isOffline) {
+            return GlobalSnackbar.message((context) =>
+                AppLocalizations.of(context)!.notAvailableInOfflineMode);
+          }
+
+          bool inPlaylist = queueItemInPlaylist(queueItem);
+          if (inPlaylist) {
+            await showModalQuickActionsMenu(
+              context: context,
+              item: item!,
+              parentItem: queueItem!.source.item,
+            );
+          } else {
+            FeedbackHelper.feedback(FeedbackType.medium);
+            await Navigator.of(context)
+                .pushNamed(AddToPlaylistScreen.routeName, arguments: item!.id);
+          }
         },
         child: IconButton(
           icon: const Icon(

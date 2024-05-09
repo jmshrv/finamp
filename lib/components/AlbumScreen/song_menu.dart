@@ -1116,3 +1116,285 @@ class RenderSongMenuMask extends RenderProxySliver {
     }
   }
 }
+
+Future<void> showModalQuickActionsMenu({
+  required BuildContext context,
+  required BaseItemDto item,
+  required BaseItemDto? parentItem,
+  bool usePlayerTheme = false,
+  Function? onRemoveFromList,
+  bool confirmPlaylistRemoval = false,
+  ImageProvider? cachedImage,
+  ThemeProvider? themeProvider,
+}) async {
+  final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
+  FeedbackHelper.feedback(FeedbackType.impact);
+
+  if (themeProvider == null && !usePlayerTheme) {
+    if (cachedImage != null) {
+      // If calling widget failed to precalculate theme and we have a cached image,
+      // calculate in foreground.  This causes a lag spike but is far quicker.
+      themeProvider = ThemeProvider(cachedImage, Theme.of(context).brightness,
+          useIsolate: false);
+    } else if (item.blurHash != null) {
+      themeProvider = ThemeProvider(
+          BlurHashImage(item.blurHash!), Theme.of(context).brightness,
+          useIsolate: false);
+    }
+  }
+
+  await showModalBottomSheet(
+      context: context,
+      constraints: BoxConstraints(
+          maxWidth: (Platform.isIOS || Platform.isAndroid)
+              ? 500
+              : min(500, MediaQuery.sizeOf(context).width * 0.9)),
+      isDismissible: true,
+      enableDrag: true,
+      useSafeArea: true,
+      isScrollControlled: true,
+      routeSettings: const RouteSettings(name: QuickActionsMenu.routeName),
+      clipBehavior: Clip.hardEdge,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      backgroundColor: (Theme.of(context).brightness == Brightness.light
+              ? Colors.white
+              : Colors.black)
+          .withOpacity(0.9),
+      builder: (BuildContext context) {
+        return QuickActionsMenu(
+          key: ValueKey(item.id),
+          item: item,
+          parentItem: parentItem,
+          usePlayerTheme: usePlayerTheme,
+          isOffline: isOffline,
+          onRemoveFromList: onRemoveFromList,
+          cachedImage: cachedImage,
+          themeProvider: themeProvider,
+          brightness: Theme.of(context).brightness,
+          confirmPlaylistRemoval: confirmPlaylistRemoval,
+        );
+      });
+}
+
+class QuickActionsMenu extends ConsumerStatefulWidget {
+  static const routeName = "/playlist-actions-menu";
+
+  const QuickActionsMenu({
+    super.key,
+    required this.item,
+    required this.isOffline,
+    required this.usePlayerTheme,
+    required this.onRemoveFromList,
+    required this.confirmPlaylistRemoval,
+    this.parentItem,
+    this.cachedImage,
+    this.themeProvider,
+    required this.brightness,
+  });
+
+  final BaseItemDto item;
+  final BaseItemDto? parentItem;
+  final bool isOffline;
+  final bool usePlayerTheme;
+  final Function? onRemoveFromList;
+  final ImageProvider? cachedImage;
+  final ThemeProvider? themeProvider;
+  final Brightness brightness;
+  final bool confirmPlaylistRemoval;
+
+  @override
+  ConsumerState<QuickActionsMenu> createState() => _QuickActionsMenuState();
+}
+
+class _QuickActionsMenuState extends ConsumerState<QuickActionsMenu> {
+  final ScrollController _controller = ScrollController();
+
+  ColorScheme? _imageTheme;
+  ImageProvider? _imageProvider;
+
+  final dragController = DraggableScrollableController();
+
+  @override
+  void initState() {
+    if (widget.usePlayerTheme) {
+      // We do not want to update theme/image on track changes.
+      _imageTheme = ref.read(playerScreenThemeProvider(widget.brightness));
+      _imageProvider = ref.read(currentAlbumImageProvider);
+    } else {
+      _imageTheme = widget.themeProvider?.colorScheme;
+      if (_imageTheme == null) {
+        _imageTheme = getGreyTheme(widget.brightness);
+        // Rebuild widget if/when theme calculation completes
+        widget.themeProvider?.colorSchemeFuture.then((value) => setState(() {
+              _imageTheme = value;
+            }));
+      }
+      _imageProvider = widget.cachedImage ??
+          ref.read(albumImageProvider(AlbumImageRequest(
+            item: widget.item,
+            maxWidth: 100,
+            maxHeight: 100,
+          )));
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: ThemeData(colorScheme: _imageTheme),
+      child: LayoutBuilder(builder: (context, constraints) {
+        final menuEntries = _menuEntries(context);
+        var stackHeight = 75;
+        stackHeight += menuEntries
+                .where((element) =>
+                    switch (element) { Visibility e => e.visible, _ => true })
+                .length *
+            56;
+        var size = (stackHeight / constraints.maxHeight).clamp(0.2, 1.0);
+
+        if (Platform.isIOS || Platform.isAndroid) {
+          return DraggableScrollableSheet(
+            controller: dragController,
+            snap: true,
+            initialChildSize: size,
+            minChildSize: size * 0.8,
+            shouldCloseOnMinExtent: true,
+            maxChildSize: size,
+            expand: false,
+            builder: (context, scrollController) =>
+                menu(context, scrollController, menuEntries),
+          );
+        } else {
+          return SizedBox(
+            // This is an overestimate of stack height on desktop, but this widget
+            // needs some bottom padding on large displays anyway.
+            height: stackHeight.toDouble(),
+            child: menu(context, _controller, menuEntries),
+          );
+        }
+      }),
+    );
+  }
+
+  List<Widget> _menuEntries(BuildContext context) {
+    var iconColor = Theme.of(context).colorScheme.primary;
+
+    return [
+      ListTile(
+        leading: Icon(
+          Icons.playlist_add,
+          color: iconColor,
+        ),
+        title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
+        enabled: !widget.isOffline,
+        onTap: () {
+          FeedbackHelper.feedback(FeedbackType.selection);
+          Navigator.pop(context); // close menu
+          Navigator.of(context).pushNamed(AddToPlaylistScreen.routeName,
+              arguments: widget.item.id);
+        },
+      ),
+      ListTile(
+        leading: Icon(
+          Icons.playlist_remove,
+          color: iconColor,
+        ),
+        title: Text(AppLocalizations.of(context)!.removeFromPlaylistNamedTitle(
+            widget.parentItem!.name ??
+                AppLocalizations.of(context)!.unknownName)),
+        enabled: widget.parentItem != null && !widget.isOffline,
+        onTap: () async {
+          FeedbackHelper.feedback(FeedbackType.selection);
+          var removed = await removeFromPlaylist(
+              context, widget.item, widget.parentItem!,
+              confirm: widget.confirmPlaylistRemoval);
+          if (removed) {
+            if (widget.onRemoveFromList != null) {
+              widget.onRemoveFromList!();
+            }
+            if (context.mounted) {
+              Navigator.pop(context);
+            }
+          }
+        },
+      ),
+    ];
+  }
+
+  Widget menu(BuildContext context, ScrollController scrollController,
+      List<Widget> menuEntries) {
+    return Stack(
+      children: [
+        if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+          BlurredPlayerScreenBackground(
+              customImageProvider: _imageProvider,
+              blurHash: widget.item.blurHash,
+              opacityFactor:
+                  Theme.of(context).brightness == Brightness.dark ? 1.0 : 1.0),
+        CustomScrollView(
+          controller: scrollController,
+          slivers: [
+            SliverPersistentHeader(
+              delegate: QuickActionsMenuSliverAppBar(
+                headerImage: widget.usePlayerTheme ? _imageProvider : null,
+              ),
+              pinned: true,
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(left: 8.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(menuEntries),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    widget.themeProvider?.dispose();
+    super.dispose();
+  }
+}
+
+class QuickActionsMenuSliverAppBar extends SliverPersistentHeaderDelegate {
+  ImageProvider? headerImage;
+
+  QuickActionsMenuSliverAppBar({
+    this.headerImage,
+  });
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+        child: Center(
+          child: Text(AppLocalizations.of(context)!.quickActions,
+              style: Theme.of(context).textTheme.titleMedium),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      true;
+}
