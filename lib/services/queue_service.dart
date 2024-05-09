@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
+import '../components/PlayerScreen/queue_source_helper.dart';
 import 'downloads_service.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
@@ -467,6 +468,7 @@ class QueueService {
       _queuePreviousTracks.clear();
       _queueNextUp.clear();
       _currentTrack = null;
+      playlistRemovalsCache.clear();
 
       List<FinampQueueItem> newItems = [];
       List<int> newLinearOrder = [];

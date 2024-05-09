@@ -124,7 +124,6 @@ Future<bool> removeFromPlaylist(
 
 // Removed playlist items will persist in queue with playlist source.  Store removed items
 // to hide remove from playlist prompt on those items.
-// TODO be smarter, reset on queue replacment, delete on re-add?  Show state somehow?
 final List<String> playlistRemovalsCache = [];
 
 bool queueItemInPlaylist(FinampQueueItem? queueItem) {
