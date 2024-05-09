@@ -8,8 +8,8 @@ import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/progress_state_stream.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -107,9 +107,10 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
           SafeArea(
             minimum: EdgeInsets.only(top: toolbarHeight),
             child: LayoutBuilder(builder: (context, constraints) {
-              if (MediaQuery.of(context).orientation == Orientation.landscape) {
-                controller.updateLayoutLandscape(
-                    Size(constraints.maxWidth, constraints.maxHeight));
+              controller.setSize(
+                  Size(constraints.maxWidth, constraints.maxHeight),
+                  MediaQuery.orientationOf(context));
+              if (controller.useLandscape) {
                 return SimpleGestureDetector(
                     onHorizontalSwipe: (direction) {
                       if (direction == SwipeDirection.right) {
@@ -121,8 +122,6 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                     },
                     child: const LyricsView());
               } else {
-                controller.updateLayoutPortrait(
-                    Size(constraints.maxWidth, constraints.maxHeight));
                 return SimpleGestureDetector(
                   onHorizontalSwipe: (direction) {
                     if (direction == SwipeDirection.right) {
@@ -189,7 +188,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     autoScrollController = AutoScrollController(
         suggestedRowHeight: 72,
         viewportBoundaryGetter: () =>
