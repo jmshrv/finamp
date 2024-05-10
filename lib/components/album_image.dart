@@ -28,6 +28,7 @@ class AlbumImage extends ConsumerWidget {
     this.placeholderBuilder,
     this.disabled = false,
     this.autoScale = true,
+    this.blurHash,
   });
 
   /// The item to get an image for.
@@ -47,12 +48,13 @@ class AlbumImage extends ConsumerWidget {
   /// Whether to automatically scale the image to the size of the widget.
   final bool autoScale;
 
+  final String? blurHash;
+
   static final defaultBorderRadius = BorderRadius.circular(4);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final borderRadius = this.borderRadius ?? defaultBorderRadius;
-
     assert(item == null || imageListenable == null);
     if ((item == null || item!.imageId == null) && imageListenable == null) {
       return ClipRRect(
@@ -95,6 +97,7 @@ class AlbumImage extends ConsumerWidget {
             }
           }
 
+          var localBlurhash = blurHash ?? item?.blurHash;
           var image = BareAlbumImage(
             imageListenable: imageListenable ??
                 albumImageProvider(AlbumImageRequest(
@@ -104,11 +107,11 @@ class AlbumImage extends ConsumerWidget {
                 )),
             imageProviderCallback: imageProviderCallback,
             placeholderBuilder: placeholderBuilder ??
-                (item?.blurHash != null
+                (localBlurhash != null
                     ? (_) => Image(
                         fit: BoxFit.cover,
                         image: BlurHashImage(
-                          item!.blurHash!,
+                          localBlurhash,
                         ))
                     : BareAlbumImage.defaultPlaceholderBuilder),
           );

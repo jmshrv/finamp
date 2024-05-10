@@ -28,6 +28,11 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var imageProvider =
         customImageProvider ?? ref.watch(currentAlbumImageProvider);
+    var localBlurhash = blurHash;
+    if (customImageProvider == null) {
+      localBlurhash ??=
+          ref.watch(currentSongProvider).value?.baseItem?.blurHash;
+    }
 
     var overlayColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.black
@@ -35,14 +40,14 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
         : Colors.white
             .withOpacity(ui.clampDouble(0.75 * opacityFactor, 0.0, 1.0));
 
-    Widget placeholderBuilder(_) => blurHash != null
+    Widget placeholderBuilder(_) => localBlurhash != null
         ? SizedBox.expand(
             child: Image(
                 fit: BoxFit.cover,
                 color: overlayColor,
                 colorBlendMode: BlendMode.srcOver,
                 image: BlurHashImage(
-                  blurHash!,
+                  localBlurhash,
                 )),
           )
         : const SizedBox.shrink();
@@ -55,9 +60,9 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                 ? placeholderBuilder(null)
                 : OctoImage(
                     // Don't transition between images with identical files/urls unless
-                // system theme has changed
-                    key: ValueKey(imageProvider.toString() +
-                    Theme.of(context).brightness.toString()),
+                    // system theme has changed
+                    key: ValueKey(imageProvider.hashCode +
+                        Theme.of(context).brightness.index),
                     image: imageProvider,
                     fit: BoxFit.cover,
                     fadeInDuration: const Duration(seconds: 0),

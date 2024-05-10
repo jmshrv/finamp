@@ -163,7 +163,6 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
   }
 
   Widget buildInternal(int stackHeight, List<Widget> slivers) {
-    //var (stackHeight, slivers) = widget.buildSlivers(context);
     if (Platform.isIOS || Platform.isAndroid) {
       return LayoutBuilder(builder: (context, constraints) {
         var size = (stackHeight / constraints.maxHeight)

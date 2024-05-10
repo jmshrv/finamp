@@ -1,3 +1,4 @@
+import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -9,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../../services/current_album_image_provider.dart';
+import '../AlbumScreen/song_menu.dart';
 import '../album_image.dart';
 
 class PlayerScreenAlbumImage extends StatelessWidget {
@@ -28,63 +30,82 @@ class PlayerScreenAlbumImage extends StatelessWidget {
           );
         }
 
-        return SimpleGestureDetector(
-          //TODO replace with PageView, this is just a placeholder
-          onTap: () {
-            final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
-            audioService.togglePlayback();
-            FeedbackHelper.feedback(FeedbackType.selection);
-          },
-          onHorizontalSwipe: (direction) {
-            final queueService = GetIt.instance<QueueService>();
-            if (direction == SwipeDirection.left) {
-              if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                queueService.skipByOffset(1);
-                FeedbackHelper.feedback(FeedbackType.selection);
-              }
-            } else if (direction == SwipeDirection.right) {
-              if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                queueService.skipByOffset(-1);
-                FeedbackHelper.feedback(FeedbackType.selection);
-              }
+        return GestureDetector(
+          onSecondaryTapDown: (_) async {
+            var queueItem = snapshot.data!.currentTrack;
+            if (queueItem?.baseItem != null) {
+              var inPlaylist = queueItemInPlaylist(queueItem);
+              await showModalSongMenu(
+                context: context,
+                item: queueItem!.baseItem!,
+                usePlayerTheme: true,
+                showPlaybackControls: true,
+                // show controls on player screen
+                parentItem: inPlaylist ? queueItem.source.item : null,
+                isInPlaylist: inPlaylist,
+              );
             }
           },
-          child: AspectRatio(
-            aspectRatio: 1.0,
-            //aspectRatio: 0.5,
-            child: Align(
-              alignment: Alignment.center,
-              child: LayoutBuilder(builder: (context, constraints) {
-                //print(
-                //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
-                final horizontalPadding = constraints.maxWidth *
-                    (FinampSettingsHelper
-                            .finampSettings.playerScreenCoverMinimumPadding /
-                        100.0);
-                return Padding(
-                  padding: EdgeInsets.only(
-                    left: horizontalPadding,
-                    right: horizontalPadding,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 24,
-                          offset: const Offset(0, 4),
-                          color: Colors.black.withOpacity(0.3),
-                        )
-                      ],
+          child: SimpleGestureDetector(
+            //TODO replace with PageView, this is just a placeholder
+            onTap: () {
+              final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
+              audioService.togglePlayback();
+              FeedbackHelper.feedback(FeedbackType.selection);
+            },
+            onHorizontalSwipe: (direction) {
+              final queueService = GetIt.instance<QueueService>();
+              if (direction == SwipeDirection.left) {
+                if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                  queueService.skipByOffset(1);
+                  FeedbackHelper.feedback(FeedbackType.selection);
+                }
+              } else if (direction == SwipeDirection.right) {
+                if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                  queueService.skipByOffset(-1);
+                  FeedbackHelper.feedback(FeedbackType.selection);
+                }
+              }
+            },
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              //aspectRatio: 0.5,
+              child: Align(
+                alignment: Alignment.center,
+                child: LayoutBuilder(builder: (context, constraints) {
+                  //print(
+                  //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
+                  final horizontalPadding = constraints.maxWidth *
+                      (FinampSettingsHelper
+                              .finampSettings.playerScreenCoverMinimumPadding /
+                          100.0);
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      left: horizontalPadding,
+                      right: horizontalPadding,
                     ),
-                    child: AlbumImage(
-                      imageListenable: currentAlbumImageProvider,
-                      borderRadius: BorderRadius.circular(8.0),
-                      // Load player cover at max size to allow more seamless scaling
-                      autoScale: false,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 24,
+                            offset: const Offset(0, 4),
+                            color: Colors.black.withOpacity(0.3),
+                          )
+                        ],
+                      ),
+                      child: AlbumImage(
+                        blurHash:
+                            snapshot.data?.currentTrack?.baseItem?.blurHash,
+                        imageListenable: currentAlbumImageProvider,
+                        borderRadius: BorderRadius.circular(8.0),
+                        // Load player cover at max size to allow more seamless scaling
+                        autoScale: false,
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ),
           ),
         );
