@@ -44,6 +44,7 @@ class PlayerButtonsMore extends ConsumerWidget {
               context: context,
               item: item!,
               parentItem: queueItem!.source.item,
+              usePlayerTheme: true,
             );
           } else {
             FeedbackHelper.feedback(FeedbackType.medium);
