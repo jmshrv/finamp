@@ -168,12 +168,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _queueCallbackPreviousTrack = previousTrackCallback;
   }
 
-  Future<void> initializeAudioSource(ConcatenatingAudioSource source) async {
+  Future<void> initializeAudioSource(ConcatenatingAudioSource source,
+      {required bool preload}) async {
     _queueAudioSource = source;
 
     try {
       await _player.setAudioSource(
         _queueAudioSource,
+        preload: preload,
         initialIndex: nextInitialIndex,
       );
     } on PlayerException catch (e) {

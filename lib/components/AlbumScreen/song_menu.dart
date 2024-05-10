@@ -367,13 +367,11 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         },
       ),
       Visibility(
-        visible: widget.isInPlaylist &&
-            widget.parentItem != null &&
-            !widget.isOffline,
+        visible: widget.isInPlaylist && widget.parentItem != null,
         child: ListTile(
           leading: Icon(
             Icons.playlist_remove,
-            color: iconColor,
+            color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.removeFromPlaylistTitle),
           enabled: widget.isInPlaylist &&

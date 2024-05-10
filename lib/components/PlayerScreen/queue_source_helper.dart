@@ -137,8 +137,7 @@ bool queueItemInPlaylist(FinampQueueItem? queueItem) {
     return false;
   }
   final baseItem = queueItem.baseItem;
-  return !FinampSettingsHelper.finampSettings.isOffline &&
-      [QueueItemSourceType.playlist, QueueItemSourceType.nextUpPlaylist]
+  return [QueueItemSourceType.playlist, QueueItemSourceType.nextUpPlaylist]
           .contains(queueItem.source.type) &&
       baseItem?.playlistItemId != null &&
       !playlistRemovalsCache

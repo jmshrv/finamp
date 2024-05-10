@@ -92,7 +92,6 @@ class QueueService {
       children: [],
       shuffleOrder: _shuffleOrder,
     );
-    _audioHandler.initializeAudioSource(_queueAudioSource);
 
     _audioHandler.playbackState.listen((event) async {
       // int indexDifference = (event.currentIndex ?? 0) - _queueAudioSourceIndex;
@@ -138,6 +137,9 @@ class QueueService {
     //   skipToIndexCallback: _applySkipToTrackByOffset,
     // );
   }
+
+  Future initializePlayer() =>
+      _audioHandler.initializeAudioSource(_queueAudioSource, preload: true);
 
   void _queueFromConcatenatingAudioSource({
     logUpdate = true,
@@ -510,7 +512,9 @@ class QueueService {
         _queueAudioSourceIndex = _queueAudioSource.shuffleIndices[initialIndex];
       }
       _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
-      await _audioHandler.initializeAudioSource(_queueAudioSource);
+
+      await _audioHandler.initializeAudioSource(_queueAudioSource,
+          preload: true);
 
       newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
@@ -556,6 +560,9 @@ class QueueService {
     await _audioHandler.stopPlayback();
 
     await _queueAudioSource.clear();
+
+    await _audioHandler.initializeAudioSource(_queueAudioSource,
+        preload: false);
 
     _queueFromConcatenatingAudioSource();
 
