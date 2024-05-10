@@ -64,11 +64,12 @@ const _androidStopForegroundOnPauseDefault = false;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
 const _volumeNormalizationActiveDefault = true;
-// 3/4 volume in dB. In my testing, most tracks were louder than the default target
-// of -14.0 normalization gain, so the gain rarely needed to be increased. -5.0 gives us a bit of
+// 80% volume in dB. In my testing, most tracks were louder than the default target
+// of -18.0 LUFS, so the gain rarely needed to be increased. -2.0 gives us a bit of
 // headroom in case we need to boost a track (since volume can't go above 1.0),
 // without reducing the volume too much.
-const _volumeNormalizationIOSBaseGainDefault = -5.0;
+// Ideally the maximum gain in each library should be fetched from the server, and this volume should be adjusted accordingly
+const _volumeNormalizationIOSBaseGainDefault = -2.0;
 const _volumeNormalizationModeDefault = VolumeNormalizationMode.hybrid;
 const _contentViewType = ContentViewType.list;
 const _playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;

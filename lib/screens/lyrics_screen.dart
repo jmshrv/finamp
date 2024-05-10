@@ -108,9 +108,10 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
           SafeArea(
             minimum: EdgeInsets.only(top: toolbarHeight),
             child: LayoutBuilder(builder: (context, constraints) {
-              if (MediaQuery.of(context).orientation == Orientation.landscape) {
-                controller.updateLayoutLandscape(
-                    Size(constraints.maxWidth, constraints.maxHeight));
+              controller.setSize(
+                  Size(constraints.maxWidth, constraints.maxHeight),
+                  MediaQuery.orientationOf(context));
+              if (controller.useLandscape) {
                 return SimpleGestureDetector(
                     onHorizontalSwipe: (direction) {
                       if (direction == SwipeDirection.right) {
@@ -122,8 +123,6 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                     },
                     child: const LyricsView());
               } else {
-                controller.updateLayoutPortrait(
-                    Size(constraints.maxWidth, constraints.maxHeight));
                 return SimpleGestureDetector(
                   onHorizontalSwipe: (direction) {
                     if (direction == SwipeDirection.right) {

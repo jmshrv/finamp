@@ -1088,7 +1088,7 @@
   "@volumeNormalizationIOSBaseGainEditorTitle": {
     "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet tracks. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet tracks. The value is in decibels (dB), where -10 dB is ~30% volume, -4.5 dB is ~60% volume and -2 dB is ~80% volume.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
