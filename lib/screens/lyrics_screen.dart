@@ -8,8 +8,9 @@ import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/progress_state_stream.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -172,7 +173,7 @@ class LyricsView extends ConsumerStatefulWidget {
   const LyricsView({super.key});
 
   @override
-  _LyricsViewState createState() => _LyricsViewState();
+  ConsumerState createState() => _LyricsViewState();
 }
 
 class _LyricsViewState extends ConsumerState<LyricsView>
@@ -186,15 +187,27 @@ class _LyricsViewState extends ConsumerState<LyricsView>
   bool isAutoScrollEnabled = true;
 
   bool _isInForeground = true;
+  bool _isSynchronizedLyrics = false;
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     autoScrollController = AutoScrollController(
         suggestedRowHeight: 72,
         viewportBoundaryGetter: () =>
             Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
         axis: Axis.vertical);
+
+    autoScrollController.addListener(() {
+      var position = autoScrollController.position;
+      if (position.userScrollDirection != ScrollDirection.idle &&
+          _isSynchronizedLyrics &&
+          isAutoScrollEnabled) {
+        setState(() {
+          isAutoScrollEnabled = false;
+        });
+      }
+    });
 
     super.initState();
   }
@@ -216,10 +229,10 @@ class _LyricsViewState extends ConsumerState<LyricsView>
   Widget build(BuildContext context) {
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
-    final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current song yet, we want to show the loading state, and not the lyrics for the previous track
-    final isSynchronizedLyrics =
+    _isSynchronizedLyrics =
         metadata.valueOrNull?.lyrics?.lyrics?.first.start != null;
 
     Widget getEmptyState({
@@ -280,7 +293,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
           progressStateStream.listen((state) async {
         currentPosition = state.position;
 
-        if (!isSynchronizedLyrics || !_isInForeground) {
+        if (!_isSynchronizedLyrics || !_isInForeground) {
           return;
         }
 
@@ -329,83 +342,70 @@ class _LyricsViewState extends ConsumerState<LyricsView>
           padding: const EdgeInsets.only(left: 20.0, right: 12.0),
           child: Stack(
             children: [
-              Listener(
-                onPointerMove: (event) {
-                  if (isSynchronizedLyrics &&
-                      event.delta.dy.abs() > 2 * event.delta.dx.abs()) {
-                    setState(() {
-                      isAutoScrollEnabled = false;
-                    });
-                  }
-                },
-                child: LyricsListMask(
-                  child: ListView.builder(
-                    controller: autoScrollController,
-                    itemCount: metadata.value!.lyrics!.lyrics?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      final line = metadata.value!.lyrics!.lyrics![index];
-                      final nextLine =
-                          index < metadata.value!.lyrics!.lyrics!.length - 1
-                              ? metadata.value!.lyrics!.lyrics![index + 1]
-                              : null;
+              LyricsListMask(
+                child: ListView.builder(
+                  controller: autoScrollController,
+                  itemCount: metadata.value!.lyrics!.lyrics?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final line = metadata.value!.lyrics!.lyrics![index];
+                    final nextLine =
+                        index < metadata.value!.lyrics!.lyrics!.length - 1
+                            ? metadata.value!.lyrics!.lyrics![index + 1]
+                            : null;
 
-                      final isCurrentLine =
-                          (currentPosition?.inMicroseconds ?? 0) >=
-                                  (line.start ?? 0) ~/ 10 &&
-                              (nextLine == null ||
-                                  (currentPosition?.inMicroseconds ?? 0) <
-                                      (nextLine.start ?? 0) ~/ 10);
+                    final isCurrentLine =
+                        (currentPosition?.inMicroseconds ?? 0) >=
+                                (line.start ?? 0) ~/ 10 &&
+                            (nextLine == null ||
+                                (currentPosition?.inMicroseconds ?? 0) <
+                                    (nextLine.start ?? 0) ~/ 10);
 
-                      return Column(
-                        children: [
-                          if (index == 0)
-                            AutoScrollTag(
-                              key: const ValueKey(-1),
-                              controller: autoScrollController,
-                              index: -1,
-                              child: SizedBox(
-                                height: constraints.maxHeight * 0.65,
-                                child: Center(
-                                    child: SizedBox(
-                                        height: constraints.maxHeight * 0.55,
-                                        child: const PlayerScreenAlbumImage())),
-                              ),
-                            ),
+                    return Column(
+                      children: [
+                        if (index == 0)
                           AutoScrollTag(
-                            key: ValueKey(index),
+                            key: const ValueKey(-1),
                             controller: autoScrollController,
-                            index: index,
-                            child: _LyricLine(
-                                line: line,
-                                isCurrentLine: isCurrentLine,
-                                onTap: () async {
-                                  // Seek to the start of the line
-                                  await _audioHandler.seek(Duration(
-                                      microseconds: (line.start ?? 0) ~/ 10));
-                                  setState(() {
-                                    isAutoScrollEnabled = true;
-                                  });
-                                  if (previousLineIndex != null) {
-                                    unawaited(
-                                        autoScrollController.scrollToIndex(
-                                      previousLineIndex!,
-                                      preferPosition: AutoScrollPosition.middle,
-                                      duration:
-                                          const Duration(milliseconds: 500),
-                                    ));
-                                  }
-                                }),
+                            index: -1,
+                            child: SizedBox(
+                              height: constraints.maxHeight * 0.65,
+                              child: Center(
+                                  child: SizedBox(
+                                      height: constraints.maxHeight * 0.55,
+                                      child: const PlayerScreenAlbumImage())),
+                            ),
                           ),
-                          if (index ==
-                              metadata.value!.lyrics!.lyrics!.length - 1)
-                            SizedBox(height: constraints.maxHeight * 0.2),
-                        ],
-                      );
-                    },
-                  ),
+                        AutoScrollTag(
+                          key: ValueKey(index),
+                          controller: autoScrollController,
+                          index: index,
+                          child: _LyricLine(
+                              line: line,
+                              isCurrentLine: isCurrentLine,
+                              onTap: () async {
+                                // Seek to the start of the line
+                                await audioHandler.seek(Duration(
+                                    microseconds: (line.start ?? 0) ~/ 10));
+                                setState(() {
+                                  isAutoScrollEnabled = true;
+                                });
+                                if (previousLineIndex != null) {
+                                  unawaited(autoScrollController.scrollToIndex(
+                                    previousLineIndex!,
+                                    preferPosition: AutoScrollPosition.middle,
+                                    duration: const Duration(milliseconds: 500),
+                                  ));
+                                }
+                              }),
+                        ),
+                        if (index == metadata.value!.lyrics!.lyrics!.length - 1)
+                          SizedBox(height: constraints.maxHeight * 0.2),
+                      ],
+                    );
+                  },
                 ),
               ),
-              if (isSynchronizedLyrics)
+              if (_isSynchronizedLyrics)
                 Positioned(
                   bottom: 24,
                   right: 0,

@@ -1021,11 +1021,16 @@ class DownloadsSyncService {
     if (parent.type.requiresItem &&
         (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
             _downloadsService.forceFullSync ||
-            parent.baseItem?.sortName == null ||
+            parent.baseItem?.playlistItemId != null ||
             requiredAttributes.any((element) => element == null))) {
       newBaseItem ??=
           (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
               ?.baseItem;
+      // We return the same BaseItemDto for all requests, so null out playlistItemId
+      // as it will not usually be accurate.  Modifying without copying should be
+      // fine as this item was generated within the download service, so this value
+      // is not being used elsewhere.
+      newBaseItem?.playlistItemId = null;
     }
 
     //

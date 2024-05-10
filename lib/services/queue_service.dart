@@ -315,7 +315,6 @@ class QueueService {
     try {
       _savedQueueState = SavedQueueState.loading;
       if (info.songCount == 0) {
-        await stopPlayback();
         return;
       }
       refreshQueueStream();
@@ -344,10 +343,11 @@ class QueueService {
         playlistIds = itemList.map((e) => e.id).toSet();
       }
 
-      List<String> uniqueIds = allIds.toSet().difference(playlistIds).toList();
+      // Get list of unique ids that do not yet have an associated item.
+      List<String> missingIds = allIds.toSet().difference(playlistIds).toList();
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
-        for (var id in uniqueIds) {
+        for (var id in missingIds) {
           jellyfin_models.BaseItemDto? item =
               _isarDownloader.getSongDownload(id: id)?.baseItem;
           if (item != null) {
@@ -355,7 +355,7 @@ class QueueService {
           }
         }
       } else {
-        for (var slice in uniqueIds.slices(200)) {
+        for (var slice in missingIds.slices(200)) {
           List<jellyfin_models.BaseItemDto> itemList =
               await _jellyfinApiHelper.getItems(itemIds: slice) ?? [];
           for (var d2 in itemList) {
@@ -916,10 +916,10 @@ class QueueService {
       double? contextNormalizationGain) async {
     const uuid = Uuid();
 
-    final downloadedSong = await _isarDownloader.getSongDownload(item: item);
+    final downloadedSong = _isarDownloader.getSongDownload(item: item);
     DownloadItem? downloadedImage;
     try {
-      downloadedImage = await _isarDownloader.getImageDownload(item: item);
+      downloadedImage = _isarDownloader.getImageDownload(item: item);
     } catch (e) {
       _queueServiceLogger.warning(
           "Couldn't get the offline image for track '${item.name}' because it's missing a blurhash");

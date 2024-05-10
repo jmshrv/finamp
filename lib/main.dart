@@ -118,7 +118,8 @@ void main() async {
         titleBarStyle: TitleBarStyle.normal,
         minimumSize: Size(400, 250),
       );
-      unawaited(WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+      unawaited(
+          WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
         await windowManager.show();
         await windowManager.focus();
       }));
@@ -352,7 +353,6 @@ class Finamp extends ConsumerStatefulWidget {
 }
 
 class _FinampState extends ConsumerState<Finamp> with WindowListener {
-
   static final Logger windowManagerLogger = Logger("WindowManager");
 
   @override
@@ -371,7 +371,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
     }
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
@@ -513,6 +513,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
 
   @override
   void onWindowEvent(String eventName) {
+    if (eventName == "move" || eventName == "resize") return;
     windowManagerLogger.finer("[WindowManager] onWindowEvent: $eventName");
   }
 
@@ -521,7 +522,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
     if (!(Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
       return;
     }
-    
+
     bool isPreventClose = await windowManager.isPreventClose();
     if (isPreventClose && mounted) {
       await windowManager.destroy();
@@ -551,7 +552,6 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
       // );
     }
   }
-  
 }
 
 class FinampErrorApp extends StatelessWidget {

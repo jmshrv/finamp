@@ -69,7 +69,7 @@ class PlayerScreen extends ConsumerWidget {
             PlayerScreen.routeName,
             QueueList.routeName,
             SongMenu.routeName,
-            QuickActionsMenu.routeName,
+            quickActionsMenuRouteName,
             LyricsScreen.routeName,
           ].contains(route.settings.name);
         });

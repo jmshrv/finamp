@@ -108,8 +108,12 @@ Future<bool> removeFromPlaylist(
               AppLocalizations.of(context)!.removeFromPlaylistConfirm,
           abortButtonText:
               AppLocalizations.of(context)!.removeFromPlaylistCancel,
-          onConfirmed: () {isConfirmed = true;},
-          onAborted: () {isConfirmed = false;},
+          onConfirmed: () {
+            isConfirmed = true;
+          },
+          onAborted: () {
+            isConfirmed = false;
+          },
         ),
       );
     }
@@ -134,7 +138,8 @@ bool queueItemInPlaylist(FinampQueueItem? queueItem) {
   }
   final baseItem = queueItem.baseItem;
   return !FinampSettingsHelper.finampSettings.isOffline &&
-      [QueueItemSourceType.playlist, QueueItemSourceType.nextUpPlaylist].contains(queueItem.source.type) &&
+      [QueueItemSourceType.playlist, QueueItemSourceType.nextUpPlaylist]
+          .contains(queueItem.source.type) &&
       baseItem?.playlistItemId != null &&
       !playlistRemovalsCache
           .contains(queueItem.source.id + (baseItem?.playlistItemId ?? ""));

@@ -2279,7 +2279,8 @@ class BaseItemDto with RunTimeTickDuration {
         other.childCount == childCount &&
         other.mediaSources?.length == mediaSources?.length &&
         other.mediaStreams?.length == mediaStreams?.length &&
-        other.normalizationGain == normalizationGain;
+        other.normalizationGain == normalizationGain &&
+        other.playlistItemId == playlistItemId;
   }
 }
 
