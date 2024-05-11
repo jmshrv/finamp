@@ -293,7 +293,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           onTap: ()  {
             Navigator.pop(context); // close menu
             bool inPlaylist = queueItemInPlaylist(queueItem);
-            showModalQuickActionsMenu(
+            showPlaylistActionsMenu(
               context: context,
               item: widget.item,
               parentPlaylist: inPlaylist ? queueItem!.source.item : null,
@@ -980,7 +980,7 @@ class PlaybackAction extends StatelessWidget {
 
 const quickActionsMenuRouteName = "/playlist-actions-menu";
 
-Future<void> showModalQuickActionsMenu({
+Future<void> showPlaylistActionsMenu({
   required BuildContext context,
   required BaseItemDto item,
   required BaseItemDto? parentPlaylist,

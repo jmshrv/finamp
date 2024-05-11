@@ -36,7 +36,7 @@ class PlayerButtonsMore extends ConsumerWidget {
           }
 
           bool inPlaylist = queueItemInPlaylist(queueItem);
-          await showModalQuickActionsMenu(
+          await showPlaylistActionsMenu(
             context: context,
             item: item!,
             parentPlaylist: inPlaylist ? queueItem!.source.item : null,

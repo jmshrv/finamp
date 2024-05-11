@@ -93,7 +93,7 @@ class _AddToPlaylistButtonState extends State<AddToPlaylistButton> {
           }
 
           bool inPlaylist = queueItemInPlaylist(widget.queueItem);
-          await showModalQuickActionsMenu(
+          await showPlaylistActionsMenu(
             context: context,
             item: widget.item!,
             parentPlaylist: inPlaylist ? widget.queueItem!.source.item : null,
