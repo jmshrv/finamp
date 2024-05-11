@@ -520,10 +520,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_tabler_icons
-      sha256: bc7c5d44c3dd1621e086337dcb823567ba6de026375da0ed9c125b119921ee60
+      sha256: f20c3f4dc3755f330bdcde80b96ee92bde2677fdbb55b0d5f385a719a25ad384
       url: "https://pub.dev"
     source: hosted
-    version: "1.25.0"
+    version: "1.27.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

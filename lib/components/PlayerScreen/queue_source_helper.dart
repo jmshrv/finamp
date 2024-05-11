@@ -75,57 +75,82 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
 Future<bool> removeFromPlaylist(
     BuildContext context, BaseItemDto item, BaseItemDto parent,
     {required bool confirm}) async {
-  try {
-    var out = false;
-    Future<void> callback() async {
-      await GetIt.instance<JellyfinApiHelper>().removeItemsFromPlaylist(
-          playlistId: parent.id, entryIds: [item.playlistItemId!]);
+  var out = false;
+  Future<void> callback() async {
+    await GetIt.instance<JellyfinApiHelper>().removeItemsFromPlaylist(
+        playlistId: parent.id, entryIds: [item.playlistItemId!]);
 
-      // re-sync playlist to delete removed item if not required anymore
-      final downloadsService = GetIt.instance<DownloadsService>();
-      unawaited(downloadsService.resync(
-          DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: parent),
-          null,
-          keepSlow: true));
+    // re-sync playlist to delete removed item if not required anymore
+    final downloadsService = GetIt.instance<DownloadsService>();
+    unawaited(downloadsService.resync(
+        DownloadStub.fromItem(
+            type: DownloadItemType.collection, item: parent),
+        null,
+        keepSlow: true));
 
-      playlistRemovalsCache.add(parent.id + item.playlistItemId!);
+    playlistRemovalsCache.add(parent.id + item.id); // use the regular id instead of the playlistItemId since Jellyfin doesn't allow duplicates anyway, and we are able to remove the item from the cache again if needed
 
-      GlobalSnackbar.message(
-          (context) => AppLocalizations.of(context)!.removedFromPlaylist,
-          isConfirmation: true);
-      out = true;
-    }
-
-    bool isConfirmed = !confirm;
-    if (confirm) {
-      await showDialog(
-        context: context,
-        builder: (context) => ConfirmationPromptDialog(
-          promptText: AppLocalizations.of(context)!.removeFromPlaylistPrompt(
-              item.name ?? "item", parent.name ?? "playlist"),
-          confirmButtonText:
-              AppLocalizations.of(context)!.removeFromPlaylistConfirm,
-          abortButtonText:
-              AppLocalizations.of(context)!.removeFromPlaylistCancel,
-          onConfirmed: () {
-            isConfirmed = true;
-          },
-          onAborted: () {
-            isConfirmed = false;
-          },
-        ),
-      );
-    }
-    if (isConfirmed) {
-      await callback();
-    }
-
-    return out;
-  } catch (e) {
-    GlobalSnackbar.error(e);
-    return false;
+    GlobalSnackbar.message(
+        (context) => AppLocalizations.of(context)!.removedFromPlaylist,
+        isConfirmation: true);
+    out = true;
   }
+
+  bool isConfirmed = !confirm;
+  if (confirm) {
+    await showDialog(
+      context: context,
+      builder: (context) => ConfirmationPromptDialog(
+        promptText: AppLocalizations.of(context)!.removeFromPlaylistPrompt(
+            item.name ?? "item", parent.name ?? "playlist"),
+        confirmButtonText:
+            AppLocalizations.of(context)!.removeFromPlaylistConfirm,
+        abortButtonText:
+            AppLocalizations.of(context)!.removeFromPlaylistCancel,
+        onConfirmed: () {
+          isConfirmed = true;
+        },
+        onAborted: () {
+          isConfirmed = false;
+        },
+      ),
+    );
+  }
+  if (isConfirmed) {
+    await callback();
+  }
+
+  return out;
+}
+
+Future<bool> addItemToPlaylist(
+    BuildContext context, BaseItemDto item, BaseItemDto parent) async {
+  bool added = false;
+  Future<void> callback() async {
+    //TODO request server to return the new playlist item id
+    await GetIt.instance<JellyfinApiHelper>().addItemstoPlaylist(
+        playlistId: parent.id, ids: [item.playlistItemId!]);
+
+    // re-sync playlist to download added item if needed
+    final downloadsService = GetIt.instance<DownloadsService>();
+    unawaited(downloadsService.resync(
+        DownloadStub.fromItem(
+            type: DownloadItemType.collection, item: parent),
+        null,
+        keepSlow: true));
+
+    playlistRemovalsCache.remove(parent.id + item.id);
+
+    GlobalSnackbar.message(
+      (scaffold) => AppLocalizations.of(context)!
+          .confirmAddedToPlaylist,
+      isConfirmation: true);
+    added = true;
+  }
+
+  await callback();
+
+  return added;
 }
 
 // Removed playlist items will persist in queue with playlist source.  Store removed items
@@ -141,5 +166,5 @@ bool queueItemInPlaylist(FinampQueueItem? queueItem) {
           .contains(queueItem.source.type) &&
       baseItem?.playlistItemId != null &&
       !playlistRemovalsCache
-          .contains(queueItem.source.id + (baseItem?.playlistItemId ?? ""));
+          .contains(queueItem.source.id + (baseItem?.id ?? ""));
 }

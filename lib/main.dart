@@ -43,7 +43,6 @@ import 'models/locale_adapter.dart';
 import 'models/theme_mode_adapter.dart';
 import 'screens/active_downloads_screen.dart';
 import 'screens/add_download_location_screen.dart';
-import 'screens/add_to_playlist_screen.dart';
 import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
@@ -403,8 +402,6 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                     MusicScreen.routeName: (context) => const MusicScreen(),
                     AlbumScreen.routeName: (context) => const AlbumScreen(),
                     ArtistScreen.routeName: (context) => const ArtistScreen(),
-                    AddToPlaylistScreen.routeName: (context) =>
-                        const AddToPlaylistScreen(),
                     PlayerScreen.routeName: (context) => const PlayerScreen(
                         key: ValueKey(PlayerScreen.routeName)),
                     DownloadsScreen.routeName: (context) =>

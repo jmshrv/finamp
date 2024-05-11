@@ -316,7 +316,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
                                     .bodyLarge!
                                     .color!,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w300)),
+                                fontWeight: FontWeight.w400)),
                         const SizedBox(height: 20),
                         Expanded(
                           child: QueueList(
