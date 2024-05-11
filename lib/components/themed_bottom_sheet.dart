@@ -7,6 +7,7 @@ import 'package:finamp/services/album_image_provider.dart';
 import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -15,10 +16,11 @@ import '../models/jellyfin_models.dart';
 import '../services/feedback_helper.dart';
 import '../services/finamp_settings_helper.dart';
 
-typedef SliverBuilder = (int, List<Widget>) Function(BuildContext);
+typedef SliverBuilder = (double, List<Widget>) Function(
+    BuildContext, ImageProvider);
 typedef WrapperBuilder = Widget Function(
     BuildContext, ImageProvider, ScrollBuilder);
-typedef ScrollBuilder = Widget Function(int, List<Widget>);
+typedef ScrollBuilder = Widget Function(double, List<Widget>);
 
 Future<void> showThemedBottomSheet({
   required BuildContext context,
@@ -155,14 +157,15 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
               return widget.buildWrapper!(context, _imageProvider!,
                   (height, slivers) => buildInternal(height, slivers));
             } else {
-              var (height, slivers) = widget.buildSlivers!(context);
+              var (height, slivers) =
+                  widget.buildSlivers!(context, _imageProvider!);
               return buildInternal(height, slivers);
             }
           },
         ));
   }
 
-  Widget buildInternal(int stackHeight, List<Widget> slivers) {
+  Widget buildInternal(double stackHeight, List<Widget> slivers) {
     if (Platform.isIOS || Platform.isAndroid) {
       return LayoutBuilder(builder: (context, constraints) {
         var size = (stackHeight / constraints.maxHeight)
@@ -207,5 +210,50 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
   void dispose() {
     widget.themeProvider?.dispose();
     super.dispose();
+  }
+}
+
+class MenuMask extends SingleChildRenderObjectWidget {
+  const MenuMask({
+    super.key,
+    super.child,
+    required this.height,
+  });
+
+  final double height;
+
+  @override
+  RenderSongMenuMask createRenderObject(BuildContext context) {
+    return RenderSongMenuMask(height);
+  }
+}
+
+class RenderSongMenuMask extends RenderProxySliver {
+  RenderSongMenuMask(this.height);
+
+  final double height;
+
+  @override
+  ShaderMaskLayer? get layer => super.layer as ShaderMaskLayer?;
+
+  @override
+  bool get alwaysNeedsCompositing => child != null;
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    if (child != null) {
+      layer ??= ShaderMaskLayer(
+          shader: const LinearGradient(colors: [
+            Color.fromARGB(0, 255, 255, 255),
+            Color.fromARGB(255, 255, 255, 255)
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
+              .createShader(Rect.fromLTWH(0, height, 0, 10)),
+          blendMode: BlendMode.modulate,
+          maskRect: Rect.fromLTWH(0, 0, 99999, height + 15));
+
+      context.pushLayer(layer!, super.paint, offset);
+    } else {
+      layer = null;
+    }
   }
 }

@@ -13,9 +13,9 @@ import '../global_snackbar.dart';
 
 class AddToPlaylistList extends StatefulWidget {
   const AddToPlaylistList({
-    Key? key,
+    super.key,
     required this.itemToAddId,
-  }) : super(key: key);
+  });
 
   final String itemToAddId;
 
@@ -42,9 +42,9 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
       future: addToPlaylistListFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
+          return SliverList(
+              delegate: SliverChildBuilderDelegate(
+            (context, index) {
               return AlbumItem(
                 album: snapshot.data![index],
                 parentType: snapshot.data![index].type,
@@ -76,15 +76,22 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                 },
               );
             },
-          );
+            childCount: snapshot.data!.length,
+          ));
         } else if (snapshot.hasError) {
           GlobalSnackbar.error(snapshot.error);
-          return const Center(
-            child: Icon(Icons.error, size: 64),
+          return const SliverToBoxAdapter(
+            child: Center(
+              heightFactor: 3.0,
+              child: Icon(Icons.error, size: 64),
+            ),
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
+          return const SliverToBoxAdapter(
+            child: Center(
+              heightFactor: 3.0,
+              child: CircularProgressIndicator.adaptive(),
+            ),
           );
         }
       },

@@ -13,7 +13,6 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -29,6 +28,7 @@ import '../../services/music_player_background_task.dart';
 import '../../services/process_artist.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
+import '../themed_bottom_sheet.dart';
 import 'queue_list_item.dart';
 import 'queue_source_helper.dart';
 
@@ -504,7 +504,8 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
 
   @override
   Widget build(context) {
-    return StickyHeaderMask(
+    return MenuMask(
+      height: 131.0,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -594,7 +595,8 @@ class _QueueTracksListState extends State<QueueTracksList> {
 
   @override
   Widget build(context) {
-    return StickyHeaderMask(
+    return MenuMask(
+      height: 131.0,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -1292,42 +1294,4 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
-}
-
-class StickyHeaderMask extends SingleChildRenderObjectWidget {
-  const StickyHeaderMask({
-    super.key,
-    super.child,
-  });
-
-  @override
-  RenderQueueTracksMask createRenderObject(BuildContext context) {
-    return RenderQueueTracksMask();
-  }
-}
-
-class RenderQueueTracksMask extends RenderProxySliver {
-  @override
-  ShaderMaskLayer? get layer => super.layer as ShaderMaskLayer?;
-
-  @override
-  bool get alwaysNeedsCompositing => child != null;
-
-  @override
-  void paint(PaintingContext context, Offset offset) {
-    if (child != null) {
-      layer ??= ShaderMaskLayer(
-          shader: const LinearGradient(colors: [
-            Color.fromARGB(0, 255, 255, 255),
-            Color.fromARGB(255, 255, 255, 255)
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-              .createShader(const Rect.fromLTWH(0, 131, 0, 10)),
-          blendMode: BlendMode.modulate,
-          maskRect: const Rect.fromLTWH(0, 0, 99999, 145));
-
-      context.pushLayer(layer!, super.paint, offset);
-    } else {
-      layer = null;
-    }
-  }
 }

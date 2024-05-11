@@ -601,10 +601,10 @@ class ErrorScreen extends StatelessWidget {
 
 // Show scrollbars on all vertically scrolling widgets by default
 class FinampScrollBehavior extends MaterialScrollBehavior {
-  const FinampScrollBehavior(
-      {this.interactive = false, this.scrollbars = true});
+  const FinampScrollBehavior({this.interactive, this.scrollbars = true});
 
-  final bool interactive;
+  // If interactive is null, platform default will be used
+  final bool? interactive;
   final bool scrollbars;
 
   @override

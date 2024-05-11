@@ -22,8 +22,12 @@ class _AddToPlaylistScreenState extends State<AddToPlaylistScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
       ),
-      body: AddToPlaylistList(
-        itemToAddId: itemId,
+      body: CustomScrollView(
+        slivers: [
+          AddToPlaylistList(
+            itemToAddId: itemId,
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
