@@ -53,17 +53,18 @@ Future<void> showPlaylistActionsMenu({
                   ref.watch(isFavoriteProvider(item.id, DefaultValue(item)));
               return ToggleableListTile(
                 title: AppLocalizations.of(context)!.favourites,
-                leading: Container(
-                  width: 58,
-                  height: 58,
-                  decoration: BoxDecoration(
-                    color: themeColor.withOpacity(0.3),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      TablerIcons.heart,
-                      size: 36.0,
-                      color: Colors.white,
+                leading: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: themeColor.withOpacity(0.3),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        TablerIcons.heart,
+                        size: 36.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
