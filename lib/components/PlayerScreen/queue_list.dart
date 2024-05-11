@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
+import 'package:finamp/components/add_to_playlist_button.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/main.dart';
@@ -939,17 +940,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: FavoriteButton(
+                                    child: AddToPlaylistButton(
                                       item: currentTrackBaseItem,
+                                      queueItem: currentTrack,
                                       color: Colors.white,
                                       size: 28,
                                       visualDensity:
                                           const VisualDensity(horizontal: -4),
-                                      onToggle: (favorite) {
-                                        setState(() {
-                                          setFavourite(currentTrack!, context);
-                                        });
-                                      },
                                     ),
                                   ),
                                   IconButton(

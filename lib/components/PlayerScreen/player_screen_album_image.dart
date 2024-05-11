@@ -1,5 +1,7 @@
+import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
@@ -20,8 +22,9 @@ class PlayerScreenAlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final queueService = GetIt.instance<QueueService>();
     return StreamBuilder<FinampQueueInfo?>(
-      stream: GetIt.instance<QueueService>().getQueueStream(),
+      stream: queueService.getQueueStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           // show loading indicator
@@ -52,6 +55,13 @@ class PlayerScreenAlbumImage extends StatelessWidget {
               final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
               audioService.togglePlayback();
               FeedbackHelper.feedback(FeedbackType.selection);
+            },
+            onDoubleTap: () {
+              final currentTrack = queueService.getCurrentTrack();
+              if (currentTrack != null) {
+                setFavourite(currentTrack, context);
+                FeedbackHelper.feedback(FeedbackType.success);
+              }
             },
             onHorizontalSwipe: (direction) {
               final queueService = GetIt.instance<QueueService>();

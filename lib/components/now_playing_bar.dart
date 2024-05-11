@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/components/add_to_playlist_button.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -467,19 +468,13 @@ class NowPlayingBar extends ConsumerWidget {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 4.0, right: 4.0),
-                                                child: FavoriteButton(
+                                                child: AddToPlaylistButton(
                                                   item: currentTrackBaseItem,
+                                                  queueItem: currentTrack,
                                                   color: Colors.white,
-                                                  onToggle: (isFavorite) {
-                                                    currentTrackBaseItem!
-                                                            .userData!
-                                                            .isFavorite =
-                                                        isFavorite;
-                                                    mediaState.mediaItem?.extras![
-                                                            "itemJson"] =
-                                                        currentTrackBaseItem
-                                                            .toJson();
-                                                  },
+                                                  size: 28,
+                                                  visualDensity:
+                                                      const VisualDensity(horizontal: -4),
                                                 ),
                                               ),
                                             ],

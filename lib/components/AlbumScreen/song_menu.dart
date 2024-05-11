@@ -994,6 +994,8 @@ Future<void> showModalQuickActionsMenu({
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
+  FeedbackHelper.feedback(FeedbackType.selection);
+
   await showThemedBottomSheet(
       context: context,
       item: item,

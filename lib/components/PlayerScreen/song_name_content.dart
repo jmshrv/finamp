@@ -1,5 +1,6 @@
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
+import 'package:finamp/components/add_to_playlist_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/screens/player_screen.dart';
@@ -88,13 +89,9 @@ class SongNameContent extends StatelessWidget {
                             IconTheme.of(context).color!.withOpacity(0.1),
                       ),
                     ),
-                    FavoriteButton(
+                    AddToPlaylistButton(
                       item: songBaseItemDto,
-                      onToggle: (isFavorite) {
-                        songBaseItemDto!.userData!.isFavorite = isFavorite;
-                        currentTrack.item.extras!["itemJson"] =
-                            songBaseItemDto.toJson();
-                      },
+                      queueItem: currentTrack,
                     ),
                   ],
                 ),
