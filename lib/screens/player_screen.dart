@@ -26,6 +26,7 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
 import '../components/PlayerScreen/player_split_screen_scaffold.dart';
+import '../components/PlayerScreen/playlist_actions_menu.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
 import '../components/PlayerScreen/song_name_content.dart';
@@ -45,7 +46,7 @@ class PlayerScreen extends ConsumerWidget {
     final imageTheme =
         ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
     // Rebuild player screen if settings change
-    ref.watch(FinampSettingsHelper.finampSettingsProvider);
+    ref.watch(finampSettingsProvider);
     final queueService = GetIt.instance<QueueService>();
 
     // close the player screen if the queue is empty
@@ -62,7 +63,7 @@ class PlayerScreen extends ConsumerWidget {
             PlayerScreen.routeName,
             QueueList.routeName,
             SongMenu.routeName,
-            quickActionsMenuRouteName,
+            playlistActionsMenuRouteName,
             LyricsScreen.routeName,
           ].contains(route.settings.name);
         });

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
@@ -9,11 +11,25 @@ import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../album_image.dart';
 
+part 'artist_chip.g.dart';
+
 const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
 const _height = 24.0; // I'm sure this magic number will work on all devices
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
-final Map<String, BaseItemDto> _artistCache = {};
+
+@riverpod
+Future<BaseItemDto> artistItem(ArtistItemRef ref, String id) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final isarDownloader = GetIt.instance<DownloadsService>();
+  final bool isOffline = ref.watch(finampSettingsProvider
+      .select((value) => value.value?.isOffline ?? false));
+  return isOffline
+      ? isarDownloader
+          .getCollectionInfo(id: id)
+          .then((value) => value!.baseItem!)
+      : jellyfinApiHelper.getItemById(id);
+}
 
 class ArtistChips extends StatelessWidget {
   const ArtistChips({
@@ -69,64 +85,35 @@ class ArtistChips extends StatelessWidget {
   }
 }
 
-class ArtistChip extends StatefulWidget {
+class ArtistChip extends ConsumerWidget {
   const ArtistChip({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.color,
     this.artist,
-  }) : super(key: key);
+  });
 
   final BaseItemDto? artist;
   final Color? backgroundColor;
   final Color? color;
 
   @override
-  State<ArtistChip> createState() => _ArtistChipState();
-}
-
-class _ArtistChipState extends State<ArtistChip> {
-  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _isarDownloader = GetIt.instance<DownloadsService>();
-
-  // We make the future nullable since if the item is null it is not initialised
-  // in initState.
-  Future<BaseItemDto>? _artistChipFuture;
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.artist != null &&
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localBackgroundColor = backgroundColor ?? _defaultBackgroundColour;
+    final localColor =
+        color ?? Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
+    final BaseItemDto? localArtist;
+    if (artist != null &&
         FinampSettingsHelper.finampSettings.showArtistChipImage) {
-      final albumArtistId = widget.artist!.id;
-
-      _artistChipFuture = FinampSettingsHelper.finampSettings.isOffline
-          ? _isarDownloader
-              .getCollectionInfo(id: albumArtistId)
-              .then((value) => value!.baseItem!)
-          : _jellyfinApiHelper.getItemById(albumArtistId);
-      _artistChipFuture?.then((value) => _artistCache[value.id] = value);
+      localArtist = ref.watch(artistItemProvider(artist!.id)).value ?? artist;
+    } else {
+      localArtist = artist;
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<BaseItemDto>(
-        future: _artistChipFuture,
-        initialData: _artistCache[widget.artist?.id],
-        builder: (context, snapshot) {
-          final backgroundColor =
-              widget.backgroundColor ?? _defaultBackgroundColour;
-          final color = widget.color ??
-              Theme.of(context).textTheme.bodySmall?.color ??
-              Colors.white;
-          return _ArtistChipContent(
-            item: snapshot.data ?? widget.artist,
-            backgroundColor: backgroundColor,
-            color: color,
-          );
-        });
+    return _ArtistChipContent(
+      item: localArtist,
+      backgroundColor: localBackgroundColor,
+      color: localColor,
+    );
   }
 }
 

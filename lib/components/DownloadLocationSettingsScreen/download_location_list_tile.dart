@@ -17,9 +17,8 @@ class DownloadLocationListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isDefault = ref.watch(FinampSettingsHelper.finampSettingsProvider
-        .select((value) =>
-            value.value?.defaultDownloadLocation == downloadLocation.id));
+    bool isDefault = ref.watch(finampSettingsProvider.select((value) =>
+        value.value?.defaultDownloadLocation == downloadLocation.id));
 
     return ListTile(
       title: Text(downloadLocation.name),

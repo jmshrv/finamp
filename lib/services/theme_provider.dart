@@ -56,8 +56,7 @@ final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
 });
 
 class ThemeProvider {
-  ThemeProvider(ImageProvider image, Brightness brightness,
-      {bool useIsolate = true}) {
+  ThemeProvider(this.image, Brightness brightness, {bool useIsolate = true}) {
     ImageStream stream =
         image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
     ImageStreamListener? listener;
@@ -85,6 +84,7 @@ class ThemeProvider {
   final Completer<ColorScheme> _completer = Completer();
   Future<ColorScheme> get colorSchemeFuture => _completer.future;
   ColorScheme? colorScheme;
+  final ImageProvider image;
 
   /// Disposes the imageStream, ending the attempt to load the theme.  This has no effect
   /// if the image has already loaded, as the stream will already have been disposed.

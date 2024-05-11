@@ -4,14 +4,11 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/add_to_playlist_button.dart';
-import 'package:finamp/components/favourite_button.dart';
-import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/main.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -989,41 +986,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
         }
       },
     );
-  }
-}
-
-Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
-  final queueService = GetIt.instance<QueueService>();
-  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
-  try {
-    // We switch the widget state before actually doing the request to
-    // make the app feel faster (without, there is a delay from the
-    // user adding the favourite and the icon showing)
-    jellyfin_models.BaseItemDto item =
-        jellyfin_models.BaseItemDto.fromJson(track.item.extras!["itemJson"]);
-
-    // setState(() {
-    item.userData!.isFavorite = !item.userData!.isFavorite;
-    // });
-
-    // Since we flipped the favourite state already, we can use the flipped
-    // state to decide which API call to make
-    final newUserData = item.userData!.isFavorite
-        ? await jellyfinApiHelper.addFavourite(item.id)
-        : await jellyfinApiHelper.removeFavourite(item.id);
-
-    item.userData = newUserData;
-
-    // if (!mounted) return;
-    // setState(() {
-    //!!! update the QueueItem with the new BaseItemDto, then trigger a rebuild of the widget with the current snapshot (**which includes the modified QueueItem**)
-    track.item.extras!["itemJson"] = item.toJson();
-    // });
-
-    queueService.refreshQueueStream();
-  } catch (e) {
-    GlobalSnackbar.error(e);
   }
 }
 

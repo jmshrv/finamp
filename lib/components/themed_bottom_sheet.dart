@@ -166,8 +166,8 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
   }
 
   Widget buildInternal(double stackHeight, List<Widget> slivers) {
-    if (Platform.isIOS || Platform.isAndroid) {
-      return LayoutBuilder(builder: (context, constraints) {
+    return LayoutBuilder(builder: (context, constraints) {
+      if (Platform.isIOS || Platform.isAndroid) {
         var size = (stackHeight / constraints.maxHeight)
             .clamp(widget.minDraggableHeight, 1.0);
         return DraggableScrollableSheet(
@@ -179,15 +179,16 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
           builder: (context, scrollController) =>
               menu(scrollController, slivers),
         );
-      });
-    } else {
-      return SizedBox(
-        // This is an overestimate of stack height on desktop, but this widget
-        // needs some bottom padding on large displays anyway.
-        height: stackHeight.toDouble(),
-        child: menu(_controller, slivers),
-      );
-    }
+      } else {
+        var minSize = widget.minDraggableHeight * constraints.maxHeight;
+        return SizedBox(
+          // This is an overestimate of stack height on desktop, but this widget
+          // needs some bottom padding on large displays anyway.
+          height: max(minSize, stackHeight),
+          child: menu(_controller, slivers),
+        );
+      }
+    });
   }
 
   Widget menu(ScrollController scrollController, List<Widget> slivers) {

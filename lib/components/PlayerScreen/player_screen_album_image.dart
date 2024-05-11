@@ -1,27 +1,27 @@
-import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../../services/current_album_image_provider.dart';
+import '../../services/favorite_provider.dart';
 import '../AlbumScreen/song_menu.dart';
 import '../album_image.dart';
 
-class PlayerScreenAlbumImage extends StatelessWidget {
+class PlayerScreenAlbumImage extends ConsumerWidget {
   const PlayerScreenAlbumImage({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
     return StreamBuilder<FinampQueueInfo?>(
       stream: queueService.getQueueStream(),
@@ -58,9 +58,13 @@ class PlayerScreenAlbumImage extends StatelessWidget {
             },
             onDoubleTap: () {
               final currentTrack = queueService.getCurrentTrack();
-              if (currentTrack != null) {
-                setFavourite(currentTrack, context);
-                FeedbackHelper.feedback(FeedbackType.success);
+              if (currentTrack?.baseItem != null &&
+                  !FinampSettingsHelper.finampSettings.isOffline) {
+                ref
+                    .read(isFavoriteProvider(currentTrack!.baseItem!.id,
+                            DefaultValue(currentTrack.baseItem))
+                        .notifier)
+                    .toggleFavorite();
               }
             },
             onHorizontalSwipe: (direction) {

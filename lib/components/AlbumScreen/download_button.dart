@@ -28,7 +28,7 @@ class DownloadButton extends ConsumerWidget {
     final downloadsService = GetIt.instance<DownloadsService>();
     var status =
         ref.watch(downloadsService.statusProvider((item, children))).value;
-    var isOffline = ref.watch(FinampSettingsHelper.finampSettingsProvider
+    var isOffline = ref.watch(finampSettingsProvider
             .select((value) => value.valueOrNull?.isOffline)) ??
         true;
     String? parentTooltip;

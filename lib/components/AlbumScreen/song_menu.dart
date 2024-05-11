@@ -16,7 +16,6 @@ import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
@@ -26,11 +25,12 @@ import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../services/audio_service_helper.dart';
 import '../../services/downloads_service.dart';
+import '../../services/favorite_provider.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../AddToPlaylistScreen/add_to_playlist_list.dart';
 import '../PlayerScreen/album_chip.dart';
 import '../PlayerScreen/artist_chip.dart';
+import '../PlayerScreen/playlist_actions_menu.dart';
 import '../PlayerScreen/queue_source_helper.dart';
 import '../album_image.dart';
 import '../global_snackbar.dart';
@@ -77,6 +77,7 @@ Future<void> showModalSongMenu({
           confirmPlaylistRemoval: confirmPlaylistRemoval,
           childBuilder: childBuilder,
           imageProvider: imageProvider,
+          themeProvider: themeProvider,
         );
       },
       usePlayerTheme: usePlayerTheme,
@@ -102,6 +103,7 @@ class SongMenu extends ConsumerStatefulWidget {
     this.parentItem,
     required this.childBuilder,
     required this.imageProvider,
+    required this.themeProvider,
   });
 
   final BaseItemDto item;
@@ -117,6 +119,7 @@ class SongMenu extends ConsumerStatefulWidget {
   final bool confirmPlaylistRemoval;
   final ScrollBuilder childBuilder;
   final ImageProvider imageProvider;
+  final ThemeProvider? themeProvider;
 
   @override
   ConsumerState<SongMenu> createState() => _SongMenuState();
@@ -149,53 +152,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       return baseItem.id == queueItem.id;
     }
     return false;
-  }
-
-  /// Sets the item's favourite on the Jellyfin server.
-  Future<void> toggleFavorite() async {
-    try {
-      final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-
-      if (isOffline) {
-        FeedbackHelper.feedback(FeedbackType.error);
-        GlobalSnackbar.message((context) =>
-            AppLocalizations.of(context)!.notAvailableInOfflineMode);
-        return;
-      }
-
-      final currentTrack = _queueService.getCurrentTrack();
-      if (isBaseItemInQueueItem(widget.item, currentTrack)) {
-        await setFavourite(currentTrack!, context);
-        FeedbackHelper.feedback(FeedbackType.success);
-        return;
-      }
-
-      // We switch the widget state before actually doing the request to
-      // make the app feel faster (without, there is a delay from the
-      // user adding the favourite and the icon showing)
-      setState(() {
-        widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
-      });
-      FeedbackHelper.feedback(FeedbackType.success);
-
-      // Since we flipped the favourite state already, we can use the flipped
-      // state to decide which API call to make
-      final newUserData = widget.item.userData!.isFavorite
-          ? await _jellyfinApiHelper.addFavourite(widget.item.id)
-          : await _jellyfinApiHelper.removeFavourite(widget.item.id);
-
-      if (!mounted) return;
-
-      setState(() {
-        widget.item.userData = newUserData;
-      });
-    } catch (e) {
-      setState(() {
-        widget.item.userData!.isFavorite = !widget.item.userData!.isFavorite;
-      });
-      FeedbackHelper.feedback(FeedbackType.error);
-      GlobalSnackbar.error(e);
-    }
   }
 
   void toggleSpeedMenu() {
@@ -290,7 +246,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           ),
           title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
           enabled: !widget.isOffline,
-          onTap: ()  {
+          onTap: () {
             Navigator.pop(context); // close menu
             bool inPlaylist = queueItemInPlaylist(queueItem);
             showPlaylistActionsMenu(
@@ -298,6 +254,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               item: widget.item,
               parentPlaylist: inPlaylist ? queueItem!.source.item : null,
               usePlayerTheme: widget.usePlayerTheme,
+              cachedImage: widget.imageProvider,
+              themeProvider: widget.themeProvider,
             );
           },
         ),
@@ -485,25 +443,36 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           ),
         ),
       ),
-      ListTile(
-        enabled: !widget.isOffline,
-        leading: widget.item.userData!.isFavorite
-            ? Icon(
-                Icons.favorite,
-                color:
-                    widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
-              )
-            : Icon(
-                Icons.favorite_border,
-                color:
-                    widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
-              ),
-        title: Text(widget.item.userData!.isFavorite
-            ? AppLocalizations.of(context)!.removeFavourite
-            : AppLocalizations.of(context)!.addFavourite),
-        onTap: () async {
-          await toggleFavorite();
-          if (context.mounted) Navigator.pop(context);
+      Consumer(
+        builder: (context, ref, child) {
+          bool isFav = ref.watch(
+              isFavoriteProvider(widget.item.id, DefaultValue(widget.item)));
+          return ListTile(
+            enabled: !widget.isOffline,
+            leading: isFav
+                ? Icon(
+                    Icons.favorite,
+                    color: widget.isOffline
+                        ? iconColor.withOpacity(0.3)
+                        : iconColor,
+                  )
+                : Icon(
+                    Icons.favorite_border,
+                    color: widget.isOffline
+                        ? iconColor.withOpacity(0.3)
+                        : iconColor,
+                  ),
+            title: Text(isFav
+                ? AppLocalizations.of(context)!.removeFavourite
+                : AppLocalizations.of(context)!.addFavourite),
+            onTap: () async {
+              ref
+                  .read(isFavoriteProvider(widget.item.id, DefaultValue())
+                      .notifier)
+                  .updateFavorite(!isFav);
+              if (context.mounted) Navigator.pop(context);
+            },
+          );
         },
       ),
       Visibility(
@@ -973,303 +942,6 @@ class PlaybackAction extends StatelessWidget {
         padding: const EdgeInsets.only(
             top: 12.0, left: 12.0, right: 12.0, bottom: 16.0),
         tooltip: tooltip,
-      ),
-    );
-  }
-}
-
-const quickActionsMenuRouteName = "/playlist-actions-menu";
-
-Future<void> showPlaylistActionsMenu({
-  required BuildContext context,
-  required BaseItemDto item,
-  required BaseItemDto? parentPlaylist,
-  bool usePlayerTheme = false,
-  Function? onRemoveFromList,
-  bool confirmPlaylistRemoval = false,
-  ImageProvider? cachedImage,
-  ThemeProvider? themeProvider,
-}) async {
-  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-  final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-
-  FeedbackHelper.feedback(FeedbackType.selection);
-
-  await showThemedBottomSheet(
-      context: context,
-      item: item,
-      routeName: SongMenu.routeName,
-      minDraggableHeight: 0.2,
-      buildSlivers: (context, imageProvider) {
-        var themeColor = Theme.of(context).colorScheme.primary;
-        bool isFavorite = item.userData?.isFavorite ?? false;
-
-        final menuEntries = [
-          SongInfo(
-            item: item,
-            headerImage: usePlayerTheme ? imageProvider : null,
-          ),
-          const SizedBox(height: 10),
-          ToggleableListTile(
-            title: AppLocalizations.of(context)!.favourites,
-            leading: Container(
-              width: 58,
-              height: 58,
-              decoration: BoxDecoration(
-                color: themeColor.withOpacity(0.3),
-              ),
-              child: const Center(
-                child: Icon(
-                  TablerIcons.heart,
-                  size: 36.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            positiveIcon: TablerIcons.heart_filled,
-            negativeIcon: TablerIcons.heart,
-            initialState: isFavorite,
-            onToggle: (bool currentState) async {
-              if (isOffline) {
-                FeedbackHelper.feedback(FeedbackType.error);
-                GlobalSnackbar.message((context) =>
-                    AppLocalizations.of(context)!.notAvailableInOfflineMode);
-                return currentState;
-              }
-
-              UserItemDataDto? newUserData;
-              if (currentState) {
-                newUserData = await jellyfinApiHelper.removeFavourite(item.id);
-              } else {
-                newUserData =
-                    await jellyfinApiHelper.addFavourite(item.id);
-              }
-              item.userData = newUserData;
-
-              final currentTrackItem = BaseItemDto.fromJson(audioHandler.mediaItem.valueOrNull!.extras!['itemJson']);
-              if (currentTrackItem.id == item.id) {
-                audioHandler.mediaItem.valueOrNull!.extras!['itemJson'] = item.toJson();
-              }
-
-              return newUserData.isFavorite;
-            },
-            enabled: !isOffline,
-            accentColor: themeColor,
-          ),
-          if (parentPlaylist != null)
-            ToggleableListTile(
-              title: parentPlaylist.name ?? AppLocalizations.of(context)!.unknownName,
-              subtitle: AppLocalizations.of(context)!.songCount(parentPlaylist.childCount ?? 0),
-              leading: AlbumImage(item: parentPlaylist),
-              positiveIcon: TablerIcons.circle_check_filled,
-              negativeIcon: TablerIcons.circle_plus,
-              initialState: parentPlaylist != null,
-              onToggle: (bool currentState) async {
-                bool isPartOfPlaylist = currentState;
-                if (currentState) {
-                  // part of playlist, remove
-                  bool removed = await removeFromPlaylist(
-                      context, item, parentPlaylist,
-                      confirm: confirmPlaylistRemoval);
-                  if (removed) {
-                    if (onRemoveFromList != null) {
-                      onRemoveFromList();
-                    }
-                  }
-                  isPartOfPlaylist = !removed;
-                } else {
-                  // add back to playlist
-                  bool added = await addItemToPlaylist(context, item, parentPlaylist);
-                  isPartOfPlaylist = added;
-                }
-
-                return isPartOfPlaylist;
-              },
-              enabled: !isOffline,
-              accentColor: themeColor,
-            ),
-        ];
-
-        var menu = [
-          SliverStickyHeader(
-            header: Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
-              child: Column(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 3.5,
-                    decoration: BoxDecoration(
-                      color:
-                          Theme.of(context).textTheme.bodySmall!.color!,
-                      borderRadius: BorderRadius.circular(3.5),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: Text("Add To / Remove From Playlists",
-                      style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .color!,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400)),
-                  ),
-                ],
-              ),
-            ),
-            sliver: MenuMask(
-                height: 45.0,
-                child: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                  menuEntries,
-                ))),
-          ),
-          SliverStickyHeader(
-              header: Padding(
-                padding: const EdgeInsets.only(top: 24.0, bottom: 8.0, left: 16.0, right: 16.0),
-                child: Text("Add track to a playlist",
-                    style: Theme.of(context).textTheme.titleMedium),
-              ),
-              sliver: MenuMask(
-                height: 55.0,
-                child: AddToPlaylistList(
-                  itemToAdd: item,
-                  accentColor: themeColor,
-                  partOfPlaylists: parentPlaylist != null ? [parentPlaylist] : [],
-                ),
-              )),
-          const SliverPadding(padding: EdgeInsets.only(bottom: 100.0))
-        ];
-        // TODO better estimate, how to deal with lag getting playlists?
-        var stackHeight = MediaQuery.sizeOf(context).height * 0.9;
-        return (stackHeight, menu);
-      },
-      usePlayerTheme: usePlayerTheme,
-      cachedImage: cachedImage,
-      themeProvider: themeProvider);
-}
-
-class ToggleableListTile extends StatefulWidget {
-  const ToggleableListTile({
-    super.key,
-    required this.title,
-    this.subtitle,
-    required this.leading,
-    required this.positiveIcon,
-    required this.negativeIcon,
-    required this.initialState,
-    required this.onToggle,
-    required this.enabled,
-    required this.accentColor,
-  });
-
-  final String title;
-  final String? subtitle;
-  final Widget leading;
-  final IconData positiveIcon;
-  final IconData negativeIcon;
-  final bool initialState;
-  final Future<bool> Function(bool currentState) onToggle;
-  final bool enabled;
-  final Color accentColor;
-
-  @override
-  State<ToggleableListTile> createState() => _ToggleableListTileState();
-}
-
-class _ToggleableListTileState extends State<ToggleableListTile> {
-
-  bool isLoading = false;
-  bool currentState = false;
-
-  @override
-  void initState() {
-    super.initState();
-    currentState = widget.initialState;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
-      child: Container(
-        decoration: ShapeDecoration(
-          color: widget.accentColor.withOpacity(currentState ? 0.3 : 0.1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        clipBehavior: Clip.antiAlias,
-        padding: EdgeInsets.zero,
-        child: ListTile(
-          enableFeedback: true,
-          enabled: widget.enabled,
-          leading: widget.leading,
-          title: Text(
-            widget.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: Wrap(
-            alignment: WrapAlignment.end,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              if (widget.subtitle != null)
-                Text(
-                  widget.subtitle!,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              SizedBox(
-                height: 48.0,
-                width: 16.0,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
-                  child: VerticalDivider(
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
-                      thickness: 1.5,
-                      indent: 8.0,
-                      endIndent: 8.0,
-                      width: 1.0,
-                    ),
-                ),
-              ),
-              isLoading ? 
-                const CircularProgressIndicator() :
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 12.0),
-                  child: Icon(
-                    currentState == true ? widget.positiveIcon : widget.negativeIcon,
-                    size: 36.0,
-                    color: widget.accentColor,
-                  ),
-                ),
-            ]
-          ),
-          onTap: () async {
-            try {
-              setState(() {
-                isLoading = true;
-              });
-              final result = await widget.onToggle(currentState);
-              FeedbackHelper.feedback(FeedbackType.success);
-              setState(() {
-                isLoading = false;
-                currentState = result;
-              });
-            } catch(e) {
-              setState(() {
-                isLoading = false;
-              });
-              GlobalSnackbar.error(e);
-            }
-          },
-          contentPadding: EdgeInsets.zero,
-          minVerticalPadding: 0,
-          // visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
-        ),
       ),
     );
   }

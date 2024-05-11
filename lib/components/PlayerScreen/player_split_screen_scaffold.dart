@@ -41,8 +41,7 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
 
     return Consumer(
       builder: (context, ref, child) {
-        bool allowSplitScreen = ref.watch(FinampSettingsHelper
-                .finampSettingsProvider
+        bool allowSplitScreen = ref.watch(finampSettingsProvider
                 .select((value) => value.value?.allowSplitScreen)) ??
             FinampSettingsHelper.finampSettings.allowSplitScreen;
 

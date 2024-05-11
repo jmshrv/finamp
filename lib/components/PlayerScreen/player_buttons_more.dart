@@ -1,11 +1,8 @@
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
-import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
@@ -28,39 +25,23 @@ class PlayerButtonsMore extends ConsumerWidget {
         color: IconTheme.of(context).color,
         size: 24,
       ),
-      child: GestureDetector(
-        onLongPress: () async {
-          if (FinampSettingsHelper.finampSettings.isOffline) {
-            return GlobalSnackbar.message((context) =>
-                AppLocalizations.of(context)!.notAvailableInOfflineMode);
-          }
-
-          bool inPlaylist = queueItemInPlaylist(queueItem);
-          await showPlaylistActionsMenu(
+      child: IconButton(
+        icon: const Icon(
+          TablerIcons.menu_2,
+        ),
+        visualDensity: VisualDensity.compact,
+        onPressed: () async {
+          if (item == null) return;
+          var inPlaylist = queueItemInPlaylist(queueItem);
+          await showModalSongMenu(
             context: context,
             item: item!,
-            parentPlaylist: inPlaylist ? queueItem!.source.item : null,
             usePlayerTheme: true,
+            showPlaybackControls: true, // show controls on player screen
+            parentItem: inPlaylist ? queueItem!.source.item : null,
+            isInPlaylist: inPlaylist,
           );
         },
-        child: IconButton(
-          icon: const Icon(
-            TablerIcons.menu_2,
-          ),
-          visualDensity: VisualDensity.compact,
-          onPressed: () async {
-            if (item == null) return;
-            var inPlaylist = queueItemInPlaylist(queueItem);
-            await showModalSongMenu(
-              context: context,
-              item: item!,
-              usePlayerTheme: true,
-              showPlaybackControls: true, // show controls on player screen
-              parentItem: inPlaylist ? queueItem!.source.item : null,
-              isInPlaylist: inPlaylist,
-            );
-          },
-        ),
       ),
     );
   }

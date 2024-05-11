@@ -236,8 +236,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
           isInPlaylist: widget.isInPlaylist,
           parentItem: widget.parentItem,
           onRemoveFromList: widget.onRemoveFromList,
-          cachedImage: _thumbnail,
           themeProvider: _menuTheme,
+          cachedImage: _thumbnail,
           confirmPlaylistRemoval: false,
         );
       }

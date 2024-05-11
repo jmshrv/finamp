@@ -1,12 +1,10 @@
 import 'package:balanced_text/balanced_text.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import '../../models/jellyfin_models.dart';
 import 'queue_source_helper.dart';
 
 class PlayerScreenAppBarTitle extends StatefulWidget {
@@ -41,15 +39,6 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
           constraints: BoxConstraints(maxWidth: screenWidth * 0.62),
           child: GestureDetector(
             onTap: () => navigateToSource(context, queueItem.source),
-            onLongPress: () {
-              if (queueItemInPlaylist(queueItem) &&
-                  !FinampSettingsHelper.finampSettings.isOffline) {
-                final baseItem =
-                    BaseItemDto.fromJson(queueItem.item.extras?["itemJson"]);
-                removeFromPlaylist(context, baseItem, queueItem.source.item!,
-                    confirm: true);
-              }
-            },
             child: Column(
               children: [
                 Text(

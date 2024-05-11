@@ -79,7 +79,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
       volumeNormalizationActive: fields[29] == null ? true : fields[29] as bool,
       volumeNormalizationIOSBaseGain:
-          fields[30] == null ? -5.0 : fields[30] as double,
+          fields[30] == null ? -2.0 : fields[30] as double,
       volumeNormalizationMode: fields[33] == null
           ? VolumeNormalizationMode.hybrid
           : fields[33] as VolumeNormalizationMode,

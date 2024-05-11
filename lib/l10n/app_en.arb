@@ -1490,5 +1490,13 @@
   "quickActions": "Quick Actions",
   "@quickActions": {
     "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "addRemoveFromPlaylist": "Add To / Remove From Playlists",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "Add track to a playlist",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   }
 }

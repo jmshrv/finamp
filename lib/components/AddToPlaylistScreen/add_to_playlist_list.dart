@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/components/album_image.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,7 +10,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../MusicScreen/album_item.dart';
+import '../PlayerScreen/playlist_actions_menu.dart';
 import '../global_snackbar.dart';
 
 class AddToPlaylistList extends StatefulWidget {
@@ -56,16 +53,21 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
             (context, index) {
               final playlistItem = snapshot.data![index];
               bool isPartOfPlaylist = false;
-              if (widget.partOfPlaylists?.any((element) => element.id == playlistItem.id) ?? false) {
+              if (widget.partOfPlaylists
+                      ?.any((element) => element.id == playlistItem.id) ??
+                  false) {
                 isPartOfPlaylist = true;
               }
               final isOffline = FinampSettingsHelper.finampSettings.isOffline;
               return ToggleableListTile(
-                title: playlistItem.name ?? AppLocalizations.of(context)!.unknownName,
-                subtitle: AppLocalizations.of(context)!.songCount(playlistItem.childCount ?? 0),
+                title: playlistItem.name ??
+                    AppLocalizations.of(context)!.unknownName,
+                subtitle: AppLocalizations.of(context)!
+                    .songCount(playlistItem.childCount ?? 0),
                 leading: AlbumImage(item: playlistItem),
                 positiveIcon: TablerIcons.circle_check_filled,
-                negativeIcon: TablerIcons.circle_dashed_check, // we don't actually know if the track is part of the playlist
+                negativeIcon: TablerIcons
+                    .circle_dashed_check, // we don't actually know if the track is part of the playlist
                 initialState: isPartOfPlaylist,
                 onToggle: (bool currentState) async {
                   bool isPartOfPlaylist = currentState;
@@ -74,7 +76,8 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                     //TODO not currently possible, because we don't have the playlist item id after adding
                   } else {
                     // add to playlist
-                    bool added = await addItemToPlaylist(context, widget.itemToAdd, playlistItem);
+                    bool added = await addItemToPlaylist(
+                        context, widget.itemToAdd, playlistItem);
                     isPartOfPlaylist = added;
                   }
 
