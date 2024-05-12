@@ -1603,6 +1603,7 @@ class BaseItemDto with RunTimeTickDuration {
     this.channelType,
     this.audio,
     this.normalizationGain,
+    this.hasLyrics,
   });
 
   /// Gets or sets the name.
@@ -2198,6 +2199,10 @@ class BaseItemDto with RunTimeTickDuration {
   /// Gets or sets the normalization gain value.
   @HiveField(151)
   double? normalizationGain;
+
+  /// Gets or sets the HasLyrics value.
+  @HiveField(152)
+  bool? hasLyrics;
 
   /// Checks if the item has its own image (not inherited from a parent)
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;

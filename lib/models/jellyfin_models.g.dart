@@ -1458,13 +1458,14 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       channelType: fields[149] as String?,
       audio: fields[150] as String?,
       normalizationGain: fields[151] as double?,
+      hasLyrics: fields[152] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, BaseItemDto obj) {
     writer
-      ..writeByte(152)
+      ..writeByte(153)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -1768,7 +1769,9 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       ..writeByte(150)
       ..write(obj.audio)
       ..writeByte(151)
-      ..write(obj.normalizationGain);
+      ..write(obj.normalizationGain)
+      ..writeByte(152)
+      ..write(obj.hasLyrics);
   }
 
   @override
@@ -4000,6 +4003,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       channelType: json['ChannelType'] as String?,
       audio: json['Audio'] as String?,
       normalizationGain: (json['NormalizationGain'] as num?)?.toDouble(),
+      hasLyrics: json['HasLyrics'] as bool?,
     );
 
 Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) {
@@ -4171,6 +4175,7 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) {
   writeNotNull('ChannelType', instance.channelType);
   writeNotNull('Audio', instance.audio);
   writeNotNull('NormalizationGain', instance.normalizationGain);
+  writeNotNull('HasLyrics', instance.hasLyrics);
   return val;
 }
 
