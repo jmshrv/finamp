@@ -19,10 +19,12 @@ class AddToPlaylistList extends StatefulWidget {
     super.key,
     required this.itemToAdd,
     this.hiddenPlaylists = const [],
+    this.playlistsCallback,
   });
 
   final BaseItemDto itemToAdd;
   final List<BaseItemDto> hiddenPlaylists;
+  final ValueNotifier<List<BaseItemDto>?>? playlistsCallback;
 
   @override
   State<AddToPlaylistList> createState() => _AddToPlaylistListState();
@@ -39,6 +41,8 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
       includeItemTypes: "Playlist",
       sortBy: "SortName",
     );
+    addToPlaylistListFuture
+        .then((value) => widget.playlistsCallback?.value = value);
   }
 
   @override

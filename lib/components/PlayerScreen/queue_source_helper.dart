@@ -139,7 +139,7 @@ Future<bool> addItemToPlaylist(
 
 // Removed playlist items will persist in queue with playlist source.  Store removed items
 // to hide remove from playlist prompt on those items.
-final List<String> playlistRemovalsCache = [];
+final Set<String> playlistRemovalsCache = {};
 
 bool queueItemInPlaylist(FinampQueueItem? queueItem) {
   if (queueItem == null) {

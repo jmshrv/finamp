@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -38,6 +39,7 @@ Future<void> showPlaylistActionsMenu({
       minDraggableHeight: 0.2,
       buildSlivers: (context) {
         var themeColor = Theme.of(context).colorScheme.primary;
+        var playlistsCallback = ValueNotifier<List<BaseItemDto>?>(null);
 
         final menuEntries = [
           SongInfo(
@@ -81,9 +83,11 @@ Future<void> showPlaylistActionsMenu({
           ),
           if (parentPlaylist != null)
             RemovablePlaylist(
-                parentPlaylist: parentPlaylist,
-                item: item,
-                confirmPlaylistRemoval: confirmPlaylistRemoval)
+              parentPlaylist: parentPlaylist,
+              item: item,
+              confirmPlaylistRemoval: confirmPlaylistRemoval,
+              listenable: playlistsCallback,
+            )
         ];
 
         var menu = [
@@ -133,6 +137,7 @@ Future<void> showPlaylistActionsMenu({
                   itemToAdd: item,
                   hiddenPlaylists:
                       parentPlaylist != null ? [parentPlaylist] : [],
+                  playlistsCallback: playlistsCallback,
                 ),
               )),
           const SliverPadding(padding: EdgeInsets.only(bottom: 100.0))
@@ -150,58 +155,64 @@ class RemovablePlaylist extends StatefulWidget {
       {super.key,
       required this.parentPlaylist,
       required this.item,
-      required this.confirmPlaylistRemoval});
+      required this.confirmPlaylistRemoval,
+      required this.listenable});
 
   final BaseItemDto parentPlaylist;
   final BaseItemDto item;
   final bool confirmPlaylistRemoval;
+  final ValueNotifier<List<BaseItemDto>?> listenable;
 
   @override
   State<RemovablePlaylist> createState() => _RemovablePlaylistState();
 }
 
 class _RemovablePlaylistState extends State<RemovablePlaylist> {
-  // TODO put this in a provider like favorites to persist across items?
-  int? _childCount;
+  int _childCountOffset = 0;
 
   @override
   Widget build(BuildContext context) {
-    _childCount ??= widget.parentPlaylist.childCount;
-    return ToggleableListTile(
-      title: widget.parentPlaylist.name ??
-          AppLocalizations.of(context)!.unknownName,
-      subtitle: AppLocalizations.of(context)!
-          .songCount(_childCount ?? widget.parentPlaylist.childCount ?? 0),
-      leading: AlbumImage(item: widget.parentPlaylist),
-      positiveIcon: TablerIcons.circle_check_filled,
-      negativeIcon: TablerIcons.circle_plus,
-      initialState: true,
-      onToggle: (bool currentState) async {
-        if (currentState) {
-          // part of playlist, remove
-          bool removed = await removeFromPlaylist(
-              context, widget.item, widget.parentPlaylist,
-              confirm: widget.confirmPlaylistRemoval);
-          if (removed) {
-            setState(() {
-              _childCount = _childCount! - 1;
-            });
-          }
-          return !removed;
-        } else {
-          // add back to playlist
-          bool added = await addItemToPlaylist(
-              context, widget.item, widget.parentPlaylist);
-          if (added) {
-            setState(() {
-              _childCount = _childCount! + 1;
-            });
-          }
-          return added;
-        }
-      },
-      enabled: !FinampSettingsHelper.finampSettings.isOffline,
-    );
+    return ValueListenableBuilder(
+        valueListenable: widget.listenable,
+        builder: (context, playlists, _) {
+          var parent = playlists
+                  ?.firstWhereOrNull((x) => x.id == widget.parentPlaylist.id) ??
+              widget.parentPlaylist;
+          return ToggleableListTile(
+            title: parent.name ?? AppLocalizations.of(context)!.unknownName,
+            subtitle: AppLocalizations.of(context)!
+                .songCount(_childCountOffset + (parent.childCount ?? 0)),
+            leading: AlbumImage(item: parent),
+            positiveIcon: TablerIcons.circle_check_filled,
+            negativeIcon: TablerIcons.circle_plus,
+            initialState: true,
+            onToggle: (bool currentState) async {
+              if (currentState) {
+                // part of playlist, remove
+                bool removed = await removeFromPlaylist(
+                    context, widget.item, parent,
+                    confirm: widget.confirmPlaylistRemoval);
+                if (removed) {
+                  setState(() {
+                    _childCountOffset--;
+                  });
+                }
+                return !removed;
+              } else {
+                // add back to playlist
+                bool added =
+                    await addItemToPlaylist(context, widget.item, parent);
+                if (added) {
+                  setState(() {
+                    _childCountOffset++;
+                  });
+                }
+                return added;
+              }
+            },
+            enabled: !FinampSettingsHelper.finampSettings.isOffline,
+          );
+        });
   }
 }
 
