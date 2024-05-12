@@ -10,20 +10,19 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../PlayerScreen/playlist_actions_menu.dart';
 import '../global_snackbar.dart';
+import 'new_playlist_dialog.dart';
+import 'playlist_actions_menu.dart';
 
 class AddToPlaylistList extends StatefulWidget {
   const AddToPlaylistList({
     super.key,
     required this.itemToAdd,
-    required this.accentColor,
-    required this.partOfPlaylists,
+    this.hiddenPlaylists = const [],
   });
 
   final BaseItemDto itemToAdd;
-  final Color accentColor;
-  final List<BaseItemDto>? partOfPlaylists;
+  final List<BaseItemDto> hiddenPlaylists;
 
   @override
   State<AddToPlaylistList> createState() => _AddToPlaylistListState();
@@ -48,16 +47,19 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
       future: addToPlaylistListFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          var playlists = snapshot.data!
+              .where((element) => !widget.hiddenPlaylists
+                  .any((hidden) => element.id == hidden.id))
+              .toList();
           return SliverList(
               delegate: SliverChildBuilderDelegate(
             (context, index) {
-              final playlistItem = snapshot.data![index];
-              bool isPartOfPlaylist = false;
-              if (widget.partOfPlaylists
-                      ?.any((element) => element.id == playlistItem.id) ??
-                  false) {
-                isPartOfPlaylist = true;
+              if (index == playlists.length) {
+                return addToPlaylistButton(context);
               }
+              final playlistItem = playlists[index];
+              bool isPartOfPlaylist = widget.hiddenPlaylists
+                  .any((element) => element.id == playlistItem.id);
               final isOffline = FinampSettingsHelper.finampSettings.isOffline;
               return ToggleableListTile(
                 title: playlistItem.name ??
@@ -70,24 +72,26 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                     .circle_dashed_check, // we don't actually know if the track is part of the playlist
                 initialState: isPartOfPlaylist,
                 onToggle: (bool currentState) async {
-                  bool isPartOfPlaylist = currentState;
                   if (currentState) {
                     // part of playlist, remove
                     //TODO not currently possible, because we don't have the playlist item id after adding
+                    return currentState;
                   } else {
                     // add to playlist
                     bool added = await addItemToPlaylist(
                         context, widget.itemToAdd, playlistItem);
-                    isPartOfPlaylist = added;
+                    if (added && playlistItem.childCount != null) {
+                      setState(() {
+                        playlistItem.childCount = playlistItem.childCount! + 1;
+                      });
+                    }
+                    return added;
                   }
-
-                  return isPartOfPlaylist;
                 },
                 enabled: !isOffline,
-                accentColor: widget.accentColor,
               );
             },
-            childCount: snapshot.data!.length,
+            childCount: playlists.length + 1,
           ));
         } else if (snapshot.hasError) {
           GlobalSnackbar.error(snapshot.error);
@@ -106,6 +110,51 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
           );
         }
       },
+    );
+  }
+
+  Widget addToPlaylistButton(BuildContext context) {
+    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+    return ToggleableListTile(
+      title: AppLocalizations.of(context)!.newPlaylist,
+      leading: AspectRatio(
+        aspectRatio: 1.0,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+          ),
+          child: const Center(
+            child: Icon(
+              TablerIcons.plus,
+              size: 36.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      positiveIcon: TablerIcons.circle_check_filled,
+      negativeIcon: TablerIcons
+          .circle_dashed_check, // we don't actually know if the track is part of the playlist
+      initialState: false,
+      onToggle: (bool currentState) async {
+        assert(currentState == false);
+        // The dialog returns true if a playlist is created. If this is the
+        // case, we also pop this page. It will return false if the user
+        // cancels the dialog.
+        final result = await await showDialog<Future<bool>>(
+          context: context,
+          builder: (context) =>
+              NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
+        );
+
+        if (!context.mounted) return currentState;
+
+        if (result ?? false) {
+          Navigator.of(context).pop();
+        }
+        return currentState;
+      },
+      enabled: !isOffline,
     );
   }
 }

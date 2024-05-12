@@ -70,11 +70,22 @@ final Provider<(ImageProvider?, String?)> imageThemeProvider = Provider((ref) {
   return (theme.image, theme.blurHash);
 }, dependencies: [themeDataProvider]);
 
-final FutureProvider<Future<ColorScheme>> colorThemeProvider =
+final FutureProvider<ColorScheme> colorThemeNullableProvider =
     FutureProvider((ref) {
   var theme = ref.watch(themeDataProvider);
   var brightness = ref.watch(brightnessProvider);
   return theme.calculate(brightness);
+}, dependencies: [themeDataProvider]);
+
+final Provider<ColorScheme> colorThemeProvider = Provider((ref) {
+  var brightness = ref.watch(brightnessProvider);
+  var theme = ref.watch(themeDataProvider).colorScheme(brightness);
+  if (theme != null) return theme;
+  ref
+      .watch(themeDataProvider)
+      .calculate(brightness)
+      .then((value) => ref.invalidateSelf());
+  return getDefaultTheme(brightness);
 }, dependencies: [themeDataProvider]);
 
 class FinampTheme {

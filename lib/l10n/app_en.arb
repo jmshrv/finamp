@@ -633,7 +633,7 @@
   },
   "newPlaylist": "New Playlist",
   "@newPlaylist": {},
-  "createButtonLabel": "CREATE",
+  "createButtonLabel": "Create",
   "@createButtonLabel": {},
   "playlistCreated": "Playlist created.",
   "@playlistCreated": {},

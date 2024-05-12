@@ -11,11 +11,11 @@ import '../../services/favorite_provider.dart';
 import '../../services/feedback_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/theme_provider.dart';
-import '../AddToPlaylistScreen/add_to_playlist_list.dart';
 import '../AlbumScreen/song_menu.dart';
 import '../album_image.dart';
 import '../global_snackbar.dart';
 import '../themed_bottom_sheet.dart';
+import 'add_to_playlist_list.dart';
 
 const playlistActionsMenuRouteName = "/playlist-actions-menu";
 
@@ -24,7 +24,6 @@ Future<void> showPlaylistActionsMenu({
   required BaseItemDto item,
   required BaseItemDto? parentPlaylist,
   bool usePlayerTheme = false,
-  Function? onRemoveFromList,
   bool confirmPlaylistRemoval = false,
   FinampTheme? themeProvider,
 }) async {
@@ -77,45 +76,14 @@ Future<void> showPlaylistActionsMenu({
                       .updateFavorite(!isFavorite);
                 },
                 enabled: !isOffline,
-                accentColor: themeColor,
               );
             },
           ),
           if (parentPlaylist != null)
-            ToggleableListTile(
-              title: parentPlaylist.name ??
-                  AppLocalizations.of(context)!.unknownName,
-              subtitle: AppLocalizations.of(context)!
-                  .songCount(parentPlaylist.childCount ?? 0),
-              leading: AlbumImage(item: parentPlaylist),
-              positiveIcon: TablerIcons.circle_check_filled,
-              negativeIcon: TablerIcons.circle_plus,
-              initialState: true,
-              onToggle: (bool currentState) async {
-                bool isPartOfPlaylist = currentState;
-                if (currentState) {
-                  // part of playlist, remove
-                  bool removed = await removeFromPlaylist(
-                      context, item, parentPlaylist,
-                      confirm: confirmPlaylistRemoval);
-                  if (removed) {
-                    if (onRemoveFromList != null) {
-                      onRemoveFromList();
-                    }
-                  }
-                  isPartOfPlaylist = !removed;
-                } else {
-                  // add back to playlist
-                  bool added =
-                      await addItemToPlaylist(context, item, parentPlaylist);
-                  isPartOfPlaylist = added;
-                }
-
-                return isPartOfPlaylist;
-              },
-              enabled: !isOffline,
-              accentColor: themeColor,
-            ),
+            RemovablePlaylist(
+                parentPlaylist: parentPlaylist,
+                item: item,
+                confirmPlaylistRemoval: confirmPlaylistRemoval)
         ];
 
         var menu = [
@@ -163,8 +131,7 @@ Future<void> showPlaylistActionsMenu({
                 height: 55.0,
                 child: AddToPlaylistList(
                   itemToAdd: item,
-                  accentColor: themeColor,
-                  partOfPlaylists:
+                  hiddenPlaylists:
                       parentPlaylist != null ? [parentPlaylist] : [],
                 ),
               )),
@@ -178,7 +145,67 @@ Future<void> showPlaylistActionsMenu({
       themeProvider: themeProvider);
 }
 
-class ToggleableListTile extends StatefulWidget {
+class RemovablePlaylist extends StatefulWidget {
+  const RemovablePlaylist(
+      {super.key,
+      required this.parentPlaylist,
+      required this.item,
+      required this.confirmPlaylistRemoval});
+
+  final BaseItemDto parentPlaylist;
+  final BaseItemDto item;
+  final bool confirmPlaylistRemoval;
+
+  @override
+  State<RemovablePlaylist> createState() => _RemovablePlaylistState();
+}
+
+class _RemovablePlaylistState extends State<RemovablePlaylist> {
+  // TODO put this in a provider like favorites to persist across items?
+  int? _childCount;
+
+  @override
+  Widget build(BuildContext context) {
+    _childCount ??= widget.parentPlaylist.childCount;
+    return ToggleableListTile(
+      title: widget.parentPlaylist.name ??
+          AppLocalizations.of(context)!.unknownName,
+      subtitle: AppLocalizations.of(context)!
+          .songCount(_childCount ?? widget.parentPlaylist.childCount ?? 0),
+      leading: AlbumImage(item: widget.parentPlaylist),
+      positiveIcon: TablerIcons.circle_check_filled,
+      negativeIcon: TablerIcons.circle_plus,
+      initialState: true,
+      onToggle: (bool currentState) async {
+        if (currentState) {
+          // part of playlist, remove
+          bool removed = await removeFromPlaylist(
+              context, widget.item, widget.parentPlaylist,
+              confirm: widget.confirmPlaylistRemoval);
+          if (removed) {
+            setState(() {
+              _childCount = _childCount! - 1;
+            });
+          }
+          return !removed;
+        } else {
+          // add back to playlist
+          bool added = await addItemToPlaylist(
+              context, widget.item, widget.parentPlaylist);
+          if (added) {
+            setState(() {
+              _childCount = _childCount! + 1;
+            });
+          }
+          return added;
+        }
+      },
+      enabled: !FinampSettingsHelper.finampSettings.isOffline,
+    );
+  }
+}
+
+class ToggleableListTile extends ConsumerStatefulWidget {
   const ToggleableListTile({
     super.key,
     required this.title,
@@ -189,7 +216,6 @@ class ToggleableListTile extends StatefulWidget {
     required this.initialState,
     required this.onToggle,
     required this.enabled,
-    required this.accentColor,
   });
 
   final String title;
@@ -200,13 +226,12 @@ class ToggleableListTile extends StatefulWidget {
   final bool initialState;
   final Future<bool> Function(bool currentState) onToggle;
   final bool enabled;
-  final Color accentColor;
 
   @override
-  State<ToggleableListTile> createState() => _ToggleableListTileState();
+  ConsumerState<ToggleableListTile> createState() => _ToggleableListTileState();
 }
 
-class _ToggleableListTileState extends State<ToggleableListTile> {
+class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
   bool isLoading = false;
   bool currentState = false;
 
@@ -218,12 +243,13 @@ class _ToggleableListTileState extends State<ToggleableListTile> {
 
   @override
   Widget build(BuildContext context) {
+    var themeColor = Theme.of(context).colorScheme.primary;
     return Padding(
       padding:
           const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
       child: Container(
         decoration: ShapeDecoration(
-          color: widget.accentColor.withOpacity(currentState ? 0.3 : 0.1),
+          color: themeColor.withOpacity(currentState ? 0.3 : 0.1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -266,18 +292,18 @@ class _ToggleableListTileState extends State<ToggleableListTile> {
                     ),
                   ),
                 ),
-                isLoading
-                    ? const CircularProgressIndicator()
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 12.0),
-                        child: Icon(
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 12.0),
+                  child: isLoading
+                      ? const CircularProgressIndicator()
+                      : Icon(
                           currentState == true
                               ? widget.positiveIcon
                               : widget.negativeIcon,
                           size: 36.0,
-                          color: widget.accentColor,
+                          color: themeColor,
                         ),
-                      ),
+                ),
               ]),
           onTap: () async {
             try {

@@ -127,7 +127,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
             leading: AlbumImage(
               item: widget.item,
               disabled: !playable,
-              themeCallback: (x) => _menuTheme = x,
+              themeCallback: (x) => _menuTheme ??= x,
             ),
             title: Opacity(
               opacity: playable ? 1.0 : 0.5,

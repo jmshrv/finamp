@@ -23,10 +23,10 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
+import '../components/AddToPlaylistScreen/playlist_actions_menu.dart';
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
 import '../components/PlayerScreen/player_split_screen_scaffold.dart';
-import '../components/PlayerScreen/playlist_actions_menu.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
 import '../components/PlayerScreen/song_name_content.dart';

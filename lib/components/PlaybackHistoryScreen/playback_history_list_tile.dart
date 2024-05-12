@@ -72,7 +72,7 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                 item: widget.item.item.item.extras?["itemJson"] == null
                     ? null
                     : baseItem,
-                themeCallback: (x) => _menuTheme = x,
+                themeCallback: (x) => _menuTheme ??= x,
               ),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
