@@ -26,8 +26,7 @@ Future<void> showPlaylistActionsMenu({
   bool usePlayerTheme = false,
   Function? onRemoveFromList,
   bool confirmPlaylistRemoval = false,
-  ImageProvider? cachedImage,
-  ThemeProvider? themeProvider,
+  FinampTheme? themeProvider,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
 
@@ -38,13 +37,13 @@ Future<void> showPlaylistActionsMenu({
       item: item,
       routeName: playlistActionsMenuRouteName,
       minDraggableHeight: 0.2,
-      buildSlivers: (context, imageProvider) {
+      buildSlivers: (context) {
         var themeColor = Theme.of(context).colorScheme.primary;
 
         final menuEntries = [
           SongInfo(
             item: item,
-            headerImage: usePlayerTheme ? imageProvider : null,
+            useThemeImage: usePlayerTheme,
           ),
           const SizedBox(height: 10),
           Consumer(
@@ -176,7 +175,6 @@ Future<void> showPlaylistActionsMenu({
         return (stackHeight, menu);
       },
       usePlayerTheme: usePlayerTheme,
-      cachedImage: cachedImage,
       themeProvider: themeProvider);
 }
 

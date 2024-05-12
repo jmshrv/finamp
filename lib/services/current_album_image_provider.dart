@@ -9,7 +9,7 @@ import 'album_image_provider.dart';
 
 /// Provider to handle syncing up the current playing item's image provider.
 /// Used on the player screen to sync up loading the blurred background.
-final currentAlbumImageProvider = Provider<ImageProvider?>((ref) {
+final currentAlbumImageProvider = Provider<(ImageProvider?, String?)>((ref) {
   final List<FinampQueueItem> precacheItems =
       GetIt.instance<QueueService>().peekQueue(next: 3, previous: 1);
   ImageStream? stream;
@@ -39,9 +39,9 @@ final currentAlbumImageProvider = Provider<ImageProvider?>((ref) {
     final request = AlbumImageRequest(
       item: currentTrack,
     );
-    return ref.read(albumImageProvider(request));
+    return (ref.read(albumImageProvider(request)), currentTrack.blurHash);
   }
-  return null;
+  return (null, null);
 });
 
 final currentSongProvider = StreamProvider(

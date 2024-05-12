@@ -3,14 +3,11 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/add_to_playlist_button.dart';
-import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/theme_provider.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -474,7 +471,8 @@ class NowPlayingBar extends ConsumerWidget {
                                                   color: Colors.white,
                                                   size: 28,
                                                   visualDensity:
-                                                      const VisualDensity(horizontal: -4),
+                                                      const VisualDensity(
+                                                          horizontal: -4),
                                                 ),
                                               ),
                                             ],
@@ -505,8 +503,7 @@ class NowPlayingBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    var imageTheme =
-        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    var imageTheme = ref.watch(playerScreenThemeProvider);
 
     ref.listen(currentTrackMetadataProvider,
         (metadataOrNull, metadata) {}); // keep provider alive

@@ -48,8 +48,7 @@ class _QueueListItemState extends State<QueueListItem>
   @override
   bool get wantKeepAlive => true;
 
-  ImageProvider? _thumbnail;
-  ThemeProvider? _menuTheme;
+  FinampTheme? _menuTheme;
 
   @override
   void dispose() {
@@ -74,7 +73,6 @@ class _QueueListItemState extends State<QueueListItem>
       showModalSongMenu(
         context: context,
         item: baseItem,
-        cachedImage: _thumbnail,
         usePlayerTheme: widget.item.baseItem?.blurHash != null &&
             widget.item.baseItem?.blurHash == currentTrack.blurHash,
         themeProvider: _menuTheme,
@@ -96,10 +94,7 @@ class _QueueListItemState extends State<QueueListItem>
       },
       child: GestureDetector(
           onTapDown: (_) {
-            if (_thumbnail != null) {
-              _menuTheme ??=
-                  ThemeProvider(_thumbnail!, Theme.of(context).brightness);
-            }
+            _menuTheme?.calculate(Theme.of(context).brightness);
           },
           onLongPressStart: (details) => menuCallback(),
           onSecondaryTapDown: (details) => menuCallback(),
@@ -129,7 +124,7 @@ class _QueueListItemState extends State<QueueListItem>
                         : jellyfin_models.BaseItemDto.fromJson(
                             widget.item.item.extras?["itemJson"]),
                     borderRadius: BorderRadius.zero,
-                    imageProviderCallback: (x) => _thumbnail = x,
+                    themeCallback: (x) => _menuTheme = x,
                   ),
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

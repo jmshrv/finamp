@@ -49,8 +49,7 @@ Future<void> showModalSongMenu({
   BaseItemDto? parentItem,
   Function? onRemoveFromList,
   bool confirmPlaylistRemoval = true,
-  ImageProvider? cachedImage,
-  ThemeProvider? themeProvider,
+  FinampTheme? themeProvider,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final canGoToAlbum = item.parentId != null;
@@ -61,7 +60,7 @@ Future<void> showModalSongMenu({
       context: context,
       item: item,
       routeName: SongMenu.routeName,
-      buildWrapper: (context, imageProvider, childBuilder) {
+      buildWrapper: (context, childBuilder) {
         return SongMenu(
           key: ValueKey(item.id),
           item: item,
@@ -76,12 +75,10 @@ Future<void> showModalSongMenu({
           onRemoveFromList: onRemoveFromList,
           confirmPlaylistRemoval: confirmPlaylistRemoval,
           childBuilder: childBuilder,
-          imageProvider: imageProvider,
           themeProvider: themeProvider,
         );
       },
       usePlayerTheme: usePlayerTheme,
-      cachedImage: cachedImage,
       themeProvider: themeProvider);
 }
 
@@ -102,7 +99,6 @@ class SongMenu extends ConsumerStatefulWidget {
     required this.confirmPlaylistRemoval,
     this.parentItem,
     required this.childBuilder,
-    required this.imageProvider,
     required this.themeProvider,
   });
 
@@ -118,8 +114,7 @@ class SongMenu extends ConsumerStatefulWidget {
   final Function? onRemoveFromList;
   final bool confirmPlaylistRemoval;
   final ScrollBuilder childBuilder;
-  final ImageProvider imageProvider;
-  final ThemeProvider? themeProvider;
+  final FinampTheme? themeProvider;
 
   @override
   ConsumerState<SongMenu> createState() => _SongMenuState();
@@ -254,7 +249,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               item: widget.item,
               parentPlaylist: inPlaylist ? queueItem!.source.item : null,
               usePlayerTheme: widget.usePlayerTheme,
-              cachedImage: widget.imageProvider,
               themeProvider: widget.themeProvider,
             );
           },
@@ -585,7 +579,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       SliverPersistentHeader(
         delegate: SongMenuSliverAppBar(
           item: widget.item,
-          headerImage: widget.usePlayerTheme ? widget.imageProvider : null,
+          useThemeImage: widget.usePlayerTheme,
         ),
         pinned: true,
       ),
@@ -747,11 +741,11 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
 class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
-  ImageProvider? headerImage;
+  bool useThemeImage;
 
   SongMenuSliverAppBar({
     required this.item,
-    this.headerImage,
+    this.useThemeImage = false,
   });
 
   @override
@@ -759,7 +753,7 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return SongInfo(
       item: item,
-      headerImage: headerImage,
+      useThemeImage: useThemeImage,
     );
   }
 
@@ -776,23 +770,19 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
 
 class SongInfo extends ConsumerStatefulWidget {
   const SongInfo({
+    super.key,
     required this.item,
-    this.headerImage,
+    required this.useThemeImage,
   });
 
   final BaseItemDto item;
-  final ImageProvider? headerImage;
+  final bool useThemeImage;
 
   @override
   ConsumerState createState() => _SongInfoState();
 }
 
 class _SongInfoState extends ConsumerState<SongInfo> {
-  // Wrap a static imageProvider to give to AlbumImage  Do not watch player image
-  // provider because the song menu does not update on track changes.
-  static final _imageProvider = Provider.autoDispose
-      .family<ImageProvider, ImageProvider>((ref, value) => value);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -818,10 +808,9 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                 height: 120,
                 child: AlbumImage(
                   // Only supply one of item or imageListenable
-                  item: widget.headerImage == null ? widget.item : null,
-                  imageListenable: widget.headerImage == null
-                      ? null
-                      : _imageProvider(widget.headerImage!),
+                  item: widget.useThemeImage ? null : widget.item,
+                  imageListenable:
+                      widget.useThemeImage ? imageThemeProvider : null,
                   borderRadius: BorderRadius.zero,
                 ),
               ),

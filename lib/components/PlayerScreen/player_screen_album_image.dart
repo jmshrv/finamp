@@ -109,8 +109,6 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
                         ],
                       ),
                       child: AlbumImage(
-                        blurHash:
-                            snapshot.data?.currentTrack?.baseItem?.blurHash,
                         imageListenable: currentAlbumImageProvider,
                         borderRadius: BorderRadius.circular(8.0),
                         // Load player cover at max size to allow more seamless scaling

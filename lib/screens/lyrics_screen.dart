@@ -36,21 +36,27 @@ class LyricsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme =
-        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    final imageTheme = ref.watch(playerScreenThemeProvider);
 
-    return AnimatedTheme(
-      duration: const Duration(milliseconds: 1000),
-      data: ThemeData(
-        colorScheme: imageTheme.copyWith(
-          brightness: Theme.of(context).brightness,
-        ),
-        iconTheme: Theme.of(context).iconTheme.copyWith(
-              color: imageTheme.primary,
+    return ProviderScope(
+        overrides: [
+          themeDataProvider.overrideWith((ref) {
+            return ref.watch(playerScreenThemeDataProvider) ??
+                FinampTheme.defaultTheme();
+          })
+        ],
+        child: AnimatedTheme(
+          duration: const Duration(milliseconds: 1000),
+          data: ThemeData(
+            colorScheme: imageTheme.copyWith(
+              brightness: Theme.of(context).brightness,
             ),
-      ),
-      child: const _LyricsScreenContent(),
-    );
+            iconTheme: Theme.of(context).iconTheme.copyWith(
+                  color: imageTheme.primary,
+                ),
+          ),
+          child: const _LyricsScreenContent(),
+        ));
   }
 }
 

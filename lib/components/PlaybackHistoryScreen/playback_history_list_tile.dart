@@ -31,8 +31,7 @@ class PlaybackHistoryListTile extends StatefulWidget {
 }
 
 class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
-  ImageProvider? _thumbnail;
-  ThemeProvider? _menuTheme;
+  FinampTheme? _menuTheme;
 
   @override
   void dispose() {
@@ -48,18 +47,12 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
     void menuCallback() async {
       unawaited(Feedback.forLongPress(context));
       await showModalSongMenu(
-          context: context,
-          item: baseItem,
-          cachedImage: _thumbnail,
-          themeProvider: _menuTheme);
+          context: context, item: baseItem, themeProvider: _menuTheme);
     }
 
     return GestureDetector(
         onTapDown: (_) {
-          if (_thumbnail != null) {
-            _menuTheme ??=
-                ThemeProvider(_thumbnail!, Theme.of(context).brightness);
-          }
+          _menuTheme?.calculate(Theme.of(context).brightness);
         },
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),
@@ -79,7 +72,7 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                 item: widget.item.item.item.extras?["itemJson"] == null
                     ? null
                     : baseItem,
-                imageProviderCallback: (x) => _thumbnail = x,
+                themeCallback: (x) => _menuTheme = x,
               ),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

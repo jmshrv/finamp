@@ -19,6 +19,7 @@ import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -393,113 +394,128 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
             return ValueListenableBuilder<Box<ThemeMode>>(
               valueListenable: ThemeModeHelper.themeModeListener,
               builder: (_, box, __) {
-                return MaterialApp(
-                  title: "Finamp",
-                  routes: {
-                    SplashScreen.routeName: (context) => const SplashScreen(),
-                    LoginScreen.routeName: (context) => const LoginScreen(),
-                    ViewSelector.routeName: (context) => const ViewSelector(),
-                    MusicScreen.routeName: (context) => const MusicScreen(),
-                    AlbumScreen.routeName: (context) => const AlbumScreen(),
-                    ArtistScreen.routeName: (context) => const ArtistScreen(),
-                    PlayerScreen.routeName: (context) => const PlayerScreen(
-                        key: ValueKey(PlayerScreen.routeName)),
-                    DownloadsScreen.routeName: (context) =>
-                        const DownloadsScreen(),
-                    ActiveDownloadsScreen.routeName: (context) =>
-                        const ActiveDownloadsScreen(),
-                    PlaybackHistoryScreen.routeName: (context) =>
-                        const PlaybackHistoryScreen(),
-                    LogsScreen.routeName: (context) => const LogsScreen(),
-                    QueueRestoreScreen.routeName: (context) =>
-                        const QueueRestoreScreen(),
-                    SettingsScreen.routeName: (context) =>
-                        const SettingsScreen(),
-                    TranscodingSettingsScreen.routeName: (context) =>
-                        const TranscodingSettingsScreen(),
-                    DownloadsLocationScreen.routeName: (context) =>
-                        const DownloadsLocationScreen(),
-                    DownloadsSettingsScreen.routeName: (context) =>
-                        const DownloadsSettingsScreen(),
-                    AddDownloadLocationScreen.routeName: (context) =>
-                        const AddDownloadLocationScreen(),
-                    AudioServiceSettingsScreen.routeName: (context) =>
-                        const AudioServiceSettingsScreen(),
-                    VolumeNormalizationSettingsScreen.routeName: (context) =>
-                        const VolumeNormalizationSettingsScreen(),
-                    InteractionSettingsScreen.routeName: (context) =>
-                        const InteractionSettingsScreen(),
-                    TabsSettingsScreen.routeName: (context) =>
-                        const TabsSettingsScreen(),
-                    LayoutSettingsScreen.routeName: (context) =>
-                        const LayoutSettingsScreen(),
-                    CustomizationSettingsScreen.routeName: (context) =>
-                        const CustomizationSettingsScreen(),
-                    PlayerSettingsScreen.routeName: (context) =>
-                        const PlayerSettingsScreen(),
-                    LanguageSelectionScreen.routeName: (context) =>
-                        const LanguageSelectionScreen(),
+                var theme = switch (box.get("ThemeMode")) {
+                  null ||
+                  ThemeMode.system =>
+                    MediaQuery.platformBrightnessOf(context),
+                  ThemeMode.light => Brightness.light,
+                  ThemeMode.dark => Brightness.dark,
+                };
+                return Consumer(
+                  builder: (context, ref, child) {
+                    Future(() {
+                      ref.read(brightnessProvider.notifier).state = theme;
+                    });
+                    return child!;
                   },
-                  initialRoute: SplashScreen.routeName,
-                  builder: buildPlayerSplitScreenScaffold,
-                  theme: ThemeData(
-                    brightness: Brightness.light,
-                    colorScheme: lightColorScheme,
-                    appBarTheme: const AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle(
-                        statusBarBrightness: Brightness.light,
-                        statusBarIconBrightness: Brightness.dark,
+                  child: MaterialApp(
+                    title: "Finamp",
+                    routes: {
+                      SplashScreen.routeName: (context) => const SplashScreen(),
+                      LoginScreen.routeName: (context) => const LoginScreen(),
+                      ViewSelector.routeName: (context) => const ViewSelector(),
+                      MusicScreen.routeName: (context) => const MusicScreen(),
+                      AlbumScreen.routeName: (context) => const AlbumScreen(),
+                      ArtistScreen.routeName: (context) => const ArtistScreen(),
+                      PlayerScreen.routeName: (context) => const PlayerScreen(
+                          key: ValueKey(PlayerScreen.routeName)),
+                      DownloadsScreen.routeName: (context) =>
+                          const DownloadsScreen(),
+                      ActiveDownloadsScreen.routeName: (context) =>
+                          const ActiveDownloadsScreen(),
+                      PlaybackHistoryScreen.routeName: (context) =>
+                          const PlaybackHistoryScreen(),
+                      LogsScreen.routeName: (context) => const LogsScreen(),
+                      QueueRestoreScreen.routeName: (context) =>
+                          const QueueRestoreScreen(),
+                      SettingsScreen.routeName: (context) =>
+                          const SettingsScreen(),
+                      TranscodingSettingsScreen.routeName: (context) =>
+                          const TranscodingSettingsScreen(),
+                      DownloadsLocationScreen.routeName: (context) =>
+                          const DownloadsLocationScreen(),
+                      DownloadsSettingsScreen.routeName: (context) =>
+                          const DownloadsSettingsScreen(),
+                      AddDownloadLocationScreen.routeName: (context) =>
+                          const AddDownloadLocationScreen(),
+                      AudioServiceSettingsScreen.routeName: (context) =>
+                          const AudioServiceSettingsScreen(),
+                      VolumeNormalizationSettingsScreen.routeName: (context) =>
+                          const VolumeNormalizationSettingsScreen(),
+                      InteractionSettingsScreen.routeName: (context) =>
+                          const InteractionSettingsScreen(),
+                      TabsSettingsScreen.routeName: (context) =>
+                          const TabsSettingsScreen(),
+                      LayoutSettingsScreen.routeName: (context) =>
+                          const LayoutSettingsScreen(),
+                      CustomizationSettingsScreen.routeName: (context) =>
+                          const CustomizationSettingsScreen(),
+                      PlayerSettingsScreen.routeName: (context) =>
+                          const PlayerSettingsScreen(),
+                      LanguageSelectionScreen.routeName: (context) =>
+                          const LanguageSelectionScreen(),
+                    },
+                    initialRoute: SplashScreen.routeName,
+                    builder: buildPlayerSplitScreenScaffold,
+                    theme: ThemeData(
+                      brightness: Brightness.light,
+                      colorScheme: lightColorScheme,
+                      appBarTheme: const AppBarTheme(
+                        systemOverlayStyle: SystemUiOverlayStyle(
+                          statusBarBrightness: Brightness.light,
+                          statusBarIconBrightness: Brightness.dark,
+                        ),
+                      ),
+                      snackBarTheme: const SnackBarThemeData(
+                        //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
+                        // behavior: SnackBarBehavior.floating,
+                        elevation: 10.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        ),
+                        // insetPadding: EdgeInsets.symmetric(
+                        //   horizontal: 12.0,
+                        //   vertical: 0.0,
+                        // ),
+                        dismissDirection: DismissDirection.horizontal,
                       ),
                     ),
-                    snackBarTheme: const SnackBarThemeData(
-                      //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
-                      // behavior: SnackBarBehavior.floating,
-                      elevation: 10.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                    darkTheme: ThemeData(
+                      brightness: Brightness.dark,
+                      colorScheme: darkColorScheme,
+                      snackBarTheme: const SnackBarThemeData(
+                        //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
+                        // behavior: SnackBarBehavior.floating,
+                        elevation: 10.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        ),
+                        // insetPadding: EdgeInsets.symmetric(
+                        //   horizontal: 12.0,
+                        //   vertical: 0.0,
+                        // ),
+                        dismissDirection: DismissDirection.horizontal,
                       ),
-                      // insetPadding: EdgeInsets.symmetric(
-                      //   horizontal: 12.0,
-                      //   vertical: 0.0,
-                      // ),
-                      dismissDirection: DismissDirection.horizontal,
                     ),
+                    scrollBehavior: FinampScrollBehavior(),
+                    themeMode: box.get("ThemeMode"),
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: AppLocalizations.supportedLocales,
+                    // We awkwardly put English as the first supported locale so
+                    // that basicLocaleListResolution falls back to it instead of
+                    // the first language in supportedLocales (Arabic as of writing)
+                    localeListResolutionCallback: (locales, supportedLocales) =>
+                        basicLocaleListResolution(locales,
+                            [const Locale("en")].followedBy(supportedLocales)),
+                    locale: LocaleHelper.locale,
+                    scaffoldMessengerKey: GlobalSnackbar.materialAppScaffoldKey,
+                    navigatorKey: GlobalSnackbar.materialAppNavigatorKey,
                   ),
-                  darkTheme: ThemeData(
-                    brightness: Brightness.dark,
-                    colorScheme: darkColorScheme,
-                    snackBarTheme: const SnackBarThemeData(
-                      //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
-                      // behavior: SnackBarBehavior.floating,
-                      elevation: 10.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      // insetPadding: EdgeInsets.symmetric(
-                      //   horizontal: 12.0,
-                      //   vertical: 0.0,
-                      // ),
-                      dismissDirection: DismissDirection.horizontal,
-                    ),
-                  ),
-                  scrollBehavior: FinampScrollBehavior(),
-                  themeMode: box.get("ThemeMode"),
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  // We awkwardly put English as the first supported locale so
-                  // that basicLocaleListResolution falls back to it instead of
-                  // the first language in supportedLocales (Arabic as of writing)
-                  localeListResolutionCallback: (locales, supportedLocales) =>
-                      basicLocaleListResolution(locales,
-                          [const Locale("en")].followedBy(supportedLocales)),
-                  locale: LocaleHelper.locale,
-                  scaffoldMessengerKey: GlobalSnackbar.materialAppScaffoldKey,
-                  navigatorKey: GlobalSnackbar.materialAppNavigatorKey,
                 );
               },
             );

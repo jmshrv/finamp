@@ -43,8 +43,7 @@ class PlayerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme =
-        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    final imageTheme = ref.watch(playerScreenThemeProvider);
     // Rebuild player screen if settings change
     ref.watch(finampSettingsProvider);
     final queueService = GetIt.instance<QueueService>();
@@ -70,34 +69,42 @@ class PlayerScreen extends ConsumerWidget {
       }
     });
 
-    return AnimatedTheme(
-      duration: getThemeTransitionDuration(context),
-      data: ThemeData(
-        colorScheme: imageTheme.copyWith(
-          brightness: Theme.of(context).brightness,
+    return ProviderScope(
+      overrides: [
+        themeDataProvider.overrideWith((ref) {
+          return ref.watch(playerScreenThemeDataProvider) ??
+              FinampTheme.defaultTheme();
+        })
+      ],
+      child: AnimatedTheme(
+        duration: getThemeTransitionDuration(context),
+        data: ThemeData(
+          colorScheme: imageTheme.copyWith(
+            brightness: Theme.of(context).brightness,
+          ),
+          iconTheme: Theme.of(context).iconTheme.copyWith(
+                color: imageTheme.primary,
+              ),
         ),
-        iconTheme: Theme.of(context).iconTheme.copyWith(
-              color: imageTheme.primary,
-            ),
+        child: StreamBuilder<FinampQueueInfo?>(
+            stream: queueService.getQueueStream(),
+            initialData: queueService.getQueue(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.data!.saveState == SavedQueueState.loading) {
+                return buildLoadingScreen(context, null);
+              } else if (snapshot.hasData &&
+                  snapshot.data!.saveState == SavedQueueState.failed) {
+                return buildLoadingScreen(context, queueService.retryQueueLoad);
+              } else if (snapshot.hasData &&
+                  snapshot.data!.currentTrack != null) {
+                return _PlayerScreenContent(
+                    airplayTheme: imageTheme.primary, playerScreen: this);
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
       ),
-      child: StreamBuilder<FinampQueueInfo?>(
-          stream: queueService.getQueueStream(),
-          initialData: queueService.getQueue(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData &&
-                snapshot.data!.saveState == SavedQueueState.loading) {
-              return buildLoadingScreen(context, null);
-            } else if (snapshot.hasData &&
-                snapshot.data!.saveState == SavedQueueState.failed) {
-              return buildLoadingScreen(context, queueService.retryQueueLoad);
-            } else if (snapshot.hasData &&
-                snapshot.data!.currentTrack != null) {
-              return _PlayerScreenContent(
-                  airplayTheme: imageTheme.primary, playerScreen: this);
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
     );
   }
 
