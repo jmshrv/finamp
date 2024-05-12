@@ -41,7 +41,7 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
     bool isFav = ref
         .watch(isFavoriteProvider(widget.item?.id, DefaultValue(widget.item)));
     return GestureDetector(
-      onDoubleTap: () async {
+      onLongPress: () async {
         ref
             .read(isFavoriteProvider(widget.item?.id, DefaultValue()).notifier)
             .updateFavorite(!isFav);

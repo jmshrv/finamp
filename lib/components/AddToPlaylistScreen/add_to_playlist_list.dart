@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -59,7 +60,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
               delegate: SliverChildBuilderDelegate(
             (context, index) {
               if (index == playlists.length) {
-                return addToPlaylistButton(context);
+                return createNewPlaylistButton(context);
               }
               final playlistItem = playlists[index];
               bool isPartOfPlaylist = widget.hiddenPlaylists
@@ -106,59 +107,47 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
             ),
           );
         } else {
-          return const SliverToBoxAdapter(
-            child: Center(
-              heightFactor: 3.0,
-              child: CircularProgressIndicator.adaptive(),
-            ),
+          return SliverList(
+              delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              if (index == 1) {
+                return createNewPlaylistButton(context);
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              }
+            },
+            childCount: 2)
           );
         }
       },
     );
   }
 
-  Widget addToPlaylistButton(BuildContext context) {
-    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-    return ToggleableListTile(
-      title: AppLocalizations.of(context)!.newPlaylist,
-      leading: AspectRatio(
-        aspectRatio: 1.0,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+  Widget createNewPlaylistButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CTAMedium(
+            text: AppLocalizations.of(context)!.newPlaylist,
+            icon: TablerIcons.plus,
+            accentColor: Theme.of(context).colorScheme.primary,
+            onPressed: () async {
+              final result = await (await showDialog<Future<bool>>(
+                context: context,
+                builder: (context) =>
+                    NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
+              ));
+              if ((result ?? false) && context.mounted) {
+                Navigator.of(context).pop();
+              }
+            },
           ),
-          child: const Center(
-            child: Icon(
-              TablerIcons.plus,
-              size: 36.0,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        ],
       ),
-      positiveIcon: TablerIcons.circle_check_filled,
-      negativeIcon: TablerIcons
-          .circle_dashed_check, // we don't actually know if the track is part of the playlist
-      initialState: false,
-      onToggle: (bool currentState) async {
-        assert(currentState == false);
-        // The dialog returns true if a playlist is created. If this is the
-        // case, we also pop this page. It will return false if the user
-        // cancels the dialog.
-        final result = await await showDialog<Future<bool>>(
-          context: context,
-          builder: (context) =>
-              NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
-        );
-
-        if (!context.mounted) return currentState;
-
-        if (result ?? false) {
-          Navigator.of(context).pop();
-        }
-        return currentState;
-      },
-      enabled: !isOffline,
     );
   }
 }

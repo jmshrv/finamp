@@ -46,7 +46,7 @@ Future<void> showPlaylistActionsMenu({
             item: item,
             useThemeImage: usePlayerTheme,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
           Consumer(
             builder: (context, ref, child) {
               bool isFavorite =
@@ -127,7 +127,7 @@ Future<void> showPlaylistActionsMenu({
           SliverStickyHeader(
               header: Padding(
                 padding: const EdgeInsets.only(
-                    top: 24.0, bottom: 8.0, left: 16.0, right: 16.0),
+                    top: 16.0, bottom: 8.0, left: 16.0, right: 16.0),
                 child: Text(AppLocalizations.of(context)!.addPlaylistSubheader,
                     style: Theme.of(context).textTheme.titleMedium),
               ),

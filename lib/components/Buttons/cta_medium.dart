@@ -8,13 +8,15 @@ class CTAMedium extends StatelessWidget {
   final IconData icon;
   final void Function() onPressed;
   final double? minWidth;
+  final Color? accentColor;
 
   const CTAMedium(
       {super.key,
       required this.text,
       required this.icon,
       required this.onPressed,
-      this.minWidth});
+      this.minWidth,
+      this.accentColor});
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +44,9 @@ class CTAMedium extends StatelessWidget {
               bottom: paddingVertical),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
-          Theme.of(context).brightness == Brightness.dark
+          accentColor?.withOpacity(0.3) ?? (Theme.of(context).brightness == Brightness.dark
               ? jellyfinBlueColor.withOpacity(0.3)
-              : jellyfinBlueColor,
+              : jellyfinBlueColor),
         ),
       ),
       child: Container(
@@ -59,9 +61,9 @@ class CTAMedium extends StatelessWidget {
             Icon(
               icon,
               size: 24,
-              color: Theme.of(context).brightness == Brightness.dark
+              color: accentColor ?? (Theme.of(context).brightness == Brightness.dark
                   ? jellyfinBlueColor
-                  : Colors.white,
+                  : Colors.white),
               weight: 1.5,
             ),
             const SizedBox(

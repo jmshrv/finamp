@@ -7,12 +7,14 @@ class CTALarge extends StatelessWidget {
   final String text;
   final IconData icon;
   final void Function() onPressed;
+  final Color? accentColor;
 
   const CTALarge(
       {super.key,
       required this.text,
       required this.icon,
-      required this.onPressed});
+      required this.onPressed,
+      this.accentColor});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +33,9 @@ class CTALarge extends StatelessWidget {
           const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
-          Theme.of(context).brightness == Brightness.dark
+          accentColor?.withOpacity(0.3) ?? (Theme.of(context).brightness == Brightness.dark
               ? jellyfinBlueColor.withOpacity(0.3)
-              : jellyfinBlueColor,
+              : jellyfinBlueColor),
         ),
       ),
       child: Wrap(
@@ -42,9 +44,9 @@ class CTALarge extends StatelessWidget {
           Icon(
             icon,
             size: 28,
-            color: Theme.of(context).brightness == Brightness.dark
+            color: accentColor ?? (Theme.of(context).brightness == Brightness.dark
                 ? jellyfinBlueColor
-                : Colors.white,
+                : Colors.white),
             weight: 1.5,
           ),
           const SizedBox(
