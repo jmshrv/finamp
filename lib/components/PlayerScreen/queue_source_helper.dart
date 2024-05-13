@@ -72,8 +72,8 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
   }
 }
 
-Future<bool> removeFromPlaylist(
-    BuildContext context, BaseItemDto item, BaseItemDto parent,
+Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
+    BaseItemDto parent, String playlistItemId,
     {required bool confirm}) async {
   bool isConfirmed = !confirm;
   if (confirm) {
@@ -96,7 +96,7 @@ Future<bool> removeFromPlaylist(
   }
   if (isConfirmed) {
     await GetIt.instance<JellyfinApiHelper>().removeItemsFromPlaylist(
-        playlistId: parent.id, entryIds: [item.playlistItemId!]);
+        playlistId: parent.id, entryIds: [playlistItemId]);
 
     // re-sync playlist to delete removed item if not required anymore
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -105,8 +105,7 @@ Future<bool> removeFromPlaylist(
         null,
         keepSlow: true));
 
-    playlistRemovalsCache.add(parent.id +
-        item.id); // use the regular id instead of the playlistItemId since Jellyfin doesn't allow duplicates anyway, and we are able to remove the item from the cache again if needed
+    playlistRemovalsCache.add(parent.id + playlistItemId);
 
     GlobalSnackbar.message(
         (context) => AppLocalizations.of(context)!.removedFromPlaylist,
@@ -128,8 +127,6 @@ Future<bool> addItemToPlaylist(
       DownloadStub.fromItem(type: DownloadItemType.collection, item: parent),
       null,
       keepSlow: true));
-
-  playlistRemovalsCache.remove(parent.id + item.id);
 
   GlobalSnackbar.message(
       (scaffold) => AppLocalizations.of(context)!.confirmAddedToPlaylist,

@@ -341,8 +341,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               widget.parentItem != null &&
               !widget.isOffline,
           onTap: () async {
-            var removed = await removeFromPlaylist(
-                context, widget.item, widget.parentItem!,
+            var removed = await removeFromPlaylist(context, widget.item,
+                widget.parentItem!, widget.item.playlistItemId!,
                 confirm: widget.confirmPlaylistRemoval);
             if (removed) {
               if (widget.onRemoveFromList != null) {

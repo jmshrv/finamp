@@ -1,16 +1,17 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 import 'new_playlist_dialog.dart';
 import 'playlist_actions_menu.dart';
@@ -19,84 +20,48 @@ class AddToPlaylistList extends StatefulWidget {
   const AddToPlaylistList({
     super.key,
     required this.itemToAdd,
-    this.hiddenPlaylists = const [],
-    this.playlistsCallback,
+    required this.playlistsFuture,
   });
 
   final BaseItemDto itemToAdd;
-  final List<BaseItemDto> hiddenPlaylists;
-  final ValueNotifier<List<BaseItemDto>?>? playlistsCallback;
+  final Future<List<BaseItemDto>> playlistsFuture;
 
   @override
   State<AddToPlaylistList> createState() => _AddToPlaylistListState();
 }
 
 class _AddToPlaylistListState extends State<AddToPlaylistList> {
-  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  late Future<List<BaseItemDto>?> addToPlaylistListFuture;
-
   @override
   void initState() {
     super.initState();
-    addToPlaylistListFuture = jellyfinApiHelper.getItems(
-      includeItemTypes: "Playlist",
-      sortBy: "SortName",
-    );
-    addToPlaylistListFuture
-        .then((value) => widget.playlistsCallback?.value = value);
+    playlistsFuture = widget.playlistsFuture.then(
+        (value) => value.map((e) => (e, false, null as String?)).toList());
   }
+
+  // playlist, isLoading, playlistItemId
+  late Future<List<(BaseItemDto, bool, String?)>> playlistsFuture;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<BaseItemDto>?>(
-      future: addToPlaylistListFuture,
+    return FutureBuilder(
+      future: playlistsFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var playlists = snapshot.data!
-              .where((element) => !widget.hiddenPlaylists
-                  .any((hidden) => element.id == hidden.id))
-              .toList();
           return SliverList(
               delegate: SliverChildBuilderDelegate(
             (context, index) {
-              if (index == playlists.length) {
+              if (index == snapshot.data!.length) {
                 return createNewPlaylistButton(context);
               }
-              final playlistItem = playlists[index];
-              bool isPartOfPlaylist = widget.hiddenPlaylists
-                  .any((element) => element.id == playlistItem.id);
-              final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-              return ToggleableListTile(
-                title: playlistItem.name ??
-                    AppLocalizations.of(context)!.unknownName,
-                subtitle: AppLocalizations.of(context)!
-                    .songCount(playlistItem.childCount ?? 0),
-                leading: AlbumImage(item: playlistItem),
-                positiveIcon: TablerIcons.circle_check_filled,
-                negativeIcon: TablerIcons
-                    .circle_dashed_check, // we don't actually know if the track is part of the playlist
-                initialState: isPartOfPlaylist,
-                onToggle: (bool currentState) async {
-                  if (currentState) {
-                    // part of playlist, remove
-                    //TODO not currently possible, because we don't have the playlist item id after adding
-                    return currentState;
-                  } else {
-                    // add to playlist
-                    bool added = await addItemToPlaylist(
-                        context, widget.itemToAdd, playlistItem);
-                    if (added && playlistItem.childCount != null) {
-                      setState(() {
-                        playlistItem.childCount = playlistItem.childCount! + 1;
-                      });
-                    }
-                    return added;
-                  }
-                },
-                enabled: !isOffline,
-              );
+              final (playlist, isLoading, playListItemId) =
+                  snapshot.data![index];
+              return AddToPlaylistTile(
+                  playlist: playlist,
+                  song: widget.itemToAdd,
+                  playlistItemId: playListItemId,
+                  isLoading: isLoading);
             },
-            childCount: playlists.length + 1,
+            childCount: snapshot.data!.length + 1,
           ));
         } else if (snapshot.hasError) {
           GlobalSnackbar.error(snapshot.error);
@@ -108,18 +73,15 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
           );
         } else {
           return SliverList(
-              delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              if (index == 1) {
-                return createNewPlaylistButton(context);
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              }
-            },
-            childCount: 2)
-          );
+              delegate: SliverChildBuilderDelegate((context, index) {
+            if (index == 1) {
+              return createNewPlaylistButton(context);
+            } else {
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }
+          }, childCount: 2));
         }
       },
     );
@@ -134,20 +96,139 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
           CTAMedium(
             text: AppLocalizations.of(context)!.newPlaylist,
             icon: TablerIcons.plus,
-            accentColor: Theme.of(context).colorScheme.primary,
+            //accentColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
-              final result = await (await showDialog<Future<bool>>(
+              var dialogResult = await showDialog<(Future<String>, String?)?>(
                 context: context,
                 builder: (context) =>
                     NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
-              ));
-              if ((result ?? false) && context.mounted) {
-                Navigator.of(context).pop();
+              );
+              if (dialogResult != null) {
+                var oldFuture = playlistsFuture;
+                setState(() {
+                  var loadingItem = [
+                    (
+                      BaseItemDto(id: "pending", name: dialogResult.$2),
+                      true,
+                      null as String?
+                    )
+                  ];
+                  playlistsFuture =
+                      oldFuture.then((value) => value + loadingItem);
+                });
+                try {
+                  var newId = await dialogResult.$1;
+                  // Give the server time to calculate an initial playlist image
+                  await Future.delayed(const Duration(seconds: 1));
+                  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+                  var playlist = await jellyfinApiHelper.getItemById(newId);
+                  var playlistItems = await jellyfinApiHelper.getItems(
+                      parentItem: playlist, fields: "");
+                  var song = playlistItems?.firstWhere(
+                      (element) => element.id == widget.itemToAdd.id);
+                  setState(() {
+                    var newItem = [(playlist, false, song?.playlistItemId)];
+                    playlistsFuture =
+                        oldFuture.then((value) => value + newItem);
+                  });
+                } catch (e) {
+                  GlobalSnackbar.error(e);
+                }
               }
             },
           ),
         ],
       ),
+    );
+  }
+}
+
+class AddToPlaylistTile extends StatefulWidget {
+  const AddToPlaylistTile(
+      {super.key,
+      required this.playlist,
+      this.playlistItemId,
+      required this.song,
+      this.isLoading = false});
+
+  final BaseItemDto playlist;
+  final BaseItemDto song;
+  final String? playlistItemId;
+  final bool isLoading;
+
+  @override
+  State<AddToPlaylistTile> createState() => _AddToPlaylistTileState();
+}
+
+class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
+  String? playlistItemId;
+  int? childCount;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.isLoading) {
+      playlistItemId = widget.playlistItemId;
+      childCount = widget.playlist.childCount;
+    }
+  }
+
+  @override
+  void didUpdateWidget(AddToPlaylistTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.isLoading) {
+      playlistItemId = widget.playlistItemId;
+      childCount = widget.playlist.childCount;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+    return ToggleableListTile(
+      forceLoading: widget.isLoading,
+      title: widget.playlist.name ?? AppLocalizations.of(context)!.unknownName,
+      subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
+      leading: AlbumImage(item: widget.playlist),
+      positiveIcon: TablerIcons.circle_check_filled,
+      negativeIcon: TablerIcons
+          .circle_dashed_check, // we don't actually know if the track is part of the playlist
+      initialState: playlistItemId != null,
+      onToggle: (bool currentState) async {
+        if (currentState) {
+          if (playlistItemId == null) {
+            throw "Cannot remove item from playlist, missing playlistItemId";
+          }
+          // part of playlist, remove
+          bool removed = await removeFromPlaylist(
+              context, widget.song, widget.playlist, playlistItemId!,
+              confirm: false);
+          if (removed) {
+            setState(() {
+              childCount = childCount == null ? null : childCount! - 1;
+            });
+          }
+          return !removed;
+        } else {
+          // add to playlist
+          bool added =
+              await addItemToPlaylist(context, widget.song, widget.playlist);
+          if (added) {
+            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+            var newItems = await jellyfinApiHelper.getItems(
+                parentItem: widget.playlist, fields: "");
+            setState(() {
+              childCount = newItems?.length ?? 0;
+              playlistItemId = newItems
+                  ?.firstWhereOrNull((x) => x.id == widget.song.id)
+                  ?.playlistItemId;
+            });
+            return playlistItemId != null;
+          }
+          return false;
+        }
+      },
+      enabled: !isOffline,
     );
   }
 }

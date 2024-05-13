@@ -1,19 +1,19 @@
 import 'package:collection/collection.dart';
-import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/favorite_provider.dart';
 import '../../services/feedback_helper.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/jellyfin_api_helper.dart';
 import '../../services/theme_provider.dart';
 import '../AlbumScreen/song_menu.dart';
-import '../album_image.dart';
 import '../global_snackbar.dart';
 import '../themed_bottom_sheet.dart';
 import 'add_to_playlist_list.dart';
@@ -25,10 +25,10 @@ Future<void> showPlaylistActionsMenu({
   required BaseItemDto item,
   required BaseItemDto? parentPlaylist,
   bool usePlayerTheme = false,
-  bool confirmPlaylistRemoval = false,
   FinampTheme? themeProvider,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   FeedbackHelper.feedback(FeedbackType.selection);
 
@@ -39,7 +39,10 @@ Future<void> showPlaylistActionsMenu({
       minDraggableHeight: 0.2,
       buildSlivers: (context) {
         var themeColor = Theme.of(context).colorScheme.primary;
-        var playlistsCallback = ValueNotifier<List<BaseItemDto>?>(null);
+        var playlistsFuture = jellyfinApiHelper.getItems(
+          includeItemTypes: "Playlist",
+          sortBy: "SortName",
+        );
 
         final menuEntries = [
           SongInfo(
@@ -81,13 +84,21 @@ Future<void> showPlaylistActionsMenu({
               );
             },
           ),
-          if (parentPlaylist != null)
-            RemovablePlaylist(
-              parentPlaylist: parentPlaylist,
-              item: item,
-              confirmPlaylistRemoval: confirmPlaylistRemoval,
-              listenable: playlistsCallback,
-            )
+          FutureBuilder(
+              future: playlistsFuture.then((value) =>
+                  value?.firstWhereOrNull((x) => x.id == parentPlaylist?.id)),
+              initialData: parentPlaylist,
+              builder: (context, snapshot) {
+                if (snapshot.data != null) {
+                  return AddToPlaylistTile(
+                    playlist: snapshot.data!,
+                    song: item,
+                    playlistItemId: item.playlistItemId,
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              })
         ];
 
         var menu = [
@@ -135,9 +146,10 @@ Future<void> showPlaylistActionsMenu({
                 height: 55.0,
                 child: AddToPlaylistList(
                   itemToAdd: item,
-                  hiddenPlaylists:
-                      parentPlaylist != null ? [parentPlaylist] : [],
-                  playlistsCallback: playlistsCallback,
+                  playlistsFuture: playlistsFuture.then((value) => (value
+                          ?.where((element) => element.id != parentPlaylist?.id)
+                          .toList() ??
+                      [])),
                 ),
               )),
           const SliverPadding(padding: EdgeInsets.only(bottom: 100.0))
@@ -148,72 +160,6 @@ Future<void> showPlaylistActionsMenu({
       },
       usePlayerTheme: usePlayerTheme,
       themeProvider: themeProvider);
-}
-
-class RemovablePlaylist extends StatefulWidget {
-  const RemovablePlaylist(
-      {super.key,
-      required this.parentPlaylist,
-      required this.item,
-      required this.confirmPlaylistRemoval,
-      required this.listenable});
-
-  final BaseItemDto parentPlaylist;
-  final BaseItemDto item;
-  final bool confirmPlaylistRemoval;
-  final ValueNotifier<List<BaseItemDto>?> listenable;
-
-  @override
-  State<RemovablePlaylist> createState() => _RemovablePlaylistState();
-}
-
-class _RemovablePlaylistState extends State<RemovablePlaylist> {
-  int _childCountOffset = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: widget.listenable,
-        builder: (context, playlists, _) {
-          var parent = playlists
-                  ?.firstWhereOrNull((x) => x.id == widget.parentPlaylist.id) ??
-              widget.parentPlaylist;
-          return ToggleableListTile(
-            title: parent.name ?? AppLocalizations.of(context)!.unknownName,
-            subtitle: AppLocalizations.of(context)!
-                .songCount(_childCountOffset + (parent.childCount ?? 0)),
-            leading: AlbumImage(item: parent),
-            positiveIcon: TablerIcons.circle_check_filled,
-            negativeIcon: TablerIcons.circle_plus,
-            initialState: true,
-            onToggle: (bool currentState) async {
-              if (currentState) {
-                // part of playlist, remove
-                bool removed = await removeFromPlaylist(
-                    context, widget.item, parent,
-                    confirm: widget.confirmPlaylistRemoval);
-                if (removed) {
-                  setState(() {
-                    _childCountOffset--;
-                  });
-                }
-                return !removed;
-              } else {
-                // add back to playlist
-                bool added =
-                    await addItemToPlaylist(context, widget.item, parent);
-                if (added) {
-                  setState(() {
-                    _childCountOffset++;
-                  });
-                }
-                return added;
-              }
-            },
-            enabled: !FinampSettingsHelper.finampSettings.isOffline,
-          );
-        });
-  }
 }
 
 class ToggleableListTile extends ConsumerStatefulWidget {
@@ -227,6 +173,7 @@ class ToggleableListTile extends ConsumerStatefulWidget {
     required this.initialState,
     required this.onToggle,
     required this.enabled,
+    this.forceLoading = false,
   });
 
   final String title;
@@ -237,6 +184,7 @@ class ToggleableListTile extends ConsumerStatefulWidget {
   final bool initialState;
   final Future<bool> Function(bool currentState) onToggle;
   final bool enabled;
+  final bool forceLoading;
 
   @override
   ConsumerState<ToggleableListTile> createState() => _ToggleableListTileState();
@@ -250,6 +198,14 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
   void initState() {
     super.initState();
     currentState = widget.initialState;
+  }
+
+  @override
+  void didUpdateWidget(ToggleableListTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.forceLoading) {
+      currentState = widget.initialState;
+    }
   }
 
   @override
@@ -305,7 +261,7 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 12.0),
-                  child: isLoading
+                  child: isLoading || widget.forceLoading
                       ? const CircularProgressIndicator()
                       : Icon(
                           currentState == true
@@ -316,24 +272,26 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
                         ),
                 ),
               ]),
-          onTap: () async {
-            try {
-              setState(() {
-                isLoading = true;
-              });
-              final result = await widget.onToggle(currentState);
-              FeedbackHelper.feedback(FeedbackType.success);
-              setState(() {
-                isLoading = false;
-                currentState = result;
-              });
-            } catch (e) {
-              setState(() {
-                isLoading = false;
-              });
-              GlobalSnackbar.error(e);
-            }
-          },
+          onTap: widget.forceLoading || isLoading
+              ? null
+              : () async {
+                  try {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    final result = await widget.onToggle(currentState);
+                    FeedbackHelper.feedback(FeedbackType.success);
+                    setState(() {
+                      isLoading = false;
+                      currentState = result;
+                    });
+                  } catch (e) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    GlobalSnackbar.error(e);
+                  }
+                },
           contentPadding: EdgeInsets.zero,
           minVerticalPadding: 0,
           // visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),

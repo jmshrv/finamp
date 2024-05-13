@@ -54,7 +54,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       actions: [
         TextButton(
           onPressed: () =>
-              Navigator.of(context).pop<Future<bool>>(Future.value(false)),
+              Navigator.of(context).pop<(Future<String>, String?)?>(null),
           child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
@@ -73,9 +73,9 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
 
       _formKey.currentState!.save();
 
-      Navigator.of(context).pop<Future<bool>>(Future.sync(() async {
-        try {
-          await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
+      Navigator.of(context).pop<(Future<String>, String?)?>((
+        Future.sync(() async {
+          var newId = await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
             name: _name,
             ids: [widget.itemToAdd],
             userId: _finampUserHelper.currentUser!.id,
@@ -96,12 +96,10 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
                   name: null),
               null,
               keepSlow: true));
-          return true;
-        } catch (e) {
-          GlobalSnackbar.error(e);
-          return false;
-        }
-      }));
+          return newId.id!;
+        }),
+        _name
+      ));
     }
   }
 }

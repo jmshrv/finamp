@@ -1,4 +1,3 @@
-import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -7,17 +6,16 @@ class CTALarge extends StatelessWidget {
   final String text;
   final IconData icon;
   final void Function() onPressed;
-  final Color? accentColor;
 
   const CTALarge(
       {super.key,
       required this.text,
       required this.icon,
-      required this.onPressed,
-      this.accentColor});
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
+    final accentColor = Theme.of(context).colorScheme.primary;
     return ElevatedButton(
       onPressed: () {
         FeedbackHelper.feedback(FeedbackType.selection);
@@ -33,10 +31,9 @@ class CTALarge extends StatelessWidget {
           const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
-          accentColor?.withOpacity(0.3) ?? (Theme.of(context).brightness == Brightness.dark
-              ? jellyfinBlueColor.withOpacity(0.3)
-              : jellyfinBlueColor),
-        ),
+            Theme.of(context).brightness == Brightness.dark
+                ? accentColor.withOpacity(0.3)
+                : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white)),
       ),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -44,9 +41,9 @@ class CTALarge extends StatelessWidget {
           Icon(
             icon,
             size: 28,
-            color: accentColor ?? (Theme.of(context).brightness == Brightness.dark
-                ? jellyfinBlueColor
-                : Colors.white),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? accentColor
+                : Colors.white,
             weight: 1.5,
           ),
           const SizedBox(

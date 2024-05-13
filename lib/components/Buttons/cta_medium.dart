@@ -1,4 +1,3 @@
-import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -8,15 +7,13 @@ class CTAMedium extends StatelessWidget {
   final IconData icon;
   final void Function() onPressed;
   final double? minWidth;
-  final Color? accentColor;
 
   const CTAMedium(
       {super.key,
       required this.text,
       required this.icon,
       required this.onPressed,
-      this.minWidth,
-      this.accentColor});
+      this.minWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +21,7 @@ class CTAMedium extends StatelessWidget {
     final minWidth = this.minWidth ?? screenSize.width * 0.25;
     final paddingHorizontal = screenSize.width * 0.015;
     final paddingVertical = screenSize.height * 0.015;
+    final accentColor = Theme.of(context).colorScheme.primary;
 
     return ElevatedButton(
       onPressed: () {
@@ -44,9 +42,9 @@ class CTAMedium extends StatelessWidget {
               bottom: paddingVertical),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
-          accentColor?.withOpacity(0.3) ?? (Theme.of(context).brightness == Brightness.dark
-              ? jellyfinBlueColor.withOpacity(0.3)
-              : jellyfinBlueColor),
+          Theme.of(context).brightness == Brightness.dark
+              ? accentColor.withOpacity(0.3)
+              : accentColor,
         ),
       ),
       child: Container(
@@ -61,9 +59,9 @@ class CTAMedium extends StatelessWidget {
             Icon(
               icon,
               size: 24,
-              color: accentColor ?? (Theme.of(context).brightness == Brightness.dark
-                  ? jellyfinBlueColor
-                  : Colors.white),
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? accentColor
+                  : Colors.white,
               weight: 1.5,
             ),
             const SizedBox(
