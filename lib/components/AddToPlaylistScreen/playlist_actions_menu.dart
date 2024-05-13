@@ -275,6 +275,7 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
           onTap: widget.forceLoading || isLoading
               ? null
               : () async {
+                  FeedbackHelper.feedback(FeedbackType.selection);
                   try {
                     setState(() {
                       isLoading = true;
