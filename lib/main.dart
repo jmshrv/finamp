@@ -360,7 +360,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
     super.initState();
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.addListener(this);
-      windowManager.setPreventClose(true);
+      // windowManager.setPreventClose(true); //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
     }
   }
 
@@ -522,34 +522,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
       return;
     }
     
-    bool isPreventClose = await windowManager.isPreventClose();
-    if (isPreventClose && mounted) {
-      await windowManager.destroy();
-      //TODO try to stop the playback session here, stalling the closing and shutting down after the request finished?
-      // await showDialog(
-      //   context: context,
-      //   builder: (_) {
-      //     return AlertDialog(
-      //       title: Text('Are you sure you want to close this window?'),
-      //       actions: [
-      //         TextButton(
-      //           child: Text('No'),
-      //           onPressed: () {
-      //             Navigator.of(context).pop();
-      //           },
-      //         ),
-      //         TextButton(
-      //           child: Text('Yes'),
-      //           onPressed: () {
-      //             Navigator.of(context).pop();
-      //             await windowManager.destroy();
-      //           },
-      //         ),
-      //       ],
-      //     );
-      //   },
-      // );
-    }
+    //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
   }
   
 }
