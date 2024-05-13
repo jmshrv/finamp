@@ -45,7 +45,7 @@ Future<void> showPlaylistActionsMenu({
         );
 
         final menuEntries = [
-          SongInfo(
+          SongInfo.condensed(
             item: item,
             useThemeImage: usePlayerTheme,
           ),
@@ -105,7 +105,7 @@ Future<void> showPlaylistActionsMenu({
         var menu = [
           SliverStickyHeader(
             header: Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
+              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
               child: Column(
                 children: [
                   Container(

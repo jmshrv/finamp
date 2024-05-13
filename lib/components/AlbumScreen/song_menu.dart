@@ -773,10 +773,17 @@ class SongInfo extends ConsumerStatefulWidget {
     super.key,
     required this.item,
     required this.useThemeImage,
-  });
+  }) : condensed = false;
+
+  const SongInfo.condensed({
+    super.key,
+    required this.item,
+    required this.useThemeImage,
+  }) : condensed = true;
 
   final BaseItemDto item;
   final bool useThemeImage;
+  final bool condensed; 
 
   @override
   ConsumerState createState() => _SongInfoState();
@@ -789,8 +796,8 @@ class _SongInfoState extends ConsumerState<SongInfo> {
       color: Colors.transparent,
       child: Center(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12.0),
-          height: 120,
+          margin: EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
+          height: widget.condensed ? 80 : 120,
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
             color: Theme.of(context).brightness == Brightness.dark
@@ -803,9 +810,8 @@ class _SongInfoState extends ConsumerState<SongInfo> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: 120,
-                height: 120,
+              AspectRatio(
+                aspectRatio: 1.0,
                 child: AlbumImage(
                   // Only supply one of item or imageListenable
                   item: widget.useThemeImage ? null : widget.item,
@@ -818,7 +824,7 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -838,7 +844,7 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                         maxLines: 2,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        padding: widget.condensed ? const EdgeInsets.only(top: 6.0) : const EdgeInsets.symmetric(vertical: 4.0),
                         child: ArtistChips(
                           baseItem: widget.item,
                           backgroundColor: IconTheme.of(context)
@@ -851,18 +857,19 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                                   Colors.white,
                         ),
                       ),
-                      AlbumChip(
-                        item: widget.item,
-                        color: Theme.of(context).textTheme.bodyMedium?.color ??
-                            Colors.white,
-                        backgroundColor:
-                            IconTheme.of(context).color?.withOpacity(0.1) ??
-                                Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
-                        key: widget.item.album == null
-                            ? null
-                            : ValueKey("${widget.item.album}-album"),
-                      ),
+                      if (!widget.condensed)
+                        AlbumChip(
+                          item: widget.item,
+                          color: Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white,
+                          backgroundColor:
+                              IconTheme.of(context).color?.withOpacity(0.1) ??
+                                  Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white,
+                          key: widget.item.album == null
+                              ? null
+                              : ValueKey("${widget.item.album}-album"),
+                        ),
                     ],
                   ),
                 ),
