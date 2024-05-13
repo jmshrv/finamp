@@ -191,7 +191,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
 
   bool isAutoScrollEnabled = true;
 
-  bool _isInForeground = true;
+  bool _isVisible = true;
   bool _isSynchronizedLyrics = false;
 
   @override
@@ -219,7 +219,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    _isInForeground = state == AppLifecycleState.resumed;
+    _isVisible = [AppLifecycleState.resumed, AppLifecycleState.inactive].contains(state);
     super.didChangeAppLifecycleState(state);
   }
 
@@ -298,7 +298,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
           progressStateStream.listen((state) async {
         currentPosition = state.position;
 
-        if (!_isSynchronizedLyrics || !_isInForeground) {
+        if (!_isSynchronizedLyrics || !_isVisible) {
           return;
         }
 

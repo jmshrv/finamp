@@ -168,7 +168,7 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   macos:
     generate: true
-    image_path: "assets/icon/icon_combined.png"
+    image_path: "assets/icon/icon_combined_macos.png"
 
 msix_config:
   display_name: Finamp
