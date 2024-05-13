@@ -163,6 +163,7 @@ class AddToPlaylistTile extends StatefulWidget {
 class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
   String? playlistItemId;
   int? childCount;
+  bool knownMissing = false;
 
   @override
   void initState() {
@@ -191,8 +192,10 @@ class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
       subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
       leading: AlbumImage(item: widget.playlist),
       positiveIcon: TablerIcons.circle_check_filled,
-      negativeIcon: TablerIcons
-          .circle_dashed_check, // we don't actually know if the track is part of the playlist
+      negativeIcon: knownMissing
+          ? TablerIcons.circle_check
+          : TablerIcons
+              .circle_dashed_check, // we don't actually know if the track is part of the playlist
       initialState: playlistItemId != null,
       onToggle: (bool currentState) async {
         if (currentState) {
@@ -206,6 +209,7 @@ class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
           if (removed) {
             setState(() {
               childCount = childCount == null ? null : childCount! - 1;
+              knownMissing = true;
             });
           }
           return !removed;

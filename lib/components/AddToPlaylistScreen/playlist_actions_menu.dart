@@ -74,6 +74,7 @@ Future<void> showPlaylistActionsMenu({
                 positiveIcon: TablerIcons.heart_filled,
                 negativeIcon: TablerIcons.heart,
                 initialState: isFavorite,
+                tapFeedback: false,
                 onToggle: (bool currentState) async {
                   return ref
                       .read(
@@ -174,6 +175,7 @@ class ToggleableListTile extends ConsumerStatefulWidget {
     required this.onToggle,
     required this.enabled,
     this.forceLoading = false,
+    this.tapFeedback = true,
   });
 
   final String title;
@@ -185,6 +187,7 @@ class ToggleableListTile extends ConsumerStatefulWidget {
   final Future<bool> Function(bool currentState) onToggle;
   final bool enabled;
   final bool forceLoading;
+  final bool tapFeedback;
 
   @override
   ConsumerState<ToggleableListTile> createState() => _ToggleableListTileState();
@@ -280,7 +283,9 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
                       isLoading = true;
                     });
                     final result = await widget.onToggle(currentState);
-                    FeedbackHelper.feedback(FeedbackType.success);
+                    if (widget.tapFeedback) {
+                      FeedbackHelper.feedback(FeedbackType.success);
+                    }
                     setState(() {
                       isLoading = false;
                       currentState = result;

@@ -393,7 +393,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
           builder: (_, __, ___) {
             return ValueListenableBuilder<Box<ThemeMode>>(
               valueListenable: ThemeModeHelper.themeModeListener,
-              builder: (_, box, __) {
+              builder: (context, box, __) {
                 var theme = switch (box.get("ThemeMode")) {
                   null ||
                   ThemeMode.system =>
