@@ -213,6 +213,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         null);
     var iconColor = Theme.of(context).colorScheme.primary;
 
+    final isInCurrentPlaylist = widget.isInPlaylist && widget.parentItem != null;
+
     final currentTrack = _queueService.getCurrentTrack();
     FinampQueueItem? queueItem;
     if (isBaseItemInQueueItem(widget.item, currentTrack)) {
@@ -239,7 +241,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             Icons.playlist_add,
             color: iconColor,
           ),
-          title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
+          title: Text(isInCurrentPlaylist ? AppLocalizations.of(context)!.addToMorePlaylistsTitle : AppLocalizations.of(context)!.addToPlaylistTitle),
           enabled: !widget.isOffline,
           onTap: () {
             Navigator.pop(context); // close menu
@@ -330,7 +332,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         },
       ),
       Visibility(
-        visible: widget.isInPlaylist && widget.parentItem != null,
+        visible: isInCurrentPlaylist,
         child: ListTile(
           leading: Icon(
             Icons.playlist_remove,
@@ -833,7 +835,7 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                             AppLocalizations.of(context)!.unknownName,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: widget.condensed ? 16 : 18,
                           height: 1.2,
                           color:
                               Theme.of(context).textTheme.bodyMedium?.color ??
