@@ -193,9 +193,9 @@ class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
       leading: AlbumImage(item: widget.playlist),
       positiveIcon: TablerIcons.circle_check_filled,
       negativeIcon: knownMissing
-          ? TablerIcons.circle_check
-          : TablerIcons
-              .circle_dashed_check, // we don't actually know if the track is part of the playlist
+          ? TablerIcons.circle_plus
+          // we don't actually know if the track is part of the playlist
+          : TablerIcons.circle_dashed_plus,
       initialState: playlistItemId != null,
       onToggle: (bool currentState) async {
         if (currentState) {

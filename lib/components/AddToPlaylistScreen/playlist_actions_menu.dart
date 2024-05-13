@@ -105,32 +105,17 @@ Future<void> showPlaylistActionsMenu({
         var menu = [
           SliverStickyHeader(
             header: Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
-              child: Column(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 3.5,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).textTheme.bodySmall!.color!,
-                      borderRadius: BorderRadius.circular(3.5),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                        AppLocalizations.of(context)!.addRemoveFromPlaylist,
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.bodyLarge!.color!,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400)),
-                  ),
-                ],
+              padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
+              child: Center(
+                child: Text(AppLocalizations.of(context)!.addRemoveFromPlaylist,
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color!,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400)),
               ),
             ),
             sliver: MenuMask(
-                height: 65.0,
+                height: 45.0,
                 child: SliverList(
                     delegate: SliverChildListDelegate.fixed(
                   menuEntries,
@@ -139,12 +124,12 @@ Future<void> showPlaylistActionsMenu({
           SliverStickyHeader(
               header: Padding(
                 padding: const EdgeInsets.only(
-                    top: 16.0, bottom: 8.0, left: 16.0, right: 16.0),
+                    top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
                 child: Text(AppLocalizations.of(context)!.addPlaylistSubheader,
                     style: Theme.of(context).textTheme.titleMedium),
               ),
               sliver: MenuMask(
-                height: 55.0,
+                height: 35.0,
                 child: AddToPlaylistList(
                   itemToAdd: item,
                   playlistsFuture: playlistsFuture.then((value) => (value

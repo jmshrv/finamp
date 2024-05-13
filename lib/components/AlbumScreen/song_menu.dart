@@ -60,7 +60,7 @@ Future<void> showModalSongMenu({
       context: context,
       item: item,
       routeName: SongMenu.routeName,
-      buildWrapper: (context, childBuilder) {
+      buildWrapper: (context, dragController, childBuilder) {
         return SongMenu(
           key: ValueKey(item.id),
           item: item,
@@ -76,6 +76,7 @@ Future<void> showModalSongMenu({
           confirmPlaylistRemoval: confirmPlaylistRemoval,
           childBuilder: childBuilder,
           themeProvider: themeProvider,
+          dragController: dragController,
         );
       },
       usePlayerTheme: usePlayerTheme,
@@ -100,6 +101,7 @@ class SongMenu extends ConsumerStatefulWidget {
     this.parentItem,
     required this.childBuilder,
     required this.themeProvider,
+    required this.dragController,
   });
 
   final BaseItemDto item;
@@ -115,6 +117,7 @@ class SongMenu extends ConsumerStatefulWidget {
   final bool confirmPlaylistRemoval;
   final ScrollBuilder childBuilder;
   final FinampTheme? themeProvider;
+  final DraggableScrollableController dragController;
 
   @override
   ConsumerState<SongMenu> createState() => _SongMenuState();
@@ -129,7 +132,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   // Makes sure that widget doesn't just disappear after press while menu is visible
   bool speedWidgetWasVisible = false;
   bool showSpeedMenu = false;
-  final dragController = DraggableScrollableController();
   double initialSheetExtent = 0.0;
   double inputStep = 0.9;
   double oldExtent = 0.0;
@@ -153,8 +155,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     setState(() {
       showSpeedMenu = !showSpeedMenu;
     });
-    if (dragController.isAttached) {
-      scrollToExtent(dragController, showSpeedMenu ? inputStep : null);
+    if (widget.dragController.isAttached) {
+      scrollToExtent(widget.dragController, showSpeedMenu ? inputStep : null);
     }
     FeedbackHelper.feedback(FeedbackType.selection);
   }
