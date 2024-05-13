@@ -261,7 +261,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
         message: "Loading lyrics...",
         icon: TablerIcons.microphone_2,
       );
-    } else if (metadata.value == null ||
+    } else if (!metadata.hasValue || metadata.value == null ||
         metadata.value!.hasLyrics &&
             metadata.value!.lyrics == null &&
             !metadata.isLoading) {
