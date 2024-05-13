@@ -1,6 +1,6 @@
 import 'package:balanced_text/balanced_text.dart';
+import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
-import 'package:finamp/components/add_to_playlist_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/screens/player_screen.dart';
@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/queue_service.dart';
-import '../favourite_button.dart';
 import 'album_chip.dart';
 import 'artist_chip.dart';
 
@@ -34,7 +33,8 @@ class SongNameContent extends StatelessWidget {
 
         final currentTrack = snapshot.data!.currentTrack!;
 
-        final jellyfin_models.BaseItemDto? songBaseItemDto = currentTrack.baseItem;
+        final jellyfin_models.BaseItemDto? songBaseItemDto =
+            currentTrack.baseItem;
 
         return LayoutBuilder(builder: (context, constraints) {
           double padding = ((constraints.maxWidth - 260) / 4).clamp(0, 20);

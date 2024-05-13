@@ -16,7 +16,8 @@ import '../services/feedback_helper.dart';
 import '../services/finamp_settings_helper.dart';
 
 typedef SliverBuilder = (double, List<Widget>) Function(BuildContext);
-typedef WrapperBuilder = Widget Function(BuildContext, ScrollBuilder);
+typedef WrapperBuilder = Widget Function(
+    BuildContext, DraggableScrollableController, ScrollBuilder);
 typedef ScrollBuilder = Widget Function(double, List<Widget>);
 
 Future<void> showThemedBottomSheet({
@@ -28,6 +29,7 @@ Future<void> showThemedBottomSheet({
   bool usePlayerTheme = false,
   required FinampTheme? themeProvider,
   double minDraggableHeight = 0.4,
+  bool showDragHandle = true,
 }) async {
   if (usePlayerTheme) {
     // Theme will be calculated later
@@ -78,6 +80,7 @@ Future<void> showThemedBottomSheet({
           buildSlivers: buildSlivers,
           buildWrapper: buildWrapper,
           minDraggableHeight: minDraggableHeight,
+          showDragHandle: showDragHandle,
         );
       });
 }
@@ -91,6 +94,7 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
     this.buildSlivers,
     this.buildWrapper,
     required this.minDraggableHeight,
+    required this.showDragHandle,
   });
 
   final BaseItemDto item;
@@ -99,6 +103,7 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
   final SliverBuilder? buildSlivers;
   final WrapperBuilder? buildWrapper;
   final double minDraggableHeight;
+  final bool showDragHandle;
 
   @override
   ConsumerState<ThemedBottomSheet> createState() => _ThemedBottomSheetState();
@@ -109,7 +114,6 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
 
   late FinampTheme? _themeProvider;
   final dragController = DraggableScrollableController();
-  double inputStep = 0.9;
 
   @override
   void initState() {
@@ -158,7 +162,7 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
                 child: Builder(
                   builder: (BuildContext context) {
                     if (widget.buildWrapper != null) {
-                      return widget.buildWrapper!(context,
+                      return widget.buildWrapper!(context, dragController,
                           (height, slivers) => buildInternal(height, slivers));
                     } else {
                       var (height, slivers) = widget.buildSlivers!(context);
@@ -197,14 +201,35 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
   }
 
   Widget menu(ScrollController scrollController, List<Widget> slivers) {
+    var scrollview = CustomScrollView(
+      controller: scrollController,
+      slivers: slivers,
+    );
     return Stack(
       children: [
         if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
           const BlurredPlayerScreenBackground(),
-        CustomScrollView(
-          controller: scrollController,
-          slivers: slivers,
-        ),
+        widget.showDragHandle
+            ? Column(
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10.0),
+                      child: Builder(builder: (context) {
+                        var textColor =
+                            Theme.of(context).textTheme.bodySmall!.color!;
+                        return Container(
+                          width: 40,
+                          height: 3.5,
+                          decoration: BoxDecoration(
+                            color: textColor,
+                            borderRadius: BorderRadius.circular(3.5),
+                          ),
+                        );
+                      })),
+                  Expanded(child: scrollview)
+                ],
+              )
+            : scrollview,
       ],
     );
   }
@@ -229,18 +254,32 @@ class MenuMask extends SingleChildRenderObjectWidget {
   RenderSongMenuMask createRenderObject(BuildContext context) {
     return RenderSongMenuMask(height);
   }
+
+  @override
+  void updateRenderObject(
+      BuildContext context, RenderSongMenuMask renderObject) {
+    renderObject.updateHeight(height);
+    super.updateRenderObject(context, renderObject);
+  }
 }
 
 class RenderSongMenuMask extends RenderProxySliver {
   RenderSongMenuMask(this.height);
 
-  final double height;
+  double height;
 
   @override
   ShaderMaskLayer? get layer => super.layer as ShaderMaskLayer?;
 
   @override
   bool get alwaysNeedsCompositing => child != null;
+
+  void updateHeight(double newHeight) {
+    if (height != newHeight) {
+      height = newHeight;
+      layer = null;
+    }
+  }
 
   @override
   void paint(PaintingContext context, Offset offset) {

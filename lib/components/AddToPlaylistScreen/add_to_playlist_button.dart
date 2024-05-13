@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'AddToPlaylistScreen/playlist_actions_menu.dart';
+import 'playlist_actions_menu.dart';
 
 class AddToPlaylistButton extends ConsumerStatefulWidget {
   const AddToPlaylistButton({

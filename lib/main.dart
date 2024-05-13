@@ -378,7 +378,9 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
     return ProviderScope(
       child: GestureDetector(
         onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
+          // Never rebuild FinampApp context, it breaks ProviderScope
+          FocusScopeNode currentFocus =
+              FocusScope.of(context, createDependency: false);
 
           if (!currentFocus.hasPrimaryFocus &&
               currentFocus.focusedChild != null) {
@@ -536,7 +538,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
     if (!(Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
       return;
     }
-    
+
     //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
   }
 }
