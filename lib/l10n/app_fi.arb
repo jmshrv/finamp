@@ -1,1 +1,190 @@
-{}
+{
+  "unknownError": "Tuntematon virhe",
+  "@unknownError": {},
+  "removedFromPlaylist": "Poistettu soittolistalta",
+  "@removedFromPlaylist": {},
+  "addFavourite": "Lisää suosikki",
+  "@addFavourite": {},
+  "goToAlbum": "Mene albumiin",
+  "@goToAlbum": {},
+  "downloads": "Lataukset",
+  "@downloads": {},
+  "settings": "Asetukset",
+  "@settings": {},
+  "shareLogs": "Jaa lokit",
+  "@shareLogs": {},
+  "removeFavourite": "Poista suosikki",
+  "@removeFavourite": {},
+  "playNext": "Toista seuraava",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "confirm": "Vahvista",
+  "@confirm": {},
+  "language": "Kieli",
+  "@language": {},
+  "refresh": "PÄIVITÄ",
+  "@refresh": {},
+  "serverUrl": "Palvelimen URL",
+  "@serverUrl": {},
+  "emptyServerUrl": "Palvelimen URL ei voi olla tyhjä",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "urlStartWithHttps": "URL pitää alkaa http:// tai https://",
+  "@urlStartWithHttps": {
+    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  },
+  "urlTrailingSlash": "URL ei saa päättyä vinoviivaan",
+  "@urlTrailingSlash": {
+    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+  },
+  "username": "Käyttäjätunnus",
+  "@username": {},
+  "password": "Salasana",
+  "@password": {},
+  "logs": "Lokit",
+  "@logs": {},
+  "next": "Seuraava",
+  "@next": {},
+  "selectMusicLibraries": "Valitse musiikkikirjastot",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Yhtään kirjastoa ei löytynyt",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "unknownName": "Tuntematon nimi",
+  "@unknownName": {},
+  "songs": "Kappaleet",
+  "@songs": {},
+  "albums": "Albumit",
+  "@albums": {},
+  "artists": "Artistit",
+  "@artists": {},
+  "genres": "Tyylilajit",
+  "@genres": {},
+  "playlists": "Soittolistat",
+  "@playlists": {},
+  "music": "Musiikki",
+  "@music": {},
+  "clear": "Tyhjennä",
+  "@clear": {},
+  "favourites": "Suosikit",
+  "@favourites": {},
+  "offlineMode": "Offline tila",
+  "@offlineMode": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "sortOrder": "Lajittelujärjestys",
+  "@sortOrder": {},
+  "album": "Albumi",
+  "@album": {},
+  "albumArtist": "Albumin artisti",
+  "@albumArtist": {},
+  "artist": "Artisti",
+  "@artist": {},
+  "name": "Nimi",
+  "@name": {},
+  "random": "Satunnainen",
+  "@random": {},
+  "criticRating": "Kriitikoiden arvostelu",
+  "@criticRating": {},
+  "downloadMissingImages": "Lataa puuttuvat kuvat",
+  "@downloadMissingImages": {},
+  "syncDownloadedPlaylists": "Synkronoi ladatut soittolistat",
+  "@syncDownloadedPlaylists": {},
+  "downloadErrors": "Latauksen virheet",
+  "@downloadErrors": {},
+  "dlFailed": "{count} epäonnistui",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} valmistunut",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} käynnissä",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrorsTitle": "Latauksen virheet",
+  "@downloadErrorsTitle": {},
+  "noErrors": "Ei virheitä!",
+  "@noErrors": {},
+  "deleteDownloadsConfirmButtonText": "Poista",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Peruuta",
+  "@deleteDownloadsAbortButtonText": {},
+  "error": "Virhe",
+  "@error": {},
+  "playButtonLabel": "TOISTA",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "SEKOITA",
+  "@shuffleButtonLabel": {},
+  "discNumber": "Levy {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTitle": "Muokkaa soittolistan nimeä",
+  "@editPlaylistNameTitle": {},
+  "editPlaylistNameTooltip": "Muokkaa soittolistan nimeä",
+  "@editPlaylistNameTooltip": {},
+  "playlistNameUpdated": "Soittolistan nimi päivitetty.",
+  "@playlistNameUpdated": {},
+  "favourite": "Suosikki",
+  "@favourite": {},
+  "addDownloads": "Lisää lataukset",
+  "@addDownloads": {},
+  "updateButtonLabel": "PÄIVITÄ",
+  "@updateButtonLabel": {},
+  "downloadsDeleted": "Lataukset poistettu.",
+  "@downloadsDeleted": {},
+  "location": "Sijainti",
+  "@location": {},
+  "downloadsAdded": "Lataukset lisätty.",
+  "@downloadsAdded": {},
+  "addButtonLabel": "LISÄÄ",
+  "@addButtonLabel": {},
+  "logsCopied": "Lokit kopioitu.",
+  "@logsCopied": {},
+  "message": "Viesti",
+  "@message": {},
+  "downloadLocations": "Latauksen sijainnit",
+  "@downloadLocations": {},
+  "transcoding": "Transkoodaus",
+  "@transcoding": {},
+  "notAvailableInOfflineMode": "Ei saatavilla offline tilassa",
+  "@notAvailableInOfflineMode": {},
+  "areYouSure": "Oletko varma?",
+  "@areYouSure": {},
+  "logOut": "Kirjaudu ulos",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "Ladattuja kappaleita ei poisteta",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin käyttää AAC:tä transkoodaukseen",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "Ota transkoodaus käyttöön",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "Transkoodaa musiikin suoratoiston palvelimen päässä.",
+  "@enableTranscodingSubtitle": {}
+}
