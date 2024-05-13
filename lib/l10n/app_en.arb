@@ -607,9 +607,13 @@
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Add to Playlist",
   "@addToPlaylistTitle": {},
-  "removeFromPlaylistTooltip": "Remove from playlist",
+  "addToMorePlaylistsTooltip": "Add to more playlists",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "Add to More Playlists",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistTooltip": "Remove from this playlist",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Remove from Playlist",
+  "removeFromPlaylistTitle": "Remove From This Playlist",
   "@removeFromPlaylistTitle": {},
   "removeFromPlaylistNamedTooltip": "Remove from playlist '{playlistName}'",
   "@removeFromPlaylistNamedTooltip": {
@@ -1429,7 +1433,7 @@
   "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen. Non-critical controls will be hidden more aggressively at small screen sizes.",
   "suppressPlayerPadding": "Suppress player controls padding",
   "suppressPlayerPaddingSubtitle": "Fully minimizes padding between player screen controls when album cover is not at full size.",
-  "lockDownload": "Keep on Device",
+  "lockDownload": "Always Keep on Device",
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
