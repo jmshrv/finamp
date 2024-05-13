@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,10 +56,7 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                       snapshot.data!.currentTrack != null) &&
                   allowSplitScreen) {
                 _inSplitScreen = true;
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  GlobalSnackbar.materialAppNavigatorKey.currentState?.popUntil(
-                      (x) => !ModalRoute.withName(PlayerScreen.routeName)(x));
-                });
+                SplitScreenNavigatorObserver.queuePop();
                 var size = MediaQuery.sizeOf(context);
                 var padding = MediaQuery.paddingOf(context);
                 // When resizing window, update weights to keep player width consistent
@@ -156,5 +154,30 @@ class EmptyRoute extends Route {
   void didAdd() {
     super.didAdd();
     navigator?.pop();
+  }
+}
+
+class SplitScreenNavigatorObserver extends NavigatorObserver {
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    if (usingPlayerSplitScreen &&
+        previousRoute != null &&
+        !shouldNotPop(previousRoute)) {
+      queuePop();
+    }
+  }
+
+  static final _playerCheck = ModalRoute.withName(PlayerScreen.routeName);
+  static final _lyricsCheck = ModalRoute.withName(LyricsScreen.routeName);
+
+  static void queuePop() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      GlobalSnackbar.materialAppNavigatorKey.currentState
+          ?.popUntil(SplitScreenNavigatorObserver.shouldNotPop);
+    });
+  }
+
+  static bool shouldNotPop(Route route) {
+    return !_playerCheck(route) && !_lyricsCheck(route);
   }
 }
