@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
-import 'package:finamp/services/chopper_aggregate_logger.dart';
+import 'package:Finamp/services/chopper_aggregate_logger.dart';
 
 final aggregateLogger = ChopperAggregateLogger();
 

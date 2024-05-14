@@ -1,7 +1,7 @@
-import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
-import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
-import 'package:finamp/screens/player_screen.dart';
-import 'package:finamp/services/feedback_helper.dart';
+import 'package:Finamp/components/PlayerScreen/player_buttons_repeating.dart';
+import 'package:Finamp/components/PlayerScreen/player_buttons_shuffle.dart';
+import 'package:Finamp/screens/player_screen.dart';
+import 'package:Finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';

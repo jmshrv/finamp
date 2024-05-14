@@ -1,6 +1,6 @@
 import 'package:clipboard/clipboard.dart';
-import 'package:finamp/services/censored_log.dart';
-import 'package:finamp/services/contains_login.dart';
+import 'package:Finamp/services/censored_log.dart';
+import 'package:Finamp/services/contains_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';

@@ -1,4 +1,4 @@
-import 'package:finamp/color_schemes.g.dart';
+import 'package:Finamp/color_schemes.g.dart';
 import 'package:flutter/material.dart';
 
 enum IconPosition {

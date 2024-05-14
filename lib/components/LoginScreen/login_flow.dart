@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:finamp/components/LoginScreen/login_server_selection_page.dart';
-import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/screens/view_selector.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:Finamp/components/LoginScreen/login_server_selection_page.dart';
+import 'package:Finamp/models/jellyfin_models.dart';
+import 'package:Finamp/screens/view_selector.dart';
+import 'package:Finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';

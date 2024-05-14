@@ -1,4 +1,4 @@
-import 'package:finamp/models/jellyfin_models.dart';
+import 'package:Finamp/models/jellyfin_models.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 

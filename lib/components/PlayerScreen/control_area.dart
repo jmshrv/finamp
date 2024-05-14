@@ -1,4 +1,4 @@
-import 'package:finamp/screens/player_screen.dart';
+import 'package:Finamp/screens/player_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'feature_chips.dart';

@@ -1,8 +1,8 @@
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
-import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/screens/add_to_playlist_screen.dart';
-import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/music_player_background_task.dart';
+import 'package:Finamp/components/AlbumScreen/song_menu.dart';
+import 'package:Finamp/models/jellyfin_models.dart';
+import 'package:Finamp/screens/add_to_playlist_screen.dart';
+import 'package:Finamp/services/feedback_helper.dart';
+import 'package:Finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';

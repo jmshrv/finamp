@@ -1,8 +1,8 @@
 import 'package:balanced_text/balanced_text.dart';
-import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/screens/player_screen.dart';
+import 'package:Finamp/components/PlayerScreen/player_buttons_more.dart';
+import 'package:Finamp/models/finamp_models.dart';
+import 'package:Finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:Finamp/screens/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/services/queue_service.dart';
+import 'package:Finamp/models/finamp_models.dart';
+import 'package:Finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:Finamp/services/queue_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';

@@ -1,7 +1,7 @@
-import 'package:finamp/components/Buttons/simple_button.dart';
-import 'package:finamp/components/LoginScreen/login_server_selection_page.dart';
-import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:Finamp/components/Buttons/simple_button.dart';
+import 'package:Finamp/components/LoginScreen/login_server_selection_page.dart';
+import 'package:Finamp/models/jellyfin_models.dart';
+import 'package:Finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
-import 'package:finamp/components/favourite_button.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/audio_service_helper.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:Finamp/components/AlbumScreen/song_menu.dart';
+import 'package:Finamp/components/favourite_button.dart';
+import 'package:Finamp/models/finamp_models.dart';
+import 'package:Finamp/services/audio_service_helper.dart';
+import 'package:Finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart' hide ReorderableList;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';

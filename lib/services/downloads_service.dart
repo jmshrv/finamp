@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:Finamp/components/global_snackbar.dart';
+import 'package:Finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
