@@ -53,8 +53,8 @@ jobs:
         channel: 'stable'
     - run: flutter doctor
     - run: flutter pub get
-    # - run: flutter test
     - run: flutter gen-l10n
+    # - run: flutter test
     - run: flutter build linux --release --no-pub
     - run: |
         tar -czf finamp-linux-release-bundle.tar.gz --directory build/linux/x64/release/ bundle \
@@ -87,6 +87,7 @@ jobs:
         channel: 'stable'
     - run: flutter doctor
     - run: flutter pub get
+    - run: flutter gen-l10n
     # - run: flutter test
     - run: dart run msix:create --install-certificate false
     #TODO would be nice to have an old-school installer here that can take the .exe + libraries and install them to the device + create a shortcut
