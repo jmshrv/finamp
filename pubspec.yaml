@@ -181,3 +181,5 @@ msix_config:
   enable_at_startup: true
   certificate_path: ./windows/runner/resources/MSIX_LOCAL_CERTIFICATE.pfx
   certificate_password: finamp
+  # Building during msix:create is currently bugged, so build manually beforehand.
+  build_windows: false
