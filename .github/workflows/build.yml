@@ -52,6 +52,7 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
     # - run: flutter test
+    - run: flutter gen-l10n
     - run: flutter build linux --release --no-pub
     - run: |
         tar -czf finamp-linux-release-bundle.tar.gz --directory build/linux/x64/release/ bundle \
