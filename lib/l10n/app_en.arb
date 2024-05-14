@@ -607,13 +607,37 @@
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Add to Playlist",
   "@addToPlaylistTitle": {},
-  "removeFromPlaylistTooltip": "Remove from playlist",
+  "addToMorePlaylistsTooltip": "Add to more playlists",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "Add to More Playlists",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistTooltip": "Remove from this playlist",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Remove from Playlist",
+  "removeFromPlaylistTitle": "Remove From This Playlist",
   "@removeFromPlaylistTitle": {},
+  "removeFromPlaylistNamedTooltip": "Remove from playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a song from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Songs"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Remove from Playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a song from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Songs"
+      }
+    }
+  },
   "newPlaylist": "New Playlist",
   "@newPlaylist": {},
-  "createButtonLabel": "CREATE",
+  "createButtonLabel": "Create",
   "@createButtonLabel": {},
   "playlistCreated": "Playlist created.",
   "@playlistCreated": {},
@@ -1409,7 +1433,7 @@
   "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen. Non-critical controls will be hidden more aggressively at small screen sizes.",
   "suppressPlayerPadding": "Suppress player controls padding",
   "suppressPlayerPaddingSubtitle": "Fully minimizes padding between player screen controls when album cover is not at full size.",
-  "lockDownload": "Keep on Device",
+  "lockDownload": "Always Keep on Device",
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
@@ -1452,5 +1476,31 @@
       }
     },
     "description": "Displays duration of unplayed tracks"
+  },
+  "removeFromPlaylistConfirm": "Remove",
+  "removeFromPlaylistCancel": "Cancel",
+  "removeFromPlaylistPrompt": "Remove '{itemName}' from playlist '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "addRemoveFromPlaylist": "Add To / Remove From Playlists",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "Add track to a playlist",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   }
 }

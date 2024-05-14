@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
+import '../components/PlayerScreen/queue_source_helper.dart';
 import 'downloads_service.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
@@ -91,7 +92,6 @@ class QueueService {
       children: [],
       shuffleOrder: _shuffleOrder,
     );
-    _audioHandler.initializeAudioSource(_queueAudioSource);
 
     _audioHandler.playbackState.listen((event) async {
       // int indexDifference = (event.currentIndex ?? 0) - _queueAudioSourceIndex;
@@ -137,6 +137,9 @@ class QueueService {
     //   skipToIndexCallback: _applySkipToTrackByOffset,
     // );
   }
+
+  Future initializePlayer() =>
+      _audioHandler.initializeAudioSource(_queueAudioSource, preload: true);
 
   void _queueFromConcatenatingAudioSource({
     logUpdate = true,
@@ -314,7 +317,6 @@ class QueueService {
     try {
       _savedQueueState = SavedQueueState.loading;
       if (info.songCount == 0) {
-        await stopPlayback();
         return;
       }
       refreshQueueStream();
@@ -323,19 +325,39 @@ class QueueService {
           ((info.currentTrack == null) ? [] : [info.currentTrack!]) +
           info.nextUp +
           info.queue;
-      List<String> uniqueIds = allIds.toSet().toList();
       Map<String, jellyfin_models.BaseItemDto> idMap = {};
+      Set<String> playlistIds = {};
+
+      // If queue source is playlist, fetch via parent to retrieve metadata needed
+      // for removal from playlist via queueItem
+      if (!FinampSettingsHelper.finampSettings.isOffline &&
+          info.source?.type == QueueItemSourceType.playlist &&
+          info.source?.item != null) {
+        var itemList = await _jellyfinApiHelper.getItems(
+              parentItem: info.source!.item!,
+              sortBy: "ParentIndexNumber,IndexNumber,SortName",
+              includeItemTypes: "Audio",
+            ) ??
+            [];
+        for (var d2 in itemList) {
+          idMap[d2.id] = d2;
+        }
+        playlistIds = itemList.map((e) => e.id).toSet();
+      }
+
+      // Get list of unique ids that do not yet have an associated item.
+      List<String> missingIds = allIds.toSet().difference(playlistIds).toList();
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
-        for (var id in uniqueIds) {
+        for (var id in missingIds) {
           jellyfin_models.BaseItemDto? item =
-              (await _isarDownloader.getSongDownload(id: id))?.baseItem;
+              _isarDownloader.getSongDownload(id: id)?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
         }
       } else {
-        for (var slice in uniqueIds.slices(200)) {
+        for (var slice in missingIds.slices(200)) {
           List<jellyfin_models.BaseItemDto> itemList =
               await _jellyfinApiHelper.getItems(itemIds: slice) ?? [];
           for (var d2 in itemList) {
@@ -448,6 +470,7 @@ class QueueService {
       _queuePreviousTracks.clear();
       _queueNextUp.clear();
       _currentTrack = null;
+      playlistRemovalsCache.clear();
 
       List<FinampQueueItem> newItems = [];
       List<int> newLinearOrder = [];
@@ -489,7 +512,9 @@ class QueueService {
         _queueAudioSourceIndex = _queueAudioSource.shuffleIndices[initialIndex];
       }
       _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
-      await _audioHandler.initializeAudioSource(_queueAudioSource);
+
+      await _audioHandler.initializeAudioSource(_queueAudioSource,
+          preload: true);
 
       newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
@@ -535,6 +560,9 @@ class QueueService {
     await _audioHandler.stopPlayback();
 
     await _queueAudioSource.clear();
+
+    await _audioHandler.initializeAudioSource(_queueAudioSource,
+        preload: false);
 
     _queueFromConcatenatingAudioSource();
 
@@ -895,10 +923,10 @@ class QueueService {
       double? contextNormalizationGain) async {
     const uuid = Uuid();
 
-    final downloadedSong = await _isarDownloader.getSongDownload(item: item);
+    final downloadedSong = _isarDownloader.getSongDownload(item: item);
     DownloadItem? downloadedImage;
     try {
-      downloadedImage = await _isarDownloader.getImageDownload(item: item);
+      downloadedImage = _isarDownloader.getImageDownload(item: item);
     } catch (e) {
       _queueServiceLogger.warning(
           "Couldn't get the offline image for track '${item.name}' because it's missing a blurhash");

@@ -6578,7 +6578,7 @@ DownloadStub _$DownloadStubFromJson(Map json) => DownloadStub._build(
       id: json['Id'] as String,
       type: $enumDecode(_$DownloadItemTypeEnumMap, json['Type']),
       jsonItem: json['JsonItem'] as String?,
-      isarId: json['IsarId'] as int,
+      isarId: (json['IsarId'] as num).toInt(),
       name: json['Name'] as String,
       baseItemType: $enumDecode(_$BaseItemDtoTypeEnumMap, json['BaseItemType']),
     );

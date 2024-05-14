@@ -13,9 +13,9 @@ import '../global_snackbar.dart';
 
 class NewPlaylistDialog extends StatefulWidget {
   const NewPlaylistDialog({
-    Key? key,
+    super.key,
     required this.itemToAdd,
-  }) : super(key: key);
+  });
 
   final String itemToAdd;
 
@@ -53,7 +53,8 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop<bool>(false),
+          onPressed: () =>
+              Navigator.of(context).pop<(Future<String>, String?)?>(null),
           child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
@@ -72,38 +73,33 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
 
       _formKey.currentState!.save();
 
-      try {
-        await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
-          name: _name,
-          ids: [widget.itemToAdd],
-          userId: _finampUserHelper.currentUser!.id,
-        ));
+      Navigator.of(context).pop<(Future<String>, String?)?>((
+        Future.sync(() async {
+          var newId = await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
+            name: _name,
+            ids: [widget.itemToAdd],
+            userId: _finampUserHelper.currentUser!.id,
+          ));
 
-        if (mounted) {
           GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(context)!.playlistCreated,
+            (scaffold) => AppLocalizations.of(scaffold)!.playlistCreated,
             isConfirmation: true,
           );
-          Navigator.of(context).pop<bool>(true);
-        }
 
-        // resync all playlists, so the new playlist automatically gets downloaded if all playlists should be downloaded
+          // resync all playlists, so the new playlist automatically gets downloaded if all playlists should be downloaded
 
-        final downloadsService = GetIt.instance<DownloadsService>();
-        unawaited(downloadsService.resync(
-            DownloadStub.fromFinampCollection(
-                collection:
-                    FinampCollection(type: FinampCollectionType.allPlaylists),
-                name: null),
-            null,
-            keepSlow: true));
-      } catch (e) {
-        GlobalSnackbar.error(e);
-        setState(() {
-          _isSubmitting = false;
-        });
-        return;
-      }
+          final downloadsService = GetIt.instance<DownloadsService>();
+          unawaited(downloadsService.resync(
+              DownloadStub.fromFinampCollection(
+                  collection:
+                      FinampCollection(type: FinampCollectionType.allPlaylists),
+                  name: null),
+              null,
+              keepSlow: true));
+          return newId.id!;
+        }),
+        _name
+      ));
     }
   }
 }

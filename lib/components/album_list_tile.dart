@@ -4,6 +4,7 @@ import 'package:Finamp/models/finamp_models.dart';
 import 'package:Finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
@@ -11,6 +12,7 @@ import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../services/downloads_service.dart';
+import '../services/favorite_provider.dart';
 import '../services/finamp_settings_helper.dart';
 import 'AlbumScreen/download_dialog.dart';
 import 'AlbumScreen/downloaded_indicator.dart';
@@ -36,9 +38,9 @@ enum AlbumListTileMenuItems {
 }
 
 //TODO should this be unified with music screen version?
-class AlbumListTile extends StatefulWidget {
+class AlbumListTile extends ConsumerStatefulWidget {
   const AlbumListTile(
-      {Key? key,
+      {super.key,
       required this.item,
 
       /// Children that are related to this list tile, such as the other songs in
@@ -51,8 +53,7 @@ class AlbumListTile extends StatefulWidget {
       /// song in an album.
       this.index,
       this.parentId,
-      this.parentName})
-      : super(key: key);
+      this.parentName});
 
   final BaseItemDto item;
   final List<BaseItemDto>? children;
@@ -61,10 +62,10 @@ class AlbumListTile extends StatefulWidget {
   final String? parentName;
 
   @override
-  State<AlbumListTile> createState() => _AlbumListTileState();
+  ConsumerState<AlbumListTile> createState() => _AlbumListTileState();
 }
 
-class _AlbumListTileState extends State<AlbumListTile> {
+class _AlbumListTileState extends ConsumerState<AlbumListTile> {
   final _queueService = GetIt.instance<QueueService>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
@@ -87,6 +88,8 @@ class _AlbumListTileState extends State<AlbumListTile> {
                   type: DownloadItemType.collection, item: widget.item),
               null)
           .isRequired;
+      final bool isFav = ref
+          .watch(isFavoriteProvider(widget.item.id, DefaultValue(widget.item)));
 
       final selection = await showMenu<AlbumListTileMenuItems>(
         context: context,
@@ -97,7 +100,7 @@ class _AlbumListTileState extends State<AlbumListTile> {
           screenSize.height - globalPosition.dy,
         ),
         items: [
-          widget.item.userData!.isFavorite
+          isFav
               ? PopupMenuItem<AlbumListTileMenuItems>(
                   value: AlbumListTileMenuItems.removeFavourite,
                   child: ListTile(
@@ -212,32 +215,14 @@ class _AlbumListTileState extends State<AlbumListTile> {
 
       switch (selection) {
         case AlbumListTileMenuItems.addFavourite:
-          try {
-            final newUserData =
-                await _jellyfinApiHelper.addFavourite(widget.item.id);
-
-            if (!mounted) return;
-
-            setState(() {
-              widget.item.userData = newUserData;
-            });
-          } catch (e) {
-            GlobalSnackbar.error(e);
-          }
+          ref
+              .read(isFavoriteProvider(widget.item.id, DefaultValue()).notifier)
+              .updateFavorite(true);
           break;
         case AlbumListTileMenuItems.removeFavourite:
-          try {
-            final newUserData =
-                await _jellyfinApiHelper.removeFavourite(widget.item.id);
-
-            if (!mounted) return;
-
-            setState(() {
-              widget.item.userData = newUserData;
-            });
-          } catch (e) {
-            GlobalSnackbar.error(e);
-          }
+          ref
+              .read(isFavoriteProvider(widget.item.id, DefaultValue()).notifier)
+              .updateFavorite(false);
           break;
         case AlbumListTileMenuItems.addToMixList:
           try {
@@ -272,10 +257,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
             await _queueService.addNext(
                 items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message(
-                    (scaffold) =>
-                        AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
-                    isConfirmation: true);
+            GlobalSnackbar.message(
+                (scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
+                isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -299,10 +284,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
             await _queueService.addToNextUp(
                 items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message(
-                    (scaffold) => AppLocalizations.of(scaffold)!
-                        .confirmAddToNextUp("album"),
-                    isConfirmation: true);
+            GlobalSnackbar.message(
+                (scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"),
+                isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -326,10 +311,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
             await _queueService.addNext(
                 items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message(
-                    (scaffold) =>
-                        AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
-                    isConfirmation: true);
+            GlobalSnackbar.message(
+                (scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
+                isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -354,10 +339,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
             await _queueService.addToNextUp(
                 items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message(
-                    (scaffold) =>
-                        AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
-                    isConfirmation: true);
+            GlobalSnackbar.message(
+                (scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+                isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -381,10 +366,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
             await _queueService.addToQueue(
                 items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message(
-                    (scaffold) => AppLocalizations.of(scaffold)!
-                        .confirmAddToQueue("album"),
-                    isConfirmation: true);
+            GlobalSnackbar.message(
+                (scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"),
+                isConfirmation: true);
 
             setState(() {});
           } catch (e) {
@@ -408,10 +393,10 @@ class _AlbumListTileState extends State<AlbumListTile> {
             await _queueService.addToQueue(
                 items: albumTracks, source: queueSource);
 
-                GlobalSnackbar.message(
-                    (scaffold) => AppLocalizations.of(scaffold)!
-                        .confirmAddToQueue("album"),
-                    isConfirmation: true);
+            GlobalSnackbar.message(
+                (scaffold) =>
+                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"),
+                isConfirmation: true);
 
             setState(() {});
           } catch (e) {

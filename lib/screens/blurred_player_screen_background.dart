@@ -6,7 +6,6 @@ import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
-import '../services/current_album_image_provider.dart';
 import '../services/theme_provider.dart';
 
 /// Same as [_PlayerScreenAlbumImage], but with a BlurHash instead. We also
@@ -14,20 +13,15 @@ import '../services/theme_provider.dart';
 class BlurredPlayerScreenBackground extends ConsumerWidget {
   /// should never be less than 1.0
   final double opacityFactor;
-  final ImageProvider? customImageProvider;
-  final String? blurHash;
 
   const BlurredPlayerScreenBackground({
     super.key,
-    this.customImageProvider,
     this.opacityFactor = 1.0,
-    this.blurHash,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var imageProvider =
-        customImageProvider ?? ref.watch(currentAlbumImageProvider);
+    var (imageProvider, localBlurhash) = ref.watch(imageThemeProvider);
 
     var overlayColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.black
@@ -35,14 +29,14 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
         : Colors.white
             .withOpacity(ui.clampDouble(0.75 * opacityFactor, 0.0, 1.0));
 
-    Widget placeholderBuilder(_) => blurHash != null
+    Widget placeholderBuilder(_) => localBlurhash != null
         ? SizedBox.expand(
             child: Image(
                 fit: BoxFit.cover,
                 color: overlayColor,
                 colorBlendMode: BlendMode.srcOver,
                 image: BlurHashImage(
-                  blurHash!,
+                  localBlurhash,
                 )),
           )
         : const SizedBox.shrink();
@@ -55,9 +49,9 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                 ? placeholderBuilder(null)
                 : OctoImage(
                     // Don't transition between images with identical files/urls unless
-                // system theme has changed
-                    key: ValueKey(imageProvider.toString() +
-                    Theme.of(context).brightness.toString()),
+                    // system theme has changed
+                    key: ValueKey(imageProvider.hashCode +
+                        Theme.of(context).brightness.index),
                     image: imageProvider,
                     fit: BoxFit.cover,
                     fadeInDuration: const Duration(seconds: 0),

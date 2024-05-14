@@ -2,14 +2,12 @@ import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:Finamp/color_schemes.g.dart';
-import 'package:Finamp/components/favourite_button.dart';
+import 'package:Finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:Finamp/models/finamp_models.dart';
-import 'package:Finamp/services/feedback_helper.dart';
-import 'package:Finamp/services/theme_provider.dart';
 import 'package:Finamp/services/current_track_metadata_provider.dart';
 import 'package:Finamp/services/feedback_helper.dart';
-import 'package:Finamp/services/theme_provider.dart';
 import 'package:Finamp/services/queue_service.dart';
+import 'package:Finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -467,19 +465,14 @@ class NowPlayingBar extends ConsumerWidget {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 4.0, right: 4.0),
-                                                child: FavoriteButton(
+                                                child: AddToPlaylistButton(
                                                   item: currentTrackBaseItem,
+                                                  queueItem: currentTrack,
                                                   color: Colors.white,
-                                                  onToggle: (isFavorite) {
-                                                    currentTrackBaseItem!
-                                                            .userData!
-                                                            .isFavorite =
-                                                        isFavorite;
-                                                    mediaState.mediaItem?.extras![
-                                                            "itemJson"] =
-                                                        currentTrackBaseItem
-                                                            .toJson();
-                                                  },
+                                                  size: 28,
+                                                  visualDensity:
+                                                      const VisualDensity(
+                                                          horizontal: -4),
                                                 ),
                                               ),
                                             ],
@@ -510,8 +503,7 @@ class NowPlayingBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    var imageTheme =
-        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    var imageTheme = ref.watch(playerScreenThemeProvider);
 
     ref.listen(currentTrackMetadataProvider,
         (metadataOrNull, metadata) {}); // keep provider alive

@@ -89,6 +89,12 @@ jobs:
     - run: flutter pub get
     - run: flutter gen-l10n
     # - run: flutter test
+    - run: flutter build windows
+    # TODO pack in redistributables?
+    - uses: actions/upload-artifact@v4
+      with:
+        name: finamp-windows-zip
+        path: build/windows/x64/runner/Release/
     - run: dart run msix:create --install-certificate false
     #TODO would be nice to have an old-school installer here that can take the .exe + libraries and install them to the device + create a shortcut
     - uses: actions/upload-artifact@v4

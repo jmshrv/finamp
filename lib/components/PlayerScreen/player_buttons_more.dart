@@ -1,21 +1,22 @@
 import 'package:Finamp/components/AlbumScreen/song_menu.dart';
+import 'package:Finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:Finamp/models/jellyfin_models.dart';
-import 'package:Finamp/screens/add_to_playlist_screen.dart';
-import 'package:Finamp/services/feedback_helper.dart';
 import 'package:Finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+
+import '../../models/finamp_models.dart';
 
 enum PlayerButtonsMoreItems { shuffle, repeat, addToPlaylist, sleepTimer }
 
 class PlayerButtonsMore extends ConsumerWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final BaseItemDto? item;
+  final FinampQueueItem? queueItem;
 
-  PlayerButtonsMore({Key? key, required this.item}) : super(key: key);
+  PlayerButtonsMore({super.key, required this.item, required this.queueItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,28 +25,23 @@ class PlayerButtonsMore extends ConsumerWidget {
         color: IconTheme.of(context).color,
         size: 24,
       ),
-      child: GestureDetector(
-        onLongPress: () {
-          FeedbackHelper.feedback(FeedbackType.medium);
-          Navigator.of(context)
-              .pushNamed(AddToPlaylistScreen.routeName, arguments: item!.id);
-        },
-        child: IconButton(
-          icon: const Icon(
-            TablerIcons.menu_2,
-          ),
-          visualDensity: VisualDensity.compact,
-          onPressed: () async {
-            if (item == null) return;
-            await showModalSongMenu(
-              context: context,
-              item: item!,
-              usePlayerTheme: true,
-              showPlaybackControls: true, // show controls on player screen
-              isInPlaylist: false,
-            );
-          },
+      child: IconButton(
+        icon: const Icon(
+          TablerIcons.menu_2,
         ),
+        visualDensity: VisualDensity.compact,
+        onPressed: () async {
+          if (item == null) return;
+          var inPlaylist = queueItemInPlaylist(queueItem);
+          await showModalSongMenu(
+            context: context,
+            item: item!,
+            usePlayerTheme: true,
+            showPlaybackControls: true, // show controls on player screen
+            parentItem: inPlaylist ? queueItem!.source.item : null,
+            isInPlaylist: inPlaylist,
+          );
+        },
       ),
     );
   }

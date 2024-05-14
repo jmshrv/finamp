@@ -772,7 +772,7 @@ extension IsarTaskDataQueryProperty
 // **************************************************************************
 
 SyncNode _$SyncNodeFromJson(Map json) => SyncNode(
-      stubIsarId: json['stubIsarId'] as int,
+      stubIsarId: (json['stubIsarId'] as num).toInt(),
       required: json['required'] as bool,
       viewId: json['viewId'] as String?,
     );

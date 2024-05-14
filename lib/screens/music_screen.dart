@@ -265,8 +265,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                         IconButton(
                             icon: const Icon(Icons.refresh),
                             onPressed: () {
-                              refreshMap[
-                                  sortedTabs.elementAt(_tabController!.index)]!();
+                              refreshMap[sortedTabs
+                                  .elementAt(_tabController!.index)]!();
                             }),
                       SortOrderButton(
                         sortedTabs.elementAt(_tabController!.index),

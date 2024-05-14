@@ -25,66 +25,124 @@ final defaultThemeLight = ColorScheme.fromSeed(
 ColorScheme getDefaultTheme(Brightness brightness) =>
     brightness == Brightness.dark ? defaultThemeDark : defaultThemeLight;
 
-final AutoDisposeProviderFamily<ColorScheme, Brightness>
-    playerScreenThemeProvider =
-    Provider.family.autoDispose<ColorScheme, Brightness>((ref, brightness) {
-  ColorScheme? scheme =
-      ref.watch(playerScreenThemeNullableProvider(brightness)).value;
+final brightnessProvider = StateProvider((ref) => Brightness.dark);
+
+final AutoDisposeProvider<ColorScheme> playerScreenThemeProvider =
+    Provider.autoDispose<ColorScheme>((ref) {
+  ColorScheme? scheme = ref.watch(playerScreenThemeNullableProvider).value;
   if (scheme == null) {
-    return getGreyTheme(brightness);
+    return getGreyTheme(ref.watch(brightnessProvider));
   } else {
     return scheme;
   }
 });
 
-final AutoDisposeFutureProviderFamily<ColorScheme?, Brightness>
-    playerScreenThemeNullableProvider = FutureProvider.family
-        .autoDispose<ColorScheme?, Brightness>((ref, brightness) async {
-  ImageProvider? image = ref.watch(currentAlbumImageProvider);
+final Provider<FinampTheme?> playerScreenThemeDataProvider =
+    Provider<FinampTheme?>((ref) {
+  var (image, blurHash) = ref.watch(currentAlbumImageProvider);
   if (image == null) {
     return null;
   }
 
   themeProviderLogger.fine("Re-theming based on image $image");
-  var themer = ThemeProvider(image, brightness);
+  var themer = FinampTheme.fromImageDeferred(image, blurHash);
 
   ref.onDispose(() {
     themer.dispose();
   });
 
-  return themer.colorSchemeFuture;
+  return themer;
 });
 
-class ThemeProvider {
-  ThemeProvider(ImageProvider image, Brightness brightness,
+final AutoDisposeFutureProvider<ColorScheme?>
+    playerScreenThemeNullableProvider =
+    FutureProvider.autoDispose<ColorScheme?>((ref) async {
+  var brightness = ref.watch(brightnessProvider);
+  return ref.watch(playerScreenThemeDataProvider)?.calculate(brightness);
+});
+
+final Provider<FinampTheme> themeDataProvider = Provider((ref) {
+  throw "No theme set";
+}, dependencies: const []);
+
+final Provider<(ImageProvider?, String?)> imageThemeProvider = Provider((ref) {
+  var theme = ref.watch(themeDataProvider);
+  return (theme.image, theme.blurHash);
+}, dependencies: [themeDataProvider]);
+
+final FutureProvider<ColorScheme> colorThemeNullableProvider =
+    FutureProvider((ref) {
+  var theme = ref.watch(themeDataProvider);
+  var brightness = ref.watch(brightnessProvider);
+  return theme.calculate(brightness);
+}, dependencies: [themeDataProvider]);
+
+final Provider<ColorScheme> colorThemeProvider = Provider((ref) {
+  var brightness = ref.watch(brightnessProvider);
+  var theme = ref.watch(themeDataProvider).colorScheme(brightness);
+  if (theme != null) return theme;
+  ref
+      .watch(themeDataProvider)
+      .calculate(brightness)
+      .then((value) => ref.invalidateSelf());
+  return getDefaultTheme(brightness);
+}, dependencies: [themeDataProvider]);
+
+class FinampTheme {
+  FinampTheme.fromImageDeferred(ImageProvider this.image, this.blurHash);
+
+  FinampTheme.fromImage(
+      ImageProvider this.image, this.blurHash, Brightness brightness,
       {bool useIsolate = true}) {
-    ImageStream stream =
-        image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
-    ImageStreamListener? listener;
-
-    listener = ImageStreamListener((image, synchronousCall) {
-      stream.removeListener(listener!);
-      _completer.complete(getColorSchemeForImage(image.image, brightness,
-          useIsolate: useIsolate));
-    }, onError: (_, __) {
-      stream.removeListener(listener!);
-      _completer.complete(getDefaultTheme(brightness));
-    });
-
-    _dispose = () {
-      stream.removeListener(listener!);
-    };
-
-    stream.addListener(listener);
-    _completer.future.then((value) {
-      colorScheme = value;
-    });
+    calculate(brightness, useIsolate: useIsolate);
   }
 
+  Future<ColorScheme> calculate(Brightness brightness,
+      {bool useIsolate = true}) {
+    if (_results[brightness] != null) {
+      return _results[brightness]!.colorSchemeFuture;
+    }
+    _results[brightness] = _ThemeProviderResults();
+    if (image == null) {
+      var scheme = getDefaultTheme(brightness);
+      _results[brightness]!._completer.complete(scheme);
+    } else {
+      ImageStream stream =
+          image!.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
+      ImageStreamListener? listener;
+
+      listener = ImageStreamListener((image, synchronousCall) {
+        stream.removeListener(listener!);
+        _results[brightness]!._completer.complete(getColorSchemeForImage(
+            image.image, brightness,
+            useIsolate: useIsolate));
+      }, onError: (_, __) {
+        stream.removeListener(listener!);
+        _results[brightness]!._completer.complete(getDefaultTheme(brightness));
+      });
+
+      _dispose = () {
+        stream.removeListener(listener!);
+      };
+
+      stream.addListener(listener);
+    }
+    _results[brightness]!.colorSchemeFuture.then((value) {
+      _results[brightness]!.colorScheme = value;
+    });
+    return _results[brightness]!.colorSchemeFuture;
+  }
+
+  FinampTheme.defaultTheme()
+      : image = null,
+        blurHash = null;
+
   void Function()? _dispose;
-  final Completer<ColorScheme> _completer = Completer();
-  Future<ColorScheme> get colorSchemeFuture => _completer.future;
-  ColorScheme? colorScheme;
+  final ImageProvider? image;
+  final String? blurHash;
+  final Map<Brightness, _ThemeProviderResults> _results = {};
+  ColorScheme? colorScheme(Brightness brightness) =>
+      _results[brightness]?.colorScheme;
 
   /// Disposes the imageStream, ending the attempt to load the theme.  This has no effect
   /// if the image has already loaded, as the stream will already have been disposed.
@@ -92,7 +150,18 @@ class ThemeProvider {
     if (_dispose != null) {
       _dispose!();
     }
+    for (var result in _results.values) {
+      if (!result._completer.isCompleted) {
+        result._completer.completeError("disposed before completed");
+      }
+    }
   }
+}
+
+class _ThemeProviderResults {
+  final Completer<ColorScheme> _completer = Completer();
+  Future<ColorScheme> get colorSchemeFuture => _completer.future;
+  ColorScheme? colorScheme;
 }
 
 Future<ColorScheme> getColorSchemeForImage(Image image, Brightness brightness,

@@ -11,8 +11,10 @@ import 'package:octo_image/octo_image.dart';
 
 import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';
+import '../services/theme_provider.dart';
 
-typedef ImageProviderCallback = void Function(ImageProvider? imageProvider);
+typedef ThemeCallback = void Function(FinampTheme theme);
+typedef ImageProviderCallback = void Function(ImageProvider theme);
 
 /// This widget provides the default look for album images throughout Finamp -
 /// Aspect ratio 1 with a circular border radius of 4. If you don't want these
@@ -23,7 +25,7 @@ class AlbumImage extends ConsumerWidget {
     super.key,
     this.item,
     this.imageListenable,
-    this.imageProviderCallback,
+    this.themeCallback,
     this.borderRadius,
     this.placeholderBuilder,
     this.disabled = false,
@@ -33,10 +35,10 @@ class AlbumImage extends ConsumerWidget {
   /// The item to get an image for.
   final BaseItemDto? item;
 
-  final ProviderListenable<ImageProvider?>? imageListenable;
+  final ProviderListenable<(ImageProvider?, String?)>? imageListenable;
 
   /// A callback to get the image provider once it has been fetched.
-  final ImageProviderCallback? imageProviderCallback;
+  final ThemeCallback? themeCallback;
 
   final BorderRadius? borderRadius;
 
@@ -52,7 +54,6 @@ class AlbumImage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final borderRadius = this.borderRadius ?? defaultBorderRadius;
-
     assert(item == null || imageListenable == null);
     if ((item == null || item!.imageId == null) && imageListenable == null) {
       return ClipRRect(
@@ -96,22 +97,17 @@ class AlbumImage extends ConsumerWidget {
           }
 
           var image = BareAlbumImage(
-            imageListenable: imageListenable ??
-                albumImageProvider(AlbumImageRequest(
-                  item: item!,
-                  maxWidth: physicalWidth,
-                  maxHeight: physicalHeight,
-                )),
-            imageProviderCallback: imageProviderCallback,
-            placeholderBuilder: placeholderBuilder ??
-                (item?.blurHash != null
-                    ? (_) => Image(
-                        fit: BoxFit.cover,
-                        image: BlurHashImage(
-                          item!.blurHash!,
-                        ))
-                    : BareAlbumImage.defaultPlaceholderBuilder),
-          );
+              imageListenable: imageListenable ??
+                  albumImageProvider(AlbumImageRequest(
+                    item: item!,
+                    maxWidth: physicalWidth,
+                    maxHeight: physicalHeight,
+                  )).select((value) => (value, item?.blurHash)),
+              imageProviderCallback: themeCallback == null
+                  ? null
+                  : (image) =>
+                      FinampTheme.fromImageDeferred(image, item?.blurHash),
+              placeholderBuilder: placeholderBuilder);
           return disabled
               ? Opacity(
                   opacity: 0.75,
@@ -133,11 +129,11 @@ class BareAlbumImage extends ConsumerWidget {
     required this.imageListenable,
     this.imageProviderCallback,
     this.errorBuilder = defaultErrorBuilder,
-    this.placeholderBuilder = defaultPlaceholderBuilder,
+    this.placeholderBuilder,
   });
 
-  final ProviderListenable<ImageProvider?> imageListenable;
-  final WidgetBuilder placeholderBuilder;
+  final ProviderListenable<(ImageProvider?, String?)> imageListenable;
+  final WidgetBuilder? placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
 
@@ -151,7 +147,16 @@ class BareAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ImageProvider? image = ref.watch(imageListenable);
+    var (image, blurHash) = ref.watch(imageListenable);
+    var localPlaceholder = placeholderBuilder;
+    if (blurHash != null) {
+      localPlaceholder ??= (_) => Image(
+          fit: BoxFit.cover,
+          image: BlurHashImage(
+            blurHash,
+          ));
+    }
+    localPlaceholder ??= defaultPlaceholderBuilder;
 
     if (image != null) {
       if (imageProviderCallback != null) {
@@ -164,13 +169,13 @@ class BareAlbumImage extends ConsumerWidget {
           fadeOutDuration: const Duration(milliseconds: 0),
           fadeInDuration: const Duration(milliseconds: 0),
           fit: BoxFit.contain,
-          placeholderBuilder: placeholderBuilder,
+          placeholderBuilder: localPlaceholder,
           errorBuilder: errorBuilder,
         );
       });
     }
 
-    return Builder(builder: placeholderBuilder);
+    return Builder(builder: localPlaceholder);
   }
 }
 

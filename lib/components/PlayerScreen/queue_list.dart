@@ -3,17 +3,14 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:Finamp/components/AlbumScreen/song_menu.dart';
 import 'package:Finamp/components/Buttons/simple_button.dart';
-import 'package:Finamp/components/favourite_button.dart';
-import 'package:Finamp/components/global_snackbar.dart';
+import 'package:Finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:Finamp/main.dart';
 import 'package:Finamp/models/finamp_models.dart';
 import 'package:Finamp/screens/blurred_player_screen_background.dart';
 import 'package:Finamp/services/feedback_helper.dart';
 import 'package:Finamp/services/finamp_settings_helper.dart';
-import 'package:Finamp/services/jellyfin_api_helper.dart';
 import 'package:Finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -29,6 +26,7 @@ import '../../services/music_player_background_task.dart';
 import '../../services/process_artist.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
+import '../themed_bottom_sheet.dart';
 import 'queue_list_item.dart';
 import 'queue_source_helper.dart';
 
@@ -76,19 +74,20 @@ class QueueList extends StatefulWidget {
 
 void scrollToKey({
   required GlobalKey key,
-  Duration? duration,
+  required Duration duration,
 }) {
-  if (duration == null) {
-    Scrollable.ensureVisible(
-      key.currentContext!,
-    );
-  } else {
-    Scrollable.ensureVisible(
-      key.currentContext!,
-      duration: duration,
-      curve: Curves.easeInOutCubic,
-    );
+  var queueList =
+      key.currentContext?.findAncestorStateOfType<_QueueListState>();
+  if (queueList != null && queueList.widget.previousTracksHeaderKey == key) {
+    Future.delayed(Duration(milliseconds: duration.inMilliseconds + 10), () {
+      queueList._currentTrackScroll = queueList.widget.scrollController.offset;
+    });
   }
+  Scrollable.ensureVisible(
+    key.currentContext!,
+    duration: duration,
+    curve: Curves.easeInOutCubic,
+  );
 }
 
 class _QueueListState extends State<QueueList> {
@@ -124,16 +123,6 @@ class _QueueListState extends State<QueueList> {
       }
       widget.jumpToCurrentKey.currentState?.showJumpToTop = jumpDirection;
     });
-  }
-
-  void scrollToCurrentTrack() {
-    if (widget.previousTracksHeaderKey.currentContext != null) {
-      Scrollable.ensureVisible(
-        widget.previousTracksHeaderKey.currentContext!,
-        // duration: const Duration(milliseconds: 200),
-        // curve: Curves.decelerate,
-      );
-    }
   }
 
   @override
@@ -274,82 +263,91 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     clipBehavior: Clip.antiAlias,
     context: context,
     builder: (context) {
-      return Consumer(
-          builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final imageTheme =
-            ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
-        return AnimatedTheme(
-          duration: const Duration(milliseconds: 500),
-          data: ThemeData(
-            colorScheme: imageTheme,
-            brightness: Theme.of(context).brightness,
-            iconTheme: Theme.of(context).iconTheme.copyWith(
-                  color: imageTheme.primary,
-                ),
-          ),
-          child: DraggableScrollableSheet(
-            snap: false,
-            snapAnimationDuration: const Duration(milliseconds: 200),
-            initialChildSize: 0.92,
-            // maxChildSize: 0.92,
-            expand: false,
-            builder: (context, scrollController) {
-              return Scaffold(
-                body: Stack(
-                  children: [
-                    if (FinampSettingsHelper
-                        .finampSettings.useCoverAsBackground)
-                      BlurredPlayerScreenBackground(
-                          opacityFactor:
-                              Theme.of(context).brightness == Brightness.dark
+      return ProviderScope(
+          overrides: [
+            themeDataProvider.overrideWith((ref) {
+              return ref.watch(playerScreenThemeDataProvider) ??
+                  FinampTheme.defaultTheme();
+            })
+          ],
+          child: Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final imageTheme = ref.watch(playerScreenThemeProvider);
+            return AnimatedTheme(
+              duration: const Duration(milliseconds: 500),
+              data: ThemeData(
+                colorScheme: imageTheme,
+                brightness: Theme.of(context).brightness,
+                iconTheme: Theme.of(context).iconTheme.copyWith(
+                      color: imageTheme.primary,
+                    ),
+              ),
+              child: DraggableScrollableSheet(
+                snap: false,
+                snapAnimationDuration: const Duration(milliseconds: 200),
+                initialChildSize: 0.92,
+                // maxChildSize: 0.92,
+                expand: false,
+                builder: (context, scrollController) {
+                  return Scaffold(
+                    body: Stack(
+                      children: [
+                        if (FinampSettingsHelper
+                            .finampSettings.useCoverAsBackground)
+                          BlurredPlayerScreenBackground(
+                              opacityFactor: Theme.of(context).brightness ==
+                                      Brightness.dark
                                   ? 1.0
                                   : 0.85),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 10),
-                        Container(
-                          width: 40,
-                          height: 3.5,
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).textTheme.bodySmall!.color!,
-                            borderRadius: BorderRadius.circular(3.5),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(AppLocalizations.of(context)!.queue,
-                            style: TextStyle(
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 10),
+                            Container(
+                              width: 40,
+                              height: 3.5,
+                              decoration: BoxDecoration(
                                 color: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge!
+                                    .bodySmall!
                                     .color!,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300)),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: QueueList(
-                            scrollController: scrollController,
-                            previousTracksHeaderKey: previousTracksHeaderKey,
-                            currentTrackKey: currentTrackKey,
-                            nextUpHeaderKey: nextUpHeaderKey,
-                            queueHeaderKey: queueHeaderKey,
-                            jumpToCurrentKey: jumpToCurrentKey,
-                          ),
+                                borderRadius: BorderRadius.circular(3.5),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(AppLocalizations.of(context)!.queue,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color!,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400)),
+                            const SizedBox(height: 20),
+                            Expanded(
+                              child: QueueList(
+                                scrollController: scrollController,
+                                previousTracksHeaderKey:
+                                    previousTracksHeaderKey,
+                                currentTrackKey: currentTrackKey,
+                                nextUpHeaderKey: nextUpHeaderKey,
+                                queueHeaderKey: queueHeaderKey,
+                                jumpToCurrentKey: jumpToCurrentKey,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-                floatingActionButton: JumpToCurrentButton(
-                  key: jumpToCurrentKey,
-                  previousTracksHeaderKey: previousTracksHeaderKey,
-                ),
-              );
-            },
-          ),
-        );
-      });
+                    floatingActionButton: JumpToCurrentButton(
+                      key: jumpToCurrentKey,
+                      previousTracksHeaderKey: previousTracksHeaderKey,
+                    ),
+                  );
+                },
+              ),
+            );
+          }));
     },
   );
 }
@@ -436,7 +434,6 @@ class _PreviousTracksListState extends State<PreviousTracksList>
             onReorder: (oldIndex, newIndex) {
               int draggingOffset = -(_previousTracks!.length - oldIndex);
               int newPositionOffset = -(_previousTracks!.length - newIndex);
-              print("$draggingOffset -> $newPositionOffset");
               if (mounted) {
                 FeedbackHelper.feedback(FeedbackType.impact);
                 setState(() {
@@ -514,7 +511,8 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
 
   @override
   Widget build(context) {
-    return StickyHeaderMask(
+    return MenuMask(
+      height: 131.0,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -604,7 +602,8 @@ class _QueueTracksListState extends State<QueueTracksList> {
 
   @override
   Widget build(context) {
-    return StickyHeaderMask(
+    return MenuMask(
+      height: 131.0,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -947,17 +946,13 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: FavoriteButton(
+                                    child: AddToPlaylistButton(
                                       item: currentTrackBaseItem,
+                                      queueItem: currentTrack,
                                       color: Colors.white,
                                       size: 28,
                                       visualDensity:
                                           const VisualDensity(horizontal: -4),
-                                      onToggle: (favorite) {
-                                        setState(() {
-                                          setFavourite(currentTrack!, context);
-                                        });
-                                      },
                                     ),
                                   ),
                                   IconButton(
@@ -977,7 +972,10 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                           context: context,
                                           usePlayerTheme: true,
                                           item: currentTrackBaseItem,
-                                          isInPlaylist: false,
+                                          isInPlaylist:
+                                              queueItemInPlaylist(currentTrack),
+                                          parentItem: currentTrack?.source.item,
+                                          confirmPlaylistRemoval: true,
                                         );
                                       })
                                 ],
@@ -997,41 +995,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
         }
       },
     );
-  }
-}
-
-Future<void> setFavourite(FinampQueueItem track, BuildContext context) async {
-  final queueService = GetIt.instance<QueueService>();
-  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
-  try {
-    // We switch the widget state before actually doing the request to
-    // make the app feel faster (without, there is a delay from the
-    // user adding the favourite and the icon showing)
-    jellyfin_models.BaseItemDto item =
-        jellyfin_models.BaseItemDto.fromJson(track.item.extras!["itemJson"]);
-
-    // setState(() {
-    item.userData!.isFavorite = !item.userData!.isFavorite;
-    // });
-
-    // Since we flipped the favourite state already, we can use the flipped
-    // state to decide which API call to make
-    final newUserData = item.userData!.isFavorite
-        ? await jellyfinApiHelper.addFavourite(item.id)
-        : await jellyfinApiHelper.removeFavourite(item.id);
-
-    item.userData = newUserData;
-
-    // if (!mounted) return;
-    // setState(() {
-    //!!! update the QueueItem with the new BaseItemDto, then trigger a rebuild of the widget with the current snapshot (**which includes the modified QueueItem**)
-    track.item.extras!["itemJson"] = item.toJson();
-    // });
-
-    queueService.refreshQueueStream();
-  } catch (e) {
-    GlobalSnackbar.error(e);
   }
 }
 
@@ -1299,42 +1262,4 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
-}
-
-class StickyHeaderMask extends SingleChildRenderObjectWidget {
-  const StickyHeaderMask({
-    super.key,
-    super.child,
-  });
-
-  @override
-  RenderQueueTracksMask createRenderObject(BuildContext context) {
-    return RenderQueueTracksMask();
-  }
-}
-
-class RenderQueueTracksMask extends RenderProxySliver {
-  @override
-  ShaderMaskLayer? get layer => super.layer as ShaderMaskLayer?;
-
-  @override
-  bool get alwaysNeedsCompositing => child != null;
-
-  @override
-  void paint(PaintingContext context, Offset offset) {
-    if (child != null) {
-      layer ??= ShaderMaskLayer(
-          shader: const LinearGradient(colors: [
-            Color.fromARGB(0, 255, 255, 255),
-            Color.fromARGB(255, 255, 255, 255)
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-              .createShader(const Rect.fromLTWH(0, 131, 0, 10)),
-          blendMode: BlendMode.modulate,
-          maskRect: const Rect.fromLTWH(0, 0, 99999, 145));
-
-      context.pushLayer(layer!, super.paint, offset);
-    } else {
-      layer = null;
-    }
-  }
 }

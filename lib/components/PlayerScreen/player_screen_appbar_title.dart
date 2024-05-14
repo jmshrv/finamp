@@ -35,7 +35,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
         }
         final queueItem = snapshot.data!;
 
-        return Container(
+        return ConstrainedBox(
           constraints: BoxConstraints(maxWidth: screenWidth * 0.62),
           child: GestureDetector(
             onTap: () => navigateToSource(context, queueItem.source),

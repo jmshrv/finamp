@@ -4,13 +4,11 @@ import 'package:Finamp/components/AlbumScreen/song_menu.dart';
 import 'package:Finamp/components/favourite_button.dart';
 import 'package:Finamp/models/finamp_models.dart';
 import 'package:Finamp/services/audio_service_helper.dart';
-import 'package:Finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart' hide ReorderableList;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/process_artist.dart';
+import '../../services/theme_provider.dart';
 import '../album_image.dart';
 
 class PlaybackHistoryListTile extends StatefulWidget {
@@ -27,14 +25,20 @@ class PlaybackHistoryListTile extends StatefulWidget {
   final AudioServiceHelper audioServiceHelper;
   final void Function() onTap;
 
-  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
   @override
   State<PlaybackHistoryListTile> createState() =>
       _PlaybackHistoryListTileState();
 }
 
 class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
+  FinampTheme? _menuTheme;
+
+  @override
+  void dispose() {
+    _menuTheme?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final baseItem = jellyfin_models.BaseItemDto.fromJson(
@@ -42,14 +46,18 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
 
     void menuCallback() async {
       unawaited(Feedback.forLongPress(context));
-      await showModalSongMenu(context: context, item: baseItem);
+      await showModalSongMenu(
+          context: context, item: baseItem, themeProvider: _menuTheme);
     }
 
     return GestureDetector(
+        onTapDown: (_) {
+          _menuTheme?.calculate(Theme.of(context).brightness);
+        },
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),
         child: Card(
-            margin: EdgeInsets.all(0.0),
+            margin: const EdgeInsets.all(0.0),
             elevation: 0,
             clipBehavior: Clip.antiAlias,
             shape: RoundedRectangleBorder(
@@ -64,6 +72,7 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                 item: widget.item.item.item.extras?["itemJson"] == null
                     ? null
                     : baseItem,
+                themeCallback: (x) => _menuTheme ??= x,
               ),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,8 +80,7 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                   Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: Text(
-                      widget.item.item.item.title ??
-                          AppLocalizations.of(context)!.unknownName,
+                      widget.item.item.item.title,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -120,13 +128,6 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                   ),
                   FavoriteButton(
                     item: baseItem,
-                    onToggle: (isFavorite) => setState(() {
-                      if (baseItem.userData != null) {
-                        baseItem.userData!.isFavorite = isFavorite;
-                        widget.item.item.item.extras?["itemJson"] =
-                            baseItem.toJson();
-                      }
-                    }),
                   )
                 ],
               ),

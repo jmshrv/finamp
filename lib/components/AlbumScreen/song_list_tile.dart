@@ -92,8 +92,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
   final _queueService = GetIt.instance<QueueService>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-  ImageProvider? _thumbnail;
-  ThemeProvider? _menuTheme;
+  FinampTheme? _menuTheme;
 
   @override
   void dispose() {
@@ -128,7 +127,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
             leading: AlbumImage(
               item: widget.item,
               disabled: !playable,
-              imageProviderCallback: (x) => _thumbnail = x,
+              themeCallback: (x) => _menuTheme ??= x,
             ),
             title: Opacity(
               opacity: playable ? 1.0 : 0.5,
@@ -236,18 +235,15 @@ class _SongListTileState extends ConsumerState<SongListTile>
           isInPlaylist: widget.isInPlaylist,
           parentItem: widget.parentItem,
           onRemoveFromList: widget.onRemoveFromList,
-          cachedImage: _thumbnail,
           themeProvider: _menuTheme,
+          confirmPlaylistRemoval: false,
         );
       }
     }
 
     return GestureDetector(
       onTapDown: (_) {
-        if (_thumbnail != null) {
-          _menuTheme ??=
-              ThemeProvider(_thumbnail!, Theme.of(context).brightness);
-        }
+        _menuTheme?.calculate(Theme.of(context).brightness);
       },
       onLongPressStart: (details) => menuCallback(),
       onSecondaryTapDown: (details) => menuCallback(),

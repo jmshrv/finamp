@@ -310,8 +310,7 @@ class RedownloadTranscodesSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool? redownloadTranscodes = ref.watch(FinampSettingsHelper
-        .finampSettingsProvider
+    bool? redownloadTranscodes = ref.watch(finampSettingsProvider
         .select((value) => value.valueOrNull?.shouldRedownloadTranscodes));
 
     return SwitchListTile.adaptive(

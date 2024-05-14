@@ -44,7 +44,9 @@ class DownloadDialog extends StatefulWidget {
     }
     bool needTranscode =
         FinampSettingsHelper.finampSettings.shouldTranscodeDownloads ==
-            TranscodeDownloadsSetting.ask;
+                TranscodeDownloadsSetting.ask &&
+            // Skipp asking for transcode for image only collection
+            item.finampCollection?.type != FinampCollectionType.libraryImages;
     String? downloadLocation =
         FinampSettingsHelper.finampSettings.defaultDownloadLocation;
     if (!FinampSettingsHelper.finampSettings.downloadLocationsMap
