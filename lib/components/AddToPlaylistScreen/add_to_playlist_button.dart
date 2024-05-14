@@ -1,9 +1,9 @@
-import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/favorite_provider.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:Finamp/components/PlayerScreen/queue_source_helper.dart';
+import 'package:Finamp/components/global_snackbar.dart';
+import 'package:Finamp/models/finamp_models.dart';
+import 'package:Finamp/models/jellyfin_models.dart';
+import 'package:Finamp/services/favorite_provider.dart';
+import 'package:Finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

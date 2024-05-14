@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/downloads_service.dart';
+import 'package:Finamp/models/finamp_models.dart';
+import 'package:Finamp/models/jellyfin_models.dart';
+import 'package:Finamp/services/downloads_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';

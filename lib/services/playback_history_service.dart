@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/services/music_player_background_task.dart';
-import 'package:finamp/services/queue_service.dart';
+import 'package:Finamp/services/music_player_background_task.dart';
+import 'package:Finamp/services/queue_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';

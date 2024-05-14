@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:finamp/components/PlayerScreen/player_split_screen_scaffold.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:Finamp/components/PlayerScreen/player_split_screen_scaffold.dart';
+import 'package:Finamp/models/finamp_models.dart';
+import 'package:Finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

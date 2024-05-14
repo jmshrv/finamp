@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/models/finamp_models.dart';
+import 'package:Finamp/models/finamp_models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';

@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
-import 'package:finamp/components/Buttons/simple_button.dart';
-import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
-import 'package:finamp/main.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/screens/blurred_player_screen_background.dart';
-import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/theme_provider.dart';
+import 'package:Finamp/components/AlbumScreen/song_menu.dart';
+import 'package:Finamp/components/Buttons/simple_button.dart';
+import 'package:Finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
+import 'package:Finamp/main.dart';
+import 'package:Finamp/models/finamp_models.dart';
+import 'package:Finamp/screens/blurred_player_screen_background.dart';
+import 'package:Finamp/services/feedback_helper.dart';
+import 'package:Finamp/services/finamp_settings_helper.dart';
+import 'package:Finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

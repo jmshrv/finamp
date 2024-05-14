@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:Finamp/models/finamp_models.dart';
+import 'package:Finamp/services/finamp_user_helper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';

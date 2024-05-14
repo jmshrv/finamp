@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
-import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/current_track_metadata_provider.dart';
-import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/music_player_background_task.dart';
-import 'package:finamp/services/progress_state_stream.dart';
+import 'package:Finamp/color_schemes.g.dart';
+import 'package:Finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:Finamp/models/jellyfin_models.dart';
+import 'package:Finamp/services/current_track_metadata_provider.dart';
+import 'package:Finamp/services/feedback_helper.dart';
+import 'package:Finamp/services/music_player_background_task.dart';
+import 'package:Finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

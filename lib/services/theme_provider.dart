@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:finamp/at_contrast.dart';
-import 'package:finamp/services/queue_service.dart';
+import 'package:Finamp/at_contrast.dart';
+import 'package:Finamp/services/queue_service.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
