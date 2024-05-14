@@ -23,6 +23,7 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
+    - run: flutter doctor
     - run: flutter pub get
     # - run: flutter test
     - run: flutter build apk --debug --no-pub
@@ -50,6 +51,7 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
+    - run: flutter doctor
     - run: flutter pub get
     # - run: flutter test
     - run: flutter gen-l10n
@@ -83,6 +85,7 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
+    - run: flutter doctor
     - run: flutter pub get
     # - run: flutter test
     - run: dart run msix:create --install-certificate false
@@ -102,7 +105,8 @@ jobs:
       with:
         channel: 'stable'
         architecture: x64
+    - run: flutter doctor
     - run: flutter pub get
     # - run: flutter test
     - run: flutter build ios --release --no-pub --no-codesign
-    - run: flutter build macos --release --no-pub --no-codesign
+    - run: flutter build macos --release --no-pub
