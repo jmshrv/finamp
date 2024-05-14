@@ -91,8 +91,12 @@ void main() async {
     final flutterLogger = Logger("Flutter");
 
     FlutterError.onError = (FlutterErrorDetails details) {
+      var error = details.exception;
+      if (error is Error) {
+        details = details.copyWith(stack: error.stackTrace ?? details.stack);
+      }
       FlutterError.presentError(details);
-      flutterLogger.severe(details.exception, details.exception, details.stack);
+      flutterLogger.severe(error, error, details.stack);
     };
     // On iOS, the status bar will have black icons by default on the login
     // screen as it does not have an AppBar. To fix this, we set the

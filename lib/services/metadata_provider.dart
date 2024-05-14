@@ -166,25 +166,37 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
       }
     }
     if (!metadata.qualifiesForPlaybackSpeedControl &&
-        metadata.mediaSourceInfo.runTimeTicks! >
+        (metadata.mediaSourceInfo.runTimeTicks ?? 0) >
             MetadataProvider.speedControlLongTrackDuration.inMicroseconds *
                 10) {
       // we might want playback speed control for long tracks (like podcasts or audiobook chapters)
       metadata.qualifiesForPlaybackSpeedControl = true;
     } else {
       // check if "album" is long enough to qualify for playback speed control
-      try {
-        final parent =
-            await jellyfinApiHelper.getItemById(request.item.parentId!);
-        if (parent.runTimeTicks! >
-            MetadataProvider.speedControlLongAlbumDuration.inMicroseconds *
-                10) {
-          metadata.qualifiesForPlaybackSpeedControl = true;
+      if (request.item.parentId != null) {
+        if (FinampSettingsHelper.finampSettings.isOffline) {
+          final parent = await downloadsService.getCollectionInfo(
+              id: request.item.parentId);
+          if ((parent?.baseItem?.runTimeTicks ?? 0) >
+              MetadataProvider.speedControlLongAlbumDuration.inMicroseconds *
+                  10) {
+            metadata.qualifiesForPlaybackSpeedControl = true;
+          }
+        } else {
+          try {
+            final parent =
+                await jellyfinApiHelper.getItemById(request.item.parentId!);
+            if ((parent.runTimeTicks ?? 0) >
+                MetadataProvider.speedControlLongAlbumDuration.inMicroseconds *
+                    10) {
+              metadata.qualifiesForPlaybackSpeedControl = true;
+            }
+          } catch (e) {
+            metadataProviderLogger.warning(
+                "Failed to check if '${request.item.name}' (${request.item.id}) qualifies for playback speed controls",
+                e);
+          }
         }
-      } catch (e) {
-        metadataProviderLogger.warning(
-            "Failed to check if '${request.item.name}' (${request.item.id}) qualifies for playback speed controls",
-            e);
       }
     }
   }
