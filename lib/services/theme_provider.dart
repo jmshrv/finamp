@@ -114,11 +114,12 @@ class FinampTheme {
       listener = ImageStreamListener((image, synchronousCall) {
         stream.removeListener(listener!);
         _results[brightness]!._completer.complete(getColorSchemeForImage(
-            image.image, brightness,
+            image, brightness,
             useIsolate: useIsolate));
-      }, onError: (_, __) {
+      }, onError: (e, stack) {
         stream.removeListener(listener!);
         _results[brightness]!._completer.complete(getDefaultTheme(brightness));
+        themeProviderLogger.severe(e,e,stack);
       });
 
       _dispose = () {
@@ -164,11 +165,15 @@ class _ThemeProviderResults {
   ColorScheme? colorScheme;
 }
 
-Future<ColorScheme> getColorSchemeForImage(Image image, Brightness brightness,
+Future<ColorScheme> getColorSchemeForImage(ImageInfo image, Brightness brightness,
     {bool useIsolate = true}) async {
   // Use fromImage instead of fromImageProvider to better handle error case
-  final PaletteGenerator palette =
-      await PaletteGenerator.fromImage(image, useIsolate: useIsolate);
+  final PaletteGenerator palette;
+  try{
+    palette = await PaletteGenerator.fromImage(image.image, useIsolate: useIsolate);
+  } finally {
+    image.dispose();
+  }
 
   Color accent = palette.vibrantColor?.color ??
       palette.dominantColor?.color ??

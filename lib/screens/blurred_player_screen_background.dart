@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
+import 'dart:io';
 
 import '../services/theme_provider.dart';
 
@@ -61,16 +62,24 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                     filterQuality: FilterQuality.none,
                     errorBuilder: (x, _, __) => placeholderBuilder(x),
                     placeholderBuilder: placeholderBuilder,
-                    imageBuilder: (context, child) => CachePaint(
-                        imageKey: imageProvider.toString(),
-                        child: ImageFiltered(
+                    imageBuilder: (context, child) {
+                        var image = ImageFiltered(
                           imageFilter: ui.ImageFilter.blur(
                             sigmaX: 85,
                             sigmaY: 85,
                             tileMode: TileMode.mirror,
                           ),
                           child: SizedBox.expand(child: child),
-                        )))));
+                        );
+                        // There seems to be some sort of issue with how Linux handles ui.Image that breaks
+                        // cachePaint.  This shouldn't be too important outside mobile, though.
+                        if(Platform.isLinux){
+                          return image;
+                        }
+                      return CachePaint(
+                        imageKey: imageProvider.toString(),
+                        child: image);
+                    })));
   }
 }
 
