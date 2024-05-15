@@ -47,3 +47,13 @@ The biggest main piece of work being done on Finamp at the moment is the redesig
 Finamp uses Weblate to manage translations: **https://hosted.weblate.org/engage/finamp/**
 
 Feel free to add new languages if yours isn't there yet. If you have any questions, such as the context of a string, you can ask in the [Translation Discussions](https://github.com/jmshrv/finamp/discussions/categories/translations).
+
+## Packaging
+
+### Linux
+
+Linux packaging might vary depending on distribution and type of installation.
+Please follow the guidelines of your distribution if you would like to package Finamp for it.
+The repo contains a [desktop file template](assets/finamp.desktop.m4) and
+pre-generated icons following the XDG Icon Theme Specification
+in the [assets folder](assets/icon/linux).
