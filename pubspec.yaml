@@ -34,8 +34,8 @@ dependencies:
   just_audio_media_kit: ^2.0.4
   media_kit_libs_linux: ^1.1.3
 
-  # Transcoding does not work on windows with current media-kit release.  This fork uses a more recent
-  # build of MPV that works.  The MPV download link it uses will expire in ~1 month.
+  # Transcoding does not work on windows with current media-kit release.  This fork uses the most recent
+  # build of MPV from https://github.com/zhongfly/mpv-winbuild, which works correctly while transcoding.
   media_kit_libs_windows_audio: #^1.0.9
     git:
       url: https://github.com/Komodo5197/media-kit.git
