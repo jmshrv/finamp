@@ -189,6 +189,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  /// Fully dispose the player instance.  Should only be called during app shutdown.
   Future<void> dispose() => _player.dispose();
 
   @override
