@@ -852,7 +852,7 @@ packages:
     description:
       path: "libs/windows/media_kit_libs_windows_audio"
       ref: HEAD
-      resolved-ref: "0cb6ec7640e075fda1175b50e39f2e103b3d4ba5"
+      resolved-ref: "475a08cc97b94702f774bc906e1472b5bddc932b"
       url: "https://github.com/Komodo5197/media-kit.git"
     source: git
     version: "1.0.9"
