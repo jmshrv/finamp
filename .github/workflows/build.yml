@@ -5,7 +5,7 @@ on:
   push:
 
 # Due to a flutter bug, flutter build is not generating localizations
-# workaround by always runnning flutter pub get immediatly before building,
+# workaround by always running flutter pub get immediately before building,
 # and performing build for msix:create manually to allow implementing this workaround
 jobs:
   build-android:
