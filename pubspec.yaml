@@ -39,7 +39,7 @@ dependencies:
   media_kit_libs_windows_audio: #^1.0.9
     git:
       url: https://github.com/Komodo5197/media-kit.git
-      branch: main
+      ref: 475a08cc97b94702f774bc906e1472b5bddc932b
       path: libs/windows/media_kit_libs_windows_audio
   smtc_windows: ^0.1.2
   audio_service: ^0.18.13
