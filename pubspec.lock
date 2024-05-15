@@ -850,10 +850,11 @@ packages:
   media_kit_libs_windows_audio:
     dependency: "direct main"
     description:
-      name: media_kit_libs_windows_audio
-      sha256: c2fd558cc87b9d89a801141fcdffe02e338a3b21a41a18fbd63d5b221a1b8e53
-      url: "https://pub.dev"
-    source: hosted
+      path: "libs/windows/media_kit_libs_windows_audio"
+      ref: HEAD
+      resolved-ref: "9f37e6572e3effd9852e2ce6390e4c00916611a2"
+      url: "https://github.com/Komodo5197/media-kit.git"
+    source: git
     version: "1.0.9"
   meta:
     dependency: transitive
