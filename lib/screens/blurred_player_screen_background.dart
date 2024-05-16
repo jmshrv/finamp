@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
-import 'dart:io';
 
 import '../services/theme_provider.dart';
 
@@ -63,22 +63,21 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                     errorBuilder: (x, _, __) => placeholderBuilder(x),
                     placeholderBuilder: placeholderBuilder,
                     imageBuilder: (context, child) {
-                        var image = ImageFiltered(
-                          imageFilter: ui.ImageFilter.blur(
-                            sigmaX: 85,
-                            sigmaY: 85,
-                            tileMode: TileMode.mirror,
-                          ),
-                          child: SizedBox.expand(child: child),
-                        );
-                        // There seems to be some sort of issue with how Linux handles ui.Image that breaks
-                        // cachePaint.  This shouldn't be too important outside mobile, though.
-                        if(Platform.isLinux){
-                          return image;
-                        }
+                      var image = ImageFiltered(
+                        imageFilter: ui.ImageFilter.blur(
+                          sigmaX: 85,
+                          sigmaY: 85,
+                          tileMode: TileMode.mirror,
+                        ),
+                        child: SizedBox.expand(child: child),
+                      );
+                      // There seems to be some sort of issue with how Linux handles ui.Image that breaks
+                      // cachePaint.  This shouldn't be too important outside mobile, though.
+                      if (Platform.isLinux) {
+                        return image;
+                      }
                       return CachePaint(
-                        imageKey: imageProvider.toString(),
-                        child: image);
+                          imageKey: imageProvider.toString(), child: image);
                     })));
   }
 }
@@ -89,35 +88,19 @@ class CachePaint extends SingleChildRenderObjectWidget {
   final String imageKey;
 
   @override
-  void updateRenderObject(BuildContext context, RenderCachePaint renderObject) {
-    renderObject.screenSize = MediaQuery.sizeOf(context);
-  }
-
-  @override
   RenderCachePaint createRenderObject(BuildContext context) {
-    return RenderCachePaint(
-        imageKey, MediaQuery.sizeOf(context), Theme.of(context).brightness);
+    return RenderCachePaint(imageKey, Theme.of(context).brightness);
   }
 }
 
 class RenderCachePaint extends RenderProxyBox {
-  RenderCachePaint(this._imageKey, this._screenSize, this._brightness);
+  RenderCachePaint(this._imageKey, this._brightness);
 
   final String _imageKey;
 
-  String get _cacheKey =>
-      _imageKey + _screenSize.toString() + _brightness.toString();
-
-  Size _screenSize;
+  String get _cacheKey => _imageKey + size.toString() + _brightness.toString();
 
   final Brightness _brightness;
-
-  set screenSize(Size value) {
-    if (value != _screenSize) {
-      _disposeCache();
-    }
-    _screenSize = value;
-  }
 
   static final Map<String, (List<RenderCachePaint>, ui.Image?)> _cache = {};
 
@@ -146,10 +129,8 @@ class RenderCachePaint extends RenderProxyBox {
       // Save image of child to cache
       final OffsetLayer offsetLayer = layer! as OffsetLayer;
       Future.sync(() async {
-        _cache[_cacheKey] = (
-          _cache[_cacheKey]!.$1,
-          await offsetLayer.toImage(offset & _screenSize)
-        );
+        _cache[_cacheKey] =
+            (_cache[_cacheKey]!.$1, await offsetLayer.toImage(offset & size));
         // Schedule repaint next frame because the image is lighter than the full
         // child during compositing, which is more frequent than paints.
         for (var element in _cache[_cacheKey]!.$1) {
@@ -159,18 +140,32 @@ class RenderCachePaint extends RenderProxyBox {
     }
   }
 
-  void _disposeCache() {
-    _cache[_cacheKey]?.$1.remove(this);
-    if (_cache[_cacheKey]?.$1.isEmpty ?? false) {
+  @override
+
+  /// Dispose of outdated render cache whenever widget size changes
+  set size(Size newSize) {
+    String? oldKey;
+    if (hasSize) {
+      oldKey = _cacheKey;
+    }
+    super.size = newSize;
+    if (_cacheKey != oldKey && oldKey != null) {
+      _disposeCache(oldKey);
+    }
+  }
+
+  void _disposeCache(String key) {
+    _cache[key]?.$1.remove(this);
+    if (_cache[key]?.$1.isEmpty ?? false) {
       // If we are last user of image, dispose
-      _cache[_cacheKey]?.$2?.dispose();
-      _cache.remove(_cacheKey);
+      _cache[key]?.$2?.dispose();
+      _cache.remove(key);
     }
   }
 
   @override
   void dispose() {
-    _disposeCache();
+    _disposeCache(_cacheKey);
     super.dispose();
   }
 }

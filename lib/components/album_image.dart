@@ -105,8 +105,8 @@ class AlbumImage extends ConsumerWidget {
                   )).select((value) => (value, item?.blurHash)),
               imageProviderCallback: themeCallback == null
                   ? null
-                  : (image) =>
-                      themeCallback!(FinampTheme.fromImageDeferred(image, item?.blurHash)),
+                  : (image) => themeCallback!(
+                      FinampTheme.fromImageDeferred(image, item?.blurHash)),
               placeholderBuilder: placeholderBuilder);
           return disabled
               ? Opacity(
