@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:audio_service/audio_service.dart';
-import 'package:collection/collection.dart';
 import 'package:Finamp/components/AlbumScreen/song_menu.dart';
 import 'package:Finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:Finamp/components/global_snackbar.dart';
@@ -9,6 +7,8 @@ import 'package:Finamp/models/finamp_models.dart';
 import 'package:Finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:Finamp/services/finamp_user_helper.dart';
 import 'package:Finamp/services/queue_service.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -223,6 +223,85 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 ),
               ],
             ),
+            // This must be in ListTile instead of parent GestureDetecter to
+            // enable hover color changes
+            onTap: () async {
+              if (!playable) return;
+              var children = await widget.children;
+              if (children != null) {
+                // start linear playback of album from the given index
+                await _queueService.startPlayback(
+                  items: children,
+                  startingIndex: await widget.index,
+                  order: FinampPlaybackOrder.linear,
+                  source: QueueItemSource(
+                    type: widget.isInPlaylist
+                        ? QueueItemSourceType.playlist
+                        : widget.isOnArtistScreen
+                            ? QueueItemSourceType.artist
+                            : QueueItemSourceType.album,
+                    name: QueueItemSourceName(
+                        type: QueueItemSourceNameType.preTranslated,
+                        pretranslatedName: ((widget.isInPlaylist ||
+                                    widget.isOnArtistScreen)
+                                ? widget.parentItem?.name
+                                : widget.item.album) ??
+                            AppLocalizations.of(context)!.placeholderSource),
+                    id: widget.parentItem?.id ?? "",
+                    item: widget.parentItem,
+                    // we're playing from an album, so we should use the album's normalization gain.
+                    contextNormalizationGain:
+                        (widget.isInPlaylist || widget.isOnArtistScreen)
+                            ? null
+                            : widget.parentItem?.normalizationGain,
+                  ),
+                );
+              } else {
+                // TODO put in a real offline songs implementation
+                if (FinampSettingsHelper.finampSettings.isOffline) {
+                  final settings = FinampSettingsHelper.finampSettings;
+                  final downloadService = GetIt.instance<DownloadsService>();
+                  final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+                  // get all downloaded songs in order
+                  List<DownloadStub> offlineItems;
+                  // If we're on the songs tab, just get all of the downloaded items
+                  offlineItems = await downloadService.getAllSongs(
+                      // nameFilter: widget.searchTerm,
+                      viewFilter: finampUserHelper.currentUser?.currentView?.id,
+                      nullableViewFilters:
+                          settings.showDownloadsWithUnknownLibrary);
+
+                  var items = offlineItems
+                      .map((e) => e.baseItem)
+                      .whereNotNull()
+                      .toList();
+
+                  items = sortItems(
+                      items,
+                      settings.tabSortBy[TabContentType.songs],
+                      settings.tabSortOrder[TabContentType.songs]);
+
+                  await _queueService.startPlayback(
+                    items: items,
+                    startingIndex: widget.isShownInSearch
+                        ? items.indexWhere(
+                            (element) => element.id == widget.item.id)
+                        : await widget.index,
+                    source: QueueItemSource(
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              AppLocalizations.of(context)!.placeholderSource),
+                      type: QueueItemSourceType.allSongs,
+                      id: widget.item.id,
+                    ),
+                  );
+                } else {
+                  await _audioServiceHelper.startInstantMixForItem(widget.item);
+                }
+              }
+            },
           );
         });
 
@@ -247,77 +326,6 @@ class _SongListTileState extends ConsumerState<SongListTile>
       },
       onLongPressStart: (details) => menuCallback(),
       onSecondaryTapDown: (details) => menuCallback(),
-      onTap: () async {
-        if (!playable) return;
-        var children = await widget.children;
-        if (children != null) {
-          // start linear playback of album from the given index
-          await _queueService.startPlayback(
-            items: children,
-            startingIndex: await widget.index,
-            order: FinampPlaybackOrder.linear,
-            source: QueueItemSource(
-              type: widget.isInPlaylist
-                  ? QueueItemSourceType.playlist
-                  : widget.isOnArtistScreen
-                      ? QueueItemSourceType.artist
-                      : QueueItemSourceType.album,
-              name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName:
-                      ((widget.isInPlaylist || widget.isOnArtistScreen)
-                              ? widget.parentItem?.name
-                              : widget.item.album) ??
-                          AppLocalizations.of(context)!.placeholderSource),
-              id: widget.parentItem?.id ?? "",
-              item: widget.parentItem,
-              // we're playing from an album, so we should use the album's normalization gain.
-              contextNormalizationGain:
-                  (widget.isInPlaylist || widget.isOnArtistScreen)
-                      ? null
-                      : widget.parentItem?.normalizationGain,
-            ),
-          );
-        } else {
-          // TODO put in a real offline songs implementation
-          if (FinampSettingsHelper.finampSettings.isOffline) {
-            final settings = FinampSettingsHelper.finampSettings;
-            final downloadService = GetIt.instance<DownloadsService>();
-            final finampUserHelper = GetIt.instance<FinampUserHelper>();
-
-            // get all downloaded songs in order
-            List<DownloadStub> offlineItems;
-            // If we're on the songs tab, just get all of the downloaded items
-            offlineItems = await downloadService.getAllSongs(
-                // nameFilter: widget.searchTerm,
-                viewFilter: finampUserHelper.currentUser?.currentView?.id,
-                nullableViewFilters: settings.showDownloadsWithUnknownLibrary);
-
-            var items =
-                offlineItems.map((e) => e.baseItem).whereNotNull().toList();
-
-            items = sortItems(items, settings.tabSortBy[TabContentType.songs],
-                settings.tabSortOrder[TabContentType.songs]);
-
-            await _queueService.startPlayback(
-              items: items,
-              startingIndex: widget.isShownInSearch
-                  ? items.indexWhere((element) => element.id == widget.item.id)
-                  : await widget.index,
-              source: QueueItemSource(
-                name: QueueItemSourceName(
-                    type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName:
-                        AppLocalizations.of(context)!.placeholderSource),
-                type: QueueItemSourceType.allSongs,
-                id: widget.item.id,
-              ),
-            );
-          } else {
-            await _audioServiceHelper.startInstantMixForItem(widget.item);
-          }
-        }
-      },
       child: (widget.isSong || !playable)
           ? listTile
           : Dismissible(

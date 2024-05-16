@@ -4,6 +4,9 @@ on:
   pull_request:
   push:
 
+# Due to a flutter bug, flutter build is not generating localizations
+# workaround by always running flutter pub get immediately before building,
+# and performing build for msix:create manually to allow implementing this workaround
 jobs:
   build-android:
     name: Build for Android
@@ -53,7 +56,6 @@ jobs:
         channel: 'stable'
     - run: flutter doctor
     - run: flutter pub get
-    - run: flutter gen-l10n
     # - run: flutter test
     - run: flutter build linux --release --no-pub
     - run: |
@@ -87,13 +89,12 @@ jobs:
         channel: 'stable'
     - run: flutter doctor
     - run: flutter pub get
-    - run: flutter gen-l10n
     # - run: flutter test
     - run: flutter build windows
     # TODO pack in redistributables?
     - uses: actions/upload-artifact@v4
       with:
-        name: finamp-windows-zip
+        name: finamp-windows
         path: build/windows/x64/runner/Release/
     - run: dart run msix:create --install-certificate false
     #TODO would be nice to have an old-school installer here that can take the .exe + libraries and install them to the device + create a shortcut

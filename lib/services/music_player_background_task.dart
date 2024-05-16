@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:Finamp/models/finamp_models.dart';
 import 'package:Finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:Finamp/services/queue_service.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
@@ -188,6 +188,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.severe("Player error ${e.toString()}");
     }
   }
+
+  /// Fully dispose the player instance.  Should only be called during app shutdown.
+  Future<void> dispose() => _player.dispose();
 
   @override
   Future<void> play() {

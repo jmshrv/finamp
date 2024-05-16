@@ -115,7 +115,7 @@ Future<void> showPlaylistActionsMenu({
               ),
             ),
             sliver: MenuMask(
-                height: 45.0,
+                height: 36.0,
                 child: SliverList(
                     delegate: SliverChildListDelegate.fixed(
                   menuEntries,

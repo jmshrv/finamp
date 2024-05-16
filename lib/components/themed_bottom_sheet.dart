@@ -28,7 +28,7 @@ Future<void> showThemedBottomSheet({
   WrapperBuilder? buildWrapper,
   bool usePlayerTheme = false,
   required FinampTheme? themeProvider,
-  double minDraggableHeight = 0.4,
+  double minDraggableHeight = 0.6,
   bool showDragHandle = true,
 }) async {
   if (usePlayerTheme) {

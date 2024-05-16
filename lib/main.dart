@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:audio_service/audio_service.dart';
-import 'package:audio_session/audio_session.dart';
-import 'package:background_downloader/background_downloader.dart';
 import 'package:Finamp/color_schemes.g.dart';
 import 'package:Finamp/screens/downloads_settings_screen.dart';
 import 'package:Finamp/screens/interaction_settings_screen.dart';
@@ -20,6 +17,9 @@ import 'package:Finamp/services/offline_listen_helper.dart';
 import 'package:Finamp/services/playback_history_service.dart';
 import 'package:Finamp/services/queue_service.dart';
 import 'package:Finamp/services/theme_provider.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -544,7 +544,11 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
       return;
     }
 
-    //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
+    // Destroy player on platforms using mediaKit.
+    if (Platform.isWindows || Platform.isLinux) {
+      await GetIt.instance<MusicPlayerBackgroundTask>().dispose();
+      windowManagerLogger.info("Player disposed.");
+    }
   }
 }
 
