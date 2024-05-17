@@ -1057,7 +1057,8 @@ class DownloadItem extends DownloadStub {
   DownloadItem? copyWith(
       {BaseItemDto? item,
       List<DownloadStub>? orderedChildItems,
-      String? viewId}) {
+      String? viewId,
+      required bool forceCopy}) {
     String? json;
     if (type == DownloadItemType.image) {
       // Images do not have any attributes we might want to update
@@ -1074,17 +1075,19 @@ class DownloadItem extends DownloadStub {
       // overwrite with null if the new item does not have them.
       item.mediaSources ??= baseItem?.mediaSources;
       item.mediaStreams ??= baseItem?.mediaStreams;
-      item.childCount ??= baseItem?.childCount;
+      item.sortName ??= baseItem?.sortName;
     }
     assert(item == null ||
         ((item.mediaSources == null || item.mediaSources!.isNotEmpty) &&
             (item.mediaStreams == null || item.mediaStreams!.isNotEmpty)));
     var orderedChildren = orderedChildItems?.map((e) => e.isarId).toList();
-    if (viewId == null || viewId == this.viewId) {
-      if (item == null || baseItem!.mostlyEqual(item)) {
-        var equal = const DeepCollectionEquality().equals;
-        if (equal(orderedChildren, this.orderedChildren)) {
-          return null;
+    if (!forceCopy) {
+      if (viewId == null || viewId == this.viewId) {
+        if (item == null || baseItem!.mostlyEqual(item)) {
+          var equal = const DeepCollectionEquality().equals;
+          if (equal(orderedChildren, this.orderedChildren)) {
+            return null;
+          }
         }
       }
     }

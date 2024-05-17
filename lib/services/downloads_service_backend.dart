@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:background_downloader/background_downloader.dart';
-import 'package:collection/collection.dart';
 import 'package:Finamp/components/global_snackbar.dart';
 import 'package:Finamp/services/downloads_service.dart';
+import 'package:background_downloader/background_downloader.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
@@ -927,11 +927,6 @@ class DownloadsSyncService {
     switch (parent.type) {
       case DownloadItemType.collection:
         var item = parent.baseItem!;
-        // TODO alert user that image deduplication is broken.
-        if ((item.blurHash ?? item.imageId) != null) {
-          infoChildren.add(
-              DownloadStub.fromItem(type: DownloadItemType.image, item: item));
-        }
         try {
           if (asRequired) {
             orderedChildItems = await _getCollectionChildren(parent);
@@ -957,6 +952,12 @@ class DownloadsSyncService {
         } catch (e) {
           _syncLogger.info("Error downloading children for ${item.name}: $e");
           rethrow;
+        }
+        // TODO alert user that image deduplication is broken.
+        var latestItem = newBaseItem ?? item;
+        if ((latestItem.blurHash ?? latestItem.imageId) != null) {
+          infoChildren.add(DownloadStub.fromItem(
+              type: DownloadItemType.image, item: latestItem));
         }
       case DownloadItemType.song:
         var item = parent.baseItem!;
@@ -1011,9 +1012,12 @@ class DownloadsSyncService {
         }
     }
 
+    // If modifying this to add more required attributes, the requested fields to be downloaded
+    // in _getCollectionInfo and _getCollectionChildren must be updated.  Additionally,
+    // DownloadItem.copyWith must be updated to preserve the field, and BaseItemDto.mostlyEqual
+    // must be updated to check the field when determining equality.
     final requiredAttributes = [
       parent.baseItem?.sortName,
-      parent.baseItem?.childCount,
       parent.baseItem?.mediaSources,
       parent.baseItem?.mediaStreams
     ];
@@ -1052,7 +1056,8 @@ class DownloadsSyncService {
             var newParent = canonParent!.copyWith(
                 item: newBaseItem,
                 viewId: viewId,
-                orderedChildItems: orderedChildItems);
+                orderedChildItems: orderedChildItems,
+                forceCopy: _downloadsService.forceFullSync);
             // copyWith returns null if no updates to important fields are needed
             if (newParent != null) {
               _isar.downloadItems.putSync(newParent);
@@ -1105,7 +1110,8 @@ class DownloadsSyncService {
           // successful sync.  songs/images will be moved out by _initiateDownload.
           // If our linked children just changed, recalculate state with new children.
           if (!canonParent!.type.hasFiles &&
-              (requiredChanges.$1.isNotEmpty ||
+              (canonParent!.state == DownloadItemState.syncFailed ||
+                  requiredChanges.$1.isNotEmpty ||
                   requiredChanges.$2.isNotEmpty ||
                   requiredChanges.$3.isNotEmpty ||
                   infoChanges.$1.isNotEmpty ||
@@ -1296,10 +1302,25 @@ class DownloadsSyncService {
               fields: fields) ??
           [];
       _downloadsService.resetConnectionErrors();
-      itemFetch.complete(childItems.map((e) => e.id).toList());
       var childStubs = childItems
           .map((e) => DownloadStub.fromItem(type: childType, item: e))
           .toList();
+      // If we are a library, we need to get orphan songs to download in addition to
+      // songs which are contained in albums.
+      if (parent.baseItemType == BaseItemDtoType.library) {
+        var songChildItems = await _jellyfinApiData.getItems(
+                parentItem: item,
+                includeItemTypes: BaseItemDtoType.song.idString,
+                recursive: false,
+                fields:
+                    "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName") ??
+            [];
+        childItems.addAll(songChildItems);
+        var songChildStubs = songChildItems.map(
+            (e) => DownloadStub.fromItem(type: DownloadItemType.song, item: e));
+        childStubs.addAll(songChildStubs);
+      }
+      itemFetch.complete(childItems.map((e) => e.id).toList());
       for (var element in childStubs) {
         _metadataCache[element.id] = Future.value(element);
       }

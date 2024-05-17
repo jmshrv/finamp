@@ -22,10 +22,11 @@ class ItemFileSize extends ConsumerWidget {
         ref.watch(isarDownloader.itemProvider(stub).future).then((item) {
       switch (item?.state) {
         case DownloadItemState.notDownloaded:
-          if (isarDownloader.getStatus(item!, null).isRequired) {
-            return Future.value(syncingText);
-          } else {
+          if (isarDownloader.getStatus(item!, null) ==
+              DownloadItemStatus.notNeeded) {
             return Future.value(deletingText);
+          } else {
+            return Future.value(syncingText);
           }
         case DownloadItemState.syncFailed:
           return Future.value(syncingText);
