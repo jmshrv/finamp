@@ -13,6 +13,7 @@ import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
+import 'package:uuid/uuid.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
@@ -1592,9 +1593,8 @@ class DownloadsSyncService {
           path_helper.join(downloadLocation.currentPath, subDirectory);
     }
 
-    // We still use imageIds for filenames despite switching to blurhashes as
-    // blurhashes can include characters that filesystems don't support
-    final fileName = "${_filesystemSafe(item.imageId)!}.image";
+    // Always use a new, unique filename when creating image downloads
+    final fileName = "${const Uuid().v4()}.image";
 
     _isar.writeTxnSync(() {
       DownloadItem? canonItem =

@@ -2278,6 +2278,9 @@ class BaseItemDto with RunTimeTickDuration {
         other.albumArtist == albumArtist &&
         other.childCount == childCount &&
         other.imageId == imageId &&
+        // imageId does not necessarily change when the image is updated, so
+        // we must compare blurHashes as well.
+        other.blurHash == blurHash &&
         other.mediaSources?.length == mediaSources?.length &&
         other.mediaStreams?.length == mediaStreams?.length &&
         other.normalizationGain == normalizationGain &&
