@@ -57,7 +57,7 @@ jobs:
         compression-level: 0 # no compression
     - run: flutter build appbundle --debug --no-pub
   build-ios:
-    name: Build for iOS and macOS
+    name: Build for iOS
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
@@ -135,7 +135,7 @@ jobs:
         path: build/windows/x64/runner/Release/finamp.msix
         compression-level: 0 # no compression
   build-macos:
-    name: Build for iOS and macOS
+    name: Build for macOS
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
