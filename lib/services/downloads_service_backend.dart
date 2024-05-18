@@ -920,28 +920,14 @@ class DownloadsSyncService {
     //
     // Fetch latest metadata from server, if needed or not quicksyncing
     //
-    // If modifying requiredAttributes with another field, the requested fields to be downloaded
-    // in _getCollectionInfo and _getCollectionChildren must be updated.  Additionally,
-    // DownloadItem.copyWith must be updated to preserve the field, and BaseItemDto.mostlyEqual
-    // must be updated to check the field when determining equality.
-    final requiredAttributes = [
-      parent.baseItem?.sortName,
-      parent.baseItem?.mediaSources,
-      parent.baseItem?.mediaStreams
-    ];
     // newBaseItem must be calculated before children are determined so that the latest
     // metadata can be used, especially imageId and blurhash.
     BaseItemDto? newBaseItem;
     //If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar.
-    // childCount is expected to change frequently for playlists, so we
-    // always fetch a fresh copy from the server to check if the metadata
-    // needs updating, even when quickSyncing.
     if (parent.type.requiresItem &&
         (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
             _downloadsService.forceFullSync ||
-            (parent.type == DownloadItemType.collection &&
-                parent.baseItemType == BaseItemDtoType.playlist) ||
-            requiredAttributes.any((element) => element == null))) {
+            _needsMetadataUpdate(parent))) {
       newBaseItem =
           (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
               ?.baseItem;
@@ -1445,6 +1431,32 @@ class DownloadsSyncService {
       }
     }
     return null;
+  }
+
+  /// This returns whether the given item needs its metadata refreshed from the server.
+  /// If modifying to add another required field, the requested fields to be downloaded
+  /// in _getCollectionInfo and _getCollectionChildren must be updated.  Additionally,
+  /// DownloadItem.copyWith must be updated to preserve the field, and BaseItemDto.mostlyEqual
+  /// must be updated to check the field when determining equality.
+  bool _needsMetadataUpdate(DownloadStub stub) {
+    assert(stub.type.requiresItem);
+
+    // childCount is expected to change frequently for playlists, so we
+    // always fetch a fresh copy from the server to check if the metadata
+    // needs updating, even when quickSyncing.
+    if (stub.type == DownloadItemType.collection &&
+        stub.baseItemType == BaseItemDtoType.playlist) {
+      return true;
+    }
+    if (stub.baseItem?.sortName == null) {
+      return true;
+    }
+    if (stub.type == DownloadItemType.song &&
+        (stub.baseItem?.mediaSources == null ||
+            stub.baseItem?.mediaStreams == null)) {
+      return true;
+    }
+    return false;
   }
 
   /// Ensures the given node is downloaded.  Called on all required nodes with files
