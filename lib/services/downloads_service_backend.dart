@@ -3,16 +3,17 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:background_downloader/background_downloader.dart';
-import 'package:collection/collection.dart';
 import 'package:Finamp/components/global_snackbar.dart';
 import 'package:Finamp/services/downloads_service.dart';
+import 'package:background_downloader/background_downloader.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
+import 'package:uuid/uuid.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
@@ -917,21 +918,40 @@ class DownloadsSyncService {
         "Syncing ${parent.baseItemType.name} ${parent.name} with required:$asRequired viewId:$viewId");
 
     //
+    // Fetch latest metadata from server, if needed or not quicksyncing
+    //
+    // newBaseItem must be calculated before children are determined so that the latest
+    // metadata can be used, especially imageId and blurhash.
+    BaseItemDto? newBaseItem;
+    //If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar.
+    if (parent.type.requiresItem &&
+        (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
+            _downloadsService.forceFullSync ||
+            _needsMetadataUpdate(parent))) {
+      newBaseItem =
+          (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
+              ?.baseItem;
+    }
+    // We return the same BaseItemDto for all requests, so null out playlistItemId
+    // as it will not usually be accurate.  Modifying without copying should be
+    // fine as this item was generated within the download service, so this value
+    // is not being used elsewhere.
+    if (parent.baseItem?.playlistItemId != null ||
+        newBaseItem?.playlistItemId != null) {
+      newBaseItem ??= parent.baseItem;
+      newBaseItem?.playlistItemId = null;
+    }
+
+    //
     // Calculate needed children for item based on type and asRequired flag
     //
     bool updateChildren = true;
     Set<DownloadStub> requiredChildren = {};
     Set<DownloadStub> infoChildren = {};
     List<DownloadStub>? orderedChildItems;
-    BaseItemDto? newBaseItem;
     switch (parent.type) {
       case DownloadItemType.collection:
-        var item = parent.baseItem!;
-        // TODO alert user that image deduplication is broken.
-        if ((item.blurHash ?? item.imageId) != null) {
-          infoChildren.add(
-              DownloadStub.fromItem(type: DownloadItemType.image, item: item));
-        }
+        var item = newBaseItem ?? parent.baseItem!;
         try {
           if (asRequired) {
             orderedChildItems = await _getCollectionChildren(parent);
@@ -942,12 +962,7 @@ class DownloadsSyncService {
             orderedChildItems ??= await _getCollectionChildren(parent);
             infoChildren.addAll(orderedChildItems);
           }
-          if (parent.baseItemType == BaseItemDtoType.playlist) {
-            newBaseItem = (await _getCollectionInfo(
-                    parent.baseItem!.id, parent.type, true))
-                ?.baseItem;
-          } else if (parent.baseItemType == BaseItemDtoType.album &&
-              viewId == null) {
+          if (parent.baseItemType == BaseItemDtoType.album && viewId == null) {
             isarParent ??= _isar.downloadItems.getSync(parent.isarId);
             if (isarParent?.viewId == null) {
               // If we are an album and have no viewId, attempt to fetch from server
@@ -958,8 +973,13 @@ class DownloadsSyncService {
           _syncLogger.info("Error downloading children for ${item.name}: $e");
           rethrow;
         }
+        // TODO alert user if image deduplication is broken.
+        if ((item.blurHash ?? item.imageId) != null) {
+          infoChildren.add(
+              DownloadStub.fromItem(type: DownloadItemType.image, item: item));
+        }
       case DownloadItemType.song:
-        var item = parent.baseItem!;
+        var item = newBaseItem ?? parent.baseItem!;
         if ((item.blurHash ?? item.imageId) != null) {
           requiredChildren.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
@@ -1011,28 +1031,6 @@ class DownloadsSyncService {
         }
     }
 
-    final requiredAttributes = [
-      parent.baseItem?.sortName,
-      parent.baseItem?.childCount,
-      parent.baseItem?.mediaSources,
-      parent.baseItem?.mediaStreams
-    ];
-    //If we aren't quicksyncing, fetch the latest BaseItemDto to copy into Isar
-    if (parent.type.requiresItem &&
-        (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
-            _downloadsService.forceFullSync ||
-            parent.baseItem?.playlistItemId != null ||
-            requiredAttributes.any((element) => element == null))) {
-      newBaseItem ??=
-          (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))
-              ?.baseItem;
-      // We return the same BaseItemDto for all requests, so null out playlistItemId
-      // as it will not usually be accurate.  Modifying without copying should be
-      // fine as this item was generated within the download service, so this value
-      // is not being used elsewhere.
-      newBaseItem?.playlistItemId = null;
-    }
-
     //
     // Update item with latest metadata and previously calculated children.
     // For the anchor, just fetch current children.
@@ -1052,7 +1050,8 @@ class DownloadsSyncService {
             var newParent = canonParent!.copyWith(
                 item: newBaseItem,
                 viewId: viewId,
-                orderedChildItems: orderedChildItems);
+                orderedChildItems: orderedChildItems,
+                forceCopy: _downloadsService.forceFullSync);
             // copyWith returns null if no updates to important fields are needed
             if (newParent != null) {
               _isar.downloadItems.putSync(newParent);
@@ -1105,7 +1104,8 @@ class DownloadsSyncService {
           // successful sync.  songs/images will be moved out by _initiateDownload.
           // If our linked children just changed, recalculate state with new children.
           if (!canonParent!.type.hasFiles &&
-              (requiredChanges.$1.isNotEmpty ||
+              (canonParent!.state == DownloadItemState.syncFailed ||
+                  requiredChanges.$1.isNotEmpty ||
                   requiredChanges.$2.isNotEmpty ||
                   requiredChanges.$3.isNotEmpty ||
                   infoChanges.$1.isNotEmpty ||
@@ -1296,10 +1296,25 @@ class DownloadsSyncService {
               fields: fields) ??
           [];
       _downloadsService.resetConnectionErrors();
-      itemFetch.complete(childItems.map((e) => e.id).toList());
       var childStubs = childItems
           .map((e) => DownloadStub.fromItem(type: childType, item: e))
           .toList();
+      // If we are a library, we need to get orphan songs to download in addition to
+      // songs which are contained in albums.
+      if (parent.baseItemType == BaseItemDtoType.library) {
+        var songChildItems = await _jellyfinApiData.getItems(
+                parentItem: item,
+                includeItemTypes: BaseItemDtoType.song.idString,
+                recursive: false,
+                fields:
+                    "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName") ??
+            [];
+        childItems.addAll(songChildItems);
+        var songChildStubs = songChildItems.map(
+            (e) => DownloadStub.fromItem(type: DownloadItemType.song, item: e));
+        childStubs.addAll(songChildStubs);
+      }
+      itemFetch.complete(childItems.map((e) => e.id).toList());
       for (var element in childStubs) {
         _metadataCache[element.id] = Future.value(element);
       }
@@ -1416,6 +1431,32 @@ class DownloadsSyncService {
       }
     }
     return null;
+  }
+
+  /// This returns whether the given item needs its metadata refreshed from the server.
+  /// If modifying to add another required field, the requested fields to be downloaded
+  /// in _getCollectionInfo and _getCollectionChildren must be updated.  Additionally,
+  /// DownloadItem.copyWith must be updated to preserve the field, and BaseItemDto.mostlyEqual
+  /// must be updated to check the field when determining equality.
+  bool _needsMetadataUpdate(DownloadStub stub) {
+    assert(stub.type.requiresItem);
+
+    // childCount is expected to change frequently for playlists, so we
+    // always fetch a fresh copy from the server to check if the metadata
+    // needs updating, even when quickSyncing.
+    if (stub.type == DownloadItemType.collection &&
+        stub.baseItemType == BaseItemDtoType.playlist) {
+      return true;
+    }
+    if (stub.baseItem?.sortName == null) {
+      return true;
+    }
+    if (stub.type == DownloadItemType.song &&
+        (stub.baseItem?.mediaSources == null ||
+            stub.baseItem?.mediaStreams == null)) {
+      return true;
+    }
+    return false;
   }
 
   /// Ensures the given node is downloaded.  Called on all required nodes with files
@@ -1571,9 +1612,8 @@ class DownloadsSyncService {
           path_helper.join(downloadLocation.currentPath, subDirectory);
     }
 
-    // We still use imageIds for filenames despite switching to blurhashes as
-    // blurhashes can include characters that filesystems don't support
-    final fileName = "${_filesystemSafe(item.imageId)!}.image";
+    // Always use a new, unique filename when creating image downloads
+    final fileName = "${const Uuid().v4()}.image";
 
     _isar.writeTxnSync(() {
       DownloadItem? canonItem =

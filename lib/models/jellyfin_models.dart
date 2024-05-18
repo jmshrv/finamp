@@ -7,8 +7,8 @@
 ///
 /// These classes should be correct with Jellyfin 10.7.5
 
-import 'package:collection/collection.dart';
 import 'package:Finamp/models/finamp_models.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -2277,6 +2277,10 @@ class BaseItemDto with RunTimeTickDuration {
         equal(other.artists, artists) &&
         other.albumArtist == albumArtist &&
         other.childCount == childCount &&
+        other.imageId == imageId &&
+        // imageId does not necessarily change when the image is updated, so
+        // we must compare blurHashes as well.
+        other.blurHash == blurHash &&
         other.mediaSources?.length == mediaSources?.length &&
         other.mediaStreams?.length == mediaStreams?.length &&
         other.normalizationGain == normalizationGain &&
