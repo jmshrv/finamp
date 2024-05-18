@@ -1,5 +1,5 @@
-import 'package:Finamp/models/finamp_models.dart';
-import 'package:Finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

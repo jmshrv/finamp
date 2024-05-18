@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:file_sizes/file_sizes.dart';
-import 'package:Finamp/models/finamp_models.dart';
-import 'package:Finamp/models/jellyfin_models.dart';
-import 'package:Finamp/services/current_track_metadata_provider.dart';
-import 'package:Finamp/services/metadata_provider.dart';
-import 'package:Finamp/services/music_player_background_task.dart';
-import 'package:Finamp/services/queue_service.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
+import 'package:finamp/services/metadata_provider.dart';
+import 'package:finamp/services/music_player_background_task.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

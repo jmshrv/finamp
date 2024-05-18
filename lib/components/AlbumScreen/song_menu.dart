@@ -1,18 +1,18 @@
 import 'dart:async';
 
-import 'package:Finamp/components/AlbumScreen/speed_menu.dart';
-import 'package:Finamp/components/PlayerScreen/queue_list.dart';
-import 'package:Finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
-import 'package:Finamp/components/PlayerScreen/sleep_timer_dialog.dart';
-import 'package:Finamp/components/themed_bottom_sheet.dart';
-import 'package:Finamp/models/finamp_models.dart';
-import 'package:Finamp/screens/artist_screen.dart';
-import 'package:Finamp/services/current_track_metadata_provider.dart';
-import 'package:Finamp/services/feedback_helper.dart';
-import 'package:Finamp/services/metadata_provider.dart';
-import 'package:Finamp/services/music_player_background_task.dart';
-import 'package:Finamp/services/queue_service.dart';
-import 'package:Finamp/services/theme_provider.dart';
+import 'package:finamp/components/AlbumScreen/speed_menu.dart';
+import 'package:finamp/components/PlayerScreen/queue_list.dart';
+import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
+import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
+import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
+import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/metadata_provider.dart';
+import 'package:finamp/services/music_player_background_task.dart';
+import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -215,7 +215,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         null);
     var iconColor = Theme.of(context).colorScheme.primary;
 
-    final isInCurrentPlaylist = widget.isInPlaylist && widget.parentItem != null;
+    final isInCurrentPlaylist =
+        widget.isInPlaylist && widget.parentItem != null;
 
     final currentTrack = _queueService.getCurrentTrack();
     FinampQueueItem? queueItem;
@@ -243,7 +244,9 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             Icons.playlist_add,
             color: iconColor,
           ),
-          title: Text(isInCurrentPlaylist ? AppLocalizations.of(context)!.addToMorePlaylistsTitle : AppLocalizations.of(context)!.addToPlaylistTitle),
+          title: Text(isInCurrentPlaylist
+              ? AppLocalizations.of(context)!.addToMorePlaylistsTitle
+              : AppLocalizations.of(context)!.addToPlaylistTitle),
           enabled: !widget.isOffline,
           onTap: () {
             Navigator.pop(context); // close menu
@@ -787,7 +790,7 @@ class SongInfo extends ConsumerStatefulWidget {
 
   final BaseItemDto item;
   final bool useThemeImage;
-  final bool condensed; 
+  final bool condensed;
 
   @override
   ConsumerState createState() => _SongInfoState();
@@ -800,7 +803,8 @@ class _SongInfoState extends ConsumerState<SongInfo> {
       color: Colors.transparent,
       child: Center(
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
+          margin:
+              EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
           height: widget.condensed ? 80 : 120,
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
@@ -848,7 +852,9 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                         maxLines: 2,
                       ),
                       Padding(
-                        padding: widget.condensed ? const EdgeInsets.only(top: 6.0) : const EdgeInsets.symmetric(vertical: 4.0),
+                        padding: widget.condensed
+                            ? const EdgeInsets.only(top: 6.0)
+                            : const EdgeInsets.symmetric(vertical: 4.0),
                         child: ArtistChips(
                           baseItem: widget.item,
                           backgroundColor: IconTheme.of(context)
@@ -864,12 +870,14 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                       if (!widget.condensed)
                         AlbumChip(
                           item: widget.item,
-                          color: Theme.of(context).textTheme.bodyMedium?.color ??
-                              Colors.white,
-                          backgroundColor:
-                              IconTheme.of(context).color?.withOpacity(0.1) ??
-                                  Theme.of(context).textTheme.bodyMedium?.color ??
+                          color:
+                              Theme.of(context).textTheme.bodyMedium?.color ??
                                   Colors.white,
+                          backgroundColor: IconTheme.of(context)
+                                  .color
+                                  ?.withOpacity(0.1) ??
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white,
                           key: widget.item.album == null
                               ? null
                               : ValueKey("${widget.item.album}-album"),

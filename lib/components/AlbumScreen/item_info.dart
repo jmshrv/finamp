@@ -1,5 +1,5 @@
-import 'package:Finamp/components/PlayerScreen/artist_chip.dart';
-import 'package:Finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/components/PlayerScreen/artist_chip.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

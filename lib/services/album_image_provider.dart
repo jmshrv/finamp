@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Finamp/models/finamp_models.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
-import 'package:Finamp/screens/customization_settings_screen.dart';
-import 'package:Finamp/components/LayoutSettingsScreen/show_artists_top_songs.dart';
-import 'package:Finamp/screens/player_settings_screen.dart';
+import 'package:finamp/screens/customization_settings_screen.dart';
+import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_songs.dart';
+import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -33,24 +33,24 @@ class LayoutSettingsScreen extends StatelessWidget {
             ),
             body: ListView(
               children: [
-          ListTile(
-            leading: const Icon(TablerIcons.sparkles),
-            title:
-                Text(AppLocalizations.of(context)!.customizationSettingsTitle),
-            onTap: () => Navigator.of(context)
-                .pushNamed(CustomizationSettingsScreen.routeName),
-          ),
+                ListTile(
+                  leading: const Icon(TablerIcons.sparkles),
+                  title: Text(
+                      AppLocalizations.of(context)!.customizationSettingsTitle),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(CustomizationSettingsScreen.routeName),
+                ),
                 ListTile(
                   leading: const Icon(Icons.play_circle_outline),
                   title: Text(AppLocalizations.of(context)!.playerScreen),
-                  onTap: () =>
-                      Navigator.of(context).pushNamed(PlayerSettingsScreen.routeName),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(PlayerSettingsScreen.routeName),
                 ),
                 ListTile(
                   leading: const Icon(Icons.tab),
                   title: Text(AppLocalizations.of(context)!.tabs),
-                  onTap: () =>
-                      Navigator.of(context).pushNamed(TabsSettingsScreen.routeName),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(TabsSettingsScreen.routeName),
                 ),
                 const Divider(),
                 const ContentViewTypeDropdownListTile(),
@@ -62,7 +62,7 @@ class LayoutSettingsScreen extends StatelessWidget {
                   const FixedGridTileSizeDropdownListTile(),
                 const ShowTextOnGridViewSelector(),
                 const UseCoverAsBackgroundToggle(),
-          const ShowArtistChipImageToggle(),
+                const ShowArtistChipImageToggle(),
                 const AllowSplitScreenSwitch(),
                 const HideSongArtistsIfSameAsAlbumArtistsSelector(),
                 const ThemeSelector(),
