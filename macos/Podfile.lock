@@ -73,7 +73,7 @@ SPEC CHECKSUMS:
   isar_flutter_libs: 43385c99864c168fadba7c9adeddc5d38838ca6a
   just_audio: 9b67ca7b97c61cfc9784ea23cd8cc55eb226d489
   package_info_plus: fa739dd842b393193c5ca93c26798dff6e3d0e0c
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
   share_plus: 36537c04ce0c3e3f5bd297ce4318b6d5ee5fd6cf
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec

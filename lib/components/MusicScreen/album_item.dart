@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:Finamp/components/MusicScreen/album_item_list_tile.dart';
-import 'package:Finamp/models/finamp_models.dart';
-import 'package:Finamp/services/finamp_settings_helper.dart';
-import 'package:Finamp/services/queue_service.dart';
+import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

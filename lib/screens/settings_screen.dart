@@ -1,4 +1,4 @@
-import 'package:Finamp/screens/interaction_settings_screen.dart';
+import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';

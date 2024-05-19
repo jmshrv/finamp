@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:Finamp/screens/blurred_player_screen_background.dart';
-import 'package:Finamp/services/theme_provider.dart';
+import 'package:finamp/screens/blurred_player_screen_background.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';

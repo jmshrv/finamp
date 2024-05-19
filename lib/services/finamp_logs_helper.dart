@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:clipboard/clipboard.dart';
-import 'package:Finamp/services/censored_log.dart';
+import 'package:finamp/services/censored_log.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';

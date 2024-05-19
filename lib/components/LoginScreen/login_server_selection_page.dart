@@ -1,6 +1,6 @@
-import 'package:Finamp/components/Buttons/simple_button.dart';
-import 'package:Finamp/models/jellyfin_models.dart';
-import 'package:Finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';

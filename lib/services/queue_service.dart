@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:Finamp/components/global_snackbar.dart';
-import 'package:Finamp/models/finamp_models.dart';
-import 'package:Finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

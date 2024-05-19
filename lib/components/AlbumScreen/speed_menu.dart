@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:Finamp/services/feedback_helper.dart';
-import 'package:Finamp/services/queue_service.dart';
+import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';

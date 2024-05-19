@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:Finamp/at_contrast.dart';
-import 'package:Finamp/services/queue_service.dart';
+import 'package:finamp/at_contrast.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -113,13 +113,12 @@ class FinampTheme {
 
       listener = ImageStreamListener((image, synchronousCall) {
         stream.removeListener(listener!);
-        _results[brightness]!._completer.complete(getColorSchemeForImage(
-            image, brightness,
-            useIsolate: useIsolate));
+        _results[brightness]!._completer.complete(
+            getColorSchemeForImage(image, brightness, useIsolate: useIsolate));
       }, onError: (e, stack) {
         stream.removeListener(listener!);
         _results[brightness]!._completer.complete(getDefaultTheme(brightness));
-        themeProviderLogger.severe(e,e,stack);
+        themeProviderLogger.severe(e, e, stack);
       });
 
       _dispose = () {
@@ -165,12 +164,14 @@ class _ThemeProviderResults {
   ColorScheme? colorScheme;
 }
 
-Future<ColorScheme> getColorSchemeForImage(ImageInfo image, Brightness brightness,
+Future<ColorScheme> getColorSchemeForImage(
+    ImageInfo image, Brightness brightness,
     {bool useIsolate = true}) async {
   // Use fromImage instead of fromImageProvider to better handle error case
   final PaletteGenerator palette;
-  try{
-    palette = await PaletteGenerator.fromImage(image.image, useIsolate: useIsolate);
+  try {
+    palette =
+        await PaletteGenerator.fromImage(image.image, useIsolate: useIsolate);
   } finally {
     image.dispose();
   }

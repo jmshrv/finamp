@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:Finamp/components/AlbumScreen/song_menu.dart';
-import 'package:Finamp/components/MusicScreen/music_screen_tab_view.dart';
-import 'package:Finamp/components/global_snackbar.dart';
-import 'package:Finamp/models/finamp_models.dart';
-import 'package:Finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:Finamp/services/finamp_user_helper.dart';
-import 'package:Finamp/services/queue_service.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';

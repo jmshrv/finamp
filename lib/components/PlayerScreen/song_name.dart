@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:Finamp/models/jellyfin_models.dart';
-import 'package:Finamp/screens/artist_screen.dart';
-import 'package:Finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

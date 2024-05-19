@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:Finamp/components/Buttons/cta_medium.dart';
-import 'package:Finamp/components/PlayerScreen/queue_source_helper.dart';
-import 'package:Finamp/components/album_image.dart';
-import 'package:Finamp/services/finamp_settings_helper.dart';
-import 'package:Finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
+import 'package:finamp/components/album_image.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';

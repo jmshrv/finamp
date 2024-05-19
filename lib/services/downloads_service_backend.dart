@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:Finamp/components/global_snackbar.dart';
-import 'package:Finamp/services/downloads_service.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/scheduler.dart';
