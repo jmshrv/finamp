@@ -436,7 +436,6 @@ class DownloadsService {
     required DownloadStub stub,
     required String viewId,
     required DownloadProfile transcodeProfile,
-    bool asInfo = false,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure
@@ -455,11 +454,7 @@ class DownloadsService {
       var anchorItem = _anchor.asItem(null);
       // This may be the first download ever, so the anchor might not be present
       _isar.downloadItems.putSync(anchorItem);
-      if (asInfo) {
-        anchorItem.info.updateSync(link: [canonItem]);
-      } else {
-        anchorItem.requires.updateSync(link: [canonItem]);
-      }
+      anchorItem.requires.updateSync(link: [canonItem]);
       // Update download location id/transcode profile for all our children
       syncItemDownloadSettings(canonItem);
     });
@@ -470,8 +465,7 @@ class DownloadsService {
   /// Removes the anchor link to an item and sync deletes it.  This will allow the
   /// item to be deleted but may not result in deletion actually occurring as the
   /// item may be required by other collections.
-  Future<void> deleteDownload(
-      {required DownloadStub stub, bool asInfo = false}) async {
+  Future<void> deleteDownload({required DownloadStub stub}) async {
     DownloadItem? canonItem;
     _isar.writeTxnSync(() {
       var anchorItem = _anchor.asItem(null);
@@ -485,11 +479,7 @@ class DownloadsService {
       _isar.downloadItems.putSync(anchorItem);
       deleteBuffer.addAll([stub.isarId]);
       // Actual item is not required for updating links
-      if (asInfo) {
-        anchorItem.info.updateSync(unlink: [canonItem!]);
-      } else {
-        anchorItem.requires.updateSync(unlink: [canonItem!]);
-      }
+      anchorItem.requires.updateSync(unlink: [canonItem!]);
       canonItem!.userTranscodingProfile = null;
       _isar.downloadItems.putSync(canonItem!);
     });
@@ -914,9 +904,14 @@ class DownloadsService {
           .distinctByState()
           .stateProperty()
           .findAllSync());
-      // add dependency on image in info links
-      childStates.addAll(
-          item.info.filter().distinctByState().stateProperty().findAllSync());
+      // playlist metadata info links collections which are not nessecarilly downloaded,
+      // and should still be considered downloaded.
+      if (item.finampCollection?.type !=
+          FinampCollectionType.allPlaylistsMetadata) {
+        // add dependency on image in info links
+        childStates.addAll(
+            item.info.filter().distinctByState().stateProperty().findAllSync());
+      }
     }
     if (childStates.contains(DownloadItemState.notDownloaded)) {
       return updateItemState(item, DownloadItemState.notDownloaded);
@@ -1486,52 +1481,81 @@ class DownloadsService {
   Future<int> getFileSize(DownloadStub item) async {
     var canonItem = await _isar.downloadItems.get(item.isarId);
     if (canonItem == null) return 0;
-    return _getFileSize(canonItem, {});
+    Set<DownloadItem> info = {};
+    Set<DownloadItem> required = {};
+    _getFileChildren(canonItem, required, info, true);
+    info = info.difference(required);
+    int size = 0;
+    for (var item in required) {
+      size += await _getFileSize(item, true);
+    }
+    for (var item in info) {
+      size += await _getFileSize(item, false);
+    }
+    return size;
   }
 
   /// Recursive subcomponent of [getFileSize].
-  Future<int> _getFileSize(
-      DownloadItem item, Set<DownloadStub> completed) async {
-    if (completed.contains(item)) {
-      return 0;
+  void _getFileChildren(DownloadItem item, Set<DownloadItem> required,
+      Set<DownloadItem> info, bool isRequired) {
+    if (required.contains(item) || (info.contains(item) && !isRequired)) {
+      return;
     } else {
-      completed.add(item);
+      if (isRequired) {
+        required.add(item);
+      } else {
+        info.add(item);
+      }
     }
-    int size = 0;
-    var children = item.requires.filter().findAllSync();
-    for (var child in children) {
-      size += await _getFileSize(child, completed);
+    if (isRequired || item.type == DownloadItemType.song) {
+      var children = item.requires.filter().findAllSync();
+      for (var child in children) {
+        _getFileChildren(child, required, info, isRequired);
+      }
     }
-    if (item.type == DownloadItemType.song && item.state.isComplete) {
+    if (isRequired || item.type != DownloadItemType.song) {
+      var children = item.info.filter().findAllSync();
+      for (var child in children) {
+        _getFileChildren(child, required, info, false);
+      }
+    }
+  }
+
+  /// Recursive subcomponent of [getFileSize].
+  Future<int> _getFileSize(DownloadItem item, bool required) async {
+    if (item.type == DownloadItemType.song &&
+        item.state.isComplete &&
+        required) {
       if (item.fileTranscodingProfile == null ||
           item.fileTranscodingProfile!.codec !=
               FinampTranscodingCodec.original ||
           item.baseItem?.mediaSources == null) {
-        var statSize =
-            await item.file?.stat().then((value) => value.size).catchError((e) {
-                  _downloadsLogger.fine(
-                      "No file for song ${item.name} when calculating size.");
-                  return 0;
-                }) ??
-                0;
-        size += statSize;
+        return await item.file
+                ?.stat()
+                .then((value) => value.size)
+                .catchError((e) {
+              _downloadsLogger
+                  .fine("No file for song ${item.name} when calculating size.");
+              return 0;
+            }) ??
+            0;
       } else {
-        size += item.baseItem?.mediaSources?[0].size ?? 0;
+        return item.baseItem?.mediaSources?[0].size ?? 0;
       }
     }
     if (item.type == DownloadItemType.image &&
         item.state == DownloadItemState.complete) {
-      var statSize =
-          await item.file?.stat().then((value) => value.size).catchError((e) {
-                _downloadsLogger.fine(
-                    "No file for image ${item.name} when calculating size.");
-                return 0;
-              }) ??
-              0;
-      size += statSize;
+      return await item.file
+              ?.stat()
+              .then((value) => value.size)
+              .catchError((e) {
+            _downloadsLogger
+                .fine("No file for image ${item.name} when calculating size.");
+            return 0;
+          }) ??
+          0;
     }
-
-    return size;
+    return 0;
   }
 
   /// Returns the download status of an item.  This is whether the associated item

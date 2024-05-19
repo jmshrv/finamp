@@ -6644,4 +6644,5 @@ const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.allPlaylists: 'allPlaylists',
   FinampCollectionType.latest5Albums: 'latest5Albums',
   FinampCollectionType.libraryImages: 'libraryImages',
+  FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
 };

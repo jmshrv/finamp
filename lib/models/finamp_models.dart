@@ -1905,7 +1905,8 @@ enum FinampCollectionType {
   favorites,
   allPlaylists,
   latest5Albums,
-  libraryImages;
+  libraryImages,
+  allPlaylistsMetadata;
 }
 
 @JsonSerializable(
@@ -1929,6 +1930,7 @@ class FinampCollection {
         FinampCollectionType.latest5Albums => "5 Latest Albums",
         FinampCollectionType.libraryImages =>
           "Cache Library Images:${library!.id}",
+        FinampCollectionType.allPlaylistsMetadata => "All Playlists Metadata",
       };
 
   String getName(BuildContext context) => switch (type) {
@@ -1940,6 +1942,9 @@ class FinampCollection {
             .finampCollectionNames("fiveLatestAlbums"),
         FinampCollectionType.libraryImages => AppLocalizations.of(context)!
             .cacheLibraryImagesName(library!.name ?? ""),
+        FinampCollectionType.allPlaylistsMetadata =>
+          AppLocalizations.of(context)!
+              .finampCollectionNames("allPlaylistsMetadata"),
       };
 
   factory FinampCollection.fromJson(Map<String, dynamic> json) =>

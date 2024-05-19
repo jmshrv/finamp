@@ -44,9 +44,8 @@ class DownloadsSettingsScreen extends StatelessWidget {
             subtitle: Text(
                 AppLocalizations.of(context)!.allPlaylistsInfoSettingSubtitle),
             trailing: DownloadButton(
-                infoOnly: true,
-                item: DownloadStub.fromFinampCollection(
-                    FinampCollection(type: FinampCollectionType.allPlaylists))),
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                    type: FinampCollectionType.allPlaylistsMetadata))),
           ),
           // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           if (!Platform.isIOS) const ConcurentDownloadsSelector(),
@@ -144,6 +143,10 @@ class SyncFavoritesSwitch extends StatelessWidget {
                       box.get("FinampSettings")!;
                   finampSettingsTemp.trackOfflineFavorites = value;
                   box.put("FinampSettings", finampSettingsTemp);
+                  if (value) {
+                    final isarDownloader = GetIt.instance<DownloadsService>();
+                    isarDownloader.resyncAll();
+                  }
                 },
         );
       },

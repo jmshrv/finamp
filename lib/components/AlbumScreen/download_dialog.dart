@@ -21,7 +21,6 @@ class DownloadDialog extends StatefulWidget {
     required this.downloadLocationId,
     required this.needsTranscode,
     required this.children,
-    required this.infoOnly,
   });
 
   final DownloadStub item;
@@ -29,7 +28,6 @@ class DownloadDialog extends StatefulWidget {
   final String? downloadLocationId;
   final bool needsTranscode;
   final List<BaseItemDto>? children;
-  final bool infoOnly;
 
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
@@ -80,11 +78,7 @@ class DownloadDialog extends StatefulWidget {
           (scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted,
           isConfirmation: true);
       unawaited(downloadsService
-          .addDownload(
-              stub: item,
-              viewId: viewId!,
-              transcodeProfile: profile,
-              asInfo: infoOnly)
+          .addDownload(stub: item, viewId: viewId!, transcodeProfile: profile)
           // TODO only show the enqueued confirmation if the enqueuing took longer than ~10 seconds
           .then((value) => GlobalSnackbar.message(
               (scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued)));
@@ -108,7 +102,6 @@ class DownloadDialog extends StatefulWidget {
           downloadLocationId: downloadLocation,
           needsTranscode: needTranscode,
           children: children,
-          infoOnly: infoOnly,
         ),
       );
     }
@@ -229,8 +222,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
                       .addDownload(
                           stub: widget.item,
                           viewId: widget.viewId,
-                          transcodeProfile: profile,
-                          asInfo: widget.infoOnly)
+                          transcodeProfile: profile)
                       .onError(
                           (error, stackTrace) => GlobalSnackbar.error(error));
 

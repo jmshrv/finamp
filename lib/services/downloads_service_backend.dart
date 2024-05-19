@@ -1014,32 +1014,26 @@ class DownloadsSyncService {
             .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
             .findAllSync();
         requiredChildren.addAll(children);
-        var infoItems = _isar.downloadItems
-            .filter()
-            .infoFor((q) => q.isarIdEqualTo(parent.isarId))
-            .findAllSync();
         // If trackOfflineFavorites is set and we have downloads, add an info link
         // to the favorites collection, otherwise remove it.
-        var favorites = FinampCollection(type: FinampCollectionType.favorites);
-        infoItems.removeWhere((item) => item.id == favorites.id);
-        infoChildren.addAll(infoItems);
         if (children.isNotEmpty &&
             FinampSettingsHelper.finampSettings.trackOfflineFavorites) {
           infoChildren.add(DownloadStub.fromFinampCollection(
               FinampCollection(type: FinampCollectionType.favorites)));
         }
-        infoChildren.addAll(infoItems);
         updateRequiredChildren = false;
       case DownloadItemType.finampCollection:
         try {
           if (asRequired) {
             orderedChildItems = await _getFinampCollectionChildren(parent);
-            requiredChildren.addAll(orderedChildItems);
+            if (parent.finampCollection!.type ==
+                FinampCollectionType.allPlaylistsMetadata) {
+              infoChildren.addAll(orderedChildItems);
+            } else {
+              requiredChildren.addAll(orderedChildItems);
+            }
           } else {
             switch (parent.finampCollection!.type) {
-              case FinampCollectionType.allPlaylists:
-                orderedChildItems = await _getFinampCollectionChildren(parent);
-                infoChildren.addAll(orderedChildItems);
               case FinampCollectionType.favorites:
                 orderedChildItems = await _getFinampCollectionChildren(parent);
               case var type:
@@ -1373,6 +1367,7 @@ class DownloadsSyncService {
               ) ??
               []);
         case FinampCollectionType.allPlaylists:
+        case FinampCollectionType.allPlaylistsMetadata:
           outputItems = await _jellyfinApiData.getItems(
                 includeItemTypes: "Playlist",
               ) ??
