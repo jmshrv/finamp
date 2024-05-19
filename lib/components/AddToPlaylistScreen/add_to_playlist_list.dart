@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/components/album_image.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
@@ -163,23 +164,31 @@ class AddToPlaylistTile extends StatefulWidget {
 class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
   String? playlistItemId;
   int? childCount;
-  bool knownMissing = false;
+  bool? itemIsIncluded;
 
   @override
   void initState() {
     super.initState();
-    if (!widget.isLoading) {
-      playlistItemId = widget.playlistItemId;
-      childCount = widget.playlist.childCount;
-    }
+    _updateState();
   }
 
   @override
   void didUpdateWidget(AddToPlaylistTile oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _updateState();
+  }
+
+  void _updateState() {
     if (!widget.isLoading) {
       playlistItemId = widget.playlistItemId;
       childCount = widget.playlist.childCount;
+      if (widget.playlistItemId != null) {
+        itemIsIncluded = true;
+      } else {
+        final downloadsService = GetIt.instance<DownloadsService>();
+        itemIsIncluded =
+            downloadsService.checkIfInCollection(widget.playlist, widget.song);
+      }
     }
   }
 
@@ -192,15 +201,33 @@ class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
       subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
       leading: AlbumImage(item: widget.playlist),
       positiveIcon: TablerIcons.circle_check_filled,
-      negativeIcon: knownMissing
-          ? TablerIcons.circle_plus
+      negativeIcon: itemIsIncluded == null
           // we don't actually know if the track is part of the playlist
-          : TablerIcons.circle_dashed_plus,
-      initialState: playlistItemId != null,
+          ? TablerIcons.circle_dashed_plus
+          : TablerIcons.circle_plus,
+      initialState: itemIsIncluded ?? false,
       onToggle: (bool currentState) async {
         if (currentState) {
+          // If playlistItemId is null, we need to fetch from the server before we can remove
           if (playlistItemId == null) {
-            throw "Cannot remove item from playlist, missing playlistItemId";
+            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+            var newItems = await jellyfinApiHelper.getItems(
+                parentItem: widget.playlist, fields: "");
+
+            playlistItemId = newItems
+                ?.firstWhereOrNull((x) => x.id == widget.song.id)
+                ?.playlistItemId;
+            if (playlistItemId == null) {
+              // We were already not part of the playlist,. so removal is complete
+              setState(() {
+                childCount = newItems?.length ?? 0;
+                itemIsIncluded = false;
+              });
+              return false;
+            }
+            if (!context.mounted) {
+              return true;
+            }
           }
           // part of playlist, remove
           bool removed = await removeFromPlaylist(
@@ -209,7 +236,7 @@ class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
           if (removed) {
             setState(() {
               childCount = childCount == null ? null : childCount! - 1;
-              knownMissing = true;
+              itemIsIncluded = false;
             });
           }
           return !removed;
@@ -226,6 +253,7 @@ class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
               playlistItemId = newItems
                   ?.firstWhereOrNull((x) => x.id == widget.song.id)
                   ?.playlistItemId;
+              itemIsIncluded = true;
             });
             return playlistItemId != null;
           }

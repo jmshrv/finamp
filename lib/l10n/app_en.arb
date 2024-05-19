@@ -1504,5 +1504,13 @@
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
   "trackOfflineFavorites": "Sync all favorite statuses",
-  "trackOfflineFavoritesSubtitle": "This allows showing more up-to-date favorite statuses while offline.  Does not download any additional files."
+  "trackOfflineFavoritesSubtitle": "This allows showing more up-to-date favorite statuses while offline.  Does not download any additional files.",
+  "allPlaylistsInfoSetting": "Show all playlists offline",
+  "allPlaylistsInfoSettingSubtitle": "Sync metadata for all playlists to show partially downloaded playlists offline",
+  "downloadFavoritesSetting": "Download all favorites",
+  "downloadAllPlaylistsSetting": "Download all playlists",
+  "fiveLatestAlbumsSetting": "Download 5 latest albums",
+  "fiveLatestAlbumsSettingSubtitle": "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed.",
+  "cacheLibraryImagesSettings": "Cache current library images",
+  "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded."
 }

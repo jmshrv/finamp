@@ -40,9 +40,9 @@ class DownloadsSettingsScreen extends StatelessWidget {
           const SyncFavoritesSwitch(),
           ListTile(
             // TODO real UI for this
-            title: const Text("Show all playlists offline"),
-            subtitle: const Text(
-                "Sync metadata for all playlists to show partially downloaded playlists offline"),
+            title: Text(AppLocalizations.of(context)!.allPlaylistsInfoSetting),
+            subtitle: Text(
+                AppLocalizations.of(context)!.allPlaylistsInfoSettingSubtitle),
             trailing: DownloadButton(
                 infoOnly: true,
                 item: DownloadStub.fromFinampCollection(
@@ -52,32 +52,34 @@ class DownloadsSettingsScreen extends StatelessWidget {
           if (!Platform.isIOS) const ConcurentDownloadsSelector(),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download all favorites"),
+            title: Text(AppLocalizations.of(context)!.downloadFavoritesSetting),
             trailing: DownloadButton(
                 item: DownloadStub.fromFinampCollection(
                     FinampCollection(type: FinampCollectionType.favorites))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download all playlists"),
+            title:
+                Text(AppLocalizations.of(context)!.downloadAllPlaylistsSetting),
             trailing: DownloadButton(
                 item: DownloadStub.fromFinampCollection(
                     FinampCollection(type: FinampCollectionType.allPlaylists))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download 5 latest albums"),
-            subtitle: const Text(
-                "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed."),
+            title: Text(AppLocalizations.of(context)!.fiveLatestAlbumsSetting),
+            subtitle: Text(
+                AppLocalizations.of(context)!.fiveLatestAlbumsSettingSubtitle),
             trailing: DownloadButton(
                 item: DownloadStub.fromFinampCollection(FinampCollection(
                     type: FinampCollectionType.latest5Albums))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Cache current library images"),
-            subtitle: const Text(
-                "All album, artist, genre, and playlist covers in the currently active library will be downloaded."),
+            title:
+                Text(AppLocalizations.of(context)!.cacheLibraryImagesSettings),
+            subtitle: Text(AppLocalizations.of(context)!
+                .cacheLibraryImagesSettingsSubtitle),
             trailing: DownloadButton(
                 item: DownloadStub.fromFinampCollection(FinampCollection(
                     type: FinampCollectionType.libraryImages,

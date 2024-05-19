@@ -12,7 +12,7 @@ import 'jellyfin_api_helper.dart';
 
 part 'favorite_provider.g.dart';
 
-/// All DefaultValues should be considered equal
+/// All favoriteRequests with the same BaseItemDto id should be considered equal.
 class FavoriteRequest {
   final BaseItemDto? item;
 
@@ -33,8 +33,6 @@ class IsFavorite extends _$IsFavorite {
   Future<void>? _initializing;
 
   @override
-  // Because DefaultValue is always equal and we never invalidate, this should only
-  // be called once per itemId and all other DefaultValues should be ignored
   bool build(FavoriteRequest value) {
     if (value.item == null) {
       return false;

@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -289,7 +289,6 @@ class DownloadsService {
       // If app is in background for more than 5 hours, treat it like a restart
       // and potentially resync all items
       if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
-          !FinampSettingsHelper.finampSettings.isOffline &&
           _appPauseTime != null &&
           DateTime.now().difference(_appPauseTime!).inHours > 5) {
         _isar.writeTxnSync(() {
@@ -365,8 +364,7 @@ class DownloadsService {
   /// Begin processing stored downloads/deletes.  This should only be called
   /// after background_downloader is fully set up.
   Future<void> startQueues() async {
-    if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
-        !FinampSettingsHelper.finampSettings.isOffline) {
+    if (FinampSettingsHelper.finampSettings.resyncOnStartup) {
       _isar.writeTxnSync(() {
         syncBuffer.addAll([_anchor.isarId], [], null);
       });
@@ -1253,6 +1251,15 @@ class DownloadsService {
         .findFirstSync();
   }
 
+  /// Check whether the given item is part of the given collection.  Returns null
+  /// if there is no metadata for the collection.
+  bool? checkIfInCollection(BaseItemDto collection, BaseItemDto item) {
+    var parent = _isar.downloadItems.getSync(
+        DownloadStub.getHash(collection.id, DownloadItemType.collection));
+    var childId = DownloadStub.getHash(item.id, item.downloadType);
+    return parent?.orderedChildren?.contains(childId);
+  }
+
   // This is for album/playlist screen
   /// Get all songs in a collection, ordered correctly.  Used to show songs on
   /// album/playlist screen.  Can return all songs in the album/playlist or
@@ -1438,11 +1445,7 @@ class DownloadsService {
   }
 
   bool? isFavorite(BaseItemDto item) {
-    var stubId = DownloadStub.getHash(
-        item.id,
-        item.type == "Audio"
-            ? DownloadItemType.song
-            : DownloadItemType.collection);
+    var stubId = DownloadStub.getHash(item.id, item.downloadType);
     return _getFavoriteIds()?.contains(stubId);
   }
 

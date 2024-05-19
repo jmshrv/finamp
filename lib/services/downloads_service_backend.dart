@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/downloads_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
@@ -1410,11 +1410,7 @@ class DownloadsSyncService {
       _downloadsService.resetConnectionErrors();
       var stubList = outputItems
           .map((e) => DownloadStub.fromItem(
-              item: e,
-              type: typeOverride ??
-                  (e.type == "Audio"
-                      ? DownloadItemType.song
-                      : DownloadItemType.collection)))
+              item: e, type: typeOverride ?? e.downloadType))
           .toList();
       for (var element in stubList) {
         _metadataCache[element.id] = Future.value(element);
