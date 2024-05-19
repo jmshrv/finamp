@@ -902,10 +902,7 @@ class DownloadsSyncService {
     // Skip items that are unlikely to need syncing if allowed.
     if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
         !_downloadsService.forceFullSync) {
-      if (parent.type == DownloadItemType.song ||
-          parent.type == DownloadItemType.image ||
-          (parent.type == DownloadItemType.collection &&
-              parent.baseItemType == BaseItemDtoType.album)) {
+      if (parent.type.requiresItem && !parent.baseItemType.expectChanges) {
         isarParent = _isar.downloadItems.getSync(parent.isarId);
         if (isarParent?.state == DownloadItemState.complete) {
           _syncLogger.finest("Skipping sync of ${parent.name}");
@@ -945,7 +942,7 @@ class DownloadsSyncService {
     //
     // Calculate needed children for item based on type and asRequired flag
     //
-    bool updateChildren = true;
+    bool updateRequiredChildren = true;
     Set<DownloadStub> requiredChildren = {};
     Set<DownloadStub> infoChildren = {};
     List<DownloadStub>? orderedChildItems;
@@ -1017,12 +1014,37 @@ class DownloadsSyncService {
             .requiredBy((q) => q.isarIdEqualTo(parent.isarId))
             .findAllSync();
         requiredChildren.addAll(children);
-        updateChildren = false;
+        var infoItems = _isar.downloadItems
+            .filter()
+            .infoFor((q) => q.isarIdEqualTo(parent.isarId))
+            .findAllSync();
+        // If trackOfflineFavorites is set and we have downloads, add an info link
+        // to the favorites collection, otherwise remove it.
+        var favorites = FinampCollection(type: FinampCollectionType.favorites);
+        infoItems.removeWhere((item) => item.id == favorites.id);
+        infoChildren.addAll(infoItems);
+        if (children.isNotEmpty &&
+            FinampSettingsHelper.finampSettings.trackOfflineFavorites) {
+          infoChildren.add(DownloadStub.fromFinampCollection(
+              FinampCollection(type: FinampCollectionType.favorites)));
+        }
+        infoChildren.addAll(infoItems);
+        updateRequiredChildren = false;
       case DownloadItemType.finampCollection:
         try {
           if (asRequired) {
             orderedChildItems = await _getFinampCollectionChildren(parent);
             requiredChildren.addAll(orderedChildItems);
+          } else {
+            switch (parent.finampCollection!.type) {
+              case FinampCollectionType.allPlaylists:
+                orderedChildItems = await _getFinampCollectionChildren(parent);
+                infoChildren.addAll(orderedChildItems);
+              case FinampCollectionType.favorites:
+                orderedChildItems = await _getFinampCollectionChildren(parent);
+              case var type:
+                throw "FinampCollection of type $type was info linked, cannot handle";
+            }
           }
         } catch (e) {
           _syncLogger.info(
@@ -1039,102 +1061,91 @@ class DownloadsSyncService {
     // once network requests come back.
     await SchedulerBinding.instance.scheduleTask(() async {
       DownloadItem? canonParent;
-      if (updateChildren) {
-        _isar.writeTxnSync(() {
-          canonParent = _isar.downloadItems.getSync(parent.isarId);
-          if (canonParent == null) {
-            throw StateError(
-                "_syncDownload called on missing node ${parent.id}");
+      _isar.writeTxnSync(() {
+        canonParent = _isar.downloadItems.getSync(parent.isarId);
+        if (canonParent == null) {
+          throw StateError("_syncDownload called on missing node ${parent.id}");
+        }
+        try {
+          var newParent = canonParent!.copyWith(
+              item: newBaseItem,
+              viewId: viewId,
+              orderedChildItems: orderedChildItems,
+              forceCopy: _downloadsService.forceFullSync);
+          // copyWith returns null if no updates to important fields are needed
+          if (newParent != null) {
+            _isar.downloadItems.putSync(newParent);
+            canonParent = newParent;
           }
-          try {
-            var newParent = canonParent!.copyWith(
-                item: newBaseItem,
-                viewId: viewId,
-                orderedChildItems: orderedChildItems,
-                forceCopy: _downloadsService.forceFullSync);
-            // copyWith returns null if no updates to important fields are needed
-            if (newParent != null) {
-              _isar.downloadItems.putSync(newParent);
-              canonParent = newParent;
-            }
-          } catch (e) {
-            _syncLogger.warning(e);
-          }
+        } catch (e) {
+          _syncLogger.warning(e);
+        }
 
-          viewId ??= canonParent!.viewId;
+        viewId ??= canonParent!.viewId;
 
-          // Run appropriate _updateChildren calls and store changes to allow skipping
-          // unneeded syncs when nothing changed
-          // _updatechildren output is inserted nodes, linked nodes, unlinked nodes
-          (Set<int>, Set<int>, Set<int>) requiredChanges = ({}, {}, {});
-          (Set<int>, Set<int>, Set<int>) infoChanges = ({}, {}, {});
-          if (asRequired) {
-            requiredChanges =
-                _updateChildren(canonParent!, true, requiredChildren);
-            infoChanges = _updateChildren(canonParent!, false, infoChildren);
-          } else if (canonParent!.type == DownloadItemType.song) {
-            // For info only songs, we put image link into required so that we can delete
-            // all info links in _syncDelete, so if not processing as required only
-            // update that and ignore info links
-            requiredChanges =
-                _updateChildren(canonParent!, true, requiredChildren);
-          } else {
-            infoChanges = _updateChildren(canonParent!, false, infoChildren);
-          }
+        // Run appropriate _updateChildren calls and store changes to allow skipping
+        // unneeded syncs when nothing changed
+        // _updatechildren output is inserted nodes, linked nodes, unlinked nodes
+        (Set<int>, Set<int>, Set<int>) requiredChanges = ({}, {}, {});
+        (Set<int>, Set<int>, Set<int>) infoChanges = ({}, {}, {});
+        if (asRequired && updateRequiredChildren) {
+          requiredChanges =
+              _updateChildren(canonParent!, true, requiredChildren);
+          infoChanges = _updateChildren(canonParent!, false, infoChildren);
+        } else if (canonParent!.type == DownloadItemType.song) {
+          // For info only songs, we put image link into required so that we can delete
+          // all info links in _syncDelete, so if not processing as required only
+          // update that and ignore info links
+          requiredChanges =
+              _updateChildren(canonParent!, true, requiredChildren);
+        } else {
+          infoChanges = _updateChildren(canonParent!, false, infoChildren);
+        }
 
-          if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
-              !_downloadsService.forceFullSync &&
-              canonParent!.type == DownloadItemType.collection &&
-              canonParent!.baseItemType == BaseItemDtoType.playlist &&
-              canonParent!.state == DownloadItemState.complete) {
-            // When quicksyncing, unchanged songs in playlists do not need to be resynced.
-            // Songs we just linked may need download settings updated
-            var quicksyncRequiredIds =
-                requiredChanges.$1.union(requiredChanges.$2);
-            var quicksyncInfoIds = infoChanges.$1.union(infoChanges.$2);
-            addAll(quicksyncRequiredIds,
-                quicksyncInfoIds.difference(quicksyncRequiredIds), viewId);
-          } else {
-            addAll(
-                requiredChildren.map((e) => e.isarId),
-                infoChildren.difference(requiredChildren).map((e) => e.isarId),
-                viewId);
-          }
-          // If we are a collection, move out of syncFailed because we just completed a
-          // successful sync.  songs/images will be moved out by _initiateDownload.
-          // If our linked children just changed, recalculate state with new children.
-          if (!canonParent!.type.hasFiles &&
-              (canonParent!.state == DownloadItemState.syncFailed ||
-                  requiredChanges.$1.isNotEmpty ||
-                  requiredChanges.$2.isNotEmpty ||
-                  requiredChanges.$3.isNotEmpty ||
-                  infoChanges.$1.isNotEmpty ||
-                  infoChanges.$2.isNotEmpty ||
-                  infoChanges.$3.isNotEmpty)) {
-            _downloadsService.syncItemState(canonParent!,
-                removeSyncFailed: true);
-          }
-
-          // sync download settings on all newly required children.  Newly inserted children
-          // may be skipped, as they inherit the parent settings.  Children who exactly match
-          // the parent's download settings already may be skipped.
-          for (var child in _isar.downloadItems
-              .getAllSync(requiredChanges.$2.toList())
-              .whereNotNull()) {
-            if (child.syncTranscodingProfile !=
-                canonParent!.syncTranscodingProfile) {
-              _downloadsService.syncItemDownloadSettings(child);
-            }
-          }
-        });
-      } else {
-        _isar.writeTxnSync(() {
+        if (FinampSettingsHelper.finampSettings.preferQuickSyncs &&
+            !_downloadsService.forceFullSync &&
+            canonParent!.type == DownloadItemType.collection &&
+            !canonParent!.baseItemType.expectChangesInChildren &&
+            canonParent!.state == DownloadItemState.complete) {
+          // When quicksyncing, unchanged songs/albums do not need to be resynced.
+          // Items we just linked may need download settings updated.
+          var quicksyncRequiredIds =
+              requiredChanges.$1.union(requiredChanges.$2);
+          var quicksyncInfoIds = infoChanges.$1.union(infoChanges.$2);
+          addAll(quicksyncRequiredIds,
+              quicksyncInfoIds.difference(quicksyncRequiredIds), viewId);
+        } else {
           addAll(
               requiredChildren.map((e) => e.isarId),
               infoChildren.difference(requiredChildren).map((e) => e.isarId),
               viewId);
-        });
-      }
+        }
+        // If we are a collection, move out of syncFailed because we just completed a
+        // successful sync.  songs/images will be moved out by _initiateDownload.
+        // If our linked children just changed, recalculate state with new children.
+        if (!canonParent!.type.hasFiles &&
+            (canonParent!.state == DownloadItemState.syncFailed ||
+                requiredChanges.$1.isNotEmpty ||
+                requiredChanges.$2.isNotEmpty ||
+                requiredChanges.$3.isNotEmpty ||
+                infoChanges.$1.isNotEmpty ||
+                infoChanges.$2.isNotEmpty ||
+                infoChanges.$3.isNotEmpty)) {
+          _downloadsService.syncItemState(canonParent!, removeSyncFailed: true);
+        }
+
+        // sync download settings on all newly required children.  Newly inserted children
+        // may be skipped, as they inherit the parent settings.  Children who exactly match
+        // the parent's download settings already may be skipped.
+        for (var child in _isar.downloadItems
+            .getAllSync(requiredChanges.$2.toList())
+            .whereNotNull()) {
+          if (child.syncTranscodingProfile !=
+              canonParent!.syncTranscodingProfile) {
+            _downloadsService.syncItemDownloadSettings(child);
+          }
+        }
+      });
 
       //
       // Download item files if needed

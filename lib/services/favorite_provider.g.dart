@@ -6,7 +6,7 @@ part of 'favorite_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$isFavoriteHash() => r'72fb1365755e053a70b239dd1c5e757065af3104';
+String _$isFavoriteHash() => r'd3e8dbfc2d63ed1af22fa61e9d33550b6f566580';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,12 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$IsFavorite extends BuildlessAutoDisposeNotifier<bool> {
-  late final String? itemId;
-  late final DefaultValue value;
+  late final FavoriteRequest value;
 
   bool build(
-    String? itemId,
-    DefaultValue value,
+    FavoriteRequest value,
   );
 }
 
@@ -50,11 +48,9 @@ class IsFavoriteFamily extends Family<bool> {
 
   /// See also [IsFavorite].
   IsFavoriteProvider call(
-    String? itemId,
-    DefaultValue value,
+    FavoriteRequest value,
   ) {
     return IsFavoriteProvider(
-      itemId,
       value,
     );
   }
@@ -64,7 +60,6 @@ class IsFavoriteFamily extends Family<bool> {
     covariant IsFavoriteProvider provider,
   ) {
     return call(
-      provider.itemId,
       provider.value,
     );
   }
@@ -89,12 +84,9 @@ class IsFavoriteProvider
     extends AutoDisposeNotifierProviderImpl<IsFavorite, bool> {
   /// See also [IsFavorite].
   IsFavoriteProvider(
-    String? itemId,
-    DefaultValue value,
+    FavoriteRequest value,
   ) : this._internal(
-          () => IsFavorite()
-            ..itemId = itemId
-            ..value = value,
+          () => IsFavorite()..value = value,
           from: isFavoriteProvider,
           name: r'isFavoriteProvider',
           debugGetCreateSourceHash:
@@ -104,7 +96,6 @@ class IsFavoriteProvider
           dependencies: IsFavoriteFamily._dependencies,
           allTransitiveDependencies:
               IsFavoriteFamily._allTransitiveDependencies,
-          itemId: itemId,
           value: value,
         );
 
@@ -115,19 +106,16 @@ class IsFavoriteProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.itemId,
     required this.value,
   }) : super.internal();
 
-  final String? itemId;
-  final DefaultValue value;
+  final FavoriteRequest value;
 
   @override
   bool runNotifierBuild(
     covariant IsFavorite notifier,
   ) {
     return notifier.build(
-      itemId,
       value,
     );
   }
@@ -137,15 +125,12 @@ class IsFavoriteProvider
     return ProviderOverride(
       origin: this,
       override: IsFavoriteProvider._internal(
-        () => create()
-          ..itemId = itemId
-          ..value = value,
+        () => create()..value = value,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        itemId: itemId,
         value: value,
       ),
     );
@@ -158,15 +143,12 @@ class IsFavoriteProvider
 
   @override
   bool operator ==(Object other) {
-    return other is IsFavoriteProvider &&
-        other.itemId == itemId &&
-        other.value == value;
+    return other is IsFavoriteProvider && other.value == value;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, itemId.hashCode);
     hash = _SystemHash.combine(hash, value.hashCode);
 
     return _SystemHash.finish(hash);
@@ -174,11 +156,8 @@ class IsFavoriteProvider
 }
 
 mixin IsFavoriteRef on AutoDisposeNotifierProviderRef<bool> {
-  /// The parameter `itemId` of this provider.
-  String? get itemId;
-
   /// The parameter `value` of this provider.
-  DefaultValue get value;
+  FavoriteRequest get value;
 }
 
 class _IsFavoriteProviderElement
@@ -187,9 +166,7 @@ class _IsFavoriteProviderElement
   _IsFavoriteProviderElement(super.provider);
 
   @override
-  String? get itemId => (origin as IsFavoriteProvider).itemId;
-  @override
-  DefaultValue get value => (origin as IsFavoriteProvider).value;
+  FavoriteRequest get value => (origin as IsFavoriteProvider).value;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

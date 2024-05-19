@@ -215,7 +215,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         null);
     var iconColor = Theme.of(context).colorScheme.primary;
 
-    final isInCurrentPlaylist = widget.isInPlaylist && widget.parentItem != null;
+    final isInCurrentPlaylist =
+        widget.isInPlaylist && widget.parentItem != null;
 
     final currentTrack = _queueService.getCurrentTrack();
     FinampQueueItem? queueItem;
@@ -243,7 +244,9 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             Icons.playlist_add,
             color: iconColor,
           ),
-          title: Text(isInCurrentPlaylist ? AppLocalizations.of(context)!.addToMorePlaylistsTitle : AppLocalizations.of(context)!.addToPlaylistTitle),
+          title: Text(isInCurrentPlaylist
+              ? AppLocalizations.of(context)!.addToMorePlaylistsTitle
+              : AppLocalizations.of(context)!.addToPlaylistTitle),
           enabled: !widget.isOffline,
           onTap: () {
             Navigator.pop(context); // close menu
@@ -443,8 +446,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       ),
       Consumer(
         builder: (context, ref, child) {
-          bool isFav = ref.watch(
-              isFavoriteProvider(widget.item.id, DefaultValue(widget.item)));
+          bool isFav =
+              ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
           return ListTile(
             enabled: !widget.isOffline,
             leading: isFav
@@ -465,8 +468,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                 : AppLocalizations.of(context)!.addFavourite),
             onTap: () async {
               ref
-                  .read(isFavoriteProvider(widget.item.id, DefaultValue())
-                      .notifier)
+                  .read(
+                      isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
                   .updateFavorite(!isFav);
               if (context.mounted) Navigator.pop(context);
             },
@@ -787,7 +790,7 @@ class SongInfo extends ConsumerStatefulWidget {
 
   final BaseItemDto item;
   final bool useThemeImage;
-  final bool condensed; 
+  final bool condensed;
 
   @override
   ConsumerState createState() => _SongInfoState();
@@ -800,7 +803,8 @@ class _SongInfoState extends ConsumerState<SongInfo> {
       color: Colors.transparent,
       child: Center(
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
+          margin:
+              EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
           height: widget.condensed ? 80 : 120,
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
@@ -848,7 +852,9 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                         maxLines: 2,
                       ),
                       Padding(
-                        padding: widget.condensed ? const EdgeInsets.only(top: 6.0) : const EdgeInsets.symmetric(vertical: 4.0),
+                        padding: widget.condensed
+                            ? const EdgeInsets.only(top: 6.0)
+                            : const EdgeInsets.symmetric(vertical: 4.0),
                         child: ArtistChips(
                           baseItem: widget.item,
                           backgroundColor: IconTheme.of(context)
@@ -864,12 +870,14 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                       if (!widget.condensed)
                         AlbumChip(
                           item: widget.item,
-                          color: Theme.of(context).textTheme.bodyMedium?.color ??
-                              Colors.white,
-                          backgroundColor:
-                              IconTheme.of(context).color?.withOpacity(0.1) ??
-                                  Theme.of(context).textTheme.bodyMedium?.color ??
+                          color:
+                              Theme.of(context).textTheme.bodyMedium?.color ??
                                   Colors.white,
+                          backgroundColor: IconTheme.of(context)
+                                  .color
+                                  ?.withOpacity(0.1) ??
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white,
                           key: widget.item.album == null
                               ? null
                               : ValueKey("${widget.item.album}-album"),

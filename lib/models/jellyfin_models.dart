@@ -2199,6 +2199,8 @@ class BaseItemDto with RunTimeTickDuration {
   @HiveField(151)
   double? normalizationGain;
 
+  bool? finampOffline;
+
   /// Checks if the item has its own image (not inherited from a parent)
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;
 
@@ -2268,7 +2270,13 @@ class BaseItemDto with RunTimeTickDuration {
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
-  Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);
+  Map<String, dynamic> toJson({bool setOffline = true}) {
+    var json = _$BaseItemDtoToJson(this);
+    if (setOffline) {
+      json["FinampOffline"] = true;
+    }
+    return json;
+  }
 
   bool mostlyEqual(BaseItemDto other) {
     var equal = const DeepCollectionEquality().equals;

@@ -106,6 +106,25 @@ class DownloadsService {
         .distinct();
   });
 
+  late final infoForAnchorProvider =
+      StreamProvider.family.autoDispose<bool, DownloadStub>((ref, stub) {
+    assert(stub.type != DownloadItemType.image &&
+        stub.type != DownloadItemType.anchor);
+    // Refresh on addDownload/removeDownload as well as state change
+    ref.watch(_anchorProvider);
+    return _isar.downloadItems
+        .watchObjectLazy(stub.isarId, fireImmediately: true)
+        .map((event) {
+      return _isar.downloadItems
+              .where()
+              .isarIdEqualTo(_anchor.isarId)
+              .filter()
+              .info((q) => q.isarIdEqualTo(stub.isarId))
+              .countSync() >
+          0;
+    }).distinct();
+  });
+
   /// Provider for the download status of an item.  See [getStatus] for details.
   /// This provider relies on the fact that [_syncDownload] always re-inserts
   /// processed items into Isar to know when to re-check status.
@@ -419,6 +438,7 @@ class DownloadsService {
     required DownloadStub stub,
     required String viewId,
     required DownloadProfile transcodeProfile,
+    bool asInfo = false,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure
@@ -437,7 +457,11 @@ class DownloadsService {
       var anchorItem = _anchor.asItem(null);
       // This may be the first download ever, so the anchor might not be present
       _isar.downloadItems.putSync(anchorItem);
-      anchorItem.requires.updateSync(link: [canonItem]);
+      if (asInfo) {
+        anchorItem.info.updateSync(link: [canonItem]);
+      } else {
+        anchorItem.requires.updateSync(link: [canonItem]);
+      }
       // Update download location id/transcode profile for all our children
       syncItemDownloadSettings(canonItem);
     });
@@ -448,7 +472,8 @@ class DownloadsService {
   /// Removes the anchor link to an item and sync deletes it.  This will allow the
   /// item to be deleted but may not result in deletion actually occurring as the
   /// item may be required by other collections.
-  Future<void> deleteDownload({required DownloadStub stub}) async {
+  Future<void> deleteDownload(
+      {required DownloadStub stub, bool asInfo = false}) async {
     DownloadItem? canonItem;
     _isar.writeTxnSync(() {
       var anchorItem = _anchor.asItem(null);
@@ -462,7 +487,11 @@ class DownloadsService {
       _isar.downloadItems.putSync(anchorItem);
       deleteBuffer.addAll([stub.isarId]);
       // Actual item is not required for updating links
-      anchorItem.requires.updateSync(unlink: [canonItem!]);
+      if (asInfo) {
+        anchorItem.info.updateSync(unlink: [canonItem!]);
+      } else {
+        anchorItem.requires.updateSync(unlink: [canonItem!]);
+      }
       canonItem!.userTranscodingProfile = null;
       _isar.downloadItems.putSync(canonItem!);
     });
@@ -617,10 +646,11 @@ class DownloadsService {
                 .typeEqualTo(DownloadItemType.image))),
         // Select nodes which only info link images or have no info links
         (q) => q.not().info((q) => q.not().typeEqualTo(DownloadItemType.image)),
+        (q) => q.typeEqualTo(DownloadItemType.anchor),
       ];
       // albums/playlist can require info on songs.  required songs can require info on
-      // collections.  Anyone can require info on an image.
-      // All other info links are disallowed.
+      // collections.  Anyone can require info on an image.  The anchor can info link
+      // anyone.  All other info links are disallowed.
       var badInfoItems = _isar.downloadItems
           .filter()
           .not()
@@ -1231,8 +1261,6 @@ class DownloadsService {
       {bool playable = true}) async {
     var stub =
         DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
-    assert(stub.baseItemType == BaseItemDtoType.playlist ||
-        stub.baseItemType == BaseItemDtoType.album);
 
     var id = DownloadStub.getHash(item.id, DownloadItemType.collection);
     var query = _isar.downloadItems
@@ -1275,7 +1303,12 @@ class DownloadsService {
       {String? nameFilter,
       BaseItemDto? relatedTo,
       String? viewFilter,
-      bool nullableViewFilters = true}) {
+      bool nullableViewFilters = true,
+      bool onlyFavorites = false}) {
+    List<int> favoriteIds = [];
+    if (onlyFavorites) {
+      favoriteIds = _getFavoriteIds() ?? [];
+    }
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
@@ -1284,6 +1317,8 @@ class DownloadsService {
             .stateEqualTo(DownloadItemState.complete)
             .or()
             .stateEqualTo(DownloadItemState.needsRedownloadComplete))
+        .optional(onlyFavorites,
+            (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(nameFilter != null,
             (q) => q.nameContains(nameFilter!, caseSensitive: false))
         .optional(
@@ -1308,6 +1343,7 @@ class DownloadsService {
   /// + viewFilter - only return collections in the given library.
   /// + childViewFilter - only return collections with children in the given library.
   /// Useful for artists/genres, which may need to be shown in several libraries.
+  /// + onlyFavorites - return only favorite items
   Future<List<DownloadStub>> getAllCollections(
       {String? nameFilter,
       BaseItemDtoType? baseTypeFilter,
@@ -1315,7 +1351,12 @@ class DownloadsService {
       bool fullyDownloaded = false,
       String? viewFilter,
       String? childViewFilter,
-      bool nullableViewFilters = true}) {
+      bool nullableViewFilters = true,
+      bool onlyFavorites = false}) {
+    List<int> favoriteIds = [];
+    if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
+      favoriteIds = _getFavoriteIds() ?? [];
+    }
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1324,6 +1365,10 @@ class DownloadsService {
             (q) => q.nameContains(nameFilter!, caseSensitive: false))
         .optional(baseTypeFilter != null,
             (q) => q.baseItemTypeEqualTo(baseTypeFilter!))
+        // If allPlaylists is info downloaded, we may have info for empty
+        // playlists.  These should not be returned.
+        .optional(baseTypeFilter == BaseItemDtoType.playlist,
+            (q) => q.info((q) => q.requiredByIsNotEmpty()))
         .optional(
             relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
@@ -1331,6 +1376,8 @@ class DownloadsService {
                     relatedTo!.id, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
+        .optional(onlyFavorites,
+            (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(
             viewFilter != null,
             (q) => q.group((q) => q.viewIdEqualTo(viewFilter).optional(
@@ -1388,6 +1435,21 @@ class DownloadsService {
     var item = _isar.downloadedLyrics
         .getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.song));
     return item;
+  }
+
+  bool? isFavorite(BaseItemDto item) {
+    var stubId = DownloadStub.getHash(
+        item.id,
+        item.type == "Audio"
+            ? DownloadItemType.song
+            : DownloadItemType.collection);
+    return _getFavoriteIds()?.contains(stubId);
+  }
+
+  List<int>? _getFavoriteIds() {
+    var stub = DownloadStub.fromFinampCollection(
+        FinampCollection(type: FinampCollectionType.favorites));
+    return _isar.downloadItems.getSync(stub.isarId)?.orderedChildren ?? [];
   }
 
   /// Get a downloadItem with verified files by id.

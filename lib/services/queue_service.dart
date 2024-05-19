@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:audio_service/audio_service.dart';
-import 'package:collection/collection.dart';
 import 'package:Finamp/components/global_snackbar.dart';
 import 'package:Finamp/models/finamp_models.dart';
 import 'package:Finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -942,7 +942,7 @@ class QueueService {
               : null),
       title: item.name ?? "unknown",
       extras: {
-        "itemJson": item.toJson(),
+        "itemJson": item.toJson(setOffline: false),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedSongPath": downloadedSong?.file?.path,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,

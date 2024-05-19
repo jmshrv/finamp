@@ -53,7 +53,7 @@ Future<void> showPlaylistActionsMenu({
           Consumer(
             builder: (context, ref, child) {
               bool isFavorite =
-                  ref.watch(isFavoriteProvider(item.id, DefaultValue(item)));
+                  ref.watch(isFavoriteProvider(FavoriteRequest(item)));
               return ToggleableListTile(
                 title: AppLocalizations.of(context)!.favourites,
                 leading: AspectRatio(
@@ -77,8 +77,7 @@ Future<void> showPlaylistActionsMenu({
                 tapFeedback: false,
                 onToggle: (bool currentState) async {
                   return ref
-                      .read(
-                          isFavoriteProvider(item.id, DefaultValue()).notifier)
+                      .read(isFavoriteProvider(FavoriteRequest(item)).notifier)
                       .updateFavorite(!isFavorite);
                 },
                 enabled: !isOffline,

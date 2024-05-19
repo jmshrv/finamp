@@ -17,17 +17,27 @@ class DownloadButton extends ConsumerWidget {
     required this.item,
     this.children,
     this.isLibrary = false,
+    this.infoOnly = false,
   });
 
   final DownloadStub item;
   final int? children;
   final bool isLibrary;
+  final bool infoOnly;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    var status =
-        ref.watch(downloadsService.statusProvider((item, children))).value;
+    DownloadItemStatus? status;
+    if (infoOnly) {
+      status = (ref.watch(downloadsService.infoForAnchorProvider(item)).value ??
+              false)
+          ? DownloadItemStatus.required
+          : DownloadItemStatus.notNeeded;
+    } else {
+      status =
+          ref.watch(downloadsService.statusProvider((item, children))).value;
+    }
     var isOffline = ref.watch(finampSettingsProvider
             .select((value) => value.valueOrNull?.isOffline)) ??
         true;
@@ -67,12 +77,13 @@ class DownloadButton extends ConsumerWidget {
                         AppLocalizations.of(context)!.addButtonLabel,
                     abortButtonText:
                         MaterialLocalizations.of(context).cancelButtonLabel,
-                    onConfirmed: () =>
-                        DownloadDialog.show(context, item, viewId),
+                    onConfirmed: () => DownloadDialog.show(
+                        context, item, viewId,
+                        infoOnly: infoOnly),
                     onAborted: () {},
                   ));
         } else {
-          await DownloadDialog.show(context, item, viewId);
+          await DownloadDialog.show(context, item, viewId, infoOnly: infoOnly);
         }
       },
       tooltip: parentTooltip,
@@ -95,7 +106,8 @@ class DownloadButton extends ConsumerWidget {
                 AppLocalizations.of(context)!.deleteDownloadsAbortButtonText,
             onConfirmed: () async {
               try {
-                await downloadsService.deleteDownload(stub: item);
+                await downloadsService.deleteDownload(
+                    stub: item, asInfo: infoOnly);
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.downloadsDeleted);
               } catch (error) {

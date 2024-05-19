@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:file_sizes/file_sizes.dart';
 import 'package:Finamp/models/jellyfin_models.dart';
+import 'package:file_sizes/file_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -21,6 +21,7 @@ class DownloadDialog extends StatefulWidget {
     required this.downloadLocationId,
     required this.needsTranscode,
     required this.children,
+    required this.infoOnly,
   });
 
   final DownloadStub item;
@@ -28,6 +29,7 @@ class DownloadDialog extends StatefulWidget {
   final String? downloadLocationId;
   final bool needsTranscode;
   final List<BaseItemDto>? children;
+  final bool infoOnly;
 
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
@@ -37,7 +39,8 @@ class DownloadDialog extends StatefulWidget {
   /// if transcode downloads is set to ask.  If neither is needed, the
   /// download is initiated immediately with no dialog.
   static Future<void> show(
-      BuildContext context, DownloadStub item, String? viewId) async {
+      BuildContext context, DownloadStub item, String? viewId,
+      {bool infoOnly = false}) async {
     if (viewId == null) {
       final finampUserHelper = GetIt.instance<FinampUserHelper>();
       viewId = finampUserHelper.currentUser!.currentViewId;
@@ -74,7 +77,11 @@ class DownloadDialog extends StatefulWidget {
           (scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted,
           isConfirmation: true);
       unawaited(downloadsService
-          .addDownload(stub: item, viewId: viewId!, transcodeProfile: profile)
+          .addDownload(
+              stub: item,
+              viewId: viewId!,
+              transcodeProfile: profile,
+              asInfo: infoOnly)
           // TODO only show the enqueued confirmation if the enqueuing took longer than ~10 seconds
           .then((value) => GlobalSnackbar.message(
               (scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued)));
@@ -93,11 +100,13 @@ class DownloadDialog extends StatefulWidget {
       await showDialog(
         context: context,
         builder: (context) => DownloadDialog._build(
-            item: item,
-            viewId: viewId!,
-            downloadLocationId: downloadLocation,
-            needsTranscode: needTranscode,
-            children: children),
+          item: item,
+          viewId: viewId!,
+          downloadLocationId: downloadLocation,
+          needsTranscode: needTranscode,
+          children: children,
+          infoOnly: infoOnly,
+        ),
       );
     }
   }
@@ -217,7 +226,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
                       .addDownload(
                           stub: widget.item,
                           viewId: widget.viewId,
-                          transcodeProfile: profile)
+                          transcodeProfile: profile,
+                          asInfo: widget.infoOnly)
                       .onError(
                           (error, stackTrace) => GlobalSnackbar.error(error));
 

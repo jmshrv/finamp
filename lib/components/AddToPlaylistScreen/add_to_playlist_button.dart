@@ -38,12 +38,11 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
       return const SizedBox.shrink();
     }
 
-    bool isFav = ref
-        .watch(isFavoriteProvider(widget.item?.id, DefaultValue(widget.item)));
+    bool isFav = ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
     return GestureDetector(
       onLongPress: () async {
         ref
-            .read(isFavoriteProvider(widget.item?.id, DefaultValue()).notifier)
+            .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
             .updateFavorite(!isFav);
       },
       child: IconButton(

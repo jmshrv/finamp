@@ -287,14 +287,14 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                           tooltip: AppLocalizations.of(context)!
                               .onlyShowFullyDownloaded,
                         ),
-                      if (!finampSettings.isOffline)
+                      if (!finampSettings.isOffline ||
+                          finampSettings.trackOfflineFavorites)
                         IconButton(
                           icon: finampSettings.onlyShowFavourite
                               ? const Icon(Icons.favorite)
                               : const Icon(Icons.favorite_outline),
-                          onPressed: finampSettings.isOffline
-                              ? null
-                              : () => FinampSettingsHelper.setOnlyShowFavourite(
+                          onPressed: () =>
+                              FinampSettingsHelper.setOnlyShowFavourite(
                                   !finampSettings.onlyShowFavourite),
                           tooltip: AppLocalizations.of(context)!.favourites,
                         ),

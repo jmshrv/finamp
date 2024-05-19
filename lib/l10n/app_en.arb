@@ -1502,5 +1502,7 @@
   "addPlaylistSubheader": "Add track to a playlist",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
-  }
+  },
+  "trackOfflineFavorites": "Sync all favorite statuses",
+  "trackOfflineFavoritesSubtitle": "This allows showing more up-to-date favorite statuses while offline.  Does not download any additional files."
 }
