@@ -37,8 +37,7 @@ class DownloadDialog extends StatefulWidget {
   /// if transcode downloads is set to ask.  If neither is needed, the
   /// download is initiated immediately with no dialog.
   static Future<void> show(
-      BuildContext context, DownloadStub item, String? viewId,
-      {bool infoOnly = false}) async {
+      BuildContext context, DownloadStub item, String? viewId) async {
     if (viewId == null) {
       final finampUserHelper = GetIt.instance<FinampUserHelper>();
       viewId = finampUserHelper.currentUser!.currentViewId;
@@ -49,8 +48,8 @@ class DownloadDialog extends StatefulWidget {
             // Skip asking for transcode for image only collection
             item.finampCollection?.type != FinampCollectionType.libraryImages ||
         // Skip asking for transcode for metadata +image collection
-        (item.finampCollection?.type != FinampCollectionType.allPlaylists &&
-            infoOnly);
+        (item.finampCollection?.type !=
+            FinampCollectionType.allPlaylistsMetadata);
     String? downloadLocation =
         FinampSettingsHelper.finampSettings.defaultDownloadLocation;
     if (!FinampSettingsHelper.finampSettings.downloadLocationsMap
