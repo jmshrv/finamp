@@ -1368,9 +1368,12 @@ class DownloadsService {
         .optional(baseTypeFilter != null,
             (q) => q.baseItemTypeEqualTo(baseTypeFilter!))
         // If allPlaylists is info downloaded, we may have info for empty
-        // playlists.  These should not be returned.
-        .optional(baseTypeFilter == BaseItemDtoType.playlist,
-            (q) => q.info((q) => q.requiredByIsNotEmpty()))
+        // playlists.  We should only return playlists with at least 1 required
+        // song in them.
+        .optional(
+            baseTypeFilter == BaseItemDtoType.playlist,
+            (q) => q.info((q) =>
+                q.typeEqualTo(DownloadItemType.song).requiredByIsNotEmpty()))
         .optional(
             relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
