@@ -138,7 +138,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       offlineItems = await _isarDownloader.getAllSongs(
           nameFilter: widget.searchTerm,
           viewFilter: widget.view?.id,
-          nullableViewFilters: settings.showDownloadsWithUnknownLibrary);
+          nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+          onlyFavorites:
+              settings.onlyShowFavourite && settings.trackOfflineFavorites);
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
           nameFilter: widget.searchTerm,
@@ -152,7 +154,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               ? widget.view?.id
               : null,
           nullableViewFilters: widget.tabContentType == TabContentType.albums &&
-              settings.showDownloadsWithUnknownLibrary);
+              settings.showDownloadsWithUnknownLibrary,
+          onlyFavorites:
+              settings.onlyShowFavourite && settings.trackOfflineFavorites);
     }
 
     var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
@@ -301,6 +305,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             widget.view?.id,
             settings.isOffline,
             settings.tabOrder.indexOf(widget.tabContentType),
+            settings.trackOfflineFavorites,
           );
           if (refreshHash == null) {
             refreshHash = newRefreshHash;

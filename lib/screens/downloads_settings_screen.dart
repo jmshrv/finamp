@@ -37,52 +37,52 @@ class DownloadsSettingsScreen extends StatelessWidget {
           ),
           if (Platform.isIOS || Platform.isAndroid) const RequireWifiSwitch(),
           const ShowPlaylistSongsSwitch(),
+          const SyncFavoritesSwitch(),
+          ListTile(
+            // TODO real UI for this
+            title: Text(AppLocalizations.of(context)!.allPlaylistsInfoSetting),
+            subtitle: Text(
+                AppLocalizations.of(context)!.allPlaylistsInfoSettingSubtitle),
+            trailing: DownloadButton(
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                    type: FinampCollectionType.allPlaylistsMetadata))),
+          ),
           // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           if (!Platform.isIOS) const ConcurentDownloadsSelector(),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download all favorites"),
+            title: Text(AppLocalizations.of(context)!.downloadFavoritesSetting),
             trailing: DownloadButton(
                 item: DownloadStub.fromFinampCollection(
-                    collection:
-                        FinampCollection(type: FinampCollectionType.favorites),
-                    name: AppLocalizations.of(context)!
-                        .finampCollectionNames("favorites"))),
+                    FinampCollection(type: FinampCollectionType.favorites))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download all playlists"),
+            title:
+                Text(AppLocalizations.of(context)!.downloadAllPlaylistsSetting),
             trailing: DownloadButton(
                 item: DownloadStub.fromFinampCollection(
-                    collection: FinampCollection(
-                        type: FinampCollectionType.allPlaylists),
-                    name: AppLocalizations.of(context)!
-                        .finampCollectionNames("allPlaylists"))),
+                    FinampCollection(type: FinampCollectionType.allPlaylists))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download 5 latest albums"),
-            subtitle: const Text(
-                "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed."),
+            title: Text(AppLocalizations.of(context)!.fiveLatestAlbumsSetting),
+            subtitle: Text(
+                AppLocalizations.of(context)!.fiveLatestAlbumsSettingSubtitle),
             trailing: DownloadButton(
-                item: DownloadStub.fromFinampCollection(
-                    collection: FinampCollection(
-                        type: FinampCollectionType.latest5Albums),
-                    name: AppLocalizations.of(context)!
-                        .finampCollectionNames("fiveLatestAlbums"))),
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                    type: FinampCollectionType.latest5Albums))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Cache current library images"),
-            subtitle: const Text(
-                "All album, artist, genre, and playlist covers in the currently active library will be downloaded."),
+            title:
+                Text(AppLocalizations.of(context)!.cacheLibraryImagesSettings),
+            subtitle: Text(AppLocalizations.of(context)!
+                .cacheLibraryImagesSettingsSubtitle),
             trailing: DownloadButton(
-                item: DownloadStub.fromFinampCollection(
-                    collection: FinampCollection(
-                        type: FinampCollectionType.libraryImages,
-                        library: userHelper.currentUser!.currentView!),
-                    name: AppLocalizations.of(context)!.cacheLibraryImagesName(
-                        userHelper.currentUser!.currentView!.name ?? ""))),
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                    type: FinampCollectionType.libraryImages,
+                    library: userHelper.currentUser!.currentView!))),
           ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
@@ -114,6 +114,39 @@ class RequireWifiSwitch extends StatelessWidget {
                       box.get("FinampSettings")!;
                   finampSettingsTemp.requireWifiForDownloads = value;
                   box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}
+
+class SyncFavoritesSwitch extends StatelessWidget {
+  const SyncFavoritesSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? syncFavorites = box.get("FinampSettings")?.trackOfflineFavorites;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.trackOfflineFavorites),
+          subtitle:
+              Text(AppLocalizations.of(context)!.trackOfflineFavoritesSubtitle),
+          value: syncFavorites ?? false,
+          onChanged: syncFavorites == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.trackOfflineFavorites = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                  if (value) {
+                    final isarDownloader = GetIt.instance<DownloadsService>();
+                    isarDownloader.resyncAll();
+                  }
                 },
         );
       },

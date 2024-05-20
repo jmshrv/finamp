@@ -162,6 +162,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : fields[53] as int,
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
+      trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -171,7 +172,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(61)
+      ..writeByte(62)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -293,7 +294,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(61)
       ..write(obj.allowSplitScreen)
       ..writeByte(62)
-      ..write(obj.splitScreenPlayerWidth);
+      ..write(obj.splitScreenPlayerWidth)
+      ..writeByte(63)
+      ..write(obj.trackOfflineFavorites);
   }
 
   @override
@@ -6641,4 +6644,5 @@ const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.allPlaylists: 'allPlaylists',
   FinampCollectionType.latest5Albums: 'latest5Albums',
   FinampCollectionType.libraryImages: 'libraryImages',
+  FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
 };

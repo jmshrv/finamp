@@ -91,9 +91,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
           final downloadsService = GetIt.instance<DownloadsService>();
           unawaited(downloadsService.resync(
               DownloadStub.fromFinampCollection(
-                  collection:
-                      FinampCollection(type: FinampCollectionType.allPlaylists),
-                  name: null),
+                  FinampCollection(type: FinampCollectionType.allPlaylists)),
               null,
               keepSlow: true));
           return newId.id!;

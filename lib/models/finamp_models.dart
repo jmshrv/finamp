@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -101,6 +102,7 @@ const _hideQueueButton = false;
 const _reportQueueToServerDefault = false;
 const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 const _showArtistChipImage = true;
+const _trackOfflineFavoritesDefault = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -171,6 +173,7 @@ class FinampSettings {
     this.periodicPlaybackSessionUpdateFrequencySeconds =
         _periodicPlaybackSessionUpdateFrequencySecondsDefault,
     this.showArtistChipImage = _showArtistChipImage,
+    this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -374,6 +377,9 @@ class FinampSettings {
 
   @HiveField(62, defaultValue: _defaultSplitScreenPlayerWidth)
   double splitScreenPlayerWidth;
+
+  @HiveField(63, defaultValue: _trackOfflineFavoritesDefault)
+  bool trackOfflineFavorites;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -860,9 +866,15 @@ class DownloadStub {
         baseItemType: BaseItemDtoType.unknown);
   }
 
-  factory DownloadStub.fromFinampCollection(
-      {required FinampCollection collection, required String? name}) {
+  factory DownloadStub.fromFinampCollection(FinampCollection collection) {
     String id = collection.id;
+    // Fetch localized name from default global context.
+    String? name;
+    var context = GlobalSnackbar.materialAppScaffoldKey.currentContext;
+    if (context != null) {
+      name = collection.getName(context);
+    }
+
     return DownloadStub._build(
         id: id,
         isarId: getHash(id, DownloadItemType.finampCollection),
@@ -1209,20 +1221,24 @@ enum DownloadItemStatus {
 /// The type of a BaseItemDto as determined from its type field.
 /// Enumerated by Isar, do not modify order or delete existing entries
 enum BaseItemDtoType {
-  unknown(null, false),
-  album("MusicAlbum", false),
-  artist("MusicArtist", true),
-  playlist("Playlist", true),
-  genre("MusicGenre", true),
-  song("Audio", false),
-  library("CollectionFolder", true),
-  folder("Folder", false),
-  musicVideo("MusicVideo", false);
+  unknown(null, true, null),
+  album("MusicAlbum", false, [song]),
+  artist("MusicArtist", true, [album, song]),
+  playlist("Playlist", true, [song]),
+  genre("MusicGenre", true, [album, song]),
+  song("Audio", false, []),
+  library("CollectionFolder", true, [album, song]),
+  folder("Folder", true, null),
+  musicVideo("MusicVideo", false, []);
 
-  const BaseItemDtoType(this.idString, this.expectChanges);
+  const BaseItemDtoType(this.idString, this.expectChanges, this.childTypes);
 
   final String? idString;
   final bool expectChanges;
+  final List<BaseItemDtoType>? childTypes;
+
+  bool get expectChangesInChildren =>
+      childTypes?.any((x) => x.expectChanges) ?? true;
 
   static BaseItemDtoType fromItem(BaseItemDto item) {
     switch (item.type) {
@@ -1889,7 +1905,8 @@ enum FinampCollectionType {
   favorites,
   allPlaylists,
   latest5Albums,
-  libraryImages;
+  libraryImages,
+  allPlaylistsMetadata;
 }
 
 @JsonSerializable(
@@ -1913,6 +1930,21 @@ class FinampCollection {
         FinampCollectionType.latest5Albums => "5 Latest Albums",
         FinampCollectionType.libraryImages =>
           "Cache Library Images:${library!.id}",
+        FinampCollectionType.allPlaylistsMetadata => "All Playlists Metadata",
+      };
+
+  String getName(BuildContext context) => switch (type) {
+        FinampCollectionType.favorites =>
+          AppLocalizations.of(context)!.finampCollectionNames("favorites"),
+        FinampCollectionType.allPlaylists =>
+          AppLocalizations.of(context)!.finampCollectionNames("allPlaylists"),
+        FinampCollectionType.latest5Albums => AppLocalizations.of(context)!
+            .finampCollectionNames("fiveLatestAlbums"),
+        FinampCollectionType.libraryImages => AppLocalizations.of(context)!
+            .cacheLibraryImagesName(library!.name ?? ""),
+        FinampCollectionType.allPlaylistsMetadata =>
+          AppLocalizations.of(context)!
+              .finampCollectionNames("allPlaylistsMetadata"),
       };
 
   factory FinampCollection.fromJson(Map<String, dynamic> json) =>

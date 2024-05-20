@@ -4004,7 +4004,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       channelType: json['ChannelType'] as String?,
       audio: json['Audio'] as String?,
       normalizationGain: (json['NormalizationGain'] as num?)?.toDouble(),
-    );
+    )..finampOffline = json['FinampOffline'] as bool?;
 
 Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) {
   final val = <String, dynamic>{};
@@ -4175,6 +4175,7 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) {
   writeNotNull('ChannelType', instance.channelType);
   writeNotNull('Audio', instance.audio);
   writeNotNull('NormalizationGain', instance.normalizationGain);
+  writeNotNull('FinampOffline', instance.finampOffline);
   return val;
 }
 

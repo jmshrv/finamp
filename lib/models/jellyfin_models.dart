@@ -7,8 +7,8 @@
 ///
 /// These classes should be correct with Jellyfin 10.7.5
 
-import 'package:finamp/models/finamp_models.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -2199,6 +2199,8 @@ class BaseItemDto with RunTimeTickDuration {
   @HiveField(151)
   double? normalizationGain;
 
+  bool? finampOffline;
+
   /// Checks if the item has its own image (not inherited from a parent)
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;
 
@@ -2268,7 +2270,13 @@ class BaseItemDto with RunTimeTickDuration {
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
-  Map<String, dynamic> toJson() => _$BaseItemDtoToJson(this);
+  Map<String, dynamic> toJson({bool setOffline = true}) {
+    var json = _$BaseItemDtoToJson(this);
+    if (setOffline) {
+      json["FinampOffline"] = true;
+    }
+    return json;
+  }
 
   bool mostlyEqual(BaseItemDto other) {
     var equal = const DeepCollectionEquality().equals;
@@ -2286,6 +2294,9 @@ class BaseItemDto with RunTimeTickDuration {
         other.normalizationGain == normalizationGain &&
         other.playlistItemId == playlistItemId;
   }
+
+  DownloadItemType get downloadType =>
+      type! == "Audio" ? DownloadItemType.song : DownloadItemType.collection;
 }
 
 @JsonSerializable(

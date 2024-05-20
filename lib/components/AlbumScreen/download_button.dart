@@ -26,7 +26,7 @@ class DownloadButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    var status =
+    DownloadItemStatus? status =
         ref.watch(downloadsService.statusProvider((item, children))).value;
     var isOffline = ref.watch(finampSettingsProvider
             .select((value) => value.valueOrNull?.isOffline)) ??

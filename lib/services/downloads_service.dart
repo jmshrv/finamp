@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -104,6 +104,25 @@ class DownloadsService {
         .watchObject(stub.isarId, fireImmediately: true)
         .map((event) => event?.state)
         .distinct();
+  });
+
+  late final infoForAnchorProvider =
+      StreamProvider.family.autoDispose<bool, DownloadStub>((ref, stub) {
+    assert(stub.type != DownloadItemType.image &&
+        stub.type != DownloadItemType.anchor);
+    // Refresh on addDownload/removeDownload as well as state change
+    ref.watch(_anchorProvider);
+    return _isar.downloadItems
+        .watchObjectLazy(stub.isarId, fireImmediately: true)
+        .map((event) {
+      return _isar.downloadItems
+              .where()
+              .isarIdEqualTo(_anchor.isarId)
+              .filter()
+              .info((q) => q.isarIdEqualTo(stub.isarId))
+              .countSync() >
+          0;
+    }).distinct();
   });
 
   /// Provider for the download status of an item.  See [getStatus] for details.
@@ -270,7 +289,6 @@ class DownloadsService {
       // If app is in background for more than 5 hours, treat it like a restart
       // and potentially resync all items
       if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
-          !FinampSettingsHelper.finampSettings.isOffline &&
           _appPauseTime != null &&
           DateTime.now().difference(_appPauseTime!).inHours > 5) {
         _isar.writeTxnSync(() {
@@ -346,8 +364,7 @@ class DownloadsService {
   /// Begin processing stored downloads/deletes.  This should only be called
   /// after background_downloader is fully set up.
   Future<void> startQueues() async {
-    if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
-        !FinampSettingsHelper.finampSettings.isOffline) {
+    if (FinampSettingsHelper.finampSettings.resyncOnStartup) {
       _isar.writeTxnSync(() {
         syncBuffer.addAll([_anchor.isarId], [], null);
       });
@@ -617,10 +634,11 @@ class DownloadsService {
                 .typeEqualTo(DownloadItemType.image))),
         // Select nodes which only info link images or have no info links
         (q) => q.not().info((q) => q.not().typeEqualTo(DownloadItemType.image)),
+        (q) => q.typeEqualTo(DownloadItemType.anchor),
       ];
       // albums/playlist can require info on songs.  required songs can require info on
-      // collections.  Anyone can require info on an image.
-      // All other info links are disallowed.
+      // collections.  Anyone can require info on an image.  The anchor can info link
+      // anyone.  All other info links are disallowed.
       var badInfoItems = _isar.downloadItems
           .filter()
           .not()
@@ -886,9 +904,14 @@ class DownloadsService {
           .distinctByState()
           .stateProperty()
           .findAllSync());
-      // add dependency on image in info links
-      childStates.addAll(
-          item.info.filter().distinctByState().stateProperty().findAllSync());
+      // playlist metadata info links collections which are not nessecarilly downloaded,
+      // and should still be considered downloaded.
+      if (item.finampCollection?.type !=
+          FinampCollectionType.allPlaylistsMetadata) {
+        // add dependency on image in info links
+        childStates.addAll(
+            item.info.filter().distinctByState().stateProperty().findAllSync());
+      }
     }
     if (childStates.contains(DownloadItemState.notDownloaded)) {
       return updateItemState(item, DownloadItemState.notDownloaded);
@@ -1223,6 +1246,15 @@ class DownloadsService {
         .findFirstSync();
   }
 
+  /// Check whether the given item is part of the given collection.  Returns null
+  /// if there is no metadata for the collection.
+  bool? checkIfInCollection(BaseItemDto collection, BaseItemDto item) {
+    var parent = _isar.downloadItems.getSync(
+        DownloadStub.getHash(collection.id, DownloadItemType.collection));
+    var childId = DownloadStub.getHash(item.id, item.downloadType);
+    return parent?.orderedChildren?.contains(childId);
+  }
+
   // This is for album/playlist screen
   /// Get all songs in a collection, ordered correctly.  Used to show songs on
   /// album/playlist screen.  Can return all songs in the album/playlist or
@@ -1231,8 +1263,6 @@ class DownloadsService {
       {bool playable = true}) async {
     var stub =
         DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
-    assert(stub.baseItemType == BaseItemDtoType.playlist ||
-        stub.baseItemType == BaseItemDtoType.album);
 
     var id = DownloadStub.getHash(item.id, DownloadItemType.collection);
     var query = _isar.downloadItems
@@ -1275,7 +1305,12 @@ class DownloadsService {
       {String? nameFilter,
       BaseItemDto? relatedTo,
       String? viewFilter,
-      bool nullableViewFilters = true}) {
+      bool nullableViewFilters = true,
+      bool onlyFavorites = false}) {
+    List<int> favoriteIds = [];
+    if (onlyFavorites) {
+      favoriteIds = _getFavoriteIds() ?? [];
+    }
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.song)
@@ -1284,6 +1319,8 @@ class DownloadsService {
             .stateEqualTo(DownloadItemState.complete)
             .or()
             .stateEqualTo(DownloadItemState.needsRedownloadComplete))
+        .optional(onlyFavorites,
+            (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(nameFilter != null,
             (q) => q.nameContains(nameFilter!, caseSensitive: false))
         .optional(
@@ -1308,6 +1345,7 @@ class DownloadsService {
   /// + viewFilter - only return collections in the given library.
   /// + childViewFilter - only return collections with children in the given library.
   /// Useful for artists/genres, which may need to be shown in several libraries.
+  /// + onlyFavorites - return only favorite items
   Future<List<DownloadStub>> getAllCollections(
       {String? nameFilter,
       BaseItemDtoType? baseTypeFilter,
@@ -1315,7 +1353,12 @@ class DownloadsService {
       bool fullyDownloaded = false,
       String? viewFilter,
       String? childViewFilter,
-      bool nullableViewFilters = true}) {
+      bool nullableViewFilters = true,
+      bool onlyFavorites = false}) {
+    List<int> favoriteIds = [];
+    if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
+      favoriteIds = _getFavoriteIds() ?? [];
+    }
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1324,6 +1367,13 @@ class DownloadsService {
             (q) => q.nameContains(nameFilter!, caseSensitive: false))
         .optional(baseTypeFilter != null,
             (q) => q.baseItemTypeEqualTo(baseTypeFilter!))
+        // If allPlaylists is info downloaded, we may have info for empty
+        // playlists.  We should only return playlists with at least 1 required
+        // song in them.
+        .optional(
+            baseTypeFilter == BaseItemDtoType.playlist,
+            (q) => q.info((q) =>
+                q.typeEqualTo(DownloadItemType.song).requiredByIsNotEmpty()))
         .optional(
             relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
@@ -1331,6 +1381,8 @@ class DownloadsService {
                     relatedTo!.id, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
+        .optional(onlyFavorites,
+            (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(
             viewFilter != null,
             (q) => q.group((q) => q.viewIdEqualTo(viewFilter).optional(
@@ -1390,6 +1442,17 @@ class DownloadsService {
     return item;
   }
 
+  bool? isFavorite(BaseItemDto item) {
+    var stubId = DownloadStub.getHash(item.id, item.downloadType);
+    return _getFavoriteIds()?.contains(stubId);
+  }
+
+  List<int>? _getFavoriteIds() {
+    var stub = DownloadStub.fromFinampCollection(
+        FinampCollection(type: FinampCollectionType.favorites));
+    return _isar.downloadItems.getSync(stub.isarId)?.orderedChildren ?? [];
+  }
+
   /// Get a downloadItem with verified files by id.
   DownloadItem? _getDownloadByID(String id, DownloadItemType type) {
     assert(type.hasFiles);
@@ -1421,52 +1484,81 @@ class DownloadsService {
   Future<int> getFileSize(DownloadStub item) async {
     var canonItem = await _isar.downloadItems.get(item.isarId);
     if (canonItem == null) return 0;
-    return _getFileSize(canonItem, {});
+    Set<DownloadItem> info = {};
+    Set<DownloadItem> required = {};
+    _getFileChildren(canonItem, required, info, true);
+    info = info.difference(required);
+    int size = 0;
+    for (var item in required) {
+      size += await _getFileSize(item, true);
+    }
+    for (var item in info) {
+      size += await _getFileSize(item, false);
+    }
+    return size;
   }
 
   /// Recursive subcomponent of [getFileSize].
-  Future<int> _getFileSize(
-      DownloadItem item, Set<DownloadStub> completed) async {
-    if (completed.contains(item)) {
-      return 0;
+  void _getFileChildren(DownloadItem item, Set<DownloadItem> required,
+      Set<DownloadItem> info, bool isRequired) {
+    if (required.contains(item) || (info.contains(item) && !isRequired)) {
+      return;
     } else {
-      completed.add(item);
+      if (isRequired) {
+        required.add(item);
+      } else {
+        info.add(item);
+      }
     }
-    int size = 0;
-    var children = item.requires.filter().findAllSync();
-    for (var child in children) {
-      size += await _getFileSize(child, completed);
+    if (isRequired || item.type == DownloadItemType.song) {
+      var children = item.requires.filter().findAllSync();
+      for (var child in children) {
+        _getFileChildren(child, required, info, isRequired);
+      }
     }
-    if (item.type == DownloadItemType.song && item.state.isComplete) {
+    if (isRequired || item.type != DownloadItemType.song) {
+      var children = item.info.filter().findAllSync();
+      for (var child in children) {
+        _getFileChildren(child, required, info, false);
+      }
+    }
+  }
+
+  /// Recursive subcomponent of [getFileSize].
+  Future<int> _getFileSize(DownloadItem item, bool required) async {
+    if (item.type == DownloadItemType.song &&
+        item.state.isComplete &&
+        required) {
       if (item.fileTranscodingProfile == null ||
           item.fileTranscodingProfile!.codec !=
               FinampTranscodingCodec.original ||
           item.baseItem?.mediaSources == null) {
-        var statSize =
-            await item.file?.stat().then((value) => value.size).catchError((e) {
-                  _downloadsLogger.fine(
-                      "No file for song ${item.name} when calculating size.");
-                  return 0;
-                }) ??
-                0;
-        size += statSize;
+        return await item.file
+                ?.stat()
+                .then((value) => value.size)
+                .catchError((e) {
+              _downloadsLogger
+                  .fine("No file for song ${item.name} when calculating size.");
+              return 0;
+            }) ??
+            0;
       } else {
-        size += item.baseItem?.mediaSources?[0].size ?? 0;
+        return item.baseItem?.mediaSources?[0].size ?? 0;
       }
     }
     if (item.type == DownloadItemType.image &&
         item.state == DownloadItemState.complete) {
-      var statSize =
-          await item.file?.stat().then((value) => value.size).catchError((e) {
-                _downloadsLogger.fine(
-                    "No file for image ${item.name} when calculating size.");
-                return 0;
-              }) ??
-              0;
-      size += statSize;
+      return await item.file
+              ?.stat()
+              .then((value) => value.size)
+              .catchError((e) {
+            _downloadsLogger
+                .fine("No file for image ${item.name} when calculating size.");
+            return 0;
+          }) ??
+          0;
     }
-
-    return size;
+    return 0;
   }
 
   /// Returns the download status of an item.  This is whether the associated item

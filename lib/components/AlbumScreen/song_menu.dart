@@ -446,8 +446,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       ),
       Consumer(
         builder: (context, ref, child) {
-          bool isFav = ref.watch(
-              isFavoriteProvider(widget.item.id, DefaultValue(widget.item)));
+          bool isFav =
+              ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
           return ListTile(
             enabled: !widget.isOffline,
             leading: isFav
@@ -468,8 +468,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                 : AppLocalizations.of(context)!.addFavourite),
             onTap: () async {
               ref
-                  .read(isFavoriteProvider(widget.item.id, DefaultValue())
-                      .notifier)
+                  .read(
+                      isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
                   .updateFavorite(!isFav);
               if (context.mounted) Navigator.pop(context);
             },

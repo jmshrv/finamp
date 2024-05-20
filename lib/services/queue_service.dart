@@ -942,7 +942,7 @@ class QueueService {
               : null),
       title: item.name ?? "unknown",
       extras: {
-        "itemJson": item.toJson(),
+        "itemJson": item.toJson(setOffline: false),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedSongPath": downloadedSong?.file?.path,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,

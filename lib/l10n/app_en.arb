@@ -1282,7 +1282,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Info for All Playlists} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1502,5 +1502,15 @@
   "addPlaylistSubheader": "Add track to a playlist",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
-  }
+  },
+  "trackOfflineFavorites": "Sync all favorite statuses",
+  "trackOfflineFavoritesSubtitle": "This allows showing more up-to-date favorite statuses while offline.  Does not download any additional files.",
+  "allPlaylistsInfoSetting": "Show all playlists offline",
+  "allPlaylistsInfoSettingSubtitle": "Sync metadata for all playlists to show partially downloaded playlists offline",
+  "downloadFavoritesSetting": "Download all favorites",
+  "downloadAllPlaylistsSetting": "Download all playlists",
+  "fiveLatestAlbumsSetting": "Download 5 latest albums",
+  "fiveLatestAlbumsSettingSubtitle": "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed.",
+  "cacheLibraryImagesSettings": "Cache current library images",
+  "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded."
 }

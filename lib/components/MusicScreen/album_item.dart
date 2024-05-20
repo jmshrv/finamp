@@ -159,8 +159,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           screenSize.height - globalPosition.dy,
         ),
         items: [
-          ref.watch(isFavoriteProvider(
-                  mutableAlbum.id, DefaultValue(mutableAlbum)))
+          ref.watch(isFavoriteProvider(FavoriteRequest(mutableAlbum)))
               ? PopupMenuItem<_AlbumListTileMenuItems>(
                   enabled: !isOffline,
                   value: _AlbumListTileMenuItems.removeFavourite,
@@ -283,14 +282,12 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       switch (selection) {
         case _AlbumListTileMenuItems.addFavourite:
           ref
-              .read(
-                  isFavoriteProvider(mutableAlbum.id, DefaultValue()).notifier)
+              .read(isFavoriteProvider(FavoriteRequest(mutableAlbum)).notifier)
               .updateFavorite(true);
           break;
         case _AlbumListTileMenuItems.removeFavourite:
           ref
-              .read(
-                  isFavoriteProvider(mutableAlbum.id, DefaultValue()).notifier)
+              .read(isFavoriteProvider(FavoriteRequest(mutableAlbum)).notifier)
               .updateFavorite(false);
           break;
         case _AlbumListTileMenuItems.addToMixList:
