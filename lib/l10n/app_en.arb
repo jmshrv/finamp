@@ -648,21 +648,21 @@
   "@removeFromPlaylistTitle": {},
   "removeFromPlaylistNamedTooltip": "Remove from playlist '{playlistName}'",
   "@removeFromPlaylistNamedTooltip": {
-    "description": "Tooltip for the action that removes a song from a specific playlist. The playlist name is a placeholder.",
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
     "placeholders": {
       "playlistName": {
         "type": "String",
-        "example": "My Favorite Songs"
+        "example": "My Favorite Tracks"
       }
     }
   },
   "removeFromPlaylistNamedTitle": "Remove from Playlist '{playlistName}'",
   "@removeFromPlaylistNamedTitle": {
-    "description": "Tooltip for the action that removes a song from a specific playlist. The playlist name is a placeholder.",
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
     "placeholders": {
       "playlistName": {
         "type": "String",
-        "example": "My Favorite Songs"
+        "example": "My Favorite Tracks"
       }
     }
   },
@@ -901,7 +901,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1065,7 +1065,7 @@
       }
     }
   },
-  "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {},
   "confirm": "Confirm",
   "close": "Close",
@@ -1141,6 +1141,12 @@
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Enable to insert a track as next item in queue when swiped in track list instead of appending it to the end.",
   "@swipeInsertQueueNextSubtitle": {},
+  "startInstantMixForIndividualTracksSwitchTitle": "Start Instant Mixes for Individual Tracks",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "When enabled, tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
   "downloadItem": "Download",
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
@@ -1544,7 +1550,7 @@
   "fiveLatestAlbumsSettingSubtitle": "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed.",
   "cacheLibraryImagesSettings": "Cache current library images",
   "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded.",
-  "showProgressOnNowPlayingBarTitle": "Show track progress on now playing bar?",
+  "showProgressOnNowPlayingBarTitle": "Show track progress on now playing bar",
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
   },

@@ -181,7 +181,7 @@ class ShowProgressOnNowPlayingBar extends StatelessWidget {
           title: Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarTitle),
           subtitle:
               Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarSubtitle),
-          value: showProgressOnNowPlayingBar ?? true,
+          value: showProgressOnNowPlayingBar ?? false,
           onChanged: showProgressOnNowPlayingBar == null
               ? null
               : (value) {

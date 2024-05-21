@@ -104,6 +104,7 @@ const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 const _showArtistChipImage = true;
 const _trackOfflineFavoritesDefault = true;
 const _showProgressOnNowPlayingBarDefault = true;
+const _startInstantMixForIndividualTracksDefault = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -176,6 +177,7 @@ class FinampSettings {
     this.showArtistChipImage = _showArtistChipImage,
     this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
     this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
+    this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -385,6 +387,9 @@ class FinampSettings {
 
   @HiveField(64, defaultValue: _showProgressOnNowPlayingBarDefault)
   bool showProgressOnNowPlayingBar;
+
+  @HiveField(65, defaultValue: _startInstantMixForIndividualTracksDefault)
+  bool startInstantMixForIndividualTracks;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1362,7 +1367,9 @@ enum QueueItemSourceType {
   @HiveField(17)
   unknown,
   @HiveField(18)
-  genreMix;
+  genreMix,
+  @HiveField(19)
+  song;
 }
 
 @HiveType(typeId: 53)

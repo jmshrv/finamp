@@ -312,7 +312,20 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     ),
                   );
                 } else {
-                  await _audioServiceHelper.startInstantMixForItem(widget.item);
+                  if (FinampSettingsHelper.finampSettings.startInstantMixForIndividualTracks) {
+                    await _audioServiceHelper.startInstantMixForItem(widget.item);
+                  } else {
+                    await _queueService.startPlayback(
+                      items: [widget.item],
+                      source: QueueItemSource(
+                        name: QueueItemSourceName(
+                            type: QueueItemSourceNameType.preTranslated,
+                            pretranslatedName: widget.item.name),
+                        type: QueueItemSourceType.song,
+                        id: widget.item.id,
+                      ),
+                    );
+                  }
                 }
               }
             },

@@ -165,6 +165,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
           fields[64] == null ? true : fields[64] as bool,
+      startInstantMixForIndividualTracks:
+          fields[65] == null ? true : fields[65] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -174,7 +176,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(63)
+      ..writeByte(64)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -300,7 +302,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(63)
       ..write(obj.trackOfflineFavorites)
       ..writeByte(64)
-      ..write(obj.showProgressOnNowPlayingBar);
+      ..write(obj.showProgressOnNowPlayingBar)
+      ..writeByte(65)
+      ..write(obj.startInstantMixForIndividualTracks);
   }
 
   @override
@@ -1100,6 +1104,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         return QueueItemSourceType.unknown;
       case 18:
         return QueueItemSourceType.genreMix;
+      case 19:
+        return QueueItemSourceType.song;
       default:
         return QueueItemSourceType.album;
     }
@@ -1164,6 +1170,9 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         break;
       case QueueItemSourceType.genreMix:
         writer.writeByte(18);
+        break;
+      case QueueItemSourceType.song:
+        writer.writeByte(19);
         break;
     }
   }

@@ -36,7 +36,6 @@ class DownloadsSettingsScreen extends StatelessWidget {
                 .pushNamed(DownloadsLocationScreen.routeName),
           ),
           if (Platform.isIOS || Platform.isAndroid) const RequireWifiSwitch(),
-          const ShowPlaylistSongsSwitch(),
           const SyncFavoritesSwitch(),
           ListTile(
             // TODO real UI for this
@@ -47,8 +46,17 @@ class DownloadsSettingsScreen extends StatelessWidget {
                 item: DownloadStub.fromFinampCollection(FinampCollection(
                     type: FinampCollectionType.allPlaylistsMetadata))),
           ),
-          // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
-          if (!Platform.isIOS) const ConcurentDownloadsSelector(),
+          ListTile(
+            // TODO real UI for this
+            title:
+                Text(AppLocalizations.of(context)!.cacheLibraryImagesSettings),
+            subtitle: Text(AppLocalizations.of(context)!
+                .cacheLibraryImagesSettingsSubtitle),
+            trailing: DownloadButton(
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                    type: FinampCollectionType.libraryImages,
+                    library: userHelper.currentUser!.currentView!))),
+          ),
           ListTile(
             // TODO real UI for this
             title: Text(AppLocalizations.of(context)!.downloadFavoritesSetting),
@@ -73,21 +81,13 @@ class DownloadsSettingsScreen extends StatelessWidget {
                 item: DownloadStub.fromFinampCollection(FinampCollection(
                     type: FinampCollectionType.latest5Albums))),
           ),
-          ListTile(
-            // TODO real UI for this
-            title:
-                Text(AppLocalizations.of(context)!.cacheLibraryImagesSettings),
-            subtitle: Text(AppLocalizations.of(context)!
-                .cacheLibraryImagesSettingsSubtitle),
-            trailing: DownloadButton(
-                item: DownloadStub.fromFinampCollection(FinampCollection(
-                    type: FinampCollectionType.libraryImages,
-                    library: userHelper.currentUser!.currentView!))),
-          ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
-          const DownloadWorkersSelector(),
           const RedownloadTranscodesSwitch(),
+          const ShowPlaylistSongsSwitch(),
+          const DownloadWorkersSelector(),
+          // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
+          if (!Platform.isIOS) const ConcurentDownloadsSelector(),
         ],
       ),
     );
