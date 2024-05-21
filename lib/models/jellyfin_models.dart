@@ -1603,6 +1603,7 @@ class BaseItemDto with RunTimeTickDuration {
     this.channelType,
     this.audio,
     this.normalizationGain,
+    this.hasLyrics,
   });
 
   /// Gets or sets the name.
@@ -2199,8 +2200,13 @@ class BaseItemDto with RunTimeTickDuration {
   @HiveField(151)
   double? normalizationGain;
 
-  bool? finampOffline;
+  /// Gets or sets the HasLyrics value.
+  @HiveField(152)
+  bool? hasLyrics;
 
+  /// Custom helper field to determine if the BaseItemDto was created in offline mode
+  bool? finampOffline;
+  
   /// Checks if the item has its own image (not inherited from a parent)
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;
 

@@ -1,4 +1,4 @@
-![Several screenshots of the app showing off different screens and features in both light and dark mode](./Showcase.png)
+![Banner](./GitHub_Banner.png)
 
 #### Redesign Beta
 
@@ -12,19 +12,20 @@ Please note that the beta is still work-in-progress, so the UI and functionality
 Some of its features include:
 
 - A welcoming user interface that looks modern & unique, but still familiar
-- Downloading files for offline listening and saving mobile data
+- Downloading files for offline listening and saving mobile data. Can use transcoded downloads to save even more space.
 - Transcoded streaming for saving mobile data
 - Beautiful dynamic colors that adapt to your media
 - Audio volume normalization ("ReplayGain") (Jellyfin 10.9+)
+- Lyrics (Jellyfin 10.9+)
 - Gapless playback
-- Android Auto support (experimental, only works when installed via Google Play)
+- Android Auto support (coming soon™)
 - Full support for Jellyfin's "Playback Reporting" feature and plugin, letting you keep track of your listening activity
 
 ***You need your own Jellyfin server to use Finamp. If you don't have one yet, take a look at [Jellyfin's website](https://jellyfin.org/) to learn more about it and how to set it up.***
 
 ## Getting Finamp
 
-<div style="display: flex; align-items: center;">
+<div style="display: flex; align-items: center;" align="center">
 
 [<img src="app-store-badges/fdroid.png"
     alt="Get it on F-Droid"
@@ -68,9 +69,6 @@ Yes. Finamp is a *tool* that lets you interface with a Jellyfin server. Finamp d
 ##### I'm having trouble with Finamp, where can I find help?
 If you're experiencing software bugs or other issues with Finamp, be sure to take a look at [Finamp's issue tracker](https://github.com/jmshrv/finamp/issues), especially the pinned issues at the top of the page. If you can't find anything related to your specific problem, please create a new issue (you will need a GitHub account).
 
-##### My Playlists aren't showing up!
-A recent Jellyfin update (10.8.11) included some changes to how playlists show up. This was done by mistake and should be fixed in a coming Jellyfin update soon. In case the update is delayed, we will try to temporarily change how Finamp shows playlists until the problem is resolved.
-
 ## Contributing
 
 Finamp is a community-driven project and relies on people like **you** and their contributions. To learn how you could help out with making Finamp even better, take a look at our [Contribution Guidelines](CONTRIBUTING.md)
@@ -81,19 +79,16 @@ This app is still a work in progress, and has some bugs/issues that haven't been
 
 - Reordering the queue while shuffle is enabled is not possible at the moment. It seems like this is an issue with a dependency of Finamp (`just_audio`), and is being tracked [here](https://github.com/ryanheise/just_audio/issues/1042)
 - If you have a very large library or an older phone, performance might not be great in some places
-- Download indicators occasionally don't update
 
 ## Planned Features
 
-- Lyrics support (Jellyfin 10.9+)
 - Improved Android Auto / Apple CarPlay support
 - Full redesign, adding more features and a home screen. See [this issue](https://github.com/jmshrv/finamp/issues/220) for more info
 - Better playlist editing
-- Transcoding support for downloads
 - Multiple users/servers
 - More customization options
 
-## Screenshots
+## Screenshots (Stable Version, outdated)
 
 | | |
 |:-------------------------:|:-------------------------:|

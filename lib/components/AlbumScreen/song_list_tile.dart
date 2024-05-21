@@ -177,6 +177,20 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       ),
                       alignment: PlaceholderAlignment.top,
                     ),
+                    if (widget.item.hasLyrics ?? false)
+                      WidgetSpan(
+                        child: Transform.translate(
+                          offset: const Offset(-2.5, 0),
+                          child: Icon(
+                            TablerIcons.microphone_2,
+                            size: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize! + 2,
+                          )
+                        ),
+                        alignment: PlaceholderAlignment.top,
+                      ),
                     TextSpan(
                       text: printDuration(widget.item.runTimeTicksDuration()),
                       style: TextStyle(
