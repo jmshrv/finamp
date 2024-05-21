@@ -280,7 +280,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                   width: max(
                                                       0,
                                                       (screenSize.width -
-                                                              2 *
+                                                              3 *
                                                                   horizontalPadding -
                                                               albumImageSize) *
                                                           (playbackPosition!
