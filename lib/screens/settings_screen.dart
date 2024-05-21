@@ -1,8 +1,10 @@
 import 'package:finamp/screens/interaction_settings_screen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../components/SettingsScreen/logout_list_tile.dart';
 import '../services/finamp_settings_helper.dart';
@@ -19,6 +21,9 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   static const routeName = "/settings";
+  static const repoLink = "https://github.com/jmshrv/finamp";
+  static const releaseNotesLink = "https://github.com/jmshrv/finamp/releases";
+  static const translationsLink = "https://hosted.weblate.org/projects/finamp";
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +34,99 @@ class SettingsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.info),
             onPressed: () async {
+              final localizations = AppLocalizations.of(context)!;
               final applicationLegalese =
-                  AppLocalizations.of(context)!.applicationLegalese;
+                  AppLocalizations.of(context)!.applicationLegalese(repoLink);
               PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+              const linkStyle = TextStyle(
+                color: Colors.blue,
+                decoration: TextDecoration.underline,
+              );
 
               showAboutDialog(
                 context: context,
                 applicationName: packageInfo.appName,
                 applicationVersion: packageInfo.version,
+                applicationIcon: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Image.asset(
+                    'images/finamp_cropped.png',
+                    width: 56,
+                    height: 56,
+                  ),
+                ),
                 applicationLegalese: applicationLegalese,
+                children: [
+                  const SizedBox(height: 20),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text: localizations.finampTagline,
+                          style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
+                        ),
+                        const TextSpan(
+                          text: '\n\n',
+                        ),
+                        TextSpan(
+                          text: localizations.aboutContributionPrompt,
+                        ),
+                        const TextSpan(
+                          text: '\n\n',
+                        ),
+                        TextSpan(
+                          text: '${localizations.aboutContributionLink}\n',
+                        ),
+                        TextSpan(
+                          text: repoLink,
+                          style: linkStyle,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              await launchUrl(Uri.parse(repoLink));
+                            },
+                        ),
+                        const TextSpan(
+                          text: '\n\n',
+                        ),
+                        TextSpan(
+                          text: '${localizations.aboutTranslations}\n',
+                        ),
+                        TextSpan(
+                          text: translationsLink,
+                          style: linkStyle,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              await launchUrl(Uri.parse(translationsLink));
+                            },
+                        ),
+                        const TextSpan(
+                          text: '\n\n',
+                        ),
+                        TextSpan(
+                          text: '${localizations.aboutReleaseNotes}\n',
+                        ),
+                        TextSpan(
+                          text: releaseNotesLink,
+                          style: linkStyle,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              await launchUrl(Uri.parse(releaseNotesLink));
+                            },
+                        ),
+                        const TextSpan(
+                          text: '\n\n\n',
+                        ),
+                        TextSpan(
+                          text: localizations.aboutThanks,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]
               );
             },
           )

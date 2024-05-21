@@ -3,6 +3,10 @@
   "@finamp": {
     "description": "App name, possibly translated"
   },
+  "finampTagline": "An open source Jellyfin music player",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
   "startupError": "Something went wrong during app startup. The error was: {error}\n\nPlease create an issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this problem persists you can clear your app data to reset the app.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -12,6 +16,26 @@
         "example": "Failed to open download DB"
       }
     }
+  },
+  "aboutContributionPrompt": "Made by awesome people in their free time.\nYou could be one of them!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "Contribute to Finamp on GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "Read the latest release notes:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "Help translate Finamp into your language:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "aboutThanks": "Thank you for using Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
   },
   "loginFlowWelcomeHeading": "Welcome to",
   "@loginFlowWelcomeHeading": {
@@ -396,8 +420,15 @@
   "@message": {},
   "stackTrace": "Stack Trace",
   "@stackTrace": {},
-  "applicationLegalese": "Licensed with the Mozilla Public License 2.0. Source code available at:\n\ngithub.com/jmshrv/finamp",
-  "@applicationLegalese": {},
+  "applicationLegalese": "Licensed with the Mozilla Public License 2.0.\nSource code available at {sourceCodeLink}.",
+  "@applicationLegalese": {
+    "placeholders": {
+      "sourceCodeLink": {
+        "type": "String",
+        "example": "https://github.com/jmshrv/finamp"
+      }
+    }
+  },
   "transcoding": "Transcoding",
   "@transcoding": {},
   "downloadLocations": "Download Locations",

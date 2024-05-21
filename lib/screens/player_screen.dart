@@ -441,7 +441,7 @@ enum PlayerHideable {
   queueButton(0, 27, 2),
   progressSlider(0, 14, 4),
   twoLineTitle(0, 27, 3),
-  codecInfo(0, 20, 3),
+  features(0, 20, 3),
   loopShuffleButtons(96, 0, 0),
   unhideableElements(144, 162, 0),
   controlsPaddingSmall(0, 8, 2),
@@ -469,7 +469,7 @@ class PlayerHideableController {
     PlayerHideable.bigPlayButton,
     PlayerHideable.queueButton,
     PlayerHideable.controlsPaddingSmall,
-    PlayerHideable.codecInfo,
+    PlayerHideable.features,
     PlayerHideable.twoLineTitle,
     PlayerHideable.progressSlider
   ];
