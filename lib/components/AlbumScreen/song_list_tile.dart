@@ -348,8 +348,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
                   ? DismissDirection.none
                   : DismissDirection.horizontal,
               dismissThresholds: const {
-                DismissDirection.startToEnd: 0.5,
-                DismissDirection.endToStart: 0.5
+                DismissDirection.startToEnd: 0.65,
+                DismissDirection.endToStart: 0.65
               },
               background: Container(
                 color: Theme.of(context).colorScheme.secondaryContainer,
