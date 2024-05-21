@@ -3,10 +3,12 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/favorite_provider.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 import 'playlist_actions_menu.dart';
 
@@ -41,6 +43,7 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
     bool isFav = ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
     return GestureDetector(
       onLongPress: () async {
+        FeedbackHelper.feedback(FeedbackType.selection);
         ref
             .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
             .updateFavorite(!isFav);
