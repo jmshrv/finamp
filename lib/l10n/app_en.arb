@@ -607,13 +607,37 @@
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Add to Playlist",
   "@addToPlaylistTitle": {},
-  "removeFromPlaylistTooltip": "Remove from playlist",
+  "addToMorePlaylistsTooltip": "Add to more playlists",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "Add to More Playlists",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistTooltip": "Remove from this playlist",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Remove from Playlist",
+  "removeFromPlaylistTitle": "Remove From This Playlist",
   "@removeFromPlaylistTitle": {},
+  "removeFromPlaylistNamedTooltip": "Remove from playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a song from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Songs"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Remove from Playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a song from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Songs"
+      }
+    }
+  },
   "newPlaylist": "New Playlist",
   "@newPlaylist": {},
-  "createButtonLabel": "CREATE",
+  "createButtonLabel": "Create",
   "@createButtonLabel": {},
   "playlistCreated": "Playlist created.",
   "@playlistCreated": {},
@@ -1068,7 +1092,7 @@
   "@volumeNormalizationIOSBaseGainEditorTitle": {
     "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet tracks. The value is in decibels (dB), where -10 dB is 50% volume and -5 dB is 75% volume.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet tracks. The value is in decibels (dB), where -10 dB is ~30% volume, -4.5 dB is ~60% volume and -2 dB is ~80% volume.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
@@ -1258,7 +1282,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Info for All Playlists} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1266,6 +1290,15 @@
       }
     },
     "description": "Localized names of special downloadable collections like favorites."
+  },
+  "cacheLibraryImagesName": "Cached Images for '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
   "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
   "@downloadTranscodeEnableTitle": {
@@ -1372,6 +1405,24 @@
   "@redownloadSubtitle": {
     "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
   },
+  "defaultDownloadLocationButton": "Set as default download location.  Disable to select per download.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "fixedGridSizeSwitchTitle": "Use fixed size grid tiles",
+  "fixedGridSizeSwitchSubtitle": "Grid tile sizes will not respond to window/screen size.",
+  "fixedGridSizeTitle": "Grid Tile Size",
+  "fixedGridTileSizeEnum": "{size, select, small{Small} medium{Medium} large{Large} veryLarge{Very Large} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "allowSplitScreenTitle": "Allow SplitScreen Mode",
+  "allowSplitScreenSubtitle": "The player will be displayed alongside other views on wider displays.",
   "enableVibration": "Enable vibration",
   "@enableVibration": {},
   "enableVibrationSubtitle": "Whether to enable vibration.",
@@ -1382,7 +1433,7 @@
   "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen. Non-critical controls will be hidden more aggressively at small screen sizes.",
   "suppressPlayerPadding": "Suppress player controls padding",
   "suppressPlayerPaddingSubtitle": "Fully minimizes padding between player screen controls when album cover is not at full size.",
-  "lockDownload": "Keep on Device",
+  "lockDownload": "Always Keep on Device",
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
@@ -1425,5 +1476,41 @@
       }
     },
     "description": "Displays duration of unplayed tracks"
-  }
+  },
+  "removeFromPlaylistConfirm": "Remove",
+  "removeFromPlaylistCancel": "Cancel",
+  "removeFromPlaylistPrompt": "Remove '{itemName}' from playlist '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "addRemoveFromPlaylist": "Add To / Remove From Playlists",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "Add track to a playlist",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "trackOfflineFavorites": "Sync all favorite statuses",
+  "trackOfflineFavoritesSubtitle": "This allows showing more up-to-date favorite statuses while offline.  Does not download any additional files.",
+  "allPlaylistsInfoSetting": "Show all playlists offline",
+  "allPlaylistsInfoSettingSubtitle": "Sync metadata for all playlists to show partially downloaded playlists offline",
+  "downloadFavoritesSetting": "Download all favorites",
+  "downloadAllPlaylistsSetting": "Download all playlists",
+  "fiveLatestAlbumsSetting": "Download 5 latest albums",
+  "fiveLatestAlbumsSettingSubtitle": "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed.",
+  "cacheLibraryImagesSettings": "Cache current library images",
+  "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded."
 }

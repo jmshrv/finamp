@@ -1,4 +1,5 @@
 import 'package:finamp/components/PlayerScreen/artist_chip.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -41,7 +42,8 @@ class ItemInfo extends StatelessWidget {
         IconAndText(
             iconData: Icons.music_note,
             textSpan: TextSpan(
-              text: (itemSongs == (item.childCount ?? itemSongs))
+              text: (itemSongs == (item.childCount ?? itemSongs) ||
+                      !FinampSettingsHelper.finampSettings.isOffline)
                   ? AppLocalizations.of(context)!.songCount(itemSongs)
                   : AppLocalizations.of(context)!
                       .offlineSongCount(item.childCount!, itemSongs),

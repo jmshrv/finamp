@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   TextEditingController textEditingController = TextEditingController();
   String? searchQuery;
   final _musicScreenLogger = Logger("MusicScreen");
+  final Map<TabContentType, MusicRefreshCallback> refreshMap = {};
 
   TabController? _tabController;
 
@@ -191,6 +194,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         // include enabled tabs
         final sortedTabs = finampSettings!.tabOrder.where(
             (e) => FinampSettingsHelper.finampSettings.showTabs[e] ?? false);
+        refreshMap[sortedTabs.elementAt(_tabController!.index)] =
+            MusicRefreshCallback();
 
         if (sortedTabs.length != _tabController?.length) {
           _musicScreenLogger.info(
@@ -256,6 +261,13 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       )
                     ]
                   : [
+                      if (!Platform.isIOS && !Platform.isAndroid)
+                        IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () {
+                              refreshMap[sortedTabs
+                                  .elementAt(_tabController!.index)]!();
+                            }),
                       SortOrderButton(
                         sortedTabs.elementAt(_tabController!.index),
                       ),
@@ -275,14 +287,14 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                           tooltip: AppLocalizations.of(context)!
                               .onlyShowFullyDownloaded,
                         ),
-                      if (!finampSettings.isOffline)
+                      if (!finampSettings.isOffline ||
+                          finampSettings.trackOfflineFavorites)
                         IconButton(
                           icon: finampSettings.onlyShowFavourite
                               ? const Icon(Icons.favorite)
                               : const Icon(Icons.favorite_outline),
-                          onPressed: finampSettings.isOffline
-                              ? null
-                              : () => FinampSettingsHelper.setOnlyShowFavourite(
+                          onPressed: () =>
+                              FinampSettingsHelper.setOnlyShowFavourite(
                                   !finampSettings.onlyShowFavourite),
                           tooltip: AppLocalizations.of(context)!.favourites,
                         ),
@@ -316,6 +328,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                         tabContentType: tabType,
                         searchTerm: searchQuery,
                         view: _finampUserHelper.currentUser?.currentView,
+                        refresh: refreshMap[tabType],
                       ))
                   .toList(),
             ),

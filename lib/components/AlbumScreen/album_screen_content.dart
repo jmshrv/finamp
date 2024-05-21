@@ -61,73 +61,71 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
       }
     }
 
-    return Scrollbar(
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Text(widget.parent.name ??
-                AppLocalizations.of(context)!.unknownName),
-            // 125 + 64 is the total height of the widget we use as a
-            // FlexibleSpaceBar. We add the toolbar height since the widget
-            // should appear below the appbar.
-            // TODO: This height is affected by platform density.
-            expandedHeight: kToolbarHeight + 125 + 80,
-            // collapsedHeight: kToolbarHeight + 125 + 80,
-            pinned: true,
-            flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
-              parentItem: widget.parent,
-              isPlaylist: widget.parent.type == "Playlist",
-              items: widget.queueChildren,
-            ),
-            actions: [
-              if (widget.parent.type == "Playlist" &&
-                  !FinampSettingsHelper.finampSettings.isOffline)
-                PlaylistNameEditButton(playlist: widget.parent),
-              FavoriteButton(item: widget.parent),
-              DownloadButton(
-                  item: DownloadStub.fromItem(
-                      type: DownloadItemType.collection, item: widget.parent),
-                  children: widget.displayChildren.length)
-            ],
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          title: Text(
+              widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
+          // 125 + 64 is the total height of the widget we use as a
+          // FlexibleSpaceBar. We add the toolbar height since the widget
+          // should appear below the appbar.
+          // TODO: This height is affected by platform density.
+          expandedHeight: kToolbarHeight + 125 + 80,
+          // collapsedHeight: kToolbarHeight + 125 + 80,
+          pinned: true,
+          flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
+            parentItem: widget.parent,
+            isPlaylist: widget.parent.type == "Playlist",
+            items: widget.queueChildren,
           ),
-          if (widget.displayChildren.length > 1 &&
-              childrenPerDisc.length >
-                  1) // show headers only for multi disc albums
-            for (var childrenOfThisDisc in childrenPerDisc)
-              SliverStickyHeader(
-                header: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 16.0,
-                  ),
-                  color: Theme.of(context).colorScheme.surfaceVariant,
-                  child: Text(
-                    AppLocalizations.of(context)!
-                        .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
-                    style: const TextStyle(fontSize: 20.0),
-                  ),
+          actions: [
+            if (widget.parent.type == "Playlist" &&
+                !FinampSettingsHelper.finampSettings.isOffline)
+              PlaylistNameEditButton(playlist: widget.parent),
+            FavoriteButton(item: widget.parent),
+            DownloadButton(
+                item: DownloadStub.fromItem(
+                    type: DownloadItemType.collection, item: widget.parent),
+                children: widget.displayChildren.length)
+          ],
+        ),
+        if (widget.displayChildren.length > 1 &&
+            childrenPerDisc.length >
+                1) // show headers only for multi disc albums
+          for (var childrenOfThisDisc in childrenPerDisc)
+            SliverStickyHeader(
+              header: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
                 ),
-                sliver: SongsSliverList(
-                  childrenForList: childrenOfThisDisc,
-                  childrenForQueue: Future.value(widget.queueChildren),
-                  parent: widget.parent,
-                  onRemoveFromList: onDelete,
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                child: Text(
+                  AppLocalizations.of(context)!
+                      .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                  style: const TextStyle(fontSize: 20.0),
                 ),
-              )
-          else if (widget.displayChildren.isNotEmpty)
-            SongsSliverList(
-              childrenForList: widget.displayChildren,
-              childrenForQueue: Future.value(widget.queueChildren),
-              parent: widget.parent,
-              onRemoveFromList: onDelete,
-            ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: MediaQuery.paddingOf(context).bottom,
-            ),
-          )
-        ],
-      ),
+              ),
+              sliver: SongsSliverList(
+                childrenForList: childrenOfThisDisc,
+                childrenForQueue: Future.value(widget.queueChildren),
+                parent: widget.parent,
+                onRemoveFromList: onDelete,
+              ),
+            )
+        else if (widget.displayChildren.isNotEmpty)
+          SongsSliverList(
+            childrenForList: widget.displayChildren,
+            childrenForQueue: Future.value(widget.queueChildren),
+            parent: widget.parent,
+            onRemoveFromList: onDelete,
+          ),
+        SliverToBoxAdapter(
+          child: Container(
+            height: MediaQuery.paddingOf(context).bottom,
+          ),
+        )
+      ],
     );
   }
 }

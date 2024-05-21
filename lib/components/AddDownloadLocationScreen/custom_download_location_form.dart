@@ -131,9 +131,10 @@ class _CustomDownloadLocationFormState
             },
           ),
           const Padding(padding: EdgeInsets.all(8.0)),
-          Text(AppLocalizations.of(context)!.customLocationsBuggy,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.red)),
+          if (Platform.isIOS || Platform.isAndroid)
+            Text(AppLocalizations.of(context)!.customLocationsBuggy,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.red)),
         ],
       ),
     );

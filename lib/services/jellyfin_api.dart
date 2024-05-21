@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io' show HttpClient, Platform;
 
 import 'package:chopper/chopper.dart';
@@ -472,40 +473,54 @@ abstract class JellyfinApi extends ChopperService {
       // converter: JsonConverter(),
       interceptors: [
         /// Gets baseUrl from SharedPreferences.
-        (Request request) {
-          final finampUserHelper = GetIt.instance<FinampUserHelper>();
-          Uri? baseUrlTemp;
-          if (inForeground) {
-            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-            baseUrlTemp = jellyfinApiHelper.baseUrlTemp;
-          }
-
-          String authHeader = finampUserHelper.authorizationHeader;
-
-          // If baseUrlTemp is null, use the baseUrl of the current user.
-          // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-          Uri baseUri =
-              baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
-
-          // Add the request path on to the baseUrl
-          baseUri = baseUri.replace(
-              pathSegments:
-                  baseUri.pathSegments.followedBy(request.uri.pathSegments));
-
-          return request.copyWith(
-            uri: baseUri,
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": authHeader,
-            },
-          );
-        },
+        JellyfinInterceptor(inForeground),
         HttpAggregateLoggingInterceptor(level: chopperHttpLogLevel),
       ],
     );
 
     // The generated class with the ChopperClient passed in
     return _$JellyfinApi(client);
+  }
+}
+
+class JellyfinInterceptor implements Interceptor {
+  JellyfinInterceptor(this.inForeground);
+
+  final bool inForeground;
+
+  @override
+  FutureOr<Response<BodyType>> intercept<BodyType>(
+      Chain<BodyType> chain) async {
+    return await chain.proceed(updateRequest(chain.request));
+  }
+
+  Request updateRequest(Request request) {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    Uri? baseUrlTemp;
+    if (inForeground) {
+      final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+      baseUrlTemp = jellyfinApiHelper.baseUrlTemp;
+    }
+
+    String authHeader = finampUserHelper.authorizationHeader;
+
+    // If baseUrlTemp is null, use the baseUrl of the current user.
+    // If baseUrlTemp is set, we're setting up a new user and should use it instead.
+    Uri baseUri =
+        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
+
+    // Add the request path on to the baseUrl
+    baseUri = baseUri.replace(
+        pathSegments:
+            baseUri.pathSegments.followedBy(request.uri.pathSegments));
+
+    return request.copyWith(
+      uri: baseUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": authHeader,
+      },
+    );
   }
 }
 
@@ -537,8 +552,23 @@ Future<String> getAuthHeader() async {
     authHeader = '${authHeader}Device="${iosDeviceInfo.name}", ';
     authHeader =
         '${authHeader}DeviceId="${iosDeviceInfo.identifierForVendor}", ';
+  } else if (Platform.isWindows) {
+    WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
+    authHeader = '${authHeader}Device="${windowsDeviceInfo.computerName}", ';
+    final windowsId = windowsDeviceInfo.deviceId;
+    authHeader = '${authHeader}DeviceId="$windowsId", ';
+  } else if (Platform.isLinux) {
+    LinuxDeviceInfo linuxDeviceInfo = await deviceInfo.linuxInfo;
+    authHeader = '${authHeader}Device="${linuxDeviceInfo.name}", ';
+    final linuxId = linuxDeviceInfo.machineId;
+    authHeader = '${authHeader}DeviceId="$linuxId", ';
+  } else if (Platform.isMacOS) {
+    MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
+    authHeader = '${authHeader}Device="${macOsDeviceInfo.computerName}", ';
+    final macId = macOsDeviceInfo.systemGUID;
+    authHeader = '${authHeader}DeviceId="$macId", ';
   } else {
-    throw "getAuthHeader() only supports Android and iOS";
+    throw Exception("Unsupported platform");
   }
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();

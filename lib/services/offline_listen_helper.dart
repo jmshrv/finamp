@@ -17,7 +17,9 @@ class OfflineListenLogHelper {
 
   Future<Directory> get _logDirectory async {
     if (!Platform.isAndroid) {
-      return await getApplicationDocumentsDirectory();
+      return Platform.isIOS
+          ? await getApplicationDocumentsDirectory()
+          : await getApplicationSupportDirectory();
     }
 
     final List<Directory>? dirs =

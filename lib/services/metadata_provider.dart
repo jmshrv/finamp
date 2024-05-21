@@ -64,9 +64,8 @@ class MetadataProvider {
 final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
     metadataProvider = FutureProvider.autoDispose
         .family<MetadataProvider?, MetadataRequest>((ref, request) async {
-  unawaited(ref.watch(FinampSettingsHelper.finampSettingsProvider.selectAsync(
-      (settings) => settings
-          ?.isOffline))); // watch settings to trigger re-fetching metadata when offline mode changes
+  unawaited(ref.watch(finampSettingsProvider.selectAsync((settings) => settings
+      ?.isOffline))); // watch settings to trigger re-fetching metadata when offline mode changes
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
@@ -181,18 +180,30 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
       metadata.qualifiesForPlaybackSpeedControl = true;
     } else {
       // check if "album" is long enough to qualify for playback speed control
-      try {
-        final parent =
-            await jellyfinApiHelper.getItemById(request.item.parentId!);
-        if (parent.runTimeTicks! >
-            MetadataProvider.speedControlLongAlbumDuration.inMicroseconds *
-                10) {
-          metadata.qualifiesForPlaybackSpeedControl = true;
+      if (request.item.parentId != null) {
+        if (FinampSettingsHelper.finampSettings.isOffline) {
+          final parent = await downloadsService.getCollectionInfo(
+              id: request.item.parentId);
+          if ((parent?.baseItem?.runTimeTicks ?? 0) >
+              MetadataProvider.speedControlLongAlbumDuration.inMicroseconds *
+                  10) {
+            metadata.qualifiesForPlaybackSpeedControl = true;
+          }
+        } else {
+          try {
+            final parent =
+                await jellyfinApiHelper.getItemById(request.item.parentId!);
+            if ((parent.runTimeTicks ?? 0) >
+                MetadataProvider.speedControlLongAlbumDuration.inMicroseconds *
+                    10) {
+              metadata.qualifiesForPlaybackSpeedControl = true;
+            }
+          } catch (e) {
+            metadataProviderLogger.warning(
+                "Failed to check if '${request.item.name}' (${request.item.id}) qualifies for playback speed controls",
+                e);
+          }
         }
-      } catch (e) {
-        metadataProviderLogger.warning(
-            "Failed to check if '${request.item.name}' (${request.item.id}) qualifies for playback speed controls",
-            e);
       }
     }
   }

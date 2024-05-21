@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/favourite_button.dart';
+import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/player_screen_theme_provider.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +23,7 @@ import '../services/finamp_settings_helper.dart';
 import '../services/media_state_stream.dart';
 import '../services/music_player_background_task.dart';
 import '../services/process_artist.dart';
+import 'PlayerScreen/player_split_screen_scaffold.dart';
 import 'album_image.dart';
 
 class NowPlayingBar extends ConsumerWidget {
@@ -464,19 +465,14 @@ class NowPlayingBar extends ConsumerWidget {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 4.0, right: 4.0),
-                                                child: FavoriteButton(
+                                                child: AddToPlaylistButton(
                                                   item: currentTrackBaseItem,
+                                                  queueItem: currentTrack,
                                                   color: Colors.white,
-                                                  onToggle: (isFavorite) {
-                                                    currentTrackBaseItem!
-                                                            .userData!
-                                                            .isFavorite =
-                                                        isFavorite;
-                                                    mediaState.mediaItem?.extras![
-                                                            "itemJson"] =
-                                                        currentTrackBaseItem
-                                                            .toJson();
-                                                  },
+                                                  size: 28,
+                                                  visualDensity:
+                                                      const VisualDensity(
+                                                          horizontal: -4),
                                                 ),
                                               ),
                                             ],
@@ -507,8 +503,7 @@ class NowPlayingBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    var imageTheme =
-        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
+    var imageTheme = ref.watch(playerScreenThemeProvider);
 
     ref.listen(currentTrackMetadataProvider,
         (metadataOrNull, metadata) {}); // keep provider alive
@@ -531,14 +526,17 @@ class NowPlayingBar extends ConsumerWidget {
               initialData: queueService.getQueue(),
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
-                    snapshot.data!.saveState == SavedQueueState.loading) {
+                    snapshot.data!.saveState == SavedQueueState.loading &&
+                    !usingPlayerSplitScreen) {
                   return buildLoadingQueueBar(context, null);
                 } else if (snapshot.hasData &&
-                    snapshot.data!.saveState == SavedQueueState.failed) {
+                    snapshot.data!.saveState == SavedQueueState.failed &&
+                    !usingPlayerSplitScreen) {
                   return buildLoadingQueueBar(
                       context, queueService.retryQueueLoad);
                 } else if (snapshot.hasData &&
-                    snapshot.data!.currentTrack != null) {
+                    snapshot.data!.currentTrack != null &&
+                    !usingPlayerSplitScreen) {
                   return buildNowPlayingBar(
                       context, snapshot.data!.currentTrack!);
                 } else {

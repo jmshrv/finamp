@@ -4,29 +4,146 @@ on:
   pull_request:
   push:
 
+# Due to a flutter bug, flutter build is not generating localizations
+# workaround by always running flutter pub get immediately before building,
+# and performing build for msix:create manually to allow implementing this workaround
 jobs:
+  # test:
+  #   name: Run Tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Clone repository
+  #     uses: actions/checkout@v4
+  #   - uses: actions/setup-java@v4
+  #     with:
+  #       distribution: 'zulu'
+  #       java-version: '17'
+  #   - name: Install dependencies
+  #     run: |
+  #       sudo apt-get update
+  #       sudo apt-get install -y build-essential cmake ninja-build libgtk-3-dev
+  #   - name: Set up Flutter
+  #     uses: subosito/flutter-action@v2
+  #     with:
+  #       channel: 'stable'
+  #   - run: flutter doctor
+  #   - run: flutter pub get
+  #   - run: flutter test
   build-android:
     name: Build for Android
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v2
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '17'
-    - uses: subosito/flutter-action@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build libgtk-3-dev
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
+    - run: flutter doctor
     - run: flutter pub get
-    - run: flutter build apk --debug
+    - run: flutter build apk --debug --no-pub
+    - uses: actions/upload-artifact@v4
+      with:
+        name: finamp-android-debug.apk
+        path: build/app/outputs/flutter-apk/app-debug.apk
+        compression-level: 0 # no compression
+    - run: flutter build appbundle --debug --no-pub
   build-ios:
     name: Build for iOS
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: subosito/flutter-action@v2
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
         architecture: x64
+    - run: flutter doctor
     - run: flutter pub get
-    - run: flutter build ios --release --no-codesign
+    - run: flutter build ios --release --no-pub --no-codesign
+  build-linux:
+    name: Build for Linux
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build libgtk-3-dev
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - run: flutter doctor
+    - run: flutter pub get
+    - run: flutter build linux --release --no-pub
+    - run: |
+        tar -czf finamp-linux-release-bundle.tar.gz --directory build/linux/x64/release/ bundle \
+        && sha256sum finamp-linux-release-bundle.tar.gz > finamp-linux-release-bundle.tar.gz.sha256sum
+    - uses: actions/upload-artifact@v4
+      with:
+        name: finamp-linux-release-bundle.tar.gz
+        path: finamp-linux-release-bundle.tar.gz
+        compression-level: 0 # no compression
+    - uses: actions/upload-artifact@v4
+      with:
+        name: finamp-linux-release-bundle.tar.gz.sha256sum
+        path: finamp-linux-release-bundle.tar.gz.sha256sum
+        compression-level: 0 # no compression
+  build-windows:
+    name: Build for Windows
+    runs-on: windows-latest
+    steps:
+    - name: Support longpaths
+      run: git config --system core.longpaths true
+    - name: Clone repository
+      uses: actions/checkout@v4
+    # - uses: actions/setup-java@v2
+    #   with:
+    #     distribution: 'zulu'
+    #     java-version: '17'
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - run: flutter doctor
+    - run: flutter pub get
+    - run: flutter build windows
+    # TODO pack in redistributables?
+    - uses: actions/upload-artifact@v4
+      with:
+        name: finamp-windows
+        path: build/windows/x64/runner/Release/
+    - run: dart run msix:create --install-certificate false
+    #TODO would be nice to have an old-school installer here that can take the .exe + libraries and install them to the device + create a shortcut
+    - uses: actions/upload-artifact@v4
+      with:
+        name: finamp-windows.msix
+        path: build/windows/x64/runner/Release/finamp.msix
+        compression-level: 0 # no compression
+  build-macos:
+    name: Build for macOS
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        architecture: x64
+    - run: flutter doctor
+    - run: flutter pub get
+    - run: flutter build macos --release --no-pub

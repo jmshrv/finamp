@@ -79,7 +79,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
       volumeNormalizationActive: fields[29] == null ? true : fields[29] as bool,
       volumeNormalizationIOSBaseGain:
-          fields[30] == null ? -5.0 : fields[30] as double,
+          fields[30] == null ? -2.0 : fields[30] as double,
       volumeNormalizationMode: fields[33] == null
           ? VolumeNormalizationMode.hybrid
           : fields[33] as VolumeNormalizationMode,
@@ -150,6 +150,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
+      useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
+      fixedGridTileSize: fields[60] == null ? 150 : fields[60] as int,
+      allowSplitScreen: fields[61] == null ? true : fields[61] as bool,
+      splitScreenPlayerWidth: fields[62] == null ? 400.0 : fields[62] as double,
       enableVibration: fields[47] == null ? true : fields[47] as bool,
       prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
       suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
@@ -158,15 +162,17 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : fields[53] as int,
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
+      trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
-      ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
+      ..showFastScroller = fields[25] == null ? true : fields[25] as bool
+      ..defaultDownloadLocation = fields[58] as String?;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(56)
+      ..writeByte(62)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -278,7 +284,19 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(56)
       ..write(obj.playbackSpeed)
       ..writeByte(57)
-      ..write(obj.playbackSpeedVisibility);
+      ..write(obj.playbackSpeedVisibility)
+      ..writeByte(58)
+      ..write(obj.defaultDownloadLocation)
+      ..writeByte(59)
+      ..write(obj.useFixedSizeGridTiles)
+      ..writeByte(60)
+      ..write(obj.fixedGridTileSize)
+      ..writeByte(61)
+      ..write(obj.allowSplitScreen)
+      ..writeByte(62)
+      ..write(obj.splitScreenPlayerWidth)
+      ..writeByte(63)
+      ..write(obj.trackOfflineFavorites);
   }
 
   @override
@@ -1404,6 +1422,8 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
         return DownloadLocationType.none;
       case 5:
         return DownloadLocationType.migrated;
+      case 6:
+        return DownloadLocationType.cache;
       default:
         return DownloadLocationType.internalDocuments;
     }
@@ -1429,6 +1449,9 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
         break;
       case DownloadLocationType.migrated:
         writer.writeByte(5);
+        break;
+      case DownloadLocationType.cache:
+        writer.writeByte(6);
         break;
     }
   }
@@ -6558,7 +6581,7 @@ DownloadStub _$DownloadStubFromJson(Map json) => DownloadStub._build(
       id: json['Id'] as String,
       type: $enumDecode(_$DownloadItemTypeEnumMap, json['Type']),
       jsonItem: json['JsonItem'] as String?,
-      isarId: json['IsarId'] as int,
+      isarId: (json['IsarId'] as num).toInt(),
       name: json['Name'] as String,
       baseItemType: $enumDecode(_$BaseItemDtoTypeEnumMap, json['BaseItemType']),
     );
@@ -6591,4 +6614,35 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.library: 'library',
   BaseItemDtoType.folder: 'folder',
   BaseItemDtoType.musicVideo: 'musicVideo',
+};
+
+FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
+      type: $enumDecode(_$FinampCollectionTypeEnumMap, json['Type']),
+      library: json['Library'] == null
+          ? null
+          : BaseItemDto.fromJson(
+              Map<String, dynamic>.from(json['Library'] as Map)),
+    );
+
+Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) {
+  final val = <String, dynamic>{
+    'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Library', instance.library?.toJson());
+  return val;
+}
+
+const _$FinampCollectionTypeEnumMap = {
+  FinampCollectionType.favorites: 'favorites',
+  FinampCollectionType.allPlaylists: 'allPlaylists',
+  FinampCollectionType.latest5Albums: 'latest5Albums',
+  FinampCollectionType.libraryImages: 'libraryImages',
+  FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
 };

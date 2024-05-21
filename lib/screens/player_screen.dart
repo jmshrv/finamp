@@ -1,16 +1,21 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/metadata_provider.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -18,29 +23,38 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
+import '../components/AddToPlaylistScreen/playlist_actions_menu.dart';
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
+import '../components/PlayerScreen/player_split_screen_scaffold.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
 import '../components/PlayerScreen/song_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
-import '../services/finamp_settings_helper.dart';
-import '../services/player_screen_theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 
+const double _defaultToolbarHeight = 53.0;
+const int _defaultMaxToolbarLines = 2;
+
 class PlayerScreen extends ConsumerWidget {
-  const PlayerScreen({Key? key}) : super(key: key);
+  const PlayerScreen({super.key});
 
   static const routeName = "/nowplaying";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme =
-        ref.watch(playerScreenThemeProvider(Theme.of(context).brightness));
-
+    final imageTheme = ref.watch(playerScreenThemeProvider);
+    // Rebuild player screen if settings change
+    ref.watch(finampSettingsProvider);
     final queueService = GetIt.instance<QueueService>();
+
     // close the player screen if the queue is empty
-    queueService.getQueueStream().listen((currentQueue) {
+    StreamSubscription<FinampQueueInfo?>? listener;
+    listener = queueService.getQueueStream().listen((currentQueue) {
+      if (!context.mounted) {
+        listener?.cancel();
+        return;
+      }
       if (currentQueue == null ||
           currentQueue.currentTrack == null && context.mounted) {
         Navigator.of(context).popUntil((route) {
@@ -48,43 +62,125 @@ class PlayerScreen extends ConsumerWidget {
             PlayerScreen.routeName,
             QueueList.routeName,
             SongMenu.routeName,
+            playlistActionsMenuRouteName,
             LyricsScreen.routeName,
           ].contains(route.settings.name);
         });
       }
     });
 
-    return AnimatedTheme(
-      duration: getThemeTransitionDuration(context),
-      data: ThemeData(
-        colorScheme: imageTheme.copyWith(
-          brightness: Theme.of(context).brightness,
+    return ProviderScope(
+      overrides: [
+        themeDataProvider.overrideWith((ref) {
+          return ref.watch(playerScreenThemeDataProvider) ??
+              FinampTheme.defaultTheme();
+        })
+      ],
+      child: AnimatedTheme(
+        duration: getThemeTransitionDuration(context),
+        data: ThemeData(
+          colorScheme: imageTheme.copyWith(
+            brightness: Theme.of(context).brightness,
+          ),
+          iconTheme: Theme.of(context).iconTheme.copyWith(
+                color: imageTheme.primary,
+              ),
         ),
-        iconTheme: Theme.of(context).iconTheme.copyWith(
-              color: imageTheme.primary,
-            ),
+        child: StreamBuilder<FinampQueueInfo?>(
+            stream: queueService.getQueueStream(),
+            initialData: queueService.getQueue(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.data!.saveState == SavedQueueState.loading) {
+                return buildLoadingScreen(context, null);
+              } else if (snapshot.hasData &&
+                  snapshot.data!.saveState == SavedQueueState.failed) {
+                return buildLoadingScreen(context, queueService.retryQueueLoad);
+              } else if (snapshot.hasData &&
+                  snapshot.data!.currentTrack != null) {
+                return _PlayerScreenContent(
+                    airplayTheme: imageTheme.primary, playerScreen: this);
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
       ),
-      child: _PlayerScreenContent(airplayTheme: imageTheme.primary),
+    );
+  }
+
+  Widget buildLoadingScreen(BuildContext context, Function()? retryCallback) {
+    double imageSize = min(MediaQuery.of(context).size.width,
+            MediaQuery.of(context).size.height) /
+        2;
+
+    return SimpleGestureDetector(
+      onTap: retryCallback,
+      child: Scaffold(
+        backgroundColor: Color.alphaBlend(
+            Theme.of(context).brightness == Brightness.dark
+                ? IconTheme.of(context).color!.withOpacity(0.35)
+                : IconTheme.of(context).color!.withOpacity(0.5),
+            Theme.of(context).brightness == Brightness.dark
+                ? Colors.black
+                : Colors.white),
+        // Required for sleep timer input
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
+        body: SafeArea(
+          minimum: const EdgeInsets.only(top: _defaultToolbarHeight),
+          child: SizedBox.expand(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  (retryCallback != null)
+                      ? Icon(
+                          Icons.refresh,
+                          size: imageSize,
+                        )
+                      : SizedBox(
+                          width: imageSize,
+                          height: imageSize,
+                          child: const CircularProgressIndicator.adaptive()),
+                  const Spacer(),
+                  BalancedText(
+                      (retryCallback != null)
+                          ? AppLocalizations.of(context)!.queueRetryMessage
+                          : AppLocalizations.of(context)!.queueLoadingMessage,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        height: 26 / 20,
+                      )),
+                  const Spacer(flex: 2),
+                ]),
+          ),
+        ),
+      ),
     );
   }
 }
 
 class _PlayerScreenContent extends ConsumerWidget {
-  const _PlayerScreenContent({super.key, required this.airplayTheme});
+  const _PlayerScreenContent(
+      {super.key, required this.airplayTheme, required this.playerScreen});
 
   final Color airplayTheme;
+  final Widget playerScreen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double toolbarHeight = 53.0;
-    int maxToolbarLines = 2;
+    var controller = PlayerHideableController();
+
+    var screenOrientation = MediaQuery.orientationOf(context);
+    double toolbarHeight = _defaultToolbarHeight;
+    int maxToolbarLines = _defaultMaxToolbarLines;
+
     // If in landscape, only show 2 lines in toolbar instead of 3
-    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+    if (screenOrientation == Orientation.landscape) {
       toolbarHeight = 36.0;
       maxToolbarLines = 1;
     }
-
-    var controller = PlayerHideableController();
 
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
@@ -111,7 +207,7 @@ class _PlayerScreenContent extends ConsumerWidget {
         if (direction == SwipeDirection.left && isLyricsAvailable) {
           if (!FinampSettingsHelper.finampSettings.disableGesture) {
             Navigator.of(context).push(_buildSlideRouteTransition(
-                this, const LyricsScreen(),
+                playerScreen, const LyricsScreen(),
                 routeSettings:
                     const RouteSettings(name: LyricsScreen.routeName)));
           }
@@ -128,9 +224,11 @@ class _PlayerScreenContent extends ConsumerWidget {
           title: PlayerScreenAppBarTitle(
             maxLines: maxToolbarLines,
           ),
-          leading: FinampAppBarButton(
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          leading: usingPlayerSplitScreen
+              ? null
+              : FinampAppBarButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
           actions: [
             if (Platform.isIOS)
               Padding(
@@ -158,21 +256,29 @@ class _PlayerScreenContent extends ConsumerWidget {
             SafeArea(
               minimum: EdgeInsets.only(top: toolbarHeight),
               child: LayoutBuilder(builder: (context, constraints) {
-                if (MediaQuery.of(context).orientation ==
-                    Orientation.landscape) {
-                  controller.updateLayoutLandscape(
-                      Size(constraints.maxWidth, constraints.maxHeight));
+                controller.setSize(
+                    Size(constraints.maxWidth, constraints.maxHeight),
+                    screenOrientation);
+                if (controller.useLandscape) {
                   return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
+                      SizedBox(
+                        width: controller.albumSize.width,
+                        height: controller.albumSize.height,
                         child: Padding(
-                            padding:
-                                EdgeInsets.all(constraints.maxHeight * 0.03),
+                            padding: EdgeInsets.only(
+                                left: constraints.maxHeight * 0.03,
+                                top: constraints.maxHeight * 0.03,
+                                bottom: constraints.maxHeight * 0.03,
+                                right:
+                                    max(0, constraints.maxHeight * 0.03 - 20)),
                             child: const PlayerScreenAlbumImage()),
                       ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxWidth: controller.getTarget().width),
+                      const Spacer(),
+                      SizedBox(
+                        width: controller.controlsSize.width,
+                        height: controller.controlsSize.height,
                         child: Column(
                           children: [
                             const Spacer(flex: 4),
@@ -191,34 +297,43 @@ class _PlayerScreenContent extends ConsumerWidget {
                           ],
                         ),
                       ),
+                      const Spacer(),
                     ],
                   );
                 } else {
-                  controller.updateLayoutPortrait(
-                      Size(constraints.maxWidth, constraints.maxHeight));
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                          height: min(
-                              constraints.maxHeight -
-                                  controller.getTarget().height,
-                              constraints.maxWidth),
-                          width: constraints.maxWidth,
+                          height: controller.albumSize.height,
+                          width: controller.albumSize.width,
                           child: const PlayerScreenAlbumImage()),
-                      SongNameContent(controller),
-                      ControlArea(controller),
-                      if (controller.shouldShow(PlayerHideable.queueButton))
-                        _buildBottomActions(
-                          context,
-                          controller,
-                          isLyricsLoading: isLyricsLoading,
-                          isLyricsAvailable: isLyricsAvailable,
+                      SizedBox(
+                        height: controller.controlsSize.height,
+                        width: controller.controlsSize.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SongNameContent(controller),
+                            ControlArea(controller),
+                            if (controller
+                                .shouldShow(PlayerHideable.queueButton))
+                              _buildBottomActions(
+                                context,
+                                controller,
+                                isLyricsLoading: isLyricsLoading,
+                                isLyricsAvailable: isLyricsAvailable,
+                              ),
+                            if (!controller
+                                .shouldShow(PlayerHideable.queueButton))
+                              const SizedBox(
+                                height: 5,
+                              )
+                          ],
                         ),
-                      if (!controller.shouldShow(PlayerHideable.queueButton))
-                        const SizedBox(
-                          height: 5,
-                        )
+                      ),
                     ],
                   );
                 }
@@ -230,6 +345,7 @@ class _PlayerScreenContent extends ConsumerWidget {
     );
   }
 
+  // This causes the source widget to blink if it does not have a key set.
   PageRouteBuilder _buildSlideRouteTransition(
     Widget sourceWidget,
     Widget targetWidget, {
@@ -249,7 +365,7 @@ class _PlayerScreenContent extends ConsumerWidget {
         final tweenExit = Tween(begin: beginExit, end: endExit);
         final curvedAnimation = CurvedAnimation(
           parent: animation,
-          curve: curve,
+          curve: curve.flipped,
         );
 
         return Stack(
@@ -289,32 +405,29 @@ class _PlayerScreenContent extends ConsumerWidget {
           flex: 1,
         ),
         Expanded(
-            flex: 16,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(
-                  width: 80,
-                  // child: Text("Output")
-                  child: SizedBox.shrink(),
+          flex: 16,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Spacer(),
+              const Flexible(fit: FlexFit.tight, child: QueueButton()),
+              Flexible(
+                fit: FlexFit.tight,
+                child: SimpleButton(
+                  inactive: !isLyricsAvailable,
+                  text: "Lyrics",
+                  icon: getLyricsIcon(),
+                  onPressed: () {
+                    Navigator.of(context).push(_buildSlideRouteTransition(
+                        playerScreen, const LyricsScreen(),
+                        routeSettings:
+                            const RouteSettings(name: LyricsScreen.routeName)));
+                  },
                 ),
-                const SizedBox(width: 80, child: QueueButton()),
-                SizedBox(
-                  width: 80,
-                  child: SimpleButton(
-                    inactive: !isLyricsAvailable,
-                    text: "Lyrics",
-                    icon: getLyricsIcon(),
-                    onPressed: () {
-                      Navigator.of(context).push(_buildSlideRouteTransition(
-                          this, const LyricsScreen(),
-                          routeSettings: const RouteSettings(
-                              name: LyricsScreen.routeName)));
-                    },
-                  ),
-                ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
         const Spacer(
           flex: 1,
         ),
@@ -362,41 +475,47 @@ class PlayerHideableController {
   ];
 
   List<PlayerHideable> _visible = [];
-  Size _target = const Size(0, 0);
+  Size? _target;
+  Size? _album;
+  bool? _useLandscape;
 
   /// Update player screen hidden elements based on usable area in portrait mode.
-  void updateLayoutPortrait(Size size) {
-    _reset();
+  void _updateLayoutPortrait(Size size) {
     var minAlbumPadding =
         FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding;
+    var maxAlbumSize = min(size.width, size.height);
 
-    var targetWidth = size.width;
+    var targetWidth = min(size.width, 1000.0);
     _updateLayoutFromWidth(targetWidth);
 
     // Update _visible based on a target height.  Removes elements in order of priority
     // until target is met.
     for (var element in verticalHideOrder) {
       // Allow shrinking album by up to (element.maxShrink)% of screen width per side beyond the user specified minimum value
-      // if it allows us to show more controls.
+      // if it allows us to show more controls.  Allow shrinking by greater amounts as album size grows.
       var maxDesiredPadding = minAlbumPadding +
           element.maxShrink *
-              FinampSettingsHelper.finampSettings.prioritizeCoverFactor;
+              FinampSettingsHelper.finampSettings.prioritizeCoverFactor *
+              ((maxAlbumSize - 300) / 300.0).clamp(1.0, 3.0);
       // Calculate max allowable control height to avoid shrinking album cover beyond maxPadding.
       var targetHeight =
-          size.height - size.width * (1 - (maxDesiredPadding / 100.0) * 2);
+          size.height - maxAlbumSize * (1 - (maxDesiredPadding / 100.0) * 2);
       if (_getSize().height < targetHeight) {
         break;
       }
       _visible.remove(element);
     }
     var desiredHeight =
-        size.height - size.width * (1 - (minAlbumPadding / 100.0) * 2);
-    _target = Size(targetWidth, max(_getSize().height, desiredHeight));
+        size.height - maxAlbumSize * (1 - (minAlbumPadding / 100.0) * 2);
+    var paddedControlsHeight = max(_getSize().height, desiredHeight);
+    _target = Size(targetWidth, _controlsInternalHeight(paddedControlsHeight));
+    // Do not let album size go negative, use full width
+    _album = Size(size.width,
+        (size.height - paddedControlsHeight).clamp(1.0, size.width));
   }
 
   /// Update player screen hidden elements based on usable area in landscape mode.
-  void updateLayoutLandscape(Size size) {
-    _reset();
+  void _updateLayoutLandscape(Size size) {
     // We never want to allocate extra width to album covers while some controls
     // are hidden.
     var desiredControlsWidth =
@@ -409,30 +528,34 @@ class PlayerHideableController {
         max(size.width * (widthPercent / 100), size.width - size.height);
     _updateLayoutFromWidth(maxControlsWidth);
 
-    var targetHeight = size.height;
+    var maxHeight = size.height;
     // Prevent allocating extra space between 50% and maxControlsWidth if we're just
     // going to shrink the play button anyway.
-    if (_getSize().height >= targetHeight) {
+    if (_getSize().height >= maxHeight) {
       _visible.remove(PlayerHideable.bigPlayButton);
     }
     // Force controls width to always be at least 50% of screen.
     var minPercent =
         FinampSettingsHelper.finampSettings.prioritizeCoverFactor * 2 + 34;
-    var minControlsWidth = max(_getSize().width, (minPercent / 100));
+    var minControlsWidth =
+        max(_getSize().width, size.width * (minPercent / 100));
     // If the minimum and maximum sizes do not form a valid range, prioritize the minimum
     // and shrink the album to avoid the controls clipping.
     double targetWidth = desiredControlsWidth.clamp(
         minControlsWidth, max(minControlsWidth, maxControlsWidth));
-    _target = Size(targetWidth, targetHeight);
 
     // Update _visible based on a target height.  Removes elements in order of priority
     // until target is met.
     for (var element in verticalHideOrder) {
-      if (_getSize().height < targetHeight) {
-        return;
+      if (_getSize().height < maxHeight) {
+        break;
       }
       _visible.remove(element);
     }
+
+    _target = Size(min(targetWidth, 800.0), _controlsInternalHeight(maxHeight));
+    // Do not let album size go negative, use full height & full left half
+    _album = Size(max(1.0, size.width - targetWidth), size.height);
   }
 
   /// Update _visible based on a target width.  Only shrink player button if it would fit the constraints,
@@ -451,10 +574,33 @@ class PlayerHideableController {
     }
   }
 
-  /// Reset to use maximum size
+  void setSize(Size size, Orientation screenOrientation) {
+    _reset();
+    assert(_target == null && _album == null && _useLandscape == null);
+    // Estimate control height as average of min and max
+    var controlsSize = Size(PlayerHideable.unhideableElements.width,
+        (PlayerHideable.unhideableElements.height + _getSize().height) / 2.0);
+    var landscapeWidth = max(controlsSize.width, size.width / 2.0);
+    var landscapeAlbum = min(size.width - landscapeWidth, size.height);
+    var portraitAlbum = min(size.width, size.height - controlsSize.height);
+    if (Platform.isIOS || Platform.isAndroid) {
+      _useLandscape = screenOrientation == Orientation.landscape;
+    } else {
+      _useLandscape = landscapeAlbum > portraitAlbum;
+    }
+    if (_useLandscape!) {
+      _updateLayoutLandscape(size);
+    } else {
+      _updateLayoutPortrait(size);
+    }
+  }
+
+  /// Reset controller to visibility
   void _reset() {
+    _target = null;
+    _album = null;
+    _useLandscape = null;
     _visible = List.from(PlayerHideable.values);
-    _target = const Size(0, 0);
     if (FinampSettingsHelper.finampSettings.hideQueueButton) {
       _visible.remove(PlayerHideable.queueButton);
     }
@@ -463,6 +609,13 @@ class PlayerHideableController {
       _visible.remove(PlayerHideable.controlsPaddingBig);
     }
   }
+
+  /// If we have space for vertical padding, put 33% between control elements and
+  /// the rest around them, up until controls have 40% padding internally.  Then
+  /// switch to only external padding.
+  double _controlsInternalHeight(double totalHeight) => min(
+      (totalHeight - _getSize().height) / 3.0 + _getSize().height,
+      _getSize().height * 1.4);
 
   /// Gets predicted size of player controls based on current _visible items.
   Size _getSize() {
@@ -476,13 +629,16 @@ class PlayerHideableController {
   }
 
   /// Get player controls target size
-  Size getTarget() {
-    return _target;
-  }
+  Size get controlsSize => _target!;
+
+  /// Get player album target size
+  Size get albumSize => _album!;
 
   /// Get whether a player control element should be shown or hidden based on screen size.
   bool shouldShow(PlayerHideable element) {
-    assert(_target.width > 0 && _target.height > 0);
+    assert(_target != null && _album != null);
     return _visible.contains(element);
   }
+
+  bool get useLandscape => _useLandscape!;
 }

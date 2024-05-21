@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
@@ -55,7 +56,9 @@ class JellyfinApiHelper {
     BackgroundIsolateBinaryMessenger.ensureInitialized(input.$2);
     ReceivePort requestPort = ReceivePort();
     input.$1.send(requestPort.sendPort);
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = (Platform.isAndroid || Platform.isIOS)
+        ? await getApplicationDocumentsDirectory()
+        : await getApplicationSupportDirectory();
     final isar = await Isar.open(
       [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
       directory: dir.path,
@@ -103,6 +106,7 @@ class JellyfinApiHelper {
     List<String>? itemIds,
     String? filters,
     String? fields,
+    bool? recursive,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -124,6 +128,8 @@ class JellyfinApiHelper {
     assert(itemIds == null || parentItem == null);
     fields ??=
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
+    recursive ??= true;
+
     if (parentItem != null) {
       _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
     } else if (itemIds != null) {
@@ -145,14 +151,14 @@ class JellyfinApiHelper {
           userId: currentUserId,
           parentId: parentItem.id,
           includeItemTypes: includeItemTypes,
-          recursive: true,
+          recursive: recursive,
           fields: fields,
         );
       } else if (includeItemTypes == "MusicArtist") {
         // For artists, we need to use a different endpoint
         response = await api.getAlbumArtists(
           parentId: parentItem?.id,
-          recursive: true,
+          recursive: recursive,
           sortBy: sortBy,
           sortOrder: sortOrder,
           searchTerm: searchTerm,
@@ -169,7 +175,7 @@ class JellyfinApiHelper {
           userId: currentUserId,
           albumArtistIds: parentItem?.id,
           includeItemTypes: includeItemTypes,
-          recursive: true,
+          recursive: recursive,
           sortBy: sortBy,
           sortOrder: sortOrder,
           searchTerm: searchTerm,
@@ -192,7 +198,7 @@ class JellyfinApiHelper {
           userId: currentUserId,
           genreIds: parentItem?.id,
           includeItemTypes: includeItemTypes,
-          recursive: true,
+          recursive: recursive,
           sortBy: sortBy,
           sortOrder: sortOrder,
           searchTerm: searchTerm,
@@ -208,7 +214,7 @@ class JellyfinApiHelper {
           userId: currentUserId,
           parentId: parentItem?.id,
           includeItemTypes: includeItemTypes,
-          recursive: true,
+          recursive: recursive,
           sortBy: sortBy,
           sortOrder: sortOrder,
           searchTerm: searchTerm,
@@ -533,10 +539,8 @@ class JellyfinApiHelper {
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromId(
-            id: "Favorites",
-            type: DownloadItemType.finampCollection,
-            name: null),
+        DownloadStub.fromFinampCollection(
+            FinampCollection(type: FinampCollectionType.favorites)),
         null,
         keepSlow: true));
     return UserItemDataDto.fromJson(response);
@@ -550,10 +554,8 @@ class JellyfinApiHelper {
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromId(
-            id: "Favorites",
-            type: DownloadItemType.finampCollection,
-            name: null),
+        DownloadStub.fromFinampCollection(
+            FinampCollection(type: FinampCollectionType.favorites)),
         null,
         keepSlow: true));
     return UserItemDataDto.fromJson(response);

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:finamp/components/AlbumScreen/download_button.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +22,7 @@ class DownloadsSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userHelper = GetIt.instance<FinampUserHelper>();
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloadSettings),
@@ -35,39 +37,52 @@ class DownloadsSettingsScreen extends StatelessWidget {
           ),
           if (Platform.isIOS || Platform.isAndroid) const RequireWifiSwitch(),
           const ShowPlaylistSongsSwitch(),
+          const SyncFavoritesSwitch(),
+          ListTile(
+            // TODO real UI for this
+            title: Text(AppLocalizations.of(context)!.allPlaylistsInfoSetting),
+            subtitle: Text(
+                AppLocalizations.of(context)!.allPlaylistsInfoSettingSubtitle),
+            trailing: DownloadButton(
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                    type: FinampCollectionType.allPlaylistsMetadata))),
+          ),
           // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           if (!Platform.isIOS) const ConcurentDownloadsSelector(),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download all favorites"),
+            title: Text(AppLocalizations.of(context)!.downloadFavoritesSetting),
             trailing: DownloadButton(
-                item: DownloadStub.fromId(
-                    id: "Favorites",
-                    type: DownloadItemType.finampCollection,
-                    name: AppLocalizations.of(context)!
-                        .finampCollectionNames("favorites"))),
+                item: DownloadStub.fromFinampCollection(
+                    FinampCollection(type: FinampCollectionType.favorites))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download all playlists"),
+            title:
+                Text(AppLocalizations.of(context)!.downloadAllPlaylistsSetting),
             trailing: DownloadButton(
-                item: DownloadStub.fromId(
-                    id: "All Playlists",
-                    type: DownloadItemType.finampCollection,
-                    name: AppLocalizations.of(context)!
-                        .finampCollectionNames("allPlaylists"))),
+                item: DownloadStub.fromFinampCollection(
+                    FinampCollection(type: FinampCollectionType.allPlaylists))),
           ),
           ListTile(
             // TODO real UI for this
-            title: const Text("Download 5 latest albums"),
-            subtitle: const Text(
-                "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed."),
+            title: Text(AppLocalizations.of(context)!.fiveLatestAlbumsSetting),
+            subtitle: Text(
+                AppLocalizations.of(context)!.fiveLatestAlbumsSettingSubtitle),
             trailing: DownloadButton(
-                item: DownloadStub.fromId(
-                    id: "5 Latest Albums",
-                    type: DownloadItemType.finampCollection,
-                    name: AppLocalizations.of(context)!
-                        .finampCollectionNames("fiveLatestAlbums"))),
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                    type: FinampCollectionType.latest5Albums))),
+          ),
+          ListTile(
+            // TODO real UI for this
+            title:
+                Text(AppLocalizations.of(context)!.cacheLibraryImagesSettings),
+            subtitle: Text(AppLocalizations.of(context)!
+                .cacheLibraryImagesSettingsSubtitle),
+            trailing: DownloadButton(
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                    type: FinampCollectionType.libraryImages,
+                    library: userHelper.currentUser!.currentView!))),
           ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
@@ -99,6 +114,39 @@ class RequireWifiSwitch extends StatelessWidget {
                       box.get("FinampSettings")!;
                   finampSettingsTemp.requireWifiForDownloads = value;
                   box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}
+
+class SyncFavoritesSwitch extends StatelessWidget {
+  const SyncFavoritesSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? syncFavorites = box.get("FinampSettings")?.trackOfflineFavorites;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.trackOfflineFavorites),
+          subtitle:
+              Text(AppLocalizations.of(context)!.trackOfflineFavoritesSubtitle),
+          value: syncFavorites ?? false,
+          onChanged: syncFavorites == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.trackOfflineFavorites = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                  if (value) {
+                    final isarDownloader = GetIt.instance<DownloadsService>();
+                    isarDownloader.resyncAll();
+                  }
                 },
         );
       },
@@ -295,8 +343,7 @@ class RedownloadTranscodesSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool? redownloadTranscodes = ref.watch(FinampSettingsHelper
-        .finampSettingsProvider
+    bool? redownloadTranscodes = ref.watch(finampSettingsProvider
         .select((value) => value.valueOrNull?.shouldRedownloadTranscodes));
 
     return SwitchListTile.adaptive(

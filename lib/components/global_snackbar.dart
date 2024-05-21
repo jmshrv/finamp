@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chopper/chopper.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:logging/logging.dart';
@@ -29,7 +30,8 @@ class GlobalSnackbar {
   static void _enqueue(Function func) {
     if (materialAppScaffoldKey.currentState != null &&
         (materialAppNavigatorKey.currentContext?.mounted ?? false)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => func());
+      // Schedule snackbar creation for as soon as possible outside of build()
+      SchedulerBinding.instance.scheduleTask(() => func(), Priority.touch);
     } else {
       _queue.add(func);
       _timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {

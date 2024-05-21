@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:file_sizes/file_sizes.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -13,9 +15,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-const _radius = Radius.circular(99);
-const _borderRadius = BorderRadius.all(_radius);
-const _height = 24.0; // I'm sure this magic number will work on all devices
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
 class FeatureState {
@@ -196,13 +195,18 @@ class FeatureChips extends ConsumerWidget {
 
                 return Padding(
                   padding: const EdgeInsets.only(left: 32.0, right: 32.0),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Features(
-                      backgroundColor:
-                          IconTheme.of(context).color?.withOpacity(0.1) ??
-                              _defaultBackgroundColour,
-                      features: featureState,
+                  child: ScrollConfiguration(
+                    // Allow drag scrolling on desktop
+                    behavior: ScrollConfiguration.of(context).copyWith(
+                        dragDevices: PointerDeviceKind.values.toSet()),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Features(
+                        backgroundColor:
+                            IconTheme.of(context).color?.withOpacity(0.1) ??
+                                _defaultBackgroundColour,
+                        features: featureState,
+                      ),
                     ),
                   ),
                 );
@@ -228,8 +232,8 @@ class Features extends StatelessWidget {
     return Wrap(
       spacing: 4.0,
       runSpacing: 4.0,
-      children: List.generate(features.features.length ?? 0, (index) {
-        final feature = features.features![index];
+      children: List.generate(features.features.length, (index) {
+        final feature = features.features[index];
 
         return _FeatureContent(
           backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??

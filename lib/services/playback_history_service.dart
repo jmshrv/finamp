@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
@@ -320,6 +322,11 @@ class PlaybackHistoryService {
         _currentTrack!); // current track is always the last item in the history
 
     _historyStream.add(_history);
+
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      WindowManager.instance.setTitle(
+          "${_currentTrack?.item.item.artist != null ? '${_currentTrack?.item.item.artist} - ' : ''}${_currentTrack!.item.item.title} - Finamp");
+    }
   }
 
   /// Report track changes to the Jellyfin Server if the user is not offline.

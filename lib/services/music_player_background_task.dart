@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/queue_service.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
 
 import 'finamp_settings_helper.dart';
@@ -49,6 +50,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
+
+    if (Platform.isWindows || Platform.isLinux) {
+      _audioServiceBackgroundTaskLogger
+          .info("Initializing media-kit for Windows/Linux");
+      JustAudioMediaKit.title = "Finamp";
+      JustAudioMediaKit.prefetchPlaylist = true; // cache upcoming tracks
+      JustAudioMediaKit.ensureInitialized(
+        linux: true,
+        windows: true,
+        macOS: false,
+        iOS: false,
+        android: false,
+      );
+    }
 
     _androidAudioEffects = [];
     _iosAudioEffects = [];
@@ -153,12 +168,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _queueCallbackPreviousTrack = previousTrackCallback;
   }
 
-  Future<void> initializeAudioSource(ConcatenatingAudioSource source) async {
+  Future<void> initializeAudioSource(ConcatenatingAudioSource source,
+      {required bool preload}) async {
     _queueAudioSource = source;
 
     try {
       await _player.setAudioSource(
         _queueAudioSource,
+        preload: preload,
         initialIndex: nextInitialIndex,
       );
     } on PlayerException catch (e) {
@@ -171,6 +188,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.severe("Player error ${e.toString()}");
     }
   }
+
+  /// Fully dispose the player instance.  Should only be called during app shutdown.
+  Future<void> dispose() => _player.dispose();
 
   @override
   Future<void> play() {
