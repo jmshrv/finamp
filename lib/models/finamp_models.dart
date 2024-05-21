@@ -103,6 +103,7 @@ const _reportQueueToServerDefault = false;
 const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 const _showArtistChipImage = true;
 const _trackOfflineFavoritesDefault = true;
+const _showProgressOnNowPlayingBarDefault = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -174,6 +175,7 @@ class FinampSettings {
         _periodicPlaybackSessionUpdateFrequencySecondsDefault,
     this.showArtistChipImage = _showArtistChipImage,
     this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
+    this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -380,6 +382,9 @@ class FinampSettings {
 
   @HiveField(63, defaultValue: _trackOfflineFavoritesDefault)
   bool trackOfflineFavorites;
+
+  @HiveField(64, defaultValue: _showProgressOnNowPlayingBarDefault)
+  bool showProgressOnNowPlayingBar;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

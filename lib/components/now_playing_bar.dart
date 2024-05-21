@@ -31,6 +31,9 @@ class NowPlayingBar extends ConsumerWidget {
     super.key,
   });
 
+  static const horizontalPadding = 8.0;
+  static const albumImageSize = 70.0;
+
   BoxDecoration? getShadow(BuildContext context) => BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(12.0)),
           boxShadow: [
@@ -42,8 +45,26 @@ class NowPlayingBar extends ConsumerWidget {
                     : darkColorScheme.background.withOpacity(0.7))
           ]);
 
+  Color getProgressBackgroundColor(BuildContext context) {
+    return FinampSettingsHelper.finampSettings.showProgressOnNowPlayingBar ?
+      Color.alphaBlend(
+        Theme.of(context).brightness == Brightness.dark
+          ? IconTheme.of(context)
+              .color!
+              .withOpacity(0.35)
+          : IconTheme.of(context)
+              .color!
+              .withOpacity(0.5),
+        Theme.of(context).brightness ==
+                Brightness.dark
+            ? Colors.black
+            : Colors.white
+      ) : 
+      IconTheme.of(context).color!.withOpacity(0.85);
+  }
+
   Widget buildLoadingQueueBar(BuildContext context, Function()? retryCallback) {
-    const albumImageSize = 70.0;
+    final progressBackgroundColor = getProgressBackgroundColor(context).withOpacity(0.5);
 
     return SimpleGestureDetector(
         onVerticalSwipe: (direction) {
@@ -74,13 +95,7 @@ class NowPlayingBar extends ConsumerWidget {
                 child: Container(
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
-                    color: Color.alphaBlend(
-                        Theme.of(context).brightness == Brightness.dark
-                            ? IconTheme.of(context).color!.withOpacity(0.35)
-                            : IconTheme.of(context).color!.withOpacity(0.5),
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Colors.black
-                            : Colors.white),
+                    color: progressBackgroundColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -123,8 +138,6 @@ class NowPlayingBar extends ConsumerWidget {
 
   Widget buildNowPlayingBar(
       BuildContext context, FinampQueueItem currentTrack) {
-    const horizontalPadding = 8.0;
-    const albumImageSize = 70.0;
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
@@ -134,6 +147,9 @@ class NowPlayingBar extends ConsumerWidget {
         ? jellyfin_models.BaseItemDto.fromJson(
             currentTrack.item.extras!["itemJson"] as Map<String, dynamic>)
         : null;
+
+    final progressBackgroundColor = getProgressBackgroundColor(context);
+        
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
@@ -155,6 +171,7 @@ class NowPlayingBar extends ConsumerWidget {
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: getShadow(context),
+              //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
               child: Dismissible(
                 key: const Key("NowPlayingBar"),
                 direction: FinampSettingsHelper.finampSettings.disableGesture
@@ -162,9 +179,9 @@ class NowPlayingBar extends ConsumerWidget {
                     : DismissDirection.horizontal,
                 confirmDismiss: (direction) async {
                   if (direction == DismissDirection.endToStart) {
-                    audioHandler.skipToNext();
+                    await audioHandler.skipToNext();
                   } else {
-                    audioHandler.skipToPrevious(forceSkip: true);
+                    await audioHandler.skipToPrevious(forceSkip: true);
                   }
                   return false;
                 },
@@ -182,7 +199,6 @@ class NowPlayingBar extends ConsumerWidget {
                       ? IconTheme.of(context).color!.withOpacity(0.1)
                       : Theme.of(context).cardColor,
                   elevation: 8.0,
-                  //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
                   child: StreamBuilder<MediaState>(
                     stream: mediaStateStream
                         .where((event) => event.mediaItem != null),
@@ -201,19 +217,7 @@ class NowPlayingBar extends ConsumerWidget {
                           child: Container(
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
-                              color: Color.alphaBlend(
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? IconTheme.of(context)
-                                          .color!
-                                          .withOpacity(0.35)
-                                      : IconTheme.of(context)
-                                          .color!
-                                          .withOpacity(0.5),
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.black
-                                      : Colors.white),
+                              color: progressBackgroundColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
@@ -262,57 +266,58 @@ class NowPlayingBar extends ConsumerWidget {
                                 Expanded(
                                   child: Stack(
                                     children: [
-                                      Positioned(
-                                        left: 0,
-                                        top: 0,
-                                        child: StreamBuilder<Duration>(
-                                            stream: AudioService.position,
-                                            initialData: audioHandler
-                                                .playbackState.value.position,
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData) {
-                                                playbackPosition =
-                                                    snapshot.data;
-                                                final screenSize =
-                                                    MediaQuery.of(context).size;
-                                                return Container(
-                                                  // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
-                                                  width: max(
-                                                      0,
-                                                      (screenSize.width -
-                                                              3 *
-                                                                  horizontalPadding -
-                                                              albumImageSize) *
-                                                          (playbackPosition!
-                                                                  .inMilliseconds /
-                                                              (mediaState.mediaItem
-                                                                          ?.duration ??
-                                                                      const Duration(
-                                                                          seconds:
-                                                                              0))
-                                                                  .inMilliseconds)),
-                                                  height: 70.0,
-                                                  decoration: ShapeDecoration(
-                                                    color: IconTheme.of(context)
+                                      if (FinampSettingsHelper.finampSettings.showProgressOnNowPlayingBar)
+                                        Positioned(
+                                          left: 0,
+                                          top: 0,
+                                          child: StreamBuilder<Duration>(
+                                              stream: AudioService.position,
+                                              initialData: audioHandler
+                                                  .playbackState.value.position,
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  playbackPosition =
+                                                      snapshot.data;
+                                                  final screenSize =
+                                                      MediaQuery.of(context).size;
+                                                  return Container(
+                                                    // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
+                                                    width: max(
+                                                        0,
+                                                        (screenSize.width -
+                                                                3 *
+                                                                    horizontalPadding -
+                                                                albumImageSize) *
+                                                            (playbackPosition!
+                                                                    .inMilliseconds /
+                                                                (mediaState.mediaItem
+                                                                            ?.duration ??
+                                                                        const Duration(
+                                                                            seconds:
+                                                                                0))
+                                                                    .inMilliseconds)),
+                                                    height: albumImageSize,
+                                                    decoration: ShapeDecoration(
+                                                      color: IconTheme.of(context)
                                                         .color!
                                                         .withOpacity(0.75),
-                                                    shape:
-                                                        const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topRight:
-                                                            Radius.circular(12),
-                                                        bottomRight:
-                                                            Radius.circular(12),
+                                                      shape:
+                                                          const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topRight:
+                                                              Radius.circular(12),
+                                                          bottomRight:
+                                                              Radius.circular(12),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                );
-                                              } else {
-                                                return Container();
-                                              }
-                                            }),
-                                      ),
+                                                  );
+                                                } else {
+                                                  return Container();
+                                                }
+                                              }),
+                                        ),
                                       Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:

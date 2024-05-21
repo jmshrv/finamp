@@ -163,6 +163,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[53] == null ? 150 : fields[53] as int,
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
+      showProgressOnNowPlayingBar:
+          fields[64] == null ? true : fields[64] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -172,7 +174,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(62)
+      ..writeByte(63)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -296,7 +298,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(62)
       ..write(obj.splitScreenPlayerWidth)
       ..writeByte(63)
-      ..write(obj.trackOfflineFavorites);
+      ..write(obj.trackOfflineFavorites)
+      ..writeByte(64)
+      ..write(obj.showProgressOnNowPlayingBar);
   }
 
   @override

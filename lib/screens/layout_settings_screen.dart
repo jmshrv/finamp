@@ -53,6 +53,7 @@ class LayoutSettingsScreen extends StatelessWidget {
                       .pushNamed(TabsSettingsScreen.routeName),
                 ),
                 const Divider(),
+                const ThemeSelector(),
                 const ContentViewTypeDropdownListTile(),
                 const FixedSizeGridSwitch(),
                 if (!FinampSettingsHelper.finampSettings.useFixedSizeGridTiles)
@@ -65,7 +66,7 @@ class LayoutSettingsScreen extends StatelessWidget {
                 const ShowArtistChipImageToggle(),
                 const AllowSplitScreenSwitch(),
                 const HideSongArtistsIfSameAsAlbumArtistsSelector(),
-                const ThemeSelector(),
+                const ShowProgressOnNowPlayingBar(),
               ],
             ),
           );
@@ -160,6 +161,35 @@ class FixedGridTileSizeDropdownListTile extends StatelessWidget {
               }
             },
           ),
+        );
+      },
+    );
+  }
+}
+
+class ShowProgressOnNowPlayingBar extends StatelessWidget {
+  const ShowProgressOnNowPlayingBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? showProgressOnNowPlayingBar = box.get("FinampSettings")?.showProgressOnNowPlayingBar;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarTitle),
+          subtitle:
+              Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarSubtitle),
+          value: showProgressOnNowPlayingBar ?? true,
+          onChanged: showProgressOnNowPlayingBar == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.showProgressOnNowPlayingBar = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
         );
       },
     );

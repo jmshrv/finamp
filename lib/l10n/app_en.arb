@@ -1543,5 +1543,14 @@
   "fiveLatestAlbumsSetting": "Download 5 latest albums",
   "fiveLatestAlbumsSettingSubtitle": "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed.",
   "cacheLibraryImagesSettings": "Cache current library images",
-  "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded."
+  "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded.",
+  "showProgressOnNowPlayingBarTitle": "Show track progress on now playing bar?",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "showProgressOnNowPlayingBarSubtitle": "Controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  }
+
 }
