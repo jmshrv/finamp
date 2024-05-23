@@ -90,23 +90,23 @@ jobs:
     - run: flutter doctor
     - run: flutter pub get
     - run: flutter build linux --release --no-pub
-    # copy icon assets and desktop file into bundle
+    # copy icon assets and desktop file next to bundle location for easy including in tar archive
     - run: |
-        cp -r assets/icon/linux/ build/linux/x64/release/bundle/icons \
-        && cp assets/finamp.desktop.m4 build/linux/x64/release/bundle/
+        cp -r assets/icon/linux/ build/linux/x64/release/icons \
+        && cp assets/finamp.desktop.m4 build/linux/x64/release/
     # archive bundle and generate checksum
     - run: |
-        tar -czf finamp-linux-release-bundle.tar.gz --directory build/linux/x64/release/ bundle \
-        && sha256sum finamp-linux-release-bundle.tar.gz > finamp-linux-release-bundle.tar.gz.sha256sum
+        tar -czf finamp-linux-release.tar.gz --directory build/linux/x64/release/ bundle icons finamp.desktop.m4 \
+        && sha256sum finamp-linux-release.tar.gz > finamp-linux-release.tar.gz.sha256sum
     - uses: actions/upload-artifact@v4
       with:
-        name: finamp-linux-release-bundle.tar.gz
-        path: finamp-linux-release-bundle.tar.gz
+        name: finamp-linux-release.tar.gz
+        path: finamp-linux-release.tar.gz
         compression-level: 0 # no compression
     - uses: actions/upload-artifact@v4
       with:
-        name: finamp-linux-release-bundle.tar.gz.sha256sum
-        path: finamp-linux-release-bundle.tar.gz.sha256sum
+        name: finamp-linux-release.tar.gz.sha256sum
+        path: finamp-linux-release.tar.gz.sha256sum
         compression-level: 0 # no compression
   build-windows:
     name: Build for Windows
