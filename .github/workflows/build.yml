@@ -90,6 +90,11 @@ jobs:
     - run: flutter doctor
     - run: flutter pub get
     - run: flutter build linux --release --no-pub
+    # copy icon assets and desktop file into bundle
+    - run: |
+        cp -r assets/icon/linux/ build/linux/x64/release/bundle/icons \
+        && cp assets/finamp.desktop.m4 build/linux/x64/release/bundle/
+    # archive bundle and generate checksum
     - run: |
         tar -czf finamp-linux-release-bundle.tar.gz --directory build/linux/x64/release/ bundle \
         && sha256sum finamp-linux-release-bundle.tar.gz > finamp-linux-release-bundle.tar.gz.sha256sum
@@ -134,16 +139,16 @@ jobs:
         name: finamp-windows.msix
         path: build/windows/x64/runner/Release/finamp.msix
         compression-level: 0 # no compression
-  build-macos:
-    name: Build for macOS
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable'
-        architecture: x64
-    - run: flutter doctor
-    - run: flutter pub get
-    - run: flutter build macos --release --no-pub
+  # build-macos:
+  #   name: Build for macOS
+  #   runs-on: macos-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Set up Flutter
+  #     uses: subosito/flutter-action@v2
+  #     with:
+  #       channel: 'stable'
+  #       architecture: x64
+  #   - run: flutter doctor
+  #   - run: flutter pub get
+  #   - run: flutter build macos --release --no-pub
