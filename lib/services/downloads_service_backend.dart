@@ -1265,6 +1265,7 @@ class DownloadsSyncService {
     String? fields;
     String? sortOrder;
     assert(parent.type == DownloadItemType.collection);
+    assert(parent.baseItemType.downloadType == DownloadItemType.collection);
     switch (parent.baseItemType) {
       case BaseItemDtoType.playlist || BaseItemDtoType.album:
         childType = DownloadItemType.song;
@@ -1279,7 +1280,9 @@ class DownloadsSyncService {
         childFilter = BaseItemDtoType.album;
         fields = "${_jellyfinApiData.defaultFields},SortName";
       case _:
-        throw StateError("Unknown collection type ${parent.baseItemType}");
+        _syncLogger.severe(
+            "Unknown collection type ${parent.baseItemType} for ${parent.name}");
+        return Future.value([]);
     }
     var item = parent.baseItem!;
 

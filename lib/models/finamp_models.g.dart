@@ -3243,7 +3243,7 @@ DownloadItem _downloadItemDeserialize(
     baseIndexNumber: reader.readLongOrNull(offsets[0]),
     baseItemType: _DownloadItembaseItemTypeValueEnumMap[
             reader.readByteOrNull(offsets[1])] ??
-        BaseItemDtoType.unknown,
+        BaseItemDtoType.noItem,
     fileTranscodingProfile: reader.readObjectOrNull<DownloadProfile>(
       offsets[2],
       DownloadProfileSchema.deserialize,
@@ -3287,7 +3287,7 @@ P _downloadItemDeserializeProp<P>(
     case 1:
       return (_DownloadItembaseItemTypeValueEnumMap[
               reader.readByteOrNull(offset)] ??
-          BaseItemDtoType.unknown) as P;
+          BaseItemDtoType.noItem) as P;
     case 2:
       return (reader.readObjectOrNull<DownloadProfile>(
         offset,
@@ -3343,7 +3343,7 @@ const _DownloadItembaseItemTypeEnumValueMap = {
   'musicVideo': 8,
 };
 const _DownloadItembaseItemTypeValueEnumMap = {
-  0: BaseItemDtoType.unknown,
+  0: BaseItemDtoType.noItem,
   1: BaseItemDtoType.album,
   2: BaseItemDtoType.artist,
   3: BaseItemDtoType.playlist,
@@ -6618,7 +6618,7 @@ const _$DownloadItemTypeEnumMap = {
 };
 
 const _$BaseItemDtoTypeEnumMap = {
-  BaseItemDtoType.unknown: 'unknown',
+  BaseItemDtoType.noItem: 'unknown',
   BaseItemDtoType.album: 'album',
   BaseItemDtoType.artist: 'artist',
   BaseItemDtoType.playlist: 'playlist',
