@@ -39,7 +39,7 @@ class _LoginAuxillaryOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4.0),
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 12.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

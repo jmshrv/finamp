@@ -1,4 +1,4 @@
-import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
@@ -17,15 +17,15 @@ class CTAMedium extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final screenSize = MediaQuery.of(context).size;
     final minWidth = this.minWidth ?? screenSize.width * 0.25;
     final paddingHorizontal = screenSize.width * 0.015;
     final paddingVertical = screenSize.height * 0.015;
-    
+    final accentColor = Theme.of(context).colorScheme.primary;
+
     return ElevatedButton(
       onPressed: () {
-        Vibrate.feedback(FeedbackType.selection);
+        FeedbackHelper.feedback(FeedbackType.selection);
         onPressed();
       },
       style: ButtonStyle(
@@ -35,18 +35,23 @@ class CTAMedium extends StatelessWidget {
           ),
         ),
         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-          EdgeInsets.only(left: 8 + paddingHorizontal, right: 8, top: paddingVertical, bottom: paddingVertical),
+          EdgeInsets.only(
+              left: 8 + paddingHorizontal,
+              right: 8,
+              top: paddingVertical,
+              bottom: paddingVertical),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
           Theme.of(context).brightness == Brightness.dark
-              ? jellyfinBlueColor.withOpacity(0.3)
-              : jellyfinBlueColor,
+              ? accentColor.withOpacity(0.3)
+              : accentColor,
         ),
       ),
       child: Container(
         constraints: BoxConstraints(minWidth: minWidth + paddingHorizontal),
         padding: EdgeInsets.only(
-            right: paddingHorizontal), // this is to center the content when a minWidth is set
+            right:
+                paddingHorizontal), // this is to center the content when a minWidth is set
         alignment: Alignment.center,
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
@@ -55,7 +60,7 @@ class CTAMedium extends StatelessWidget {
               icon,
               size: 24,
               color: Theme.of(context).brightness == Brightness.dark
-                  ? jellyfinBlueColor
+                  ? accentColor
                   : Colors.white,
               weight: 1.5,
             ),

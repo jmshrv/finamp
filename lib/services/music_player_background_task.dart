@@ -4,13 +4,15 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/services/queue_service.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
 
 import 'finamp_settings_helper.dart';
@@ -20,8 +22,6 @@ import 'android_auto_helper.dart';
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
-  final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
-  final _replayGainLogger = Logger("ReplayGain");
 
   final _androidAutoHelper = GetIt.instance<AndroidAutoHelper>();
 
@@ -36,6 +36,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   ConcatenatingAudioSource _queueAudioSource =
       ConcatenatingAudioSource(children: []);
+  final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
+  final _volumeNormalizationLogger = Logger("VolumeNormalization");
 
   /// Set when creating a new queue. Will be used to set the first index in a
   /// new queue.
@@ -59,6 +61,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
+
+    if (Platform.isWindows || Platform.isLinux) {
+      _audioServiceBackgroundTaskLogger
+          .info("Initializing media-kit for Windows/Linux");
+      JustAudioMediaKit.title = "Finamp";
+      JustAudioMediaKit.prefetchPlaylist = true; // cache upcoming tracks
+      JustAudioMediaKit.ensureInitialized(
+        linux: true,
+        windows: true,
+        macOS: false,
+        iOS: false,
+        android: false,
+      );
+    }
 
     _androidAudioEffects = [];
     _iosAudioEffects = [];
@@ -92,16 +108,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       audioPipeline: _audioPipeline,
     );
 
-    _loudnessEnhancerEffect
-        ?.setEnabled(FinampSettingsHelper.finampSettings.replayGainActive);
+    _loudnessEnhancerEffect?.setEnabled(
+        FinampSettingsHelper.finampSettings.volumeNormalizationActive);
     _loudnessEnhancerEffect?.setTargetGain(0.0 /
         10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
     // calculate base volume gain for iOS as a linear factor, because just_audio doesn't yet support AudioEffect on iOS
-    iosBaseVolumeGainFactor = pow(10.0,
-            FinampSettingsHelper.finampSettings.replayGainIOSBaseGain / 20.0)
+    iosBaseVolumeGainFactor = pow(
+            10.0,
+            FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain /
+                20.0)
         as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
     if (!Platform.isAndroid) {
-      _replayGainLogger.info(
+      _volumeNormalizationLogger.info(
           "non-Android base volume gain factor: $iosBaseVolumeGainFactor");
     }
 
@@ -112,36 +130,30 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       // update replay gain settings every time settings are changed
-      iosBaseVolumeGainFactor = pow(10.0,
-              FinampSettingsHelper.finampSettings.replayGainIOSBaseGain / 20.0)
+      iosBaseVolumeGainFactor = pow(
+              10.0,
+              FinampSettingsHelper
+                      .finampSettings.volumeNormalizationIOSBaseGain /
+                  20.0)
           as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
-      if (FinampSettingsHelper.finampSettings.replayGainActive) {
+      if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
         _loudnessEnhancerEffect?.setEnabled(true);
-        _applyReplayGain(mediaItem.valueOrNull);
+        _applyVolumeNormalization(mediaItem.valueOrNull);
       } else {
         _loudnessEnhancerEffect?.setEnabled(false);
         _player.setVolume(1.0); // disable replay gain on iOS
-        _replayGainLogger.info("Replay gain disabled");
+        _volumeNormalizationLogger.info("Replay gain disabled");
       }
     });
 
     mediaItem.listen((currentTrack) {
-      _applyReplayGain(currentTrack);
+      _applyVolumeNormalization(currentTrack);
     });
 
     // Special processing for state transitions.
     _player.processingStateStream.listen((event) async {
       if (event == ProcessingState.completed) {
-        try {
-          _audioServiceBackgroundTaskLogger.info("Queue completed.");
-          // A full stop will trigger a re-shuffle with an unshuffled first
-          // item, so only pause.
-          await pause();
-          await skipToIndex(0);
-        } catch (e) {
-          _audioServiceBackgroundTaskLogger.severe(e);
-          return Future.error(e);
-        }
+        await handleEndOfQueue();
       }
     });
 
@@ -167,12 +179,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _queueCallbackPreviousTrack = previousTrackCallback;
   }
 
-  Future<void> initializeAudioSource(ConcatenatingAudioSource source) async {
+  Future<void> initializeAudioSource(ConcatenatingAudioSource source,
+      {required bool preload}) async {
     _queueAudioSource = source;
 
     try {
       await _player.setAudioSource(
         _queueAudioSource,
+        preload: preload,
         initialIndex: nextInitialIndex,
       );
     } on PlayerException catch (e) {
@@ -186,9 +200,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  /// Fully dispose the player instance.  Should only be called during app shutdown.
+  Future<void> dispose() => _player.dispose();
+
   @override
   Future<void> play() {
     return _player.play();
+  }
+
+  @override
+  Future<void> setSpeed(final double speed) async {
+    return _player.setSpeed(speed);
   }
 
   @override
@@ -207,14 +229,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       _audioServiceBackgroundTaskLogger.info("Stopping audio service");
 
-      // Stop playing audio.
-      await _player.stop();
+      final queueService = GetIt.instance<QueueService>();
+      await queueService.stopPlayback();
+      // await _player.seek(_player.duration);
 
-      playbackState.add(playbackState.value
-          .copyWith(processingState: AudioProcessingState.completed));
-
-      // // Seek to the start of the current item
-      await _player.seek(Duration.zero);
+      // await handleEndOfQueue();
 
       _sleepTimerDuration = Duration.zero;
 
@@ -222,6 +241,31 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _sleepTimer.value = null;
 
       await super.stop();
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> stopPlayback() async {
+    try {
+      await _player.stop();
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<void> handleEndOfQueue() async {
+    try {
+      _audioServiceBackgroundTaskLogger.info("Queue completed.");
+      // A full stop will trigger a re-shuffle with an unshuffled first
+      // item, so only pause.
+      await pause();
+      // Skipping to zero with empty queue re-triggers queue complete event
+      if (_player.effectiveIndices?.isNotEmpty ?? false) {
+        await skipToIndex(0);
+      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -296,7 +340,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           : (_player.currentIndex ?? 0) + offset;
       if (queueIndex >= (_player.effectiveIndices?.length ?? 1)) {
         if (_player.loopMode == LoopMode.off) {
-          await _player.stop();
+          //!!! seek to end of track to for the player to handle the end of queue
+          // this is hacky, but seems to be the only way to get the proper events that the playback history service needs
+          //TODO Finamp should probably use its own event system that is able to convey the necessary information
+          return await _player.seek(_player.duration);
         }
         queueIndex %= (_player.effectiveIndices?.length ?? 1);
       }
@@ -515,57 +562,39 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     nextInitialIndex = index;
   }
 
-  void _applyReplayGain(MediaItem? currentTrack) {
-    if (FinampSettingsHelper.finampSettings.replayGainActive &&
+  void _applyVolumeNormalization(MediaItem? currentTrack) {
+    if (FinampSettingsHelper.finampSettings.volumeNormalizationActive &&
         currentTrack != null) {
       final baseItem = jellyfin_models.BaseItemDto.fromJson(
           currentTrack.extras?["itemJson"]);
 
-      double? effectiveLufs;
-      switch (FinampSettingsHelper.finampSettings.replayGainMode) {
-        case ReplayGainMode.hybrid:
-          // use context LUFS if available, otherwise use track LUFS
-          effectiveLufs = currentTrack.extras?["contextLufs"] ?? baseItem.lufs;
-          break;
-        case ReplayGainMode.trackOnly:
-          // only ever use track LUFS
-          effectiveLufs = baseItem.lufs;
-          break;
-        case ReplayGainMode.albumOnly:
-          // only ever use context LUFS, don't normalize tracks out of special contexts
-          effectiveLufs = currentTrack.extras?["contextLufs"];
-          break;
-      }
+      double? effectiveGainChange =
+          getEffectiveGainChange(currentTrack, baseItem);
 
-      _replayGainLogger.info(
-          "LUFS for '${baseItem.name}': ${effectiveLufs} (track lufs: ${baseItem.lufs})");
-      if (effectiveLufs != null) {
-        final gainChange = (FinampSettingsHelper
-                    .finampSettings.replayGainTargetLufs -
-                effectiveLufs) *
-            FinampSettingsHelper.finampSettings.replayGainNormalizationFactor;
-        _replayGainLogger.info(
-            "Gain change: ${FinampSettingsHelper.finampSettings.replayGainTargetLufs - effectiveLufs} (raw), $gainChange (adjusted)");
+      _volumeNormalizationLogger.info(
+          "normalization gain for '${baseItem.name}': $effectiveGainChange (track gain change: ${baseItem.normalizationGain})");
+      if (effectiveGainChange != null) {
+        _volumeNormalizationLogger.info("Gain change: $effectiveGainChange");
         if (Platform.isAndroid) {
-          _loudnessEnhancerEffect?.setTargetGain(gainChange /
+          _loudnessEnhancerEffect?.setTargetGain(effectiveGainChange /
               10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
         } else {
           final newVolume = iosBaseVolumeGainFactor *
               pow(
                   10.0,
-                  gainChange /
+                  effectiveGainChange /
                       20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
           final newVolumeClamped = newVolume.clamp(0.0, 1.0);
-          _replayGainLogger
+          _volumeNormalizationLogger
               .finer("new volume: $newVolume ($newVolumeClamped clipped)");
           _player.setVolume(newVolumeClamped);
         }
       } else {
         // reset gain offset
         _loudnessEnhancerEffect?.setTargetGain(0 /
-            10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+            10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856ua630329c4e6 is merged)
         _player.setVolume(
-            iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without LUFS information don't fall back to full volume, but to the base volume for iOS
+            iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without normalization gain information don't fall back to full volume, but to the base volume for iOS
       }
     }
   }
@@ -653,6 +682,30 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   double get volume => _player.volume;
   bool get paused => !_player.playing;
   Duration get playbackPosition => _player.position;
+}
+
+double? getEffectiveGainChange(
+    MediaItem currentTrack, jellyfin_models.BaseItemDto? item) {
+  final baseItem = item ??
+      jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
+  double? effectiveGainChange;
+  switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
+    case VolumeNormalizationMode.hybrid:
+      // case VolumeNormalizationMode.albumBased: // we use the context normalization gain for album-based because we don't have the album item here
+      // use context normalization gain if available, otherwise use track normalization gain
+      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"] ??
+          baseItem.normalizationGain;
+      break;
+    case VolumeNormalizationMode.trackBased:
+      // only ever use track normalization gain
+      effectiveGainChange = baseItem.normalizationGain;
+      break;
+    case VolumeNormalizationMode.albumOnly:
+      // only ever use context normalization gain, don't normalize tracks out of special contexts
+      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"];
+      break;
+  }
+  return effectiveGainChange;
 }
 
 AudioServiceRepeatMode _audioServiceRepeatMode(LoopMode loopMode) {

@@ -141,13 +141,17 @@ class AndroidAutoHelper {
   }
 
   Future<List<MediaItem>> getRecentItems() async {
-    final finampUserHelper = GetIt.instance<FinampUserHelper>();
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final queueService = GetIt.instance<QueueService>();
 
     try {
-      final recentItems = queueService.getNextXTracksInQueue(0, reverse: 5);
-      return [ for (final item in recentItems ?? []) await _convertToMediaItem(item: item, parentType: MediaItemParentType.collection) ];
+      final recentItems = queueService.peekQueue(previous: 5);
+      final List<MediaItem> recentMediaItems = [];
+      for (final item in recentItems) {
+        if (item.baseItem == null) continue;
+        final mediaItem = await _convertToMediaItem(item: item.baseItem!, parentType: MediaItemParentType.collection);
+        recentMediaItems.add(mediaItem);
+      }
+      return recentMediaItems;
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while getting recent items:", err);
       return [];

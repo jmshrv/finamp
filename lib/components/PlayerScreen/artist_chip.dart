@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/artist_screen.dart';
@@ -9,10 +11,25 @@ import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../album_image.dart';
 
+part 'artist_chip.g.dart';
+
 const _radius = Radius.circular(4);
 const _borderRadius = BorderRadius.all(_radius);
 const _height = 24.0; // I'm sure this magic number will work on all devices
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
+
+@riverpod
+Future<BaseItemDto> artistItem(ArtistItemRef ref, String id) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final isarDownloader = GetIt.instance<DownloadsService>();
+  final bool isOffline = ref.watch(finampSettingsProvider
+      .select((value) => value.value?.isOffline ?? false));
+  return isOffline
+      ? isarDownloader
+          .getCollectionInfo(id: id)
+          .then((value) => value!.baseItem!)
+      : jellyfinApiHelper.getItemById(id);
+}
 
 class ArtistChips extends StatelessWidget {
   const ArtistChips({
@@ -31,7 +48,7 @@ class ArtistChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final artists =
-        useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems;
+        (useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -41,80 +58,62 @@ class ArtistChips extends StatelessWidget {
           spacing: 4.0,
           runSpacing: 4.0,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: List.generate(artists?.length ?? 0, (index) {
-            final currentArtist = artists![index];
+          children: artists.isEmpty
+              ? [
+                  ArtistChip(
+                      backgroundColor: backgroundColor,
+                      color: color,
+                      artist: null,
+                      key: const ValueKey(null))
+                ]
+              : List.generate(artists.length, (index) {
+                  final currentArtist = artists[index];
 
-            return ArtistChip(
-                backgroundColor: backgroundColor,
-                color: color,
-                artist: BaseItemDto(
-                  id: currentArtist.id,
-                  name: currentArtist.name,
-                  type: "MusicArtist",
-                ),
-                key: ValueKey(currentArtist.id));
-          }),
+                  return ArtistChip(
+                      backgroundColor: backgroundColor,
+                      color: color,
+                      artist: BaseItemDto(
+                        id: currentArtist.id,
+                        name: currentArtist.name,
+                        type: "MusicArtist",
+                      ),
+                      key: ValueKey(currentArtist.id));
+                }),
         ),
       ),
     );
   }
 }
 
-class ArtistChip extends StatefulWidget {
+class ArtistChip extends ConsumerWidget {
   const ArtistChip({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.color,
     this.artist,
-  }) : super(key: key);
+  });
 
   final BaseItemDto? artist;
   final Color? backgroundColor;
   final Color? color;
 
   @override
-  State<ArtistChip> createState() => _ArtistChipState();
-}
-
-class _ArtistChipState extends State<ArtistChip> {
-  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _isarDownloader = GetIt.instance<DownloadsService>();
-
-  // We make the future nullable since if the item is null it is not initialised
-  // in initState.
-  Future<BaseItemDto>? _artistChipFuture;
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.artist != null) {
-      final albumArtistId = widget.artist!.id;
-
-      _artistChipFuture = FinampSettingsHelper.finampSettings.isOffline
-          ? _isarDownloader
-              .getCollectionInfo(id: albumArtistId)
-              .then((value) => value!.baseItem!)
-          : _jellyfinApiHelper.getItemById(albumArtistId);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localBackgroundColor = backgroundColor ?? _defaultBackgroundColour;
+    final localColor =
+        color ?? Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
+    final BaseItemDto? localArtist;
+    if (artist != null &&
+        FinampSettingsHelper.finampSettings.showArtistChipImage) {
+      localArtist = ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
+    } else {
+      localArtist = artist;
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<BaseItemDto>(
-        future: _artistChipFuture,
-        builder: (context, snapshot) {
-          final backgroundColor =
-              widget.backgroundColor ?? _defaultBackgroundColour;
-          final color = widget.color ??
-              Theme.of(context).textTheme.bodySmall?.color ??
-              Colors.white;
-          return _ArtistChipContent(
-            item: snapshot.data ?? widget.artist!,
-            backgroundColor: backgroundColor,
-            color: color,
-          );
-        });
+    return _ArtistChipContent(
+      item: localArtist,
+      backgroundColor: localBackgroundColor,
+      color: localColor,
+    );
   }
 }
 
@@ -126,7 +125,7 @@ class _ArtistChipContent extends StatelessWidget {
     required this.color,
   });
 
-  final BaseItemDto item;
+  final BaseItemDto? item;
   final Color backgroundColor;
   final Color color;
 
@@ -134,8 +133,10 @@ class _ArtistChipContent extends StatelessWidget {
   Widget build(BuildContext context) {
     // We do this so that we can pass the song item here to show an actual value
     // instead of empty
-    final name =
-        item.isArtist ? item.name : (item.artists?.first ?? item.albumArtist);
+    bool isArtist = item?.isArtist ?? false;
+    final name = isArtist
+        ? item?.name
+        : (item?.artists?.firstOrNull ?? item?.albumArtist);
 
     return SizedBox(
       height: _height,
@@ -144,7 +145,7 @@ class _ArtistChipContent extends StatelessWidget {
         borderRadius: _borderRadius,
         child: InkWell(
           // We shouldn't click through to artists if not passed one
-          onTap: !item.isArtist
+          onTap: !isArtist
               ? null
               : () => Navigator.of(context)
                   .pushNamed(ArtistScreen.routeName, arguments: item),
@@ -152,7 +153,7 @@ class _ArtistChipContent extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (item.isArtist && item.imageId != null)
+              if (isArtist && item?.imageId != null)
                 AlbumImage(
                   item: item,
                   borderRadius: const BorderRadius.only(

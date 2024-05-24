@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
@@ -27,6 +28,9 @@ class JellyfinApiHelper {
   // Stores the ids of albums that the user selected to mix
   List<BaseItemDto> selectedMixAlbums = [];
 
+  // Stores the ids of genres that the user selected to mix
+  List<BaseItemDto> selectedMixGenres = [];
+
   Uri? baseUrlTemp;
 
   final String defaultFields = jellyfin_api.defaultFields;
@@ -52,7 +56,9 @@ class JellyfinApiHelper {
     BackgroundIsolateBinaryMessenger.ensureInitialized(input.$2);
     ReceivePort requestPort = ReceivePort();
     input.$1.send(requestPort.sendPort);
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = (Platform.isAndroid || Platform.isIOS)
+        ? await getApplicationDocumentsDirectory()
+        : await getApplicationSupportDirectory();
     final isar = await Isar.open(
       [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
       directory: dir.path,
@@ -100,6 +106,7 @@ class JellyfinApiHelper {
     List<String>? itemIds,
     String? filters,
     String? fields,
+    bool? recursive,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -119,7 +126,10 @@ class JellyfinApiHelper {
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
-    fields ??= defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
+    fields ??=
+        defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
+    recursive ??= true;
+
     if (parentItem != null) {
       _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
     } else if (itemIds != null) {
@@ -141,14 +151,14 @@ class JellyfinApiHelper {
           userId: currentUserId,
           parentId: parentItem.id,
           includeItemTypes: includeItemTypes,
-          recursive: true,
+          recursive: recursive,
           fields: fields,
         );
       } else if (includeItemTypes == "MusicArtist") {
         // For artists, we need to use a different endpoint
         response = await api.getAlbumArtists(
           parentId: parentItem?.id,
-          recursive: true,
+          recursive: recursive,
           sortBy: sortBy,
           sortOrder: sortOrder,
           searchTerm: searchTerm,
@@ -165,7 +175,7 @@ class JellyfinApiHelper {
           userId: currentUserId,
           albumArtistIds: parentItem?.id,
           includeItemTypes: includeItemTypes,
-          recursive: true,
+          recursive: recursive,
           sortBy: sortBy,
           sortOrder: sortOrder,
           searchTerm: searchTerm,
@@ -188,7 +198,7 @@ class JellyfinApiHelper {
           userId: currentUserId,
           genreIds: parentItem?.id,
           includeItemTypes: includeItemTypes,
-          recursive: true,
+          recursive: recursive,
           sortBy: sortBy,
           sortOrder: sortOrder,
           searchTerm: searchTerm,
@@ -204,7 +214,7 @@ class JellyfinApiHelper {
           userId: currentUserId,
           parentId: parentItem?.id,
           includeItemTypes: includeItemTypes,
-          recursive: true,
+          recursive: recursive,
           sortBy: sortBy,
           sortOrder: sortOrder,
           searchTerm: searchTerm,
@@ -416,7 +426,8 @@ class JellyfinApiHelper {
   /// Updates player progress so that Jellyfin can track what we're listening to
   Future<void> updatePlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    final response = await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
+    final response =
+        await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response;
     }
@@ -425,7 +436,8 @@ class JellyfinApiHelper {
   /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
   Future<void> stopPlaybackProgress(
       PlaybackProgressInfo playbackProgressInfo) async {
-    final response = await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
+    final response =
+        await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response;
     }
@@ -449,7 +461,8 @@ class JellyfinApiHelper {
   Future<BaseItemDto?> getItemByIdBatched(String itemId,
       [String? fields]) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    fields ??= defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
+    fields ??=
+        defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     _getItemByIdBatchedRequests.add(itemId);
     _getItemByIdBatchedFuture ??=
         Future.delayed(const Duration(milliseconds: 250), () async {
@@ -511,7 +524,8 @@ class JellyfinApiHelper {
     /// changed values.
     required BaseItemDto newItem,
   }) async {
-    final response = await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
+    final response =
+        await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
     if (response.toString().isNotEmpty) {
       throw response;
     }
@@ -525,10 +539,8 @@ class JellyfinApiHelper {
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromId(
-            id: "Favorites",
-            type: DownloadItemType.finampCollection,
-            name: null),
+        DownloadStub.fromFinampCollection(
+            FinampCollection(type: FinampCollectionType.favorites)),
         null,
         keepSlow: true));
     return UserItemDataDto.fromJson(response);
@@ -542,10 +554,8 @@ class JellyfinApiHelper {
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromId(
-            id: "Favorites",
-            type: DownloadItemType.finampCollection,
-            name: null),
+        DownloadStub.fromFinampCollection(
+            FinampCollection(type: FinampCollectionType.favorites)),
         null,
         keepSlow: true));
     return UserItemDataDto.fromJson(response);
@@ -575,6 +585,18 @@ class JellyfinApiHelper {
     selectedMixAlbums.clear();
   }
 
+  void addGenreToMixBuilderList(BaseItemDto item) {
+    selectedMixGenres.add(item);
+  }
+
+  void removeGenreFromMixBuilderList(BaseItemDto item) {
+    selectedMixGenres.remove(item);
+  }
+
+  void clearGenreMixBuilderList() {
+    selectedMixGenres.clear();
+  }
+
   Future<List<BaseItemDto>?> getArtistMix(List<String> artistIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
@@ -599,6 +621,30 @@ class JellyfinApiHelper {
         fields: "Chapters");
 
     return (QueryResult_BaseItemDto.fromJson(response).items);
+  }
+
+  Future<List<BaseItemDto>?> getGenreMix(List<String> genreIds) async {
+    final response = await jellyfinApi.getItems(
+        userId: _finampUserHelper.currentUser!.id,
+        genreIds: genreIds.join(","),
+        filters: "IsNotFolder",
+        recursive: true,
+        sortBy: "Random",
+        limit: 300,
+        fields: "Chapters");
+
+    return (QueryResult_BaseItemDto.fromJson(response).items);
+  }
+
+  /// Gets the lyrics for an item.
+  Future<LyricDto> getLyrics({
+    required String itemId,
+  }) async {
+    final response = await jellyfinApi.getLyrics(
+      itemId: itemId,
+    );
+
+    return LyricDto.fromJson(response);
   }
 
   /// Removes the current user from the DB and revokes the token on Jellyfin
@@ -728,8 +774,11 @@ class JellyfinApiHelper {
       // Jellyfin). Once https://github.com/jellyfin/jellyfin/pull/9192 lands,
       // we could use M4A/AAC.
 
+      assert(transcodingProfile.codec.container != null,
+          "Missing container for codec while trying to download transcoded track!");
+
       queryParameters.addAll({
-        "transcodingContainer": transcodingProfile.codec.container,
+        "transcodingContainer": transcodingProfile.codec.container!,
         "audioCodec": transcodingProfile.codec.name,
         "audioBitRate": transcodingProfile.stereoBitrate.toString(),
       });

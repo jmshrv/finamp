@@ -1,14 +1,20 @@
+import 'dart:ui';
+
+import 'package:collection/collection.dart';
+import 'package:file_sizes/file_sizes.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
+import 'package:finamp/services/metadata_provider.dart';
+import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-const _radius = Radius.circular(99);
-const _borderRadius = BorderRadius.all(_radius);
-const _height = 24.0; // I'm sure this magic number will work on all devices
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
 class FeatureState {
@@ -16,14 +22,61 @@ class FeatureState {
     required this.context,
     required this.currentTrack,
     required this.settings,
+    required this.metadata,
   });
 
   final BuildContext context;
   final FinampQueueItem? currentTrack;
   final FinampSettings settings;
+  final MetadataProvider? metadata;
 
-  get features {
-    final features = [];
+  bool get isDownloaded => metadata?.isDownloaded ?? false;
+  bool get isTranscoding =>
+      !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] ?? false);
+  String get container =>
+      isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
+  int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
+  MediaStream? get audioStream => metadata?.mediaSourceInfo.mediaStreams
+      .firstWhereOrNull((stream) => stream.type == "Audio");
+  int? get bitrate => isTranscoding
+      ? settings.transcodeBitrate
+      : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
+  int? get sampleRate => audioStream?.sampleRate;
+  int? get bitDepth => audioStream?.bitDepth;
+
+  List<FeatureProperties> get features {
+    final queueService = GetIt.instance<QueueService>();
+
+    final List<FeatureProperties> features = [];
+
+    if (queueService.playbackSpeed != 1.0) {
+      features.add(
+        FeatureProperties(
+          text: AppLocalizations.of(context)!
+              .playbackSpeedFeatureText(queueService.playbackSpeed),
+        ),
+      );
+    }
+
+    // TODO this will likely be extremely outdated if offline, hide?
+    if (currentTrack?.baseItem?.userData?.playCount != null) {
+      features.add(
+        FeatureProperties(
+          text: AppLocalizations.of(context)!
+              .playCountValue(currentTrack!.baseItem!.userData?.playCount ?? 0),
+        ),
+      );
+    }
+
+    if (currentTrack?.baseItem?.people?.isNotEmpty ?? false) {
+      currentTrack?.baseItem?.people?.forEach((person) {
+        features.add(
+          FeatureProperties(
+            text: "${person.role}: ${person.name}",
+          ),
+        );
+      });
+    }
 
     if (currentTrack?.item.extras?["downloadedSongPath"] != null) {
       features.add(
@@ -32,11 +85,10 @@ class FeatureState {
         ),
       );
     } else {
-      if (currentTrack?.item.extras?["shouldTranscode"]) {
+      if (isTranscoding) {
         features.add(
           FeatureProperties(
-            text:
-                "${AppLocalizations.of(context)!.playbackModeTranscoding} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(settings.transcodeBitrate ~/ 1000)}",
+            text: AppLocalizations.of(context)!.playbackModeTranscoding,
           ),
         );
       } else {
@@ -52,27 +104,54 @@ class FeatureState {
       }
     }
 
-    // TODO this will likely be extremely outdated if offline, hide?
-    if (currentTrack?.baseItem?.userData?.playCount != null) {
-      features.add(
-        FeatureProperties(
-          text: AppLocalizations.of(context)!
-              .playCountValue(currentTrack!.baseItem!.userData?.playCount ?? 0),
-        ),
-      );
-    }
-
-    if (currentTrack?.baseItem?.people?.isNotEmpty == true) {
-      currentTrack?.baseItem?.people?.forEach((person) {
+    if (metadata?.mediaSourceInfo != null) {
+      if (bitrate != null) {
         features.add(
           FeatureProperties(
-            text: "${person.role}: ${person.name}",
+            text:
+                "${container.toUpperCase()} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate! ~/ 1000)}",
           ),
         );
-      });
+      }
+
+      if (bitDepth != null) {
+        features.add(
+          FeatureProperties(
+            text: AppLocalizations.of(context)!.numberAsBit(bitDepth!),
+          ),
+        );
+      }
+
+      if (sampleRate != null) {
+        features.add(
+          FeatureProperties(
+            text: AppLocalizations.of(context)!
+                .numberAsKiloHertz(sampleRate! / 1000.0),
+          ),
+        );
+      }
+
+      if (size != null) {
+        features.add(
+          FeatureProperties(
+            text: FileSize.getSize(size),
+          ),
+        );
+      }
     }
 
-    //TODO get codec information (from just_audio or Jellyfin)
+    if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
+      double? effectiveGainChange =
+          getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
+      if (effectiveGainChange != null) {
+        features.add(
+          FeatureProperties(
+            text: AppLocalizations.of(context)!.numberAsDecibel(
+                double.parse(effectiveGainChange.toStringAsFixed(1))),
+          ),
+        );
+      }
+    }
 
     return features;
   }
@@ -86,14 +165,16 @@ class FeatureProperties {
   final String text;
 }
 
-class FeatureChips extends StatelessWidget {
+class FeatureChips extends ConsumerWidget {
   const FeatureChips({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
+
+    final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
     return ValueListenableBuilder(
         valueListenable: FinampSettingsHelper.finampSettingsListener,
@@ -109,15 +190,24 @@ class FeatureChips extends StatelessWidget {
                   context: context,
                   currentTrack: snapshot.data,
                   settings: settings,
+                  metadata: metadata.valueOrNull,
                 );
 
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Features(
-                    backgroundColor:
-                        IconTheme.of(context).color?.withOpacity(0.1) ??
-                            _defaultBackgroundColour,
-                    features: featureState,
+                return Padding(
+                  padding: const EdgeInsets.only(left: 32.0, right: 32.0),
+                  child: ScrollConfiguration(
+                    // Allow drag scrolling on desktop
+                    behavior: ScrollConfiguration.of(context).copyWith(
+                        dragDevices: PointerDeviceKind.values.toSet()),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Features(
+                        backgroundColor:
+                            IconTheme.of(context).color?.withOpacity(0.1) ??
+                                _defaultBackgroundColour,
+                        features: featureState,
+                      ),
+                    ),
                   ),
                 );
               });
@@ -127,11 +217,11 @@ class FeatureChips extends StatelessWidget {
 
 class Features extends StatelessWidget {
   const Features({
-    Key? key,
+    super.key,
     required this.features,
     this.backgroundColor,
     this.color,
-  }) : super(key: key);
+  });
 
   final FeatureState features;
   final Color? backgroundColor;
@@ -142,8 +232,8 @@ class Features extends StatelessWidget {
     return Wrap(
       spacing: 4.0,
       runSpacing: 4.0,
-      children: List.generate(features.features.length ?? 0, (index) {
-        final feature = features.features![index];
+      children: List.generate(features.features.length, (index) {
+        final feature = features.features[index];
 
         return _FeatureContent(
           backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
@@ -158,11 +248,11 @@ class Features extends StatelessWidget {
 
 class _FeatureContent extends StatelessWidget {
   const _FeatureContent({
-    Key? key,
+    super.key,
     required this.feature,
     required this.backgroundColor,
     this.color,
-  }) : super(key: key);
+  });
 
   final FeatureProperties feature;
   final Color? backgroundColor;
@@ -171,15 +261,16 @@ class _FeatureContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor ?? _defaultBackgroundColour,
-        borderRadius: _borderRadius,
-      ),
+      // decoration: BoxDecoration(
+      //   color: backgroundColor ?? _defaultBackgroundColour,
+      //   borderRadius: _borderRadius,
+      // ),
       constraints: const BoxConstraints(maxWidth: 220),
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
       child: Text(
         feature.text,
-        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+        style: Theme.of(context).textTheme.displaySmall!.copyWith(
+            fontSize: 11,
             fontWeight: FontWeight.w300,
             overflow: TextOverflow.ellipsis),
         softWrap: false,

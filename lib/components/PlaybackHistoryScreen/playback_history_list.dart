@@ -66,7 +66,7 @@ class PlaybackHistoryList extends StatelessWidget {
                                         .item
                                         .extras?["itemJson"]))
                                 .catchError((e) {
-                                  GlobalSnackbar.error(e);
+                              GlobalSnackbar.error(e);
                             });
                           },
                         ),

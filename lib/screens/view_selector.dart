@@ -3,11 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../components/ViewSelector/no_music_libraries_message.dart';
-import '../services/finamp_user_helper.dart';
-import 'music_screen.dart';
-import '../services/jellyfin_api_helper.dart';
-import '../models/jellyfin_models.dart';
 import '../components/global_snackbar.dart';
+import '../models/jellyfin_models.dart';
+import '../services/finamp_user_helper.dart';
+import '../services/jellyfin_api_helper.dart';
+import 'music_screen.dart';
 
 class ViewSelector extends StatefulWidget {
   const ViewSelector({Key? key}) : super(key: key);
@@ -80,31 +80,29 @@ class _ViewSelectorState extends State<ViewSelector> {
                     child: const Icon(Icons.check),
                   )
                 : null,
-            body: Scrollbar(
-              child: ListView.builder(
-                itemCount: _views.length,
-                itemBuilder: (context, index) {
-                  final isSelected = _views.values.elementAt(index);
-                  final view = _views.keys.elementAt(index);
+            body: ListView.builder(
+              itemCount: _views.length,
+              itemBuilder: (context, index) {
+                final isSelected = _views.values.elementAt(index);
+                final view = _views.keys.elementAt(index);
 
-                  return CheckboxListTile(
-                    value: isSelected,
-                    enabled: view.collectionType == "music",
-                    title: Text(_views.keys.elementAt(index).name ??
-                        AppLocalizations.of(context)!.unknownName),
-                    onChanged: (value) {
-                      setState(() {
-                        _views[_views.keys.elementAt(index)] = value!;
-                        isSubmitButtonEnabled = _views.values.contains(true);
-                      });
-                    },
-                  );
-                },
-              ),
+                return CheckboxListTile(
+                  value: isSelected,
+                  enabled: view.collectionType == "music",
+                  title: Text(_views.keys.elementAt(index).name ??
+                      AppLocalizations.of(context)!.unknownName),
+                  onChanged: (value) {
+                    setState(() {
+                      _views[_views.keys.elementAt(index)] = value!;
+                      isSubmitButtonEnabled = _views.values.contains(true);
+                    });
+                  },
+                );
+              },
             ),
           );
         } else if (snapshot.hasError) {
-          errorSnackbar(snapshot.error, context);
+          GlobalSnackbar.error(snapshot.error);
           // TODO: Let the user refresh the page
           return const Center(child: Icon(Icons.error));
         } else {
@@ -129,7 +127,7 @@ class _ViewSelectorState extends State<ViewSelector> {
         Future.microtask(() => Navigator.of(context)
             .pushNamedAndRemoveUntil(MusicScreen.routeName, (route) => false));
       } catch (e) {
-        errorSnackbar(e, context);
+        GlobalSnackbar.error(e);
       }
     }
   }

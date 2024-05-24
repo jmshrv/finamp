@@ -182,13 +182,13 @@ final class _$JellyfinApi extends JellyfinApi {
     String? albumArtistIds,
     String? artistIds,
     String? albumIds,
+    String? genreIds,
     String? ids,
     bool? recursive,
     String? sortBy,
     String? sortOrder,
     String? fields = defaultFields,
     String? searchTerm,
-    String? genreIds,
     String? filters,
     int? startIndex,
     int? limit,
@@ -201,13 +201,13 @@ final class _$JellyfinApi extends JellyfinApi {
       'AlbumArtistIds': albumArtistIds,
       'ArtistIds': artistIds,
       'AlbumIds': albumIds,
+      'GenreIds': genreIds,
       'ids': ids,
       'Recursive': recursive,
       'SortBy': sortBy,
       'SortOrder': sortOrder,
       'Fields': fields,
       'SearchTerm': searchTerm,
-      'GenreIds': genreIds,
       'Filters': filters,
       'StartIndex': startIndex,
       'Limit': limit,
@@ -593,6 +593,22 @@ final class _$JellyfinApi extends JellyfinApi {
     final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
     final Request $request = Request(
       'DELETE',
+      $url,
+      client.baseUrl,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
+  Future<dynamic> getLyrics({required String itemId}) async {
+    final Uri $url = Uri.parse('/Audio/${itemId}/Lyrics');
+    final Request $request = Request(
+      'GET',
       $url,
       client.baseUrl,
     );

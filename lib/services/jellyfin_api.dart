@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:io' show HttpClient, Platform;
 
-import 'package:android_id/android_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
@@ -117,6 +117,10 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. If specified, results will be filtered to include only those
     /// containing the specified album id.
     @Query("AlbumIds") String? albumIds,
+
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified genre id.
+    @Query("GenreIds") String? genreIds,
     @Query("ids") String? ids,
 
     /// When searching within folders, this determines whether or not the search
@@ -152,10 +156,6 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
-
-    /// Optional. If specified, results will be filtered based on genre id. This
-    /// allows multiple, pipe delimited.
-    @Query("GenreIds") String? genreIds,
 
     /// Items Enum: "IsFolder" "IsNotFolder" "IsUnplayed" "IsPlayed"
     /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"
@@ -436,6 +436,17 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String itemId,
   });
 
+  /// Requests lyrics for a song.
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
+  @Get(path: "/Audio/{itemId}/Lyrics")
+  Future<dynamic> getLyrics({
+    /// The item id.
+    @Path() required String itemId,
+  });
+
   /// Reports that a session has ended.
   @FactoryConverter(
     request: JsonConverter.requestFactory,
@@ -450,7 +461,8 @@ abstract class JellyfinApi extends ChopperService {
     final client = ChopperClient(
       client: http.IOClient(HttpClient()
             ..connectionTimeout = const Duration(
-                seconds: 8) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+                seconds:
+                    8) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
           ),
       // The first part of the URL is now here
       services: [
@@ -461,40 +473,54 @@ abstract class JellyfinApi extends ChopperService {
       // converter: JsonConverter(),
       interceptors: [
         /// Gets baseUrl from SharedPreferences.
-        (Request request) {
-          final finampUserHelper = GetIt.instance<FinampUserHelper>();
-          Uri? baseUrlTemp;
-          if (inForeground) {
-            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-            baseUrlTemp = jellyfinApiHelper.baseUrlTemp;
-          }
-
-          String authHeader = finampUserHelper.authorizationHeader;
-
-          // If baseUrlTemp is null, use the baseUrl of the current user.
-          // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-          Uri baseUri =
-              baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
-
-          // Add the request path on to the baseUrl
-          baseUri = baseUri.replace(
-              pathSegments:
-                  baseUri.pathSegments.followedBy(request.uri.pathSegments));
-
-          return request.copyWith(
-            uri: baseUri,
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": authHeader,
-            },
-          );
-        },
+        JellyfinInterceptor(inForeground),
         HttpAggregateLoggingInterceptor(level: chopperHttpLogLevel),
       ],
     );
 
     // The generated class with the ChopperClient passed in
     return _$JellyfinApi(client);
+  }
+}
+
+class JellyfinInterceptor implements Interceptor {
+  JellyfinInterceptor(this.inForeground);
+
+  final bool inForeground;
+
+  @override
+  FutureOr<Response<BodyType>> intercept<BodyType>(
+      Chain<BodyType> chain) async {
+    return await chain.proceed(updateRequest(chain.request));
+  }
+
+  Request updateRequest(Request request) {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    Uri? baseUrlTemp;
+    if (inForeground) {
+      final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+      baseUrlTemp = jellyfinApiHelper.baseUrlTemp;
+    }
+
+    String authHeader = finampUserHelper.authorizationHeader;
+
+    // If baseUrlTemp is null, use the baseUrl of the current user.
+    // If baseUrlTemp is set, we're setting up a new user and should use it instead.
+    Uri baseUri =
+        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
+
+    // Add the request path on to the baseUrl
+    baseUri = baseUri.replace(
+        pathSegments:
+            baseUri.pathSegments.followedBy(request.uri.pathSegments));
+
+    return request.copyWith(
+      uri: baseUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": authHeader,
+      },
+    );
   }
 }
 
@@ -520,15 +546,29 @@ Future<String> getAuthHeader() async {
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
     authHeader = '${authHeader}Device="${androidDeviceInfo.model}", ';
-    final androidId = await const AndroidId().getId();
-    authHeader = '${authHeader}DeviceId="$androidId", ';
+    authHeader = '${authHeader}DeviceId="${androidDeviceInfo.id}", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
     authHeader = '${authHeader}Device="${iosDeviceInfo.name}", ';
     authHeader =
         '${authHeader}DeviceId="${iosDeviceInfo.identifierForVendor}", ';
+  } else if (Platform.isWindows) {
+    WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
+    authHeader = '${authHeader}Device="${windowsDeviceInfo.computerName}", ';
+    final windowsId = windowsDeviceInfo.deviceId;
+    authHeader = '${authHeader}DeviceId="$windowsId", ';
+  } else if (Platform.isLinux) {
+    LinuxDeviceInfo linuxDeviceInfo = await deviceInfo.linuxInfo;
+    authHeader = '${authHeader}Device="${linuxDeviceInfo.name}", ';
+    final linuxId = linuxDeviceInfo.machineId;
+    authHeader = '${authHeader}DeviceId="$linuxId", ';
+  } else if (Platform.isMacOS) {
+    MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
+    authHeader = '${authHeader}Device="${macOsDeviceInfo.computerName}", ';
+    final macId = macOsDeviceInfo.systemGUID;
+    authHeader = '${authHeader}DeviceId="$macId", ';
   } else {
-    throw "getAuthHeader() only supports Android and iOS";
+    throw Exception("Unsupported platform");
   }
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();

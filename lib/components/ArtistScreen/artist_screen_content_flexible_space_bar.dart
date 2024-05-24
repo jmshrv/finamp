@@ -5,6 +5,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/jellyfin_api.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -98,8 +99,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleNext, isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
+          isConfirmation: true);
     }
 
     void shuffleAllFromArtistToNextUp(List<BaseItemDto> items) {
@@ -118,8 +120,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleToNextUp, isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+          isConfirmation: true);
     }
 
     void shuffleAllFromArtistToQueue(List<BaseItemDto> items) {
@@ -137,8 +140,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleToQueue, isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
+          isConfirmation: true);
     }
 
     void addArtistNext(List<BaseItemDto> items) {
@@ -155,8 +159,10 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmPlayNext(isGenre ? "genre" : "artist"), isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!
+              .confirmPlayNext(isGenre ? "genre" : "artist"),
+          isConfirmation: true);
     }
 
     void addArtistToNextUp(List<BaseItemDto> items) {
@@ -173,8 +179,10 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmAddToNextUp(isGenre ? "genre" : "artist"), isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!
+              .confirmAddToNextUp(isGenre ? "genre" : "artist"),
+          isConfirmation: true);
     }
 
     void addArtistToQueue(List<BaseItemDto> items) {
@@ -191,8 +199,10 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             id: parentItem.id,
             item: parentItem,
           ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmAddToQueue(isGenre ? "genre" : "artist"), isConfirmation: true);
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!
+              .confirmAddToQueue(isGenre ? "genre" : "artist"),
+          isConfirmation: true);
     }
 
     void shuffleAlbumsFromArtist(List<BaseItemDto> items) {
@@ -239,8 +249,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleNext,
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
           isConfirmation: true);
     }
 
@@ -265,8 +275,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleToNextUp,
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
           isConfirmation: true);
     }
 
@@ -290,8 +300,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-          .confirmShuffleToQueue,
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
           isConfirmation: true);
     }
 
@@ -346,13 +356,15 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     onPressed: () => allSongs.then((items) =>
                                         playAllFromArtist(items ?? [])),
                                     // set the minimum width as 25% of the screen width,
-                                    minWidth: MediaQuery.of(context).size.width * 0.25,
+                                    minWidth:
+                                        MediaQuery.of(context).size.width *
+                                            0.25,
                                   ),
                                   PopupMenuButton<ArtistMenuItems>(
                                     enableFeedback: true,
                                     // icon: const Icon(TablerIcons.dots_vertical),
-                                    onOpened: () =>
-                                        Vibrate.feedback(FeedbackType.light),
+                                    onOpened: () => FeedbackHelper.feedback(
+                                        FeedbackType.light),
                                     itemBuilder: (context) {
                                       final queueService =
                                           GetIt.instance<QueueService>();
@@ -364,8 +376,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                           PopupMenuItem<ArtistMenuItems>(
                                             value: ArtistMenuItems.playNext,
                                             child: ListTile(
-                                              leading: const Icon(
-                                                  TablerIcons.corner_right_down),
+                                              leading: const Icon(TablerIcons
+                                                  .corner_right_down),
                                               title: Text(
                                                   AppLocalizations.of(context)!
                                                       .playNext),
@@ -374,8 +386,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                         PopupMenuItem<ArtistMenuItems>(
                                           value: ArtistMenuItems.addToNextUp,
                                           child: ListTile(
-                                            leading:
-                                                const Icon(TablerIcons.corner_right_down_double),
+                                            leading: const Icon(TablerIcons
+                                                .corner_right_down_double),
                                             title: Text(
                                                 AppLocalizations.of(context)!
                                                     .addToNextUp),
@@ -463,13 +475,15 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     onPressed: () => allSongs.then((items) =>
                                         shuffleAllFromArtist(items ?? [])),
                                     // set the minimum width as 25% of the screen width,
-                                    minWidth: MediaQuery.of(context).size.width * 0.25,
+                                    minWidth:
+                                        MediaQuery.of(context).size.width *
+                                            0.25,
                                   ),
                                   PopupMenuButton<ArtistMenuItems>(
                                     enableFeedback: true,
                                     // icon: const Icon(TablerIcons.dots_vertical),
-                                    onOpened: () =>
-                                        Vibrate.feedback(FeedbackType.light),
+                                    onOpened: () => FeedbackHelper.feedback(
+                                        FeedbackType.light),
                                     itemBuilder: (context) {
                                       final queueService =
                                           GetIt.instance<QueueService>();

@@ -1,17 +1,16 @@
 import 'package:balanced_text/balanced_text.dart';
-import 'package:flutter/gestures.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
-import 'package:finamp/services/queue_service.dart';
-
 import 'queue_source_helper.dart';
 
 class PlayerScreenAppBarTitle extends StatefulWidget {
-  const PlayerScreenAppBarTitle({Key? key}) : super(key: key);
+  const PlayerScreenAppBarTitle({super.key, required this.maxLines});
+
+  final int maxLines;
 
   @override
   State<PlayerScreenAppBarTitle> createState() =>
@@ -31,9 +30,12 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
       stream: currentTrackStream,
       initialData: _queueService.getCurrentTrack(),
       builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return const SizedBox.shrink();
+        }
         final queueItem = snapshot.data!;
 
-        return Container(
+        return ConstrainedBox(
           constraints: BoxConstraints(maxWidth: screenWidth * 0.62),
           child: GestureDetector(
             onTap: () => navigateToSource(context, queueItem.source),
@@ -61,7 +63,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                         ? Colors.white
                         : Colors.black.withOpacity(0.9),
                   ),
-                  maxLines: 2,
+                  maxLines: widget.maxLines,
                   textAlign: TextAlign.center,
                 ),
               ],

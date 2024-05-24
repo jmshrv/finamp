@@ -261,8 +261,8 @@
   },
   "showTextOnGridViewSubtitle": "سواء ان تظهر كلمات  [الإسم، الفنان، أو الباقي] على صفحة الموسيقى التي تستعمل عرض الشبكي.",
   "@showTextOnGridViewSubtitle": {},
-  "showCoverAsPlayerBackgroundSubtitle": "سواء ان تستعمل مخلاف البوم غائم على مشغل الموسيقى.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "useCoverAsBackgroundSubtitle": "سواء ان تستعمل مخلاف البوم غائم على مشغل الموسيقى.",
+  "@useCoverAsBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "إخفاء أسماء فنانين اﻷغنية إذا هن نفس أسماء فنانين الأابوم",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "theme": "الألوان التطبيق",
@@ -417,8 +417,8 @@
   },
   "pathReturnSlashErrorMessage": "مسارات التي ترجع \"/\" لا يمكن ان تستعمل",
   "@pathReturnSlashErrorMessage": {},
-  "showCoverAsPlayerBackground": "أظهر مخلاف البوم غائم على مشغل الموسيقى",
-  "@showCoverAsPlayerBackground": {},
+  "useCoverAsBackground": "أظهر مخلاف البوم غائم على مشغل الموسيقى",
+  "@useCoverAsBackground": {},
   "urlTrailingSlash": "العنوان لا يمكن ان ينهي مع \"/\"",
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"

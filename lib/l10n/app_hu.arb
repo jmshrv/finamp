@@ -265,8 +265,8 @@
   "@portrait": {},
   "selectDirectory": "Könyvtár kiválasztása",
   "@selectDirectory": {},
-  "showCoverAsPlayerBackground": "Elmosódott borító megjelenítése lejátszási háttérként",
-  "@showCoverAsPlayerBackground": {},
+  "useCoverAsBackground": "Elmosódott borító megjelenítése lejátszási háttérként",
+  "@useCoverAsBackground": {},
   "showTextOnGridView": "Szöveg megjelenítése rácsnézetben",
   "@showTextOnGridView": {},
   "system": "Rendszer",
@@ -430,8 +430,8 @@
   "@addToMix": {},
   "showTextOnGridViewSubtitle": "Megjelenik-e a szöveg (cím, előadó stb.) a rácszene képernyőn.",
   "@showTextOnGridViewSubtitle": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Használja-e az elmosódott borítót háttérként a lejátszó képernyőjén.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "useCoverAsBackgroundSubtitle": "Használja-e az elmosódott borítót háttérként a lejátszó képernyőjén.",
+  "@useCoverAsBackgroundSubtitle": {},
   "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
   "@downloadCount": {
     "placeholders": {

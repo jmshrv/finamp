@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -56,13 +59,15 @@ class _LogoutListTileState extends State<LogoutListTile> {
                   try {
                     final audioHandler =
                         GetIt.instance<MusicPlayerBackgroundTask>();
+                    final queueService = GetIt.instance<QueueService>();
 
                     // We don't want audio to be playing after we log out.
                     // We check if the audio service is running on iOS because
                     // stop() never completes if the service is not running.
-                    if (audioHandler.playbackState.valueOrNull?.playing ==
-                        true) {
-                      await audioHandler.stop();
+                    if (!Platform.isIOS ||
+                        (audioHandler.playbackState.valueOrNull?.playing ??
+                            false)) {
+                      await queueService.stopPlayback();
                     }
 
                     final jellyfinApiHelper =

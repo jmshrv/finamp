@@ -77,17 +77,18 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
-      replayGainActive: fields[29] == null ? true : fields[29] as bool,
-      replayGainIOSBaseGain: fields[30] == null ? -5.0 : fields[30] as double,
-      replayGainTargetLufs: fields[31] == null ? -14.0 : fields[31] as double,
-      replayGainNormalizationFactor:
-          fields[32] == null ? 1.0 : fields[32] as double,
-      replayGainMode: fields[33] == null
-          ? ReplayGainMode.hybrid
-          : fields[33] as ReplayGainMode,
+      volumeNormalizationActive: fields[29] == null ? true : fields[29] as bool,
+      volumeNormalizationIOSBaseGain:
+          fields[30] == null ? -2.0 : fields[30] as double,
+      volumeNormalizationMode: fields[33] == null
+          ? VolumeNormalizationMode.hybrid
+          : fields[33] as VolumeNormalizationMode,
       contentViewType: fields[10] == null
           ? ContentViewType.list
           : fields[10] as ContentViewType,
+      playbackSpeedVisibility: fields[57] == null
+          ? PlaybackSpeedVisibility.automatic
+          : fields[57] as PlaybackSpeedVisibility,
       contentGridViewCrossAxisCountPortrait:
           fields[11] == null ? 2 : fields[11] as int,
       contentGridViewCrossAxisCountLandscape:
@@ -97,10 +98,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
-      showCoverAsPlayerBackground:
-          fields[16] == null ? true : fields[16] as bool,
+      useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
+      playerScreenCoverMinimumPadding:
+          fields[48] == null ? 1.5 : fields[48] as double,
       hideSongArtistsIfSameAsAlbumArtists:
           fields[17] == null ? true : fields[17] as bool,
+      showArtistsTopSongs: fields[54] == null ? true : fields[54] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
       tabSortBy: fields[20] == null
           ? {}
@@ -111,6 +114,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       loopMode: fields[27] == null
           ? FinampLoopMode.none
           : fields[27] as FinampLoopMode,
+      playbackSpeed: fields[56] == null ? 1.0 : fields[56] as double,
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
@@ -146,15 +150,33 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
+      useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
+      fixedGridTileSize: fields[60] == null ? 150 : fields[60] as int,
+      allowSplitScreen: fields[61] == null ? true : fields[61] as bool,
+      splitScreenPlayerWidth: fields[62] == null ? 400.0 : fields[62] as double,
+      enableVibration: fields[47] == null ? true : fields[47] as bool,
+      prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
+      suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
+      hideQueueButton: fields[51] == null ? false : fields[51] as bool,
+      reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
+      periodicPlaybackSessionUpdateFrequencySeconds:
+          fields[53] == null ? 150 : fields[53] as int,
+      showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
+      trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
+      showProgressOnNowPlayingBar:
+          fields[64] == null ? true : fields[64] as bool,
+      startInstantMixForIndividualTracks:
+          fields[65] == null ? true : fields[65] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
-      ..showFastScroller = fields[25] == null ? true : fields[25] as bool;
+      ..showFastScroller = fields[25] == null ? true : fields[25] as bool
+      ..defaultDownloadLocation = fields[58] as String?;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(47)
+      ..writeByte(64)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -188,7 +210,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(15)
       ..write(obj.downloadLocationsMap)
       ..writeByte(16)
-      ..write(obj.showCoverAsPlayerBackground)
+      ..write(obj.useCoverAsBackground)
       ..writeByte(17)
       ..write(obj.hideSongArtistsIfSameAsAlbumArtists)
       ..writeByte(18)
@@ -214,15 +236,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(28)
       ..write(obj.autoloadLastQueueOnStartup)
       ..writeByte(29)
-      ..write(obj.replayGainActive)
+      ..write(obj.volumeNormalizationActive)
       ..writeByte(30)
-      ..write(obj.replayGainIOSBaseGain)
-      ..writeByte(31)
-      ..write(obj.replayGainTargetLufs)
-      ..writeByte(32)
-      ..write(obj.replayGainNormalizationFactor)
+      ..write(obj.volumeNormalizationIOSBaseGain)
       ..writeByte(33)
-      ..write(obj.replayGainMode)
+      ..write(obj.volumeNormalizationMode)
       ..writeByte(34)
       ..write(obj.hasCompleteddownloadsServiceMigration)
       ..writeByte(35)
@@ -248,7 +266,45 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(45)
       ..write(obj.downloadTranscodeBitrate)
       ..writeByte(46)
-      ..write(obj.shouldRedownloadTranscodes);
+      ..write(obj.shouldRedownloadTranscodes)
+      ..writeByte(47)
+      ..write(obj.enableVibration)
+      ..writeByte(48)
+      ..write(obj.playerScreenCoverMinimumPadding)
+      ..writeByte(49)
+      ..write(obj.prioritizeCoverFactor)
+      ..writeByte(50)
+      ..write(obj.suppressPlayerPadding)
+      ..writeByte(51)
+      ..write(obj.hideQueueButton)
+      ..writeByte(52)
+      ..write(obj.reportQueueToServer)
+      ..writeByte(53)
+      ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds)
+      ..writeByte(54)
+      ..write(obj.showArtistsTopSongs)
+      ..writeByte(55)
+      ..write(obj.showArtistChipImage)
+      ..writeByte(56)
+      ..write(obj.playbackSpeed)
+      ..writeByte(57)
+      ..write(obj.playbackSpeedVisibility)
+      ..writeByte(58)
+      ..write(obj.defaultDownloadLocation)
+      ..writeByte(59)
+      ..write(obj.useFixedSizeGridTiles)
+      ..writeByte(60)
+      ..write(obj.fixedGridTileSize)
+      ..writeByte(61)
+      ..write(obj.allowSplitScreen)
+      ..writeByte(62)
+      ..write(obj.splitScreenPlayerWidth)
+      ..writeByte(63)
+      ..write(obj.trackOfflineFavorites)
+      ..writeByte(64)
+      ..write(obj.showProgressOnNowPlayingBar)
+      ..writeByte(65)
+      ..write(obj.startInstantMixForIndividualTracks);
   }
 
   @override
@@ -524,7 +580,7 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       name: fields[1] as QueueItemSourceName,
       id: fields[2] as String,
       item: fields[3] as BaseItemDto?,
-      contextLufs: fields[4] as double?,
+      contextNormalizationGain: fields[4] as double?,
     );
   }
 
@@ -541,7 +597,7 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       ..writeByte(3)
       ..write(obj.item)
       ..writeByte(4)
-      ..write(obj.contextLufs);
+      ..write(obj.contextNormalizationGain);
   }
 
   @override
@@ -652,13 +708,13 @@ class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
       originalSource: fields[1] as QueueItemSource,
       linearOrder: (fields[2] as List).cast<int>(),
       shuffledOrder: (fields[3] as List).cast<int>(),
-    );
+    )..id = fields[4] as String;
   }
 
   @override
   void write(BinaryWriter writer, FinampQueueOrder obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.items)
       ..writeByte(1)
@@ -666,7 +722,9 @@ class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
       ..writeByte(2)
       ..write(obj.linearOrder)
       ..writeByte(3)
-      ..write(obj.shuffledOrder);
+      ..write(obj.shuffledOrder)
+      ..writeByte(4)
+      ..write(obj.id);
   }
 
   @override
@@ -691,6 +749,7 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampQueueInfo(
+      id: fields[6] as String,
       previousTracks: (fields[0] as List).cast<FinampQueueItem>(),
       currentTrack: fields[1] as FinampQueueItem?,
       nextUp: (fields[2] as List).cast<FinampQueueItem>(),
@@ -703,7 +762,7 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
   @override
   void write(BinaryWriter writer, FinampQueueInfo obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.previousTracks)
       ..writeByte(1)
@@ -715,7 +774,9 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
       ..writeByte(4)
       ..write(obj.source)
       ..writeByte(5)
-      ..write(obj.saveState);
+      ..write(obj.saveState)
+      ..writeByte(6)
+      ..write(obj.id);
   }
 
   @override
@@ -824,7 +885,7 @@ class FinampStorableQueueInfoAdapter
 
 class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
   @override
-  final int typeId = 68;
+  final int typeId = 69;
 
   @override
   MediaItemId read(BinaryReader reader) {
@@ -1084,6 +1145,10 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         return QueueItemSourceType.queue;
       case 17:
         return QueueItemSourceType.unknown;
+      case 18:
+        return QueueItemSourceType.genreMix;
+      case 19:
+        return QueueItemSourceType.song;
       default:
         return QueueItemSourceType.album;
     }
@@ -1145,6 +1210,12 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         break;
       case QueueItemSourceType.unknown:
         writer.writeByte(17);
+        break;
+      case QueueItemSourceType.genreMix:
+        writer.writeByte(18);
+        break;
+      case QueueItemSourceType.song:
+        writer.writeByte(19);
         break;
     }
   }
@@ -1343,34 +1414,35 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
           typeId == other.typeId;
 }
 
-class ReplayGainModeAdapter extends TypeAdapter<ReplayGainMode> {
+class VolumeNormalizationModeAdapter
+    extends TypeAdapter<VolumeNormalizationMode> {
   @override
   final int typeId = 63;
 
   @override
-  ReplayGainMode read(BinaryReader reader) {
+  VolumeNormalizationMode read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ReplayGainMode.hybrid;
+        return VolumeNormalizationMode.hybrid;
       case 1:
-        return ReplayGainMode.trackOnly;
+        return VolumeNormalizationMode.trackBased;
       case 2:
-        return ReplayGainMode.albumOnly;
+        return VolumeNormalizationMode.albumOnly;
       default:
-        return ReplayGainMode.hybrid;
+        return VolumeNormalizationMode.hybrid;
     }
   }
 
   @override
-  void write(BinaryWriter writer, ReplayGainMode obj) {
+  void write(BinaryWriter writer, VolumeNormalizationMode obj) {
     switch (obj) {
-      case ReplayGainMode.hybrid:
+      case VolumeNormalizationMode.hybrid:
         writer.writeByte(0);
         break;
-      case ReplayGainMode.trackOnly:
+      case VolumeNormalizationMode.trackBased:
         writer.writeByte(1);
         break;
-      case ReplayGainMode.albumOnly:
+      case VolumeNormalizationMode.albumOnly:
         writer.writeByte(2);
         break;
     }
@@ -1382,7 +1454,7 @@ class ReplayGainModeAdapter extends TypeAdapter<ReplayGainMode> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ReplayGainModeAdapter &&
+      other is VolumeNormalizationModeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -1406,6 +1478,8 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
         return DownloadLocationType.none;
       case 5:
         return DownloadLocationType.migrated;
+      case 6:
+        return DownloadLocationType.cache;
       default:
         return DownloadLocationType.internalDocuments;
     }
@@ -1431,6 +1505,9 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
         break;
       case DownloadLocationType.migrated:
         writer.writeByte(5);
+        break;
+      case DownloadLocationType.cache:
+        writer.writeByte(6);
         break;
     }
   }
@@ -1541,9 +1618,54 @@ class TranscodeDownloadsSettingAdapter
           typeId == other.typeId;
 }
 
-class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
+class PlaybackSpeedVisibilityAdapter
+    extends TypeAdapter<PlaybackSpeedVisibility> {
   @override
   final int typeId = 67;
+
+  @override
+  PlaybackSpeedVisibility read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return PlaybackSpeedVisibility.automatic;
+      case 1:
+        return PlaybackSpeedVisibility.visible;
+      case 2:
+        return PlaybackSpeedVisibility.hidden;
+      default:
+        return PlaybackSpeedVisibility.automatic;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, PlaybackSpeedVisibility obj) {
+    switch (obj) {
+      case PlaybackSpeedVisibility.automatic:
+        writer.writeByte(0);
+        break;
+      case PlaybackSpeedVisibility.visible:
+        writer.writeByte(1);
+        break;
+      case PlaybackSpeedVisibility.hidden:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlaybackSpeedVisibilityAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
+  @override
+  final int typeId = 68;
 
   @override
   MediaItemParentType read(BinaryReader reader) {
@@ -5676,6 +5798,471 @@ extension DownloadItemQueryProperty
   }
 }
 
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+extension GetDownloadedLyricsCollection on Isar {
+  IsarCollection<DownloadedLyrics> get downloadedLyrics => this.collection();
+}
+
+const DownloadedLyricsSchema = CollectionSchema(
+  name: r'DownloadedLyrics',
+  id: 7780135185558523971,
+  properties: {
+    r'jsonItem': PropertySchema(
+      id: 0,
+      name: r'jsonItem',
+      type: IsarType.string,
+    )
+  },
+  estimateSize: _downloadedLyricsEstimateSize,
+  serialize: _downloadedLyricsSerialize,
+  deserialize: _downloadedLyricsDeserialize,
+  deserializeProp: _downloadedLyricsDeserializeProp,
+  idName: r'isarId',
+  indexes: {},
+  links: {},
+  embeddedSchemas: {},
+  getId: _downloadedLyricsGetId,
+  getLinks: _downloadedLyricsGetLinks,
+  attach: _downloadedLyricsAttach,
+  version: '3.1.0+1',
+);
+
+int _downloadedLyricsEstimateSize(
+  DownloadedLyrics object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  {
+    final value = object.jsonItem;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  return bytesCount;
+}
+
+void _downloadedLyricsSerialize(
+  DownloadedLyrics object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.jsonItem);
+}
+
+DownloadedLyrics _downloadedLyricsDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = DownloadedLyrics(
+    isarId: id,
+    jsonItem: reader.readStringOrNull(offsets[0]),
+  );
+  return object;
+}
+
+P _downloadedLyricsDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readStringOrNull(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+Id _downloadedLyricsGetId(DownloadedLyrics object) {
+  return object.isarId;
+}
+
+List<IsarLinkBase<dynamic>> _downloadedLyricsGetLinks(DownloadedLyrics object) {
+  return [];
+}
+
+void _downloadedLyricsAttach(
+    IsarCollection<dynamic> col, Id id, DownloadedLyrics object) {}
+
+extension DownloadedLyricsQueryWhereSort
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QWhere> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhere> anyIsarId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+}
+
+extension DownloadedLyricsQueryWhere
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QWhereClause> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdEqualTo(Id isarId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: isarId,
+        upper: isarId,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdNotEqualTo(Id isarId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+            )
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+            )
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdGreaterThan(Id isarId, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.greaterThan(lower: isarId, includeLower: include),
+      );
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdLessThan(Id isarId, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.lessThan(upper: isarId, includeUpper: include),
+      );
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterWhereClause>
+      isarIdBetween(
+    Id lowerIsarId,
+    Id upperIsarId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: lowerIsarId,
+        includeLower: includeLower,
+        upper: upperIsarId,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+}
+
+extension DownloadedLyricsQueryFilter
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdEqualTo(Id value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdGreaterThan(
+    Id value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdLessThan(
+    Id value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      isarIdBetween(
+    Id lower,
+    Id upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'isarId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'jsonItem',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'jsonItem',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'jsonItem',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'jsonItem',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'jsonItem',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'jsonItem',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterFilterCondition>
+      jsonItemIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'jsonItem',
+        value: '',
+      ));
+    });
+  }
+}
+
+extension DownloadedLyricsQueryObject
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {}
+
+extension DownloadedLyricsQueryLinks
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QFilterCondition> {}
+
+extension DownloadedLyricsQuerySortBy
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QSortBy> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      sortByJsonItem() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'jsonItem', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      sortByJsonItemDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'jsonItem', Sort.desc);
+    });
+  }
+}
+
+extension DownloadedLyricsQuerySortThenBy
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QSortThenBy> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByIsarId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isarId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByIsarIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isarId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByJsonItem() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'jsonItem', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QAfterSortBy>
+      thenByJsonItemDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'jsonItem', Sort.desc);
+    });
+  }
+}
+
+extension DownloadedLyricsQueryWhereDistinct
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QDistinct> {
+  QueryBuilder<DownloadedLyrics, DownloadedLyrics, QDistinct>
+      distinctByJsonItem({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'jsonItem', caseSensitive: caseSensitive);
+    });
+  }
+}
+
+extension DownloadedLyricsQueryProperty
+    on QueryBuilder<DownloadedLyrics, DownloadedLyrics, QQueryProperty> {
+  QueryBuilder<DownloadedLyrics, int, QQueryOperations> isarIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isarId');
+    });
+  }
+
+  QueryBuilder<DownloadedLyrics, String?, QQueryOperations> jsonItemProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'jsonItem');
+    });
+  }
+}
+
 // **************************************************************************
 // IsarEmbeddedGenerator
 // **************************************************************************
@@ -6094,7 +6681,7 @@ DownloadStub _$DownloadStubFromJson(Map json) => DownloadStub._build(
       id: json['Id'] as String,
       type: $enumDecode(_$DownloadItemTypeEnumMap, json['Type']),
       jsonItem: json['JsonItem'] as String?,
-      isarId: json['IsarId'] as int,
+      isarId: (json['IsarId'] as num).toInt(),
       name: json['Name'] as String,
       baseItemType: $enumDecode(_$BaseItemDtoTypeEnumMap, json['BaseItemType']),
     );
@@ -6127,6 +6714,37 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.library: 'library',
   BaseItemDtoType.folder: 'folder',
   BaseItemDtoType.musicVideo: 'musicVideo',
+};
+
+FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
+      type: $enumDecode(_$FinampCollectionTypeEnumMap, json['Type']),
+      library: json['Library'] == null
+          ? null
+          : BaseItemDto.fromJson(
+              Map<String, dynamic>.from(json['Library'] as Map)),
+    );
+
+Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) {
+  final val = <String, dynamic>{
+    'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Library', instance.library?.toJson());
+  return val;
+}
+
+const _$FinampCollectionTypeEnumMap = {
+  FinampCollectionType.favorites: 'favorites',
+  FinampCollectionType.allPlaylists: 'allPlaylists',
+  FinampCollectionType.latest5Albums: 'latest5Albums',
+  FinampCollectionType.libraryImages: 'libraryImages',
+  FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
 };
 
 MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(

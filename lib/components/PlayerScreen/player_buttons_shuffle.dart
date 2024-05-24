@@ -3,6 +3,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/media_state_stream.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -21,7 +22,7 @@ class PlayerButtonsShuffle extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return IconButton(
           onPressed: () async {
-            Vibrate.feedback(FeedbackType.light);
+            FeedbackHelper.feedback(FeedbackType.light);
             _queueService.togglePlaybackOrder();
           },
           icon: Icon(

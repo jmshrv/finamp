@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:logging/logging.dart';
@@ -28,7 +30,8 @@ class GlobalSnackbar {
   static void _enqueue(Function func) {
     if (materialAppScaffoldKey.currentState != null &&
         (materialAppNavigatorKey.currentContext?.mounted ?? false)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => func());
+      // Schedule snackbar creation for as soon as possible outside of build()
+      SchedulerBinding.instance.scheduleTask(() => func(), Priority.touch);
     } else {
       _queue.add(func);
       _timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -61,17 +64,21 @@ class GlobalSnackbar {
   }
 
   /// Show a localized message to the user using the global context
-  static void message(String Function(BuildContext scaffold) message, {
+  static void message(
+    String Function(BuildContext scaffold) message, {
     bool isConfirmation = false,
   }) =>
       _enqueue(() => _message(message, isConfirmation));
-  static void _message(String Function(BuildContext scaffold) message, bool isConfirmation) {
+  static void _message(
+      String Function(BuildContext scaffold) message, bool isConfirmation) {
     var text = message(materialAppNavigatorKey.currentContext!);
     _logger.info("Displaying message: $text");
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(text),
-        duration: isConfirmation ? const Duration(milliseconds: 1500) : const Duration(seconds: 4),
+        duration: isConfirmation
+            ? const Duration(milliseconds: 1500)
+            : const Duration(seconds: 4),
       ),
     );
   }
@@ -97,7 +104,7 @@ class GlobalSnackbar {
       errorText = event.toString();
     }
     // give immediate feedback that something went wrong
-    Vibrate.feedback(FeedbackType.error);
+    FeedbackHelper.feedback(FeedbackType.warning);
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(AppLocalizations.of(context)!.anErrorHasOccured),

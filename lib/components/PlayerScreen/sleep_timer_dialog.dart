@@ -33,7 +33,8 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
             Expanded(
               child: TextFormField(
                 controller: _textController,
-                keyboardType: TextInputType.number,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.minutes),
@@ -42,16 +43,18 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
                     return AppLocalizations.of(context)!.required;
                   }
 
-                  if (int.tryParse(value) == null) {
+                  if (double.tryParse(value) == null) {
                     return AppLocalizations.of(context)!.invalidNumber;
                   }
                   return null;
                 },
                 onSaved: (value) {
-                  final valueInt = int.parse(value!);
+                  final valueDouble = double.parse(value!);
+                  final durationInSeconds = (valueDouble * 60).round();
 
-                  _audioHandler.setSleepTimer(Duration(minutes: valueInt));
-                  FinampSettingsHelper.setSleepTimerSeconds(valueInt * 60);
+                  _audioHandler
+                      .setSleepTimer(Duration(seconds: durationInSeconds));
+                  FinampSettingsHelper.setSleepTimerSeconds(durationInSeconds);
                 },
               ),
             ),

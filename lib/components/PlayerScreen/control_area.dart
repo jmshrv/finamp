@@ -1,27 +1,26 @@
+import 'package:finamp/screens/player_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'feature_chips.dart';
 import 'player_buttons.dart';
 import 'progress_slider.dart';
-import 'feature_chips.dart';
 
 class ControlArea extends StatelessWidget {
-  const ControlArea({Key? key}) : super(key: key);
+  const ControlArea(this.controller, {super.key});
+
+  final PlayerHideableController controller;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FeatureChips(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: ProgressSlider(),
-          ),
-          PlayerButtons(),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (controller.shouldShow(PlayerHideable.features))
+          const FeatureChips(),
+        if (controller.shouldShow(PlayerHideable.progressSlider))
+          const ProgressSlider(),
+        PlayerButtons(controller),
+      ],
     );
   }
 }

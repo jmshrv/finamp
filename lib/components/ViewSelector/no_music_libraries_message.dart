@@ -12,26 +12,24 @@ class NoMusicLibrariesMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Scrollbar(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.noMusicLibrariesTitle,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  AppLocalizations.of(context)!.noMusicLibrariesBody,
-                  textAlign: TextAlign.center,
-                ),
-                ElevatedButton(
-                    onPressed: onRefresh,
-                    child: Text(AppLocalizations.of(context)!.refresh))
-              ],
-            ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.noMusicLibrariesTitle,
+                style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                AppLocalizations.of(context)!.noMusicLibrariesBody,
+                textAlign: TextAlign.center,
+              ),
+              ElevatedButton(
+                  onPressed: onRefresh,
+                  child: Text(AppLocalizations.of(context)!.refresh))
+            ],
           ),
         ),
       ),

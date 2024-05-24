@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/downloads_service.dart';
@@ -13,13 +14,12 @@ import '../album_image.dart';
 import '../global_snackbar.dart';
 
 class QueueRestoreTile extends StatelessWidget {
-  const QueueRestoreTile({Key? key, required this.info}) : super(key: key);
+  const QueueRestoreTile({super.key, required this.info});
 
   final FinampStorableQueueInfo info;
 
   @override
   Widget build(BuildContext context) {
-    final queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
     final isarDownloader = GetIt.instance<DownloadsService>();
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final queueService = GetIt.instance<QueueService>();
@@ -75,15 +75,12 @@ class QueueRestoreTile extends StatelessWidget {
                     ])),
         trailing: IconButton(
             icon: const Icon(Icons.arrow_circle_right_outlined),
-            onPressed: () {
-              var latest = queuesBox.get("latest");
-              if (latest != null && latest.songCount != 0) {
-                queuesBox.put(latest.creation.toString(), latest);
-              }
-              BuildContext parentContext = Navigator.of(context).context;
-              queueService
+            onPressed: () async {
+              await queueService.archiveSavedQueue();
+              unawaited(queueService
                   .loadSavedQueue(info)
-                  .catchError((x) => errorSnackbar(x, parentContext));
+                  .catchError(GlobalSnackbar.error));
+              if (!context.mounted) return;
               Navigator.of(context).popUntil(
                   (route) => route.isFirst && !route.willHandlePopInternally);
             }),

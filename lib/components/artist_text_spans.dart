@@ -8,17 +8,12 @@ import '../../services/jellyfin_api_helper.dart';
 import '../screens/artist_screen.dart';
 
 List<TextSpan> getArtistsTextSpans(
-    BaseItemDto item,
-    BuildContext context,
-    bool popRoutes
-  ) {
+    BaseItemDto item, BuildContext context, bool popRoutes) {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   List<TextSpan> separatedArtistTextSpans = [];
 
   List<NameIdPair>? artists =
-    item.type == "MusicAlbum"
-    ? item.albumArtists
-    : item.artistItems;
+      item.type == "MusicAlbum" ? item.albumArtists : item.artistItems;
 
   if (artists?.isEmpty ?? true) {
     separatedArtistTextSpans = [
@@ -29,25 +24,22 @@ List<TextSpan> getArtistsTextSpans(
     ];
   } else {
     artists
-      ?.map((e) => TextSpan(
-      text: e.name,
-      style: Theme.of(context).textTheme.bodyMedium,
-      recognizer: TapGestureRecognizer()
-        ..onTap = () {
-          // Offline artists aren't implemented yet so we return if offline
-          if (FinampSettingsHelper.finampSettings.isOffline) return;
+        ?.map((e) => TextSpan(
+            text: e.name,
+            style: Theme.of(context).textTheme.bodyMedium,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                // Offline artists aren't implemented yet so we return if offline
+                if (FinampSettingsHelper.finampSettings.isOffline) return;
 
-          jellyfinApiHelper.getItemById(e.id).then((artist) =>
-            popRoutes
-            ? Navigator.of(context).popAndPushNamed(
-                ArtistScreen.routeName,
-                arguments: artist)
-            : Navigator.of(context).pushNamed(
-                ArtistScreen.routeName,
-                arguments: artist)
-          );
-        }))
-      .forEach((artistTextSpan) {
+                jellyfinApiHelper.getItemById(e.id).then((artist) => popRoutes
+                    ? Navigator.of(context).popAndPushNamed(
+                        ArtistScreen.routeName,
+                        arguments: artist)
+                    : Navigator.of(context)
+                        .pushNamed(ArtistScreen.routeName, arguments: artist));
+              }))
+        .forEach((artistTextSpan) {
       separatedArtistTextSpans.add(artistTextSpan);
       separatedArtistTextSpans.add(TextSpan(
         text: ", ",

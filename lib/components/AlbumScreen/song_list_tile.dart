@@ -1,11 +1,14 @@
 import 'dart:async';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +21,7 @@ import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/process_artist.dart';
+import '../../services/theme_provider.dart';
 import '../album_image.dart';
 import '../favourite_button.dart';
 import '../print_duration.dart';
@@ -39,7 +43,7 @@ enum SongListTileMenuItems {
 
 class SongListTile extends ConsumerStatefulWidget {
   const SongListTile({
-    Key? key,
+    super.key,
     required this.item,
 
     /// Children that are related to this list tile, such as the other songs in
@@ -63,7 +67,8 @@ class SongListTile extends ConsumerStatefulWidget {
     /// the remove from playlist button.
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
-  }) : super(key: key);
+    this.isShownInSearch = false,
+  });
 
   final jellyfin_models.BaseItemDto item;
   final Future<List<jellyfin_models.BaseItemDto>>? children;
@@ -75,6 +80,7 @@ class SongListTile extends ConsumerStatefulWidget {
   final bool showPlayCount;
   final bool isInPlaylist;
   final bool isOnArtistScreen;
+  final bool isShownInSearch;
 
   @override
   ConsumerState<SongListTile> createState() => _SongListTileState();
@@ -85,6 +91,14 @@ class _SongListTileState extends ConsumerState<SongListTile>
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _queueService = GetIt.instance<QueueService>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+  FinampTheme? _menuTheme;
+
+  @override
+  void dispose() {
+    _menuTheme?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +124,11 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       widget.parentItem?.id;
 
           return ListTile(
-            leading: AlbumImage(item: widget.item, disabled: !playable),
+            leading: AlbumImage(
+              item: widget.item,
+              disabled: !playable,
+              themeCallback: (x) => _menuTheme ??= x,
+            ),
             title: Opacity(
               opacity: playable ? 1.0 : 0.5,
               child: RichText(
@@ -159,6 +177,20 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       ),
                       alignment: PlaceholderAlignment.top,
                     ),
+                    if (widget.item.hasLyrics ?? false)
+                      WidgetSpan(
+                        child: Transform.translate(
+                          offset: const Offset(-2.5, 0),
+                          child: Icon(
+                            TablerIcons.microphone_2,
+                            size: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize! + 2,
+                          )
+                        ),
+                        alignment: PlaceholderAlignment.top,
+                      ),
                     TextSpan(
                       text: printDuration(widget.item.runTimeTicksDuration()),
                       style: TextStyle(
@@ -178,7 +210,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     if (widget.showPlayCount)
                       TextSpan(
                         text:
-                            "· ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
+                            " · ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
                         style:
                             TextStyle(color: Theme.of(context).disabledColor),
                       ),
@@ -205,72 +237,122 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 ),
               ],
             ),
+            // This must be in ListTile instead of parent GestureDetecter to
+            // enable hover color changes
+            onTap: () async {
+              if (!playable) return;
+              var children = await widget.children;
+              if (children != null) {
+                // start linear playback of album from the given index
+                await _queueService.startPlayback(
+                  items: children,
+                  startingIndex: await widget.index,
+                  order: FinampPlaybackOrder.linear,
+                  source: QueueItemSource(
+                    type: widget.isInPlaylist
+                        ? QueueItemSourceType.playlist
+                        : widget.isOnArtistScreen
+                            ? QueueItemSourceType.artist
+                            : QueueItemSourceType.album,
+                    name: QueueItemSourceName(
+                        type: QueueItemSourceNameType.preTranslated,
+                        pretranslatedName: ((widget.isInPlaylist ||
+                                    widget.isOnArtistScreen)
+                                ? widget.parentItem?.name
+                                : widget.item.album) ??
+                            AppLocalizations.of(context)!.placeholderSource),
+                    id: widget.parentItem?.id ?? "",
+                    item: widget.parentItem,
+                    // we're playing from an album, so we should use the album's normalization gain.
+                    contextNormalizationGain:
+                        (widget.isInPlaylist || widget.isOnArtistScreen)
+                            ? null
+                            : widget.parentItem?.normalizationGain,
+                  ),
+                );
+              } else {
+                // TODO put in a real offline songs implementation
+                if (FinampSettingsHelper.finampSettings.isOffline) {
+                  final settings = FinampSettingsHelper.finampSettings;
+                  final downloadService = GetIt.instance<DownloadsService>();
+                  final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+                  // get all downloaded songs in order
+                  List<DownloadStub> offlineItems;
+                  // If we're on the songs tab, just get all of the downloaded items
+                  offlineItems = await downloadService.getAllSongs(
+                      // nameFilter: widget.searchTerm,
+                      viewFilter: finampUserHelper.currentUser?.currentView?.id,
+                      nullableViewFilters:
+                          settings.showDownloadsWithUnknownLibrary);
+
+                  var items = offlineItems
+                      .map((e) => e.baseItem)
+                      .whereNotNull()
+                      .toList();
+
+                  items = sortItems(
+                      items,
+                      settings.tabSortBy[TabContentType.songs],
+                      settings.tabSortOrder[TabContentType.songs]);
+
+                  await _queueService.startPlayback(
+                    items: items,
+                    startingIndex: widget.isShownInSearch
+                        ? items.indexWhere(
+                            (element) => element.id == widget.item.id)
+                        : await widget.index,
+                    source: QueueItemSource(
+                      name: QueueItemSourceName(
+                          type: QueueItemSourceNameType.preTranslated,
+                          pretranslatedName:
+                              AppLocalizations.of(context)!.placeholderSource),
+                      type: QueueItemSourceType.allSongs,
+                      id: widget.item.id,
+                    ),
+                  );
+                } else {
+                  if (FinampSettingsHelper.finampSettings.startInstantMixForIndividualTracks) {
+                    await _audioServiceHelper.startInstantMixForItem(widget.item);
+                  } else {
+                    await _queueService.startPlayback(
+                      items: [widget.item],
+                      source: QueueItemSource(
+                        name: QueueItemSourceName(
+                            type: QueueItemSourceNameType.preTranslated,
+                            pretranslatedName: widget.item.name),
+                        type: QueueItemSourceType.song,
+                        id: widget.item.id,
+                      ),
+                    );
+                  }
+                }
+              }
+            },
           );
         });
 
+    void menuCallback() async {
+      if (playable) {
+        unawaited(Feedback.forLongPress(context));
+        await showModalSongMenu(
+          context: context,
+          item: widget.item,
+          isInPlaylist: widget.isInPlaylist,
+          parentItem: widget.parentItem,
+          onRemoveFromList: widget.onRemoveFromList,
+          themeProvider: _menuTheme,
+          confirmPlaylistRemoval: false,
+        );
+      }
+    }
+
     return GestureDetector(
-      onLongPressStart: !playable
-          ? null
-          : (details) async {
-              unawaited(Feedback.forLongPress(context));
-              await showModalSongMenu(
-                context: context,
-                item: widget.item,
-                isInPlaylist: widget.isInPlaylist,
-                parentItem: widget.parentItem,
-                onRemoveFromList: widget.onRemoveFromList,
-              );
-            },
-      onTap: () async {
-        if (!playable) return;
-        var children = await widget.children;
-        if (children != null) {
-          // start linear playback of album from the given index
-          await _queueService.startPlayback(
-            items: children,
-            source: QueueItemSource(
-              type: widget.isInPlaylist
-                  ? QueueItemSourceType.playlist
-                  : widget.isOnArtistScreen
-                      ? QueueItemSourceType.artist
-                      : QueueItemSourceType.album,
-              name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName:
-                      ((widget.isInPlaylist || widget.isOnArtistScreen)
-                              ? widget.parentItem?.name
-                              : widget.item.album) ??
-                          AppLocalizations.of(context)!.placeholderSource),
-              id: widget.parentItem?.id ?? "",
-              item: widget.parentItem,
-              // we're playing from an album, so we should use the album's LUFS.
-              // album LUFS sometimes end up being simply `0`, but that's not the actual value
-              contextLufs: (widget.isInPlaylist ||
-                      widget.isOnArtistScreen ||
-                      widget.parentItem?.lufs == 0.0)
-                  ? null
-                  : widget.parentItem?.lufs,
-            ),
-            order: FinampPlaybackOrder.linear,
-            startingIndex: await widget.index,
-          );
-        } else {
-          // TODO put in a real offline songs implementation
-          if (FinampSettingsHelper.finampSettings.isOffline) {
-            await _queueService.startPlayback(
-                items: [widget.item],
-                source: QueueItemSource(
-                    name: QueueItemSourceName(
-                        type: QueueItemSourceNameType.preTranslated,
-                        pretranslatedName:
-                            AppLocalizations.of(context)!.placeholderSource),
-                    type: QueueItemSourceType.allSongs,
-                    id: widget.item.id));
-          } else {
-            await _audioServiceHelper.startInstantMixForItem(widget.item);
-          }
-        }
+      onTapDown: (_) {
+        _menuTheme?.calculate(Theme.of(context).brightness);
       },
+      onLongPressStart: (details) => menuCallback(),
+      onSecondaryTapDown: (details) => menuCallback(),
       child: (widget.isSong || !playable)
           ? listTile
           : Dismissible(
@@ -278,7 +360,10 @@ class _SongListTileState extends ConsumerState<SongListTile>
               direction: FinampSettingsHelper.finampSettings.disableGesture
                   ? DismissDirection.none
                   : DismissDirection.horizontal,
-              dismissThresholds: const {DismissDirection.startToEnd: 0.5, DismissDirection.endToStart: 0.5},
+              dismissThresholds: const {
+                DismissDirection.startToEnd: 0.65,
+                DismissDirection.endToStart: 0.65
+              },
               background: Container(
                 color: Theme.of(context).colorScheme.secondaryContainer,
                 alignment: Alignment.centerLeft,
@@ -289,16 +374,14 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     children: [
                       Icon(
                         TablerIcons.playlist,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         size: 40,
                       ),
                       Icon(
                         TablerIcons.playlist,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         size: 40,
                       )
                     ],
@@ -335,11 +418,12 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 if (!mounted) return false;
 
                 GlobalSnackbar.message(
-                  (scaffold) => FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-                      ? AppLocalizations.of(scaffold)!
-                          .confirmAddToNextUp("track")
-                      : AppLocalizations.of(scaffold)!
-                          .confirmAddToQueue("track"),
+                  (scaffold) =>
+                      FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                          ? AppLocalizations.of(scaffold)!
+                              .confirmAddToNextUp("track")
+                          : AppLocalizations.of(scaffold)!
+                              .confirmAddToQueue("track"),
                   isConfirmation: true,
                 );
 
