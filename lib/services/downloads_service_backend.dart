@@ -1338,18 +1338,7 @@ class DownloadsSyncService {
   Future<List<DownloadStub>> _getFinampCollectionChildren(
       DownloadStub parent) async {
     assert(parent.type == DownloadItemType.finampCollection);
-    FinampCollection collection;
-    // Switch on ID to allow legacy collections to continue syncing
-    switch (parent.id) {
-      case "Favorites":
-        collection = FinampCollection(type: FinampCollectionType.favorites);
-      case "All Playlists":
-        collection = FinampCollection(type: FinampCollectionType.allPlaylists);
-      case "5 Latest Albums":
-        collection = FinampCollection(type: FinampCollectionType.latest5Albums);
-      case _:
-        collection = parent.finampCollection!;
-    }
+    FinampCollection collection = parent.finampCollection!;
     try {
       List<BaseItemDto> outputItems;
       DownloadItemType? typeOverride;
