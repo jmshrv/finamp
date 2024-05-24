@@ -573,6 +573,21 @@ class QueueService {
     required List<jellyfin_models.BaseItemDto> items,
     QueueItemSource? source,
   }) async {
+
+    if (_queueAudioSource.length == 0) {
+      return _replaceWholeQueue(
+        itemList: items,
+        source: source ??  QueueItemSource(
+          type: QueueItemSourceType.queue,
+          name: const QueueItemSourceName(type: QueueItemSourceNameType.queue),
+          id: "queue",
+          item: null,
+        ),
+        initialIndex: 0,
+        beginPlaying: false,
+      );
+    }
+    
     try {
       if (_savedQueueState == SavedQueueState.pendingSave) {
         _savedQueueState = SavedQueueState.saving;
@@ -606,6 +621,21 @@ class QueueService {
     required List<jellyfin_models.BaseItemDto> items,
     QueueItemSource? source,
   }) async {
+
+    if (_queueAudioSource.length == 0) {
+      return _replaceWholeQueue(
+        itemList: items,
+        source: source ??  QueueItemSource(
+          type: QueueItemSourceType.queue,
+          name: const QueueItemSourceName(type: QueueItemSourceNameType.queue),
+          id: "queue",
+          item: null,
+        ),
+        initialIndex: 0,
+        beginPlaying: false,
+      );
+    }
+
     try {
       if (_savedQueueState == SavedQueueState.pendingSave) {
         _savedQueueState = SavedQueueState.saving;
@@ -647,6 +677,21 @@ class QueueService {
     required List<jellyfin_models.BaseItemDto> items,
     QueueItemSource? source,
   }) async {
+
+    if (_queueAudioSource.length == 0) {
+      return _replaceWholeQueue(
+        itemList: items,
+        source: source ??  QueueItemSource(
+          type: QueueItemSourceType.queue,
+          name: const QueueItemSourceName(type: QueueItemSourceNameType.queue),
+          id: "queue",
+          item: null,
+        ),
+        initialIndex: 0,
+        beginPlaying: false,
+      );
+    }
+    
     try {
       if (_savedQueueState == SavedQueueState.pendingSave) {
         _savedQueueState = SavedQueueState.saving;
