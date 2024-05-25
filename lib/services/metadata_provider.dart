@@ -40,6 +40,9 @@ class MetadataRequest {
       item.id, queueItem?.id, includeLyrics, checkIfSpeedControlNeeded);
 }
 
+/// A storage container for metadata about a song.  The codec information will reflect
+/// the downloaded file if appropriate, even for transcoded downloads.  Online
+/// transcoding will not be reflected.
 class MetadataProvider {
   static const speedControlGenres = ["audiobook", "podcast", "speech"];
   static const speedControlLongTrackDuration = Duration(minutes: 15);
@@ -93,6 +96,8 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
           ? profile?.stereoBitrate
           : downloadItem.baseItem!.mediaSources?.first.bitrate;
 
+      // We cannot create a fully accurate MediaStream for a transcoded item, so
+      // just return an empty list.
       List<MediaStream> mediaStream =
           profile?.codec != FinampTranscodingCodec.original
               ? []

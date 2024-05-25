@@ -40,6 +40,10 @@ class FeatureState {
       ? null
       : metadata?.mediaSourceInfo.mediaStreams
           .firstWhereOrNull((stream) => stream.type == "Audio");
+  // Transcoded downloads will not have a valid MediaStream, but will have
+  // the target transcode bitrate set for the mediasource bitrate.  Other items
+  // should have a valid mediaStream, so use that audio-only bitrate instead of the
+  // whole-file bitrate.
   int? get bitrate => isTranscoding
       ? settings.transcodeBitrate
       : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
