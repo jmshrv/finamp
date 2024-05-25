@@ -1237,7 +1237,7 @@ class DownloadsSyncService {
       _metadataCache[id] = itemFetch.future;
       item = await _jellyfinApiData
           .getItemByIdBatched(id,
-              "${_jellyfinApiData.defaultFields},childCount,sortName,MediaSources,MediaStreams")
+              "${_jellyfinApiData.defaultFields},sortName,MediaSources,MediaStreams")
           .then((value) => value == null
               ? null
               : DownloadStub.fromItem(item: value, type: type));
@@ -1339,6 +1339,8 @@ class DownloadsSyncService {
       DownloadStub parent) async {
     assert(parent.type == DownloadItemType.finampCollection);
     FinampCollection collection = parent.finampCollection!;
+    final String fields =
+        "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName";
     try {
       List<BaseItemDto> outputItems;
       DownloadItemType? typeOverride;
@@ -1347,45 +1349,55 @@ class DownloadsSyncService {
           outputItems = await _jellyfinApiData.getItems(
                 includeItemTypes: "Audio,MusicAlbum,Playlist",
                 filters: "IsFavorite",
+                fields: fields,
               ) ??
               [];
           // Artists use a different endpoint, so request those separately
           outputItems.addAll(await _jellyfinApiData.getItems(
                 includeItemTypes: "MusicArtist",
                 filters: "IsFavorite",
+                fields: fields,
               ) ??
               []);
         case FinampCollectionType.allPlaylists:
         case FinampCollectionType.allPlaylistsMetadata:
           outputItems = await _jellyfinApiData.getItems(
                 includeItemTypes: "Playlist",
+                fields: fields,
               ) ??
               [];
         case FinampCollectionType.latest5Albums:
           outputItems = await _jellyfinApiData.getLatestItems(
-                  includeItemTypes: "MusicAlbum", limit: 5) ??
+                includeItemTypes: "MusicAlbum",
+                limit: 5,
+                fields: fields,
+              ) ??
               [];
         case FinampCollectionType.libraryImages:
           outputItems = await _jellyfinApiData.getItems(
                 parentItem: collection.library!,
                 includeItemTypes: "MusicAlbum",
+                fields: fields,
               ) ??
               [];
           // Playlists need to be fetched without libraries
           outputItems.addAll(await _jellyfinApiData.getItems(
                 includeItemTypes: "Playlist",
+                fields: fields,
               ) ??
               []);
           // Artists use a different endpoint, so request those separately
           outputItems.addAll(await _jellyfinApiData.getItems(
                 parentItem: collection.library!,
                 includeItemTypes: "MusicArtist",
+                fields: fields,
               ) ??
               []);
           // Genres use a different endpoint, so request those separately
           outputItems.addAll(await _jellyfinApiData.getItems(
                 parentItem: collection.library!,
                 includeItemTypes: "MusicGenre",
+                fields: fields,
               ) ??
               []);
           outputItems.removeWhere((element) => element.imageId == null);
@@ -1512,7 +1524,7 @@ class DownloadsSyncService {
 
     // Container must be accurate because unknown container names break iOS playback
     String? container = downloadItem.syncTranscodingProfile?.codec.container ??
-        mediaSources?[0].container;
+        mediaSources?.firstOrNull?.container;
     String extension = container == null ? "" : ".$container";
 
     String fileName;

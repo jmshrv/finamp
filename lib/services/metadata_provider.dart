@@ -84,23 +84,20 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
       metadataProviderLogger
           .fine("Got offline metadata for '${request.item.name}'");
       var profile = downloadItem.fileTranscodingProfile;
-      var codec = profile?.codec == FinampTranscodingCodec.original
-          ? downloadItem.baseItem?.mediaSources?.first.container
-          : profile?.codec.name ?? FinampTranscodingCodec.original.name;
-      
-      var mediaStream = downloadItem.baseItem!.mediaStreams?.map((mediaStream) {
-        // if we transcoded the file, we need to update the original bitrate
-        // the bitrate of the MediaSource(Info) includes all streams, so we prefer the media stream bitrate and hence update it here
-        if (["Audio", "Default"].contains(mediaStream.type)) {
-          //!!! the bitrate for the original codec is just a placeholder
-          // keep the original bitrate from the media stream instead
-          if (profile?.codec != FinampTranscodingCodec.original && profile?.stereoBitrate != null) {
-            mediaStream.bitRate = profile?.stereoBitrate;
-          }
-        }
-        return mediaStream;
-      }).toList() ?? [];
-          
+      // We could explicitly get a mediaSource of type Default, but just grabbing
+      // the first seems to generally work?
+      var codec = profile?.codec != FinampTranscodingCodec.original
+          ? profile?.codec.name
+          : downloadItem.baseItem!.mediaSources?.first.container;
+      var bitrate = profile?.codec != FinampTranscodingCodec.original
+          ? profile?.stereoBitrate
+          : downloadItem.baseItem!.mediaSources?.first.bitrate;
+
+      List<MediaStream> mediaStream =
+          profile?.codec != FinampTranscodingCodec.original
+              ? []
+              : downloadItem.baseItem!.mediaStreams ?? [];
+
       localPlaybackInfo = MediaSourceInfo(
         id: downloadItem.baseItem!.id,
         protocol: "File",
@@ -119,7 +116,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
         ignoreDts: false,
         ignoreIndex: false,
         genPtsInput: false,
-        bitrate: profile?.codec != FinampTranscodingCodec.original ? profile?.stereoBitrate : downloadItem.baseItem!.mediaSources?.firstWhere((x) => ["Audio", "Default"].contains(x.type)).bitrate,
+        bitrate: bitrate,
         container: codec,
         name: downloadItem.baseItem!.mediaSources?.first.name,
         size: await downloadsService.getFileSize(downloadStub),
@@ -149,7 +146,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
     if (localPlaybackInfo != null && playbackInfo != null) {
       playbackInfo.protocol = localPlaybackInfo.protocol;
       playbackInfo.bitrate = localPlaybackInfo.bitrate;
-      playbackInfo.mediaStreams = localPlaybackInfo.mediaStreams.where((x) => ["Audio", "Default"].contains(x.type)).toList()..addAll(playbackInfo.mediaStreams.where((x) => ["Audio", "Default"].contains(x.type))); // use local (possibly transcoded) audio stream information
+      playbackInfo.mediaStreams = localPlaybackInfo.mediaStreams;
       playbackInfo.container = localPlaybackInfo.container;
       playbackInfo.size = localPlaybackInfo.size;
     }

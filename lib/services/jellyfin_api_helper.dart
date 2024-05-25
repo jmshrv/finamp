@@ -234,14 +234,18 @@ class JellyfinApiHelper {
     BaseItemDto? parentItem,
     String? includeItemTypes,
     int? limit,
+    String? fields,
   }) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
+
+    fields ??= defaultFields;
 
     var response = await jellyfinApi.getLatestItems(
       userId: _finampUserHelper.currentUser!.id,
       parentId: parentItem?.id,
       includeItemTypes: includeItemTypes,
       limit: limit,
+      fields: fields,
     );
 
     return (response as List<dynamic>)
