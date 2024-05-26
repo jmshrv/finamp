@@ -303,10 +303,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
                             (element) => element.id == widget.item.id)
                         : await widget.index,
                     source: QueueItemSource(
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName:
-                              AppLocalizations.of(context)!.placeholderSource),
+                      name: const QueueItemSourceName(
+                          type: QueueItemSourceNameType.mix),
                       type: QueueItemSourceType.allSongs,
                       id: widget.item.id,
                     ),
