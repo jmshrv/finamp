@@ -36,8 +36,14 @@ class FeatureState {
   String get container =>
       isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
-  MediaStream? get audioStream => metadata?.mediaSourceInfo.mediaStreams
-      .firstWhereOrNull((stream) => stream.type == "Audio");
+  MediaStream? get audioStream => isTranscoding
+      ? null
+      : metadata?.mediaSourceInfo.mediaStreams
+          .firstWhereOrNull((stream) => stream.type == "Audio");
+  // Transcoded downloads will not have a valid MediaStream, but will have
+  // the target transcode bitrate set for the mediasource bitrate.  Other items
+  // should have a valid mediaStream, so use that audio-only bitrate instead of the
+  // whole-file bitrate.
   int? get bitrate => isTranscoding
       ? settings.transcodeBitrate
       : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;

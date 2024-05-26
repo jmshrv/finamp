@@ -924,10 +924,22 @@ class DownloadStub {
   BaseItemDto? _baseItemCached;
 
   @ignore
-  FinampCollection? get finampCollection => _finampCollectionCached ??=
-      ((jsonItem == null || type != DownloadItemType.finampCollection)
+  FinampCollection? get finampCollection =>
+      _finampCollectionCached ??= (type != DownloadItemType.finampCollection
           ? null
-          : FinampCollection.fromJson(jsonDecode(jsonItem!)));
+          : jsonItem == null
+              // Switch on ID to allow legacy collections to continue syncing
+              ? switch (id) {
+                  "Favorites" =>
+                    FinampCollection(type: FinampCollectionType.favorites),
+                  "All Playlists" =>
+                    FinampCollection(type: FinampCollectionType.allPlaylists),
+                  "5 Latest Albums" =>
+                    FinampCollection(type: FinampCollectionType.latest5Albums),
+                  _ =>
+                    throw "Invalid FinampCollection DownloadItem: no attached collection"
+                }
+              : FinampCollection.fromJson(jsonDecode(jsonItem!)));
 
   @ignore
   FinampCollection? _finampCollectionCached;

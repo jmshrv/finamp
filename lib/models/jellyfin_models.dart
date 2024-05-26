@@ -2710,7 +2710,7 @@ class MediaStream {
   @HiveField(28)
   String? profile;
 
-  /// Enum: "Audio" "Video" "Subtitle" "EmbeddedImage"
+  /// Enum: "Audio" "Video" "Subtitle" "EmbeddedImage" "Data" "Lyric"
   /// Gets or sets the type.
   @HiveField(29)
   String type;
