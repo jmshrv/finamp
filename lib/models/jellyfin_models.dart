@@ -2206,7 +2206,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   /// Custom helper field to determine if the BaseItemDto was created in offline mode
   bool? finampOffline;
-  
+
   /// Checks if the item has its own image (not inherited from a parent)
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;
 
@@ -2302,7 +2302,7 @@ class BaseItemDto with RunTimeTickDuration {
   }
 
   DownloadItemType get downloadType =>
-      type! == "Audio" ? DownloadItemType.song : DownloadItemType.collection;
+      BaseItemDtoType.fromItem(this).downloadType!;
 }
 
 @JsonSerializable(

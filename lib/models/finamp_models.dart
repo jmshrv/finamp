@@ -177,7 +177,8 @@ class FinampSettings {
     this.showArtistChipImage = _showArtistChipImage,
     this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
     this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
-    this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
+    this.startInstantMixForIndividualTracks =
+        _startInstantMixForIndividualTracksDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -821,22 +822,21 @@ class DownloadStub {
       case DownloadItemType.collection:
         return baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
-            baseItemType != BaseItemDtoType.song &&
-            baseItemType != BaseItemDtoType.unknown;
+            baseItemType.downloadType == DownloadItemType.collection &&
+            baseItemType != BaseItemDtoType.noItem;
       case DownloadItemType.song:
-        return baseItemType == BaseItemDtoType.song &&
+        return baseItemType.downloadType == DownloadItemType.song &&
             baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType;
       case DownloadItemType.image:
         return baseItem != null;
       case DownloadItemType.finampCollection:
-        // TODO create an enum or somthing for this if more custom collections happen
         return baseItem == null &&
-            baseItemType == BaseItemDtoType.unknown &&
+            baseItemType == BaseItemDtoType.noItem &&
             finampCollection != null;
       case DownloadItemType.anchor:
         return baseItem == null &&
-            baseItemType == BaseItemDtoType.unknown &&
+            baseItemType == BaseItemDtoType.noItem &&
             id == "Anchor";
     }
   }
@@ -873,7 +873,7 @@ class DownloadStub {
         jsonItem: null,
         type: type,
         name: name ?? "Unlocalized $id",
-        baseItemType: BaseItemDtoType.unknown);
+        baseItemType: BaseItemDtoType.noItem);
   }
 
   factory DownloadStub.fromFinampCollection(FinampCollection collection) {
@@ -891,7 +891,7 @@ class DownloadStub {
         jsonItem: jsonEncode(collection.toJson()),
         type: DownloadItemType.finampCollection,
         name: name ?? "Unlocalized Finamp Collection $id",
-        baseItemType: BaseItemDtoType.unknown);
+        baseItemType: BaseItemDtoType.noItem);
   }
 
   /// The integer iD used as a database key by Isar
@@ -1231,28 +1231,52 @@ enum DownloadItemStatus {
 /// The type of a BaseItemDto as determined from its type field.
 /// Enumerated by Isar, do not modify order or delete existing entries
 enum BaseItemDtoType {
-  unknown(null, true, null),
-  album("MusicAlbum", false, [song]),
-  artist("MusicArtist", true, [album, song]),
-  playlist("Playlist", true, [song]),
-  genre("MusicGenre", true, [album, song]),
-  song("Audio", false, []),
-  library("CollectionFolder", true, [album, song]),
-  folder("Folder", true, null),
-  musicVideo("MusicVideo", false, []);
+  noItem(null, true, null, null),
+  album("MusicAlbum", false, [song], DownloadItemType.collection),
+  artist("MusicArtist", true, [album, song], DownloadItemType.collection),
+  playlist("Playlist", true, [song], DownloadItemType.collection),
+  genre("MusicGenre", true, [album, song], DownloadItemType.collection),
+  song("Audio", false, [], DownloadItemType.song),
+  library("CollectionFolder", true, [album, song], DownloadItemType.collection),
+  folder("Folder", true, null, DownloadItemType.collection),
+  musicVideo("MusicVideo", false, [], DownloadItemType.song),
+  audioBook("AudioBook", false, [], DownloadItemType.song),
+  tvEpisode("Episode", false, [], DownloadItemType.song),
+  video("Video", false, [], DownloadItemType.song),
+  movie("Movie", false, [], DownloadItemType.song),
+  trailer("Trailer", false, [], DownloadItemType.song),
+  unknown(null, true, null, DownloadItemType.collection);
 
-  const BaseItemDtoType(this.idString, this.expectChanges, this.childTypes);
+  // All possible types in Jellyfin as of 10.9:
+  //"AggregateFolder" "Audio" "AudioBook" "BasePluginFolder" "Book" "BoxSet"
+  // "Channel" "ChannelFolderItem" "CollectionFolder" "Episode" "Folder" "Genre"
+  // "ManualPlaylistsFolder" "Movie" "LiveTvChannel" "LiveTvProgram" "MusicAlbum"
+  // "MusicArtist" "MusicGenre" "MusicVideo" "Person" "Photo" "PhotoAlbum" "Playlist"
+  // "PlaylistsFolder" "Program" "Recording" "Season" "Series" "Studio" "Trailer" "TvChannel"
+  // "TvProgram" "UserRootFolder" "UserView" "Video" "Year"
+
+  const BaseItemDtoType(
+      this.idString, this.expectChanges, this.childTypes, this.downloadType);
 
   final String? idString;
   final bool expectChanges;
   final List<BaseItemDtoType>? childTypes;
+  final DownloadItemType? downloadType;
 
   bool get expectChangesInChildren =>
       childTypes?.any((x) => x.expectChanges) ?? true;
 
+  // BaseItemDto types that we handle like songs have been handled by returning
+  // the actual song type.  This may be a bad ides?
   static BaseItemDtoType fromItem(BaseItemDto item) {
     switch (item.type) {
       case "Audio":
+      case "AudioBook":
+      case "MusicVideo":
+      case "Episode":
+      case "Video":
+      case "Movie":
+      case "Trailer":
         return song;
       case "MusicAlbum":
         return album;
@@ -1265,11 +1289,9 @@ enum BaseItemDtoType {
       case "CollectionFolder":
         return library;
       case "Folder":
-        return song;
-      case "MusicVideo":
-        return song;
+        return folder;
       default:
-        throw "Unknown baseItemDto type ${item.type}";
+        return unknown;
     }
   }
 }

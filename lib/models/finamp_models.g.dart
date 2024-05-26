@@ -3243,7 +3243,7 @@ DownloadItem _downloadItemDeserialize(
     baseIndexNumber: reader.readLongOrNull(offsets[0]),
     baseItemType: _DownloadItembaseItemTypeValueEnumMap[
             reader.readByteOrNull(offsets[1])] ??
-        BaseItemDtoType.unknown,
+        BaseItemDtoType.noItem,
     fileTranscodingProfile: reader.readObjectOrNull<DownloadProfile>(
       offsets[2],
       DownloadProfileSchema.deserialize,
@@ -3287,7 +3287,7 @@ P _downloadItemDeserializeProp<P>(
     case 1:
       return (_DownloadItembaseItemTypeValueEnumMap[
               reader.readByteOrNull(offset)] ??
-          BaseItemDtoType.unknown) as P;
+          BaseItemDtoType.noItem) as P;
     case 2:
       return (reader.readObjectOrNull<DownloadProfile>(
         offset,
@@ -3332,7 +3332,7 @@ P _downloadItemDeserializeProp<P>(
 }
 
 const _DownloadItembaseItemTypeEnumValueMap = {
-  'unknown': 0,
+  'noItem': 0,
   'album': 1,
   'artist': 2,
   'playlist': 3,
@@ -3341,9 +3341,15 @@ const _DownloadItembaseItemTypeEnumValueMap = {
   'library': 6,
   'folder': 7,
   'musicVideo': 8,
+  'audioBook': 9,
+  'tvEpisode': 10,
+  'video': 11,
+  'movie': 12,
+  'trailer': 13,
+  'unknown': 14,
 };
 const _DownloadItembaseItemTypeValueEnumMap = {
-  0: BaseItemDtoType.unknown,
+  0: BaseItemDtoType.noItem,
   1: BaseItemDtoType.album,
   2: BaseItemDtoType.artist,
   3: BaseItemDtoType.playlist,
@@ -3352,6 +3358,12 @@ const _DownloadItembaseItemTypeValueEnumMap = {
   6: BaseItemDtoType.library,
   7: BaseItemDtoType.folder,
   8: BaseItemDtoType.musicVideo,
+  9: BaseItemDtoType.audioBook,
+  10: BaseItemDtoType.tvEpisode,
+  11: BaseItemDtoType.video,
+  12: BaseItemDtoType.movie,
+  13: BaseItemDtoType.trailer,
+  14: BaseItemDtoType.unknown,
 };
 const _DownloadItemstateEnumValueMap = {
   'notDownloaded': 0,
@@ -6618,7 +6630,7 @@ const _$DownloadItemTypeEnumMap = {
 };
 
 const _$BaseItemDtoTypeEnumMap = {
-  BaseItemDtoType.unknown: 'unknown',
+  BaseItemDtoType.noItem: 'noItem',
   BaseItemDtoType.album: 'album',
   BaseItemDtoType.artist: 'artist',
   BaseItemDtoType.playlist: 'playlist',
@@ -6627,6 +6639,12 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.library: 'library',
   BaseItemDtoType.folder: 'folder',
   BaseItemDtoType.musicVideo: 'musicVideo',
+  BaseItemDtoType.audioBook: 'audioBook',
+  BaseItemDtoType.tvEpisode: 'tvEpisode',
+  BaseItemDtoType.video: 'video',
+  BaseItemDtoType.movie: 'movie',
+  BaseItemDtoType.trailer: 'trailer',
+  BaseItemDtoType.unknown: 'unknown',
 };
 
 FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
