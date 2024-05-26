@@ -96,11 +96,15 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
           ? profile?.stereoBitrate
           : downloadItem.baseItem!.mediaSources?.first.bitrate;
 
-      // We cannot create a fully accurate MediaStream for a transcoded item, so
-      // just return an empty list.
+      // We cannot create accurate MediaStreams for a transcoded item,so
+      // just return the lyrics stream, as those are not affected and will not
+      // be shown if the mediaStream is not present
       List<MediaStream> mediaStream =
           profile?.codec != FinampTranscodingCodec.original
-              ? []
+              ? downloadItem.baseItem!.mediaStreams
+                      ?.where((x) => x.type == "Lyrics")
+                      .toList() ??
+                  []
               : downloadItem.baseItem!.mediaStreams ?? [];
 
       localPlaybackInfo = MediaSourceInfo(
@@ -151,7 +155,12 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
     if (localPlaybackInfo != null && playbackInfo != null) {
       playbackInfo.protocol = localPlaybackInfo.protocol;
       playbackInfo.bitrate = localPlaybackInfo.bitrate;
-      playbackInfo.mediaStreams = localPlaybackInfo.mediaStreams;
+      // Use lyrics mediastream from online item, but take all other streams
+      // from downloaded item
+      playbackInfo.mediaStreams =
+          playbackInfo.mediaStreams.where((x) => x.type == "Lyric").toList();
+      playbackInfo.mediaStreams.addAll(
+          localPlaybackInfo.mediaStreams.where((x) => x.type != "Lyric"));
       playbackInfo.container = localPlaybackInfo.container;
       playbackInfo.size = localPlaybackInfo.size;
     }
