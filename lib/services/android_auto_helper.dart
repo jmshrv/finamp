@@ -144,7 +144,7 @@ class AndroidAutoHelper {
 
   Future<List<MediaItem>> getRecentItems() async {
     final queueService = GetIt.instance<QueueService>();
-
+    //TODO this should ideally list recent queues (the restorable ones), or items from the home screen
     try {
       final recentItems = queueService.peekQueue(previous: 5);
       final List<MediaItem> recentMediaItems = [];
@@ -702,10 +702,10 @@ class AndroidAutoHelper {
       itemId: item.id,
     );
 
-    final downloadedSong = await _downloadService.getSongDownload(item: item);
+    final downloadedSong = _downloadService.getSongDownload(item: item);
     DownloadItem? downloadedImage;
     try {
-      downloadedImage = await _downloadService.getImageDownload(item: item);
+      downloadedImage = _downloadService.getImageDownload(item: item);
     } catch (e) {
       _androidAutoHelperLogger.warning("Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");
     }

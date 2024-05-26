@@ -478,19 +478,22 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       return _getRootMenu();
     }
-    // else if (parentMediaId == AudioService.recentRootId) {
-    //   return await _androidAutoHelper.getRecentItems();
-    // }
-
-    try {
-      final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId));
-
-      return await _androidAutoHelper.getMediaItems(itemId);
-      
-    } catch (e) {
-      _audioServiceBackgroundTaskLogger.severe(e);
-      return super.getChildren(parentMediaId);
+    else if (parentMediaId == AudioService.recentRootId) {
+      // return await _androidAutoHelper.getRecentItems();
+      // return playlists for now
+      return await _androidAutoHelper.getMediaItems(MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection));
     }
+      try {
+        final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId));
+
+        return await _androidAutoHelper.getMediaItems(itemId);
+        
+      } catch (e) {
+        _audioServiceBackgroundTaskLogger.severe(e);
+        return super.getChildren(parentMediaId);
+      }
+    }
+
   }
 
   // play specific item
