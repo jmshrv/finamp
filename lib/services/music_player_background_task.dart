@@ -482,7 +482,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       // return await _androidAutoHelper.getRecentItems();
       // return playlists for now
       return await _androidAutoHelper.getMediaItems(MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection));
-    }
+    } else {
       try {
         final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId));
 
