@@ -285,8 +285,9 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       viewFilter: finampUserHelper.currentUser?.currentView?.id,
                       nullableViewFilters:
                           settings.showDownloadsWithUnknownLibrary,
-                      onlyFavorites: FinampSettingsHelper
-                          .finampSettings.onlyShowFavourite);
+                      onlyFavorites:
+                          settings.onlyShowFavourite && settings.trackOfflineFavorites,
+                  );
 
                   var items = offlineItems
                       .map((e) => e.baseItem)
