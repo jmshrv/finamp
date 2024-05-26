@@ -102,7 +102,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
       List<MediaStream> mediaStream =
           profile?.codec != FinampTranscodingCodec.original
               ? downloadItem.baseItem!.mediaStreams
-                      ?.where((x) => x.type == "Lyrics")
+                      ?.where((x) => x.type == "Lyric")
                       .toList() ??
                   []
               : downloadItem.baseItem!.mediaStreams ?? [];
