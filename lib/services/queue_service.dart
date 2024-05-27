@@ -1028,10 +1028,10 @@ class QueueService {
       // replace with placeholder art
       if (artUri == null) {
         final applicationSupportDirectory = await getApplicationSupportDirectory();
-        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: path_helper.join(applicationSupportDirectory.path, Assets.images.albumWhite.path));
+        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: path_helper.join(applicationSupportDirectory.absolute.path, Assets.images.albumWhite.path));
       } else {
         // store the origin in fragment since it should be unused
-        artUri = artUri.replace(scheme: "content", host: contentProviderPackageName, fragment: artUri.origin);
+        artUri = artUri.replace(scheme: "content", host: contentProviderPackageName, fragment: ["http", "https"].contains(artUri.scheme) ? artUri.origin : null);
       }
     }
 

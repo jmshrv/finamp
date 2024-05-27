@@ -271,7 +271,7 @@ Future<void> _setupOSIntegration() async {
 
   // Load the album image from assets and save it to the documents directory for use in Android Auto
   final applicationSupportDirectory = await getApplicationSupportDirectory();
-  final albumImageFile = File(path_helper.join(applicationSupportDirectory.path, Assets.images.albumWhite.path));
+  final albumImageFile = File(path_helper.join(applicationSupportDirectory.absolute.path, Assets.images.albumWhite.path));
   if (!(await albumImageFile.exists())) {
     final albumImageBytes = await rootBundle.load(Assets.images.albumWhite.path);
     final albumBuffer = albumImageBytes.buffer;
