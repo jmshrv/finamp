@@ -8,7 +8,6 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/services/android_auto_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,6 +16,7 @@ import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
+import 'package:path/path.dart' as path_helper;
 
 import '../components/PlayerScreen/queue_source_helper.dart';
 import 'downloads_service.dart';
@@ -489,7 +489,7 @@ class QueueService {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
           MediaItem mediaItem =
-              await _generateMediaItem(item, contextNormalizationGain: source.contextNormalizationGain);
+              await generateMediaItem(item, contextNormalizationGain: source.contextNormalizationGain);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -606,7 +606,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
+              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ?? _order.originalSource,
           type: QueueItemQueueType.queue,
         ));
@@ -654,7 +654,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
+              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -710,7 +710,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
+              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -979,7 +979,7 @@ class QueueService {
     double? contextNormalizationGain,
     MediaItemParentType? parentType,
     String? parentId,
-    bool Function(jellyfin_models.BaseItemDto item)? isPlayable,
+    bool Function({ jellyfin_models.BaseItemDto? item, TabContentType? contentType })? isPlayable,
   }) async {
     const uuid = Uuid();
 
@@ -1023,11 +1023,12 @@ class QueueService {
       }
     }
 
+    // use content provider for handling media art on Android
     if (Platform.isAndroid) {
       // replace with placeholder art
       if (artUri == null) {
         final applicationSupportDirectory = await getApplicationSupportDirectory();
-        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: "${applicationSupportDirectory.path}/${Assets.images.albumWhite.path}");
+        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: path_helper.join(applicationSupportDirectory.path, Assets.images.albumWhite.path));
       } else {
         // store the origin in fragment since it should be unused
         artUri = artUri.replace(scheme: "content", host: contentProviderPackageName, fragment: artUri.origin);
@@ -1036,7 +1037,7 @@ class QueueService {
 
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
-      playable: isPlayable?.call(item) ?? true, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
+      playable: isPlayable?.call(item: item) ?? true, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: artUri,

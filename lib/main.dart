@@ -35,6 +35,7 @@ import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:path/path.dart' as path_helper;
 
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
@@ -270,7 +271,7 @@ Future<void> _setupOSIntegration() async {
 
   // Load the album image from assets and save it to the documents directory for use in Android Auto
   final applicationSupportDirectory = await getApplicationSupportDirectory();
-  final albumImageFile = File('${applicationSupportDirectory.path}/${Assets.images.albumWhite.path}');
+  final albumImageFile = File(path_helper.join(applicationSupportDirectory.path, Assets.images.albumWhite.path));
   if (!(await albumImageFile.exists())) {
     final albumImageBytes = await rootBundle.load(Assets.images.albumWhite.path);
     final albumBuffer = albumImageBytes.buffer;

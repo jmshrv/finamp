@@ -1,17 +1,12 @@
-import 'dart:math';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
-import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:logging/logging.dart';
-import 'package:path_provider/path_provider.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
 import 'finamp_settings_helper.dart';
@@ -116,7 +111,7 @@ class AndroidAutoHelper {
           }
 
           // only sort items if we are not playing them
-          return _isPlayable(itemId.contentType) ? downloadedItems : sortItems(downloadedItems, sortBy, sortOrder);
+          return _isPlayable(contentType: itemId.contentType) ? downloadedItems : sortItems(downloadedItems, sortBy, sortOrder);
         }
       }
       
@@ -505,7 +500,7 @@ class AndroidAutoHelper {
     final queueService = GetIt.instance<QueueService>();
 
     // shouldn't happen, but just in case
-    if (!_isPlayable(itemId.contentType)) {
+    if (!_isPlayable(contentType: itemId.contentType)) {
       _androidAutoHelperLogger.warning("Tried to play from media id with non-playable item type ${itemId.parentType.name}");
       return;
     }
@@ -645,8 +640,11 @@ class AndroidAutoHelper {
   // albums, playlists, and songs should play when clicked
   // clicking artists starts an instant mix, so they are technically playable
   // genres has subcategories, so it should be browsable but not playable
-  bool _isPlayable(BaseItemDto item) {
-    final tabContentType = TabContentType.fromItemType(item.type ?? "Audio");
+  bool _isPlayable({
+    BaseItemDto? item,
+    TabContentType? contentType,
+  }) {
+    final tabContentType = TabContentType.fromItemType(item?.type ?? contentType?.itemType.idString ?? "Audio");
     return tabContentType == TabContentType.albums || tabContentType == TabContentType.playlists
         || tabContentType == TabContentType.artists || tabContentType == TabContentType.songs;
   }
