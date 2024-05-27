@@ -441,6 +441,11 @@ class FinampSettings {
   }
 }
 
+enum CustomPlaybackActions {
+  shuffle,
+  toggleFavorite;
+}
+
 /// Custom storage locations for storing music/images.
 @HiveType(typeId: 31)
 class DownloadLocation {

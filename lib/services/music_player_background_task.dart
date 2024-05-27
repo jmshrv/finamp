@@ -26,7 +26,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   final _androidAutoHelper = GetIt.instance<AndroidAutoHelper>();
 
   AppLocalizations? _appLocalizations;
-  bool _localizationsInitialized = false;
 
   late final AudioPlayer _player;
   late final AudioPipeline _audioPipeline;
@@ -440,6 +439,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  /// Returns the top-level browsable categories for use in a media browser.
   List<MediaItem> _getRootMenu() {
     return [
       MediaItem(
@@ -464,17 +464,19 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       )];
   }
 
-  // menus
+  /// Implements a media browser, like used in Android Auto.
+  /// Called with the ID of a non-playable (and therefore browsable) [MediaItem], and returns a list of its children.
+  /// We jerry-rig the [parentMediaId] to be a JSON string that can be parsed into a [MediaItemId] object, otherwise we don't have a way to tell which item the parentMediaId refers to.
+  /// There are some special IDs that might be passed to this method:
+  /// - [AudioService.browsableRootId] is passed when the client requests the root menu (the list of top-level categories)
+  /// - [AudioService.recentRootId] is passed when the client requests the recent items (e.g. in the "For you" section of Android Auto).
   @override
   Future<List<MediaItem>> getChildren(String parentMediaId, [Map<String, dynamic>? options]) async {
 
     // display root category/parent
     if (parentMediaId == AudioService.browsableRootId) {
-      if (!_localizationsInitialized) {
-        _appLocalizations = await AppLocalizations.delegate.load(
+      _appLocalizations ??= await AppLocalizations.delegate.load(
             LocaleHelper.locale ?? const Locale("en", "US"));
-        _localizationsInitialized = true;
-      }
 
       return _getRootMenu();
     }
@@ -496,7 +498,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   }
 
-  // play specific item
+  /// Called when a media item is requested to be played.
+  /// We jerry-rig the [mediaId] to be a JSON string that can be parsed into a [MediaItemId] object, otherwise we don't have a way to tell which item the mediaId refers to.
   @override
   Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
     try {
@@ -510,7 +513,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  // keyboard search
+  /// Called when a media browser performs a search, e.g. using a search bar or to correct a voice search.
+  /// Currently, the [extras] parameter isn't passed correctly by AudioService, so some of the metadata available during a voice search isn't available here, that's why we store the [lastSearchQuery] to use it here. 
   @override
   Future<List<MediaItem>> search(String query, [Map<String, dynamic>? extras]) async {
     _audioServiceBackgroundTaskLogger.info("search: $query ; extras: $extras");
@@ -536,7 +540,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     
   }
 
-  // voice search
+  /// Called when the user asks for an item to be played based on a query.
+  /// In this case, the search needs to be performed and the "best" result should be played immediately.
+  /// [extras] can contain additional information about the search, like the original query, a title, artist, or album (all optional and filled in by e.g. the Voice Assistant for popular items. Provided fields can indicate which type of item was requested). 
   @override
   Future<void> playFromSearch(String query, [Map<String, dynamic>? extras]) async {
     _audioServiceBackgroundTaskLogger.info("playFromSearch: $query ; extras: $extras");
@@ -547,18 +553,27 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<dynamic> customAction(String name, [Map<String, dynamic>? extras]) async {
-    switch (name) {
-      case 'shuffle':
-          return await _androidAutoHelper.toggleShuffle();
+    try {
+      final action = CustomPlaybackActions.values.firstWhere((element) => element.name == name);
+      switch (action) {
+        case CustomPlaybackActions.shuffle:
+          final queueService = GetIt.instance<QueueService>();
+          return queueService.togglePlaybackOrder();
+        default:
+          // NOP, handled below
+      }
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe("Custom action '$name' not found.", e);
     }
-
+  
+    // only called if no custom action was found
     return await super.customAction(name, extras);
   }
 
   // triggers when skipping to specific item in android auto queue
   @override
   Future<void> skipToQueueItem(int index) async {
-    skipToIndex(index);
+    return skipToIndex(index);
   }
 
   void setNextInitialIndex(int index) {
@@ -642,6 +657,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       controls: [
         MediaControl.skipToPrevious,
         if (_player.playing) MediaControl.pause else MediaControl.play,
+        // MediaControl.stop.copyWith(
+        //     androidIcon: "drawable/baseline_shuffle_on_24"),
         MediaControl.stop,
         MediaControl.skipToNext,
         MediaControl.custom(
@@ -649,7 +666,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                 ? "drawable/baseline_shuffle_on_24"
                 : "drawable/baseline_shuffle_24",
             label: "Shuffle",
-            name: "shuffle"
+            name: CustomPlaybackActions.shuffle.name,
       )],
       systemActions: const {
         MediaAction.seek,

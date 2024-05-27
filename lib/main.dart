@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
@@ -81,6 +82,7 @@ void main() async {
     await _setupJellyfinApiData();
     _setupOfflineListenLogHelper();
     await _setupDownloadsHelper();
+    await _setupOSIntegration();
     await _setupPlaybackServices();
   } catch (error, trace) {
     hasFailed = true;
@@ -111,39 +113,6 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     await initializeDateFormatting(localeString, null);
-
-    // Load the album image from assets and save it to the documents directory for use in Android Auto
-    final documentsDirectory = await getApplicationDocumentsDirectory();
-    final albumImageFile = File('${documentsDirectory.absolute.path}/images/album_white.png');
-    if (!(await albumImageFile.exists())) {
-      final albumImageBytes = await rootBundle.load("images/album_white.png");
-      final albumBuffer = albumImageBytes.buffer;
-      await albumImageFile.create(recursive: true);
-      await albumImageFile.writeAsBytes(
-        albumBuffer.asUint8List(
-          albumImageBytes.offsetInBytes,
-          albumImageBytes.lengthInBytes,
-        ),
-      );
-    }
-
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      WidgetsFlutterBinding.ensureInitialized();
-      await windowManager.ensureInitialized();
-      WindowOptions windowOptions = const WindowOptions(
-        size: Size(1200, 800),
-        center: true,
-        backgroundColor: Colors.transparent,
-        skipTaskbar: false,
-        titleBarStyle: TitleBarStyle.normal,
-        minimumSize: Size(400, 250),
-      );
-      unawaited(
-          WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.show();
-        await windowManager.focus();
-      }));
-    }
 
     runApp(const Finamp());
   }
@@ -276,6 +245,44 @@ Future<void> setupHive() async {
     name: isarDatabaseName,
   );
   GetIt.instance.registerSingleton(isar);
+}
+
+Future<void> _setupOSIntegration() async {
+
+  // set up window manager on desktop, mainly to restrict minimum size
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await windowManager.ensureInitialized();
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(1200, 800),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.normal,
+      minimumSize: Size(400, 250),
+    );
+    unawaited(
+      WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.show();
+        await windowManager.focus();
+    }));
+  }
+
+  // Load the album image from assets and save it to the documents directory for use in Android Auto
+  final applicationSupportDirectory = await getApplicationSupportDirectory();
+  final albumImageFile = File('${applicationSupportDirectory.path}/${Assets.images.albumWhite.path}');
+  if (!(await albumImageFile.exists())) {
+    final albumImageBytes = await rootBundle.load(Assets.images.albumWhite.path);
+    final albumBuffer = albumImageBytes.buffer;
+    await albumImageFile.create(recursive: true);
+    await albumImageFile.writeAsBytes(
+      albumBuffer.asUint8List(
+        albumImageBytes.offsetInBytes,
+        albumImageBytes.lengthInBytes,
+      ),
+    );
+  }
+  
 }
 
 Future<void> _setupPlaybackServices() async {

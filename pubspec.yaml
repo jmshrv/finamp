@@ -106,6 +106,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.3.3
+  flutter_gen_runner:
   chopper_generator: ^8.0.0
   hive_generator: ^2.0.0
   json_serializable: ^6.7.1

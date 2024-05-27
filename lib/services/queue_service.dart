@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/android_auto_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -24,6 +27,10 @@ import 'music_player_background_task.dart';
 
 /// A track queueing service for Finamp.
 class QueueService {
+
+  /// Used to build content:// URIs that are handled by Finamp's built-in content provider.
+  static final contentProviderPackageName = "com.unicornsonlsd.finamp";
+  
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -482,7 +489,7 @@ class QueueService {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
           MediaItem mediaItem =
-              await _generateMediaItem(item, source.contextNormalizationGain);
+              await _generateMediaItem(item, contextNormalizationGain: source.contextNormalizationGain);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -599,7 +606,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, source?.contextNormalizationGain),
+              await _generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ?? _order.originalSource,
           type: QueueItemQueueType.queue,
         ));
@@ -647,7 +654,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, source?.contextNormalizationGain),
+              await _generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -703,7 +710,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, source?.contextNormalizationGain),
+              await _generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -967,9 +974,26 @@ class QueueService {
 
   /// [contextNormalizationGain] is the normalization gain of the context that the song is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
-  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item,
-      double? contextNormalizationGain) async {
+  Future<MediaItem> generateMediaItem(
+    jellyfin_models.BaseItemDto item, {
+    double? contextNormalizationGain,
+    MediaItemParentType? parentType,
+    String? parentId,
+    bool Function(jellyfin_models.BaseItemDto item)? isPlayable,
+  }) async {
     const uuid = Uuid();
+
+    MediaItemId? itemId;
+    final tabContentType = TabContentType.fromItemType(item.type ?? "Audio");
+
+    if (parentType != null) {
+      itemId = MediaItemId(
+        contentType: tabContentType,
+        parentType: parentType,
+        parentId: parentId ?? item.parentId,
+        itemId: item.id,
+      );
+    }
 
     final downloadedSong = _isarDownloader.getSongDownload(item: item);
     DownloadItem? downloadedImage;
@@ -983,7 +1007,7 @@ class QueueService {
 
     // replace with content uri or jellyfin api uri
     if (downloadedImage != null) {
-      artUri = downloadedImage.file?.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
+      artUri = downloadedImage.file?.uri;
     } else if (!FinampSettingsHelper.finampSettings.isOffline) {
       artUri = _jellyfinApiHelper.getImageUrl(item: item);
       // try to get image file (Android Automotive needs this)
@@ -991,10 +1015,7 @@ class QueueService {
         try {
           final fileInfo = await AudioService.cacheManager.getFileFromCache(item.id);
           if (fileInfo != null) {
-            artUri = fileInfo.file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
-          } else {
-            // store the origin in fragment since it should be unused
-            artUri = artUri.replace(scheme: "content", host: "com.unicornsonlsd.finamp", fragment: artUri.origin);
+            artUri = fileInfo.file.uri;
           }
         } catch (e) {
           _queueServiceLogger.severe("Error setting new media artwork uri for item: ${item.id} name: ${item.name}", e);
@@ -1002,14 +1023,20 @@ class QueueService {
       }
     }
 
-    // replace with placeholder art
-    if (artUri == null) {
-      final documentsDirectory = await getApplicationDocumentsDirectory();
-      artUri = Uri(scheme: "content", host: "com.unicornsonlsd.finamp", path: "${documentsDirectory.absolute.path}/images/album_white.png");
+    if (Platform.isAndroid) {
+      // replace with placeholder art
+      if (artUri == null) {
+        final applicationSupportDirectory = await getApplicationSupportDirectory();
+        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: "${applicationSupportDirectory.path}/${Assets.images.albumWhite.path}");
+      } else {
+        // store the origin in fragment since it should be unused
+        artUri = artUri.replace(scheme: "content", host: contentProviderPackageName, fragment: artUri.origin);
+      }
     }
 
     return MediaItem(
-      id: uuid.v4(),
+      id: itemId?.toString() ?? uuid.v4(),
+      playable: isPlayable?.call(item) ?? true, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
       album: item.album ?? "unknown",
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: artUri,

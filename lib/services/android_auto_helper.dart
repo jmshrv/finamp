@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:get_it/get_it.dart';
@@ -71,7 +72,7 @@ class AndroidAutoHelper {
           baseItems.add(downloadedParent.baseItem!);
         }
       }
-      return _sortItems(baseItems, sortBy, sortOrder);
+      return sortItems(baseItems, sortBy, sortOrder);
     }
 
     // use downloaded parent only in offline mode
@@ -115,7 +116,7 @@ class AndroidAutoHelper {
           }
 
           // only sort items if we are not playing them
-          return _isPlayable(itemId.contentType) ? downloadedItems : _sortItems(downloadedItems, sortBy, sortOrder);
+          return _isPlayable(itemId.contentType) ? downloadedItems : sortItems(downloadedItems, sortBy, sortOrder);
         }
       }
       
@@ -124,13 +125,35 @@ class AndroidAutoHelper {
     // fetch the online version if we can't get offline version
 
     // select the item type that each parent holds
-    final includeItemTypes = itemId.parentType == MediaItemParentType.collection // if we are browsing a root library. e.g. browsing the list of all albums or artists
-        ? (itemId.contentType == TabContentType.albums ? TabContentType.songs.itemType.idString // get an album's songs
-        : itemId.contentType == TabContentType.artists ? TabContentType.albums.itemType.idString // get an artist's albums
-        : itemId.contentType == TabContentType.playlists ? TabContentType.songs.itemType.idString // get a playlist's songs
-        : itemId.contentType == TabContentType.genres ? TabContentType.albums.itemType.idString // get a genre's albums
-        : TabContentType.songs.itemType.idString ) // if we don't have one of these categories, we are probably dealing with stray songs
-        : itemId.contentType.itemType.idString; // get the root library
+    String? includeItemTypes;
+    if (itemId.parentType == MediaItemParentType.collection) {
+      // if we are browsing a root library. e.g. browsing the list of all albums or artists
+      switch (itemId.contentType) {
+        case TabContentType.albums:
+          // get an album's songs
+          includeItemTypes = TabContentType.songs.itemType.idString;
+          break;
+        case TabContentType.artists:
+          // get an artist's albums
+          includeItemTypes = TabContentType.albums.itemType.idString;
+          break;
+        case TabContentType.playlists:
+          // get a playlist's songs
+          includeItemTypes = TabContentType.songs.itemType.idString;
+          break;
+        case TabContentType.genres:
+          // get a genre's albums
+          includeItemTypes = TabContentType.albums.itemType.idString;
+          break;
+        default:
+          // if we don't have one of these categories, we are probably dealing with stray songs
+          includeItemTypes = TabContentType.songs.itemType.idString;
+          break;
+      }
+    } else {
+      // get the root library
+      includeItemTypes = itemId.contentType.itemType.idString;
+    }
 
     // if parent id is defined, use that to get items.
     // otherwise, use the current view as fallback to ensure we get the correct items.
@@ -150,7 +173,7 @@ class AndroidAutoHelper {
       final List<MediaItem> recentMediaItems = [];
       for (final item in recentItems) {
         if (item.baseItem == null) continue;
-        final mediaItem = await _convertToMediaItem(item: item.baseItem!, parentType: MediaItemParentType.collection);
+        final mediaItem = await queueService.generateMediaItem(item.baseItem!, parentType: MediaItemParentType.collection, isPlayable: _isPlayable);
         recentMediaItems.add(mediaItem);
       }
       return recentMediaItems;
@@ -161,8 +184,7 @@ class AndroidAutoHelper {
   }
 
   Future<List<MediaItem>> searchItems(AndroidAutoSearchQuery searchQuery) async {
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    final queueService = GetIt.instance<QueueService>();
 
     try {
 
@@ -241,7 +263,7 @@ class AndroidAutoHelper {
         return bMatchQuality.compareTo(aMatchQuality);
       });
 
-      return [ for (final item in filteredSearchResults) await _convertToMediaItem(item: item, parentType: MediaItemParentType.instantMix, parentId: item.parentId) ];
+      return [ for (final item in filteredSearchResults) await queueService.generateMediaItem(item, parentType: MediaItemParentType.instantMix, parentId: item.parentId, isPlayable: _isPlayable) ];
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while searching:", err);
       return [];
@@ -434,7 +456,7 @@ class AndroidAutoHelper {
               .whereNotNull()
               .toList();
 
-          items = _sortItems(
+          items = sortItems(
               items,
               FinampSettingsHelper.finampSettings.tabSortBy[TabContentType.songs]!,
               FinampSettingsHelper.finampSettings.tabSortOrder[TabContentType.songs]!);
@@ -472,12 +494,8 @@ class AndroidAutoHelper {
   }
 
   Future<List<MediaItem>> getMediaItems(MediaItemId itemId) async {
-    return [ for (final item in await getBaseItems(itemId)) await _convertToMediaItem(item: item, parentType: MediaItemParentType.collection, parentId: item.parentId) ];
-  }
-
-  Future<void> toggleShuffle() async {
     final queueService = GetIt.instance<QueueService>();
-    queueService.togglePlaybackOrder();
+    return [ for (final item in await getBaseItems(itemId)) await queueService.generateMediaItem(item, parentType: MediaItemParentType.collection, parentId: item.parentId, isPlayable: _isPlayable) ];
   }
 
   Future<void> playFromMediaId(MediaItemId itemId) async {
@@ -507,7 +525,7 @@ class AndroidAutoHelper {
             .whereNotNull()
             .toList();
 
-        items = _sortItems(
+        items = sortItems(
             items,
             FinampSettingsHelper.finampSettings.tabSortBy[TabContentType.songs]!,
             FinampSettingsHelper.finampSettings.tabSortOrder[TabContentType.songs]!);
@@ -624,138 +642,13 @@ class AndroidAutoHelper {
     return searchResult;
   }
 
-  // sort items
-  List<BaseItemDto> _sortItems(List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
-    itemsToSort.sort((a, b) {
-      switch (sortBy ?? SortBy.sortName) {
-        case SortBy.sortName:
-          if (a.nameForSorting == null || b.nameForSorting == null) {
-            // Returning 0 is the same as both being the same
-            return 0;
-          } else {
-            return a.nameForSorting!.compareTo(b.nameForSorting!);
-          }
-        case SortBy.albumArtist:
-          if (a.albumArtist == null || b.albumArtist == null) {
-            return 0;
-          } else {
-            return a.albumArtist!.compareTo(b.albumArtist!);
-          }
-        case SortBy.communityRating:
-          if (a.communityRating == null ||
-              b.communityRating == null) {
-            return 0;
-          } else {
-            return a.communityRating!.compareTo(b.communityRating!);
-          }
-        case SortBy.criticRating:
-          if (a.criticRating == null || b.criticRating == null) {
-            return 0;
-          } else {
-            return a.criticRating!.compareTo(b.criticRating!);
-          }
-        case SortBy.dateCreated:
-          if (a.dateCreated == null || b.dateCreated == null) {
-            return 0;
-          } else {
-            return a.dateCreated!.compareTo(b.dateCreated!);
-          }
-        case SortBy.premiereDate:
-          if (a.premiereDate == null || b.premiereDate == null) {
-            return 0;
-          } else {
-            return a.premiereDate!.compareTo(b.premiereDate!);
-          }
-        case SortBy.random:
-        // We subtract the result by one so that we can get -1 values
-        // (see compareTo documentation)
-          return Random().nextInt(2) - 1;
-        default:
-          throw UnimplementedError(
-              "Unimplemented offline sort mode $sortBy");
-      }
-    });
-
-    return sortOrder == SortOrder.descending
-      ? itemsToSort.reversed.toList()
-      : itemsToSort;
-  }
-
   // albums, playlists, and songs should play when clicked
   // clicking artists starts an instant mix, so they are technically playable
   // genres has subcategories, so it should be browsable but not playable
-  bool _isPlayable(TabContentType tabContentType) {
+  bool _isPlayable(BaseItemDto item) {
+    final tabContentType = TabContentType.fromItemType(item.type ?? "Audio");
     return tabContentType == TabContentType.albums || tabContentType == TabContentType.playlists
         || tabContentType == TabContentType.artists || tabContentType == TabContentType.songs;
   }
 
-  Future<MediaItem> _convertToMediaItem({
-    required BaseItemDto item,
-    required MediaItemParentType parentType,
-    String? parentId,
-  }) async {
-    final tabContentType = TabContentType.fromItemType(item.type!);
-    final itemId = MediaItemId(
-      contentType: tabContentType,
-      parentType: parentType,
-      parentId: parentId ?? item.parentId,
-      itemId: item.id,
-    );
-
-    final downloadedSong = _downloadService.getSongDownload(item: item);
-    DownloadItem? downloadedImage;
-    try {
-      downloadedImage = _downloadService.getImageDownload(item: item);
-    } catch (e) {
-      _androidAutoHelperLogger.warning("Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");
-    }
-    Uri? artUri;
-
-    // replace with content uri or jellyfin api uri
-    if (downloadedImage != null) {
-      artUri = downloadedImage.file?.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
-    } else if (!FinampSettingsHelper.finampSettings.isOffline) {
-      artUri = _jellyfinApiHelper.getImageUrl(item: item);
-      // try to get image file (Android Automotive needs this)
-      if (artUri != null) {
-        try {
-          final fileInfo = await AudioService.cacheManager.getFileFromCache(item.id);
-          if (fileInfo != null) {
-            artUri = fileInfo.file.uri.replace(scheme: "content", host: "com.unicornsonlsd.finamp");
-          } else {
-            // store the origin in fragment since it should be unused
-            artUri = artUri.replace(scheme: "content", host: "com.unicornsonlsd.finamp", fragment: artUri.origin);
-          }
-        } catch (e) {
-          _androidAutoHelperLogger.severe("Error setting new media artwork uri for item: ${item.id} name: ${item.name}", e);
-        }
-      }
-    }
-
-    // replace with placeholder art
-    if (artUri == null) {
-      final documentsDirectory = await getApplicationDocumentsDirectory();
-      artUri = Uri(scheme: "content", host: "com.unicornsonlsd.finamp", path: "${documentsDirectory.absolute.path}/images/album_white.png");
-    }
-
-    return MediaItem(
-      id: itemId.toString(),
-      playable: _isPlayable(tabContentType), // this dictates whether clicking on an item will try to play it or browse it
-      album: item.album,
-      artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: artUri,
-      title: item.name ?? "unknown",
-      extras: {
-        "itemJson": item.toJson(),
-        "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongPath": downloadedSong?.file?.path,
-        "isOffline": FinampSettingsHelper.finampSettings.isOffline,
-      },
-      // Jellyfin returns microseconds * 10 for some reason
-      duration: Duration(
-        microseconds:
-        (item.runTimeTicks == null ? 0 : item.runTimeTicks! ~/ 10),
-      ),
-    );
-  }
 }

@@ -57,7 +57,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _isarDownloader = GetIt.instance<DownloadsService>();
-  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   StreamSubscription<void>? _refreshStream;
 
   late AutoScrollController controller;
