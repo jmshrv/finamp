@@ -1038,7 +1038,7 @@ class QueueService {
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
       playable: isPlayable?.call(item: item) ?? true, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
-      album: item.album ?? "unknown",
+      album: item.album,
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: artUri,
       title: item.name ?? "unknown",
