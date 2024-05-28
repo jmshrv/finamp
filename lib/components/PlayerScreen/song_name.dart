@@ -132,18 +132,20 @@ class SongNameContent extends StatelessWidget {
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-          ScrollingTextHelper(
-            text: mediaItem == null
-                ? AppLocalizations.of(context)!.noItem
-                : mediaItem!.title,
-            style: TextStyle(
-              fontSize: 24,
-              height: 26 / 20,
-              fontWeight: Theme.of(context).brightness == Brightness.light
-                  ? FontWeight.w500
-                  : FontWeight.w600,
-            ),
-          ),
+          // Center(
+          //   child: ScrollingTextHelper(
+          //     text: mediaItem == null
+          //         ? AppLocalizations.of(context)!.noItem
+          //         : mediaItem!.title,
+          //     style: TextStyle(
+          //       fontSize: 24,
+          //       height: 26 / 20,
+          //       fontWeight: Theme.of(context).brightness == Brightness.light
+          //           ? FontWeight.w500
+          //           : FontWeight.w600,
+          //     ),
+          //   ),
+          // ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
           RichText(
             text: TextSpan(

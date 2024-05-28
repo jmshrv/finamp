@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class ScrollingTextHelper extends StatelessWidget {
   final String text;
   final TextStyle? style;
+  final TextAlign alignment;
 
   const ScrollingTextHelper({
     Key? key,
     required this.text,
     this.style,
+    this.alignment = TextAlign.center,
   }) : super(key: key);
 
   @override
@@ -38,6 +40,7 @@ class ScrollingTextHelper extends StatelessWidget {
                   style: style,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
+                  textAlign: alignment,
                 ),
         );
       },
