@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
+import 'package:finamp/components/scrolling_text.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -46,25 +47,20 @@ class NowPlayingBar extends ConsumerWidget {
           ]);
 
   Color getProgressBackgroundColor(BuildContext context) {
-    return FinampSettingsHelper.finampSettings.showProgressOnNowPlayingBar ?
-      Color.alphaBlend(
-        Theme.of(context).brightness == Brightness.dark
-          ? IconTheme.of(context)
-              .color!
-              .withOpacity(0.35)
-          : IconTheme.of(context)
-              .color!
-              .withOpacity(0.5),
-        Theme.of(context).brightness ==
-                Brightness.dark
-            ? Colors.black
-            : Colors.white
-      ) : 
-      IconTheme.of(context).color!.withOpacity(0.85);
+    return FinampSettingsHelper.finampSettings.showProgressOnNowPlayingBar
+        ? Color.alphaBlend(
+            Theme.of(context).brightness == Brightness.dark
+                ? IconTheme.of(context).color!.withOpacity(0.35)
+                : IconTheme.of(context).color!.withOpacity(0.5),
+            Theme.of(context).brightness == Brightness.dark
+                ? Colors.black
+                : Colors.white)
+        : IconTheme.of(context).color!.withOpacity(0.85);
   }
 
   Widget buildLoadingQueueBar(BuildContext context, Function()? retryCallback) {
-    final progressBackgroundColor = getProgressBackgroundColor(context).withOpacity(0.5);
+    final progressBackgroundColor =
+        getProgressBackgroundColor(context).withOpacity(0.5);
 
     return SimpleGestureDetector(
         onVerticalSwipe: (direction) {
@@ -138,7 +134,6 @@ class NowPlayingBar extends ConsumerWidget {
 
   Widget buildNowPlayingBar(
       BuildContext context, FinampQueueItem currentTrack) {
-
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     Duration? playbackPosition;
@@ -149,7 +144,7 @@ class NowPlayingBar extends ConsumerWidget {
         : null;
 
     final progressBackgroundColor = getProgressBackgroundColor(context);
-        
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
@@ -266,7 +261,8 @@ class NowPlayingBar extends ConsumerWidget {
                                 Expanded(
                                   child: Stack(
                                     children: [
-                                      if (FinampSettingsHelper.finampSettings.showProgressOnNowPlayingBar)
+                                      if (FinampSettingsHelper.finampSettings
+                                          .showProgressOnNowPlayingBar)
                                         Positioned(
                                           left: 0,
                                           top: 0,
@@ -279,7 +275,8 @@ class NowPlayingBar extends ConsumerWidget {
                                                   playbackPosition =
                                                       snapshot.data;
                                                   final screenSize =
-                                                      MediaQuery.of(context).size;
+                                                      MediaQuery.of(context)
+                                                          .size;
                                                   return Container(
                                                     // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
                                                     width: max(
@@ -298,17 +295,20 @@ class NowPlayingBar extends ConsumerWidget {
                                                                     .inMilliseconds)),
                                                     height: albumImageSize,
                                                     decoration: ShapeDecoration(
-                                                      color: IconTheme.of(context)
-                                                        .color!
-                                                        .withOpacity(0.75),
+                                                      color: IconTheme.of(
+                                                              context)
+                                                          .color!
+                                                          .withOpacity(0.75),
                                                       shape:
                                                           const RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.only(
                                                           topRight:
-                                                              Radius.circular(12),
+                                                              Radius.circular(
+                                                                  12),
                                                           bottomRight:
-                                                              Radius.circular(12),
+                                                              Radius.circular(
+                                                                  12),
                                                         ),
                                                       ),
                                                     ),
@@ -335,15 +335,78 @@ class NowPlayingBar extends ConsumerWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    currentTrack.item.title,
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
+                                                  // Text(
+                                                  //   currentTrack.item.title,
+                                                  //   style: const TextStyle(
+                                                  //       color: Colors.white,
+                                                  //       fontSize: 16,
+                                                  //       fontWeight:
+                                                  //           FontWeight.w500,
+                                                  //       overflow: TextOverflow
+                                                  //           .ellipsis),
+                                                  // ),
+                                                  LayoutBuilder(
+                                                    builder:
+                                                        (context, constraints) {
+                                                      final textPainter =
+                                                          TextPainter(
+                                                        text: TextSpan(
+                                                          text: snapshot.data!
+                                                              .mediaItem!.title,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                        maxLines: 1,
+                                                        textDirection:
+                                                            TextDirection.ltr,
+                                                      )..layout(
+                                                              maxWidth:
+                                                                  constraints
+                                                                      .maxWidth);
+
+                                                      final isOverflowing =
+                                                          textPainter
+                                                              .didExceedMaxLines;
+
+                                                      return Container(
+                                                        width: constraints
+                                                            .maxWidth,
+                                                        child: isOverflowing
+                                                            ? ScrollingText(
+                                                                text: snapshot
+                                                                    .data!
+                                                                    .mediaItem!
+                                                                    .title,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              )
+                                                            : Text(
+                                                                snapshot
+                                                                    .data!
+                                                                    .mediaItem!
+                                                                    .title,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
+                                                      );
+                                                    },
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Row(

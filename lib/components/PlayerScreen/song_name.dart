@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/scrolling_text.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -130,14 +131,51 @@ class SongNameContent extends StatelessWidget {
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-          Text(
-            mediaItem == null
-                ? AppLocalizations.of(context)!.noItem
-                : mediaItem!.title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-            overflow: TextOverflow.fade,
-            softWrap: false,
-            maxLines: 1,
+          // Text(
+          //   mediaItem == null
+          //       ? AppLocalizations.of(context)!.noItem
+          //       : mediaItem!.title,
+          //   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+          //   overflow: TextOverflow.fade,
+          //   softWrap: false,
+          //   maxLines: 1,
+          // ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final textPainter = TextPainter(
+                text: TextSpan(
+                  text: mediaItem == null
+                      ? AppLocalizations.of(context)!.noItem
+                      : mediaItem!.title,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.w600),
+                ),
+                maxLines: 1,
+                textDirection: TextDirection.ltr,
+              )..layout(maxWidth: constraints.maxWidth);
+
+              final isOverflowing = textPainter.didExceedMaxLines;
+
+              return Container(
+                width: constraints.maxWidth,
+                child: isOverflowing
+                    ? ScrollingText(
+                        text: mediaItem == null
+                            ? AppLocalizations.of(context)!.noItem
+                            : mediaItem!.title,
+                        style: const TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.w600),
+                      )
+                    : Text(
+                        mediaItem == null
+                            ? AppLocalizations.of(context)!.noItem
+                            : mediaItem!.title,
+                        style: const TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.w600),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+              );
+            },
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
           RichText(
