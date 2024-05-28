@@ -8,6 +8,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -335,78 +336,18 @@ class NowPlayingBar extends ConsumerWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  // Text(
-                                                  //   currentTrack.item.title,
-                                                  //   style: const TextStyle(
-                                                  //       color: Colors.white,
-                                                  //       fontSize: 16,
-                                                  //       fontWeight:
-                                                  //           FontWeight.w500,
-                                                  //       overflow: TextOverflow
-                                                  //           .ellipsis),
-                                                  // ),
-                                                  LayoutBuilder(
-                                                    builder:
-                                                        (context, constraints) {
-                                                      final textPainter =
-                                                          TextPainter(
-                                                        text: TextSpan(
-                                                          text: snapshot.data!
-                                                              .mediaItem!.title,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                        maxLines: 1,
-                                                        textDirection:
-                                                            TextDirection.ltr,
-                                                      )..layout(
-                                                              maxWidth:
-                                                                  constraints
-                                                                      .maxWidth);
-
-                                                      final isOverflowing =
-                                                          textPainter
-                                                              .didExceedMaxLines;
-
-                                                      return Container(
-                                                        width: constraints
-                                                            .maxWidth,
-                                                        child: isOverflowing
-                                                            ? ScrollingText(
-                                                                text: snapshot
-                                                                    .data!
-                                                                    .mediaItem!
-                                                                    .title,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
-                                                              )
-                                                            : Text(
-                                                                snapshot
-                                                                    .data!
-                                                                    .mediaItem!
-                                                                    .title,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
-                                                      );
-                                                    },
+                                                  ScrollingTextHelper(
+                                                    text:
+                                                        currentTrack.item.title,
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: Theme.of(
+                                                                      context)
+                                                                  .brightness ==
+                                                              Brightness.light
+                                                          ? FontWeight.w500
+                                                          : FontWeight.w600,
+                                                    ),
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Row(
