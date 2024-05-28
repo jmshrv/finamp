@@ -337,6 +337,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   ScrollingTextHelper(
+                                                    alignment: TextAlign.start,
                                                     text:
                                                         currentTrack.item.title,
                                                     style: TextStyle(

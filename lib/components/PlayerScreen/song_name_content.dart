@@ -1,10 +1,11 @@
 import 'package:finamp/components/scrolling_text.dart';
+import 'package:finamp/screens/player_screen.dart';
+import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/screens/player_screen.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/queue_service.dart';
@@ -46,60 +47,20 @@ class SongNameContent extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    alignment: Alignment.center,
                     constraints: BoxConstraints(
-                      maxHeight: 24,
                       maxWidth: 280,
                     ),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final textPainter = TextPainter(
-                          text: TextSpan(
-                            text: currentTrack.item.title,
-                            style: TextStyle(
-                              fontSize: 20,
-                              height: 26 / 20,
-                              fontWeight: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? FontWeight.w500
-                                  : FontWeight.w600,
-                            ),
-                          ),
-                          maxLines: 1,
-                          textDirection: TextDirection.ltr,
-                        )..layout(maxWidth: constraints.maxWidth);
-
-                        final isOverflowing = textPainter.didExceedMaxLines;
-
-                        return Container(
-                          width: constraints.maxWidth,
-                          child: isOverflowing
-                              ? ScrollingText(
-                                  text: currentTrack.item.title,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    height: 26 / 20,
-                                    fontWeight: Theme.of(context).brightness ==
-                                            Brightness.light
-                                        ? FontWeight.w500
-                                        : FontWeight.w600,
-                                  ),
-                                )
-                              : Text(
-                                  currentTrack.item.title,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    height: 26 / 20,
-                                    fontWeight: Theme.of(context).brightness ==
-                                            Brightness.light
-                                        ? FontWeight.w500
-                                        : FontWeight.w600,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                        );
-                      },
+                    child: ScrollingTextHelper(
+                      alignment: TextAlign.center,
+                      text: currentTrack.item.title,
+                      style: TextStyle(
+                        fontSize: 20,
+                        height: 26 / 20,
+                        fontWeight:
+                            Theme.of(context).brightness == Brightness.light
+                                ? FontWeight.w500
+                                : FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
