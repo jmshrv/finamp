@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Finamp
+Exec=finamp
+Icon=com.unicornsonlsd.Finamp
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;Music;
+Keywords=music;player;media;audio;playlist;jellyfin;flutter;
+StartupNotify=true
+# Translators: Do NOT translate or transliterate this text (these are enum types)!
+X-Purism-FormFactor=Workstation;Mobile;

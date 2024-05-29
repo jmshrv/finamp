@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.unicornsonlsd.Finamp</id>
+  <name>Finamp</name>
+  <summary>An open source Jellyfin music player</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MPL</project_license>
+  <recommends>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </recommends>
+  <developer_name>jmshrv</developer_name>
+  <url type="homepage">https://github.com/jmshrv/finamp</url>
+  <description>
+    <p>Finamp is an open source, cross-platform Jellyfin music player</p>
+    <p>It supports streaming playback and offline downloads, playlists, favourites and shuffle. Linux support is currently in Beta.</p> 
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/baarkerlounger/flathub/finamp/screenshots/main.png</image>
+      <caption>Default screenshot for desktop</caption>
+    </screenshot>
+  </screenshots>
+  <launchable type="desktop-id">com.unicornsonlsd.Finamp.desktop</launchable>
+  <releases>
+    <release version="0.9.7-beta" date="2024-05-23"/>
+  </releases>
+  <content_rating type="oars-1.1" />
+  <update_contact>db@slothlife.xyz</update_contact>
+</component>
