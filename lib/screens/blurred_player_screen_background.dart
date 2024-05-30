@@ -52,7 +52,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                     // Don't transition between images with identical files/urls unless
                     // system theme has changed
                     key: ValueKey(imageProvider.hashCode +
-                        Theme.of(context).brightness.index),
+                        Theme.of(context).brightness.hashCode),
                     image: imageProvider,
                     fit: BoxFit.cover,
                     fadeInDuration: const Duration(seconds: 0),
@@ -76,8 +76,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                       if (Platform.isLinux) {
                         return image;
                       }
-                      return CachePaint(
-                          imageKey: imageProvider.toString(), child: image);
+                      return CachePaint(imageKey: imageProvider, child: image);
                     })));
   }
 }
@@ -85,24 +84,39 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
 class CachePaint extends SingleChildRenderObjectWidget {
   const CachePaint({super.key, super.child, required this.imageKey});
 
-  final String imageKey;
+  final ImageProvider imageKey;
+
+  @override
+  void updateRenderObject(BuildContext context, RenderCachePaint renderObject) {
+    renderObject.screenSize = MediaQuery.sizeOf(context);
+  }
 
   @override
   RenderCachePaint createRenderObject(BuildContext context) {
-    return RenderCachePaint(imageKey, Theme.of(context).brightness);
+    return RenderCachePaint(
+        imageKey, MediaQuery.sizeOf(context), Theme.of(context).brightness);
   }
 }
 
 class RenderCachePaint extends RenderProxyBox {
-  RenderCachePaint(this._imageKey, this._brightness);
+  RenderCachePaint(this._imageKey, this._screenSize, this._brightness);
 
-  final String _imageKey;
+  final ImageProvider _imageKey;
 
-  String get _cacheKey => _imageKey + size.toString() + _brightness.toString();
+  int get _cacheKey => Object.hash(_imageKey, _screenSize, _brightness);
+
+  Size _screenSize;
 
   final Brightness _brightness;
 
-  static final Map<String, (List<RenderCachePaint>, ui.Image?)> _cache = {};
+  set screenSize(Size value) {
+    if (value != _screenSize) {
+      _disposeCache();
+    }
+    _screenSize = value;
+  }
+
+  static final Map<int, (List<RenderCachePaint>, ui.Image?)> _cache = {};
 
   @override
   bool get isRepaintBoundary => true;
@@ -129,8 +143,10 @@ class RenderCachePaint extends RenderProxyBox {
       // Save image of child to cache
       final OffsetLayer offsetLayer = layer! as OffsetLayer;
       Future.sync(() async {
-        _cache[_cacheKey] =
-            (_cache[_cacheKey]!.$1, await offsetLayer.toImage(offset & size));
+        _cache[_cacheKey] = (
+          _cache[_cacheKey]!.$1,
+          await offsetLayer.toImage(offset & _screenSize)
+        );
         // Schedule repaint next frame because the image is lighter than the full
         // child during compositing, which is more frequent than paints.
         for (var element in _cache[_cacheKey]!.$1) {
@@ -140,32 +156,18 @@ class RenderCachePaint extends RenderProxyBox {
     }
   }
 
-  @override
-
-  /// Dispose of outdated render cache whenever widget size changes
-  set size(Size newSize) {
-    String? oldKey;
-    if (hasSize) {
-      oldKey = _cacheKey;
-    }
-    super.size = newSize;
-    if (_cacheKey != oldKey && oldKey != null) {
-      _disposeCache(oldKey);
-    }
-  }
-
-  void _disposeCache(String key) {
-    _cache[key]?.$1.remove(this);
-    if (_cache[key]?.$1.isEmpty ?? false) {
+  void _disposeCache() {
+    _cache[_cacheKey]?.$1.remove(this);
+    if (_cache[_cacheKey]?.$1.isEmpty ?? false) {
       // If we are last user of image, dispose
-      _cache[key]?.$2?.dispose();
-      _cache.remove(key);
+      _cache[_cacheKey]?.$2?.dispose();
+      _cache.remove(_cacheKey);
     }
   }
 
   @override
   void dispose() {
-    _disposeCache(_cacheKey);
+    _disposeCache();
     super.dispose();
   }
 }

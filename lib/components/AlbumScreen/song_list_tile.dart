@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:audio_service/audio_service.dart';
+import 'package:collection/collection.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
@@ -7,8 +9,6 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -180,15 +180,15 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     if (widget.item.hasLyrics ?? false)
                       WidgetSpan(
                         child: Transform.translate(
-                          offset: const Offset(-2.5, 0),
-                          child: Icon(
-                            TablerIcons.microphone_2,
-                            size: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .fontSize! + 2,
-                          )
-                        ),
+                            offset: const Offset(-2.5, 0),
+                            child: Icon(
+                              TablerIcons.microphone_2,
+                              size: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize! +
+                                  2,
+                            )),
                         alignment: PlaceholderAlignment.top,
                       ),
                     TextSpan(
@@ -284,7 +284,10 @@ class _SongListTileState extends ConsumerState<SongListTile>
                       // nameFilter: widget.searchTerm,
                       viewFilter: finampUserHelper.currentUser?.currentView?.id,
                       nullableViewFilters:
-                          settings.showDownloadsWithUnknownLibrary);
+                          settings.showDownloadsWithUnknownLibrary,
+                      onlyFavorites:
+                          settings.onlyShowFavourite && settings.trackOfflineFavorites,
+                  );
 
                   var items = offlineItems
                       .map((e) => e.baseItem)
@@ -310,8 +313,10 @@ class _SongListTileState extends ConsumerState<SongListTile>
                     ),
                   );
                 } else {
-                  if (FinampSettingsHelper.finampSettings.startInstantMixForIndividualTracks) {
-                    await _audioServiceHelper.startInstantMixForItem(widget.item);
+                  if (FinampSettingsHelper
+                      .finampSettings.startInstantMixForIndividualTracks) {
+                    await _audioServiceHelper
+                        .startInstantMixForItem(widget.item);
                   } else {
                     await _queueService.startPlayback(
                       items: [widget.item],
