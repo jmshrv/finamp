@@ -4,8 +4,12 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/favorite_provider.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -560,6 +564,48 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         case CustomPlaybackActions.shuffle:
           final queueService = GetIt.instance<QueueService>();
           return queueService.togglePlaybackOrder();
+        case CustomPlaybackActions.toggleFavorite:
+          jellyfin_models.BaseItemDto? currentItem;
+
+          if (mediaItem.valueOrNull?.extras?["itemJson"] != null) {
+            currentItem = jellyfin_models.BaseItemDto.fromJson(mediaItem.valueOrNull?.extras!["itemJson"] as Map<String, dynamic>);
+          } else {
+            return;
+          }
+
+          bool isFavorite = currentItem.userData?.isFavorite ?? false;
+          if (GlobalSnackbar.materialAppScaffoldKey.currentContext != null) {
+            // get current favorite status from the provider
+            isFavorite = ProviderScope.containerOf(GlobalSnackbar.materialAppScaffoldKey.currentContext!, listen: false)
+              .read(isFavoriteProvider(FavoriteRequest(currentItem)));
+            // update favorite status with the value returned by the provider
+            isFavorite = ProviderScope.containerOf(GlobalSnackbar.materialAppScaffoldKey.currentContext!, listen: false)
+              .read(isFavoriteProvider(FavoriteRequest(currentItem)).notifier)
+              .updateFavorite(!isFavorite);
+          } else {
+            // fallback if we can't find the context
+            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+            if (isFavorite) {
+              await jellyfinApiHelper.removeFavourite(currentItem.id);
+            } else {
+              await jellyfinApiHelper.addFavourite(currentItem.id);
+            }
+            isFavorite = !isFavorite;
+            final newUserData = currentItem.userData;
+            if (newUserData != null) {
+              newUserData.isFavorite = isFavorite;
+            }
+            currentItem.userData = newUserData;
+            mediaItem.add(mediaItem.valueOrNull?.copyWith(
+              extras: {
+                ...mediaItem.valueOrNull?.extras ?? {},
+                "itemJson": currentItem.toJson(),
+              },
+            ));
+          }
+          // re-trigger the playbackState update to update the notification
+          final event = _transformEvent(_player.playbackEvent);
+          return playbackState.add(event);
         default:
           // NOP, handled below
       }
@@ -654,27 +700,56 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// just_audio player will be transformed into an audio_service state so that
   /// it can be broadcast to audio_service clients.
   PlaybackState _transformEvent(PlaybackEvent event) {
+
+    jellyfin_models.BaseItemDto? currentItem;
+    bool isFavorite = false;
+
+    if (mediaItem.valueOrNull?.extras?["itemJson"] != null) {
+      currentItem = jellyfin_models.BaseItemDto.fromJson(mediaItem.valueOrNull?.extras!["itemJson"] as Map<String, dynamic>);
+      if (GlobalSnackbar.materialAppScaffoldKey.currentContext != null) {
+        isFavorite = ProviderScope.containerOf(GlobalSnackbar.materialAppScaffoldKey.currentContext!, listen: false)
+          .read(isFavoriteProvider(FavoriteRequest(currentItem)));
+      } else {
+        isFavorite = currentItem.userData?.isFavorite ?? false;
+      }
+    }
+
+    
     return PlaybackState(
       controls: [
         MediaControl.skipToPrevious,
         if (_player.playing) MediaControl.pause else MediaControl.play,
-        // MediaControl.stop.copyWith(
-        //     androidIcon: "drawable/baseline_shuffle_on_24"),
-        MediaControl.stop,
         MediaControl.skipToNext,
         MediaControl.custom(
-            androidIcon: _player.shuffleModeEnabled
-                ? "drawable/baseline_shuffle_on_24"
-                : "drawable/baseline_shuffle_24",
-            label: "Shuffle",
-            name: CustomPlaybackActions.shuffle.name,
-      )],
-      systemActions: const {
+            name: CustomPlaybackActions.toggleFavorite.name,
+            androidIcon: isFavorite
+                ? "drawable/baseline_heart_filled_24"
+                : "drawable/baseline_heart_24",
+            label: isFavorite ?
+              (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.removeFavourite : "Remove favorite") :
+              (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.addFavourite : "Add favorite"),
+        ),
+        //!!! Android Auto adds a shuffle toggle button automatically, adding it here would result in a duplicate button
+        // MediaControl.custom(
+        //     name: CustomPlaybackActions.shuffle.name,
+        //     androidIcon: _player.shuffleModeEnabled
+        //         ? "drawable/baseline_shuffle_on_24"
+        //         : "drawable/baseline_shuffle_24",
+        //     label: _player.shuffleModeEnabled ?
+        //       (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderShuffledButtonLabel : "Shuffle enabled") :
+        //       (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderLinearButtonLabel : "Shuffle disabled"),
+        // ),
+        if (FinampSettingsHelper.finampSettings.showStopButtonOnMediaNotification)
+          MediaControl.stop.copyWith(
+              androidIcon: "drawable/baseline_stop_24"),
+          // MediaControl.stop,
+      ],
+      systemActions: FinampSettingsHelper.finampSettings.showSeekControlsOnMediaNotification ? const {
         MediaAction.seek,
         MediaAction.seekForward,
         MediaAction.seekBackward,
-      },
-      androidCompactActionIndices: const [0, 1, 3],
+      } : {},
+      androidCompactActionIndices: const [0, 1, 2],
       processingState: const {
         ProcessingState.idle: AudioProcessingState.idle,
         ProcessingState.loading: AudioProcessingState.loading,

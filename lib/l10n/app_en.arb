@@ -914,17 +914,17 @@
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
-  "playbackOrderLinearButtonLabel": "Playing in order",
+  "playbackOrderLinearButtonLabel": "Playing in order. Tap to shuffle.",
   "@playbackOrderLinearButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "playbackOrderShuffledButtonLabel": "Shuffling tracks",
+  "playbackOrderShuffledButtonLabel": "Shuffling tracks. Tap to play in order.",
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
   "playbackSpeedButtonLabel": "Playing at x{speed} speed",
   "@playbackSpeedButtonLabel": {
-    "description": "Label for the button that toggles visibility of the playback speed menu, {speed} is the current playback speed.",
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
     "placeholders": {
       "speed": {
         "type": "double"
@@ -1550,13 +1550,28 @@
   "fiveLatestAlbumsSettingSubtitle": "Downloads will be removed as they age out.  Lock the download to prevent an album from being removed.",
   "cacheLibraryImagesSettings": "Cache current library images",
   "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded.",
-  "showProgressOnNowPlayingBarTitle": "Show track progress on now playing bar",
+  "showProgressOnNowPlayingBarTitle": "Show track progress on in-app miniplayer",
   "@showProgressOnNowPlayingBarTitle": {
-    "description": "Title for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar.",
+  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar.",
   "@showProgressOnNowPlayingBarSubtitle": {
-    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+    "description": "Subtitle for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "showStopButtonOnMediaNotificationTitle": "Show stop button on media notification",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Controls if the media notification has a stop button in addition to the pause button. This lets you stop playback without opening the app.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Show seek controls on media notification",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Controls if the media notification has a seekable progress bar. This lets you change the playback position without opening the app.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
   }
-
 }

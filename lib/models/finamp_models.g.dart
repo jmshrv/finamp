@@ -167,6 +167,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[64] == null ? true : fields[64] as bool,
       startInstantMixForIndividualTracks:
           fields[65] == null ? true : fields[65] as bool,
+      showStopButtonOnMediaNotification:
+          fields[66] == null ? false : fields[66] as bool,
+      showSeekControlsOnMediaNotification:
+          fields[67] == null ? true : fields[67] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -176,7 +180,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(64)
+      ..writeByte(66)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -304,7 +308,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(64)
       ..write(obj.showProgressOnNowPlayingBar)
       ..writeByte(65)
-      ..write(obj.startInstantMixForIndividualTracks);
+      ..write(obj.startInstantMixForIndividualTracks)
+      ..writeByte(66)
+      ..write(obj.showStopButtonOnMediaNotification)
+      ..writeByte(67)
+      ..write(obj.showSeekControlsOnMediaNotification);
   }
 
   @override

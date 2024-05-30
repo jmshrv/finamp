@@ -105,6 +105,8 @@ const _showArtistChipImage = true;
 const _trackOfflineFavoritesDefault = true;
 const _showProgressOnNowPlayingBarDefault = true;
 const _startInstantMixForIndividualTracksDefault = true;
+const _showStopButtonOnMediaNotificationDefault = false;
+const _showSeekControlsOnMediaNotificationDefault = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -178,6 +180,8 @@ class FinampSettings {
     this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
     this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
     this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
+    this.showStopButtonOnMediaNotification = _showStopButtonOnMediaNotificationDefault,
+    this.showSeekControlsOnMediaNotification = _showSeekControlsOnMediaNotificationDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -390,6 +394,12 @@ class FinampSettings {
 
   @HiveField(65, defaultValue: _startInstantMixForIndividualTracksDefault)
   bool startInstantMixForIndividualTracks;
+
+  @HiveField(66, defaultValue: _showStopButtonOnMediaNotificationDefault)
+  bool showStopButtonOnMediaNotification;
+
+  @HiveField(67, defaultValue: _showSeekControlsOnMediaNotificationDefault)
+  bool showSeekControlsOnMediaNotification;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
