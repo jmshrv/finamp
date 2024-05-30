@@ -46,7 +46,7 @@
   <content_rating type="oars-1.1" />
   <update_contact>nne66vse2@mozmail.com</update_contact>
   <branding>
-    <color type="primary" scheme_preference="light">#ff00ff</color>
-    <color type="primary" scheme_preference="dark">#993d3d</color>
+    <color type="primary" scheme_preference="light">#ccf2ff</color>
+    <color type="primary" scheme_preference="dark">#00394d</color>
   </branding>
 </component>
