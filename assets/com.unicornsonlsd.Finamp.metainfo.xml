@@ -18,7 +18,7 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image type="source">https://raw.githubusercontent.com/baarkerlounger/flathub/finamp/screenshots/main.png</image>
+      <image type="source">https://github.com/jmshrv/finamp/blob/976ea6c5244465a457ffa2ecc723034adf83393d/images/screenshots/linux_main.png</image>
       <caption>Default screenshot for desktop</caption>
     </screenshot>
   </screenshots>
