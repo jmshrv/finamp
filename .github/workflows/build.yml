@@ -97,7 +97,7 @@ jobs:
         && cp assets/com.unicornsonlsd.Finamp.metainfo.xml build/linux/x64/release/
     # archive bundle and generate checksum
     - run: |
-        tar -czf finamp-linux-release.tar.gz --directory build/linux/x64/release/ bundle icons finamp.desktop.m4 \
+        tar -czf finamp-linux-release.tar.gz --directory build/linux/x64/release/ bundle icons finamp.desktop.m4 com.unicornsonlsd.Finamp.metainfo.xml \
         && sha256sum finamp-linux-release.tar.gz > finamp-linux-release.tar.gz.sha256sum
     - uses: actions/upload-artifact@v4
       with:
