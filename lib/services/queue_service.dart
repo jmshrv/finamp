@@ -34,7 +34,7 @@ class QueueService {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
-  final _isarDownloader = GetIt.instance<DownloadsService>();
+  final downloadsService = GetIt.instance<DownloadsService>();
   final _queueServiceLogger = Logger("QueueService");
   final _queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
 
@@ -361,7 +361,7 @@ class QueueService {
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in missingIds) {
           jellyfin_models.BaseItemDto? item =
-              _isarDownloader.getSongDownload(id: id)?.baseItem;
+              downloadsService.getSongDownload(id: id)?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -995,10 +995,25 @@ class QueueService {
       );
     }
 
-    final downloadedSong = _isarDownloader.getSongDownload(item: item);
+    bool isDownloaded = false;
+    bool isItemPlayable = isPlayable?.call(item: item) ?? true;
+    DownloadItem? downloadedSong;
+    DownloadStub? downloadedCollection;
     DownloadItem? downloadedImage;
+
+    if (item.type == "Audio") {
+      downloadedSong = downloadsService.getSongDownload(item: item);
+      isDownloaded = downloadedSong != null;
+    } else {
+      downloadedCollection = await downloadsService.getCollectionInfo(item: item);
+      if (downloadedCollection != null) {
+        final downloadStatus = downloadsService.getStatus(downloadedCollection, null);
+        isDownloaded = downloadStatus != DownloadItemStatus.notNeeded;
+      }
+    }
+
     try {
-      downloadedImage = _isarDownloader.getImageDownload(item: item);
+      downloadedImage = downloadsService.getImageDownload(item: item);
     } catch (e) {
       _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");
     }
@@ -1037,7 +1052,7 @@ class QueueService {
 
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
-      playable: isPlayable?.call(item: item) ?? true, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
+      playable: isItemPlayable, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
       album: item.album,
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: artUri,
@@ -1046,6 +1061,7 @@ class QueueService {
         "itemJson": item.toJson(setOffline: false),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedSongPath": downloadedSong?.file?.path,
+        "android.media.extra.DOWNLOAD_STATUS": isDownloaded ? 2 : 0,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         "contextNormalizationGain": contextNormalizationGain,
       },

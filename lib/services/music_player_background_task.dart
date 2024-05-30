@@ -536,7 +536,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       }
     }
 
-    return await _androidAutoHelper.searchItems(currentSearchQuery);
+    final results = await _androidAutoHelper.searchItems(currentSearchQuery);
+    return results;
     
   }
 
