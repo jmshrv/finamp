@@ -151,10 +151,11 @@ class BareAlbumImage extends ConsumerWidget {
     var localPlaceholder = placeholderBuilder;
     if (blurHash != null) {
       localPlaceholder ??= (_) => Image(
-          fit: BoxFit.cover,
-          image: BlurHashImage(
-            blurHash,
-          ));
+            fit: BoxFit.cover,
+            image: BlurHashImage(
+              blurHash,
+            ),
+          );
     }
     localPlaceholder ??= defaultPlaceholderBuilder;
 
@@ -166,8 +167,8 @@ class BareAlbumImage extends ConsumerWidget {
         return OctoImage(
           image: image,
           filterQuality: FilterQuality.medium,
-          fadeOutDuration: const Duration(milliseconds: 0),
-          fadeInDuration: const Duration(milliseconds: 0),
+          fadeOutDuration: const Duration(milliseconds: 300),
+          fadeInDuration: const Duration(milliseconds: 300),
           fit: BoxFit.contain,
           placeholderBuilder: localPlaceholder,
           errorBuilder: errorBuilder,
