@@ -30,6 +30,7 @@ class AlbumImage extends ConsumerWidget {
     this.placeholderBuilder,
     this.disabled = false,
     this.autoScale = true,
+    this.decoration,
   });
 
   /// The item to get an image for.
@@ -49,6 +50,11 @@ class AlbumImage extends ConsumerWidget {
   /// Whether to automatically scale the image to the size of the widget.
   final bool autoScale;
 
+  /// The decoration to use for the album image. This is defined in AlbumImage
+  /// instead of being used as a separate widget so that non-square images don't
+  /// look incorrect due to AlbumImage having an aspect ratio of 1:1
+  final Decoration? decoration;
+
   static final defaultBorderRadius = BorderRadius.circular(4);
 
   @override
@@ -58,9 +64,12 @@ class AlbumImage extends ConsumerWidget {
     if ((item == null || item!.imageId == null) && imageListenable == null) {
       return ClipRRect(
         borderRadius: borderRadius,
-        child: const AspectRatio(
+        child: AspectRatio(
           aspectRatio: 1,
-          child: _AlbumImageErrorPlaceholder(),
+          child: Container(
+            decoration: decoration,
+            child: const _AlbumImageErrorPlaceholder(),
+          ),
         ),
       );
     }
@@ -96,18 +105,24 @@ class AlbumImage extends ConsumerWidget {
             }
           }
 
-          var image = BareAlbumImage(
-              imageListenable: imageListenable ??
-                  albumImageProvider(AlbumImageRequest(
-                    item: item!,
-                    maxWidth: physicalWidth,
-                    maxHeight: physicalHeight,
-                  )).select((value) => (value, item?.blurHash)),
-              imageProviderCallback: themeCallback == null
-                  ? null
-                  : (image) => themeCallback!(
-                      FinampTheme.fromImageDeferred(image, item?.blurHash)),
-              placeholderBuilder: placeholderBuilder);
+          var image = Center(
+            // This Center stops the container from expanding
+            child: Container(
+              decoration: decoration,
+              child: BareAlbumImage(
+                  imageListenable: imageListenable ??
+                      albumImageProvider(AlbumImageRequest(
+                        item: item!,
+                        maxWidth: physicalWidth,
+                        maxHeight: physicalHeight,
+                      )).select((value) => (value, item?.blurHash)),
+                  imageProviderCallback: themeCallback == null
+                      ? null
+                      : (image) => themeCallback!(
+                          FinampTheme.fromImageDeferred(image, item?.blurHash)),
+                  placeholderBuilder: placeholderBuilder),
+            ),
+          );
           return disabled
               ? Opacity(
                   opacity: 0.75,

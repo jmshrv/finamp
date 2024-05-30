@@ -98,7 +98,11 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
                       left: horizontalPadding,
                       right: horizontalPadding,
                     ),
-                    child: Container(
+                    child: AlbumImage(
+                      imageListenable: currentAlbumImageProvider,
+                      borderRadius: BorderRadius.circular(8.0),
+                      // Load player cover at max size to allow more seamless scaling
+                      autoScale: false,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -107,12 +111,6 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
                             color: Colors.black.withOpacity(0.3),
                           )
                         ],
-                      ),
-                      child: AlbumImage(
-                        imageListenable: currentAlbumImageProvider,
-                        borderRadius: BorderRadius.circular(8.0),
-                        // Load player cover at max size to allow more seamless scaling
-                        autoScale: false,
                       ),
                     ),
                   );
