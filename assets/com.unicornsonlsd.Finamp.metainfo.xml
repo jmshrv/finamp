@@ -18,8 +18,16 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image type="source">https://github.com/jmshrv/finamp/blob/976ea6c5244465a457ffa2ecc723034adf83393d/images/screenshots/linux_main.png</image>
-      <caption>Default screenshot for desktop</caption>
+      <image type="source">https://github.com/jmshrv/finamp/blob/cd15f2f80c1615040d50ccb4fc88dfd97f2767e5/images/screenshots/linux/album_playing_view.png</image>
+      <caption>Individual album view with a track playing on desktop</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image type="source">https://github.com/jmshrv/finamp/blob/cd15f2f80c1615040d50ccb4fc88dfd97f2767e5/images/screenshots/linux/album_list_view.png</image>
+      <caption>List of albums on desktop</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image type="source">https://github.com/jmshrv/finamp/blob/cd15f2f80c1615040d50ccb4fc88dfd97f2767e5/images/screenshots/linux/album_playing_view_mobile.png</image>
+      <caption>List of albums on mobile</caption>
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.Finamp.desktop</launchable>
