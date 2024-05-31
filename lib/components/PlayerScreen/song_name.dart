@@ -1,5 +1,4 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/scrolling_text.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -133,14 +132,18 @@ class SongNameContent extends StatelessWidget {
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
           Center(
-            child: ScrollingTextHelper(
-              text: mediaItem == null
+            child:
+            ScrollingTextHelper(
+              id: ValueKey(mediaItem!.id),
+              alignment: TextAlign.center,
+              text:  mediaItem == null
                   ? AppLocalizations.of(context)!.noItem
                   : mediaItem!.title,
               style: TextStyle(
                 fontSize: 24,
                 height: 26 / 20,
-                fontWeight: Theme.of(context).brightness == Brightness.light
+                fontWeight:
+                Theme.of(context).brightness == Brightness.light
                     ? FontWeight.w500
                     : FontWeight.w600,
               ),

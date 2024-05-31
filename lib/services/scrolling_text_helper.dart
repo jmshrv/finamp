@@ -1,17 +1,19 @@
-import 'package:finamp/components/scrolling_text.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:hive/hive.dart';
 
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
 
 class ScrollingTextHelper extends StatelessWidget {
+  final Key id;
   final String text;
   final TextStyle? style;
   final TextAlign alignment;
 
   const ScrollingTextHelper({
     Key? key,
+    required this.id,
     required this.text,
     this.style,
     this.alignment = TextAlign.center,
@@ -23,7 +25,6 @@ class ScrollingTextHelper extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
         bool oneLineMarquee = box.get("FinampSettings")?.oneLineMarqueeTextButton ?? false;
-        int maxLines = oneLineMarquee ? 1 : 2;
 
         return LayoutBuilder(
           builder: (context, constraints) {
@@ -32,28 +33,42 @@ class ScrollingTextHelper extends StatelessWidget {
                 text: text,
                 style: style,
               ),
-              maxLines: maxLines,
+              maxLines: 2,
               textDirection: TextDirection.ltr,
             )..layout(maxWidth: constraints.maxWidth);
 
             final isOverflowing = textPainter.didExceedMaxLines;
 
-            return Container(
-              width: constraints.maxWidth,
-              child: isOverflowing
-                  ? ScrollingText(
-                text: text,
-                style: style,
-                maxLines: maxLines,
-              )
-                  : Text(
-                text,
-                style: style,
-                overflow: TextOverflow.ellipsis,
-                maxLines: maxLines,
-                textAlign: alignment,
-              ),
-            );
+            if (oneLineMarquee || isOverflowing) {
+              return Container(
+                height: (style?.fontSize ?? 16.0),
+                width: constraints.maxWidth,
+                child: Marquee(
+                  text: text,
+                  style: style,
+                  scrollAxis: Axis.horizontal,
+                  blankSpace: 20.0,
+                  velocity: 50.0,
+                  pauseAfterRound: Duration(seconds: 1),
+                  accelerationDuration: Duration(seconds: 1),
+                  accelerationCurve: Curves.linear,
+                  decelerationDuration: Duration(milliseconds: 500),
+                  decelerationCurve: Curves.easeOut,
+                  textDirection: TextDirection.ltr,
+                ),
+              );
+            } else {
+              return Container(
+                width: constraints.maxWidth,
+                child: Text(
+                  text,
+                  style: style,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  textAlign: alignment,
+                ),
+              );
+            }
           },
         );
       },

@@ -3,12 +3,10 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
-import 'package:finamp/components/scrolling_text.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:marquee/marquee.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../models/jellyfin_models.dart' as jellyfin_models;
@@ -336,18 +335,42 @@ class NowPlayingBar extends ConsumerWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  ScrollingTextHelper(
-                                                    alignment: TextAlign.start,
-                                                    text:
-                                                        currentTrack.item.title,
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: Theme.of(
-                                                                      context)
-                                                                  .brightness ==
-                                                              Brightness.light
-                                                          ? FontWeight.w500
-                                                          : FontWeight.w600,
+                                                  SizedBox(
+                                                    height: 20,
+                                                    child: Marquee(
+                                                      key: ValueKey(
+                                                          currentTrack.item.id),
+                                                      text: currentTrack
+                                                          .item.title,
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: Theme.of(
+                                                                        context)
+                                                                    .brightness ==
+                                                                Brightness.light
+                                                            ? FontWeight.w500
+                                                            : FontWeight.w600,
+                                                      ),
+                                                      scrollAxis:
+                                                          Axis.horizontal,
+                                                      blankSpace: 20.0,
+                                                      velocity: 50.0,
+                                                      pauseAfterRound:
+                                                          const Duration(
+                                                              seconds: 3),
+                                                      accelerationDuration:
+                                                          const Duration(
+                                                              seconds: 1),
+                                                      accelerationCurve:
+                                                          Curves.linear,
+                                                      decelerationDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  500),
+                                                      decelerationCurve:
+                                                          Curves.easeOut,
+                                                      textDirection:
+                                                          TextDirection.ltr,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),

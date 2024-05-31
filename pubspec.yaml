@@ -101,6 +101,10 @@ dependencies:
   window_manager: ^0.3.8
   url_launcher: ^6.2.6
 
+# Fix for marquee dependency after Flutter 3.2.2 upgrade
+dependency_overrides:
+  fading_edge_scrollview: ^4.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

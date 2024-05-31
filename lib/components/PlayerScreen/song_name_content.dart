@@ -1,4 +1,3 @@
-import 'package:finamp/components/scrolling_text.dart';
 import 'package:finamp/screens/player_screen.dart';
 import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +46,12 @@ class SongNameContent extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
+                    height: 45,
                     constraints: BoxConstraints(
                       maxWidth: 280,
                     ),
                     child: ScrollingTextHelper(
+                      id: ValueKey(currentTrack.item.id),
                       alignment: TextAlign.center,
                       text: currentTrack.item.title,
                       style: TextStyle(
