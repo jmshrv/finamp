@@ -99,6 +99,7 @@ const _enableVibration = true;
 const _prioritizeCoverFactor = 8.0;
 const _suppressPlayerPadding = false;
 const _hideQueueButton = false;
+const _oneLineMarqueeTextButton = false;
 const _reportQueueToServerDefault = false;
 const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 const _showArtistChipImage = true;
@@ -171,6 +172,7 @@ class FinampSettings {
     this.prioritizeCoverFactor = _prioritizeCoverFactor,
     this.suppressPlayerPadding = _suppressPlayerPadding,
     this.hideQueueButton = _hideQueueButton,
+    this.oneLineMarqueeTextButton = _oneLineMarqueeTextButton,
     this.reportQueueToServer = _reportQueueToServerDefault,
     this.periodicPlaybackSessionUpdateFrequencySeconds =
         _periodicPlaybackSessionUpdateFrequencySecondsDefault,
@@ -391,6 +393,9 @@ class FinampSettings {
 
   @HiveField(65, defaultValue: _startInstantMixForIndividualTracksDefault)
   bool startInstantMixForIndividualTracks;
+
+  @HiveField(66, defaultValue: _oneLineMarqueeTextButton)
+  bool oneLineMarqueeTextButton;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
