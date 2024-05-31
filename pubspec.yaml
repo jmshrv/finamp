@@ -180,7 +180,7 @@ flutter_launcher_icons:
 
 msix_config:
   display_name: Finamp
-  publisher_display_name: Jellyfin
+  publisher_display_name: jmshrv
   identity_name: com.unicornsonlsd.finamp
   msix_version: 0.9.7.0
   logo_path: ./images/finamp_cropped.png
