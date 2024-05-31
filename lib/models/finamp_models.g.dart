@@ -158,6 +158,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
       suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
       hideQueueButton: fields[51] == null ? false : fields[51] as bool,
+      oneLineMarqueeTextButton: fields[66] == null ? false : fields[66] as bool,
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : fields[53] as int,
@@ -176,7 +177,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(64)
+      ..writeByte(65)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -304,7 +305,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(64)
       ..write(obj.showProgressOnNowPlayingBar)
       ..writeByte(65)
-      ..write(obj.startInstantMixForIndividualTracks);
+      ..write(obj.startInstantMixForIndividualTracks)
+      ..writeByte(66)
+      ..write(obj.oneLineMarqueeTextButton);
   }
 
   @override
