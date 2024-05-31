@@ -105,6 +105,7 @@ const _showArtistChipImage = true;
 const _trackOfflineFavoritesDefault = true;
 const _showProgressOnNowPlayingBarDefault = true;
 const _startInstantMixForIndividualTracksDefault = true;
+const _showLyricsTimestampsDefault = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -179,6 +180,7 @@ class FinampSettings {
     this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
     this.startInstantMixForIndividualTracks =
         _startInstantMixForIndividualTracksDefault,
+    this.showLyricsTimestamps = _showLyricsTimestampsDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -391,6 +393,9 @@ class FinampSettings {
 
   @HiveField(65, defaultValue: _startInstantMixForIndividualTracksDefault)
   bool startInstantMixForIndividualTracks;
+
+  @HiveField(66, defaultValue: _showLyricsTimestampsDefault)
+  bool showLyricsTimestamps;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

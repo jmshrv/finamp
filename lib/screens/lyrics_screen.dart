@@ -439,7 +439,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
   }
 }
 
-class _LyricLine extends StatelessWidget {
+class _LyricLine extends ConsumerWidget {
   final LyricLine line;
   final bool isCurrentLine;
   final VoidCallback? onTap;
@@ -451,9 +451,11 @@ class _LyricLine extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final lowlightLine = !isCurrentLine && line.start != null;
     final isSynchronized = line.start != null;
+
+    final finampSettings = ref.watch(finampSettingsProvider).value;
 
     return GestureDetector(
       onTap: isSynchronized ? onTap : null,
@@ -462,7 +464,11 @@ class _LyricLine extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (line.start != null)
+            if (
+              line.start != null
+              && (line.text?.trim().isNotEmpty ?? false)
+              && (finampSettings?.showLyricsTimestamps ?? true)
+            )
               Text(
                 "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
                 style: TextStyle(

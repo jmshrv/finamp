@@ -1,6 +1,7 @@
 import 'package:finamp/screens/customization_settings_screen.dart';
 import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_songs.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
+import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -45,6 +46,12 @@ class LayoutSettingsScreen extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.playerScreen),
                   onTap: () => Navigator.of(context)
                       .pushNamed(PlayerSettingsScreen.routeName),
+                ),
+                ListTile(
+                  leading: const Icon(TablerIcons.microphone_2),
+                  title: Text(AppLocalizations.of(context)!.lyricsScreen),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(LyricsSettingsScreen.routeName),
                 ),
                 ListTile(
                   leading: const Icon(Icons.tab),
