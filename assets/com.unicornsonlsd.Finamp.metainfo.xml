@@ -4,43 +4,47 @@
   <name>Finamp</name>
   <summary>An open source Jellyfin music player</summary>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>MPL</project_license>
+  <project_license>MPL-2.0</project_license>
   <recommends>
     <control>pointing</control>
     <control>keyboard</control>
     <control>touch</control>
   </recommends>
-  <developer_name>jmshrv</developer_name>
+  <developer id="com.unicornsonlsd">
+    <name>
+      jmshrv
+    </name>
+  </developer>
   <url type="homepage">https://github.com/jmshrv/finamp</url>
   <description>
-    <p>Finamp is an open source, cross-platform Jellyfin music player</p>
-    <p>It supports streaming playback and offline downloads, playlists, favourites and shuffle. Linux support is currently in Beta.</p> 
+    <p>Finamp is an open source, cross-platform Jellyfin music player that supports streaming playback and offline downloads, playlists, favourites and shuffle. Linux support is currently in Beta.</p> 
   </description>
   <screenshots>
     <screenshot type="default">
-      <image type="source">https://github.com/jmshrv/finamp/blob/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view.png</image>
+      <image type="source">https://raw.githubusercontent.com/jmshrv/finamp/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view.png</image>
       <caption>Individual album view with a track playing on desktop</caption>
     </screenshot>
     <screenshot type="default">
-      <image type="source">https://github.com/jmshrv/finamp/blob/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_list_view.png</image>
+      <image type="source">https://raw.githubusercontent.com/jmshrv/finamp/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_list_view.png</image>
       <caption>List of albums on desktop</caption>
     </screenshot>
     <screenshot type="default">
-      <image type="source">https://github.com/jmshrv/finamp/blob/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view_dark.png</image>
+      <image type="source">https://raw.githubusercontent.com/jmshrv/finamp/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view_dark.png</image>
       <caption>List of albums on desktop in dark mode</caption>
     </screenshot>
     <screenshot type="default">
-      <image type="source">https://github.com/jmshrv/finamp/blob/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view_mobile.png</image>
+      <image type="source">https://raw.githubusercontent.com/jmshrv/finamp/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view_mobile.png</image>
       <caption>List of albums on mobile</caption>
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.Finamp.desktop</launchable>
   <releases>
-    <release version="0.9.7-beta" date="2024-05-23"/>
+    <release version="0.9.7-beta" date="2024-05-23">
     <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.7-beta</url>
-    <description>
-      <p>
-        New Features:
+      <description>
+        <p>
+          New Features:
+        </p>
         <ul>
           <li>Favorite button now opens a menu that allows adding a track to playlists. Long press to like.</li>
           <li>Faster image loading and caching options for your music library</li>
@@ -49,11 +53,11 @@
           <li>"Song" renamed to "Track" throughout the app</li>
           <li>Download a library now includes tracks that don't belong to any album</li>
         </ul>
-      </p>
-      <p>
-        <i>Thank you for using Finamp!</i>
-      </p>
-    </description>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
   </releases>
   <content_rating type="oars-1.1" />
   <update_contact>nne66vse2@mozmail.com</update_contact>
