@@ -17,7 +17,7 @@ class ScrollingText extends StatefulWidget {
     this.pauseDuration = const Duration(seconds: 3),
     this.maxLines = 1,
   }) : super(key: key);
-s
+
   @override
   _ScrollingTextState createState() => _ScrollingTextState();
 }
