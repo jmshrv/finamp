@@ -7,6 +7,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -337,8 +338,8 @@ class NowPlayingBar extends ConsumerWidget {
                                                 children: [
                                                   SizedBox(
                                                     height: 20,
-                                                    child: Marquee(
-                                                      key: ValueKey(
+                                                    child: ScrollingTextHelper(
+                                                      id: ValueKey(
                                                           currentTrack.item.id),
                                                       text: currentTrack
                                                           .item.title,
@@ -350,27 +351,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 Brightness.light
                                                             ? FontWeight.w500
                                                             : FontWeight.w600,
-                                                      ),
-                                                      scrollAxis:
-                                                          Axis.horizontal,
-                                                      blankSpace: 20.0,
-                                                      velocity: 50.0,
-                                                      pauseAfterRound:
-                                                          const Duration(
-                                                              seconds: 3),
-                                                      accelerationDuration:
-                                                          const Duration(
-                                                              seconds: 1),
-                                                      accelerationCurve:
-                                                          Curves.linear,
-                                                      decelerationDuration:
-                                                          const Duration(
-                                                              milliseconds:
-                                                                  500),
-                                                      decelerationCurve:
-                                                          Curves.easeOut,
-                                                      textDirection:
-                                                          TextDirection.ltr,
+                                                      ), alignment: TextAlign.start,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),

@@ -9,14 +9,16 @@ class ScrollingTextHelper extends StatelessWidget {
   final Key id;
   final String text;
   final TextStyle? style;
-  final TextAlign alignment;
+  final TextAlign? alignment;
+  final bool useMarqueeCondition;
 
   const ScrollingTextHelper({
     Key? key,
     required this.id,
     required this.text,
     this.style,
-    this.alignment = TextAlign.center,
+    required this.alignment,
+    this.useMarqueeCondition = true,
   }) : super(key: key);
 
   @override
@@ -39,11 +41,13 @@ class ScrollingTextHelper extends StatelessWidget {
 
             final isOverflowing = textPainter.didExceedMaxLines;
 
-            if (oneLineMarquee || isOverflowing) {
+            if (!useMarqueeCondition || oneLineMarquee || isOverflowing) {
               return Container(
+                alignment: Alignment.centerLeft,
                 height: (style?.fontSize ?? 16.0),
                 width: constraints.maxWidth,
                 child: Marquee(
+                  key: id,
                   text: text,
                   style: style,
                   scrollAxis: Axis.horizontal,

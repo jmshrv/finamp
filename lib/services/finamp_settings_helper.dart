@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 

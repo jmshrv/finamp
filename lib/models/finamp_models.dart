@@ -394,7 +394,7 @@ class FinampSettings {
   @HiveField(65, defaultValue: _startInstantMixForIndividualTracksDefault)
   bool startInstantMixForIndividualTracks;
 
-  @HiveField(66, defaultValue: _oneLineMarqueeTextButton)
+  @HiveField(67, defaultValue: _oneLineMarqueeTextButton)
   bool oneLineMarqueeTextButton;
 
   static Future<FinampSettings> create() async {
