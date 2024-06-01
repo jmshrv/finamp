@@ -46,7 +46,6 @@ class SongNameContent extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.06,
                     constraints: BoxConstraints(
                       maxWidth: 280,
                     ),

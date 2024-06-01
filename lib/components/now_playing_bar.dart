@@ -351,7 +351,11 @@ class NowPlayingBar extends ConsumerWidget {
                                                                 Brightness.light
                                                             ? FontWeight.w500
                                                             : FontWeight.w600,
-                                                      ), alignment: TextAlign.start,
+                                                      ),
+                                                      alignment:
+                                                          TextAlign.start,
+                                                      useMarqueeCondition:
+                                                          false,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),

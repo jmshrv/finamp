@@ -26,7 +26,8 @@ class ScrollingTextHelper extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool oneLineMarquee = box.get("FinampSettings")?.oneLineMarqueeTextButton ?? false;
+        bool oneLineMarquee =
+            box.get("FinampSettings")?.oneLineMarqueeTextButton ?? false;
 
         return LayoutBuilder(
           builder: (context, constraints) {
@@ -35,16 +36,17 @@ class ScrollingTextHelper extends StatelessWidget {
                 text: text,
                 style: style,
               ),
-              maxLines: 2,
+              maxLines: useMarqueeCondition ? 2 : 1,
               textDirection: TextDirection.ltr,
             )..layout(maxWidth: constraints.maxWidth);
 
             final isOverflowing = textPainter.didExceedMaxLines;
 
-            if (!useMarqueeCondition || oneLineMarquee || isOverflowing) {
+            if (oneLineMarquee || isOverflowing) {
               return Container(
                 alignment: Alignment.centerLeft,
-                height: (style?.fontSize ?? 16.0),
+                height:
+                    (style?.fontSize ?? 16.0) * (useMarqueeCondition ? 2 : 1),
                 width: constraints.maxWidth,
                 child: Marquee(
                   key: id,
