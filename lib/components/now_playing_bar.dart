@@ -338,24 +338,89 @@ class NowPlayingBar extends ConsumerWidget {
                                                 children: [
                                                   SizedBox(
                                                     height: 20,
-                                                    child: ScrollingTextHelper(
-                                                      id: ValueKey(
-                                                          currentTrack.item.id),
-                                                      text: currentTrack
-                                                          .item.title,
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: Theme.of(
-                                                                        context)
+                                                    child: LayoutBuilder(
+                                                      builder: (context, constraints) {
+                                                        final textPainter = TextPainter(
+                                                          text: TextSpan(
+                                                            text: currentTrack
+                                                                .item.title,
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: Theme.of(
+                                                                  context)
+                                                                  .brightness ==
+                                                                  Brightness.light
+                                                                  ? FontWeight.w500
+                                                                  : FontWeight.w600,
+                                                            ),
+                                                          ),
+                                                          maxLines: 1,
+                                                          textDirection: TextDirection.ltr,
+                                                        )..layout(maxWidth: constraints.maxWidth);
+
+                                                        final isOverflowing = textPainter.didExceedMaxLines;
+
+                                                        if (isOverflowing) {
+                                                          return Container(
+                                                            alignment: Alignment.centerLeft,
+                                                            height:
+                                                            (TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: Theme.of(
+                                                                  context)
+                                                                  .brightness ==
+                                                                  Brightness.light
+                                                                  ? FontWeight.w500
+                                                                  : FontWeight.w600,
+                                                            ).fontSize ?? 16.0),
+                                                            width: constraints.maxWidth,
+                                                            child: Marquee(
+                                                              key: ValueKey(
+                                                                  currentTrack.item.id),
+                                                              text: currentTrack
+                                                                  .item.title,
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: Theme.of(
+                                                                    context)
                                                                     .brightness ==
-                                                                Brightness.light
-                                                            ? FontWeight.w500
-                                                            : FontWeight.w600,
-                                                      ),
-                                                      alignment:
-                                                          TextAlign.start,
-                                                      useMarqueeCondition:
-                                                          false,
+                                                                    Brightness.light
+                                                                    ? FontWeight.w500
+                                                                    : FontWeight.w600,
+                                                              ),
+                                                              scrollAxis: Axis.horizontal,
+                                                              blankSpace: 20.0,
+                                                              velocity: 50.0,
+                                                              pauseAfterRound: const Duration(seconds: 3),
+                                                              accelerationDuration: const Duration(seconds: 1),
+                                                              accelerationCurve: Curves.linear,
+                                                              decelerationDuration: const Duration(milliseconds: 500),
+                                                              decelerationCurve: Curves.easeOut,
+                                                              textDirection: TextDirection.ltr,
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          return Container(
+                                                            width: constraints.maxWidth,
+                                                            child: Text(
+                                                              currentTrack
+                                                                  .item.title,
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: Theme.of(
+                                                                    context)
+                                                                    .brightness ==
+                                                                    Brightness.light
+                                                                    ? FontWeight.w500
+                                                                    : FontWeight.w600,
+                                                              ),
+                                                              overflow: TextOverflow.ellipsis,
+                                                              maxLines: 2,
+                                                              textAlign: TextAlign.start,
+                                                            ),
+                                                          );
+                                                        }
+                                                      },
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),

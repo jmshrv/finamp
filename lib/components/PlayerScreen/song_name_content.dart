@@ -61,6 +61,7 @@ class SongNameContent extends StatelessWidget {
                                 ? FontWeight.w500
                                 : FontWeight.w600,
                       ),
+                      useMarqueeCondition: true,
                     ),
                   ),
                 ),
