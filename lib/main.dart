@@ -6,6 +6,7 @@ import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
+import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
@@ -492,6 +493,8 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                           const CustomizationSettingsScreen(),
                       PlayerSettingsScreen.routeName: (context) =>
                           const PlayerSettingsScreen(),
+                      LyricsSettingsScreen.routeName: (context) =>
+                          const LyricsSettingsScreen(),
                       LanguageSelectionScreen.routeName: (context) =>
                           const LanguageSelectionScreen(),
                     },

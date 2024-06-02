@@ -1556,7 +1556,19 @@
   },
   "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar.",
   "@showProgressOnNowPlayingBarSubtitle": {
-    "description": "Subtitle for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "lyricsScreen": "Lyrics View",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsTitle": "Show timestamps for synchronized lyrics",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showLyricsTimestampsSubtitle": "Controls if the timestamp of each lyric line is shown in the lyrics view, if available.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
   "showStopButtonOnMediaNotificationTitle": "Show stop button on media notification",
   "@showStopButtonOnMediaNotificationTitle": {

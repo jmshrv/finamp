@@ -107,6 +107,7 @@ const _showProgressOnNowPlayingBarDefault = true;
 const _startInstantMixForIndividualTracksDefault = true;
 const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
+const _showLyricsTimestampsDefault = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -180,6 +181,7 @@ class FinampSettings {
     this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
     this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
     this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
+    this.showLyricsTimestamps = _showLyricsTimestampsDefault,
     this.showStopButtonOnMediaNotification = _showStopButtonOnMediaNotificationDefault,
     this.showSeekControlsOnMediaNotification = _showSeekControlsOnMediaNotificationDefault,
   });
@@ -395,10 +397,13 @@ class FinampSettings {
   @HiveField(65, defaultValue: _startInstantMixForIndividualTracksDefault)
   bool startInstantMixForIndividualTracks;
 
-  @HiveField(66, defaultValue: _showStopButtonOnMediaNotificationDefault)
+  @HiveField(66, defaultValue: _showLyricsTimestampsDefault)
+  bool showLyricsTimestamps;
+
+  @HiveField(67, defaultValue: _showStopButtonOnMediaNotificationDefault)
   bool showStopButtonOnMediaNotification;
 
-  @HiveField(67, defaultValue: _showSeekControlsOnMediaNotificationDefault)
+  @HiveField(68, defaultValue: _showSeekControlsOnMediaNotificationDefault)
   bool showSeekControlsOnMediaNotification;
 
   static Future<FinampSettings> create() async {
