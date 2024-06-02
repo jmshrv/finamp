@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,8 +13,10 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
+import 'package:path/path.dart' as path_helper;
 
 import '../components/PlayerScreen/queue_source_helper.dart';
 import 'downloads_service.dart';
@@ -23,10 +27,14 @@ import 'music_player_background_task.dart';
 
 /// A track queueing service for Finamp.
 class QueueService {
+
+  /// Used to build content:// URIs that are handled by Finamp's built-in content provider.
+  static final contentProviderPackageName = "com.unicornsonlsd.finamp";
+  
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
-  final _isarDownloader = GetIt.instance<DownloadsService>();
+  final downloadsService = GetIt.instance<DownloadsService>();
   final _queueServiceLogger = Logger("QueueService");
   final _queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
 
@@ -239,6 +247,8 @@ class QueueService {
         .followedBy(_queue)
         .map((e) => e.item)
         .toList());
+    // _audioHandler.queueTitle.add(_order.originalSource.name.toString());
+    _audioHandler.queueTitle.add("Finamp");
 
     if (_savedQueueState == SavedQueueState.saving) {
       FinampStorableQueueInfo info =
@@ -351,7 +361,7 @@ class QueueService {
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in missingIds) {
           jellyfin_models.BaseItemDto? item =
-              _isarDownloader.getSongDownload(id: id)?.baseItem;
+              downloadsService.getSongDownload(id: id)?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -479,7 +489,7 @@ class QueueService {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
           MediaItem mediaItem =
-              await _generateMediaItem(item, source.contextNormalizationGain);
+              await generateMediaItem(item, contextNormalizationGain: source.contextNormalizationGain);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -596,7 +606,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, source?.contextNormalizationGain),
+              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ?? _order.originalSource,
           type: QueueItemQueueType.queue,
         ));
@@ -644,7 +654,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, source?.contextNormalizationGain),
+              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -700,7 +710,7 @@ class QueueService {
       for (final item in items) {
         queueItems.add(FinampQueueItem(
           item:
-              await _generateMediaItem(item, source?.contextNormalizationGain),
+              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -964,32 +974,94 @@ class QueueService {
 
   /// [contextNormalizationGain] is the normalization gain of the context that the song is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
-  Future<MediaItem> _generateMediaItem(jellyfin_models.BaseItemDto item,
-      double? contextNormalizationGain) async {
+  Future<MediaItem> generateMediaItem(
+    jellyfin_models.BaseItemDto item, {
+    double? contextNormalizationGain,
+    MediaItemParentType? parentType,
+    String? parentId,
+    bool Function({ jellyfin_models.BaseItemDto? item, TabContentType? contentType })? isPlayable,
+  }) async {
     const uuid = Uuid();
 
-    final downloadedSong = _isarDownloader.getSongDownload(item: item);
+    MediaItemId? itemId;
+    final tabContentType = TabContentType.fromItemType(item.type ?? "Audio");
+
+    if (parentType != null) {
+      itemId = MediaItemId(
+        contentType: tabContentType,
+        parentType: parentType,
+        parentId: parentId ?? item.parentId,
+        itemId: item.id,
+      );
+    }
+
+    bool isDownloaded = false;
+    bool isItemPlayable = isPlayable?.call(item: item) ?? true;
+    DownloadItem? downloadedSong;
+    DownloadStub? downloadedCollection;
     DownloadItem? downloadedImage;
+
+    if (item.type == "Audio") {
+      downloadedSong = downloadsService.getSongDownload(item: item);
+      isDownloaded = downloadedSong != null;
+    } else {
+      downloadedCollection = await downloadsService.getCollectionInfo(item: item);
+      if (downloadedCollection != null) {
+        final downloadStatus = downloadsService.getStatus(downloadedCollection, null);
+        isDownloaded = downloadStatus != DownloadItemStatus.notNeeded;
+      }
+    }
+
     try {
-      downloadedImage = _isarDownloader.getImageDownload(item: item);
+      downloadedImage = downloadsService.getImageDownload(item: item);
     } catch (e) {
-      _queueServiceLogger.warning(
-          "Couldn't get the offline image for track '${item.name}' because it's missing a blurhash");
+      _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");
+    }
+
+    Uri? artUri;
+
+    // replace with content uri or jellyfin api uri
+    if (downloadedImage != null) {
+      artUri = downloadedImage.file?.uri;
+    } else if (!FinampSettingsHelper.finampSettings.isOffline) {
+      artUri = _jellyfinApiHelper.getImageUrl(item: item);
+      // try to get image file (Android Automotive needs this)
+      if (artUri != null) {
+        try {
+          final fileInfo = await AudioService.cacheManager.getFileFromCache(item.id);
+          if (fileInfo != null) {
+            artUri = fileInfo.file.uri;
+          }
+        } catch (e) {
+          _queueServiceLogger.severe("Error setting new media artwork uri for item: ${item.id} name: ${item.name}", e);
+        }
+      }
+    }
+
+    // use content provider for handling media art on Android
+    if (Platform.isAndroid) {
+      // replace with placeholder art
+      if (artUri == null) {
+        final applicationSupportDirectory = await getApplicationSupportDirectory();
+        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: path_helper.join(applicationSupportDirectory.absolute.path, Assets.images.albumWhite.path));
+      } else {
+        // store the origin in fragment since it should be unused
+        artUri = artUri.replace(scheme: "content", host: contentProviderPackageName, fragment: ["http", "https"].contains(artUri.scheme) ? artUri.origin : null);
+      }
     }
 
     return MediaItem(
-      id: uuid.v4(),
-      album: item.album ?? "unknown",
+      id: itemId?.toString() ?? uuid.v4(),
+      playable: isItemPlayable, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
+      album: item.album,
       artist: item.artists?.join(", ") ?? item.albumArtist,
-      artUri: downloadedImage?.file?.uri ??
-          (!FinampSettingsHelper.finampSettings.isOffline
-              ? _jellyfinApiHelper.getImageUrl(item: item)
-              : null),
+      artUri: artUri,
       title: item.name ?? "unknown",
       extras: {
         "itemJson": item.toJson(setOffline: false),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedSongPath": downloadedSong?.file?.path,
+        "android.media.extra.DOWNLOAD_STATUS": isDownloaded ? 2 : 0,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         "contextNormalizationGain": contextNormalizationGain,
       },

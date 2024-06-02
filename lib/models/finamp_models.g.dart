@@ -168,6 +168,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       startInstantMixForIndividualTracks:
           fields[65] == null ? true : fields[65] as bool,
       showLyricsTimestamps: fields[66] == null ? true : fields[66] as bool,
+      showStopButtonOnMediaNotification:
+          fields[67] == null ? false : fields[67] as bool,
+      showSeekControlsOnMediaNotification:
+          fields[68] == null ? true : fields[68] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -177,7 +181,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(65)
+      ..writeByte(67)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -307,7 +311,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(65)
       ..write(obj.startInstantMixForIndividualTracks)
       ..writeByte(66)
-      ..write(obj.showLyricsTimestamps);
+      ..write(obj.showLyricsTimestamps)
+      ..writeByte(67)
+      ..write(obj.showStopButtonOnMediaNotification)
+      ..writeByte(68)
+      ..write(obj.showSeekControlsOnMediaNotification);
   }
 
   @override
@@ -882,6 +890,49 @@ class FinampStorableQueueInfoAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampStorableQueueInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
+  @override
+  final int typeId = 69;
+
+  @override
+  MediaItemId read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return MediaItemId(
+      contentType: fields[0] as TabContentType,
+      parentType: fields[1] as MediaItemParentType,
+      itemId: fields[2] as String?,
+      parentId: fields[3] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaItemId obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.contentType)
+      ..writeByte(1)
+      ..write(obj.parentType)
+      ..writeByte(2)
+      ..write(obj.itemId)
+      ..writeByte(3)
+      ..write(obj.parentId);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaItemIdAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -1619,6 +1670,50 @@ class PlaybackSpeedVisibilityAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PlaybackSpeedVisibilityAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
+  @override
+  final int typeId = 68;
+
+  @override
+  MediaItemParentType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return MediaItemParentType.collection;
+      case 1:
+        return MediaItemParentType.rootCollection;
+      case 2:
+        return MediaItemParentType.instantMix;
+      default:
+        return MediaItemParentType.collection;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaItemParentType obj) {
+    switch (obj) {
+      case MediaItemParentType.collection:
+        writer.writeByte(0);
+        break;
+      case MediaItemParentType.rootCollection:
+        writer.writeByte(1);
+        break;
+      case MediaItemParentType.instantMix:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaItemParentTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -6679,4 +6774,33 @@ const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.latest5Albums: 'latest5Albums',
   FinampCollectionType.libraryImages: 'libraryImages',
   FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
+};
+
+MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(
+      contentType: $enumDecode(_$TabContentTypeEnumMap, json['contentType']),
+      parentType: $enumDecode(_$MediaItemParentTypeEnumMap, json['parentType']),
+      itemId: json['itemId'] as String?,
+      parentId: json['parentId'] as String?,
+    );
+
+Map<String, dynamic> _$MediaItemIdToJson(MediaItemId instance) =>
+    <String, dynamic>{
+      'contentType': _$TabContentTypeEnumMap[instance.contentType]!,
+      'parentType': _$MediaItemParentTypeEnumMap[instance.parentType]!,
+      'itemId': instance.itemId,
+      'parentId': instance.parentId,
+    };
+
+const _$TabContentTypeEnumMap = {
+  TabContentType.albums: 'albums',
+  TabContentType.artists: 'artists',
+  TabContentType.playlists: 'playlists',
+  TabContentType.genres: 'genres',
+  TabContentType.songs: 'songs',
+};
+
+const _$MediaItemParentTypeEnumMap = {
+  MediaItemParentType.collection: 'collection',
+  MediaItemParentType.rootCollection: 'rootCollection',
+  MediaItemParentType.instantMix: 'instantMix',
 };

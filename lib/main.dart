@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
@@ -9,6 +10,7 @@ import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
@@ -34,6 +36,7 @@ import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:path/path.dart' as path_helper;
 
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
@@ -81,6 +84,7 @@ void main() async {
     await _setupJellyfinApiData();
     _setupOfflineListenLogHelper();
     await _setupDownloadsHelper();
+    await _setupOSIntegration();
     await _setupPlaybackServices();
   } catch (error, trace) {
     hasFailed = true;
@@ -111,24 +115,6 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     await initializeDateFormatting(localeString, null);
-
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      WidgetsFlutterBinding.ensureInitialized();
-      await windowManager.ensureInitialized();
-      WindowOptions windowOptions = const WindowOptions(
-        size: Size(1200, 800),
-        center: true,
-        backgroundColor: Colors.transparent,
-        skipTaskbar: false,
-        titleBarStyle: TitleBarStyle.normal,
-        minimumSize: Size(400, 250),
-      );
-      unawaited(
-          WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.show();
-        await windowManager.focus();
-      }));
-    }
 
     runApp(const Finamp());
   }
@@ -263,6 +249,44 @@ Future<void> setupHive() async {
   GetIt.instance.registerSingleton(isar);
 }
 
+Future<void> _setupOSIntegration() async {
+
+  // set up window manager on desktop, mainly to restrict minimum size
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await windowManager.ensureInitialized();
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(1200, 800),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.normal,
+      minimumSize: Size(400, 250),
+    );
+    unawaited(
+      WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.show();
+        await windowManager.focus();
+    }));
+  }
+
+  // Load the album image from assets and save it to the documents directory for use in Android Auto
+  final applicationSupportDirectory = await getApplicationSupportDirectory();
+  final albumImageFile = File(path_helper.join(applicationSupportDirectory.absolute.path, Assets.images.albumWhite.path));
+  if (!(await albumImageFile.exists())) {
+    final albumImageBytes = await rootBundle.load(Assets.images.albumWhite.path);
+    final albumBuffer = albumImageBytes.buffer;
+    await albumImageFile.create(recursive: true);
+    await albumImageFile.writeAsBytes(
+      albumBuffer.asUint8List(
+        albumImageBytes.offsetInBytes,
+        albumImageBytes.lengthInBytes,
+      ),
+    );
+  }
+  
+}
+
 Future<void> _setupPlaybackServices() async {
   if (Platform.isWindows) {
     AudioServiceSMTC.registerWith();
@@ -270,14 +294,24 @@ Future<void> _setupPlaybackServices() async {
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
 
+  GetIt.instance.registerSingleton<AndroidAutoHelper>(AndroidAutoHelper());
+
   final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
     config: AudioServiceConfig(
       androidStopForegroundOnPause:
           FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
-      androidNotificationChannelName: "Playback",
+      androidNotificationChannelName: "Finamp",
       androidNotificationIcon: "mipmap/white",
       androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
+      // notificationColor: TODO use the theme color for older versions of Android,
+      preloadArtwork: false,
+      androidBrowsableRootExtras: <String, dynamic>{
+        "android.media.browse.SEARCH_SUPPORTED" : true, // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+        // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
+        "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT": FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
+        "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT": FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
+      }
     ),
   );
   // GetIt.instance.registerSingletonAsync<AudioHandler>(

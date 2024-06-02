@@ -491,6 +491,44 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> getArtists({
+    String? parentId,
+    String? sortBy,
+    String? sortOrder,
+    String? fields = defaultFields,
+    String? searchTerm,
+    String? filters,
+    int? startIndex,
+    int? limit,
+    bool? isFavorite,
+  }) async {
+    final Uri $url = Uri.parse('/Artists');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'ParentId': parentId,
+      'SortBy': sortBy,
+      'SortOrder': sortOrder,
+      'Fields': fields,
+      'SearchTerm': searchTerm,
+      'Filters': filters,
+      'StartIndex': startIndex,
+      'Limit': limit,
+      'IsFavorite': isFavorite,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
   Future<dynamic> getAlbumArtists({
     String? includeItemTypes,
     String? parentId,

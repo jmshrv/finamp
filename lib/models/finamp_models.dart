@@ -105,6 +105,8 @@ const _showArtistChipImage = true;
 const _trackOfflineFavoritesDefault = true;
 const _showProgressOnNowPlayingBarDefault = true;
 const _startInstantMixForIndividualTracksDefault = true;
+const _showStopButtonOnMediaNotificationDefault = false;
+const _showSeekControlsOnMediaNotificationDefault = true;
 const _showLyricsTimestampsDefault = true;
 
 @HiveType(typeId: 28)
@@ -178,9 +180,10 @@ class FinampSettings {
     this.showArtistChipImage = _showArtistChipImage,
     this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
     this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
-    this.startInstantMixForIndividualTracks =
-        _startInstantMixForIndividualTracksDefault,
+    this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
     this.showLyricsTimestamps = _showLyricsTimestampsDefault,
+    this.showStopButtonOnMediaNotification = _showStopButtonOnMediaNotificationDefault,
+    this.showSeekControlsOnMediaNotification = _showSeekControlsOnMediaNotificationDefault,
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -397,6 +400,12 @@ class FinampSettings {
   @HiveField(66, defaultValue: _showLyricsTimestampsDefault)
   bool showLyricsTimestamps;
 
+  @HiveField(67, defaultValue: _showStopButtonOnMediaNotificationDefault)
+  bool showStopButtonOnMediaNotification;
+
+  @HiveField(68, defaultValue: _showSeekControlsOnMediaNotificationDefault)
+  bool showSeekControlsOnMediaNotification;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
@@ -445,6 +454,11 @@ class FinampSettings {
   SortOrder getSortOrder(TabContentType tabType) {
     return tabSortOrder[tabType] ?? SortOrder.ascending;
   }
+}
+
+enum CustomPlaybackActions {
+  shuffle,
+  toggleFavorite;
 }
 
 /// Custom storage locations for storing music/images.
@@ -625,6 +639,24 @@ enum TabContentType {
         return AppLocalizations.of(context)!.playlists;
     }
   }
+
+  static TabContentType fromItemType(String itemType) {
+    switch (itemType) {
+      case "Audio":
+        return TabContentType.songs;
+      case "MusicAlbum":
+        return TabContentType.albums;
+      case "MusicArtist":
+        return TabContentType.artists;
+      case "MusicGenre":
+        return TabContentType.genres;
+      case "Playlist":
+        return TabContentType.playlists;
+      default:
+        throw const FormatException("Unsupported itemType");
+    }
+  }
+
 }
 
 @HiveType(typeId: 39)
@@ -2001,4 +2033,49 @@ class FinampCollection {
   factory FinampCollection.fromJson(Map<String, dynamic> json) =>
       _$FinampCollectionFromJson(json);
   Map<String, dynamic> toJson() => _$FinampCollectionToJson(this);
+}
+
+@HiveType(typeId: 68)
+enum MediaItemParentType {
+  @HiveField(0)
+  collection,
+  @HiveField(1)
+  rootCollection,
+  @HiveField(2)
+  instantMix,
+}
+
+@JsonSerializable()
+@HiveType(typeId: 69)
+class MediaItemId {
+
+  MediaItemId({
+    required this.contentType,
+    required this.parentType,
+    this.itemId,
+    this.parentId,
+  });
+
+  @HiveField(0)
+  TabContentType contentType;
+
+  @HiveField(1)
+  MediaItemParentType parentType;
+
+  @HiveField(2)
+  String? itemId;  
+
+  @HiveField(3)
+  String? parentId;
+
+  factory MediaItemId.fromJson(Map<String, dynamic> json) =>
+      _$MediaItemIdFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MediaItemIdToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
+
 }

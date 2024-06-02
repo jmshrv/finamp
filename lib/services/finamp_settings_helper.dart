@@ -324,8 +324,10 @@ class FinampSettingsHelper {
 
   static void resetCustomizationSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.playbackSpeedVisibility =
-        PlaybackSpeedVisibility.automatic;
+    //TODO refactor this so default settings are available here
+    finampSettingsTemp.playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
+    finampSettingsTemp.showStopButtonOnMediaNotification = false;
+    finampSettingsTemp.showSeekControlsOnMediaNotification = true;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

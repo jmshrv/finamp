@@ -78,6 +78,7 @@ class PlaybackHistoryService {
       final currentItem = _queueService.getCurrentTrack();
 
       if (currentIndex != null && currentItem != null) {
+
         // differences in queue index or item id are considered track changes
         if (currentItem.id != prevItem?.id) {
           if (currentState.playing != prevState?.playing) {

@@ -73,7 +73,7 @@ class LayoutSettingsScreen extends StatelessWidget {
                 const ShowArtistChipImageToggle(),
                 const AllowSplitScreenSwitch(),
                 const HideSongArtistsIfSameAsAlbumArtistsSelector(),
-                const ShowProgressOnNowPlayingBar(),
+                const ShowProgressOnNowPlayingBarToggle(),
               ],
             ),
           );
@@ -174,8 +174,8 @@ class FixedGridTileSizeDropdownListTile extends StatelessWidget {
   }
 }
 
-class ShowProgressOnNowPlayingBar extends StatelessWidget {
-  const ShowProgressOnNowPlayingBar({super.key});
+class ShowProgressOnNowPlayingBarToggle extends StatelessWidget {
+  const ShowProgressOnNowPlayingBarToggle({super.key});
 
   @override
   Widget build(BuildContext context) {

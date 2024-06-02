@@ -29,9 +29,16 @@
         <category android:name="android.intent.category.APP_MUSIC"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
+      <intent-filter>
+        <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
     </activity>
-    <service android:name="com.ryanheise.audioservice.AudioService" android:foregroundServiceType="mediaPlayback"
-        android:exported="true">
+    <provider
+            android:name=".MediaItemContentProvider"
+            android:authorities="com.unicornsonlsd.finamp"
+            android:exported="true" />
+    <service android:name="com.ryanheise.audioservice.AudioService" android:foregroundServiceType="mediaPlayback" android:exported="true">
       <intent-filter>
         <action android:name="android.media.browse.MediaBrowserService" />
       </intent-filter>
@@ -44,6 +51,10 @@
     </receiver>
 
     <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
+    <meta-data
       android:name="io.flutter.embedding.android.EnableImpeller"
       android:value="true" />
 
@@ -51,4 +62,17 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
     <meta-data android:name="flutterEmbedding" android:value="2" />
   </application>
+
+  <uses-feature
+          android:name="android.hardware.type.automotive"
+          android:required="true" />
+  <uses-feature
+          android:name="android.hardware.wifi"
+          android:required="false" />
+  <uses-feature
+          android:name="android.hardware.screen.portrait"
+          android:required="false" />
+  <uses-feature
+          android:name="android.hardware.screen.landscape"
+          android:required="false" />
 </manifest>

@@ -329,6 +329,66 @@ abstract class JellyfinApi extends ChopperService {
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,
   )
+  @Get(path: "/Artists")
+  Future<dynamic> getArtists({
+
+    /// Specify this to localize the search to a specific item or folder. Omit
+    /// to use the root.
+    @Query("ParentId") String? parentId,
+
+    /// Optional. Specify one or more sort orders, comma delimited. Options:
+    /// Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating,
+    /// DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear,
+    /// SortName, Random, Revenue, Runtime.
+    @Query("SortBy") String? sortBy,
+
+    /// Items Enum: "Ascending" "Descending"
+    /// Sort Order - Ascending,Descending.
+    @Query("SortOrder") String? sortOrder,
+
+    /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
+    /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"
+    /// "DateLastMediaAdded" "DisplayPreferencesId" "Etag" "ExternalUrls"
+    /// "Genres" "HomePageUrl" "ItemCounts" "MediaSourceCount" "MediaSources"
+    /// "OriginalTitle" "Overview" "ParentId" "Path" "People" "PlayAccess"
+    /// "ProductionLocations" "ProviderIds" "PrimaryImageAspectRatio"
+    /// "RecursiveItemCount" "Settings" "ScreenshotImageTags"
+    /// "SeriesPrimaryImage" "SeriesStudio" "SortName" "SpecialEpisodeNumbers"
+    /// "Studios" "BasicSyncInfo" "SyncInfo" "Taglines" "Tags" "RemoteTrailers"
+    /// "MediaStreams" "SeasonUserData" "ServiceName" "ThemeSongIds"
+    /// "ThemeVideoIds" "ExternalEtag" "PresentationUniqueKey"
+    /// "InheritedParentalRatingValue" "ExternalSeriesId"
+    /// "SeriesPresentationUniqueKey" "DateLastRefreshed" "DateLastSaved"
+    /// "RefreshState" "ChannelImage" "EnableMediaSourceDisplay" "Width"
+    /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
+    @Query("Fields") String? fields = defaultFields,
+
+    /// Optional. Filter based on a search term.
+    @Query("SearchTerm") String? searchTerm,
+
+    /// Items Enum: "IsFolder" "IsNotFolder" "IsUnplayed" "IsPlayed"
+    /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"
+    /// Optional. Specify additional filters to apply. This allows multiple,
+    /// comma delimited. Options: IsFolder, IsNotFolder, IsUnplayed, IsPlayed,
+    /// IsFavorite, IsResumable, Likes, Dislikes.
+    @Query("Filters") String? filters,
+
+    /// Optional. The record index to start at. All items with a lower index
+    /// will be dropped from the results.
+    @Query("StartIndex") int? startIndex,
+
+    /// Optional. The maximum number of records to return.
+    @Query("Limit") int? limit,
+
+    /// Optional. If enabled, only favorite artists will be returned.
+    @Query("IsFavorite") bool? isFavorite,
+
+  });
+
+  @FactoryConverter(
+    request: JsonConverter.requestFactory,
+    response: JsonConverter.responseFactory,
+  )
   @Get(path: "/Artists/AlbumArtists")
   Future<dynamic> getAlbumArtists({
     @Query("IncludeItemTypes") String? includeItemTypes,
@@ -461,8 +521,7 @@ abstract class JellyfinApi extends ChopperService {
     final client = ChopperClient(
       client: http.IOClient(HttpClient()
             ..connectionTimeout = const Duration(
-                seconds:
-                    8) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+                seconds: 10) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
           ),
       // The first part of the URL is now here
       services: [

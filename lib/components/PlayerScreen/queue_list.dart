@@ -11,6 +11,7 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -803,7 +804,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                       width: (screenSize.width -
                                               2 * horizontalPadding -
                                               albumImageSize) *
-                                          (playbackPosition!.inMilliseconds /
+                                          ((playbackPosition?.inMilliseconds ?? 0) /
                                               (mediaState?.mediaItem
                                                           ?.duration ??
                                                       const Duration(

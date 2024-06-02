@@ -274,13 +274,13 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 // TODO put in a real offline songs implementation
                 if (FinampSettingsHelper.finampSettings.isOffline) {
                   final settings = FinampSettingsHelper.finampSettings;
-                  final downloadService = GetIt.instance<DownloadsService>();
+                  final downloadsService = GetIt.instance<DownloadsService>();
                   final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
                   // get all downloaded songs in order
                   List<DownloadStub> offlineItems;
                   // If we're on the songs tab, just get all of the downloaded items
-                  offlineItems = await downloadService.getAllSongs(
+                  offlineItems = await downloadsService.getAllSongs(
                       // nameFilter: widget.searchTerm,
                       viewFilter: finampUserHelper.currentUser?.currentView?.id,
                       nullableViewFilters:
@@ -306,10 +306,8 @@ class _SongListTileState extends ConsumerState<SongListTile>
                             (element) => element.id == widget.item.id)
                         : await widget.index,
                     source: QueueItemSource(
-                      name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName:
-                              AppLocalizations.of(context)!.placeholderSource),
+                      name: const QueueItemSourceName(
+                          type: QueueItemSourceNameType.mix),
                       type: QueueItemSourceType.allSongs,
                       id: widget.item.id,
                     ),

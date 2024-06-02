@@ -33,7 +33,7 @@ class DownloadsOverview extends StatelessWidget {
         stream: downloadsService.downloadCountsStream,
         initialData: downloadsService.downloadCounts,
         builder: (context, countSnapshot) {
-          // This is throttled to 10 per second in downloadService constructor.
+          // This is throttled to 10 per second in downloadsService constructor.
           return StreamBuilder<Map<DownloadItemState, int>>(
             stream: downloadsService.downloadStatusesStream,
             initialData: downloadsService.downloadStatuses,
