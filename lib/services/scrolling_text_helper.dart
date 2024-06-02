@@ -1,3 +1,4 @@
+import 'package:balanced_text/balanced_text.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:hive/hive.dart';
@@ -42,11 +43,10 @@ class ScrollingTextHelper extends StatelessWidget {
 
             final isOverflowing = textPainter.didExceedMaxLines;
 
-            if (oneLineMarquee || isOverflowing) {
+            if (oneLineMarquee && isOverflowing) {
               return Container(
                 alignment: Alignment.centerLeft,
-                height:
-                    (style?.fontSize ?? 16.0) * (useMarqueeCondition ? 2 : 1),
+                height: (style?.fontSize ?? 16.0) + 10,
                 width: constraints.maxWidth,
                 child: Marquee(
                   key: id,
@@ -66,11 +66,11 @@ class ScrollingTextHelper extends StatelessWidget {
             } else {
               return Container(
                 width: constraints.maxWidth,
-                child: Text(
+                child: BalancedText(
                   text,
                   style: style,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
+                  maxLines: oneLineMarquee ? 1 : 2,
                   textAlign: alignment,
                 ),
               );

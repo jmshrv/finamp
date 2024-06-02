@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -339,84 +340,126 @@ class NowPlayingBar extends ConsumerWidget {
                                                   SizedBox(
                                                     height: 20,
                                                     child: LayoutBuilder(
-                                                      builder: (context, constraints) {
-                                                        final textPainter = TextPainter(
+                                                      builder: (context,
+                                                          constraints) {
+                                                        final textPainter =
+                                                            TextPainter(
                                                           text: TextSpan(
                                                             text: currentTrack
                                                                 .item.title,
                                                             style: TextStyle(
                                                               fontSize: 16,
                                                               fontWeight: Theme.of(
-                                                                  context)
-                                                                  .brightness ==
-                                                                  Brightness.light
-                                                                  ? FontWeight.w500
-                                                                  : FontWeight.w600,
+                                                                              context)
+                                                                          .brightness ==
+                                                                      Brightness
+                                                                          .light
+                                                                  ? FontWeight
+                                                                      .w500
+                                                                  : FontWeight
+                                                                      .w600,
                                                             ),
                                                           ),
                                                           maxLines: 1,
-                                                          textDirection: TextDirection.ltr,
-                                                        )..layout(maxWidth: constraints.maxWidth);
+                                                          textDirection:
+                                                              TextDirection.ltr,
+                                                        )..layout(
+                                                                maxWidth:
+                                                                    constraints
+                                                                        .maxWidth);
 
-                                                        final isOverflowing = textPainter.didExceedMaxLines;
+                                                        final isOverflowing =
+                                                            textPainter
+                                                                .didExceedMaxLines;
 
                                                         if (isOverflowing) {
                                                           return Container(
-                                                            alignment: Alignment.centerLeft,
-                                                            height:
-                                                            (TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: Theme.of(
-                                                                  context)
-                                                                  .brightness ==
-                                                                  Brightness.light
-                                                                  ? FontWeight.w500
-                                                                  : FontWeight.w600,
-                                                            ).fontSize ?? 16.0),
-                                                            width: constraints.maxWidth,
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            height: (TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight: Theme.of(context)
+                                                                              .brightness ==
+                                                                          Brightness
+                                                                              .light
+                                                                      ? FontWeight
+                                                                          .w500
+                                                                      : FontWeight
+                                                                          .w600,
+                                                                ).fontSize ??
+                                                                16.0),
+                                                            width: constraints
+                                                                .maxWidth,
                                                             child: Marquee(
                                                               key: ValueKey(
-                                                                  currentTrack.item.id),
+                                                                  currentTrack
+                                                                      .item.id),
                                                               text: currentTrack
                                                                   .item.title,
                                                               style: TextStyle(
                                                                 fontSize: 16,
-                                                                fontWeight: Theme.of(
-                                                                    context)
-                                                                    .brightness ==
-                                                                    Brightness.light
-                                                                    ? FontWeight.w500
-                                                                    : FontWeight.w600,
+                                                                color: Colors.white,
+                                                                fontWeight: Theme.of(context)
+                                                                            .brightness ==
+                                                                        Brightness
+                                                                            .light
+                                                                    ? FontWeight
+                                                                        .w500
+                                                                    : FontWeight
+                                                                        .w600,
                                                               ),
-                                                              scrollAxis: Axis.horizontal,
+                                                              scrollAxis: Axis
+                                                                  .horizontal,
                                                               blankSpace: 20.0,
                                                               velocity: 50.0,
-                                                              pauseAfterRound: const Duration(seconds: 3),
-                                                              accelerationDuration: const Duration(seconds: 1),
-                                                              accelerationCurve: Curves.linear,
-                                                              decelerationDuration: const Duration(milliseconds: 500),
-                                                              decelerationCurve: Curves.easeOut,
-                                                              textDirection: TextDirection.ltr,
+                                                              pauseAfterRound:
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          3),
+                                                              accelerationDuration:
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          1),
+                                                              accelerationCurve:
+                                                                  Curves.linear,
+                                                              decelerationDuration:
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          500),
+                                                              decelerationCurve:
+                                                                  Curves
+                                                                      .easeOut,
+                                                              textDirection:
+                                                                  TextDirection
+                                                                      .ltr,
                                                             ),
                                                           );
                                                         } else {
                                                           return Container(
-                                                            width: constraints.maxWidth,
-                                                            child: Text(
+                                                            width: constraints
+                                                                .maxWidth,
+                                                            child: BalancedText(
                                                               currentTrack
                                                                   .item.title,
                                                               style: TextStyle(
                                                                 fontSize: 16,
-                                                                fontWeight: Theme.of(
-                                                                    context)
-                                                                    .brightness ==
-                                                                    Brightness.light
-                                                                    ? FontWeight.w500
-                                                                    : FontWeight.w600,
+                                                                color: Colors.white,
+                                                                fontWeight: Theme.of(context)
+                                                                            .brightness ==
+                                                                        Brightness
+                                                                            .light
+                                                                    ? FontWeight
+                                                                        .w500
+                                                                    : FontWeight
+                                                                        .w600,
                                                               ),
-                                                              overflow: TextOverflow.ellipsis,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
                                                               maxLines: 2,
-                                                              textAlign: TextAlign.start,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
                                                             ),
                                                           );
                                                         }
