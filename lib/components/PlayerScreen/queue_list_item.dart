@@ -1,3 +1,4 @@
+import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/components/album_image.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart' hide ReorderableList;
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:marquee/marquee.dart';
 
 import '../../services/theme_provider.dart';
 
@@ -131,17 +133,122 @@ class _QueueListItemState extends State<QueueListItem>
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(0.0),
-                        child: Text(
-                          widget.item.item.title,
-                          style: widget.isCurrentTrack
-                              ? TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  overflow: TextOverflow.ellipsis)
-                              : null,
-                          overflow: TextOverflow.ellipsis,
+                        child: SizedBox(
+                          height: 20,
+                          child: LayoutBuilder(
+                            builder: (context,
+                                constraints) {
+                              final textPainter =
+                              TextPainter(
+                                text: TextSpan(
+                                  text: widget.item.item.title,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: Theme.of(
+                                        context)
+                                        .brightness ==
+                                        Brightness
+                                            .light
+                                        ? FontWeight
+                                        .w500
+                                        : FontWeight
+                                        .w600,
+                                  ),
+                                ),
+                                maxLines: 1,
+                                textDirection:
+                                TextDirection.ltr,
+                              )..layout(
+                                  maxWidth:
+                                  constraints
+                                      .maxWidth);
+
+                              final isOverflowing =
+                                  textPainter
+                                      .didExceedMaxLines;
+
+                              if (isOverflowing) {
+                                return Container(
+                                  alignment: Alignment
+                                      .centerLeft,
+                                  height: (TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: Theme.of(context)
+                                        .brightness ==
+                                        Brightness
+                                            .light
+                                        ? FontWeight
+                                        .w500
+                                        : FontWeight
+                                        .w600,
+                                  ).fontSize ??
+                                      16.0),
+                                  width: constraints
+                                      .maxWidth,
+                                  child: Marquee(
+                                    key: ValueKey(
+                                        widget.item.item.id),
+                                    text: widget.item.item.title,
+                                    style: widget.isCurrentTrack
+                                        ? TextStyle(
+                                        color:
+                                        Theme.of(context).colorScheme.secondary,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        overflow: TextOverflow.ellipsis)
+                                        : null,
+                                    scrollAxis: Axis
+                                        .horizontal,
+                                    blankSpace: 20.0,
+                                    velocity: 50.0,
+                                    pauseAfterRound:
+                                    const Duration(
+                                        seconds:
+                                        3),
+                                    accelerationDuration:
+                                    const Duration(
+                                        seconds:
+                                        1),
+                                    accelerationCurve:
+                                    Curves.linear,
+                                    decelerationDuration:
+                                    const Duration(
+                                        milliseconds:
+                                        500),
+                                    decelerationCurve:
+                                    Curves
+                                        .easeOut,
+                                    textDirection:
+                                    TextDirection
+                                        .ltr,
+                                  ),
+                                );
+                              } else {
+                                return Container(
+                                  width: constraints
+                                      .maxWidth,
+                                  child: BalancedText(
+                                    widget.item.item.title,
+                                    style: widget.isCurrentTrack
+                                        ? TextStyle(
+                                        color:
+                                        Theme.of(context).colorScheme.secondary,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        overflow: TextOverflow.ellipsis)
+                                        : null,
+                                    overflow:
+                                    TextOverflow
+                                        .ellipsis,
+                                    maxLines: 2,
+                                    textAlign:
+                                    TextAlign
+                                        .start,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
                         ),
                       ),
                       Padding(

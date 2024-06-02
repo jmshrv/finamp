@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:marquee/marquee.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart' as jellyfin_models;
@@ -842,15 +844,113 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        currentTrack?.item.title ??
-                                            AppLocalizations.of(context)!
-                                                .unknownName,
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            overflow: TextOverflow.ellipsis),
+                                      SizedBox(
+                                        height: 20,
+                                        child: LayoutBuilder(
+                                          builder: (context,
+                                              constraints) {
+                                            final textPainter =
+                                            TextPainter(
+                                              text: TextSpan(
+                                                text: currentTrack?.item.title ??
+                                                    AppLocalizations.of(context)!
+                                                        .unknownName,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    overflow: TextOverflow.ellipsis
+                                                ),
+                                              ),
+                                              maxLines: 1,
+                                              textDirection:
+                                              TextDirection.ltr,
+                                            )..layout(
+                                                maxWidth:
+                                                constraints
+                                                    .maxWidth);
+
+                                            final isOverflowing =
+                                                textPainter
+                                                    .didExceedMaxLines;
+
+                                            if (isOverflowing) {
+                                              return Container(
+                                                alignment: Alignment
+                                                    .centerLeft,
+                                                height: (const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    overflow: TextOverflow.ellipsis
+                                                ).fontSize ??
+                                                    16.0),
+                                                width: constraints
+                                                    .maxWidth,
+                                                child: Marquee(
+                                                  key: ValueKey(
+                                                      currentTrack?.item.id),
+                                                  text: currentTrack?.item.title ??
+                                                      AppLocalizations.of(context)!
+                                                          .unknownName,
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500,
+                                                      overflow: TextOverflow.ellipsis
+                                                  ),
+                                                  scrollAxis: Axis
+                                                      .horizontal,
+                                                  blankSpace: 20.0,
+                                                  velocity: 50.0,
+                                                  pauseAfterRound:
+                                                  const Duration(
+                                                      seconds:
+                                                      3),
+                                                  accelerationDuration:
+                                                  const Duration(
+                                                      seconds:
+                                                      1),
+                                                  accelerationCurve:
+                                                  Curves.linear,
+                                                  decelerationDuration:
+                                                  const Duration(
+                                                      milliseconds:
+                                                      500),
+                                                  decelerationCurve:
+                                                  Curves
+                                                      .easeOut,
+                                                  textDirection:
+                                                  TextDirection
+                                                      .ltr,
+                                                ),
+                                              );
+                                            } else {
+                                              return Container(
+                                                width: constraints
+                                                    .maxWidth,
+                                                child: BalancedText(
+                                                  currentTrack?.item.title ??
+                                                      AppLocalizations.of(context)!
+                                                          .unknownName,
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500,
+                                                      overflow: TextOverflow.ellipsis
+                                                  ),
+                                                  overflow:
+                                                  TextOverflow
+                                                      .ellipsis,
+                                                  maxLines: 2,
+                                                  textAlign:
+                                                  TextAlign
+                                                      .start,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        ),
                                       ),
                                       const SizedBox(height: 4),
                                       Row(
