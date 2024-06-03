@@ -37,16 +37,17 @@ class ScrollingTextHelper extends StatelessWidget {
                 text: text,
                 style: style,
               ),
-              maxLines: useMarqueeCondition ? 2 : 1,
               textDirection: TextDirection.ltr,
             )..layout(maxWidth: constraints.maxWidth);
 
-            final isOverflowing = textPainter.didExceedMaxLines;
+            final lineHeight = textPainter.preferredLineHeight;
+            final textHeight = textPainter.size.height;
+            final lineCount = (textHeight / lineHeight).ceil();
 
-            if (oneLineMarquee && isOverflowing) {
+            if (oneLineMarquee && lineCount > 1 || lineCount > 2) {
               return Container(
                 alignment: Alignment.centerLeft,
-                height: (style?.fontSize ?? 16.0) + 10,
+                height: lineHeight,
                 width: constraints.maxWidth,
                 child: Marquee(
                   key: id,
