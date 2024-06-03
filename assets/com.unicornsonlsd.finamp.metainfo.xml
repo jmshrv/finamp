@@ -37,7 +37,7 @@
       <caption>List of albums on mobile</caption>
     </screenshot>
   </screenshots>
-  <launchable type="desktop-id">com.unicornsonlsd.Finamp.desktop</launchable>
+  <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
     <release version="0.9.7-beta" date="2024-05-23">
     <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.7-beta</url>
