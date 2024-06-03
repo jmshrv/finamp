@@ -168,10 +168,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       startInstantMixForIndividualTracks:
           fields[65] == null ? true : fields[65] as bool,
       showLyricsTimestamps: fields[66] == null ? true : fields[66] as bool,
+      lyricsAlignment: fields[67] == null
+          ? LyricsAlignment.start
+          : fields[67] as LyricsAlignment,
       showStopButtonOnMediaNotification:
-          fields[67] == null ? false : fields[67] as bool,
+          fields[68] == null ? false : fields[68] as bool,
       showSeekControlsOnMediaNotification:
-          fields[68] == null ? true : fields[68] as bool,
+          fields[69] == null ? true : fields[69] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -181,7 +184,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(67)
+      ..writeByte(68)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -313,8 +316,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(66)
       ..write(obj.showLyricsTimestamps)
       ..writeByte(67)
-      ..write(obj.showStopButtonOnMediaNotification)
+      ..write(obj.lyricsAlignment)
       ..writeByte(68)
+      ..write(obj.showStopButtonOnMediaNotification)
+      ..writeByte(69)
       ..write(obj.showSeekControlsOnMediaNotification);
   }
 
@@ -1714,6 +1719,50 @@ class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is MediaItemParentTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
+  @override
+  final int typeId = 70;
+
+  @override
+  LyricsAlignment read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return LyricsAlignment.start;
+      case 1:
+        return LyricsAlignment.center;
+      case 2:
+        return LyricsAlignment.end;
+      default:
+        return LyricsAlignment.start;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, LyricsAlignment obj) {
+    switch (obj) {
+      case LyricsAlignment.start:
+        writer.writeByte(0);
+        break;
+      case LyricsAlignment.center:
+        writer.writeByte(1);
+        break;
+      case LyricsAlignment.end:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricsAlignmentAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1585,5 +1585,25 @@
   "showSeekControlsOnMediaNotificationSubtitle": "Controls if the media notification has a seekable progress bar. This lets you change the playback position without opening the app.",
   "@showSeekControlsOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionStart": "Start",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "Center",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "End",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "lyricsAlignmentTitle": "Lyrics alignment",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsAlignmentSubtitle": "Controls the alignment of lyrics in the lyrics view.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
   }
 }

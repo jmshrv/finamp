@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -367,6 +368,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                                     (nextLine.start ?? 0) ~/ 10);
 
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         if (index == 0)
                           AutoScrollTag(
@@ -461,47 +463,50 @@ class _LyricLine extends ConsumerWidget {
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        child:
+        Text.rich(
+          textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+          softWrap: true,
+          TextSpan(
+            children: [
             if (
               line.start != null
               && (line.text?.trim().isNotEmpty ?? false)
               && (finampSettings?.showLyricsTimestamps ?? true)
             )
-              Text(
-                "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
+              WidgetSpan(
+                alignment: PlaceholderAlignment.bottom,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Text(
+                    "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
+                    style: TextStyle(
+                      color: lowlightLine
+                          ? Colors.grey
+                          : Theme.of(context).textTheme.bodyLarge!.color,
+                      fontSize: 16,
+                      height: 1.75,
+                    ),
+                  ),
+                ),
+              ),
+            TextSpan(
+                text: line.text ?? "<missing lyric line>",
                 style: TextStyle(
                   color: lowlightLine
                       ? Colors.grey
                       : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontSize: 16,
-                  height: 1.75,
+                  fontWeight: lowlightLine || !isSynchronized
+                      ? FontWeight.normal
+                      : FontWeight.w500,
+                  letterSpacing: lowlightLine || !isSynchronized
+                      ? 0.05
+                      : -0.045, // keep text width consistent across the different weights
+                  fontSize: isSynchronized ? 26 : 20,
+                  height: 1.25,
                 ),
               ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: Text(
-                  line.text ?? "<missing lyric line>",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: lowlightLine
-                        ? Colors.grey
-                        : Theme.of(context).textTheme.bodyLarge!.color,
-                    fontWeight: lowlightLine || !isSynchronized
-                        ? FontWeight.normal
-                        : FontWeight.w500,
-                    letterSpacing: lowlightLine || !isSynchronized
-                        ? 0.05
-                        : -0.045, // keep text width consistent across the different weights
-                    fontSize: isSynchronized ? 26 : 20,
-                    height: 1.25,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ]),
         ),
       ),
     );
@@ -579,5 +584,16 @@ class EnableAutoScrollButton extends StatelessWidget {
             ),
           )
         : const SizedBox.shrink();
+  }
+}
+
+TextAlign lyricsAlignmentToTextAlign(LyricsAlignment alignment) {
+  switch (alignment) {
+    case LyricsAlignment.start:
+      return TextAlign.start;
+    case LyricsAlignment.center:
+      return TextAlign.center;
+    case LyricsAlignment.end:
+      return TextAlign.end;
   }
 }

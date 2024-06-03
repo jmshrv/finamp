@@ -20,6 +20,7 @@ class LyricsSettingsScreen extends StatelessWidget {
       body: ListView(
         children: const [
           ShowLyricsTimestampsToggle(),
+          LyricsAlignmentSelector(),
         ],
       ),
     );
@@ -55,3 +56,39 @@ class ShowLyricsTimestampsToggle extends StatelessWidget {
     );
   }
 }
+
+class LyricsAlignmentSelector extends StatelessWidget {
+  const LyricsAlignmentSelector({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (_, box, __) {
+        final finampSettings = box.get("FinampSettings")!;
+        return ListTile(
+          title: Text(AppLocalizations.of(context)!.lyricsAlignmentTitle),
+          subtitle: Text(AppLocalizations.of(context)!.lyricsAlignmentSubtitle),
+          trailing: DropdownButton<LyricsAlignment>(
+            value: finampSettings.lyricsAlignment,
+            items: LyricsAlignment.values
+                .map((e) => DropdownMenuItem<LyricsAlignment>(
+                      value: e,
+                      child: Text(e.toLocalisedString(context)),
+                    ))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) {
+                FinampSettings finampSettingsTemp = finampSettings;
+                finampSettingsTemp.lyricsAlignment = value;
+                Hive.box<FinampSettings>("FinampSettings")
+                    .put("FinampSettings", finampSettingsTemp);
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+

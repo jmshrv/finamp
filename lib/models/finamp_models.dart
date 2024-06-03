@@ -105,9 +105,10 @@ const _showArtistChipImage = true;
 const _trackOfflineFavoritesDefault = true;
 const _showProgressOnNowPlayingBarDefault = true;
 const _startInstantMixForIndividualTracksDefault = true;
+const _showLyricsTimestampsDefault = true;
+const _lyricsAlignmentDefault = LyricsAlignment.start;
 const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
-const _showLyricsTimestampsDefault = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -182,6 +183,7 @@ class FinampSettings {
     this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
     this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
     this.showLyricsTimestamps = _showLyricsTimestampsDefault,
+    this.lyricsAlignment = _lyricsAlignmentDefault,
     this.showStopButtonOnMediaNotification = _showStopButtonOnMediaNotificationDefault,
     this.showSeekControlsOnMediaNotification = _showSeekControlsOnMediaNotificationDefault,
   });
@@ -400,10 +402,13 @@ class FinampSettings {
   @HiveField(66, defaultValue: _showLyricsTimestampsDefault)
   bool showLyricsTimestamps;
 
-  @HiveField(67, defaultValue: _showStopButtonOnMediaNotificationDefault)
+  @HiveField(67, defaultValue: _lyricsAlignmentDefault)
+  LyricsAlignment lyricsAlignment;
+
+  @HiveField(68, defaultValue: _showStopButtonOnMediaNotificationDefault)
   bool showStopButtonOnMediaNotification;
 
-  @HiveField(68, defaultValue: _showSeekControlsOnMediaNotificationDefault)
+  @HiveField(69, defaultValue: _showSeekControlsOnMediaNotificationDefault)
   bool showSeekControlsOnMediaNotification;
 
   static Future<FinampSettings> create() async {
@@ -454,6 +459,7 @@ class FinampSettings {
   SortOrder getSortOrder(TabContentType tabType) {
     return tabSortOrder[tabType] ?? SortOrder.ascending;
   }
+
 }
 
 enum CustomPlaybackActions {
@@ -2078,4 +2084,45 @@ class MediaItemId {
     return jsonEncode(toJson());
   }
 
+}
+
+@HiveType(typeId: 70)
+enum LyricsAlignment {
+  @HiveField(0)
+  start,
+  @HiveField(1)
+  center,
+  @HiveField(2)
+  end;
+
+  /// Human-readable version of the [LyricsAlignment]
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(LyricsAlignment tabContentType) {
+    switch (tabContentType) {
+      case LyricsAlignment.start:
+        return "Start";
+      case LyricsAlignment.center:
+        return "Center";
+      case LyricsAlignment.end:
+        return "End";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      LyricsAlignment tabContentType, BuildContext context) {
+    switch (tabContentType) {
+      case LyricsAlignment.start:
+        return AppLocalizations.of(context)!.alignmentOptionStart;
+      case LyricsAlignment.center:
+        return AppLocalizations.of(context)!.alignmentOptionCenter;
+      case LyricsAlignment.end:
+        return AppLocalizations.of(context)!.alignmentOptionEnd;
+    }
+  }
 }
