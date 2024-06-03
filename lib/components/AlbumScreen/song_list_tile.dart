@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:balanced_text/balanced_text.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:marquee/marquee.dart';
 import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 
 import '../../services/audio_service_helper.dart';
@@ -131,32 +133,95 @@ class _SongListTileState extends ConsumerState<SongListTile>
             ),
             title: Opacity(
               opacity: playable ? 1.0 : 0.5,
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-                    // same horrible check as in canGoToAlbum in GestureDetector below
-                    if (widget.item.indexNumber != null &&
-                        !widget.isSong &&
-                        widget.item.albumId == widget.parentItem?.id)
-                      TextSpan(
-                          text: "${widget.item.indexNumber}. ",
-                          style: TextStyle(
-                              color: Theme.of(context).disabledColor)),
-                    TextSpan(
-                      text: widget.item.name ??
-                          AppLocalizations.of(context)!.unknownName,
+              child: Row(
+                children: [
+                  if (widget.item.indexNumber != null &&
+                      !widget.isSong &&
+                      widget.item.albumId == widget.parentItem?.id)
+                    Text(
+                      "${widget.item.indexNumber}. ",
                       style: TextStyle(
-                        color: isCurrentlyPlaying
-                            ? Theme.of(context).colorScheme.secondary
-                            : null,
+                        color: Theme.of(context).disabledColor,
                       ),
                     ),
-                  ],
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                  Expanded(
+                    child: SizedBox(
+                      height: 20,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final textPainter = TextPainter(
+                            text: TextSpan(
+                              text: widget.item.name ?? AppLocalizations.of(context)!.unknownName,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: Theme.of(context).brightness == Brightness.light
+                                    ? FontWeight.w500
+                                    : FontWeight.w600,
+                              ),
+                            ),
+                            maxLines: 1,
+                            textDirection: TextDirection.ltr,
+                          )..layout(maxWidth: constraints.maxWidth);
+
+                          final isOverflowing = textPainter.didExceedMaxLines;
+
+                          if (isOverflowing) {
+                            return Container(
+                              alignment: Alignment.centerLeft,
+                              height: (TextStyle(
+                                fontSize: 16,
+                                fontWeight: Theme.of(context).brightness == Brightness.light
+                                    ? FontWeight.w500
+                                    : FontWeight.w600,
+                              ).fontSize ?? 16.0),
+                              width: constraints.maxWidth,
+                              child: Marquee(
+                                key: ValueKey(widget.item.id),
+                                text: widget.item.name ?? AppLocalizations.of(context)!.unknownName,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: isCurrentlyPlaying ? Theme.of(context).colorScheme.secondary : null,
+                                  fontWeight: Theme.of(context).brightness == Brightness.light
+                                      ? FontWeight.w500
+                                      : FontWeight.w600,
+                                ),
+                                scrollAxis: Axis.horizontal,
+                                blankSpace: 20.0,
+                                velocity: 50.0,
+                                pauseAfterRound: const Duration(seconds: 3),
+                                accelerationDuration: const Duration(seconds: 1),
+                                accelerationCurve: Curves.linear,
+                                decelerationDuration: const Duration(milliseconds: 500),
+                                decelerationCurve: Curves.easeOut,
+                                textDirection: TextDirection.ltr,
+                              ),
+                            );
+                          } else {
+                            return Container(
+                              width: constraints.maxWidth,
+                              child: BalancedText(
+                                widget.item.name ?? AppLocalizations.of(context)!.unknownName,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: isCurrentlyPlaying ? Theme.of(context).colorScheme.secondary : null,
+                                  fontWeight: Theme.of(context).brightness == Brightness.light
+                                      ? FontWeight.w500
+                                      : FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                textAlign: TextAlign.start,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+
             subtitle: Opacity(
               opacity: playable ? 1.0 : 0.5,
               child: Text.rich(
