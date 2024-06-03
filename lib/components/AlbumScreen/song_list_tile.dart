@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:balanced_text/balanced_text.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
@@ -9,13 +8,13 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-import 'package:marquee/marquee.dart';
 import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 
 import '../../services/audio_service_helper.dart';
@@ -147,74 +146,18 @@ class _SongListTileState extends ConsumerState<SongListTile>
                   Expanded(
                     child: SizedBox(
                       height: 20,
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          final textPainter = TextPainter(
-                            text: TextSpan(
-                              text: widget.item.name ?? AppLocalizations.of(context)!.unknownName,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: Theme.of(context).brightness == Brightness.light
-                                    ? FontWeight.w500
-                                    : FontWeight.w600,
-                              ),
-                            ),
-                            maxLines: 1,
-                            textDirection: TextDirection.ltr,
-                          )..layout(maxWidth: constraints.maxWidth);
-
-                          final isOverflowing = textPainter.didExceedMaxLines;
-
-                          if (isOverflowing) {
-                            return Container(
-                              alignment: Alignment.centerLeft,
-                              height: (TextStyle(
-                                fontSize: 16,
-                                fontWeight: Theme.of(context).brightness == Brightness.light
-                                    ? FontWeight.w500
-                                    : FontWeight.w600,
-                              ).fontSize ?? 16.0),
-                              width: constraints.maxWidth,
-                              child: Marquee(
-                                key: ValueKey(widget.item.id),
-                                text: widget.item.name ?? AppLocalizations.of(context)!.unknownName,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: isCurrentlyPlaying ? Theme.of(context).colorScheme.secondary : null,
-                                  fontWeight: Theme.of(context).brightness == Brightness.light
-                                      ? FontWeight.w500
-                                      : FontWeight.w600,
-                                ),
-                                scrollAxis: Axis.horizontal,
-                                blankSpace: 20.0,
-                                velocity: 50.0,
-                                pauseAfterRound: const Duration(seconds: 3),
-                                accelerationDuration: const Duration(seconds: 1),
-                                accelerationCurve: Curves.linear,
-                                decelerationDuration: const Duration(milliseconds: 500),
-                                decelerationCurve: Curves.easeOut,
-                                textDirection: TextDirection.ltr,
-                              ),
-                            );
-                          } else {
-                            return Container(
-                              width: constraints.maxWidth,
-                              child: BalancedText(
-                                widget.item.name ?? AppLocalizations.of(context)!.unknownName,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: isCurrentlyPlaying ? Theme.of(context).colorScheme.secondary : null,
-                                  fontWeight: Theme.of(context).brightness == Brightness.light
-                                      ? FontWeight.w500
-                                      : FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                textAlign: TextAlign.start,
-                              ),
-                            );
-                          }
-                        },
+                      child: OneLineMarqueeHelper(
+                        key: ValueKey(widget.item.id),
+                        text: widget.item.name ??
+                            AppLocalizations.of(context)!.unknownName,
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 26 / 20,
+                          fontWeight:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? FontWeight.w500
+                                  : FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -346,12 +289,12 @@ class _SongListTileState extends ConsumerState<SongListTile>
                   List<DownloadStub> offlineItems;
                   // If we're on the songs tab, just get all of the downloaded items
                   offlineItems = await downloadService.getAllSongs(
-                      // nameFilter: widget.searchTerm,
-                      viewFilter: finampUserHelper.currentUser?.currentView?.id,
-                      nullableViewFilters:
-                          settings.showDownloadsWithUnknownLibrary,
-                      onlyFavorites:
-                          settings.onlyShowFavourite && settings.trackOfflineFavorites,
+                    // nameFilter: widget.searchTerm,
+                    viewFilter: finampUserHelper.currentUser?.currentView?.id,
+                    nullableViewFilters:
+                        settings.showDownloadsWithUnknownLibrary,
+                    onlyFavorites: settings.onlyShowFavourite &&
+                        settings.trackOfflineFavorites,
                   );
 
                   var items = offlineItems
