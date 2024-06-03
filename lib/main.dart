@@ -251,7 +251,6 @@ Future<void> setupHive() async {
 }
 
 Future<void> _setupOSIntegration() async {
-
   // set up window manager on desktop, mainly to restrict minimum size
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     WidgetsFlutterBinding.ensureInitialized();
@@ -265,17 +264,20 @@ Future<void> _setupOSIntegration() async {
       minimumSize: Size(400, 250),
     );
     unawaited(
-      WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.show();
-        await windowManager.focus();
+        WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
     }));
   }
 
   // Load the album image from assets and save it to the documents directory for use in Android Auto
   final applicationSupportDirectory = await getApplicationSupportDirectory();
-  final albumImageFile = File(path_helper.join(applicationSupportDirectory.absolute.path, Assets.images.albumWhite.path));
+  final albumImageFile = File(path_helper.join(
+      applicationSupportDirectory.absolute.path,
+      Assets.images.albumWhite.path));
   if (!(await albumImageFile.exists())) {
-    final albumImageBytes = await rootBundle.load(Assets.images.albumWhite.path);
+    final albumImageBytes =
+        await rootBundle.load(Assets.images.albumWhite.path);
     final albumBuffer = albumImageBytes.buffer;
     await albumImageFile.create(recursive: true);
     await albumImageFile.writeAsBytes(
@@ -285,7 +287,6 @@ Future<void> _setupOSIntegration() async {
       ),
     );
   }
-  
 }
 
 Future<void> _setupPlaybackServices() async {
@@ -300,20 +301,28 @@ Future<void> _setupPlaybackServices() async {
   final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
     config: AudioServiceConfig(
-      androidStopForegroundOnPause:
-          FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
-      androidNotificationChannelName: "Finamp",
-      androidNotificationIcon: "mipmap/white",
-      androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
-      // notificationColor: TODO use the theme color for older versions of Android,
-      preloadArtwork: false,
-      androidBrowsableRootExtras: <String, dynamic>{
-        "android.media.browse.SEARCH_SUPPORTED" : true, // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
-        // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
-        "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT": FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
-        "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT": FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
-      }
-    ),
+        androidStopForegroundOnPause:
+            FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
+        androidNotificationChannelName: "Finamp",
+        androidNotificationIcon: "mipmap/white",
+        androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
+        // notificationColor: TODO use the theme color for older versions of Android,
+        preloadArtwork: false,
+        androidBrowsableRootExtras: <String, dynamic>{
+          "android.media.browse.SEARCH_SUPPORTED":
+              true, // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+          // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
+          "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT":
+              FinampSettingsHelper.finampSettings.contentViewType ==
+                      ContentViewType.list
+                  ? 1
+                  : 2,
+          "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT":
+              FinampSettingsHelper.finampSettings.contentViewType ==
+                      ContentViewType.list
+                  ? 1
+                  : 2,
+        }),
   );
   // GetIt.instance.registerSingletonAsync<AudioHandler>(
   //     () async => );
@@ -626,9 +635,11 @@ class ErrorScreen extends StatelessWidget {
           AppLocalizations.of(context)!.startupError(error.toString()),
         ),
       ),
-      bottomNavigationBar: const Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [ShareLogsButton(), CopyLogsButton()],
+      bottomNavigationBar: const SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [ShareLogsButton(), CopyLogsButton()],
+        ),
       ),
     );
   }
