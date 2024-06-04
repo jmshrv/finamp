@@ -4,6 +4,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
+import 'package:chopper/chopper.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/downloads_service.dart';
@@ -1561,7 +1562,13 @@ class DownloadsSyncService {
         _syncLogger.finer("Fetched lyrics for ${item.name}");
       } catch (e) {
         _syncLogger.warning("Failed to fetch lyrics for ${item.name}.");
-        rethrow;
+        //!!! don't fail download if local metadata is outdated and server has no lyrics
+        if (e is Response && e.statusCode == 404) {
+          _syncLogger.finer("No lyrics for ${item.name}");
+        } else {
+          _syncLogger.warning("Failed to fetch lyrics for ${item.name}.");
+          rethrow;
+        }
       }
     } else {
       _syncLogger.finer("No lyrics for ${item.name}");
