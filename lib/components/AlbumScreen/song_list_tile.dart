@@ -132,36 +132,30 @@ class _SongListTileState extends ConsumerState<SongListTile>
             ),
             title: Opacity(
               opacity: playable ? 1.0 : 0.5,
-              child: Row(
-                children: [
-                  if (widget.item.indexNumber != null &&
-                      !widget.isSong &&
-                      widget.item.albumId == widget.parentItem?.id)
-                    Text(
-                      "${widget.item.indexNumber}. ",
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+                    // same horrible check as in canGoToAlbum in GestureDetector below
+                    if (widget.item.indexNumber != null &&
+                        !widget.isSong &&
+                        widget.item.albumId == widget.parentItem?.id)
+                      TextSpan(
+                          text: "${widget.item.indexNumber}. ",
+                          style: TextStyle(
+                              color: Theme.of(context).disabledColor)),
+                    TextSpan(
+                      text: widget.item.name ??
+                          AppLocalizations.of(context)!.unknownName,
                       style: TextStyle(
-                        color: Theme.of(context).disabledColor,
+                        color: isCurrentlyPlaying
+                            ? Theme.of(context).colorScheme.secondary
+                            : null,
                       ),
                     ),
-                  Expanded(
-                    child: SizedBox(
-                      height: 20,
-                      child: OneLineMarqueeHelper(
-                        key: ValueKey(widget.item.id),
-                        text: widget.item.name ??
-                            AppLocalizations.of(context)!.unknownName,
-                        style: TextStyle(
-                          fontSize: 16,
-                          height: 26 / 20,
-                          fontWeight:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? FontWeight.w500
-                                  : FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
             ),
 
