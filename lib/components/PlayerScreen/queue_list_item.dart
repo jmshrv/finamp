@@ -132,20 +132,17 @@ class _QueueListItemState extends State<QueueListItem>
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(0.0),
-                        child: SizedBox(
-                          height: 20,
-                          child: OneLineMarqueeHelper(
-                            key: ValueKey(widget.item.item.id),
-                            text: widget.item.item.title,
-                            style: TextStyle(
+                        child: Text(
+                          widget.item.item.title,
+                          style: widget.isCurrentTrack
+                              ? TextStyle(
+                              color:
+                              Theme.of(context).colorScheme.secondary,
                               fontSize: 16,
-                              height: 26 / 20,
-                              fontWeight: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? FontWeight.w500
-                                  : FontWeight.w600,
-                            ),
-                          ),
+                              fontWeight: FontWeight.w400,
+                              overflow: TextOverflow.ellipsis)
+                              : null,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Padding(

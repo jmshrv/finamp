@@ -853,6 +853,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                           style: TextStyle(
                                             fontSize: 16,
                                             height: 26 / 20,
+                                            color: Colors.white,
                                             fontWeight:
                                                 Theme.of(context).brightness ==
                                                         Brightness.light
