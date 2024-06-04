@@ -22,7 +22,7 @@ class PlayerSettingsScreen extends StatelessWidget {
           PlayerScreenMinimumCoverPaddingEditor(),
           SuppressPlayerPaddingSwitch(),
           PrioritizeCoverSwitch(),
-          HideQueueButtonSwitch(),
+          hidePlayerBottomActionsSwitch(),
         ],
       ),
     );
@@ -59,26 +59,26 @@ class SuppressPlayerPaddingSwitch extends StatelessWidget {
   }
 }
 
-class HideQueueButtonSwitch extends StatelessWidget {
-  const HideQueueButtonSwitch({super.key});
+class hidePlayerBottomActionsSwitch extends StatelessWidget {
+  const hidePlayerBottomActionsSwitch({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool? hideQueue = box.get("FinampSettings")?.hideQueueButton;
+        bool? hideQueue = box.get("FinampSettings")?.hidePlayerBottomActions;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.hideQueueButton),
-          subtitle: Text(AppLocalizations.of(context)!.hideQueueButtonSubtitle),
+          title: Text(AppLocalizations.of(context)!.hidePlayerBottomActions),
+          subtitle: Text(AppLocalizations.of(context)!.hidePlayerBottomActionsSubtitle),
           value: hideQueue ?? false,
           onChanged: hideQueue == null
               ? null
               : (value) {
                   FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
-                  finampSettingsTemp.hideQueueButton = value;
+                  finampSettingsTemp.hidePlayerBottomActions = value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );

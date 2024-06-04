@@ -105,23 +105,20 @@ class AlbumImage extends ConsumerWidget {
             }
           }
 
-          var image = Center(
-            // This Center stops the container from expanding
-            child: Container(
-              decoration: decoration,
-              child: BareAlbumImage(
-                  imageListenable: imageListenable ??
-                      albumImageProvider(AlbumImageRequest(
-                        item: item!,
-                        maxWidth: physicalWidth,
-                        maxHeight: physicalHeight,
-                      )).select((value) => (value, item?.blurHash)),
-                  imageProviderCallback: themeCallback == null
-                      ? null
-                      : (image) => themeCallback!(
-                          FinampTheme.fromImageDeferred(image, item?.blurHash)),
-                  placeholderBuilder: placeholderBuilder),
-            ),
+          var image = Container(
+            decoration: decoration,
+            child: BareAlbumImage(
+                imageListenable: imageListenable ??
+                    albumImageProvider(AlbumImageRequest(
+                      item: item!,
+                      maxWidth: physicalWidth,
+                      maxHeight: physicalHeight,
+                    )).select((value) => (value, item?.blurHash)),
+                imageProviderCallback: themeCallback == null
+                    ? null
+                    : (image) => themeCallback!(
+                        FinampTheme.fromImageDeferred(image, item?.blurHash)),
+                placeholderBuilder: placeholderBuilder),
           );
           return disabled
               ? Opacity(

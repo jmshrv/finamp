@@ -198,14 +198,14 @@ class _PlayerScreenContent extends ConsumerWidget {
         } else if (direction == SwipeDirection.up) {
           // This should never actually be called until widget finishes build and controller is initialized
           if (!FinampSettingsHelper.finampSettings.disableGesture ||
-              !controller.shouldShow(PlayerHideable.queueButton)) {
+              !controller.shouldShow(PlayerHideable.bottomActions)) {
             showQueueBottomSheet(context);
           }
         }
       },
       onHorizontalSwipe: (direction) {
         if (direction == SwipeDirection.left && isLyricsAvailable) {
-          if (!FinampSettingsHelper.finampSettings.disableGesture) {
+          if (!FinampSettingsHelper.finampSettings.disableGesture || !controller.shouldShow(PlayerHideable.bottomActions)) {
             Navigator.of(context).push(_buildSlideRouteTransition(
                 playerScreen, const LyricsScreen(),
                 routeSettings:
@@ -286,10 +286,10 @@ class _PlayerScreenContent extends ConsumerWidget {
                             const Spacer(flex: 4),
                             ControlArea(controller),
                             if (controller
-                                .shouldShow(PlayerHideable.queueButton))
+                                .shouldShow(PlayerHideable.bottomActions))
                               const Spacer(flex: 10),
                             if (controller
-                                .shouldShow(PlayerHideable.queueButton))
+                                .shouldShow(PlayerHideable.bottomActions))
                               _buildBottomActions(context, controller),
                             const Spacer(
                               flex: 4,
@@ -319,7 +319,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                             SongNameContent(controller),
                             ControlArea(controller),
                             if (controller
-                                .shouldShow(PlayerHideable.queueButton))
+                                .shouldShow(PlayerHideable.bottomActions))
                               _buildBottomActions(
                                 context,
                                 controller,
@@ -327,7 +327,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                                 isLyricsAvailable: isLyricsAvailable,
                               ),
                             if (!controller
-                                .shouldShow(PlayerHideable.queueButton))
+                                .shouldShow(PlayerHideable.bottomActions))
                               const SizedBox(
                                 height: 5,
                               )
@@ -438,7 +438,7 @@ class _PlayerScreenContent extends ConsumerWidget {
 
 enum PlayerHideable {
   bigPlayButton(14, 14, 1),
-  queueButton(0, 27, 2),
+  bottomActions(0, 27, 2),
   progressSlider(0, 14, 4),
   twoLineTitle(0, 27, 3),
   features(0, 20, 3),
@@ -467,7 +467,7 @@ class PlayerHideableController {
   final verticalHideOrder = [
     PlayerHideable.controlsPaddingBig,
     PlayerHideable.bigPlayButton,
-    PlayerHideable.queueButton,
+    PlayerHideable.bottomActions,
     PlayerHideable.controlsPaddingSmall,
     PlayerHideable.features,
     PlayerHideable.twoLineTitle,
@@ -601,8 +601,8 @@ class PlayerHideableController {
     _album = null;
     _useLandscape = null;
     _visible = List.from(PlayerHideable.values);
-    if (FinampSettingsHelper.finampSettings.hideQueueButton) {
-      _visible.remove(PlayerHideable.queueButton);
+    if (FinampSettingsHelper.finampSettings.hidePlayerBottomActions) {
+      _visible.remove(PlayerHideable.bottomActions);
     }
     if (FinampSettingsHelper.finampSettings.suppressPlayerPadding) {
       _visible.remove(PlayerHideable.controlsPaddingSmall);

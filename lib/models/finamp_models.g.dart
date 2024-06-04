@@ -157,7 +157,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       enableVibration: fields[47] == null ? true : fields[47] as bool,
       prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
       suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
-      hideQueueButton: fields[51] == null ? false : fields[51] as bool,
+      hidePlayerBottomActions: fields[51] == null ? false : fields[51] as bool,
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : fields[53] as int,
@@ -284,7 +284,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(50)
       ..write(obj.suppressPlayerPadding)
       ..writeByte(51)
-      ..write(obj.hideQueueButton)
+      ..write(obj.hidePlayerBottomActions)
       ..writeByte(52)
       ..write(obj.reportQueueToServer)
       ..writeByte(53)

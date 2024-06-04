@@ -98,7 +98,7 @@ const _defaultSplitScreenPlayerWidth = 400.0;
 const _enableVibration = true;
 const _prioritizeCoverFactor = 8.0;
 const _suppressPlayerPadding = false;
-const _hideQueueButton = false;
+const _hidePlayerBottomActions = false;
 const _reportQueueToServerDefault = false;
 const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 const _showArtistChipImage = true;
@@ -174,7 +174,7 @@ class FinampSettings {
     this.enableVibration = _enableVibration,
     this.prioritizeCoverFactor = _prioritizeCoverFactor,
     this.suppressPlayerPadding = _suppressPlayerPadding,
-    this.hideQueueButton = _hideQueueButton,
+    this.hidePlayerBottomActions = _hidePlayerBottomActions,
     this.reportQueueToServer = _reportQueueToServerDefault,
     this.periodicPlaybackSessionUpdateFrequencySeconds =
         _periodicPlaybackSessionUpdateFrequencySecondsDefault,
@@ -350,8 +350,8 @@ class FinampSettings {
   @HiveField(50, defaultValue: _suppressPlayerPadding)
   bool suppressPlayerPadding;
 
-  @HiveField(51, defaultValue: _hideQueueButton)
-  bool hideQueueButton;
+  @HiveField(51, defaultValue: _hidePlayerBottomActions)
+  bool hidePlayerBottomActions;
 
   @HiveField(52, defaultValue: _reportQueueToServerDefault)
   bool reportQueueToServer;
