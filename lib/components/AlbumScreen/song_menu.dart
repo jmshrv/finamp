@@ -10,6 +10,7 @@ import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/metadata_provider.dart';
+import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
@@ -836,20 +837,18 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        widget.item.name ??
+                      OneLineMarqueeHelper(
+                        key: ValueKey(
+                            widget.item.id),
+                        text: widget.item.name ??
                             AppLocalizations.of(context)!.unknownName,
-                        textAlign: TextAlign.start,
                         style: TextStyle(
                           fontSize: widget.condensed ? 16 : 18,
                           height: 1.2,
                           color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
+                          Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                        maxLines: 2,
                       ),
                       Padding(
                         padding: widget.condensed
