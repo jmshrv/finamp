@@ -2,7 +2,7 @@
 <component type="desktop-application">
   <id>com.unicornsonlsd.finamp</id>
   <name>Finamp</name>
-  <summary>An open source Jellyfin music player</summary>
+  <summary>Open source Jellyfin music player</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MPL-2.0</project_license>
   <recommends>
