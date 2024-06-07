@@ -58,6 +58,29 @@
         </p>
       </description>
     </release>
+    <release version="0.9.8-beta" date="2024-06-08">
+    <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.8-beta</url>
+      <description>
+        <p>
+          Bug Fixes:
+        </p>
+        <ul>
+          <li>Fixed download issues introduced with 0.9.7. You might have to run a download repair.</li>
+          <li>Fixed playlist download for mixed-media playlists</li>
+        </ul>
+        <p>
+          New Features:
+        </p>
+        <ul>
+          <li>Android Auto (and Automotive) support!</li>
+          <li>Like button in media notification (on Android)</li>
+          <li>Lyrics customization settings</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
   </releases>
   <content_rating type="oars-1.1" />
   <update_contact>nne66vse2@mozmail.com</update_contact>
