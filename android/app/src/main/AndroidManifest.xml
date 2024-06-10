@@ -61,8 +61,12 @@
     </receiver>
 
     <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
+      android:name="com.google.android.gms.car.application"
+      android:resource="@xml/automotive_app_desc" />
+
+    <!-- <meta-data
+      android:name="com.android.automotive"
+      android:resource="@xml/automotive_app_desc" /> -->
 
     <meta-data
       android:name="io.flutter.embedding.android.EnableImpeller"
@@ -73,9 +77,9 @@
     <meta-data android:name="flutterEmbedding" android:value="2" />
   </application>
 
-  <uses-feature
+  <!-- <uses-feature
           android:name="android.hardware.type.automotive"
-          android:required="true" />
+          android:required="true" /> -->
   <uses-feature
           android:name="android.hardware.wifi"
           android:required="false" />
