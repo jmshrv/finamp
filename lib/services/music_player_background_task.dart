@@ -532,7 +532,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       // so we try to instead use the title provided in the extras right after the voice search, and just search for that
       if (query.contains(previousItemTitle)) {
         // if the the title is fully contained in the query, we can assume that the user clicked on the "Search Results" button on the player screen
-        currentSearchQuery.query = previousItemTitle;
+        currentSearchQuery.rawQuery = previousItemTitle;
         currentSearchQuery.extras = _androidAutoHelper.lastSearchQuery?.extras;
       } else {
         // otherwise, we assume they're searching for something else, and discard the previous search query

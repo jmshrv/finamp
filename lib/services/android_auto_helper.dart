@@ -16,10 +16,10 @@ import 'queue_service.dart';
 import 'audio_service_helper.dart';
 
 class AndroidAutoSearchQuery {
-  String query;
+  String rawQuery;
   Map<String, dynamic>? extras;
 
-  AndroidAutoSearchQuery(this.query, this.extras);
+  AndroidAutoSearchQuery(this.rawQuery, this.extras);
   
 }
 
@@ -240,34 +240,36 @@ class AndroidAutoHelper {
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
     final queueService = GetIt.instance<QueueService>();
 
-    if (searchQuery.query.isEmpty) {
+    if (searchQuery.rawQuery.isEmpty) {
       return await shuffleAllSongs();
     }
     
     BaseItemDtoType? itemType = TabContentType.songs.itemType;
-    String? alternativeQuery;
+    String? enhancedQuery;
     bool searchForPlaylists = false;
 
     if (searchQuery.extras?["android.intent.extra.album"] != null && searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] != null) {
       // if all metadata is provided, search for song
       itemType = TabContentType.songs.itemType;
-      alternativeQuery = searchQuery.extras?["android.intent.extra.title"];
+      enhancedQuery = searchQuery.extras?["android.intent.extra.title"];
     } else if (searchQuery.extras?["android.intent.extra.album"] != null && searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only album is provided, search for album
       itemType = TabContentType.albums.itemType;
-      alternativeQuery = searchQuery.extras?["android.intent.extra.album"];
+      enhancedQuery = searchQuery.extras?["android.intent.extra.album"];
     } else if (searchQuery.extras?["android.intent.extra.artist"] != null && searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only artist is provided, search for artist
       itemType = TabContentType.artists.itemType;
-      alternativeQuery = searchQuery.extras?["android.intent.extra.artist"];
+      enhancedQuery = searchQuery.extras?["android.intent.extra.artist"];
     } else {
       // if no metadata is provided, search for tracks *and* playlists, preferring playlists
       searchForPlaylists = true;
     }
 
-    _androidAutoHelperLogger.info("Searching for: $itemType that matches query '${alternativeQuery ?? searchQuery.query}'${searchForPlaylists ? ", including (and preferring) playlists" : ""}");
+    _androidAutoHelperLogger.info("Searching for: $itemType that matches query '${enhancedQuery ?? searchQuery.rawQuery}'${searchForPlaylists ? ", including (and preferring) playlists" : ""}");
 
-    final searchTerm = alternativeQuery?.trim() ?? searchQuery.query.trim();
+    final searchTerm = searchForPlaylists ? 
+      searchQuery.rawQuery.trim() : // always use the raw query for searching playlists
+      enhancedQuery?.trim() ?? searchQuery.rawQuery.trim();
 
     if (searchForPlaylists) {
       try {
@@ -320,7 +322,7 @@ class AndroidAutoHelper {
           );
 
         } else {
-          _androidAutoHelperLogger.warning("No playlists found for query: ${alternativeQuery ?? searchQuery.query}");
+          _androidAutoHelperLogger.warning("No playlists found for query: ${enhancedQuery ?? searchQuery.rawQuery}");
         }
 
       } catch (e) {
@@ -330,24 +332,28 @@ class AndroidAutoHelper {
 
     try {
       
+      // first try with any metadata we could get (could be corrected based on metadata or localizations, or just the raw query)
       List<BaseItemDto>? searchResult = await _getResults(
         searchTerm: searchTerm,
         itemTypes: [itemType],
       );
 
       if (searchResult == null || searchResult.isEmpty) {
+        _androidAutoHelperLogger.warning("No search results found for search term: $searchTerm)");
 
-        if (alternativeQuery != null) {
-          // try again with metadata provided by android (could be corrected based on metadata or localizations)
+        if (enhancedQuery != null) {
           
+          // if we got additional metadata, we already tried searching with it
+          // now try searching with the raw query
           searchResult = await _getResults(
-            searchTerm: alternativeQuery.trim(),
+            searchTerm: searchQuery.rawQuery.trim(),
             itemTypes: [itemType],
           );
 
         }
         
         if (searchResult == null || searchResult.isEmpty) {
+          _androidAutoHelperLogger.warning("No search results found for search term (raw query): ${searchQuery.rawQuery}");
           return;
         }
       }
@@ -572,7 +578,7 @@ class AndroidAutoHelper {
     List<BaseItemDto>? searchResultAdjustedQuery;
     try {
       searchResultExactQuery = await _getResults(
-        searchTerm: searchQuery.query.trim(),
+        searchTerm: searchQuery.rawQuery.trim(),
         itemTypes: [TabContentType.songs.itemType],
         limit: searchQuery.extras?["android.intent.extra.title"] != null ? (limit/2).round() : limit,
       );
@@ -603,7 +609,7 @@ class AndroidAutoHelper {
     }
 
     if (searchResult.isEmpty) {
-      _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.query} (extras: ${searchQuery.extras})");
+      _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.rawQuery} (extras: ${searchQuery.extras})");
     }
 
     int calculateMatchQuality(BaseItemDto item, AndroidAutoSearchQuery searchQuery) {
@@ -613,7 +619,7 @@ class AndroidAutoHelper {
       final wantedArtist = searchQuery.extras?["android.intent.extra.artist"]?.toString().trim();
 
       if (
-        title.toLowerCase() == searchQuery.query.toLowerCase() ||
+        title.toLowerCase() == searchQuery.rawQuery.toLowerCase() ||
         wantedArtist != null &&
         (item.albumArtists?.any((artist) => (artist.name?.isNotEmpty ?? false) && (wantedArtist?.toString().toLowerCase().contains(artist.name?.toLowerCase() ?? "") ?? false)) ?? false)
       ) {
@@ -651,7 +657,7 @@ class AndroidAutoHelper {
     List<BaseItemDto>? searchResultAdjustedQuery;
     try {
       searchResultExactQuery = await _getResults(
-        searchTerm: searchQuery.query.trim(),
+        searchTerm: searchQuery.rawQuery.trim(),
         itemTypes: [TabContentType.albums.itemType],
         limit: hasAlbumMetadata ? (limit/2).round() : limit,
       );
@@ -682,7 +688,7 @@ class AndroidAutoHelper {
     }
 
     if (searchResult.isEmpty) {
-      _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.query} (extras: ${searchQuery.extras})");
+      _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.rawQuery} (extras: ${searchQuery.extras})");
     }
 
     int calculateMatchQuality(BaseItemDto item, AndroidAutoSearchQuery searchQuery) {
@@ -692,7 +698,7 @@ class AndroidAutoHelper {
       final wantedArtist = searchQuery.extras?["android.intent.extra.artist"]?.toString().trim();
 
       if (
-        title.toLowerCase() == searchQuery.query.toLowerCase() ||
+        title.toLowerCase() == searchQuery.rawQuery.toLowerCase() ||
         wantedArtist != null &&
         (item.albumArtists?.any((artist) => (artist.name?.isNotEmpty ?? false) && (wantedArtist?.toString().toLowerCase().contains(artist.name?.toLowerCase() ?? "") ?? false)) ?? false)
       ) {
@@ -730,7 +736,7 @@ class AndroidAutoHelper {
     List<BaseItemDto>? searchResultAdjustedQuery;
     try {
       searchResultExactQuery = await _getResults(
-        searchTerm: searchQuery.query.trim(),
+        searchTerm: searchQuery.rawQuery.trim(),
         itemTypes: [TabContentType.playlists.itemType],
         limit: hasPlaylistMetadata ? (limit/2).round() : limit,
       );
@@ -761,7 +767,7 @@ class AndroidAutoHelper {
     }
 
     if (searchResult.isEmpty) {
-      _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.query} (extras: ${searchQuery.extras})");
+      _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.rawQuery} (extras: ${searchQuery.extras})");
     }
 
     int calculateMatchQuality(BaseItemDto item, AndroidAutoSearchQuery searchQuery) {
@@ -769,7 +775,7 @@ class AndroidAutoHelper {
 
       final wantedPlaylist = searchQuery.extras?["android.intent.extra.playlist"]?.toString().trim();
 
-      if (title.toLowerCase() == searchQuery.query.toLowerCase()) {
+      if (title.toLowerCase() == searchQuery.rawQuery.toLowerCase()) {
         // Title matches exactly, highest priority
         return 1;
       } else if (title == wantedPlaylist) {
@@ -804,7 +810,7 @@ class AndroidAutoHelper {
     List<BaseItemDto>? searchResultAdjustedQuery;
     try {
       searchResultExactQuery = await _getResults(
-        searchTerm: searchQuery.query.trim(),
+        searchTerm: searchQuery.rawQuery.trim(),
         itemTypes: [TabContentType.artists.itemType],
         limit: hasArtistMetadata ? (limit/2).round() : limit,
       );
@@ -835,7 +841,7 @@ class AndroidAutoHelper {
     }
 
     if (searchResult.isEmpty) {
-      _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.query} (extras: ${searchQuery.extras})");
+      _androidAutoHelperLogger.warning("No search results found for query: ${searchQuery.rawQuery} (extras: ${searchQuery.extras})");
     }
 
     int calculateMatchQuality(BaseItemDto item, AndroidAutoSearchQuery searchQuery) {
@@ -843,7 +849,7 @@ class AndroidAutoHelper {
 
       final wantedArtist = searchQuery.extras?["android.intent.extra.artist"]?.toString().trim();
 
-      if (title.toLowerCase() == searchQuery.query.toLowerCase()) {
+      if (title.toLowerCase() == searchQuery.rawQuery.toLowerCase()) {
         // Title matches exactly, highest priority
         return 1;
       } else
