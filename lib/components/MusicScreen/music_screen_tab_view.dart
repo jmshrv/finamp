@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
@@ -405,7 +405,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 );
 
           return RefreshIndicator(
-            onRefresh: () async => _refresh,
+            onRefresh: () async => _refresh(),
             child: box.get("FinampSettings")!.showFastScroller &&
                     settings.tabSortBy[widget.tabContentType] == SortBy.sortName
                 ? AlphabetList(
