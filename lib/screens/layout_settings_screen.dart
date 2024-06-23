@@ -71,6 +71,7 @@ class LayoutSettingsScreen extends StatelessWidget {
                 const ShowTextOnGridViewSelector(),
                 const UseCoverAsBackgroundToggle(),
                 const ShowArtistChipImageToggle(),
+                const ShowArtistsTopSongsSelector(),
                 const AllowSplitScreenSwitch(),
                 const HideSongArtistsIfSameAsAlbumArtistsSelector(),
                 const ShowProgressOnNowPlayingBarToggle(),
