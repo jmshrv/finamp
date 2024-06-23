@@ -46,7 +46,7 @@
     </activity>
     <provider
             android:name=".MediaItemContentProvider"
-            android:authorities="com.unicornsonlsd.finamp"
+            android:authorities="${applicationId}"
             android:exported="true" />
     <service android:name="com.ryanheise.audioservice.AudioService" android:foregroundServiceType="mediaPlayback" android:exported="true">
       <intent-filter>
