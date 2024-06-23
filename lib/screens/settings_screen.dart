@@ -39,6 +39,7 @@ class SettingsScreen extends StatelessWidget {
                   AppLocalizations.of(context)!.applicationLegalese(repoLink);
               PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
+              ThemeData theme = Theme.of(context);
               const linkStyle = TextStyle(
                 color: Colors.blue,
                 decoration: TextDecoration.underline,
@@ -62,7 +63,7 @@ class SettingsScreen extends StatelessWidget {
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: const TextStyle(color: Colors.black),
+                      style: TextStyle(color: theme.textTheme.bodyMedium!.color),
                       children: [
                         TextSpan(
                           text: localizations.finampTagline,
