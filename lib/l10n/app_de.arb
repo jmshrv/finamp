@@ -533,5 +533,7 @@
   "noMusicLibrariesBody": "Finamp konnte keine Musikbibliotheken finden. Bitte stelle sicher, dass dein Jellyfin-Server mindestens eine Bibliothek mit dem Medientyp \"Musik\" enthält.",
   "@noMusicLibrariesBody": {},
   "interactions": "Interaktionen",
-  "@interactions": {}
+  "@interactions": {},
+  "redesignBeta": "Neugestaltung der Oberfläche Beta",
+  "@redesignBeta": {}
 }

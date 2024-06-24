@@ -1,5 +1,5 @@
 {
-  "serverUrl": "服務器 URL",
+  "serverUrl": "伺服器 URL",
   "@serverUrl": {},
   "showTextOnGridViewSubtitle": "是否在網格音樂螢幕上顯示文字（標題、歌手等）。",
   "@showTextOnGridViewSubtitle": {},
@@ -13,11 +13,11 @@
       }
     }
   },
-  "internalExternalIpExplanation": "如果您希望能夠遠程訪問您的 Jellyfin 服務器，則需要使用您的外部 IP。\n\n如果您的服務器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的服務器位於反向代理後面，則可能會出現這種情況。",
+  "internalExternalIpExplanation": "如果您希望能夠遠程訪問您的 Jellyfin 伺服器，則需要使用您的外部 IP。\n\n如果您的伺服器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的伺服器位於反向代理後面，則可能會出現這種情況。",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "emptyServerUrl": "服務器 URL 不能為空",
+  "emptyServerUrl": "伺服器 URL 不能為空",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
@@ -282,7 +282,7 @@
   "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "啓用轉碼",
   "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "如果啓用，音樂流將由服務器轉碼。",
+  "enableTranscodingSubtitle": "如果啓用，音樂流將由伺服器轉碼。",
   "@enableTranscodingSubtitle": {},
   "bitrate": "位元速率",
   "@bitrate": {},
