@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
-import '../components/LayoutSettingsScreen/player_screen_minimum_cover_padding_editor.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
@@ -101,20 +100,21 @@ class KeepScreenAwakeToggle extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool? showLyricsTimestamps =
-            box.get("FinampSettings")?.keepScreenAwakeInLyrics;
+        bool? keepScreenAwakeOnLyrics =
+            box.get("FinampSettings")?.keepScreenAwakeOnLyrics;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.keepScreenAwakeInLyricsScreenTitile),
-          subtitle:
-              Text(AppLocalizations.of(context)!.keepScreenAwakeInLyricsScreenSubtitle),
-          value: keepScreenAwakeInLyrics ?? false,
-          onChanged: keepScreenAwakeInLyrics == null
+          title: Text(AppLocalizations.of(context)!
+              .keepScreenAwakeOnLyricsScreenTitile),
+          subtitle: Text(AppLocalizations.of(context)!
+              .keepScreenAwakeOnLyricsScreenSubtitle),
+          value: keepScreenAwakeOnLyrics ?? false,
+          onChanged: keepScreenAwakeOnLyrics == null
               ? null
               : (value) {
                   FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
-                  finampSettingsTemp.keepScreenAwakeInLyrics = value;
+                  finampSettingsTemp.keepScreenAwakeOnLyrics = value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );

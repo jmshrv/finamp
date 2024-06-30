@@ -32,16 +32,13 @@ import 'blurred_player_screen_background.dart';
 import 'player_screen.dart';
 
 class LyricsScreen extends ConsumerWidget {
-  const LyricsScreen({Key? key}) : super(key: key);
+  const LyricsScreen({super.key});
 
   static const routeName = "/lyrics";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageTheme = ref.watch(playerScreenThemeProvider);
-    if (FinampSettingsHelper.finampSettings.keepScreenAwakeInLyrics) {
-      WakelockPlus.enable();
-    }
 
     return ProviderScope(
         overrides: [
@@ -66,9 +63,7 @@ class LyricsScreen extends ConsumerWidget {
 }
 
 class _LyricsScreenContent extends StatefulWidget {
-  const _LyricsScreenContent({
-    super.key,
-  });
+  const _LyricsScreenContent({super.key});
 
   @override
   State<_LyricsScreenContent> createState() => _LyricsScreenContentState();
@@ -128,7 +123,7 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                       if (direction == SwipeDirection.right) {
                         if (!FinampSettingsHelper
                             .finampSettings.disableGesture) {
-                          _goBack();
+                          Navigator.of(context).pop();
                         }
                       }
                     },
@@ -138,7 +133,7 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                   onHorizontalSwipe: (direction) {
                     if (direction == SwipeDirection.right) {
                       if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                        _goBack();
+                        Navigator.of(context).pop();
                       }
                     }
                   },
@@ -177,13 +172,6 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
       ),
     );
   }
-
-  void _goBack() {
-    if (FinampSettingsHelper.finampSettings.keepScreenAwakeInLyrics) {
-      WakelockPlus.disable();
-    }
-    Navigator.of(context).pop();
-  }
 }
 
 class LyricsView extends ConsumerStatefulWidget {
@@ -202,6 +190,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
   int? previousLineIndex;
 
   bool isAutoScrollEnabled = true;
+  bool _isWakelockEnabled = false;
 
   bool _isVisible = true;
   bool _isSynchronizedLyrics = false;
@@ -240,12 +229,22 @@ class _LyricsViewState extends ConsumerState<LyricsView>
   void dispose() {
     progressStateStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
+    if (_isWakelockEnabled) {
+      WakelockPlus.disable();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
+
+    if (metadata.value!.hasLyrics &&
+        !_isWakelockEnabled &&
+        FinampSettingsHelper.finampSettings.keepScreenAwakeOnLyrics) {
+      WakelockPlus.enable();
+      _isWakelockEnabled = true;
+    }
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
@@ -292,7 +291,8 @@ class _LyricsViewState extends ConsumerState<LyricsView>
         message: "Loading lyrics...",
         icon: TablerIcons.microphone_2,
       );
-    } else if (!metadata.hasValue || metadata.value == null ||
+    } else if (!metadata.hasValue ||
+        metadata.value == null ||
         metadata.value!.hasLyrics &&
             metadata.value!.lyrics == null &&
             !metadata.isLoading) {
@@ -474,17 +474,14 @@ class _LyricLine extends ConsumerWidget {
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-        child:
-        Text.rich(
-          textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+        child: Text.rich(
+          textAlign: lyricsAlignmentToTextAlign(
+              finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
           softWrap: true,
-          TextSpan(
-            children: [
-            if (
-              line.start != null
-              && (line.text?.trim().isNotEmpty ?? false)
-              && (finampSettings?.showLyricsTimestamps ?? true)
-            )
+          TextSpan(children: [
+            if (line.start != null &&
+                (line.text?.trim().isNotEmpty ?? false) &&
+                (finampSettings?.showLyricsTimestamps ?? true))
               WidgetSpan(
                 alignment: PlaceholderAlignment.bottom,
                 child: Padding(
@@ -502,21 +499,21 @@ class _LyricLine extends ConsumerWidget {
                 ),
               ),
             TextSpan(
-                text: line.text ?? "<missing lyric line>",
-                style: TextStyle(
-                  color: lowlightLine
-                      ? Colors.grey
-                      : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontWeight: lowlightLine || !isSynchronized
-                      ? FontWeight.normal
-                      : FontWeight.w500,
-                  letterSpacing: lowlightLine || !isSynchronized
-                      ? 0.05
-                      : -0.045, // keep text width consistent across the different weights
-                  fontSize: isSynchronized ? 26 : 20,
-                  height: 1.25,
-                ),
+              text: line.text ?? "<missing lyric line>",
+              style: TextStyle(
+                color: lowlightLine
+                    ? Colors.grey
+                    : Theme.of(context).textTheme.bodyLarge!.color,
+                fontWeight: lowlightLine || !isSynchronized
+                    ? FontWeight.normal
+                    : FontWeight.w500,
+                letterSpacing: lowlightLine || !isSynchronized
+                    ? 0.05
+                    : -0.045, // keep text width consistent across the different weights
+                fontSize: isSynchronized ? 26 : 20,
+                height: 1.25,
               ),
+            ),
           ]),
         ),
       ),
