@@ -1567,7 +1567,7 @@
     "description": "Title for the setting that controls if timestamps are shown for lyrics"
   },
   "showLyricsTimestampsSubtitle": "Controls if the timestamp of each lyric line is shown in the lyrics view, if available.",
-  "@showLyricsTimestampsSubtitle" {
+  "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
   "keepScreenAwakeInLyricsScreenTitile": "Keep screen awake",
