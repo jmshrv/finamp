@@ -102,19 +102,19 @@ class KeepScreenAwakeToggle extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
         bool? showLyricsTimestamps =
-            box.get("FinampSettings")?.keepScreenAwake;
+            box.get("FinampSettings")?.keepScreenAwakeInLyrics;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.keepScreenAwakeTitle),
+          title: Text(AppLocalizations.of(context)!.keepScreenAwakeInLyricsScreenTitile),
           subtitle:
-              Text(AppLocalizations.of(context)!.keepScreenAwakeSubtitle),
-          value: keepScreenAwake ?? false,
-          onChanged: keepScreenAwake == null
+              Text(AppLocalizations.of(context)!.keepScreenAwakeInLyricsScreenSubtitle),
+          value: keepScreenAwakeInLyrics ?? false,
+          onChanged: keepScreenAwakeInLyrics == null
               ? null
               : (value) {
                   FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
-                  finampSettingsTemp.keepScreenAwake = value;
+                  finampSettingsTemp.keepScreenAwakeInLyrics = value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );
