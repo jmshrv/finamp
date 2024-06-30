@@ -21,6 +21,7 @@ class LyricsSettingsScreen extends StatelessWidget {
         children: const [
           ShowLyricsTimestampsToggle(),
           LyricsAlignmentSelector(),
+          KeepScreenAwakeToggle(),
         ],
       ),
     );
@@ -92,3 +93,32 @@ class LyricsAlignmentSelector extends StatelessWidget {
   }
 }
 
+class KeepScreenAwakeToggle extends StatelessWidget {
+  const KeepScreenAwakeToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? showLyricsTimestamps =
+            box.get("FinampSettings")?.keepScreenAwake;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.keepScreenAwakeTitle),
+          subtitle:
+              Text(AppLocalizations.of(context)!.keepScreenAwakeSubtitle),
+          value: keepScreenAwake ?? false,
+          onChanged: keepScreenAwake == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.keepScreenAwake = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}
