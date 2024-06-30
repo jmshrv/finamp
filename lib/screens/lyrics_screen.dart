@@ -19,6 +19,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
@@ -38,6 +39,9 @@ class LyricsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageTheme = ref.watch(playerScreenThemeProvider);
+    if (FinampSettingsHelper.finampSettings.keepScreenAwakeInLyrics) {
+      WakelockPlus.enable();
+    }
 
     return ProviderScope(
         overrides: [
@@ -124,7 +128,7 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                       if (direction == SwipeDirection.right) {
                         if (!FinampSettingsHelper
                             .finampSettings.disableGesture) {
-                          Navigator.of(context).pop();
+                          _goBack();
                         }
                       }
                     },
@@ -134,7 +138,7 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                   onHorizontalSwipe: (direction) {
                     if (direction == SwipeDirection.right) {
                       if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                        Navigator.of(context).pop();
+                        _goBack();
                       }
                     }
                   },
@@ -172,6 +176,13 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
         ],
       ),
     );
+  }
+
+  void _goBack() {
+    if (FinampSettingsHelper.finampSettings.keepScreenAwakeInLyrics) {
+      WakelockPlus.disable();
+    }
+    Navigator.of(context).pop();
   }
 }
 
