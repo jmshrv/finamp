@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
-import '../components/LayoutSettingsScreen/player_screen_minimum_cover_padding_editor.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
@@ -21,6 +20,7 @@ class LyricsSettingsScreen extends StatelessWidget {
         children: const [
           ShowLyricsTimestampsToggle(),
           LyricsAlignmentSelector(),
+          KeepScreenAwakeToggle(),
         ],
       ),
     );
@@ -92,3 +92,33 @@ class LyricsAlignmentSelector extends StatelessWidget {
   }
 }
 
+class KeepScreenAwakeToggle extends StatelessWidget {
+  const KeepScreenAwakeToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? keepScreenAwakeOnLyrics =
+            box.get("FinampSettings")?.keepScreenAwakeOnLyrics;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!
+              .keepScreenAwakeOnLyricsScreenTitile),
+          subtitle: Text(AppLocalizations.of(context)!
+              .keepScreenAwakeOnLyricsScreenSubtitle),
+          value: keepScreenAwakeOnLyrics ?? false,
+          onChanged: keepScreenAwakeOnLyrics == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.keepScreenAwakeOnLyrics = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}

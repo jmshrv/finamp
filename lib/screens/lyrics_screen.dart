@@ -19,6 +19,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
@@ -31,7 +32,7 @@ import 'blurred_player_screen_background.dart';
 import 'player_screen.dart';
 
 class LyricsScreen extends ConsumerWidget {
-  const LyricsScreen({Key? key}) : super(key: key);
+  const LyricsScreen({super.key});
 
   static const routeName = "/lyrics";
 
@@ -62,9 +63,7 @@ class LyricsScreen extends ConsumerWidget {
 }
 
 class _LyricsScreenContent extends StatefulWidget {
-  const _LyricsScreenContent({
-    super.key,
-  });
+  const _LyricsScreenContent({super.key});
 
   @override
   State<_LyricsScreenContent> createState() => _LyricsScreenContentState();
@@ -191,6 +190,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
   int? previousLineIndex;
 
   bool isAutoScrollEnabled = true;
+  bool _isWakelockEnabled = false;
 
   bool _isVisible = true;
   bool _isSynchronizedLyrics = false;
@@ -229,12 +229,22 @@ class _LyricsViewState extends ConsumerState<LyricsView>
   void dispose() {
     progressStateStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
+    if (_isWakelockEnabled) {
+      WakelockPlus.disable();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
+
+    if (metadata.value!.hasLyrics &&
+        !_isWakelockEnabled &&
+        FinampSettingsHelper.finampSettings.keepScreenAwakeOnLyrics) {
+      WakelockPlus.enable();
+      _isWakelockEnabled = true;
+    }
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
@@ -281,7 +291,8 @@ class _LyricsViewState extends ConsumerState<LyricsView>
         message: "Loading lyrics...",
         icon: TablerIcons.microphone_2,
       );
-    } else if (!metadata.hasValue || metadata.value == null ||
+    } else if (!metadata.hasValue ||
+        metadata.value == null ||
         metadata.value!.hasLyrics &&
             metadata.value!.lyrics == null &&
             !metadata.isLoading) {
@@ -463,17 +474,14 @@ class _LyricLine extends ConsumerWidget {
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-        child:
-        Text.rich(
-          textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+        child: Text.rich(
+          textAlign: lyricsAlignmentToTextAlign(
+              finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
           softWrap: true,
-          TextSpan(
-            children: [
-            if (
-              line.start != null
-              && (line.text?.trim().isNotEmpty ?? false)
-              && (finampSettings?.showLyricsTimestamps ?? true)
-            )
+          TextSpan(children: [
+            if (line.start != null &&
+                (line.text?.trim().isNotEmpty ?? false) &&
+                (finampSettings?.showLyricsTimestamps ?? true))
               WidgetSpan(
                 alignment: PlaceholderAlignment.bottom,
                 child: Padding(
@@ -491,21 +499,21 @@ class _LyricLine extends ConsumerWidget {
                 ),
               ),
             TextSpan(
-                text: line.text ?? "<missing lyric line>",
-                style: TextStyle(
-                  color: lowlightLine
-                      ? Colors.grey
-                      : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontWeight: lowlightLine || !isSynchronized
-                      ? FontWeight.normal
-                      : FontWeight.w500,
-                  letterSpacing: lowlightLine || !isSynchronized
-                      ? 0.05
-                      : -0.045, // keep text width consistent across the different weights
-                  fontSize: isSynchronized ? 26 : 20,
-                  height: 1.25,
-                ),
+              text: line.text ?? "<missing lyric line>",
+              style: TextStyle(
+                color: lowlightLine
+                    ? Colors.grey
+                    : Theme.of(context).textTheme.bodyLarge!.color,
+                fontWeight: lowlightLine || !isSynchronized
+                    ? FontWeight.normal
+                    : FontWeight.w500,
+                letterSpacing: lowlightLine || !isSynchronized
+                    ? 0.05
+                    : -0.045, // keep text width consistent across the different weights
+                fontSize: isSynchronized ? 26 : 20,
+                height: 1.25,
               ),
+            ),
           ]),
         ),
       ),

@@ -1570,6 +1570,14 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
+  "keepScreenAwakeOnLyricsScreenTitile": "Keep screen awake",
+  "@keepScreenAwakeOnLyricsScreenTitile": {
+    "description": "Title for the setting that controls if the screen should be prevented from sleeping"
+  },
+  "keepScreenAwakeOnLyricsScreenSubtitle": "Prevents the phone from sleeping if there are lyrics showing",
+  "@keepScreenAwakeOnLyricsScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the screen should be prevented from sleeping"
+  },
   "showStopButtonOnMediaNotificationTitle": "Show stop button on media notification",
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."

@@ -107,6 +107,7 @@ const _showProgressOnNowPlayingBarDefault = true;
 const _startInstantMixForIndividualTracksDefault = true;
 const _showLyricsTimestampsDefault = true;
 const _lyricsAlignmentDefault = LyricsAlignment.start;
+const _keepScreenAwakeOnLyricsDefault = false;
 const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
 
@@ -184,6 +185,7 @@ class FinampSettings {
     this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
     this.showLyricsTimestamps = _showLyricsTimestampsDefault,
     this.lyricsAlignment = _lyricsAlignmentDefault,
+    this.keepScreenAwakeOnLyrics = _keepScreenAwakeOnLyricsDefault,
     this.showStopButtonOnMediaNotification = _showStopButtonOnMediaNotificationDefault,
     this.showSeekControlsOnMediaNotification = _showSeekControlsOnMediaNotificationDefault,
   });
@@ -410,6 +412,9 @@ class FinampSettings {
 
   @HiveField(69, defaultValue: _showSeekControlsOnMediaNotificationDefault)
   bool showSeekControlsOnMediaNotification;
+
+  @HiveField(70, defaultValue: _keepScreenAwakeOnLyricsDefault)
+  bool keepScreenAwakeOnLyrics;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

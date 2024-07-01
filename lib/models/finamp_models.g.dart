@@ -171,6 +171,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       lyricsAlignment: fields[67] == null
           ? LyricsAlignment.start
           : fields[67] as LyricsAlignment,
+      keepScreenAwakeOnLyrics: fields[70] == null ? false : fields[70] as bool,
       showStopButtonOnMediaNotification:
           fields[68] == null ? false : fields[68] as bool,
       showSeekControlsOnMediaNotification:
@@ -184,7 +185,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(68)
+      ..writeByte(69)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -320,7 +321,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(68)
       ..write(obj.showStopButtonOnMediaNotification)
       ..writeByte(69)
-      ..write(obj.showSeekControlsOnMediaNotification);
+      ..write(obj.showSeekControlsOnMediaNotification)
+      ..writeByte(70)
+      ..write(obj.keepScreenAwakeOnLyrics);
   }
 
   @override
