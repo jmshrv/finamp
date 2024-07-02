@@ -15,10 +15,10 @@ class MediaItemContentProvider : ContentProvider() {
     private lateinit var memoryCache : LruCache<String, ByteArray>
 
     override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
-        if (uri.fragment != null) {
+        if (uri.encodedFragment != null) {
             // we store the original scheme://host in fragment since it should be unused
-            val origin = Uri.parse(uri.fragment)
-            val fixedUri = uri.buildUpon().fragment(null).scheme(origin.scheme).authority(origin.authority).toString()
+            val origin = Uri.parse(uri.encodedFragment)
+            val fixedUri = uri.buildUpon().fragment(null).scheme(origin.scheme).encodedAuthority(origin.encodedAuthority).toString()
 
             // check if we already cached the image
             val bytes = memoryCache.get(fixedUri)
