@@ -5,11 +5,11 @@
   "@error": {},
   "serverUrl": "サーバー URL",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "Jellyfinサーバーをリモートでアクセスするには、外部 IP を指定して下さい。\n\nサーバーが HTTP ポート(80／443)で動いてる場合はポートを指定する必要はありません。サーバーがリバースプロクシの後段にある場合これが一般的です。",
+  "internalExternalIpExplanation": "リモートからJellyfinサーバーにアクセスするには外部IPを指定する必要があります。\n\nサーバーがHTTPポート(80/443)で動いている場合にはポートは不要です。サーバーがリバースプロキシの後ろにある場合はこれが一般的です。",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "emptyServerUrl": "サーバー URL は空であってはなりません",
+  "emptyServerUrl": "サーバーURLを入力してください",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
@@ -61,11 +61,11 @@
   "@startMix": {},
   "favourites": "お気に入り",
   "@favourites": {},
-  "startMixNoSongsArtist": "アーティスト名をロングプレスして、ミックス開始前にミックスビルダーに追加や外すことができます",
+  "startMixNoSongsArtist": "アーティスト名を長押しすることでミックス対象に追加または削除できます",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "アーティスト名をロングプレスして、ミックス開始前にミックスビルダーに追加や外すことができます",
+  "startMixNoSongsAlbum": "アルバムを長押しすることでミックス対象に追加または削除できます",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -417,7 +417,7 @@
   "@bufferDuration": {},
   "language": "言語",
   "@language": {},
-  "finamp": "フィナンプ",
+  "finamp": "Finamp",
   "@finamp": {},
   "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
   "@downloadedItemsImagesCount": {
@@ -435,7 +435,7 @@
   },
   "areYouSure": "よろしいですか？",
   "@areYouSure": {},
-  "appDirectory": "アプリディレクトリ",
+  "appDirectory": "Appのディレクトリ",
   "@appDirectory": {},
   "shuffleAllSongCount": "曲がシャッフル化される回数",
   "@shuffleAllSongCount": {},
@@ -453,7 +453,7 @@
       }
     }
   },
-  "customLocation": "カスタム場所",
+  "customLocation": "指定の場所",
   "@customLocation": {},
   "refresh": "リフレッシュ",
   "@refresh": {},
@@ -464,5 +464,64 @@
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
   "resetTabs": "タブリセット",
-  "@resetTabs": {}
+  "@resetTabs": {},
+  "viewTypeSubtitle": "ミュージック画面の表示形式",
+  "@viewTypeSubtitle": {},
+  "deleteDownloadsPrompt": "このデバイスから{itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}'を削除してもよろしいですか?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "insertedIntoQueue": "キューに挿入されました。",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "responseError401": "{error} Status code {statusCode}. ユーザー名/パスワードが間違っているか、クライアントがログインしていません。",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "noMusicLibrariesBody": "Finamp は音楽ライブラリを見つけることができませんでした。Jellyfin サーバーに、コンテンツ タイプが「音楽」に設定されているライブラリが少なくとも 1 つ含まれていることを確認してください。",
+  "@noMusicLibrariesBody": {},
+  "swipeInsertQueueNextSubtitle": "曲リストでスワイプしたときに、曲を最後に追加するのではなく、キューの次の項目として挿入できるようにします。",
+  "@swipeInsertQueueNextSubtitle": {},
+  "deleteDownloadsAbortButtonText": "キャンセル",
+  "@deleteDownloadsAbortButtonText": {},
+  "showUncensoredLogMessage": "このログはあなたのログイン情報を含みます。表示しますか？",
+  "@showUncensoredLogMessage": {},
+  "syncDownloadedPlaylists": "ダウンロードしたプレイリストの同期",
+  "@syncDownloadedPlaylists": {},
+  "deleteDownloadsConfirmButtonText": "削除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "applicationLegalese": "Mozilla Public License 2.0 でライセンスされています。ソース コードは以下から入手できます:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "customLocationsBuggy": "カスタムの場所は、権限の問題により、非常にバグが多くなります。これを修正する方法を考えていますが、今のところは使用しないことをお勧めします。",
+  "@customLocationsBuggy": {},
+  "showFastScroller": "高速スクロールを表示",
+  "@showFastScroller": {},
+  "swipeInsertQueueNext": "スワイプした曲を再生する",
+  "@swipeInsertQueueNext": {},
+  "noMusicLibrariesTitle": "音楽ライブラリなし",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  }
 }
