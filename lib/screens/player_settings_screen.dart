@@ -23,7 +23,6 @@ class PlayerSettingsScreen extends StatelessWidget {
           SuppressPlayerPaddingSwitch(),
           PrioritizeCoverSwitch(),
           HideQueueButtonSwitch(),
-          OneLineMarqueeTextSwitch(),
         ],
       ),
     );
@@ -112,33 +111,6 @@ class PrioritizeCoverSwitch extends StatelessWidget {
                   finampSettingsTemp.prioritizeCoverFactor = value ? 3.0 : 8.0;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
-        );
-      },
-    );
-  }
-}
-
-class OneLineMarqueeTextSwitch extends StatelessWidget {
-  const OneLineMarqueeTextSwitch({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? oneLineMarquee = box.get("FinampSettings")?.oneLineMarqueeTextButton;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.oneLineMarqueeTextButton),
-          subtitle: Text(AppLocalizations.of(context)!.oneLineMarqueeTextButtonSubtitle),
-          value: oneLineMarquee ?? false,
-          onChanged: oneLineMarquee == null
-              ? null
-              : (value) {
-            FinampSettings finampSettingsTemp = box.get("FinampSettings")!;
-            finampSettingsTemp.oneLineMarqueeTextButton = value;
-            box.put("FinampSettings", finampSettingsTemp);
-          },
         );
       },
     );

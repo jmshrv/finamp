@@ -1466,7 +1466,7 @@
   "@enableVibrationSubtitle": {},
   "hideQueueButton":  "Hide queue button",
   "hideQueueButtonSubtitle":  "Hide the queue button on the player screen. Swipe up to access the queue.",
-  "oneLineMarqueeTextButton":  "One line track title",
+  "oneLineMarqueeTextButton":  "Allow one line break before using scrolling text",
   "oneLineMarqueeTextButtonSubtitle":  "Sets song title to one line marquee text in player screen. Default 2",
   "prioritizePlayerCover":  "Prioritize album cover",
   "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen. Non-critical controls will be hidden more aggressively at small screen sizes.",
