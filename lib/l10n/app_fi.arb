@@ -294,5 +294,70 @@
   "noMusicLibrariesTitle": "Ei musiikkikirjastoja",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "downloadedItemsCount": "{count,plural,=1{{count} item} muu{{count} items}}",
+  "@downloadedItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadCount": "{count,plural, =1{{count} download} muu{{count} downloads}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
+    "placeholders": {
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 downloads"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
+      }
+    }
+  },
+  "downloadedImagesCount": "{count,plural,=1{{count} image} muu{{count} images}}",
+  "@downloadedImagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "showCoverAsPlayerBackground": "Näytä sumennettu kansikuva soittimen taustakuvana",
+  "@showCoverAsPlayerBackground": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Piilota kappaleen artistit, jos samat kuin albumin artistit",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "insertedIntoQueue": "Lisätty jonoon.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "responseError": "{error} Tilakoodi {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "showUncensoredLogMessage": "Tämä loki sisältää kirjautumistietosi. Näytä?",
+  "@showUncensoredLogMessage": {},
+  "directoryMustBeEmpty": "Hakemiston pitää olla tyhjä",
+  "@directoryMustBeEmpty": {},
+  "selectDirectory": "Valitse hakemisto",
+  "@selectDirectory": {}
 }
