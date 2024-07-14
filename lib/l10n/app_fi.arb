@@ -359,5 +359,13 @@
   "directoryMustBeEmpty": "Hakemiston pitää olla tyhjä",
   "@directoryMustBeEmpty": {},
   "selectDirectory": "Valitse hakemisto",
-  "@selectDirectory": {}
+  "@selectDirectory": {},
+  "songCount": "{count,plural,=1{{count} Song} muu{{count} Kappaleita}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
