@@ -1046,7 +1046,7 @@ class QueueService {
         artUri = Uri(scheme: "content", host: contentProviderPackageName, path: path_helper.join(applicationSupportDirectory.absolute.path, Assets.images.albumWhite.path));
       } else {
         // store the origin in fragment since it should be unused
-        artUri = artUri.replace(scheme: "content", host: contentProviderPackageName, fragment: ["http", "https"].contains(artUri.scheme) ? artUri.origin : null);
+        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: artUri.path, fragment: ["http", "https"].contains(artUri.scheme) ? artUri.origin : null);
       }
     }
 
