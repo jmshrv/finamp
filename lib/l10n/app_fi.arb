@@ -367,5 +367,37 @@
         "type": "int"
       }
     }
-  }
+  },
+  "sortBy": "Järjestä",
+  "@sortBy": {},
+  "premiereDate": "Ensiesityspäivä",
+  "@premiereDate": {},
+  "interactions": "Vuorovaikutukset",
+  "@interactions": {},
+  "audioService": "Äänipalvelu",
+  "@audioService": {},
+  "bitrate": "Bitrate",
+  "@bitrate": {},
+  "bitrateSubtitle": "Suurempi bitrate antaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
+  "@bitrateSubtitle": {},
+  "customLocation": "Mukautettu sijainti",
+  "@customLocation": {},
+  "appDirectory": "Sovelluksen hakemisto",
+  "@appDirectory": {},
+  "addDownloadLocation": "Lisää latauksen hakemisto",
+  "@addDownloadLocation": {},
+  "pathReturnSlashErrorMessage": "Polkuja jotka palauttavat \"/\" ei voi käyttää",
+  "@pathReturnSlashErrorMessage": {},
+  "disableGesture": "Poista eleet käytöstä",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Poistaa eleet käytöstä.",
+  "@disableGestureSubtitle": {},
+  "invalidNumber": "Virheellinen numero",
+  "@invalidNumber": {},
+  "noItem": "Ei kohdetta",
+  "@noItem": {},
+  "streaming": "SUORATOISTAA",
+  "@streaming": {},
+  "transcode": "TRANSKOODI",
+  "@transcode": {}
 }
