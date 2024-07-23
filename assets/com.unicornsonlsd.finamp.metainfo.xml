@@ -39,6 +39,23 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
+    <release version="0.9.9-beta" date="2024-07-21">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.9-beta</url>
+      <description>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Improve Android Auto search logic</li>
+          <li>Fix refresh on music screen</li>
+          <li>Fix artist top song settings item not showing</li>
+          <li>Fix Chinese font rendering on Windows</li>
+          <li>Fix invisible text in about dialog</li>
+          <li>Fix graphical glitches on some Android phones (disable Impeller)</li>
+          <li>Fix Android Auto album art when the server uses a custom port</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.9.8-beta" date="2024-06-13">
     <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.8-beta</url>
       <description>
