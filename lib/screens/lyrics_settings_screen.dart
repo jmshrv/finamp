@@ -20,6 +20,7 @@ class LyricsSettingsScreen extends StatelessWidget {
       body: ListView(
         children: const [
           ShowLyricsTimestampsToggle(),
+          ShowLyricsScreenAlbumPreludeToggle(),
           LyricsAlignmentSelector(),
           LyricsFontSizeSelector(),
         ],
@@ -128,3 +129,33 @@ class LyricsFontSizeSelector extends StatelessWidget {
   }
 }
 
+
+class ShowLyricsScreenAlbumPreludeToggle extends StatelessWidget {
+  const ShowLyricsScreenAlbumPreludeToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? showLyricsScreenAlbumPrelude =
+            box.get("FinampSettings")?.showLyricsScreenAlbumPrelude;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle),
+          subtitle:
+              Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeSubtitle),
+          value: showLyricsScreenAlbumPrelude ?? false,
+          onChanged: showLyricsScreenAlbumPrelude == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.showLyricsScreenAlbumPrelude = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}

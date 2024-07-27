@@ -234,9 +234,11 @@ class _LyricsViewState extends ConsumerState<LyricsView>
 
   @override
   Widget build(BuildContext context) {
-    final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+    final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
+    final finampSettings = ref.watch(finampSettingsProvider).value;
 
     //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current song yet, we want to show the loading state, and not the lyrics for the previous track
     _isSynchronizedLyrics =
@@ -380,7 +382,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                               child: Center(
                                   child: SizedBox(
                                       height: constraints.maxHeight * 0.55,
-                                      child: const PlayerScreenAlbumImage())),
+                                      child: (finampSettings?.showLyricsScreenAlbumPrelude ?? true) ? const PlayerScreenAlbumImage() : null)),
                             ),
                           ),
                         AutoScrollTag(

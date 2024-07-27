@@ -174,6 +174,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       lyricsFontSize: fields[70] == null
           ? LyricsFontSize.medium
           : fields[70] as LyricsFontSize,
+      showLyricsScreenAlbumPrelude:
+          fields[71] == null ? true : fields[71] as bool,
       showStopButtonOnMediaNotification:
           fields[68] == null ? false : fields[68] as bool,
       showSeekControlsOnMediaNotification:
@@ -187,7 +189,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(69)
+      ..writeByte(70)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -325,7 +327,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(69)
       ..write(obj.showSeekControlsOnMediaNotification)
       ..writeByte(70)
-      ..write(obj.lyricsFontSize);
+      ..write(obj.lyricsFontSize)
+      ..writeByte(71)
+      ..write(obj.showLyricsScreenAlbumPrelude);
   }
 
   @override
