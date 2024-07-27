@@ -419,5 +419,17 @@
   "redesignBeta": "Uusi Design Beta",
   "@redesignBeta": {},
   "swipeInsertQueueNext": "Toista Pyyhkäisty Kappale Seuraavaksi",
-  "@swipeInsertQueueNext": {}
+  "@swipeInsertQueueNext": {},
+  "startMix": "Aloita sekoitus",
+  "@startMix": {},
+  "failedToGetSongFromDownloadId": "Kappaleen nouto lataus ID:stä epäonnistui",
+  "@failedToGetSongFromDownloadId": {},
+  "stackTrace": "Pinon jäljitys",
+  "@stackTrace": {},
+  "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä. Lähdekoodi saatavilla osoitteessa:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia käyttöoikeusongelmien vuoksi. Mietin tapoja korjata tämä, mutta toistaiseksi en suosittele niiden käyttöä.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
+  "@enterLowPriorityStateOnPauseSubtitle": {}
 }
