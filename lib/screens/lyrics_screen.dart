@@ -485,7 +485,7 @@ class _LyricLine extends ConsumerWidget {
                           ? Colors.grey
                           : Theme.of(context).textTheme.bodyLarge!.color,
                       fontSize: 16,
-                      height: 1.75,
+                      height: 1.75 * (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
                     ),
                   ),
                 ),
@@ -502,7 +502,7 @@ class _LyricLine extends ConsumerWidget {
                   letterSpacing: lowlightLine || !isSynchronized
                       ? 0.05
                       : -0.045, // keep text width consistent across the different weights
-                  fontSize: isSynchronized ? 26 : 20,
+                  fontSize: lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) * (isSynchronized ? 1.0 : 0.75),
                   height: 1.25,
                 ),
               ),
@@ -595,5 +595,16 @@ TextAlign lyricsAlignmentToTextAlign(LyricsAlignment alignment) {
       return TextAlign.center;
     case LyricsAlignment.end:
       return TextAlign.end;
+  }
+}
+
+int lyricsFontSizeToSize(LyricsFontSize fontSize) {
+  switch (fontSize) {
+    case LyricsFontSize.small:
+      return 20;
+    case LyricsFontSize.medium:
+      return 26;
+    case LyricsFontSize.large:
+      return 32;
   }
 }

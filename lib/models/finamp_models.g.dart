@@ -171,6 +171,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       lyricsAlignment: fields[67] == null
           ? LyricsAlignment.start
           : fields[67] as LyricsAlignment,
+      lyricsFontSize: fields[70] == null
+          ? LyricsFontSize.medium
+          : fields[70] as LyricsFontSize,
       showStopButtonOnMediaNotification:
           fields[68] == null ? false : fields[68] as bool,
       showSeekControlsOnMediaNotification:
@@ -184,7 +187,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(68)
+      ..writeByte(69)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -320,7 +323,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(68)
       ..write(obj.showStopButtonOnMediaNotification)
       ..writeByte(69)
-      ..write(obj.showSeekControlsOnMediaNotification);
+      ..write(obj.showSeekControlsOnMediaNotification)
+      ..writeByte(70)
+      ..write(obj.lyricsFontSize);
   }
 
   @override
@@ -1763,6 +1768,50 @@ class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is LyricsAlignmentAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
+  @override
+  final int typeId = 71;
+
+  @override
+  LyricsFontSize read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return LyricsFontSize.small;
+      case 1:
+        return LyricsFontSize.medium;
+      case 2:
+        return LyricsFontSize.large;
+      default:
+        return LyricsFontSize.small;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, LyricsFontSize obj) {
+    switch (obj) {
+      case LyricsFontSize.small:
+        writer.writeByte(0);
+        break;
+      case LyricsFontSize.medium:
+        writer.writeByte(1);
+        break;
+      case LyricsFontSize.large:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricsFontSizeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

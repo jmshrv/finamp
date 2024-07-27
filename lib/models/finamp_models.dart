@@ -107,6 +107,7 @@ const _showProgressOnNowPlayingBarDefault = true;
 const _startInstantMixForIndividualTracksDefault = true;
 const _showLyricsTimestampsDefault = true;
 const _lyricsAlignmentDefault = LyricsAlignment.start;
+const _lyricsFontSizeDefault = LyricsFontSize.medium;
 const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
 
@@ -184,6 +185,7 @@ class FinampSettings {
     this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
     this.showLyricsTimestamps = _showLyricsTimestampsDefault,
     this.lyricsAlignment = _lyricsAlignmentDefault,
+    this.lyricsFontSize = _lyricsFontSizeDefault,
     this.showStopButtonOnMediaNotification = _showStopButtonOnMediaNotificationDefault,
     this.showSeekControlsOnMediaNotification = _showSeekControlsOnMediaNotificationDefault,
   });
@@ -410,6 +412,9 @@ class FinampSettings {
 
   @HiveField(69, defaultValue: _showSeekControlsOnMediaNotificationDefault)
   bool showSeekControlsOnMediaNotification;
+
+  @HiveField(70, defaultValue: _lyricsFontSizeDefault)
+  LyricsFontSize lyricsFontSize;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2103,8 +2108,8 @@ enum LyricsAlignment {
   String toLocalisedString(BuildContext context) =>
       _humanReadableLocalisedName(this, context);
 
-  String _humanReadableName(LyricsAlignment tabContentType) {
-    switch (tabContentType) {
+  String _humanReadableName(LyricsAlignment lyricsAlignment) {
+    switch (lyricsAlignment) {
       case LyricsAlignment.start:
         return "Start";
       case LyricsAlignment.center:
@@ -2115,14 +2120,55 @@ enum LyricsAlignment {
   }
 
   String _humanReadableLocalisedName(
-      LyricsAlignment tabContentType, BuildContext context) {
-    switch (tabContentType) {
+      LyricsAlignment lyricsAlignment, BuildContext context) {
+    switch (lyricsAlignment) {
       case LyricsAlignment.start:
         return AppLocalizations.of(context)!.alignmentOptionStart;
       case LyricsAlignment.center:
         return AppLocalizations.of(context)!.alignmentOptionCenter;
       case LyricsAlignment.end:
         return AppLocalizations.of(context)!.alignmentOptionEnd;
+    }
+  }
+}
+
+@HiveType(typeId: 71)
+enum LyricsFontSize {
+  @HiveField(0)
+  small,
+  @HiveField(1)
+  medium,
+  @HiveField(2)
+  large;
+
+  /// Human-readable version of the [LyricsFontSize]
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(LyricsFontSize lyricsFontSize) {
+    switch (lyricsFontSize) {
+      case LyricsFontSize.small:
+        return "Small";
+      case LyricsFontSize.medium:
+        return "Medium";
+      case LyricsFontSize.large:
+        return "Large";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      LyricsFontSize lyricsFontSize, BuildContext context) {
+    switch (lyricsFontSize) {
+      case LyricsFontSize.small:
+        return AppLocalizations.of(context)!.fontSizeOptionSmall;
+      case LyricsFontSize.medium:
+        return AppLocalizations.of(context)!.fontSizeOptionMedium;
+      case LyricsFontSize.large:
+        return AppLocalizations.of(context)!.fontSizeOptionLarge;
     }
   }
 }

@@ -21,6 +21,7 @@ class LyricsSettingsScreen extends StatelessWidget {
         children: const [
           ShowLyricsTimestampsToggle(),
           LyricsAlignmentSelector(),
+          LyricsFontSizeSelector(),
         ],
       ),
     );
@@ -81,6 +82,41 @@ class LyricsAlignmentSelector extends StatelessWidget {
               if (value != null) {
                 FinampSettings finampSettingsTemp = finampSettings;
                 finampSettingsTemp.lyricsAlignment = value;
+                Hive.box<FinampSettings>("FinampSettings")
+                    .put("FinampSettings", finampSettingsTemp);
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class LyricsFontSizeSelector extends StatelessWidget {
+  const LyricsFontSizeSelector({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (_, box, __) {
+        final finampSettings = box.get("FinampSettings")!;
+        return ListTile(
+          title: Text(AppLocalizations.of(context)!.lyricsFontSizeTitle),
+          subtitle: Text(AppLocalizations.of(context)!.lyricsFontSizeSubtitle),
+          trailing: DropdownButton<LyricsFontSize>(
+            value: finampSettings.lyricsFontSize,
+            items: LyricsFontSize.values
+                .map((e) => DropdownMenuItem<LyricsFontSize>(
+                      value: e,
+                      child: Text(e.toLocalisedString(context)),
+                    ))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) {
+                FinampSettings finampSettingsTemp = finampSettings;
+                finampSettingsTemp.lyricsFontSize = value;
                 Hive.box<FinampSettings>("FinampSettings")
                     .put("FinampSettings", finampSettingsTemp);
               }

@@ -1598,6 +1598,18 @@
   "@alignmentOptionEnd": {
     "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
   },
+  "fontSizeOptionSmall": "Small",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "fontSizeOptionMedium": "Medium",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "fontSizeOptionLarge": "Large",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
   "lyricsAlignmentTitle": "Lyrics alignment",
   "@lyricsAlignmentTitle": {
     "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
@@ -1605,5 +1617,13 @@
   "lyricsAlignmentSubtitle": "Controls the alignment of lyrics in the lyrics view.",
   "@lyricsAlignmentSubtitle": {
     "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeTitle": "Lyrics font size",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeSubtitle": "Controls the font size of lyrics in the lyrics view.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
   }
 }
