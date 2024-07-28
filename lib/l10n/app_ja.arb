@@ -381,9 +381,9 @@
   },
   "goToAlbum": "アルバムに行く",
   "@goToAlbum": {},
-  "errorScreenError": "エラーリスト取得時にエラーが発生しました！この時点では、GitHub でイシューを作成し、アプリデータを削除することをお勧めします",
+  "errorScreenError": "エラーリスト取得時にエラーが発生しました！この時点では、GitHub で issue を作成し、アプリデータを削除することをお勧めします",
   "@errorScreenError": {},
-  "startupError": "起動時に問題が起こりました。エラー: {error}\n\ngithub.com/UnicornsOnLSD/finamp でイシューを作成し、このページのスクリーンショットを付けてください。問題が継続した場合はアプリデータをクリアしてアプリを初期化して下さい。",
+  "startupError": "起動時に問題が起こりました。エラー内容: {error}\n\ngithub.com/UnicornsOnLSD/finamp でイシューを作成し、このページのスクリーンショットを付けてください。問題が継続した場合はアプリデータをクリアしてアプリを初期化して下さい。",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
