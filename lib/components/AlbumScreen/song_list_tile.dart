@@ -123,7 +123,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
           final isCurrentlyPlaying =
               snapshot.data?.extras?["itemJson"]["Id"] == widget.item.id;
 
-          return TrackListItem(
+          final trackListItem = TrackListItem(
             item: widget.item,
             parentItem: widget.parentItem,
             listIndex: widget.index,
@@ -232,6 +232,34 @@ class _SongListTileState extends ConsumerState<SongListTile>
               }
             },
           );
+
+          return isCurrentlyPlaying ?
+            ProviderScope(
+              overrides: [
+                themeDataProvider.overrideWith((ref) {
+                  return ref.watch(playerScreenThemeDataProvider) ??
+                      FinampTheme.defaultTheme();
+                })
+              ],
+              child: Consumer(
+                  builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                final imageTheme = ref.watch(playerScreenThemeProvider);
+                return AnimatedTheme(
+                  duration: const Duration(milliseconds: 500),
+                  data: ThemeData(
+                    colorScheme: imageTheme,
+                    brightness: Theme.of(context).brightness,
+                    iconTheme: Theme.of(context).iconTheme.copyWith(
+                          color: imageTheme.primary,
+                        ),
+                  ),
+                  child: trackListItem,
+                  );
+                },
+              ),
+            )
+            : trackListItem;
+          
         });
     void menuCallback() async {
       if (playable) {
