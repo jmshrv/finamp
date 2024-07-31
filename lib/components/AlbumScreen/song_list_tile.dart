@@ -7,12 +7,14 @@ import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 
@@ -123,120 +125,226 @@ class _SongListTileState extends ConsumerState<SongListTile>
                   snapshot.data?.extras?["itemJson"]["AlbumId"] ==
                       widget.parentItem?.id;
 
-          return ListTile(
-            leading: AlbumImage(
-              item: widget.item,
-              disabled: !playable,
-              themeCallback: (x) => _menuTheme ??= x,
-            ),
-            title: Opacity(
-              opacity: playable ? 1.0 : 0.5,
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-                    // same horrible check as in canGoToAlbum in GestureDetector below
-                    if (widget.item.indexNumber != null &&
-                        !widget.isSong &&
-                        widget.item.albumId == widget.parentItem?.id)
-                      TextSpan(
-                          text: "${widget.item.indexNumber}. ",
-                          style: TextStyle(
-                              color: Theme.of(context).disabledColor)),
-                    TextSpan(
-                      text: widget.item.name ??
-                          AppLocalizations.of(context)!.unknownName,
-                      style: TextStyle(
-                        color: isCurrentlyPlaying
-                            ? Theme.of(context).colorScheme.secondary
-                            : null,
-                      ),
-                    ),
-                  ],
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-            ),
-            subtitle: Opacity(
-              opacity: playable ? 1.0 : 0.5,
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    WidgetSpan(
-                      child: Transform.translate(
-                        offset: const Offset(-3, 0),
-                        child: DownloadedIndicator(
-                          item: DownloadStub.fromItem(
-                              item: widget.item, type: DownloadItemType.song),
-                          size: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .fontSize! +
-                              3,
-                        ),
-                      ),
-                      alignment: PlaceholderAlignment.top,
-                    ),
-                    if (widget.item.hasLyrics ?? false)
-                      WidgetSpan(
-                        child: Transform.translate(
-                            offset: const Offset(-2.5, 0),
-                            child: Icon(
-                              TablerIcons.microphone_2,
-                              size: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .fontSize! +
-                                  2,
-                            )),
-                        alignment: PlaceholderAlignment.top,
-                      ),
-                    TextSpan(
-                      text: printDuration(widget.item.runTimeTicksDuration()),
-                      style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.color
-                              ?.withOpacity(0.7)),
-                    ),
-                    if (widget.showArtists)
-                      TextSpan(
-                        text:
-                            " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
-                        style:
-                            TextStyle(color: Theme.of(context).disabledColor),
-                      ),
-                    if (widget.showPlayCount)
-                      TextSpan(
-                        text:
-                            " · ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
-                        style:
-                            TextStyle(color: Theme.of(context).disabledColor),
-                      ),
-                  ],
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (isCurrentlyPlaying)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: MiniMusicVisualizer(
-                      color: Theme.of(context).colorScheme.secondary,
-                      width: 4,
-                      height: 15,
-                    ),
-                  ),
-                FavoriteButton(
-                  item: widget.item,
-                  onlyIfFav: true,
-                ),
-              ],
-            ),
+          // return ListTile(
+          //   leading: AlbumImage(
+          //     item: widget.item,
+          //     disabled: !playable,
+          //     themeCallback: (x) => _menuTheme ??= x,
+          //   ),
+          //   title: Opacity(
+          //     opacity: playable ? 1.0 : 0.5,
+          //     child: RichText(
+          //       text: TextSpan(
+          //         children: [
+          //           // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
+          //           // same horrible check as in canGoToAlbum in GestureDetector below
+          //           if (widget.item.indexNumber != null &&
+          //               !widget.isSong &&
+          //               widget.item.albumId == widget.parentItem?.id)
+          //             TextSpan(
+          //                 text: "${widget.item.indexNumber}. ",
+          //                 style: TextStyle(
+          //                     color: Theme.of(context).disabledColor)),
+          //           TextSpan(
+          //             text: widget.item.name ??
+          //                 AppLocalizations.of(context)!.unknownName,
+          //             style: TextStyle(
+          //               color: isCurrentlyPlaying
+          //                   ? Theme.of(context).colorScheme.secondary
+          //                   : null,
+          //             ),
+          //           ),
+          //         ],
+          //         style: Theme.of(context).textTheme.titleMedium,
+          //       ),
+          //     ),
+          //   ),
+          //   subtitle: Opacity(
+          //     opacity: playable ? 1.0 : 0.5,
+          //     child: Text.rich(
+          //       TextSpan(
+          //         children: [
+          //           WidgetSpan(
+          //             child: Transform.translate(
+          //               offset: const Offset(-3, 0),
+          //               child: DownloadedIndicator(
+          //                 item: DownloadStub.fromItem(
+          //                     item: widget.item, type: DownloadItemType.song),
+          //                 size: Theme.of(context)
+          //                         .textTheme
+          //                         .bodyMedium!
+          //                         .fontSize! +
+          //                     3,
+          //               ),
+          //             ),
+          //             alignment: PlaceholderAlignment.top,
+          //           ),
+          //           if (widget.item.hasLyrics ?? false)
+          //             WidgetSpan(
+          //               child: Transform.translate(
+          //                   offset: const Offset(-2.5, 0),
+          //                   child: Icon(
+          //                     TablerIcons.microphone_2,
+          //                     size: Theme.of(context)
+          //                             .textTheme
+          //                             .bodyMedium!
+          //                             .fontSize! +
+          //                         2,
+          //                   )),
+          //               alignment: PlaceholderAlignment.top,
+          //             ),
+          //           TextSpan(
+          //             text: printDuration(widget.item.runTimeTicksDuration()),
+          //             style: TextStyle(
+          //                 color: Theme.of(context)
+          //                     .textTheme
+          //                     .bodyMedium
+          //                     ?.color
+          //                     ?.withOpacity(0.7)),
+          //           ),
+          //           if (widget.showArtists)
+          //             TextSpan(
+          //               text:
+          //                   " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
+          //               style:
+          //                   TextStyle(color: Theme.of(context).disabledColor),
+          //             ),
+          //           if (widget.showPlayCount)
+          //             TextSpan(
+          //               text:
+          //                   " · ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
+          //               style:
+          //                   TextStyle(color: Theme.of(context).disabledColor),
+          //             ),
+          //         ],
+          //       ),
+          //       overflow: TextOverflow.ellipsis,
+          //     ),
+          //   ),
+          //   trailing: Row(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       if (isCurrentlyPlaying)
+          //         Padding(
+          //           padding: const EdgeInsets.symmetric(horizontal: 8),
+          //           child: MiniMusicVisualizer(
+          //             color: Theme.of(context).colorScheme.secondary,
+          //             width: 4,
+          //             height: 15,
+          //           ),
+          //         ),
+          //       FavoriteButton(
+          //         item: widget.item,
+          //         onlyIfFav: true,
+          //       ),
+          //     ],
+          //   ),
+          //   // This must be in ListTile instead of parent GestureDetecter to
+          //   // enable hover color changes
+          //   onTap: () async {
+          //     if (!playable) return;
+          //     var children = await widget.children;
+          //     if (children != null) {
+          //       // start linear playback of album from the given index
+          //       await _queueService.startPlayback(
+          //         items: children,
+          //         startingIndex: await widget.index,
+          //         order: FinampPlaybackOrder.linear,
+          //         source: QueueItemSource(
+          //           type: widget.isInPlaylist
+          //               ? QueueItemSourceType.playlist
+          //               : widget.isOnArtistScreen
+          //                   ? QueueItemSourceType.artist
+          //                   : QueueItemSourceType.album,
+          //           name: QueueItemSourceName(
+          //               type: QueueItemSourceNameType.preTranslated,
+          //               pretranslatedName: ((widget.isInPlaylist ||
+          //                           widget.isOnArtistScreen)
+          //                       ? widget.parentItem?.name
+          //                       : widget.item.album) ??
+          //                   AppLocalizations.of(context)!.placeholderSource),
+          //           id: widget.parentItem?.id ?? "",
+          //           item: widget.parentItem,
+          //           // we're playing from an album, so we should use the album's normalization gain.
+          //           contextNormalizationGain:
+          //               (widget.isInPlaylist || widget.isOnArtistScreen)
+          //                   ? null
+          //                   : widget.parentItem?.normalizationGain,
+          //         ),
+          //       );
+          //     } else {
+          //       // TODO put in a real offline songs implementation
+          //       if (FinampSettingsHelper.finampSettings.isOffline) {
+          //         final settings = FinampSettingsHelper.finampSettings;
+          //         final downloadsService = GetIt.instance<DownloadsService>();
+          //         final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+          //         // get all downloaded songs in order
+          //         List<DownloadStub> offlineItems;
+          //         // If we're on the songs tab, just get all of the downloaded items
+          //         offlineItems = await downloadsService.getAllSongs(
+          //             // nameFilter: widget.searchTerm,
+          //             viewFilter: finampUserHelper.currentUser?.currentView?.id,
+          //             nullableViewFilters:
+          //                 settings.showDownloadsWithUnknownLibrary,
+          //             onlyFavorites:
+          //                 settings.onlyShowFavourite && settings.trackOfflineFavorites,
+          //         );
+
+          //         var items = offlineItems
+          //             .map((e) => e.baseItem)
+          //             .whereNotNull()
+          //             .toList();
+
+          //         items = sortItems(
+          //             items,
+          //             settings.tabSortBy[TabContentType.songs],
+          //             settings.tabSortOrder[TabContentType.songs]);
+
+          //         await _queueService.startPlayback(
+          //           items: items,
+          //           startingIndex: widget.isShownInSearch
+          //               ? items.indexWhere(
+          //                   (element) => element.id == widget.item.id)
+          //               : await widget.index,
+          //           source: QueueItemSource(
+          //             name: const QueueItemSourceName(
+          //                 type: QueueItemSourceNameType.mix),
+          //             type: QueueItemSourceType.allSongs,
+          //             id: widget.item.id,
+          //           ),
+          //         );
+          //       } else {
+          //         if (FinampSettingsHelper
+          //             .finampSettings.startInstantMixForIndividualTracks) {
+          //           await _audioServiceHelper
+          //               .startInstantMixForItem(widget.item);
+          //         } else {
+          //           await _queueService.startPlayback(
+          //             items: [widget.item],
+          //             source: QueueItemSource(
+          //               name: QueueItemSourceName(
+          //                   type: QueueItemSourceNameType.preTranslated,
+          //                   pretranslatedName: widget.item.name),
+          //               type: QueueItemSourceType.song,
+          //               id: widget.item.id,
+          //             ),
+          //           );
+          //         }
+          //       }
+          //     }
+          //   },
+          // );
+
+          return TrackListItem(
+            item: widget.item,
+            parentItem: widget.parentItem,
+            listIndex: widget.index,
+            actualIndex: widget.item.indexNumber ?? -1,
+            isCurrentTrack: isCurrentlyPlaying,
+            isPlayable: playable,
+            isInPlaylist: widget.isInPlaylist,
+            onRemoveFromList: widget.onRemoveFromList,
             // This must be in ListTile instead of parent GestureDetecter to
             // enable hover color changes
             onTap: () async {
@@ -338,7 +446,6 @@ class _SongListTileState extends ConsumerState<SongListTile>
             },
           );
         });
-
     void menuCallback() async {
       if (playable) {
         unawaited(Feedback.forLongPress(context));
@@ -438,6 +545,251 @@ class _SongListTileState extends ConsumerState<SongListTile>
               },
               child: listTile,
             ),
+    );
+  }
+}
+
+class TrackListItem extends StatefulWidget {
+  final jellyfin_models.BaseItemDto item;
+  final jellyfin_models.BaseItemDto? parentItem;
+  final Future<int>? listIndex;
+  final int actualIndex;
+  final bool isCurrentTrack;
+  final bool isInPlaylist;
+  
+  final bool isPlayable;
+  final void Function() onTap;
+  final VoidCallback? onRemoveFromList;
+
+  const TrackListItem({
+    super.key,
+    required this.item,
+    required this.listIndex,
+    required this.actualIndex,
+    required this.onTap,
+    this.parentItem,
+    this.isPlayable = true,
+    this.isCurrentTrack = false,
+    this.isInPlaylist = false,
+    this.onRemoveFromList,
+  });
+  @override
+  State<TrackListItem> createState() => _TrackListItemState();
+}
+
+class _TrackListItemState extends State<TrackListItem>
+    with AutomaticKeepAliveClientMixin {
+  final _queueService = GetIt.instance<QueueService>();
+
+  @override
+  bool get wantKeepAlive => true;
+
+  FinampTheme? _menuTheme;
+
+  @override
+  void dispose() {
+    _menuTheme?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    jellyfin_models.BaseItemDto baseItem = widget.item;
+
+    final cardBackground = Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromRGBO(255, 255, 255, 0.075)
+        : const Color.fromRGBO(255, 255, 255, 0.125);
+
+    void menuCallback() async {
+      if (widget.isPlayable) {
+        FeedbackHelper.feedback(FeedbackType.selection);
+        await showModalSongMenu(
+          context: context,
+          item: widget.item,
+          isInPlaylist: widget.isInPlaylist,
+          parentItem: widget.parentItem,
+          onRemoveFromList: widget.onRemoveFromList,
+          themeProvider: _menuTheme,
+          confirmPlaylistRemoval: false,
+        );
+      }
+    }
+
+    Widget listTile = GestureDetector(
+      onTapDown: (_) {
+        _menuTheme?.calculate(Theme.of(context).brightness);
+      },
+      onLongPressStart: (details) => menuCallback(),
+      onSecondaryTapDown: (details) => menuCallback(),
+      child: Opacity(
+        opacity: widget.isPlayable ? 1.0 : 0.5,
+        child: Card(
+          color: cardBackground,
+          elevation: 0,
+          margin:
+              const EdgeInsets.only(left: 8.0, right: 8.0, top: 6.0),
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: ListTile(
+            visualDensity: const VisualDensity(
+              horizontal: 0.0,
+              vertical: 1.0,
+            ),
+            minVerticalPadding: 0.0,
+            horizontalTitleGap: 8.0,
+            contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+            tileColor: widget.isCurrentTrack
+                ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+                : const Color.fromRGBO(0, 0, 0, 0.035),
+            leading: AlbumImage(
+              item: baseItem,
+              borderRadius: BorderRadius.zero,
+              themeCallback: (x) => _menuTheme = x,
+            ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Text(
+                    baseItem.name ?? AppLocalizations.of(context)!.unknownName,
+                    style: widget.isCurrentTrack
+                        ? TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.secondary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            height: 1.0)
+                        : const TextStyle(
+                            fontSize: 16,
+                            height: 1.0),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 3.0),
+                  child: Text(
+                    baseItem.artists?.join(", ") ?? baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist,
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .color!,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                        overflow: TextOverflow.ellipsis),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            trailing: Container(
+              margin: const EdgeInsets.only(right: 0.0),
+              padding: const EdgeInsets.only(right: 4.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "${baseItem.runTimeTicksDuration()?.inMinutes.toString()}:${((baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodySmall?.color,
+                    ),
+                  ),
+                  FavoriteButton(
+                    item: widget.item,
+                    onlyIfFav: false,
+                  ),
+                ],
+              ),
+            ),
+            onTap: widget.onTap,
+          )),
+    ));
+
+    return Dismissible(
+      key: Key(widget.listIndex.toString()),
+      direction: FinampSettingsHelper.finampSettings.disableGesture
+          ? DismissDirection.none
+          : DismissDirection.horizontal,
+      dismissThresholds: const {
+        DismissDirection.startToEnd: 0.65,
+        DismissDirection.endToStart: 0.65
+      },
+      background: Container(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                TablerIcons.playlist,
+                color:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
+                size: 40,
+              ),
+              Icon(
+                TablerIcons.playlist,
+                color:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
+                size: 40,
+              )
+            ],
+          ),
+        ),
+      ),
+      confirmDismiss: (direction) async {
+        if (FinampSettingsHelper.finampSettings.swipeInsertQueueNext) {
+          await _queueService.addToNextUp(
+              items: [widget.item],
+              source: QueueItemSource(
+                type: QueueItemSourceType.nextUp,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName:
+                        AppLocalizations.of(context)!.queue),
+                id: widget.parentItem?.id ?? "",
+                item: widget.parentItem,
+              ));
+        } else {
+          await _queueService.addToQueue(
+              items: [widget.item],
+              source: QueueItemSource(
+                type: QueueItemSourceType.queue,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName:
+                        AppLocalizations.of(context)!.queue),
+                id: widget.parentItem?.id ?? "",
+                item: widget.parentItem,
+              ));
+        }
+
+        if (!mounted) return false;
+
+        GlobalSnackbar.message(
+          (scaffold) =>
+              FinampSettingsHelper.finampSettings.swipeInsertQueueNext
+                  ? AppLocalizations.of(scaffold)!
+                      .confirmAddToNextUp("track")
+                  : AppLocalizations.of(scaffold)!
+                      .confirmAddToQueue("track"),
+          isConfirmation: true,
+        );
+
+        return false;
+      },
+      child: listTile,
     );
   }
 }

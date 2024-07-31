@@ -126,10 +126,8 @@ class _AlphabetListState extends State<AlphabetList> {
             // Disable default scrollbar
             ScrollConfiguration(
                 behavior: const FinampScrollBehavior(scrollbars: false),
-                child: MediaQuery(
-                  data: mediaQuery.copyWith(
-                      padding: mediaQuery.padding.copyWith(
-                          right: mediaQuery.padding.right + _letterHeight)),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
                   child: widget.child,
                 )),
             if (_currentSelected != null && _displayPreview)
