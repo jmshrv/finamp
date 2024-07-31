@@ -473,13 +473,13 @@ class _TrackListItemState extends State<TrackListItem>
           child: ListTile(
             visualDensity: const VisualDensity(
               horizontal: 0.0,
-              vertical: 1.0,
+              vertical: 0.0,
             ),
             minVerticalPadding: 0.0,
             horizontalTitleGap: 8.0,
             contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
             tileColor: widget.isCurrentTrack
-                ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
                 : const Color.fromRGBO(0, 0, 0, 0.035),
             leading: Stack(
               children: [
@@ -490,9 +490,10 @@ class _TrackListItemState extends State<TrackListItem>
                 ),
                 if (widget.isCurrentTrack)
                   SizedBox.square(
-                    dimension: 60,
+                    dimension: 56,
                     child: Container(
-                      color: Colors.black.withOpacity(0.35),
+                      // color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
+                      color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withOpacity(0.35) : Colors.white.withOpacity(0.35),
                       child: MiniMusicVisualizer(
                         color: Theme.of(context).colorScheme.secondary,
                         animate: true,
