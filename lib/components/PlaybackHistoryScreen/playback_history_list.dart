@@ -1,3 +1,4 @@
+import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
@@ -42,28 +43,32 @@ class PlaybackHistoryList extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
-                        child: PlaybackHistoryListTile(
-                          actualIndex: actualIndex,
-                          item: group.value[actualIndex],
-                          audioServiceHelper: audioServiceHelper,
-                          onTap: () {
-                            GlobalSnackbar.message(
-                              (scaffold) => AppLocalizations.of(context)!
-                                  .startingInstantMix,
-                              isConfirmation: true,
-                            );
+                        // child: PlaybackHistoryListTile(
+                        //   actualIndex: actualIndex,
+                        //   item: group.value[actualIndex],
+                        //   audioServiceHelper: audioServiceHelper,
+                        //   onTap: () {
+                        //     GlobalSnackbar.message(
+                        //       (scaffold) => AppLocalizations.of(context)!
+                        //           .startingInstantMix,
+                        //       isConfirmation: true,
+                        //     );
 
-                            audioServiceHelper
-                                .startInstantMixForItem(
-                                    jellyfin_models.BaseItemDto.fromJson(group
-                                        .value[actualIndex]
-                                        .item
-                                        .item
-                                        .extras?["itemJson"]))
-                                .catchError((e) {
-                              GlobalSnackbar.error(e);
-                            });
-                          },
+                        //     audioServiceHelper
+                        //         .startInstantMixForItem(
+                        //             jellyfin_models.BaseItemDto.fromJson(group
+                        //                 .value[actualIndex]
+                        //                 .item
+                        //                 .item
+                        //                 .extras?["itemJson"]))
+                        //         .catchError((e) {
+                        //       GlobalSnackbar.error(e);
+                        //     });
+                        //   },
+                        // ),
+                        child: SongListTile(
+                          index: Future.value(actualIndex),
+                          item: group.value[actualIndex].item.baseItem!,
                         ),
                       );
 

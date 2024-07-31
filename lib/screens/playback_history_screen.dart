@@ -3,6 +3,8 @@ import 'package:finamp/components/PlaybackHistoryScreen/share_offline_listens_bu
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../components/now_playing_bar.dart';
+
 class PlaybackHistoryScreen extends StatelessWidget {
   const PlaybackHistoryScreen({Key? key}) : super(key: key);
 
@@ -23,10 +25,10 @@ class PlaybackHistoryScreen extends StatelessWidget {
         ],
       ),
       body: const Padding(
-        padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0, bottom: 0.0),
+        padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 16.0, bottom: 0.0),
         child: PlaybackHistoryList(),
       ),
-      //bottomNavigationBar: const NowPlayingBar(),
+      bottomNavigationBar: const NowPlayingBar(),
     );
   }
 }
