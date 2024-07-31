@@ -565,9 +565,15 @@ class JellyfinApiHelper {
       playlistId: playlistId,
       entryIds: entryIds?.join(","),
     );
-    if (response.error != null) {
-      throw response.error!;
-    }
+    if (response.statusCode == 403) {
+      _jellyfinApiHelperLogger.warning("Failed to remove items from playlist due to insufficient permissions. Status code: ${response.statusCode}");
+      throw "You do not have permission to remove items from this playlist. Status code: ${response.statusCode}";
+    } else if (response.error != null) {
+      if (response.error == "") {
+        throw "An unknown error occurred while removing items from the playlist. Status code: ${response.statusCode}";
+      }
+      throw "${response.error}. Status code: ${response.statusCode}";
+    } 
   }
 
   /// Updates an item.

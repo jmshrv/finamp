@@ -95,22 +95,29 @@ Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
     );
   }
   if (isConfirmed) {
-    await GetIt.instance<JellyfinApiHelper>().removeItemsFromPlaylist(
-        playlistId: parent.id, entryIds: [playlistItemId]);
+    try {
+      await GetIt.instance<JellyfinApiHelper>().removeItemsFromPlaylist(
+          playlistId: parent.id, entryIds: [playlistItemId]);
 
-    // re-sync playlist to delete removed item if not required anymore
-    final downloadsService = GetIt.instance<DownloadsService>();
-    unawaited(downloadsService.resync(
-        DownloadStub.fromItem(type: DownloadItemType.collection, item: parent),
-        null,
-        keepSlow: true));
+      // re-sync playlist to delete removed item if not required anymore
+      final downloadsService = GetIt.instance<DownloadsService>();
+      unawaited(downloadsService.resync(
+          DownloadStub.fromItem(type: DownloadItemType.collection, item: parent),
+          null,
+          keepSlow: true));
 
-    playlistRemovalsCache.add(parent.id + playlistItemId);
+      playlistRemovalsCache.add(parent.id + playlistItemId);
 
-    GlobalSnackbar.message(
-        (context) => AppLocalizations.of(context)!.removedFromPlaylist,
-        isConfirmation: true);
-    return true;
+      GlobalSnackbar.message(
+          (context) => AppLocalizations.of(context)!.removedFromPlaylist,
+          isConfirmation: true);
+      return true;
+      
+    } catch (err) {
+      
+      GlobalSnackbar.error(err);
+      return false;
+    }
   }
   return false;
 }
