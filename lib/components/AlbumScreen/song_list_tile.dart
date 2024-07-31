@@ -479,27 +479,48 @@ class _SongListTileState extends ConsumerState<SongListTile>
                 DismissDirection.endToStart: 0.65
               },
               background: Container(
-                color: Theme.of(context).colorScheme.secondaryContainer,
+                // color: Theme.of(context).colorScheme.secondaryContainer,
+                padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 8.0),
                 alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                       Icon(
                         TablerIcons.playlist,
                         color:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
+                            Theme.of(context).colorScheme.secondary,
                         size: 40,
                       ),
+                      const SizedBox(width: 4.0),
+                      Text(
+                        FinampSettingsHelper.finampSettings.swipeInsertQueueNext ? AppLocalizations.of(context)!.addToNextUp : AppLocalizations.of(context)!.addToQueue,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                      Text(
+                        FinampSettingsHelper.finampSettings.swipeInsertQueueNext ? AppLocalizations.of(context)!.addToNextUp : AppLocalizations.of(context)!.addToQueue,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(width: 4.0),
                       Icon(
                         TablerIcons.playlist,
                         color:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
+                            Theme.of(context).colorScheme.secondary,
                         size: 40,
-                      )
-                    ],
-                  ),
+                      ),
+                    ],),
+                  ],
                 ),
               ),
               confirmDismiss: (direction) async {
@@ -629,7 +650,7 @@ class _TrackListItemState extends State<TrackListItem>
           color: cardBackground,
           elevation: 0,
           margin:
-              const EdgeInsets.only(left: 8.0, right: 8.0, top: 6.0),
+              const EdgeInsets.only(left: 6.0, right: 6.0, top: 6.0),
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -646,9 +667,9 @@ class _TrackListItemState extends State<TrackListItem>
                 ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
                 : const Color.fromRGBO(0, 0, 0, 0.035),
             leading: AlbumImage(
-              item: baseItem,
-              borderRadius: BorderRadius.zero,
-              themeCallback: (x) => _menuTheme = x,
+                  item: baseItem,
+                  borderRadius: BorderRadius.zero,
+                  themeCallback: (x) => _menuTheme = x,
             ),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -715,81 +736,6 @@ class _TrackListItemState extends State<TrackListItem>
           )),
     ));
 
-    return Dismissible(
-      key: Key(widget.listIndex.toString()),
-      direction: FinampSettingsHelper.finampSettings.disableGesture
-          ? DismissDirection.none
-          : DismissDirection.horizontal,
-      dismissThresholds: const {
-        DismissDirection.startToEnd: 0.65,
-        DismissDirection.endToStart: 0.65
-      },
-      background: Container(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(
-                TablerIcons.playlist,
-                color:
-                    Theme.of(context).colorScheme.onSecondaryContainer,
-                size: 40,
-              ),
-              Icon(
-                TablerIcons.playlist,
-                color:
-                    Theme.of(context).colorScheme.onSecondaryContainer,
-                size: 40,
-              )
-            ],
-          ),
-        ),
-      ),
-      confirmDismiss: (direction) async {
-        if (FinampSettingsHelper.finampSettings.swipeInsertQueueNext) {
-          await _queueService.addToNextUp(
-              items: [widget.item],
-              source: QueueItemSource(
-                type: QueueItemSourceType.nextUp,
-                name: QueueItemSourceName(
-                    type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName:
-                        AppLocalizations.of(context)!.queue),
-                id: widget.parentItem?.id ?? "",
-                item: widget.parentItem,
-              ));
-        } else {
-          await _queueService.addToQueue(
-              items: [widget.item],
-              source: QueueItemSource(
-                type: QueueItemSourceType.queue,
-                name: QueueItemSourceName(
-                    type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName:
-                        AppLocalizations.of(context)!.queue),
-                id: widget.parentItem?.id ?? "",
-                item: widget.parentItem,
-              ));
-        }
-
-        if (!mounted) return false;
-
-        GlobalSnackbar.message(
-          (scaffold) =>
-              FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-                  ? AppLocalizations.of(scaffold)!
-                      .confirmAddToNextUp("track")
-                  : AppLocalizations.of(scaffold)!
-                      .confirmAddToQueue("track"),
-          isConfirmation: true,
-        );
-
-        return false;
-      },
-      child: listTile,
-    );
+    return listTile;
   }
 }
