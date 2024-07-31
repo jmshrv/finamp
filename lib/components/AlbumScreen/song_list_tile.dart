@@ -121,220 +121,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
           // performance. It works for now, apologies if you're debugging it
           // years in the future.
           final isCurrentlyPlaying =
-              snapshot.data?.extras?["itemJson"]["Id"] == widget.item.id &&
-                  snapshot.data?.extras?["itemJson"]["AlbumId"] ==
-                      widget.parentItem?.id;
-
-          // return ListTile(
-          //   leading: AlbumImage(
-          //     item: widget.item,
-          //     disabled: !playable,
-          //     themeCallback: (x) => _menuTheme ??= x,
-          //   ),
-          //   title: Opacity(
-          //     opacity: playable ? 1.0 : 0.5,
-          //     child: RichText(
-          //       text: TextSpan(
-          //         children: [
-          //           // third condition checks if the item is viewed from its album (instead of e.g. a playlist)
-          //           // same horrible check as in canGoToAlbum in GestureDetector below
-          //           if (widget.item.indexNumber != null &&
-          //               !widget.isSong &&
-          //               widget.item.albumId == widget.parentItem?.id)
-          //             TextSpan(
-          //                 text: "${widget.item.indexNumber}. ",
-          //                 style: TextStyle(
-          //                     color: Theme.of(context).disabledColor)),
-          //           TextSpan(
-          //             text: widget.item.name ??
-          //                 AppLocalizations.of(context)!.unknownName,
-          //             style: TextStyle(
-          //               color: isCurrentlyPlaying
-          //                   ? Theme.of(context).colorScheme.secondary
-          //                   : null,
-          //             ),
-          //           ),
-          //         ],
-          //         style: Theme.of(context).textTheme.titleMedium,
-          //       ),
-          //     ),
-          //   ),
-          //   subtitle: Opacity(
-          //     opacity: playable ? 1.0 : 0.5,
-          //     child: Text.rich(
-          //       TextSpan(
-          //         children: [
-          //           WidgetSpan(
-          //             child: Transform.translate(
-          //               offset: const Offset(-3, 0),
-          //               child: DownloadedIndicator(
-          //                 item: DownloadStub.fromItem(
-          //                     item: widget.item, type: DownloadItemType.song),
-          //                 size: Theme.of(context)
-          //                         .textTheme
-          //                         .bodyMedium!
-          //                         .fontSize! +
-          //                     3,
-          //               ),
-          //             ),
-          //             alignment: PlaceholderAlignment.top,
-          //           ),
-          //           if (widget.item.hasLyrics ?? false)
-          //             WidgetSpan(
-          //               child: Transform.translate(
-          //                   offset: const Offset(-2.5, 0),
-          //                   child: Icon(
-          //                     TablerIcons.microphone_2,
-          //                     size: Theme.of(context)
-          //                             .textTheme
-          //                             .bodyMedium!
-          //                             .fontSize! +
-          //                         2,
-          //                   )),
-          //               alignment: PlaceholderAlignment.top,
-          //             ),
-          //           TextSpan(
-          //             text: printDuration(widget.item.runTimeTicksDuration()),
-          //             style: TextStyle(
-          //                 color: Theme.of(context)
-          //                     .textTheme
-          //                     .bodyMedium
-          //                     ?.color
-          //                     ?.withOpacity(0.7)),
-          //           ),
-          //           if (widget.showArtists)
-          //             TextSpan(
-          //               text:
-          //                   " · ${processArtist(widget.item.artists?.join(", ") ?? widget.item.albumArtist, context)}",
-          //               style:
-          //                   TextStyle(color: Theme.of(context).disabledColor),
-          //             ),
-          //           if (widget.showPlayCount)
-          //             TextSpan(
-          //               text:
-          //                   " · ${AppLocalizations.of(context)!.playCountValue(widget.item.userData?.playCount ?? 0)}",
-          //               style:
-          //                   TextStyle(color: Theme.of(context).disabledColor),
-          //             ),
-          //         ],
-          //       ),
-          //       overflow: TextOverflow.ellipsis,
-          //     ),
-          //   ),
-          //   trailing: Row(
-          //     mainAxisSize: MainAxisSize.min,
-          //     children: [
-          //       if (isCurrentlyPlaying)
-          //         Padding(
-          //           padding: const EdgeInsets.symmetric(horizontal: 8),
-          //           child: MiniMusicVisualizer(
-          //             color: Theme.of(context).colorScheme.secondary,
-          //             width: 4,
-          //             height: 15,
-          //           ),
-          //         ),
-          //       FavoriteButton(
-          //         item: widget.item,
-          //         onlyIfFav: true,
-          //       ),
-          //     ],
-          //   ),
-          //   // This must be in ListTile instead of parent GestureDetecter to
-          //   // enable hover color changes
-          //   onTap: () async {
-          //     if (!playable) return;
-          //     var children = await widget.children;
-          //     if (children != null) {
-          //       // start linear playback of album from the given index
-          //       await _queueService.startPlayback(
-          //         items: children,
-          //         startingIndex: await widget.index,
-          //         order: FinampPlaybackOrder.linear,
-          //         source: QueueItemSource(
-          //           type: widget.isInPlaylist
-          //               ? QueueItemSourceType.playlist
-          //               : widget.isOnArtistScreen
-          //                   ? QueueItemSourceType.artist
-          //                   : QueueItemSourceType.album,
-          //           name: QueueItemSourceName(
-          //               type: QueueItemSourceNameType.preTranslated,
-          //               pretranslatedName: ((widget.isInPlaylist ||
-          //                           widget.isOnArtistScreen)
-          //                       ? widget.parentItem?.name
-          //                       : widget.item.album) ??
-          //                   AppLocalizations.of(context)!.placeholderSource),
-          //           id: widget.parentItem?.id ?? "",
-          //           item: widget.parentItem,
-          //           // we're playing from an album, so we should use the album's normalization gain.
-          //           contextNormalizationGain:
-          //               (widget.isInPlaylist || widget.isOnArtistScreen)
-          //                   ? null
-          //                   : widget.parentItem?.normalizationGain,
-          //         ),
-          //       );
-          //     } else {
-          //       // TODO put in a real offline songs implementation
-          //       if (FinampSettingsHelper.finampSettings.isOffline) {
-          //         final settings = FinampSettingsHelper.finampSettings;
-          //         final downloadsService = GetIt.instance<DownloadsService>();
-          //         final finampUserHelper = GetIt.instance<FinampUserHelper>();
-
-          //         // get all downloaded songs in order
-          //         List<DownloadStub> offlineItems;
-          //         // If we're on the songs tab, just get all of the downloaded items
-          //         offlineItems = await downloadsService.getAllSongs(
-          //             // nameFilter: widget.searchTerm,
-          //             viewFilter: finampUserHelper.currentUser?.currentView?.id,
-          //             nullableViewFilters:
-          //                 settings.showDownloadsWithUnknownLibrary,
-          //             onlyFavorites:
-          //                 settings.onlyShowFavourite && settings.trackOfflineFavorites,
-          //         );
-
-          //         var items = offlineItems
-          //             .map((e) => e.baseItem)
-          //             .whereNotNull()
-          //             .toList();
-
-          //         items = sortItems(
-          //             items,
-          //             settings.tabSortBy[TabContentType.songs],
-          //             settings.tabSortOrder[TabContentType.songs]);
-
-          //         await _queueService.startPlayback(
-          //           items: items,
-          //           startingIndex: widget.isShownInSearch
-          //               ? items.indexWhere(
-          //                   (element) => element.id == widget.item.id)
-          //               : await widget.index,
-          //           source: QueueItemSource(
-          //             name: const QueueItemSourceName(
-          //                 type: QueueItemSourceNameType.mix),
-          //             type: QueueItemSourceType.allSongs,
-          //             id: widget.item.id,
-          //           ),
-          //         );
-          //       } else {
-          //         if (FinampSettingsHelper
-          //             .finampSettings.startInstantMixForIndividualTracks) {
-          //           await _audioServiceHelper
-          //               .startInstantMixForItem(widget.item);
-          //         } else {
-          //           await _queueService.startPlayback(
-          //             items: [widget.item],
-          //             source: QueueItemSource(
-          //               name: QueueItemSourceName(
-          //                   type: QueueItemSourceNameType.preTranslated,
-          //                   pretranslatedName: widget.item.name),
-          //               type: QueueItemSourceType.song,
-          //               id: widget.item.id,
-          //             ),
-          //           );
-          //         }
-          //       }
-          //     }
-          //   },
-          // );
+              snapshot.data?.extras?["itemJson"]["Id"] == widget.item.id;
 
           return TrackListItem(
             item: widget.item,
@@ -666,10 +453,25 @@ class _TrackListItemState extends State<TrackListItem>
             tileColor: widget.isCurrentTrack
                 ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
                 : const Color.fromRGBO(0, 0, 0, 0.035),
-            leading: AlbumImage(
+            leading: Stack(
+              children: [
+                AlbumImage(
                   item: baseItem,
                   borderRadius: BorderRadius.zero,
                   themeCallback: (x) => _menuTheme = x,
+                ),
+                if (widget.isCurrentTrack)
+                  SizedBox.square(
+                    dimension: 60,
+                    child: Container(
+                      color: Colors.black.withOpacity(0.35),
+                      child: MiniMusicVisualizer(
+                        color: Theme.of(context).colorScheme.secondary,
+                        animate: true,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
