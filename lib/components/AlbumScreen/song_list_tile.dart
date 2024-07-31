@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
+import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
@@ -507,7 +508,7 @@ class _TrackListItemState extends State<TrackListItem>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
+                  padding: const EdgeInsets.only(top: 1.0),
                   child: Text(
                     baseItem.name ?? AppLocalizations.of(context)!.unknownName,
                     style: widget.isCurrentTrack
@@ -525,7 +526,7 @@ class _TrackListItemState extends State<TrackListItem>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 3.0),
+                  padding: const EdgeInsets.only(top: 2.0),
                   child: Text(
                     baseItem.artists?.join(", ") ?? baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist,
                     style: TextStyle(
@@ -556,9 +557,13 @@ class _TrackListItemState extends State<TrackListItem>
                       color: Theme.of(context).textTheme.bodySmall?.color,
                     ),
                   ),
-                  FavoriteButton(
-                    item: widget.item,
-                    onlyIfFav: false,
+                  AddToPlaylistButton(
+                    item: baseItem,
+                    color: Colors.white,
+                    size: 24,
+                    visualDensity:
+                        const VisualDensity(
+                            horizontal: -4,),
                   ),
                 ],
               ),

@@ -93,8 +93,7 @@ class _AlphabetListState extends State<AlphabetList> {
                 children: List.generate(
                   alphabet.length,
                   (x) => Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    padding: const EdgeInsets.only(right: 1.0),
                     height: _letterHeight,
                     child: FittedBox(
                       child: Text(
