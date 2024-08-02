@@ -534,7 +534,7 @@ class _TrackListItemState extends State<TrackListItem>
                             .textTheme
                             .bodyMedium!
                             .color!,
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.w300,
                         overflow: TextOverflow.ellipsis),
                     overflow: TextOverflow.ellipsis,
