@@ -133,6 +133,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
             isPlayable: playable,
             isInPlaylist: widget.isInPlaylist,
             onRemoveFromList: widget.onRemoveFromList,
+            themeCallback: (x) => _menuTheme = x,
             // This must be in ListTile instead of parent GestureDetecter to
             // enable hover color changes
             onTap: () async {
@@ -264,7 +265,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
         });
     void menuCallback() async {
       if (playable) {
-        unawaited(Feedback.forLongPress(context));
+        FeedbackHelper.feedback(FeedbackType.selection);
         await showModalSongMenu(
           context: context,
           item: widget.item,
@@ -386,7 +387,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
   }
 }
 
-class TrackListItem extends StatefulWidget {
+class TrackListItem extends StatelessWidget {
   final jellyfin_models.BaseItemDto item;
   final jellyfin_models.BaseItemDto? parentItem;
   final Future<int>? listIndex;
@@ -397,6 +398,7 @@ class TrackListItem extends StatefulWidget {
   final bool isPlayable;
   final void Function() onTap;
   final VoidCallback? onRemoveFromList;
+  final void Function(FinampTheme)? themeCallback;
 
   const TrackListItem({
     super.key,
@@ -409,168 +411,130 @@ class TrackListItem extends StatefulWidget {
     this.isCurrentTrack = false,
     this.isInPlaylist = false,
     this.onRemoveFromList,
+    this.themeCallback,
   });
-  @override
-  State<TrackListItem> createState() => _TrackListItemState();
-}
-
-class _TrackListItemState extends State<TrackListItem>
-    with AutomaticKeepAliveClientMixin {
-  final _queueService = GetIt.instance<QueueService>();
-
-  @override
-  bool get wantKeepAlive => true;
-
-  FinampTheme? _menuTheme;
-
-  @override
-  void dispose() {
-    _menuTheme?.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
 
-    jellyfin_models.BaseItemDto baseItem = widget.item;
+    jellyfin_models.BaseItemDto baseItem = item;
 
     final cardBackground = Theme.of(context).brightness == Brightness.dark
         ? const Color.fromRGBO(255, 255, 255, 0.075)
         : const Color.fromRGBO(255, 255, 255, 0.125);
 
-    void menuCallback() async {
-      if (widget.isPlayable) {
-        FeedbackHelper.feedback(FeedbackType.selection);
-        await showModalSongMenu(
-          context: context,
-          item: widget.item,
-          isInPlaylist: widget.isInPlaylist,
-          parentItem: widget.parentItem,
-          onRemoveFromList: widget.onRemoveFromList,
-          themeProvider: _menuTheme,
-          confirmPlaylistRemoval: false,
-        );
-      }
-    }
-
-    Widget listTile = GestureDetector(
-      onTapDown: (_) {
-        _menuTheme?.calculate(Theme.of(context).brightness);
-      },
-      onLongPressStart: (details) => menuCallback(),
-      onSecondaryTapDown: (details) => menuCallback(),
-      child: Opacity(
-        opacity: widget.isPlayable ? 1.0 : 0.5,
-        child: Card(
-          color: cardBackground,
-          elevation: 0,
-          margin:
-              const EdgeInsets.only(left: 6.0, right: 6.0, top: 6.0),
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+    Widget listTile = Opacity(
+      opacity: isPlayable ? 1.0 : 0.5,
+      child: Card(
+        color: cardBackground,
+        elevation: 0,
+        margin:
+            const EdgeInsets.only(left: 6.0, right: 6.0, top: 6.0),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ListTile(
+          visualDensity: const VisualDensity(
+            horizontal: 0.0,
+            vertical: 0.0,
           ),
-          child: ListTile(
-            visualDensity: const VisualDensity(
-              horizontal: 0.0,
-              vertical: 0.0,
-            ),
-            minVerticalPadding: 0.0,
-            horizontalTitleGap: 8.0,
-            contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-            tileColor: widget.isCurrentTrack
-                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-                : const Color.fromRGBO(0, 0, 0, 0.035),
-            leading: Stack(
-              children: [
-                AlbumImage(
-                  item: baseItem,
-                  borderRadius: BorderRadius.zero,
-                  themeCallback: (x) => _menuTheme = x,
-                ),
-                if (widget.isCurrentTrack)
-                  SizedBox.square(
-                    dimension: 56,
-                    child: Container(
-                      // color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
-                      color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withOpacity(0.35) : Colors.white.withOpacity(0.35),
-                      child: MiniMusicVisualizer(
-                        color: Theme.of(context).colorScheme.secondary,
-                        animate: true,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 1.0),
-                  child: Text(
-                    baseItem.name ?? AppLocalizations.of(context)!.unknownName,
-                    style: widget.isCurrentTrack
-                        ? TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.secondary,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            height: 1.0)
-                        : const TextStyle(
-                            fontSize: 16,
-                            height: 1.0),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Text(
-                    baseItem.artists?.join(", ") ?? baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist,
-                    style: TextStyle(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .color!,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w300,
-                        overflow: TextOverflow.ellipsis),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            trailing: Container(
-              margin: const EdgeInsets.only(right: 0.0),
-              padding: const EdgeInsets.only(right: 4.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "${baseItem.runTimeTicksDuration()?.inMinutes.toString()}:${((baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodySmall?.color,
-                    ),
-                  ),
-                  AddToPlaylistButton(
-                    item: baseItem,
-                    size: 24,
-                    visualDensity:
-                        const VisualDensity(
-                            horizontal: -4,),
-                  ),
-                ],
+          minVerticalPadding: 0.0,
+          horizontalTitleGap: 8.0,
+          contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+          tileColor: isCurrentTrack
+              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+              : const Color.fromRGBO(0, 0, 0, 0.035),
+          leading: Stack(
+            children: [
+              AlbumImage(
+                item: baseItem,
+                borderRadius: BorderRadius.zero,
+                themeCallback: themeCallback,
               ),
+              if (isCurrentTrack)
+                SizedBox.square(
+                  dimension: 56,
+                  child: Container(
+                    // color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
+                    color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withOpacity(0.35) : Colors.white.withOpacity(0.35),
+                    child: MiniMusicVisualizer(
+                      color: Theme.of(context).colorScheme.secondary,
+                      animate: true,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 1.0),
+                child: Text(
+                  baseItem.name ?? AppLocalizations.of(context)!.unknownName,
+                  style: isCurrentTrack
+                      ? TextStyle(
+                          color:
+                              Theme.of(context).colorScheme.secondary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          height: 1.0)
+                      : const TextStyle(
+                          fontSize: 16,
+                          height: 1.0),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Text(
+                  baseItem.artists?.join(", ") ?? baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist,
+                  style: TextStyle(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .color!,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                      overflow: TextOverflow.ellipsis),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          trailing: Container(
+            margin: const EdgeInsets.only(right: 0.0),
+            padding: const EdgeInsets.only(right: 4.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "${baseItem.runTimeTicksDuration()?.inMinutes.toString()}:${((baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodySmall?.color,
+                  ),
+                ),
+                AddToPlaylistButton(
+                  item: baseItem,
+                  size: 24,
+                  visualDensity:
+                      const VisualDensity(
+                          horizontal: -4,),
+                ),
+              ],
             ),
-            onTap: widget.onTap,
-          )),
-    ));
+          ),
+          onTap: onTap,
+        )),
+        );
 
     return listTile;
   }
+  
 }
