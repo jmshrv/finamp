@@ -344,6 +344,24 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> updateCapabilitiesFull(
+      ClientCapabilities clientCapabilities) async {
+    final Uri $url = Uri.parse('/Sessions/Capabilities/Full');
+    final $body = clientCapabilities;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
   Future<dynamic> startPlayback(
       PlaybackProgressInfo playbackProgressInfo) async {
     final Uri $url = Uri.parse('/Sessions/Playing');

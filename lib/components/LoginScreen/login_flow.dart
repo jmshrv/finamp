@@ -120,6 +120,13 @@ class _LoginFlowState extends State<LoginFlow> {
                 connectionState: connectionState,
                 onAuthenticated: () {
                   Navigator.of(context).popAndPushNamed(ViewSelector.routeName);
+                  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+                  jellyfinApiHelper.updateCapabilities(ClientCapabilities(
+                    supportsMediaControl: true,
+                    supportsPersistentIdentifier: true,
+                    playableMediaTypes: ["Audio"],
+                    supportedCommands: ["MoveUp", "MoveDown", "MoveLeft", "MoveRight", "PageUp", "PageDown", "PreviousLetter", "NextLetter", "ToggleOsd", "ToggleContextMenu", "Select", "Back", "TakeScreenshot", "SendKey", "SendString", "GoHome", "GoToSettings", "VolumeUp", "VolumeDown", "Mute", "Unmute", "ToggleMute", "SetVolume", "SetAudioStreamIndex", "SetSubtitleStreamIndex", "ToggleFullscreen", "DisplayContent", "GoToSearch", "DisplayMessage", "SetRepeatMode", "ChannelUp", "ChannelDown", "Guide", "ToggleStats", "PlayMediaSource", "PlayTrailers", "SetShuffleQueue", "PlayState", "PlayNext", "ToggleOsdMenu", "Play", "SetMaxStreamingBitrate", "SetPlaybackOrder"],
+                  ));
                 },
               ));
               break;

@@ -155,7 +155,7 @@ Future<void> _setupDownloadsHelper() async {
 
 Future<void> _setupPlayonHandler() async {
   GetIt.instance.registerSingleton(PlayonHandler());
-  GetIt.instance<PlayonHandler>().startListener();
+  unawaited(GetIt.instance<PlayonHandler>().initialize());
 }
 
 Future<void> setupHive() async {

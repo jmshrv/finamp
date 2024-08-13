@@ -772,10 +772,10 @@ class ClientCapabilities {
     this.supportedCommands,
     required this.supportsMediaControl,
     required this.supportsPersistentIdentifier,
-    required this.supportsSync,
+    this.supportsSync,
     this.deviceProfile,
     this.iconUrl,
-    required this.supportsContentUploading,
+    this.supportsContentUploading,
     this.messageCallbackUrl,
     this.appStoreUrl,
   });
