@@ -410,7 +410,11 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
   @override
   void initState() {
     super.initState();
-    initSuggestions();
+    
+    if (Platform.isIOS || Platform.isMacOS) {
+      initSuggestions();
+    }
+
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.addListener(this);
       // windowManager.setPreventClose(true); //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
@@ -456,8 +460,10 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
       WindowManager.instance.removeListener(this);
     }
 
-    FlutterSiriSuggestions.instance
+    if (Platform.isIOS || Platform.isMacOS) {
+      FlutterSiriSuggestions.instance
                             .deleteAllSavedUserActivities();
+    }
 
     super.dispose();
   }
