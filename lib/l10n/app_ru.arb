@@ -285,7 +285,7 @@
   "@offlineMode": {},
   "startMix": "Начать Микс",
   "@startMix": {},
-  "internalExternalIpExplanation": "Чтобы получить доступ к вашему серверу Jellyfin необходимо использовать внешний IP.\n\nЕсли ваш сервер работает на HTTP портах (80/443) вам не нужно его укзывать, например, если вы используете обратный прокси.",
+  "internalExternalIpExplanation": "Чтобы получить доступ к вашему серверу Jellyfin необходимо использовать внешний IP.\n\nЕсли ваш сервер работает на HTTP портах (80/443) вам не нужно его укfзывать, например, если вы используете обратный прокси.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
