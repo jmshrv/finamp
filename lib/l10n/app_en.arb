@@ -355,9 +355,9 @@
       }
     }
   },
-  "playButtonLabel": "PLAY",
+  "playButtonLabel": "Play",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "SHUFFLE",
+  "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
   "songCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
   "@songCount": {
@@ -392,7 +392,7 @@
   "@editPlaylistNameTitle": {},
   "required": "Required",
   "@required": {},
-  "updateButtonLabel": "UPDATE",
+  "updateButtonLabel": "Update",
   "@updateButtonLabel": {},
   "playlistNameUpdated": "Playlist name updated.",
   "@playlistNameUpdated": {},
@@ -410,7 +410,7 @@
   },
   "downloadsQueued": "Download prepared, downloading files",
   "@downloadsQueued": {},
-  "addButtonLabel": "ADD",
+  "addButtonLabel": "Add",
   "@addButtonLabel": {},
   "shareLogs": "Share logs",
   "@shareLogs": {},
@@ -613,9 +613,9 @@
   },
   "cancelSleepTimer": "Cancel Sleep Timer?",
   "@cancelSleepTimer": {},
-  "yesButtonLabel": "YES",
+  "yesButtonLabel": "Yes",
   "@yesButtonLabel": {},
-  "noButtonLabel": "NO",
+  "noButtonLabel": "No",
   "@noButtonLabel": {},
   "setSleepTimer": "Set Sleep Timer",
   "@setSleepTimer": {},
@@ -1077,7 +1077,7 @@
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
   "noMusicLibrariesBody": "Finamp could not find any music libraries. Please ensure that your Jellyfin server contains at least one library with the content type set to \"Music\".",
-  "refresh": "REFRESH",
+  "refresh": "Refresh",
   "moreInfo": "More Info",
   "volumeNormalizationSettingsTitle": "Volume Normalization",
   "@volumeNormalizationSettingsTitle": {
