@@ -1420,7 +1420,7 @@
     },
     "description": "Collection info line in downloads screen lists"
   },
-  "dontTranscode": "Download original{description, select, null{} other { - {description}}}",
+  "dontTranscode": "Download original{description, select, null{} other{ - {description}}}",
   "@dontTranscode": {
     "placeholders": {
       "description": {

@@ -121,31 +121,34 @@ class _DownloadDialogState extends State<DownloadDialog> {
         DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
 
     if (widget.children != null) {
-      final originalFileSize = widget.children!
-          .map((e) => e.mediaSources?.first.size ?? 0)
-          .fold(0, (a, b) => a + b);
-
       final transcodedFileSize = widget.children!
           .map((e) => e.mediaSources?.first.transcodedSize(FinampSettingsHelper
               .finampSettings.downloadTranscodingProfile.bitrateChannels))
           .fold(0, (a, b) => a + (b ?? 0));
-
-      final originalFileSizeFormatted = FileSize.getSize(
-        originalFileSize,
-        precision: PrecisionValue.None,
-      );
-
-      final formats = widget.children!
-          .map((e) => e.mediaSources?.first.mediaStreams.first.codec)
-          .toSet();
 
       transcodeDescription = FileSize.getSize(
         transcodedFileSize,
         precision: PrecisionValue.None,
       );
 
-      originalDescription =
-          "$originalFileSizeFormatted ${formats.length == 1 ? formats.first!.toUpperCase() : "null"}";
+      final originalFileSize = widget.children!
+          .map((e) => e.mediaSources?.first.size ?? 0)
+          .fold(0, (a, b) => a + b);
+
+      final originalFileSizeFormatted = FileSize.getSize(
+        originalFileSize,
+        precision: PrecisionValue.None,
+      );
+
+      originalDescription = originalFileSizeFormatted;
+
+      final formats = widget.children!
+          .map((e) => e.mediaSources?.first.mediaStreams.first.codec)
+          .toSet();
+
+      if (formats.length == 1) {
+        originalDescription += " ${formats.first!.toUpperCase()}";
+      }
     }
 
     return AlertDialog(
