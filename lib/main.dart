@@ -36,6 +36,7 @@ import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter_siri_suggestions/flutter_siri_suggestions.dart';
 import 'package:path/path.dart' as path_helper;
 
 import 'components/LogsScreen/copy_logs_button.dart';
@@ -409,10 +410,48 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
   @override
   void initState() {
     super.initState();
+    
+    if (Platform.isIOS || Platform.isMacOS) {
+      initSuggestions();
+    }
+
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.addListener(this);
       // windowManager.setPreventClose(true); //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
     }
+  }
+
+  void initSuggestions() async {
+    FlutterSiriSuggestions.instance.configure(
+        onLaunch: (Map<String, dynamic> message) async {
+      debugPrint('[FlutterSiriSuggestions] [onLaunch] $message');
+      //Awaken from Siri Suggestion
+      ///// TO DO : do something!
+      String __text;
+
+      debugPrint(
+          "[FlutterSiriSuggestions] Called by ${message['key']} suggestion.");
+
+      switch (message["key"]) {
+        case "playlistActivity":
+          __text = "redirect to playlistActivity";
+          break;
+        default:
+          __text = "hmmmm...... made a typo";
+      }
+
+      setState(() {
+        //_text = __text;
+      });
+    });
+
+    await FlutterSiriSuggestions.instance.registerActivity(
+        const FlutterSiriActivity("playlistActivity Suggestion", "playlistActivity",
+            isEligibleForSearch: true,
+            isEligibleForPrediction: true,
+            contentDescription: "Open playlistActivity",
+            suggestedInvocationPhrase: "playlist ",
+            userInfo: {"info": "sample"}));
   }
 
   @override
@@ -420,6 +459,12 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.removeListener(this);
     }
+
+    if (Platform.isIOS || Platform.isMacOS) {
+      FlutterSiriSuggestions.instance
+                            .deleteAllSavedUserActivities();
+    }
+
     super.dispose();
   }
 
