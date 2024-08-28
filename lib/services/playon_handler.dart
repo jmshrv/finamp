@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -69,57 +70,73 @@ class PlayonHandler {
       if (request['MessageType'] != 'ForceKeepAlive' && request['MessageType'] != 'KeepAlive') {
         _playOnHandlerLogger.info("Received a '${request['MessageType']}' message: ${request['Data']}");
 
-        switch (request['Data']['Command']) {
-          case "Stop":
-            await audioHandler.stop();
-            break;
-					case "Pause":
-            await audioHandler.pause();
-            break;
-					case "Unpause":
-            await audioHandler.play();
-            break;
-					case "NextTrack":
-            await audioHandler.skipToNext();
-            break;
-					case "PreviousTrack":
-            await audioHandler.skipToPrevious();
-            break;
-					case "Seek":
-						// val to = message.data?.seekPositionTicks?.ticks ?: Duration.ZERO
-            final seekPosition = request['Data']['SeekPositionTicks'] != null ? Duration(milliseconds: ((request['Data']['SeekPositionTicks'] as int) / 10000).round()) : Duration.zero; 
-            await audioHandler.seek(seekPosition);
-            break;
-					case "Rewind":
-            await audioHandler.rewind();
-            break;
-					case "FastForward":
-            await audioHandler.fastForward();
-            break;
-					case "PlayPause":
-            await audioHandler.togglePlayback();
-            break;
-
-					// Do nothing
-          default:
-            switch (request['Data']['PlayCommand']) {
-              case 'PlayNow':
-                channel.sink.add('{"MessageType":"KeepAlive"}');
-                // print(request['Data']);
-                // print(request['Data']['ItemIds']);
-                var item = await jellyfinApiHelper.getItemById(request['Data']['ItemIds'][0]);
-                unawaited(queueService.startPlayback(
-                  items: [item],
-                  source: QueueItemSource(
-                    name: QueueItemSourceName(
-                        type: QueueItemSourceNameType.preTranslated,
-                        pretranslatedName: item.name),
-                    type: QueueItemSourceType.song,
-                    id: item.id,
-                  ),
-                ));
+        switch(request['MessageType']) {
+          case "GeneralCommand":
+            switch (request['Data']['Name']) {
+              case "DisplayMessage":
+                final messageFromServer = request['Data']['Arguments']['Text'];
+                final header = request['Data']['Arguments']['Header'];
+                final timeout = request['Data']['Arguments']['Timeout'];
+                _playOnHandlerLogger.info("Displaying message from server: '$messageFromServer'");
+                GlobalSnackbar.message((context) => "$header: $messageFromServer");
+                break;
             }
-          }
+            break;
+          default:
+            switch (request['Data']['Command']) {
+              case "Stop":
+                await audioHandler.stop();
+                break;
+              case "Pause":
+                await audioHandler.pause();
+                break;
+              case "Unpause":
+                await audioHandler.play();
+                break;
+              case "NextTrack":
+                await audioHandler.skipToNext();
+                break;
+              case "PreviousTrack":
+                await audioHandler.skipToPrevious();
+                break;
+              case "Seek":
+                // val to = message.data?.seekPositionTicks?.ticks ?: Duration.ZERO
+                final seekPosition = request['Data']['SeekPositionTicks'] != null ? Duration(milliseconds: ((request['Data']['SeekPositionTicks'] as int) / 10000).round()) : Duration.zero; 
+                await audioHandler.seek(seekPosition);
+                break;
+              case "Rewind":
+                await audioHandler.rewind();
+                break;
+              case "FastForward":
+                await audioHandler.fastForward();
+                break;
+              case "PlayPause":
+                await audioHandler.togglePlayback();
+                break;
+
+              // Do nothing
+              default:
+                switch (request['Data']['PlayCommand']) {
+                  case 'PlayNow':
+                    channel.sink.add('{"MessageType":"KeepAlive"}');
+                    // print(request['Data']);
+                    // print(request['Data']['ItemIds']);
+                    var item = await jellyfinApiHelper.getItemById(request['Data']['ItemIds'][0]);
+                    unawaited(queueService.startPlayback(
+                      items: [item],
+                      source: QueueItemSource(
+                        name: QueueItemSourceName(
+                            type: QueueItemSourceNameType.preTranslated,
+                            pretranslatedName: item.name),
+                        type: QueueItemSourceType.song,
+                        id: item.id,
+                      ),
+                    ));
+                }
+              }
+            break;
+        }
+
         }
 
         // channel.sink.add('{"MessageType":"KeepAlive"}');
