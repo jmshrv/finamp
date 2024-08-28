@@ -469,6 +469,11 @@ class JellyfinApiHelper {
     return (QueryResult_BaseItemDto.fromJson(response).items);
   }
 
+  /// Updates capabilities for this client.
+  Future<void> updateCapabilities(ClientCapabilities capabilities) async {
+    await jellyfinApi.updateCapabilitiesFull(capabilities);
+  }
+
   /// Tells the Jellyfin server that playback has started
   Future<void> reportPlaybackStart(
       PlaybackProgressInfo playbackProgressInfo) async {
