@@ -9,6 +9,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -215,6 +216,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> play() {
+    KeepScreenOnHelper.setCondition(isPlaying: true);
     return _player.play();
   }
 
@@ -224,7 +226,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
-  Future<void> pause() => _player.pause();
+  Future<void> pause() {
+    KeepScreenOnHelper.setCondition(isPlaying: false);
+    return _player.pause();
+  }
 
   Future<void> togglePlayback() {
     if (_player.playing) {

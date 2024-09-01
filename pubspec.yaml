@@ -101,6 +101,8 @@ dependencies:
   scroll_to_index: ^3.0.1
   window_manager: ^0.3.8
   url_launcher: ^6.2.6
+  keep_screen_on: ^3.0.0
+  battery_plus: ^6.0.2
 
 dev_dependencies:
   flutter_test:

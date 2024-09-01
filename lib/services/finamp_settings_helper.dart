@@ -361,4 +361,18 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
+  static void setKeepScreenOnOption(KeepScreenOnOption keepScreenOnOption) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.keepScreenOnOption = keepScreenOnOption;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setKeepScreenOnWhileCharging(bool keepScreenOnWhileCharging) {
+        FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.keepScreenOnWhilePluggedIn = keepScreenOnWhileCharging;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
 }

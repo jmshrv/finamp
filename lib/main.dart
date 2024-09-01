@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:battery_plus/battery_plus.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
@@ -16,6 +17,7 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -116,7 +118,7 @@ void main() async {
         : "en_US";
     await initializeDateFormatting(localeString, null);
 
-    runApp(const Finamp());
+    runApp(Finamp());
   }
 }
 
@@ -214,6 +216,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LyricDtoAdapter());
   Hive.registerAdapter(LyricsAlignmentAdapter());
   Hive.registerAdapter(LyricsFontSizeAdapter());
+  Hive.registerAdapter(KeepScreenOnOptionAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
@@ -397,7 +400,28 @@ Future<void> _setupFinampUserHelper() async {
 }
 
 class Finamp extends ConsumerStatefulWidget {
-  const Finamp({Key? key}) : super(key: key);
+  /// Constructor added for KeepScreenOn
+  Finamp({super.key}) {
+    var battery = Battery();
+
+    // Monitor if device battery state changed.
+    battery.onBatteryStateChanged.listen((BatteryState state) {
+      debugPrint("KeepScreenOnInMain battery state: $state");
+      switch (state) {
+        case BatteryState.charging:
+        case BatteryState.connectedNotCharging:
+          KeepScreenOnHelper.setCondition(isPluggedIn: true);
+          break;
+        case BatteryState.discharging:
+        case BatteryState.unknown:
+          KeepScreenOnHelper.setCondition(isPluggedIn: false);
+          break;
+        default:
+          // Do nothing
+          break;
+      }
+    });
+  }
 
   @override
   ConsumerState<Finamp> createState() => _FinampState();
