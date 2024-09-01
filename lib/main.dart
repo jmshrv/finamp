@@ -407,19 +407,7 @@ class Finamp extends ConsumerStatefulWidget {
     // Monitor if device battery state changed.
     battery.onBatteryStateChanged.listen((BatteryState state) {
       debugPrint("KeepScreenOnInMain battery state: $state");
-      switch (state) {
-        case BatteryState.charging:
-        case BatteryState.connectedNotCharging:
-          KeepScreenOnHelper.setCondition(isPluggedIn: true);
-          break;
-        case BatteryState.discharging:
-        case BatteryState.unknown:
-          KeepScreenOnHelper.setCondition(isPluggedIn: false);
-          break;
-        default:
-          // Do nothing
-          break;
-      }
+      KeepScreenOnHelper.setCondition(batteryState: state);
     });
   }
 

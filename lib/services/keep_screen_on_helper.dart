@@ -1,3 +1,4 @@
+import 'package:battery_plus/battery_plus.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/foundation.dart';
@@ -55,10 +56,26 @@ class KeepScreenOnHelper {
         "KeepScreenOnHelper keepingScreenOn: $keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
   }
 
-  static void setCondition({bool? isPlaying, bool? isLyricsShowing, bool? isPluggedIn}) {
+  static void setCondition({bool? isPlaying, bool? isLyricsShowing, BatteryState? batteryState}) {
     if (isPlaying != null) _isPlaying = isPlaying;
     if (isLyricsShowing != null) _isLyricsShowing = isLyricsShowing;
-    if (isPluggedIn != null) _isPluggedIn = isPluggedIn;
+    if (batteryState != null) {
+      debugPrint("KeepScreenOnHelper reported battery state: $batteryState");
+      switch (batteryState) {
+        case BatteryState.charging:
+        case BatteryState.connectedNotCharging:
+        case BatteryState.full:
+          _isPluggedIn = true;
+          break;
+        case BatteryState.discharging:
+        case BatteryState.unknown:
+          _isPluggedIn = false;
+          break;
+        default:
+          // Do nothing
+          break;
+      }
+    }
 
     setKeepScreenOn();
   }
