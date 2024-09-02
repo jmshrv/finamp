@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:battery_plus/battery_plus.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
