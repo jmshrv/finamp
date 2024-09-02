@@ -1,8 +1,12 @@
 import 'package:battery_plus/battery_plus.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:flutter/foundation.dart';
+import 'package:finamp/services/music_player_background_task.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
+import 'package:logging/logging.dart';
 
 /// KeepScreenOn
 /// 
@@ -14,19 +18,36 @@ import 'package:keep_screen_on/keep_screen_on.dart';
 ///   - Keep Screen On: Only while plugged in
 /// 
 /// Ties into the following actions:
-///   - MusicPlayerBackgroundTask.play() -- Sets _isPlaying to true.
-///   - MusicPlayerBackgroundTask.pause() -- Sets _isPlaying to false.
-///   - LyricsScreen.draw() -- Sets _isLyricsShowing to true.
-///   - LyricsScreen.dispose() -- Sets _isLyricsShowing to false.
-///   - FinAmp constructor -- Creates an event listener for battery status change.  Sets _isPluggedIn value.
-///   - KeepScreenOnOption -- Changes to this option re-evaluates the keepScreenOn status.
-///   - KeepScreenOnWhilePluggedIn -- Changes to this option re-evaluates the keepsScreenOn status.
+///   - listens for audioHandler's playbackstate to determine _isPlaying.
+///   - Extends NavigatorObserver class to listen for push and pop of LyricScreen to determine _isLyricsShowing
+///   - listens for battyer state changes from the battery_plus widget to determine _isPluggedIn
 class KeepScreenOnHelper {
   static bool keepingScreenOn = false;
 
   static bool _isPlaying = false;
   static bool _isLyricsShowing = false;
   static bool _isPluggedIn = false;
+
+  static final _keepScreenOnLogger = Logger("KeepScreenOnHelper");
+
+  static void init() {
+    // Subscribe to audio playback events
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    audioHandler.playbackState.listen((event) async {
+      KeepScreenOnHelper.setCondition(isPlaying: event.playing);
+    });
+
+    // Subscribe to battery state change events
+    var battery = Battery();
+    battery.onBatteryStateChanged.listen((BatteryState state) {
+      KeepScreenOnHelper.setCondition(batteryState: state);
+    });
+
+    FinampSettingsHelper.finampSettingsListener.addListener(() {
+      // When a settings change occurs, check keepScreenOnState.
+      setKeepScreenOn();
+    });
+  }
 
   static void setKeepScreenOn() {
     if (FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn && !_isPluggedIn) {
@@ -52,15 +73,15 @@ class KeepScreenOnHelper {
           break;
       }
     }
-    debugPrint(
-        "KeepScreenOnHelper keepingScreenOn: $keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
+    _keepScreenOnLogger.fine(
+        "keepingScreenOn: $keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
   }
 
   static void setCondition({bool? isPlaying, bool? isLyricsShowing, BatteryState? batteryState}) {
     if (isPlaying != null) _isPlaying = isPlaying;
     if (isLyricsShowing != null) _isLyricsShowing = isLyricsShowing;
     if (batteryState != null) {
-      debugPrint("KeepScreenOnHelper reported battery state: $batteryState");
+      _keepScreenOnLogger.fine("reported battery state: $batteryState");
       switch (batteryState) {
         case BatteryState.charging:
         case BatteryState.connectedNotCharging:
@@ -92,5 +113,22 @@ class KeepScreenOnHelper {
       keepingScreenOn = false;
       KeepScreenOn.turnOff();
     }
+  }
+}
+
+class KeepScreenOnObserver extends NavigatorObserver {
+  static final _lyricsCheck = ModalRoute.withName(LyricsScreen.routeName);
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    // Just pushed to lyrics?
+    if (_lyricsCheck(route)) KeepScreenOnHelper.setCondition(isLyricsShowing: true);
+    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    // Just popped lyrics?
+    if (_lyricsCheck(route)) KeepScreenOnHelper.setCondition(isLyricsShowing: false);
+    super.didPop(route, previousRoute);
   }
 }

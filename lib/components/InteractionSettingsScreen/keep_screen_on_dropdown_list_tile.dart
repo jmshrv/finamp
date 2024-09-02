@@ -7,7 +7,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class KeepScreenOnDropdownListTile extends StatelessWidget {
-  const KeepScreenOnDropdownListTile({Key? key}) : super(key: key);
+  const KeepScreenOnDropdownListTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,6 @@ class KeepScreenOnDropdownListTile extends StatelessWidget {
             onChanged: (value) {
               if (value != null) {
                 FinampSettingsHelper.setKeepScreenOnOption(value);
-                KeepScreenOnHelper.setKeepScreenOn();
               }
             },
           ),

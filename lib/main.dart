@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:battery_plus/battery_plus.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
@@ -118,6 +117,7 @@ void main() async {
         : "en_US";
     await initializeDateFormatting(localeString, null);
 
+    KeepScreenOnHelper.init();
     runApp(Finamp());
   }
 }
@@ -400,16 +400,7 @@ Future<void> _setupFinampUserHelper() async {
 }
 
 class Finamp extends ConsumerStatefulWidget {
-  /// Constructor added for KeepScreenOn
-  Finamp({super.key}) {
-    var battery = Battery();
-
-    // Monitor if device battery state changed.
-    battery.onBatteryStateChanged.listen((BatteryState state) {
-      debugPrint("KeepScreenOnInMain battery state: $state");
-      KeepScreenOnHelper.setCondition(batteryState: state);
-    });
-  }
+  Finamp({super.key});
 
   @override
   ConsumerState<Finamp> createState() => _FinampState();
@@ -522,7 +513,10 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                           const LanguageSelectionScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
-                    navigatorObservers: [SplitScreenNavigatorObserver()],
+                    navigatorObservers: [
+                      SplitScreenNavigatorObserver(),
+                      KeepScreenOnObserver()
+                    ],
                     builder: buildPlayerSplitScreenScaffold,
                     theme: ThemeData(
                       brightness: Brightness.light,

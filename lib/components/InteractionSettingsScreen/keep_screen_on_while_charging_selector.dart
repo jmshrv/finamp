@@ -7,7 +7,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class KeepScreenOnWhilePluggedInSelector extends StatelessWidget {
-  const KeepScreenOnWhilePluggedInSelector({Key? key}) : super(key: key);
+  const KeepScreenOnWhilePluggedInSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,6 @@ class KeepScreenOnWhilePluggedInSelector extends StatelessWidget {
           value: FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn,
           onChanged: (value) {
             FinampSettingsHelper.setKeepScreenOnWhileCharging(value);
-            KeepScreenOnHelper.setKeepScreenOn();
           },
         );
       },
