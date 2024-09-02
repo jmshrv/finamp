@@ -72,11 +72,6 @@ class _LyricsScreenContent extends StatefulWidget {
 
 class _LyricsScreenContentState extends State<_LyricsScreenContent> {
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double toolbarHeight = 53;
     int maxLines = 2;
@@ -239,6 +234,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
 
   @override
   Widget build(BuildContext context) {
+
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
