@@ -7,6 +7,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
@@ -72,10 +73,18 @@ class _LyricsScreenContent extends StatefulWidget {
 
 class _LyricsScreenContentState extends State<_LyricsScreenContent> {
   @override
+  void dispose() {
+    KeepScreenOnHelper.setCondition(isLyricsShowing: false);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double toolbarHeight = 53;
     int maxLines = 2;
 
+    KeepScreenOnHelper.setCondition(isLyricsShowing: true);
+    
     var controller = PlayerHideableController();
 
     return Scaffold(
