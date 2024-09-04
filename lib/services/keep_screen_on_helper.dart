@@ -15,6 +15,7 @@ class KeepScreenOnHelper {
   static bool _isPlaying = false;
   static bool _isLyricsShowing = false;
   static bool _isPluggedIn = false;
+  static BatteryState _prevBattState = BatteryState.unknown;
 
   static final _keepScreenOnLogger = Logger("KeepScreenOnHelper");
 
@@ -28,7 +29,10 @@ class KeepScreenOnHelper {
     // Subscribe to battery state change events
     var battery = Battery();
     battery.onBatteryStateChanged.listen((BatteryState state) {
-      KeepScreenOnHelper.setCondition(batteryState: state);
+      if (_prevBattState != state) {
+        _prevBattState = state;
+        KeepScreenOnHelper.setCondition(batteryState: state);
+      }
     });
 
     FinampSettingsHelper.finampSettingsListener.addListener(() {
@@ -104,7 +108,7 @@ class KeepScreenOnHelper {
   }
 }
 
-class KeepScreenOnObserver extends NavigatorObserver {
+class KeepScreenOnObserver extends RouteObserver<PageRoute<dynamic>> {
   static final _lyricsCheck = ModalRoute.withName(LyricsScreen.routeName);
   @override
   void didPush(Route route, Route? previousRoute) {
