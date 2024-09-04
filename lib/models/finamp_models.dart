@@ -2191,11 +2191,13 @@ enum LyricsFontSize {
 @HiveType(typeId: 72)
 enum KeepScreenOnOption {
   @HiveField(0)
-  whileLyrics,
+  disabled,
   @HiveField(1)
-  whilePlaying,
+  alwaysOn,
   @HiveField(2)
-  disabled;
+  whilePlaying,
+  @HiveField(3)
+  whileLyrics;
 
   /// Human-readable version of this enum. I've written longer descriptions on
   /// enums like [TabContentType], and I can't be bothered to copy and paste it
@@ -2211,6 +2213,8 @@ enum KeepScreenOnOption {
     switch (keepScreenOnOption) {
       case KeepScreenOnOption.disabled:
         return "Disabled";
+      case KeepScreenOnOption.alwaysOn:
+        return "Always On";
       case KeepScreenOnOption.whilePlaying:
         return "While Playing Music";
       case KeepScreenOnOption.whileLyrics:
@@ -2223,10 +2227,12 @@ enum KeepScreenOnOption {
     switch (keepScreenOnOption) {
       case KeepScreenOnOption.disabled:
         return AppLocalizations.of(context)!.keepScreenOnDisabled;
+      case KeepScreenOnOption.alwaysOn:
+        return AppLocalizations.of(context)!.keepScreenOnAlwaysOn;
       case KeepScreenOnOption.whilePlaying:
-        return AppLocalizations.of(context)!.whilePlaying;
+        return AppLocalizations.of(context)!.keepScreenOnWhilePlaying;
       case KeepScreenOnOption.whileLyrics:
-        return AppLocalizations.of(context)!.whileLyrics;
+        return AppLocalizations.of(context)!.keepScreenOnWhileLyrics;
     }
   }
 }
