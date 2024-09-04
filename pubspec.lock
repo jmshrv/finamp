@@ -815,22 +815,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.11"
-  keep_screen_on:
-    dependency: "direct main"
-    description:
-      name: keep_screen_on
-      sha256: "374405358a3229b0e1041b6e390ff4c74e73fbd21075298042044e0c84b5574c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
-  keep_screen_on_platform_interface:
-    dependency: transitive
-    description:
-      name: keep_screen_on_platform_interface
-      sha256: "065a0811407a970027c7530f9b8f36d11c89f36aab85b4b5acdacfe2cf3a8568"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   leak_tracker:
     dependency: transitive
     description:
@@ -1623,6 +1607,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.2.5"
+  wakelock_plus:
+    dependency: "direct main"
+    description:
+      name: wakelock_plus
+      sha256: bf4ee6f17a2fa373ed3753ad0e602b7603f8c75af006d5b9bdade263928c0484
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.8"
+  wakelock_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: wakelock_plus_platform_interface
+      sha256: "422d1cdbb448079a8a62a5a770b69baa489f8f7ca21aef47800c726d404f9d16"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   watcher:
     dependency: transitive
     description:
