@@ -87,6 +87,7 @@ void main() async {
     await _setupDownloadsHelper();
     await _setupOSIntegration();
     await _setupPlaybackServices();
+    await _setupKeepScreenOnHelper();
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -116,8 +117,7 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     await initializeDateFormatting(localeString, null);
-
-    KeepScreenOnHelper.init();
+    
     runApp(const Finamp());
   }
 }
@@ -151,6 +151,10 @@ Future<void> _setupDownloadsHelper() async {
       .configure(globalConfig: (Config.checkAvailableSpace, 1024));
   await FileDownloader().resumeFromBackground();
   await downloadsService.startQueues();
+}
+
+Future<void> _setupKeepScreenOnHelper() async {
+  GetIt.instance.registerSingleton(KeepScreenOnHelper());
 }
 
 Future<void> setupHive() async {
