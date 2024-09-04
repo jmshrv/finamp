@@ -15,6 +15,8 @@ class KeepScreenOnHelper {
   bool _isPlaying = false;
   bool _isLyricsShowing = false;
   bool _isPluggedIn = false;
+  BatteryState _prevBattState = BatteryState.unknown;
+
 
   final _keepScreenOnLogger = Logger("KeepScreenOnHelper");
   
@@ -32,7 +34,10 @@ class KeepScreenOnHelper {
     // Subscribe to battery state change events
     var battery = Battery();
     battery.onBatteryStateChanged.listen((BatteryState state) {
-      setCondition(batteryState: state);
+      if (_prevBattState != state) {
+        _prevBattState = state;
+        setCondition(batteryState: state);
+      }
     });
 
     FinampSettingsHelper.finampSettingsListener.addListener(() {
