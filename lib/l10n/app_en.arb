@@ -1638,10 +1638,11 @@
   "@keepScreenOn": {
     "description": "Option to keep the screen on while using the app"
   },
-  "keepScreenOnSubtitle": "Keep the screen on while playing music or only while showing lyrics",
+  "keepScreenOnSubtitle": "Keep the screen on while using Finamp, only while playing music or only while showing lyrics",
   "keepScreenOnDisabled": "Disabled",
-  "whilePlaying": "While Playing Music",
-  "whileLyrics": "While Showing Lyrics",
+  "keepScreenOnAlwaysOn": "Always On",
+  "keepScreenOnWhilePlaying": "While Playing Music",
+  "keepScreenOnWhileLyrics": "While Showing Lyrics",
   "keepScreenOnWhilePluggedIn": "Keep Screen On only while plugged in",
   "keepScreenOnWhilePluggedInSubtitle": "Ignore the Keep Screen On setting if device is unplugged"
 }
