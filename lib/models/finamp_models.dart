@@ -2191,11 +2191,11 @@ enum LyricsFontSize {
 @HiveType(typeId: 72)
 enum KeepScreenOnOption {
   @HiveField(0)
-  whileLyrics,
+  disabled,
   @HiveField(1)
   whilePlaying,
   @HiveField(2)
-  disabled;
+  whileLyrics;
 
   /// Human-readable version of this enum. I've written longer descriptions on
   /// enums like [TabContentType], and I can't be bothered to copy and paste it
