@@ -8,19 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:logging/logging.dart';
 
-/// KeepScreenOn
-/// 
-/// Added dependencies:
-///   - keep_screen_on: ^3.0.0
-///   - battery_plus: ^6.0.2
-/// This functionality adds two options in settings under "Interactions":
-///   - Keep Screen On: Main Setting
-///   - Keep Screen On: Only while plugged in
-/// 
-/// Ties into the following actions:
-///   - listens for audioHandler's playbackstate to determine _isPlaying.
-///   - Extends NavigatorObserver class to listen for push and pop of LyricScreen to determine _isLyricsShowing
-///   - listens for battyer state changes from the battery_plus widget to determine _isPluggedIn
+/// Implements ability to keep screen on according to various conditions
 class KeepScreenOnHelper {
   static bool keepingScreenOn = false;
 

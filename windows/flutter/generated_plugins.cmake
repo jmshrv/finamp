@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  battery_plus
   isar_flutter_libs
   media_kit_libs_windows_audio
   permission_handler_windows

@@ -180,6 +180,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[68] == null ? false : fields[68] as bool,
       showSeekControlsOnMediaNotification:
           fields[69] == null ? true : fields[69] as bool,
+      keepScreenOnOption: fields[72] == null
+          ? KeepScreenOnOption.disabled
+          : fields[72] as KeepScreenOnOption,
+      keepScreenOnWhilePluggedIn:
+          fields[73] == null ? true : fields[73] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -189,7 +194,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(70)
+      ..writeByte(72)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -329,7 +334,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(70)
       ..write(obj.lyricsFontSize)
       ..writeByte(71)
-      ..write(obj.showLyricsScreenAlbumPrelude);
+      ..write(obj.showLyricsScreenAlbumPrelude)
+      ..writeByte(72)
+      ..write(obj.keepScreenOnOption)
+      ..writeByte(73)
+      ..write(obj.keepScreenOnWhilePluggedIn);
   }
 
   @override
@@ -1816,6 +1825,50 @@ class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is LyricsFontSizeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
+  @override
+  final int typeId = 72;
+
+  @override
+  KeepScreenOnOption read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return KeepScreenOnOption.disabled;
+      case 1:
+        return KeepScreenOnOption.whilePlaying;
+      case 2:
+        return KeepScreenOnOption.whileLyrics;
+      default:
+        return KeepScreenOnOption.disabled;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, KeepScreenOnOption obj) {
+    switch (obj) {
+      case KeepScreenOnOption.disabled:
+        writer.writeByte(0);
+        break;
+      case KeepScreenOnOption.whilePlaying:
+        writer.writeByte(1);
+        break;
+      case KeepScreenOnOption.whileLyrics:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is KeepScreenOnOptionAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

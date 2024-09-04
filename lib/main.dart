@@ -118,7 +118,7 @@ void main() async {
     await initializeDateFormatting(localeString, null);
 
     KeepScreenOnHelper.init();
-    runApp(Finamp());
+    runApp(const Finamp());
   }
 }
 
@@ -400,7 +400,7 @@ Future<void> _setupFinampUserHelper() async {
 }
 
 class Finamp extends ConsumerStatefulWidget {
-  Finamp({super.key});
+  const Finamp({super.key});
 
   @override
   ConsumerState<Finamp> createState() => _FinampState();
