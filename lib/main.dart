@@ -517,7 +517,10 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                           const LanguageSelectionScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
-                    navigatorObservers: [SplitScreenNavigatorObserver()],
+                    navigatorObservers: [
+                      SplitScreenNavigatorObserver(),
+                      KeepScreenOnObserver()
+                    ],
                     builder: buildPlayerSplitScreenScaffold,
                     theme: ThemeData(
                       brightness: Brightness.light,
