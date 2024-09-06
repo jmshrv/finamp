@@ -1,7 +1,9 @@
 import 'package:battery_plus/battery_plus.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -70,8 +72,7 @@ class KeepScreenOnHelper {
           break;
       }
     }
-    _keepScreenOnLogger.fine(
-        "keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
+    _keepScreenOnLogger.fine("keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
   }
 
   void setCondition({bool? isPlaying, bool? isLyricsShowing, BatteryState? batteryState}) {
@@ -110,5 +111,24 @@ class KeepScreenOnHelper {
       _keepingScreenOn = false;
       WakelockPlus.disable();
     }
+  }
+}
+
+class KeepScreenOnObserver extends NavigatorObserver {
+  final KeepScreenOnHelper keepScreenOnHelper = GetIt.instance<KeepScreenOnHelper>();
+
+  static final _lyricsCheck = ModalRoute.withName(LyricsScreen.routeName);
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    // Just pushed to lyrics?
+    if (_lyricsCheck(route)) keepScreenOnHelper.setCondition(isLyricsShowing: true);
+    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    // Just popped lyrics?
+    if (_lyricsCheck(route)) keepScreenOnHelper.setCondition(isLyricsShowing: false);
+    super.didPop(route, previousRoute);
   }
 }
