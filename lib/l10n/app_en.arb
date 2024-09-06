@@ -1640,6 +1640,7 @@
   },
   "keepScreenOnSubtitle": "Keep the screen on while playing music or only while showing lyrics",
   "keepScreenOnDisabled": "Disabled",
+  "always": "Always On",
   "whilePlaying": "While Playing Music",
   "whileLyrics": "While Showing Lyrics",
   "keepScreenOnWhilePluggedIn": "Keep Screen On only while plugged in",

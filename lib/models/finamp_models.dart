@@ -2193,8 +2193,10 @@ enum KeepScreenOnOption {
   @HiveField(0)
   disabled,
   @HiveField(1)
-  whilePlaying,
+  always,
   @HiveField(2)
+  whilePlaying,
+  @HiveField(3)
   whileLyrics;
 
   /// Human-readable version of this enum. I've written longer descriptions on
