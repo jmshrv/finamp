@@ -2213,6 +2213,8 @@ enum KeepScreenOnOption {
     switch (keepScreenOnOption) {
       case KeepScreenOnOption.disabled:
         return "Disabled";
+      case KeepScreenOnOption.always:
+        return "Always On";
       case KeepScreenOnOption.whilePlaying:
         return "While Playing Music";
       case KeepScreenOnOption.whileLyrics:
@@ -2225,6 +2227,8 @@ enum KeepScreenOnOption {
     switch (keepScreenOnOption) {
       case KeepScreenOnOption.disabled:
         return AppLocalizations.of(context)!.keepScreenOnDisabled;
+      case KeepScreenOnOption.always:
+        return "Always On";
       case KeepScreenOnOption.whilePlaying:
         return AppLocalizations.of(context)!.whilePlaying;
       case KeepScreenOnOption.whileLyrics:

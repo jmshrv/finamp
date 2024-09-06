@@ -181,7 +181,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       showSeekControlsOnMediaNotification:
           fields[69] == null ? true : fields[69] as bool,
       keepScreenOnOption: fields[72] == null
-          ? KeepScreenOnOption.disabled
+          ? KeepScreenOnOption.whileLyrics
           : fields[72] as KeepScreenOnOption,
       keepScreenOnWhilePluggedIn:
           fields[73] == null ? true : fields[73] as bool,
@@ -1839,8 +1839,10 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
       case 0:
         return KeepScreenOnOption.disabled;
       case 1:
-        return KeepScreenOnOption.whilePlaying;
+        return KeepScreenOnOption.always;
       case 2:
+        return KeepScreenOnOption.whilePlaying;
+      case 3:
         return KeepScreenOnOption.whileLyrics;
       default:
         return KeepScreenOnOption.disabled;
@@ -1853,11 +1855,14 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
       case KeepScreenOnOption.disabled:
         writer.writeByte(0);
         break;
-      case KeepScreenOnOption.whilePlaying:
+      case KeepScreenOnOption.always:
         writer.writeByte(1);
         break;
-      case KeepScreenOnOption.whileLyrics:
+      case KeepScreenOnOption.whilePlaying:
         writer.writeByte(2);
+        break;
+      case KeepScreenOnOption.whileLyrics:
+        writer.writeByte(3);
         break;
     }
   }

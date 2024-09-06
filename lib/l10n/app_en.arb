@@ -1638,7 +1638,7 @@
   "@keepScreenOn": {
     "description": "Option to keep the screen on while using the app"
   },
-  "keepScreenOnSubtitle": "Keep the screen on while playing music or only while showing lyrics",
+  "keepScreenOnSubtitle": "Keep the screen on while using the app, while playing music or only while showing lyrics",
   "keepScreenOnDisabled": "Disabled",
   "always": "Always On",
   "whilePlaying": "While Playing Music",
