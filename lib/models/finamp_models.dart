@@ -111,6 +111,8 @@ const _lyricsFontSizeDefault = LyricsFontSize.medium;
 const _showLyricsScreenAlbumPreludeDefault = true;
 const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
+const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
+const _keepScreenOnWhilePluggedIn = true;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -190,6 +192,8 @@ class FinampSettings {
     this.showLyricsScreenAlbumPrelude = _showLyricsScreenAlbumPreludeDefault,
     this.showStopButtonOnMediaNotification = _showStopButtonOnMediaNotificationDefault,
     this.showSeekControlsOnMediaNotification = _showSeekControlsOnMediaNotificationDefault,
+    this.keepScreenOnOption = _keepScreenOnOption,
+    this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn
   });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
@@ -420,6 +424,12 @@ class FinampSettings {
 
   @HiveField(71, defaultValue: _showLyricsScreenAlbumPreludeDefault)
   bool showLyricsScreenAlbumPrelude;
+
+  @HiveField(72, defaultValue: _keepScreenOnOption)
+  KeepScreenOnOption keepScreenOnOption;
+
+  @HiveField(73, defaultValue: _keepScreenOnWhilePluggedIn)
+  bool keepScreenOnWhilePluggedIn;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2174,6 +2184,49 @@ enum LyricsFontSize {
         return AppLocalizations.of(context)!.fontSizeOptionMedium;
       case LyricsFontSize.large:
         return AppLocalizations.of(context)!.fontSizeOptionLarge;
+    }
+  }
+}
+
+@HiveType(typeId: 72)
+enum KeepScreenOnOption {
+  @HiveField(0)
+  disabled,
+  @HiveField(1)
+  whilePlaying,
+  @HiveField(2)
+  whileLyrics;
+
+  /// Human-readable version of this enum. I've written longer descriptions on
+  /// enums like [TabContentType], and I can't be bothered to copy and paste it
+  /// again.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(KeepScreenOnOption keepScreenOnOption) {
+    switch (keepScreenOnOption) {
+      case KeepScreenOnOption.disabled:
+        return "Disabled";
+      case KeepScreenOnOption.whilePlaying:
+        return "While Playing Music";
+      case KeepScreenOnOption.whileLyrics:
+        return "While Showing Lyrics";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      KeepScreenOnOption keepScreenOnOption, BuildContext context) {
+    switch (keepScreenOnOption) {
+      case KeepScreenOnOption.disabled:
+        return AppLocalizations.of(context)!.keepScreenOnDisabled;
+      case KeepScreenOnOption.whilePlaying:
+        return AppLocalizations.of(context)!.whilePlaying;
+      case KeepScreenOnOption.whileLyrics:
+        return AppLocalizations.of(context)!.whileLyrics;
     }
   }
 }

@@ -16,6 +16,7 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -86,6 +87,7 @@ void main() async {
     await _setupDownloadsHelper();
     await _setupOSIntegration();
     await _setupPlaybackServices();
+    await _setupKeepScreenOnHelper();
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -115,7 +117,7 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     await initializeDateFormatting(localeString, null);
-
+    
     runApp(const Finamp());
   }
 }
@@ -149,6 +151,10 @@ Future<void> _setupDownloadsHelper() async {
       .configure(globalConfig: (Config.checkAvailableSpace, 1024));
   await FileDownloader().resumeFromBackground();
   await downloadsService.startQueues();
+}
+
+Future<void> _setupKeepScreenOnHelper() async {
+  GetIt.instance.registerSingleton(KeepScreenOnHelper());
 }
 
 Future<void> setupHive() async {
@@ -214,6 +220,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LyricDtoAdapter());
   Hive.registerAdapter(LyricsAlignmentAdapter());
   Hive.registerAdapter(LyricsFontSizeAdapter());
+  Hive.registerAdapter(KeepScreenOnOptionAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
@@ -397,7 +404,7 @@ Future<void> _setupFinampUserHelper() async {
 }
 
 class Finamp extends ConsumerStatefulWidget {
-  const Finamp({Key? key}) : super(key: key);
+  const Finamp({super.key});
 
   @override
   ConsumerState<Finamp> createState() => _FinampState();
@@ -510,7 +517,10 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                           const LanguageSelectionScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
-                    navigatorObservers: [SplitScreenNavigatorObserver()],
+                    navigatorObservers: [
+                      SplitScreenNavigatorObserver(),
+                      KeepScreenOnObserver()
+                    ],
                     builder: buildPlayerSplitScreenScaffold,
                     theme: ThemeData(
                       brightness: Brightness.light,

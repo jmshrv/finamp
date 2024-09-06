@@ -1,3 +1,5 @@
+import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropdown_list_tile.dart';
+import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,8 @@ class InteractionSettingsScreen extends StatelessWidget {
           FastScrollSelector(),
           DisableGestureSelector(),
           DisableVibrationSelector(),
+          KeepScreenOnDropdownListTile(),
+          KeepScreenOnWhilePluggedInSelector()
         ],
       ),
     );
