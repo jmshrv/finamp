@@ -46,16 +46,13 @@ class KeepScreenOnHelper {
     });
   }
 
-  void setKeepScreenOn() {
+  void setKeepScreenOn() async {
     if (FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn && !_isPluggedIn) {
       _turnOff();
     } else {
       switch (FinampSettingsHelper.finampSettings.keepScreenOnOption) {
         case KeepScreenOnOption.disabled:
           if (_keepingScreenOn) _turnOff();
-          break;
-        case KeepScreenOnOption.alwaysOn:
-          _turnOn();
           break;
         case KeepScreenOnOption.whilePlaying:
           if (_isPlaying) {
@@ -73,6 +70,7 @@ class KeepScreenOnHelper {
           break;
       }
     }
+    
     _keepScreenOnLogger.fine("keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
   }
 
