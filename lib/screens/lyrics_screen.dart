@@ -72,18 +72,10 @@ class _LyricsScreenContent extends StatefulWidget {
 
 class _LyricsScreenContentState extends State<_LyricsScreenContent> {
   @override
-  void dispose() {
-    KeepScreenOnHelper.setCondition(isLyricsShowing: false);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double toolbarHeight = 53;
     int maxLines = 2;
 
-    KeepScreenOnHelper.setCondition(isLyricsShowing: true);
-    
     var controller = PlayerHideableController();
 
     return Scaffold(
