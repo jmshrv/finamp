@@ -112,6 +112,7 @@ const _showLyricsScreenAlbumPreludeDefault = true;
 const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
 const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
+const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
 const _keepScreenOnWhilePluggedIn = true;
 
 @HiveType(typeId: 28)
