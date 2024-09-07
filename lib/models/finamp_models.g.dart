@@ -1839,7 +1839,7 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
       case 0:
         return KeepScreenOnOption.disabled;
       case 1:
-        return KeepScreenOnOption.whilePlaying;
+        return KeepScreenOnOption.alwaysOn;
       case 2:
         return KeepScreenOnOption.whilePlaying;
       case 3:
@@ -1855,7 +1855,7 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
       case KeepScreenOnOption.disabled:
         writer.writeByte(0);
         break;
-      case KeepScreenOnOption.whilePlaying:
+      case KeepScreenOnOption.alwaysOn:
         writer.writeByte(1);
         break;
       case KeepScreenOnOption.whilePlaying:
