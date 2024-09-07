@@ -53,6 +53,9 @@ class KeepScreenOnHelper {
         case KeepScreenOnOption.disabled:
           if (_keepingScreenOn) _turnOff();
           break;
+        case KeepScreenOnOption.alwaysOn:
+          _turnOn();
+          break;
         case KeepScreenOnOption.whilePlaying:
           if (_isPlaying) {
             _turnOn();
