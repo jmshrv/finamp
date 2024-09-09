@@ -54,6 +54,9 @@ class KeepScreenOnHelper {
         case KeepScreenOnOption.disabled:
           if (_keepingScreenOn) _turnOff();
           break;
+        case KeepScreenOnOption.alwaysOn:
+          _turnOn();
+          break;
         case KeepScreenOnOption.whilePlaying:
           if (_isPlaying) {
             _turnOn();
@@ -70,6 +73,7 @@ class KeepScreenOnHelper {
           break;
       }
     }
+    
     _keepScreenOnLogger.fine("keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
   }
 
