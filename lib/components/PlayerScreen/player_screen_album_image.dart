@@ -81,42 +81,39 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
                 }
               }
             },
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              //aspectRatio: 0.5,
-              child: Align(
-                alignment: Alignment.center,
-                child: LayoutBuilder(builder: (context, constraints) {
-                  //print(
-                  //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
-                  final horizontalPadding = constraints.maxWidth *
-                      (FinampSettingsHelper
-                              .finampSettings.playerScreenCoverMinimumPadding /
-                          100.0);
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      left: horizontalPadding,
-                      right: horizontalPadding,
-                    ),
-                    child: AlbumImage(
-                      imageListenable: currentAlbumImageProvider,
-                      borderRadius: BorderRadius.circular(8.0),
-                      // Load player cover at max size to allow more seamless scaling
-                      autoScale: false,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 24,
-                            offset: const Offset(0, 4),
-                            color: Colors.black.withOpacity(0.3),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ),
+            child: LayoutBuilder(builder: (context, constraints) {
+              //print(
+              //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
+              final horizontalPadding = constraints.maxWidth *
+                  (FinampSettingsHelper
+                          .finampSettings.playerScreenCoverMinimumPadding /
+                      100.0);
+              final verticalPadding = constraints.maxHeight *
+                  (FinampSettingsHelper
+                          .finampSettings.playerScreenCoverMinimumPadding /
+                      100.0);
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: horizontalPadding,
+                  vertical: verticalPadding,
+                ),
+                child: AlbumImage(
+                  imageListenable: currentAlbumImageProvider,
+                  borderRadius: BorderRadius.circular(8.0),
+                  // Load player cover at max size to allow more seamless scaling
+                  autoScale: false,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 24,
+                        offset: const Offset(0, 4),
+                        color: Colors.black.withOpacity(0.3),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }),
           ),
         );
       },

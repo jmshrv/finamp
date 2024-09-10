@@ -74,61 +74,64 @@ class AlbumImage extends ConsumerWidget {
       );
     }
 
-    return ClipRRect(
-      borderRadius: borderRadius,
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: LayoutBuilder(builder: (context, constraints) {
-          int? physicalWidth;
-          int? physicalHeight;
-          if (autoScale) {
-            // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
-            // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
-            // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
-            // If we use logical pixels for the image request, we'll get a smaller image than we want.
-            // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
-            final MediaQueryData mediaQuery = MediaQuery.of(context);
-            physicalWidth =
-                (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
-            physicalHeight =
-                (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
-            // If using grid music screen view without fixed size tiles, and if the view is resizable due
-            // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
-            if ((!(Platform.isIOS || Platform.isAndroid) ||
-                    usingPlayerSplitScreen) &&
-                !FinampSettingsHelper.finampSettings.useFixedSizeGridTiles &&
-                FinampSettingsHelper.finampSettings.contentViewType ==
-                    ContentViewType.grid) {
-              physicalWidth = exp((log(physicalWidth) * 3).ceil() / 3).toInt();
+    return AspectRatio(
+      aspectRatio: 1.0,
+      child: Align(
+        child: ClipRRect(
+          borderRadius: borderRadius,
+          child: LayoutBuilder(builder: (context, constraints) {
+            int? physicalWidth;
+            int? physicalHeight;
+            if (autoScale) {
+              // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
+              // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
+              // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
+              // If we use logical pixels for the image request, we'll get a smaller image than we want.
+              // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
+              final MediaQueryData mediaQuery = MediaQuery.of(context);
+              physicalWidth =
+                  (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
               physicalHeight =
-                  exp((log(physicalHeight) * 3).ceil() / 3).toInt();
+                  (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+              // If using grid music screen view without fixed size tiles, and if the view is resizable due
+              // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
+              if ((!(Platform.isIOS || Platform.isAndroid) ||
+                      usingPlayerSplitScreen) &&
+                  !FinampSettingsHelper.finampSettings.useFixedSizeGridTiles &&
+                  FinampSettingsHelper.finampSettings.contentViewType ==
+                      ContentViewType.grid) {
+                physicalWidth =
+                    exp((log(physicalWidth) * 3).ceil() / 3).toInt();
+                physicalHeight =
+                    exp((log(physicalHeight) * 3).ceil() / 3).toInt();
+              }
             }
-          }
 
-          var image = Container(
-            decoration: decoration,
-            child: BareAlbumImage(
-                imageListenable: imageListenable ??
-                    albumImageProvider(AlbumImageRequest(
-                      item: item!,
-                      maxWidth: physicalWidth,
-                      maxHeight: physicalHeight,
-                    )).select((value) => (value, item?.blurHash)),
-                imageProviderCallback: themeCallback == null
-                    ? null
-                    : (image) => themeCallback!(
-                        FinampTheme.fromImageDeferred(image, item?.blurHash)),
-                placeholderBuilder: placeholderBuilder),
-          );
-          return disabled
-              ? Opacity(
-                  opacity: 0.75,
-                  child: ColorFiltered(
-                      colorFilter:
-                          const ColorFilter.mode(Colors.black, BlendMode.color),
-                      child: image))
-              : image;
-        }),
+            var image = Container(
+              decoration: decoration,
+              child: BareAlbumImage(
+                  imageListenable: imageListenable ??
+                      albumImageProvider(AlbumImageRequest(
+                        item: item!,
+                        maxWidth: physicalWidth,
+                        maxHeight: physicalHeight,
+                      )).select((value) => (value, item?.blurHash)),
+                  imageProviderCallback: themeCallback == null
+                      ? null
+                      : (image) => themeCallback!(
+                          FinampTheme.fromImageDeferred(image, item?.blurHash)),
+                  placeholderBuilder: placeholderBuilder),
+            );
+            return disabled
+                ? Opacity(
+                    opacity: 0.75,
+                    child: ColorFiltered(
+                        colorFilter: const ColorFilter.mode(
+                            Colors.black, BlendMode.color),
+                        child: image))
+                : image;
+          }),
+        ),
       ),
     );
   }

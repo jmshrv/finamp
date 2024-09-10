@@ -205,7 +205,8 @@ class _PlayerScreenContent extends ConsumerWidget {
       },
       onHorizontalSwipe: (direction) {
         if (direction == SwipeDirection.left && isLyricsAvailable) {
-          if (!FinampSettingsHelper.finampSettings.disableGesture || !controller.shouldShow(PlayerHideable.bottomActions)) {
+          if (!FinampSettingsHelper.finampSettings.disableGesture ||
+              !controller.shouldShow(PlayerHideable.bottomActions)) {
             Navigator.of(context).push(_buildSlideRouteTransition(
                 playerScreen, const LyricsScreen(),
                 routeSettings:
@@ -302,7 +303,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                   );
                 } else {
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
@@ -509,9 +510,12 @@ class PlayerHideableController {
         size.height - maxAlbumSize * (1 - (minAlbumPadding / 100.0) * 2);
     var paddedControlsHeight = max(_getSize().height, desiredHeight);
     _target = Size(targetWidth, _controlsInternalHeight(paddedControlsHeight));
+    // 1/3 of padding goes under the controls and is added by the Column, the other
+    // 2/3 should be included in the album cover region
+    var controlsBottomPadding = (paddedControlsHeight - _target!.height) / 3.0;
     // Do not let album size go negative, use full width
     _album = Size(size.width,
-        (size.height - paddedControlsHeight).clamp(1.0, size.width));
+        max(1.0, size.height - _target!.height - controlsBottomPadding));
   }
 
   /// Update player screen hidden elements based on usable area in landscape mode.
