@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/services/progress_state_stream.dart';
@@ -131,20 +133,28 @@ class _ProgressSliderDuration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final showRemaining = Platform.isIOS || Platform.isMacOS;
+    final currentPosition = Duration(seconds: (position.inMilliseconds / 1000).round());
+    final roundedDuration = Duration(seconds: ((itemDuration?.inMilliseconds ?? 0) / 1000).round());
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          printDuration(
-            Duration(microseconds: position.inMicroseconds),
-          ),
+          printDuration(currentPosition),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 height: 0.5, // reduce line height
               ),
         ),
         Text(
-          printDuration(itemDuration),
+          printDuration(
+            // display remaining time if on iOS or macOS
+            showRemaining ?
+              (roundedDuration - currentPosition)
+              : roundedDuration
+            ,
+            isRemaining: showRemaining,
+          ),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 height: 0.5, // reduce line height
               ),
