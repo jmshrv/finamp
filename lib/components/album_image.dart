@@ -166,9 +166,11 @@ class BareAlbumImage extends ConsumerWidget {
     var localPlaceholder = placeholderBuilder;
     if (blurHash != null) {
       localPlaceholder ??= (_) => Image(
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             image: BlurHashImage(
               blurHash,
+              // Allow scaling blurhashes up to 3200 pixels wide by setting scale
+              scale: 0.01,
             ),
           );
     }
