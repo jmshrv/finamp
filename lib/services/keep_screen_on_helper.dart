@@ -15,11 +15,9 @@ class KeepScreenOnHelper {
   bool _isPlaying = false;
   bool _isLyricsShowing = false;
   bool _isPluggedIn = false;
-  BatteryState _prevBattState = BatteryState.unknown;
-
 
   final _keepScreenOnLogger = Logger("KeepScreenOnHelper");
-  
+
   KeepScreenOnHelper() {
     _attachEvents();
   }
@@ -28,14 +26,17 @@ class KeepScreenOnHelper {
     // Subscribe to audio playback events
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
     audioHandler.playbackState.listen((event) async {
-      setCondition(isPlaying: event.playing);
+      if (_isPlaying != event.playing) {
+        setCondition(isPlaying: event.playing);
+      }
     });
 
     // Subscribe to battery state change events
     var battery = Battery();
+    BatteryState prevBattState = BatteryState.unknown;
     battery.onBatteryStateChanged.listen((BatteryState state) {
-      if (_prevBattState != state) {
-        _prevBattState = state;
+      if (prevBattState != state) {
+        prevBattState = state;
         setCondition(batteryState: state);
       }
     });
@@ -47,7 +48,8 @@ class KeepScreenOnHelper {
   }
 
   void setKeepScreenOn() {
-    if (FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn && !_isPluggedIn) {
+    if (FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn &&
+        !_isPluggedIn) {
       _turnOff();
     } else {
       switch (FinampSettingsHelper.finampSettings.keepScreenOnOption) {
@@ -73,11 +75,13 @@ class KeepScreenOnHelper {
           break;
       }
     }
-    
-    _keepScreenOnLogger.fine("keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
+
+    _keepScreenOnLogger.fine(
+        "keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
   }
 
-  void setCondition({bool? isPlaying, bool? isLyricsShowing, BatteryState? batteryState}) {
+  void setCondition(
+      {bool? isPlaying, bool? isLyricsShowing, BatteryState? batteryState}) {
     if (isPlaying != null) _isPlaying = isPlaying;
     if (isLyricsShowing != null) _isLyricsShowing = isLyricsShowing;
     if (batteryState != null) {
@@ -117,20 +121,25 @@ class KeepScreenOnHelper {
 }
 
 class KeepScreenOnObserver extends NavigatorObserver {
-  final KeepScreenOnHelper keepScreenOnHelper = GetIt.instance<KeepScreenOnHelper>();
+  final KeepScreenOnHelper keepScreenOnHelper =
+      GetIt.instance<KeepScreenOnHelper>();
 
   static final _lyricsCheck = ModalRoute.withName(LyricsScreen.routeName);
   @override
   void didPush(Route route, Route? previousRoute) {
     // Just pushed to lyrics?
-    if (_lyricsCheck(route)) keepScreenOnHelper.setCondition(isLyricsShowing: true);
+    if (_lyricsCheck(route)) {
+      keepScreenOnHelper.setCondition(isLyricsShowing: true);
+    }
     super.didPush(route, previousRoute);
   }
 
   @override
   void didPop(Route route, Route? previousRoute) {
     // Just popped lyrics?
-    if (_lyricsCheck(route)) keepScreenOnHelper.setCondition(isLyricsShowing: false);
+    if (_lyricsCheck(route)) {
+      keepScreenOnHelper.setCondition(isLyricsShowing: false);
+    }
     super.didPop(route, previousRoute);
   }
 }
