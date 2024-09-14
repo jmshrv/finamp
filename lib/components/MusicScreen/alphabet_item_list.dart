@@ -7,6 +7,7 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:focus_on_it/focus_on_it.dart';
 
 enum Drag {
   start,
@@ -128,18 +129,34 @@ class _AlphabetListState extends State<AlphabetList> {
                   child: widget.child,
                 )),
             if (_currentSelected != null && _displayPreview)
-              Positioned(
-                left: 20,
-                top: 20,
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width / 3,
-                  height: MediaQuery.sizeOf(context).width / 3,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor.withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: FittedBox(
-                      child: Text(_currentSelected!,
-                          style: const TextStyle(fontSize: 120))),
+              FocusOnIt(
+                onUnfocus: () {
+                  setState(() {
+                    _currentSelected = null;
+                    _displayPreview = false;
+                  });
+                },
+                child: Positioned(
+                  left: 20,
+                  top: 20,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _currentSelected = null;
+                        _displayPreview = false;
+                      });
+                    },
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width / 3,
+                      height: MediaQuery.sizeOf(context).width / 3,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor.withOpacity(0.85),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: FittedBox(
+                          child: Text(_currentSelected!,
+                              style: const TextStyle(fontSize: 120))),
+                    ),
+                  ),
                 ),
               ),
             Directionality.of(context) == TextDirection.rtl
@@ -188,6 +205,9 @@ class _AlphabetListState extends State<AlphabetList> {
             _displayPreview = false;
             _currentSelected = null;
           });
+        } else {
+          _displayPreview = false;
+          _currentSelected = null;
         }
       });
     } else if (_currentSelected != _toBeSelected) {
