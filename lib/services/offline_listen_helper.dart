@@ -48,7 +48,7 @@ class OfflineListenLogHelper {
       trackMbid: itemJson["ProviderIds"]?["MusicBrainzTrack"],
     );
 
-    await _logOfflineListen(offlineListen);
+    return _logOfflineListen(offlineListen);
   }
 
   /// Logs a listen to a file.
@@ -56,10 +56,11 @@ class OfflineListenLogHelper {
   /// This is used when the user is offline or submitting live playback events fails.
   /// The [timestamp] provided to this function should be in seconds
   /// and marks the time the track was stopped.
-  Future<void> _logOfflineListen(OfflineListen listen) async {
-    Hive.box<OfflineListen>("OfflineListens").add(listen);
-
-    _exportOfflineListenToFile(listen);
+  Future<void> _logOfflineListen(OfflineListen listen) {
+    return Future.wait([
+      Hive.box<OfflineListen>("OfflineListens").add(listen),
+      _exportOfflineListenToFile(listen)
+    ]);
   }
 
   Future<void> _exportOfflineListenToFile(OfflineListen listen) async {
@@ -76,7 +77,7 @@ class OfflineListenLogHelper {
 
     final file = await _logFile;
     try {
-      file.writeAsString(content, mode: FileMode.append, flush: true);
+      await file.writeAsString(content, mode: FileMode.append, flush: true);
     } catch (e) {
       _logger.warning("Failed to write listen to file: $content");
     }

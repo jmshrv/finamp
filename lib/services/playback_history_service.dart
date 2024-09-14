@@ -341,7 +341,7 @@ class PlaybackHistoryService {
   ) async {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       if (previousItem != null) {
-        _offlineListenLogHelper.logOfflineListen(previousItem.item);
+        await _offlineListenLogHelper.logOfflineListen(previousItem.item);
       }
       return;
     }
@@ -382,7 +382,7 @@ class PlaybackHistoryService {
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
         if (previousItem != null) {
-          _offlineListenLogHelper.logOfflineListen(previousItem.item);
+          await _offlineListenLogHelper.logOfflineListen(previousItem.item);
         }
       }
     }
@@ -396,7 +396,7 @@ class PlaybackHistoryService {
         await _jellyfinApiHelper.reportPlaybackStart(newTrackplaybackData);
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
-        //!!! don't catch with offline listen log helper, as only stop events are logged
+        // don't log start event to offline listen log helper, as only stop events are logged
       }
     }
   }
@@ -433,7 +433,7 @@ class PlaybackHistoryService {
           }
         } catch (e) {
           _playbackHistoryServiceLogger.warning(e);
-          _offlineListenLogHelper.logOfflineListen(currentItem.item);
+          await _offlineListenLogHelper.logOfflineListen(currentItem.item);
         }
       }
     }
@@ -462,7 +462,7 @@ class PlaybackHistoryService {
   Future<void> _reportPlaybackStopped() async {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       if (_currentTrack != null) {
-        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+        await _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
       }
       return;
     }
@@ -476,7 +476,7 @@ class PlaybackHistoryService {
         }
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
-        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+        await _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
       }
     }
   }
@@ -499,7 +499,6 @@ class PlaybackHistoryService {
         }
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
-        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
       }
     }
   }
