@@ -84,8 +84,12 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
     // This helps keep cache usage by fileImages in check
     // Caching smaller at 2X size results in blurriness comparable to
     // NetworkImages fetched with display size
-    out = ResizeImage(out,
-        width: request.maxWidth! * 2, height: request.maxHeight! * 2);
+    out = ResizeImage(
+      out,
+      width: request.maxWidth! * 2,
+      height: request.maxHeight! * 2,
+      policy: ResizeImagePolicy.fit,
+    );
   }
   return out;
 });
