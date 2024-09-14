@@ -62,6 +62,7 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   flutter_sticky_header: ^0.6.5
   device_info_plus: ^10.0.1
+  app_set_id: ^1.2.0
   package_info_plus: ^8.0.0
   octo_image: ^2.0.0
   # Main split view package does not seem actively maintained.  Use fork with ability to specify
