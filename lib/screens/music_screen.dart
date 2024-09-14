@@ -317,24 +317,122 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       : 8.0),
               child: getFloatingActionButton(sortedTabs.toList()),
             ),
-            body: TabBarView(
-              controller: _tabController,
-              physics: FinampSettingsHelper.finampSettings.disableGesture
-                  ? const NeverScrollableScrollPhysics()
-                  : const AlwaysScrollableScrollPhysics(),
-              dragStartBehavior: DragStartBehavior.down,
-              children: sortedTabs
-                  .map((tabType) => MusicScreenTabView(
-                        tabContentType: tabType,
-                        searchTerm: searchQuery,
-                        view: _finampUserHelper.currentUser?.currentView,
-                        refresh: refreshMap[tabType],
-                      ))
-                  .toList(),
-            ),
+            body: Builder(builder: (context) {
+              return TransparentRightSwipeDetector(
+                action: () {
+                  if (_tabController?.index == 0 &&
+                      !FinampSettingsHelper.finampSettings.disableGesture) {
+                    Scaffold.of(context).openDrawer();
+                  }
+                },
+                child: TabBarView(
+                  controller: _tabController,
+                  physics: FinampSettingsHelper.finampSettings.disableGesture
+                      ? const NeverScrollableScrollPhysics()
+                      : const AlwaysScrollableScrollPhysics(),
+                  dragStartBehavior: DragStartBehavior.down,
+                  children: sortedTabs
+                      .map((tabType) => MusicScreenTabView(
+                            tabContentType: tabType,
+                            searchTerm: searchQuery,
+                            view: _finampUserHelper.currentUser?.currentView,
+                            refresh: refreshMap[tabType],
+                          ))
+                      .toList(),
+                ),
+              );
+            }),
           ),
         );
       },
     );
+  }
+}
+
+// This class causes a horizontal swipe to be processed even when another widget
+// wins the GestureArena.
+class _TransparentSwipeRecognizer extends HorizontalDragGestureRecognizer {
+  _TransparentSwipeRecognizer({
+    super.debugOwner,
+    super.supportedDevices,
+  });
+
+  @override
+  void rejectGesture(int pointer) {
+    acceptGesture(pointer);
+  }
+}
+
+// This class is a cut-down version of SimplifiedGestureDetector/GestureDetector,
+// but using _TransparentSwipeRecognizer instead of HorizontalDragGestureRecognizer
+// to allow both it and the TabBarView to process the same gestures.
+class TransparentRightSwipeDetector extends StatefulWidget {
+  const TransparentRightSwipeDetector(
+      {super.key, this.child, required this.action});
+
+  final Widget? child;
+
+  final void Function() action;
+
+  @override
+  State<TransparentRightSwipeDetector> createState() =>
+      _TransparentRightSwipeDetectorState();
+}
+
+class _TransparentRightSwipeDetectorState
+    extends State<TransparentRightSwipeDetector> {
+  @override
+  Widget build(BuildContext context) {
+    /// Device types that scrollables should accept drag gestures from by default.
+    const Set<PointerDeviceKind> supportedDevices = <PointerDeviceKind>{
+      PointerDeviceKind.touch,
+      PointerDeviceKind.stylus,
+      PointerDeviceKind.invertedStylus,
+      PointerDeviceKind.trackpad,
+      // The VoiceAccess sends pointer events with unknown type when scrolling
+      // scrollables.
+      PointerDeviceKind.unknown,
+    };
+    final Map<Type, GestureRecognizerFactory> gestures =
+        <Type, GestureRecognizerFactory>{};
+    gestures[_TransparentSwipeRecognizer] =
+        GestureRecognizerFactoryWithHandlers<_TransparentSwipeRecognizer>(
+      () => _TransparentSwipeRecognizer(
+          debugOwner: this, supportedDevices: supportedDevices),
+      (_TransparentSwipeRecognizer instance) {
+        instance
+          ..onStart = _onHorizontalDragStart
+          ..onUpdate = _onHorizontalDragUpdate
+          ..onEnd = _onHorizontalDragEnd
+          ..supportedDevices = supportedDevices;
+      },
+    );
+
+    return RawGestureDetector(
+      gestures: gestures,
+      child: widget.child,
+    );
+  }
+
+  Offset? _initialSwipeOffset;
+
+  void _onHorizontalDragStart(DragStartDetails details) {
+    _initialSwipeOffset = details.globalPosition;
+  }
+
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    final finalOffset = details.globalPosition;
+    final initialOffset = _initialSwipeOffset;
+    if (initialOffset != null) {
+      final offsetDifference = initialOffset.dx - finalOffset.dx;
+      if (offsetDifference < -100.0) {
+        _initialSwipeOffset = null;
+        widget.action();
+      }
+    }
+  }
+
+  void _onHorizontalDragEnd(DragEndDetails details) {
+    _initialSwipeOffset = null;
   }
 }
