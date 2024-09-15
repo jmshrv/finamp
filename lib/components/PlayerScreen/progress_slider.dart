@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
@@ -227,6 +228,15 @@ class __PlaybackProgressSliderState
         value: (_dragValue ?? widget.position.inMicroseconds)
             .clamp(0, widget.mediaItem!.duration!.inMicroseconds.toDouble())
             .toDouble(),
+        semanticFormatterCallback: (double value) {
+          final positionFullMinutes = Duration(microseconds: value.toInt()).inMinutes % 60;
+          final positionFullHours = Duration(microseconds: value.toInt()).inHours;
+          final positionSeconds = Duration(microseconds: value.toInt()).inSeconds % 60;
+          final durationFullHours = (widget.mediaItem?.duration?.inHours ?? 0);
+          final durationFullMinutes = (widget.mediaItem?.duration?.inMinutes ?? 0) % 60;
+          final durationSeconds = (widget.mediaItem?.duration?.inSeconds ?? 0) % 60;
+          return "${positionFullHours > 0 ? "$positionFullHours hours " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes minutes " : ""}$positionSeconds seconds of ${durationFullHours > 0 ? "$durationFullHours hours " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes minutes " : ""}$durationSeconds seconds";
+        },
         secondaryTrackValue:
             widget.mediaItem?.extras?["downloadedSongPath"] == null
                 ? widget.playbackState.bufferedPosition.inMicroseconds
@@ -261,7 +271,7 @@ class __PlaybackProgressSliderState
                 // Seek to the new position
                 await _audioHandler
                     .seek(Duration(microseconds: newValue.toInt()));
-
+    
                 // Clear drag value so that the slider uses the play
                 // duration again.
                 if (mounted) {

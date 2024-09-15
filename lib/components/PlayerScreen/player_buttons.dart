@@ -3,6 +3,7 @@ import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
 import 'package:finamp/screens/player_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
@@ -32,50 +33,74 @@ class PlayerButtons extends StatelessWidget {
             children: [
               if (controller.shouldShow(PlayerHideable.loopShuffleButtons))
                 PlayerButtonsRepeating(),
-              IconButton(
-                icon: const Icon(TablerIcons.player_skip_back),
-                onPressed: playbackState != null
-                    ? () async {
-                        FeedbackHelper.feedback(FeedbackType.light);
-                        await audioHandler.skipToPrevious();
-                      }
-                    : null,
-              ),
-              _RoundedIconButton(
-                width: controller.shouldShow(PlayerHideable.bigPlayButton)
-                    ? 62
-                    : 48,
-                height: controller.shouldShow(PlayerHideable.bigPlayButton)
-                    ? 62
-                    : 48,
-                borderRadius: BorderRadius.circular(
-                    controller.shouldShow(PlayerHideable.bigPlayButton)
-                        ? 16
-                        : 12),
-                onTap: playbackState != null
-                    ? () async {
-                        FeedbackHelper.feedback(FeedbackType.light);
-                        if (playbackState.playing) {
-                          await audioHandler.pause();
-                        } else {
-                          await audioHandler.play();
+              Semantics.fromProperties(
+                properties: const SemanticsProperties(
+                  label: "Skip to beginning or previous track",
+                  button: true,
+                ),
+                container: true,
+                excludeSemantics: true,
+                child: IconButton(
+                  icon: const Icon(TablerIcons.player_skip_back),
+                  onPressed: playbackState != null
+                      ? () async {
+                          FeedbackHelper.feedback(FeedbackType.light);
+                          await audioHandler.skipToPrevious();
                         }
-                      }
-                    : null,
-                icon: Icon(
-                    playbackState == null || playbackState.playing
-                        ? TablerIcons.player_pause
-                        : TablerIcons.player_play,
-                    size: 28),
+                      : null,
+                ),
               ),
-              IconButton(
-                icon: const Icon(TablerIcons.player_skip_forward),
-                onPressed: playbackState != null
-                    ? () async {
-                        FeedbackHelper.feedback(FeedbackType.light);
-                        await audioHandler.skipToNext();
-                      }
-                    : null,
+              Semantics.fromProperties(
+                properties: const SemanticsProperties(
+                  label: "Toggle playback",
+                  button: true,
+                ),
+                container: true,
+                excludeSemantics: true,
+                child: _RoundedIconButton(
+                  width: controller.shouldShow(PlayerHideable.bigPlayButton)
+                      ? 62
+                      : 48,
+                  height: controller.shouldShow(PlayerHideable.bigPlayButton)
+                      ? 62
+                      : 48,
+                  borderRadius: BorderRadius.circular(
+                      controller.shouldShow(PlayerHideable.bigPlayButton)
+                          ? 16
+                          : 12),
+                  onTap: playbackState != null
+                      ? () async {
+                          FeedbackHelper.feedback(FeedbackType.light);
+                          if (playbackState.playing) {
+                            await audioHandler.pause();
+                          } else {
+                            await audioHandler.play();
+                          }
+                        }
+                      : null,
+                  icon: Icon(
+                      playbackState == null || playbackState.playing
+                          ? TablerIcons.player_pause
+                          : TablerIcons.player_play,
+                      size: 28),
+                ),
+              ),
+              Semantics.fromProperties(
+                properties: const SemanticsProperties(
+                  label: "Skip to next track",
+                  button: true,
+                ),
+                container: true,
+                excludeSemantics: true,
+                child: IconButton(
+                  icon: const Icon(TablerIcons.player_skip_forward),
+                  onPressed: playbackState != null
+                      ? () async {
+                          FeedbackHelper.feedback(FeedbackType.light);
+                          await audioHandler.skipToNext();
+                        }
+                      : null,
+                ),
               ),
               if (controller.shouldShow(PlayerHideable.loopShuffleButtons))
                 PlayerButtonsShuffle()

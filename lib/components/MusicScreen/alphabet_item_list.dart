@@ -85,21 +85,25 @@ class _AlphabetListState extends State<AlphabetList> {
           onPointerMove: (x) => updateSelected(x.localPosition, Drag.update),
           onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
           behavior: HitTestBehavior.opaque,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                alphabet.length,
-                (x) => Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  height: _letterHeight,
-                  child: FittedBox(
-                    child: Text(
-                      alphabet[x].toUpperCase(),
+          child: Semantics(
+            label: 'Alphabet list for fast scrolling',
+            excludeSemantics: true, // replace child semantics with custom semantics
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  alphabet.length,
+                  (x) => Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    height: _letterHeight,
+                    child: FittedBox(
+                      child: Text(
+                        alphabet[x].toUpperCase(),
+                      ),
                     ),
                   ),
-                ),
-              )),
+                )),
+          ),
         );
       }),
     );

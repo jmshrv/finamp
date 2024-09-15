@@ -5,6 +5,7 @@ import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
@@ -20,15 +21,23 @@ class PlayerButtonsShuffle extends StatelessWidget {
     return StreamBuilder(
       stream: mediaStateStream,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        return IconButton(
-          onPressed: () async {
-            FeedbackHelper.feedback(FeedbackType.light);
-            _queueService.togglePlaybackOrder();
-          },
-          icon: Icon(
-            (_queueService.playbackOrder == FinampPlaybackOrder.shuffled
-                ? TablerIcons.arrows_shuffle
-                : TablerIcons.arrows_right),
+        return Semantics.fromProperties(
+          properties: SemanticsProperties(
+            label: "Playing ${_queueService.playbackOrder == FinampPlaybackOrder.shuffled ? "shuffled" : "in order"}. Tap to toggle.",
+            button: true,
+          ),
+          excludeSemantics: true,
+          container: true,
+          child: IconButton(
+            onPressed: () async {
+              FeedbackHelper.feedback(FeedbackType.light);
+              _queueService.togglePlaybackOrder();
+            },
+            icon: Icon(
+              (_queueService.playbackOrder == FinampPlaybackOrder.shuffled
+                  ? TablerIcons.arrows_shuffle
+                  : TablerIcons.arrows_right),
+            ),
           ),
         );
       },

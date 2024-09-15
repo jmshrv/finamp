@@ -6,6 +6,7 @@ import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -41,37 +42,46 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
     }
 
     bool isFav = ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
-    return GestureDetector(
-      onLongPress: () async {
-        FeedbackHelper.feedback(FeedbackType.selection);
-        ref
-            .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
-            .updateFavorite(!isFav);
-      },
-      child: IconButton(
-          icon: Icon(
-            isFav ? Icons.favorite : Icons.favorite_outline,
-            size: widget.size ?? 24.0,
-          ),
-          color: widget.color ?? IconTheme.of(context).color,
-          disabledColor:
-              (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
-          visualDensity: widget.visualDensity ?? VisualDensity.compact,
-          // tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
-          onPressed: () async {
-            if (FinampSettingsHelper.finampSettings.isOffline) {
-              return GlobalSnackbar.message((context) =>
-                  AppLocalizations.of(context)!.notAvailableInOfflineMode);
-            }
-
-            bool inPlaylist = queueItemInPlaylist(widget.queueItem);
-            await showPlaylistActionsMenu(
-              context: context,
-              item: widget.item!,
-              parentPlaylist: inPlaylist ? widget.queueItem!.source.item : null,
-              usePlayerTheme: true,
-            );
-          }),
+    return Semantics.fromProperties(
+      properties: SemanticsProperties(
+        label: AppLocalizations.of(context)!.addToPlaylistTooltip,
+        hint: "Tap to add to playlist. Long press to toggle favorite.",
+        button: true,
+      ),
+      excludeSemantics: true,
+      container: true,
+      child: GestureDetector(
+        onLongPress: () async {
+          FeedbackHelper.feedback(FeedbackType.selection);
+          ref
+              .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+              .updateFavorite(!isFav);
+        },
+        child: IconButton(
+            icon: Icon(
+              isFav ? Icons.favorite : Icons.favorite_outline,
+              size: widget.size ?? 24.0,
+            ),
+            color: widget.color ?? IconTheme.of(context).color,
+            disabledColor:
+                (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
+            visualDensity: widget.visualDensity ?? VisualDensity.compact,
+            // tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
+            onPressed: () async {
+              if (FinampSettingsHelper.finampSettings.isOffline) {
+                return GlobalSnackbar.message((context) =>
+                    AppLocalizations.of(context)!.notAvailableInOfflineMode);
+              }
+      
+              bool inPlaylist = queueItemInPlaylist(widget.queueItem);
+              await showPlaylistActionsMenu(
+                context: context,
+                item: widget.item!,
+                parentPlaylist: inPlaylist ? widget.queueItem!.source.item : null,
+                usePlayerTheme: true,
+              );
+            }),
+      ),
     );
   }
 }

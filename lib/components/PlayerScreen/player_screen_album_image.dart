@@ -32,88 +32,94 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
             child: CircularProgressIndicator(),
           );
         }
+        final currentTrack = snapshot.data!.currentTrack;
 
-        return GestureDetector(
-          onSecondaryTapDown: (_) async {
-            var queueItem = snapshot.data!.currentTrack;
-            if (queueItem?.baseItem != null) {
-              var inPlaylist = queueItemInPlaylist(queueItem);
-              await showModalSongMenu(
-                context: context,
-                item: queueItem!.baseItem!,
-                usePlayerTheme: true,
-                showPlaybackControls: true,
-                // show controls on player screen
-                parentItem: inPlaylist ? queueItem.source.item : null,
-                isInPlaylist: inPlaylist,
-              );
-            }
-          },
-          child: SimpleGestureDetector(
-            //TODO replace with PageView, this is just a placeholder
-            onTap: () {
-              final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
-              audioService.togglePlayback();
-              FeedbackHelper.feedback(FeedbackType.selection);
-            },
-            onDoubleTap: () {
-              final currentTrack = queueService.getCurrentTrack();
-              if (currentTrack?.baseItem != null &&
-                  !FinampSettingsHelper.finampSettings.isOffline) {
-                ref
-                    .read(isFavoriteProvider(
-                            FavoriteRequest(currentTrack!.baseItem))
-                        .notifier)
-                    .toggleFavorite();
+        return Semantics(
+          label: "Artwork for ${currentTrack?.item.title}. Tap to toggle playback. Swipe left or right to switch tracks.",
+          excludeSemantics: true, // replace child semantics with custom semantics
+          container: true,
+          child: GestureDetector(
+            onSecondaryTapDown: (_) async {
+              var queueItem = snapshot.data!.currentTrack;
+              if (queueItem?.baseItem != null) {
+                var inPlaylist = queueItemInPlaylist(queueItem);
+                await showModalSongMenu(
+                  context: context,
+                  item: queueItem!.baseItem!,
+                  usePlayerTheme: true,
+                  showPlaybackControls: true,
+                  // show controls on player screen
+                  parentItem: inPlaylist ? queueItem.source.item : null,
+                  isInPlaylist: inPlaylist,
+                );
               }
             },
-            onHorizontalSwipe: (direction) {
-              final queueService = GetIt.instance<QueueService>();
-              if (direction == SwipeDirection.left) {
-                if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                  queueService.skipByOffset(1);
-                  FeedbackHelper.feedback(FeedbackType.selection);
+            child: SimpleGestureDetector(
+              //TODO replace with PageView, this is just a placeholder
+              onTap: () {
+                final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
+                audioService.togglePlayback();
+                FeedbackHelper.feedback(FeedbackType.selection);
+              },
+              onDoubleTap: () {
+                final currentTrack = queueService.getCurrentTrack();
+                if (currentTrack?.baseItem != null &&
+                    !FinampSettingsHelper.finampSettings.isOffline) {
+                  ref
+                      .read(isFavoriteProvider(
+                              FavoriteRequest(currentTrack!.baseItem))
+                          .notifier)
+                      .toggleFavorite();
                 }
-              } else if (direction == SwipeDirection.right) {
-                if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                  queueService.skipByOffset(-1);
-                  FeedbackHelper.feedback(FeedbackType.selection);
+              },
+              onHorizontalSwipe: (direction) {
+                final queueService = GetIt.instance<QueueService>();
+                if (direction == SwipeDirection.left) {
+                  if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                    queueService.skipByOffset(1);
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                  }
+                } else if (direction == SwipeDirection.right) {
+                  if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                    queueService.skipByOffset(-1);
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                  }
                 }
-              }
-            },
-            child: LayoutBuilder(builder: (context, constraints) {
-              //print(
-              //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
-              final horizontalPadding = constraints.maxWidth *
-                  (FinampSettingsHelper
-                          .finampSettings.playerScreenCoverMinimumPadding /
-                      100.0);
-              final verticalPadding = constraints.maxHeight *
-                  (FinampSettingsHelper
-                          .finampSettings.playerScreenCoverMinimumPadding /
-                      100.0);
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: horizontalPadding,
-                  vertical: verticalPadding,
-                ),
-                child: AlbumImage(
-                  imageListenable: currentAlbumImageProvider,
-                  borderRadius: BorderRadius.circular(8.0),
-                  // Load player cover at max size to allow more seamless scaling
-                  autoScale: false,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 24,
-                        offset: const Offset(0, 4),
-                        color: Colors.black.withOpacity(0.3),
-                      )
-                    ],
+              },
+              child: LayoutBuilder(builder: (context, constraints) {
+                //print(
+                //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
+                final horizontalPadding = constraints.maxWidth *
+                    (FinampSettingsHelper
+                            .finampSettings.playerScreenCoverMinimumPadding /
+                        100.0);
+                final verticalPadding = constraints.maxHeight *
+                    (FinampSettingsHelper
+                            .finampSettings.playerScreenCoverMinimumPadding /
+                        100.0);
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: verticalPadding,
                   ),
-                ),
-              );
-            }),
+                  child: AlbumImage(
+                    imageListenable: currentAlbumImageProvider,
+                    borderRadius: BorderRadius.circular(8.0),
+                    // Load player cover at max size to allow more seamless scaling
+                    autoScale: false,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 24,
+                          offset: const Offset(0, 4),
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
           ),
         );
       },

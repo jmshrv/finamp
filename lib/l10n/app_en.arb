@@ -17,6 +17,10 @@
       }
     }
   },
+  "about": "About Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
   "aboutContributionPrompt": "Made by awesome people in their free time.\nYou could be one of them!",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
@@ -948,7 +952,7 @@
   "@playbackSpeedIncreaseLabel": {
     "description": "Label for the button in the speed menu that increases the playback speed."
   },
-  "loopModeNoneButtonLabel": "Looping off",
+  "loopModeNoneButtonLabel": "Not looping",
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
   },
@@ -1163,7 +1167,7 @@
   "@syncComplete": {
     "description": "Message displayed after download sync completes."
   },
-  "syncDownloads": "Sync and download all items.",
+  "syncDownloads": "Sync and download missing items.",
   "@syncDownloads": {
     "description": "Tooltip for downloads sync button."
   },

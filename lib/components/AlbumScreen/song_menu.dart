@@ -625,7 +625,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                 final loopModeTooltips = {
                   FinampLoopMode.none:
                       AppLocalizations.of(context)?.loopModeNoneButtonLabel ??
-                          "Looping off",
+                          "Not looping",
                   FinampLoopMode.one:
                       AppLocalizations.of(context)?.loopModeOneButtonLabel ??
                           "Looping this song",

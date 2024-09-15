@@ -20,28 +20,33 @@ class PlayerButtonsMore extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return IconTheme(
-      data: IconThemeData(
-        color: IconTheme.of(context).color,
-        size: 24,
-      ),
-      child: IconButton(
-        icon: const Icon(
-          TablerIcons.menu_2,
+    return Semantics(
+      label: "Track menu",
+      excludeSemantics: true, // replace child semantics with custom semantics
+      container: true,
+      child: IconTheme(
+        data: IconThemeData(
+          color: IconTheme.of(context).color,
+          size: 24,
         ),
-        visualDensity: VisualDensity.compact,
-        onPressed: () async {
-          if (item == null) return;
-          var inPlaylist = queueItemInPlaylist(queueItem);
-          await showModalSongMenu(
-            context: context,
-            item: item!,
-            usePlayerTheme: true,
-            showPlaybackControls: true, // show controls on player screen
-            parentItem: inPlaylist ? queueItem!.source.item : null,
-            isInPlaylist: inPlaylist,
-          );
-        },
+        child: IconButton(
+          icon: const Icon(
+            TablerIcons.menu_2,
+          ),
+          visualDensity: VisualDensity.compact,
+          onPressed: () async {
+            if (item == null) return;
+            var inPlaylist = queueItemInPlaylist(queueItem);
+            await showModalSongMenu(
+              context: context,
+              item: item!,
+              usePlayerTheme: true,
+              showPlaybackControls: true, // show controls on player screen
+              parentItem: inPlaylist ? queueItem!.source.item : null,
+              isInPlaylist: inPlaylist,
+            );
+          },
+        ),
       ),
     );
   }
