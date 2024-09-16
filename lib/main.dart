@@ -40,6 +40,11 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:finamp/services/widget_bindings_observer_provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:finamp/services/server_discovery_emulation_service.dart';
+import 'package:finamp/services/theme_provider.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -363,6 +368,7 @@ Future<void> _setupPlaybackServices() async {
   GetIt.instance.registerSingleton(queueService);
   GetIt.instance.registerSingleton(PlaybackHistoryService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
+  GetIt.instance.registerSingleton(JellyfinServerDiscoveryEmulationService());
 
   // Begin to restore queue
   unawaited(queueService.performInitialQueueLoad().catchError((dynamic x) => GlobalSnackbar.error(x)));

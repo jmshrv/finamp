@@ -337,6 +337,7 @@ class JellyfinServerClientDiscovery {
           final response = ClientDiscoveryResponse.fromJson(
             jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>,
           );
+          _clientDiscoveryLogger.fine("Received discovery response from ${datagram.address}:${datagram.port}: ${jsonEncode(response)}");
           onServerFound(response);
         }
       }
