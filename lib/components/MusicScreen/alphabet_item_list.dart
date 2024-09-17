@@ -133,16 +133,16 @@ class _AlphabetListState extends State<AlphabetList> {
                   child: widget.child,
                 )),
             if (_currentSelected != null && _displayPreview)
-              FocusOnIt(
-                onUnfocus: () {
-                  setState(() {
-                    _currentSelected = null;
-                    _displayPreview = false;
-                  });
-                },
-                child: Positioned(
-                  left: 20,
-                  top: 20,
+              Positioned(
+                left: 20,
+                top: 20,
+                child: FocusOnIt(
+                  onUnfocus: () {
+                    setState(() {
+                      _currentSelected = null;
+                      _displayPreview = false;
+                    });
+                  },
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
