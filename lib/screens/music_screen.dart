@@ -318,29 +318,35 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
               child: getFloatingActionButton(sortedTabs.toList()),
             ),
             body: Builder(builder: (context) {
-              return TransparentRightSwipeDetector(
-                action: () {
-                  if (_tabController?.index == 0 &&
-                      !FinampSettingsHelper.finampSettings.disableGesture) {
-                    Scaffold.of(context).openDrawer();
-                  }
-                },
-                child: TabBarView(
-                  controller: _tabController,
-                  physics: FinampSettingsHelper.finampSettings.disableGesture
-                      ? const NeverScrollableScrollPhysics()
-                      : const AlwaysScrollableScrollPhysics(),
-                  dragStartBehavior: DragStartBehavior.down,
-                  children: sortedTabs
-                      .map((tabType) => MusicScreenTabView(
-                            tabContentType: tabType,
-                            searchTerm: searchQuery,
-                            view: _finampUserHelper.currentUser?.currentView,
-                            refresh: refreshMap[tabType],
-                          ))
-                      .toList(),
-                ),
+              final child = TabBarView(
+                controller: _tabController,
+                physics: FinampSettingsHelper.finampSettings.disableGesture
+                    ? const NeverScrollableScrollPhysics()
+                    : const AlwaysScrollableScrollPhysics(),
+                dragStartBehavior: DragStartBehavior.down,
+                children: sortedTabs
+                    .map((tabType) => MusicScreenTabView(
+                          tabContentType: tabType,
+                          searchTerm: searchQuery,
+                          view: _finampUserHelper.currentUser?.currentView,
+                          refresh: refreshMap[tabType],
+                        ))
+                    .toList(),
               );
+
+              if (Platform.isAndroid) {
+                return TransparentRightSwipeDetector(
+                  action: () {
+                    if (_tabController?.index == 0 &&
+                        !FinampSettingsHelper.finampSettings.disableGesture) {
+                      Scaffold.of(context).openDrawer();
+                    }
+                  },
+                  child: child,
+                );
+              }
+
+              return child;
             }),
           ),
         );

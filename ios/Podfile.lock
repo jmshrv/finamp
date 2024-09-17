@@ -1,9 +1,13 @@
 PODS:
+  - app_set_id (1.2.0):
+    - Flutter
   - audio_service (0.0.1):
     - Flutter
   - audio_session (0.0.1):
     - Flutter
   - background_downloader (0.0.1):
+    - Flutter
+  - battery_plus (1.0.0):
     - Flutter
   - CropViewController (2.6.1)
   - device_info_plus (0.0.1):
@@ -91,11 +95,15 @@ PODS:
   - SwiftyGif (5.4.4)
   - url_launcher_ios (0.0.1):
     - Flutter
+  - wakelock_plus (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
+  - app_set_id (from `.symlinks/plugins/app_set_id/ios`)
   - audio_service (from `.symlinks/plugins/audio_service/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - background_downloader (from `.symlinks/plugins/background_downloader/ios`)
+  - battery_plus (from `.symlinks/plugins/battery_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - DKImagePickerController (= 4.3.4)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -110,6 +118,7 @@ DEPENDENCIES:
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
 
 SPEC REPOS:
   trunk:
@@ -123,12 +132,16 @@ SPEC REPOS:
     - SwiftyGif
 
 EXTERNAL SOURCES:
+  app_set_id:
+    :path: ".symlinks/plugins/app_set_id/ios"
   audio_service:
     :path: ".symlinks/plugins/audio_service/ios"
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
   background_downloader:
     :path: ".symlinks/plugins/background_downloader/ios"
+  battery_plus:
+    :path: ".symlinks/plugins/battery_plus/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker:
@@ -155,11 +168,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  wakelock_plus:
+    :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
+  app_set_id: a4d12ebbc7915f987b4a04983b4c0104c64d5e02
   audio_service: f509d65da41b9521a61f1c404dd58651f265a567
   audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
   background_downloader: 9f788ffc5de45acf87d6380e91ca0841066c18cf
+  battery_plus: 1ff2e16ba75af2a78387f65476057a390b47885e
   CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
@@ -181,7 +198,8 @@ SPEC CHECKSUMS:
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
 
 PODFILE CHECKSUM: 047c0919aa274fcdf0ce568f883473a4587eda02
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.15.2
