@@ -39,6 +39,21 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
+    <release version="0.9.11-beta" date="2024-09-17">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.11-beta</url>
+      <description>
+        <p>This is a hotfix for a bug introduced with 0.9.10</p>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fix white overlay preventing further interaction when using the fast scroller / alphabet list</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
     <release version="0.9.10-beta" date="2024-09-15">
       <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.10-beta</url>
       <description>
@@ -49,6 +64,7 @@
           <li>Added setting to keep the screen on</li>
           <li>Accessibility improvements</li>
           <li>More lyrics screen customizations</li>
+        </ul>
         <p>
           Bug Fixes
         </p>
