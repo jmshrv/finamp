@@ -17,7 +17,7 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "couldNotFindLibraries": "Не было найдено библиотек.",
+  "couldNotFindLibraries": "Библиотеки не найдены.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
@@ -29,7 +29,7 @@
   "@music": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "albumArtist": "Исполнитель альбома",
+  "albumArtist": "Исполнитель Альбома",
   "@albumArtist": {},
   "artist": "Исполнитель",
   "@artist": {},
@@ -93,7 +93,7 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Изменить название плейлиста",
+  "editPlaylistNameTooltip": "Редактировать название плейлиста",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Изменить название плейлиста",
   "@editPlaylistNameTitle": {},
@@ -281,11 +281,11 @@
   "@addToMix": {},
   "downloadMissingImages": "Скачать отсутствующие изображения",
   "@downloadMissingImages": {},
-  "offlineMode": "Режим без интернета",
+  "offlineMode": "Автономный режим",
   "@offlineMode": {},
   "startMix": "Начать Микс",
   "@startMix": {},
-  "internalExternalIpExplanation": "Чтобы получить доступ к вашему серверу Jellyfin необходимо использовать внешний IP.\n\nЕсли ваш сервер работает на HTTP портах (80/443) вам не нужно его укfзывать, например, если вы используете обратный прокси.",
+  "internalExternalIpExplanation": "Чтобы получить удалённый доступ к серверу Jellyfin, используйте внешний IP-адрес.\n\nЕсли ваш сервер работает на портах HTTP(S) 80/443, указывать порт не нужно. Это обычно так, если сервер находится за обратным прокси-сервером.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -309,17 +309,17 @@
   "@sortBy": {},
   "next": "Далее",
   "@next": {},
-  "startMixNoSongsArtist": "Зажмите исполнителя, чтобы добавить или убрать его из составителя микса, прежде чем запустить микс",
+  "startMixNoSongsArtist": "Чтобы добавить или удалить исполнителя из микса, нажмите и удерживайте его имя",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Зажмите альбом, чтобы добавить или убрать его из составителя микса, прежде чем запустить микс",
+  "startMixNoSongsAlbum": "Чтобы добавить или удалить альбом из микса, нажмите и удерживайте его",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "favourites": "Избранное",
   "@favourites": {},
-  "shuffleAll": "Проиграть все в случайном порядке",
+  "shuffleAll": "Перемешать всё",
   "@shuffleAll": {},
   "downloads": "Загрузки",
   "@downloads": {},
@@ -329,7 +329,7 @@
   "@productionYear": {},
   "revenue": "Доход",
   "@revenue": {},
-  "runtime": "Время проката",
+  "runtime": "Время выполнения",
   "@runtime": {},
   "downloadedMissingImages": "{count,plural, =0{Не найдено отсутствующих изображений} =1{Скачано {count} отсутствующее изображение} few{Скачано {count} отсутствующих изображения} other{Скачано {count} отсутствующих изображений}}",
   "@downloadedMissingImages": {
@@ -446,7 +446,7 @@
   "@showCoverAsPlayerBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Не отображать одинаковых исполнителей для трека и альбома",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "startupError": "Что-то пошло не так во время запуска приложения. Ошибка: {error}\n\nПожалуйста, опубликуйте ошибку на github.com/UnicornsOnLSD/finamp со скриншотом данной страницы. Если данная ошибка продолжит появляться, очистите данные, чтобы сбросить настройки приложения.",
+  "startupError": "Что-то пошло не так во время запуска приложения. Возникла ошибка: {error}\n\nПожалуйста, создайте \"issue\" на github.com/UnicornsOnLSD/finamp и приложите скриншот этой страницы. Если проблема будет повторяться, вы можете очистить данные приложения, чтобы сбросить его настройки.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -514,7 +514,7 @@
   "@syncDownloadedPlaylists": {},
   "swipeInsertQueueNextSubtitle": "Включите этот параметр, чтобы вставить трек в качестве следующего элемента в очереди при свайпе в списке треков вместо добавления в конец.",
   "@swipeInsertQueueNextSubtitle": {},
-  "deleteDownloadsPrompt": "Вы уверены, что хотите удалить {itemType, select, album{альбом} playlist{плейлист} artist{исполнителя} genre{жанр} song{песня} other{}} '{itemName}' с этого устройства?",
+  "deleteDownloadsPrompt": "Вы уверены, что хотите удалить {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' с этого устройства?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -533,5 +533,7 @@
   "swipeInsertQueueNext": "Играть свайпнутый трек следующим",
   "@swipeInsertQueueNext": {},
   "redesignBeta": "Бета-версия с редизайном",
-  "@redesignBeta": {}
+  "@redesignBeta": {},
+  "showFastScroller": "Показать быструю прокрутку",
+  "@showFastScroller": {}
 }
