@@ -24,7 +24,7 @@ typedef ScrollBuilder = Widget Function(double, List<Widget>);
 
 Future<void> showThemedBottomSheet({
   required BuildContext context,
-  required BaseItemDto item,
+  BaseItemDto? item,
   required String routeName,
   SliverBuilder? buildSlivers,
   WrapperBuilder? buildWrapper,

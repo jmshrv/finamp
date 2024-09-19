@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -15,13 +16,25 @@ class JellyfinServerDiscoveryEmulationService {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   late RawDatagramSocket socket;
-  bool isDisposed = false;
+  bool isSharing = false;
 
   JellyfinServerDiscoveryEmulationService() {
-    advertiseServer();
+    // listen for Finamp settings change and enable/disable server discovery emulation
+    FinampSettingsHelper.finampSettingsListener.addListener(() {
+      if (isSharing != FinampSettingsHelper.finampSettings.serverSharingEnabled) {
+        if (FinampSettingsHelper.finampSettings.serverSharingEnabled) {
+          advertiseServer();
+        } else {
+          dispose();
+        }
+      }
+    });
+    
   }
 
   void advertiseServer() async {
+
+    isSharing = true;
 
     const discoveryMessage =
         "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
@@ -63,7 +76,8 @@ class JellyfinServerDiscoveryEmulationService {
   }
 
   void dispose() {
-    isDisposed = true;
+    isSharing = false;
     socket.close();
+    _serverDiscoveryEmulationLogger.fine("Stopped advertising server");
   }
 }
