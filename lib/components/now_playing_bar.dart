@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
+import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -400,11 +401,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                               child: Row(
                                                                 children: [
                                                                     Text(
-                                                                        // '0:00',
-                                                                        playbackPosition!.inHours >=
-                                                                                1.0
-                                                                            ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
-                                                                            : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                                                                        printDuration(playbackPosition, leadingZeroes: false),
                                                                         style: TextStyle(
                                                                           fontSize: 14,
                                                                           fontWeight:
