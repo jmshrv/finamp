@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/jellyfin_api_helper.dart';
+import '../../services/finamp_settings_helper.dart';
 import 'dart:convert';
 import 'finamp_user_helper.dart';
 
@@ -30,6 +32,7 @@ class PlayonHandler {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final queueService = GetIt.instance<QueueService>();
+    final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
     await jellyfinApiHelper.updateCapabilities(ClientCapabilities(
       supportsMediaControl: true,
@@ -120,18 +123,23 @@ class PlayonHandler {
                   case 'PlayNow':
                     channel.sink.add('{"MessageType":"KeepAlive"}');
                     // print(request['Data']);
-                    // print(request['Data']['ItemIds']);
-                    var item = await jellyfinApiHelper.getItemById(request['Data']['ItemIds'][0]);
-                    unawaited(queueService.startPlayback(
-                      items: [item],
-                      source: QueueItemSource(
-                        name: QueueItemSourceName(
-                            type: QueueItemSourceNameType.preTranslated,
-                            pretranslatedName: item.name),
-                        type: QueueItemSourceType.song,
-                        id: item.id,
-                      ),
-                    ));
+                    // print(request['Data']['ItemIds']);              
+                    var item = await jellyfinApiHelper.getItemById(request['Data']['ItemIds'][request['Data']['StartIndex']]);
+                      if (FinampSettingsHelper
+                        .finampSettings.startInstantMixForIndividualTracks) {
+                      unawaited(audioServiceHelper.startInstantMixForItem(item));
+                    } else {
+                      unawaited(queueService.startPlayback(
+                        items: [item],
+                        source: QueueItemSource(
+                          name: QueueItemSourceName(
+                              type: QueueItemSourceNameType.preTranslated,
+                              pretranslatedName: item.name),
+                          type: QueueItemSourceType.song,
+                          id: item.id,
+                        ),
+                      ));
+                    }
                 }
               }
             break;
