@@ -7,7 +7,6 @@ import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import '../../services/music_player_background_task.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/finamp_settings_helper.dart';
@@ -86,8 +85,8 @@ class PlayonHandler {
                 GlobalSnackbar.message((context) => "$header: $messageFromServer");
                 break;
               case "SetVolume":
-                final desiredVolume=request['Data']['Arguments']['Volume'];
-                await FlutterVolumeController.setVolume(float.parse(desiredVolume)/100.0);
+                _playOnHandlerLogger.info("Server requested a volume adjustment");
+                // Waiting for planned issue #500 to be resolved to adjust volume
                 // We now have to report to jellyfin server, probably through playback_history_service, that we updated volume
             }
             break;
