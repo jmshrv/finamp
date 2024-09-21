@@ -52,12 +52,13 @@ class PlayonHandler {
 
     channel.sink.add('{"MessageType":"KeepAlive"}');
 
-    // Will need to send a Keepalive message every 30 seconds, the code below didn't work
+    final keepaliveSubscription = Stream.periodic(const Duration(seconds: 30), (count) {
+      return count;
+    }).listen((event) {
+      _playOnHandlerLogger.info("Sent KeepAlive message through websocket");
+      channel.sink.add('{"MessageType":"KeepAlive"}');
+    });
 
-    // final Stream _myStream =
-    //     Stream.periodic(const Duration(seconds: 30), (int count) {
-    //       channel.sink.add('{"MessageType":"KeepAlive"}');
-    // });
 
     channel.stream.handleError((error, trace) {
         _playOnHandlerLogger.severe("WebSocket Error: $error");
