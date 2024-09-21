@@ -122,24 +122,41 @@ class PlayonHandler {
                 switch (request['Data']['PlayCommand']) {
                   case 'PlayNow':
                     channel.sink.add('{"MessageType":"KeepAlive"}');
-                    // print(request['Data']);
-                    // print(request['Data']['ItemIds']);              
-                    var item = await jellyfinApiHelper.getItemById(request['Data']['ItemIds'][request['Data']['StartIndex']]);
+                    if (request['Data'].containsKey('StartIndex')) { // User started a single song
+                      var item = await jellyfinApiHelper.getItemById(request['Data']['ItemIds'][request['Data']['StartIndex']]);
                       if (FinampSettingsHelper
                         .finampSettings.startInstantMixForIndividualTracks) {
                       unawaited(audioServiceHelper.startInstantMixForItem(item));
-                    } else {
+                      } else {
+                        unawaited(queueService.startPlayback(
+                          items: [item],
+                          source: QueueItemSource(
+                            name: QueueItemSourceName(
+                                type: QueueItemSourceNameType.preTranslated,
+                                pretranslatedName: item.name),
+                            type: QueueItemSourceType.song,
+                            id: item.id,
+                          ),
+                        ));
+                      }
+                    } else { // User asked to play an album
+                      var items=<BaseItemDto>[];
+                      for (final itemId in request['Data']['ItemIds']) {
+                        items.add(await jellyfinApiHelper.getItemById(itemId));
+                      }
                       unawaited(queueService.startPlayback(
-                        items: [item],
-                        source: QueueItemSource(
-                          name: QueueItemSourceName(
-                              type: QueueItemSourceNameType.preTranslated,
-                              pretranslatedName: item.name),
-                          type: QueueItemSourceType.song,
-                          id: item.id,
-                        ),
-                      ));
+                          items: items,
+                          source: QueueItemSource(
+                            name: QueueItemSourceName(
+                                type: QueueItemSourceNameType.preTranslated,
+                                pretranslatedName: items[0].name),
+                            type: QueueItemSourceType.song,
+                            id: items[0].id,
+                          ),
+                        ));
                     }
+                    
+                      
                 }
               }
             break;
