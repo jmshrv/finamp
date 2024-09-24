@@ -78,7 +78,6 @@ class PlaybackHistoryService {
       final currentItem = _queueService.getCurrentTrack();
 
       if (currentIndex != null && currentItem != null) {
-
         // differences in queue index or item id are considered track changes
         if (currentItem.id != prevItem?.id) {
           if (currentState.playing != prevState?.playing) {
@@ -462,7 +461,8 @@ class PlaybackHistoryService {
   Future<void> _reportPlaybackStopped() async {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       if (_currentTrack != null) {
-        await _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+        await _offlineListenLogHelper
+            .logOfflineListen(_currentTrack!.item.item);
       }
       return;
     }
@@ -476,7 +476,8 @@ class PlaybackHistoryService {
         }
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
-        await _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+        await _offlineListenLogHelper
+            .logOfflineListen(_currentTrack!.item.item);
       }
     }
   }

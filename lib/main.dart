@@ -117,7 +117,7 @@ void main() async {
             : LocaleHelper.locale.toString())
         : "en_US";
     await initializeDateFormatting(localeString, null);
-    
+
     runApp(const Finamp());
   }
 }

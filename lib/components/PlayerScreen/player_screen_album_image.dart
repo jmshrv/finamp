@@ -36,8 +36,11 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
         final currentTrack = snapshot.data!.currentTrack;
 
         return Semantics(
-          label: AppLocalizations.of(context)!.playerAlbumArtworkTooltip(currentTrack?.item.title ?? AppLocalizations.of(context)!.unknownName),
-          excludeSemantics: true, // replace child semantics with custom semantics
+          label: AppLocalizations.of(context)!.playerAlbumArtworkTooltip(
+              currentTrack?.item.title ??
+                  AppLocalizations.of(context)!.unknownName),
+          excludeSemantics:
+              true, // replace child semantics with custom semantics
           container: true,
           child: GestureDetector(
             onSecondaryTapDown: (_) async {
@@ -58,7 +61,8 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
             child: SimpleGestureDetector(
               //TODO replace with PageView, this is just a placeholder
               onTap: () {
-                final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
+                final audioService =
+                    GetIt.instance<MusicPlayerBackgroundTask>();
                 audioService.togglePlayback();
                 FeedbackHelper.feedback(FeedbackType.selection);
               },

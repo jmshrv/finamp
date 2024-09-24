@@ -59,7 +59,8 @@ class SongNameContent extends StatelessWidget {
                     ),
                     child: Semantics.fromProperties(
                       properties: SemanticsProperties(
-                        label: "${currentTrack.item.title} (${AppLocalizations.of(context)!.title})",
+                        label:
+                            "${currentTrack.item.title} (${AppLocalizations.of(context)!.title})",
                       ),
                       excludeSemantics: true,
                       container: true,

@@ -71,7 +71,8 @@ class hidePlayerBottomActionsSwitch extends StatelessWidget {
 
         return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.hidePlayerBottomActions),
-          subtitle: Text(AppLocalizations.of(context)!.hidePlayerBottomActionsSubtitle),
+          subtitle: Text(
+              AppLocalizations.of(context)!.hidePlayerBottomActionsSubtitle),
           value: hideQueue ?? false,
           onChanged: hideQueue == null
               ? null

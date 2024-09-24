@@ -29,7 +29,8 @@ class _VolumeNormalizationIOSBaseGainEditorState
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+          keyboardType: const TextInputType.numberWithOptions(
+              decimal: true, signed: true),
           onChanged: (value) {
             final valueDouble = double.tryParse(value);
 

@@ -15,7 +15,8 @@ class KeepScreenOnWhilePluggedInSelector extends StatelessWidget {
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.keepScreenOnWhilePluggedIn),
-          subtitle: Text(AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
+          subtitle: Text(
+              AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
           value: FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn,
           onChanged: (value) {
             FinampSettingsHelper.setKeepScreenOnWhileCharging(value);

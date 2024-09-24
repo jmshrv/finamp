@@ -45,12 +45,14 @@ class StartInstantMixForIndividualTracksSwitch extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
-        bool? startInstantMixForIndividualTracks = box.get("FinampSettings")?.startInstantMixForIndividualTracks;
+        bool? startInstantMixForIndividualTracks =
+            box.get("FinampSettings")?.startInstantMixForIndividualTracks;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.startInstantMixForIndividualTracksSwitchTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.startInstantMixForIndividualTracksSwitchSubtitle),
+          title: Text(AppLocalizations.of(context)!
+              .startInstantMixForIndividualTracksSwitchTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .startInstantMixForIndividualTracksSwitchSubtitle),
           value: startInstantMixForIndividualTracks ?? false,
           onChanged: startInstantMixForIndividualTracks == null
               ? null

@@ -183,12 +183,14 @@ class ShowProgressOnNowPlayingBarToggle extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool? showProgressOnNowPlayingBar = box.get("FinampSettings")?.showProgressOnNowPlayingBar;
+        bool? showProgressOnNowPlayingBar =
+            box.get("FinampSettings")?.showProgressOnNowPlayingBar;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarSubtitle),
+          title: Text(
+              AppLocalizations.of(context)!.showProgressOnNowPlayingBarTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .showProgressOnNowPlayingBarSubtitle),
           value: showProgressOnNowPlayingBar ?? false,
           onChanged: showProgressOnNowPlayingBar == null
               ? null

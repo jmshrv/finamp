@@ -129,7 +129,6 @@ class LyricsFontSizeSelector extends StatelessWidget {
   }
 }
 
-
 class ShowLyricsScreenAlbumPreludeToggle extends StatelessWidget {
   const ShowLyricsScreenAlbumPreludeToggle({super.key});
 
@@ -142,9 +141,10 @@ class ShowLyricsScreenAlbumPreludeToggle extends StatelessWidget {
             box.get("FinampSettings")?.showLyricsScreenAlbumPrelude;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeSubtitle),
+          title: Text(
+              AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .showLyricsScreenAlbumPreludeSubtitle),
           value: showLyricsScreenAlbumPrelude ?? false,
           onChanged: showLyricsScreenAlbumPrelude == null
               ? null

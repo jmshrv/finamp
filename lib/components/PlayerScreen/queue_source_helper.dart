@@ -102,7 +102,8 @@ Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
       // re-sync playlist to delete removed item if not required anymore
       final downloadsService = GetIt.instance<DownloadsService>();
       unawaited(downloadsService.resync(
-          DownloadStub.fromItem(type: DownloadItemType.collection, item: parent),
+          DownloadStub.fromItem(
+              type: DownloadItemType.collection, item: parent),
           null,
           keepSlow: true));
 
@@ -112,9 +113,7 @@ Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
           (context) => AppLocalizations.of(context)!.removedFromPlaylist,
           isConfirmation: true);
       return true;
-      
     } catch (err) {
-      
       GlobalSnackbar.error(err);
       return false;
     }

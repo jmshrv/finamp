@@ -36,7 +36,8 @@ class PlayerButtons extends StatelessWidget {
                 PlayerButtonsRepeating(),
               Semantics.fromProperties(
                 properties: SemanticsProperties(
-                  label: AppLocalizations.of(context)!.skipToPreviousTrackButtonTooltip,
+                  label: AppLocalizations.of(context)!
+                      .skipToPreviousTrackButtonTooltip,
                   button: true,
                 ),
                 container: true,
@@ -53,7 +54,8 @@ class PlayerButtons extends StatelessWidget {
               ),
               Semantics.fromProperties(
                 properties: SemanticsProperties(
-                  label: AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
+                  label:
+                      AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
                   button: true,
                 ),
                 container: true,
@@ -88,7 +90,8 @@ class PlayerButtons extends StatelessWidget {
               ),
               Semantics.fromProperties(
                 properties: SemanticsProperties(
-                  label: AppLocalizations.of(context)!.skipToNextTrackButtonTooltip,
+                  label: AppLocalizations.of(context)!
+                      .skipToNextTrackButtonTooltip,
                   button: true,
                 ),
                 container: true,

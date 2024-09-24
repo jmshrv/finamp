@@ -46,97 +46,100 @@ class SettingsScreen extends StatelessWidget {
                 final applicationLegalese =
                     AppLocalizations.of(context)!.applicationLegalese(repoLink);
                 PackageInfo packageInfo = await PackageInfo.fromPlatform();
-            
+
                 ThemeData theme = Theme.of(context);
                 const linkStyle = TextStyle(
                   color: Colors.blue,
                   decoration: TextDecoration.underline,
                 );
-            
+
                 showAboutDialog(
-                  context: context,
-                  applicationName: packageInfo.appName,
-                  applicationVersion: packageInfo.version,
-                  applicationIcon: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Image.asset(
-                      'images/finamp_cropped.png',
-                      width: 56,
-                      height: 56,
-                    ),
-                  ),
-                  applicationLegalese: applicationLegalese,
-                  children: [
-                    const SizedBox(height: 20),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: TextStyle(color: theme.textTheme.bodyMedium!.color),
-                        children: [
-                          TextSpan(
-                            text: localizations.finampTagline,
-                            style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
-                          ),
-                          const TextSpan(
-                            text: '\n\n',
-                          ),
-                          TextSpan(
-                            text: localizations.aboutContributionPrompt,
-                          ),
-                          const TextSpan(
-                            text: '\n\n',
-                          ),
-                          TextSpan(
-                            text: '${localizations.aboutContributionLink}\n',
-                          ),
-                          TextSpan(
-                            text: repoLink,
-                            style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () async {
-                                await launchUrl(Uri.parse(repoLink));
-                              },
-                          ),
-                          const TextSpan(
-                            text: '\n\n',
-                          ),
-                          TextSpan(
-                            text: '${localizations.aboutTranslations}\n',
-                          ),
-                          TextSpan(
-                            text: translationsLink,
-                            style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () async {
-                                await launchUrl(Uri.parse(translationsLink));
-                              },
-                          ),
-                          const TextSpan(
-                            text: '\n\n',
-                          ),
-                          TextSpan(
-                            text: '${localizations.aboutReleaseNotes}\n',
-                          ),
-                          TextSpan(
-                            text: releaseNotesLink,
-                            style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () async {
-                                await launchUrl(Uri.parse(releaseNotesLink));
-                              },
-                          ),
-                          const TextSpan(
-                            text: '\n\n\n',
-                          ),
-                          TextSpan(
-                            text: localizations.aboutThanks,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                    context: context,
+                    applicationName: packageInfo.appName,
+                    applicationVersion: packageInfo.version,
+                    applicationIcon: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Image.asset(
+                        'images/finamp_cropped.png',
+                        width: 56,
+                        height: 56,
                       ),
                     ),
-                  ]
-                );
+                    applicationLegalese: applicationLegalese,
+                    children: [
+                      const SizedBox(height: 20),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: TextStyle(
+                              color: theme.textTheme.bodyMedium!.color),
+                          children: [
+                            TextSpan(
+                              text: localizations.finampTagline,
+                              style: const TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            const TextSpan(
+                              text: '\n\n',
+                            ),
+                            TextSpan(
+                              text: localizations.aboutContributionPrompt,
+                            ),
+                            const TextSpan(
+                              text: '\n\n',
+                            ),
+                            TextSpan(
+                              text: '${localizations.aboutContributionLink}\n',
+                            ),
+                            TextSpan(
+                              text: repoLink,
+                              style: linkStyle,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  await launchUrl(Uri.parse(repoLink));
+                                },
+                            ),
+                            const TextSpan(
+                              text: '\n\n',
+                            ),
+                            TextSpan(
+                              text: '${localizations.aboutTranslations}\n',
+                            ),
+                            TextSpan(
+                              text: translationsLink,
+                              style: linkStyle,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  await launchUrl(Uri.parse(translationsLink));
+                                },
+                            ),
+                            const TextSpan(
+                              text: '\n\n',
+                            ),
+                            TextSpan(
+                              text: '${localizations.aboutReleaseNotes}\n',
+                            ),
+                            TextSpan(
+                              text: releaseNotesLink,
+                              style: linkStyle,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  await launchUrl(Uri.parse(releaseNotesLink));
+                                },
+                            ),
+                            const TextSpan(
+                              text: '\n\n\n',
+                            ),
+                            TextSpan(
+                              text: localizations.aboutThanks,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]);
               },
             ),
           )

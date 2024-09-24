@@ -136,8 +136,10 @@ class _ProgressSliderDuration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final showRemaining = Platform.isIOS || Platform.isMacOS;
-    final currentPosition = Duration(seconds: (position.inMilliseconds / 1000).round());
-    final roundedDuration = Duration(seconds: ((itemDuration?.inMilliseconds ?? 0) / 1000).round());
+    final currentPosition =
+        Duration(seconds: (position.inMilliseconds / 1000).round());
+    final roundedDuration =
+        Duration(seconds: ((itemDuration?.inMilliseconds ?? 0) / 1000).round());
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,10 +153,9 @@ class _ProgressSliderDuration extends StatelessWidget {
         Text(
           printDuration(
             // display remaining time if on iOS or macOS
-            showRemaining ?
-              (roundedDuration - currentPosition)
-              : roundedDuration
-            ,
+            showRemaining
+                ? (roundedDuration - currentPosition)
+                : roundedDuration,
             isRemaining: showRemaining,
           ),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -230,15 +231,23 @@ class __PlaybackProgressSliderState
             .clamp(0, widget.mediaItem!.duration!.inMicroseconds.toDouble())
             .toDouble(),
         semanticFormatterCallback: (double value) {
-          final positionFullMinutes = Duration(microseconds: value.toInt()).inMinutes % 60;
-          final positionFullHours = Duration(microseconds: value.toInt()).inHours;
-          final positionSeconds = Duration(microseconds: value.toInt()).inSeconds % 60;
+          final positionFullMinutes =
+              Duration(microseconds: value.toInt()).inMinutes % 60;
+          final positionFullHours =
+              Duration(microseconds: value.toInt()).inHours;
+          final positionSeconds =
+              Duration(microseconds: value.toInt()).inSeconds % 60;
           final durationFullHours = (widget.mediaItem?.duration?.inHours ?? 0);
-          final durationFullMinutes = (widget.mediaItem?.duration?.inMinutes ?? 0) % 60;
-          final durationSeconds = (widget.mediaItem?.duration?.inSeconds ?? 0) % 60;
-          final positionString = "${positionFullHours > 0 ? "$positionFullHours ${AppLocalizations.of(context)!.hours} " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$positionSeconds ${AppLocalizations.of(context)!.seconds}";
-          final durationString = "${durationFullHours > 0 ? "$durationFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationSeconds ${AppLocalizations.of(context)!.seconds}";
-          return AppLocalizations.of(context)!.timeFractionTooltip(positionString, durationString);
+          final durationFullMinutes =
+              (widget.mediaItem?.duration?.inMinutes ?? 0) % 60;
+          final durationSeconds =
+              (widget.mediaItem?.duration?.inSeconds ?? 0) % 60;
+          final positionString =
+              "${positionFullHours > 0 ? "$positionFullHours ${AppLocalizations.of(context)!.hours} " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$positionSeconds ${AppLocalizations.of(context)!.seconds}";
+          final durationString =
+              "${durationFullHours > 0 ? "$durationFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationSeconds ${AppLocalizations.of(context)!.seconds}";
+          return AppLocalizations.of(context)!
+              .timeFractionTooltip(positionString, durationString);
         },
         secondaryTrackValue:
             widget.mediaItem?.extras?["downloadedSongPath"] == null
@@ -274,7 +283,7 @@ class __PlaybackProgressSliderState
                 // Seek to the new position
                 await _audioHandler
                     .seek(Duration(microseconds: newValue.toInt()));
-    
+
                 // Clear drag value so that the slider uses the play
                 // duration again.
                 if (mounted) {

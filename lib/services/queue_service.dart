@@ -27,10 +27,9 @@ import 'music_player_background_task.dart';
 
 /// A track queueing service for Finamp.
 class QueueService {
-
   /// Used to build content:// URIs that are handled by Finamp's built-in content provider.
   static final contentProviderPackageName = "com.unicornsonlsd.finamp";
-  
+
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -488,8 +487,8 @@ class QueueService {
       for (int i = 0; i < itemList.length; i++) {
         jellyfin_models.BaseItemDto item = itemList[i];
         try {
-          MediaItem mediaItem =
-              await generateMediaItem(item, contextNormalizationGain: source.contextNormalizationGain);
+          MediaItem mediaItem = await generateMediaItem(item,
+              contextNormalizationGain: source.contextNormalizationGain);
           newItems.add(FinampQueueItem(
             item: mediaItem,
             source: source,
@@ -583,21 +582,22 @@ class QueueService {
     required List<jellyfin_models.BaseItemDto> items,
     QueueItemSource? source,
   }) async {
-
     if (_queueAudioSource.length == 0) {
       return _replaceWholeQueue(
         itemList: items,
-        source: source ??  QueueItemSource(
-          type: QueueItemSourceType.queue,
-          name: const QueueItemSourceName(type: QueueItemSourceNameType.queue),
-          id: "queue",
-          item: null,
-        ),
+        source: source ??
+            QueueItemSource(
+              type: QueueItemSourceType.queue,
+              name: const QueueItemSourceName(
+                  type: QueueItemSourceNameType.queue),
+              id: "queue",
+              item: null,
+            ),
         initialIndex: 0,
         beginPlaying: false,
       );
     }
-    
+
     try {
       if (_savedQueueState == SavedQueueState.pendingSave) {
         _savedQueueState = SavedQueueState.saving;
@@ -605,8 +605,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item:
-              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
+          item: await generateMediaItem(item,
+              contextNormalizationGain: source?.contextNormalizationGain),
           source: source ?? _order.originalSource,
           type: QueueItemQueueType.queue,
         ));
@@ -631,16 +631,17 @@ class QueueService {
     required List<jellyfin_models.BaseItemDto> items,
     QueueItemSource? source,
   }) async {
-
     if (_queueAudioSource.length == 0) {
       return _replaceWholeQueue(
         itemList: items,
-        source: source ??  QueueItemSource(
-          type: QueueItemSourceType.queue,
-          name: const QueueItemSourceName(type: QueueItemSourceNameType.queue),
-          id: "queue",
-          item: null,
-        ),
+        source: source ??
+            QueueItemSource(
+              type: QueueItemSourceType.queue,
+              name: const QueueItemSourceName(
+                  type: QueueItemSourceNameType.queue),
+              id: "queue",
+              item: null,
+            ),
         initialIndex: 0,
         beginPlaying: false,
       );
@@ -653,8 +654,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item:
-              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
+          item: await generateMediaItem(item,
+              contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -687,21 +688,22 @@ class QueueService {
     required List<jellyfin_models.BaseItemDto> items,
     QueueItemSource? source,
   }) async {
-
     if (_queueAudioSource.length == 0) {
       return _replaceWholeQueue(
         itemList: items,
-        source: source ??  QueueItemSource(
-          type: QueueItemSourceType.queue,
-          name: const QueueItemSourceName(type: QueueItemSourceNameType.queue),
-          id: "queue",
-          item: null,
-        ),
+        source: source ??
+            QueueItemSource(
+              type: QueueItemSourceType.queue,
+              name: const QueueItemSourceName(
+                  type: QueueItemSourceNameType.queue),
+              id: "queue",
+              item: null,
+            ),
         initialIndex: 0,
         beginPlaying: false,
       );
     }
-    
+
     try {
       if (_savedQueueState == SavedQueueState.pendingSave) {
         _savedQueueState = SavedQueueState.saving;
@@ -709,8 +711,8 @@ class QueueService {
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
         queueItems.add(FinampQueueItem(
-          item:
-              await generateMediaItem(item, contextNormalizationGain: source?.contextNormalizationGain),
+          item: await generateMediaItem(item,
+              contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
               QueueItemSource(
                   id: "next-up",
@@ -979,7 +981,9 @@ class QueueService {
     double? contextNormalizationGain,
     MediaItemParentType? parentType,
     String? parentId,
-    bool Function({ jellyfin_models.BaseItemDto? item, TabContentType? contentType })? isPlayable,
+    bool Function(
+            {jellyfin_models.BaseItemDto? item, TabContentType? contentType})?
+        isPlayable,
   }) async {
     const uuid = Uuid();
 
@@ -1005,9 +1009,11 @@ class QueueService {
       downloadedSong = downloadsService.getSongDownload(item: item);
       isDownloaded = downloadedSong != null;
     } else {
-      downloadedCollection = await downloadsService.getCollectionInfo(item: item);
+      downloadedCollection =
+          await downloadsService.getCollectionInfo(item: item);
       if (downloadedCollection != null) {
-        final downloadStatus = downloadsService.getStatus(downloadedCollection, null);
+        final downloadStatus =
+            downloadsService.getStatus(downloadedCollection, null);
         isDownloaded = downloadStatus != DownloadItemStatus.notNeeded;
       }
     }
@@ -1015,7 +1021,8 @@ class QueueService {
     try {
       downloadedImage = downloadsService.getImageDownload(item: item);
     } catch (e) {
-      _queueServiceLogger.warning("Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");
+      _queueServiceLogger.warning(
+          "Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");
     }
 
     Uri? artUri;
@@ -1028,12 +1035,15 @@ class QueueService {
       // try to get image file (Android Automotive needs this)
       if (artUri != null) {
         try {
-          final fileInfo = await AudioService.cacheManager.getFileFromCache(item.id);
+          final fileInfo =
+              await AudioService.cacheManager.getFileFromCache(item.id);
           if (fileInfo != null) {
             artUri = fileInfo.file.uri;
           }
         } catch (e) {
-          _queueServiceLogger.severe("Error setting new media artwork uri for item: ${item.id} name: ${item.name}", e);
+          _queueServiceLogger.severe(
+              "Error setting new media artwork uri for item: ${item.id} name: ${item.name}",
+              e);
         }
       }
     }
@@ -1042,17 +1052,29 @@ class QueueService {
     if (Platform.isAndroid) {
       // replace with placeholder art
       if (artUri == null) {
-        final applicationSupportDirectory = await getApplicationSupportDirectory();
-        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: path_helper.join(applicationSupportDirectory.absolute.path, Assets.images.albumWhite.path));
+        final applicationSupportDirectory =
+            await getApplicationSupportDirectory();
+        artUri = Uri(
+            scheme: "content",
+            host: contentProviderPackageName,
+            path: path_helper.join(applicationSupportDirectory.absolute.path,
+                Assets.images.albumWhite.path));
       } else {
         // store the origin in fragment since it should be unused
-        artUri = Uri(scheme: "content", host: contentProviderPackageName, path: artUri.path, fragment: ["http", "https"].contains(artUri.scheme) ? artUri.origin : null);
+        artUri = Uri(
+            scheme: "content",
+            host: contentProviderPackageName,
+            path: artUri.path,
+            fragment: ["http", "https"].contains(artUri.scheme)
+                ? artUri.origin
+                : null);
       }
     }
 
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
-      playable: isItemPlayable, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
+      playable:
+          isItemPlayable, // this dictates whether clicking on an item will try to play it or browse it in media browsers like Android Auto
       album: item.album,
       artist: item.artists?.join(", ") ?? item.albumArtist,
       artUri: artUri,

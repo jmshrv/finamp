@@ -804,7 +804,8 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                       width: (screenSize.width -
                                               2 * horizontalPadding -
                                               albumImageSize) *
-                                          ((playbackPosition?.inMilliseconds ?? 0) /
+                                          ((playbackPosition?.inMilliseconds ??
+                                                  0) /
                                               (mediaState?.mediaItem
                                                           ?.duration ??
                                                       const Duration(

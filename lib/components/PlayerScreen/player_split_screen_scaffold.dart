@@ -134,8 +134,7 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                                             arguments: x.arguments);
                                     return EmptyRoute();
                                   },
-                                  observers: [KeepScreenOnObserver()]
-                                ),
+                                  observers: [KeepScreenOnObserver()]),
                             )),
                       )
                     ]);

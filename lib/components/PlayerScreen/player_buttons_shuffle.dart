@@ -23,7 +23,8 @@ class PlayerButtonsShuffle extends StatelessWidget {
       stream: mediaStateStream,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return IconButton(
-          tooltip: getLocalizedPlaybackOrder(context, _queueService.playbackOrder),
+          tooltip:
+              getLocalizedPlaybackOrder(context, _queueService.playbackOrder),
           onPressed: () async {
             FeedbackHelper.feedback(FeedbackType.light);
             _queueService.togglePlaybackOrder();
@@ -38,7 +39,8 @@ class PlayerButtonsShuffle extends StatelessWidget {
     );
   }
 
-  String getLocalizedPlaybackOrder(BuildContext context, FinampPlaybackOrder playbackOrder) {
+  String getLocalizedPlaybackOrder(
+      BuildContext context, FinampPlaybackOrder playbackOrder) {
     switch (playbackOrder) {
       case FinampPlaybackOrder.linear:
         return AppLocalizations.of(context)!.playbackOrderLinearButtonTooltip;
@@ -46,5 +48,4 @@ class PlayerButtonsShuffle extends StatelessWidget {
         return AppLocalizations.of(context)!.playbackOrderShuffledButtonTooltip;
     }
   }
-  
 }

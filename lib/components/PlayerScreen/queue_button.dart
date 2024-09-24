@@ -13,10 +13,10 @@ class QueueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleButton(
-      text: AppLocalizations.of(context)!.queue,
-      icon: TablerIcons.playlist,
-      onPressed: () {
-        showQueueBottomSheet(context);
-    });
+        text: AppLocalizations.of(context)!.queue,
+        icon: TablerIcons.playlist,
+        onPressed: () {
+          showQueueBottomSheet(context);
+        });
   }
 }

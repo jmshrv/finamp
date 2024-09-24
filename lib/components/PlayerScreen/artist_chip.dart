@@ -106,7 +106,8 @@ class ArtistChip extends ConsumerWidget {
     final BaseItemDto? localArtist;
     if (artist != null &&
         FinampSettingsHelper.finampSettings.showArtistChipImage) {
-      localArtist = ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
+      localArtist =
+          ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
     } else {
       localArtist = artist;
     }

@@ -72,12 +72,13 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
                 return GlobalSnackbar.message((context) =>
                     AppLocalizations.of(context)!.notAvailableInOfflineMode);
               }
-      
+
               bool inPlaylist = queueItemInPlaylist(widget.queueItem);
               await showPlaylistActionsMenu(
                 context: context,
                 item: widget.item!,
-                parentPlaylist: inPlaylist ? widget.queueItem!.source.item : null,
+                parentPlaylist:
+                    inPlaylist ? widget.queueItem!.source.item : null,
                 usePlayerTheme: true,
               );
             }),

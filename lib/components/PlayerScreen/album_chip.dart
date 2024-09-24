@@ -88,8 +88,8 @@ class _AlbumChipContent extends StatelessWidget {
                   (album) => Navigator.of(context).pushNamed(
                       AlbumScreen.routeName,
                       arguments: album!.baseItem!))
-              : () => jellyfinApiHelper.getItemById(item.albumId!).then((album) =>
-                  Navigator.of(context)
+              : () => jellyfinApiHelper.getItemById(item.albumId!).then(
+                  (album) => Navigator.of(context)
                       .pushNamed(AlbumScreen.routeName, arguments: album)),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),

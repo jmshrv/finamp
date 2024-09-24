@@ -86,7 +86,8 @@ class _AlphabetListState extends State<AlphabetList> {
           onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
           behavior: HitTestBehavior.opaque,
           child: Semantics(
-            excludeSemantics: true, // replace child semantics with custom semantics
+            excludeSemantics:
+                true, // replace child semantics with custom semantics
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(

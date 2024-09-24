@@ -94,14 +94,17 @@ class AlbumImage extends ConsumerWidget {
                 // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
                 final MediaQueryData mediaQuery = MediaQuery.of(context);
                 physicalWidth =
-                    (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
+                    (constraints.maxWidth * mediaQuery.devicePixelRatio)
+                        .toInt();
                 physicalHeight =
-                    (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+                    (constraints.maxHeight * mediaQuery.devicePixelRatio)
+                        .toInt();
                 // If using grid music screen view without fixed size tiles, and if the view is resizable due
                 // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
                 if ((!(Platform.isIOS || Platform.isAndroid) ||
                         usingPlayerSplitScreen) &&
-                    !FinampSettingsHelper.finampSettings.useFixedSizeGridTiles &&
+                    !FinampSettingsHelper
+                        .finampSettings.useFixedSizeGridTiles &&
                     FinampSettingsHelper.finampSettings.contentViewType ==
                         ContentViewType.grid) {
                   physicalWidth =
@@ -110,7 +113,7 @@ class AlbumImage extends ConsumerWidget {
                       exp((log(physicalHeight) * 3).ceil() / 3).toInt();
                 }
               }
-      
+
               var image = Container(
                 decoration: decoration,
                 child: BareAlbumImage(
@@ -123,7 +126,8 @@ class AlbumImage extends ConsumerWidget {
                     imageProviderCallback: themeCallback == null
                         ? null
                         : (image) => themeCallback!(
-                            FinampTheme.fromImageDeferred(image, item?.blurHash)),
+                            FinampTheme.fromImageDeferred(
+                                image, item?.blurHash)),
                     placeholderBuilder: placeholderBuilder),
               );
               return disabled
