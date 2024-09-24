@@ -141,7 +141,7 @@ class _ArtistChipContent extends StatelessWidget {
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
-        label: "$name (Artist)",
+        label: "$name (${AppLocalizations.of(context)!.artist})",
         button: true,
       ),
       container: true,

@@ -53,37 +53,30 @@ class DownloadButton extends ConsumerWidget {
       viewId = finampUserHelper.currentUser!.currentViewId!;
     }
 
-    var downloadButton = Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: AppLocalizations.of(context)!.downloadItem,
-        button: true,
-      ),
-      container: true,
-      child: IconButton(
-        icon: status == DownloadItemStatus.notNeeded
-            ? const Icon(Icons.file_download)
-            : const Icon(Icons.lock), //TODO get better icon
-        onPressed: () async {
-          if (isLibrary) {
-            await showDialog(
-                context: context,
-                builder: (context) => ConfirmationPromptDialog(
-                      promptText: AppLocalizations.of(context)!
-                          .downloadLibraryPrompt(item.name),
-                      confirmButtonText:
-                          AppLocalizations.of(context)!.addButtonLabel,
-                      abortButtonText:
-                          MaterialLocalizations.of(context).cancelButtonLabel,
-                      onConfirmed: () =>
-                          DownloadDialog.show(context, item, viewId),
-                      onAborted: () {},
-                    ));
-          } else {
-            await DownloadDialog.show(context, item, viewId);
-          }
-        },
-        tooltip: parentTooltip,
-      ),
+    var downloadButton = IconButton(
+      icon: status == DownloadItemStatus.notNeeded
+          ? const Icon(Icons.file_download)
+          : const Icon(Icons.lock), //TODO get better icon
+      onPressed: () async {
+        if (isLibrary) {
+          await showDialog(
+              context: context,
+              builder: (context) => ConfirmationPromptDialog(
+                    promptText: AppLocalizations.of(context)!
+                        .downloadLibraryPrompt(item.name),
+                    confirmButtonText:
+                        AppLocalizations.of(context)!.addButtonLabel,
+                    abortButtonText:
+                        MaterialLocalizations.of(context).cancelButtonLabel,
+                    onConfirmed: () =>
+                        DownloadDialog.show(context, item, viewId),
+                    onAborted: () {},
+                  ));
+        } else {
+          await DownloadDialog.show(context, item, viewId);
+        }
+      },
+      tooltip: parentTooltip,
     );
     var deleteButton = IconButton(
       icon: const Icon(Icons.delete),

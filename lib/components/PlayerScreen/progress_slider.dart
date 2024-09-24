@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/music_player_background_task.dart';
 
@@ -235,7 +236,9 @@ class __PlaybackProgressSliderState
           final durationFullHours = (widget.mediaItem?.duration?.inHours ?? 0);
           final durationFullMinutes = (widget.mediaItem?.duration?.inMinutes ?? 0) % 60;
           final durationSeconds = (widget.mediaItem?.duration?.inSeconds ?? 0) % 60;
-          return "${positionFullHours > 0 ? "$positionFullHours hours " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes minutes " : ""}$positionSeconds seconds of ${durationFullHours > 0 ? "$durationFullHours hours " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes minutes " : ""}$durationSeconds seconds";
+          final positionString = "${positionFullHours > 0 ? "$positionFullHours ${AppLocalizations.of(context)!.hours} " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$positionSeconds ${AppLocalizations.of(context)!.seconds}";
+          final durationString = "${durationFullHours > 0 ? "$durationFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationSeconds ${AppLocalizations.of(context)!.seconds}";
+          return AppLocalizations.of(context)!.timeFractionTooltip(positionString, durationString);
         },
         secondaryTrackValue:
             widget.mediaItem?.extras?["downloadedSongPath"] == null

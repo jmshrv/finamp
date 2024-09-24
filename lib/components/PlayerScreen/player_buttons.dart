@@ -7,6 +7,7 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
@@ -34,8 +35,8 @@ class PlayerButtons extends StatelessWidget {
               if (controller.shouldShow(PlayerHideable.loopShuffleButtons))
                 PlayerButtonsRepeating(),
               Semantics.fromProperties(
-                properties: const SemanticsProperties(
-                  label: "Skip to beginning or previous track",
+                properties: SemanticsProperties(
+                  label: AppLocalizations.of(context)!.skipToPreviousTrackButtonTooltip,
                   button: true,
                 ),
                 container: true,
@@ -51,8 +52,8 @@ class PlayerButtons extends StatelessWidget {
                 ),
               ),
               Semantics.fromProperties(
-                properties: const SemanticsProperties(
-                  label: "Toggle playback",
+                properties: SemanticsProperties(
+                  label: AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
                   button: true,
                 ),
                 container: true,
@@ -86,8 +87,8 @@ class PlayerButtons extends StatelessWidget {
                 ),
               ),
               Semantics.fromProperties(
-                properties: const SemanticsProperties(
-                  label: "Skip to next track",
+                properties: SemanticsProperties(
+                  label: AppLocalizations.of(context)!.skipToNextTrackButtonTooltip,
                   button: true,
                 ),
                 container: true,

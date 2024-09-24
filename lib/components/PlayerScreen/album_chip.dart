@@ -73,7 +73,7 @@ class _AlbumChipContent extends StatelessWidget {
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
-        label: "$albumName (Album)",
+        label: "$albumName (${AppLocalizations.of(context)!.album})",
         button: true,
       ),
       excludeSemantics: true,

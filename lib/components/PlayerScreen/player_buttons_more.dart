@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/finamp_models.dart';
 
@@ -21,7 +22,7 @@ class PlayerButtonsMore extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Semantics(
-      label: "Track menu",
+      label: AppLocalizations.of(context)!.trackMenuButtonTooltip,
       excludeSemantics: true, // replace child semantics with custom semantics
       container: true,
       child: IconTheme(

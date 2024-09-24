@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlayerButtonsShuffle extends StatelessWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -21,26 +22,29 @@ class PlayerButtonsShuffle extends StatelessWidget {
     return StreamBuilder(
       stream: mediaStateStream,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        return Semantics.fromProperties(
-          properties: SemanticsProperties(
-            label: "Playing ${_queueService.playbackOrder == FinampPlaybackOrder.shuffled ? "shuffled" : "in order"}. Tap to toggle.",
-            button: true,
-          ),
-          excludeSemantics: true,
-          container: true,
-          child: IconButton(
-            onPressed: () async {
-              FeedbackHelper.feedback(FeedbackType.light);
-              _queueService.togglePlaybackOrder();
-            },
-            icon: Icon(
-              (_queueService.playbackOrder == FinampPlaybackOrder.shuffled
-                  ? TablerIcons.arrows_shuffle
-                  : TablerIcons.arrows_right),
-            ),
+        return IconButton(
+          tooltip: getLocalizedPlaybackOrder(context, _queueService.playbackOrder),
+          onPressed: () async {
+            FeedbackHelper.feedback(FeedbackType.light);
+            _queueService.togglePlaybackOrder();
+          },
+          icon: Icon(
+            (_queueService.playbackOrder == FinampPlaybackOrder.shuffled
+                ? TablerIcons.arrows_shuffle
+                : TablerIcons.arrows_right),
           ),
         );
       },
     );
   }
+
+  String getLocalizedPlaybackOrder(BuildContext context, FinampPlaybackOrder playbackOrder) {
+    switch (playbackOrder) {
+      case FinampPlaybackOrder.linear:
+        return AppLocalizations.of(context)!.playbackOrderLinearButtonTooltip;
+      case FinampPlaybackOrder.shuffled:
+        return AppLocalizations.of(context)!.playbackOrderShuffledButtonTooltip;
+    }
+  }
+  
 }

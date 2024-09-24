@@ -23,23 +23,16 @@ class PlayerButtonsRepeating extends StatelessWidget {
     return StreamBuilder(
         stream: mediaStateStream,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          return Semantics.fromProperties(
-            properties: SemanticsProperties(
-              label: "${getLocalizedLoopMode(context, queueService.loopMode)}. Tap to toggle.",
-              button: true,
-            ),
-            excludeSemantics: true,
-            container: true,
-            child: IconButton(
-                onPressed: () async {
-                  FeedbackHelper.feedback(FeedbackType.light);
-                  queueService.toggleLoopMode();
-                },
-                icon: _getRepeatingIcon(
-                  queueService.loopMode,
-                  Theme.of(context).colorScheme.secondary,
-                )),
-          );
+          return IconButton(
+            tooltip: "${getLocalizedLoopMode(context, queueService.loopMode)}. ${AppLocalizations.of(context)!.genericToggleButtonTooltip}",
+              onPressed: () async {
+                FeedbackHelper.feedback(FeedbackType.light);
+                queueService.toggleLoopMode();
+              },
+              icon: _getRepeatingIcon(
+                queueService.loopMode,
+                Theme.of(context).colorScheme.secondary,
+              ));
         });
   }
 

@@ -219,6 +219,8 @@
   "@sortOrder": {},
   "sortBy": "Sort by",
   "@sortBy": {},
+  "title": "Title",
+  "@title": {},
   "album": "Album",
   "@album": {},
   "albumArtist": "Album Artist",
@@ -623,8 +625,16 @@
   "@noButtonLabel": {},
   "setSleepTimer": "Set Sleep Timer",
   "@setSleepTimer": {},
+  "hours": "Hours",
+  "@hours": {},
+  "seconds": "Seconds",
+  "@seconds": {},
   "minutes": "Minutes",
   "@minutes": {},
+  "timeFractionTooltip": "{currentTime} of {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
   "invalidNumber": "Invalid Number",
   "@invalidNumber": {},
   "sleepTimerTooltip": "Sleep timer",
@@ -676,6 +686,10 @@
   "@createButtonLabel": {},
   "playlistCreated": "Playlist created.",
   "@playlistCreated": {},
+  "playlistActionsMenuButtonTooltip": "Tap to add to playlist. Long press to toggle favorite.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
   "noAlbum": "No Album",
   "@noAlbum": {},
   "noItem": "No Item",
@@ -796,6 +810,18 @@
   "@bufferDurationSubtitle": {},
   "language": "Language",
   "@language": {},
+  "skipToPreviousTrackButtonTooltip": "Skip to beginning or to previous track",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "skipToNextTrackButtonTooltip": "Skip to next track",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "togglePlaybackButtonTooltip": "Toggle playback",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
   "previousTracks": "Previous Tracks",
   "@previousTracks": {
     "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
@@ -918,13 +944,21 @@
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
-  "playbackOrderLinearButtonLabel": "Playing in order. Tap to shuffle.",
+  "playbackOrderLinearButtonLabel": "Playing in order",
   "@playbackOrderLinearButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "playbackOrderShuffledButtonLabel": "Shuffling tracks. Tap to play in order.",
+  "playbackOrderLinearButtonTooltip": "Playing in order. Tap to shuffle.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Shuffling tracks",
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Shuffling tracks. Tap to play in order.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
   "playbackSpeedButtonLabel": "Playing at x{speed} speed",
   "@playbackSpeedButtonLabel": {
@@ -1532,6 +1566,10 @@
     },
     "description": "Prompt on dialog to confirm a removal from playlist"
   },
+  "trackMenuButtonTooltip": "Track Menu",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
   "quickActions": "Quick Actions",
   "@quickActions": {
     "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
@@ -1648,5 +1686,35 @@
   "keepScreenOnWhilePlaying": "While Playing Music",
   "keepScreenOnWhileLyrics": "While Showing Lyrics",
   "keepScreenOnWhilePluggedIn": "Keep Screen On only while plugged in",
-  "keepScreenOnWhilePluggedInSubtitle": "Ignore the Keep Screen On setting if device is unplugged"
+  "keepScreenOnWhilePluggedInSubtitle": "Ignore the Keep Screen On setting if device is unplugged",
+  "genericToggleButtonTooltip": "Tap to toggle.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "artwork": "Artwork",
+  "@artwork": {},
+  "artworkTooltip": "Artwork for {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "playerAlbumArtworkTooltip": "Artwork for {title}. Tap to toggle playback. Swipe left or right to switch tracks.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "nowPlayingBarTooltip": "Open Player Screen",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  }
 }

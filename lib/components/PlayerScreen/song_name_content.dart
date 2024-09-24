@@ -7,6 +7,7 @@ import 'package:finamp/screens/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/queue_service.dart';
 import 'album_chip.dart';
@@ -58,7 +59,7 @@ class SongNameContent extends StatelessWidget {
                     ),
                     child: Semantics.fromProperties(
                       properties: SemanticsProperties(
-                        label: "${currentTrack.item.title} (Title)",
+                        label: "${currentTrack.item.title} (${AppLocalizations.of(context)!.title})",
                       ),
                       excludeSemantics: true,
                       container: true,

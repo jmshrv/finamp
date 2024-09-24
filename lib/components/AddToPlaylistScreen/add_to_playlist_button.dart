@@ -45,7 +45,7 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: AppLocalizations.of(context)!.addToPlaylistTooltip,
-        hint: "Tap to add to playlist. Long press to toggle favorite.",
+        hint: AppLocalizations.of(context)!.playlistActionsMenuButtonTooltip,
         button: true,
       ),
       excludeSemantics: true,
