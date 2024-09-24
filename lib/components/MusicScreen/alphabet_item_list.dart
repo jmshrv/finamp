@@ -86,7 +86,6 @@ class _AlphabetListState extends State<AlphabetList> {
           onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
           behavior: HitTestBehavior.opaque,
           child: Semantics(
-            label: 'Alphabet list for fast scrolling',
             excludeSemantics: true, // replace child semantics with custom semantics
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
