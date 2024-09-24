@@ -85,57 +85,45 @@ class DownloadButton extends ConsumerWidget {
         tooltip: parentTooltip,
       ),
     );
-    var deleteButton = Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: AppLocalizations.of(context)!.deleteItem,
-        button: true,
-      ),
-      container: true,
-      child: IconButton(
-        icon: const Icon(Icons.delete),
-        // If offline, we don't allow the user to delete items.
-        // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
-        // If they did, AlbumScreen would show an error since the item no longer exists.
-        // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => ConfirmationPromptDialog(
-              promptText: AppLocalizations.of(context)!.deleteDownloadsPrompt(
-                  item.baseItem?.name ?? "", item.baseItemType.name),
-              confirmButtonText:
-                  AppLocalizations.of(context)!.deleteDownloadsConfirmButtonText,
-              abortButtonText:
-                  AppLocalizations.of(context)!.deleteDownloadsAbortButtonText,
-              onConfirmed: () async {
-                try {
-                  await downloadsService.deleteDownload(stub: item);
-                  GlobalSnackbar.message((scaffold) =>
-                      AppLocalizations.of(scaffold)!.downloadsDeleted);
-                } catch (error) {
-                  GlobalSnackbar.error(error);
-                }
-              },
-              onAborted: () {},
-            ),
-          );
-          // .whenComplete(() => checkIfDownloaded());
-        },
-      )
+    var deleteButton = IconButton(
+      icon: const Icon(Icons.delete),
+      tooltip: AppLocalizations.of(context)!.deleteItem,
+      // If offline, we don't allow the user to delete items.
+      // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
+      // If they did, AlbumScreen would show an error since the item no longer exists.
+      // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => ConfirmationPromptDialog(
+            promptText: AppLocalizations.of(context)!.deleteDownloadsPrompt(
+                item.baseItem?.name ?? "", item.baseItemType.name),
+            confirmButtonText:
+                AppLocalizations.of(context)!.deleteDownloadsConfirmButtonText,
+            abortButtonText:
+                AppLocalizations.of(context)!.deleteDownloadsAbortButtonText,
+            onConfirmed: () async {
+              try {
+                await downloadsService.deleteDownload(stub: item);
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!.downloadsDeleted);
+              } catch (error) {
+                GlobalSnackbar.error(error);
+              }
+            },
+            onAborted: () {},
+          ),
+        );
+        // .whenComplete(() => checkIfDownloaded());
+      },
     );
-    var syncButton = Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: AppLocalizations.of(context)!.syncDownloads,
-        button: true,
-      ),
-      container: true,
-      child: IconButton(
-        icon: const Icon(Icons.sync),
-        onPressed: () {
-          downloadsService.resync(item, viewId);
-        },
-        color: status.outdated ? Colors.orange : null,
-      )
+    var syncButton = IconButton(
+      icon: const Icon(Icons.sync),
+      tooltip: AppLocalizations.of(context)!.syncDownloads,
+      onPressed: () {
+        downloadsService.resync(item, viewId);
+      },
+      color: status.outdated ? Colors.orange : null,
     );
     if (isOffline) {
       if (status.isRequired) {

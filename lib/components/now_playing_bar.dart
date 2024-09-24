@@ -247,6 +247,7 @@ class NowPlayingBar extends ConsumerWidget {
                                           color: Color.fromRGBO(0, 0, 0, 0.3),
                                         ),
                                         child: IconButton(
+                                          tooltip: "Toggle Playback",
                                           onPressed: () {
                                             FeedbackHelper.feedback(
                                                 FeedbackType.light);
