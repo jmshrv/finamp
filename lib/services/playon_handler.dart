@@ -127,44 +127,28 @@ class PlayonHandler {
                 switch (request['Data']['PlayCommand']) {
                   case 'PlayNow':
                     channel.sink.add('{"MessageType":"KeepAlive"}');
-                    if (request['Data'].containsKey('StartIndex')) { // User started a single song
-                      var item = await jellyfinApiHelper.getItemById(request['Data']['ItemIds'][request['Data']['StartIndex']]);
-                      if (FinampSettingsHelper
-                        .finampSettings.startInstantMixForIndividualTracks) {
-                      unawaited(audioServiceHelper.startInstantMixForItem(item));
-                      } else {
-                        unawaited(queueService.startPlayback(
-                          items: [item],
-                          source: QueueItemSource(
-                            name: QueueItemSourceName(
-                                type: QueueItemSourceNameType.preTranslated,
-                                pretranslatedName: item.name),
-                            type: QueueItemSourceType.song,
-                            id: item.id,
-                          ),
-                        ));
-                      }
-                    } else { // User asked to play an album
-                      var items = await jellyfinApiHelper.getItems(
-                        sortBy: "IndexNumber",
-                        includeItemTypes: "Audio", 
-                        itemIds: List<String>.from(request['Data']['ItemIds'] as List),
-                      );
-                      unawaited(queueService.startPlayback(
-                          items: items!,
-                          source: QueueItemSource(
-                            name: QueueItemSourceName(
-                                type: QueueItemSourceNameType.preTranslated,
-                                pretranslatedName: items![0].name),
-                            type: QueueItemSourceType.song,
-                            id: items[0].id,
-                          ),
-                        ));
+                    if (!request['Data'].containsKey('StartIndex')) { 
+                      request['Data']['StartIndex']=0;
                     }
-                    
-                      
-                }
-              }
+                    var items = await jellyfinApiHelper.getItems(
+                      sortBy: "IndexNumber",
+                      includeItemTypes: "Audio", 
+                      itemIds: List<String>.from(request['Data']['ItemIds'] as List),
+                    );
+                    unawaited(queueService.startPlayback(
+                        items: items!,
+                        source: QueueItemSource(
+                          name: QueueItemSourceName(
+                              type: QueueItemSourceNameType.preTranslated,
+                              pretranslatedName: items![0].name),
+                          type: QueueItemSourceType.song,
+                          id: items[0].id,
+                        ),
+                        startingIndex: request['Data']['StartIndex'],
+                      )
+                    );
+                  }
+            }
             break;
         }
 
