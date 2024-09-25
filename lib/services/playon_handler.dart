@@ -145,16 +145,17 @@ class PlayonHandler {
                         ));
                       }
                     } else { // User asked to play an album
-                      var items=<BaseItemDto>[];
-                      for (final itemId in request['Data']['ItemIds']) {
-                        items.add(await jellyfinApiHelper.getItemById(itemId));
-                      }
+                      var items = await jellyfinApiHelper.getItems(
+                        sortBy: "IndexNumber",
+                        includeItemTypes: "Audio", 
+                        itemIds: List<String>.from(request['Data']['ItemIds'] as List),
+                      );
                       unawaited(queueService.startPlayback(
-                          items: items,
+                          items: items!,
                           source: QueueItemSource(
                             name: QueueItemSourceName(
                                 type: QueueItemSourceNameType.preTranslated,
-                                pretranslatedName: items[0].name),
+                                pretranslatedName: items![0].name),
                             type: QueueItemSourceType.song,
                             id: items[0].id,
                           ),
