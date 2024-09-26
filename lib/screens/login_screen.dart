@@ -21,10 +21,7 @@ class LoginScreen extends StatelessWidget {
       ),
       child: const Scaffold(
         body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.0),
-            child: LoginFlow(),
-          ),
+          child: LoginFlow(),
         ),
         bottomNavigationBar: _LoginAuxillaryOptions(),
       ),

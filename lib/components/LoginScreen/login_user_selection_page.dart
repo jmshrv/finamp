@@ -59,6 +59,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
