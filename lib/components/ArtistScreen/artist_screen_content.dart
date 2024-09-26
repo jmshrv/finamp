@@ -91,11 +91,11 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           )
         else
           Future.value(null),
-        // Get Albums sorted by Production Year
+        // Get Albums sorted by Production Year and Premiere Date
         jellyfinApiHelper.getItems(
           parentItem: widget.parent,
           filters: "Artist=${widget.parent.name}",
-          sortBy: "ProductionYear",
+          sortBy: "ProductionYear,PremiereDate",
           includeItemTypes: "MusicAlbum",
         ),
       ]);
