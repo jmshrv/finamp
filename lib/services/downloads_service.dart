@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -1011,6 +1012,7 @@ class DownloadsService {
   /// always be re-run later by the user.  Note that the existing hive metadata is
   /// not deleted by this migration, we just stop using it.
   Future<void> migrateFromHive() async {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
     if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
         .where((element) =>
             element.baseDirectory == DownloadLocationType.internalSupport)
@@ -1036,6 +1038,13 @@ class DownloadsService {
           content: Text(AppLocalizations.of(scaffold)!.runRepairWarning),
           duration: const Duration(seconds: 20)));
     }));
+
+    // Automatically download playlist metadata (to enhance the playlist actions dialog and offline mode)
+    unawaited(addDownload(
+      stub: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
+      viewId: finampUserHelper.currentUser!.currentViewId!,
+      transcodeProfile: DownloadProfile(transcodeCodec: FinampTranscodingCodec.original),
+    ));
   }
 
   /// Substep 1 of [migrateFromHive].
