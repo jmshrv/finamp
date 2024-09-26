@@ -95,7 +95,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         jellyfinApiHelper.getItems(
           parentItem: widget.parent,
           filters: "Artist=${widget.parent.name}",
-          sortBy: "PremiereDate",
+          sortBy: "PremiereDate,SortName",
           includeItemTypes: "MusicAlbum",
         ),
       ]);
