@@ -147,6 +147,27 @@ class PlayonHandler {
                         startingIndex: request['Data']['StartIndex'],
                       )
                     );
+                    break;
+                    case 'PlayNext':
+                      var items = await jellyfinApiHelper.getItems(
+                        sortBy: "IndexNumber",
+                        includeItemTypes: "Audio", 
+                        itemIds: List<String>.from(request['Data']['ItemIds'] as List),
+                      );
+                      unawaited(queueService.addToNextUp(
+                        items: items!,
+                      ));
+                    break;
+                    case 'PlayLast':
+                      var items = await jellyfinApiHelper.getItems(
+                        sortBy: "IndexNumber",
+                        includeItemTypes: "Audio", 
+                        itemIds: List<String>.from(request['Data']['ItemIds'] as List),
+                      );
+                      unawaited(queueService.addToQueue(
+                        items: items!,
+                      ));
+                    break;
                   }
             }
             break;
