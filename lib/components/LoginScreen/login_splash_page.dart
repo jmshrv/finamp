@@ -1,5 +1,6 @@
 import 'package:finamp/components/Buttons/cta_large.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,8 +25,8 @@ class LoginSplashPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 80.0, bottom: 40.0),
                 child: Hero(
                   tag: "finamp_logo",
-                  child: Image.asset(
-                    'images/finamp_cropped.png',
+                  child: SvgPicture.asset(
+                    'images/finamp_cropped.svg',
                     width: 150,
                     height: 150,
                   ),
