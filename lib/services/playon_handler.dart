@@ -4,6 +4,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
+import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -111,6 +112,10 @@ class PlayonHandler {
                 // val to = message.data?.seekPositionTicks?.ticks ?: Duration.ZERO
                 final seekPosition = request['Data']['SeekPositionTicks'] != null ? Duration(milliseconds: ((request['Data']['SeekPositionTicks'] as int) / 10000).round()) : Duration.zero; 
                 await audioHandler.seek(seekPosition);
+                final currentItem = queueService.getCurrentTrack();
+                if (currentItem != null) {
+                  unawaited(playbackHistoryService.onPlaybackStateChanged(currentItem, audioHandler.playbackState.value, null));
+                }
                 break;
               case "Rewind":
                 await audioHandler.rewind();
