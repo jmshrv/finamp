@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -59,8 +60,8 @@ class SettingsScreen extends StatelessWidget {
                     applicationVersion: packageInfo.version,
                     applicationIcon: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: Image.asset(
-                        'images/finamp_cropped.png',
+                      child: SvgPicture.asset(
+                        'images/finamp_cropped.svg',
                         width: 56,
                         height: 56,
                       ),
