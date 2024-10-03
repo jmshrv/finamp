@@ -471,6 +471,8 @@ class TrackListItemTile extends StatelessWidget {
   final bool isCurrentTrack;
   final void Function() onTap;
 
+  static const double tileHeight = 60.0;
+
   @override
   Widget build(BuildContext context) {
     return ListTileTheme(
@@ -478,7 +480,7 @@ class TrackListItemTile extends StatelessWidget {
       child: ListTile(
         visualDensity: const VisualDensity(
           horizontal: 0.0,
-          vertical: 0.0,
+          vertical: 1.0,
         ),
         minVerticalPadding: 0.0,
         horizontalTitleGap: 10.0,
@@ -494,7 +496,7 @@ class TrackListItemTile extends StatelessWidget {
             ),
             if (isCurrentTrack)
               SizedBox.square(
-                dimension: 56,
+                dimension: tileHeight,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
@@ -511,41 +513,46 @@ class TrackListItemTile extends StatelessWidget {
               ),
           ],
         ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 1.0),
-              child: Text(
-                baseItem.name ?? AppLocalizations.of(context)!.unknownName,
-                style: isCurrentTrack
-                    ? TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        height: 1.0)
-                    : const TextStyle(
-                      fontSize: 15, height: 1.0),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
+        title: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxHeight: tileHeight,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(
+                fit: FlexFit.loose,
+                child: Text(
+                  baseItem.name ?? AppLocalizations.of(context)!.unknownName,
+                  style: isCurrentTrack
+                      ? TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          height: 1.0)
+                      : const TextStyle(fontSize: 15, height: 1.0),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 2.0),
-              child: Text(
-                baseItem.artists?.join(", ") ??
-                    baseItem.albumArtist ??
-                    AppLocalizations.of(context)!.unknownArtist,
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium!.color!,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w300,
-                    overflow: TextOverflow.ellipsis),
-                overflow: TextOverflow.ellipsis,
+              Flexible(
+                fit: FlexFit.loose,
+                child: Text(
+                  baseItem.artists?.join(", ") ??
+                      baseItem.albumArtist ??
+                      AppLocalizations.of(context)!.unknownArtist,
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium!.color!,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                      overflow: TextOverflow.ellipsis),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         trailing: Container(
           margin: const EdgeInsets.only(right: 0.0),
