@@ -5,11 +5,13 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:get_it/get_it.dart';
 
 import 'playlist_actions_menu.dart';
 
@@ -35,6 +37,8 @@ class AddToPlaylistButton extends ConsumerStatefulWidget {
 }
 
 class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
+  final _queueService = GetIt.instance<QueueService>();
+  
   @override
   Widget build(BuildContext context) {
     if (widget.item == null) {
@@ -74,12 +78,14 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
               }
 
               bool inPlaylist = queueItemInPlaylist(widget.queueItem);
+              final currentTrack = _queueService.getCurrentTrack()?.baseItem;
               await showPlaylistActionsMenu(
                 context: context,
                 item: widget.item!,
                 parentPlaylist:
                     inPlaylist ? widget.queueItem!.source.item : null,
-                usePlayerTheme: true,
+                usePlayerTheme: widget.item?.blurHash != null &&
+                    widget.item?.blurHash == currentTrack?.blurHash,
               );
             }),
       ),

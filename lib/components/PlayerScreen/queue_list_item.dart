@@ -68,13 +68,12 @@ class _QueueListItemState extends State<QueueListItem>
         : const Color.fromRGBO(255, 255, 255, 0.125);
 
     void menuCallback() {
-      var currentTrack = jellyfin_models.BaseItemDto.fromJson(
-          _queueService.getCurrentTrack()?.item.extras?["itemJson"]);
+      var currentTrack = _queueService.getCurrentTrack()?.baseItem;
       showModalSongMenu(
         context: context,
         item: baseItem,
         usePlayerTheme: widget.item.baseItem?.blurHash != null &&
-            widget.item.baseItem?.blurHash == currentTrack.blurHash,
+            widget.item.baseItem?.blurHash == currentTrack?.blurHash,
         themeProvider: _menuTheme,
         isInPlaylist: queueItemInPlaylist(widget.item),
         parentItem: widget.item.source.item,
