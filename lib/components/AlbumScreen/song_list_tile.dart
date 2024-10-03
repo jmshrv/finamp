@@ -387,7 +387,7 @@ class _SongListTileState extends ConsumerState<SongListTile>
   }
 }
 
-class TrackListItem extends StatelessWidget {
+class TrackListItem extends ConsumerWidget {
   final jellyfin_models.BaseItemDto item;
   final jellyfin_models.BaseItemDto? parentItem;
   final Future<int>? listIndex;
@@ -415,126 +415,165 @@ class TrackListItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
 
     jellyfin_models.BaseItemDto baseItem = item;
-
-    final cardBackground = Theme.of(context).brightness == Brightness.dark
-        ? const Color.fromRGBO(255, 255, 255, 0.075)
-        : const Color.fromRGBO(255, 255, 255, 0.125);
 
     Widget listTile = Opacity(
       opacity: isPlayable ? 1.0 : 0.5,
       child: Card(
-        color: cardBackground,
+          color: Colors.transparent,
         elevation: 0,
-        margin:
-            const EdgeInsets.only(left: 6.0, right: 6.0, top: 6.0),
+          margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: ListTile(
-          visualDensity: const VisualDensity(
-            horizontal: 0.0,
-            vertical: 0.0,
-          ),
-          minVerticalPadding: 0.0,
-          horizontalTitleGap: 8.0,
-          contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-          tileColor: isCurrentTrack
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-              : const Color.fromRGBO(0, 0, 0, 0.035),
-          leading: Stack(
-            children: [
-              AlbumImage(
-                item: baseItem,
-                borderRadius: BorderRadius.zero,
+          child: AnimatedTheme(
+            duration: const Duration(seconds: 3),
+            data: Theme.of(context).copyWith(
+                // customize the tile colors based on the current track theme
+                colorScheme: Theme.of(context).colorScheme.copyWith(
+                      surfaceContainer: isCurrentTrack
+                          ? ref
+                              .watch(colorThemeNullableProvider)
+                              .value
+                              ?.primary
+                              .withOpacity(0.3)
+                          : Colors.transparent,
+                    )),
+            child: TrackListItemTile(
+                baseItem: baseItem,
                 themeCallback: themeCallback,
-              ),
-              if (isCurrentTrack)
-                SizedBox.square(
-                  dimension: 56,
-                  child: Container(
-                    // color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
-                    color: Theme.of(context).brightness == Brightness.dark ? Colors.black.withOpacity(0.35) : Colors.white.withOpacity(0.35),
-                    child: MiniMusicVisualizer(
-                      color: Theme.of(context).colorScheme.secondary,
-                      animate: true,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 1.0),
-                child: Text(
-                  baseItem.name ?? AppLocalizations.of(context)!.unknownName,
-                  style: isCurrentTrack
-                      ? TextStyle(
-                          color:
-                              Theme.of(context).colorScheme.secondary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          height: 1.0)
-                      : const TextStyle(
-                          fontSize: 16,
-                          height: 1.0),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: Text(
-                  baseItem.artists?.join(", ") ?? baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist,
-                  style: TextStyle(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .color!,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w300,
-                      overflow: TextOverflow.ellipsis),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          trailing: Container(
-            margin: const EdgeInsets.only(right: 0.0),
-            padding: const EdgeInsets.only(right: 4.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "${baseItem.runTimeTicksDuration()?.inMinutes.toString()}:${((baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                  ),
-                ),
-                AddToPlaylistButton(
-                  item: baseItem,
-                  size: 24,
-                  visualDensity:
-                      const VisualDensity(
-                          horizontal: -4,),
-                ),
-              ],
-            ),
-          ),
-          onTap: onTap,
-        )),
-        );
+                isCurrentTrack: isCurrentTrack,
+                onTap: onTap),
+          )),
+    );
 
     return listTile;
   }
-  
+}
+
+class TrackListItemTile extends StatelessWidget {
+  const TrackListItemTile({
+    super.key,
+    required this.baseItem,
+    required this.themeCallback,
+    required this.isCurrentTrack,
+    required this.onTap,
+  });
+
+  final jellyfin_models.BaseItemDto baseItem;
+  final void Function(FinampTheme theme)? themeCallback;
+  final bool isCurrentTrack;
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTileTheme(
+      tileColor: Theme.of(context).colorScheme.surfaceContainer,
+      child: ListTile(
+        visualDensity: const VisualDensity(
+          horizontal: 0.0,
+          vertical: 0.0,
+        ),
+        minVerticalPadding: 0.0,
+        horizontalTitleGap: 10.0,
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+        // tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+        leading: Stack(
+          children: [
+            AlbumImage(
+              item: baseItem,
+              borderRadius: BorderRadius.circular(8.0),
+              themeCallback: themeCallback,
+            ),
+            if (isCurrentTrack)
+              SizedBox.square(
+                dimension: 56,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black.withOpacity(0.35)
+                        : Colors.white.withOpacity(0.35),
+                  ),
+                  // color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
+                  child: MiniMusicVisualizer(
+                    color: Theme.of(context).colorScheme.secondary,
+                    animate: true,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 1.0),
+              child: Text(
+                baseItem.name ?? AppLocalizations.of(context)!.unknownName,
+                style: isCurrentTrack
+                    ? TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        height: 1.0)
+                    : const TextStyle(
+                      fontSize: 15, height: 1.0),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: Text(
+                baseItem.artists?.join(", ") ??
+                    baseItem.albumArtist ??
+                    AppLocalizations.of(context)!.unknownArtist,
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium!.color!,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w300,
+                    overflow: TextOverflow.ellipsis),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        trailing: Container(
+          margin: const EdgeInsets.only(right: 0.0),
+          padding: const EdgeInsets.only(right: 4.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "${baseItem.runTimeTicksDuration()?.inMinutes.toString()}:${((baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodySmall?.color,
+                ),
+              ),
+              AddToPlaylistButton(
+                item: baseItem,
+                size: 24,
+                visualDensity: const VisualDensity(
+                  horizontal: -4,
+                ),
+              ),
+            ],
+          ),
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
 }
