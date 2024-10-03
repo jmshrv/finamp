@@ -530,25 +530,46 @@ class TrackListItemTile extends StatelessWidget {
                       ? TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                           fontSize: 15,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w500,
                           height: 1.0)
-                      : const TextStyle(fontSize: 15, height: 1.0),
+                      : const TextStyle(
+                          fontSize: 15,
+                          height: 1.0,
+                          fontWeight: FontWeight.w500),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
               ),
               Flexible(
                 fit: FlexFit.loose,
-                child: Text(
-                  baseItem.artists?.join(", ") ??
-                      baseItem.albumArtist ??
-                      AppLocalizations.of(context)!.unknownArtist,
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyMedium!.color!,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w300,
-                      overflow: TextOverflow.ellipsis),
-                  overflow: TextOverflow.ellipsis,
+                child: Text.rich(
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  maxLines: 1,
+                  TextSpan(
+                      text: baseItem.artists?.join(", ") ??
+                          baseItem.albumArtist ??
+                          AppLocalizations.of(context)!.unknownArtist,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium!.color!,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          overflow: TextOverflow.ellipsis),
+                      children: [
+                        const WidgetSpan(child: SizedBox(width: 10.0)),
+                        TextSpan(
+                          text: baseItem.album,
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .color!
+                                .withOpacity(0.6),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ]),
                 ),
               ),
             ],
