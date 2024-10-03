@@ -433,7 +433,7 @@ class TrackListItem extends ConsumerWidget {
           borderRadius: BorderRadius.circular(8.0),
         ),
           child: AnimatedTheme(
-            duration: const Duration(seconds: 3),
+            duration: const Duration(seconds: 2),
             data: Theme.of(context).copyWith(
                 // customize the tile colors based on the current track theme
                 colorScheme: Theme.of(context).colorScheme.copyWith(
@@ -442,8 +442,24 @@ class TrackListItem extends ConsumerWidget {
                               .watch(colorThemeNullableProvider)
                               .value
                               ?.primary
-                              .withOpacity(0.3)
-                          : Colors.transparent,
+                              .withOpacity(Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? 0.35
+                                  : 0.3)
+                          : Theme.of(context).colorScheme.surfaceContainer,
+                    ),
+                textTheme: Theme.of(context).textTheme.copyWith(
+                      bodyLarge: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(
+                            color: isCurrentTrack
+                                ? ref
+                                    .watch(colorThemeNullableProvider)
+                                    .value
+                                    ?.secondary
+                                : Theme.of(context).textTheme.bodyLarge?.color,
+                          ),
                     )),
             child: TrackListItemTile(
                 baseItem: baseItem,
@@ -491,7 +507,9 @@ class TrackListItemTile extends StatelessWidget {
           children: [
             AlbumImage(
               item: baseItem,
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: isCurrentTrack
+                  ? BorderRadius.zero
+                  : BorderRadius.circular(8.0),
               themeCallback: themeCallback,
             ),
             if (isCurrentTrack)
@@ -499,7 +517,9 @@ class TrackListItemTile extends StatelessWidget {
                 dimension: tileHeight,
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: isCurrentTrack
+                        ? BorderRadius.zero
+                        : BorderRadius.circular(8.0),
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.black.withOpacity(0.35)
                         : Colors.white.withOpacity(0.35),
@@ -526,16 +546,11 @@ class TrackListItemTile extends StatelessWidget {
                 fit: FlexFit.loose,
                 child: Text(
                   baseItem.name ?? AppLocalizations.of(context)!.unknownName,
-                  style: isCurrentTrack
-                      ? TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
-                          height: 1.0)
-                      : const TextStyle(
-                          fontSize: 15,
-                          height: 1.0,
-                          fontWeight: FontWeight.w500),
+                      height: 1.0),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
