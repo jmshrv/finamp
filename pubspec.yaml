@@ -194,8 +194,15 @@ msix_config:
   msix_version: 0.9.11.0
   logo_path: ./images/finamp_cropped.png
   trim_logo: false # don't force logo to be square, it will be stretched
-  capabilities: internetClientServer
-  enable_at_startup: true
+  # backgroundMediaPlayback prevents apps from getting muted or killed when being in the background (won't build if included at the moment)
+  # internetClient is used to allow access to remote Jellyfin servers through the internet
+  # privateNetworkClientServer is used for local network access, so that Jellyfin servers on the local network can be discovered
+  # musicLibrary is used to get access to the local and nextwork-based music directories (e.g. to store downloads there)
+  # globalMediaControl is used to get full access to the playback sessions (won't build if included at the moment)
+  # more info: https://learn.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
+  # capabilities: backgroundMediaPlayback,internetClient,musicLibrary,privateNetworkClientServer,globalMediaControl
+  capabilities: internetClient,musicLibrary,privateNetworkClientServer
+  enable_at_startup: false
   certificate_path: ./windows/runner/resources/MSIX_LOCAL_CERTIFICATE.pfx
   certificate_password: finamp
   # Building during msix:create is currently bugged, so build manually beforehand.
