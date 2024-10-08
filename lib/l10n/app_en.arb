@@ -1375,6 +1375,11 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
+  "transcodingStreamingContainerTitle": "Select Transcoding Container",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.",
   "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
