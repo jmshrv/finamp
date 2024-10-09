@@ -612,6 +612,10 @@ class PlayerHideableController {
       _visible.remove(PlayerHideable.controlsPaddingSmall);
       _visible.remove(PlayerHideable.controlsPaddingBig);
     }
+    if (!FinampSettingsHelper
+        .finampSettings.featureChipsConfiguration.enabled) {
+      _visible.remove(PlayerHideable.features);
+    }
   }
 
   /// If we have space for vertical padding, put 33% between control elements and
