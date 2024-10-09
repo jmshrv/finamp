@@ -1160,7 +1160,8 @@ class QueueService {
         "maxAudioBitDepth": "16",
         "audioBitRate":
             FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
-        "segmentContainer": "ts",
+        "segmentContainer": FinampSettingsHelper
+            .finampSettings.transcodingSegmentContainer.container,
         "transcodeReasons": "ContainerBitrateExceedsLimit",
       });
     } else {

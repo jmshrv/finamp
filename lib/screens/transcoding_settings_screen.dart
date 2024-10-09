@@ -24,6 +24,7 @@ class TranscodingSettingsScreen extends StatelessWidget {
         children: [
           const TranscodeSwitch(),
           const BitrateSelector(),
+          const StreamingTranscodeSegmentContainerDropdownListTile(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -155,6 +156,45 @@ class DownloadTranscodeCodecDropdownListTile extends StatelessWidget {
               if (value != null) {
                 FinampSettings finampSettingsTemp = finampSettings;
                 finampSettingsTemp.downloadTranscodingCodec = value;
+                Hive.box<FinampSettings>("FinampSettings")
+                    .put("FinampSettings", finampSettingsTemp);
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class StreamingTranscodeSegmentContainerDropdownListTile
+    extends StatelessWidget {
+  const StreamingTranscodeSegmentContainerDropdownListTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (_, box, __) {
+        final finampSettings = box.get("FinampSettings")!;
+
+        return ListTile(
+          title: Text(
+              AppLocalizations.of(context)!.transcodingStreamingContainerTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .transcodingStreamingContainerSubtitle),
+          trailing: DropdownButton<FinampSegmentContainer>(
+            value: finampSettings.transcodingSegmentContainer,
+            items: FinampSegmentContainer.values
+                .map((e) => DropdownMenuItem<FinampSegmentContainer>(
+                      value: e,
+                      child: Text(e.container!.toUpperCase()),
+                    ))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) {
+                FinampSettings finampSettingsTemp = finampSettings;
+                finampSettingsTemp.transcodingSegmentContainer = value;
                 Hive.box<FinampSettings>("FinampSettings")
                     .put("FinampSettings", finampSettingsTemp);
               }

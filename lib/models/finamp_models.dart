@@ -113,6 +113,8 @@ const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
 const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
 const _keepScreenOnWhilePluggedIn = true;
+const _defaultTranscodingSegmentContainer =
+    FinampSegmentContainer.fragmentedMp4;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -196,7 +198,9 @@ class FinampSettings {
       this.showSeekControlsOnMediaNotification =
           _showSeekControlsOnMediaNotificationDefault,
       this.keepScreenOnOption = _keepScreenOnOption,
-      this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn});
+    this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
+    this.transcodingSegmentContainer = _defaultTranscodingSegmentContainer,
+  });
 
   @HiveField(0, defaultValue: _isOfflineDefault)
   bool isOffline;
@@ -432,6 +436,9 @@ class FinampSettings {
 
   @HiveField(73, defaultValue: _keepScreenOnWhilePluggedIn)
   bool keepScreenOnWhilePluggedIn;
+
+  @HiveField(74, defaultValue: _defaultTranscodingSegmentContainer)
+  FinampSegmentContainer transcodingSegmentContainer;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2233,4 +2240,18 @@ enum KeepScreenOnOption {
         return AppLocalizations.of(context)!.keepScreenOnWhileLyrics;
     }
   }
+}
+
+
+@HiveType(typeId: 73)
+enum FinampSegmentContainer {
+  @HiveField(0)
+  mpegTS("ts"),
+  @HiveField(1)
+  fragmentedMp4("mp4");
+
+  const FinampSegmentContainer(this.container);
+
+  /// The container to use to transport the segments
+  final String container;
 }

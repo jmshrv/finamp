@@ -185,6 +185,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[72] as KeepScreenOnOption,
       keepScreenOnWhilePluggedIn:
           fields[73] == null ? true : fields[73] as bool,
+      transcodingSegmentContainer: fields[74] == null
+          ? FinampSegmentContainer.fragmentedMp4
+          : fields[74] as FinampSegmentContainer,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -194,7 +197,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(72)
+      ..writeByte(73)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -338,7 +341,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(72)
       ..write(obj.keepScreenOnOption)
       ..writeByte(73)
-      ..write(obj.keepScreenOnWhilePluggedIn);
+      ..write(obj.keepScreenOnWhilePluggedIn)
+      ..writeByte(74)
+      ..write(obj.transcodingSegmentContainer);
   }
 
   @override
@@ -1874,6 +1879,46 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is KeepScreenOnOptionAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampSegmentContainerAdapter
+    extends TypeAdapter<FinampSegmentContainer> {
+  @override
+  final int typeId = 73;
+
+  @override
+  FinampSegmentContainer read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return FinampSegmentContainer.mpegTS;
+      case 1:
+        return FinampSegmentContainer.fragmentedMp4;
+      default:
+        return FinampSegmentContainer.mpegTS;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampSegmentContainer obj) {
+    switch (obj) {
+      case FinampSegmentContainer.mpegTS:
+        writer.writeByte(0);
+        break;
+      case FinampSegmentContainer.fragmentedMp4:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampSegmentContainerAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

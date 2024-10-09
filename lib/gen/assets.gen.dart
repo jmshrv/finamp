@@ -19,16 +19,24 @@ class $ImagesGen {
   AssetGenImage get finamp => const AssetGenImage('images/finamp.png');
 
   /// File path: images/finamp_cropped.png
-  AssetGenImage get finampCropped =>
+  AssetGenImage get finampCroppedPng =>
       const AssetGenImage('images/finamp_cropped.png');
+
+  /// File path: images/finamp_cropped.svg
+  String get finampCroppedSvg => 'images/finamp_cropped.svg';
 
   /// File path: images/jellyfin-icon-transparent.png
   AssetGenImage get jellyfinIconTransparent =>
       const AssetGenImage('images/jellyfin-icon-transparent.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [albumWhite, finamp, finampCropped, jellyfinIconTransparent];
+  List<dynamic> get values => [
+        albumWhite,
+        finamp,
+        finampCroppedPng,
+        finampCroppedSvg,
+        jellyfinIconTransparent
+      ];
 }
 
 class Assets {
@@ -38,11 +46,16 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName, {this.size = null});
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+  });
 
   final String _assetName;
 
   final Size? size;
+  final Set<String> flavors;
 
   Image image({
     Key? key,
