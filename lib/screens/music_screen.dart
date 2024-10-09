@@ -218,8 +218,11 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
               title: isSearching
                   ? TextField(
                       controller: textEditingController,
+                      autocorrect: false, // avoid autocorrect
+                      enableSuggestions: false, // avoid autocorrect
                       autofocus: true,
-                      onChanged: (value) => setState(() {
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.search,
                         searchQuery = value;
                       }),
                       decoration: InputDecoration(
