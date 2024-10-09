@@ -222,7 +222,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   ? TextField(
                       controller: textEditingController,
                       autocorrect: false, // avoid autocorrect
-                      enableSuggestions: false, // avoid autocorrect
+                      enableSuggestions:
+                          true, // keep suggestions which can be manually selected
                       autofocus: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.search,
