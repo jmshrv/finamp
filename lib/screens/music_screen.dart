@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/services/queue_service.dart';
@@ -203,6 +204,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           _buildTabController();
         }
 
+        Timer? _debounce;
+
         return PopScope(
           canPop: !isSearching,
           onPopInvoked: (popped) {
@@ -223,6 +226,16 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       autofocus: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.search,
+                      onChanged: (value) {
+                        if (_debounce?.isActive ?? false) _debounce!.cancel();
+                        _debounce =
+                            Timer(const Duration(milliseconds: 400), () {
+                          setState(() {
+                            searchQuery = value;
+                          });
+                        });
+                      },
+                      onSubmitted: (value) => setState(() {
                         searchQuery = value;
                       }),
                       decoration: InputDecoration(
