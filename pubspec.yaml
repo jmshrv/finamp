@@ -60,7 +60,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   path: ^1.8.2
   android_id: ^0.3.5
-  intl: ^0.18.0
+  intl: ^0.19.0
   auto_size_text: ^3.0.0
   flutter_riverpod: ^2.3.4
   # locale_names:
