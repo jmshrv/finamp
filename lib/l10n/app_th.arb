@@ -525,5 +525,9 @@
   "deleteDownloadsAbortButtonText": "ยกเลิก",
   "@deleteDownloadsAbortButtonText": {},
   "showFastScroller": "แสดงตัวเลื่อนแบบเร็ว",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "syncDownloadedPlaylists": "ซิงก์เพลลิสต์ที่ดาวน์โหลดแล้ว",
+  "@syncDownloadedPlaylists": {},
+  "interactions": "การกระทำ",
+  "@interactions": {}
 }

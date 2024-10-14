@@ -390,7 +390,7 @@
   "@logsCopied": {},
   "downloadsAdded": "Downloads hinzugefügt.",
   "@downloadsAdded": {},
-  "addButtonLabel": "HINZUFÜGEN",
+  "addButtonLabel": "Hinzufügen",
   "@addButtonLabel": {},
   "applicationLegalese": "Lizensiert mit der Mozilla Public License 2.0. Quellcode verfügbar unter:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
@@ -484,7 +484,7 @@
   "@language": {},
   "confirm": "Bestätigen",
   "@confirm": {},
-  "showUncensoredLogMessage": "Dieses Protokoll enthält Ihre Anmeldeinformationen. Anzeigen?",
+  "showUncensoredLogMessage": "Dieses Protokoll enthält deine Anmeldedaten. Anzeigen?",
   "@showUncensoredLogMessage": {},
   "resetTabs": "Tabs zurücksetzen",
   "@resetTabs": {},
@@ -516,9 +516,9 @@
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Schnellen Scroller anzeigen",
   "@showFastScroller": {},
-  "swipeInsertQueueNext": "Gewischtes Lied als nächstes abspielen.",
+  "swipeInsertQueueNext": "Gewischtes Lied als Nächstes abspielen",
   "@swipeInsertQueueNext": {},
-  "swipeInsertQueueNextSubtitle": "Aktivieren um das in der Liste nach links/rechts gewischte Lied als nächstes abzuspielen.",
+  "swipeInsertQueueNextSubtitle": "Aktivieren, um das in der Liste nach links/rechts gewischte Lied als Nächstes abzuspielen, statt es am Ende der Warteschlange einzufügen.",
   "@swipeInsertQueueNextSubtitle": {},
   "playNext": "Als Nächstes abspielen",
   "@playNext": {
@@ -533,5 +533,7 @@
   "noMusicLibrariesBody": "Finamp konnte keine Musikbibliotheken finden. Bitte stelle sicher, dass dein Jellyfin-Server mindestens eine Bibliothek mit dem Medientyp \"Musik\" enthält.",
   "@noMusicLibrariesBody": {},
   "interactions": "Interaktionen",
-  "@interactions": {}
+  "@interactions": {},
+  "redesignBeta": "Neugestaltung der Oberfläche Beta",
+  "@redesignBeta": {}
 }
