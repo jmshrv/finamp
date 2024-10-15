@@ -387,6 +387,163 @@ class _SongListTileState extends ConsumerState<SongListTile>
   }
 }
 
+
+class QueueListTile extends ConsumerStatefulWidget {
+  final jellyfin_models.BaseItemDto item;
+  final jellyfin_models.BaseItemDto? parentItem;
+  final Future<int>? listIndex;
+  final int actualIndex;
+  final int indexOffset;
+  final bool isCurrentTrack;
+  final bool isInPlaylist;
+  final bool allowReorder;
+
+  final void Function() onTap;
+  final VoidCallback? onRemoveFromList;
+  final void Function(FinampTheme)? themeCallback;
+
+  const QueueListTile({
+    super.key,
+    required this.item,
+    required this.listIndex,
+    required this.actualIndex,
+    required this.indexOffset,
+    required this.onTap,
+    required this.isCurrentTrack,
+    required this.isInPlaylist,
+    required this.allowReorder,
+    this.parentItem,
+    this.onRemoveFromList,
+    this.themeCallback,
+  });
+
+  @override
+  ConsumerState<QueueListTile> createState() => _QueueListTileState();
+}
+
+class _QueueListTileState extends ConsumerState<QueueListTile>
+    with SingleTickerProviderStateMixin {
+  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+  final _queueService = GetIt.instance<QueueService>();
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+  FinampTheme? _menuTheme;
+
+  @override
+  void dispose() {
+    _menuTheme?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool playable;
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      playable = ref.watch(GetIt.instance<DownloadsService>()
+          .stateProvider(DownloadStub.fromItem(
+              type: DownloadItemType.song, item: widget.item))
+          .select((value) => value.value?.isComplete ?? false));
+    } else {
+      playable = true;
+    }
+
+    final listTile = StreamBuilder<MediaItem?>(
+        stream: _audioHandler.mediaItem,
+        builder: (context, snapshot) {
+          // I think past me did this check directly from the JSON for
+          // performance. It works for now, apologies if you're debugging it
+          // years in the future.
+          final isCurrentlyPlaying =
+              snapshot.data?.extras?["itemJson"]["Id"] == widget.item.id;
+
+          final trackListItem = TrackListItem(
+            item: widget.item,
+            parentItem: widget.parentItem,
+            listIndex: widget.listIndex,
+            actualIndex: widget.item.indexNumber ?? -1,
+            isCurrentTrack: isCurrentlyPlaying,
+            isPlayable: playable,
+            isInPlaylist: widget.isInPlaylist,
+            allowReorder: widget.allowReorder,
+            onRemoveFromList: widget.onRemoveFromList,
+            themeCallback: (x) => _menuTheme = x,
+            // This must be in ListTile instead of parent GestureDetecter to
+            // enable hover color changes
+            onTap: widget.onTap,
+          );
+
+          return isCurrentlyPlaying
+              ? ProviderScope(
+                  overrides: [
+                    themeDataProvider.overrideWith((ref) {
+                      return ref.watch(playerScreenThemeDataProvider) ??
+                          FinampTheme.defaultTheme();
+                    })
+                  ],
+                  child: Consumer(
+                    builder:
+                        (BuildContext context, WidgetRef ref, Widget? child) {
+                      final imageTheme = ref.watch(playerScreenThemeProvider);
+                      return AnimatedTheme(
+                        duration: const Duration(milliseconds: 500),
+                        data: ThemeData(
+                          colorScheme: imageTheme,
+                          brightness: Theme.of(context).brightness,
+                          iconTheme: Theme.of(context).iconTheme.copyWith(
+                                color: imageTheme.primary,
+                              ),
+                        ),
+                        child: trackListItem,
+                      );
+                    },
+                  ),
+                )
+              : trackListItem;
+        });
+    void menuCallback() async {
+      if (playable) {
+        FeedbackHelper.feedback(FeedbackType.selection);
+        await showModalSongMenu(
+          context: context,
+          item: widget.item,
+          isInPlaylist: widget.isInPlaylist,
+          parentItem: widget.parentItem,
+          onRemoveFromList: widget.onRemoveFromList,
+          themeProvider: _menuTheme,
+          confirmPlaylistRemoval: false,
+        );
+      }
+    }
+
+    return GestureDetector(
+      onTapDown: (_) {
+        _menuTheme?.calculate(Theme.of(context).brightness);
+      },
+      onLongPressStart: (details) => menuCallback(),
+      onSecondaryTapDown: (details) => menuCallback(),
+      child: !playable
+          ? listTile
+          : Dismissible(
+              key: Key(widget.listIndex.toString()),
+              direction: FinampSettingsHelper.finampSettings.disableGesture
+                  ? DismissDirection.none
+                  : DismissDirection.horizontal,
+              dismissThresholds: const {
+                DismissDirection.startToEnd: 0.65,
+                DismissDirection.endToStart: 0.65
+              },
+              // no background, dismissing really dismisses here
+              onDismissed: (direction) async {
+                FeedbackHelper.feedback(FeedbackType.impact);
+                await _queueService.removeAtOffset(widget.indexOffset);
+                setState(() {});
+              },
+              child: listTile,
+            ),
+    );
+  }
+}
+
 class TrackListItem extends ConsumerWidget {
   final jellyfin_models.BaseItemDto item;
   final jellyfin_models.BaseItemDto? parentItem;
@@ -394,7 +551,8 @@ class TrackListItem extends ConsumerWidget {
   final int actualIndex;
   final bool isCurrentTrack;
   final bool isInPlaylist;
-  
+  final bool allowReorder;
+
   final bool isPlayable;
   final void Function() onTap;
   final VoidCallback? onRemoveFromList;
@@ -410,6 +568,7 @@ class TrackListItem extends ConsumerWidget {
     this.isPlayable = true,
     this.isCurrentTrack = false,
     this.isInPlaylist = false,
+    this.allowReorder = false,
     this.onRemoveFromList,
     this.themeCallback,
   });
@@ -446,7 +605,8 @@ class TrackListItem extends ConsumerWidget {
                                       Brightness.dark
                                   ? 0.35
                                   : 0.3)
-                          : Theme.of(context).colorScheme.surfaceContainer,
+                          // : Theme.of(context).colorScheme.surfaceContainer,
+                          : Colors.transparent,
                     ),
                 textTheme: Theme.of(context).textTheme.copyWith(
                       bodyLarge: Theme.of(context)
@@ -463,8 +623,10 @@ class TrackListItem extends ConsumerWidget {
                     )),
             child: TrackListItemTile(
                 baseItem: baseItem,
+                index: listIndex,
                 themeCallback: themeCallback,
                 isCurrentTrack: isCurrentTrack,
+                allowReorder: allowReorder,
                 onTap: onTap),
           )),
     );
@@ -479,12 +641,16 @@ class TrackListItemTile extends StatelessWidget {
     required this.baseItem,
     required this.themeCallback,
     required this.isCurrentTrack,
+    required this.allowReorder,
     required this.onTap,
+    this.index,
   });
 
   final jellyfin_models.BaseItemDto baseItem;
   final void Function(FinampTheme theme)? themeCallback;
   final bool isCurrentTrack;
+  final bool allowReorder;
+  final Future<int>? index;
   final void Function() onTap;
 
   static const double tileHeight = 60.0;
@@ -612,6 +778,26 @@ class TrackListItemTile extends StatelessWidget {
                   horizontal: -4,
                 ),
               ),
+              if (allowReorder)
+                FutureBuilder(
+                    future: index,
+                    builder: (context, snapshot) {
+                      return ReorderableDragStartListener(
+                        index: snapshot.data ??
+                            0, // will briefly use 0 as index, but should resolve quickly enough for user not to notice
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 6.0),
+                          child: Icon(
+                            TablerIcons.grip_horizontal,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color ??
+                                    Colors.white,
+                            size: 28.0,
+                            weight: 1.5,
+                          ),
+                        ),
+                      );
+                    }),
             ],
           ),
         ),
