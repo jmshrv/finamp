@@ -14,6 +14,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/theme_provider.dart';
 
+@Deprecated("Use QueueListItem instead")
 class QueueListItem extends StatefulWidget {
   final FinampQueueItem item;
   final int listIndex;
@@ -123,7 +124,6 @@ class _QueueListItemState extends State<QueueListItem>
                         : jellyfin_models.BaseItemDto.fromJson(
                             widget.item.item.extras?["itemJson"]),
                     borderRadius: BorderRadius.zero,
-                    themeCallback: (x) => _menuTheme = x,
                   ),
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
