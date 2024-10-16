@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 import '../../models/jellyfin_models.dart';
@@ -66,6 +67,8 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
              });
 
               return IconButton(
+            tooltip: AppLocalizations.of(context)!
+                .playArtist(widget.artist.name ?? "Unknown Artist"),
                 onPressed: () async {
                   await _audioServiceHelper
                          .replaceQueueWithItem(itemList: sortedSongs);
@@ -87,6 +90,8 @@ class _ArtistPlayButtonState extends State<ArtistPlayButton> {
                 final List<BaseItemDto> items = snapshot.data!;
 
                 return IconButton(
+                  tooltip: AppLocalizations.of(context)!
+                      .playArtist(widget.artist.name ?? "Unknown Artist"),
                   onPressed: () async {
                     await _audioServiceHelper
                            .replaceQueueWithItem(itemList: items);

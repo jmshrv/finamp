@@ -531,5 +531,57 @@
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Enable to insert a song as next item in queue when swiped in song list instead of appending it to the end.",
   "@swipeInsertQueueNextSubtitle": {},
-  "redesignBeta": "Redesign Beta"
+  "redesignBeta": "Try the Beta",
+  "@redesignBeta": {},
+  "playbackOrderShuffledTooltip": "Shuffling. Tap to toggle.",
+  "@playbackOrderShuffledTooltip": {},
+  "playbackOrderLinearTooltip": "Playing in order. Tap to toggle.",
+  "@playbackOrderLinearTooltip": {},
+  "loopModeAllTooltip": "Looping all. Tap to toggle.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "Looping one. Tap to toggle.",
+  "@loopModeOneTooltip": {},
+  "loopModeNoneTooltip": "Not looping. Tap to toggle.",
+  "@loopModeNoneTooltip": {},
+  "skipToPrevious": "Skip to Previous Song",
+  "@skipToPrevious": {},
+  "skipToNext": "Skip to Next Song",
+  "@skipToNext": {},
+  "togglePlayback": "Toggle Playback",
+  "@togglePlayback": {},
+  "playArtist": "Play all albums by {artist}",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "Shuffle all albums by {artist}",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "downloadArtist": "Download all albums by {artist}",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "deleteFromDevice": "Delete from Device",
+  "@deleteFromDevice": {},
+  "download": "Download",
+  "@download": {},
+  "sync": "Synchronize with Server",
+  "@sync": {},
+  "about": "About Finamp",
+  "@about": {}
 }

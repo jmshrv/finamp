@@ -4,6 +4,7 @@ import 'package:finamp/services/sync_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SyncAlbumOrPlaylistButton extends StatefulWidget {
   const SyncAlbumOrPlaylistButton({
@@ -39,6 +40,9 @@ class _SyncAlbumOrPlaylistButtonState
   Widget build(BuildContext context) {
     isAlbumDownloaded = _downloadHelper.isAlbumDownloaded(widget.parent.id);
     return IconButton(
+        tooltip: isAlbumDownloaded
+            ? AppLocalizations.of(context)!.sync
+            : AppLocalizations.of(context)!.download,
         onPressed: () => syncAlbumOrPlaylist(), icon:
         isAlbumDownloaded ?
         const Icon(Icons.sync) :

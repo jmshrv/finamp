@@ -68,6 +68,8 @@ class _ArtistDownloadButtonState extends State<ArtistDownloadButton> {
                 deleteAlbums = undownloadedAlbums.isEmpty;
 
                 return IconButton(
+                  tooltip: AppLocalizations.of(context)!
+                      .downloadArtist(widget.artist.name ?? "Unknown Artist"),
                   icon: deleteAlbums
                       ? const Icon(Icons.delete)
                       : const Icon(Icons.download),

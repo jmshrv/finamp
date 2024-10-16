@@ -82,6 +82,8 @@ unlinked_spec.ds
 
 # macOS
 **/macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/flutter_export_environment.sh
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
 
 # Coverage
 coverage/
@@ -96,3 +98,8 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+
+# Not-yet supported platforms
+windows/
+linux/
+

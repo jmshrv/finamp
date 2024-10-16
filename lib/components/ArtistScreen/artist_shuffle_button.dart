@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 import '../../models/jellyfin_models.dart';
@@ -55,6 +56,8 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
              }
             
               return IconButton(
+            tooltip: AppLocalizations.of(context)!
+                .shuffleArtist(widget.artist.name ?? "Unknown Artist"),
                 onPressed: () async {
                   await _audioServiceHelper
                          .replaceQueueWithItem(itemList: artistsSongs, shuffle: true);
@@ -76,6 +79,8 @@ class _ArtistShuffleButtonState extends State<ArtistShuffleButton> {
                 final List<BaseItemDto> items = snapshot.data!;
 
                 return IconButton(
+                  tooltip: AppLocalizations.of(context)!
+                      .shuffleArtist(widget.artist.name ?? "Unknown Artist"),
                   onPressed: () async {
                     await _audioServiceHelper
                            .replaceQueueWithItem(itemList: items, shuffle: true, initialIndex: Random().nextInt(items.length));

@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/music_player_background_task.dart';
 
@@ -20,6 +21,9 @@ class PlayerButtons extends StatelessWidget {
           textDirection: TextDirection.ltr,
           children: [
             IconButton(
+              tooltip: playbackState?.shuffleMode == AudioServiceShuffleMode.all
+                  ? AppLocalizations.of(context)!.playbackOrderShuffledTooltip
+                  : AppLocalizations.of(context)!.playbackOrderLinearTooltip,
               icon: _getShufflingIcon(
                 playbackState == null
                     ? AudioServiceShuffleMode.none
@@ -41,6 +45,7 @@ class PlayerButtons extends StatelessWidget {
               iconSize: 20,
             ),
             IconButton(
+              tooltip: AppLocalizations.of(context)!.skipToPrevious,
               icon: const Icon(Icons.skip_previous),
               onPressed: playbackState != null
                   ? () async => await audioHandler.skipToPrevious()
@@ -51,6 +56,7 @@ class PlayerButtons extends StatelessWidget {
               height: 56,
               width: 56,
               child: FloatingActionButton(
+                tooltip: AppLocalizations.of(context)!.togglePlayback,
                 // We set a heroTag because otherwise the play button on AlbumScreenContent will do hero widget stuff
                 heroTag: "PlayerScreenFAB",
                 backgroundColor: Theme.of(context).colorScheme.primary,
@@ -75,12 +81,18 @@ class PlayerButtons extends StatelessWidget {
               ),
             ),
             IconButton(
+                tooltip: AppLocalizations.of(context)!.skipToNext,
                 icon: const Icon(Icons.skip_next),
                 onPressed: playbackState != null
                     ? () async => audioHandler.skipToNext()
                     : null,
                 iconSize: 36),
             IconButton(
+              tooltip: playbackState?.repeatMode == AudioServiceRepeatMode.all
+                  ? AppLocalizations.of(context)!.loopModeAllTooltip
+                  : playbackState?.repeatMode == AudioServiceRepeatMode.one
+                      ? AppLocalizations.of(context)!.loopModeOneTooltip
+                      : AppLocalizations.of(context)!.loopModeNoneTooltip,
               icon: _getRepeatingIcon(
                 playbackState == null
                     ? AudioServiceRepeatMode.none

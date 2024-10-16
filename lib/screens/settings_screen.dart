@@ -26,6 +26,7 @@ class SettingsScreen extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.settings),
         actions: [
           IconButton(
+            tooltip: AppLocalizations.of(context)!.about,
             icon: const Icon(Icons.info),
             onPressed: () async {
               final applicationLegalese =
