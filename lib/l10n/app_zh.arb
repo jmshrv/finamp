@@ -534,6 +534,57 @@
   "@interactions": {},
   "swipeInsertQueueNextSubtitle": "在歌曲列表中滑动时，可以将歌曲作为队列中的下一个项目插入，而不是将其附加到末尾。",
   "@swipeInsertQueueNextSubtitle": {},
-  "redesignBeta": "重新设计测试版",
-  "@redesignBeta": {}
+  "redesignBeta": "试用 Beta 版",
+  "@redesignBeta": {},
+  "loopModeOneTooltip": "循环播放一首。点击即可切换。",
+  "@loopModeOneTooltip": {},
+  "loopModeNoneTooltip": "不循环。点击即可切换。",
+  "@loopModeNoneTooltip": {},
+  "skipToNext": "跳至下一首歌曲",
+  "@skipToNext": {},
+  "togglePlayback": "切换播放",
+  "@togglePlayback": {},
+  "playArtist": "播放 {artist} 的所有专辑",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "随机播放 {artist} 的所有专辑",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "deleteFromDevice": "从设备中删除",
+  "@deleteFromDevice": {},
+  "playbackOrderShuffledTooltip": "随机播放。点击即可切换。",
+  "@playbackOrderShuffledTooltip": {},
+  "playbackOrderLinearTooltip": "按顺序播放。点击即可切换。",
+  "@playbackOrderLinearTooltip": {},
+  "loopModeAllTooltip": "全部循环播放。点击即可切换。",
+  "@loopModeAllTooltip": {},
+  "download": "下载",
+  "@download": {},
+  "skipToPrevious": "跳至上一首歌曲",
+  "@skipToPrevious": {},
+  "downloadArtist": "下载 {artist} 的所有专辑",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "sync": "与服务器同步",
+  "@sync": {},
+  "about": "关于 Finamp",
+  "@about": {}
 }
