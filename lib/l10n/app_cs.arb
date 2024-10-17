@@ -534,6 +534,57 @@
   "@interactions": {},
   "swipeInsertQueueNext": "Přehrát posunutou skladbu jako další",
   "@swipeInsertQueueNext": {},
-  "redesignBeta": "Nový design (beta)",
-  "@redesignBeta": {}
+  "redesignBeta": "Vyzkoušejte beta verzi",
+  "@redesignBeta": {},
+  "playbackOrderShuffledTooltip": "Náhodně. Klepnutím přepnete.",
+  "@playbackOrderShuffledTooltip": {},
+  "playbackOrderLinearTooltip": "Přehrávání v pořadí. Klepnutím přepnete.",
+  "@playbackOrderLinearTooltip": {},
+  "loopModeAllTooltip": "Opakování všeho. Klepnutím přepnete.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "Opakování jedné. Klepnutím přepnete.",
+  "@loopModeOneTooltip": {},
+  "loopModeNoneTooltip": "Bez opakování. Klepnutím přepnete.",
+  "@loopModeNoneTooltip": {},
+  "skipToPrevious": "Přeskočit na předchozí skladbu",
+  "@skipToPrevious": {},
+  "skipToNext": "Přeskočit na další skladbu",
+  "@skipToNext": {},
+  "togglePlayback": "Přepnout přehrávání",
+  "@togglePlayback": {},
+  "downloadArtist": "Stáhnout všechna alba umělce {artist}",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "Přehrát náhodně všechna alba umělce {artist}",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "playArtist": "Přehrát všechna alba umělce {artist}",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "deleteFromDevice": "Smazat ze zařízení",
+  "@deleteFromDevice": {},
+  "download": "Stáhnout",
+  "@download": {},
+  "sync": "Synchronizovat se serverem",
+  "@sync": {},
+  "about": "O aplikaci Finamp",
+  "@about": {}
 }
