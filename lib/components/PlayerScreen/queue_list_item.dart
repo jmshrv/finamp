@@ -14,6 +14,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/theme_provider.dart';
 
+@Deprecated("Use QueueListItem instead")
 class QueueListItem extends StatefulWidget {
   final FinampQueueItem item;
   final int listIndex;
@@ -68,13 +69,12 @@ class _QueueListItemState extends State<QueueListItem>
         : const Color.fromRGBO(255, 255, 255, 0.125);
 
     void menuCallback() {
-      var currentTrack = jellyfin_models.BaseItemDto.fromJson(
-          _queueService.getCurrentTrack()?.item.extras?["itemJson"]);
+      var currentTrack = _queueService.getCurrentTrack()?.baseItem;
       showModalSongMenu(
         context: context,
         item: baseItem,
         usePlayerTheme: widget.item.baseItem?.blurHash != null &&
-            widget.item.baseItem?.blurHash == currentTrack.blurHash,
+            widget.item.baseItem?.blurHash == currentTrack?.blurHash,
         themeProvider: _menuTheme,
         isInPlaylist: queueItemInPlaylist(widget.item),
         parentItem: widget.item.source.item,
@@ -124,7 +124,6 @@ class _QueueListItemState extends State<QueueListItem>
                         : jellyfin_models.BaseItemDto.fromJson(
                             widget.item.item.extras?["itemJson"]),
                     borderRadius: BorderRadius.zero,
-                    themeCallback: (x) => _menuTheme = x,
                   ),
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

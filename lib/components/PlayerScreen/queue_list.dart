@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
@@ -648,13 +649,32 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 final actualIndex = index;
                 final indexOffset = index + _nextUp!.length + 1;
 
-                return QueueListItem(
+                // return QueueListItem(
+                //   key: ValueKey(item.id),
+                //   item: item,
+                //   listIndex: index,
+                //   actualIndex: actualIndex,
+                //   indexOffset: indexOffset,
+                //   subqueue: _queue!,
+                //   allowReorder:
+                //       _queueService.playbackOrder == FinampPlaybackOrder.linear,
+                //   onTap: () async {
+                //     FeedbackHelper.feedback(FeedbackType.selection);
+                //     await _queueService.skipByOffset(indexOffset);
+                //     scrollToKey(
+                //         key: widget.previousTracksHeaderKey,
+                //         duration: const Duration(milliseconds: 500));
+                //   },
+                //   isCurrentTrack: false,
+                // );
+                return QueueListTile(
                   key: ValueKey(item.id),
-                  item: item,
-                  listIndex: index,
+                  item: item.baseItem!,
+                  listIndex: Future.value(index),
                   actualIndex: actualIndex,
                   indexOffset: indexOffset,
-                  subqueue: _queue!,
+                  isInPlaylist: queueItemInPlaylist(item),
+                  parentItem: item.source.item,
                   allowReorder:
                       _queueService.playbackOrder == FinampPlaybackOrder.linear,
                   onTap: () async {
