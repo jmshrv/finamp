@@ -534,10 +534,57 @@
   "@noMusicLibrariesBody": {},
   "interactions": "Interaktionen",
   "@interactions": {},
-  "redesignBeta": "Neugestaltung der Oberfläche Beta",
+  "redesignBeta": "Probier die Beta",
   "@redesignBeta": {},
   "playbackOrderShuffledTooltip": "Mischen. Zum Umschalten tippen.",
   "@playbackOrderShuffledTooltip": {},
   "togglePlayback": "Wiedergabe umschalten",
-  "@togglePlayback": {}
+  "@togglePlayback": {},
+  "playbackOrderLinearTooltip": "Abspielen in Reihenfolge. Zum umschalten tippen.",
+  "@playbackOrderLinearTooltip": {},
+  "loopModeAllTooltip": "Wiederhole alle. Zum umschalten tippen.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "Wiederhole einen. Zum umschalten tippen.",
+  "@loopModeOneTooltip": {},
+  "skipToNext": "Springe zum nächsten Lied",
+  "@skipToNext": {},
+  "skipToPrevious": "Springe zum vorherigen Lied",
+  "@skipToPrevious": {},
+  "playArtist": "Spiele alle Alben von {artist}",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "Spiele alle Alben von {artist} in zufälliger Reihenfolge",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "download": "Herunterladen",
+  "@download": {},
+  "about": "Über Finamp",
+  "@about": {},
+  "downloadArtist": "Lade alle Alben von {artist} herunter",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "loopModeNoneTooltip": "Wiederholt nicht. Zum umschalten tippen.",
+  "@loopModeNoneTooltip": {},
+  "deleteFromDevice": "Vom Gerät Löschen",
+  "@deleteFromDevice": {},
+  "sync": "Mit Server synchronisieren",
+  "@sync": {}
 }
