@@ -478,7 +478,7 @@
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
   "@removedFromPlaylist": {},
-  "bufferDurationSubtitle": "Wie viele Sekunden der Player vorladen soll. Benötigt einen Neustart.",
+  "bufferDurationSubtitle": "Wie viel gepuffert werden soll, in Sekunden. Neustart erforderlich.",
   "@bufferDurationSubtitle": {},
   "language": "Sprache",
   "@language": {},
