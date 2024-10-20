@@ -15,15 +15,15 @@
   "@artist": {},
   "bitrate": "Bitrate",
   "@bitrate": {},
-  "emptyServerUrl": "Server Webadresse darf nicht leer sein",
+  "emptyServerUrl": "Server-URL darf nicht leer sein",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "Webadresse muss mit http:// oder https:// beginnen",
+  "urlStartWithHttps": "URL muss mit http:// oder https:// beginnen",
   "@urlStartWithHttps": {
     "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   },
-  "urlTrailingSlash": "Webadresse darf keinen Schrägstrich am Ende enthalten",
+  "urlTrailingSlash": "URL darf keinen Schrägstrich am Ende enthalten",
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
@@ -39,7 +39,7 @@
   },
   "clear": "Entfernen",
   "@clear": {},
-  "internalExternalIpExplanation": "Wenn du deinen Jellyfin Server aus der Ferne erreichen möchtest, benötigst du eine externe IP.\n\nWenn dein Server einen HTTP Port (80/443) benutzt, musst du keinen Port festlegen. Dies ist vermutlich der Fall wenn dein Server sich hinter einem Reverse Proxy befindet.",
+  "internalExternalIpExplanation": "Wenn du deinen Jellyfin Server aus der Ferne erreichen möchtest, benötigst du eine externe IP.\n\nWenn dein Server einen HTTP Port (80/443) benutzt, musst du keinen Port festlegen. Dies ist vermutlich der Fall wenn dein Server sich hinter einer Reverse Proxy befindet.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -135,7 +135,7 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "startupError": "Während dem Starten der App ist etwas schief gelaufen. Der Fehler war: {error}\n\nBitte öffne einen Issue auf github.com/UnicornsOnLSD/finamp mit einem Bildschirmfoto von dieser Seite. Wenn dieses Problem weiterhin besteht, kannst du deine App-Daten löschen, um die App zurückzusetzen.",
+  "startupError": "Während dem Starten der App ist etwas schief gelaufen. Der Fehler war: {error}\n\nBitte öffne ein Issue auf github.com/UnicornsOnLSD/finamp mit einem Bildschirmfoto von dieser Seite. Wenn dieses Problem weiterhin besteht, kannst du deine App-Daten löschen, um die App zurückzusetzen.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -145,7 +145,7 @@
       }
     }
   },
-  "serverUrl": "Server Webadresse",
+  "serverUrl": "Server-URL",
   "@serverUrl": {},
   "shuffleAll": "Alle mischen",
   "@shuffleAll": {},
@@ -167,7 +167,7 @@
   "@runtime": {},
   "downloadMissingImages": "Fehlende Bilder herunterladen",
   "@downloadMissingImages": {},
-  "downloadErrors": "Downloadfehler",
+  "downloadErrors": "Download-Fehler",
   "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} Download} other{{count} Downloads}}",
   "@downloadCount": {
@@ -209,7 +209,7 @@
       }
     }
   },
-  "downloadErrorsTitle": "Downloadfehler",
+  "downloadErrorsTitle": "Download-Fehler",
   "@downloadErrorsTitle": {},
   "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
   "@downloadedItemsImagesCount": {
@@ -520,7 +520,7 @@
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Aktivieren, um das in der Liste nach links/rechts gewischte Lied als Nächstes abzuspielen, statt es am Ende der Warteschlange einzufügen.",
   "@swipeInsertQueueNextSubtitle": {},
-  "playNext": "Als Nächstes abspielen",
+  "playNext": "Als Nächstes wiedergeben",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
@@ -535,5 +535,9 @@
   "interactions": "Interaktionen",
   "@interactions": {},
   "redesignBeta": "Neugestaltung der Oberfläche Beta",
-  "@redesignBeta": {}
+  "@redesignBeta": {},
+  "playbackOrderShuffledTooltip": "Mischen. Zum Umschalten tippen.",
+  "@playbackOrderShuffledTooltip": {},
+  "togglePlayback": "Wiedergabe umschalten",
+  "@togglePlayback": {}
 }
