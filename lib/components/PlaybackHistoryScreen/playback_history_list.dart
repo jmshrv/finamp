@@ -73,11 +73,12 @@ class PlaybackHistoryList extends StatelessWidget {
                       );
 
                       final now = DateTime.now();
-                      final String localeString = (LocaleHelper.locale != null)
-                          ? ((LocaleHelper.locale?.countryCode != null)
-                              ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
-                              : LocaleHelper.locale.toString())
-                          : "en_US";
+                      final settingsLocale = LocaleHelper.locale;
+                      final String? localeString = settingsLocale != null
+                          ? (settingsLocale.countryCode != null
+                              ? "${settingsLocale.languageCode.toLowerCase()}_${settingsLocale.countryCode?.toUpperCase()}"
+                              : settingsLocale.toString())
+                          : null;
 
                       return index == 0
                           ? Column(
