@@ -15,7 +15,7 @@ import '../../models/jellyfin_models.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../AlbumScreen/song_list_tile.dart';
+import '../AlbumScreen/track_list_tile.dart';
 import '../first_page_progress_indicator.dart';
 import '../global_snackbar.dart';
 import '../new_page_progress_indicator.dart';
@@ -337,7 +337,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           controller: controller,
                           index: index,
                           child: widget.tabContentType == TabContentType.songs
-                              ? SongListTile(
+                              ? TrackListTile(
                                   key: ValueKey(item.id),
                                   item: item,
                                   isSong: true,

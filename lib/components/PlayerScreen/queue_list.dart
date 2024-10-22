@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
+import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
@@ -677,7 +677,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                   parentItem: item.source.item,
                   allowReorder:
                       _queueService.playbackOrder == FinampPlaybackOrder.linear,
-                  onTap: () async {
+                  onTap: (bool playable) async {
                     FeedbackHelper.feedback(FeedbackType.selection);
                     await _queueService.skipByOffset(indexOffset);
                     scrollToKey(

@@ -10,7 +10,7 @@ import '../../services/finamp_settings_helper.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
 import 'playlist_name_edit_button.dart';
-import 'song_list_tile.dart';
+import 'track_list_tile.dart';
 
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
@@ -185,7 +185,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
             return item;
           }
 
-          return SongListTile(
+          return TrackListTile(
             item: item,
             children: widget.childrenForQueue,
             index: indexOffset,

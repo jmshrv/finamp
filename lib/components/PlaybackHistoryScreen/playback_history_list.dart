@@ -1,4 +1,4 @@
-import 'package:finamp/components/AlbumScreen/song_list_tile.dart';
+import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
@@ -66,7 +66,7 @@ class PlaybackHistoryList extends StatelessWidget {
                         //     });
                         //   },
                         // ),
-                        child: SongListTile(
+                        child: TrackListTile(
                           index: Future.value(actualIndex),
                           item: group.value[actualIndex].item.baseItem!,
                         ),
