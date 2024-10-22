@@ -15,7 +15,7 @@ packages:
     source: sdk
     version: "0.3.2"
   analyzer:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: analyzer
       sha256: b652861553cd3990d8ed361f7979dc6d7053a9ac8843fa73820ab68ce5410139
@@ -782,11 +782,10 @@ packages:
   isar_generator:
     dependency: "direct dev"
     description:
-      path: "packages/isar_generator"
-      ref: "70a5abd2b36d265a2eef0141f98f312a8710e60c"
-      resolved-ref: "70a5abd2b36d265a2eef0141f98f312a8710e60c"
-      url: "https://github.com/ndelanou/isar.git"
-    source: git
+      name: isar_generator
+      sha256: "76c121e1295a30423604f2f819bc255bc79f852f3bc8743a24017df6068ad133"
+      url: "https://pub.dev"
+    source: hosted
     version: "3.1.0+1"
   js:
     dependency: transitive

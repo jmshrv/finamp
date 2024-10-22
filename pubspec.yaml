@@ -120,14 +120,13 @@ dev_dependencies:
   riverpod_generator: ^2.3.9
   custom_lint:
   riverpod_lint: ^2.3.7
-  # isar_generator requires analyzer <6.0.0 by default, but 6.x.0 doesn't have breaking changes
-  # Using fork of 3.1.0+1 with pubspec updated to analyzer: "^6.0.0"
-  isar_generator:
-    git:
-      url: https://github.com/ndelanou/isar.git
-      ref: 70a5abd2b36d265a2eef0141f98f312a8710e60c
-      path: packages/isar_generator
+  isar_generator: ^3.1.0+1
   msix: ^3.16.7
+
+dependency_overrides:
+  # isar_generator requires analyzer <6.0.0 by default, but 6.x.0 doesn't have breaking changes
+  # Overriding the package version allows us to use the latest version.
+  analyzer: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
