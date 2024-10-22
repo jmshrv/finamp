@@ -32,6 +32,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -111,12 +112,8 @@ void main() async {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
 
-    final String localeString = (LocaleHelper.locale != null)
-        ? ((LocaleHelper.locale?.countryCode != null)
-            ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
-            : LocaleHelper.locale.toString())
-        : "en_US";
-    await initializeDateFormatting(localeString, null);
+    await findSystemLocale();
+    await initializeDateFormatting();
 
     runApp(const Finamp());
   }
