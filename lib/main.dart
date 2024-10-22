@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
@@ -21,9 +24,6 @@ import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:audio_session/audio_session.dart';
-import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,10 +35,10 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:path/path.dart' as path_helper;
 
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
@@ -316,8 +316,8 @@ Future<void> _setupPlaybackServices() async {
         // notificationColor: TODO use the theme color for older versions of Android,
         preloadArtwork: false,
         androidBrowsableRootExtras: <String, dynamic>{
-          "android.media.browse.SEARCH_SUPPORTED":
-              true, // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+          // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+          "android.media.browse.SEARCH_SUPPORTED": true,
           // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
           "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT":
               FinampSettingsHelper.finampSettings.contentViewType ==
@@ -331,8 +331,6 @@ Future<void> _setupPlaybackServices() async {
                   : 2,
         }),
   );
-  // GetIt.instance.registerSingletonAsync<AudioHandler>(
-  //     () async => );
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
   GetIt.instance.registerSingleton(QueueService());
