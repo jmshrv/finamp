@@ -534,6 +534,57 @@
   "@interactions": {},
   "swipeInsertQueueNext": "Reproducir la siguiente canción al deslizarla",
   "@swipeInsertQueueNext": {},
-  "redesignBeta": "Nuevo diseño (beta)",
-  "@redesignBeta": {}
+  "redesignBeta": "Prueba la versión Beta",
+  "@redesignBeta": {},
+  "playbackOrderShuffledTooltip": "Mezclando. Toca para alternar.",
+  "@playbackOrderShuffledTooltip": {},
+  "playbackOrderLinearTooltip": "Reproducción en orden. Toca para alternar.",
+  "@playbackOrderLinearTooltip": {},
+  "loopModeAllTooltip": "Repitiendo todo. Toca para alternar.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "En bucle. Toca para alternar.",
+  "@loopModeOneTooltip": {},
+  "loopModeNoneTooltip": "No se reproduce en bucle. Toca para alternar.",
+  "@loopModeNoneTooltip": {},
+  "skipToPrevious": "Saltar a la canción anterior",
+  "@skipToPrevious": {},
+  "skipToNext": "Saltar a la siguiente canción",
+  "@skipToNext": {},
+  "togglePlayback": "Alternar reproducción",
+  "@togglePlayback": {},
+  "playArtist": "Reproducir todos los álbumes de {artist}",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "Reproducir aleatoriamente todos los álbumes de {artist}",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "downloadArtist": "Descargar todos los álbumes de {artist}",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "deleteFromDevice": "Eliminar del dispositivo",
+  "@deleteFromDevice": {},
+  "download": "Descargar",
+  "@download": {},
+  "sync": "Sincronizar con el servidor",
+  "@sync": {},
+  "about": "Acerca de Finamp",
+  "@about": {}
 }
