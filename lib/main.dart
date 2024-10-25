@@ -221,6 +221,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LyricsAlignmentAdapter());
   Hive.registerAdapter(LyricsFontSizeAdapter());
   Hive.registerAdapter(KeepScreenOnOptionAdapter());
+  Hive.registerAdapter(FinampSegmentContainerAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
