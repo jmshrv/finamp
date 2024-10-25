@@ -39,37 +39,9 @@ class PlaybackHistoryList extends StatelessWidget {
                     (context, index) {
                       final actualIndex = group.value.length - index - 1;
 
-                      final historyItem = Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        // child: PlaybackHistoryListTile(
-                        //   actualIndex: actualIndex,
-                        //   item: group.value[actualIndex],
-                        //   audioServiceHelper: audioServiceHelper,
-                        //   onTap: () {
-                        //     GlobalSnackbar.message(
-                        //       (scaffold) => AppLocalizations.of(context)!
-                        //           .startingInstantMix,
-                        //       isConfirmation: true,
-                        //     );
-
-                        //     audioServiceHelper
-                        //         .startInstantMixForItem(
-                        //             jellyfin_models.BaseItemDto.fromJson(group
-                        //                 .value[actualIndex]
-                        //                 .item
-                        //                 .item
-                        //                 .extras?["itemJson"]))
-                        //         .catchError((e) {
-                        //       GlobalSnackbar.error(e);
-                        //     });
-                        //   },
-                        // ),
-                        child: TrackListTile(
-                          index: Future.value(actualIndex),
-                          item: group.value[actualIndex].item.baseItem!,
-                        ),
+                      final historyItem = TrackListTile(
+                        index: Future.value(actualIndex),
+                        item: group.value[actualIndex].item.baseItem!,
                       );
 
                       final now = DateTime.now();

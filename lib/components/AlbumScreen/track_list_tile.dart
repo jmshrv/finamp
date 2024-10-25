@@ -11,6 +11,7 @@ import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,9 +61,11 @@ class TrackListTile extends StatelessWidget {
     this.index,
     this.parentItem,
 
+    // if leading index number should be shown
+    this.showIndex = false,
+
     /// Whether we are in the songs tab, as opposed to a playlist/album
     this.isSong = false,
-    this.showArtists = true,
     this.onRemoveFromList,
     this.showPlayCount = false,
 
@@ -76,9 +79,9 @@ class TrackListTile extends StatelessWidget {
   final jellyfin_models.BaseItemDto item;
   final Future<List<jellyfin_models.BaseItemDto>>? children;
   final Future<int>? index;
+  final bool showIndex;
   final bool isSong;
   final jellyfin_models.BaseItemDto? parentItem;
-  final bool showArtists;
   final VoidCallback? onRemoveFromList;
   final bool showPlayCount;
   final bool isInPlaylist;
@@ -269,6 +272,18 @@ class TrackListTile extends StatelessWidget {
       parentItem: parentItem,
       listIndex: index,
       actualIndex: item.indexNumber ?? -1,
+      showIndex: showIndex,
+      showArtists: !(
+              // "hide song artists if they're the same as album artists" == true
+              FinampSettingsHelper
+                      .finampSettings.hideSongArtistsIfSameAsAlbumArtists
+                  // song artists == album artists
+                  &&
+                  setEquals(
+                      parentItem?.albumArtists?.map((e) => e.name).toSet(),
+                      item.artists?.toSet())) &&
+          parentItem?.isArtist != true,
+      showPlayCount: showPlayCount,
       isInPlaylist: isInPlaylist,
       allowReorder: false,
       onRemoveFromList: onRemoveFromList,
@@ -338,6 +353,9 @@ class TrackListItem extends ConsumerStatefulWidget {
   final jellyfin_models.BaseItemDto? parentItem;
   final Future<int>? listIndex;
   final int actualIndex;
+  final bool showIndex;
+  final bool showArtists;
+  final bool showPlayCount;
   final bool isInPlaylist;
   final bool allowReorder;
   final Widget dismissBackground;
@@ -356,6 +374,9 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.parentItem,
       this.isInPlaylist = false,
       this.allowReorder = false,
+      this.showIndex = false,
+      this.showArtists = false,
+      this.showPlayCount = false,
       this.onRemoveFromList,
       this.dismissBackground = const SizedBox.shrink()});
 
@@ -388,6 +409,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     } else {
       playable = true;
     }
+
+    final bool showAlbum = widget.baseItem.albumId != widget.parentItem?.id;
 
     void menuCallback() async {
       if (playable) {
@@ -440,6 +463,11 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                             themeCallback: (x) => _menuTheme = x,
                             baseItem: widget.baseItem,
                             listIndex: widget.listIndex,
+                            actualIndex: widget.actualIndex,
+                            showIndex: widget.showIndex,
+                            showArtists: widget.showArtists,
+                            showAlbum: showAlbum,
+                            showPlayCount: widget.showPlayCount,
                             allowReorder: widget.allowReorder,
                             onTap: () => widget.onTap(playable)),
                       );
@@ -452,6 +480,11 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                   themeCallback: (x) => _menuTheme = x,
                   baseItem: widget.baseItem,
                   listIndex: widget.listIndex,
+                  actualIndex: widget.actualIndex,
+                  showIndex: widget.showIndex,
+                  showArtists: widget.showArtists,
+                  showAlbum: showAlbum,
+                  showPlayCount: widget.showPlayCount,
                   allowReorder: widget.allowReorder,
                   onTap: () => widget.onTap(playable));
         });
@@ -488,6 +521,11 @@ class ThemedTrackListTile extends ConsumerWidget {
   final void Function(FinampTheme) themeCallback;
   final jellyfin_models.BaseItemDto baseItem;
   final Future<int>? listIndex;
+  final int actualIndex;
+  final bool showIndex;
+  final bool showArtists;
+  final bool showAlbum;
+  final bool showPlayCount;
   final bool allowReorder;
   final void Function() onTap;
 
@@ -498,6 +536,11 @@ class ThemedTrackListTile extends ConsumerWidget {
     required this.themeCallback,
     required this.baseItem,
     required this.listIndex,
+    required this.actualIndex,
+    required this.showIndex,
+    required this.showArtists,
+    required this.showAlbum,
+    required this.showPlayCount,
     required this.allowReorder,
     required this.onTap,
   });
@@ -546,7 +589,12 @@ class ThemedTrackListTile extends ConsumerWidget {
                     )),
             child: TrackListItemTile(
                 baseItem: baseItem,
-                index: listIndex,
+                listIndex: listIndex,
+                actualIndex: actualIndex,
+                showIndex: showIndex,
+                showArtists: showArtists,
+                showAlbum: showAlbum,
+                showPlayCount: showPlayCount,
                 themeCallback: themeCallback,
                 isCurrentTrack: isCurrentTrack,
                 allowReorder: allowReorder,
@@ -564,20 +612,32 @@ class TrackListItemTile extends StatelessWidget {
     required this.isCurrentTrack,
     required this.allowReorder,
     required this.onTap,
-    this.index,
+    required this.actualIndex,
+    this.listIndex,
+    this.showIndex = false,
+    this.showArtists = true,
+    this.showAlbum = true,
+    this.showPlayCount = false,
   });
 
   final jellyfin_models.BaseItemDto baseItem;
   final void Function(FinampTheme theme)? themeCallback;
   final bool isCurrentTrack;
   final bool allowReorder;
-  final Future<int>? index;
+  final Future<int>? listIndex;
+  final int actualIndex;
+  final bool showIndex;
+  final bool showArtists;
+  final bool showAlbum;
+  final bool showPlayCount;
   final void Function() onTap;
 
-  static const double tileHeight = 60.0;
+  static const double defaultTileHeight = 60.0;
 
   @override
   Widget build(BuildContext context) {
+    final bool secondRowNeeded = showArtists || showAlbum || showPlayCount;
+
     return ListTileTheme(
       tileColor: Theme.of(context).colorScheme.surfaceContainer,
       child: ListTile(
@@ -590,39 +650,54 @@ class TrackListItemTile extends StatelessWidget {
         contentPadding:
             const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
         // tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-        leading: Stack(
-          children: [
-            AlbumImage(
-              item: baseItem,
-              borderRadius: isCurrentTrack
-                  ? BorderRadius.zero
-                  : BorderRadius.circular(8.0),
-              themeCallback: themeCallback,
-            ),
-            if (isCurrentTrack)
-              SizedBox.square(
-                dimension: tileHeight,
-                child: Container(
-                  decoration: BoxDecoration(
+        leading: showIndex
+            ? Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: SizedBox.fromSize(
+                    size: const Size(20.0, defaultTileHeight),
+                    child: Center(
+                        child: Text(
+                      actualIndex.toString(),
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ))),
+              )
+            : Stack(
+                children: [
+                  AlbumImage(
+                    item: baseItem,
                     borderRadius: isCurrentTrack
                         ? BorderRadius.zero
                         : BorderRadius.circular(8.0),
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black.withOpacity(0.35)
-                        : Colors.white.withOpacity(0.35),
+                    themeCallback: themeCallback,
                   ),
-                  // color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
-                  child: MiniMusicVisualizer(
-                    color: Theme.of(context).colorScheme.secondary,
-                    animate: true,
-                  ),
-                ),
+                  if (isCurrentTrack)
+                    SizedBox.square(
+                      dimension: defaultTileHeight,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: isCurrentTrack
+                              ? BorderRadius.zero
+                              : BorderRadius.circular(8.0),
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.black.withOpacity(0.35)
+                              : Colors.white.withOpacity(0.35),
+                        ),
+                        // color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
+                        child: MiniMusicVisualizer(
+                          color: Theme.of(context).colorScheme.secondary,
+                          animate: true,
+                        ),
+                      ),
+                    ),
+                ],
               ),
-          ],
-        ),
         title: ConstrainedBox(
           constraints: const BoxConstraints(
-            maxHeight: tileHeight,
+            maxHeight: defaultTileHeight,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -649,28 +724,64 @@ class TrackListItemTile extends StatelessWidget {
                   softWrap: false,
                   maxLines: 1,
                   TextSpan(
-                      text: baseItem.artists?.join(", ") ??
-                          baseItem.albumArtist ??
-                          AppLocalizations.of(context)!.unknownArtist,
+                      text: showArtists
+                          ? baseItem.artists?.join(", ") ??
+                              baseItem.albumArtist ??
+                              AppLocalizations.of(context)!.unknownArtist
+                          : "",
                       style: TextStyle(
                           color: Theme.of(context).textTheme.bodyMedium!.color!,
                           fontSize: 13,
                           fontWeight: FontWeight.w400,
                           overflow: TextOverflow.ellipsis),
                       children: [
-                        const WidgetSpan(child: SizedBox(width: 10.0)),
-                        TextSpan(
-                          text: baseItem.album,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .color!
-                                .withOpacity(0.6),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w300,
+                        if (!secondRowNeeded)
+                          // show the artist anyway if nothing else is shown
+                          TextSpan(
+                            text: baseItem.artists?.join(", ") ??
+                                baseItem.albumArtist ??
+                                AppLocalizations.of(context)!.unknownArtist,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .color!
+                                  .withOpacity(0.6),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
-                        ),
+                        if (showArtists)
+                          const WidgetSpan(child: SizedBox(width: 10.0)),
+                        if (showAlbum)
+                          TextSpan(
+                            text: baseItem.album,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .color!
+                                  .withOpacity(0.6),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        if (showAlbum)
+                          const WidgetSpan(child: SizedBox(width: 10.0)),
+                        if (showPlayCount)
+                          TextSpan(
+                            text: AppLocalizations.of(context)!.playCountValue(
+                                baseItem.userData?.playCount ?? 0),
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .color!
+                                  .withOpacity(0.6),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
                       ]),
                 ),
               ),
@@ -701,7 +812,7 @@ class TrackListItemTile extends StatelessWidget {
               ),
               if (allowReorder)
                 FutureBuilder(
-                    future: index,
+                    future: listIndex,
                     builder: (context, snapshot) {
                       return ReorderableDragStartListener(
                         index: snapshot.data ??

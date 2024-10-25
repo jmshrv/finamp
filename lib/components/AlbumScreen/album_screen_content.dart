@@ -189,6 +189,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
             item: item,
             children: widget.childrenForQueue,
             index: indexOffset,
+            showIndex: item.albumId == widget.parent.id,
             parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();
@@ -198,24 +199,6 @@ class _SongsSliverListState extends State<SongsSliverList> {
             },
             isInPlaylist: widget.parent.type == "Playlist",
             isOnArtistScreen: widget.isOnArtistScreen,
-            // show artists except for this one scenario
-            showArtists: !(
-                    // we're on album screen
-                    widget.parent.type == "MusicAlbum"
-                        // "hide song artists if they're the same as album artists" == true
-                        &&
-                        FinampSettingsHelper
-                            .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                        // song artists == album artists
-                        &&
-                        setEquals(
-                            widget.parent.albumArtists
-                                ?.map((e) => e.name)
-                                .toSet(),
-                            item.artists?.toSet()))
-                // hide song artist if on the artist screen
-                &&
-                widget.parent.type != "MusicArtist",
             showPlayCount: widget.showPlayCount,
           );
         },
