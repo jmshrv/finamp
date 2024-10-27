@@ -660,6 +660,15 @@ class TrackListItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool secondRowNeeded = showArtists || showAlbum || showPlayCount;
 
+    final durationLabelFullHours =
+        (baseItem.runTimeTicksDuration()?.inHours ?? 0);
+    final durationLabelFullMinutes =
+        (baseItem.runTimeTicksDuration()?.inMinutes ?? 0) % 60;
+    final durationLabelSeconds =
+        (baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60;
+    final durationLabelString =
+        "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
+
     return ListTileTheme(
       tileColor: Theme.of(context).colorScheme.surfaceContainer,
       child: ListTile(
@@ -829,17 +838,22 @@ class TrackListItemTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "${baseItem.runTimeTicksDuration()?.inMinutes.toString()}:${((baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                printDuration(baseItem.runTimeTicksDuration(),
+                    leadingZeroes: false),
+                semanticsLabel: durationLabelString,
                 textAlign: TextAlign.end,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodySmall?.color,
                 ),
               ),
-              AddToPlaylistButton(
-                item: baseItem,
-                size: 24,
-                visualDensity: const VisualDensity(
-                  horizontal: -4,
+              Semantics(
+                excludeSemantics: true,
+                child: AddToPlaylistButton(
+                  item: baseItem,
+                  size: 24,
+                  visualDensity: const VisualDensity(
+                    horizontal: -4,
+                  ),
                 ),
               ),
               if (allowReorder)
