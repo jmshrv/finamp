@@ -208,6 +208,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
       ..writeByte(73)
+      ..writeByte(0)
+      ..write(obj.isOffline)
+      ..writeByte(1)
       ..write(obj.shouldTranscode)
       ..writeByte(2)
       ..write(obj.transcodeBitrate)
