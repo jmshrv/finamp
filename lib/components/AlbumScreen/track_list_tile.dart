@@ -301,6 +301,7 @@ class QueueListTile extends StatelessWidget {
   final int actualIndex;
   final int indexOffset;
   final bool isCurrentTrack;
+  final bool isPreviousTrack;
   final bool isInPlaylist;
   final bool allowReorder;
 
@@ -318,6 +319,7 @@ class QueueListTile extends StatelessWidget {
     required this.isCurrentTrack,
     required this.isInPlaylist,
     required this.allowReorder,
+    this.isPreviousTrack = false,
     this.parentItem,
     this.onRemoveFromList,
     this.themeCallback,
@@ -337,6 +339,7 @@ class QueueListTile extends StatelessWidget {
       parentItem: parentItem,
       listIndex: listIndex,
       actualIndex: item.indexNumber ?? -1,
+      isPreviousTrack: isPreviousTrack,
       isInPlaylist: isInPlaylist,
       allowReorder: allowReorder,
       onRemoveFromList: onRemoveFromList,
@@ -356,6 +359,7 @@ class TrackListItem extends ConsumerStatefulWidget {
   final bool showIndex;
   final bool showArtists;
   final bool showPlayCount;
+  final bool isPreviousTrack;
   final bool isInPlaylist;
   final bool allowReorder;
   final Widget dismissBackground;
@@ -372,6 +376,7 @@ class TrackListItem extends ConsumerStatefulWidget {
       required this.onTap,
       required this.confirmDismiss,
       this.parentItem,
+      this.isPreviousTrack = false,
       this.isInPlaylist = false,
       this.allowReorder = false,
       this.showIndex = false,
@@ -460,6 +465,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                         child: ThemedTrackListTile(
                             playable: playable,
                             isCurrentTrack: isCurrentlyPlaying,
+                            isPreviousTrack: widget.isPreviousTrack,
                             themeCallback: (x) => _menuTheme = x,
                             baseItem: widget.baseItem,
                             listIndex: widget.listIndex,
@@ -477,6 +483,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
               : ThemedTrackListTile(
                   playable: playable,
                   isCurrentTrack: isCurrentlyPlaying,
+                  isPreviousTrack: widget.isPreviousTrack,
                   themeCallback: (x) => _menuTheme = x,
                   baseItem: widget.baseItem,
                   listIndex: widget.listIndex,
@@ -518,6 +525,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
 class ThemedTrackListTile extends ConsumerWidget {
   final bool playable;
   final bool isCurrentTrack;
+  final bool isPreviousTrack;
   final void Function(FinampTheme) themeCallback;
   final jellyfin_models.BaseItemDto baseItem;
   final Future<int>? listIndex;
@@ -533,6 +541,7 @@ class ThemedTrackListTile extends ConsumerWidget {
     super.key,
     required this.playable,
     required this.isCurrentTrack,
+    required this.isPreviousTrack,
     required this.themeCallback,
     required this.baseItem,
     required this.listIndex,
@@ -548,7 +557,7 @@ class ThemedTrackListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Opacity(
-      opacity: playable ? 1.0 : 0.5,
+      opacity: playable ? (isPreviousTrack ? 0.7 : 1.0) : 0.5,
       child: Card(
           color: Colors.transparent,
           elevation: 0,

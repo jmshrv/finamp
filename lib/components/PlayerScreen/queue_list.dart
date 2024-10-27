@@ -29,7 +29,6 @@ import '../../services/process_artist.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
 import '../themed_bottom_sheet.dart';
-import 'queue_list_item.dart';
 import 'queue_source_helper.dart';
 
 class _QueueListStreamState {
@@ -466,16 +465,17 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               final item = _previousTracks![index];
               final actualIndex = index;
               final indexOffset = -((_previousTracks?.length ?? 0) - index);
-              return QueueListItem(
+              return QueueListTile(
                 key: ValueKey(item.id),
-                item: item,
-                listIndex: index,
+                item: item.baseItem!,
+                listIndex: Future.value(index),
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
-                subqueue: _previousTracks!,
+                isInPlaylist: queueItemInPlaylist(item),
+                parentItem: item.source.item,
                 allowReorder:
                     _queueService.playbackOrder == FinampPlaybackOrder.linear,
-                onTap: () async {
+                onTap: (bool playable) async {
                   FeedbackHelper.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
                   scrollToKey(
@@ -522,7 +522,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
             _nextUp ??= snapshot.data!.nextUp;
 
             return SliverPadding(
-                padding: const EdgeInsets.only(top: 0.0, left: 4.0, right: 4.0),
+                padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
                 sliver: SliverReorderableList(
                   autoScrollerVelocityScalar: 20.0,
                   onReorder: (oldIndex, newIndex) {
@@ -558,14 +558,17 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     final item = _nextUp![index];
                     final actualIndex = index;
                     final indexOffset = index + 1;
-                    return QueueListItem(
+                    return QueueListTile(
                       key: ValueKey(item.id),
-                      item: item,
-                      listIndex: index,
+                      item: item.baseItem!,
+                      listIndex: Future.value(index),
                       actualIndex: actualIndex,
                       indexOffset: indexOffset,
-                      subqueue: _nextUp!,
-                      onTap: () async {
+                      isInPlaylist: queueItemInPlaylist(item),
+                      parentItem: item.source.item,
+                      allowReorder: _queueService.playbackOrder ==
+                          FinampPlaybackOrder.linear,
+                      onTap: (bool playable) async {
                         FeedbackHelper.feedback(FeedbackType.selection);
                         await _queueService.skipByOffset(indexOffset);
                         scrollToKey(
@@ -649,24 +652,6 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 final actualIndex = index;
                 final indexOffset = index + _nextUp!.length + 1;
 
-                // return QueueListItem(
-                //   key: ValueKey(item.id),
-                //   item: item,
-                //   listIndex: index,
-                //   actualIndex: actualIndex,
-                //   indexOffset: indexOffset,
-                //   subqueue: _queue!,
-                //   allowReorder:
-                //       _queueService.playbackOrder == FinampPlaybackOrder.linear,
-                //   onTap: () async {
-                //     FeedbackHelper.feedback(FeedbackType.selection);
-                //     await _queueService.skipByOffset(indexOffset);
-                //     scrollToKey(
-                //         key: widget.previousTracksHeaderKey,
-                //         duration: const Duration(milliseconds: 500));
-                //   },
-                //   isCurrentTrack: false,
-                // );
                 return QueueListTile(
                   key: ValueKey(item.id),
                   item: item.baseItem!,
