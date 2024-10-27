@@ -1768,5 +1768,17 @@
   "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bit rate, and more on the player screen.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "albumScreen": "Album Screen",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenTitle": "Show Album Covers For Tracks",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Show album covers for each track separately on the album screen.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
   }
 }

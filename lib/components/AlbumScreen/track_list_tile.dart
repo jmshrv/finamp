@@ -659,22 +659,30 @@ class TrackListItemTile extends StatelessWidget {
         contentPadding:
             const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
         // tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-        leading: showIndex
-            ? Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (showIndex)
+              Padding(
+                padding:
+                    FinampSettingsHelper.finampSettings.showCoversOnAlbumScreen
+                        ? const EdgeInsets.only(left: 2.0, right: 6.0)
+                        : const EdgeInsets.only(left: 6.0, right: 0.0),
                 child: SizedBox.fromSize(
-                    size: const Size(20.0, defaultTileHeight),
+                    size: const Size(22.0, defaultTileHeight),
                     child: Center(
                         child: Text(
                       actualIndex.toString(),
+                      textAlign: TextAlign.end,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
                     ))),
-              )
-            : Stack(
+              ),
+            if (FinampSettingsHelper.finampSettings.showCoversOnAlbumScreen)
+              Stack(
                 children: [
                   AlbumImage(
                     item: baseItem,
@@ -704,6 +712,8 @@ class TrackListItemTile extends StatelessWidget {
                     ),
                 ],
               ),
+          ],
+        ),
         title: ConstrainedBox(
           constraints: const BoxConstraints(
             maxHeight: defaultTileHeight,

@@ -198,6 +198,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               FinampFeatureChipType.normalizationGain
             ])
           : fields[74] as FinampFeatureChipsConfiguration,
+      showCoversOnAlbumScreen: fields[75] == null ? false : fields[75] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -207,7 +208,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(73)
+      ..writeByte(74)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -353,7 +354,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(73)
       ..write(obj.keepScreenOnWhilePluggedIn)
       ..writeByte(74)
-      ..write(obj.featureChipsConfiguration);
+      ..write(obj.featureChipsConfiguration)
+      ..writeByte(75)
+      ..write(obj.showCoversOnAlbumScreen);
   }
 
   @override

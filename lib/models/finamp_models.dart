@@ -125,6 +125,7 @@ const _featureChipsConfigurationDefault =
   FinampFeatureChipType.size,
   FinampFeatureChipType.normalizationGain,
 ]);
+const _showCoversOnAlbumScreenDefault = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -209,7 +210,8 @@ class FinampSettings {
           _showSeekControlsOnMediaNotificationDefault,
       this.keepScreenOnOption = _keepScreenOnOption,
       this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
-      this.featureChipsConfiguration = _featureChipsConfigurationDefault});
+      this.featureChipsConfiguration = _featureChipsConfigurationDefault,
+      this.showCoversOnAlbumScreen = _showCoversOnAlbumScreenDefault});
 
   @HiveField(0, defaultValue: _isOfflineDefault)
   bool isOffline;
@@ -448,6 +450,9 @@ class FinampSettings {
 
   @HiveField(74, defaultValue: _featureChipsConfigurationDefault)
   FinampFeatureChipsConfiguration featureChipsConfiguration;
+
+  @HiveField(75, defaultValue: _showCoversOnAlbumScreenDefault)
+  bool showCoversOnAlbumScreen;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

@@ -1,3 +1,4 @@
+import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/customization_settings_screen.dart';
 import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_songs.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
@@ -52,6 +53,12 @@ class LayoutSettingsScreen extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.lyricsScreen),
                   onTap: () => Navigator.of(context)
                       .pushNamed(LyricsSettingsScreen.routeName),
+                ),
+                ListTile(
+                  leading: const Icon(TablerIcons.disc),
+                  title: Text(AppLocalizations.of(context)!.albumScreen),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(AlbumSettingsScreen.routeName),
                 ),
                 ListTile(
                   leading: const Icon(Icons.tab),
