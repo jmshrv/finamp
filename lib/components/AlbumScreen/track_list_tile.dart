@@ -375,7 +375,7 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.isInPlaylist = false,
       this.allowReorder = false,
       this.showIndex = false,
-      this.showArtists = false,
+      this.showArtists = true,
       this.showPlayCount = false,
       this.onRemoveFromList,
       this.dismissBackground = const SizedBox.shrink()});
