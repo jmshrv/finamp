@@ -63,6 +63,8 @@ class TrackListTile extends StatelessWidget {
 
     // if leading index number should be shown
     this.showIndex = false,
+    // if leading album cover should be shown
+    this.showCover = true,
 
     /// Whether we are in the songs tab, as opposed to a playlist/album
     this.isSong = false,
@@ -80,6 +82,7 @@ class TrackListTile extends StatelessWidget {
   final Future<List<jellyfin_models.BaseItemDto>>? children;
   final Future<int>? index;
   final bool showIndex;
+  final bool showCover;
   final bool isSong;
   final jellyfin_models.BaseItemDto? parentItem;
   final VoidCallback? onRemoveFromList;
@@ -273,6 +276,7 @@ class TrackListTile extends StatelessWidget {
       listIndex: index,
       actualIndex: item.indexNumber ?? -1,
       showIndex: showIndex,
+      showCover: showCover,
       showArtists: !(
               // "hide song artists if they're the same as album artists" == true
               FinampSettingsHelper
@@ -357,6 +361,7 @@ class TrackListItem extends ConsumerStatefulWidget {
   final Future<int>? listIndex;
   final int actualIndex;
   final bool showIndex;
+  final bool showCover;
   final bool showArtists;
   final bool showPlayCount;
   final bool isPreviousTrack;
@@ -380,6 +385,7 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.isInPlaylist = false,
       this.allowReorder = false,
       this.showIndex = false,
+      this.showCover = true,
       this.showArtists = true,
       this.showPlayCount = false,
       this.onRemoveFromList,
@@ -471,6 +477,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                             listIndex: widget.listIndex,
                             actualIndex: widget.actualIndex,
                             showIndex: widget.showIndex,
+                            showCover: widget.showCover,
                             showArtists: widget.showArtists,
                             showAlbum: showAlbum,
                             showPlayCount: widget.showPlayCount,
@@ -489,6 +496,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                   listIndex: widget.listIndex,
                   actualIndex: widget.actualIndex,
                   showIndex: widget.showIndex,
+                  showCover: widget.showCover,
                   showArtists: widget.showArtists,
                   showAlbum: showAlbum,
                   showPlayCount: widget.showPlayCount,
@@ -531,6 +539,7 @@ class ThemedTrackListTile extends ConsumerWidget {
   final Future<int>? listIndex;
   final int actualIndex;
   final bool showIndex;
+  final bool showCover;
   final bool showArtists;
   final bool showAlbum;
   final bool showPlayCount;
@@ -547,6 +556,7 @@ class ThemedTrackListTile extends ConsumerWidget {
     required this.listIndex,
     required this.actualIndex,
     required this.showIndex,
+    required this.showCover,
     required this.showArtists,
     required this.showAlbum,
     required this.showPlayCount,
@@ -557,7 +567,7 @@ class ThemedTrackListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Opacity(
-      opacity: playable ? (isPreviousTrack ? 0.7 : 1.0) : 0.5,
+      opacity: playable ? (isPreviousTrack ? 0.8 : 1.0) : 0.5,
       child: Card(
           color: Colors.transparent,
           elevation: 0,
@@ -601,6 +611,7 @@ class ThemedTrackListTile extends ConsumerWidget {
                 listIndex: listIndex,
                 actualIndex: actualIndex,
                 showIndex: showIndex,
+                showCover: showCover,
                 showArtists: showArtists,
                 showAlbum: showAlbum,
                 showPlayCount: showPlayCount,
@@ -624,6 +635,7 @@ class TrackListItemTile extends StatelessWidget {
     required this.actualIndex,
     this.listIndex,
     this.showIndex = false,
+    this.showCover = true,
     this.showArtists = true,
     this.showAlbum = true,
     this.showPlayCount = false,
@@ -636,6 +648,7 @@ class TrackListItemTile extends StatelessWidget {
   final Future<int>? listIndex;
   final int actualIndex;
   final bool showIndex;
+  final bool showCover;
   final bool showArtists;
   final bool showAlbum;
   final bool showPlayCount;
@@ -665,7 +678,7 @@ class TrackListItemTile extends StatelessWidget {
             if (showIndex)
               Padding(
                 padding:
-                    FinampSettingsHelper.finampSettings.showCoversOnAlbumScreen
+                    showCover
                         ? const EdgeInsets.only(left: 2.0, right: 6.0)
                         : const EdgeInsets.only(left: 6.0, right: 0.0),
                 child: SizedBox.fromSize(
@@ -681,7 +694,7 @@ class TrackListItemTile extends StatelessWidget {
                       ),
                     ))),
               ),
-            if (FinampSettingsHelper.finampSettings.showCoversOnAlbumScreen)
+            if (showCover)
               Stack(
                 children: [
                   AlbumImage(
