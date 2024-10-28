@@ -599,10 +599,18 @@ class ThemedTrackListTile extends ConsumerWidget {
                           .bodyLarge
                           ?.copyWith(
                             color: isCurrentTrack
-                                ? ref
+                                ? Color.alphaBlend(
+                                    (ref
                                     .watch(colorThemeNullableProvider)
                                     .value
-                                    ?.secondary
+                                            ?.secondary
+                                            .withOpacity(0.5)) ??
+                                        Colors.transparent,
+                                    Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color ??
+                                        Colors.black) 
                                 : Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                     )),
@@ -704,35 +712,12 @@ class TrackListItemTile extends StatelessWidget {
                     ))),
               ),
             if (showCover)
-              Stack(
-                children: [
-                  AlbumImage(
-                    item: baseItem,
-                    borderRadius: isCurrentTrack
-                        ? BorderRadius.zero
-                        : BorderRadius.circular(8.0),
-                    themeCallback: themeCallback,
-                  ),
-                  if (isCurrentTrack)
-                    SizedBox.square(
-                      dimension: defaultTileHeight,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: isCurrentTrack
-                              ? BorderRadius.zero
-                              : BorderRadius.circular(8.0),
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.black.withOpacity(0.35)
-                              : Colors.white.withOpacity(0.35),
-                        ),
-                        // color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
-                        child: MiniMusicVisualizer(
-                          color: Theme.of(context).colorScheme.secondary,
-                          animate: true,
-                        ),
-                      ),
-                    ),
-                ],
+              AlbumImage(
+                item: baseItem,
+                borderRadius: isCurrentTrack
+                    ? BorderRadius.zero
+                    : BorderRadius.circular(8.0),
+                themeCallback: themeCallback,
               ),
           ],
         ),
