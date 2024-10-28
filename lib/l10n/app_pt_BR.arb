@@ -533,5 +533,58 @@
   "syncDownloadedPlaylists": "Sincronizar listas de reprodução baixadas",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Mostrar rolagem rápida",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "redesignBeta": "Teste o beta",
+  "@redesignBeta": {},
+  "playbackOrderLinearTooltip": "Tocando em ordem. Aperte para ativar.",
+  "@playbackOrderLinearTooltip": {},
+  "playbackOrderShuffledTooltip": "Embaralhando. Aperte para ativar.",
+  "@playbackOrderShuffledTooltip": {},
+  "loopModeAllTooltip": "Repetir tudo. Aperte para ativar.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "Repetir uma. Aperte para ativar.",
+  "@loopModeOneTooltip": {},
+  "loopModeNoneTooltip": "Sem repetição. Aperte para ativar.",
+  "@loopModeNoneTooltip": {},
+  "skipToNext": "Pular para próxima música",
+  "@skipToNext": {},
+  "skipToPrevious": "Pular para música anterior",
+  "@skipToPrevious": {},
+  "deleteFromDevice": "Remover do dispositivo",
+  "@deleteFromDevice": {},
+  "download": "Baixar",
+  "@download": {},
+  "sync": "Sincronizar com servidor",
+  "@sync": {},
+  "downloadArtist": "Baixar todos os álbuns de {artist}",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "Tocar todos os álbuns de {artist} em modo aleatório",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "playArtist": "Tocar todos os álbuns de {artist}",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "togglePlayback": "Ativar reprodução",
+  "@togglePlayback": {},
+  "about": "Sobre Finamp",
+  "@about": {}
 }
