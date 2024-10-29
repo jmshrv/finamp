@@ -219,7 +219,7 @@
   "@pathReturnSlashErrorMessage": {},
   "portrait": "直向",
   "@portrait": {},
-  "gridCrossAxisCountSubtitle": "屏幕在{value}顯示時，每行所顯示的資訊數量（例如歌曲、歌手等）。",
+  "gridCrossAxisCountSubtitle": "屏幕在{value}顯示時，每行顯示的資訊數量（例如歌曲、歌手等）。",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -231,15 +231,15 @@
   },
   "showTextOnGridView": "在網絡內顯示文字",
   "@showTextOnGridView": {},
-  "showTextOnGridViewSubtitle": "使用格狀顯示模式時，是否在網絡內顯示歌曲資訊（名稱、歌手等）。",
+  "showTextOnGridViewSubtitle": "使用格狀顯示時，在網格內顯示歌曲資訊（名稱、歌手等）。",
   "@showTextOnGridViewSubtitle": {},
   "showCoverAsPlayerBackground": "模糊化封面作為播放器的背景",
   "@showCoverAsPlayerBackground": {},
-  "showCoverAsPlayerBackgroundSubtitle": "是否以模糊化的專輯封面圖片作為應用程式內的播放頁面的背景。",
+  "showCoverAsPlayerBackgroundSubtitle": "以模糊化的專輯封面作為應用程式內的播放頁面的背景。",
   "@showCoverAsPlayerBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "隱藏與專輯歌手同名的歌手名稱",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "當專輯的歌手與專輯歌曲的歌手名稱相同時，是否隱藏歌曲的歌手名稱。",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "當專輯的歌手與歌曲的歌手相同時，隱藏歌曲的歌手名稱。",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "禁用「手勢」功能",
   "@disableGesture": {},
@@ -530,10 +530,49 @@
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "顯示快速卷軸",
   "@showFastScroller": {},
-  "redesignBeta": "新介面測試版",
+  "redesignBeta": "測試版",
   "@redesignBeta": {},
   "swipeInsertQueueNext": "滑動插播",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "在歌曲列表中輕掃歌曲時，將其插入至播放佇列的最頭而不是最後。",
-  "@swipeInsertQueueNextSubtitle": {}
+  "@swipeInsertQueueNextSubtitle": {},
+  "skipToNext": "下一首歌",
+  "@skipToNext": {},
+  "skipToPrevious": "上一首歌",
+  "@skipToPrevious": {},
+  "download": "下載",
+  "@download": {},
+  "deleteFromDevice": "從裝置中刪除",
+  "@deleteFromDevice": {},
+  "downloadArtist": "下載 {artist}所有的專輯",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "playArtist": "播放{artist}所有的專輯",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "隨機播放{artist}的專輯",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "about": "關於 Finamp",
+  "@about": {},
+  "sync": "與伺服器同步",
+  "@sync": {}
 }
