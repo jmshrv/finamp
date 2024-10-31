@@ -338,19 +338,21 @@ class PlaybackHistoryService {
     PlaybackState? previousState,
     bool skippingForward,
   ) async {
+    final shouldReportPreviousTrack = previousItem != null &&
+        previousState != null &&
+        // don't submit stop events for idle tracks (at position 0 and not playing)
+        (previousState.playing ||
+            previousState.updatePosition != Duration.zero);
+
     if (FinampSettingsHelper.finampSettings.isOffline) {
-      if (previousItem != null) {
+      if (shouldReportPreviousTrack) {
         await _offlineListenLogHelper.logOfflineListen(previousItem.item);
       }
       return;
     }
 
     jellyfin_models.PlaybackProgressInfo? previousTrackPlaybackData;
-    if (previousItem != null &&
-        previousState != null &&
-        // don't submit stop events for idle tracks (at position 0 and not playing)
-        (previousState.playing ||
-            previousState.updatePosition != Duration.zero)) {
+    if (shouldReportPreviousTrack) {
       previousTrackPlaybackData = generatePlaybackProgressInfoFromState(
         previousItem,
         previousState,
