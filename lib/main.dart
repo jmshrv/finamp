@@ -72,6 +72,7 @@ import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
+import 'services/ui_overlay_setter_observer.dart';
 import 'setup_logging.dart';
 
 void main() async {
@@ -79,6 +80,7 @@ void main() async {
   bool hasFailed = false;
   try {
     await setupLogging();
+    await _setupEdgeToEdgeOverlayStyle();
     await setupHive();
     _migrateDownloadLocations();
     _migrateSortOptions();
@@ -116,6 +118,15 @@ void main() async {
     await initializeDateFormatting();
 
     runApp(const Finamp());
+  }
+}
+
+Future<void> _setupEdgeToEdgeOverlayStyle() async {
+  if (Platform.isAndroid) {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
+    final binding = WidgetsFlutterBinding.ensureInitialized();
+    binding.addObserver(UIOverlaySetterObserver());
   }
 }
 
