@@ -64,6 +64,9 @@ android {
             // shrinkResources false
             // minifyEnabled false
         }
+        debug {
+            applicationIdSuffix '.debug'
+        }
     }
 }
 
