@@ -115,6 +115,18 @@ const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
 const _keepScreenOnWhilePluggedIn = true;
 const _defaultTranscodingSegmentContainer =
     FinampSegmentContainer.fragmentedMp4;
+const _featureChipsConfigurationDefault =
+    FinampFeatureChipsConfiguration(enabled: true, features: [
+  FinampFeatureChipType.playCount,
+  FinampFeatureChipType.additionalPeople,
+  FinampFeatureChipType.playbackMode,
+  FinampFeatureChipType.codec,
+  FinampFeatureChipType.bitRate,
+  FinampFeatureChipType.bitDepth,
+  FinampFeatureChipType.sampleRate,
+  FinampFeatureChipType.size,
+  FinampFeatureChipType.normalizationGain,
+]);
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -198,9 +210,9 @@ class FinampSettings {
       this.showSeekControlsOnMediaNotification =
           _showSeekControlsOnMediaNotificationDefault,
       this.keepScreenOnOption = _keepScreenOnOption,
-    this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
-    this.transcodingSegmentContainer = _defaultTranscodingSegmentContainer,
-  });
+      this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
+      this.transcodingSegmentContainer = _defaultTranscodingSegmentContainer,
+      this.featureChipsConfiguration = _featureChipsConfigurationDefault});
 
   @HiveField(0, defaultValue: _isOfflineDefault)
   bool isOffline;
@@ -439,6 +451,9 @@ class FinampSettings {
 
   @HiveField(74, defaultValue: _defaultTranscodingSegmentContainer)
   FinampSegmentContainer transcodingSegmentContainer;
+
+  @HiveField(75, defaultValue: _featureChipsConfigurationDefault)
+  FinampFeatureChipsConfiguration featureChipsConfiguration;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2242,7 +2257,6 @@ enum KeepScreenOnOption {
   }
 }
 
-
 @HiveType(typeId: 73)
 enum FinampSegmentContainer {
   @HiveField(0)
@@ -2254,4 +2268,118 @@ enum FinampSegmentContainer {
 
   /// The container to use to transport the segments
   final String container;
+}
+
+@HiveType(typeId: 74)
+enum FinampFeatureChipType {
+  @HiveField(0)
+  playCount,
+  @HiveField(1)
+  additionalPeople,
+  @HiveField(2)
+  playbackMode,
+  @HiveField(3)
+  codec,
+  @HiveField(4)
+  bitRate,
+  @HiveField(5)
+  bitDepth,
+  @HiveField(6)
+  size,
+  @HiveField(7)
+  normalizationGain,
+  @HiveField(8)
+  sampleRate;
+
+  /// Human-readable version of the [FinampFeatureChipType]
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(FinampFeatureChipType featureChipType) {
+    switch (featureChipType) {
+      case FinampFeatureChipType.playCount:
+        return "Play Count";
+      case FinampFeatureChipType.additionalPeople:
+        return "Additional People";
+      case FinampFeatureChipType.playbackMode:
+        return "Playback Mode";
+      case FinampFeatureChipType.codec:
+        return "codec";
+      case FinampFeatureChipType.bitRate:
+        return "Bit Rate";
+      case FinampFeatureChipType.bitDepth:
+        return "Bit Depth";
+      case FinampFeatureChipType.size:
+        return "size";
+      case FinampFeatureChipType.normalizationGain:
+        return "Normalization Gain";
+      case FinampFeatureChipType.sampleRate:
+        return "Sample Rate";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      FinampFeatureChipType featureChipType, BuildContext context) {
+    switch (featureChipType) {
+      case FinampFeatureChipType.playCount:
+        return AppLocalizations.of(context)!.playCount;
+      case FinampFeatureChipType.additionalPeople:
+        return AppLocalizations.of(context)!.additionalPeople;
+      case FinampFeatureChipType.playbackMode:
+        return AppLocalizations.of(context)!.playbackMode;
+      case FinampFeatureChipType.codec:
+        return AppLocalizations.of(context)!.codec;
+      case FinampFeatureChipType.bitRate:
+        return AppLocalizations.of(context)!.bitRate;
+      case FinampFeatureChipType.bitDepth:
+        return AppLocalizations.of(context)!.bitDepth;
+      case FinampFeatureChipType.size:
+        return AppLocalizations.of(context)!.size;
+      case FinampFeatureChipType.normalizationGain:
+        return AppLocalizations.of(context)!.normalizationGain;
+      case FinampFeatureChipType.sampleRate:
+        return AppLocalizations.of(context)!.sampleRate;
+    }
+  }
+}
+
+@JsonSerializable()
+@HiveType(typeId: 75)
+class FinampFeatureChipsConfiguration {
+  const FinampFeatureChipsConfiguration({
+    required this.enabled,
+    required this.features,
+  });
+
+  @HiveField(0)
+  final bool enabled;
+
+  @HiveField(1)
+  final List<FinampFeatureChipType> features;
+
+  factory FinampFeatureChipsConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$FinampFeatureChipsConfigurationFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$FinampFeatureChipsConfigurationToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
+
+  // implement copyWith
+  FinampFeatureChipsConfiguration copyWith({
+    bool? enabled,
+    List<FinampFeatureChipType>? features,
+  }) {
+    return FinampFeatureChipsConfiguration(
+      enabled: enabled ?? this.enabled,
+      features: features ?? this.features,
+    );
+  }
 }

@@ -226,9 +226,10 @@ class __PlaybackProgressSliderState
         min: 0.0,
         max: widget.mediaItem?.duration == null
             ? widget.playbackState.bufferedPosition.inMicroseconds.toDouble()
-            : widget.mediaItem!.duration!.inMicroseconds.toDouble(),
+            : widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0,
         value: (_dragValue ?? widget.position.inMicroseconds)
-            .clamp(0, widget.mediaItem!.duration!.inMicroseconds.toDouble())
+            .clamp(
+                0, widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0)
             .toDouble(),
         semanticFormatterCallback: (double value) {
           final positionFullMinutes =
@@ -254,9 +255,9 @@ class __PlaybackProgressSliderState
                 ? widget.playbackState.bufferedPosition.inMicroseconds
                     .clamp(
                       0.0,
-                      widget.mediaItem!.duration == null
+                      widget.mediaItem?.duration == null
                           ? widget.playbackState.bufferedPosition.inMicroseconds
-                          : widget.mediaItem!.duration!.inMicroseconds,
+                          : widget.mediaItem?.duration?.inMicroseconds ?? 0,
                     )
                     .toDouble()
                 : 0,

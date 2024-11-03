@@ -202,11 +202,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     } on PlayerException catch (e) {
       _audioServiceBackgroundTaskLogger
           .severe("Player error code ${e.code}: ${e.message}");
+      GlobalSnackbar.error(e);
     } on PlayerInterruptedException catch (e) {
       _audioServiceBackgroundTaskLogger
           .warning("Player interrupted: ${e.message}");
+      GlobalSnackbar.error(e);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe("Player error ${e.toString()}");
+      GlobalSnackbar.error(e);
     }
   }
 

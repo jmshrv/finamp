@@ -4,16 +4,15 @@ import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/locale_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
-import '../../services/playback_history_service.dart';
 import '../../models/jellyfin_models.dart' as jellyfin_models;
+import '../../services/playback_history_service.dart';
 import 'playback_history_list_tile.dart';
 
 class PlaybackHistoryList extends StatelessWidget {
-  const PlaybackHistoryList({Key? key}) : super(key: key);
+  const PlaybackHistoryList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +27,8 @@ class PlaybackHistoryList extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             history = snapshot.data;
-            // groupedHistory = playbackHistoryService.getHistoryGroupedByDate();
-            // groupedHistory = playbackHistoryService.getHistoryGroupedByHour();
             groupedHistory =
                 playbackHistoryService.getHistoryGroupedDynamically();
-
-            print(groupedHistory);
 
             return CustomScrollView(
               // use nested SliverList.builder()s to show history items grouped by date
@@ -73,11 +68,7 @@ class PlaybackHistoryList extends StatelessWidget {
                       );
 
                       final now = DateTime.now();
-                      final String localeString = (LocaleHelper.locale != null)
-                          ? ((LocaleHelper.locale?.countryCode != null)
-                              ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
-                              : LocaleHelper.locale.toString())
-                          : "en_US";
+                      final String? localeString = LocaleHelper.localeString;
 
                       return index == 0
                           ? Column(
