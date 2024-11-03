@@ -186,7 +186,7 @@ class TrackListTile extends StatelessWidget {
     Future<bool> trackListTileConfirmDismiss(DismissDirection direction) async {
       final queueService = GetIt.instance<QueueService>();
       if (FinampSettingsHelper.finampSettings.swipeInsertQueueNext) {
-        await queueService.addToNextUp(
+        unawaited(queueService.addToNextUp(
             items: [item],
             source: QueueItemSource(
               type: QueueItemSourceType.nextUp,
@@ -195,9 +195,9 @@ class TrackListTile extends StatelessWidget {
                   pretranslatedName: AppLocalizations.of(context)!.queue),
               id: parentItem?.id ?? "",
               item: parentItem,
-            ));
+            )));
       } else {
-        await queueService.addToQueue(
+        unawaited(queueService.addToQueue(
             items: [item],
             source: QueueItemSource(
               type: QueueItemSourceType.queue,
@@ -206,7 +206,7 @@ class TrackListTile extends StatelessWidget {
                   pretranslatedName: AppLocalizations.of(context)!.queue),
               id: parentItem?.id ?? "",
               item: parentItem,
-            ));
+            )));
       }
 
       GlobalSnackbar.message(
@@ -333,7 +333,7 @@ class QueueListTile extends StatelessWidget {
     Future<bool> queueListTileConfirmDismiss(direction) async {
       final queueService = GetIt.instance<QueueService>();
       FeedbackHelper.feedback(FeedbackType.impact);
-      await queueService.removeAtOffset(indexOffset);
+      unawaited(queueService.removeAtOffset(indexOffset));
       return true;
     }
 
