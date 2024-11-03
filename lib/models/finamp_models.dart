@@ -113,6 +113,7 @@ const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
 const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
 const _keepScreenOnWhilePluggedIn = true;
+const _hasDownloadedPlaylistInfoDefault = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
@@ -157,7 +158,7 @@ class FinampSettings {
       this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
       this.hasCompletedBlurhashImageMigration = true,
       this.hasCompletedBlurhashImageMigrationIdFix = true,
-      this.hasCompleteddownloadsServiceMigration = true,
+      this.hasCompleteddownloadsServiceMigration = false,
       this.requireWifiForDownloads = false,
       this.onlyShowFullyDownloaded = false,
       this.showDownloadsWithUnknownLibrary = true,
@@ -196,7 +197,8 @@ class FinampSettings {
       this.showSeekControlsOnMediaNotification =
           _showSeekControlsOnMediaNotificationDefault,
       this.keepScreenOnOption = _keepScreenOnOption,
-      this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn});
+      this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
+      this.hasDownloadedPlaylistInfo = false});
 
   @HiveField(0, defaultValue: _isOfflineDefault)
   bool isOffline;
@@ -432,6 +434,9 @@ class FinampSettings {
 
   @HiveField(73, defaultValue: _keepScreenOnWhilePluggedIn)
   bool keepScreenOnWhilePluggedIn;
+
+  @HiveField(74, defaultValue: _hasDownloadedPlaylistInfoDefault)
+  bool hasDownloadedPlaylistInfo;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

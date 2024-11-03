@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
 
+import 'package:finamp/services/downloads_service.dart';
 import '../components/MusicScreen/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
@@ -20,6 +21,16 @@ import '../services/audio_service_helper.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
+
+void postLaunchHook() async {
+  final downloadsService = GetIt.instance<DownloadsService>();
+
+  // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
+  if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
+    await downloadsService.addDefaultPlaylistInfoDownload();
+    FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
+  }
+}
 
 class MusicScreen extends ConsumerStatefulWidget {
   const MusicScreen({super.key});
@@ -92,6 +103,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   @override
   void initState() {
     super.initState();
+    postLaunchHook();
   }
 
   @override

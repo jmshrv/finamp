@@ -1012,7 +1012,6 @@ class DownloadsService {
   /// always be re-run later by the user.  Note that the existing hive metadata is
   /// not deleted by this migration, we just stop using it.
   Future<void> migrateFromHive() async {
-    final finampUserHelper = GetIt.instance<FinampUserHelper>();
     if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
         .where((element) =>
             element.baseDirectory == DownloadLocationType.internalSupport)
@@ -1038,13 +1037,6 @@ class DownloadsService {
           content: Text(AppLocalizations.of(scaffold)!.runRepairWarning),
           duration: const Duration(seconds: 20)));
     }));
-
-    // Automatically download playlist metadata (to enhance the playlist actions dialog and offline mode)
-    unawaited(addDownload(
-      stub: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
-      viewId: finampUserHelper.currentUser!.currentViewId!,
-      transcodeProfile: DownloadProfile(transcodeCodec: FinampTranscodingCodec.original),
-    ));
   }
 
   /// Substep 1 of [migrateFromHive].
@@ -1230,6 +1222,19 @@ class DownloadsService {
         isarItem.info.saveSync();
       });
     }
+  }
+
+  Future<void> addDefaultPlaylistInfoDownload() async {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+    // Automatically download playlist metadata (to enhance the playlist actions dialog and offline mode)
+    await addDownload(
+      stub: DownloadStub.fromFinampCollection(
+          FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
+      viewId: finampUserHelper.currentUser!.currentViewId!,
+      transcodeProfile:
+          DownloadProfile(transcodeCodec: FinampTranscodingCodec.original),
+    );
   }
 
   /// Get all user-downloaded items.  Used to show items on downloads screen.

@@ -305,6 +305,13 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setHasDownloadedPlaylistInfo(bool hasDownloadedPlaylistInfo) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasDownloadedPlaylistInfo = hasDownloadedPlaylistInfo;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setTabOrder(List<TabContentType> newTabOrder) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.tabOrder = newTabOrder;
