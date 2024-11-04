@@ -34,6 +34,7 @@ class PlayonHandler {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final queueService = GetIt.instance<QueueService>();
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+    final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
 
     await jellyfinApiHelper.updateCapabilities(ClientCapabilities(
       supportsMediaControl: true,
