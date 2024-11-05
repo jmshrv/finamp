@@ -171,18 +171,22 @@ class PlayonHandler {
                       includeItemTypes: "Audio", 
                       itemIds: List<String>.from(request['Data']['ItemIds'] as List),
                     );
-                    unawaited(queueService.startPlayback(
-                        items: items!,
-                        source: QueueItemSource(
-                          name: QueueItemSourceName(
-                              type: QueueItemSourceNameType.preTranslated,
-                              pretranslatedName: items![0].name),
-                          type: QueueItemSourceType.song,
-                          id: items[0].id,
-                        ),
-                        startingIndex: request['Data']['StartIndex'],
-                      )
-                    );
+                    if (items!.isNotEmpty) {
+                      unawaited(queueService.startPlayback(
+                          items: items,
+                          source: QueueItemSource(
+                            name: QueueItemSourceName(
+                                type: QueueItemSourceNameType.preTranslated,
+                                pretranslatedName: items[0].name),
+                            type: QueueItemSourceType.song,
+                            id: items[0].id,
+                          ),
+                          startingIndex: request['Data']['StartIndex'],
+                        )
+                      );
+                    } else {
+                      _playOnHandlerLogger.severe("Server asked to start an unplayable item");
+                    }
                     break;
                     case 'PlayNext':
                       var items = await jellyfinApiHelper.getItems(
