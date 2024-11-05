@@ -24,11 +24,20 @@ final queueService = GetIt.instance<QueueService>();
 final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
 final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+var channel;
 
 
 class PlayonHandler {
 
   Future<void> initialize() async {
+    var settingsListener = FinampSettingsHelper.finampSettingsListener;
+    settingsListener.addListener(() {
+      if (FinampSettingsHelper.finampSettings.isOffline) {
+        closeListener();
+      } else {
+        startListener();
+      }
+    });
     try {
       await startListener();
     } catch (e) {
@@ -47,7 +56,7 @@ class PlayonHandler {
     final url="${finampUserHelper.currentUser!.baseUrl}/socket?api_key=${finampUserHelper.currentUser!.accessToken}";
     final parsedUrl = Uri.parse(url);
     final wsUrl = parsedUrl.replace(scheme: parsedUrl.scheme == "https" ? "wss" : "ws");
-    final channel = WebSocketChannel.connect(wsUrl);
+    channel = WebSocketChannel.connect(wsUrl);
 
     await channel.ready;
     _playOnHandlerLogger.info("WebSocket connection to server established");
@@ -84,6 +93,10 @@ class PlayonHandler {
     );
   }
 
+  Future<void> closeListener() async {
+    channel.sink.add('{"MessageType":"SessionsStop"}');
+    channel.sink.close();
+  }
 
   Future<void> handleMessage(value) async {
     _playOnHandlerLogger.finest("Received message: $value");
