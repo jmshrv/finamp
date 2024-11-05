@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/screens/active_downloads_screen.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -17,6 +18,12 @@ import 'finamp_user_helper.dart';
 import 'package:get_it/get_it.dart';
 
 final _playOnHandlerLogger = Logger("PlayOnHandler");
+final finampUserHelper = GetIt.instance<FinampUserHelper>();
+final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+final queueService = GetIt.instance<QueueService>();
+final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
+final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
 
 class PlayonHandler {
@@ -30,19 +37,12 @@ class PlayonHandler {
   }
   
   Future<void> startListener() async {
-    final finampUserHelper = GetIt.instance<FinampUserHelper>();
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final queueService = GetIt.instance<QueueService>();
-    final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-    final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
-
     await jellyfinApiHelper.updateCapabilities(ClientCapabilities(
       supportsMediaControl: true,
       supportsPersistentIdentifier: true,
       playableMediaTypes: ["Audio"],
       supportedCommands: ["MoveUp", "MoveDown", "MoveLeft", "MoveRight", "PageUp", "PageDown", "PreviousLetter", "NextLetter", "ToggleOsd", "ToggleContextMenu", "Select", "Back", "TakeScreenshot", "SendKey", "SendString", "GoHome", "GoToSettings", "VolumeUp", "VolumeDown", "Mute", "Unmute", "ToggleMute", "SetVolume", "SetAudioStreamIndex", "SetSubtitleStreamIndex", "ToggleFullscreen", "DisplayContent", "GoToSearch", "DisplayMessage", "SetRepeatMode", "ChannelUp", "ChannelDown", "Guide", "ToggleStats", "PlayMediaSource", "PlayTrailers", "SetShuffleQueue", "PlayState", "PlayNext", "ToggleOsdMenu", "Play", "SetMaxStreamingBitrate", "SetPlaybackOrder"],
     ));
-    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     final url="${finampUserHelper.currentUser!.baseUrl}/socket?api_key=${finampUserHelper.currentUser!.accessToken}";
     final parsedUrl = Uri.parse(url);
@@ -67,9 +67,26 @@ class PlayonHandler {
       },
     );
 
-    await for (final value in channel.stream) {
+    channel.stream.listen(
+      (dynamic message) {
+          _playOnHandlerLogger.severe("WebSocket connection to server established");
+          unawaited(handleMessage(message));
+        },
+        onDone: () {
+          Future.delayed(const Duration(seconds: 10), () {
+            startListener();
+            _playOnHandlerLogger.severe("Attempted to restart listener");
+          });
+        },
+        onError: (error) {
+          _playOnHandlerLogger.severe("WebSocket connection to server established");
+        },
+    );
+  }
 
-      _playOnHandlerLogger.finest("Received message: $value");
+
+  Future<void> handleMessage(value) async {
+    _playOnHandlerLogger.finest("Received message: $value");
       
       var request = jsonDecode(value);
 
@@ -98,10 +115,11 @@ class PlayonHandler {
                 await audioHandler.stop();
                 break;
               case "Pause":
-                await audioHandler.pause();
+                audioHandler.pause();
+                _playOnHandlerLogger.severe("PAUSEEEEE !");
                 break;
               case "Unpause":
-                await audioHandler.play();
+                audioHandler.play();
                 break;
               case "NextTrack":
                 await audioHandler.skipToNext();
@@ -125,14 +143,13 @@ class PlayonHandler {
                 await audioHandler.fastForward();
                 break;
               case "PlayPause":
-                await audioHandler.togglePlayback();
+                audioHandler.togglePlayback();
                 break;
 
               // Do nothing
               default:
                 switch (request['Data']['PlayCommand']) {
                   case 'PlayNow':
-                    channel.sink.add('{"MessageType":"KeepAlive"}');
                     if (!request['Data'].containsKey('StartIndex')) { 
                       request['Data']['StartIndex']=0;
                     }
@@ -178,11 +195,6 @@ class PlayonHandler {
             }
             break;
         }
-
-        }
-
-        // channel.sink.add('{"MessageType":"KeepAlive"}');
-        
-    }
+      }
   }
 }
