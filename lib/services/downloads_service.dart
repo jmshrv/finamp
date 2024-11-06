@@ -1204,7 +1204,9 @@ class DownloadsService {
       }
 
       isarItem.state = DownloadItemState.complete;
-      isarItem.viewId = parent.viewId;
+      if (isarItem.baseItemType != BaseItemDtoType.playlist) {
+        isarItem.viewId = parent.viewId;
+      }
 
       _isar.writeTxnSync(() {
         _isar.downloadItems.putSync(isarItem);
