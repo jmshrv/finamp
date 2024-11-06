@@ -15,6 +15,7 @@ class AudioServiceSMTC extends AudioServicePlatform {
     // initialize SMTC
     //TODO we should call smtc.dispose() before the app is closed to prevent a background process from continuing to run
     // https://pub.dev/packages/flutter_window_close could be used to detect when the app is closed
+    await SMTCWindows.initialize();
     smtc = SMTCWindows(
       // Which buttons to show in the OS media player
       config: const SMTCConfig(
@@ -62,12 +63,12 @@ class AudioServiceSMTC extends AudioServicePlatform {
     if (request.state.playing && !smtc.enabled) {
       await smtc
           .enableSmtc()
-          .then((value) => smtc.setPlaybackStatus(PlaybackStatus.Playing));
+          .then((value) => smtc.setPlaybackStatus(PlaybackStatus.playing));
     } else {
       await smtc.setPosition(request.state.updatePosition);
       await smtc.setPlaybackStatus(request.state.playing
-          ? PlaybackStatus.Playing
-          : PlaybackStatus.Paused);
+          ? PlaybackStatus.playing
+          : PlaybackStatus.paused);
 
       await smtc.setRepeatMode(switch (request.state.repeatMode) {
         AudioServiceRepeatModeMessage.none => RepeatMode.none,

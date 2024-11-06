@@ -57,6 +57,7 @@ class OfflineListenLogHelper {
   /// The [timestamp] provided to this function should be in seconds
   /// and marks the time the track was stopped.
   Future<void> _logOfflineListen(OfflineListen listen) {
+    _logger.info("Storing offline listen for ${listen.name}");
     return Future.wait([
       Hive.box<OfflineListen>("OfflineListens").add(listen),
       _exportOfflineListenToFile(listen)

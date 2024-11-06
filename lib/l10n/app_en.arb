@@ -385,7 +385,7 @@
     }
   },
   "offlineSongCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} Downloaded",
-  "@offlineSongCountArtis": {
+  "@offlineSongCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -507,7 +507,7 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "playbackSpeedControlSettingDescription": "Automatic:\nFinamp tries to identify whether the track you are playing is a podcast or (part of) an audiobook. This is considered to be the case if the track is longer than {trackDuration} minutes, if the track's album is longer than {albumDuration} hours, or if the track has at least one of these genres assigned: {genreList}\nPlayback speed controls will then be shown in the player screen menu.\n\nShown:\nThe playback speed controls will always be shown in the player screen menu.\n\nHidden:\nThe playback speed controls in the player screen menu are always hidden.",
+  "playbackSpeedControlSettingDescription": "Automatic:\nFinamp tries to identify whether the track you are playing is a podcast or (part of) an audiobook. This is considered to be the case if the track is longer than {trackDuration} minutes, if the track''s album is longer than {albumDuration} hours, or if the track has at least one of these genres assigned: {genreList}\nPlayback speed controls will then be shown in the player screen menu.\n\nShown:\nThe playback speed controls will always be shown in the player screen menu.\n\nHidden:\nThe playback speed controls in the player screen menu are always hidden.",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -1070,14 +1070,20 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-"periodicPlaybackSessionUpdateFrequencyDetails": "If the Jellyfin server hasn't received any updates from a client in the last 5 minutes, it assumes that playback has ended. This means that for tracks longer than 5 minutes, that playback could be incorrectly reported as having ended, which reduced the quality of the playback reporting data.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "If the Jellyfin server hasn''t received any updates from a client in the last 5 minutes, it assumes that playback has ended. This means that for tracks longer than 5 minutes, that playback could be incorrectly reported as having ended, which reduced the quality of the playback reporting data.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
   "topSongs": "Top Tracks",
   "@topSongs": {},
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
-  "@albumCount": {},
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "shuffleAlbums": "Shuffle Albums",
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
@@ -1103,8 +1109,14 @@
       }
     }
   },
-  "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
-  "@couldNotLoad": {},
+  "couldNotLoad": "Couldn''t load {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
   "confirm": "Confirm",
   "close": "Close",
   "showUncensoredLogMessage": "This log contains your login information. Show?",
@@ -1137,7 +1149,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nTrack gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
+  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nTrack gain is used for regular playback, but if an album is playing (either because it''s the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -1161,7 +1173,7 @@
   "@volumeNormalizationIOSBaseGainEditorTitle": {
     "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can't increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet tracks. The value is in decibels (dB), where -10 dB is ~30% volume, -4.5 dB is ~60% volume and -2 dB is ~80% volume.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can''t increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet tracks. The value is in decibels (dB), where -10 dB is ~30% volume, -4.5 dB is ~60% volume and -2 dB is ~80% volume.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
@@ -1190,7 +1202,7 @@
     "description": "Option to download item in long-press menu."
   },
   "deleteItem": "Delete from device",
-  "@deletedItem": {
+  "@deleteItem": {
     "description": "Option to delete item in long-press menu."
   },
   "repairComplete": "Downloads Repair complete.",
@@ -1222,7 +1234,7 @@
       }
     }
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1234,7 +1246,7 @@
       }
     }
   },
-  "downloadLibraryPrompt": "Are you sure you want to download all contents of the library '{ libraryName }'?",
+  "downloadLibraryPrompt": "Are you sure you want to download all contents of the library ''{libraryName}''?",
   "@downloadLibraryPrompt": {
     "description": "Confirmation prompt before downloading entire library, which may be large.",
     "placeholders": {
@@ -1297,7 +1309,7 @@
   "@maxConcurrentDownloadsSubtitle": {
     "description": "Description of setting controlling max concurrent downloads."
   },
-  "maxConcurrentDownloadsLabel": "{ count} Concurrent Downloads",
+  "maxConcurrentDownloadsLabel": "{count} Concurrent Downloads",
   "@maxConcurrentDownloadsLabel": {
     "description": "Label of values on max concurrent downloads slider",
     "placeholders": {
@@ -1314,7 +1326,7 @@
   "@downloadsWorkersSettingSubtitle": {
     "description": "Description of setting controlling download worker count."
   },
-  "downloadsWorkersSettingLabel": "{ count} Download Workers",
+  "downloadsWorkersSettingLabel": "{count} Download Workers",
   "@downloadsWorkersSettingLabel": {
     "description": "Label of values on download worker count slider",
     "placeholders": {
@@ -1375,6 +1387,11 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
+  "transcodingStreamingContainerTitle": "Select Transcoding Container",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.",
   "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -1716,5 +1733,45 @@
   "nowPlayingBarTooltip": "Open Player Screen",
   "@nowPlayingBarTooltip": {
     "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "additionalPeople": "People",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "playbackMode": "Playback Mode",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "codec": "Codec",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "bitRate": "Bit Rate",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "bitDepth": "Bit Depth",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "Size",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "normalizationGain": "Gain",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "sampleRate": "Sample Rate",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "showFeatureChipsToggleTitle": "Show Advanced Track Info",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bit rate, and more on the player screen.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   }
 }
