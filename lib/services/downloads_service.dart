@@ -435,8 +435,8 @@ class DownloadsService {
   /// it to the anchor as required and then syncing.
   Future<void> addDownload({
     required DownloadStub stub,
-    required String viewId,
     required DownloadProfile transcodeProfile,
+    String? viewId,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure

@@ -25,12 +25,18 @@ import '../services/jellyfin_api_helper.dart';
 
 void postLaunchHook() async {
   final downloadsService = GetIt.instance<DownloadsService>();
+  final queueService = GetIt.instance<QueueService>();
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
     await downloadsService.addDefaultPlaylistInfoDownload();
     FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
   }
+
+  // Restore queue
+  unawaited(queueService
+      .performInitialQueueLoad()
+      .catchError((x) => GlobalSnackbar.error(x)));
 }
 
 class MusicScreen extends ConsumerStatefulWidget {
@@ -56,7 +62,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _queueService = GetIt.instance<QueueService>();
 
   void _stopSearching() {
     setState(() {
@@ -191,9 +196,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
-    _queueService
-        .performInitialQueueLoad()
-        .catchError((x) => GlobalSnackbar.error(x));
     if (_tabController == null) {
       _buildTabController();
     }
