@@ -218,6 +218,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LyricsAlignmentAdapter());
   Hive.registerAdapter(LyricsFontSizeAdapter());
   Hive.registerAdapter(KeepScreenOnOptionAdapter());
+  Hive.registerAdapter(FinampSegmentContainerAdapter());
   Hive.registerAdapter(FinampFeatureChipsConfigurationAdapter());
   Hive.registerAdapter(FinampFeatureChipTypeAdapter());
 
