@@ -25,6 +25,7 @@ final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
 final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 var channel;
+var keepaliveSubscription;
 
 
 class PlayonHandler {
@@ -63,32 +64,27 @@ class PlayonHandler {
 
     channel.sink.add('{"MessageType":"KeepAlive"}');
 
-    final keepaliveSubscription = Stream.periodic(const Duration(seconds: 30), (count) {
+    keepaliveSubscription = Stream.periodic(const Duration(seconds: 30), (count) {
       return count;
     }).listen((event) {
       _playOnHandlerLogger.info("Sent KeepAlive message through websocket");
       channel.sink.add('{"MessageType":"KeepAlive"}');
     });
 
-
-    channel.stream.handleError((error, trace) {
-        _playOnHandlerLogger.severe("WebSocket Error: $error");
-      },
-    );
-
     channel.stream.listen(
       (dynamic message) {
-          _playOnHandlerLogger.severe("WebSocket connection to server established");
           unawaited(handleMessage(message));
         },
         onDone: () {
-          Future.delayed(const Duration(seconds: 10), () {
-            startListener();
-            _playOnHandlerLogger.severe("Attempted to restart listener");
-          });
+          if (!FinampSettingsHelper.finampSettings.isOffline) {
+            Future.delayed(const Duration(seconds: 1), () {
+              startListener();
+              _playOnHandlerLogger.severe("Attempted to restart listener");
+            });
+          }
         },
         onError: (error) {
-          _playOnHandlerLogger.severe("WebSocket connection to server established");
+          _playOnHandlerLogger.severe("WebSocket Error: $error");
         },
     );
   }
@@ -96,6 +92,7 @@ class PlayonHandler {
   Future<void> closeListener() async {
     channel.sink.add('{"MessageType":"SessionsStop"}');
     channel.sink.close();
+    keepaliveSubscription.cancel();
   }
 
   Future<void> handleMessage(value) async {
