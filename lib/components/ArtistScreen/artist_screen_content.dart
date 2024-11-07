@@ -156,7 +156,10 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             if (!isOffline &&
                 FinampSettingsHelper.finampSettings.showArtistsTopSongs)
               SongsSliverList(
-                childrenForList: songs.take(5).toList(),
+                childrenForList: songs
+                    .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+                    .take(5)
+                    .toList(),
                 childrenForQueue: Future.value(songs),
                 showPlayCount: true,
                 isOnArtistScreen: true,
