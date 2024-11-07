@@ -23,13 +23,20 @@ import '../services/finamp_settings_helper.dart';
 import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
 
-void postLaunchHook() async {
+void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
   final queueService = GetIt.instance<QueueService>();
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
-    await downloadsService.addDefaultPlaylistInfoDownload();
+    // check if metadata already downloaded to avoid possible duplicates
+    DownloadItemStatus? status = downloadsService.getStatus(
+        DownloadStub.fromFinampCollection(
+            FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
+        null);
+    if (status.isRequired == false) {
+      await downloadsService.addDefaultPlaylistInfoDownload();
+    }
     FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
   }
 
@@ -109,7 +116,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   @override
   void initState() {
     super.initState();
-    postLaunchHook();
+    postLaunchHook(ref);
   }
 
   @override
