@@ -255,7 +255,7 @@ class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
                   ?.playlistItemId;
               itemIsIncluded = true;
             });
-            return playlistItemId != null;
+            return true; // this is called before the state is updated
           }
           return false;
         }
