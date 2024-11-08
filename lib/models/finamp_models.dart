@@ -80,7 +80,6 @@ const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
 const _useCoverAsBackground = true;
 const _playerScreenCoverMinimumPadding = 1.5;
-const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _showArtistsTopSongs = true;
 const _disableGesture = false;
 const _showFastScroller = true;
@@ -158,8 +157,6 @@ class FinampSettings {
       required this.downloadLocationsMap,
       this.useCoverAsBackground = _useCoverAsBackground,
       this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
-      this.hideSongArtistsIfSameAsAlbumArtists =
-          _hideSongArtistsIfSameAsAlbumArtists,
       this.showArtistsTopSongs = _showArtistsTopSongs,
       this.bufferDurationSeconds = _bufferDurationSeconds,
       required this.tabSortBy,
@@ -277,10 +274,6 @@ class FinampSettings {
   /// Whether or not to use blurred cover art as background on player screen.
   @HiveField(16, defaultValue: _useCoverAsBackground)
   bool useCoverAsBackground = _useCoverAsBackground;
-
-  @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
-  bool hideSongArtistsIfSameAsAlbumArtists =
-      _hideSongArtistsIfSameAsAlbumArtists;
 
   @HiveField(18, defaultValue: _bufferDurationSeconds)
   int bufferDurationSeconds;

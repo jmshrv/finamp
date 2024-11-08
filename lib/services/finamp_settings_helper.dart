@@ -216,15 +216,6 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setHideSongArtistsIfSameAsAlbumArtists(
-      bool hideSongArtistsIfSameAsAlbumArtists) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hideSongArtistsIfSameAsAlbumArtists =
-        hideSongArtistsIfSameAsAlbumArtists;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setShowArtistsTopSongs(bool showArtistsTopSongs) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.showArtistsTopSongs = showArtistsTopSongs;

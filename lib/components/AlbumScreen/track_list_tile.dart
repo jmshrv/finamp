@@ -276,16 +276,7 @@ class TrackListTile extends StatelessWidget {
       actualIndex: item.indexNumber ?? -1,
       showIndex: showIndex,
       showCover: showCover,
-      showArtists: !(
-              // "hide song artists if they're the same as album artists" == true
-              FinampSettingsHelper
-                      .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                  // song artists == album artists
-                  &&
-                  setEquals(
-                      parentItem?.albumArtists?.map((e) => e.name).toSet(),
-                      item.artists?.toSet())) &&
-          parentItem?.isArtist != true,
+      showArtists: parentItem?.isArtist != true,
       showPlayCount: showPlayCount,
       isInPlaylist: isInPlaylist,
       allowReorder: false,
