@@ -723,7 +723,7 @@ class TrackListItemTile extends StatelessWidget {
                   baseItem.name ?? AppLocalizations.of(context)!.unknownName,
                   style: TextStyle(
                       color: Theme.of(context).textTheme.bodyLarge!.color,
-                      fontSize: 15,
+                      fontSize: 15.5,
                       fontWeight: FontWeight.w500,
                       height: 1.0),
                   overflow: TextOverflow.ellipsis,
@@ -743,7 +743,11 @@ class TrackListItemTile extends StatelessWidget {
                               AppLocalizations.of(context)!.unknownArtist
                           : "",
                       style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyMedium!.color!,
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
                           fontSize: 13,
                           fontWeight: FontWeight.w400,
                           overflow: TextOverflow.ellipsis),
