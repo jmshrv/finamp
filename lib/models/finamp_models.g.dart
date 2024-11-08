@@ -66,7 +66,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampSettings(
-      shouldTranscode: fields[0] == null ? false : fields[0] as bool,
+      isOffline: fields[0] == null ? false : fields[0] as bool,
+      shouldTranscode: fields[1] == null ? false : fields[1] as bool,
       transcodeBitrate: fields[2] == null ? 320000 : fields[2] as int,
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause:
@@ -129,7 +130,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
-      hasCompleteddownloadsServiceMigration:
+      hasCompletedDownloadsServiceMigration:
           fields[34] == null ? false : fields[34] as bool,
       requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
@@ -211,8 +212,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(74)
+      ..writeByte(75)
       ..writeByte(0)
+      ..write(obj.isOffline)
+      ..writeByte(1)
       ..write(obj.shouldTranscode)
       ..writeByte(2)
       ..write(obj.transcodeBitrate)
@@ -275,7 +278,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(33)
       ..write(obj.volumeNormalizationMode)
       ..writeByte(34)
-      ..write(obj.hasCompleteddownloadsServiceMigration)
+      ..write(obj.hasCompletedDownloadsServiceMigration)
       ..writeByte(35)
       ..write(obj.requireWifiForDownloads)
       ..writeByte(36)

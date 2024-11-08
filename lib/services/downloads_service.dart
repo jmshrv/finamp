@@ -1234,15 +1234,7 @@ class DownloadsService {
         .containsKey(downloadLocation)) {
       downloadLocation = null;
     }
-    if (downloadLocation == null) {
-      var locations = FinampSettingsHelper
-          .finampSettings.downloadLocationsMap.values
-          .where((element) =>
-              element.baseDirectory != DownloadLocationType.internalDocuments);
-      if (locations.length == 1) {
-        downloadLocation = locations.first.id;
-      }
-    }
+    downloadLocation ??= FinampSettingsHelper.finampSettings.internalSongDir.id;
 
     // Automatically download playlist metadata (to enhance the playlist actions dialog and offline mode)
     await addDownload(

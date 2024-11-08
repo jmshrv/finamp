@@ -290,7 +290,7 @@ class FinampSettingsHelper {
   static void setHasCompleteddownloadsServiceMigration(
       bool hasCompleteddownloadsServiceMigration) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hasCompleteddownloadsServiceMigration =
+    finampSettingsTemp.hasCompletedDownloadsServiceMigration =
         hasCompleteddownloadsServiceMigration;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);

@@ -172,7 +172,7 @@ class FinampSettings {
       this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
       this.hasCompletedBlurhashImageMigration = true,
       this.hasCompletedBlurhashImageMigrationIdFix = true,
-      this.hasCompleteddownloadsServiceMigration = false,
+      this.hasCompletedDownloadsServiceMigration = true,
       this.requireWifiForDownloads = false,
       this.onlyShowFullyDownloaded = false,
       this.showDownloadsWithUnknownLibrary = true,
@@ -212,7 +212,7 @@ class FinampSettings {
           _showSeekControlsOnMediaNotificationDefault,
       this.keepScreenOnOption = _keepScreenOnOption,
       this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
-      this.hasDownloadedPlaylistInfo = false,
+      this.hasDownloadedPlaylistInfo = _hasDownloadedPlaylistInfoDefault,
       this.transcodingSegmentContainer = _defaultTranscodingSegmentContainer,
       this.featureChipsConfiguration = _featureChipsConfigurationDefault});
 
@@ -328,7 +328,7 @@ class FinampSettings {
   VolumeNormalizationMode volumeNormalizationMode;
 
   @HiveField(34, defaultValue: false)
-  bool hasCompleteddownloadsServiceMigration;
+  bool hasCompletedDownloadsServiceMigration;
 
   @HiveField(35, defaultValue: false)
   bool requireWifiForDownloads;

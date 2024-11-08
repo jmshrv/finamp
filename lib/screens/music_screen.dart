@@ -23,6 +23,8 @@ import '../services/finamp_settings_helper.dart';
 import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
 
+final _musicScreenLogger = Logger("MusicScreen");
+
 void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
   final queueService = GetIt.instance<QueueService>();
@@ -35,7 +37,10 @@ void postLaunchHook(WidgetRef ref) async {
             FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
         null);
     if (status.isRequired == false) {
-      await downloadsService.addDefaultPlaylistInfoDownload();
+      await downloadsService.addDefaultPlaylistInfoDownload().catchError((e) {
+        // log error without snackbar, we don't want users to be greeted with errors on first launch
+        _musicScreenLogger.severe("Failed to download playlist metadata: $e");
+      });
     }
     FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
   }
@@ -61,7 +66,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   bool _showShuffleFab = false;
   TextEditingController textEditingController = TextEditingController();
   String? searchQuery;
-  final _musicScreenLogger = Logger("MusicScreen");
   final Map<TabContentType, MusicRefreshCallback> refreshMap = {};
 
   TabController? _tabController;
