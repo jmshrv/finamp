@@ -190,7 +190,7 @@ class _SongsSliverListState extends State<SongsSliverList> {
             children: widget.childrenForQueue,
             index: indexOffset,
             showIndex: item.albumId == widget.parent.id,
-            showCover:
+            showCover: item.albumId != widget.parent.id ||
                 FinampSettingsHelper.finampSettings.showCoversOnAlbumScreen,
             parentItem: widget.parent,
             onRemoveFromList: () {
