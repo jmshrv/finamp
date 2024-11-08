@@ -573,9 +573,7 @@ class ThemedTrackListTile extends ConsumerWidget {
                 colorScheme: Theme.of(context).colorScheme.copyWith(
                       surfaceContainer: isCurrentTrack
                           ? ref
-                              .watch(colorThemeNullableProvider)
-                              .value
-                              ?.primary
+                              .watch(colorThemeProvider).primary
                               .withOpacity(Theme.of(context).brightness ==
                                       Brightness.dark
                                   ? 0.35
@@ -591,10 +589,9 @@ class ThemedTrackListTile extends ConsumerWidget {
                             color: isCurrentTrack
                                 ? Color.alphaBlend(
                                     (ref
-                                    .watch(colorThemeNullableProvider)
-                                    .value
-                                            ?.secondary
-                                            .withOpacity(0.5)) ??
+                                            .watch(colorThemeProvider)
+                                            .secondary
+                                            .withOpacity(0.3)) ??
                                         Colors.transparent,
                                     Theme.of(context)
                                             .textTheme
