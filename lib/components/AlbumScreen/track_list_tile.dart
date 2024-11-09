@@ -626,7 +626,7 @@ class TrackListItemTile extends StatelessWidget {
       child: ListTile(
         visualDensity: const VisualDensity(
           horizontal: 0.0,
-          vertical: 1.0,
+          vertical: 0.5,
         ),
         minVerticalPadding: 0.0,
         horizontalTitleGap: 10.0,
@@ -675,13 +675,14 @@ class TrackListItemTile extends StatelessWidget {
             children: [
               Flexible(
                 fit: FlexFit.loose,
+                flex: 2,
                 child: Text(
                   baseItem.name ?? AppLocalizations.of(context)!.unknownName,
                   style: TextStyle(
                       color: Theme.of(context).textTheme.bodyLarge!.color,
                       fontSize: 15.5,
                       fontWeight: FontWeight.w500,
-                      height: 1.0),
+                      height: 1.1),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
