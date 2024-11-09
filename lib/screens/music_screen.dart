@@ -31,17 +31,10 @@ void postLaunchHook(WidgetRef ref) async {
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
-    // check if metadata already downloaded to avoid possible duplicates
-    DownloadItemStatus? status = downloadsService.getStatus(
-        DownloadStub.fromFinampCollection(
-            FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
-        null);
-    if (status.isRequired == false) {
-      await downloadsService.addDefaultPlaylistInfoDownload().catchError((e) {
-        // log error without snackbar, we don't want users to be greeted with errors on first launch
-        _musicScreenLogger.severe("Failed to download playlist metadata: $e");
-      });
-    }
+    await downloadsService.addDefaultPlaylistInfoDownload().catchError((e) {
+      // log error without snackbar, we don't want users to be greeted with errors on first launch
+      _musicScreenLogger.severe("Failed to download playlist metadata: $e");
+    });
     FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
   }
 
