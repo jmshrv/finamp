@@ -438,7 +438,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
               snapshot.data?.extras?["itemJson"]["Id"] == widget.baseItem.id;
 
           return Opacity(
-            opacity: playable ? (isCurrentlyPlaying ? 0.8 : 1.0) : 0.5,
+            opacity: playable ? 1.0 : 0.5,
             child: Card(
               color: Colors.transparent,
               elevation: 0,
@@ -489,13 +489,23 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                                                           .watch(
                                                               colorThemeProvider)
                                                           .secondary
-                                                          .withOpacity(0.3)) ??
+                                                          .withOpacity(Theme.of(
+                                                                          context)
+                                                                      .brightness ==
+                                                                  Brightness
+                                                                      .light
+                                                              ? 0.5
+                                                              : 0.1)) ??
                                                       Colors.transparent,
                                                   Theme.of(context)
                                                           .textTheme
                                                           .bodyLarge
                                                           ?.color ??
-                                                      Colors.black)
+                                                      (Theme.of(context)
+                                                                  .brightness ==
+                                                              Brightness.light
+                                                          ? Colors.black
+                                                          : Colors.white))
                                               : Theme.of(context)
                                                   .textTheme
                                                   .bodyLarge
