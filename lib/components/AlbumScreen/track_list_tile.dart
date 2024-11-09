@@ -75,6 +75,7 @@ class TrackListTile extends StatelessWidget {
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
     this.isShownInSearch = false,
+    this.allowDismiss = true,
   });
 
   final jellyfin_models.BaseItemDto item;
@@ -89,6 +90,7 @@ class TrackListTile extends StatelessWidget {
   final bool isInPlaylist;
   final bool isOnArtistScreen;
   final bool isShownInSearch;
+  final bool allowDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -280,6 +282,7 @@ class TrackListTile extends StatelessWidget {
       showPlayCount: showPlayCount,
       isInPlaylist: isInPlaylist,
       allowReorder: false,
+      allowDismiss: allowDismiss,
       onRemoveFromList: onRemoveFromList,
       onTap: trackListTileOnTap,
       confirmDismiss: trackListTileConfirmDismiss,
@@ -298,6 +301,7 @@ class QueueListTile extends StatelessWidget {
   final bool isPreviousTrack;
   final bool isInPlaylist;
   final bool allowReorder;
+  final bool allowDismiss;
 
   final void Function(bool playable) onTap;
   final VoidCallback? onRemoveFromList;
@@ -313,6 +317,7 @@ class QueueListTile extends StatelessWidget {
     required this.isCurrentTrack,
     required this.isInPlaylist,
     required this.allowReorder,
+    this.allowDismiss = false,
     this.isPreviousTrack = false,
     this.parentItem,
     this.onRemoveFromList,
@@ -336,6 +341,7 @@ class QueueListTile extends StatelessWidget {
       isPreviousTrack: isPreviousTrack,
       isInPlaylist: isInPlaylist,
       allowReorder: allowReorder,
+      allowDismiss: allowDismiss,
       onRemoveFromList: onRemoveFromList,
       // This must be in ListTile instead of parent GestureDetecter to
       // enable hover color changes
@@ -357,6 +363,7 @@ class TrackListItem extends ConsumerStatefulWidget {
   final bool isPreviousTrack;
   final bool isInPlaylist;
   final bool allowReorder;
+  final bool allowDismiss;
   final Widget dismissBackground;
 
   final void Function(bool playable) onTap;
@@ -374,6 +381,7 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.isPreviousTrack = false,
       this.isInPlaylist = false,
       this.allowReorder = false,
+      this.allowDismiss = true,
       this.showIndex = false,
       this.showCover = true,
       this.showArtists = true,
@@ -560,7 +568,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
           ? listItem
           : Dismissible(
               key: Key(widget.listIndex.toString()),
-              direction: FinampSettingsHelper.finampSettings.disableGesture
+              direction: FinampSettingsHelper.finampSettings.disableGesture ||
+                      !widget.allowDismiss
                   ? DismissDirection.none
                   : DismissDirection.horizontal,
               dismissThresholds: const {

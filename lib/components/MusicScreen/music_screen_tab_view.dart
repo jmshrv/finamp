@@ -380,6 +380,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   isSong: true,
                                   index: Future.value(index),
                                   isShownInSearch: widget.searchTerm != null,
+                                  allowDismiss: false,
                                 )
                               : AlbumItem(
                                   key: ValueKey(item.id),
