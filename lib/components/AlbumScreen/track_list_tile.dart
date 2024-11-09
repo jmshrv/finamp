@@ -737,6 +737,43 @@ class TrackListItemTile extends StatelessWidget {
                   softWrap: false,
                   maxLines: 1,
                   TextSpan(
+                      children: [
+                    WidgetSpan(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 2.0),
+                        child: Transform.translate(
+                          offset: const Offset(-1.5, 2.5),
+                          child: DownloadedIndicator(
+                            item: DownloadStub.fromItem(
+                                item: baseItem, type: DownloadItemType.song),
+                            size: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize! +
+                                1,
+                          ),
+                        ),
+                      ),
+                      alignment: PlaceholderAlignment.top,
+                    ),
+                    if (baseItem.hasLyrics ?? false)
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 2.0),
+                          child: Transform.translate(
+                              offset: const Offset(-1.5, 2.5),
+                              child: Icon(
+                                TablerIcons.microphone_2,
+                                size: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize! +
+                                    1,
+                              )),
+                        ),
+                        alignment: PlaceholderAlignment.top,
+                      ),
+                    TextSpan(
                       text: showArtists
                           ? baseItem.artists?.join(", ") ??
                               baseItem.albumArtist ??
@@ -751,55 +788,55 @@ class TrackListItemTile extends StatelessWidget {
                           fontSize: 13,
                           fontWeight: FontWeight.w400,
                           overflow: TextOverflow.ellipsis),
-                      children: [
-                        if (!secondRowNeeded)
-                          // show the artist anyway if nothing else is shown
-                          TextSpan(
-                            text: baseItem.artists?.join(", ") ??
-                                baseItem.albumArtist ??
-                                AppLocalizations.of(context)!.unknownArtist,
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .color!
-                                  .withOpacity(0.6),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        if (showArtists)
-                          const WidgetSpan(child: SizedBox(width: 10.0)),
-                        if (showAlbum)
-                          TextSpan(
-                            text: baseItem.album,
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .color!
-                                  .withOpacity(0.6),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        if (showAlbum)
-                          const WidgetSpan(child: SizedBox(width: 10.0)),
-                        if (showPlayCount)
-                          TextSpan(
-                            text: AppLocalizations.of(context)!.playCountValue(
-                                baseItem.userData?.playCount ?? 0),
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .color!
-                                  .withOpacity(0.6),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                      ]),
+                    ),
+                    if (!secondRowNeeded)
+                      // show the artist anyway if nothing else is shown
+                      TextSpan(
+                        text: baseItem.artists?.join(", ") ??
+                            baseItem.albumArtist ??
+                            AppLocalizations.of(context)!.unknownArtist,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.6),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    if (showArtists)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showAlbum)
+                      TextSpan(
+                        text: baseItem.album,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.6),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    if (showAlbum)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showPlayCount)
+                      TextSpan(
+                        text: AppLocalizations.of(context)!
+                            .playCountValue(baseItem.userData?.playCount ?? 0),
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.6),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                  ]),
                 ),
               ),
             ],
