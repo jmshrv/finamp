@@ -474,17 +474,14 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                               // colorScheme: imageTheme,
                               // brightness: Theme.of(context).brightness,
                               colorScheme: imageTheme.copyWith(
-                                surfaceContainer: isCurrentlyPlaying
-                                    ? ref
+                                  surfaceContainer: ref
                                         .watch(colorThemeProvider)
                                         .primary
                                         .withOpacity(
                                             Theme.of(context).brightness ==
                                                     Brightness.dark
                                                 ? 0.35
-                                                : 0.3)
-                                    // : Theme.of(context).colorScheme.surfaceContainer,
-                                    : Colors.transparent,
+                                              : 0.3)
                               ),
                               textTheme: Theme.of(context).textTheme.copyWith(
                                     bodyLarge: Theme.of(context)
@@ -631,7 +628,9 @@ class TrackListItemTile extends StatelessWidget {
         "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
 
     return ListTileTheme(
-      tileColor: Theme.of(context).colorScheme.surfaceContainer,
+      tileColor: isCurrentTrack
+          ? Theme.of(context).colorScheme.surfaceContainer
+          : Colors.transparent,
       child: ListTile(
         visualDensity: const VisualDensity(
           horizontal: 0.0,
