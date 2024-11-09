@@ -1383,7 +1383,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Info for All Playlists} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1401,6 +1401,11 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
+  "transcodingStreamingContainerTitle": "Select Transcoding Container",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.",
   "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -1608,8 +1613,8 @@
   },
   "trackOfflineFavorites": "Sync all favorite statuses",
   "trackOfflineFavoritesSubtitle": "This allows showing more up-to-date favorite statuses while offline.  Does not download any additional files.",
-  "allPlaylistsInfoSetting": "Show all playlists offline",
-  "allPlaylistsInfoSettingSubtitle": "Sync metadata for all playlists to show partially downloaded playlists offline",
+  "allPlaylistsInfoSetting": "Download Playlist Metadata",
+  "allPlaylistsInfoSettingSubtitle": "Sync metadata for all playlists to improve your playlist experience",
   "downloadFavoritesSetting": "Download all favorites",
   "downloadAllPlaylistsSetting": "Download all playlists",
   "fiveLatestAlbumsSetting": "Download 5 latest albums",
@@ -1792,5 +1797,21 @@
   "showCoversOnAlbumScreenSubtitle": "Show album covers for each track separately on the album screen.",
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "emptyTopTracksList": "You haven't listened to any track by this artist yet.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "emptyFilteredListTitle": "No items found",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "emptyFilteredListSubtitle": "No items match the filter. Try turning off the filter or changing the search term.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetFiltersButton": "Reset filters",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
   }
 }

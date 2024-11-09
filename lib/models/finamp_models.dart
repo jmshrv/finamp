@@ -112,6 +112,9 @@ const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
 const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
 const _keepScreenOnWhilePluggedIn = true;
+const _hasDownloadedPlaylistInfoDefault = false;
+const _defaultTranscodingSegmentContainer =
+    FinampSegmentContainer.fragmentedMp4;
 const _featureChipsConfigurationDefault =
     FinampFeatureChipsConfiguration(enabled: true, features: [
   FinampFeatureChipType.playCount,
@@ -167,7 +170,7 @@ class FinampSettings {
       this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
       this.hasCompletedBlurhashImageMigration = true,
       this.hasCompletedBlurhashImageMigrationIdFix = true,
-      this.hasCompleteddownloadsServiceMigration = true,
+      this.hasCompletedDownloadsServiceMigration = true,
       this.requireWifiForDownloads = false,
       this.onlyShowFullyDownloaded = false,
       this.showDownloadsWithUnknownLibrary = true,
@@ -208,7 +211,9 @@ class FinampSettings {
       this.keepScreenOnOption = _keepScreenOnOption,
       this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
       this.featureChipsConfiguration = _featureChipsConfigurationDefault,
-      this.showCoversOnAlbumScreen = _showCoversOnAlbumScreenDefault});
+      this.showCoversOnAlbumScreen = _showCoversOnAlbumScreenDefault,
+      this.hasDownloadedPlaylistInfo = _hasDownloadedPlaylistInfoDefault,
+      this.transcodingSegmentContainer = _defaultTranscodingSegmentContainer});
 
   @HiveField(0, defaultValue: _isOfflineDefault)
   bool isOffline;
@@ -318,7 +323,7 @@ class FinampSettings {
   VolumeNormalizationMode volumeNormalizationMode;
 
   @HiveField(34, defaultValue: false)
-  bool hasCompleteddownloadsServiceMigration;
+  bool hasCompletedDownloadsServiceMigration;
 
   @HiveField(35, defaultValue: false)
   bool requireWifiForDownloads;
@@ -441,10 +446,16 @@ class FinampSettings {
   @HiveField(73, defaultValue: _keepScreenOnWhilePluggedIn)
   bool keepScreenOnWhilePluggedIn;
 
-  @HiveField(74, defaultValue: _featureChipsConfigurationDefault)
+  @HiveField(74, defaultValue: _hasDownloadedPlaylistInfoDefault)
+  bool hasDownloadedPlaylistInfo;
+
+  @HiveField(75, defaultValue: _defaultTranscodingSegmentContainer)
+  FinampSegmentContainer transcodingSegmentContainer;
+
+  @HiveField(76, defaultValue: _featureChipsConfigurationDefault)
   FinampFeatureChipsConfiguration featureChipsConfiguration;
 
-  @HiveField(75, defaultValue: _showCoversOnAlbumScreenDefault)
+  @HiveField(77, defaultValue: _showCoversOnAlbumScreenDefault)
   bool showCoversOnAlbumScreen;
 
   static Future<FinampSettings> create() async {
@@ -2250,6 +2261,19 @@ enum KeepScreenOnOption {
 }
 
 @HiveType(typeId: 73)
+enum FinampSegmentContainer {
+  @HiveField(0)
+  mpegTS("ts"),
+  @HiveField(1)
+  fragmentedMp4("mp4");
+
+  const FinampSegmentContainer(this.container);
+
+  /// The container to use to transport the segments
+  final String container;
+}
+
+@HiveType(typeId: 74)
 enum FinampFeatureChipType {
   @HiveField(0)
   playCount,
@@ -2327,7 +2351,7 @@ enum FinampFeatureChipType {
 }
 
 @JsonSerializable()
-@HiveType(typeId: 74)
+@HiveType(typeId: 75)
 class FinampFeatureChipsConfiguration {
   const FinampFeatureChipsConfiguration({
     required this.enabled,

@@ -2,13 +2,17 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -314,6 +318,39 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             refreshHash = newRefreshHash;
           }
 
+          final emptyListIndicator = Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+            child: Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.emptyFilteredListTitle,
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  AppLocalizations.of(context)!.emptyFilteredListSubtitle,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                CTAMedium(
+                  icon: TablerIcons.filter_x,
+                  text: AppLocalizations.of(context)!.resetFiltersButton,
+                  onPressed: () {
+                    FinampSettingsHelper.setOnlyShowFavourite(false);
+                    FinampSettingsHelper.setOnlyShowFullyDownloaded(false);
+                  },
+                )
+              ],
+            ),
+          );
+
           var tabContent = box.get("FinampSettings")!.contentViewType ==
                       ContentViewType.list ||
                   widget.tabContentType == TabContentType.songs
@@ -357,6 +394,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         const FirstPageProgressIndicator(),
                     newPageProgressIndicatorBuilder: (_) =>
                         const NewPageProgressIndicator(),
+                    noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
                   ),
                   separatorBuilder: (context, index) => const SizedBox.shrink(),
                 )
@@ -387,6 +425,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         const FirstPageProgressIndicator(),
                     newPageProgressIndicatorBuilder: (_) =>
                         const NewPageProgressIndicator(),
+                    noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
                   ),
                   gridDelegate: FinampSettingsHelper
                           .finampSettings.useFixedSizeGridTiles

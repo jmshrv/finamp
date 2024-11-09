@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -434,8 +435,8 @@ class DownloadsService {
   /// it to the anchor as required and then syncing.
   Future<void> addDownload({
     required DownloadStub stub,
-    required String viewId,
     required DownloadProfile transcodeProfile,
+    String? viewId,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure
@@ -1204,7 +1205,9 @@ class DownloadsService {
       }
 
       isarItem.state = DownloadItemState.complete;
-      isarItem.viewId = parent.viewId;
+      if (isarItem.baseItemType != BaseItemDtoType.playlist) {
+        isarItem.viewId = parent.viewId;
+      }
 
       _isar.writeTxnSync(() {
         _isar.downloadItems.putSync(isarItem);
@@ -1221,6 +1224,28 @@ class DownloadsService {
         isarItem.info.saveSync();
       });
     }
+  }
+
+  Future<void> addDefaultPlaylistInfoDownload() async {
+
+    String? downloadLocation =
+        FinampSettingsHelper.finampSettings.defaultDownloadLocation;
+    if (!FinampSettingsHelper.finampSettings.downloadLocationsMap
+        .containsKey(downloadLocation)) {
+      downloadLocation = null;
+    }
+    downloadLocation ??= FinampSettingsHelper.finampSettings.internalSongDir.id;
+
+    // Automatically download playlist metadata (to enhance the playlist actions dialog and offline mode)
+    await addDownload(
+      stub: DownloadStub.fromFinampCollection(
+          FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
+      transcodeProfile:
+          DownloadProfile(
+        transcodeCodec: FinampTranscodingCodec.original,
+        downloadLocationId: downloadLocation,
+      ),
+    );
   }
 
   /// Get all user-downloaded items.  Used to show items on downloads screen.

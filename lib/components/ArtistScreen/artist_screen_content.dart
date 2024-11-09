@@ -112,6 +112,10 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         builder: (context, snapshot) {
           var songs = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
+          var topTracks = songs
+              .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+              .take(5)
+              .toList();
 
           return CustomScrollView(slivers: <Widget>[
             SliverAppBar(
@@ -156,7 +160,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             if (!isOffline &&
                 FinampSettingsHelper.finampSettings.showArtistsTopSongs)
               SongsSliverList(
-                childrenForList: songs.take(5).toList(),
+                childrenForList: topTracks,
                 childrenForQueue: Future.value(songs),
                 showPlayCount: true,
                 isOnArtistScreen: true,

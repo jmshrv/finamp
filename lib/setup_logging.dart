@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 import 'services/finamp_logs_helper.dart';
 
@@ -24,5 +28,38 @@ Future<void> setupLogging() async {
     }
     finampLogsHelper.addLog(event);
   });
-  Logger("Startup").info("App starting, logging initialized.");
+  final startupLogger = Logger("Startup");
+  startupLogger.info("App starting, logging initialized.");
+
+  final packageInfo = await PackageInfo.fromPlatform();
+  final deviceInfo = DeviceInfoPlugin();
+
+  startupLogger.info(
+      "This is ${packageInfo.appName} version ${packageInfo.version}+${packageInfo.buildNumber} (Signature ${packageInfo.buildSignature}), installed via ${packageInfo.installerStore}.");
+
+  startupLogger.info("Device info:");
+  if (Platform.isAndroid) {
+    final androidInfo = await deviceInfo.androidInfo;
+    startupLogger.info(
+        "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})");
+  } else if (Platform.isIOS) {
+    final iosInfo = await deviceInfo.iosInfo;
+    startupLogger.info("iOS ${iosInfo.systemVersion} on ${iosInfo.model}");
+  } else if (Platform.isMacOS) {
+    final macosInfo = await deviceInfo.macOsInfo;
+    startupLogger.info(
+        "macOS ${macosInfo.majorVersion}.${macosInfo.minorVersion}.${macosInfo.patchVersion} on ${macosInfo.model}");
+  } else if (Platform.isLinux) {
+    final linuxInfo = await deviceInfo.linuxInfo;
+    startupLogger.info("Linux ${linuxInfo.version} on ${linuxInfo.id}");
+  } else if (Platform.isWindows) {
+    final windowsInfo = await deviceInfo.windowsInfo;
+    startupLogger.info(
+        "Windows ${windowsInfo.displayVersion} on ${windowsInfo.deviceId}");
+  } else {
+    final webInfo = await deviceInfo.webBrowserInfo;
+    startupLogger
+        .info("Web browser ${webInfo.userAgent} on ${webInfo.platform}");
+  }
+  
 }

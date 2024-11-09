@@ -163,6 +163,18 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.childrenForList.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+          child: Text(
+            AppLocalizations.of(context)!.emptyTopTracksList,
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

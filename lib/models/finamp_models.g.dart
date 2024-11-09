@@ -128,7 +128,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
-      hasCompleteddownloadsServiceMigration:
+      hasCompletedDownloadsServiceMigration:
           fields[34] == null ? false : fields[34] as bool,
       requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
@@ -183,7 +183,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[72] as KeepScreenOnOption,
       keepScreenOnWhilePluggedIn:
           fields[73] == null ? true : fields[73] as bool,
-      featureChipsConfiguration: fields[74] == null
+      featureChipsConfiguration: fields[76] == null
           ? const FinampFeatureChipsConfiguration(enabled: true, features: [
               FinampFeatureChipType.playCount,
               FinampFeatureChipType.additionalPeople,
@@ -195,8 +195,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               FinampFeatureChipType.size,
               FinampFeatureChipType.normalizationGain
             ])
-          : fields[74] as FinampFeatureChipsConfiguration,
-      showCoversOnAlbumScreen: fields[75] == null ? false : fields[75] as bool,
+          : fields[76] as FinampFeatureChipsConfiguration,
+      showCoversOnAlbumScreen: fields[77] == null ? false : fields[77] as bool,
+      hasDownloadedPlaylistInfo:
+          fields[74] == null ? false : fields[74] as bool,
+      transcodingSegmentContainer: fields[75] == null
+          ? FinampSegmentContainer.fragmentedMp4
+          : fields[75] as FinampSegmentContainer,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -206,7 +211,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(73)
+      ..writeByte(75)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -270,7 +275,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(33)
       ..write(obj.volumeNormalizationMode)
       ..writeByte(34)
-      ..write(obj.hasCompleteddownloadsServiceMigration)
+      ..write(obj.hasCompletedDownloadsServiceMigration)
       ..writeByte(35)
       ..write(obj.requireWifiForDownloads)
       ..writeByte(36)
@@ -350,8 +355,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(73)
       ..write(obj.keepScreenOnWhilePluggedIn)
       ..writeByte(74)
-      ..write(obj.featureChipsConfiguration)
+      ..write(obj.hasDownloadedPlaylistInfo)
       ..writeByte(75)
+      ..write(obj.transcodingSegmentContainer)
+      ..writeByte(76)
+      ..write(obj.featureChipsConfiguration)
+      ..writeByte(77)
       ..write(obj.showCoversOnAlbumScreen);
   }
 
@@ -977,7 +986,7 @@ class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
 class FinampFeatureChipsConfigurationAdapter
     extends TypeAdapter<FinampFeatureChipsConfiguration> {
   @override
-  final int typeId = 74;
+  final int typeId = 75;
 
   @override
   FinampFeatureChipsConfiguration read(BinaryReader reader) {
@@ -1930,9 +1939,49 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
           typeId == other.typeId;
 }
 
-class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
+class FinampSegmentContainerAdapter
+    extends TypeAdapter<FinampSegmentContainer> {
   @override
   final int typeId = 73;
+
+  @override
+  FinampSegmentContainer read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return FinampSegmentContainer.mpegTS;
+      case 1:
+        return FinampSegmentContainer.fragmentedMp4;
+      default:
+        return FinampSegmentContainer.mpegTS;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampSegmentContainer obj) {
+    switch (obj) {
+      case FinampSegmentContainer.mpegTS:
+        writer.writeByte(0);
+        break;
+      case FinampSegmentContainer.fragmentedMp4:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampSegmentContainerAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
+  @override
+  final int typeId = 74;
 
   @override
   FinampFeatureChipType read(BinaryReader reader) {

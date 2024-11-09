@@ -10,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
 
+import 'package:finamp/services/downloads_service.dart';
 import '../components/MusicScreen/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
@@ -21,6 +22,27 @@ import '../services/audio_service_helper.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
+
+final _musicScreenLogger = Logger("MusicScreen");
+
+void postLaunchHook(WidgetRef ref) async {
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final queueService = GetIt.instance<QueueService>();
+
+  // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
+  if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
+    await downloadsService.addDefaultPlaylistInfoDownload().catchError((e) {
+      // log error without snackbar, we don't want users to be greeted with errors on first launch
+      _musicScreenLogger.severe("Failed to download playlist metadata: $e");
+    });
+    FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
+  }
+
+  // Restore queue
+  unawaited(queueService
+      .performInitialQueueLoad()
+      .catchError((x) => GlobalSnackbar.error(x)));
+}
 
 class MusicScreen extends ConsumerStatefulWidget {
   const MusicScreen({super.key});
@@ -37,7 +59,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   bool _showShuffleFab = false;
   TextEditingController textEditingController = TextEditingController();
   String? searchQuery;
-  final _musicScreenLogger = Logger("MusicScreen");
   final Map<TabContentType, MusicRefreshCallback> refreshMap = {};
 
   TabController? _tabController;
@@ -45,7 +66,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _queueService = GetIt.instance<QueueService>();
 
   void _stopSearching() {
     setState(() {
@@ -93,6 +113,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   @override
   void initState() {
     super.initState();
+    postLaunchHook(ref);
   }
 
   @override
@@ -179,9 +200,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
-    _queueService
-        .performInitialQueueLoad()
-        .catchError((x) => GlobalSnackbar.error(x));
     if (_tabController == null) {
       _buildTabController();
     }

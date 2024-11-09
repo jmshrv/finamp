@@ -73,6 +73,7 @@ import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
+import 'services/ui_overlay_setter_observer.dart';
 import 'setup_logging.dart';
 
 void main() async {
@@ -80,6 +81,7 @@ void main() async {
   bool hasFailed = false;
   try {
     await setupLogging();
+    await _setupEdgeToEdgeOverlayStyle();
     await setupHive();
     _migrateDownloadLocations();
     _migrateSortOptions();
@@ -120,6 +122,15 @@ void main() async {
   }
 }
 
+Future<void> _setupEdgeToEdgeOverlayStyle() async {
+  if (Platform.isAndroid) {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
+    final binding = WidgetsFlutterBinding.ensureInitialized();
+    binding.addObserver(UIOverlaySetterObserver());
+  }
+}
+
 Future<void> _setupJellyfinApiData() async {
   GetIt.instance.registerSingleton(JellyfinApiHelper());
 }
@@ -140,7 +151,7 @@ Future<void> _setupDownloadsHelper() async {
   final downloadsService = GetIt.instance<DownloadsService>();
 
   if (!FinampSettingsHelper
-      .finampSettings.hasCompleteddownloadsServiceMigration) {
+      .finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
     FinampSettingsHelper.setHasCompleteddownloadsServiceMigration(true);
   }
@@ -219,6 +230,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LyricsAlignmentAdapter());
   Hive.registerAdapter(LyricsFontSizeAdapter());
   Hive.registerAdapter(KeepScreenOnOptionAdapter());
+  Hive.registerAdapter(FinampSegmentContainerAdapter());
   Hive.registerAdapter(FinampFeatureChipsConfigurationAdapter());
   Hive.registerAdapter(FinampFeatureChipTypeAdapter());
 
