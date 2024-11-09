@@ -26,34 +26,57 @@ final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
 final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 var channel;
 var keepaliveSubscription;
+var reconnectionSubscription = null;
 
 
 class PlayonHandler {
 
   Future<void> initialize() async {
+
+    // Turn on/off when offline mode is toggled
     var settingsListener = FinampSettingsHelper.finampSettingsListener;
-    settingsListener.addListener(() {
+    settingsListener.addListener(() async {
       if (FinampSettingsHelper.finampSettings.isOffline) {
-        closeListener();
+        await closeListener();
       } else {
-        startListener();
+        await startListener();
       }
     });
+
+    await startListener();
+  }
+
+  Future<void> startListener() async {
     try {
-      await startListener();
+      if (!FinampSettingsHelper.finampSettings.isOffline) {
+        await jellyfinApiHelper.updateCapabilities(ClientCapabilities(
+          supportsMediaControl: true,
+          supportsPersistentIdentifier: true,
+          playableMediaTypes: ["Audio"],
+          supportedCommands: ["MoveUp", "MoveDown", "MoveLeft", "MoveRight", "PageUp", "PageDown", "PreviousLetter", "NextLetter", "ToggleOsd", "ToggleContextMenu", "Select", "Back", "TakeScreenshot", "SendKey", "SendString", "GoHome", "GoToSettings", "VolumeUp", "VolumeDown", "Mute", "Unmute", "ToggleMute", "SetVolume", "SetAudioStreamIndex", "SetSubtitleStreamIndex", "ToggleFullscreen", "DisplayContent", "GoToSearch", "DisplayMessage", "SetRepeatMode", "ChannelUp", "ChannelDown", "Guide", "ToggleStats", "PlayMediaSource", "PlayTrailers", "SetShuffleQueue", "PlayState", "PlayNext", "ToggleOsdMenu", "Play", "SetMaxStreamingBitrate", "SetPlaybackOrder"],
+        ));
+        await connectWebsocket();
+      }
+      reconnectionSubscription?.cancel();
+      reconnectionSubscription = null;
     } catch (e) {
-      _playOnHandlerLogger.severe("Error initializing PlayOnHandler: $e");
+      if (reconnectionSubscription == null) {
+        unawaited(startReconnectionLoop());
+        _playOnHandlerLogger.severe("Error starting PlayOn listener: $e");
+      }
     }
   }
-  
-  Future<void> startListener() async {
-    await jellyfinApiHelper.updateCapabilities(ClientCapabilities(
-      supportsMediaControl: true,
-      supportsPersistentIdentifier: true,
-      playableMediaTypes: ["Audio"],
-      supportedCommands: ["MoveUp", "MoveDown", "MoveLeft", "MoveRight", "PageUp", "PageDown", "PreviousLetter", "NextLetter", "ToggleOsd", "ToggleContextMenu", "Select", "Back", "TakeScreenshot", "SendKey", "SendString", "GoHome", "GoToSettings", "VolumeUp", "VolumeDown", "Mute", "Unmute", "ToggleMute", "SetVolume", "SetAudioStreamIndex", "SetSubtitleStreamIndex", "ToggleFullscreen", "DisplayContent", "GoToSearch", "DisplayMessage", "SetRepeatMode", "ChannelUp", "ChannelDown", "Guide", "ToggleStats", "PlayMediaSource", "PlayTrailers", "SetShuffleQueue", "PlayState", "PlayNext", "ToggleOsdMenu", "Play", "SetMaxStreamingBitrate", "SetPlaybackOrder"],
-    ));
 
+  Future<void> startReconnectionLoop() async {
+    reconnectionSubscription = Stream.periodic(const Duration(seconds: 1), (count) {
+      return count;
+    }).listen((count) {
+      startListener();
+      _playOnHandlerLogger.info("Attempted to restart listener");
+    });
+  }
+  
+  Future<void> connectWebsocket() async {
     final url="${finampUserHelper.currentUser!.baseUrl}/socket?api_key=${finampUserHelper.currentUser!.accessToken}";
     final parsedUrl = Uri.parse(url);
     final wsUrl = parsedUrl.replace(scheme: parsedUrl.scheme == "https" ? "wss" : "ws");
@@ -64,35 +87,36 @@ class PlayonHandler {
 
     channel.sink.add('{"MessageType":"KeepAlive"}');
 
+    channel.stream.listen(
+      (dynamic message) {
+          unawaited(handleMessage(message));
+        },
+        onDone: () {
+          keepaliveSubscription?.cancel();
+          startReconnectionLoop();
+        },
+        onError: (error) {
+          _playOnHandlerLogger.severe("WebSocket Error: $error");
+        },
+    );
+
     keepaliveSubscription = Stream.periodic(const Duration(seconds: 30), (count) {
       return count;
     }).listen((event) {
       _playOnHandlerLogger.info("Sent KeepAlive message through websocket");
       channel.sink.add('{"MessageType":"KeepAlive"}');
     });
-
-    channel.stream.listen(
-      (dynamic message) {
-          unawaited(handleMessage(message));
-        },
-        onDone: () {
-          if (!FinampSettingsHelper.finampSettings.isOffline) {
-            Future.delayed(const Duration(seconds: 1), () {
-              startListener();
-              _playOnHandlerLogger.severe("Attempted to restart listener");
-            });
-          }
-        },
-        onError: (error) {
-          _playOnHandlerLogger.severe("WebSocket Error: $error");
-        },
-    );
   }
 
   Future<void> closeListener() async {
+    _playOnHandlerLogger.info("Closing playon session");
     channel.sink.add('{"MessageType":"SessionsStop"}');
     channel.sink.close();
-    keepaliveSubscription.cancel();
+    keepaliveSubscription?.cancel();
+
+    // In case offline mod is turned on while attempting to reconnect
+    reconnectionSubscription?.cancel();
+    reconnectionSubscription = null;
   }
 
   Future<void> handleMessage(value) async {
