@@ -130,7 +130,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[23] == null ? false : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
           fields[24] == null ? false : fields[24] as bool,
-      hasCompleteddownloadsServiceMigration:
+      hasCompletedDownloadsServiceMigration:
           fields[34] == null ? false : fields[34] as bool,
       requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
@@ -185,10 +185,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[72] as KeepScreenOnOption,
       keepScreenOnWhilePluggedIn:
           fields[73] == null ? true : fields[73] as bool,
-      transcodingSegmentContainer: fields[74] == null
+      hasDownloadedPlaylistInfo:
+          fields[74] == null ? false : fields[74] as bool,
+      transcodingSegmentContainer: fields[75] == null
           ? FinampSegmentContainer.fragmentedMp4
-          : fields[74] as FinampSegmentContainer,
-      featureChipsConfiguration: fields[75] == null
+          : fields[75] as FinampSegmentContainer,
+      featureChipsConfiguration: fields[76] == null
           ? const FinampFeatureChipsConfiguration(enabled: true, features: [
               FinampFeatureChipType.playCount,
               FinampFeatureChipType.additionalPeople,
@@ -200,7 +202,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               FinampFeatureChipType.size,
               FinampFeatureChipType.normalizationGain
             ])
-          : fields[75] as FinampFeatureChipsConfiguration,
+          : fields[76] as FinampFeatureChipsConfiguration,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -210,7 +212,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(74)
+      ..writeByte(75)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -276,7 +278,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(33)
       ..write(obj.volumeNormalizationMode)
       ..writeByte(34)
-      ..write(obj.hasCompleteddownloadsServiceMigration)
+      ..write(obj.hasCompletedDownloadsServiceMigration)
       ..writeByte(35)
       ..write(obj.requireWifiForDownloads)
       ..writeByte(36)
@@ -356,8 +358,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(73)
       ..write(obj.keepScreenOnWhilePluggedIn)
       ..writeByte(74)
-      ..write(obj.transcodingSegmentContainer)
+      ..write(obj.hasDownloadedPlaylistInfo)
       ..writeByte(75)
+      ..write(obj.transcodingSegmentContainer)
+      ..writeByte(76)
       ..write(obj.featureChipsConfiguration);
   }
 

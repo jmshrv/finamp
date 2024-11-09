@@ -150,7 +150,7 @@ Future<void> _setupDownloadsHelper() async {
   final downloadsService = GetIt.instance<DownloadsService>();
 
   if (!FinampSettingsHelper
-      .finampSettings.hasCompleteddownloadsServiceMigration) {
+      .finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
     FinampSettingsHelper.setHasCompleteddownloadsServiceMigration(true);
   }

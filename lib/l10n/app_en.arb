@@ -1369,7 +1369,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Info for All Playlists} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1601,8 +1601,8 @@
   },
   "trackOfflineFavorites": "Sync all favorite statuses",
   "trackOfflineFavoritesSubtitle": "This allows showing more up-to-date favorite statuses while offline.  Does not download any additional files.",
-  "allPlaylistsInfoSetting": "Show all playlists offline",
-  "allPlaylistsInfoSettingSubtitle": "Sync metadata for all playlists to show partially downloaded playlists offline",
+  "allPlaylistsInfoSetting": "Download Playlist Metadata",
+  "allPlaylistsInfoSettingSubtitle": "Sync metadata for all playlists to improve your playlist experience",
   "downloadFavoritesSetting": "Download all favorites",
   "downloadAllPlaylistsSetting": "Download all playlists",
   "fiveLatestAlbumsSetting": "Download 5 latest albums",

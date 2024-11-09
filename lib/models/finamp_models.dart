@@ -113,6 +113,7 @@ const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
 const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
 const _keepScreenOnWhilePluggedIn = true;
+const _hasDownloadedPlaylistInfoDefault = false;
 const _defaultTranscodingSegmentContainer =
     FinampSegmentContainer.fragmentedMp4;
 const _featureChipsConfigurationDefault =
@@ -171,7 +172,7 @@ class FinampSettings {
       this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
       this.hasCompletedBlurhashImageMigration = true,
       this.hasCompletedBlurhashImageMigrationIdFix = true,
-      this.hasCompleteddownloadsServiceMigration = true,
+      this.hasCompletedDownloadsServiceMigration = true,
       this.requireWifiForDownloads = false,
       this.onlyShowFullyDownloaded = false,
       this.showDownloadsWithUnknownLibrary = true,
@@ -211,6 +212,7 @@ class FinampSettings {
           _showSeekControlsOnMediaNotificationDefault,
       this.keepScreenOnOption = _keepScreenOnOption,
       this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
+      this.hasDownloadedPlaylistInfo = _hasDownloadedPlaylistInfoDefault,
       this.transcodingSegmentContainer = _defaultTranscodingSegmentContainer,
       this.featureChipsConfiguration = _featureChipsConfigurationDefault});
 
@@ -326,7 +328,7 @@ class FinampSettings {
   VolumeNormalizationMode volumeNormalizationMode;
 
   @HiveField(34, defaultValue: false)
-  bool hasCompleteddownloadsServiceMigration;
+  bool hasCompletedDownloadsServiceMigration;
 
   @HiveField(35, defaultValue: false)
   bool requireWifiForDownloads;
@@ -449,10 +451,13 @@ class FinampSettings {
   @HiveField(73, defaultValue: _keepScreenOnWhilePluggedIn)
   bool keepScreenOnWhilePluggedIn;
 
-  @HiveField(74, defaultValue: _defaultTranscodingSegmentContainer)
+  @HiveField(74, defaultValue: _hasDownloadedPlaylistInfoDefault)
+  bool hasDownloadedPlaylistInfo;
+
+  @HiveField(75, defaultValue: _defaultTranscodingSegmentContainer)
   FinampSegmentContainer transcodingSegmentContainer;
 
-  @HiveField(75, defaultValue: _featureChipsConfigurationDefault)
+  @HiveField(76, defaultValue: _featureChipsConfigurationDefault)
   FinampFeatureChipsConfiguration featureChipsConfiguration;
 
   static Future<FinampSettings> create() async {

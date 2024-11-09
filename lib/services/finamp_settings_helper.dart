@@ -290,7 +290,7 @@ class FinampSettingsHelper {
   static void setHasCompleteddownloadsServiceMigration(
       bool hasCompleteddownloadsServiceMigration) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hasCompleteddownloadsServiceMigration =
+    finampSettingsTemp.hasCompletedDownloadsServiceMigration =
         hasCompleteddownloadsServiceMigration;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -301,6 +301,13 @@ class FinampSettingsHelper {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.hasCompletedIsarUserMigration =
         hasCompletedIsarUserMigration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setHasDownloadedPlaylistInfo(bool hasDownloadedPlaylistInfo) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasDownloadedPlaylistInfo = hasDownloadedPlaylistInfo;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
