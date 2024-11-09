@@ -317,7 +317,7 @@ class QueueListTile extends StatelessWidget {
     required this.isCurrentTrack,
     required this.isInPlaylist,
     required this.allowReorder,
-    this.allowDismiss = false,
+    this.allowDismiss = true,
     this.isPreviousTrack = false,
     this.parentItem,
     this.onRemoveFromList,
