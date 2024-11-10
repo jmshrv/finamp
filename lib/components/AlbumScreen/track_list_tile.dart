@@ -613,6 +613,7 @@ class TrackListItemTile extends StatelessWidget {
   final void Function() onTap;
 
   static const double defaultTileHeight = 60.0;
+  static const double defaultTitleGap = 10.0;
 
   @override
   Widget build(BuildContext context) {
@@ -641,7 +642,7 @@ class TrackListItemTile extends StatelessWidget {
           vertical: 0.5,
         ),
         minVerticalPadding: 0.0,
-        horizontalTitleGap: 10.0,
+        horizontalTitleGap: defaultTitleGap,
         contentPadding:
             const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
         // tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),

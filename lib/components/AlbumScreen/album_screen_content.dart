@@ -175,7 +175,10 @@ class _SongsSliverListState extends State<SongsSliverList> {
         ),
       );
     }
-    return SliverList(
+    return SliverFixedExtentList(
+      itemExtent: TrackListItemTile.defaultTileHeight +
+          TrackListItemTile.defaultTitleGap,
+      // return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           // When user selects song from disc other than first, index number is
