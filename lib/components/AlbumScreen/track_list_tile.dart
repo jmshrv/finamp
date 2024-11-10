@@ -337,7 +337,7 @@ class QueueListTile extends StatelessWidget {
       baseItem: item,
       parentItem: parentItem,
       listIndex: listIndex,
-      actualIndex: item.indexNumber ?? -1,
+      actualIndex: item.indexNumber,
       isPreviousTrack: isPreviousTrack,
       isInPlaylist: isInPlaylist,
       allowReorder: allowReorder,
@@ -355,7 +355,7 @@ class TrackListItem extends ConsumerStatefulWidget {
   final jellyfin_models.BaseItemDto baseItem;
   final jellyfin_models.BaseItemDto? parentItem;
   final Future<int>? listIndex;
-  final int actualIndex;
+  final int? actualIndex;
   final bool showIndex;
   final bool showCover;
   final bool showArtists;
@@ -604,7 +604,7 @@ class TrackListItemTile extends StatelessWidget {
   final bool isCurrentTrack;
   final bool allowReorder;
   final Future<int>? listIndex;
-  final int actualIndex;
+  final int? actualIndex;
   final bool showIndex;
   final bool showCover;
   final bool showArtists;
@@ -627,6 +627,10 @@ class TrackListItemTile extends StatelessWidget {
     final durationLabelString =
         "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
 
+    final artistsString = (baseItem.artists?.isNotEmpty ?? false)
+        ? baseItem.artists?.join(", ")
+        : baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist;
+
     return ListTileTheme(
       tileColor: isCurrentTrack
           ? Theme.of(context).colorScheme.surfaceContainer
@@ -644,7 +648,7 @@ class TrackListItemTile extends StatelessWidget {
         leading: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (showIndex)
+            if (showIndex && actualIndex != null)
               Padding(
                 padding: showCover
                     ? const EdgeInsets.only(left: 2.0, right: 6.0)
@@ -737,22 +741,19 @@ class TrackListItemTile extends StatelessWidget {
                         ),
                         alignment: PlaceholderAlignment.top,
                       ),
-                    TextSpan(
-                      text: showArtists
-                          ? baseItem.artists?.join(", ") ??
-                              baseItem.albumArtist ??
-                              AppLocalizations.of(context)!.unknownArtist
-                          : "",
-                      style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.75),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          overflow: TextOverflow.ellipsis),
-                    ),
+                    if (showArtists)
+                      TextSpan(
+                        text: artistsString,
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .color!
+                                .withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            overflow: TextOverflow.ellipsis),
+                      ),
                     if (!secondRowNeeded)
                       // show the artist anyway if nothing else is shown
                       TextSpan(
