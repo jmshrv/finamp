@@ -687,7 +687,7 @@ class TrackListItemTile extends StatelessWidget {
             children: [
               Flexible(
                 fit: FlexFit.loose,
-                flex: 2,
+                flex: 3,
                 child: Text(
                   baseItem.name ?? AppLocalizations.of(context)!.unknownName,
                   style: TextStyle(
@@ -701,8 +701,9 @@ class TrackListItemTile extends StatelessWidget {
               ),
               Flexible(
                 fit: FlexFit.loose,
+                flex: 2,
                 child: Text.rich(
-                  overflow: TextOverflow.fade,
+                  overflow: TextOverflow.clip,
                   softWrap: false,
                   maxLines: 1,
                   TextSpan(children: [
