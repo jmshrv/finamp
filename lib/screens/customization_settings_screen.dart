@@ -41,7 +41,6 @@ class _CustomizationSettingsScreenState
           const PlaybackSpeedControlVisibilityDropdownListTile(),
           if (!Platform.isIOS) const ShowStopButtonOnMediaNotificationToggle(),
           const ShowSeekControlsOnMediaNotificationToggle(),
-          const ShowFeatureChipsToggle(),
         ],
       ),
     );
@@ -103,39 +102,6 @@ class ShowSeekControlsOnMediaNotificationToggle extends StatelessWidget {
                       box.get("FinampSettings")!;
                   finampSettingsTemp.showSeekControlsOnMediaNotification =
                       value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
-    );
-  }
-}
-
-class ShowFeatureChipsToggle extends StatelessWidget {
-  const ShowFeatureChipsToggle({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? featureChipsEnabled =
-            box.get("FinampSettings")?.featureChipsConfiguration.enabled;
-
-        return SwitchListTile.adaptive(
-          title:
-              Text(AppLocalizations.of(context)!.showFeatureChipsToggleTitle),
-          subtitle: Text(
-              AppLocalizations.of(context)!.showFeatureChipsToggleSubtitle),
-          value: featureChipsEnabled ?? false,
-          onChanged: featureChipsEnabled == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.featureChipsConfiguration =
-                      finampSettingsTemp.featureChipsConfiguration
-                          .copyWith(enabled: value);
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );
