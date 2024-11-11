@@ -76,6 +76,7 @@ class TrackListTile extends StatelessWidget {
     this.isOnArtistScreen = false,
     this.isShownInSearch = false,
     this.allowDismiss = true,
+    this.highlightCurrentTrack = true,
   });
 
   final jellyfin_models.BaseItemDto item;
@@ -91,6 +92,7 @@ class TrackListTile extends StatelessWidget {
   final bool isOnArtistScreen;
   final bool isShownInSearch;
   final bool allowDismiss;
+  final bool highlightCurrentTrack;
 
   @override
   Widget build(BuildContext context) {
@@ -283,6 +285,7 @@ class TrackListTile extends StatelessWidget {
       isInPlaylist: isInPlaylist,
       allowReorder: false,
       allowDismiss: allowDismiss,
+      highlightCurrentTrack: highlightCurrentTrack,
       onRemoveFromList: onRemoveFromList,
       onTap: trackListTileOnTap,
       confirmDismiss: trackListTileConfirmDismiss,
@@ -298,10 +301,10 @@ class QueueListTile extends StatelessWidget {
   final int actualIndex;
   final int indexOffset;
   final bool isCurrentTrack;
-  final bool isPreviousTrack;
   final bool isInPlaylist;
   final bool allowReorder;
   final bool allowDismiss;
+  final bool highlightCurrentTrack;
 
   final void Function(bool playable) onTap;
   final VoidCallback? onRemoveFromList;
@@ -318,7 +321,7 @@ class QueueListTile extends StatelessWidget {
     required this.isInPlaylist,
     required this.allowReorder,
     this.allowDismiss = true,
-    this.isPreviousTrack = false,
+    this.highlightCurrentTrack = false,
     this.parentItem,
     this.onRemoveFromList,
     this.themeCallback,
@@ -338,10 +341,10 @@ class QueueListTile extends StatelessWidget {
       parentItem: parentItem,
       listIndex: listIndex,
       actualIndex: item.indexNumber,
-      isPreviousTrack: isPreviousTrack,
       isInPlaylist: isInPlaylist,
       allowReorder: allowReorder,
       allowDismiss: allowDismiss,
+      highlightCurrentTrack: highlightCurrentTrack,
       onRemoveFromList: onRemoveFromList,
       // This must be in ListTile instead of parent GestureDetecter to
       // enable hover color changes
@@ -360,10 +363,10 @@ class TrackListItem extends ConsumerStatefulWidget {
   final bool showCover;
   final bool showArtists;
   final bool showPlayCount;
-  final bool isPreviousTrack;
   final bool isInPlaylist;
   final bool allowReorder;
   final bool allowDismiss;
+  final bool highlightCurrentTrack;
   final Widget dismissBackground;
 
   final void Function(bool playable) onTap;
@@ -378,7 +381,6 @@ class TrackListItem extends ConsumerStatefulWidget {
       required this.onTap,
       required this.confirmDismiss,
       this.parentItem,
-      this.isPreviousTrack = false,
       this.isInPlaylist = false,
       this.allowReorder = false,
       this.allowDismiss = true,
@@ -386,6 +388,7 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.showCover = true,
       this.showArtists = true,
       this.showPlayCount = false,
+      this.highlightCurrentTrack = true,
       this.onRemoveFromList,
       this.dismissBackground = const SizedBox.shrink()});
 
@@ -455,7 +458,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: isCurrentlyPlaying
+              child: isCurrentlyPlaying && widget.highlightCurrentTrack
                   ? ProviderScope(
                       overrides: [
                         themeDataProvider.overrideWith((ref) {
@@ -488,8 +491,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                                         .textTheme
                                         .bodyLarge
                                         ?.copyWith(
-                                          color: isCurrentlyPlaying
-                                              ? Color.alphaBlend(
+                                            color: Color.alphaBlend(
                                                   (ref
                                                           .watch(
                                                               colorThemeProvider)
@@ -500,8 +502,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                                                                   Brightness
                                                                       .light
                                                               ? 0.5
-                                                              : 0.1)) ??
-                                                      Colors.transparent,
+                                                        : 0.1)),
                                                   Theme.of(context)
                                                           .textTheme
                                                           .bodyLarge
@@ -510,11 +511,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                                                                   .brightness ==
                                                               Brightness.light
                                                           ? Colors.black
-                                                          : Colors.white))
-                                              : Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.color,
+                                                        : Colors.white))
                                         ),
                                   ),
                               iconTheme: Theme.of(context).iconTheme.copyWith(
@@ -532,6 +529,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                                 showPlayCount: widget.showPlayCount,
                                 themeCallback: (x) => _menuTheme = x,
                                 isCurrentTrack: isCurrentlyPlaying,
+                                highlightCurrentTrack:
+                                    widget.highlightCurrentTrack,
                                 allowReorder: widget.allowReorder,
                                 onTap: () => widget.onTap(playable)),
                           );
@@ -549,6 +548,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                       showPlayCount: widget.showPlayCount,
                       themeCallback: (x) => _menuTheme = x,
                       isCurrentTrack: isCurrentlyPlaying,
+                      highlightCurrentTrack: widget.highlightCurrentTrack,
                       allowReorder: widget.allowReorder,
                       onTap: () => widget.onTap(playable)),
             ),
@@ -597,6 +597,7 @@ class TrackListItemTile extends StatelessWidget {
     this.showArtists = true,
     this.showAlbum = true,
     this.showPlayCount = false,
+    this.highlightCurrentTrack = true,
   });
 
   final jellyfin_models.BaseItemDto baseItem;
@@ -610,6 +611,7 @@ class TrackListItemTile extends StatelessWidget {
   final bool showArtists;
   final bool showAlbum;
   final bool showPlayCount;
+  final bool highlightCurrentTrack;
   final void Function() onTap;
 
   static const double defaultTileHeight = 60.0;
@@ -617,6 +619,9 @@ class TrackListItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final highlightTrack = isCurrentTrack && highlightCurrentTrack;
+    
     final bool secondRowNeeded = showArtists || showAlbum || showPlayCount;
 
     final durationLabelFullHours =
@@ -633,7 +638,7 @@ class TrackListItemTile extends StatelessWidget {
         : baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist;
 
     return ListTileTheme(
-      tileColor: isCurrentTrack
+      tileColor: highlightTrack
           ? Theme.of(context).colorScheme.surfaceContainer
           : Colors.transparent,
       child: ListTile(
@@ -670,7 +675,7 @@ class TrackListItemTile extends StatelessWidget {
             if (showCover)
               AlbumImage(
                 item: baseItem,
-                borderRadius: isCurrentTrack
+                borderRadius: highlightTrack
                     ? BorderRadius.zero
                     : BorderRadius.circular(8.0),
                 themeCallback: themeCallback,

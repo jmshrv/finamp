@@ -1,3 +1,4 @@
+import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -33,7 +34,9 @@ class PlaybackHistoryList extends StatelessWidget {
 
             return CustomScrollView(
               // use nested SliverList.builder()s to show history items grouped by date
-              slivers: groupedHistory.map((group) {
+              slivers: groupedHistory.indexed.map((indexedGroup) {
+                final groupIndex = indexedGroup.$1;
+                final group = indexedGroup.$2;
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -42,6 +45,8 @@ class PlaybackHistoryList extends StatelessWidget {
                       final historyItem = TrackListTile(
                         index: Future.value(actualIndex),
                         item: group.value[actualIndex].item.baseItem!,
+                        highlightCurrentTrack: groupIndex == 0 &&
+                            index == 0, // only highlight first track
                       );
 
                       final now = DateTime.now();

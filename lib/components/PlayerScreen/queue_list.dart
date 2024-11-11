@@ -484,7 +484,6 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                       duration: const Duration(milliseconds: 500));
                 },
                 isCurrentTrack: false,
-                isPreviousTrack: true,
               );
             },
           );
