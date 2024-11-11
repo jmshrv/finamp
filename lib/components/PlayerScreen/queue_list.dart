@@ -279,7 +279,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
               duration: const Duration(milliseconds: 500),
               data: ThemeData(
                 colorScheme: imageTheme,
-                brightness: Theme.of(context).brightness,
                 iconTheme: Theme.of(context).iconTheme.copyWith(
                       color: imageTheme.primary,
                     ),
