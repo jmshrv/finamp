@@ -262,7 +262,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                     screenOrientation);
                 if (controller.useLandscape) {
                   return Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAliingnment.center,
                     children: [
                       SizedBox(
                         width: controller.albumSize.width,
@@ -291,7 +291,12 @@ class _PlayerScreenContent extends ConsumerWidget {
                               const Spacer(flex: 10),
                             if (controller
                                 .shouldShow(PlayerHideable.bottomActions))
-                              _buildBottomActions(context, controller),
+                              _buildBottomActions(
+                                context,
+                                controller,
+                                isLyricsLoading: isLyricsLoading,
+                                isLyricsAvailable: isLyricsAvailable,
+                              ),
                             const Spacer(
                               flex: 4,
                             ),
