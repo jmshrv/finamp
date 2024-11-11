@@ -125,7 +125,8 @@ void main() async {
 Future<void> _setupEdgeToEdgeOverlayStyle() async {
   if (Platform.isAndroid) {
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent));
     final binding = WidgetsFlutterBinding.ensureInitialized();
     binding.addObserver(UIOverlaySetterObserver());
   }

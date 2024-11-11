@@ -1227,7 +1227,6 @@ class DownloadsService {
   }
 
   Future<void> addDefaultPlaylistInfoDownload() async {
-
     String? downloadLocation =
         FinampSettingsHelper.finampSettings.defaultDownloadLocation;
     if (!FinampSettingsHelper.finampSettings.downloadLocationsMap
@@ -1240,8 +1239,7 @@ class DownloadsService {
     await addDownload(
       stub: DownloadStub.fromFinampCollection(
           FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
-      transcodeProfile:
-          DownloadProfile(
+      transcodeProfile: DownloadProfile(
         transcodeCodec: FinampTranscodingCodec.original,
         downloadLocationId: downloadLocation,
       ),

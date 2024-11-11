@@ -478,41 +478,37 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                               // brightness: Theme.of(context).brightness,
                               colorScheme: imageTheme.copyWith(
                                   surfaceContainer: ref
-                                        .watch(colorThemeProvider)
-                                        .primary
-                                        .withOpacity(
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? 0.35
-                                              : 0.3)
-                              ),
+                                      .watch(colorThemeProvider)
+                                      .primary
+                                      .withOpacity(
+                                          Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? 0.35
+                                              : 0.3)),
                               textTheme: Theme.of(context).textTheme.copyWith(
                                     bodyLarge: Theme.of(context)
                                         .textTheme
                                         .bodyLarge
                                         ?.copyWith(
                                             color: Color.alphaBlend(
-                                                  (ref
-                                                          .watch(
-                                                              colorThemeProvider)
-                                                          .secondary
-                                                          .withOpacity(Theme.of(
-                                                                          context)
-                                                                      .brightness ==
-                                                                  Brightness
-                                                                      .light
-                                                              ? 0.5
+                                                (ref
+                                                    .watch(colorThemeProvider)
+                                                    .secondary
+                                                    .withOpacity(Theme.of(
+                                                                    context)
+                                                                .brightness ==
+                                                            Brightness.light
+                                                        ? 0.5
                                                         : 0.1)),
-                                                  Theme.of(context)
-                                                          .textTheme
-                                                          .bodyLarge
-                                                          ?.color ??
-                                                      (Theme.of(context)
-                                                                  .brightness ==
-                                                              Brightness.light
-                                                          ? Colors.black
-                                                        : Colors.white))
-                                        ),
+                                                Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.color ??
+                                                    (Theme.of(context)
+                                                                .brightness ==
+                                                            Brightness.light
+                                                        ? Colors.black
+                                                        : Colors.white))),
                                   ),
                               iconTheme: Theme.of(context).iconTheme.copyWith(
                                     color: imageTheme.primary,
@@ -619,9 +615,8 @@ class TrackListItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final highlightTrack = isCurrentTrack && highlightCurrentTrack;
-    
+
     final bool secondRowNeeded = showArtists || showAlbum || showPlayCount;
 
     final durationLabelFullHours =

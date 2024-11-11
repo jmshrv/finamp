@@ -66,9 +66,8 @@ class FeatureState {
         ),
       );
     }
-      
-    for (var feature in configuration.features) {
 
+    for (var feature in configuration.features) {
       // TODO this will likely be extremely outdated if offline, hide?
       if (feature == FinampFeatureChipType.playCount &&
           currentTrack?.baseItem?.userData?.playCount != null) {
@@ -182,7 +181,6 @@ class FeatureState {
           );
         }
       }
-
     }
     return features;
   }

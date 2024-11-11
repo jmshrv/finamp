@@ -38,7 +38,7 @@ class AddToPlaylistButton extends ConsumerStatefulWidget {
 
 class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
   final _queueService = GetIt.instance<QueueService>();
-  
+
   @override
   Widget build(BuildContext context) {
     if (widget.item == null) {

@@ -61,5 +61,4 @@ Future<void> setupLogging() async {
     startupLogger
         .info("Web browser ${webInfo.userAgent} on ${webInfo.platform}");
   }
-  
 }
