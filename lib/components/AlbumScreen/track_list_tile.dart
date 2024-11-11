@@ -275,7 +275,7 @@ class TrackListTile extends StatelessWidget {
       baseItem: item,
       parentItem: parentItem,
       listIndex: index,
-      actualIndex: item.indexNumber ?? -1,
+      actualIndex: item.indexNumber,
       showIndex: showIndex,
       showCover: showCover,
       showArtists: parentItem?.isArtist != true,
