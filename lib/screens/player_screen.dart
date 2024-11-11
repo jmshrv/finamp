@@ -262,7 +262,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                     screenOrientation);
                 if (controller.useLandscape) {
                   return Row(
-                    crossAxisAlignment: CrossAxisAliingnment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
                         width: controller.albumSize.width,
