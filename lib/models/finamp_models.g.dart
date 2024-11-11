@@ -101,8 +101,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : fields[48] as double,
-      hideSongArtistsIfSameAsAlbumArtists:
-          fields[17] == null ? true : fields[17] as bool,
       showArtistsTopSongs: fields[54] == null ? true : fields[54] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
       tabSortBy: fields[20] == null
@@ -185,11 +183,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[72] as KeepScreenOnOption,
       keepScreenOnWhilePluggedIn:
           fields[73] == null ? true : fields[73] as bool,
-      hasDownloadedPlaylistInfo:
-          fields[74] == null ? false : fields[74] as bool,
-      transcodingSegmentContainer: fields[75] == null
-          ? FinampSegmentContainer.fragmentedMp4
-          : fields[75] as FinampSegmentContainer,
       featureChipsConfiguration: fields[76] == null
           ? const FinampFeatureChipsConfiguration(enabled: true, features: [
               FinampFeatureChipType.playCount,
@@ -203,6 +196,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               FinampFeatureChipType.normalizationGain
             ])
           : fields[76] as FinampFeatureChipsConfiguration,
+      showCoversOnAlbumScreen: fields[77] == null ? false : fields[77] as bool,
+      hasDownloadedPlaylistInfo:
+          fields[74] == null ? false : fields[74] as bool,
+      transcodingSegmentContainer: fields[75] == null
+          ? FinampSegmentContainer.fragmentedMp4
+          : fields[75] as FinampSegmentContainer,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -247,8 +246,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.downloadLocationsMap)
       ..writeByte(16)
       ..write(obj.useCoverAsBackground)
-      ..writeByte(17)
-      ..write(obj.hideSongArtistsIfSameAsAlbumArtists)
       ..writeByte(18)
       ..write(obj.bufferDurationSeconds)
       ..writeByte(19)
@@ -362,7 +359,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(75)
       ..write(obj.transcodingSegmentContainer)
       ..writeByte(76)
-      ..write(obj.featureChipsConfiguration);
+      ..write(obj.featureChipsConfiguration)
+      ..writeByte(77)
+      ..write(obj.showCoversOnAlbumScreen);
   }
 
   @override

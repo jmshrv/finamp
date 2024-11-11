@@ -90,7 +90,6 @@ dependencies:
   riverpod_annotation: ^2.6.1
   locale_names: ^1.1.1
   flutter_vibrate: ^1.3.0
-  mini_music_visualizer: ^1.0.2
   flutter_cache_manager: ^3.4.1
   # fix not showing elipses when maxLines==1
   balanced_text:

@@ -1,3 +1,5 @@
+import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
+import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
@@ -32,39 +34,19 @@ class PlaybackHistoryList extends StatelessWidget {
 
             return CustomScrollView(
               // use nested SliverList.builder()s to show history items grouped by date
-              slivers: groupedHistory.map((group) {
+              slivers: groupedHistory.indexed.map((indexedGroup) {
+                final groupIndex = indexedGroup.$1;
+                final group = indexedGroup.$2;
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final actualIndex = group.value.length - index - 1;
 
-                      final historyItem = Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: PlaybackHistoryListTile(
-                          actualIndex: actualIndex,
-                          item: group.value[actualIndex],
-                          audioServiceHelper: audioServiceHelper,
-                          onTap: () {
-                            GlobalSnackbar.message(
-                              (scaffold) => AppLocalizations.of(context)!
-                                  .startingInstantMix,
-                              isConfirmation: true,
-                            );
-
-                            audioServiceHelper
-                                .startInstantMixForItem(
-                                    jellyfin_models.BaseItemDto.fromJson(group
-                                        .value[actualIndex]
-                                        .item
-                                        .item
-                                        .extras?["itemJson"]))
-                                .catchError((e) {
-                              GlobalSnackbar.error(e);
-                            });
-                          },
-                        ),
+                      final historyItem = TrackListTile(
+                        index: Future.value(actualIndex),
+                        item: group.value[actualIndex].item.baseItem!,
+                        highlightCurrentTrack: groupIndex == 0 &&
+                            index == 0, // only highlight first track
                       );
 
                       final now = DateTime.now();

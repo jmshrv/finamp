@@ -635,6 +635,20 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
+  "trackCountTooltip": "Track {currentTrackIndex} of {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
   "invalidNumber": "Invalid Number",
   "@invalidNumber": {},
   "sleepTimerTooltip": "Sleep timer",
@@ -1557,17 +1571,15 @@
       }
     }
   },
-  "remainingDuration": "{hoursRemaining, select, 0{} other{{hoursRemaining}h }}{minutesRemaining}m remaining",
+  "remainingDuration": "{duration} remaining",
   "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
     "placeholders": {
-      "hoursRemaining": {
-        "type": "String"
-      },
-      "minutesRemaining": {
-        "type": "String"
+      "duration": {
+        "type": "String",
+        "example": "36:23"
       }
-    },
-    "description": "Displays duration of unplayed tracks"
+    }
   },
   "removeFromPlaylistConfirm": "Remove",
   "removeFromPlaylistCancel": "Cancel",
@@ -1773,6 +1785,18 @@
   "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bit rate, and more on the player screen.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "albumScreen": "Album Screen",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenTitle": "Show Album Covers For Tracks",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Show album covers for each track separately on the album screen.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
   },
   "emptyTopTracksList": "You haven't listened to any track by this artist yet.",
   "@emptyTopTracksList": {

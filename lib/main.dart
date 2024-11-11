@@ -6,6 +6,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/gen/assets.gen.dart';
+import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
@@ -524,6 +525,8 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                           const LyricsSettingsScreen(),
                       LanguageSelectionScreen.routeName: (context) =>
                           const LanguageSelectionScreen(),
+                      AlbumSettingsScreen.routeName: (context) =>
+                          const AlbumSettingsScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
                     navigatorObservers: [

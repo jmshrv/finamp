@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
+import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/main.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
@@ -28,7 +30,6 @@ import '../../services/process_artist.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
 import '../themed_bottom_sheet.dart';
-import 'queue_list_item.dart';
 import 'queue_source_helper.dart';
 
 class _QueueListStreamState {
@@ -465,16 +466,17 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               final item = _previousTracks![index];
               final actualIndex = index;
               final indexOffset = -((_previousTracks?.length ?? 0) - index);
-              return QueueListItem(
+              return QueueListTile(
                 key: ValueKey(item.id),
-                item: item,
-                listIndex: index,
+                item: item.baseItem!,
+                listIndex: Future.value(index),
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
-                subqueue: _previousTracks!,
+                isInPlaylist: queueItemInPlaylist(item),
+                parentItem: item.source.item,
                 allowReorder:
                     _queueService.playbackOrder == FinampPlaybackOrder.linear,
-                onTap: () async {
+                onTap: (bool playable) async {
                   FeedbackHelper.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
                   scrollToKey(
@@ -482,7 +484,6 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                       duration: const Duration(milliseconds: 500));
                 },
                 isCurrentTrack: false,
-                isPreviousTrack: true,
               );
             },
           );
@@ -521,7 +522,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
             _nextUp ??= snapshot.data!.nextUp;
 
             return SliverPadding(
-                padding: const EdgeInsets.only(top: 0.0, left: 4.0, right: 4.0),
+                padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
                 sliver: SliverReorderableList(
                   autoScrollerVelocityScalar: 20.0,
                   onReorder: (oldIndex, newIndex) {
@@ -557,14 +558,17 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     final item = _nextUp![index];
                     final actualIndex = index;
                     final indexOffset = index + 1;
-                    return QueueListItem(
+                    return QueueListTile(
                       key: ValueKey(item.id),
-                      item: item,
-                      listIndex: index,
+                      item: item.baseItem!,
+                      listIndex: Future.value(index),
                       actualIndex: actualIndex,
                       indexOffset: indexOffset,
-                      subqueue: _nextUp!,
-                      onTap: () async {
+                      isInPlaylist: queueItemInPlaylist(item),
+                      parentItem: item.source.item,
+                      allowReorder: _queueService.playbackOrder ==
+                          FinampPlaybackOrder.linear,
+                      onTap: (bool playable) async {
                         FeedbackHelper.feedback(FeedbackType.selection);
                         await _queueService.skipByOffset(indexOffset);
                         scrollToKey(
@@ -648,16 +652,17 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 final actualIndex = index;
                 final indexOffset = index + _nextUp!.length + 1;
 
-                return QueueListItem(
+                return QueueListTile(
                   key: ValueKey(item.id),
-                  item: item,
-                  listIndex: index,
+                  item: item.baseItem!,
+                  listIndex: Future.value(index),
                   actualIndex: actualIndex,
                   indexOffset: indexOffset,
-                  subqueue: _queue!,
+                  isInPlaylist: queueItemInPlaylist(item),
+                  parentItem: item.source.item,
                   allowReorder:
                       _queueService.playbackOrder == FinampPlaybackOrder.linear,
-                  onTap: () async {
+                  onTap: (bool playable) async {
                     FeedbackHelper.feedback(FeedbackType.selection);
                     await _queueService.skipByOffset(indexOffset);
                     scrollToKey(
@@ -1049,17 +1054,23 @@ class QueueSectionHeader extends StatelessWidget {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               var remaining = snapshot.data!.remainingDuration;
-                              var remainText = AppLocalizations.of(context)!
-                                  .remainingDuration(
-                                      remaining.inHours.toString(),
-                                      (remaining.inMinutes % 60)
-                                          .toString()
-                                          .padLeft(2, '0'));
+                              var remainText = printDuration(remaining,
+                                  leadingZeroes: false);
+                              final remainingLabelFullHours =
+                                  (remaining.inHours);
+                              final remainingLabelFullMinutes =
+                                  (remaining.inMinutes) % 60;
+                              final remainingLabelSeconds =
+                                  (remaining.inSeconds) % 60;
+                              final remainingLabelString =
+                                  "${remainingLabelFullHours > 0 ? "$remainingLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${remainingLabelFullMinutes > 0 ? "$remainingLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$remainingLabelSeconds ${AppLocalizations.of(context)!.seconds}";
                               return Padding(
                                   padding: const EdgeInsets.only(
                                       top: 4.0, right: 8.0),
                                   child: Text(
-                                      "${snapshot.data!.currentTrackIndex} / ${snapshot.data!.trackCount}  ($remainText)"));
+                                      "${snapshot.data!.currentTrackIndex} / ${snapshot.data!.trackCount}  (${AppLocalizations.of(context)!.remainingDuration(remainText)})",
+                                      semanticsLabel:
+                                          "${AppLocalizations.of(context)!.trackCountTooltip(snapshot.data!.currentTrackIndex, snapshot.data!.trackCount)} (${AppLocalizations.of(context)!.remainingDuration(remainingLabelString)})"));
                             }
                             return const SizedBox.shrink();
                           }),
