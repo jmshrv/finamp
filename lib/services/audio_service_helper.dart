@@ -27,7 +27,10 @@ class AudioServiceHelper {
       // This is a bit inefficient since we have to get all of the songs and
       // shuffle them before making a sublist, but I couldn't think of a better
       // way.
-      items = (await _isarDownloader.getAllSongs())
+      items = (await _isarDownloader.getAllSongs(
+              viewFilter: _finampUserHelper.currentUser?.currentView?.id,
+              nullableViewFilters: FinampSettingsHelper
+                  .finampSettings.showDownloadsWithUnknownLibrary))
           .map((e) => e.baseItem!)
           .toList();
       items.shuffle();

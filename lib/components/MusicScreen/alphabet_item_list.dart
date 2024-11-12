@@ -7,6 +7,7 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:focus_on_it/focus_on_it.dart';
 
 enum Drag {
   start,
@@ -84,21 +85,24 @@ class _AlphabetListState extends State<AlphabetList> {
           onPointerMove: (x) => updateSelected(x.localPosition, Drag.update),
           onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
           behavior: HitTestBehavior.opaque,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                alphabet.length,
-                (x) => Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  height: _letterHeight,
-                  child: FittedBox(
-                    child: Text(
-                      alphabet[x].toUpperCase(),
+          child: Semantics(
+            excludeSemantics:
+                true, // replace child semantics with custom semantics
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  alphabet.length,
+                  (x) => Container(
+                    padding: const EdgeInsets.only(right: 6.0),
+                    height: _letterHeight,
+                    child: FittedBox(
+                      child: Text(
+                        alphabet[x].toUpperCase(),
+                      ),
                     ),
                   ),
-                ),
-              )),
+                )),
+          ),
         );
       }),
     );
@@ -121,25 +125,39 @@ class _AlphabetListState extends State<AlphabetList> {
             // Disable default scrollbar
             ScrollConfiguration(
                 behavior: const FinampScrollBehavior(scrollbars: false),
-                child: MediaQuery(
-                  data: mediaQuery.copyWith(
-                      padding: mediaQuery.padding.copyWith(
-                          right: mediaQuery.padding.right + _letterHeight)),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 22.0),
                   child: widget.child,
                 )),
             if (_currentSelected != null && _displayPreview)
               Positioned(
                 left: 20,
                 top: 20,
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width / 3,
-                  height: MediaQuery.sizeOf(context).width / 3,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor.withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: FittedBox(
-                      child: Text(_currentSelected!,
-                          style: const TextStyle(fontSize: 120))),
+                child: FocusOnIt(
+                  onUnfocus: () {
+                    setState(() {
+                      _currentSelected = null;
+                      _displayPreview = false;
+                    });
+                  },
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _currentSelected = null;
+                        _displayPreview = false;
+                      });
+                    },
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width / 3,
+                      height: MediaQuery.sizeOf(context).width / 3,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor.withOpacity(0.85),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: FittedBox(
+                          child: Text(_currentSelected!,
+                              style: const TextStyle(fontSize: 120))),
+                    ),
+                  ),
                 ),
               ),
             Directionality.of(context) == TextDirection.rtl
@@ -188,6 +206,9 @@ class _AlphabetListState extends State<AlphabetList> {
             _displayPreview = false;
             _currentSelected = null;
           });
+        } else {
+          _displayPreview = false;
+          _currentSelected = null;
         }
       });
     } else if (_currentSelected != _toBeSelected) {

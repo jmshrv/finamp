@@ -80,7 +80,6 @@ const _showTextOnGridView = true;
 const _sleepTimerSeconds = 1800; // 30 Minutes
 const _useCoverAsBackground = true;
 const _playerScreenCoverMinimumPadding = 1.5;
-const _hideSongArtistsIfSameAsAlbumArtists = true;
 const _showArtistsTopSongs = true;
 const _disableGesture = false;
 const _showFastScroller = true;
@@ -90,7 +89,7 @@ const _swipeInsertQueueNext = true;
 const _defaultLoopMode = FinampLoopMode.none;
 const _defaultPlaybackSpeed = 1.0;
 const _autoLoadLastQueueOnStartup = true;
-const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.never;
+const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.ask;
 const _shouldRedownloadTranscodesDefault = false;
 const _defaultResyncOnStartup = true;
 const _fixedGridTileSizeDefault = 150;
@@ -111,86 +110,110 @@ const _lyricsFontSizeDefault = LyricsFontSize.medium;
 const _showLyricsScreenAlbumPreludeDefault = true;
 const _showStopButtonOnMediaNotificationDefault = false;
 const _showSeekControlsOnMediaNotificationDefault = true;
+const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
+const _keepScreenOnWhilePluggedIn = true;
+const _hasDownloadedPlaylistInfoDefault = false;
+const _defaultTranscodingSegmentContainer =
+    FinampSegmentContainer.fragmentedMp4;
+const _featureChipsConfigurationDefault =
+    FinampFeatureChipsConfiguration(enabled: true, features: [
+  FinampFeatureChipType.playCount,
+  FinampFeatureChipType.additionalPeople,
+  FinampFeatureChipType.playbackMode,
+  FinampFeatureChipType.codec,
+  FinampFeatureChipType.bitRate,
+  FinampFeatureChipType.bitDepth,
+  FinampFeatureChipType.sampleRate,
+  FinampFeatureChipType.size,
+  FinampFeatureChipType.normalizationGain,
+]);
+const _showCoversOnAlbumScreenDefault = false;
 
 @HiveType(typeId: 28)
 class FinampSettings {
-  FinampSettings({
-    this.isOffline = _isOfflineDefault,
-    this.shouldTranscode = _shouldTranscodeDefault,
-    this.transcodeBitrate = _transcodeBitrateDefault,
-    // downloadLocations is required since the other values can be created with
-    // default values. create() is used to return a FinampSettings with
-    // downloadLocations.
-    required this.downloadLocations,
-    this.androidStopForegroundOnPause = _androidStopForegroundOnPauseDefault,
-    required this.showTabs,
-    this.onlyShowFavourite = _isFavouriteDefault,
-    this.sortBy = SortBy.sortName,
-    this.sortOrder = SortOrder.ascending,
-    this.songShuffleItemCount = _songShuffleItemCountDefault,
-    this.volumeNormalizationActive = _volumeNormalizationActiveDefault,
-    this.volumeNormalizationIOSBaseGain =
-        _volumeNormalizationIOSBaseGainDefault,
-    this.volumeNormalizationMode = _volumeNormalizationModeDefault,
-    this.contentViewType = _contentViewType,
-    this.playbackSpeedVisibility = _playbackSpeedVisibility,
-    this.contentGridViewCrossAxisCountPortrait =
-        _contentGridViewCrossAxisCountPortrait,
-    this.contentGridViewCrossAxisCountLandscape =
-        _contentGridViewCrossAxisCountLandscape,
-    this.showTextOnGridView = _showTextOnGridView,
-    this.sleepTimerSeconds = _sleepTimerSeconds,
-    required this.downloadLocationsMap,
-    this.useCoverAsBackground = _useCoverAsBackground,
-    this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
-    this.hideSongArtistsIfSameAsAlbumArtists =
-        _hideSongArtistsIfSameAsAlbumArtists,
-    this.showArtistsTopSongs = _showArtistsTopSongs,
-    this.bufferDurationSeconds = _bufferDurationSeconds,
-    required this.tabSortBy,
-    required this.tabSortOrder,
-    this.loopMode = _defaultLoopMode,
-    this.playbackSpeed = _defaultPlaybackSpeed,
-    this.tabOrder = _tabOrder,
-    this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
-    this.hasCompletedBlurhashImageMigration = true,
-    this.hasCompletedBlurhashImageMigrationIdFix = true,
-    this.hasCompleteddownloadsServiceMigration = true,
-    this.requireWifiForDownloads = false,
-    this.onlyShowFullyDownloaded = false,
-    this.showDownloadsWithUnknownLibrary = true,
-    this.maxConcurrentDownloads = 10,
-    this.downloadWorkers = 5,
-    this.resyncOnStartup = _defaultResyncOnStartup,
-    this.preferQuickSyncs = true,
-    this.hasCompletedIsarUserMigration = true,
-    this.downloadTranscodingCodec,
-    this.downloadTranscodeBitrate,
-    this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
-    this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
-    this.swipeInsertQueueNext = _swipeInsertQueueNext,
-    this.useFixedSizeGridTiles = false,
-    this.fixedGridTileSize = _fixedGridTileSizeDefault,
-    this.allowSplitScreen = true,
-    this.splitScreenPlayerWidth = _defaultSplitScreenPlayerWidth,
-    this.enableVibration = _enableVibration,
-    this.prioritizeCoverFactor = _prioritizeCoverFactor,
-    this.suppressPlayerPadding = _suppressPlayerPadding,
-    this.hidePlayerBottomActions = _hidePlayerBottomActions,
-    this.reportQueueToServer = _reportQueueToServerDefault,
-    this.periodicPlaybackSessionUpdateFrequencySeconds =
-        _periodicPlaybackSessionUpdateFrequencySecondsDefault,
-    this.showArtistChipImage = _showArtistChipImage,
-    this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
-    this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
-    this.startInstantMixForIndividualTracks = _startInstantMixForIndividualTracksDefault,
-    this.showLyricsTimestamps = _showLyricsTimestampsDefault,
-    this.lyricsAlignment = _lyricsAlignmentDefault,
-    this.lyricsFontSize = _lyricsFontSizeDefault,
-    this.showLyricsScreenAlbumPrelude = _showLyricsScreenAlbumPreludeDefault,
-    this.showStopButtonOnMediaNotification = _showStopButtonOnMediaNotificationDefault,
-    this.showSeekControlsOnMediaNotification = _showSeekControlsOnMediaNotificationDefault,
-  });
+  FinampSettings(
+      {this.isOffline = _isOfflineDefault,
+      this.shouldTranscode = _shouldTranscodeDefault,
+      this.transcodeBitrate = _transcodeBitrateDefault,
+      // downloadLocations is required since the other values can be created with
+      // default values. create() is used to return a FinampSettings with
+      // downloadLocations.
+      required this.downloadLocations,
+      this.androidStopForegroundOnPause = _androidStopForegroundOnPauseDefault,
+      required this.showTabs,
+      this.onlyShowFavourite = _isFavouriteDefault,
+      this.sortBy = SortBy.sortName,
+      this.sortOrder = SortOrder.ascending,
+      this.songShuffleItemCount = _songShuffleItemCountDefault,
+      this.volumeNormalizationActive = _volumeNormalizationActiveDefault,
+      this.volumeNormalizationIOSBaseGain =
+          _volumeNormalizationIOSBaseGainDefault,
+      this.volumeNormalizationMode = _volumeNormalizationModeDefault,
+      this.contentViewType = _contentViewType,
+      this.playbackSpeedVisibility = _playbackSpeedVisibility,
+      this.contentGridViewCrossAxisCountPortrait =
+          _contentGridViewCrossAxisCountPortrait,
+      this.contentGridViewCrossAxisCountLandscape =
+          _contentGridViewCrossAxisCountLandscape,
+      this.showTextOnGridView = _showTextOnGridView,
+      this.sleepTimerSeconds = _sleepTimerSeconds,
+      required this.downloadLocationsMap,
+      this.useCoverAsBackground = _useCoverAsBackground,
+      this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
+      this.showArtistsTopSongs = _showArtistsTopSongs,
+      this.bufferDurationSeconds = _bufferDurationSeconds,
+      required this.tabSortBy,
+      required this.tabSortOrder,
+      this.loopMode = _defaultLoopMode,
+      this.playbackSpeed = _defaultPlaybackSpeed,
+      this.tabOrder = _tabOrder,
+      this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
+      this.hasCompletedBlurhashImageMigration = true,
+      this.hasCompletedBlurhashImageMigrationIdFix = true,
+      this.hasCompletedDownloadsServiceMigration = true,
+      this.requireWifiForDownloads = false,
+      this.onlyShowFullyDownloaded = false,
+      this.showDownloadsWithUnknownLibrary = true,
+      this.maxConcurrentDownloads = 10,
+      this.downloadWorkers = 5,
+      this.resyncOnStartup = _defaultResyncOnStartup,
+      this.preferQuickSyncs = true,
+      this.hasCompletedIsarUserMigration = true,
+      this.downloadTranscodingCodec,
+      this.downloadTranscodeBitrate,
+      this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
+      this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
+      this.swipeInsertQueueNext = _swipeInsertQueueNext,
+      this.useFixedSizeGridTiles = false,
+      this.fixedGridTileSize = _fixedGridTileSizeDefault,
+      this.allowSplitScreen = true,
+      this.splitScreenPlayerWidth = _defaultSplitScreenPlayerWidth,
+      this.enableVibration = _enableVibration,
+      this.prioritizeCoverFactor = _prioritizeCoverFactor,
+      this.suppressPlayerPadding = _suppressPlayerPadding,
+      this.hidePlayerBottomActions = _hidePlayerBottomActions,
+      this.reportQueueToServer = _reportQueueToServerDefault,
+      this.periodicPlaybackSessionUpdateFrequencySeconds =
+          _periodicPlaybackSessionUpdateFrequencySecondsDefault,
+      this.showArtistChipImage = _showArtistChipImage,
+      this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
+      this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
+      this.startInstantMixForIndividualTracks =
+          _startInstantMixForIndividualTracksDefault,
+      this.showLyricsTimestamps = _showLyricsTimestampsDefault,
+      this.lyricsAlignment = _lyricsAlignmentDefault,
+      this.lyricsFontSize = _lyricsFontSizeDefault,
+      this.showLyricsScreenAlbumPrelude = _showLyricsScreenAlbumPreludeDefault,
+      this.showStopButtonOnMediaNotification =
+          _showStopButtonOnMediaNotificationDefault,
+      this.showSeekControlsOnMediaNotification =
+          _showSeekControlsOnMediaNotificationDefault,
+      this.keepScreenOnOption = _keepScreenOnOption,
+      this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
+      this.featureChipsConfiguration = _featureChipsConfigurationDefault,
+      this.showCoversOnAlbumScreen = _showCoversOnAlbumScreenDefault,
+      this.hasDownloadedPlaylistInfo = _hasDownloadedPlaylistInfoDefault,
+      this.transcodingSegmentContainer = _defaultTranscodingSegmentContainer});
 
   @HiveField(0, defaultValue: _isOfflineDefault)
   bool isOffline;
@@ -257,10 +280,6 @@ class FinampSettings {
   @HiveField(16, defaultValue: _useCoverAsBackground)
   bool useCoverAsBackground = _useCoverAsBackground;
 
-  @HiveField(17, defaultValue: _hideSongArtistsIfSameAsAlbumArtists)
-  bool hideSongArtistsIfSameAsAlbumArtists =
-      _hideSongArtistsIfSameAsAlbumArtists;
-
   @HiveField(18, defaultValue: _bufferDurationSeconds)
   int bufferDurationSeconds;
 
@@ -304,7 +323,7 @@ class FinampSettings {
   VolumeNormalizationMode volumeNormalizationMode;
 
   @HiveField(34, defaultValue: false)
-  bool hasCompleteddownloadsServiceMigration;
+  bool hasCompletedDownloadsServiceMigration;
 
   @HiveField(35, defaultValue: false)
   bool requireWifiForDownloads;
@@ -421,6 +440,24 @@ class FinampSettings {
   @HiveField(71, defaultValue: _showLyricsScreenAlbumPreludeDefault)
   bool showLyricsScreenAlbumPrelude;
 
+  @HiveField(72, defaultValue: _keepScreenOnOption)
+  KeepScreenOnOption keepScreenOnOption;
+
+  @HiveField(73, defaultValue: _keepScreenOnWhilePluggedIn)
+  bool keepScreenOnWhilePluggedIn;
+
+  @HiveField(74, defaultValue: _hasDownloadedPlaylistInfoDefault)
+  bool hasDownloadedPlaylistInfo;
+
+  @HiveField(75, defaultValue: _defaultTranscodingSegmentContainer)
+  FinampSegmentContainer transcodingSegmentContainer;
+
+  @HiveField(76, defaultValue: _featureChipsConfigurationDefault)
+  FinampFeatureChipsConfiguration featureChipsConfiguration;
+
+  @HiveField(77, defaultValue: _showCoversOnAlbumScreenDefault)
+  bool showCoversOnAlbumScreen;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
@@ -469,7 +506,6 @@ class FinampSettings {
   SortOrder getSortOrder(TabContentType tabType) {
     return tabSortOrder[tabType] ?? SortOrder.ascending;
   }
-
 }
 
 enum CustomPlaybackActions {
@@ -672,7 +708,6 @@ enum TabContentType {
         throw const FormatException("Unsupported itemType");
     }
   }
-
 }
 
 @HiveType(typeId: 39)
@@ -2064,7 +2099,6 @@ enum MediaItemParentType {
 @JsonSerializable()
 @HiveType(typeId: 69)
 class MediaItemId {
-
   MediaItemId({
     required this.contentType,
     required this.parentType,
@@ -2079,7 +2113,7 @@ class MediaItemId {
   MediaItemParentType parentType;
 
   @HiveField(2)
-  String? itemId;  
+  String? itemId;
 
   @HiveField(3)
   String? parentId;
@@ -2093,7 +2127,6 @@ class MediaItemId {
   String toString() {
     return jsonEncode(toJson());
   }
-
 }
 
 @HiveType(typeId: 70)
@@ -2175,5 +2208,181 @@ enum LyricsFontSize {
       case LyricsFontSize.large:
         return AppLocalizations.of(context)!.fontSizeOptionLarge;
     }
+  }
+}
+
+@HiveType(typeId: 72)
+enum KeepScreenOnOption {
+  @HiveField(0)
+  disabled,
+  @HiveField(1)
+  alwaysOn,
+  @HiveField(2)
+  whilePlaying,
+  @HiveField(3)
+  whileLyrics;
+
+  /// Human-readable version of this enum. I've written longer descriptions on
+  /// enums like [TabContentType], and I can't be bothered to copy and paste it
+  /// again.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(KeepScreenOnOption keepScreenOnOption) {
+    switch (keepScreenOnOption) {
+      case KeepScreenOnOption.disabled:
+        return "Disabled";
+      case KeepScreenOnOption.alwaysOn:
+        return "Always On";
+      case KeepScreenOnOption.whilePlaying:
+        return "While Playing Music";
+      case KeepScreenOnOption.whileLyrics:
+        return "While Showing Lyrics";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      KeepScreenOnOption keepScreenOnOption, BuildContext context) {
+    switch (keepScreenOnOption) {
+      case KeepScreenOnOption.disabled:
+        return AppLocalizations.of(context)!.keepScreenOnDisabled;
+      case KeepScreenOnOption.alwaysOn:
+        return AppLocalizations.of(context)!.keepScreenOnAlwaysOn;
+      case KeepScreenOnOption.whilePlaying:
+        return AppLocalizations.of(context)!.keepScreenOnWhilePlaying;
+      case KeepScreenOnOption.whileLyrics:
+        return AppLocalizations.of(context)!.keepScreenOnWhileLyrics;
+    }
+  }
+}
+
+@HiveType(typeId: 73)
+enum FinampSegmentContainer {
+  @HiveField(0)
+  mpegTS("ts"),
+  @HiveField(1)
+  fragmentedMp4("mp4");
+
+  const FinampSegmentContainer(this.container);
+
+  /// The container to use to transport the segments
+  final String container;
+}
+
+@HiveType(typeId: 74)
+enum FinampFeatureChipType {
+  @HiveField(0)
+  playCount,
+  @HiveField(1)
+  additionalPeople,
+  @HiveField(2)
+  playbackMode,
+  @HiveField(3)
+  codec,
+  @HiveField(4)
+  bitRate,
+  @HiveField(5)
+  bitDepth,
+  @HiveField(6)
+  size,
+  @HiveField(7)
+  normalizationGain,
+  @HiveField(8)
+  sampleRate;
+
+  /// Human-readable version of the [FinampFeatureChipType]
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(FinampFeatureChipType featureChipType) {
+    switch (featureChipType) {
+      case FinampFeatureChipType.playCount:
+        return "Play Count";
+      case FinampFeatureChipType.additionalPeople:
+        return "Additional People";
+      case FinampFeatureChipType.playbackMode:
+        return "Playback Mode";
+      case FinampFeatureChipType.codec:
+        return "codec";
+      case FinampFeatureChipType.bitRate:
+        return "Bit Rate";
+      case FinampFeatureChipType.bitDepth:
+        return "Bit Depth";
+      case FinampFeatureChipType.size:
+        return "size";
+      case FinampFeatureChipType.normalizationGain:
+        return "Normalization Gain";
+      case FinampFeatureChipType.sampleRate:
+        return "Sample Rate";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      FinampFeatureChipType featureChipType, BuildContext context) {
+    switch (featureChipType) {
+      case FinampFeatureChipType.playCount:
+        return AppLocalizations.of(context)!.playCount;
+      case FinampFeatureChipType.additionalPeople:
+        return AppLocalizations.of(context)!.additionalPeople;
+      case FinampFeatureChipType.playbackMode:
+        return AppLocalizations.of(context)!.playbackMode;
+      case FinampFeatureChipType.codec:
+        return AppLocalizations.of(context)!.codec;
+      case FinampFeatureChipType.bitRate:
+        return AppLocalizations.of(context)!.bitRate;
+      case FinampFeatureChipType.bitDepth:
+        return AppLocalizations.of(context)!.bitDepth;
+      case FinampFeatureChipType.size:
+        return AppLocalizations.of(context)!.size;
+      case FinampFeatureChipType.normalizationGain:
+        return AppLocalizations.of(context)!.normalizationGain;
+      case FinampFeatureChipType.sampleRate:
+        return AppLocalizations.of(context)!.sampleRate;
+    }
+  }
+}
+
+@JsonSerializable()
+@HiveType(typeId: 75)
+class FinampFeatureChipsConfiguration {
+  const FinampFeatureChipsConfiguration({
+    required this.enabled,
+    required this.features,
+  });
+
+  @HiveField(0)
+  final bool enabled;
+
+  @HiveField(1)
+  final List<FinampFeatureChipType> features;
+
+  factory FinampFeatureChipsConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$FinampFeatureChipsConfigurationFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$FinampFeatureChipsConfigurationToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
+
+  // implement copyWith
+  FinampFeatureChipsConfiguration copyWith({
+    bool? enabled,
+    List<FinampFeatureChipType>? features,
+  }) {
+    return FinampFeatureChipsConfiguration(
+      enabled: enabled ?? this.enabled,
+      features: features ?? this.features,
+    );
   }
 }

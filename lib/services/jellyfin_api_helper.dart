@@ -237,6 +237,7 @@ class JellyfinApiHelper {
     String? searchTerm,
     String? filters,
     String? fields,
+
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
     int? startIndex,
@@ -258,7 +259,8 @@ class JellyfinApiHelper {
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
 
     if (parentItem != null) {
-      _jellyfinApiHelperLogger.fine("Getting artists which are children of ${parentItem.name}");
+      _jellyfinApiHelperLogger
+          .fine("Getting artists which are children of ${parentItem.name}");
     } else {
       _jellyfinApiHelperLogger.fine("Getting artists.");
     }
@@ -571,14 +573,15 @@ class JellyfinApiHelper {
       entryIds: entryIds?.join(","),
     );
     if (response.statusCode == 403) {
-      _jellyfinApiHelperLogger.warning("Failed to remove items from playlist due to insufficient permissions. Status code: ${response.statusCode}");
+      _jellyfinApiHelperLogger.warning(
+          "Failed to remove items from playlist due to insufficient permissions. Status code: ${response.statusCode}");
       throw "You do not have permission to remove items from this playlist. Status code: ${response.statusCode}";
     } else if (response.error != null) {
       if (response.error == "") {
         throw "An unknown error occurred while removing items from the playlist. Status code: ${response.statusCode}";
       }
       throw "${response.error}. Status code: ${response.statusCode}";
-    } 
+    }
   }
 
   /// Updates an item.

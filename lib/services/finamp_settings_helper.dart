@@ -216,15 +216,6 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setHideSongArtistsIfSameAsAlbumArtists(
-      bool hideSongArtistsIfSameAsAlbumArtists) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hideSongArtistsIfSameAsAlbumArtists =
-        hideSongArtistsIfSameAsAlbumArtists;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setShowArtistsTopSongs(bool showArtistsTopSongs) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.showArtistsTopSongs = showArtistsTopSongs;
@@ -290,7 +281,7 @@ class FinampSettingsHelper {
   static void setHasCompleteddownloadsServiceMigration(
       bool hasCompleteddownloadsServiceMigration) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hasCompleteddownloadsServiceMigration =
+    finampSettingsTemp.hasCompletedDownloadsServiceMigration =
         hasCompleteddownloadsServiceMigration;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -301,6 +292,13 @@ class FinampSettingsHelper {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.hasCompletedIsarUserMigration =
         hasCompletedIsarUserMigration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setHasDownloadedPlaylistInfo(bool hasDownloadedPlaylistInfo) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.hasDownloadedPlaylistInfo = hasDownloadedPlaylistInfo;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -325,7 +323,8 @@ class FinampSettingsHelper {
   static void resetCustomizationSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
     //TODO refactor this so default settings are available here
-    finampSettingsTemp.playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
+    finampSettingsTemp.playbackSpeedVisibility =
+        PlaybackSpeedVisibility.automatic;
     finampSettingsTemp.showStopButtonOnMediaNotification = false;
     finampSettingsTemp.showSeekControlsOnMediaNotification = true;
     Hive.box<FinampSettings>("FinampSettings")
@@ -358,6 +357,20 @@ class FinampSettingsHelper {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.periodicPlaybackSessionUpdateFrequencySeconds =
         periodicPlaybackSessionUpdateFrequencySeconds;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setKeepScreenOnOption(KeepScreenOnOption keepScreenOnOption) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.keepScreenOnOption = keepScreenOnOption;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setKeepScreenOnWhileCharging(bool keepScreenOnWhileCharging) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.keepScreenOnWhilePluggedIn = keepScreenOnWhileCharging;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

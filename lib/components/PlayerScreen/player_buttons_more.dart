@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/finamp_models.dart';
 
@@ -20,28 +21,33 @@ class PlayerButtonsMore extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return IconTheme(
-      data: IconThemeData(
-        color: IconTheme.of(context).color,
-        size: 24,
-      ),
-      child: IconButton(
-        icon: const Icon(
-          TablerIcons.menu_2,
+    return Semantics(
+      label: AppLocalizations.of(context)!.trackMenuButtonTooltip,
+      excludeSemantics: true, // replace child semantics with custom semantics
+      container: true,
+      child: IconTheme(
+        data: IconThemeData(
+          color: IconTheme.of(context).color,
+          size: 24,
         ),
-        visualDensity: VisualDensity.compact,
-        onPressed: () async {
-          if (item == null) return;
-          var inPlaylist = queueItemInPlaylist(queueItem);
-          await showModalSongMenu(
-            context: context,
-            item: item!,
-            usePlayerTheme: true,
-            showPlaybackControls: true, // show controls on player screen
-            parentItem: inPlaylist ? queueItem!.source.item : null,
-            isInPlaylist: inPlaylist,
-          );
-        },
+        child: IconButton(
+          icon: const Icon(
+            TablerIcons.menu_2,
+          ),
+          visualDensity: VisualDensity.compact,
+          onPressed: () async {
+            if (item == null) return;
+            var inPlaylist = queueItemInPlaylist(queueItem);
+            await showModalSongMenu(
+              context: context,
+              item: item!,
+              usePlayerTheme: true,
+              showPlaybackControls: true, // show controls on player screen
+              parentItem: inPlaylist ? queueItem!.source.item : null,
+              isInPlaylist: inPlaylist,
+            );
+          },
+        ),
       ),
     );
   }

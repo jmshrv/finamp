@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io' show HttpClient, Platform;
 
+import 'package:app_set_id/app_set_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
@@ -336,7 +337,6 @@ abstract class JellyfinApi extends ChopperService {
   )
   @Get(path: "/Artists")
   Future<dynamic> getArtists({
-
     /// Specify this to localize the search to a specific item or folder. Omit
     /// to use the root.
     @Query("ParentId") String? parentId,
@@ -387,7 +387,6 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Optional. If enabled, only favorite artists will be returned.
     @Query("IsFavorite") bool? isFavorite,
-
   });
 
   @FactoryConverter(
@@ -526,7 +525,8 @@ abstract class JellyfinApi extends ChopperService {
     final client = ChopperClient(
       client: http.IOClient(HttpClient()
             ..connectionTimeout = const Duration(
-                seconds: 10) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+                seconds:
+                    10) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
           ),
       // The first part of the URL is now here
       services: [
@@ -609,13 +609,14 @@ Future<String> getAuthHeader() async {
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+    final appSetId = await AppSetId().getIdentifier();
     authHeader = '${authHeader}Device="${androidDeviceInfo.model}", ';
-    authHeader = '${authHeader}DeviceId="${androidDeviceInfo.id}", ';
+    authHeader = '${authHeader}DeviceId="$appSetId", ';
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+    final appSetId = await AppSetId().getIdentifier();
     authHeader = '${authHeader}Device="${iosDeviceInfo.name}", ';
-    authHeader =
-        '${authHeader}DeviceId="${iosDeviceInfo.identifierForVendor}", ';
+    authHeader = '${authHeader}DeviceId="$appSetId", ';
   } else if (Platform.isWindows) {
     WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
     authHeader = '${authHeader}Device="${windowsDeviceInfo.computerName}", ';

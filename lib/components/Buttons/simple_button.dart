@@ -39,9 +39,6 @@ class SimpleButton extends StatelessWidget {
         color: (disabled || inactive) ? iconColor?.withOpacity(0.5) : iconColor,
         weight: 1.5,
       ),
-      const SizedBox(
-        width: 6,
-      ),
       Text(
         text,
         style: TextStyle(
@@ -51,6 +48,7 @@ class SimpleButton extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),
+        textAlign: TextAlign.center,
       ),
     ];
 
@@ -74,6 +72,8 @@ class SimpleButton extends StatelessWidget {
         ),
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+          spacing: 6.0,
           children: iconPosition == IconPosition.start
               ? contents
               : contents.reversed.toList(),

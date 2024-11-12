@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/services/queue_service.dart';
@@ -9,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
 
+import 'package:finamp/services/downloads_service.dart';
 import '../components/MusicScreen/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
@@ -20,6 +22,27 @@ import '../services/audio_service_helper.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
+
+final _musicScreenLogger = Logger("MusicScreen");
+
+void postLaunchHook(WidgetRef ref) async {
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final queueService = GetIt.instance<QueueService>();
+
+  // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
+  if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
+    await downloadsService.addDefaultPlaylistInfoDownload().catchError((e) {
+      // log error without snackbar, we don't want users to be greeted with errors on first launch
+      _musicScreenLogger.severe("Failed to download playlist metadata: $e");
+    });
+    FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
+  }
+
+  // Restore queue
+  unawaited(queueService
+      .performInitialQueueLoad()
+      .catchError((x) => GlobalSnackbar.error(x)));
+}
 
 class MusicScreen extends ConsumerStatefulWidget {
   const MusicScreen({super.key});
@@ -36,7 +59,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   bool _showShuffleFab = false;
   TextEditingController textEditingController = TextEditingController();
   String? searchQuery;
-  final _musicScreenLogger = Logger("MusicScreen");
   final Map<TabContentType, MusicRefreshCallback> refreshMap = {};
 
   TabController? _tabController;
@@ -44,7 +66,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _queueService = GetIt.instance<QueueService>();
 
   void _stopSearching() {
     setState(() {
@@ -92,6 +113,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   @override
   void initState() {
     super.initState();
+    postLaunchHook(ref);
   }
 
   @override
@@ -178,9 +200,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
-    _queueService
-        .performInitialQueueLoad()
-        .catchError((x) => GlobalSnackbar.error(x));
     if (_tabController == null) {
       _buildTabController();
     }
@@ -203,6 +222,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           _buildTabController();
         }
 
+        Timer? _debounce;
+
         return PopScope(
           canPop: !isSearching,
           onPopInvoked: (popped) {
@@ -218,8 +239,22 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
               title: isSearching
                   ? TextField(
                       controller: textEditingController,
+                      autocorrect: false, // avoid autocorrect
+                      enableSuggestions:
+                          true, // keep suggestions which can be manually selected
                       autofocus: true,
-                      onChanged: (value) => setState(() {
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.search,
+                      onChanged: (value) {
+                        if (_debounce?.isActive ?? false) _debounce!.cancel();
+                        _debounce =
+                            Timer(const Duration(milliseconds: 400), () {
+                          setState(() {
+                            searchQuery = value;
+                          });
+                        });
+                      },
+                      onSubmitted: (value) => setState(() {
                         searchQuery = value;
                       }),
                       decoration: InputDecoration(
@@ -317,24 +352,128 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       : 8.0),
               child: getFloatingActionButton(sortedTabs.toList()),
             ),
-            body: TabBarView(
-              controller: _tabController,
-              physics: FinampSettingsHelper.finampSettings.disableGesture
-                  ? const NeverScrollableScrollPhysics()
-                  : const AlwaysScrollableScrollPhysics(),
-              dragStartBehavior: DragStartBehavior.down,
-              children: sortedTabs
-                  .map((tabType) => MusicScreenTabView(
-                        tabContentType: tabType,
-                        searchTerm: searchQuery,
-                        view: _finampUserHelper.currentUser?.currentView,
-                        refresh: refreshMap[tabType],
-                      ))
-                  .toList(),
-            ),
+            body: Builder(builder: (context) {
+              final child = TabBarView(
+                controller: _tabController,
+                physics: FinampSettingsHelper.finampSettings.disableGesture
+                    ? const NeverScrollableScrollPhysics()
+                    : const AlwaysScrollableScrollPhysics(),
+                dragStartBehavior: DragStartBehavior.down,
+                children: sortedTabs
+                    .map((tabType) => MusicScreenTabView(
+                          tabContentType: tabType,
+                          searchTerm: searchQuery,
+                          view: _finampUserHelper.currentUser?.currentView,
+                          refresh: refreshMap[tabType],
+                        ))
+                    .toList(),
+              );
+
+              if (Platform.isAndroid) {
+                return TransparentRightSwipeDetector(
+                  action: () {
+                    if (_tabController?.index == 0 &&
+                        !FinampSettingsHelper.finampSettings.disableGesture) {
+                      Scaffold.of(context).openDrawer();
+                    }
+                  },
+                  child: child,
+                );
+              }
+
+              return child;
+            }),
           ),
         );
       },
     );
+  }
+}
+
+// This class causes a horizontal swipe to be processed even when another widget
+// wins the GestureArena.
+class _TransparentSwipeRecognizer extends HorizontalDragGestureRecognizer {
+  _TransparentSwipeRecognizer({
+    super.debugOwner,
+    super.supportedDevices,
+  });
+
+  @override
+  void rejectGesture(int pointer) {
+    acceptGesture(pointer);
+  }
+}
+
+// This class is a cut-down version of SimplifiedGestureDetector/GestureDetector,
+// but using _TransparentSwipeRecognizer instead of HorizontalDragGestureRecognizer
+// to allow both it and the TabBarView to process the same gestures.
+class TransparentRightSwipeDetector extends StatefulWidget {
+  const TransparentRightSwipeDetector(
+      {super.key, this.child, required this.action});
+
+  final Widget? child;
+
+  final void Function() action;
+
+  @override
+  State<TransparentRightSwipeDetector> createState() =>
+      _TransparentRightSwipeDetectorState();
+}
+
+class _TransparentRightSwipeDetectorState
+    extends State<TransparentRightSwipeDetector> {
+  @override
+  Widget build(BuildContext context) {
+    /// Device types that scrollables should accept drag gestures from by default.
+    const Set<PointerDeviceKind> supportedDevices = <PointerDeviceKind>{
+      PointerDeviceKind.touch,
+      PointerDeviceKind.stylus,
+      PointerDeviceKind.invertedStylus,
+      PointerDeviceKind.trackpad,
+      // The VoiceAccess sends pointer events with unknown type when scrolling
+      // scrollables.
+      PointerDeviceKind.unknown,
+    };
+    final Map<Type, GestureRecognizerFactory> gestures =
+        <Type, GestureRecognizerFactory>{};
+    gestures[_TransparentSwipeRecognizer] =
+        GestureRecognizerFactoryWithHandlers<_TransparentSwipeRecognizer>(
+      () => _TransparentSwipeRecognizer(
+          debugOwner: this, supportedDevices: supportedDevices),
+      (_TransparentSwipeRecognizer instance) {
+        instance
+          ..onStart = _onHorizontalDragStart
+          ..onUpdate = _onHorizontalDragUpdate
+          ..onEnd = _onHorizontalDragEnd
+          ..supportedDevices = supportedDevices;
+      },
+    );
+
+    return RawGestureDetector(
+      gestures: gestures,
+      child: widget.child,
+    );
+  }
+
+  Offset? _initialSwipeOffset;
+
+  void _onHorizontalDragStart(DragStartDetails details) {
+    _initialSwipeOffset = details.globalPosition;
+  }
+
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    final finalOffset = details.globalPosition;
+    final initialOffset = _initialSwipeOffset;
+    if (initialOffset != null) {
+      final offsetDifference = initialOffset.dx - finalOffset.dx;
+      if (offsetDifference < -100.0) {
+        _initialSwipeOffset = null;
+        widget.action();
+      }
+    }
+  }
+
+  void _onHorizontalDragEnd(DragEndDetails details) {
+    _initialSwipeOffset = null;
   }
 }

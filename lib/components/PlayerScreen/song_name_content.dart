@@ -5,7 +5,9 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/screens/player_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/queue_service.dart';
 import 'album_chip.dart';
@@ -55,24 +57,32 @@ class SongNameContent extends StatelessWidget {
                               : 24,
                       maxWidth: 280,
                     ),
-                    child: BalancedText(
-                      currentTrack.item.title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        height: 26 / 20,
-                        fontWeight:
-                            Theme.of(context).brightness == Brightness.light
-                                ? FontWeight.w500
-                                : FontWeight.w600,
-                        overflow: TextOverflow.visible,
+                    child: Semantics.fromProperties(
+                      properties: SemanticsProperties(
+                        label:
+                            "${currentTrack.item.title} (${AppLocalizations.of(context)!.title})",
                       ),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines:
-                          controller.shouldShow(PlayerHideable.twoLineTitle)
-                              ? 2
-                              : 1,
+                      excludeSemantics: true,
+                      container: true,
+                      child: BalancedText(
+                        currentTrack.item.title,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          height: 26 / 20,
+                          fontWeight:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? FontWeight.w500
+                                  : FontWeight.w600,
+                          overflow: TextOverflow.visible,
+                        ),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines:
+                            controller.shouldShow(PlayerHideable.twoLineTitle)
+                                ? 2
+                                : 1,
+                      ),
                     ),
                   ),
                 ),

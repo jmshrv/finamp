@@ -59,21 +59,21 @@ jobs:
         && cp assets/com.unicornsonlsd.finamp.metainfo.xml build/linux/x64/release/
     # archive bundle and generate checksum
     - run: |
-        tar -czf finamp-${{ github.ref }}-linux-release.tar.gz --directory build/linux/x64/release/ bundle icons finamp.desktop.m4 com.unicornsonlsd.finamp.metainfo.xml \
-        && sha256sum finamp-${{ github.ref }}-linux-release.tar.gz > finamp-${{ github.ref }}-linux-release.tar.gz.sha256sum
+        tar -czf finamp-${{ github.ref_name }}-linux-release.tar.gz --directory build/linux/x64/release/ bundle icons finamp.desktop.m4 com.unicornsonlsd.finamp.metainfo.xml \
+        && sha256sum finamp-${{ github.ref_name }}-linux-release.tar.gz > finamp-${{ github.ref_name }}-linux-release.tar.gz.sha256sum
     - uses: actions/upload-artifact@v4
       with:
-        name: finamp-${{ github.ref }}-linux-release.tar.gz
-        path: finamp-${{ github.ref }}-linux-release.tar.gz
+        name: finamp-${{ github.ref_name }}-linux-release.tar.gz
+        path: finamp-${{ github.ref_name }}-linux-release.tar.gz
         compression-level: 0 # no compression
     - uses: actions/upload-artifact@v4
       with:
-        name: finamp-${{ github.ref }}-linux-release.tar.gz.sha256sum
-        path: finamp-${{ github.ref }}-linux-release.tar.gz.sha256sum
+        name: finamp-${{ github.ref_name }}-linux-release.tar.gz.sha256sum
+        path: finamp-${{ github.ref_name }}-linux-release.tar.gz.sha256sum
         compression-level: 0 # no compression
     - name: Upload release archive
       uses: alexellis/upload-assets@0.4.1
       env:
         GITHUB_TOKEN: ${{ github.token }}
       with:
-        asset_paths: '["./finamp-${{ github.ref }}-linux-release.tar.gz", "./finamp-${{ github.ref }}-linux-release.tar.gz.sha256sum"]'
+        asset_paths: '["./finamp-${{ github.ref_name }}-linux-release.tar.gz", "./finamp-${{ github.ref_name }}-linux-release.tar.gz.sha256sum"]'

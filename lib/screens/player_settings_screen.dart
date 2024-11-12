@@ -19,6 +19,7 @@ class PlayerSettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: const [
+          const ShowFeatureChipsToggle(),
           PlayerScreenMinimumCoverPaddingEditor(),
           SuppressPlayerPaddingSwitch(),
           PrioritizeCoverSwitch(),
@@ -71,7 +72,8 @@ class hidePlayerBottomActionsSwitch extends StatelessWidget {
 
         return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.hidePlayerBottomActions),
-          subtitle: Text(AppLocalizations.of(context)!.hidePlayerBottomActionsSubtitle),
+          subtitle: Text(
+              AppLocalizations.of(context)!.hidePlayerBottomActionsSubtitle),
           value: hideQueue ?? false,
           onChanged: hideQueue == null
               ? null
@@ -109,6 +111,39 @@ class PrioritizeCoverSwitch extends StatelessWidget {
                   FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
                   finampSettingsTemp.prioritizeCoverFactor = value ? 3.0 : 8.0;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}
+
+class ShowFeatureChipsToggle extends StatelessWidget {
+  const ShowFeatureChipsToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? featureChipsEnabled =
+            box.get("FinampSettings")?.featureChipsConfiguration.enabled;
+
+        return SwitchListTile.adaptive(
+          title:
+              Text(AppLocalizations.of(context)!.showFeatureChipsToggleTitle),
+          subtitle: Text(
+              AppLocalizations.of(context)!.showFeatureChipsToggleSubtitle),
+          value: featureChipsEnabled ?? false,
+          onChanged: featureChipsEnabled == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.featureChipsConfiguration =
+                      finampSettingsTemp.featureChipsConfiguration
+                          .copyWith(enabled: value);
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );

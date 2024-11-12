@@ -10,7 +10,7 @@ import '../../services/finamp_settings_helper.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
 import 'playlist_name_edit_button.dart';
-import 'song_list_tile.dart';
+import 'track_list_tile.dart';
 
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
@@ -163,7 +163,22 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
+    if (widget.childrenForList.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+          child: Text(
+            AppLocalizations.of(context)!.emptyTopTracksList,
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+    return SliverFixedExtentList(
+      itemExtent: TrackListItemTile.defaultTileHeight +
+          TrackListItemTile.defaultTitleGap,
+      // return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           // When user selects song from disc other than first, index number is
@@ -185,10 +200,13 @@ class _SongsSliverListState extends State<SongsSliverList> {
             return item;
           }
 
-          return SongListTile(
+          return TrackListTile(
             item: item,
             children: widget.childrenForQueue,
             index: indexOffset,
+            showIndex: item.albumId == widget.parent.id,
+            showCover: item.albumId != widget.parent.id ||
+                FinampSettingsHelper.finampSettings.showCoversOnAlbumScreen,
             parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();
@@ -198,24 +216,6 @@ class _SongsSliverListState extends State<SongsSliverList> {
             },
             isInPlaylist: widget.parent.type == "Playlist",
             isOnArtistScreen: widget.isOnArtistScreen,
-            // show artists except for this one scenario
-            showArtists: !(
-                    // we're on album screen
-                    widget.parent.type == "MusicAlbum"
-                        // "hide song artists if they're the same as album artists" == true
-                        &&
-                        FinampSettingsHelper
-                            .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                        // song artists == album artists
-                        &&
-                        setEquals(
-                            widget.parent.albumArtists
-                                ?.map((e) => e.name)
-                                .toSet(),
-                            item.artists?.toSet()))
-                // hide song artist if on the artist screen
-                &&
-                widget.parent.type != "MusicArtist",
             showPlayCount: widget.showPlayCount,
           );
         },

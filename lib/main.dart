@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/gen/assets.gen.dart';
+import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
@@ -16,14 +20,12 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/playon_handler.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:audio_session/audio_session.dart';
-import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,12 +34,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:path/path.dart' as path_helper;
 
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
@@ -71,6 +74,7 @@ import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
+import 'services/ui_overlay_setter_observer.dart';
 import 'setup_logging.dart';
 
 void main() async {
@@ -78,6 +82,7 @@ void main() async {
   bool hasFailed = false;
   try {
     await setupLogging();
+    await _setupEdgeToEdgeOverlayStyle();
     await setupHive();
     _migrateDownloadLocations();
     _migrateSortOptions();
@@ -88,6 +93,7 @@ void main() async {
     await _setupOSIntegration();
     await _setupPlaybackServices();
     await _setupPlayonHandler();
+    await _setupKeepScreenOnHelper();
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -111,14 +117,20 @@ void main() async {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
 
-    final String localeString = (LocaleHelper.locale != null)
-        ? ((LocaleHelper.locale?.countryCode != null)
-            ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
-            : LocaleHelper.locale.toString())
-        : "en_US";
-    await initializeDateFormatting(localeString, null);
+    await findSystemLocale();
+    await initializeDateFormatting();
 
     runApp(const Finamp());
+  }
+}
+
+Future<void> _setupEdgeToEdgeOverlayStyle() async {
+  if (Platform.isAndroid) {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent));
+    final binding = WidgetsFlutterBinding.ensureInitialized();
+    binding.addObserver(UIOverlaySetterObserver());
   }
 }
 
@@ -142,7 +154,7 @@ Future<void> _setupDownloadsHelper() async {
   final downloadsService = GetIt.instance<DownloadsService>();
 
   if (!FinampSettingsHelper
-      .finampSettings.hasCompleteddownloadsServiceMigration) {
+      .finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
     FinampSettingsHelper.setHasCompleteddownloadsServiceMigration(true);
   }
@@ -156,6 +168,10 @@ Future<void> _setupDownloadsHelper() async {
 Future<void> _setupPlayonHandler() async {
   GetIt.instance.registerSingleton(PlayonHandler());
   unawaited(GetIt.instance<PlayonHandler>().initialize());
+}
+
+Future<void> _setupKeepScreenOnHelper() async {
+  GetIt.instance.registerSingleton(KeepScreenOnHelper());
 }
 
 Future<void> setupHive() async {
@@ -221,6 +237,10 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LyricDtoAdapter());
   Hive.registerAdapter(LyricsAlignmentAdapter());
   Hive.registerAdapter(LyricsFontSizeAdapter());
+  Hive.registerAdapter(KeepScreenOnOptionAdapter());
+  Hive.registerAdapter(FinampSegmentContainerAdapter());
+  Hive.registerAdapter(FinampFeatureChipsConfigurationAdapter());
+  Hive.registerAdapter(FinampFeatureChipTypeAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
@@ -317,8 +337,8 @@ Future<void> _setupPlaybackServices() async {
         // notificationColor: TODO use the theme color for older versions of Android,
         preloadArtwork: false,
         androidBrowsableRootExtras: <String, dynamic>{
-          "android.media.browse.SEARCH_SUPPORTED":
-              true, // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+          // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+          "android.media.browse.SEARCH_SUPPORTED": true,
           // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
           "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT":
               FinampSettingsHelper.finampSettings.contentViewType ==
@@ -332,8 +352,6 @@ Future<void> _setupPlaybackServices() async {
                   : 2,
         }),
   );
-  // GetIt.instance.registerSingletonAsync<AudioHandler>(
-  //     () async => );
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
   GetIt.instance.registerSingleton(QueueService());
@@ -404,7 +422,7 @@ Future<void> _setupFinampUserHelper() async {
 }
 
 class Finamp extends ConsumerStatefulWidget {
-  const Finamp({Key? key}) : super(key: key);
+  const Finamp({super.key});
 
   @override
   ConsumerState<Finamp> createState() => _FinampState();
@@ -515,9 +533,14 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                           const LyricsSettingsScreen(),
                       LanguageSelectionScreen.routeName: (context) =>
                           const LanguageSelectionScreen(),
+                      AlbumSettingsScreen.routeName: (context) =>
+                          const AlbumSettingsScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
-                    navigatorObservers: [SplitScreenNavigatorObserver()],
+                    navigatorObservers: [
+                      SplitScreenNavigatorObserver(),
+                      KeepScreenOnObserver()
+                    ],
                     builder: buildPlayerSplitScreenScaffold,
                     theme: ThemeData(
                       brightness: Brightness.light,

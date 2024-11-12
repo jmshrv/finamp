@@ -1,6 +1,7 @@
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -79,6 +80,7 @@ class DownloadButton extends ConsumerWidget {
     );
     var deleteButton = IconButton(
       icon: const Icon(Icons.delete),
+      tooltip: AppLocalizations.of(context)!.deleteItem,
       // If offline, we don't allow the user to delete items.
       // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
       // If they did, AlbumScreen would show an error since the item no longer exists.
@@ -110,6 +112,7 @@ class DownloadButton extends ConsumerWidget {
     );
     var syncButton = IconButton(
       icon: const Icon(Icons.sync),
+      tooltip: AppLocalizations.of(context)!.syncDownloads,
       onPressed: () {
         downloadsService.resync(item, viewId);
       },
@@ -125,7 +128,7 @@ class DownloadButton extends ConsumerWidget {
     var coreButton = status.isRequired ? deleteButton : downloadButton;
     // Only show sync on album/song if there we know we are outdated due to failed downloads or the like.
     // On playlists/artists/genres, always show if downloaded.
-    List<IconButton> buttons;
+    List<Widget> buttons;
     if (status == DownloadItemStatus.notNeeded ||
         ((item.baseItemType == BaseItemDtoType.album ||
                 item.baseItemType == BaseItemDtoType.song) &&

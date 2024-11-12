@@ -39,8 +39,7 @@ class _CustomizationSettingsScreenState
       body: ListView(
         children: [
           const PlaybackSpeedControlVisibilityDropdownListTile(),
-          if (!Platform.isIOS)
-            const ShowStopButtonOnMediaNotificationToggle(),
+          if (!Platform.isIOS) const ShowStopButtonOnMediaNotificationToggle(),
           const ShowSeekControlsOnMediaNotificationToggle(),
         ],
       ),
@@ -56,12 +55,14 @@ class ShowStopButtonOnMediaNotificationToggle extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool? showStopButtonOnMediaNotification = box.get("FinampSettings")?.showStopButtonOnMediaNotification;
+        bool? showStopButtonOnMediaNotification =
+            box.get("FinampSettings")?.showStopButtonOnMediaNotification;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showStopButtonOnMediaNotificationTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.showStopButtonOnMediaNotificationSubtitle),
+          title: Text(AppLocalizations.of(context)!
+              .showStopButtonOnMediaNotificationTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .showStopButtonOnMediaNotificationSubtitle),
           value: showStopButtonOnMediaNotification ?? false,
           onChanged: showStopButtonOnMediaNotification == null
               ? null
@@ -85,19 +86,22 @@ class ShowSeekControlsOnMediaNotificationToggle extends StatelessWidget {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool? showSeekControlsOnMediaNotification = box.get("FinampSettings")?.showSeekControlsOnMediaNotification;
+        bool? showSeekControlsOnMediaNotification =
+            box.get("FinampSettings")?.showSeekControlsOnMediaNotification;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showSeekControlsOnMediaNotificationTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.showSeekControlsOnMediaNotificationSubtitle),
+          title: Text(AppLocalizations.of(context)!
+              .showSeekControlsOnMediaNotificationTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .showSeekControlsOnMediaNotificationSubtitle),
           value: showSeekControlsOnMediaNotification ?? false,
           onChanged: showSeekControlsOnMediaNotification == null
               ? null
               : (value) {
                   FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
-                  finampSettingsTemp.showSeekControlsOnMediaNotification = value;
+                  finampSettingsTemp.showSeekControlsOnMediaNotification =
+                      value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );

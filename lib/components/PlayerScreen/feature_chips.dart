@@ -30,6 +30,9 @@ class FeatureState {
   final FinampSettings settings;
   final MetadataProvider? metadata;
 
+  FinampFeatureChipsConfiguration get configuration =>
+      settings.featureChipsConfiguration;
+
   bool get isDownloaded => metadata?.isDownloaded ?? false;
   bool get isTranscoding =>
       !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] ?? false);
@@ -64,101 +67,121 @@ class FeatureState {
       );
     }
 
-    // TODO this will likely be extremely outdated if offline, hide?
-    if (currentTrack?.baseItem?.userData?.playCount != null) {
-      features.add(
-        FeatureProperties(
-          text: AppLocalizations.of(context)!
-              .playCountValue(currentTrack!.baseItem!.userData?.playCount ?? 0),
-        ),
-      );
-    }
+    for (var feature in configuration.features) {
+      // TODO this will likely be extremely outdated if offline, hide?
+      if (feature == FinampFeatureChipType.playCount &&
+          currentTrack?.baseItem?.userData?.playCount != null) {
+        features.add(
+          FeatureProperties(
+            type: feature,
+            text: AppLocalizations.of(context)!.playCountValue(
+                currentTrack!.baseItem!.userData?.playCount ?? 0),
+          ),
+        );
+      }
 
-    if (currentTrack?.baseItem?.people?.isNotEmpty ?? false) {
-      currentTrack?.baseItem?.people?.forEach((person) {
-        features.add(
-          FeatureProperties(
-            text: "${person.role}: ${person.name}",
-          ),
-        );
-      });
-    }
+      if (feature == FinampFeatureChipType.additionalPeople &&
+          (currentTrack?.baseItem?.people?.isNotEmpty ?? false)) {
+        currentTrack?.baseItem?.people?.forEach((person) {
+          features.add(
+            FeatureProperties(
+              type: feature,
+              text: "${person.role}: ${person.name}",
+            ),
+          );
+        });
+      }
 
-    if (currentTrack?.item.extras?["downloadedSongPath"] != null) {
-      features.add(
-        FeatureProperties(
-          text: AppLocalizations.of(context)!.playbackModeLocal,
-        ),
-      );
-    } else {
-      if (isTranscoding) {
-        features.add(
-          FeatureProperties(
-            text: AppLocalizations.of(context)!.playbackModeTranscoding,
-          ),
-        );
-      } else {
-        features.add(
-          //TODO differentiate between direct streaming and direct playing
-          // const FeatureProperties(
-          //   text: "Direct Streaming",
-          // ),
-          FeatureProperties(
-            text: AppLocalizations.of(context)!.playbackModeDirectPlaying,
-          ),
-        );
+      if (feature == FinampFeatureChipType.playbackMode) {
+        if (currentTrack?.item.extras?["downloadedSongPath"] != null) {
+          features.add(
+            FeatureProperties(
+              type: feature,
+              text: AppLocalizations.of(context)!.playbackModeLocal,
+            ),
+          );
+        } else {
+          if (isTranscoding) {
+            features.add(
+              FeatureProperties(
+                type: feature,
+                text: AppLocalizations.of(context)!.playbackModeTranscoding,
+              ),
+            );
+          } else {
+            features.add(
+              //TODO differentiate between direct streaming and direct playing
+              // const FeatureProperties(
+              //   text: "Direct Streaming",
+              // ),
+              FeatureProperties(
+                type: feature,
+                text: AppLocalizations.of(context)!.playbackModeDirectPlaying,
+              ),
+            );
+          }
+        }
+      }
+
+      if (metadata?.mediaSourceInfo != null) {
+        if (feature == FinampFeatureChipType.codec ||
+            feature == FinampFeatureChipType.bitRate) {
+          // only add this feature the first time
+          if (!features.any((f) => f.type == FinampFeatureChipType.codec)) {
+            features.add(
+              FeatureProperties(
+                type: feature,
+                text:
+                    "${configuration.features.contains(FinampFeatureChipType.codec) ? container.toUpperCase() : ""}${configuration.features.contains(FinampFeatureChipType.codec) && configuration.features.contains(FinampFeatureChipType.bitRate) ? " @ " : ""}${configuration.features.contains(FinampFeatureChipType.bitRate) && bitrate != null ? AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate! ~/ 1000) : ""}",
+              ),
+            );
+          }
+        }
+
+        if (feature == FinampFeatureChipType.bitDepth && bitDepth != null) {
+          features.add(
+            FeatureProperties(
+              type: feature,
+              text: AppLocalizations.of(context)!.numberAsBit(bitDepth!),
+            ),
+          );
+        }
+
+        if (feature == FinampFeatureChipType.sampleRate && sampleRate != null) {
+          features.add(
+            FeatureProperties(
+              type: feature,
+              text: AppLocalizations.of(context)!
+                  .numberAsKiloHertz(sampleRate! / 1000.0),
+            ),
+          );
+        }
+
+        if (feature == FinampFeatureChipType.size && size != null) {
+          features.add(
+            FeatureProperties(
+              type: feature,
+              text: FileSize.getSize(size),
+            ),
+          );
+        }
+      }
+
+      if (feature == FinampFeatureChipType.normalizationGain &&
+          FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
+        double? effectiveGainChange =
+            getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
+        if (effectiveGainChange != null) {
+          features.add(
+            FeatureProperties(
+              type: feature,
+              text: AppLocalizations.of(context)!.numberAsDecibel(
+                  double.parse(effectiveGainChange.toStringAsFixed(1))),
+            ),
+          );
+        }
       }
     }
-
-    if (metadata?.mediaSourceInfo != null) {
-      if (bitrate != null) {
-        features.add(
-          FeatureProperties(
-            text:
-                "${container.toUpperCase()} @ ${AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate! ~/ 1000)}",
-          ),
-        );
-      }
-
-      if (bitDepth != null) {
-        features.add(
-          FeatureProperties(
-            text: AppLocalizations.of(context)!.numberAsBit(bitDepth!),
-          ),
-        );
-      }
-
-      if (sampleRate != null) {
-        features.add(
-          FeatureProperties(
-            text: AppLocalizations.of(context)!
-                .numberAsKiloHertz(sampleRate! / 1000.0),
-          ),
-        );
-      }
-
-      if (size != null) {
-        features.add(
-          FeatureProperties(
-            text: FileSize.getSize(size),
-          ),
-        );
-      }
-    }
-
-    if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
-      double? effectiveGainChange =
-          getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
-      if (effectiveGainChange != null) {
-        features.add(
-          FeatureProperties(
-            text: AppLocalizations.of(context)!.numberAsDecibel(
-                double.parse(effectiveGainChange.toStringAsFixed(1))),
-          ),
-        );
-      }
-    }
-
     return features;
   }
 }
@@ -166,9 +189,11 @@ class FeatureState {
 class FeatureProperties {
   const FeatureProperties({
     required this.text,
+    this.type,
   });
 
   final String text;
+  final FinampFeatureChipType? type;
 }
 
 class FeatureChips extends ConsumerWidget {
