@@ -63,74 +63,80 @@ class NowPlayingBar extends ConsumerWidget {
     final progressBackgroundColor =
         getProgressBackgroundColor(context).withOpacity(0.5);
 
-    return SimpleGestureDetector(
-        onVerticalSwipe: (direction) {
-          if (direction == SwipeDirection.up && retryCallback != null) {
-            retryCallback();
-          }
-        },
-        onTap: retryCallback,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
-          child: Container(
-            decoration: getShadow(context),
-            child: Material(
-              shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
-                  Theme.of(context).brightness == Brightness.light
-                      ? 0.75
-                      : 0.3),
-              borderRadius: BorderRadius.circular(12.0),
-              clipBehavior: Clip.antiAlias,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? IconTheme.of(context).color!.withOpacity(0.1)
-                  : Theme.of(context).cardColor,
-              elevation: 8.0,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: albumImageSize,
-                padding: EdgeInsets.zero,
+    return SafeArea(
+      child: SimpleGestureDetector(
+          onVerticalSwipe: (direction) {
+            if (direction == SwipeDirection.up && retryCallback != null) {
+              retryCallback();
+            }
+          },
+          onTap: retryCallback,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+            child: Container(
+              decoration: getShadow(context),
+              child: Material(
+                shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
+                    Theme.of(context).brightness == Brightness.light
+                        ? 0.75
+                        : 0.3),
+                borderRadius: BorderRadius.circular(12.0),
+                clipBehavior: Clip.antiAlias,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? IconTheme.of(context).color!.withOpacity(0.1)
+                    : Theme.of(context).cardColor,
+                elevation: 8.0,
                 child: Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: progressBackgroundColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          width: albumImageSize,
-                          height: albumImageSize,
-                          decoration: const ShapeDecoration(
-                            shape: Border(),
-                            color: Color.fromRGBO(0, 0, 0, 0.3),
-                          ),
-                          child: (retryCallback != null)
-                              ? const Icon(Icons.refresh, size: albumImageSize)
-                              : const Center(
-                                  child: CircularProgressIndicator.adaptive())),
-                      Expanded(
-                        child: Container(
-                            height: albumImageSize,
-                            padding: const EdgeInsets.only(left: 12, right: 4),
-                            alignment: Alignment.centerLeft,
-                            child: Text((retryCallback != null)
-                                ? AppLocalizations.of(context)!
-                                    .queueRetryMessage
-                                : AppLocalizations.of(context)!
-                                    .queueLoadingMessage)),
+                  width: MediaQuery.of(context).size.width,
+                  height: albumImageSize,
+                  padding: EdgeInsets.zero,
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      color: progressBackgroundColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
-                    ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            width: albumImageSize,
+                            height: albumImageSize,
+                            decoration: const ShapeDecoration(
+                              shape: Border(),
+                              color: Color.fromRGBO(0, 0, 0, 0.3),
+                            ),
+                            child: (retryCallback != null)
+                                ? const Icon(Icons.refresh,
+                                    size: albumImageSize)
+                                : const Center(
+                                    child:
+                                        CircularProgressIndicator.adaptive())),
+                        Expanded(
+                          child: Container(
+                              height: albumImageSize,
+                              padding:
+                                  const EdgeInsets.only(left: 12, right: 4),
+                              alignment: Alignment.centerLeft,
+                              child: Text((retryCallback != null)
+                                  ? AppLocalizations.of(context)!
+                                      .queueRetryMessage
+                                  : AppLocalizations.of(context)!
+                                      .queueLoadingMessage)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   Widget buildNowPlayingBar(
