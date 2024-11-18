@@ -68,7 +68,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger
           .info("Initializing media-kit for Windows/Linux");
       JustAudioMediaKit.title = "Finamp";
-      JustAudioMediaKit.prefetchPlaylist = true; // cache upcoming tracks
+      JustAudioMediaKit.prefetchPlaylist =
+          true; // cache upcoming tracks, enable gapless playback
       JustAudioMediaKit.ensureInitialized(
         linux: true,
         windows: true,
