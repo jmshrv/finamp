@@ -109,11 +109,6 @@ void main() async {
       FlutterError.presentError(details);
       flutterLogger.severe(error, error, details.stack);
     };
-    // On iOS, the status bar will have black icons by default on the login
-    // screen as it does not have an AppBar. To fix this, we set the
-    // brightness to dark manually on startup.
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
 
     await findSystemLocale();
     await initializeDateFormatting();
@@ -129,6 +124,12 @@ Future<void> _setupEdgeToEdgeOverlayStyle() async {
         systemNavigationBarColor: Colors.transparent));
     final binding = WidgetsFlutterBinding.ensureInitialized();
     binding.addObserver(UIOverlaySetterObserver());
+  } else if (Platform.isIOS) {
+    // On iOS, the status bar will have black icons by default on the login
+    // screen as it does not have an AppBar. To fix this, we set the
+    // brightness to dark manually on startup.
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
   }
 }
 
@@ -442,7 +443,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   
     return ProviderScope(
       child: GestureDetector(
         onTap: () {

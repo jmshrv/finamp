@@ -15,6 +15,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -217,6 +218,9 @@ class _PlayerScreenContent extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          systemOverlayStyle: Theme.of(context).brightness == Brightness.dark
+              ? SystemUiOverlayStyle.light
+              : SystemUiOverlayStyle.dark,
           elevation: 0,
           scrolledUnderElevation:
               0.0, // disable tint/shadow when content is scrolled under the app bar
@@ -249,7 +253,8 @@ class _PlayerScreenContent extends ConsumerWidget {
           ],
         ),
         // Required for sleep timer input
-        resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
