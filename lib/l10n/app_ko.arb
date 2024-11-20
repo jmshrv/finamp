@@ -436,7 +436,7 @@
   },
   "refresh": "새로고침",
   "@refresh": {},
-  "redesignBeta": "신상 베타 버전",
+  "redesignBeta": "베타 버전 사용해보기",
   "@redesignBeta": {},
   "errorScreenError": "오류 목록을 가져오지 못했습니다! 이 시점에서는 GitHub에 문제를 등록하고 앱 데이터를 삭제해야 합니다",
   "@errorScreenError": {},
@@ -539,5 +539,56 @@
         "example": "Failed to open download DB"
       }
     }
-  }
+  },
+  "playbackOrderShuffledTooltip": "임의 재생. 전환하려면 탭하세요.",
+  "@playbackOrderShuffledTooltip": {},
+  "playbackOrderLinearTooltip": "순차 재생. 전환하려면 탭하세요.",
+  "@playbackOrderLinearTooltip": {},
+  "loopModeAllTooltip": "모두 반복. 전환하려면 탭하세요.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "한곡 반복. 전환하려면 탭하세요.",
+  "@loopModeOneTooltip": {},
+  "loopModeNoneTooltip": "반복 안 함. 전환하려면 탭하세요.",
+  "@loopModeNoneTooltip": {},
+  "skipToPrevious": "이전 곡으로 넘기기",
+  "@skipToPrevious": {},
+  "skipToNext": "다음 곡으로 넘기기",
+  "@skipToNext": {},
+  "togglePlayback": "재생 전환하기",
+  "@togglePlayback": {},
+  "playArtist": "{artist}의 모든 앨범 재생",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "{artist}의 모든 앨범 임의 재생",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "downloadArtist": "{artist}의 모든 앨범 다운로드",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "deleteFromDevice": "기기에서 삭제하기",
+  "@deleteFromDevice": {},
+  "download": "다운로드",
+  "@download": {},
+  "sync": "서버와 동기화하기",
+  "@sync": {},
+  "about": "Finamp(핀앰프) 소개",
+  "@about": {}
 }
