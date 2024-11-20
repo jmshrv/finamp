@@ -816,10 +816,10 @@ packages:
     dependency: transitive
     description:
       name: permission_handler_html
-      sha256: "6b9cb54b7135073841a35513fba39e598b421702d5f4d92319992fd6eb5532a9"
+      sha256: "38f000e83355abb3392140f6bc3030660cfaef189e1f87824facb76300b4ff24"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.3+4"
+    version: "0.1.3+5"
   permission_handler_platform_interface:
     dependency: transitive
     description:
