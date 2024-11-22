@@ -71,7 +71,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodeBitrate: fields[2] == null ? 320000 : fields[2] as int,
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause:
-          fields[4] == null ? false : fields[4] as bool,
+          fields[4] == null ? true : fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
       onlyShowFavourite: fields[6] == null ? false : fields[6] as bool,
       sortBy: fields[7] as SortBy,
@@ -143,7 +143,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       downloadTranscodingCodec: fields[43] as FinampTranscodingCodec?,
       downloadTranscodeBitrate: fields[45] as int?,
       shouldTranscodeDownloads: fields[44] == null
-          ? TranscodeDownloadsSetting.never
+          ? TranscodeDownloadsSetting.ask
           : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,

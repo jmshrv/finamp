@@ -61,7 +61,7 @@ class FinampUser {
 const _isOfflineDefault = false;
 const _shouldTranscodeDefault = false;
 const _transcodeBitrateDefault = 320000;
-const _androidStopForegroundOnPauseDefault = false;
+const _androidStopForegroundOnPauseDefault = true;
 const _isFavouriteDefault = false;
 const _songShuffleItemCountDefault = 250;
 const _volumeNormalizationActiveDefault = true;
