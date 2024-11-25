@@ -150,7 +150,6 @@ class PlayonHandler {
                 break;
               case "Pause":
                 audioHandler.pause();
-                _playOnHandlerLogger.severe("PAUSEEEEE !");
                 break;
               case "Unpause":
                 audioHandler.play();
