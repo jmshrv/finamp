@@ -125,7 +125,6 @@ class PlayonHandler {
       var request = jsonDecode(value);
 
       if (request['MessageType'] != 'ForceKeepAlive' && request['MessageType'] != 'KeepAlive') {
-        _playOnHandlerLogger.info("Received a '${request['MessageType']}' message: ${request['Data']}");
 
         switch(request['MessageType']) {
           case "GeneralCommand":
