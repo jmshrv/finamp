@@ -416,7 +416,7 @@
   "@removeFromMix": {},
   "bufferDurationSubtitle": "Kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.",
   "@bufferDurationSubtitle": {},
-  "redesignBeta": "Uusi Design Beta",
+  "redesignBeta": "Kokeile Betaa",
   "@redesignBeta": {},
   "swipeInsertQueueNext": "Toista Pyyhkäisty Kappale Seuraavaksi",
   "@swipeInsertQueueNext": {},
@@ -539,5 +539,56 @@
   "viewTypeSubtitle": "Musiikkinäytön näkymätyyppi",
   "@viewTypeSubtitle": {},
   "showCoverAsPlayerBackgroundSubtitle": "Käytetäänkö sumeaa kansikuvitusta taustana soittimen näytöllä vai ei.",
-  "@showCoverAsPlayerBackgroundSubtitle": {}
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "downloadArtist": "Lataa kaikki {artist}:n albumit",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "playbackOrderShuffledTooltip": "Sekoittaminen. Vaihda napauttamalla.",
+  "@playbackOrderShuffledTooltip": {},
+  "playbackOrderLinearTooltip": "Toistaminen järjestyksessä. Vaihda napauttamalla.",
+  "@playbackOrderLinearTooltip": {},
+  "skipToPrevious": "Siirry edelliseen kappaleeseen",
+  "@skipToPrevious": {},
+  "skipToNext": "Siirry seuraavaan kappaleeseen",
+  "@skipToNext": {},
+  "togglePlayback": "Toiston vaihtaminen",
+  "@togglePlayback": {},
+  "loopModeAllTooltip": "Toista kaikki. Vaihda napauttamalla.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "Toista yksi. Vaihda napauttamalla.",
+  "@loopModeOneTooltip": {},
+  "loopModeNoneTooltip": "Älä toista. Vaihda napauttamalla.",
+  "@loopModeNoneTooltip": {},
+  "playArtist": "Toista kaikki {artist}:n albumit",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "Sekoita kaikki {artist}:n albumit",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "deleteFromDevice": "Poista laitteelta",
+  "@deleteFromDevice": {},
+  "download": "Lataa",
+  "@download": {},
+  "sync": "Synkronoi palvelimen kanssa",
+  "@sync": {},
+  "about": "Tietoja Finampista",
+  "@about": {}
 }
