@@ -457,8 +457,12 @@ class QueueService {
         source: source,
         order: order,
         initialIndex: startingIndex);
+    _queueServiceLogger.info(
+        "Started playing '${GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? source.name.getLocalized(GlobalSnackbar.materialAppScaffoldKey.currentContext!) : source.name.type}' (${source.type}) in order $order from index $startingIndex");
     _queueServiceLogger
-        .info("Started playing '${source.name}' (${source.type})");
+        .info("Items for queue: ${items.map((e) => e.name).join(", ")}");
+    _queueServiceLogger
+        .info("Items for queue: ${items.map((e) => e.name).join(", ")}");
   }
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
