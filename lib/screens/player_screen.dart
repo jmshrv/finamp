@@ -12,6 +12,7 @@ import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -249,6 +250,18 @@ class _PlayerScreenContent extends ConsumerWidget {
                         FeedbackHelper.feedback(FeedbackType.selection),
                   ),
                 ),
+              ),
+            if (Platform.isAndroid)
+              IconButton(
+                icon: Icon(TablerIcons.cast),
+                onPressed: () {
+                  final audioHandler =
+                      GetIt.instance<MusicPlayerBackgroundTask>();
+                  audioHandler.getRoutes();
+                  // audioHandler.setOutputToDeviceSpeaker();
+                  // audioHandler.setOutputToBluetoothDevice();
+                  audioHandler.showOutputSwitcherDialog();
+                },
               ),
           ],
         ),

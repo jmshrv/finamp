@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -109,6 +110,8 @@ void main() async {
       FlutterError.presentError(details);
       flutterLogger.severe(error, error, details.stack);
     };
+
+    DartPluginRegistrant.ensureInitialized();
 
     await findSystemLocale();
     await initializeDateFormatting();
@@ -443,7 +446,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
   }
 
   @override
-  Widget build(BuildContext context) {   
+  Widget build(BuildContext context) {
     return ProviderScope(
       child: GestureDetector(
         onTap: () {
