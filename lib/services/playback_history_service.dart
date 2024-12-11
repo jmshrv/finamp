@@ -461,20 +461,18 @@ class PlaybackHistoryService {
   }
 
   Future<void> _reportPlaybackStopped() async {
-    if (FinampSettingsHelper.finampSettings.isOffline) {
-      if (_currentTrack != null) {
-        await _offlineListenLogHelper
-            .logOfflineListen(_currentTrack!.item.item);
-      }
-      return;
-    }
     final playbackInfo = generateGenericPlaybackProgressInfo();
     if (playbackInfo != null) {
       try {
         _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
         if (_lastReportedTrackStopped?.id != _currentTrack?.item.id) {
           _lastReportedTrackStopped = _currentTrack?.item;
-          await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+          if (FinampSettingsHelper.finampSettings.isOffline) {
+            await _offlineListenLogHelper
+                .logOfflineListen(_currentTrack!.item.item);
+          } else {
+            await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+          }
         }
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
