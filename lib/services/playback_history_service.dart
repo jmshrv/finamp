@@ -48,8 +48,8 @@ class PlaybackHistoryService {
 
   PlaybackHistoryService() {
     _queueService.getCurrentTrackStream().listen((currentTrack) {
-      if (_audioService.playbackState.valueOrNull?.processingState !=
-          AudioProcessingState.completed) {
+      if (![AudioProcessingState.idle, AudioProcessingState.completed]
+          .contains(_audioService.playbackState.valueOrNull?.processingState)) {
         updateCurrentTrack(currentTrack);
       } else if (_audioService.playbackState.valueOrNull?.processingState ==
               AudioProcessingState.completed ||
