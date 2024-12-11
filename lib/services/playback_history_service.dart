@@ -518,7 +518,7 @@ class PlaybackHistoryService {
   }) {
     try {
       return jellyfin_models.PlaybackProgressInfo(
-        itemId: item.item.extras?["itemJson"]["Id"] ?? "",
+        itemId: item.baseItem?.id ?? "",
         playSessionId: _queueService.getQueue().id,
         isPaused: isPaused,
         isMuted: isMuted,
@@ -532,7 +532,7 @@ class PlaybackHistoryService {
             : "DirectPlay",
         nowPlayingQueue:
             getQueueToReport(includeNowPlayingQueue: includeNowPlayingQueue),
-        playlistItemId: item.id,
+        playlistItemId: _queueService.getQueue().source.id,
       );
     } catch (e) {
       _playbackHistoryServiceLogger.warning(e);
@@ -561,7 +561,7 @@ class PlaybackHistoryService {
       }
 
       return jellyfin_models.PlaybackProgressInfo(
-        itemId: _currentTrack!.item.item.extras?["itemJson"]["Id"],
+        itemId: _currentTrack!.item.baseItem?.id ?? "",
         playSessionId: _queueService.getQueue().id,
         canSeek: true,
         isPaused: _audioService.paused,
@@ -575,7 +575,7 @@ class PlaybackHistoryService {
             : "DirectPlay",
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
         nowPlayingQueue: getQueueToReport(),
-        playlistItemId: _currentTrack?.item.id,
+        playlistItemId: _queueService.getQueue().source.id,
       );
     } catch (e) {
       _playbackHistoryServiceLogger.warning(e);
@@ -591,7 +591,7 @@ class PlaybackHistoryService {
           .peekQueue(next: _maxQueueLengthToReport)
           .map((e) => jellyfin_models.QueueItem(
                 id: e.item.id,
-                playlistItemId: e.source.id,
+                playlistItemId: e.type.name,
               ))
           .toList();
       return queue;
