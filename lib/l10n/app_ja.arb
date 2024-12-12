@@ -1,6 +1,4 @@
 {
-  "noErrors": "エラーなし!",
-  "@noErrors": {},
   "error": "エラー",
   "@error": {},
   "serverUrl": "サーバー URL",
@@ -21,14 +19,6 @@
   "@username": {},
   "next": "次",
   "@next": {},
-  "urlStartWithHttps": "URL は http:// か https:// で始まらなければなりません",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL の末尾にスラッシュがあってはなりません",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "unknownName": "タイトル不明",
   "@unknownName": {},
   "couldNotFindLibraries": "ライブラリが見つかりません。",
@@ -101,30 +91,12 @@
   "@communityRating": {},
   "random": "ランダム",
   "@random": {},
-  "downloadErrors": "ダウンロード・エラー",
-  "@downloadErrors": {},
   "downloadMissingImages": "欠けている画像をダウンロード",
   "@downloadMissingImages": {},
   "revenue": "収入",
   "@revenue": {},
   "downloadCount": "{count,plural, =1{{count} 個ダウンロード} other{{count}個ダウンロード}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural, =1{{count} アイテム} other{{count}アイテム}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural, =1{{count} 枚の画像} other{{count}枚の画像}}",
-  "@downloadedImagesCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -139,8 +111,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "ダウンロード・エラー",
-  "@downloadErrorsTitle": {},
   "dlEnqueued": "{count} 個キューに追加",
   "@dlEnqueued": {
     "placeholders": {
@@ -305,14 +275,6 @@
   "@noArtist": {},
   "unknownArtist": "アーティスト不明",
   "@unknownArtist": {},
-  "streaming": "ストリーミング",
-  "@streaming": {},
-  "downloaded": "ダウンロード済み",
-  "@downloaded": {},
-  "transcode": "トランスコード",
-  "@transcode": {},
-  "statusError": "ステータス・エラー",
-  "@statusError": {},
   "removeFavourite": "お気に入りを削除",
   "@removeFavourite": {},
   "addFavourite": "お気に入りを追加",
@@ -325,8 +287,6 @@
   "@anErrorHasOccured": {},
   "instantMix": "インスタント・ミックス",
   "@instantMix": {},
-  "direct": "直接",
-  "@direct": {},
   "queue": "キュー",
   "@queue": {},
   "addToQueue": "キューに追加",
@@ -419,20 +379,6 @@
   "@language": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "areYouSure": "よろしいですか？",
   "@areYouSure": {},
   "appDirectory": "Appのディレクトリ",

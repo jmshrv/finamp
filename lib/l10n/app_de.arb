@@ -19,14 +19,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL muss mit http:// oder https:// beginnen",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL darf keinen Schrägstrich am Ende enthalten",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "couldNotFindLibraries": "Konnte keine Bibliotheken finden.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
@@ -109,8 +101,6 @@
   "@yesButtonLabel": {},
   "createButtonLabel": "ERSTELLEN",
   "@createButtonLabel": {},
-  "direct": "DIREKT",
-  "@direct": {},
   "newPlaylist": "Neue Wiedergabeliste",
   "@newPlaylist": {},
   "playlistCreated": "Wiedergabeliste erstellt.",
@@ -129,8 +119,6 @@
   "@password": {},
   "showTextOnGridView": "Text in Rasteransicht anzeigen",
   "@showTextOnGridView": {},
-  "noErrors": "Keine Fehler!",
-  "@noErrors": {},
   "selectMusicLibraries": "Musikbibliotheken auswählen",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
@@ -167,8 +155,6 @@
   "@runtime": {},
   "downloadMissingImages": "Fehlende Bilder herunterladen",
   "@downloadMissingImages": {},
-  "downloadErrors": "Download-Fehler",
-  "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} Download} other{{count} Downloads}}",
   "@downloadCount": {
     "placeholders": {
@@ -206,22 +192,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "downloadErrorsTitle": "Download-Fehler",
-  "@downloadErrorsTitle": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },
@@ -321,10 +291,6 @@
   "@setSleepTimer": {},
   "minutes": "Minuten",
   "@minutes": {},
-  "downloaded": "HERUNTERGELADEN",
-  "@downloaded": {},
-  "transcode": "TRANSKODIERUNG",
-  "@transcode": {},
   "addToPlaylistTitle": "Zur Wiedergabeliste hinzufügen",
   "@addToPlaylistTitle": {},
   "noAlbum": "Kein Album",
@@ -333,10 +299,6 @@
   "@noItem": {},
   "noArtist": "Kein Künstler",
   "@noArtist": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "statusError": "STATUS FEHLER",
-  "@statusError": {},
   "queue": "Warteschlange",
   "@queue": {},
   "addToQueue": "Zur Warteschlange hinzufügen",
@@ -429,22 +391,6 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} Bild} other{{count} Bilder}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} Element} other{{count} Elemente}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "premiereDate": "Erscheinungsdatum",
   "@premiereDate": {},
   "downloadedMissingImages": "{count,plural, =0{Keine fehlenden Bilder gefunden} =1{{count} fehlendes Bild heruntergeladen} other{{count} fehlende Bilder heruntergeladen}}",
@@ -486,8 +432,6 @@
   "@topSongs": {},
   "shuffleAlbums": "Alben mischen",
   "@shuffleAlbums": {},
-  "playCountInline": " · {playCount} Wiedergaben",
-  "@playCountInline": {},
   "couldNotLoad": "{source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}} konnte nicht geladen werden",
   "@couldNotLoad": {},
   "bufferDurationSubtitle": "Wie viel gepuffert werden soll, in Sekunden. Neustart erforderlich.",
@@ -546,57 +490,6 @@
   "@noMusicLibrariesBody": {},
   "interactions": "Interaktionen",
   "@interactions": {},
-  "redesignBeta": "Teste die Beta",
-  "@redesignBeta": {},
-  "playbackOrderShuffledTooltip": "Mischen. Zum Umschalten tippen.",
-  "@playbackOrderShuffledTooltip": {},
-  "togglePlayback": "Wiedergabe umschalten",
-  "@togglePlayback": {},
-  "playbackOrderLinearTooltip": "Abspielen in Reihenfolge. Zum umschalten tippen.",
-  "@playbackOrderLinearTooltip": {},
-  "loopModeAllTooltip": "Wiederhole alle. Zum umschalten tippen.",
-  "@loopModeAllTooltip": {},
-  "loopModeOneTooltip": "Wiederhole einen. Zum umschalten tippen.",
-  "@loopModeOneTooltip": {},
-  "skipToNext": "Springe zum nächsten Lied",
-  "@skipToNext": {},
-  "skipToPrevious": "Springe zum vorherigen Lied",
-  "@skipToPrevious": {},
-  "playArtist": "Spiele alle Alben von {artist}",
-  "@playArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "shuffleArtist": "Spiele alle Alben von {artist} in zufälliger Reihenfolge",
-  "@shuffleArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "download": "Herunterladen",
-  "@download": {},
   "about": "Über Finamp",
-  "@about": {},
-  "downloadArtist": "Lade alle Alben von {artist} herunter",
-  "@downloadArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "loopModeNoneTooltip": "Wiederholt nicht. Zum umschalten tippen.",
-  "@loopModeNoneTooltip": {},
-  "deleteFromDevice": "Vom Gerät Löschen",
-  "@deleteFromDevice": {},
-  "sync": "Mit Server synchronisieren",
-  "@sync": {}
+  "@about": {}
 }

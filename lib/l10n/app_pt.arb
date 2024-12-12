@@ -13,18 +13,12 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "urlStartWithHttps": "O URL deverá começar com http:// ou https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "password": "Palavra-passe",
   "@password": {},
   "logs": "Registos",
   "@logs": {},
   "next": "Próximo",
   "@next": {},
-  "noErrors": "Sem erros!",
-  "@noErrors": {},
   "errorScreenError": "Ocorreu um erro ao aceder à lista de erros! Neste caso, recomendados que abra um issue no nosso GitHub e que limpe os dados da aplicação",
   "@errorScreenError": {},
   "shuffleButtonLabel": "MISTURAR",
@@ -76,10 +70,6 @@
   "emptyServerUrl": "O URL do servidor não pode estar em branco",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "urlTrailingSlash": "O URL não pode ter uma barra no fim",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
   "username": "Utilizador",
   "@username": {},
@@ -157,8 +147,6 @@
   "@runtime": {},
   "downloadMissingImages": "Transferir imagens inexistentes",
   "@downloadMissingImages": {},
-  "downloadErrors": "Erros de transferência",
-  "@downloadErrors": {},
   "downloadedMissingImages": "{count,plural, =0{Não foram encontradas imagens em falta} =1{{count} imagem em falta transferida} other{{count} imagens em falta descarregadas}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
@@ -173,20 +161,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },
@@ -222,8 +196,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erros de Transferência",
-  "@downloadErrorsTitle": {},
   "failedToGetSongFromDownloadId": "Falha ao adquirir música do ID da descarga",
   "@failedToGetSongFromDownloadId": {},
   "error": "Erro",
@@ -362,16 +334,6 @@
   "@noItem": {},
   "noArtist": "Nenhum Artista",
   "@noArtist": {},
-  "streaming": "TRANSMITINDO",
-  "@streaming": {},
-  "downloaded": "DESCARREGADO",
-  "@downloaded": {},
-  "transcode": "TRANSCODIFICAR",
-  "@transcode": {},
-  "direct": "DIRETO",
-  "@direct": {},
-  "statusError": "ERRO DE CONDIÇÃO",
-  "@statusError": {},
   "queue": "Fila",
   "@queue": {},
   "addToQueue": "Adicionar à Fila",
@@ -442,14 +404,6 @@
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "minutes": "Minutos",
   "@minutes": {},
   "showTextOnGridView": "Mostrar texto na visualização em grade",
@@ -476,14 +430,6 @@
   "@resetTabs": {},
   "disableGesture": "Desativar gestos",
   "@disableGesture": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "disableGestureSubtitle": "Se deseja desativar gestos.",
   "@disableGestureSubtitle": {},
   "startupError": "Ocorreu um erro durante o arranque da aplicação. O erro foi:{error}\n\nPor favor, abra um \"Issue\" em github.com/UnicornsOnLSD/finamp que contenha uma captura deste ecrã. Caso o problema persista, tente limpar os dados da aplicação para a repor para o estado original.",

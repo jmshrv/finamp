@@ -19,14 +19,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL은 \"http://\" 또는 \"https://\"로 시작해야 합니다",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL 끝부분에 슬래시(/, 후행 슬래시)를 붙이지 마세요",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "사용자 이름(아이디)",
   "@username": {},
   "password": "암호",
@@ -89,18 +81,8 @@
   "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "누락된 이미지 다운로드",
   "@downloadMissingImages": {},
-  "downloadErrors": "다운로드 에러",
-  "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count}건 다운로드} other{{count}건 다운로드}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} 아이템} other{{count} 아이템}}",
-  "@downloadedItemsCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -139,10 +121,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "다운로드 오류",
-  "@downloadErrorsTitle": {},
-  "noErrors": "오류가 없습니다!",
-  "@noErrors": {},
   "failedToGetSongFromDownloadId": "다운로드 ID에서 노래를 가져오지 못했습니다",
   "@failedToGetSongFromDownloadId": {},
   "deleteDownloadsPrompt": "이 기기에서 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}'를 삭제하시겠습니까?",
@@ -249,8 +227,6 @@
   },
   "showTextOnGridView": "그리드 보기에서 텍스트를 보여줌",
   "@showTextOnGridView": {},
-  "showCoverAsPlayerBackground": "흐릿한 커버를 재생 화면 배경으로 보여줌",
-  "@showCoverAsPlayerBackground": {},
   "hideSongArtistsIfSameAsAlbumArtists": "앨범 아티스트와 동일한 경우, 곡 아티스트를 숨김",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "showTextOnGridViewSubtitle": "그리드 음악 화면에서 '텍스트(곡목, 아티스트 등)' 표시 여부를 설정합니다.",
@@ -299,14 +275,6 @@
   "@noArtist": {},
   "unknownArtist": "알 수 없는 아티스트",
   "@unknownArtist": {},
-  "streaming": "스트리밍",
-  "@streaming": {},
-  "downloaded": "다운로드됨",
-  "@downloaded": {},
-  "transcode": "트랜스코딩",
-  "@transcode": {},
-  "statusError": "상태 오류",
-  "@statusError": {},
   "queue": "대기열",
   "@queue": {},
   "addToQueue": "대기열에 추가",
@@ -412,32 +380,8 @@
   "@albumArtist": {},
   "artist": "아티스트",
   "@artist": {},
-  "downloadedImagesCount": "{count,plural,=1{이미지 {count}건} other{이미지 {count}건}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "refresh": "새로고침",
   "@refresh": {},
-  "redesignBeta": "베타 버전 사용해보기",
-  "@redesignBeta": {},
   "errorScreenError": "오류 목록을 가져오지 못했습니다! 이 시점에서는 GitHub에 문제를 등록하고 앱 데이터를 삭제해야 합니다",
   "@errorScreenError": {},
   "deleteDownloadsAbortButtonText": "취소",
@@ -458,8 +402,6 @@
   "@editPlaylistNameTitle": {},
   "playlistNameUpdated": "플레이리스트 이름을 갱신했습니다.",
   "@playlistNameUpdated": {},
-  "downloadsAdded": "다운로드를 추가했습니다.",
-  "@downloadsAdded": {},
   "addButtonLabel": "추가",
   "@addButtonLabel": {},
   "audioService": "오디오 서비스",
@@ -488,8 +430,6 @@
       }
     }
   },
-  "showCoverAsPlayerBackgroundSubtitle": "재생 화면에서 '흐릿한 앨범 커버 배경' 사용 여부를 설정합니다.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
   "customLocationsBuggy": "사용자 지정 위치는 권한 문제 때문에 버그가 매우 많습니다. 이 문제를 해결할 방법을 찾을 때 까지는 사용을 권장하지 않습니다.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "일시 중지시 낮은 우선순위 상태로 전환합니다",
@@ -508,8 +448,6 @@
   "@removeFromPlaylistTitle": {},
   "playlistCreated": "플레이리스트 생성됨.",
   "@playlistCreated": {},
-  "direct": "다이렉트",
-  "@direct": {},
   "replaceQueue": "대기열 교체",
   "@replaceQueue": {},
   "addedToQueue": "대기열 끝에 추가.",
@@ -540,55 +478,6 @@
       }
     }
   },
-  "playbackOrderShuffledTooltip": "임의 재생. 전환하려면 탭하세요.",
-  "@playbackOrderShuffledTooltip": {},
-  "playbackOrderLinearTooltip": "순차 재생. 전환하려면 탭하세요.",
-  "@playbackOrderLinearTooltip": {},
-  "loopModeAllTooltip": "모두 반복. 전환하려면 탭하세요.",
-  "@loopModeAllTooltip": {},
-  "loopModeOneTooltip": "한곡 반복. 전환하려면 탭하세요.",
-  "@loopModeOneTooltip": {},
-  "loopModeNoneTooltip": "반복 안 함. 전환하려면 탭하세요.",
-  "@loopModeNoneTooltip": {},
-  "skipToPrevious": "이전 곡으로 넘기기",
-  "@skipToPrevious": {},
-  "skipToNext": "다음 곡으로 넘기기",
-  "@skipToNext": {},
-  "togglePlayback": "재생 전환하기",
-  "@togglePlayback": {},
-  "playArtist": "{artist}의 모든 앨범 재생",
-  "@playArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "shuffleArtist": "{artist}의 모든 앨범 임의 재생",
-  "@shuffleArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "downloadArtist": "{artist}의 모든 앨범 다운로드",
-  "@downloadArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "deleteFromDevice": "기기에서 삭제하기",
-  "@deleteFromDevice": {},
-  "download": "다운로드",
-  "@download": {},
-  "sync": "서버와 동기화하기",
-  "@sync": {},
   "about": "Finamp(핀앰프) 소개",
   "@about": {}
 }

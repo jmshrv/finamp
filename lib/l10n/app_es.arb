@@ -80,22 +80,10 @@
   "@dark": {},
   "createButtonLabel": "CREAR",
   "@createButtonLabel": {},
-  "direct": "DIRECTO",
-  "@direct": {},
   "cancelSleepTimer": "¿Cancelar el temporizador de sueño?",
   "@cancelSleepTimer": {},
-  "downloaded": "DESCARGADO",
-  "@downloaded": {},
   "dlEnqueued": "{count} en cola",
   "@dlEnqueued": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} elemento} other{{count} elementos}}",
-  "@downloadedItemsCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -130,8 +118,6 @@
   "@favourites": {},
   "genres": "Géneros",
   "@genres": {},
-  "downloadErrors": "Errores en la descarga",
-  "@downloadErrors": {},
   "downloadMissingImages": "Descargar las imágenes que faltan",
   "@downloadMissingImages": {},
   "dlComplete": "{count} completadas",
@@ -170,8 +156,6 @@
   "@queue": {},
   "replaceQueue": "Reemplazar la cola",
   "@replaceQueue": {},
-  "downloadErrorsTitle": "Error al descargar",
-  "@downloadErrorsTitle": {},
   "downloadsDeleted": "Se borraron las descargas.",
   "@downloadsDeleted": {},
   "editPlaylistNameTitle": "Modificar el nombre de la lista de reproducción",
@@ -202,8 +186,6 @@
   "@portrait": {},
   "queueReplaced": "Se reemplazó la cola.",
   "@queueReplaced": {},
-  "noErrors": "¡Sin errores!",
-  "@noErrors": {},
   "playButtonLabel": "REPRODUCIR",
   "@playButtonLabel": {},
   "removeFavourite": "Eliminar favorito",
@@ -220,19 +202,11 @@
   "@random": {},
   "clear": "Limpiar",
   "@clear": {},
-  "urlStartWithHttps": "La URL debe empezar por http:// o https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "serverUrl": "URL del servidor",
   "@serverUrl": {},
   "emptyServerUrl": "La URL del servidor no puede estar vacia",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "urlTrailingSlash": "La URL no debe incluir una barra al final",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
   "username": "Nombre de usuario",
   "@username": {},
@@ -268,14 +242,6 @@
   "@playCount": {},
   "dlFailed": "{count} han fallado",
   "@dlFailed": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagen} other{{count} imágenes}}",
-  "@downloadedImagesCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -348,10 +314,6 @@
   "@sleepTimerTooltip": {},
   "unknownArtist": "Artista desconocido",
   "@unknownArtist": {},
-  "transcode": "TRANSCODIFICADO",
-  "@transcode": {},
-  "streaming": "TRANSMITIENDO",
-  "@streaming": {},
   "startingInstantMix": "Empezando mezcla instantánea.",
   "@startingInstantMix": {},
   "downloadCount": "{count,plural, =1{{count} descarga} other{{count} descargas}}",
@@ -372,20 +334,6 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "showTextOnGridView": "Mostrar texto en vista de cuadrícula",
   "@showTextOnGridView": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "startupError": "¡Algo ha salido mal en el arranque de la aplicación! El error es: {error}\n\nPor favor crea una incidencia en github.com/UnicornsOnLSD/finamp con una captura de pantalla de esta página. Si el problema persiste, borra los datos de la aplicación para resetearla.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -435,8 +383,6 @@
   "@showTextOnGridViewSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Oculta a los artistas de las canciones en la pantalla del álbum si no son diferentes de los artistas del álbum.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "statusError": "ERROR DE ESTADO",
-  "@statusError": {},
   "useCoverAsBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor.",
   "@useCoverAsBackgroundSubtitle": {},
   "responseError401": "{error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado.",
@@ -534,57 +480,6 @@
   "@interactions": {},
   "swipeInsertQueueNext": "Reproducir la siguiente canción al deslizarla",
   "@swipeInsertQueueNext": {},
-  "redesignBeta": "Prueba la versión Beta",
-  "@redesignBeta": {},
-  "playbackOrderShuffledTooltip": "Mezclando. Toca para alternar.",
-  "@playbackOrderShuffledTooltip": {},
-  "playbackOrderLinearTooltip": "Reproducción en orden. Toca para alternar.",
-  "@playbackOrderLinearTooltip": {},
-  "loopModeAllTooltip": "Repitiendo todo. Toca para alternar.",
-  "@loopModeAllTooltip": {},
-  "loopModeOneTooltip": "En bucle. Toca para alternar.",
-  "@loopModeOneTooltip": {},
-  "loopModeNoneTooltip": "No se reproduce en bucle. Toca para alternar.",
-  "@loopModeNoneTooltip": {},
-  "skipToPrevious": "Saltar a la canción anterior",
-  "@skipToPrevious": {},
-  "skipToNext": "Saltar a la siguiente canción",
-  "@skipToNext": {},
-  "togglePlayback": "Alternar reproducción",
-  "@togglePlayback": {},
-  "playArtist": "Reproducir todos los álbumes de {artist}",
-  "@playArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "shuffleArtist": "Reproducir aleatoriamente todos los álbumes de {artist}",
-  "@shuffleArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "downloadArtist": "Descargar todos los álbumes de {artist}",
-  "@downloadArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "deleteFromDevice": "Eliminar del dispositivo",
-  "@deleteFromDevice": {},
-  "download": "Descargar",
-  "@download": {},
-  "sync": "Sincronizar con el servidor",
-  "@sync": {},
   "about": "Acerca de Finamp",
   "@about": {}
 }

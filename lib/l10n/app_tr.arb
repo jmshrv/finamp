@@ -19,14 +19,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL http:// veya https:// ile başlamalı",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL'in sonunda eğik çizgi olmamalı",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Kullanıcı adı",
   "@username": {},
   "password": "Parola",
@@ -90,42 +82,6 @@
       }
     }
   },
-  "downloadErrors": "İndirme hataları",
-  "@downloadErrors": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} dosya} other{{count} dosya}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} tane görsel} other{{count} tane görsel}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
-  "downloadErrorsTitle": "İndirme Hataları",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Hata yok!",
-  "@noErrors": {},
   "errorScreenError": "Hata listesi oluşturulurken hata meydana geldi. Bu noktada, GitHub'da bir sorun oluşturmalı ve uygulama verilerini silmelisiniz",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "İndirme ID'sinden şarkıya ulaşılamadı",
@@ -314,16 +270,6 @@
   "@noItem": {},
   "unknownArtist": "Bilinmeyen Sanatçı",
   "@unknownArtist": {},
-  "streaming": "YAYIN ALINIYOR",
-  "@streaming": {},
-  "downloaded": "İNDİRİLDİ",
-  "@downloaded": {},
-  "transcode": "YENİDEN KODLA",
-  "@transcode": {},
-  "direct": "DİREKT",
-  "@direct": {},
-  "statusError": "DURUM HATASI",
-  "@statusError": {},
   "queue": "Kuyruk",
   "@queue": {},
   "replaceQueue": "Kuyruğu Değiştir",
@@ -533,7 +479,5 @@
   "swipeInsertQueueNext": "Kaydırılan Şarkıyı Ardından Oynat",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Şarkı listesinde kaydırıldığında bir şarkıyı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.",
-  "@swipeInsertQueueNextSubtitle": {},
-  "redesignBeta": "Yeniden Tasarım Beta",
-  "@redesignBeta": {}
+  "@swipeInsertQueueNextSubtitle": {}
 }
