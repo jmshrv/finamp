@@ -60,8 +60,6 @@
   "@revenue": {},
   "runtime": "Längd",
   "@runtime": {},
-  "downloadErrors": "Nedladdningsfel",
-  "@downloadErrors": {},
   "dlComplete": "{count} färdiga",
   "@dlComplete": {
     "placeholders": {
@@ -94,14 +92,6 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} bild} other{{count} bilder}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "discNumber": "Skiva {number}",
   "@discNumber": {
     "placeholders": {
@@ -110,8 +100,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Nedladdningsfel",
-  "@downloadErrorsTitle": {},
   "error": "Fel",
   "@error": {},
   "failedToGetSongFromDownloadId": "Kunde inte hämta låt med hjälp av nedladdnings-ID",
@@ -128,8 +116,6 @@
       }
     }
   },
-  "noErrors": "Inga fel!",
-  "@noErrors": {},
   "required": "Obligatoriskt",
   "@required": {},
   "playlistNameUpdated": "Spellistans namn är ändrat.",
@@ -198,8 +184,6 @@
   "@unknownArtist": {},
   "addToQueue": "Lägg till i Uppspelningskö",
   "@addToQueue": {},
-  "direct": "DIREKT",
-  "@direct": {},
   "goToAlbum": "Gå till Album",
   "@goToAlbum": {},
   "addedToQueue": "Tillagd i uppspelningskön.",
@@ -247,22 +231,6 @@
   "@password": {},
   "pathReturnSlashErrorMessage": "Sökvägar som returnerar ett \"/\" kan inte användas",
   "@pathReturnSlashErrorMessage": {},
-  "downloaded": "NEDLADDAD",
-  "@downloaded": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "internalExternalIpExplanation": "Om du vill ha åtkomst till din Jellyfin-server utanför hemmet, behöver du använda din externa IP-adress.\n\nOm din server är bakom en HTTP-port (80/443) så behöver du inte manuellt specificera en port. Detta är troligtvis fallet om din server finns bakom en omvänd proxy.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
@@ -275,8 +243,6 @@
   "@enableTranscodingSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Dölj låtartister om samma som albumartister",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "transcode": "OMKODA",
-  "@transcode": {},
   "enableTranscoding": "Aktivera Omkodning",
   "@enableTranscoding": {},
   "albumArtist": "Albumartist",
@@ -338,14 +304,6 @@
   "@shuffleButtonLabel": {},
   "audioService": "Ljudtjänst",
   "@audioService": {},
-  "urlTrailingSlash": "URL:en får inte innehålla ett avslutande snedstreck",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
-  "urlStartWithHttps": "URL:en måste börja med antingen http:// eller https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "username": "Användarnamn",
   "@username": {},
   "logs": "Loggar",
@@ -380,14 +338,6 @@
   "@communityRating": {},
   "downloadMissingImages": "Hämta saknade bilder",
   "@downloadMissingImages": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlRunning": "{count} pågående",
   "@dlRunning": {
     "placeholders": {
@@ -438,10 +388,6 @@
   "@useCoverAsBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Om låtartister ska visas på albumskärmen om de inte skiljer sig från albumartister.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "streaming": "STRÖMNING",
-  "@streaming": {},
-  "statusError": "STATUSFEL",
-  "@statusError": {},
   "instantMix": "Snabbmix",
   "@instantMix": {},
   "noItem": "Inget objekt",

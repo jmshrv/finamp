@@ -55,20 +55,6 @@
       }
     }
   },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "downloadMissingImages": "Stáhnout chybějící obrázky",
   "@downloadMissingImages": {},
   "failedToGetSongFromDownloadId": "Error nelze sehnat skladbu s ID pro stažení",
@@ -140,8 +126,6 @@
   "@addToQueue": {},
   "anErrorHasOccured": "Vyskytla se chyba.",
   "@anErrorHasOccured": {},
-  "downloaded": "STAŽENO",
-  "@downloaded": {},
   "goToAlbum": "Přejít na album",
   "@goToAlbum": {},
   "couldNotFindLibraries": "Nebyly nalezeny žádné knihovny.",
@@ -284,14 +268,6 @@
   "@noArtist": {},
   "unknownArtist": "Neznámý umělec",
   "@unknownArtist": {},
-  "streaming": "STREAMOVÁNÍ",
-  "@streaming": {},
-  "transcode": "PŘEKÓDOVÁNÍ",
-  "@transcode": {},
-  "direct": "PŘÍMÝ",
-  "@direct": {},
-  "statusError": "CHYBA STAVU",
-  "@statusError": {},
   "queue": "Fronta",
   "@queue": {},
   "instantMix": "Okamžitý mix",
@@ -321,26 +297,8 @@
       }
     }
   },
-  "downloadErrors": "Chyby stahování",
-  "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} stahování} other{{count} stahování}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} položka} few{{count} položky} other{{count} položek}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} obrázek} few{{count} obrázky} other{{count} obrázků}}",
-  "@downloadedImagesCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -355,10 +313,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Chyby stahování",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Žádné chyby!",
-  "@noErrors": {},
   "deleteDownloadsPrompt": "Opravdu chcete odstranit {itemType, select, album{album} playlist{seznam skladeb} artist{umělce} genre{žánr} track{skladbu} other{}} '{itemName}' z tohoto zařízení?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
@@ -395,8 +349,6 @@
   "@addDownloads": {},
   "location": "Umístění",
   "@location": {},
-  "downloadsAdded": "Stahování přidána.",
-  "@downloadsAdded": {},
   "shareLogs": "Sdílet protokoly",
   "@shareLogs": {},
   "logsCopied": "Protokoly zkopírovány.",
@@ -476,14 +428,6 @@
       }
     }
   },
-  "urlStartWithHttps": "Adresa URL musí začínat s http:// nebo https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "Adresa URL nesmí obsahovat koncové lomítko",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "startMix": "Spustit mix",
   "@startMix": {},
   "music": "Hudba",
@@ -534,57 +478,6 @@
   "@interactions": {},
   "swipeInsertQueueNext": "Přehrát posunutou skladbu jako další",
   "@swipeInsertQueueNext": {},
-  "redesignBeta": "Vyzkoušejte beta verzi",
-  "@redesignBeta": {},
-  "playbackOrderShuffledTooltip": "Náhodně. Klepnutím přepnete.",
-  "@playbackOrderShuffledTooltip": {},
-  "playbackOrderLinearTooltip": "Přehrávání v pořadí. Klepnutím přepnete.",
-  "@playbackOrderLinearTooltip": {},
-  "loopModeAllTooltip": "Opakování všeho. Klepnutím přepnete.",
-  "@loopModeAllTooltip": {},
-  "loopModeOneTooltip": "Opakování jedné. Klepnutím přepnete.",
-  "@loopModeOneTooltip": {},
-  "loopModeNoneTooltip": "Bez opakování. Klepnutím přepnete.",
-  "@loopModeNoneTooltip": {},
-  "skipToPrevious": "Přeskočit na předchozí skladbu",
-  "@skipToPrevious": {},
-  "skipToNext": "Přeskočit na další skladbu",
-  "@skipToNext": {},
-  "togglePlayback": "Přepnout přehrávání",
-  "@togglePlayback": {},
-  "downloadArtist": "Stáhnout všechna alba umělce {artist}",
-  "@downloadArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "shuffleArtist": "Přehrát náhodně všechna alba umělce {artist}",
-  "@shuffleArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "playArtist": "Přehrát všechna alba umělce {artist}",
-  "@playArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "deleteFromDevice": "Smazat ze zařízení",
-  "@deleteFromDevice": {},
-  "download": "Stáhnout",
-  "@download": {},
-  "sync": "Synchronizovat se serverem",
-  "@sync": {},
   "about": "O aplikaci Finamp",
   "@about": {}
 }

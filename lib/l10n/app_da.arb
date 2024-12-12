@@ -5,14 +5,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL skal starte med http:// eller https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL må ikke indeholde en efterfølgnede stråstreg",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Brugernavn",
   "@username": {},
   "password": "Adgangskode",
@@ -87,24 +79,6 @@
   "@budget": {},
   "downloadMissingImages": "Overførelse mangler billeder",
   "@downloadMissingImages": {},
-  "downloadErrors": "Overførelsesfejl",
-  "@downloadErrors": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} emne} other{{count} emner}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} billede} other{{count} billeder}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlComplete": "{count} færdige",
   "@dlComplete": {
     "placeholders": {
@@ -129,8 +103,6 @@
       }
     }
   },
-  "noErrors": "Ingen fejl!",
-  "@noErrors": {},
   "failedToGetSongFromDownloadId": "Fejlede under hentning af sang fra overførelse ID",
   "@failedToGetSongFromDownloadId": {},
   "error": "Fejl",
@@ -279,16 +251,6 @@
   "@noItem": {},
   "invalidNumber": "Ugyldig nummer",
   "@invalidNumber": {},
-  "streaming": "STREAMER",
-  "@streaming": {},
-  "downloaded": "OVERFØRELSER",
-  "@downloaded": {},
-  "transcode": "OMKOD",
-  "@transcode": {},
-  "direct": "DIREKTE",
-  "@direct": {},
-  "statusError": "Status fejl",
-  "@statusError": {},
   "queue": "Kø",
   "@queue": {},
   "addToQueue": "Tilføj til kø",
@@ -380,8 +342,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Overførelsesfejl",
-  "@downloadErrorsTitle": {},
   "shuffleButtonLabel": "BLAND",
   "@shuffleButtonLabel": {},
   "errorScreenError": "Der opstod en fejl under hentningen af listen med fejl! På dette tidspunkt, bedes du oprette en fejl på Github og slette appens data",
@@ -463,20 +423,6 @@
       "statusCode": {
         "type": "int",
         "example": "403"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },

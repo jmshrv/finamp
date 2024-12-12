@@ -31,14 +31,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL pitää alkaa http:// tai https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL ei saa päättyä vinoviivaan",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Käyttäjätunnus",
   "@username": {},
   "password": "Salasana",
@@ -95,8 +87,6 @@
   "@downloadMissingImages": {},
   "syncDownloadedPlaylists": "Synkronoi ladatut soittolistat",
   "@syncDownloadedPlaylists": {},
-  "downloadErrors": "Latauksen virheet",
-  "@downloadErrors": {},
   "dlFailed": "{count} epäonnistui",
   "@dlFailed": {
     "placeholders": {
@@ -121,10 +111,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Latauksen virheet",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Ei virheitä!",
-  "@noErrors": {},
   "deleteDownloadsConfirmButtonText": "Poista",
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
@@ -161,8 +147,6 @@
   "@downloadsDeleted": {},
   "location": "Sijainti",
   "@location": {},
-  "downloadsAdded": "Lataukset lisätty.",
-  "@downloadsAdded": {},
   "addButtonLabel": "LISÄÄ",
   "@addButtonLabel": {},
   "logsCopied": "Lokit kopioitu.",
@@ -253,8 +237,6 @@
   "@removeFromPlaylistTooltip": {},
   "removeFromPlaylistTitle": "Poista soittolistalta",
   "@removeFromPlaylistTitle": {},
-  "direct": "SUORA",
-  "@direct": {},
   "queue": "Jono",
   "@queue": {},
   "addedToQueue": "Lisätty jonoon.",
@@ -283,8 +265,6 @@
   "@noArtist": {},
   "unknownArtist": "Tuntematon artisti",
   "@unknownArtist": {},
-  "downloaded": "LADATTU",
-  "@downloaded": {},
   "addToQueue": "Lisää jonoon",
   "@addToQueue": {
     "description": "Popup menu item title for adding an item to the end of the play queue."
@@ -295,14 +275,6 @@
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} kohde} other{{count} kohteet}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "downloadCount": "{count,plural, =1{{count} lataus} other{{count} lataukset}}",
   "@downloadCount": {
     "placeholders": {
@@ -311,30 +283,6 @@
       }
     }
   },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} kuva} other{{count} kuvat}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "showCoverAsPlayerBackground": "Näytä sumennettu kansikuva soittimen taustakuvana",
-  "@showCoverAsPlayerBackground": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Piilota kappaleen artistit, jos samat kuin albumin artistit",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "insertedIntoQueue": "Asetettu jonoon.",
@@ -396,10 +344,6 @@
   "@invalidNumber": {},
   "noItem": "Ei kohdetta",
   "@noItem": {},
-  "streaming": "SUORATOISTAA",
-  "@streaming": {},
-  "transcode": "TRANSKOODI",
-  "@transcode": {},
   "noMusicLibrariesBody": "Finamp ei löytänyt musiikkikirjastoja. Varmista, että Jellyfin-palvelimellasi on vähintään yksi kirjasto, jonka sisältötyypiksi on asetettu \"Musiikki\".",
   "@noMusicLibrariesBody": {},
   "instantMix": "Välitön Sekoitus",
@@ -416,8 +360,6 @@
   "@removeFromMix": {},
   "bufferDurationSubtitle": "Kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.",
   "@bufferDurationSubtitle": {},
-  "redesignBeta": "Uusi Design Beta",
-  "@redesignBeta": {},
   "swipeInsertQueueNext": "Toista Pyyhkäisty Kappale Seuraavaksi",
   "@swipeInsertQueueNext": {},
   "startMix": "Aloita sekoitus",
@@ -507,8 +449,6 @@
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "showFastScroller": "Näytä nopea vieritin",
   "@showFastScroller": {},
-  "statusError": "TILAVIRHE",
-  "@statusError": {},
   "responseError401": "{error} Tilakoodi {statusCode}. Tämä tarkoittaa todennäköisesti, että olet käyttänyt väärää käyttäjätunnusta/salasanaa tai että sovellus ei ole enää kirjautuneena sisään.",
   "@responseError401": {
     "placeholders": {
@@ -537,7 +477,5 @@
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "viewTypeSubtitle": "Musiikkinäytön näkymätyyppi",
-  "@viewTypeSubtitle": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Käytetäänkö sumeaa kansikuvitusta taustana soittimen näytöllä vai ei.",
-  "@showCoverAsPlayerBackgroundSubtitle": {}
+  "@viewTypeSubtitle": {}
 }
