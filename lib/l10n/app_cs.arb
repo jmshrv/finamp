@@ -170,7 +170,7 @@
   "@offlineMode": {},
   "sortOrder": "Pořadí řazení",
   "@sortOrder": {},
-  "internalExternalIpExplanation": "Pokud budete chtít vzdáleně přistupovat k vašemu serveru Jellyfin, budete muset použít vaši externí IP.\n\nPokud je váš server na portu HTTP (80/443), nemusíte specifikovat port. Toto bývá obvyklé, když máte server za reverzní proxy.",
+  "internalExternalIpExplanation": "Pokud budete chtít vzdáleně přistupovat k vašemu serveru Jellyfin, budete muset použít vaši externí IP.\n\nPokud je váš server na výchozím portu HTTP (80 nebo 443), nebo výchozím portu Jellyfinu (8096), nemusíte zadávat port.\n\nPokud je adresa URL správná, měly by se pod polem níže zobrazit informace o vašem serveru.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -479,5 +479,145 @@
   "swipeInsertQueueNext": "Přehrát posunutou skladbu jako další",
   "@swipeInsertQueueNext": {},
   "about": "O aplikaci Finamp",
-  "@about": {}
+  "@about": {},
+  "aboutContributionLink": "Přispějte do Finampu na GitHubu:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "Přečtěte si informace o posledním vydání:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "loginFlowSlogan": "Vaše hudba, tak, jak ji chcete.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "Začínáme!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "viewLogs": "Zobrazit protokoly",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "changeLanguage": "Změnit jazyk",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "Připojit k Jellyfinu",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "Zpět",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlHint": "např. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "loginFlowLocalNetworkServers": "Servery na vaší lokální síti:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Vyhledávání serverů…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "backToAccountSelection": "Zpět na výběr účtů",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowSelectAUser": "Vybrat uživatele",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameHint": "Zadejte své uživatelské jméno",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "title": "Název",
+  "@title": {},
+  "activeDownloads": "Aktivní stahování",
+  "@activeDownloads": {},
+  "aboutContributionPrompt": "Vytvořeno úžasnými lidmi v jejich volném čase.\nMůžete být jedním z nich!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "passwordHint": "Zadejte své heslo",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "loginFlowAuthenticationHeading": "Přihlaste se k vašemu účtu",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "loginFlowCustomUser": "Vlastní uživatel",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAccountSelectionHeading": "Vyberte svůj účet",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "aboutThanks": "Děkujeme za používání Finampu!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "Vítejte v aplikaci",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "connectingToServer": "Připojování k serveru…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "finampTagline": "Otevřený hudební přehrávač pro Jellyfin",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutTranslations": "Pomozte s překladem Finampu do vašeho jazyka:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "loginFlowQuickConnectDisabled": "Rychlé připojení je na tomto serveru zakázáno.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "usernameValidationMissingUsername": "Zadejte prosím uživatelské jméno",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "serverUrlInfoButtonTooltip": "Nápověda k adrese serveru",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "loginFlowNamelessUser": "Nepojmenovaný uživatel",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowQuickConnectPrompt": "Použít kód Rychlého připojení",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "login": "Přihlásit se",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "orDivider": "nebo",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "backToServerSelection": "Zpět na výběr serverů",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowQuickConnectInstructions": "Otevřete aplikaci nebo web Jellyfinu, klepněte na vaši uživatelskou ikonu a vybere Rychlé připojení.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "startMixNoSongsGenre": "Dlouze podržte prst na žánru pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  }
 }
