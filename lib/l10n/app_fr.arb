@@ -15,7 +15,7 @@
   },
   "serverUrl": "Adresse du serveur",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "Si vous souhaitez pouvoir accéder à votre serveur Jellyfin à distance, vous devez utiliser votre adresse IP externe.\n\nSi votre serveur utilise un port HTTP (80/443), vous n'avez pas besoin de spécifier de port. C'est probablement le cas si votre serveur est derrière un reverse proxy.",
+  "internalExternalIpExplanation": "Si vous souhaitez pouvoir accéder à votre serveur Jellyfin à distance, vous devez utiliser votre adresse IP externe.\n\nSi votre serveur utilise les ports HTTP par défaut (80/443) ou le port par défaut de Jellyfin (8096), vous n'avez pas besoin de spécifier le port. \n\nSi l'URL est correcte, vous devriez voir apparaître des informations sur votre serveur sous le champ de saisie.",
   "@internalExternalIpExplanation": {
     "description": "Informations supplémentaires sur l'IP à utiliser pour l'accès à distance, et sur la nécessité ou non de spécifier un port"
   },
