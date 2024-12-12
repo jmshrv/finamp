@@ -547,7 +547,7 @@
   "@skipToPrevious": {},
   "skipToNext": "Passer à la chanson suivante",
   "@skipToNext": {},
-  "togglePlayback": "",
+  "togglePlayback": "Activer/désactiver la lecture",
   "@togglePlayback": {},
   "playArtist": "Lire tous les albums de {artist}",
   "@playArtist": {
