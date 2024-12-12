@@ -1,7 +1,7 @@
 {
   "startupError": "Une erreur est survenue lors du démarrage de l'application. L'erreur est: {error}\n\nPlease create an issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this problem persists you can clear your app data to reset the app.",
   "@startupError": {
-    "description": "Le message d'erreur affiché lorsque le démarrage de l'application échou.",
+    "description": "Le message d'erreur affiché lorsque le démarrage de l'application échoue.",
     "placeholders": {
       "error": {
         "type": "String",
@@ -23,7 +23,7 @@
   "@urlStartWithHttps": {
     "description": "Cette erreur intervient lorsque l'utilisateur soumet une adresse qui ne commence pas par http:// ou https:// (par exemple, ftp://0.0.0.0)"
   },
-  "urlTrailingSlash": "L'adresse ne doit pas inclure de slash finale.",
+  "urlTrailingSlash": "L'adresse ne doit pas inclure de slash final.",
   "@urlTrailingSlash": {
     "description": "Cette erreur intervient lorsque l'utilisateur soumet une adresse qui se termine par une barre oblique finale (par exemple, http://0.0.0.0/)"
   },
@@ -43,7 +43,7 @@
   "@couldNotFindLibraries": {
     "description": "Cette erreur intervient lorsque l'utilisateur n'a pas de bibliothèque"
   },
-  "unknownName": "Nom Inconnu",
+  "unknownName": "Nom inconnu",
   "@unknownName": {},
   "songs": "Titres",
   "@songs": {},
@@ -83,7 +83,7 @@
   "@offlineMode": {},
   "sortOrder": "Ordre de tri",
   "@sortOrder": {},
-  "sortBy": "Trié par",
+  "sortBy": "Trier par",
   "@sortBy": {},
   "album": "Album",
   "@album": {},
@@ -101,7 +101,7 @@
   "@dateAdded": {},
   "datePlayed": "Date de lecture",
   "@datePlayed": {},
-  "playCount": "nombre de lecture",
+  "playCount": "nombre de lectures",
   "@playCount": {},
   "premiereDate": "Date de première",
   "@premiereDate": {},
@@ -111,7 +111,7 @@
   "@name": {},
   "random": "Aléatoire",
   "@random": {},
-  "revenue": "Revenue",
+  "revenue": "Recettes",
   "@revenue": {},
   "runtime": "Durée d'exécution",
   "@runtime": {},
@@ -239,7 +239,7 @@
   },
   "playButtonLabel": "LIRE",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "ALEATOIRE",
+  "shuffleButtonLabel": "ALÉATOIRE",
   "@shuffleButtonLabel": {},
   "songCount": "{count,plural,=1{{count} titre} other{{count} titres}}",
   "@songCount": {
@@ -471,7 +471,7 @@
   "@queueReplaced": {},
   "removedFromPlaylist": "Retiré de la playlist.",
   "@removedFromPlaylist": {},
-  "startingInstantMix": "Mix instanté lancé.",
+  "startingInstantMix": "Mix instantané lancé.",
   "@startingInstantMix": {},
   "anErrorHasOccured": "Une erreur s'est produite.",
   "@anErrorHasOccured": {},
@@ -505,7 +505,7 @@
   "@removeFromMix": {},
   "addToMix": "Ajouter au Mix",
   "@addToMix": {},
-  "redownloadedItems": "{count,plural, =0{Aucun re-téléchargement nécéssaire} =1{{count} élément re-téléchargé} other{{count} éléments re-téléchargés}}",
+  "redownloadedItems": "{count,plural, =0{Aucun re-téléchargement nécessaire} =1{{count} élément re-téléchargé} other{{count} éléments re-téléchargés}}",
   "@redownloadedItems": {
     "placeholders": {
       "count": {
@@ -523,7 +523,7 @@
   "resetTabs": "Réinitialiser les onglets",
   "noMusicLibrariesTitle": "Aucune bibliothèque musicale",
   "@noMusicLibrariesTitle": {
-    "description": "Titre du message affiché sur l'écran de vues lorsqu'aucune bibliothèque musicale n'a été trouvée."
+    "description": "Titre du message affiché sur l'écran de vues lorsque aucune bibliothèque musicale n'a été trouvée."
   },
   "noMusicLibrariesBody": "Finamp n'a pas trouvé de bibliothèques musicales. Veuillez vous assurer que votre serveur Jellyfin contient au moins une bibliothèque avec le type de contenu défini sur \"Musique\".",
   "refresh": "RAFRAÎCHIR",
@@ -535,7 +535,7 @@
   "@redesignBeta": {},
   "playbackOrderShuffledTooltip": "Lecture en aléatoire. Touchez pour activer/désactiver.",
   "@playbackOrderShuffledTooltip": {},
-  "playbackOrderLinearTooltip": "Lecture du l'ordre. Tap to toggle.",
+  "playbackOrderLinearTooltip": "Lecture dans l'ordre. Touchez pour activer/désactiver.",
   "@playbackOrderLinearTooltip": {},
   "loopModeAllTooltip": "Lecture en boucle de l'ensemble. Touchez pour activer/désactiver.",
   "@loopModeAllTooltip": {},
@@ -578,7 +578,7 @@
   },
   "deleteFromDevice": "Supprimer de l'appareil",
   "@deleteFromDevice": {},
-  "download": "Download",
+  "download": "Télécharger",
   "@download": {},
   "sync": "Synchroniser avec le serveur",
   "@sync": {},
