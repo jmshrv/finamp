@@ -384,7 +384,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Jos haluat käyttää Jellyfin-palvelintasi etänä, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi käyttää HTTP-porttia (80/443), sinun ei tarvitse määrittää porttia. Näin on todennäköisesti, jos palvelimesi on reverse proxyn takana.",
+  "internalExternalIpExplanation": "Jos haluat käyttää Jellyfin-palvelintasi etänä, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi käyttää joko HTTP-oletusporttia (80/443) tai Jellyfinin oletusporttia (8096),  sinun ei tarvitse määritellä porttia erikseen. Näin todennäköisesti on, mikäli palvelimesi on reverse proxyn takana.\nJos syötit serverin osoitteen oikein,  osoitekentän alle pitäisi ilmestyä perustietoja serveristäsi.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -477,5 +477,129 @@
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "viewTypeSubtitle": "Musiikkinäytön näkymätyyppi",
-  "@viewTypeSubtitle": {}
+  "@viewTypeSubtitle": {},
+  "loginFlowAccountSelectionHeading": "Valitse tilisi",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "orDivider": "tai",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "aboutReleaseNotes": "Uusimmat päivitystiedot:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "loginFlowServerSelectionHeading": "Yhdistä Jellyfiniin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "usernameHint": "Syötä käyttäjätunnus",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Ole hyvä ja syötä käyttäjätunnus",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "loginFlowQuickConnectInstructions": "Avaa Jellyfin-sovellus tai sivu, klikkaa käyttäjäkuvaketta, ja valitse Pikayhdistys.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "backToAccountSelection": "Takaisin tilin valintaan",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowSlogan": "Oma musiikkikirjastosi, juuri niin kuin sen haluat.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowSelectAUser": "Valitse käyttäjä",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "loginFlowWelcomeHeading": "Tervetuloa sovellukseen",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "changeLanguage": "Vaihda kieltä",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "backToServerSelection": "Takaisin palvelimen valintaan",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "Käytä pikayhdistyskoodia",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "about": "Tietoa Finampista",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "aboutThanks": "Kiitos, että käytät Finampia!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowGetStarted": "Aloita tästä!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "viewLogs": "Näytä lokitiedot",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "back": "Takaisin",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlHint": "esim. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "connectingToServer": "Yhdistetään palvelimeen..",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "Palvelimet paikallisverkossasi:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Etsitään palvelimia..",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowNamelessUser": "Anonyymi käyttäjä",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowAuthenticationHeading": "Kirjaudu tilillesi",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "loginFlowQuickConnectDisabled": "Pikayhdistys poistettu käytöstä tällä palvelimella.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "passwordHint": "Syötä salasana",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Kirjaudu sisään",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "aboutContributionLink": "Osallistu Finampin kehittämiseen GitHubissa:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "serverUrlInfoButtonTooltip": "Apua palvelinosoitteen syöttämiseen",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "aboutTranslations": "Auta kääntämään Finampia omalle kielellesi:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  }
 }
