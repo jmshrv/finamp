@@ -39,8 +39,6 @@
   "@runtime": {},
   "downloadMissingImages": "Preuzmi nedostajuće slike",
   "@downloadMissingImages": {},
-  "noErrors": "Nema grešaka!",
-  "@noErrors": {},
   "failedToGetSongFromDownloadId": "Neuspjelo dohvaćanje pjesme s ID-a preuzimanja",
   "@failedToGetSongFromDownloadId": {},
   "error": "Greška",
@@ -87,10 +85,6 @@
   "@useCoverAsBackground": {},
   "tabs": "Kartice",
   "@tabs": {},
-  "streaming": "PRIJENOS",
-  "@streaming": {},
-  "statusError": "GREŠKA STANJA",
-  "@statusError": {},
   "removedFromPlaylist": "Uklonjeno iz playliste.",
   "@removedFromPlaylist": {},
   "startingInstantMix": "Pokretanje instant miksa.",
@@ -126,10 +120,6 @@
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "urlStartWithHttps": "URL mora početi s http:// ili https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "artists": "Izvođači",
   "@artists": {},
   "internalExternalIpExplanation": "Ako želiš pristupiti Jellyfin serveru na daljinski način moraš korisititi tvoju externu IP adresu.\n\nAko je tvoj server na HTTP priključku (80/443), ne moraš navesti priključak. To će vjerojatno slučaj ako se tvoj server nalazi iza obrnutog proxija.",
@@ -139,10 +129,6 @@
   "emptyServerUrl": "URL servera ne smije biti prazan",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "urlTrailingSlash": "URL ne smije sadržavati kosu crtu na kraju",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
   "albums": "Albumi",
   "@albums": {},
@@ -211,20 +197,6 @@
   "@customLocation": {},
   "viewTypeSubtitle": "Vrsta prikaza za ekran glazbe",
   "@viewTypeSubtitle": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "discNumber": "Disk {number}",
   "@discNumber": {
     "placeholders": {
@@ -235,24 +207,6 @@
   },
   "downloadCount": "{count,plural, =1{{count} preuzimanje} few{{count} preuzimanja} other{{count} preuzimanja}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadErrors": "Greške preuzimanja",
-  "@downloadErrors": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} stavka} few{{count} stavke} other{{count} stavki}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} slika} few{{count} slike} other{{count} slika}}",
-  "@downloadedImagesCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -275,8 +229,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Greške preuzimanja",
-  "@downloadErrorsTitle": {},
   "editPlaylistNameTooltip": "Uredi ime playliste",
   "@editPlaylistNameTooltip": {},
   "playlistNameUpdated": "Ime playliste je ažurirano.",
@@ -371,8 +323,6 @@
   "@bitrateSubtitle": {},
   "setSleepTimer": "Postavi odbrojavanje",
   "@setSleepTimer": {},
-  "downloaded": "PREUZETO",
-  "@downloaded": {},
   "selectDirectory": "Odaberi direktorij",
   "@selectDirectory": {},
   "enableTranscoding": "Omogući transkodiranje",
@@ -433,8 +383,6 @@
   "@removeFromPlaylistTooltip": {},
   "unknownArtist": "Nepoznat izvođač",
   "@unknownArtist": {},
-  "transcode": "TRANSKODIRAJ",
-  "@transcode": {},
   "playlistCreated": "Playlista je stvorena.",
   "@playlistCreated": {},
   "noAlbum": "Nema albuma",
@@ -443,8 +391,6 @@
   "@noItem": {},
   "queue": "Red čekanja",
   "@queue": {},
-  "direct": "DIREKTNO",
-  "@direct": {},
   "addToQueue": "Dodaj u red čekanja",
   "@addToQueue": {},
   "instantMix": "Instant miks",
@@ -534,57 +480,6 @@
   "@interactions": {},
   "swipeInsertQueueNext": "Reproduciraj pjesmu kao sljedeću povlačenjem",
   "@swipeInsertQueueNext": {},
-  "redesignBeta": "Probaj beta verziju",
-  "@redesignBeta": {},
-  "skipToPrevious": "Prijeđi na prethodnu pjesmu",
-  "@skipToPrevious": {},
-  "skipToNext": "Prijeđi na sljedeću pjesmu",
-  "@skipToNext": {},
-  "deleteFromDevice": "Izbriši s uređaja",
-  "@deleteFromDevice": {},
-  "download": "Preuzmi",
-  "@download": {},
-  "sync": "Sinkroniziraj sa serverom",
-  "@sync": {},
-  "playbackOrderShuffledTooltip": "Miješanje. Uključi/isključi dodirom.",
-  "@playbackOrderShuffledTooltip": {},
-  "playbackOrderLinearTooltip": "Reprodukcija redom. Uključi/isključi dodirom.",
-  "@playbackOrderLinearTooltip": {},
-  "togglePlayback": "Uključi/isključi reprodukciju",
-  "@togglePlayback": {},
-  "loopModeAllTooltip": "Ponavljanje svih. Uključi/isključi dodirom.",
-  "@loopModeAllTooltip": {},
-  "loopModeOneTooltip": "Ponavljanje jedne. Uključi/isključi dodirom.",
-  "@loopModeOneTooltip": {},
   "about": "O aplikaciji Finamp",
-  "@about": {},
-  "shuffleArtist": "Izmiješaj sve albume od {artist}",
-  "@shuffleArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "playArtist": "Reproduciraj sve albume od {artist}",
-  "@playArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "downloadArtist": "Preuzmi sve albume od {artist}",
-  "@downloadArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "loopModeNoneTooltip": "Bez ponavljanja. Uključi/isključi dodirom.",
-  "@loopModeNoneTooltip": {}
+  "@about": {}
 }

@@ -23,14 +23,6 @@
   "@emptyServerUrl": {
     "description": "Cette erreur intervient lorsque l'utilisateur tente de se connecter sans indiquer l'adresse du serveur"
   },
-  "urlStartWithHttps": "L'adresse doit commencer par http:// ou https://",
-  "@urlStartWithHttps": {
-    "description": "Cette erreur intervient lorsque l'utilisateur soumet une adresse qui ne commence pas par http:// ou https:// (par exemple, ftp://0.0.0.0)"
-  },
-  "urlTrailingSlash": "L'adresse ne doit pas inclure de slash final.",
-  "@urlTrailingSlash": {
-    "description": "Cette erreur intervient lorsque l'utilisateur soumet une adresse qui se termine par une barre oblique finale (par exemple, http://0.0.0.0/)"
-  },
   "username": "Nom d'utilisateur",
   "@username": {},
   "password": "Mot de passe",
@@ -132,43 +124,11 @@
       }
     }
   },
-  "downloadErrors": "Télécharger les erreurs",
-  "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} téléchargement} other{{count} téléchargements}}",
   "@downloadCount": {
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} élément} other{{count} éléments}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} image} other{{count} images}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "Sert à fusionner downloadedItemsCount et downloadedImagesCount car les outils intl de Flutter ne supportent pas plusieurs pluriels dans une seule chaîne de caractères. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 téléchargements"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },
@@ -204,10 +164,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erreurs de téléchargement",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Pas d'erreur!",
-  "@noErrors": {},
   "errorScreenError": "Une erreur est survenue lors de la récupération de la liste des erreurs ! À ce stade, il serait probablement préférable de créer une issue sur GitHub et de supprimer les données de l'application.",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Échec de récupération de la chanson à partir de l'ID de téléchargement",
@@ -231,6 +187,7 @@
     "description": "Affiché dans la boîte de dialogue de confirmation pour la suppression des médias téléchargés du périphérique local."
   },
   "deleteDownloadsAbortButtonText": "Annuler",
+  "@deleteDownloadsAbortButtonText": {},
   "error": "Erreur",
   "@error": {},
   "discNumber": "Disque {number}",
@@ -271,8 +228,6 @@
   "@addDownloads": {},
   "location": "Emplacement",
   "@location": {},
-  "downloadsAdded": "Téléchargements ajoutés.",
-  "@downloadsAdded": {},
   "addButtonLabel": "AJOUTER",
   "@addButtonLabel": {},
   "shareLogs": "Partager les journaux.",
@@ -373,14 +328,8 @@
       }
     }
   },
-  
-  "showCoverAsPlayerBackground": "Afficher la couverture floutée en arrière-plan du lecteur",
-  "@showCoverAsPlayerBackground": {},
-  "showCoverAsPlayerBackgroundSubtitle": "Choisir d'utiliser ou non l'illustration floutée comme arrière-plan sur l'écran du lecteur.",
-  "@showCoverAsPlayerBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons si identiques aux artistes de l'album",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "Désactiver les gestes",
   "@disableGesture": {},
   "disableGestureSubtitle": "Indique si les gestes doivent être désactivés.",
@@ -433,16 +382,6 @@
   "@noArtist": {},
   "unknownArtist": "Artiste inconnu",
   "@unknownArtist": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "downloaded": "TÉLÉCHARGÉ",
-  "@downloaded": {},
-  "transcode": "TRANSCODAGE",
-  "@transcode": {},
-  "direct": "DIRECT",
-  "@direct": {},
-  "statusError": "STATUS D'ERREUR",
-  "@statusError": {},
   "queue": "File d'attente",
   "@queue": {},
   "playNext": "Lire ensuite",
@@ -466,6 +405,7 @@
   "useCoverAsBackgroundSubtitle": "Utiliser ou non une couverture floutée comme arrière-plan sur l'écran du lecteur.",
   "@useCoverAsBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Afficher ou non les artistes des chansons sur l'écran de l'album si différents des artistes de l'album.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "insertedIntoQueue": "Ajouté à la file d'attente.",
   "@insertedIntoQueue": {
     "description": "Notification affichée lorsque l'utilisateur insère avec succès des éléments dans la file d'attente de lecture à un endroit qui n'est pas nécessairement à la fin."
@@ -521,70 +461,25 @@
   "bufferDurationSubtitle": "Taille du tampon du lecteur, en secondes. Changer ce paramètre nécessite un redémarrage.",
   "@bufferDurationSubtitle": {},
   "language": "Langue",
+  "@language": {},
   "confirm": "Confirmé",
+  "@confirm": {},
   "showUncensoredLogMessage": "Ce journal contient vos informations de connexion. Afficher tout de même ?",
+  "@showUncensoredLogMessage": {},
   "resetTabs": "Réinitialiser les onglets",
+  "@resetTabs": {},
   "noMusicLibrariesTitle": "Aucune bibliothèque musicale",
   "@noMusicLibrariesTitle": {
     "description": "Titre du message affiché sur l'écran de vues lorsque aucune bibliothèque musicale n'a été trouvée."
   },
   "noMusicLibrariesBody": "Finamp n'a pas trouvé de bibliothèques musicales. Veuillez vous assurer que votre serveur Jellyfin contient au moins une bibliothèque avec le type de contenu défini sur \"Musique\".",
+  "@noMusicLibrariesBody": {},
   "refresh": "RAFRAÎCHIR",
+  "@refresh": {},
   "swipeInsertQueueNext": "Lire la chanson balayée en prochain",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Activer l'insertion d'une chanson comme élément suivant dans la file d'attente lorsqu'elle est balayée dans la liste des chansons, au lieu de l'ajouter à la fin.",
   "@swipeInsertQueueNextSubtitle": {},
-  "redesignBeta": "Essayer la bêta",
-  "@redesignBeta": {},
-  "playbackOrderShuffledTooltip": "Lecture en aléatoire. Touchez pour activer/désactiver.",
-  "@playbackOrderShuffledTooltip": {},
-  "playbackOrderLinearTooltip": "Lecture dans l'ordre. Touchez pour activer/désactiver.",
-  "@playbackOrderLinearTooltip": {},
-  "loopModeAllTooltip": "Lecture en boucle de l'ensemble. Touchez pour activer/désactiver.",
-  "@loopModeAllTooltip": {},
-  "loopModeOneTooltip": "Lecture en boucle d'un seul. Touchez pour activer/désactiver.",
-  "@loopModeOneTooltip": {},
-  "loopModeNoneTooltip": "Ne pas lire en boucle. Touchez pour activer/désactiver.",
-  "@loopModeNoneTooltip": {},
-  "skipToPrevious": "Passer à la chanson précédente",
-  "@skipToPrevious": {},
-  "skipToNext": "Passer à la chanson suivante",
-  "@skipToNext": {},
-  "togglePlayback": "Activer/désactiver la lecture",
-  "@togglePlayback": {},
-  "playArtist": "Lire tous les albums de {artist}",
-  "@playArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "shuffleArtist": "Lire aléatoirement tous les albums de {artist}",
-  "@shuffleArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "downloadArtist": "Télécharger tous les albums de {artist}",
-  "@downloadArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "deleteFromDevice": "Supprimer de l'appareil",
-  "@deleteFromDevice": {},
-  "download": "Télécharger",
-  "@download": {},
-  "sync": "Synchroniser avec le serveur",
-  "@sync": {},
   "about": "À propos de Finamp",
   "@about": {}
 }
