@@ -315,7 +315,7 @@
   "@bitrateSubtitle": {},
   "shuffleAllSongCountSubtitle": "Numero di brani da caricare quando si usa il tasto per la riproduzione casuale di tutti i brani.",
   "@shuffleAllSongCountSubtitle": {},
-  "errorScreenError": "Si è verificato un errore mentre tentavo di ottenere la lista degli errori! A questo punto probabilmente puoi solo aprire una issue su GitHub e cancellare i dati dell'app",
+  "errorScreenError": "Si è verificato un errore mentre tentavo di ottenere la lista degli errori! A questo punto probabilmente dovresti aprire una issue su GitHub e cancellare i dati dell'app",
   "@errorScreenError": {},
   "anErrorHasOccured": "Si è verificato un errore.",
   "@anErrorHasOccured": {},
@@ -507,5 +507,13 @@
   "enableVibration": "Abilita vibrazione",
   "@enableVibration": {},
   "enableVibrationSubtitle": "Se vuoi abilitare la vibrazione.",
-  "@enableVibrationSubtitle": {}
+  "@enableVibrationSubtitle": {},
+  "syncDownloadedPlaylists": "Sincronizza playlists scaricate",
+  "@syncDownloadedPlaylists": {},
+  "deleteDownloadsConfirmButtonText": "Elimina",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsAbortButtonText": "Annulla",
+  "@deleteDownloadsAbortButtonText": {}
 }

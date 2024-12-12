@@ -713,8 +713,6 @@ class JellyfinApiHelper {
 
   /// Removes the current user from the DB and revokes the token on Jellyfin
   Future<void> logoutCurrentUser() async {
-    Response? response;
-
     // We put this in a try-catch loop that basically ignores errors so that the
     // user can still log out during scenarios like wrong IP, no internet etc.
 
@@ -736,14 +734,6 @@ class JellyfinApiHelper {
           "Jellyfin logout failed with error $e. Logging out anyway, but be aware that Jellyfin may have not got the signal.",
           e);
     } finally {
-      // If the logout response wasn't successful, warn the user in the logs.
-      // We continue anyway since this will mostly be for when the client becomes
-      // unauthorised, which will return 401.
-      if (response?.isSuccessful == false) {
-        _jellyfinApiHelperLogger.warning(
-            "Jellyfin logout returned ${response!.statusCode}. Logging out anyway, but be aware that Jellyfin may still consider this device logged in.");
-      }
-
       // If we're unauthorised, the logout command will fail but we're already
       // basically logged out so we shouldn't fail.
       _finampUserHelper.removeUser(_finampUserHelper.currentUser!.id);

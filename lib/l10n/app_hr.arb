@@ -37,7 +37,7 @@
   "@revenue": {},
   "runtime": "Vrijeme trajanja",
   "@runtime": {},
-  "downloadMissingImages": "Preuzmi nedostajuće fotografije",
+  "downloadMissingImages": "Preuzmi nedostajuće slike",
   "@downloadMissingImages": {},
   "noErrors": "Nema grešaka!",
   "@noErrors": {},
@@ -59,15 +59,15 @@
   "@logOut": {},
   "unknownError": "Nepoznata greška",
   "@unknownError": {},
-  "pathReturnSlashErrorMessage": "Staze koje vraćaju \"/\" se ne mogu koristiti",
+  "pathReturnSlashErrorMessage": "Staze sa znakom „/” se ne mogu koristiti",
   "@pathReturnSlashErrorMessage": {},
-  "shuffleAllSongCount": "Izmiješaj sve pjesme",
+  "shuffleAllSongCount": "Broj pjesama za miješanje",
   "@shuffleAllSongCount": {},
   "list": "Popis",
   "@list": {},
-  "portrait": "Uspravni",
+  "portrait": "Uspravno",
   "@portrait": {},
-  "landscape": "Ležeći",
+  "landscape": "Polegnuto",
   "@landscape": {},
   "gridCrossAxisCount": "{value} broj rešetkastih linija",
   "@gridCrossAxisCount": {
@@ -91,7 +91,7 @@
   "@streaming": {},
   "statusError": "GREŠKA STANJA",
   "@statusError": {},
-  "removedFromPlaylist": "Uklonjeno iz popisa pjesama.",
+  "removedFromPlaylist": "Uklonjeno iz playliste.",
   "@removedFromPlaylist": {},
   "startingInstantMix": "Pokretanje instant miksa.",
   "@startingInstantMix": {},
@@ -150,7 +150,7 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "playlists": "Popisi pjesama",
+  "playlists": "Playliste",
   "@playlists": {},
   "startMix": "Pokreni miks",
   "@startMix": {},
@@ -196,7 +196,7 @@
   "@premiereDate": {},
   "criticRating": "Ocjena kritičara",
   "@criticRating": {},
-  "downloadedMissingImages": "{count,plural, =0{Nema nedostajućih fotografija} =1{Preuzeta je {count} nedostajuća fotografija} few{Preuzete su {count} nedostajuće fotografije} other{Preuzeto je {count} nedostajućih fotografija}}",
+  "downloadedMissingImages": "{count,plural, =0{Nema nedostajućih slika} =1{Preuzeta je {count} nedostajuća slika} few{Preuzete su {count} nedostajuće slike} other{Preuzeto je {count} nedostajućih slika}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -205,7 +205,7 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Uredi ime popisa pjesama",
+  "editPlaylistNameTitle": "Uredi ime playliste",
   "@editPlaylistNameTitle": {},
   "customLocation": "Prilagođena lokacija",
   "@customLocation": {},
@@ -251,7 +251,7 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} fotografija} few{{count} fotografije} other{{count} fotografija}}",
+  "downloadedImagesCount": "{count,plural,=1{{count} slika} few{{count} slike} other{{count} slika}}",
   "@downloadedImagesCount": {
     "placeholders": {
       "count": {
@@ -277,11 +277,11 @@
   },
   "downloadErrorsTitle": "Greške preuzimanja",
   "@downloadErrorsTitle": {},
-  "editPlaylistNameTooltip": "Uredi ime popisa pjesama",
+  "editPlaylistNameTooltip": "Uredi ime playliste",
   "@editPlaylistNameTooltip": {},
-  "playlistNameUpdated": "Ime popisa pjesama je ažurirano.",
+  "playlistNameUpdated": "Ime playliste je ažurirano.",
   "@playlistNameUpdated": {},
-  "dlEnqueued": "{count} u redu čekanja",
+  "dlEnqueued": "{count} dodano u red",
   "@dlEnqueued": {
     "placeholders": {
       "count": {
@@ -289,7 +289,7 @@
       }
     }
   },
-  "dlRunning": "{count} pokrenuto",
+  "dlRunning": "{count} u tijeku",
   "@dlRunning": {
     "placeholders": {
       "count": {
@@ -333,7 +333,7 @@
   "@layoutAndTheme": {},
   "customLocationsBuggy": "Prilagođene lokacije su izrazito pune grešaka zbog problema oko dozvola. Razmišljam o načinima da ovo ispravim, ali za sada ne bih preporučio korištenje.",
   "@customLocationsBuggy": {},
-  "shuffleAllSongCountSubtitle": "Količina pjesama koja se učitava kada se koristi gumb „Izmiješaj sve pjesme”.",
+  "shuffleAllSongCountSubtitle": "Broj pjesama koje se učitavaju kada se koristi gumb „Izmiješaj sve pjesme”.",
   "@shuffleAllSongCountSubtitle": {},
   "noArtist": "Nema izvođača",
   "@noArtist": {},
@@ -379,7 +379,7 @@
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transkodira stream glazbe na server strani.",
   "@enableTranscodingSubtitle": {},
-  "addToPlaylistTooltip": "Dodaj u popis pjesama",
+  "addToPlaylistTooltip": "Dodaj u playlistu",
   "@addToPlaylistTooltip": {},
   "goToAlbum": "Idi na album",
   "@goToAlbum": {},
@@ -407,17 +407,17 @@
   "@createButtonLabel": {},
   "sleepTimerTooltip": "Odbrojavanje",
   "@sleepTimerTooltip": {},
-  "addToPlaylistTitle": "Dodaj u popis pjesama",
+  "addToPlaylistTitle": "Dodaj u playlistu",
   "@addToPlaylistTitle": {},
-  "removeFromPlaylistTitle": "Ukloni iz popisa pjesama",
+  "removeFromPlaylistTitle": "Ukloni iz playliste",
   "@removeFromPlaylistTitle": {},
-  "newPlaylist": "Novi popis pjesama",
+  "newPlaylist": "Nova playlista",
   "@newPlaylist": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Da li prikazati izvođače pjesama na ekranu albuma ako se ne razlikuju od izvođača albuma.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGestureSubtitle": "Da li deaktivirati geste.",
   "@disableGestureSubtitle": {},
-  "system": "Sistem",
+  "system": "Sustav",
   "@system": {},
   "light": "Svijetla",
   "@light": {},
@@ -429,13 +429,13 @@
   "@noButtonLabel": {},
   "invalidNumber": "Neispravan broj",
   "@invalidNumber": {},
-  "removeFromPlaylistTooltip": "Ukloni iz popisa pjesama",
+  "removeFromPlaylistTooltip": "Ukloni iz playliste",
   "@removeFromPlaylistTooltip": {},
   "unknownArtist": "Nepoznat izvođač",
   "@unknownArtist": {},
   "transcode": "TRANSKODIRAJ",
   "@transcode": {},
-  "playlistCreated": "Popis pjesama je stvoren.",
+  "playlistCreated": "Playlista je stvorena.",
   "@playlistCreated": {},
   "noAlbum": "Nema albuma",
   "@noAlbum": {},
@@ -492,7 +492,7 @@
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
-  "playNext": "Reproduciraj sljedeću",
+  "playNext": "Reproduciraj kao sljedeću",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
@@ -508,13 +508,13 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "syncDownloadedPlaylists": "Sinkroniziraj preuzete popise pjesama",
+  "syncDownloadedPlaylists": "Sinkroniziraj preuzete playliste",
   "@syncDownloadedPlaylists": {},
   "deleteDownloadsAbortButtonText": "Odustani",
   "@deleteDownloadsAbortButtonText": {},
   "showFastScroller": "Prikaži traku za brzo listanje",
   "@showFastScroller": {},
-  "deleteDownloadsPrompt": "Stvarno želiš izbrisati {itemType, select, album{album } playlist{playlistu } artist{izvođača } genre{žanr } track{pjesmu } other{}}'{itemName}' s ovog uređaja?",
+  "deleteDownloadsPrompt": "Stvarno želiš izbrisati {itemType, select, album{album} playlist{playlistu} artist{izvođača} genre{žanr} track{pjesmu} other{}} '{itemName}' s ovog uređaja?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -527,5 +527,64 @@
       }
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  }
+  },
+  "swipeInsertQueueNextSubtitle": "Omogući umetanje pjesme kao sljedeću pjesmu u redu reprodukcije povlačenjem pjesme iz popisa pjesama umjesto dodavanja pjesme na kraj popisa.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "interactions": "Interakcije",
+  "@interactions": {},
+  "swipeInsertQueueNext": "Reproduciraj pjesmu kao sljedeću povlačenjem",
+  "@swipeInsertQueueNext": {},
+  "redesignBeta": "Probaj beta verziju",
+  "@redesignBeta": {},
+  "skipToPrevious": "Prijeđi na prethodnu pjesmu",
+  "@skipToPrevious": {},
+  "skipToNext": "Prijeđi na sljedeću pjesmu",
+  "@skipToNext": {},
+  "deleteFromDevice": "Izbriši s uređaja",
+  "@deleteFromDevice": {},
+  "download": "Preuzmi",
+  "@download": {},
+  "sync": "Sinkroniziraj sa serverom",
+  "@sync": {},
+  "playbackOrderShuffledTooltip": "Miješanje. Uključi/isključi dodirom.",
+  "@playbackOrderShuffledTooltip": {},
+  "playbackOrderLinearTooltip": "Reprodukcija redom. Uključi/isključi dodirom.",
+  "@playbackOrderLinearTooltip": {},
+  "togglePlayback": "Uključi/isključi reprodukciju",
+  "@togglePlayback": {},
+  "loopModeAllTooltip": "Ponavljanje svih. Uključi/isključi dodirom.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "Ponavljanje jedne. Uključi/isključi dodirom.",
+  "@loopModeOneTooltip": {},
+  "about": "O aplikaciji Finamp",
+  "@about": {},
+  "shuffleArtist": "Izmiješaj sve albume od {artist}",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "playArtist": "Reproduciraj sve albume od {artist}",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "downloadArtist": "Preuzmi sve albume od {artist}",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "loopModeNoneTooltip": "Bez ponavljanja. Uključi/isključi dodirom.",
+  "@loopModeNoneTooltip": {}
 }

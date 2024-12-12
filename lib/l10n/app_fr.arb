@@ -1,144 +1,138 @@
 {
-  "communityRating": "Note de la communauté",
-  "@communityRating": {},
-  "criticRating": "Note des critiques",
-  "@criticRating": {},
-  "addButtonLabel": "AJOUTER",
-  "@addButtonLabel": {},
   "downloadsQueued": "Téléchargements ajoutés.",
   "@downloadsQueued": {},
-  "name": "Nom",
-  "@name": {},
-  "noButtonLabel": "NON",
-  "@noButtonLabel": {},
-  "noAlbum": "Aucun album",
-  "@noAlbum": {},
-  "noArtist": "Aucun artiste",
-  "@noArtist": {},
-  "noItem": "Pas d'élément",
-  "@noItem": {},
-  "logs": "Journaux",
-  "@logs": {},
-  "next": "Suivant",
-  "@next": {},
-  "albums": "Albums",
-  "@albums": {},
-  "artists": "Artistes",
-  "@artists": {},
-  "downloads": "Téléchargements",
-  "@downloads": {},
-  "albumArtist": "Artiste d'album",
-  "@albumArtist": {},
-  "budget": "Budget",
-  "@budget": {},
-  "noErrors": "Aucune erreur !",
-  "@noErrors": {},
-  "error": "Erreur",
-  "@error": {},
-  "downloadsDeleted": "Téléchargements supprimés.",
-  "@downloadsDeleted": {},
-  "audioService": "Service audio",
-  "@audioService": {},
-  "location": "Emplacement",
-  "@location": {},
-  "logOut": "Déconnexion",
-  "@logOut": {},
-  "logsCopied": "Journaux copiés.",
-  "@logsCopied": {},
-  "bitrate": "Débit",
-  "@bitrate": {},
-  "addDownloadLocation": "Ajouter un emplacement de téléchargement",
-  "@addDownloadLocation": {},
-  "createButtonLabel": "CRÉER",
-  "@createButtonLabel": {},
-  "newPlaylist": "Nouvelle liste de lecture",
-  "@newPlaylist": {},
-  "responseError": "{error} Code d'erreur {statusCode}.",
-  "@responseError": {
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Forbidden"
-      },
-      "statusCode": {
-        "type": "int",
-        "example": "403"
-      }
-    }
-  },
-  "couldNotFindLibraries": "Aucune bibliothèque trouvée.",
-  "@couldNotFindLibraries": {
-    "description": "Error message when the user does not have any libraries"
-  },
-  "failedToGetSongFromDownloadId": "Impossible de récupérer le titre depuis l'ID de téléchargement",
-  "@failedToGetSongFromDownloadId": {},
-  "genres": "Genres",
-  "@genres": {},
-  "favourite": "Favoris",
-  "@favourite": {},
-  "favourites": "Favoris",
-  "@favourites": {},
-  "album": "Album",
-  "@album": {},
   "grid": "Mosaïque",
   "@grid": {},
-  "sleepTimerTooltip": "Minuterie de veille",
-  "@sleepTimerTooltip": {},
-  "startupError": "Quelque chose s'est mal passé pendant le démarrage de l'application ! L'erreur en cause était : {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si le problème persiste, supprimez les données de l'application pour la réinitialiser.",
+  "startupError": "Une erreur est survenue lors du démarrage de l'application. L'erreur est: {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si le problème persiste, supprimez les données de l'application pour la réinitialiser.",
   "@startupError": {
-    "description": "The error message that shows when startup fails.",
+    "description": "Le message d'erreur affiché lorsque le démarrage de l'application échoue.",
     "placeholders": {
       "error": {
         "type": "String",
-        "example": "Failed to open download DB"
+        "example": "Impossible d'accéder aux données de téléchargement"
       }
     }
   },
-  "music": "Musique",
-  "@music": {},
-  "serverUrl": "URL du serveur",
+  "serverUrl": "Adresse du serveur",
   "@serverUrl": {},
-  "urlStartWithHttps": "L'URL doit commencer par http:// ou https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
+  "internalExternalIpExplanation": "Si vous souhaitez pouvoir accéder à votre serveur Jellyfin à distance, vous devez utiliser votre adresse IP externe.\n\nSi votre serveur utilise un port HTTP (80/443), vous n'avez pas besoin de spécifier de port. C'est probablement le cas si votre serveur est derrière un reverse proxy.",
+  "@internalExternalIpExplanation": {
+    "description": "Informations supplémentaires sur l'IP à utiliser pour l'accès à distance, et sur la nécessité ou non de spécifier un port"
   },
-  "urlTrailingSlash": "L'URL ne doit pas se terminer pas une barre oblique",
+  "emptyServerUrl": "Vous devez indiquez l'adresse du serveur.",
+  "@emptyServerUrl": {
+    "description": "Cette erreur intervient lorsque l'utilisateur tente de se connecter sans indiquer l'adresse du serveur"
+  },
+  "urlStartWithHttps": "L'adresse doit commencer par http:// ou https://",
+  "@urlStartWithHttps": {
+    "description": "Cette erreur intervient lorsque l'utilisateur soumet une adresse qui ne commence pas par http:// ou https:// (par exemple, ftp://0.0.0.0)"
+  },
+  "urlTrailingSlash": "L'adresse ne doit pas inclure de slash final.",
   "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
+    "description": "Cette erreur intervient lorsque l'utilisateur soumet une adresse qui se termine par une barre oblique finale (par exemple, http://0.0.0.0/)"
   },
   "username": "Nom d'utilisateur",
   "@username": {},
   "password": "Mot de passe",
   "@password": {},
-  "selectMusicLibraries": "Sélection des bibliothèques de musiques",
+  "logs": "Logs",
+  "@logs": {},
+  "next": "Prochain",
+  "@next": {},
+  "selectMusicLibraries": "Selectionner des bibliothèques",
   "@selectMusicLibraries": {
-    "description": "App bar title for library select screen"
+    "description": "Titre de l'écran de sélection de bibliothèque"
+  },
+  "couldNotFindLibraries": "Aucune bibliothèque trouvée",
+  "@couldNotFindLibraries": {
+    "description": "Cette erreur intervient lorsque l'utilisateur n'a pas de bibliothèque"
   },
   "unknownName": "Nom inconnu",
   "@unknownName": {},
   "songs": "Titres",
   "@songs": {},
-  "playlists": "Listes de lecture",
+  "albums": "Albums",
+  "@albums": {},
+  "artists": "Artistes",
+  "@artists": {},
+  "genres": "Genres",
+  "@genres": {},
+  "playlists": "Playlists",
   "@playlists": {},
+  "startMix": "Commencer un Mix",
+  "@startMix": {},
+  "startMixNoSongsArtist": "Appuyer longuement sur un artiste pour l'ajouter ou le retirer du mix avant de commencer",
+  "@startMixNoSongsArtist": {
+    "description": "Notification qui intervient quand l'utilisateur lance le mix instantané sans avoir sélectionné des artistes"
+  },
+  "startMixNoSongsAlbum": "Appuyer longuement sur un album pour l'ajouter ou le retirer du mix avant de commencer",
+  "@startMixNoSongsAlbum": {
+    "description": "Notification qui intervient quand l'utilisateur lance le mix instantané sans avoir sélectionné des albums"
+  },
+  "music": "Musique",
+  "@music": {},
   "clear": "Effacer",
   "@clear": {},
-  "settings": "Paramètres",
+  "favourites": "Favoris",
+  "@favourites": {},
+  "shuffleAll": "Tout mélanger",
+  "@shuffleAll": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "downloads": "Téléchargements",
+  "@downloads": {},
+  "settings": "Réglages",
   "@settings": {},
+  "offlineMode": "Mode hors-ligne",
+  "@offlineMode": {},
   "sortOrder": "Ordre de tri",
   "@sortOrder": {},
   "sortBy": "Trier par",
   "@sortBy": {},
+  "album": "Album",
+  "@album": {},
+  "albumArtist": "Artiste de l'album",
+  "@albumArtist": {},
+  "artist": "Artiste",
+  "@artist": {},
+  "budget": "Budget",
+  "@budget": {},
+  "communityRating": "Note de la communauté",
+  "@communityRating": {},
+  "criticRating": "Note de la critique",
+  "@criticRating": {},
   "dateAdded": "Date d'ajout",
   "@dateAdded": {},
-  "datePlayed": "Date de dernière lecture",
+  "datePlayed": "Date de lecture",
   "@datePlayed": {},
-  "playCount": "Nombre de lectures",
+  "playCount": "nombre de lectures",
   "@playCount": {},
+  "premiereDate": "Date de première",
+  "@premiereDate": {},
+  "productionYear": "Date de production",
+  "@productionYear": {},
+  "name": "Nom",
+  "@name": {},
   "random": "Aléatoire",
   "@random": {},
+  "revenue": "Recettes",
+  "@revenue": {},
+  "runtime": "Durée d'exécution",
+  "@runtime": {},
+  "syncDownloadedPlaylists": "Synchroniser les playlists téléchargées",
+  "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "Télécharger les images manquantes",
   "@downloadMissingImages": {},
-  "downloadErrors": "Erreurs de téléchargement",
+  "downloadedMissingImages": "{count,plural, =0{Pas d'image manquante} =1{{count} image téléchargée} other{{count} images téléchargées}}",
+  "@downloadedMissingImages": {
+    "description": "Message affiché lorsque l'utilisateur télécharge des images manquantes",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadErrors": "Télécharger les erreurs",
   "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} téléchargement} other{{count} téléchargements}}",
   "@downloadCount": {
@@ -164,52 +158,21 @@
       }
     }
   },
-  "offlineMode": "Mode hors ligne",
-  "@offlineMode": {},
-  "internalExternalIpExplanation": "Si vous voulez pouvoir accéder à votre serveur Jellyfin hors de votre réseau local, vous devez utiliser votre IP externe.\n\nSi votre serveur est sur un port HTTP (80/443), vous n'avez pas besoin de spécifier de port. Ce sera surement le cas si votre serveur est derrière un reverse proxy.",
-  "@internalExternalIpExplanation": {
-    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
-  },
-  "emptyServerUrl": "L'URL du serveur ne peut pas être vide",
-  "@emptyServerUrl": {
-    "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "startMixNoSongsAlbum": "Appuyez longuement sur un album pour l'ajouter ou l'enlever du générateur de mix, avant de le lancer",
-  "@startMixNoSongsAlbum": {
-    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
-  },
-  "shuffleAll": "Lecture aléatoire",
-  "@shuffleAll": {},
-  "finamp": "Finamp",
-  "@finamp": {},
-  "artist": "Artiste",
-  "@artist": {},
-  "startMixNoSongsArtist": "Appuyez longuement sur un artiste pour l'ajouter ou l'enlever du générateur de mix, avant de le lancer",
-  "@startMixNoSongsArtist": {
-    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
-  },
-  "productionYear": "Année de production",
-  "@productionYear": {},
-  "premiereDate": "Date de sortie",
-  "@premiereDate": {},
-  "downloadedMissingImages": "{count,plural, =0{Aucune image manquante trouvée} =1{{count} image manquante téléchargée} other{{count} images manquantes téléchargées}}",
-  "@downloadedMissingImages": {
-    "description": "Message that shows when the user downloads missing images",
+  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "@downloadedItemsImagesCount": {
+    "description": "Sert à fusionner downloadedItemsCount et downloadedImagesCount car les outils intl de Flutter ne supportent pas plusieurs pluriels dans une seule chaîne de caractères. https://github.com/flutter/flutter/issues/86906",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "downloadedItems": {
+        "type": "String",
+        "example": "12 téléchargements"
+      },
+      "downloadedImages": {
+        "type": "String",
+        "example": "1 image"
       }
     }
   },
-  "dlRunning": "{count} en cours",
-  "@dlRunning": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dlComplete": "{count} terminés",
+  "dlComplete": "{count,plural,=1{{count} complété} other{{count} complétés}}",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -217,7 +180,7 @@
       }
     }
   },
-  "dlFailed": "{count} échoués",
+  "dlFailed": "{count,plural,=1{{count} échec} other{{count} échecs}}",
   "@dlFailed": {
     "placeholders": {
       "count": {
@@ -233,8 +196,43 @@
       }
     }
   },
+  "dlRunning": "{count} en cours",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "downloadErrorsTitle": "Erreurs de téléchargement",
   "@downloadErrorsTitle": {},
+  "noErrors": "Pas d'erreur!",
+  "@noErrors": {},
+  "errorScreenError": "Une erreur est survenue lors de la récupération de la liste des erreurs ! À ce stade, il serait probablement préférable de créer une issue sur GitHub et de supprimer les données de l'application.",
+  "@errorScreenError": {},
+  "failedToGetSongFromDownloadId": "Échec de récupération de la chanson à partir de l'ID de téléchargement",
+  "@failedToGetSongFromDownloadId": {},
+  "deleteDownloadsPrompt": "Êtes vour sûr de vouloir supprimer {itemType, select, album{l'album} playlist{la playlist} artist{l'artiste} genre{le genre} track{le titre} other{}} '{itemName}' de cet appareil ?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Invite de confirmation affichée avant de supprimer les médias téléchargés du périphérique local, action destructrice, n'affecte pas les médias sur le serveur."
+  },
+  "deleteDownloadsConfirmButtonText": "Supprimer",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Affiché dans la boîte de dialogue de confirmation pour la suppression des médias téléchargés du périphérique local."
+  },
+  "deleteDownloadsAbortButtonText": "Annuler",
+  "error": "Erreur",
+  "@error": {},
   "discNumber": "Disque {number}",
   "@discNumber": {
     "placeholders": {
@@ -243,7 +241,7 @@
       }
     }
   },
-  "playButtonLabel": "LECTURE",
+  "playButtonLabel": "LIRE",
   "@playButtonLabel": {},
   "shuffleButtonLabel": "ALÉATOIRE",
   "@shuffleButtonLabel": {},
@@ -255,89 +253,91 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Modifier le nom de la liste de lecture",
+  "editPlaylistNameTooltip": "Modifier le titre de la playlist",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "Edit Playlist Name",
   "@editPlaylistNameTitle": {},
-  "required": "Obligatoire",
+  "required": "Requis",
   "@required": {},
-  "updateButtonLabel": "RAFRAÎCHIR",
+  "updateButtonLabel": "METTRE À JOUR",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Le nom de la liste de lecture a été mis à jour.",
+  "playlistNameUpdated": "Titre de la playlist mis à jour.",
   "@playlistNameUpdated": {},
-  "addDownloads": "Ajouter des téléchargements",
+  "favourite": "Favoris",
+  "@favourite": {},
+  "downloadsDeleted": "Téléchargements supprimés.",
+  "@downloadsDeleted": {},
+  "addDownloads": "Ajouter les téléchargements",
   "@addDownloads": {},
+  "location": "Emplacement",
+  "@location": {},
+  "downloadsAdded": "Téléchargements ajoutés.",
+  "@downloadsAdded": {},
+  "addButtonLabel": "AJOUTER",
+  "@addButtonLabel": {},
+  "shareLogs": "Partager les journaux.",
+  "@shareLogs": {},
+  "logsCopied": "Journaux copiés.",
+  "@logsCopied": {},
   "message": "Message",
   "@message": {},
-  "shareLogs": "Partager les journaux",
-  "@shareLogs": {},
-  "applicationLegalese": "Sous licence \"Mozilla Public License 2.0\". Le code source est disponible à l'adresse suivante :\n\ngithub.com/jmshrv/finamp",
+  "stackTrace": "Stack Trace",
+  "@stackTrace": {},
+  "applicationLegalese": "Soumis à la licence Mozilla Public License 2.0. Le code source est disponible sur :\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "downloadLocations": "Emplacements de téléchargement",
+  "transcoding": "Transcodage",
+  "@transcoding": {},
+  "downloadLocations": "Emplacements des téléchargements",
   "@downloadLocations": {},
-  "areYouSure": "Êtes-vous sûr·e ?",
+  "audioService": "Service audio",
+  "@audioService": {},
+  "interactions": "Intéractions",
+  "@interactions": {},
+  "layoutAndTheme": "Disposition & Apparence",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "Indisponible en mode hors-ligne",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "Déconnexion",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "Les chansons téléchargées ne seront pas supprimées",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "areYouSure": "Êtes-vous sûr ?",
   "@areYouSure": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin utilise AAC lors du transcodage",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "Activer le transcodage",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "Transcode les flux musicaux côté serveur.",
+  "@enableTranscodingSubtitle": {},
+  "bitrate": "Débit binaire",
+  "@bitrate": {},
+  "bitrateSubtitle": "Un débit binaire plus élevé offre une meilleure qualité audio au prix d'une bande passante plus importante.",
+  "@bitrateSubtitle": {},
   "customLocation": "Emplacement personnalisé",
   "@customLocation": {},
-  "appDirectory": "Dossier de l'application",
+  "appDirectory": "Répertoire de l'application",
   "@appDirectory": {},
-  "selectDirectory": "Sélectionner un dossier",
+  "addDownloadLocation": "Ajouter un emplacement de téléchargement",
+  "@addDownloadLocation": {},
+  "selectDirectory": "Sélectionner un répertoire",
   "@selectDirectory": {},
   "unknownError": "Erreur inconnue",
   "@unknownError": {},
-  "shuffleAllSongCount": "Nombre pour lecture aléatoire",
-  "@shuffleAllSongCount": {},
-  "errorScreenError": "Une erreur s'est produite pendant la récupération de la liste des erreurs! Vu la situation, vous devriez juste créer une issue sur Github et supprimer les données de l'application.",
-  "@errorScreenError": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin utilise AAC pour le transcodage",
-  "@jellyfinUsesAACForTranscoding": {},
-  "editPlaylistNameTooltip": "Modifier le nom de la liste de lecture",
-  "@editPlaylistNameTooltip": {},
-  "layoutAndTheme": "Disposition et apparence",
-  "@layoutAndTheme": {},
-  "downloadedSongsWillNotBeDeleted": "Les titres téléchargés ne seront pas supprimés",
-  "@downloadedSongsWillNotBeDeleted": {},
   "pathReturnSlashErrorMessage": "Les chemins qui retournent \"/\" ne peuvent pas être utilisés",
   "@pathReturnSlashErrorMessage": {},
-  "transcoding": "Transcodage",
-  "@transcoding": {},
-  "notAvailableInOfflineMode": "Non disponible en mode hors ligne",
-  "@notAvailableInOfflineMode": {},
-  "enableTranscoding": "Activer le transcodage",
-  "@enableTranscoding": {},
-  "customLocationsBuggy": "Les emplacements personnalisés sont extrêmement bogués à cause de problèmes avec les autorisations du système. Il n'est pas conseillé de les utiliser avant que ce problème ne soit réglé.",
-  "@customLocationsBuggy": {},
-  "enableTranscodingSubtitle": "Transcode les flux musicaux du côté du serveur.",
-  "@enableTranscodingSubtitle": {},
-  "directoryMustBeEmpty": "Le dossier doit être vide",
+  "directoryMustBeEmpty": "Le répertoire doit être vide",
   "@directoryMustBeEmpty": {},
-  "startMix": "Lancer un mix",
-  "@startMix": {},
-  "revenue": "Recette box-office",
-  "@revenue": {},
-  "runtime": "Temps d'exécution",
-  "@runtime": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
-  "stackTrace": "Suivi de la pile",
-  "@stackTrace": {},
-  "bitrateSubtitle": "Un débit binaire plus élevé donne une meilleure qualité de l'audio, mais consomme plus de données.",
-  "@bitrateSubtitle": {},
-  "shuffleAllSongCountSubtitle": "Nombre de titres à charger lorsque le bouton \"Lecture aléatoire\" est utilisé.",
+  "customLocationsBuggy": "Les emplacements personnalisés sont très bogués en raison de problèmes de permissions. Je réfléchis à des solutions pour corriger cela, mais pour l'instant, je ne recommande pas de les utiliser.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Permet de supprimer la notification lorsque la lecture est en pause. Permet également à Android de fermer le service lorsqu'il est en pause.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "shuffleAllSongCount": "Nombre de chansons à mélanger",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "Nombre de chansons à charger lors de l'utilisation du bouton 'Tout mélanger'.",
   "@shuffleAllSongCountSubtitle": {},
-  "viewType": "Type d'affichage",
+  "viewType": "Disposition de l'affichage",
   "@viewType": {},
-  "viewTypeSubtitle": "Type d'affichage pour l'écran des musiques",
+  "viewTypeSubtitle": "Règle la manière dont les musiques sont diposées",
   "@viewTypeSubtitle": {},
   "list": "Liste",
   "@list": {},
@@ -345,11 +345,9 @@
   "@portrait": {},
   "landscape": "Paysage",
   "@landscape": {},
-  "showTextOnGridView": "Afficher le texte dans la vue en mosaïque",
-  "@showTextOnGridView": {},
   "gridCrossAxisCount": "Nombre de tuiles par ligne en orientation {value}",
   "@gridCrossAxisCount": {
-    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "description": "Titre de l'élément de liste pour le nombre d'axes croisés de la grille. La valeur sera soit la clé 'portrait', soit la clé 'paysage'.",
     "placeholders": {
       "value": {
         "type": "String",
@@ -357,28 +355,108 @@
       }
     }
   },
-  "showTextOnGridViewSubtitle": "Afficher ou non du texte (titre, artiste...) sur les tuiles en mode mosaïque.",
+  "showTextOnGridView": "Afficher le texte dans la grille de vue",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "Afficher ou non le texte (titre, artiste, etc.) sur l'écran de la grille musicale.",
   "@showTextOnGridViewSubtitle": {},
   "useCoverAsBackground": "Afficher la couverture floutée en arrière-plan du lecteur",
   "@useCoverAsBackground": {},
-  "addToPlaylistTooltip": "Ajouter à une liste de lecture",
-  "@addToPlaylistTooltip": {},
-  "addToPlaylistTitle": "Ajouter à une liste de lecture",
-  "@addToPlaylistTitle": {},
   "addToQueue": "Ajouter à la liste d'attente",
   "@addToQueue": {},
-  "anErrorHasOccured": "Une erreur s'est produite.",
-  "@anErrorHasOccured": {},
   "gridCrossAxisCountSubtitle": "Le nombre de tuiles à utiliser par rangée en orientation {value} lorsque l'affichage est en mode mosaïque.",
   "@gridCrossAxisCountSubtitle": {
-    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "description": "Sous-titre de l'élément de liste pour le nombre d'axes croisés de la grille. La valeur sera soit la clé 'portrait', soit la clé 'paysage'.",
     "placeholders": {
       "value": {
         "type": "String",
-        "example": "landscape"
+        "example": "Paysage"
       }
     }
   },
+  
+  "showCoverAsPlayerBackground": "Afficher la couverture floutée en arrière-plan du lecteur",
+  "@showCoverAsPlayerBackground": {},
+  "showCoverAsPlayerBackgroundSubtitle": "Choisir d'utiliser ou non l'illustration floutée comme arrière-plan sur l'écran du lecteur.",
+  "@showCoverAsPlayerBackgroundSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons si identiques aux artistes de l'album",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "Désactiver les gestes",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Indique si les gestes doivent être désactivés.",
+  "@disableGestureSubtitle": {},
+  "showFastScroller": "Afficher le défileur rapide",
+  "@showFastScroller": {},
+  "theme": "Thème",
+  "@theme": {},
+  "system": "Système",
+  "@system": {},
+  "light": "Claire",
+  "@light": {},
+  "dark": "Sombre",
+  "@dark": {},
+  "tabs": "Onglets",
+  "@tabs": {},
+  "cancelSleepTimer": "Annuler le minuteur de sommeil ?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "OUI",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "NON",
+  "@noButtonLabel": {},
+  "setSleepTimer": "Configurer le minuteur de sommeil",
+  "@setSleepTimer": {},
+  "minutes": "Minutes",
+  "@minutes": {},
+  "invalidNumber": "Nombre invalide",
+  "@invalidNumber": {},
+  "sleepTimerTooltip": "Minuteur de sommeil",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTooltip": "Ajouter à une playlist",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "Ajouter à une playlist",
+  "@addToPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "Retirer de la playlist",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Retirer de la playlist",
+  "@removeFromPlaylistTitle": {},
+  "newPlaylist": "Nouvelle Playlist",
+  "@newPlaylist": {},
+  "createButtonLabel": "CRÉER",
+  "@createButtonLabel": {},
+  "playlistCreated": "Playlist créée.",
+  "@playlistCreated": {},
+  "noAlbum": "Aucun album",
+  "@noAlbum": {},
+  "noItem": "Aucun élément",
+  "@noItem": {},
+  "noArtist": "Aucun artiste",
+  "@noArtist": {},
+  "unknownArtist": "Artiste inconnu",
+  "@unknownArtist": {},
+  "streaming": "STREAMING",
+  "@streaming": {},
+  "downloaded": "TÉLÉCHARGÉ",
+  "@downloaded": {},
+  "transcode": "TRANSCODAGE",
+  "@transcode": {},
+  "direct": "DIRECT",
+  "@direct": {},
+  "statusError": "STATUS D'ERREUR",
+  "@statusError": {},
+  "queue": "File d'attente",
+  "@queue": {},
+  "playNext": "Lire ensuite",
+  "@playNext": {
+    "description": "Titre de l'élément du menu contextuel pour insérer un élément dans la file d'attente de lecture après l'élément en cours de lecture."
+  },
+  "replaceQueue": "Remplacer la file d'attente",
+  "@replaceQueue": {},
+  "instantMix": "Mix instantané",
+  "@instantMix": {},
+  "goToAlbum": "Voir l'album",
+  "@goToAlbum": {},
+  "removeFavourite": "Retirer des favoris",
+  "@removeFavourite": {},
   "addedToQueue": "Ajouté à la file d'attente",
   "@addedToQueue": {},
   "addFavourite": "Ajouter aux favoris",
@@ -387,58 +465,38 @@
   "@enterLowPriorityStateOnPause": {},
   "useCoverAsBackgroundSubtitle": "Utiliser ou non une couverture floutée comme arrière-plan sur l'écran du lecteur.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Indique si les artistes des chansons doivent être affichés sur l'écran de l'album s'ils ne diffèrent pas des artistes de l'album.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "theme": "Thème",
-  "@theme": {},
-  "system": "Système",
-  "@system": {},
-  "light": "Lumineux",
-  "@light": {},
-  "dark": "Sombre",
-  "@dark": {},
-  "tabs": "Onglets",
-  "@tabs": {},
-  "cancelSleepTimer": "Annuler la minuterie de veille ?",
-  "@cancelSleepTimer": {},
-  "yesButtonLabel": "OUI",
-  "@yesButtonLabel": {},
-  "setSleepTimer": "Réglage de la minuterie de veille",
-  "@setSleepTimer": {},
-  "invalidNumber": "Nombre invalide",
-  "@invalidNumber": {},
-  "unknownArtist": "Artiste inconnu",
-  "@unknownArtist": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "transcode": "TRANSCODE",
-  "@transcode": {},
-  "direct": "DIRECT",
-  "@direct": {},
-  "statusError": "STATUS D'ERREUR",
-  "@statusError": {},
-  "queue": "File d'attente",
-  "@queue": {},
-  "instantMix": "Mix instantané",
-  "@instantMix": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Afficher ou non les artistes des chansons sur l'écran de l'album si différents des artistes de l'album.",
+  "insertedIntoQueue": "Ajouté à la file d'attente.",
+  "@insertedIntoQueue": {
+    "description": "Notification affichée lorsque l'utilisateur insère avec succès des éléments dans la file d'attente de lecture à un endroit qui n'est pas nécessairement à la fin."
+  },
   "queueReplaced": "File d'attente remplacée.",
   "@queueReplaced": {},
-  "startingInstantMix": "Démarrage du mix instantané.",
+  "removedFromPlaylist": "Retiré de la playlist.",
+  "@removedFromPlaylist": {},
+  "startingInstantMix": "Mix instantané lancé.",
   "@startingInstantMix": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Permet de faire glisser la notification lorsqu'elle est en pause. Permet également à Android de tuer le service lorsqu'il est en pause.",
-  "@enterLowPriorityStateOnPauseSubtitle": {},
-  "playlistCreated": "Liste de lecture créée.",
-  "@playlistCreated": {},
-  "downloaded": "TÉLÉCHARGÉ",
-  "@downloaded": {},
-  "replaceQueue": "Remplacer la file d'attente",
-  "@replaceQueue": {},
-  "responseError401": "{error} Code d'état {statusCode}. Cela signifie probablement que vous avez utilisé un mauvais nom d'utilisateur/mot de passe, ou que votre client n'est plus authentifié.",
+  "anErrorHasOccured": "Une erreur s'est produite.",
+  "@anErrorHasOccured": {},
+  "responseError": "{error} Status code {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Interdit"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "responseError401": "{error} Code de statut {statusCode}. Cela signifie probablement que vous avez utilisé un mauvais nom d'utilisateur/mot de passe, ou que votre client n'est plus connecté.",
   "@responseError401": {
     "placeholders": {
       "error": {
         "type": "String",
-        "example": "Unauthorized"
+        "example": "Non autorisé"
       },
       "statusCode": {
         "type": "int",
@@ -446,19 +504,11 @@
       }
     }
   },
-  "goToAlbum": "Aller à l'album",
-  "@goToAlbum": {},
-  "removeFavourite": "Supprimer des favoris",
-  "@removeFavourite": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons s'ils sont les mêmes que ceux des albums",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "addToMix": "Ajouter au mix",
-  "@addToMix": {},
-  "removeFromMix": "Enlever du mix",
+  "removeFromMix": "Retirer du Mix",
   "@removeFromMix": {},
-  "minutes": "Minutes",
-  "@minutes": {},
-  "redownloadedItems": "{count,plural, =0{Aucun re-téléchargement nécessaire.} =1{{count} élément re-téléchargé} other{{count} éléments re-téléchargés}}",
+  "addToMix": "Ajouter au Mix",
+  "@addToMix": {},
+  "redownloadedItems": "{count,plural, =0{Aucun re-téléchargement nécessaire} =1{{count} élément re-téléchargé} other{{count} éléments re-téléchargés}}",
   "@redownloadedItems": {
     "placeholders": {
       "count": {
@@ -466,42 +516,75 @@
       }
     }
   },
-  "bufferDuration": "Durée du tampon",
+  "bufferDuration": "Taille du tampon",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "Combien de temps le lecteur doit mettre en mémoire tampon, en secondes. Nécessite un redémarrage.",
+  "bufferDurationSubtitle": "Taille du tampon du lecteur, en secondes. Changer ce paramètre nécessite un redémarrage.",
   "@bufferDurationSubtitle": {},
-  "disableGesture": "Désactiver les gestes",
-  "@disableGesture": {},
-  "removeFromPlaylistTooltip": "Retirer de la playlist",
-  "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Retirer de la playlist",
-  "@removeFromPlaylistTitle": {},
-  "removedFromPlaylist": "Retirer de la playlist.",
-  "@removedFromPlaylist": {},
-  "disableGestureSubtitle": "Option permettant de désactiver les gestes.",
-  "@disableGestureSubtitle": {},
-  "showUncensoredLogMessage": "Ce journal contient vos informations de connexion. L'afficher ?",
-  "@showUncensoredLogMessage": {},
-  "insertedIntoQueue": "Ajouter à la file d'attente.",
-  "@insertedIntoQueue": {
-    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
-  },
-  "refresh": "ACTUALISER",
-  "@refresh": {},
-  "confirm": "Confirmer",
-  "@confirm": {},
   "language": "Langue",
-  "@language": {},
-  "playNext": "Lire à la suite",
-  "@playNext": {
-    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
-  },
+  "confirm": "Confirmé",
+  "showUncensoredLogMessage": "Ce journal contient vos informations de connexion. Afficher tout de même ?",
   "resetTabs": "Réinitialiser les onglets",
-  "@resetTabs": {},
-  "noMusicLibrariesBody": "Finamp n'a trouvé aucune bibliothèque musicale. Assurez-vous que votre serveur Jellyfin contient au moins une médiathèque de type \"Musique\".",
-  "@noMusicLibrariesBody": {},
-  "noMusicLibrariesTitle": "Pas de bibliothèque musicale",
+  "noMusicLibrariesTitle": "Aucune bibliothèque musicale",
   "@noMusicLibrariesTitle": {
-    "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+    "description": "Titre du message affiché sur l'écran de vues lorsque aucune bibliothèque musicale n'a été trouvée."
+  },
+  "noMusicLibrariesBody": "Finamp n'a pas trouvé de bibliothèques musicales. Veuillez vous assurer que votre serveur Jellyfin contient au moins une bibliothèque avec le type de contenu défini sur \"Musique\".",
+  "refresh": "RAFRAÎCHIR",
+  "swipeInsertQueueNext": "Lire la chanson balayée en prochain",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Activer l'insertion d'une chanson comme élément suivant dans la file d'attente lorsqu'elle est balayée dans la liste des chansons, au lieu de l'ajouter à la fin.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "redesignBeta": "Essayer la bêta",
+  "@redesignBeta": {},
+  "playbackOrderShuffledTooltip": "Lecture en aléatoire. Touchez pour activer/désactiver.",
+  "@playbackOrderShuffledTooltip": {},
+  "playbackOrderLinearTooltip": "Lecture dans l'ordre. Touchez pour activer/désactiver.",
+  "@playbackOrderLinearTooltip": {},
+  "loopModeAllTooltip": "Lecture en boucle de l'ensemble. Touchez pour activer/désactiver.",
+  "@loopModeAllTooltip": {},
+  "loopModeOneTooltip": "Lecture en boucle d'un seul. Touchez pour activer/désactiver.",
+  "@loopModeOneTooltip": {},
+  "loopModeNoneTooltip": "Ne pas lire en boucle. Touchez pour activer/désactiver.",
+  "@loopModeNoneTooltip": {},
+  "skipToPrevious": "Passer à la chanson précédente",
+  "@skipToPrevious": {},
+  "skipToNext": "Passer à la chanson suivante",
+  "@skipToNext": {},
+  "togglePlayback": "Activer/désactiver la lecture",
+  "@togglePlayback": {},
+  "playArtist": "Lire tous les albums de {artist}",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "Lire aléatoirement tous les albums de {artist}",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "downloadArtist": "Télécharger tous les albums de {artist}",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "deleteFromDevice": "Supprimer de l'appareil",
+  "@deleteFromDevice": {},
+  "download": "Télécharger",
+  "@download": {},
+  "sync": "Synchroniser avec le serveur",
+  "@sync": {},
+  "about": "À propos de Finamp",
+  "@about": {}
 }

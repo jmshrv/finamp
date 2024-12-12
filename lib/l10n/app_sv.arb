@@ -525,5 +525,7 @@
   "deleteDownloadsAbortButtonText": "Avbryt",
   "@deleteDownloadsAbortButtonText": {},
   "syncDownloadedPlaylists": "Synkronisera nedladdade spellistor",
-  "@syncDownloadedPlaylists": {}
+  "@syncDownloadedPlaylists": {},
+  "interactions": "Interaktioner",
+  "@interactions": {}
 }

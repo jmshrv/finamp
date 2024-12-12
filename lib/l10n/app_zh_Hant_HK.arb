@@ -9,7 +9,7 @@
   "@urlStartWithHttps": {
     "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   },
-  "urlTrailingSlash": "URL 不能以「/」結尾",
+  "urlTrailingSlash": "URL 不能以「/」作結",
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
@@ -67,7 +67,7 @@
   "@playCount": {},
   "premiereDate": "推出日期",
   "@premiereDate": {},
-  "productionYear": "推出年份",
+  "productionYear": "製作年份",
   "@productionYear": {},
   "name": "名稱",
   "@name": {},
@@ -207,7 +207,7 @@
   "@appDirectory": {},
   "enterLowPriorityStateOnPause": "暫停播放時會進入「低優先」狀態",
   "@enterLowPriorityStateOnPause": {},
-  "enterLowPriorityStateOnPauseSubtitle": "在停止播放時，允許「通知」能被「滑動移除」及關閉應用程式（適用於 Android 裝置）。",
+  "enterLowPriorityStateOnPauseSubtitle": "在停止播放時，允許本程式的「通知」能被掃走及關閉應用程式（適用於 Android 裝置）。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllSongCount": "隨機播放上限",
   "@shuffleAllSongCount": {},
@@ -217,9 +217,9 @@
   "@message": {},
   "pathReturnSlashErrorMessage": "不能使用「／」路徑",
   "@pathReturnSlashErrorMessage": {},
-  "portrait": "垂直",
+  "portrait": "直向",
   "@portrait": {},
-  "gridCrossAxisCountSubtitle": "使用{value}顯示模式時，每行的方格（歌曲、歌手等）數量。",
+  "gridCrossAxisCountSubtitle": "屏幕在{value}顯示時，每行顯示的資訊數量（例如歌曲、歌手等）。",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -229,17 +229,17 @@
       }
     }
   },
-  "showTextOnGridView": "在方格內顯示文字",
+  "showTextOnGridView": "在網絡內顯示文字",
   "@showTextOnGridView": {},
-  "showTextOnGridViewSubtitle": "使用格狀顯示方式時，是否在方格內顯示歌曲資訊（名稱、歌手等）。",
+  "showTextOnGridViewSubtitle": "使用格狀顯示時，在網格內顯示歌曲資訊（名稱、歌手等）。",
   "@showTextOnGridViewSubtitle": {},
   "useCoverAsBackground": "模糊化封面作為播放器的背景",
   "@useCoverAsBackground": {},
-  "useCoverAsBackgroundSubtitle": "是否以模糊化的專輯封面圖片作為應用程式內的播放頁面的背景。",
+  "useCoverAsBackgroundSubtitle": "以模糊化的專輯封面作為應用程式內的播放頁面的背景。",
   "@useCoverAsBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "隱藏與專輯歌手同名的歌手名稱",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "當專輯的歌手與專輯歌曲的歌手名稱相同時，是否隱藏歌曲的歌手名稱。",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "當專輯的歌手與歌曲的歌手相同時，隱藏歌曲的歌手名稱。",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "禁用「手勢」功能",
   "@disableGesture": {},
@@ -350,7 +350,7 @@
       }
     }
   },
-  "downloadedMissingImages": "{count,plural, =0{沒有缺失的圖片} =1{已下載{count}張圖片} other{已下載{count}張圖片}}",
+  "downloadedMissingImages": "{count,plural, =0{沒有缺少的圖片} =1{已下載{count}張圖片} other{已下載{count}張圖片}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -367,7 +367,7 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "internalExternalIpExplanation": "如果您需要在局部區域網絡（LAN）以外的地方連接 Jellyfin，請使用伺服器的區域網絡（WAN）IP。\n\n如果目標伺服器使用的連接埠（port）是 HTTP port（80／433），則毋須填寫連接埠。",
+  "internalExternalIpExplanation": "如果您需要在局部區域網絡（LAN）以外的地方連接 Jellyfin，請使用伺服器的區域網絡（WAN）IP。\n\n如果目標伺服器使用的連接埠（port）是 HTTP 的預設連接埠（80／433），則毋須填寫連接埠。",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -395,7 +395,7 @@
       }
     }
   },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
+  "downloadedItemsImagesCount": "{downloadedItems}， {downloadedImages}",
   "@downloadedItemsImagesCount": {
     "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
     "placeholders": {
@@ -433,17 +433,17 @@
   "@customLocation": {},
   "customLocationsBuggy": "現時，自訂位置功能因權限問題而未能完全正常運作。如非必要，建議不要使用。",
   "@customLocationsBuggy": {},
-  "viewTypeSubtitle": "顯示歌曲的方式",
+  "viewTypeSubtitle": "顯示資訊的方式",
   "@viewTypeSubtitle": {},
-  "viewType": "顯示方式",
+  "viewType": "顯示模式",
   "@viewType": {},
   "grid": "格狀",
   "@grid": {},
   "list": "清單",
   "@list": {},
-  "landscape": "水平",
+  "landscape": "橫向",
   "@landscape": {},
-  "gridCrossAxisCount": "{value}顯示模式的方格數量",
+  "gridCrossAxisCount": "{value}顯示網格數量",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -482,7 +482,7 @@
   },
   "language": "語言",
   "@language": {},
-  "showUncensoredLogMessage": "紀錄檔內包含你的登入資訊。顯示？",
+  "showUncensoredLogMessage": "紀錄檔內包含你的登入資訊。你是否確認要顯示？",
   "@showUncensoredLogMessage": {},
   "confirm": "確定",
   "@confirm": {},
@@ -503,5 +503,76 @@
   "noMusicLibrariesTitle": "沒有音樂類媒體庫",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "interactions": "互動",
+  "@interactions": {},
+  "deleteDownloadsConfirmButtonText": "刪除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsPrompt": "你是否確定從裝置中刪除 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}'？",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsAbortButtonText": "取消",
+  "@deleteDownloadsAbortButtonText": {},
+  "syncDownloadedPlaylists": "同步已下載播放清單",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "顯示快速卷軸",
+  "@showFastScroller": {},
+  "redesignBeta": "測試版",
+  "@redesignBeta": {},
+  "swipeInsertQueueNext": "滑動插播",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "在歌曲列表中輕掃歌曲時，將其插入至播放佇列的最頭而不是最後。",
+  "@swipeInsertQueueNextSubtitle": {},
+  "skipToNext": "下一首歌",
+  "@skipToNext": {},
+  "skipToPrevious": "上一首歌",
+  "@skipToPrevious": {},
+  "download": "下載",
+  "@download": {},
+  "deleteFromDevice": "從裝置中刪除",
+  "@deleteFromDevice": {},
+  "downloadArtist": "下載 {artist}所有的專輯",
+  "@downloadArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "playArtist": "播放{artist}所有的專輯",
+  "@playArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "shuffleArtist": "隨機播放{artist}的專輯",
+  "@shuffleArtist": {
+    "placeholders": {
+      "artist": {
+        "type": "String",
+        "example": "The Beatles"
+      }
+    }
+  },
+  "about": "關於 Finamp",
+  "@about": {},
+  "sync": "與伺服器同步",
+  "@sync": {}
 }

@@ -89,7 +89,7 @@ PODS:
   - SDWebImage/Core (5.18.2)
   - share_plus (0.0.1):
     - Flutter
-  - sqflite (0.0.3):
+  - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
   - SwiftyGif (5.4.4)

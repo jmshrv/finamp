@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../screens/downloads_screen.dart';
 import '../../screens/logs_screen.dart';

@@ -9,11 +9,11 @@
   "@addFavourite": {},
   "addedToQueue": "Adicionado à fila.",
   "@addedToQueue": {},
-  "internalExternalIpExplanation": "Se quer acessar o seu servidor Jellyfin remotamente, precisa usar o seu IP externo.\n\nSe o seu servidor está numa porta HTTP (80/443), não precisa especificar a porta. Esse será o caso se o servidor estiver atrás de um proxy reverso.",
+  "internalExternalIpExplanation": "Se pretende aceder ao seu servidor Jellyfin remotamente, será necessário utilizar o seu IP público.\n\nNo caso do seu servidor utilizar uma das portas padrão do HTTP (80/443), não vai precisar de indicar uma porta. Este será o caso mais provável caso utilize um proxy inverso.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "urlStartWithHttps": "URL deve começar com http:// ou https://",
+  "urlStartWithHttps": "O URL deverá começar com http:// ou https://",
   "@urlStartWithHttps": {
     "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   },
@@ -25,7 +25,7 @@
   "@next": {},
   "noErrors": "Sem erros!",
   "@noErrors": {},
-  "errorScreenError": "Um erro ocorreu a aceder a lista de erros! A este ponto, deveria provavelmente catalogar um defeito no Github e apagar os dados da app",
+  "errorScreenError": "Ocorreu um erro ao aceder à lista de erros! Neste caso, recomendados que abra um issue no nosso GitHub e que limpe os dados da aplicação",
   "@errorScreenError": {},
   "shuffleButtonLabel": "MISTURAR",
   "@shuffleButtonLabel": {},
@@ -73,11 +73,11 @@
   "@addToMix": {},
   "serverUrl": "URL do servidor",
   "@serverUrl": {},
-  "emptyServerUrl": "URL de servidor não pode ser vazia",
+  "emptyServerUrl": "O URL do servidor não pode estar em branco",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlTrailingSlash": "URL não pode incluir a barra final",
+  "urlTrailingSlash": "O URL não pode ter uma barra no fim",
   "@urlTrailingSlash": {
     "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
@@ -89,7 +89,7 @@
   },
   "unknownName": "Nome desconhecido",
   "@unknownName": {},
-  "selectMusicLibraries": "Selecione a biblioteca de Músicas",
+  "selectMusicLibraries": "Seleccione as suas bibliotecas de música",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -99,11 +99,11 @@
   "@albums": {},
   "artists": "Artistas",
   "@artists": {},
-  "genres": "Gêneros",
+  "genres": "Géneros",
   "@genres": {},
   "playlists": "Listas de Reprodução",
   "@playlists": {},
-  "startMix": "Começar Miscelânea",
+  "startMix": "Iniciar Mistura",
   "@startMix": {},
   "music": "Música",
   "@music": {},
@@ -111,13 +111,13 @@
   "@clear": {},
   "favourites": "Favoritos",
   "@favourites": {},
-  "shuffleAll": "Embaralhar todas",
+  "shuffleAll": "Misturar todas",
   "@shuffleAll": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "downloads": "Descargas",
+  "downloads": "Transferências",
   "@downloads": {},
-  "settings": "Configurações",
+  "settings": "Definições",
   "@settings": {},
   "offlineMode": "Modo Offline",
   "@offlineMode": {},
@@ -155,11 +155,11 @@
   "@revenue": {},
   "runtime": "Duração",
   "@runtime": {},
-  "downloadMissingImages": "Descarregar imagens ausentes",
+  "downloadMissingImages": "Transferir imagens inexistentes",
   "@downloadMissingImages": {},
   "downloadErrors": "Erros de transferência",
   "@downloadErrors": {},
-  "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente encontrada} =1{{count} imagem ausente descarregada} other{{count} imagens ausentes descarregadas}}",
+  "downloadedMissingImages": "{count,plural, =0{Não foram encontradas imagens em falta} =1{{count} imagem em falta transferida} other{{count} imagens em falta descarregadas}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -206,7 +206,7 @@
       }
     }
   },
-  "dlEnqueued": "{count} enfileiradas",
+  "dlEnqueued": "{count} em espera",
   "@dlEnqueued": {
     "placeholders": {
       "count": {
@@ -224,7 +224,7 @@
   },
   "downloadErrorsTitle": "Erros de Transferência",
   "@downloadErrorsTitle": {},
-  "failedToGetSongFromDownloadId": "Falha em adquirir música do ID da descarga",
+  "failedToGetSongFromDownloadId": "Falha ao adquirir música do ID da descarga",
   "@failedToGetSongFromDownloadId": {},
   "error": "Erro",
   "@error": {},
@@ -244,7 +244,7 @@
   "@editPlaylistNameTitle": {},
   "required": "Obrigatório",
   "@required": {},
-  "updateButtonLabel": "ATUALIZAÇÃO",
+  "updateButtonLabel": "ACTUALIZAR",
   "@updateButtonLabel": {},
   "playlistNameUpdated": "Nome da lista de reprodução atualizado.",
   "@playlistNameUpdated": {},
@@ -406,7 +406,7 @@
   "@removedFromPlaylist": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Ocultar artistas da música se forem iguais aos artistas do álbum",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "startMixNoSongsAlbum": "Mantenha pressionado um álbum para adicioná-lo ou removê-lo do criador de mixagens antes de iniciar uma mixagem",
+  "startMixNoSongsAlbum": "Antes de iniciar uma mistura, faça um toque longo num álbum para adicioná-lo ao editor de misturas",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -438,7 +438,7 @@
   },
   "useCoverAsBackground": "Mostrar capa desfocada como plano de fundo do player",
   "@useCoverAsBackground": {},
-  "startMixNoSongsArtist": "Mantenha pressionado um artista para adicioná-lo ou removê-lo do construtor de mixagem antes de iniciar uma mixagem",
+  "startMixNoSongsArtist": "Antes de iniciar uma mistura, faça um toque longo num artista para adicionar ou remover o mesmo do editor de misturas",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
@@ -486,7 +486,7 @@
   },
   "disableGestureSubtitle": "Se deseja desativar gestos.",
   "@disableGestureSubtitle": {},
-  "startupError": "Algo correu mal durante a inicialização da aplicação. O erro foi:{error}\n\nPor favor crie um \"Issue\" em github.com/UnicornsOnLSD/finamp com uma captura de ecrã desta página. Se o problema persistir, pode tentar limpar os dados do aplicativo para redefini-lo.",
+  "startupError": "Ocorreu um erro durante o arranque da aplicação. O erro foi:{error}\n\nPor favor, abra um \"Issue\" em github.com/UnicornsOnLSD/finamp que contenha uma captura deste ecrã. Caso o problema persista, tente limpar os dados da aplicação para a repor para o estado original.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -496,7 +496,7 @@
       }
     }
   },
-  "refresh": "ATUALIZAR",
+  "refresh": "ACTUALIZAR",
   "@refresh": {},
   "noMusicLibrariesBody": "A Finamp não encontrou nenhuma biblioteca musical. Certifique-se de que seu servidor Jellyfin contenha pelo menos uma biblioteca com o tipo de conteúdo definido como “Música”.",
   "@noMusicLibrariesBody": {},
