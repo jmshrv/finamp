@@ -481,5 +481,13 @@
   "swipeInsertQueueNextSubtitle": "Activer l'insertion d'une chanson comme élément suivant dans la file d'attente lorsqu'elle est balayée dans la liste des chansons, au lieu de l'ajouter à la fin.",
   "@swipeInsertQueueNextSubtitle": {},
   "about": "À propos de Finamp",
-  "@about": {}
+  "@about": {},
+  "aboutThanks": "Merci d'utiliser Finamp !",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "aboutTranslations": "Aidez à traduire Finamp dans votre langue :",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  }
 }
