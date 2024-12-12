@@ -119,7 +119,7 @@
   "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "Télécharger les images manquantes",
   "@downloadMissingImages": {},
-  "downloadedMissingImages": "{count,plural, =0{Pas d'image manquante} =1{{count} image téléchargée} other{{count} images téléchargées}",
+  "downloadedMissingImages": "{count,plural, =0{Pas d'image manquante} =1{{count} image téléchargée} other{{count} images téléchargées}}",
   "@downloadedMissingImages": {
     "description": "Message affiché lorsque l'utilisateur télécharge des images manquantes",
     "placeholders": {
