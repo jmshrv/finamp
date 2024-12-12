@@ -670,6 +670,5 @@ final class _$JellyfinApi extends JellyfinApi {
       $request,
       requestConverter: JsonConverter.requestFactory,
     );
-    return $response.bodyOrThrow;
   }
 }
