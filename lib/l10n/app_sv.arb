@@ -231,7 +231,7 @@
   "@password": {},
   "pathReturnSlashErrorMessage": "Sökvägar som returnerar ett \"/\" kan inte användas",
   "@pathReturnSlashErrorMessage": {},
-  "internalExternalIpExplanation": "Om du vill ha åtkomst till din Jellyfin-server utanför hemmet, behöver du använda din externa IP-adress.\n\nOm din server är bakom en HTTP-port (80/443) så behöver du inte manuellt specificera en port. Detta är troligtvis fallet om din server finns bakom en omvänd proxy.",
+  "internalExternalIpExplanation": "Om du vill kunna komma åt din Jellyfin-server på distans måste du använda din externa IP.\n\nOm din server är på en HTTP-standardport (80 eller 443) eller Jellyfins standardport (8096), behöver du inte ange porten.\n\nOm webbadressen är korrekt bör du se viss information om din server dyka upp under inmatningsfältet.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -473,5 +473,69 @@
   "syncDownloadedPlaylists": "Synkronisera nedladdade spellistor",
   "@syncDownloadedPlaylists": {},
   "interactions": "Interaktioner",
-  "@interactions": {}
+  "@interactions": {},
+  "about": "Om Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "changeLanguage": "Ändra språk",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "viewLogs": "Visa loggar",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "loginFlowGetStarted": "Kom igång!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "aboutTranslations": "Hjälp att översätta Finamp till ditt språk:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "finampTagline": "En öppen källkod Jellyfin musikspelare",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionLink": "Bidra till Finamp på GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutThanks": "Tack för att du använder Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "Välkommen till",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowSlogan": "Din musik, på ditt sätt.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowServerSelectionHeading": "Anslut till Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "Tillbaka",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlInfoButtonTooltip": "Server webbadress hjälp",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "connectingToServer": "Ansluter till server...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "Servrar på ditt lokala nätverk:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowAccountSelectionHeading": "Välj ditt konto",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  }
 }
