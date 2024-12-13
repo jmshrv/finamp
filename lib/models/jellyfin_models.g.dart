@@ -2743,7 +2743,7 @@ UserPolicy _$UserPolicyFromJson(Map json) => UserPolicy(
       isAdministrator: json['IsAdministrator'] as bool,
       isHidden: json['IsHidden'] as bool,
       isDisabled: json['IsDisabled'] as bool,
-      maxParentalRating: json['MaxParentalRating'] as int?,
+      maxParentalRating: (json['MaxParentalRating'] as num?)?.toInt(),
       blockedTags: (json['BlockedTags'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -2789,9 +2789,11 @@ UserPolicy _$UserPolicyFromJson(Map json) => UserPolicy(
           ?.map((e) => e as String)
           .toList(),
       enableAllFolders: json['EnableAllFolders'] as bool,
-      invalidLoginAttemptCount: json['InvalidLoginAttemptCount'] as int,
-      loginAttemptsBeforeLockout: json['LoginAttemptsBeforeLockout'] as int?,
-      maxActiveSessions: json['MaxActiveSessions'] as int?,
+      invalidLoginAttemptCount:
+          (json['InvalidLoginAttemptCount'] as num).toInt(),
+      loginAttemptsBeforeLockout:
+          (json['LoginAttemptsBeforeLockout'] as num?)?.toInt(),
+      maxActiveSessions: (json['MaxActiveSessions'] as num?)?.toInt(),
       enablePublicSharing: json['EnablePublicSharing'] as bool,
       blockedMediaFolders: (json['BlockedMediaFolders'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -2799,7 +2801,8 @@ UserPolicy _$UserPolicyFromJson(Map json) => UserPolicy(
       blockedChannels: (json['BlockedChannels'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      remoteClientBitrateLimit: json['RemoteClientBitrateLimit'] as int,
+      remoteClientBitrateLimit:
+          (json['RemoteClientBitrateLimit'] as num).toInt(),
       authenticationProviderId: json['AuthenticationProviderId'] as String?,
       passwordResetProviderId: json['PasswordResetProviderId'] as String?,
       syncPlayAccess: json['SyncPlayAccess'] as String,
@@ -2852,7 +2855,7 @@ Map<String, dynamic> _$UserPolicyToJson(UserPolicy instance) =>
     };
 
 AccessSchedule _$AccessScheduleFromJson(Map json) => AccessSchedule(
-      id: json['Id'] as int,
+      id: (json['Id'] as num).toInt(),
       userId: json['UserId'] as String,
       dayOfWeek: json['DayOfWeek'] as String,
       startHour: (json['StartHour'] as num).toDouble(),
@@ -2988,12 +2991,12 @@ TranscodingInfo _$TranscodingInfoFromJson(Map json) => TranscodingInfo(
       container: json['Container'] as String?,
       isVideoDirect: json['IsVideoDirect'] as bool,
       isAudioDirect: json['IsAudioDirect'] as bool,
-      bitrate: json['Bitrate'] as int?,
+      bitrate: (json['Bitrate'] as num?)?.toInt(),
       framerate: (json['Framerate'] as num?)?.toDouble(),
       completionPercentage: (json['CompletionPercentage'] as num?)?.toDouble(),
-      width: json['Width'] as int?,
-      height: json['Height'] as int?,
-      audioChannels: json['AudioChannels'] as int?,
+      width: (json['Width'] as num?)?.toInt(),
+      height: (json['Height'] as num?)?.toInt(),
+      audioChannels: (json['AudioChannels'] as num?)?.toInt(),
       transcodeReasons: (json['TranscodeReasons'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -3016,13 +3019,13 @@ Map<String, dynamic> _$TranscodingInfoToJson(TranscodingInfo instance) =>
     };
 
 PlayerStateInfo _$PlayerStateInfoFromJson(Map json) => PlayerStateInfo(
-      positionTicks: json['PositionTicks'] as int?,
+      positionTicks: (json['PositionTicks'] as num?)?.toInt(),
       canSeek: json['CanSeek'] as bool,
       isPaused: json['IsPaused'] as bool,
       isMuted: json['IsMuted'] as bool,
-      volumeLevel: json['VolumeLevel'] as int?,
-      audioStreamIndex: json['AudioStreamIndex'] as int?,
-      subtitleStreamIndex: json['SubtitleStreamIndex'] as int?,
+      volumeLevel: (json['VolumeLevel'] as num?)?.toInt(),
+      audioStreamIndex: (json['AudioStreamIndex'] as num?)?.toInt(),
+      subtitleStreamIndex: (json['SubtitleStreamIndex'] as num?)?.toInt(),
       mediaSourceId: json['MediaSourceId'] as String?,
       playMethod: json['PlayMethod'] as String?,
       repeatMode: json['RepeatMode'] as String?,
@@ -3109,18 +3112,18 @@ DeviceProfile _$DeviceProfileFromJson(Map json) => DeviceProfile(
       supportedMediaTypes: json['SupportedMediaTypes'] as String?,
       userId: json['UserId'] as String?,
       albumArtPn: json['AlbumArtPn'] as String?,
-      maxAlbumArtWidth: json['MaxAlbumArtWidth'] as int,
-      maxAlbumArtHeight: json['MaxAlbumArtHeight'] as int,
-      maxIconWidth: json['MaxIconWidth'] as int?,
-      maxIconHeight: json['MaxIconHeight'] as int?,
-      maxStreamingBitrate: json['MaxStreamingBitrate'] as int?,
-      maxStaticBitrate: json['MaxStaticBitrate'] as int?,
+      maxAlbumArtWidth: (json['MaxAlbumArtWidth'] as num).toInt(),
+      maxAlbumArtHeight: (json['MaxAlbumArtHeight'] as num).toInt(),
+      maxIconWidth: (json['MaxIconWidth'] as num?)?.toInt(),
+      maxIconHeight: (json['MaxIconHeight'] as num?)?.toInt(),
+      maxStreamingBitrate: (json['MaxStreamingBitrate'] as num?)?.toInt(),
+      maxStaticBitrate: (json['MaxStaticBitrate'] as num?)?.toInt(),
       musicStreamingTranscodingBitrate:
-          json['MusicStreamingTranscodingBitrate'] as int?,
-      maxStaticMusicBitrate: json['MaxStaticMusicBitrate'] as int?,
+          (json['MusicStreamingTranscodingBitrate'] as num?)?.toInt(),
+      maxStaticMusicBitrate: (json['MaxStaticMusicBitrate'] as num?)?.toInt(),
       sonyAggregationFlags: json['SonyAggregationFlags'] as String?,
       protocolInfo: json['ProtocolInfo'] as String?,
-      timelineOffsetSeconds: json['TimelineOffsetSeconds'] as int,
+      timelineOffsetSeconds: (json['TimelineOffsetSeconds'] as num).toInt(),
       requiresPlainVideoItems: json['RequiresPlainVideoItems'] as bool,
       requiresPlainFolders: json['RequiresPlainFolders'] as bool,
       enableMSMediaReceiverRegistrar:
@@ -3289,8 +3292,8 @@ TranscodingProfile _$TranscodingProfileFromJson(Map json) => TranscodingProfile(
       copyTimestamps: json['CopyTimestamps'] as bool,
       context: json['Context'] as String,
       maxAudioChannels: json['MaxAudioChannels'] as String?,
-      minSegments: json['MinSegments'] as int,
-      segmentLength: json['SegmentLength'] as int,
+      minSegments: (json['MinSegments'] as num).toInt(),
+      segmentLength: (json['SegmentLength'] as num).toInt(),
       breakOnNonKeyFrames: json['BreakOnNonKeyFrames'] as bool,
       enableSubtitlesInManifest: json['EnableSubtitlesInManifest'] as bool,
     );
@@ -3419,9 +3422,10 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       playlistItemId: json['PlaylistItemId'] as String?,
       dateCreated: json['DateCreated'] as String?,
       extraType: json['ExtraType'] as String?,
-      airsBeforeSeasonNumber: json['AirsBeforeSeasonNumber'] as int?,
-      airsAfterSeasonNumber: json['AirsAfterSeasonNumber'] as int?,
-      airsBeforeEpisodeNumber: json['AirsBeforeEpisodeNumber'] as int?,
+      airsBeforeSeasonNumber: (json['AirsBeforeSeasonNumber'] as num?)?.toInt(),
+      airsAfterSeasonNumber: (json['AirsAfterSeasonNumber'] as num?)?.toInt(),
+      airsBeforeEpisodeNumber:
+          (json['AirsBeforeEpisodeNumber'] as num?)?.toInt(),
       canDelete: json['CanDelete'] as bool?,
       canDownload: json['CanDownload'] as bool?,
       hasSubtitles: json['HasSubtitles'] as bool?,
@@ -3458,15 +3462,15 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       genres:
           (json['Genres'] as List<dynamic>?)?.map((e) => e as String).toList(),
       communityRating: (json['CommunityRating'] as num?)?.toDouble(),
-      runTimeTicks: json['RunTimeTicks'] as int?,
+      runTimeTicks: (json['RunTimeTicks'] as num?)?.toInt(),
       playAccess: json['PlayAccess'] as String?,
       aspectRatio: json['AspectRatio'] as String?,
-      productionYear: json['ProductionYear'] as int?,
+      productionYear: (json['ProductionYear'] as num?)?.toInt(),
       number: json['Number'] as String?,
       channelNumber: json['ChannelNumber'] as String?,
-      indexNumber: json['IndexNumber'] as int?,
-      indexNumberEnd: json['IndexNumberEnd'] as int?,
-      parentIndexNumber: json['ParentIndexNumber'] as int?,
+      indexNumber: (json['IndexNumber'] as num?)?.toInt(),
+      indexNumberEnd: (json['IndexNumberEnd'] as num?)?.toInt(),
+      parentIndexNumber: (json['ParentIndexNumber'] as num?)?.toInt(),
       remoteTrailers: (json['RemoteTrailers'] as List<dynamic>?)
           ?.map((e) => MediaUrl.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
@@ -3494,17 +3498,17 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
           (json['ParentBackdropImageTags'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList(),
-      localTrailerCount: json['LocalTrailerCount'] as int?,
+      localTrailerCount: (json['LocalTrailerCount'] as num?)?.toInt(),
       userData: json['UserData'] == null
           ? null
           : UserItemDataDto.fromJson(
               Map<String, dynamic>.from(json['UserData'] as Map)),
-      recursiveItemCount: json['RecursiveItemCount'] as int?,
-      childCount: json['ChildCount'] as int?,
+      recursiveItemCount: (json['RecursiveItemCount'] as num?)?.toInt(),
+      childCount: (json['ChildCount'] as num?)?.toInt(),
       seriesName: json['SeriesName'] as String?,
       seriesId: json['SeriesId'] as String?,
       seasonId: json['SeasonId'] as String?,
-      specialFeatureCount: json['SpecialFeatureCount'] as int?,
+      specialFeatureCount: (json['SpecialFeatureCount'] as num?)?.toInt(),
       displayPreferencesId: json['DisplayPreferencesId'] as String?,
       status: json['Status'] as String?,
       airTime: json['AirTime'] as String?,
@@ -3533,7 +3537,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
           ?.map(
               (e) => MediaStream.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
-      partCount: json['PartCount'] as int?,
+      partCount: (json['PartCount'] as num?)?.toInt(),
       imageTags: (json['ImageTags'] as Map?)?.map(
         (k, e) => MapEntry(k, e as String),
       ),
@@ -3560,8 +3564,8 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
           ?.map((e) => e as String)
           .toList(),
       lockData: json['LockData'] as bool?,
-      width: json['Width'] as int?,
-      height: json['Height'] as int?,
+      width: (json['Width'] as num?)?.toInt(),
+      height: (json['Height'] as num?)?.toInt(),
       cameraMake: json['CameraMake'] as String?,
       cameraModel: json['CameraModel'] as String?,
       software: json['Software'] as String?,
@@ -3573,7 +3577,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       latitude: (json['Latitude'] as num?)?.toDouble(),
       longitude: (json['Longitude'] as num?)?.toDouble(),
       altitude: (json['Altitude'] as num?)?.toDouble(),
-      isoSpeedRating: json['IsoSpeedRating'] as int?,
+      isoSpeedRating: (json['IsoSpeedRating'] as num?)?.toInt(),
       seriesTimerId: json['SeriesTimerId'] as String?,
       channelPrimaryImageTag: json['ChannelPrimaryImageTag'] as String?,
       startDate: json['StartDate'] as String?,
@@ -3589,19 +3593,19 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       isPremiere: json['IsPremiere'] as bool?,
       timerId: json['TimerId'] as String?,
       currentProgram: json['CurrentProgram'],
-      movieCount: json['MovieCount'] as int?,
-      seriesCount: json['SeriesCount'] as int?,
-      albumCount: json['AlbumCount'] as int?,
-      songCount: json['SongCount'] as int?,
-      musicVideoCount: json['MusicVideoCount'] as int?,
+      movieCount: (json['MovieCount'] as num?)?.toInt(),
+      seriesCount: (json['SeriesCount'] as num?)?.toInt(),
+      albumCount: (json['AlbumCount'] as num?)?.toInt(),
+      songCount: (json['SongCount'] as num?)?.toInt(),
+      musicVideoCount: (json['MusicVideoCount'] as num?)?.toInt(),
       sourceType: json['SourceType'] as String?,
       dateLastMediaAdded: json['DateLastMediaAdded'] as String?,
       enableMediaSourceDisplay: json['EnableMediaSourceDisplay'] as bool?,
-      cumulativeRunTimeTicks: json['CumulativeRunTimeTicks'] as int?,
+      cumulativeRunTimeTicks: (json['CumulativeRunTimeTicks'] as num?)?.toInt(),
       isPlaceHolder: json['IsPlaceHolder'] as bool?,
       isHD: json['IsHD'] as bool?,
       videoType: json['VideoType'] as String?,
-      mediaSourceCount: json['MediaSourceCount'] as int?,
+      mediaSourceCount: (json['MediaSourceCount'] as num?)?.toInt(),
       screenshotImageTags: (json['ScreenshotImageTags'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -3610,10 +3614,10 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
           : ImageBlurHashes.fromJson(
               Map<String, dynamic>.from(json['ImageBlurHashes'] as Map)),
       isoType: json['IsoType'] as String?,
-      trailerCount: json['TrailerCount'] as int?,
-      programCount: json['ProgramCount'] as int?,
-      episodeCount: json['EpisodeCount'] as int?,
-      artistCount: json['ArtistCount'] as int?,
+      trailerCount: (json['TrailerCount'] as num?)?.toInt(),
+      programCount: (json['ProgramCount'] as num?)?.toInt(),
+      episodeCount: (json['EpisodeCount'] as num?)?.toInt(),
+      artistCount: (json['ArtistCount'] as num?)?.toInt(),
       programId: json['ProgramId'] as String?,
       channelType: json['ChannelType'] as String?,
       audio: json['Audio'] as String?,
@@ -3794,10 +3798,10 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
       encoderProtocol: json['EncoderProtocol'] as String?,
       type: json['Type'] as String,
       container: json['Container'] as String?,
-      size: json['Size'] as int?,
+      size: (json['Size'] as num?)?.toInt(),
       name: json['Name'] as String?,
       isRemote: json['IsRemote'] as bool,
-      runTimeTicks: json['RunTimeTicks'] as int?,
+      runTimeTicks: (json['RunTimeTicks'] as num?)?.toInt(),
       supportsTranscoding: json['SupportsTranscoding'] as bool,
       supportsDirectStream: json['SupportsDirectStream'] as bool,
       supportsDirectPlay: json['SupportsDirectPlay'] as bool,
@@ -3806,7 +3810,7 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
       openToken: json['OpenToken'] as String?,
       requiresClosing: json['RequiresClosing'] as bool,
       liveStreamId: json['LiveStreamId'] as String?,
-      bufferMs: json['BufferMs'] as int?,
+      bufferMs: (json['BufferMs'] as num?)?.toInt(),
       requiresLooping: json['RequiresLooping'] as bool,
       supportsProbing: json['SupportsProbing'] as bool,
       video3DFormat: json['Video3DFormat'] as String?,
@@ -3815,7 +3819,7 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
           .toList(),
       formats:
           (json['Formats'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      bitrate: json['Bitrate'] as int?,
+      bitrate: (json['Bitrate'] as num?)?.toInt(),
       timestamp: json['Timestamp'] as String?,
       requiredHttpHeaders: (json['RequiredHttpHeaders'] as Map?)?.map(
         (k, e) => MapEntry(k, e as String),
@@ -3823,10 +3827,12 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
       transcodingUrl: json['TranscodingUrl'] as String?,
       transcodingSubProtocol: json['TranscodingSubProtocol'] as String?,
       transcodingContainer: json['TranscodingContainer'] as String?,
-      analyzeDurationMs: json['AnalyzeDurationMs'] as int?,
+      analyzeDurationMs: (json['AnalyzeDurationMs'] as num?)?.toInt(),
       readAtNativeFramerate: json['ReadAtNativeFramerate'] as bool,
-      defaultAudioStreamIndex: json['DefaultAudioStreamIndex'] as int?,
-      defaultSubtitleStreamIndex: json['DefaultSubtitleStreamIndex'] as int?,
+      defaultAudioStreamIndex:
+          (json['DefaultAudioStreamIndex'] as num?)?.toInt(),
+      defaultSubtitleStreamIndex:
+          (json['DefaultSubtitleStreamIndex'] as num?)?.toInt(),
       etag: json['Etag'] as String?,
       ignoreDts: json['IgnoreDts'] as bool,
       ignoreIndex: json['IgnoreIndex'] as bool,
@@ -3903,23 +3909,23 @@ MediaStream _$MediaStreamFromJson(Map json) => MediaStream(
       isInterlaced: json['IsInterlaced'] as bool,
       isAVC: json['IsAVC'] as bool?,
       channelLayout: json['ChannelLayout'] as String?,
-      bitRate: json['BitRate'] as int?,
-      bitDepth: json['BitDepth'] as int?,
-      refFrames: json['RefFrames'] as int?,
-      packetLength: json['PacketLength'] as int?,
-      channels: json['Channels'] as int?,
-      sampleRate: json['SampleRate'] as int?,
+      bitRate: (json['BitRate'] as num?)?.toInt(),
+      bitDepth: (json['BitDepth'] as num?)?.toInt(),
+      refFrames: (json['RefFrames'] as num?)?.toInt(),
+      packetLength: (json['PacketLength'] as num?)?.toInt(),
+      channels: (json['Channels'] as num?)?.toInt(),
+      sampleRate: (json['SampleRate'] as num?)?.toInt(),
       isDefault: json['IsDefault'] as bool,
       isForced: json['IsForced'] as bool,
-      height: json['Height'] as int?,
-      width: json['Width'] as int?,
+      height: (json['Height'] as num?)?.toInt(),
+      width: (json['Width'] as num?)?.toInt(),
       averageFrameRate: (json['AverageFrameRate'] as num?)?.toDouble(),
       realFrameRate: (json['RealFrameRate'] as num?)?.toDouble(),
       profile: json['Profile'] as String?,
       type: json['Type'] as String,
       aspectRatio: json['AspectRatio'] as String?,
-      index: json['Index'] as int,
-      score: json['Score'] as int?,
+      index: (json['Index'] as num).toInt(),
+      score: (json['Score'] as num?)?.toInt(),
       isExternal: json['IsExternal'] as bool,
       deliveryMethod: json['DeliveryMethod'] as String?,
       deliveryUrl: json['DeliveryUrl'] as String?,
@@ -4032,9 +4038,9 @@ Map<String, dynamic> _$NameLongIdPairToJson(NameLongIdPair instance) =>
 UserItemDataDto _$UserItemDataDtoFromJson(Map json) => UserItemDataDto(
       rating: (json['Rating'] as num?)?.toDouble(),
       playedPercentage: (json['PlayedPercentage'] as num?)?.toDouble(),
-      unplayedItemCount: json['UnplayedItemCount'] as int?,
-      playbackPositionTicks: json['PlaybackPositionTicks'] as int,
-      playCount: json['PlayCount'] as int,
+      unplayedItemCount: (json['UnplayedItemCount'] as num?)?.toInt(),
+      playbackPositionTicks: (json['PlaybackPositionTicks'] as num).toInt(),
+      playCount: (json['PlayCount'] as num).toInt(),
       isFavorite: json['IsFavorite'] as bool,
       likes: json['Likes'] as bool?,
       lastPlayedDate: json['LastPlayedDate'] as String?,
@@ -4070,7 +4076,7 @@ Map<String, dynamic> _$NameIdPairToJson(NameIdPair instance) =>
     };
 
 ChapterInfo _$ChapterInfoFromJson(Map json) => ChapterInfo(
-      startPositionTicks: json['StartPositionTicks'] as int,
+      startPositionTicks: (json['StartPositionTicks'] as num).toInt(),
       name: json['Name'] as String?,
       imageTag: json['ImageTag'] as String?,
       imagePath: json['ImagePath'] as String?,
@@ -4092,8 +4098,8 @@ QueryResult_BaseItemDto _$QueryResult_BaseItemDtoFromJson(Map json) =>
           ?.map(
               (e) => BaseItemDto.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
-      totalRecordCount: json['TotalRecordCount'] as int,
-      startIndex: json['StartIndex'] as int,
+      totalRecordCount: (json['TotalRecordCount'] as num).toInt(),
+      startIndex: (json['StartIndex'] as num).toInt(),
     );
 
 Map<String, dynamic> _$QueryResult_BaseItemDtoToJson(
@@ -4132,14 +4138,14 @@ PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map json) =>
       itemId: json['ItemId'] as String,
       sessionId: json['SessionId'] as String?,
       mediaSourceId: json['MediaSourceId'] as String?,
-      audioStreamIndex: json['AudioStreamIndex'] as int?,
-      subtitleStreamIndex: json['SubtitleStreamIndex'] as int?,
+      audioStreamIndex: (json['AudioStreamIndex'] as num?)?.toInt(),
+      subtitleStreamIndex: (json['SubtitleStreamIndex'] as num?)?.toInt(),
       isPaused: json['IsPaused'] as bool,
       isMuted: json['IsMuted'] as bool,
-      positionTicks: json['PositionTicks'] as int?,
-      playbackStartTimeTicks: json['PlaybackStartTimeTicks'] as int?,
-      volumeLevel: json['VolumeLevel'] as int?,
-      brightness: json['Brightness'] as int?,
+      positionTicks: (json['PositionTicks'] as num?)?.toInt(),
+      playbackStartTimeTicks: (json['PlaybackStartTimeTicks'] as num?)?.toInt(),
+      volumeLevel: (json['VolumeLevel'] as num?)?.toInt(),
+      brightness: (json['Brightness'] as num?)?.toInt(),
       aspectRatio: json['AspectRatio'] as String?,
       playMethod: json['PlayMethod'] as String? ?? "DirectPlay",
       liveStreamId: json['LiveStreamId'] as String?,
@@ -4240,7 +4246,7 @@ MediaAttachment _$MediaAttachmentFromJson(Map json) => MediaAttachment(
       codec: json['Codec'] as String?,
       codecTag: json['CodecTag'] as String?,
       comment: json['Comment'] as String?,
-      index: json['Index'] as int,
+      index: (json['Index'] as num).toInt(),
       fileName: json['FileName'] as String?,
       mimeType: json['MimeType'] as String?,
       deliveryUrl: json['DeliveryUrl'] as String?,
@@ -4258,7 +4264,7 @@ Map<String, dynamic> _$MediaAttachmentToJson(MediaAttachment instance) =>
     };
 
 BaseItem _$BaseItemFromJson(Map json) => BaseItem(
-      size: json['Size'] as int?,
+      size: (json['Size'] as num?)?.toInt(),
       container: json['Container'] as String?,
       dateLastSaved: json['DateLastSaved'] as String?,
       remoteTrailers: (json['RemoteTrailers'] as List<dynamic>?)
@@ -4267,8 +4273,8 @@ BaseItem _$BaseItemFromJson(Map json) => BaseItem(
       isHD: json['IsHD'] as bool,
       isShortcut: json['IsShortcut'] as bool,
       shortcutPath: json['ShortcutPath'] as String?,
-      width: json['Width'] as int?,
-      height: json['Height'] as int?,
+      width: (json['Width'] as num?)?.toInt(),
+      height: (json['Height'] as num?)?.toInt(),
       extraIds: (json['ExtraIds'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
