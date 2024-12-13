@@ -166,9 +166,9 @@
   },
   "errorScreenError": "Une erreur est survenue lors de la récupération de la liste des erreurs ! À ce stade, il serait probablement préférable de créer une issue sur GitHub et de supprimer les données de l'application.",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "Échec de récupération de la chanson à partir de l'ID de téléchargement",
+  "failedToGetSongFromDownloadId": "Le titre n’a pas pu être récupéré à l’aide de l’ID de téléchargement",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "Êtes vour sûr de vouloir supprimer {itemType, select, album{l'album} playlist{la playlist} artist{l'artiste} genre{le genre} track{le titre} other{}} '{itemName}' de cet appareil ?",
+  "deleteDownloadsPrompt": "Êtes vour sûr de vouloir supprimer {itemType, select, album{l'album} playlist{la playlist} artist{l'artiste} genre{le genre} track{le titre} other{}} '{itemName}' de cet appareil ?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -198,9 +198,9 @@
       }
     }
   },
-  "playButtonLabel": "LIRE",
+  "playButtonLabel": "Lire",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "ALÉATOIRE",
+  "shuffleButtonLabel": "Aléatoire",
   "@shuffleButtonLabel": {},
   "songCount": "{count,plural,=1{{count} titre} other{{count} titres}}",
   "@songCount": {
@@ -216,7 +216,7 @@
   "@editPlaylistNameTitle": {},
   "required": "Requis",
   "@required": {},
-  "updateButtonLabel": "METTRE À JOUR",
+  "updateButtonLabel": "Mettre à jour",
   "@updateButtonLabel": {},
   "playlistNameUpdated": "Titre de la playlist mis à jour.",
   "@playlistNameUpdated": {},
@@ -228,7 +228,7 @@
   "@addDownloads": {},
   "location": "Emplacement",
   "@location": {},
-  "addButtonLabel": "AJOUTER",
+  "addButtonLabel": "Ajouter",
   "@addButtonLabel": {},
   "shareLogs": "Partager les journaux.",
   "@shareLogs": {},
@@ -238,7 +238,7 @@
   "@message": {},
   "stackTrace": "Stack Trace",
   "@stackTrace": {},
-  "applicationLegalese": "Soumis à la licence Mozilla Public License 2.0. Le code source est disponible sur :\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Soumis à la licence Mozilla Public License 2.0.\nLe code source est disponible sur :{sourceCodeLink}",
   "@applicationLegalese": {},
   "transcoding": "Transcodage",
   "@transcoding": {},
@@ -254,7 +254,7 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Déconnexion",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Les chansons téléchargées ne seront pas supprimées",
+  "downloadedSongsWillNotBeDeleted": "Les titres téléchargés ne seront pas supprimés",
   "@downloadedSongsWillNotBeDeleted": {},
   "areYouSure": "Êtes-vous sûr ?",
   "@areYouSure": {},
@@ -286,7 +286,7 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Permet de supprimer la notification lorsque la lecture est en pause. Permet également à Android de fermer le service lorsqu'il est en pause.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Nombre de chansons à mélanger",
+  "shuffleAllSongCount": "Nombre de titres à mélanger",
   "@shuffleAllSongCount": {},
   "shuffleAllSongCountSubtitle": "Nombre de chansons à charger lors de l'utilisation du bouton 'Tout mélanger'.",
   "@shuffleAllSongCountSubtitle": {},
@@ -348,9 +348,9 @@
   "@tabs": {},
   "cancelSleepTimer": "Annuler le minuteur de sommeil ?",
   "@cancelSleepTimer": {},
-  "yesButtonLabel": "OUI",
+  "yesButtonLabel": "Oui",
   "@yesButtonLabel": {},
-  "noButtonLabel": "NON",
+  "noButtonLabel": "Non",
   "@noButtonLabel": {},
   "setSleepTimer": "Configurer le minuteur de sommeil",
   "@setSleepTimer": {},
@@ -370,7 +370,7 @@
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Nouvelle Playlist",
   "@newPlaylist": {},
-  "createButtonLabel": "CRÉER",
+  "createButtonLabel": "Créer",
   "@createButtonLabel": {},
   "playlistCreated": "Playlist créée.",
   "@playlistCreated": {},
@@ -533,5 +533,335 @@
   "viewLogs": "Voir les logs",
   "@viewLogs": {
     "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "removeFromPlaylistNamedTitle": "Retirer de la playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "playbackModeTranscoding": "Transcodage",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "playingFrom": "Lecture de",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Recherche des serveurs…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "serverUrlInfoButtonTooltip": "Aide sur l’URL du serveur",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "serverUrlHint": "e.g. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "loginFlowAccountSelectionHeading": "Sélectionnez votre compte",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "backToServerSelection": "Retour à la sélection du serveur",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowAuthenticationHeading": "Se connecter à votre compte",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "Utiliser un code « Quick Connect »",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "usernameHint": "Entrez votre nom d’utilisateur",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "activeDownloads": "Téléchargements actifs",
+  "@activeDownloads": {},
+  "noActiveDownloads": "Pas de téléchargement en cours.",
+  "@noActiveDownloads": {},
+  "offlineSongCount": "{count,plural,=1{{count} titre} other{{count} titres}}, {downloads} téléchargé(s)",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmDownloadStarted": "Téléchargement debuté",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "automatic": "Automatique",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Cachés",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "reset": "Réinitialiser",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Remplissage minimum autour de l’image d’album sur l’écran du lecteur, en % de la largeur de l’écran.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopSongs": "Montrer les top titres sur la page de l’artiste",
+  "@showArtistsTopSongs": {},
+  "showArtistsTopSongsSubtitle": "Afficher ou non le top 5 des titres les plus écoutés d’un artiste.",
+  "@showArtistsTopSongsSubtitle": {},
+  "playerScreen": "Écran du lecteur",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "hours": "Heures",
+  "@hours": {},
+  "seconds": "Secondes",
+  "@seconds": {},
+  "timeFractionTooltip": "{currentTime} de {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "sleepTimerRemainingTime": "Arrêt de la lecture dans {time} minutes",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTooltip": "Ajouter à d’autres playlists",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "Ajouter à d’autres playlists",
+  "@addToMorePlaylistsTitle": {},
+  "playlistActionsMenuButtonTooltip": "Appuyer pour ajouter à la playlist. Appuyer longuement pour ajouter aux favoris.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "unknownAlbum": "Album inconnu",
+  "@unknownAlbum": {},
+  "playbackModeDirectPlaying": "Lecture directe",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Lecture locale",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToArtist": "Aller à l’artiste",
+  "@goToArtist": {},
+  "goToGenre": "Aller au genre",
+  "@goToGenre": {},
+  "confirmFavoriteAdded": "Ajouté aux favoris",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Retiré des favoris",
+  "@confirmFavoriteRemoved": {},
+  "confirmAddedToPlaylist": "Ajouté à la playlist.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "skipToPreviousTrackButtonTooltip": "Retourner au début ou au titre précédent",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "skipToNextTrackButtonTooltip": "Passer au titre suivant",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "togglePlaybackButtonTooltip": "Reprendre / arrêter la lecture",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "previousTracks": "Titre précédent",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "nextUp": "Suivant",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Effacer les titres suivants",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "addToNextUp": "Ajouter aux suivants",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "playbackSpeedControlSettingSubtitle": "Affichage, ou non, des contrôles de la vitesse de lecture dans le menu du lecteur",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "speed": "Vitesse",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "connectingToServer": "Connexion au serveur…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "Serveurs sur votre réseau local :",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowNamelessUser": "Utilisateur anonyme",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} titre} other{{songCount} titres}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} noeud syncing} other{{syncCount} noeuds}}{repairing, plural, =0{} other{\nReparations en cours}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "startMixNoSongsGenre": "Avant de commencer à écouter un mix, appuyez longuement sur un genre pour l’ajouter ou le retirer du créateur de mix",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "backToAccountSelection": "Retour à la sélection du compte",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectDisabled": "« Quick Connect » n’est pas activé sur ce serveur.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "orDivider": "ou",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowSelectAUser": "Sélectionnez un utilisateur",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "title": "Titre",
+  "@title": {},
+  "playbackSpeedControlSetting": "Afficher la vitesse de lecture",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "usernameValidationMissingUsername": "S’il vous plaît, entrez un nom d’utilisateur",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "Entrez votre mot de passe",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "offlineSongCountArtist": "{count,plural,=1{{count} titre} other{{count} titres}} telechargé(s)",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loginFlowQuickConnectInstructions": "Ouvrez l’application ou le site web Jellyfin, cliquez sur votre icône d’utilisateur et sélectionnez « Quick Connect ».",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "activeDownloadsTitle": "Téléchargements actifs",
+  "@activeDownloadsTitle": {},
+  "login": "Se connecter",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "customizationSettingsTitle": "Personnalisation",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "shown": "Affichés",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "apply": "Appliquer",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Remplissage minimum de la couverture de l'album",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "loginFlowCustomUser": "Utilisateur personnalisé",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "playbackSpeedControlSettingDescription": "Automatique:\nFinamp essaie d’identifier si le titre joué est un podcast ou un chapitre d’un livre audio. Finamp. Il est considéré que c’est le cas si le titre dure plus de {trackDuration} minutes, si l’album dure plus de {albumDuration} heures ou qu’au moins un de ces genres est assigné au titre : {genreList}\nLes contrôles le vitesse de lecture seront alors affichés dans le menu du lecteur.\n\nAffichés :\nLes contrôles de vitesse de lecture seront toujours affichés dans le menu du lecteur.\n\nCachés :\nLes contrôles de vitesse de lecture seront toujours cachés dans le menu du lecteur.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTooltip": "Retirer de la playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "trackCountTooltip": "Titre {currentTrackIndex} sur {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
   }
 }
