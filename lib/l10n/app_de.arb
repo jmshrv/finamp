@@ -95,11 +95,11 @@
   "@unknownError": {},
   "invalidNumber": "Ungültige Zahl",
   "@invalidNumber": {},
-  "noButtonLabel": "NEIN",
+  "noButtonLabel": "Nein",
   "@noButtonLabel": {},
-  "yesButtonLabel": "JA",
+  "yesButtonLabel": "Ja",
   "@yesButtonLabel": {},
-  "createButtonLabel": "ERSTELLEN",
+  "createButtonLabel": "Erstellen",
   "@createButtonLabel": {},
   "newPlaylist": "Neue Wiedergabeliste",
   "@newPlaylist": {},
@@ -195,7 +195,7 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Song konnte nicht über die Download-ID abgerufen werden",
+  "failedToGetSongFromDownloadId": "Track konnte nicht über die Download-ID abgerufen werden",
   "@failedToGetSongFromDownloadId": {},
   "playButtonLabel": "Wiedergabe",
   "@playButtonLabel": {},
@@ -243,7 +243,7 @@
   "@enterLowPriorityStateOnPause": {},
   "shuffleAllSongCount": "",
   "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Die Anzahl der zu ladenden Titel wenn der Mische-Alle Knopf betätigt wird.",
+  "shuffleAllSongCountSubtitle": "Die Anzahl der zu ladenden Tracks wenn der Zufallsknopf gedrückt wird.",
   "@shuffleAllSongCountSubtitle": {},
   "viewType": "Ansichtsart",
   "@viewType": {},
@@ -269,7 +269,7 @@
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "Ob verschwommene Cover als Hintergrund im Player-Bildschirm benutzt werden sollen.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Verstecke Titel-Künstler falls derselbe wie Album-Künstler",
+  "hideSongArtistsIfSameAsAlbumArtists": "Verstecke Track-Künstler falls dieser derselbe ist wie der Album-Künstler",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "showArtistsTopSongs": "Meistgehörte Lieder von Künstlern anzeigen",
   "@showArtistsTopSongs": {},
@@ -354,7 +354,7 @@
   "@playlistNameUpdated": {},
   "logsCopied": "Protokolle kopiert.",
   "@logsCopied": {},
-  "downloadsQueued": "Downloads hinzugefügt.",
+  "downloadsQueued": "Downloads hinzugefügt",
   "@downloadsQueued": {},
   "addButtonLabel": "HINZUFÜGEN",
   "@addButtonLabel": {},
@@ -422,9 +422,9 @@
   "@disableGesture": {},
   "disableGestureSubtitle": "Ob Gesten deaktiviert werden sollen.",
   "@disableGestureSubtitle": {},
-  "removeFromPlaylistTooltip": "Aus Wiedergabeliste entfernen",
+  "removeFromPlaylistTooltip": "Aus dieser Wiedergabeliste entfernen",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Aus Wiedergabeliste entfernen",
+  "removeFromPlaylistTitle": "Aus dieser Wiedergabeliste entfernen",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
   "@removedFromPlaylist": {},
@@ -632,5 +632,362 @@
   "changeLanguage": "Sprache ändern",
   "@changeLanguage": {
     "description": "Label for button shown during the login process that allows the user to change the app language"
-  }
+  },
+  "speed": "Wiedergabegeschwindigkeit",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "automatic": "Automatisch",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "queueRetryMessage": "Wiederherstellen der Queue Fehlgeschlagen. Erneut versuchen?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "artworkTooltip": "Grafiken für {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "startMixNoSongsGenre": "Drücke lange auf ein Genre, um es vor dem Start eines Mixhin zuzufügen oder aus dem Mix zu entfernen",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "codec": "Codec",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "albumScreen": "Album Fenster",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Minimales Album Cover padding",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "shuffleNext": "Zufälligewiedergabe der nächsten tracks",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "trackCountTooltip": "Track {currentTrackIndex} von {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "playingFrom": "Wiedergabe von",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "emptyFilteredListSubtitle": "Keine Tracks treffen auf den filter zu. Versuche den filter zu deaktivieren oder die suchanfrage zu änden.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "aboutContributionPrompt": "Ermöglicht von wunderbaren Menschen in ihrer Freizeit.\nDu könntest einer von ihnen sein!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Suche nach Servern...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowCustomUser": "Eigener Benutzer",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "activeDownloads": "Aktive Downloads",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Aktive Downloads",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Keine aktiven Downloads.",
+  "@noActiveDownloads": {},
+  "customizationSettingsTitle": "Personalisierung",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "Abspielgeschwindigkeit Sichtbarkeit",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "playbackSpeedControlSettingSubtitle": "Ob die Wiedergabegeschwindigkeits-Einstellungen im Wiedergabe Fenster angezeigt werden",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "shown": "Angezeigt",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Ausgeblendet",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "reset": "Zurücksetzen",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Anwenden",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimales padding um das album cover im wiedergame fenster, in % der bildschirm breite.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreen": "Wiedergabe Fenster",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "hours": "Stunden",
+  "@hours": {},
+  "seconds": "Sekunden",
+  "@seconds": {},
+  "timeFractionTooltip": "{currentTime} von {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "sleepTimerRemainingTime": "Schlaftimer in {time} minuten",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTooltip": "zu weiteren Playlists hinzufügen",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "füge zu weiteren Playlists hinzu",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistNamedTooltip": "Aus Playlist '{playlistName}' entfernen",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "unknownAlbum": "Unbekanntes Album",
+  "@unknownAlbum": {},
+  "playbackModeDirectPlaying": "Direkte Wiedergabe",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "Transcodierung",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Lokale Wiedergabe",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToGenre": "Gehe zu Genre",
+  "@goToGenre": {},
+  "confirmFavoriteRemoved": "Favorit entfernt",
+  "@confirmFavoriteRemoved": {},
+  "confirmAddedToPlaylist": "Zur Playlist hinzugefügt.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "skipToNextTrackButtonTooltip": "Überspringe zum nächsten track",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "togglePlaybackButtonTooltip": "Wiedergabe umzuschalten",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "previousTracks": "Vorheriger Track",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "nextUp": "Nachfolgend",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Leere Nachfolgende",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "addToNextUp": "Zu nachfolgende hinzufügen",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleToNextUp": "Zufälligewiedergabe der nächsten tracks",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "placeholderSource": "Irgendwo",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "playbackHistory": "Wiedergabe Historie",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "yourLikes": "Deine Likes",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "queueRestoreButtonLabel": "Wiederherstellen",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "Gespeichert {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "Wiedergabe: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "queueLoadingMessage": "Wiederherstellung der Queue...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "autoloadLastQueueOnStartup": "Automatisches Wiederherstellen der Letzten Queue",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Dem Server die aktuelle Queue mitteilen?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "artwork": "Grafiken",
+  "@artwork": {},
+  "genericToggleButtonTooltip": "Tippe um umzuschalten.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "nowPlayingBarTooltip": "Öffne das Wiedergabe Fenster",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "bitRate": "Bit Rate",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "playbackMode": "Wiedergabe Modus",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "additionalPeople": "Personen",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "normalizationGain": "Verstärkung",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "size": "Größe",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "showFeatureChipsToggleTitle": "Zeige Erweiterte Track Informationen an",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showCoversOnAlbumScreenTitle": "Zeige Album Cover für Tracks",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "playlistActionsMenuButtonTooltip": "Klicken um zur playlist hinzuzufügen. Lange Drücken um Favoriten umzuschalten.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "confirmFavoriteAdded": "Favorit hinzugefügt",
+  "@confirmFavoriteAdded": {},
+  "emptyTopTracksList": "Du hast noch keine Track von diesem Künstler gehört.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "skipToPreviousTrackButtonTooltip": "Springe zum anfang oder letzten track",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "showFeatureChipsToggleSubtitle": "Zeige erweiterte Track informationen wie codec, bit rate und mehr auf den wiedergabe fenster.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "playerAlbumArtworkTooltip": "Grafiken für {title}. Tippe um wiedergabe umzuschalten. Wische nach links oder rechts um den Track zu wechseln.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "playbackSpeedControlSettingDescription": "Automatisch:\nFinamp versucht zu erkennen, ob es sich bei dem abgespielten Titel um einen Podcast oder um ein Hörbuch handelt. Dies ist der Fall, wenn der Titel länger als {trackDuration} Minuten ist, wenn das Album des Titels länger als {albumDuration} Stunden ist oder wenn dem Titel mindestens eines dieser Genres zugeordnet ist: {genreList}\nDie Steuerelemente für die Wiedergabegeschwindigkeit werden dann im Bildschirmmenü des Players angezeigt.\n\nAngezeigt:\nDie Steuerelemente für die Wiedergabegeschwindigkeit werden immer im Bildschirmmenü des Players angezeigt.\n\nAusgeblendet:\nDie Steuerelemente für die Wiedergabegeschwindigkeit im Player-Bildschirmmenü werden immer ausgeblendet.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "resetFiltersButton": "Filter zurücksetzen",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "removeFromPlaylistNamedTitle": "Aus Playlist '{playlistName}' entfernen",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "goToArtist": "Gehe zu Künstler",
+  "@goToArtist": {}
 }
