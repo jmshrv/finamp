@@ -384,7 +384,7 @@
   "@unknownArtist": {},
   "queue": "File d'attente",
   "@queue": {},
-  "playNext": "Lire ensuite",
+  "playNext": "Suivant",
   "@playNext": {
     "description": "Titre de l'élément du menu contextuel pour insérer un élément dans la file d'attente de lecture après l'élément en cours de lecture."
   },
@@ -863,5 +863,13 @@
         "example": "13"
       }
     }
+  },
+  "shuffleNext": "Mix suivant",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "shuffleToNextUp": "Queue",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   }
 }
