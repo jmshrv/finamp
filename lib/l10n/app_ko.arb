@@ -479,5 +479,88 @@
     }
   },
   "about": "Finamp(핀앰프) 소개",
-  "@about": {}
+  "@about": {},
+  "changeLanguage": "언어 변경",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "젤리핀 Jellyfin에 연결하기",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "aboutContributionPrompt": "대박 멋진 사람들이 여가 시간을 할애하여 만들었습니다.\n당신도 기여할 수 있습니다!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "maxConcurrentDownloadsSubtitle": "동시 다운로드 최대값을 증가시킬 경우, 백드라운드 다운로드 작업이 증가할 수 있습니다. 하지만 용량이 매우 큰 경우 다운로드가 실패할 수 있으며 어떤 경우에는 과도한 지연이 발생할 수 있습니다.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloads": "동시 다운로드 최대값",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "aboutThanks": "핀앰프 Finamp와 함께 해주셔서 고맙습니다!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "runRepairWarning": "다운로드 마이그레이션을 완료하기 위한 서버 연결이 안됩니다. 다시 온라인에 접속하면 즉시 다운로드 화면에서 '다운로드 복구'를 실행하십시오.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "finampTagline": "오픈소스 Jellyfin 젤리핀 음악 플레이어",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionLink": "Github의 핀앰프 Finamp에 기여하기:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "최신 릴리즈 노트 읽어보기:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "핀앰프 Finamp를 당신의 언어로 번역해주세요:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "환영해요, 핀앰프 Finamp 입니다",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowSlogan": "당신의 음악을 원하는 방식으로 들어보세요.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "시작합니다!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "viewLogs": "로그 보기",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "back": "뒤로가기",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "downloadSettings": "다운로드 설정",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "알 수 없는 라이브러리의 미디어 보여주기.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloadsLabel": "{count} 동시 다운로드",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadsWorkersSetting": "다운로드 작업자 개수",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  }
 }
