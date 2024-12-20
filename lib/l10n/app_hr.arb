@@ -39,19 +39,17 @@
   "@runtime": {},
   "downloadMissingImages": "Preuzmi nedostajuće slike",
   "@downloadMissingImages": {},
-  "noErrors": "Nema grešaka!",
-  "@noErrors": {},
   "failedToGetSongFromDownloadId": "Neuspjelo dohvaćanje pjesme s ID-a preuzimanja",
   "@failedToGetSongFromDownloadId": {},
   "error": "Greška",
   "@error": {},
-  "playButtonLabel": "POKRENI",
+  "playButtonLabel": "Pokreni",
   "@playButtonLabel": {},
   "favourite": "Omiljeno",
   "@favourite": {},
   "location": "Lokacija",
   "@location": {},
-  "applicationLegalese": "Licenca: Mozilla Public License 2.0. Izvorni kod je dostupan na:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Licenca: Mozilla Public License 2.0.\nIzvorni kod je dostupan na {sourceCodeLink}.",
   "@applicationLegalese": {},
   "transcoding": "Transkodiranje",
   "@transcoding": {},
@@ -61,7 +59,7 @@
   "@unknownError": {},
   "pathReturnSlashErrorMessage": "Staze sa znakom „/” se ne mogu koristiti",
   "@pathReturnSlashErrorMessage": {},
-  "shuffleAllSongCount": "Broj pjesama za miješanje",
+  "shuffleAllSongCount": "Broj svih izmiješanih pjesama",
   "@shuffleAllSongCount": {},
   "list": "Popis",
   "@list": {},
@@ -87,17 +85,13 @@
   "@useCoverAsBackground": {},
   "tabs": "Kartice",
   "@tabs": {},
-  "streaming": "PRIJENOS",
-  "@streaming": {},
-  "statusError": "GREŠKA STANJA",
-  "@statusError": {},
   "removedFromPlaylist": "Uklonjeno iz playliste.",
   "@removedFromPlaylist": {},
   "startingInstantMix": "Pokretanje instant miksa.",
   "@startingInstantMix": {},
   "anErrorHasOccured": "Dogodila se greška.",
   "@anErrorHasOccured": {},
-  "responseError401": "{error} Kȏd stanja {statusCode}. Ovo vjerojatno znači da si koristio/la pokrešno korisničko ime/lozinku ili da tvoj klijent više nije prijavljen.",
+  "responseError401": "{error} Kȏd stanja {statusCode}. Ovo vjerojatno znači da si koristio/la pogrešno korisničko ime/lozinku ili da tvoj klijent više nije prijavljen.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -126,10 +120,6 @@
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "urlStartWithHttps": "URL mora početi s http:// ili https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "artists": "Izvođači",
   "@artists": {},
   "internalExternalIpExplanation": "Ako želiš pristupiti Jellyfin serveru na daljinski način moraš korisititi tvoju externu IP adresu.\n\nAko je tvoj server na HTTP priključku (80/443), ne moraš navesti priključak. To će vjerojatno slučaj ako se tvoj server nalazi iza obrnutog proxija.",
@@ -139,10 +129,6 @@
   "emptyServerUrl": "URL servera ne smije biti prazan",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "urlTrailingSlash": "URL ne smije sadržavati kosu crtu na kraju",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
   "albums": "Albumi",
   "@albums": {},
@@ -211,20 +197,6 @@
   "@customLocation": {},
   "viewTypeSubtitle": "Vrsta prikaza za ekran glazbe",
   "@viewTypeSubtitle": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "discNumber": "Disk {number}",
   "@discNumber": {
     "placeholders": {
@@ -235,24 +207,6 @@
   },
   "downloadCount": "{count,plural, =1{{count} preuzimanje} few{{count} preuzimanja} other{{count} preuzimanja}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadErrors": "Greške preuzimanja",
-  "@downloadErrors": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} stavka} few{{count} stavke} other{{count} stavki}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} slika} few{{count} slike} other{{count} slika}}",
-  "@downloadedImagesCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -275,8 +229,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Greške preuzimanja",
-  "@downloadErrorsTitle": {},
   "editPlaylistNameTooltip": "Uredi ime playliste",
   "@editPlaylistNameTooltip": {},
   "playlistNameUpdated": "Ime playliste je ažurirano.",
@@ -299,7 +251,7 @@
   },
   "errorScreenError": "Dogodila se greška prilikom dohvaćanja popisa grešaka! Prijavi problem na GitHubu i izbriši podatke aplikacije",
   "@errorScreenError": {},
-  "shuffleButtonLabel": "IZMIJEŠAJ",
+  "shuffleButtonLabel": "Izmiješaj",
   "@shuffleButtonLabel": {},
   "addDownloads": "Dodaj preuzimanja",
   "@addDownloads": {},
@@ -313,13 +265,13 @@
   },
   "required": "Obavezno",
   "@required": {},
-  "downloadsQueued": "Preuzimanja dodana.",
+  "downloadsQueued": "Preuzimanje pripremljeno, datoteke se preuzimaju",
   "@downloadsQueued": {},
-  "updateButtonLabel": "AŽURIRAJ",
+  "updateButtonLabel": "Ažuriraj",
   "@updateButtonLabel": {},
   "downloadsDeleted": "Preuzimanja izbrisana.",
   "@downloadsDeleted": {},
-  "addButtonLabel": "DODAJ",
+  "addButtonLabel": "Dodaj",
   "@addButtonLabel": {},
   "shareLogs": "Dijeli zapise",
   "@shareLogs": {},
@@ -363,7 +315,7 @@
   "@theme": {},
   "dark": "Tamna",
   "@dark": {},
-  "downloadedSongsWillNotBeDeleted": "Preuzete pjesme neće biti izbrisane",
+  "downloadedSongsWillNotBeDeleted": "Preuzete pjesme se neće izbrisati",
   "@downloadedSongsWillNotBeDeleted": {},
   "bitrate": "Brzina prijenosa",
   "@bitrate": {},
@@ -371,8 +323,6 @@
   "@bitrateSubtitle": {},
   "setSleepTimer": "Postavi odbrojavanje",
   "@setSleepTimer": {},
-  "downloaded": "PREUZETO",
-  "@downloaded": {},
   "selectDirectory": "Odaberi direktorij",
   "@selectDirectory": {},
   "enableTranscoding": "Omogući transkodiranje",
@@ -403,13 +353,13 @@
   "@minutes": {},
   "viewType": "Vrsta prikaza",
   "@viewType": {},
-  "createButtonLabel": "STVORI",
+  "createButtonLabel": "Stvori",
   "@createButtonLabel": {},
   "sleepTimerTooltip": "Odbrojavanje",
   "@sleepTimerTooltip": {},
   "addToPlaylistTitle": "Dodaj u playlistu",
   "@addToPlaylistTitle": {},
-  "removeFromPlaylistTitle": "Ukloni iz playliste",
+  "removeFromPlaylistTitle": "Ukloni iz ove playliste",
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Nova playlista",
   "@newPlaylist": {},
@@ -423,18 +373,16 @@
   "@light": {},
   "cancelSleepTimer": "Prekinuti odbrojavanje?",
   "@cancelSleepTimer": {},
-  "yesButtonLabel": "DA",
+  "yesButtonLabel": "Da",
   "@yesButtonLabel": {},
-  "noButtonLabel": "NE",
+  "noButtonLabel": "Ne",
   "@noButtonLabel": {},
   "invalidNumber": "Neispravan broj",
   "@invalidNumber": {},
-  "removeFromPlaylistTooltip": "Ukloni iz playliste",
+  "removeFromPlaylistTooltip": "Ukloni iz ove playliste",
   "@removeFromPlaylistTooltip": {},
   "unknownArtist": "Nepoznat izvođač",
   "@unknownArtist": {},
-  "transcode": "TRANSKODIRAJ",
-  "@transcode": {},
   "playlistCreated": "Playlista je stvorena.",
   "@playlistCreated": {},
   "noAlbum": "Nema albuma",
@@ -443,8 +391,6 @@
   "@noItem": {},
   "queue": "Red čekanja",
   "@queue": {},
-  "direct": "DIREKTNO",
-  "@direct": {},
   "addToQueue": "Dodaj u red čekanja",
   "@addToQueue": {},
   "instantMix": "Instant miks",
@@ -492,11 +438,11 @@
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
-  "playNext": "Reproduciraj kao sljedeću",
+  "playNext": "Pokreni sljedeću",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
-  "refresh": "AKTUALIZIRAJ",
+  "refresh": "Aktualiziraj",
   "@refresh": {},
   "noMusicLibrariesBody": "Finamp nije mogao pronaći nijednu fonoteku. Provjeri sadrži li tvoj Jellyfin poslužitelj barem jednu biblioteku s vrstom sadržaja postavljenom na „Glazba”.",
   "@noMusicLibrariesBody": {},
@@ -514,7 +460,7 @@
   "@deleteDownloadsAbortButtonText": {},
   "showFastScroller": "Prikaži traku za brzo listanje",
   "@showFastScroller": {},
-  "deleteDownloadsPrompt": "Stvarno želiš izbrisati {itemType, select, album{album} playlist{playlistu} artist{izvođača} genre{žanr} track{pjesmu} other{}} '{itemName}' s ovog uređaja?",
+  "deleteDownloadsPrompt": "Stvarno želiš izbrisati {itemType, select, album{album} playlist{playlistu} artist{izvođača} genre{žanr} song{pjesmu} library{biblioteku} other{}} '{itemName}' s ovog uređaja?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -534,57 +480,159 @@
   "@interactions": {},
   "swipeInsertQueueNext": "Reproduciraj pjesmu kao sljedeću povlačenjem",
   "@swipeInsertQueueNext": {},
-  "redesignBeta": "Probaj beta verziju",
-  "@redesignBeta": {},
-  "skipToPrevious": "Prijeđi na prethodnu pjesmu",
-  "@skipToPrevious": {},
-  "skipToNext": "Prijeđi na sljedeću pjesmu",
-  "@skipToNext": {},
-  "deleteFromDevice": "Izbriši s uređaja",
-  "@deleteFromDevice": {},
-  "download": "Preuzmi",
-  "@download": {},
-  "sync": "Sinkroniziraj sa serverom",
-  "@sync": {},
-  "playbackOrderShuffledTooltip": "Miješanje. Uključi/isključi dodirom.",
-  "@playbackOrderShuffledTooltip": {},
-  "playbackOrderLinearTooltip": "Reprodukcija redom. Uključi/isključi dodirom.",
-  "@playbackOrderLinearTooltip": {},
-  "togglePlayback": "Uključi/isključi reprodukciju",
-  "@togglePlayback": {},
-  "loopModeAllTooltip": "Ponavljanje svih. Uključi/isključi dodirom.",
-  "@loopModeAllTooltip": {},
-  "loopModeOneTooltip": "Ponavljanje jedne. Uključi/isključi dodirom.",
-  "@loopModeOneTooltip": {},
   "about": "O aplikaciji Finamp",
   "@about": {},
-  "shuffleArtist": "Izmiješaj sve albume od {artist}",
-  "@shuffleArtist": {
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
     "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
+      "value": {
+        "type": "double",
+        "example": "-9.6"
       }
     }
   },
-  "playArtist": "Reproduciraj sve albume od {artist}",
-  "@playArtist": {
+  "queueRestoreTitle": "Spremljeno {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
     "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
       }
     }
   },
-  "downloadArtist": "Preuzmi sve albume od {artist}",
-  "@downloadArtist": {
+  "skipToNextTrackButtonTooltip": "Prijeđi na sljedeću pjesmu",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
     "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
+      "bitrate": {
+        "type": "int",
+        "example": "320"
       }
     }
   },
-  "loopModeNoneTooltip": "Bez ponavljanja. Uključi/isključi dodirom.",
-  "@loopModeNoneTooltip": {}
+  "goToArtist": "Idi na izvođača",
+  "@goToArtist": {},
+  "playlistActionsMenuButtonTooltip": "Dodirni za dodavanje u playlistu. Pritisni dugo za uključivanje u favorite.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "removeFromPlaylistNamedTitle": "Ukloni iz playliste „{playlistName}”",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTooltip": "Ukloni iz playliste „{playlistName}”",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "skipToPreviousTrackButtonTooltip": "Prijeđi na početak ili na prethodnu pjesmu",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "goToGenre": "Idi na žanr",
+  "@goToGenre": {},
+  "previousTracks": "Prethodne pjesme",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "placeholderSource": "Negdje",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "shuffleAllQueueSource": "Izmiješaj sve",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "queueRestoreButtonLabel": "Obnovi",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 pjesma} few{{count} pjesme} other{{count} pjesama}}, preostalo: {remaining}",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "volumeNormalizationModeAlbumOnly": "Samo za albume",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "downloadItem": "Preuzmi",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "deleteItem": "Izbriši s uređaja",
+  "@deleteItem": {
+    "description": "Option to delete item in long-press menu."
+  },
+  "syncDownloads": "Sinkroniziraj i preuzmi stavke koje nedostaju.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "activeDownloads": "Aktivna preuzimanja",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Aktivna preuzimanja",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Nema aktivnih preuzimanja.",
+  "@noActiveDownloads": {},
+  "confirmDownloadStarted": "Preuzimanje pokrenuto",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "unknownAlbum": "Nepoznat album",
+  "@unknownAlbum": {},
+  "confirmAddedToPlaylist": "Dodano u playlistu.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "nextUp": "Sljedeće na redu",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Izbriši sljedeće na redu",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "addToNextUp": "Dodaj u sljedeće na redu",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleToNextUp": "Izmiješaj sljedeće na redu",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "mix": "{mixSource} – miks",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  }
 }

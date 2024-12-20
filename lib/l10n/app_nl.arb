@@ -103,22 +103,6 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} plaatje} other{{count} plaatjes}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlFailed": "{count} mislukt",
   "@dlFailed": {
     "placeholders": {
@@ -135,8 +119,6 @@
   "@dark": {},
   "createButtonLabel": "CREËER",
   "@createButtonLabel": {},
-  "direct": "DIRECT",
-  "@direct": {},
   "songCount": "{count,plural,=1{{count} Nummer} other{{count} Nummers}}",
   "@songCount": {
     "placeholders": {
@@ -159,10 +141,6 @@
   "@logs": {},
   "next": "Volgende",
   "@next": {},
-  "urlTrailingSlash": "De URL mag geen / bevatten aan het einde",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "selectMusicLibraries": "Selecteer Muziekbibliotheken",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
@@ -234,22 +212,6 @@
       }
     }
   },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
-  "downloadErrors": "Download fouten",
-  "@downloadErrors": {},
   "dlEnqueued": "{count} gepland",
   "@dlEnqueued": {
     "placeholders": {
@@ -266,10 +228,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Download Fouten",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Geen fouten!",
-  "@noErrors": {},
   "failedToGetSongFromDownloadId": "Het nummer kon niet gevonden worden met deze download ID",
   "@failedToGetSongFromDownloadId": {},
   "error": "Fout",
@@ -382,12 +340,6 @@
   "@noArtist": {},
   "unknownArtist": "Onbekende artiest",
   "@unknownArtist": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "downloaded": "GEDOWNLOAD",
-  "@downloaded": {},
-  "statusError": "STATUS FOUT",
-  "@statusError": {},
   "queue": "Afspeelrij",
   "@queue": {},
   "replaceQueue": "Afspeelrij vervangen",
@@ -454,8 +406,6 @@
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "system": "Systeem",
   "@system": {},
-  "transcode": "CONVERTEREN",
-  "@transcode": {},
   "startupError": "Er ging iets mis bij het starten van de app. Dit was de foutmelding: {error}\n\nCreëer een issue op github.com/UnicornsOnLSD/finamp met een schermafbeelding van deze pagina. Wanneer het probleem zich vaker voordoet, kan je de app-data verwijderen om de app te resetten.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -469,10 +419,6 @@
   "emptyServerUrl": "De URL van je server mag niet leeg zijn",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "urlStartWithHttps": "De URL moet beginnen met http:// of https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   },
   "removeFromPlaylistTooltip": "Verwijder van afspeellijst",
   "@removeFromPlaylistTooltip": {},
