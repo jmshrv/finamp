@@ -241,7 +241,7 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "Niedrige Priorität-Modus beim Pausieren aktivieren",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "",
+  "shuffleAllSongCount": "Anzahl gemischter Lieder",
   "@shuffleAllSongCount": {},
   "shuffleAllSongCountSubtitle": "Die Anzahl der zu ladenden Tracks wenn der Zufallsknopf gedrückt wird.",
   "@shuffleAllSongCountSubtitle": {},
@@ -1322,5 +1322,216 @@
   "showLyricsTimestampsSubtitle": "Steuert, ob der Zeitstempel jeder Liedtextzeile in der Liedtextansicht angezeigt wird, falls verfügbar.",
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "aboutReleaseNotes": "Lese die neusten update informationen:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "shuffleToQueue": "Mische zur Warteschleife",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "confirmAddToNextUp": "{type, select, track{Lied} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} zu Next Up hinzugefügt",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleNext": "Wird als nächstes gemischt",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmShuffleToNextUp": "Mische zu Next Up",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "shareOfflineListens": "Exportiere Offline Wiedergaben",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "mix": "{mixSource} - Mix",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "tracksFormerNextUp": "Über Next Up Hinzugefügte Songs",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "savedQueue": "Speicher Warteschlange",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "shuffleAllQueueSource": "Mische Alles",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackSpeedDecreaseLabel": "Vergeringer Wiedergabegeschwindigkeit",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Erhöhe Wiedergabegeschwindigkeit",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeAllButtonLabel": "Wiederholung aller",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "Wiederherstellen der Warteschlange",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Lied} other{{count}  Lieder}}, {remaining} Ungespielt",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Versuche die letzte Warteschlange beim starten der app wiederherzustellen.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "syncComplete": "Alle Downloads re-synchronisiert.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Downloaden} failed{Fehlgeschlagen} syncFailed{Synchronisation Fehlgeschlagen} enqueued{Warten} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackOrderLinearButtonLabel": "Wiedergabe in Reihenfolge",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "loopModeNoneButtonLabel": "Keine Schleife",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Wie oft (in sekunden) der wiedergabe status an den Server gesendet werden soll. Der Wert sollte unter 5 minuten (300 sekunden) liegen um ein time-out zu verhinden.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "playbackOrderLinearButtonTooltip": "Wiedergabe in Reihenfolge. Tippe für Zufallige wiedergabe.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackSpeedButtonLabel": "Wiedergabe auf {speed}-facher geschwindigkeit",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "reportQueueToServerSubtitle": "Wenn aktiv sendet Finamp die aktuelle warteschlange an den server. Aktuell scheint es wenig nutzen dafür zu geben und erhöhrt die netzwerk belastung.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Nach 5 minuten ohne komunikation zwischen client und server wird der server davon ausgehen das die wiedergabe gestoppt wurde. Das heißt für Lieder die länger als 5 minuten sind könnte es zu fehlerhaften wiedergabe meldungen führen was die qualität dieser daten reduzieren kann.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "repairComplete": "Reparatur beendet.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} lied} other{{songCount} lieder}}, {imageCount,plural,=1{{imageCount} bild} other{{imageCount} bilder}}\n{syncCount,plural,=1{{syncCount} Synchronisiert} other{{syncCount} Synchronisieren}}{repairing, plural, =0{} other{\nAm Reparieren}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmPlayNext": "{type, select, track{Lied} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} wird als nächstes spielen",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadLibraryPrompt": "Bist du sicher das du alle inhalte der Bibliothek \"{libraryName}\" herunterladen möchtest?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToQueue": "{type, select, track{Lied} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} zur Warteschlange hinzugefügt",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allSongs{All Lieder} filteredList{Lieder} genre{Genre} artist{Künstler} song{Song} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreError": "Warnung: {count,plural, =1{{count} lied} other{{count} lieder}}  konntent nicht aus der Warteschlange wiederhergestellt werden.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmShuffleToQueue": "Mische zu Warteschlange",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   }
 }
