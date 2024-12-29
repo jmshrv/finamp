@@ -1,4 +1,8 @@
+import 'package:finamp/screens/layout_settings_screen.dart';
+import 'package:finamp/services/locale_helper.dart';
+import 'package:finamp/services/theme_mode_helper.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -329,6 +333,133 @@ class FinampSettingsHelper {
     finampSettingsTemp.showSeekControlsOnMediaNotification = true;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetPlayerScreenSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    finampSettingsTemp.featureChipsConfiguration = finampSettingsTemp.featureChipsConfiguration.copyWith(enabled: true);
+    finampSettingsTemp.playerScreenCoverMinimumPadding = 1.5;
+    finampSettingsTemp.suppressPlayerPadding = false;
+    finampSettingsTemp.prioritizeCoverFactor = 8.0;
+    finampSettingsTemp.hidePlayerBottomActions = false;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetLyricsSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    finampSettingsTemp.showLyricsTimestamps = true;
+    finampSettingsTemp.showLyricsScreenAlbumPrelude = true;
+    finampSettingsTemp.lyricsAlignment = LyricsAlignment.start;
+    finampSettingsTemp.lyricsFontSize = LyricsFontSize.medium;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetAlbumSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    finampSettingsTemp.showCoversOnAlbumScreen = false;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetLayoutSettings() {    
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    ThemeModeHelper.setThemeMode(ThemeMode.system);
+    setContentViewType(ContentViewType.list);
+    finampSettingsTemp.useFixedSizeGridTiles = true;
+    setContentGridViewCrossAxisCountPortrait(2);
+    setContentGridViewCrossAxisCountLandscape(3);
+    finampSettingsTemp.fixedGridTileSize = FixedGridTileSize.medium.toInt;
+    finampSettingsTemp.showTextOnGridView = true;
+    setUseCoverAsBackground(true);
+    finampSettingsTemp.showArtistChipImage = true;
+    finampSettingsTemp.showArtistsTopSongs = true;
+    finampSettingsTemp.allowSplitScreen = true;
+    finampSettingsTemp.showProgressOnNowPlayingBar = true;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetTranscodingSettings()  {
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    finampSettingsTemp.shouldTranscode = false;
+    setTranscodeBitrate(320000);
+    finampSettingsTemp.transcodingSegmentContainer = FinampSegmentContainer.fragmentedMp4;
+    finampSettingsTemp.shouldTranscodeDownloads = TranscodeDownloadsSetting.ask;
+    finampSettingsTemp.downloadTranscodingCodec = FinampTranscodingCodec.opus;
+    finampSettingsTemp.downloadTranscodeBitrate = 128000;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetDownloadSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    finampSettingsTemp.requireWifiForDownloads = false;
+    finampSettingsTemp.trackOfflineFavorites = true;
+    finampSettingsTemp.resyncOnStartup = true;
+    finampSettingsTemp.preferQuickSyncs = true;
+    finampSettingsTemp.shouldRedownloadTranscodes = false;
+    finampSettingsTemp.showDownloadsWithUnknownLibrary =  true;
+    finampSettingsTemp.downloadWorkers = 5;
+    finampSettingsTemp.maxConcurrentDownloads = 10;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetAudioServiceSettings() {
+    setAndroidStopForegroundOnPause(true); 
+    setSongShuffleItemCount(250);               // DOES NOT update UI
+    setBufferDuration(Duration(seconds: 600));  // DOES NOT update UI
+    setAutoloadLastQueueOnStartup(true);
+    setPeriodicPlaybackSessionUpdateFrequencySeconds(150); // DOES NOT update UI
+    setReportQueueToServer(false);
+  }
+  static void resetNormalizationSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    finampSettingsTemp.volumeNormalizationActive = true;
+    setVolumeNormalizationIOSBaseGain(-2.0); // DOES NOT update UI
+    finampSettingsTemp.volumeNormalizationMode = VolumeNormalizationMode.hybrid;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetInteractionsSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+
+    setSwipeInsertQueueNext(true);
+    finampSettingsTemp.startInstantMixForIndividualTracks = true;
+    setShowFastScroller(true);
+    setDisableGesture(false);
+    setEnableVibration(true);
+    setKeepScreenOnOption(KeepScreenOnOption.whileLyrics);
+    setKeepScreenOnWhileCharging(true);
+
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  static void resetAllSettings() {
+    resetTranscodingSettings();
+    resetDownloadSettings();
+    resetAudioServiceSettings();
+    resetNormalizationSettings();
+    resetInteractionsSettings();
+
+    resetLayoutSettings();
+    resetCustomizationSettings();
+    resetPlayerScreenSettings();
+    resetLyricsSettings();
+    resetAlbumSettings();
+    resetTabs();
+    
+    LocaleHelper.setLocale(null); // Reset to System Language
   }
 
   static void setSwipeInsertQueueNext(bool swipeInsertQueueNext) {

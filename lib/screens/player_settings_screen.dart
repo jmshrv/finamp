@@ -6,16 +6,31 @@ import '../components/LayoutSettingsScreen/player_screen_minimum_cover_padding_e
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
-class PlayerSettingsScreen extends StatelessWidget {
+class PlayerSettingsScreen extends StatefulWidget {
   const PlayerSettingsScreen({super.key});
-
   static const routeName = "/settings/player";
+  @override
+  State<PlayerSettingsScreen>  createState() => 
+    _PlayerSettingsScreenState();
+}
 
+class _PlayerSettingsScreenState extends State<PlayerSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.playerScreen),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                FinampSettingsHelper.resetPlayerScreenSettings();
+              });
+            },
+            icon: const Icon(Icons.refresh),
+            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          )
+        ]
       ),
       body: ListView(
         children: const [

@@ -11,16 +11,31 @@ import '../components/InteractionSettingsScreen/disable_gestures.dart';
 import '../components/InteractionSettingsScreen/disable_vibration.dart';
 import '../components/InteractionSettingsScreen/swipe_insert_queue_next_selector.dart';
 
-class InteractionSettingsScreen extends StatelessWidget {
-  const InteractionSettingsScreen({Key? key}) : super(key: key);
-
+class InteractionSettingsScreen extends  StatefulWidget {
+  const InteractionSettingsScreen({super.key});
   static const routeName = "/settings/interactions";
+  @override
+  State<InteractionSettingsScreen> createState() =>
+    _InteractionSettingsScreenState();
+}
 
+class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.interactions),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                FinampSettingsHelper.resetInteractionsSettings();
+              });
+            },
+            icon: const Icon(Icons.refresh),
+            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          )
+        ],
       ),
       body: ListView(
         children: const [
