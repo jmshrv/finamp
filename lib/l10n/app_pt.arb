@@ -842,5 +842,132 @@
   "volumeNormalizationModeAlbumBased": "Baseado em Álbuns",
   "@volumeNormalizationModeAlbumBased": {
     "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
-  }
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Espaçamento Mínimo da Capa do Álbum",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Espaçamento mínimo ao redor da capa do álbum na tela de reprodução, em % da largura da tela.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopSongs": "Mostrar faixas principais na vista do artista",
+  "@showArtistsTopSongs": {},
+  "showArtistsTopSongsSubtitle": "Indica se deve mostrar as 5 faixas mais ouvidas de um artista.",
+  "@showArtistsTopSongsSubtitle": {},
+  "playerScreen": "Tela de Reprodução",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "hours": "Horas",
+  "@hours": {},
+  "seconds": "Segundos",
+  "@seconds": {},
+  "timeFractionTooltip": "{currentTime} de {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "trackCountTooltip": "Faixa {currentTrackIndex} de {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "sleepTimerRemainingTime": "Dormindo em {time} minutos",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTitle": "Adicionar a Mais Playlists",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistNamedTooltip": "Remover da playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Remover da playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "playlistActionsMenuButtonTooltip": "Toque para adicionar à playlist. Pressione e segure para alternar favorito.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "unknownAlbum": "Álbum Desconhecido",
+  "@unknownAlbum": {},
+  "playbackModeDirectPlaying": "Reprodução Direta",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "Reprodução Transcodificada",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Reprodução Local",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToGenre": "Ir para o Género",
+  "@goToGenre": {},
+  "confirmFavoriteAdded": "Favorito Adicionado",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Favorito Removido",
+  "@confirmFavoriteRemoved": {},
+  "confirmAddedToPlaylist": "Adicionado à playlist.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "skipToPreviousTrackButtonTooltip": "Ir para o início ou para a faixa anterior",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "skipToNextTrackButtonTooltip": "Ir para a próxima faixa",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "togglePlaybackButtonTooltip": "Alternar reprodução",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "nextUp": "Próximas Faixas",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "swipeInsertQueueNext": "Reproduzir Faixa Deslizada a Seguir",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Ativar para inserir uma faixa como próximo item na fila ao ser deslizada na lista de faixas, em vez de adicioná-la ao final.",
+  "@swipeInsertQueueNextSubtitle": {}
 }
