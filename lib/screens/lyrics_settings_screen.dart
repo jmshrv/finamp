@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
-import '../components/LayoutSettingsScreen/player_screen_minimum_cover_padding_editor.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
@@ -21,14 +20,9 @@ class _LyricsSettingsScreenState extends State<LyricsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.lyricsScreen),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetLyricsSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetLyricsSettings
           )
         ],
       ),

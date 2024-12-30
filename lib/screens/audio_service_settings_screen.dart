@@ -27,14 +27,9 @@ class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen>
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.audioService),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetAudioServiceSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetAudioServiceSettings
           )
         ],
       ),

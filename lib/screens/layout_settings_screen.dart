@@ -36,14 +36,9 @@ class _LayoutSettingsScreenState extends State<LayoutSettingsScreen> {
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.layoutAndTheme),
               actions: [
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      FinampSettingsHelper.resetLayoutSettings();
-                    });
-                  },
-                  icon: const Icon(Icons.refresh),
-                  tooltip: AppLocalizations.of(context)!.resetToDefaults,
+                FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+                  context,
+                  FinampSettingsHelper.resetLayoutSettings
                 )
               ],
             ),

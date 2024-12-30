@@ -20,14 +20,9 @@ class _AlbumSettingsScreenState extends State<AlbumSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.albumScreen),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetAlbumSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetAlbumSettings
           )
         ],
       ),

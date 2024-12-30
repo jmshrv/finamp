@@ -39,14 +39,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetAllSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetAllSettings,
+            isGlobal: true
           ),
           Semantics.fromProperties(
             properties: SemanticsProperties(

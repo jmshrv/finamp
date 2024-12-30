@@ -25,14 +25,9 @@ class _CustomizationSettingsScreenState
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.customizationSettingsTitle),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetCustomizationSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetCustomizationSettings
           )
         ],
       ),

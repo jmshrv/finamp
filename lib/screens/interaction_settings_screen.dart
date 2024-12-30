@@ -26,14 +26,9 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.interactions),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetInteractionsSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetInteractionsSettings
           )
         ],
       ),

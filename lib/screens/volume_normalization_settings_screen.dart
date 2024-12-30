@@ -24,14 +24,9 @@ class _VolumeNormalizationSettingsScreenState extends State<VolumeNormalizationS
         title: Text(
             AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetNormalizationSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetNormalizationSettings
           )
         ],
       ),

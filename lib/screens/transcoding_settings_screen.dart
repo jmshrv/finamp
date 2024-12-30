@@ -26,14 +26,9 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.transcoding),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetAllSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetTranscodingSettings
           )
         ],
       ),

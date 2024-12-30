@@ -21,14 +21,9 @@ class _PlayerSettingsScreenState extends State<PlayerSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.playerScreen),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetPlayerScreenSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetPlayerScreenSettings
           )
         ]
       ),

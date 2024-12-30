@@ -20,14 +20,9 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.tabs),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetTabs();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetTabs,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetTabsSettings
           )
         ],
       ),

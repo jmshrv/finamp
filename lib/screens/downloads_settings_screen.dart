@@ -31,14 +31,9 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloadSettings),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetDownloadSettings();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetToDefaults,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetDownloadSettings
           )
         ],
       ),
