@@ -1,3 +1,4 @@
+import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/screens/layout_settings_screen.dart';
 import 'package:finamp/services/locale_helper.dart';
 import 'package:finamp/services/theme_mode_helper.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
@@ -314,7 +316,7 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void resetTabs() {
+  static void resetTabsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.tabOrder = TabContentType.values;
     finampSettingsTemp.showTabs = Map.fromEntries(
@@ -457,7 +459,7 @@ class FinampSettingsHelper {
     resetPlayerScreenSettings();
     resetLyricsSettings();
     resetAlbumSettings();
-    resetTabs();
+    resetTabsSettings();
     
     LocaleHelper.setLocale(null); // Reset to System Language
   }
@@ -504,5 +506,29 @@ class FinampSettingsHelper {
     finampSettingsTemp.keepScreenOnWhilePluggedIn = keepScreenOnWhileCharging;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static IconButton makeSettingsResetButtonWithDialog(BuildContext context, Function() resetFunction, {bool isGlobal = false}) {
+    // TODO: Replace the following Strings with localization
+    return IconButton(
+      onPressed: () async{
+        await showDialog(
+          context: context,
+          builder: (context) => ConfirmationPromptDialog(
+            promptText: isGlobal
+              ? "Are you sure you want to reset ALL settings?"
+              : "Do you want to reset these settings back to default?",
+            confirmButtonText: isGlobal
+              ? "Yes I am!"
+              : AppLocalizations.of(context)!.reset,
+            abortButtonText: "Cancel",
+            onConfirmed: resetFunction,
+            onAborted: (){},
+          )
+        );
+      },
+      icon: const Icon(Icons.refresh),
+      tooltip: AppLocalizations.of(context)!.resetToDefaults,
+    );
   }
 }
