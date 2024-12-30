@@ -329,9 +329,12 @@ class FinampSettingsHelper {
   static void resetCustomizationSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.playbackSpeedVisibility = DefaultSettings.playbackSpeedVisibility;
-    finampSettingsTemp.showStopButtonOnMediaNotification = DefaultSettings.showStopButtonOnMediaNotification;
-    finampSettingsTemp.showSeekControlsOnMediaNotification = DefaultSettings.showSeekControlsOnMediaNotification;
+    finampSettingsTemp.playbackSpeedVisibility =
+        DefaultSettings.playbackSpeedVisibility;
+    finampSettingsTemp.showStopButtonOnMediaNotification =
+        DefaultSettings.showStopButtonOnMediaNotification;
+    finampSettingsTemp.showSeekControlsOnMediaNotification =
+        DefaultSettings.showSeekControlsOnMediaNotification;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -340,11 +343,16 @@ class FinampSettingsHelper {
   static void resetPlayerScreenSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration;
-    finampSettingsTemp.playerScreenCoverMinimumPadding = DefaultSettings.playerScreenCoverMinimumPadding;
-    finampSettingsTemp.suppressPlayerPadding = DefaultSettings.suppressPlayerPadding;
-    finampSettingsTemp.prioritizeCoverFactor = DefaultSettings.prioritizeCoverFactor;
-    finampSettingsTemp.hidePlayerBottomActions = DefaultSettings.hidePlayerBottomActions;
+    finampSettingsTemp.featureChipsConfiguration =
+        DefaultSettings.featureChipsConfiguration;
+    finampSettingsTemp.playerScreenCoverMinimumPadding =
+        DefaultSettings.playerScreenCoverMinimumPadding;
+    finampSettingsTemp.suppressPlayerPadding =
+        DefaultSettings.suppressPlayerPadding;
+    finampSettingsTemp.prioritizeCoverFactor =
+        DefaultSettings.prioritizeCoverFactor;
+    finampSettingsTemp.hidePlayerBottomActions =
+        DefaultSettings.hidePlayerBottomActions;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -353,8 +361,10 @@ class FinampSettingsHelper {
   static void resetLyricsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.showLyricsTimestamps = DefaultSettings.showLyricsTimestamps;
-    finampSettingsTemp.showLyricsScreenAlbumPrelude = DefaultSettings.showLyricsScreenAlbumPrelude;
+    finampSettingsTemp.showLyricsTimestamps =
+        DefaultSettings.showLyricsTimestamps;
+    finampSettingsTemp.showLyricsScreenAlbumPrelude =
+        DefaultSettings.showLyricsScreenAlbumPrelude;
     finampSettingsTemp.lyricsAlignment = DefaultSettings.lyricsAlignment;
     finampSettingsTemp.lyricsFontSize = DefaultSettings.lyricsFontSize;
 
@@ -365,7 +375,8 @@ class FinampSettingsHelper {
   static void resetAlbumSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen;
+    finampSettingsTemp.showCoversOnAlbumScreen =
+        DefaultSettings.showCoversOnAlbumScreen;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -376,16 +387,22 @@ class FinampSettingsHelper {
 
     ThemeModeHelper.setThemeMode(DefaultSettings.theme);
     setContentViewType(DefaultSettings.contentViewType);
-    finampSettingsTemp.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles;
-    setContentGridViewCrossAxisCountPortrait(DefaultSettings.contentGridViewCrossAxisCountPortrait);
-    setContentGridViewCrossAxisCountLandscape(DefaultSettings.contentGridViewCrossAxisCountLandscape);
+    finampSettingsTemp.useFixedSizeGridTiles =
+        DefaultSettings.useFixedSizeGridTiles;
+    setContentGridViewCrossAxisCountPortrait(
+        DefaultSettings.contentGridViewCrossAxisCountPortrait);
+    setContentGridViewCrossAxisCountLandscape(
+        DefaultSettings.contentGridViewCrossAxisCountLandscape);
     finampSettingsTemp.fixedGridTileSize = DefaultSettings.fixedGridTileSize;
     finampSettingsTemp.showTextOnGridView = DefaultSettings.showTextOnGridView;
     setUseCoverAsBackground(DefaultSettings.useCoverAsBackground);
-    finampSettingsTemp.showArtistChipImage = DefaultSettings.showArtistChipImage;
-    finampSettingsTemp.showArtistsTopSongs = DefaultSettings.showArtistsTopSongs;
+    finampSettingsTemp.showArtistChipImage =
+        DefaultSettings.showArtistChipImage;
+    finampSettingsTemp.showArtistsTopSongs =
+        DefaultSettings.showArtistsTopSongs;
     finampSettingsTemp.allowSplitScreen = DefaultSettings.allowSplitScreen;
-    finampSettingsTemp.showProgressOnNowPlayingBar = DefaultSettings.showProgressOnNowPlayingBar;
+    finampSettingsTemp.showProgressOnNowPlayingBar =
+        DefaultSettings.showProgressOnNowPlayingBar;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -396,10 +413,14 @@ class FinampSettingsHelper {
 
     finampSettingsTemp.shouldTranscode = DefaultSettings.shouldTranscode;
     setTranscodeBitrate(DefaultSettings.transcodeBitrate);
-    finampSettingsTemp.transcodingSegmentContainer = DefaultSettings.transcodingSegmentContainer;
-    finampSettingsTemp.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads;
-    finampSettingsTemp.downloadTranscodingCodec = FinampTranscodingCodec.opus; // starts uninitilized, idk what value this should be
-    finampSettingsTemp.downloadTranscodeBitrate = 128000; // starts uninitilized, idk what value this should be
+    finampSettingsTemp.transcodingSegmentContainer =
+        DefaultSettings.transcodingSegmentContainer;
+    finampSettingsTemp.shouldTranscodeDownloads =
+        DefaultSettings.shouldTranscodeDownloads;
+    finampSettingsTemp.downloadTranscodingCodec = FinampTranscodingCodec
+        .opus; // starts uninitilized, idk what value this should be
+    finampSettingsTemp.downloadTranscodeBitrate =
+        128000; // starts uninitilized, idk what value this should be
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -408,34 +429,46 @@ class FinampSettingsHelper {
   static void resetDownloadSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads;
-    finampSettingsTemp.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites;
+    finampSettingsTemp.requireWifiForDownloads =
+        DefaultSettings.requireWifiForDownloads;
+    finampSettingsTemp.trackOfflineFavorites =
+        DefaultSettings.trackOfflineFavorites;
     finampSettingsTemp.resyncOnStartup = DefaultSettings.resyncOnStartup;
     finampSettingsTemp.preferQuickSyncs = DefaultSettings.preferQuickSyncs;
-    finampSettingsTemp.shouldRedownloadTranscodes = DefaultSettings.shouldRedownloadTranscodes;
-    finampSettingsTemp.showDownloadsWithUnknownLibrary = DefaultSettings.showDownloadsWithUnknownLibrary;
+    finampSettingsTemp.shouldRedownloadTranscodes =
+        DefaultSettings.shouldRedownloadTranscodes;
+    finampSettingsTemp.showDownloadsWithUnknownLibrary =
+        DefaultSettings.showDownloadsWithUnknownLibrary;
     finampSettingsTemp.downloadWorkers = DefaultSettings.downloadWorkers;
-    finampSettingsTemp.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads;
+    finampSettingsTemp.maxConcurrentDownloads =
+        DefaultSettings.maxConcurrentDownloads;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
   static void resetAudioServiceSettings() {
-    setAndroidStopForegroundOnPause(DefaultSettings.settingAndroidStopForegroundOnPause);
-    setSongShuffleItemCount(DefaultSettings.songShuffleItemCount); // DOES NOT update UI
-    setBufferDuration(Duration(seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
+    setAndroidStopForegroundOnPause(
+        DefaultSettings.settingAndroidStopForegroundOnPause);
+    setSongShuffleItemCount(
+        DefaultSettings.songShuffleItemCount); // DOES NOT update UI
+    setBufferDuration(Duration(
+        seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
     setAutoloadLastQueueOnStartup(DefaultSettings.autoLoadLastQueueOnStartup);
-    setPeriodicPlaybackSessionUpdateFrequencySeconds(DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
+    setPeriodicPlaybackSessionUpdateFrequencySeconds(DefaultSettings
+        .periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
     setReportQueueToServer(DefaultSettings.reportQueueToServer);
   }
 
   static void resetNormalizationSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive;
-    setVolumeNormalizationIOSBaseGain(DefaultSettings.volumeNormalizationIOSBaseGain); // DOES NOT update UI
-    finampSettingsTemp.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode;
+    finampSettingsTemp.volumeNormalizationActive =
+        DefaultSettings.volumeNormalizationActive;
+    setVolumeNormalizationIOSBaseGain(
+        DefaultSettings.volumeNormalizationIOSBaseGain); // DOES NOT update UI
+    finampSettingsTemp.volumeNormalizationMode =
+        DefaultSettings.volumeNormalizationMode;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -445,7 +478,8 @@ class FinampSettingsHelper {
     FinampSettings finampSettingsTemp = finampSettings;
 
     setSwipeInsertQueueNext(DefaultSettings.swipeInsertQueueNext);
-    finampSettingsTemp.startInstantMixForIndividualTracks = DefaultSettings.startInstantMixForIndividualTracks;
+    finampSettingsTemp.startInstantMixForIndividualTracks =
+        DefaultSettings.startInstantMixForIndividualTracks;
     setShowFastScroller(DefaultSettings.showFastScroller);
     setDisableGesture(DefaultSettings.disableGesture);
     setEnableVibration(DefaultSettings.enableVibration);
@@ -530,7 +564,8 @@ class FinampSettingsHelper {
                       ? AppLocalizations.of(context)!.resetSettingsPromptGlobal
                       : AppLocalizations.of(context)!.resetSettingsPromptLocal,
                   confirmButtonText: isGlobal
-                      ? AppLocalizations.of(context)!.resetSettingsPromptGlobalConfirm
+                      ? AppLocalizations.of(context)!
+                          .resetSettingsPromptGlobalConfirm
                       : AppLocalizations.of(context)!.reset,
                   abortButtonText: AppLocalizations.of(context)!.genericCancel,
                   onConfirmed: resetFunction,

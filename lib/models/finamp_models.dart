@@ -149,13 +149,15 @@ class FinampSettings {
       // default values. create() is used to return a FinampSettings with
       // downloadLocations.
       required this.downloadLocations,
-      this.androidStopForegroundOnPause = DefaultSettings.settingAndroidStopForegroundOnPause,
+      this.androidStopForegroundOnPause =
+          DefaultSettings.settingAndroidStopForegroundOnPause,
       required this.showTabs,
       this.onlyShowFavourite = DefaultSettings.settingIsFavourite,
       this.sortBy = SortBy.sortName,
       this.sortOrder = SortOrder.ascending,
       this.songShuffleItemCount = DefaultSettings.songShuffleItemCount,
-      this.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive,
+      this.volumeNormalizationActive =
+          DefaultSettings.volumeNormalizationActive,
       this.volumeNormalizationIOSBaseGain =
           DefaultSettings.volumeNormalizationIOSBaseGain,
       this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
@@ -169,7 +171,8 @@ class FinampSettings {
       this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
       required this.downloadLocationsMap,
       this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
-      this.playerScreenCoverMinimumPadding = DefaultSettings.playerScreenCoverMinimumPadding,
+      this.playerScreenCoverMinimumPadding =
+          DefaultSettings.playerScreenCoverMinimumPadding,
       this.showArtistsTopSongs = DefaultSettings.showArtistsTopSongs,
       this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
       required this.tabSortBy,
@@ -177,13 +180,15 @@ class FinampSettings {
       this.loopMode = DefaultSettings.loopMode,
       this.playbackSpeed = DefaultSettings.playbackSpeed,
       this.tabOrder = DefaultSettings.tabOrder,
-      this.autoloadLastQueueOnStartup = DefaultSettings.autoLoadLastQueueOnStartup,
+      this.autoloadLastQueueOnStartup =
+          DefaultSettings.autoLoadLastQueueOnStartup,
       this.hasCompletedBlurhashImageMigration = true,
       this.hasCompletedBlurhashImageMigrationIdFix = true,
       this.hasCompletedDownloadsServiceMigration = true,
       this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
       this.onlyShowFullyDownloaded = false,
-      this.showDownloadsWithUnknownLibrary = DefaultSettings.showDownloadsWithUnknownLibrary,
+      this.showDownloadsWithUnknownLibrary =
+          DefaultSettings.showDownloadsWithUnknownLibrary,
       this.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads,
       this.downloadWorkers = DefaultSettings.downloadWorkers,
       this.resyncOnStartup = DefaultSettings.resyncOnStartup,
@@ -192,7 +197,8 @@ class FinampSettings {
       this.downloadTranscodingCodec,
       this.downloadTranscodeBitrate,
       this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
-      this.shouldRedownloadTranscodes = DefaultSettings.shouldRedownloadTranscodes,
+      this.shouldRedownloadTranscodes =
+          DefaultSettings.shouldRedownloadTranscodes,
       this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
       this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
       this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
@@ -207,23 +213,29 @@ class FinampSettings {
           DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
       this.showArtistChipImage = DefaultSettings.showArtistChipImage,
       this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
-      this.showProgressOnNowPlayingBar = DefaultSettings.showProgressOnNowPlayingBar,
+      this.showProgressOnNowPlayingBar =
+          DefaultSettings.showProgressOnNowPlayingBar,
       this.startInstantMixForIndividualTracks =
           DefaultSettings.startInstantMixForIndividualTracks,
       this.showLyricsTimestamps = DefaultSettings.showLyricsTimestamps,
       this.lyricsAlignment = DefaultSettings.lyricsAlignment,
       this.lyricsFontSize = DefaultSettings.lyricsFontSize,
-      this.showLyricsScreenAlbumPrelude = DefaultSettings.showLyricsScreenAlbumPrelude,
+      this.showLyricsScreenAlbumPrelude =
+          DefaultSettings.showLyricsScreenAlbumPrelude,
       this.showStopButtonOnMediaNotification =
           DefaultSettings.showStopButtonOnMediaNotification,
       this.showSeekControlsOnMediaNotification =
           DefaultSettings.showSeekControlsOnMediaNotification,
       this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
-      this.keepScreenOnWhilePluggedIn = DefaultSettings.keepScreenOnWhilePluggedIn,
-      this.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration,
+      this.keepScreenOnWhilePluggedIn =
+          DefaultSettings.keepScreenOnWhilePluggedIn,
+      this.featureChipsConfiguration =
+          DefaultSettings.featureChipsConfiguration,
       this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
-      this.hasDownloadedPlaylistInfo = DefaultSettings.hasDownloadedPlaylistInfo,
-      this.transcodingSegmentContainer = DefaultSettings.transcodingSegmentContainer});
+      this.hasDownloadedPlaylistInfo =
+          DefaultSettings.hasDownloadedPlaylistInfo,
+      this.transcodingSegmentContainer =
+          DefaultSettings.transcodingSegmentContainer});
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -236,7 +248,8 @@ class FinampSettings {
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
 
-  @HiveField(4, defaultValue: DefaultSettings.settingAndroidStopForegroundOnPause)
+  @HiveField(4,
+      defaultValue: DefaultSettings.settingAndroidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
@@ -265,11 +278,13 @@ class FinampSettings {
   ContentViewType contentViewType;
 
   /// Amount of grid tiles to use per-row when portrait.
-  @HiveField(11, defaultValue: DefaultSettings.contentGridViewCrossAxisCountPortrait)
+  @HiveField(11,
+      defaultValue: DefaultSettings.contentGridViewCrossAxisCountPortrait)
   int contentGridViewCrossAxisCountPortrait;
 
   /// Amount of grid tiles to use per-row when landscape.
-  @HiveField(12, defaultValue: DefaultSettings.contentGridViewCrossAxisCountLandscape)
+  @HiveField(12,
+      defaultValue: DefaultSettings.contentGridViewCrossAxisCountLandscape)
   int contentGridViewCrossAxisCountLandscape;
 
   /// Whether or not to show the text (title, artist etc) on the grid music
@@ -375,7 +390,8 @@ class FinampSettings {
   bool enableVibration;
 
   @HiveField(48, defaultValue: DefaultSettings.playerScreenCoverMinimumPadding)
-  double playerScreenCoverMinimumPadding = DefaultSettings.playerScreenCoverMinimumPadding;
+  double playerScreenCoverMinimumPadding =
+      DefaultSettings.playerScreenCoverMinimumPadding;
 
   @HiveField(49, defaultValue: DefaultSettings.prioritizeCoverFactor)
   double prioritizeCoverFactor;
@@ -390,9 +406,11 @@ class FinampSettings {
   bool reportQueueToServer;
 
   @HiveField(53,
-      defaultValue: DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
+      defaultValue:
+          DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   @HiveField(53,
-      defaultValue: DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
+      defaultValue:
+          DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
   @HiveField(54, defaultValue: DefaultSettings.showArtistsTopSongs)
@@ -429,7 +447,8 @@ class FinampSettings {
   @HiveField(64, defaultValue: DefaultSettings.showProgressOnNowPlayingBar)
   bool showProgressOnNowPlayingBar;
 
-  @HiveField(65, defaultValue: DefaultSettings.startInstantMixForIndividualTracks)
+  @HiveField(65,
+      defaultValue: DefaultSettings.startInstantMixForIndividualTracks)
   bool startInstantMixForIndividualTracks;
 
   @HiveField(66, defaultValue: DefaultSettings.showLyricsTimestamps)
@@ -438,10 +457,12 @@ class FinampSettings {
   @HiveField(67, defaultValue: DefaultSettings.lyricsAlignment)
   LyricsAlignment lyricsAlignment;
 
-  @HiveField(68, defaultValue: DefaultSettings.showStopButtonOnMediaNotification)
+  @HiveField(68,
+      defaultValue: DefaultSettings.showStopButtonOnMediaNotification)
   bool showStopButtonOnMediaNotification;
 
-  @HiveField(69, defaultValue: DefaultSettings.showSeekControlsOnMediaNotification)
+  @HiveField(69,
+      defaultValue: DefaultSettings.showSeekControlsOnMediaNotification)
   bool showSeekControlsOnMediaNotification;
 
   @HiveField(70, defaultValue: DefaultSettings.lyricsFontSize)
