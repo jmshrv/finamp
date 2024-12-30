@@ -18,6 +18,10 @@ class VolumeNormalizationSettingsScreen extends StatefulWidget {
 
 class _VolumeNormalizationSettingsScreenState
     extends State<VolumeNormalizationSettingsScreen> {
+  // Overwriting this value causes the childrens to update
+  // this is a required workaround because some input fields
+  // might not update when resetting to defaults
+  Key _updateChildren = UniqueKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,14 +29,19 @@ class _VolumeNormalizationSettingsScreenState
         title: Text(
             AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetNormalizationSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
+            setState(() {
+              FinampSettingsHelper.resetNormalizationSettings();
+              _updateChildren = UniqueKey(); // Trigger rebuilding of Children
+            });
+          })
         ],
       ),
       body: ListView(
         children: [
           const VolumeNormalizationSwitch(),
-          if (!Platform.isAndroid) const VolumeNormalizationIOSBaseGainEditor(),
+          if (!Platform.isAndroid)
+            VolumeNormalizationIOSBaseGainEditor(key: _updateChildren),
           const VolumeNormalizationModeSelector(),
         ],
       ),

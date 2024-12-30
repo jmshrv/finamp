@@ -21,23 +21,31 @@ class AudioServiceSettingsScreen extends StatefulWidget {
 
 class _AudioServiceSettingsScreenState
     extends State<AudioServiceSettingsScreen> {
+  // Overwriting this value causes the childrens to update
+  // this is a required workaround because some input fields
+  // might not update when resetting to defaults
+  Key _updateChildren = UniqueKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.audioService),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetAudioServiceSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
+            setState(() {
+              FinampSettingsHelper.resetAudioServiceSettings();
+              _updateChildren = UniqueKey(); // Trigger rebuilding of Children
+            });
+          })
         ],
       ),
       body: ListView(
         children: [
-          if (Platform.isAndroid) const StopForegroundSelector(),
-          const SongShuffleItemCountEditor(),
-          const BufferDurationListTile(),
+          if (Platform.isAndroid) StopForegroundSelector(key: _updateChildren),
+          SongShuffleItemCountEditor(key: _updateChildren),
+          BufferDurationListTile(key: _updateChildren),
           const LoadQueueOnStartupSelector(),
-          const PeriodicPlaybackSessionUpdateFrequencyEditor(),
+          PeriodicPlaybackSessionUpdateFrequencyEditor(key: _updateChildren),
           const ReportQueueToServerToggle(),
         ],
       ),
