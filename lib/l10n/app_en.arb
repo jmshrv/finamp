@@ -1813,5 +1813,21 @@
   "resetFiltersButton": "Reset filters",
   "@resetFiltersButton": {
     "description": "Button to reset filters on a list of items"
+  },
+  "resetSettingsPromptGlobal": "Are you sure you want to reset ALL settings?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "Yes I am!",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "resetSettingsPromptLocal": "Do you want to reset these settings back to default?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "genericCancel": "Cancel",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
   }
 }

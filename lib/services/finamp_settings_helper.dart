@@ -529,12 +529,12 @@ class FinampSettingsHelper {
             context: context,
             builder: (context) => ConfirmationPromptDialog(
                   promptText: isGlobal
-                      ? "Are you sure you want to reset ALL settings?"
-                      : "Do you want to reset these settings back to default?",
+                      ? AppLocalizations.of(context)!.resetSettingsPromptGlobal
+                      : AppLocalizations.of(context)!.resetSettingsPromptLocal,
                   confirmButtonText: isGlobal
-                      ? "Yes I am!"
+                      ? AppLocalizations.of(context)!.resetSettingsPromptGlobalConfirm
                       : AppLocalizations.of(context)!.reset,
-                  abortButtonText: "Cancel",
+                  abortButtonText: AppLocalizations.of(context)!.genericCancel,
                   onConfirmed: resetFunction,
                   onAborted: () {},
                 ));
