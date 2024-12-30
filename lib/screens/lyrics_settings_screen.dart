@@ -5,12 +5,11 @@ import 'package:hive/hive.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
-class LyricsSettingsScreen extends  StatefulWidget {
+class LyricsSettingsScreen extends StatefulWidget {
   const LyricsSettingsScreen({super.key});
   static const routeName = "/settings/lyrics";
   @override
-  State<LyricsSettingsScreen> createState() =>
-    _LyricsSettingsScreenState();
+  State<LyricsSettingsScreen> createState() => _LyricsSettingsScreenState();
 }
 
 class _LyricsSettingsScreenState extends State<LyricsSettingsScreen> {
@@ -21,9 +20,7 @@ class _LyricsSettingsScreenState extends State<LyricsSettingsScreen> {
         title: Text(AppLocalizations.of(context)!.lyricsScreen),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetLyricsSettings
-          )
+              context, FinampSettingsHelper.resetLyricsSettings)
         ],
       ),
       body: ListView(

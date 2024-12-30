@@ -10,8 +10,7 @@ class PlayerSettingsScreen extends StatefulWidget {
   const PlayerSettingsScreen({super.key});
   static const routeName = "/settings/player";
   @override
-  State<PlayerSettingsScreen>  createState() => 
-    _PlayerSettingsScreenState();
+  State<PlayerSettingsScreen> createState() => _PlayerSettingsScreenState();
 }
 
 class _PlayerSettingsScreenState extends State<PlayerSettingsScreen> {
@@ -19,14 +18,11 @@ class _PlayerSettingsScreenState extends State<PlayerSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.playerScreen),
-        actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetPlayerScreenSettings
-          )
-        ]
-      ),
+          title: Text(AppLocalizations.of(context)!.playerScreen),
+          actions: [
+            FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+                context, FinampSettingsHelper.resetPlayerScreenSettings)
+          ]),
       body: ListView(
         children: const [
           const ShowFeatureChipsToggle(),

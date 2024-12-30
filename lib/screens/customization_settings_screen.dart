@@ -26,9 +26,7 @@ class _CustomizationSettingsScreenState
         title: Text(AppLocalizations.of(context)!.customizationSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetCustomizationSettings
-          )
+              context, FinampSettingsHelper.resetCustomizationSettings)
         ],
       ),
       body: ListView(

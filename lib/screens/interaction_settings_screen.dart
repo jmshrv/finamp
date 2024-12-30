@@ -11,12 +11,12 @@ import '../components/InteractionSettingsScreen/disable_gestures.dart';
 import '../components/InteractionSettingsScreen/disable_vibration.dart';
 import '../components/InteractionSettingsScreen/swipe_insert_queue_next_selector.dart';
 
-class InteractionSettingsScreen extends  StatefulWidget {
+class InteractionSettingsScreen extends StatefulWidget {
   const InteractionSettingsScreen({super.key});
   static const routeName = "/settings/interactions";
   @override
   State<InteractionSettingsScreen> createState() =>
-    _InteractionSettingsScreenState();
+      _InteractionSettingsScreenState();
 }
 
 class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
@@ -27,9 +27,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
         title: Text(AppLocalizations.of(context)!.interactions),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetInteractionsSettings
-          )
+              context, FinampSettingsHelper.resetInteractionsSettings)
         ],
       ),
       body: ListView(

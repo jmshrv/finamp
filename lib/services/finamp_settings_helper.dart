@@ -336,10 +336,12 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void resetPlayerScreenSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.featureChipsConfiguration = finampSettingsTemp.featureChipsConfiguration.copyWith(enabled: true);
+    finampSettingsTemp.featureChipsConfiguration =
+        finampSettingsTemp.featureChipsConfiguration.copyWith(enabled: true);
     finampSettingsTemp.playerScreenCoverMinimumPadding = 1.5;
     finampSettingsTemp.suppressPlayerPadding = false;
     finampSettingsTemp.prioritizeCoverFactor = 8.0;
@@ -348,6 +350,7 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void resetLyricsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
@@ -359,6 +362,7 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void resetAlbumSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
@@ -367,7 +371,8 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
-  static void resetLayoutSettings() {    
+
+  static void resetLayoutSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
     ThemeModeHelper.setThemeMode(ThemeMode.system);
@@ -386,12 +391,14 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
-  static void resetTranscodingSettings()  {
+
+  static void resetTranscodingSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
     finampSettingsTemp.shouldTranscode = false;
     setTranscodeBitrate(320000);
-    finampSettingsTemp.transcodingSegmentContainer = FinampSegmentContainer.fragmentedMp4;
+    finampSettingsTemp.transcodingSegmentContainer =
+        FinampSegmentContainer.fragmentedMp4;
     finampSettingsTemp.shouldTranscodeDownloads = TranscodeDownloadsSetting.ask;
     finampSettingsTemp.downloadTranscodingCodec = FinampTranscodingCodec.opus;
     finampSettingsTemp.downloadTranscodeBitrate = 128000;
@@ -399,6 +406,7 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void resetDownloadSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
@@ -407,21 +415,23 @@ class FinampSettingsHelper {
     finampSettingsTemp.resyncOnStartup = true;
     finampSettingsTemp.preferQuickSyncs = true;
     finampSettingsTemp.shouldRedownloadTranscodes = false;
-    finampSettingsTemp.showDownloadsWithUnknownLibrary =  true;
+    finampSettingsTemp.showDownloadsWithUnknownLibrary = true;
     finampSettingsTemp.downloadWorkers = 5;
     finampSettingsTemp.maxConcurrentDownloads = 10;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void resetAudioServiceSettings() {
-    setAndroidStopForegroundOnPause(true); 
-    setSongShuffleItemCount(250);               // DOES NOT update UI
-    setBufferDuration(Duration(seconds: 600));  // DOES NOT update UI
+    setAndroidStopForegroundOnPause(true);
+    setSongShuffleItemCount(250); // DOES NOT update UI
+    setBufferDuration(Duration(seconds: 600)); // DOES NOT update UI
     setAutoloadLastQueueOnStartup(true);
     setPeriodicPlaybackSessionUpdateFrequencySeconds(150); // DOES NOT update UI
     setReportQueueToServer(false);
   }
+
   static void resetNormalizationSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
@@ -432,6 +442,7 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void resetInteractionsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
@@ -443,10 +454,10 @@ class FinampSettingsHelper {
     setKeepScreenOnOption(KeepScreenOnOption.whileLyrics);
     setKeepScreenOnWhileCharging(true);
 
-
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
+
   static void resetAllSettings() {
     resetTranscodingSettings();
     resetDownloadSettings();
@@ -460,7 +471,7 @@ class FinampSettingsHelper {
     resetLyricsSettings();
     resetAlbumSettings();
     resetTabsSettings();
-    
+
     LocaleHelper.setLocale(null); // Reset to System Language
   }
 
@@ -508,24 +519,25 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static IconButton makeSettingsResetButtonWithDialog(BuildContext context, Function() resetFunction, {bool isGlobal = false}) {
+  static IconButton makeSettingsResetButtonWithDialog(
+      BuildContext context, Function() resetFunction,
+      {bool isGlobal = false}) {
     // TODO: Replace the following Strings with localization
     return IconButton(
-      onPressed: () async{
+      onPressed: () async {
         await showDialog(
-          context: context,
-          builder: (context) => ConfirmationPromptDialog(
-            promptText: isGlobal
-              ? "Are you sure you want to reset ALL settings?"
-              : "Do you want to reset these settings back to default?",
-            confirmButtonText: isGlobal
-              ? "Yes I am!"
-              : AppLocalizations.of(context)!.reset,
-            abortButtonText: "Cancel",
-            onConfirmed: resetFunction,
-            onAborted: (){},
-          )
-        );
+            context: context,
+            builder: (context) => ConfirmationPromptDialog(
+                  promptText: isGlobal
+                      ? "Are you sure you want to reset ALL settings?"
+                      : "Do you want to reset these settings back to default?",
+                  confirmButtonText: isGlobal
+                      ? "Yes I am!"
+                      : AppLocalizations.of(context)!.reset,
+                  abortButtonText: "Cancel",
+                  onConfirmed: resetFunction,
+                  onAborted: () {},
+                ));
       },
       icon: const Icon(Icons.refresh),
       tooltip: AppLocalizations.of(context)!.resetToDefaults,

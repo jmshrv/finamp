@@ -18,12 +18,11 @@ import '../services/finamp_settings_helper.dart';
 import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
 import 'tabs_settings_screen.dart';
 
-class LayoutSettingsScreen extends  StatefulWidget {
+class LayoutSettingsScreen extends StatefulWidget {
   const LayoutSettingsScreen({super.key});
   static const routeName = "/settings/layout";
   @override
-  State<LayoutSettingsScreen> createState() =>
-    _LayoutSettingsScreenState();
+  State<LayoutSettingsScreen> createState() => _LayoutSettingsScreenState();
 }
 
 class _LayoutSettingsScreenState extends State<LayoutSettingsScreen> {
@@ -37,9 +36,7 @@ class _LayoutSettingsScreenState extends State<LayoutSettingsScreen> {
               title: Text(AppLocalizations.of(context)!.layoutAndTheme),
               actions: [
                 FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-                  context,
-                  FinampSettingsHelper.resetLayoutSettings
-                )
+                    context, FinampSettingsHelper.resetLayoutSettings)
               ],
             ),
             body: ListView(

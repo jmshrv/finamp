@@ -9,14 +9,12 @@ import '../components/TranscodingSettingsScreen/transcode_switch.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
-
-
-class TranscodingSettingsScreen extends  StatefulWidget {
+class TranscodingSettingsScreen extends StatefulWidget {
   const TranscodingSettingsScreen({super.key});
   static const routeName = "/settings/transcoding";
   @override
   State<TranscodingSettingsScreen> createState() =>
-    _TranscodingSettingsScreenState();
+      _TranscodingSettingsScreenState();
 }
 
 class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
@@ -27,9 +25,7 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
         title: Text(AppLocalizations.of(context)!.transcoding),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetTranscodingSettings
-          )
+              context, FinampSettingsHelper.resetTranscodingSettings)
         ],
       ),
       body: ListView(

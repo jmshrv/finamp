@@ -8,15 +8,16 @@ import '../components/VolumeNormalizationSettingsScreen/volume_normalization_ios
 import '../components/VolumeNormalizationSettingsScreen/volume_normalization_mode_selector.dart';
 import '../components/VolumeNormalizationSettingsScreen/volume_normalization_switch.dart';
 
-class VolumeNormalizationSettingsScreen extends  StatefulWidget {
+class VolumeNormalizationSettingsScreen extends StatefulWidget {
   const VolumeNormalizationSettingsScreen({super.key});
   static const routeName = "/settings/volume-normalization";
   @override
   State<VolumeNormalizationSettingsScreen> createState() =>
-    _VolumeNormalizationSettingsScreenState();
+      _VolumeNormalizationSettingsScreenState();
 }
 
-class _VolumeNormalizationSettingsScreenState extends State<VolumeNormalizationSettingsScreen> {
+class _VolumeNormalizationSettingsScreenState
+    extends State<VolumeNormalizationSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,9 +26,7 @@ class _VolumeNormalizationSettingsScreenState extends State<VolumeNormalizationS
             AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetNormalizationSettings
-          )
+              context, FinampSettingsHelper.resetNormalizationSettings)
         ],
       ),
       body: ListView(
