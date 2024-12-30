@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
-import '../components/LayoutSettingsScreen/player_screen_minimum_cover_padding_editor.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
-class LyricsSettingsScreen extends StatelessWidget {
+class LyricsSettingsScreen extends StatefulWidget {
   const LyricsSettingsScreen({super.key});
-
   static const routeName = "/settings/lyrics";
+  @override
+  State<LyricsSettingsScreen> createState() => _LyricsSettingsScreenState();
+}
 
+class _LyricsSettingsScreenState extends State<LyricsSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.lyricsScreen),
+        actions: [
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+              context, FinampSettingsHelper.resetLyricsSettings)
+        ],
       ),
       body: ListView(
         children: const [

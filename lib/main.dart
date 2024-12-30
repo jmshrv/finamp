@@ -260,7 +260,7 @@ Future<void> setupHive() async {
 
   // If no ThemeMode is set, we set it to the default (system)
   Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
-  if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
+  if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(DefaultSettings.theme);
 
   final isar = await Isar.open(
     [

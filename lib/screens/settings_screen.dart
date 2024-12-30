@@ -19,10 +19,14 @@ import 'transcoding_settings_screen.dart';
 import 'view_selector.dart';
 import 'volume_normalization_settings_screen.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
-
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
   static const routeName = "/settings";
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   static const repoLink = "https://github.com/jmshrv/finamp";
   static const releaseNotesLink = "https://github.com/jmshrv/finamp/releases";
   static const translationsLink = "https://hosted.weblate.org/projects/finamp";
@@ -33,6 +37,9 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
         actions: [
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+              context, FinampSettingsHelper.resetAllSettings,
+              isGlobal: true),
           Semantics.fromProperties(
             properties: SemanticsProperties(
               label: AppLocalizations.of(context)!.about,

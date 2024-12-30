@@ -61,7 +61,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   double iosBaseVolumeGainFactor = 1.0;
-  
+
   final outputSwitcherChannel =
       MethodChannel('com.unicornsonlsd.finamp/output_switcher');
 

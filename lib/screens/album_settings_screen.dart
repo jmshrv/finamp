@@ -5,16 +5,23 @@ import 'package:hive/hive.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
-class AlbumSettingsScreen extends StatelessWidget {
+class AlbumSettingsScreen extends StatefulWidget {
   const AlbumSettingsScreen({super.key});
-
   static const routeName = "/settings/layout/album";
+  @override
+  State<AlbumSettingsScreen> createState() => _AlbumSettingsScreenState();
+}
 
+class _AlbumSettingsScreenState extends State<AlbumSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.albumScreen),
+        actions: [
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+              context, FinampSettingsHelper.resetAlbumSettings)
+        ],
       ),
       body: ListView(
         children: const [
