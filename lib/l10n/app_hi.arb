@@ -80,7 +80,7 @@
       }
     }
   },
-  "queueLoadingMessage": "कतार को पुनर्स्थापित किया जा रहा..।",
+  "queueLoadingMessage": "कतार को पुनर्स्थापित किया जा रहा…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -228,15 +228,15 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "activeDownloadSize": "डाउनलोड हो रहा..।",
+  "activeDownloadSize": "डाउनलोड हो रहा…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "missingDownloadSize": "मिट रहा..।",
+  "missingDownloadSize": "मिट रहा…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
-  "syncingDownloadSize": "सिंक्रोनाइज हो रहा..।",
+  "syncingDownloadSize": "सिंक्रोनाइज हो रहा…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -575,7 +575,7 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "connectingToServer": "सर्वर से जोड़ा जा रहा है..।",
+  "connectingToServer": "सर्वर से जोड़ा जा रहा…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -583,7 +583,7 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "सर्वर को ढूंढ रहे..।",
+  "loginFlowLocalNetworkServersScanningForServers": "सर्वर को ढूंढ रहे…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -745,7 +745,7 @@
       }
     }
   },
-  "dlRunning": "{count} चालू",
+  "dlRunning": "{count} हो रहे",
   "@dlRunning": {
     "placeholders": {
       "count": {
