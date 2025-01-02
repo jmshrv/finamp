@@ -1,8 +1,6 @@
 {
   "serverUrl": "URL del servidor",
   "@serverUrl": {},
-  "downloaded": "DESCARREGAT",
-  "@downloaded": {},
   "removeFavourite": "Suprimeix el favorit",
   "@removeFavourite": {},
   "addFavourite": "Afegeix favorit",
@@ -11,8 +9,6 @@
   "@addedToQueue": {},
   "addToMix": "Afegir a la barreja",
   "@addToMix": {},
-  "statusError": "ERROR D'ESTAT",
-  "@statusError": {},
   "startupError": "S'ha produït un error durant l'inici de l'aplicació. L'error va ser: {error}\n\nCreeu un problema a github.com/UnicornsOnLSD/finamp amb una captura de pantalla d'aquesta pàgina. Si aquest problema persisteix, podeu esborrar les dades de l'aplicació per restablir-la.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -31,10 +27,6 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "transcode": "TRANSCODIFICACIÓ",
-  "@transcode": {},
-  "direct": "DIRECTE",
-  "@direct": {},
   "instantMix": "Barreja instantània",
   "@instantMix": {},
   "addToQueue": "Afegir a la cua",

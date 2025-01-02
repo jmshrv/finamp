@@ -91,8 +91,6 @@
   "@instantMix": {},
   "queue": "Kolejka",
   "@queue": {},
-  "direct": "BEZPOŚREDNIE",
-  "@direct": {},
   "startingInstantMix": "Rozpocznij szybki miks.",
   "@startingInstantMix": {},
   "anErrorHasOccured": "Wystąpił błąd.",
@@ -103,16 +101,8 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL musi zaczynać się od http:// lub https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "username": "Nazwa użytkownika",
   "@username": {},
-  "urlTrailingSlash": "URL nie może kończyć się znakiem \"/\"",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "selectMusicLibraries": "Wybierz biblioteki z muzyką",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
@@ -135,8 +125,6 @@
   "@queueReplaced": {},
   "error": "Błąd",
   "@error": {},
-  "noErrors": "Brak błędów!",
-  "@noErrors": {},
   "addFavourite": "Dodaj do ulubionych",
   "@addFavourite": {},
   "addToPlaylistTooltip": "Dodaj do playlisty",
@@ -181,8 +169,6 @@
       }
     }
   },
-  "downloaded": "Z POBRANYCH",
-  "@downloaded": {},
   "addDownloadLocation": "Dodaj lokalizację pobierania",
   "@addDownloadLocation": {},
   "downloadLocations": "Lokalizacje pobierania",
@@ -199,10 +185,6 @@
   "@enableTranscoding": {},
   "downloadedSongsWillNotBeDeleted": "Pobrane utwory nie zostaną usunięte",
   "@downloadedSongsWillNotBeDeleted": {},
-  "downloadErrors": "Błędy pobierania",
-  "@downloadErrors": {},
-  "downloadErrorsTitle": "Błędy pobierania",
-  "@downloadErrorsTitle": {},
   "light": "Jasny",
   "@light": {},
   "customLocation": "Własna lokalizacja",
@@ -233,14 +215,6 @@
   "@revenue": {},
   "downloadCount": "{count,plural, =1{{count} pobranie} other{{count} pobrań}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} obraz} other{{count} obrazów}}",
-  "@downloadedImagesCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -289,12 +263,8 @@
   "@noAlbum": {},
   "noItem": "Brak elementu",
   "@noItem": {},
-  "streaming": "STRUMIENIOWANIE",
-  "@streaming": {},
   "replaceQueue": "Zastąp kolejkę",
   "@replaceQueue": {},
-  "statusError": "STATUS BŁĘDU",
-  "@statusError": {},
   "responseError": "{error} Kod statusu {statusCode}.",
   "@responseError": {
     "placeholders": {
@@ -338,28 +308,6 @@
   },
   "appDirectory": "Folder aplikacji",
   "@appDirectory": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} utwór} other{{count} utworów}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "bitrateSubtitle": "Wyższy bitrate dostarcza lepszą jakość, ale kosztem większego zużycia transferu danych.",
   "@bitrateSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Ukryj wykonawców utworu jeśli odpowiadają wykonawcom albumu",
@@ -430,8 +378,6 @@
       }
     }
   },
-  "transcode": "TRANSKODOWANE",
-  "@transcode": {},
   "applicationLegalese": "Licencja Mozilla Public License 2.0. Kod źródłowy dostępny na:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
   "errorScreenError": "Wystąpił błąd podczas pobierania listy błędów. Utwórz zgłoszenie na portalu GitHub i usuń dane aplikacji",
@@ -533,7 +479,5 @@
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "noMusicLibrariesBody": "Finamp nie mógł znaleźć żadnych bibliotek muzycznych. Upewnij się, że serwer Jellyfin zawiera co najmniej jedną bibliotekę z typem zawartości ustawionym na \"Muzyka\".",
-  "@noMusicLibrariesBody": {},
-  "redesignBeta": "Przeprojektowanie Beta",
-  "@redesignBeta": {}
+  "@noMusicLibrariesBody": {}
 }

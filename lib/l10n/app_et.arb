@@ -5,14 +5,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL alguses peab olema http:// või https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL ei tohi lõppeda kaldkriipsuga",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Kasutajanimi",
   "@username": {},
   "password": "Parool",
@@ -99,8 +91,6 @@
   "@runtime": {},
   "downloadMissingImages": "Laadi alla puuduvad pildid",
   "@downloadMissingImages": {},
-  "downloadErrors": "Allalaadimisvead",
-  "@downloadErrors": {},
   "budget": "Eelarve",
   "@budget": {},
   "premiereDate": "Avaldamise kuupäev",
@@ -116,14 +106,6 @@
   },
   "downloadCount": "{count,plural, =1{{count} allalaadimine} other{{count} allalaadimist}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} üksus} other{{count} üksust}}",
-  "@downloadedItemsCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -146,20 +128,6 @@
       }
     }
   },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "dlEnqueued": "{count} järjekorras",
   "@dlEnqueued": {
     "placeholders": {
@@ -176,10 +144,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Allalaadimisvead",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Pole vigu!",
-  "@noErrors": {},
   "errorScreenError": "Vigade loendi saamisel tekkis viga! Siinkohal peaksid ilmselt lihtsalt looma probleemi GitHubis ja kustutama rakenduse andmed",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Allalaadimise ID-st laulu hankimine nurjus",
@@ -332,16 +296,6 @@
   "@noArtist": {},
   "unknownArtist": "Tundmatu esitaja",
   "@unknownArtist": {},
-  "streaming": "VOOGESITUS",
-  "@streaming": {},
-  "downloaded": "ALLALAADITUD",
-  "@downloaded": {},
-  "transcode": "TRANSKOODI",
-  "@transcode": {},
-  "direct": "OTSE",
-  "@direct": {},
-  "statusError": "OLEKUVIGA",
-  "@statusError": {},
   "queue": "Järjekord",
   "@queue": {},
   "addToQueue": "Lisa järjekorda",
@@ -453,14 +407,6 @@
       "error": {
         "type": "String",
         "example": "Failed to open download DB"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} pilt} other{{count} pilti}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
       }
     }
   },

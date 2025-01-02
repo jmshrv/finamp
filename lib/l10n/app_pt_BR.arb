@@ -5,14 +5,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL deve começar com http:// ou https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL não pode incluir a barra final",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Usuário",
   "@username": {},
   "password": "Senha",
@@ -76,43 +68,11 @@
       }
     }
   },
-  "downloadErrors": "Erros de transferência",
-  "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} baixada} other{{count} baixadas}}",
   "@downloadCount": {
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },
@@ -140,10 +100,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erros de Transferência",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Sem erros!",
-  "@noErrors": {},
   "songs": "Músicas",
   "@songs": {},
   "startupError": "Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, crie um problema/issue em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro persistir, limpe os dados para restaurar o aplicativo.",
@@ -332,10 +288,6 @@
   "@noAlbum": {},
   "noItem": "Nenhum Ítem",
   "@noItem": {},
-  "direct": "DIRETO",
-  "@direct": {},
-  "statusError": "ERRO DE CONDIÇÃO",
-  "@statusError": {},
   "addToQueue": "Adicionar à Fila",
   "@addToQueue": {},
   "cancelSleepTimer": "Cancelar o Cronômetro de Sono?",
@@ -344,8 +296,6 @@
   "@addToPlaylistTitle": {},
   "playlistCreated": "Lista de reprodução criada.",
   "@playlistCreated": {},
-  "downloaded": "TRANSFERIDO",
-  "@downloaded": {},
   "invalidNumber": "Número Inválido",
   "@invalidNumber": {},
   "addToPlaylistTooltip": "Adicionar à lista de reprodução",
@@ -358,8 +308,6 @@
   "@replaceQueue": {},
   "yesButtonLabel": "SIM",
   "@yesButtonLabel": {},
-  "streaming": "TRANSMITINDO",
-  "@streaming": {},
   "instantMix": "Mistura Instantânea",
   "@instantMix": {},
   "goToAlbum": "Ir para Álbum",
@@ -368,8 +316,6 @@
   "@newPlaylist": {},
   "noArtist": "Nenhum Artista",
   "@noArtist": {},
-  "transcode": "TRANSCODIFICAR",
-  "@transcode": {},
   "startMixNoSongsArtist": "Aperte e segure num artista para adicionar ou remover da mistura antes de iniciá-la",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
@@ -534,57 +480,6 @@
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Mostrar rolagem rápida",
   "@showFastScroller": {},
-  "redesignBeta": "Teste o beta",
-  "@redesignBeta": {},
-  "playbackOrderLinearTooltip": "Tocando em ordem. Aperte para ativar.",
-  "@playbackOrderLinearTooltip": {},
-  "playbackOrderShuffledTooltip": "Embaralhando. Aperte para ativar.",
-  "@playbackOrderShuffledTooltip": {},
-  "loopModeAllTooltip": "Repetir tudo. Aperte para ativar.",
-  "@loopModeAllTooltip": {},
-  "loopModeOneTooltip": "Repetir uma. Aperte para ativar.",
-  "@loopModeOneTooltip": {},
-  "loopModeNoneTooltip": "Sem repetição. Aperte para ativar.",
-  "@loopModeNoneTooltip": {},
-  "skipToNext": "Pular para próxima música",
-  "@skipToNext": {},
-  "skipToPrevious": "Pular para música anterior",
-  "@skipToPrevious": {},
-  "deleteFromDevice": "Remover do dispositivo",
-  "@deleteFromDevice": {},
-  "download": "Baixar",
-  "@download": {},
-  "sync": "Sincronizar com servidor",
-  "@sync": {},
-  "downloadArtist": "Baixar todos os álbuns de {artist}",
-  "@downloadArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "shuffleArtist": "Tocar todos os álbuns de {artist} em modo aleatório",
-  "@shuffleArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "playArtist": "Tocar todos os álbuns de {artist}",
-  "@playArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "togglePlayback": "Ativar reprodução",
-  "@togglePlayback": {},
   "about": "Sobre Finamp",
   "@about": {}
 }
