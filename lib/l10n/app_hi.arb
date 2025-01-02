@@ -246,7 +246,7 @@
   "@maxConcurrentDownloads": {
     "description": "Title of setting controlling max concurrent downloads."
   },
-  "downloadsWorkersSetting": "डाउनलोड वर्कर संख्या",
+  "downloadsWorkersSetting": "डाउनलोड वर्कर मात्रा",
   "@downloadsWorkersSetting": {
     "description": "Title of setting controlling download worker count."
   },
@@ -579,7 +579,7 @@
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
-  "loginFlowLocalNetworkServers": "आपके स्थानीय (local) नेटवर्क पर सर्वर:",
+  "loginFlowLocalNetworkServers": "आपके स्थानीय नेटवर्क पर सर्वर:",
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
@@ -639,7 +639,7 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "logs": "लॉग (logs)",
+  "logs": "लॉग",
   "@logs": {},
   "next": "अगला",
   "@next": {},
@@ -812,7 +812,7 @@
   },
   "addButtonLabel": "जोड़ें",
   "@addButtonLabel": {},
-  "shareLogs": "लॉग (logs) शेयर करें",
+  "shareLogs": "लॉग शेयर करें",
   "@shareLogs": {},
   "message": "संदेश",
   "@message": {},
@@ -1070,7 +1070,7 @@
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
-  "viewLogs": "लॉग (logs) देखें",
+  "viewLogs": "लॉग देखें",
   "@viewLogs": {
     "description": "Label for button shown during the login process that allows the user to view the app logs"
   },
@@ -1158,7 +1158,7 @@
   "@location": {},
   "downloadsQueued": "डाउनलोड तैयार है, फ़ाइलें डाउनलोड हो रही हैं",
   "@downloadsQueued": {},
-  "logsCopied": "लॉग (logs) कॉपी किए गए।",
+  "logsCopied": "लॉग कॉपी किए गए।",
   "@logsCopied": {},
   "required": "आवश्यक",
   "@required": {},
@@ -1280,7 +1280,7 @@
       }
     }
   },
-  "gridCrossAxisCount": "{value} ग्रिड क्रॉस-एक्सिस संख्या",
+  "gridCrossAxisCount": "{value} ग्रिड क्रॉस-एक्सिस मात्रा",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
