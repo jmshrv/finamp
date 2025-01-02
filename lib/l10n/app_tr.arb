@@ -9,27 +9,27 @@
       }
     }
   },
-  "serverUrl": "Sunucunun URL'i",
+  "serverUrl": "Sunucu URL'si",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "Jellyfin sunucunuza uzaktan erişmek istiyorsanız dış IP adresinizi kullanmalısınız.\n\nEğer sunucunuz HTTP portlarından (80/443) birindeyse port belirtmenize gerek yok. Sunucunuz bir reverse proxy'nin arkasındaysa muhtemelen bu durum geçerlidir.",
+  "internalExternalIpExplanation": "Jellyfin sunucunuza uzaktan erişmek istiyorsanız dış IP adresinizi kullanmalısınız.\n\nSunucunuz bir HTTP varsayılan bağlantı noktasında (80 veya 443) veya Jellyfin'in varsayılan bağlantı noktasında (8096) bulunuyorsa, bağlantı noktasını belirtmeniz gerekmez.\n\nURL doğruysa, giriş alanının altında sunucunuzla ilgili bazı bilgilerin açıldığını görmelisiniz.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "emptyServerUrl": "Sunucu URL'i boş bırakılamaz",
+  "emptyServerUrl": "Sunucu URL'si boş bırakılamaz",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
   "username": "Kullanıcı adı",
   "@username": {},
-  "password": "Parola",
+  "password": "Şifre",
   "@password": {},
-  "logs": "Uygulama dökümleri",
+  "logs": "Günlükler",
   "@logs": {},
   "next": "Sıradaki",
   "@next": {},
-  "unknownName": "Bilinmeyen İsim",
+  "unknownName": "Bilinmeyen ad",
   "@unknownName": {},
-  "songs": "Şarkılar",
+  "songs": "Parçalar",
   "@songs": {},
   "albums": "Albümler",
   "@albums": {},
@@ -84,7 +84,7 @@
   },
   "errorScreenError": "Hata listesi oluşturulurken hata meydana geldi. Bu noktada, GitHub'da bir sorun oluşturmalı ve uygulama verilerini silmelisiniz",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "İndirme ID'sinden şarkıya ulaşılamadı",
+  "failedToGetSongFromDownloadId": "İndirme kimliğinden parça alınamadı",
   "@failedToGetSongFromDownloadId": {},
   "error": "Hata",
   "@error": {},
@@ -104,11 +104,11 @@
       }
     }
   },
-  "playButtonLabel": "OYNAT",
+  "playButtonLabel": "Oynat",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "KARIŞTIR",
+  "shuffleButtonLabel": "Karıştır",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Şarkı} other{{count} Şarkı}}",
+  "songCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -116,13 +116,13 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Çalma listesinin adını düzenle",
+  "editPlaylistNameTooltip": "Çalma listesi adını düzenle",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Çalma Listesinin Adını Düzenle",
+  "editPlaylistNameTitle": "Çalma Listesi Adını Düzenle",
   "@editPlaylistNameTitle": {},
   "required": "Gerekli",
   "@required": {},
-  "updateButtonLabel": "GÜNCELLE",
+  "updateButtonLabel": "Güncelle",
   "@updateButtonLabel": {},
   "playlistNameUpdated": "Çalma listesinin adı güncellendi.",
   "@playlistNameUpdated": {},
@@ -134,9 +134,9 @@
   "@addDownloads": {},
   "location": "Lokasyon",
   "@location": {},
-  "downloadsQueued": "İndirilenler eklendi.",
+  "downloadsQueued": "Hazırlananları indirin, dosyalar indiriliyor",
   "@downloadsQueued": {},
-  "addButtonLabel": "EKLE",
+  "addButtonLabel": "Ekle",
   "@addButtonLabel": {},
   "shareLogs": "Uygulama dökümlerini paylaş",
   "@shareLogs": {},
@@ -144,7 +144,7 @@
   "@logsCopied": {},
   "stackTrace": "Fonksiyon Çağrı Yığını",
   "@stackTrace": {},
-  "downloadLocations": "İndirilenler Lokasyonları",
+  "downloadLocations": "İndirilenler Konumları",
   "@downloadLocations": {},
   "transcoding": "Yeniden kodlama (transcoding)",
   "@transcoding": {},
@@ -166,7 +166,7 @@
   "@customLocation": {},
   "appDirectory": "Uygulama Klasörü",
   "@appDirectory": {},
-  "addDownloadLocation": "İndirme Lokasyonu Ekle",
+  "addDownloadLocation": "İndirme Konumu Ekle",
   "@addDownloadLocation": {},
   "selectDirectory": "Klasör Seç",
   "@selectDirectory": {},
@@ -180,7 +180,7 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Şarkı duraklatıldığında bildirimin temizlenebilmesini sağlar. Ayrıca Android'in hizmeti kapatmasına izin verir.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Karıştırılacak Tüm Şarkıların Sayısı",
+  "shuffleAllSongCount": "Karıştırılacak Tüm Parçaların Sayısı",
   "@shuffleAllSongCount": {},
   "viewTypeSubtitle": "Müzik ekranı için görüntüleme tipi",
   "@viewTypeSubtitle": {},
@@ -206,9 +206,9 @@
   "@showTextOnGridView": {},
   "useCoverAsBackground": "Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını göster",
   "@useCoverAsBackground": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Albüm ile şarkı sanatçısı aynıysa gösterme",
+  "hideSongArtistsIfSameAsAlbumArtists": "Albüm sanatçılarıyla aynıysa parça sanatçılarını gizle",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Eğer albüm sanatçısından farklı değilse şarkı sanatçısını albüm ekranında gösterilip gösterilmeyeceğini belirler.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Albüm sanatçılarından farklı değilse parça sanatçılarının albüm ekranında gösterilip gösterilmeyeceği.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "Jestleri devre dışı bırak",
   "@disableGesture": {},
@@ -236,9 +236,9 @@
   "@tabs": {},
   "cancelSleepTimer": "Uyuma Zamanlayıcısını İptal Et?",
   "@cancelSleepTimer": {},
-  "yesButtonLabel": "EVET",
+  "yesButtonLabel": "Evet",
   "@yesButtonLabel": {},
-  "noButtonLabel": "HAYIR",
+  "noButtonLabel": "Hayır",
   "@noButtonLabel": {},
   "setSleepTimer": "Uyuma Zamanlayıcısını Ayarla",
   "@setSleepTimer": {},
@@ -252,13 +252,13 @@
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Listeye Ekle",
   "@addToPlaylistTitle": {},
-  "removeFromPlaylistTooltip": "Çalma listesinden çıkart",
+  "removeFromPlaylistTooltip": "Bu oynatma listesinden çıkart",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Listeden Çıkart",
+  "removeFromPlaylistTitle": "Bu Oynatma Listesinden Çıkart",
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Yeni Çalma Listesi",
   "@newPlaylist": {},
-  "createButtonLabel": "OLUŞTUR",
+  "createButtonLabel": "Oluştur",
   "@createButtonLabel": {},
   "playlistCreated": "Çalma listesi oluşturuldu.",
   "@playlistCreated": {},
@@ -278,7 +278,7 @@
   "@addedToQueue": {},
   "queueReplaced": "Kuyruk değiştirildi.",
   "@queueReplaced": {},
-  "removedFromPlaylist": "Çalma listesinden çıkarıldı.",
+  "removedFromPlaylist": "Oynatma listesinden çıkarıldı.",
   "@removedFromPlaylist": {},
   "startingInstantMix": "Anlık mix başlatılıyor.",
   "@startingInstantMix": {},
@@ -329,7 +329,7 @@
   "@shuffleAll": {},
   "playCount": "Oynatma Sayısı",
   "@playCount": {},
-  "name": "İsim",
+  "name": "Ad",
   "@name": {},
   "offlineMode": "Çevrim dışı Mod",
   "@offlineMode": {},
@@ -385,9 +385,9 @@
   "@message": {},
   "areYouSure": "Emin misiniz?",
   "@areYouSure": {},
-  "downloadedSongsWillNotBeDeleted": "İndirilmiş şarkılar silinmeyecek",
+  "downloadedSongsWillNotBeDeleted": "İndirilen parçalar silinmeyecek",
   "@downloadedSongsWillNotBeDeleted": {},
-  "applicationLegalese": "Mozilla Public License 2.0 ile lisanslandı. Kaynak koda buradan ulaşılabilir:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Mozilla Kamu Lisansı 2.0 ile lisanslanmıştır.\nKaynak kodu {sourceCodeLink} adresinde mevcuttur.",
   "@applicationLegalese": {},
   "audioService": "Ses Servisi",
   "@audioService": {},
@@ -395,7 +395,7 @@
   "@layoutAndTheme": {},
   "enterLowPriorityStateOnPause": "Bekletmede Düşük Öncelik Durumuna Geç",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCountSubtitle": "Tüm şarkıları karıştır butonuna tıklandığında karıştırılacak şarkıların sayısı.",
+  "shuffleAllSongCountSubtitle": "Tüm parçaları karıştır düğmesini kullanırken karıştırılacak parça sayısı.",
   "@shuffleAllSongCountSubtitle": {},
   "viewType": "Görüntüleme Tipi",
   "@viewType": {},
@@ -409,11 +409,11 @@
   "@instantMix": {},
   "goToAlbum": "Albüme Git",
   "@goToAlbum": {},
-  "addFavourite": "Favoriye Ekle",
+  "addFavourite": "Favoriye ekle",
   "@addFavourite": {},
-  "removeFavourite": "Favoriden Çıkart",
+  "removeFavourite": "Favoriden çıkart",
   "@removeFavourite": {},
-  "responseError401": "{error} Durum kodu {statusCode}. Muhtemelen yanlış kullanıcı adı veya şifreyi kullandınız ya da uygulamadan çıkış yaptınız.",
+  "responseError401": "{error} Durum kodu {statusCode}. Bu muhtemelen yanlış kullanıcı adı/şifre kullandığınız veya istemcinizin oturuma izin vermediği anlamına gelir.",
   "@responseError401": {
     "placeholders": {
       "error": {
@@ -442,7 +442,7 @@
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
-  "refresh": "YENİLE",
+  "refresh": "Yenile",
   "@refresh": {},
   "noMusicLibrariesBody": "Finamp herhangi bir müzik kütüphanesi bulamadı. Lütfen Jellyfin sunucunun içerik türü \"Müzik\" olarak ayarlanmış en az bir kütüphaneye sahip olduğundan emin ol.",
   "@noMusicLibrariesBody": {},
@@ -454,7 +454,7 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsPrompt": "Bu aygıttan {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' silmek istediğinizden emin misiniz?",
+  "deleteDownloadsPrompt": "Bu cihazdan {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' silmek istediğinizden emin misiniz?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -470,7 +470,7 @@
   },
   "deleteDownloadsAbortButtonText": "İptal",
   "@deleteDownloadsAbortButtonText": {},
-  "syncDownloadedPlaylists": "İndirilen çalma listelerini eşzamanla",
+  "syncDownloadedPlaylists": "İndirilen oynatma listelerini eş zamanla",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Hızlı kaydırıcıyı göster",
   "@showFastScroller": {},
@@ -479,5 +479,860 @@
   "swipeInsertQueueNext": "Kaydırılan Şarkıyı Ardından Oynat",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Şarkı listesinde kaydırıldığında bir şarkıyı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.",
-  "@swipeInsertQueueNextSubtitle": {}
+  "@swipeInsertQueueNextSubtitle": {},
+  "about": "Finamp Hakkında",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "loopModeOneButtonLabel": "Bu parçayı döngüye al",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "volumeNormalizationSwitchSubtitle": "Parçaların ses yüksekliğini normalleştirmek için kazanç bilgilerini kullan (\"Replay Gain\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "scrollToCurrentTrack": "Geçerli parçaya kaydır",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "confirmDownloadStarted": "İndirme başladı",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "loginFlowAuthenticationHeading": "Hesabınıza giriş yapın",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "showArtistChipImage": "Sanatçı görsellerinde sanatçı adını göster",
+  "@showArtistChipImage": {},
+  "loginFlowQuickConnectPrompt": "Hızlı bağlantı kodunu kullan",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowSelectAUser": "Kullanıcı seçin",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "maxConcurrentDownloadsSubtitle": "Eş anlı indirmelerin artırılması, arka planda indirme işlemlerinin artmasına izin verebilir ancak bazı indirmelerin çok büyük olması durumunda başarısız olmasına veya bazı durumlarda aşırı gecikmeye neden olabilir.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "preferQuickSyncSwitchSubtitle": "Eşleme gerçekleştirilirken, bazı sabit ögeler (parçalar ve albümler gibi) güncellenmez. İndirme onarımında her zaman tam eşleme gerçekleştirilir.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "fiveLatestAlbumsSetting": "En yeni 5 albümü indir",
+  "@fiveLatestAlbumsSetting": {},
+  "removeFromPlaylistPrompt": "'{itemName}', '{playlistName}' oynatma listesinden kaldırılsın mı?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "finampTagline": "Açık kaynaklı Jellyfin ses oynatıcı",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionPrompt": "Harika insanlar tarafından boş zamanlarında yapıldı.\nSen de onlardan biri olabilirsin!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "GitHub'da Finamp'a katkıda bulunun:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "En son sürüm notlarını okuyun:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "Hoş geldiniz,",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowGetStarted": "Başlayın!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "loginFlowSlogan": "Senin müziğin, senin istediğin şekilde.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "aboutTranslations": "Finamp'ın dilinize çevrilmesine yardımcı olun:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "aboutThanks": "Finamp'ı kullandığınız için teşekkürler!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "back": "Geri",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "viewLogs": "Günlükleri göster",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "changeLanguage": "Dili değiştir",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "Jellyfin'e Bağlan",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "serverUrlHint": "örneğin demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "loginFlowLocalNetworkServers": "Yerel ağınızdaki sunucular:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Sunucular taranıyor...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "Hesabınızı seçin",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "connectingToServer": "Sunucuya bağlanılıyor...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "serverUrlInfoButtonTooltip": "Sunucu URL'si yardımı",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "backToServerSelection": "Sunucu seçimine geri dön",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "Adsız kullanıcı",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "Özel kullanıcı",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "backToAccountSelection": "Hesap seçimine geri dön",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectInstructions": "Jellyfin uygulamasını veya internet sitesini açın, kullanıcı simgenize tıklayın ve \"Hızlı Bağlan\"ı seçin.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectDisabled": "\"Hızlı Bağlan\" bu sunucuda devre dışı bırakıldı.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "orDivider": "veya",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "usernameHint": "Kullanıcı adınızı girin",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Lütfen bir kullanıcı adı girin",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "Şifrenizi girin",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Giriş",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "title": "Başlık",
+  "@title": {},
+  "activeDownloads": "Etkin İndirmeler",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Etkin İndirmeler",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Etkin indirme yok.",
+  "@noActiveDownloads": {},
+  "playbackSpeedControlSettingSubtitle": "Oynatıcı ekranı menüsünde oynatma hızı kontrollerinin gösterilip gösterilmeyeceği",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "automatic": "Otomatik",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Göster",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Gizle",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Hız",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "Sıfırla",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Uygula",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "showArtistsTopSongs": "En iyi parçaları sanatçı görünümünde göster",
+  "@showArtistsTopSongs": {},
+  "showArtistsTopSongsSubtitle": "Bir sanatçının en çok dinlenen ilk 5 parçasının gösterilip gösterilmeyeceği.",
+  "@showArtistsTopSongsSubtitle": {},
+  "playerScreen": "Oynatıcı Ekranı",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "hours": "Saat",
+  "@hours": {},
+  "seconds": "Saniye",
+  "@seconds": {},
+  "sleepTimerRemainingTime": "{time} dakika içinde uyuyor",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTooltip": "Daha fazla oynatma listesine ekle",
+  "@addToMorePlaylistsTooltip": {},
+  "removeFromPlaylistNamedTooltip": "'{playlistName}' oynatma listesinden kaldır",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "'{playlistName}' Oynatma Listesinden kaldır",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "unknownAlbum": "Bilinmeyen Albüm",
+  "@unknownAlbum": {},
+  "playbackModeLocal": "Yerel oynatma",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "playbackModeDirectPlaying": "Doğrudan oynatma",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "goToArtist": "Sanatçıya git",
+  "@goToArtist": {},
+  "goToGenre": "Türe git",
+  "@goToGenre": {},
+  "confirmFavoriteRemoved": "Favoriden kaldırıldı",
+  "@confirmFavoriteRemoved": {},
+  "confirmAddedToPlaylist": "Oynatma listesine eklendi.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "skipToPreviousTrackButtonTooltip": "Başlangıca veya önceki parçaya atla",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "skipToNextTrackButtonTooltip": "Sonraki parçaya atla",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "previousTracks": "Önceki Parçalar",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "playbackHistory": "Oynatma Geçmişi",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "shareOfflineListens": "Çevrim dışı dinlemeleri paylaş",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "yourLikes": "Beğendikleriniz",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "shuffleAllQueueSource": "Tümünü Karıştır",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderShuffledButtonLabel": "Parçaları karıştır",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Parçalar karıştırılıyor. Sırayla oynatmak için dokun.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "loopModeNoneButtonLabel": "Döngüde değil",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeAllButtonLabel": "Tümünü döngüye al",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queueRestoreSubtitle1": "Oynatılan: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Geçerli oynatma durumunun sunucuya saniye cinsinden ne sıklıkta gönderileceği. Oturumun zaman aşımına uğramasını önlemek için bu süre 5 dakikadan (300 saniye) kısa olmalıdır.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topSongs": "En İyi Parçalar",
+  "@topSongs": {},
+  "shuffleAlbums": "Albümleri Karıştır",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "close": "Kapat",
+  "@close": {},
+  "resetToDefaults": "Varsayılanlara sıfırla",
+  "@resetToDefaults": {},
+  "moreInfo": "Daha Fazla Bilgi",
+  "@moreInfo": {},
+  "volumeNormalizationModeAlbumBased": "Albüm tabanlı",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumOnly": "Yalnızca albümler",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Temel Kazanç",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "downloadItem": "İndir",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "deleteItem": "Cihazdan sil",
+  "@deleteItem": {
+    "description": "Option to delete item in long-press menu."
+  },
+  "repairComplete": "İndirmeler onarımı tamamlandı.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "syncComplete": "Tüm indirilenler eş zamanlandı.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "syncDownloads": "Eksik ögeleri indirin ve eş zamanlayın.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "İndirilen dosyalar veya meta verilerle ilgili sorunları onarın.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "requireWifiForDownloads": "Sadece kablosuz ağ üzerinden indir.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "downloadLibraryPrompt": "''{libraryName}'' kütüphanesindeki tüm içeriği indirmek istediğinizden emin misiniz?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Yalnızca tamamen indirilen albümleri göster",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "connectionInterrupted": "Bağlantı kesildi, indirmeler duraklatılıyor.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "Arka planda indirirken bağlantı kesildi. Bunun nedeni işletim sistemi ayarlarından kaynaklanabilir.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "activeDownloadSize": "İndiriliyor...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "runRepairWarning": "İndirilenlerin geçişini tamamlamak için sunucuyla bağlantı kurulamadı. Lütfen tekrar çevrim içi olduğunuzda indirme ekranından 'İndirilenleri Onar' seçeneğini çalıştırın.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "downloadSettings": "İndirme Ayarları",
+  "@downloadSettings": {},
+  "showNullLibraryItemsSubtitle": "Bazı ortamlar bilinmeyen bir kitaplıkla indirilebilir. Bunları orijinal koleksiyonlarının dışında gizlemek için kapatın.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloads": "En Fazla Eş Anlı İndirme Sayısı",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "missingDownloadSize": "Siliniyor...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "Eşitleniyor...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "maxConcurrentDownloadsLabel": "{count} eş anlı indirme",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadsWorkersSetting": "İndirme Çalışanlarının Sayısı",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingSubtitle": "Meta verileri eşleme ve indirilenleri silmek için indirme çalışanı sayısı. İndirme çalışanlarının arttırılması, özellikle sunucu gecikmesi yüksek olduğunda indirme eşlemeyi ve silmeyi hızlandırabilir, ancak gecikmeye neden olabilir.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{count} indirme çalışanı",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOnStartupSwitch": "İndirmeleri Başlangıçta Otomatik Olarak Eşitle",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "incidentalDownloadTooltip": "Bu ögenin {parentName} tarafından indirilmesi gerekiyor.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "cacheLibraryImagesName": "'{libraryName}' için ön belleğe alınmış görseller",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "downloadTranscodeCodecTitle": "İndirme Kodek'ini Seçin",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "doTranscode": "{codec} @ {bitrate}{size, select, null{} other{ - ~{size}}} olarak indir",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "dontTranscode": "Aslını indir{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "allowSplitScreenTitle": "Bölünmüş Ekran Moduna İzin Ver",
+  "@allowSplitScreenTitle": {},
+  "allowSplitScreenSubtitle": "Oynatıcı daha geniş ekranlarda diğer görünümlerin yanında görüntülenecektir.",
+  "@allowSplitScreenSubtitle": {},
+  "enableVibration": "Titreşimi etkinleştir",
+  "@enableVibration": {},
+  "enableAutoScroll": "Otomatik kaydırmayı etkinleştir",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "trackMenuButtonTooltip": "Parça Menüsü",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "remainingDuration": "{duration} kaldı",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "removeFromPlaylistConfirm": "Kaldır",
+  "@removeFromPlaylistConfirm": {},
+  "removeFromPlaylistCancel": "İptal",
+  "@removeFromPlaylistCancel": {},
+  "addPlaylistSubheader": "Parçayı çalma listesine ekle",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "quickActions": "Hızlı Eylemler",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "trackOfflineFavoritesSubtitle": "Bu, çevrim dışıyken sık kullanılanların daha güncel gösterilmesine olanak tanır.  Herhangi bir ek dosya indirmez.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "allPlaylistsInfoSetting": "Oynatma Listesi Meta Verilerini İndir",
+  "@allPlaylistsInfoSetting": {},
+  "trackOfflineFavorites": "Tüm favori durumları eşle",
+  "@trackOfflineFavorites": {},
+  "downloadFavoritesSetting": "Tüm favorileri indir",
+  "@downloadFavoritesSetting": {},
+  "downloadAllPlaylistsSetting": "Tüm oynatma listelerini indir",
+  "@downloadAllPlaylistsSetting": {},
+  "allPlaylistsInfoSettingSubtitle": "Oynatma listesi deneyiminizi geliştirmek için tüm oynatma listelerinin meta verilerini eşleyin",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "cacheLibraryImagesSettingsSubtitle": "Şu anda etkin olan kütüphanedeki tüm albüm, sanatçı, tür ve oynatma listesi kapakları indirilecektir.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "cacheLibraryImagesSettings": "Geçerli kütüphane görsellerini ön belleğe al",
+  "@cacheLibraryImagesSettings": {},
+  "lyricsScreen": "Şarkı Sözleri Görünümü",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsTitle": "Eş zamanlı şarkı sözleri için zaman damgalarını göster",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationTitle": "Ortam bildiriminde durdur düğmesini göster",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Ortam bildiriminin ayarlanabilir bir ilerleme çubuğuna sahip olup olmadığını kontrol eder. Bu, uygulamayı açmadan oynatma konumunu değiştirmenizi sağlar.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionStart": "Başla",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Küçük",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "keepScreenOn": "Ekranı Açık Tut",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnDisabled": "Kapalı",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnAlwaysOn": "Daima açık",
+  "@keepScreenOnAlwaysOn": {},
+  "keepScreenOnWhilePlaying": "Müzik çalarken",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhileLyrics": "Şarkı sözlerini gösterirken",
+  "@keepScreenOnWhileLyrics": {},
+  "nowPlayingBarTooltip": "Oynatıcı Ekranını Aç",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "playbackMode": "Oynatma Modu",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "codec": "Kodlayıcı",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "bitRate": "Bit Hızı",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "bitDepth": "Bit Derinliği",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "Boyut",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "showFeatureChipsToggleTitle": "Gelişmiş Parça Bilgilerini Göster",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showFeatureChipsToggleSubtitle": "Oynatıcı ekranında kodlayıcı, bit hızı ve daha fazla gelişmiş parça bilgilerini göster.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "emptyFilteredListTitle": "Hiçbir öge bulunamadı",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "emptyFilteredListSubtitle": "Süzgeçle eşleşen öge yok. Süzgeci kapatmayı veya arama terimini değiştirmeyi deneyin.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "playbackSpeedButtonLabel": "{speed}x hızda oynatılıyor",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedControlSetting": "Oynatma Hızı Görünürlüğü",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "showProgressOnNowPlayingBarTitle": "Uygulama içi mini oynatıcıda ilerlemeyi göster",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Ortam bildiriminde arama kontrollerini göster",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "addToMorePlaylistsTitle": "Daha Fazla Oynatma Listesine Ekle",
+  "@addToMorePlaylistsTitle": {},
+  "confirmFavoriteAdded": "Favoriye eklendi",
+  "@confirmFavoriteAdded": {},
+  "playlistActionsMenuButtonTooltip": "Oynatma listesine eklemek için dokunun. Favoriyi değiştirmek için uzun basın.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "playbackSpeedFeatureText": "{speed}x hız",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedIncreaseLabel": "Oynatma hızını artır",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "lyricsAlignmentTitle": "Şarkı sözü hizalaması",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Jellyfin sunucusu son 5 dakika içinde istemciden herhangi bir güncelleme almamışsa oynatmanın sona erdiğini varsayar. Bu, 5 dakikadan uzun parçalar için oynatmanın hatalı bir şekilde sona ermiş olarak rapor edilebileceği ve bunun da oynatma raporlama verilerinin kalitesinin düşebileceği anlamına gelir.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "volumeNormalizationModeTrackBased": "Parça tabanlı",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "prioritizePlayerCover": "Albüm kapağı öncelikli",
+  "@prioritizePlayerCover": {},
+  "lyricsAlignmentSubtitle": "Şarkı sözü görünümünde şarkı sözlerinin hizalamasını kontrol eder.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "prioritizePlayerCoverSubtitle": "Oynatıcı ekranında daha büyük bir albüm kapağı göstermeye öncelik verin. Kritik olmayan kontroller küçük ekran boyutlarında daha agresif bir şekilde gizlenecektir.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "showProgressOnNowPlayingBarSubtitle": "Oynatma ekranının alt kısmındaki uygulama içi mini oynatıcının / şimdi oynatılıyor çubuğunun bir ilerleme çubuğu olarak çalışıp çalışmadığını kontrol eder.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "keepScreenOnWhilePluggedIn": "Ekranı yalnızca fişe takılıyken açık tut",
+  "@keepScreenOnWhilePluggedIn": {},
+  "resetFiltersButton": "Süzgeci sıfırla",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "normalizationGain": "Kazanç",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "sampleRate": "Örnek Hızı",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "albumScreen": "Albüm Ekranı",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showLyricsTimestampsSubtitle": "Varsa, her şarkı sözü satırının zaman damgasının şarkı sözü görünümünde gösterilip gösterilmeyeceğini kontrol eder.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Ortam bildiriminde duraklatma düğmesine ek olarak bir durdurma düğmesinin bulunup bulunmadığını kontrol eder. Bu, uygulamayı açmadan oynatmayı durdurmanıza olanak tanır.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "fontSizeOptionMedium": "Orta",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "fontSizeOptionLarge": "Büyük",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "lyricsFontSizeTitle": "Şarkı sözleri yazı tipi boyutu",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeSubtitle": "Şarkı sözü görünümünde şarkı sözlerinin yazı tipi boyutunu kontrol eder.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeTitle": "Albümü şarkı sözlerinden önce göster",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnWhilePluggedInSubtitle": "Cihazın fişi çekilirse ekranı açık tut ayarını göz ardı eder",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "showLyricsScreenAlbumPreludeSubtitle": "Kaydırılmadan önce albüm kapağının şarkı sözlerinin üzerinde gösterilip gösterilmeyeceğini kontrol eder.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "filesystemFull": "Kalan indirmeler tamamlanamıyor. Dosya sistemi dolu.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterruptedBackgroundAndroid": "Arka planda indirirken bağlantı kesildi. Bunun nedeni 'Duraklatıldığında Düşük Öncelikli Duruma Girin' seçeneğinin etkinleştirilmesi veya işletim sistemi ayarları olabilir.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "defaultDownloadLocationButton": "Varsayılan indirme konumu olarak ayarlayın.  İndirme başına seçim yapmayı devre dışı bırak.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "reportQueueToServerSubtitle": "Etkinleştirildiğinde Finamp mevcut kuyruğu sunucuya gönderecektir. Şu anda bunun pek bir faydası yok gibi görünüyor ve ağ trafiğini artırıyor.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "downloadBitrate": "İndirme Bit Hızı",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "customizationSettingsTitle": "Özelleştirme",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "fiveLatestAlbumsSettingSubtitle": "İndirilenler eskidikçe kaldırılacaktır.  Bir albümün kaldırılmasını önlemek için indirmeyi kilitleyin.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "playbackSpeedDecreaseLabel": "Oynatma hızını azalt",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedControlSettingDescription": "Otomatik:\nFinamp, oynattığınız parçanın bir podcast mi yoksa sesli kitabın (bir parçası) mı olduğunu belirlemeye çalışır. Parçanın {trackDuration} dakikadan uzun olması, parçanın albümünün {albumDuration} saatten uzun olması veya parçaya şu türlerden en az birinin atanmış olması durumunda bu durum geçerli kabul edilir: {genreList}\nOynatma hızı kontrolleri oynatıcı ekranı menüsünde gösterilecektir.\n\nGöster:\nOynatma hızı kontrolleri her zaman oynatıcı ekranı menüsünde gösterilecektir.\n\nGizle:\nOynatıcı ekranı menüsündeki oynatma hızı kontrolleri her zaman gizlidir.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "volumeNormalizationModeHybrid": "Hibrit (Parça + Albüm)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Şu anda iOS'ta Ses Düzeyi Normalleştirmesi, kazanç değişikliğini taklit etmek için oynatma ses düzeyinin değiştirilmesini gerektiriyor. Sesi %100'ün üzerine çıkaramadığımız için, sessiz parçaların sesini artırabilmek için sesi varsayılan olarak azaltmamız gerekiyor. Değer desibel (dB) cinsindendir; burada -10 dB ~%30 ses, -4,5 dB ~%60 ses ve -2 dB ~%80 ses seviyesidir.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "volumeNormalizationModeSelectorDescription": "Hibrit (Parça + Albüm):\nParça kazancı normal çalma için kullanılır, ancak bir albüm çalıyorsa (ana çalma kuyruğu kaynağı olduğu için veya bir noktada kuyruğa eklendiği için), bunun yerine albüm kazancı kullanılır.\n\nParça tabanlı:\nParça kazancı, albümün çalınıp çalınmadığına bakılmaksızın her zaman kullanılır.\n\nYalnızca albümler:\nSes Düzeyi Normalleştirmesi yalnızca albümler oynatılırken uygulanır (albüm kazanımı kullanılarak), ancak tek tek parçalar için uygulanmaz.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  }
 }
