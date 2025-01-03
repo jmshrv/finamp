@@ -122,7 +122,7 @@
   },
   "artists": "Izvođači",
   "@artists": {},
-  "internalExternalIpExplanation": "Ako želiš pristupiti Jellyfin serveru na daljinski način moraš korisititi tvoju externu IP adresu.\n\nAko je tvoj server na HTTP priključku (80/443), ne moraš navesti priključak. To će vjerojatno slučaj ako se tvoj server nalazi iza obrnutog proxija.",
+  "internalExternalIpExplanation": "Ako želiš pristupiti Jellyfin serveru na daljinski način moraš korisititi tvoju eksternu IP adresu.\n\nAko je tvoj server na standardnom HTTP priključku (80 ili 443) ili Jellyfinovom standardnom priključku (8096), ne moraš navesti priključak.\n\nAko je URL ispravan, ispod polja za unos trebale bi se prikazati neke informacije o tvom serveru.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -327,7 +327,7 @@
   "@selectDirectory": {},
   "enableTranscoding": "Omogući transkodiranje",
   "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "Transkodira stream glazbe na server strani.",
+  "enableTranscodingSubtitle": "Transkodira stream glazbe na strani servera.",
   "@enableTranscodingSubtitle": {},
   "addToPlaylistTooltip": "Dodaj u playlistu",
   "@addToPlaylistTooltip": {},
@@ -634,5 +634,164 @@
         "example": "Never Gonna Give You Up"
       }
     }
+  },
+  "loginFlowSlogan": "Tvoja glazba, onako kako je želiš.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "connectionInterrupted": "Veza je prekinuta, preuzimanja se zaustavljaju.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "loginFlowServerSelectionHeading": "Poveži se na Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "serverUrlInfoButtonTooltip": "Pomoć za URL servera",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "playbackModeTranscoding": "Transkodiranje",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "connectionInterruptedBackground": "Veza je prekinuta tijekom preuzimanja u pozadini. Provjeri postavke OS-a.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "activeDownloadSize": "Preuzimanje …",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "Brisanje …",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "Sinkroniziranje …",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "downloadSettings": "Postavke preuzimanja",
+  "@downloadSettings": {},
+  "maxConcurrentDownloads": "Maks. broj istovremenskih preuzimanja",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsLabel": "Broj istovremenskih preuzimanja: {count}",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadTranscodeEnableTitle": "Omogući transkodirana preuzimanja",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadTranscodeCodecTitle": "Odaberi kodek preuzimanja",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "transcodeHint": "Transkodirati?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "aboutTranslations": "Pomogni prevesti Finamp na tvoj jezik:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "aboutThanks": "Hvala ti da koristiš Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "Dobro došli u",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "serverUrlHint": "npr. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "viewLogs": "Pogledaj zapise",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "back": "Natrag",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "connectingToServer": "Povezivanje na server …",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "Serveri na tvojoj lokalnoj mreži:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Pretraga za serverima …",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "backToServerSelection": "Natrag na izbor servera",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "Neimenovani korisnik",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowSelectAUser": "Odaberi korisnika",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameHint": "Upiši tvoje korisničko ime",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Upiši jedno korisničko ime",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "Upiši tvoju lozinku",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Prijava",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "changeLanguage": "Promijeni jezik",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "backToAccountSelection": "Natrag na izbor računa",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowCustomUser": "Prilagođeni korisnik",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAuthenticationHeading": "Prijavi se na tvoj račun",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "transcodingStreamingContainerTitle": "Odaberi kontejner transkodiranja",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "loginFlowGetStarted": "Započni!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "orDivider": "ili",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowAccountSelectionHeading": "Odaberi tvoj račun",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
   }
 }
