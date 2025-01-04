@@ -384,8 +384,6 @@
   "@refresh": {},
   "errorScreenError": "오류 목록을 가져오지 못했습니다! 이 시점에서는 GitHub에 문제를 등록하고 앱 데이터를 삭제해야 합니다",
   "@errorScreenError": {},
-  "deleteDownloadsAbortButtonText": "취소",
-  "@deleteDownloadsAbortButtonText": {},
   "error": "오류",
   "@error": {},
   "discNumber": "디스크 {number}",

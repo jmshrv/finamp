@@ -456,8 +456,6 @@
   },
   "syncDownloadedPlaylists": "Sinkroniziraj preuzete playliste",
   "@syncDownloadedPlaylists": {},
-  "deleteDownloadsAbortButtonText": "Odustani",
-  "@deleteDownloadsAbortButtonText": {},
   "showFastScroller": "Prikaži traku za brzo listanje",
   "@showFastScroller": {},
   "deleteDownloadsPrompt": "Stvarno želiš izbrisati {itemType, select, album{album} playlist{playlistu} artist{izvođača} genre{žanr} song{pjesmu} library{biblioteku} other{}} '{itemName}' s ovog uređaja?",

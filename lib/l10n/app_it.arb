@@ -459,7 +459,5 @@
   "deleteDownloadsConfirmButtonText": "Elimina",
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
-  "deleteDownloadsAbortButtonText": "Annulla",
-  "@deleteDownloadsAbortButtonText": {}
+  }
 }

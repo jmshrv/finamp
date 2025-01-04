@@ -448,8 +448,6 @@
   "@noMusicLibrariesBody": {},
   "swipeInsertQueueNextSubtitle": "曲リストでスワイプしたときに、曲を最後に追加するのではなく、キューの次の項目として挿入できるようにします。",
   "@swipeInsertQueueNextSubtitle": {},
-  "deleteDownloadsAbortButtonText": "キャンセル",
-  "@deleteDownloadsAbortButtonText": {},
   "showUncensoredLogMessage": "このログはあなたのログイン情報を含みます。表示しますか？",
   "@showUncensoredLogMessage": {},
   "syncDownloadedPlaylists": "ダウンロードしたプレイリストの同期",

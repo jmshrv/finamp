@@ -468,8 +468,6 @@
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
-  "deleteDownloadsAbortButtonText": "İptal",
-  "@deleteDownloadsAbortButtonText": {},
   "syncDownloadedPlaylists": "İndirilen oynatma listelerini eş zamanla",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Hızlı kaydırıcıyı göster",
@@ -1037,8 +1035,6 @@
   },
   "removeFromPlaylistConfirm": "Kaldır",
   "@removeFromPlaylistConfirm": {},
-  "removeFromPlaylistCancel": "İptal",
-  "@removeFromPlaylistCancel": {},
   "addPlaylistSubheader": "Parçayı çalma listesine ekle",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"

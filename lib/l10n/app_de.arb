@@ -462,8 +462,6 @@
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
-  "deleteDownloadsAbortButtonText": "Abbrechen",
-  "@deleteDownloadsAbortButtonText": {},
   "deleteDownloadsConfirmButtonText": "Löschen",
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
@@ -1273,8 +1271,6 @@
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
-  "removeFromPlaylistCancel": "Abbrechen",
-  "@removeFromPlaylistCancel": {},
   "lyricsFontSizeTitle": "Schriftgröße des Liedtextes",
   "@lyricsFontSizeTitle": {
     "description": "Title for the setting that controls the font size of lyrics in the lyrics view"

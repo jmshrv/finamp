@@ -452,8 +452,6 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsAbortButtonText": "Cofnij",
-  "@deleteDownloadsAbortButtonText": {},
   "syncDownloadedPlaylists": "Synchronizuj pobrane playlisty",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Pokaż szybkie przewijanie",

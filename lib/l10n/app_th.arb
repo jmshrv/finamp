@@ -468,8 +468,6 @@
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
-  "deleteDownloadsAbortButtonText": "ยกเลิก",
-  "@deleteDownloadsAbortButtonText": {},
   "showFastScroller": "แสดงตัวเลื่อนแบบเร็ว",
   "@showFastScroller": {},
   "syncDownloadedPlaylists": "ซิงก์เพลลิสต์ที่ดาวน์โหลดแล้ว",

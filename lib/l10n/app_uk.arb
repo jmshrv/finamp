@@ -450,8 +450,6 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsAbortButtonText": "Скасувати",
-  "@deleteDownloadsAbortButtonText": {},
   "insertedIntoQueue": "Вставлено в чергу.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."

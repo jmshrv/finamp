@@ -389,8 +389,6 @@
   },
   "removeFromPlaylistConfirm": "निकालें",
   "@removeFromPlaylistConfirm": {},
-  "removeFromPlaylistCancel": "रद्द करें",
-  "@removeFromPlaylistCancel": {},
   "removeFromPlaylistPrompt": "प्लेलिस्ट '{playlistName}' में से '{item name}' निकलें?",
   "@removeFromPlaylistPrompt": {
     "placeholders": {
@@ -759,8 +757,6 @@
   "@noActiveDownloads": {},
   "failedToGetSongFromDownloadId": "डाउनलोड आईडी से गाना प्राप्त करने में असफल",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsAbortButtonText": "रद्द करें",
-  "@deleteDownloadsAbortButtonText": {},
   "error": "त्रुटि",
   "@error": {},
   "discNumber": "डिस्क {number}",

@@ -523,8 +523,6 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsAbortButtonText": "ரத்துசெய்",
-  "@deleteDownloadsAbortButtonText": {},
   "error": "பிழை",
   "@error": {},
   "discNumber": "வட்டு {number}",
@@ -1608,8 +1606,6 @@
   "@showArtistChipImage": {},
   "showArtistChipImageSubtitle": "இது பிளேயர் திரை போன்ற சிறிய கலைஞர் பட மாதிரிக்காட்சிகளை பாதிக்கிறது.",
   "@showArtistChipImageSubtitle": {},
-  "removeFromPlaylistCancel": "ரத்துசெய்",
-  "@removeFromPlaylistCancel": {},
   "removeFromPlaylistPrompt": "பிளேலிச்ட்டில் இருந்து '{itemName}' ஐ அகற்று '{playlistName}'?",
   "@removeFromPlaylistPrompt": {
     "placeholders": {

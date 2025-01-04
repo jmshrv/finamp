@@ -450,8 +450,6 @@
   "@name": {},
   "random": "Náhodně",
   "@random": {},
-  "deleteDownloadsAbortButtonText": "Zrušit",
-  "@deleteDownloadsAbortButtonText": {},
   "deleteDownloadsConfirmButtonText": "Odstranit",
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
@@ -1486,8 +1484,6 @@
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
-  "removeFromPlaylistCancel": "Zrušit",
-  "@removeFromPlaylistCancel": {},
   "queueRestoreError": "Varování: nepodařilo se obnovit {count,plural, =1{{count} skladbu} few{{count} skladby} other{{count} skladeb}} ve frontě.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",

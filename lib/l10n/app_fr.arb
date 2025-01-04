@@ -186,8 +186,6 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Affiché dans la boîte de dialogue de confirmation pour la suppression des médias téléchargés du périphérique local."
   },
-  "deleteDownloadsAbortButtonText": "Annuler",
-  "@deleteDownloadsAbortButtonText": {},
   "error": "Erreur",
   "@error": {},
   "discNumber": "Disque {number}",
