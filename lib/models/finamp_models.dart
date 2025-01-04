@@ -1406,6 +1406,7 @@ class OfflineListen {
     this.artist,
     this.album,
     this.trackMbid,
+    this.deviceInfo,
   });
 
   /// The stop timestamp of the listen, measured in seconds since the epoch.
@@ -1430,6 +1431,9 @@ class OfflineListen {
   // The MusicBrainz ID of the track, if available.
   @HiveField(6)
   String? trackMbid;
+
+  @HiveField(7)
+  DeviceInfo? deviceInfo;
 }
 
 @HiveType(typeId: 50)
@@ -2385,4 +2389,19 @@ class FinampFeatureChipsConfiguration {
       features: features ?? this.features,
     );
   }
+}
+
+
+@HiveType(typeId: 76)
+class DeviceInfo {
+  DeviceInfo({
+    required this.name,
+    required this.id,
+  });
+
+  @HiveField(0)
+  String name;
+
+  @HiveField(1)
+  String? id;
 }

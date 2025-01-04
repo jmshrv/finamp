@@ -588,13 +588,14 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
       artist: fields[4] as String?,
       album: fields[5] as String?,
       trackMbid: fields[6] as String?,
+      deviceInfo: fields[7] as DeviceInfo?,
     );
   }
 
   @override
   void write(BinaryWriter writer, OfflineListen obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.timestamp)
       ..writeByte(1)
@@ -608,7 +609,9 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
       ..writeByte(5)
       ..write(obj.album)
       ..writeByte(6)
-      ..write(obj.trackMbid);
+      ..write(obj.trackMbid)
+      ..writeByte(7)
+      ..write(obj.deviceInfo);
   }
 
   @override
@@ -1017,6 +1020,43 @@ class FinampFeatureChipsConfigurationAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampFeatureChipsConfigurationAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
+  @override
+  final int typeId = 76;
+
+  @override
+  DeviceInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DeviceInfo(
+      name: fields[0] as String,
+      id: fields[1] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, DeviceInfo obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.id);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DeviceInfoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
