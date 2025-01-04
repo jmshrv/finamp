@@ -79,9 +79,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setOnlyShowFavourite(bool onlyShowFavourite) {
+  static void setonlyShowFavourites(bool onlyShowFavourites) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.onlyShowFavourite = onlyShowFavourite;
+    finampSettingsTemp.onlyShowFavourites = onlyShowFavourites;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -449,7 +449,7 @@ class FinampSettingsHelper {
 
   static void resetAudioServiceSettings() {
     setAndroidStopForegroundOnPause(
-        DefaultSettings.settingAndroidStopForegroundOnPause);
+        DefaultSettings.androidStopForegroundOnPause);
     setSongShuffleItemCount(
         DefaultSettings.songShuffleItemCount); // DOES NOT update UI
     setBufferDuration(Duration(

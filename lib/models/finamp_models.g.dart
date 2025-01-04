@@ -73,7 +73,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       androidStopForegroundOnPause:
           fields[4] == null ? true : fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
-      onlyShowFavourite: fields[6] == null ? false : fields[6] as bool,
+      onlyShowFavourites: fields[6] == null ? false : fields[6] as bool,
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
@@ -125,11 +125,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       autoloadLastQueueOnStartup:
           fields[28] == null ? true : fields[28] as bool,
       hasCompletedBlurhashImageMigration:
-          fields[23] == null ? false : fields[23] as bool,
+          fields[23] == null ? true : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
-          fields[24] == null ? false : fields[24] as bool,
+          fields[24] == null ? true : fields[24] as bool,
       hasCompletedDownloadsServiceMigration:
-          fields[34] == null ? false : fields[34] as bool,
+          fields[34] == null ? true : fields[34] as bool,
       requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
       showDownloadsWithUnknownLibrary:
@@ -139,8 +139,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       resyncOnStartup: fields[40] == null ? true : fields[40] as bool,
       preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
-          fields[42] == null ? false : fields[42] as bool,
-      downloadTranscodingCodec: fields[43] as FinampTranscodingCodec?,
+          fields[42] == null ? true : fields[42] as bool,
       downloadTranscodeBitrate: fields[45] as int?,
       shouldTranscodeDownloads: fields[44] == null
           ? TranscodeDownloadsSetting.ask
@@ -184,17 +183,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       keepScreenOnWhilePluggedIn:
           fields[73] == null ? true : fields[73] as bool,
       featureChipsConfiguration: fields[76] == null
-          ? const FinampFeatureChipsConfiguration(enabled: true, features: [
-              FinampFeatureChipType.playCount,
-              FinampFeatureChipType.additionalPeople,
-              FinampFeatureChipType.playbackMode,
-              FinampFeatureChipType.codec,
-              FinampFeatureChipType.bitRate,
-              FinampFeatureChipType.bitDepth,
-              FinampFeatureChipType.sampleRate,
-              FinampFeatureChipType.size,
-              FinampFeatureChipType.normalizationGain
-            ])
+          ? DefaultSettings.featureChipsConfiguration
           : fields[76] as FinampFeatureChipsConfiguration,
       showCoversOnAlbumScreen: fields[77] == null ? false : fields[77] as bool,
       hasDownloadedPlaylistInfo:
@@ -211,7 +200,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(75)
+      ..writeByte(74)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -225,7 +214,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(5)
       ..write(obj.showTabs)
       ..writeByte(6)
-      ..write(obj.onlyShowFavourite)
+      ..write(obj.onlyShowFavourites)
       ..writeByte(7)
       ..write(obj.sortBy)
       ..writeByte(8)
@@ -292,8 +281,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.preferQuickSyncs)
       ..writeByte(42)
       ..write(obj.hasCompletedIsarUserMigration)
-      ..writeByte(43)
-      ..write(obj.downloadTranscodingCodec)
       ..writeByte(44)
       ..write(obj.shouldTranscodeDownloads)
       ..writeByte(45)

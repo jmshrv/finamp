@@ -63,8 +63,8 @@ class DefaultSettings {
   static const theme = ThemeMode.system;
   static const shouldTranscode = false;
   static const transcodeBitrate = 320000;
-  static const settingAndroidStopForegroundOnPause = true;
-  static const settingIsFavourite = false;
+  static const androidStopForegroundOnPause = true;
+  static const onlyShowFavourites = false;
   static const songShuffleItemCount = 250;
   static const volumeNormalizationActive = true;
   // 80% volume in dB. In my testing, most tracks were louder than the default target
@@ -133,6 +133,7 @@ class DefaultSettings {
   static const showCoversOnAlbumScreen = false;
   static const allowSplitScreen = true;
   static const requireWifiForDownloads = false;
+  static const onlyShowFullyDownloaded = false;
   static const preferQuickSyncs = true;
   static const showDownloadsWithUnknownLibrary = true;
   static const downloadWorkers = 5;
@@ -150,9 +151,9 @@ class FinampSettings {
       // downloadLocations.
       required this.downloadLocations,
       this.androidStopForegroundOnPause =
-          DefaultSettings.settingAndroidStopForegroundOnPause,
+          DefaultSettings.androidStopForegroundOnPause,
       required this.showTabs,
-      this.onlyShowFavourite = DefaultSettings.settingIsFavourite,
+      this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
       this.sortBy = SortBy.sortName,
       this.sortOrder = SortOrder.ascending,
       this.songShuffleItemCount = DefaultSettings.songShuffleItemCount,
@@ -182,18 +183,22 @@ class FinampSettings {
       this.tabOrder = DefaultSettings.tabOrder,
       this.autoloadLastQueueOnStartup =
           DefaultSettings.autoLoadLastQueueOnStartup,
-      this.hasCompletedBlurhashImageMigration = true,
-      this.hasCompletedBlurhashImageMigrationIdFix = true,
-      this.hasCompletedDownloadsServiceMigration = true,
+      this.hasCompletedBlurhashImageMigration =
+          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+      this.hasCompletedBlurhashImageMigrationIdFix =
+          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+      this.hasCompletedDownloadsServiceMigration =
+          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
       this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
-      this.onlyShowFullyDownloaded = false,
+      this.onlyShowFullyDownloaded = DefaultSettings.onlyShowFullyDownloaded,
       this.showDownloadsWithUnknownLibrary =
           DefaultSettings.showDownloadsWithUnknownLibrary,
       this.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads,
       this.downloadWorkers = DefaultSettings.downloadWorkers,
       this.resyncOnStartup = DefaultSettings.resyncOnStartup,
       this.preferQuickSyncs = DefaultSettings.preferQuickSyncs,
-      this.hasCompletedIsarUserMigration = true,
+      this.hasCompletedIsarUserMigration =
+          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
       this.downloadTranscodingCodec,
       this.downloadTranscodeBitrate,
       this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
@@ -249,15 +254,15 @@ class FinampSettings {
   List<DownloadLocation> downloadLocations;
 
   @HiveField(4,
-      defaultValue: DefaultSettings.settingAndroidStopForegroundOnPause)
+      defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
 
   /// Used to remember if the user has set their music screen to favourites
   /// mode.
-  @HiveField(6, defaultValue: DefaultSettings.settingIsFavourite)
-  bool onlyShowFavourite;
+  @HiveField(6, defaultValue: DefaultSettings.onlyShowFavourites)
+  bool onlyShowFavourites;
 
   /// Current sort by setting.
   @Deprecated("Use per-tab sort by instead")
@@ -320,10 +325,14 @@ class FinampSettings {
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)
   List<TabContentType> tabOrder;
 
-  @HiveField(23, defaultValue: false)
+  @HiveField(23,
+      defaultValue:
+          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedBlurhashImageMigration;
 
-  @HiveField(24, defaultValue: false)
+  @HiveField(24,
+      defaultValue:
+          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedBlurhashImageMigrationIdFix;
 
   @HiveField(25, defaultValue: DefaultSettings.showFastScroller)
@@ -347,34 +356,34 @@ class FinampSettings {
   @HiveField(33, defaultValue: DefaultSettings.volumeNormalizationMode)
   VolumeNormalizationMode volumeNormalizationMode;
 
-  @HiveField(34, defaultValue: false)
+  @HiveField(34,
+      defaultValue:
+          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedDownloadsServiceMigration;
 
-  @HiveField(35, defaultValue: false)
+  @HiveField(35, defaultValue: DefaultSettings.requireWifiForDownloads)
   bool requireWifiForDownloads;
 
-  @HiveField(36, defaultValue: false)
+  @HiveField(36, defaultValue: DefaultSettings.onlyShowFullyDownloaded)
   bool onlyShowFullyDownloaded;
 
-  @HiveField(37, defaultValue: true)
+  @HiveField(37, defaultValue: DefaultSettings.showDownloadsWithUnknownLibrary)
   bool showDownloadsWithUnknownLibrary;
 
-  @HiveField(38, defaultValue: 10)
+  @HiveField(38, defaultValue: DefaultSettings.maxConcurrentDownloads)
   int maxConcurrentDownloads;
 
-  @HiveField(39, defaultValue: 5)
+  @HiveField(39, defaultValue: DefaultSettings.downloadWorkers)
   int downloadWorkers;
 
   @HiveField(40, defaultValue: DefaultSettings.resyncOnStartup)
   bool resyncOnStartup;
 
-  @HiveField(41, defaultValue: true)
+  @HiveField(41, defaultValue: DefaultSettings.preferQuickSyncs)
   bool preferQuickSyncs;
 
-  @HiveField(42, defaultValue: false)
+  @HiveField(42, defaultValue: true)
   bool hasCompletedIsarUserMigration;
-
-  @HiveField(43)
   FinampTranscodingCodec? downloadTranscodingCodec;
 
   @HiveField(44, defaultValue: DefaultSettings.shouldTranscodeDownloads)
@@ -429,13 +438,13 @@ class FinampSettings {
   @HiveField(58, defaultValue: null)
   String? defaultDownloadLocation;
 
-  @HiveField(59, defaultValue: false)
+  @HiveField(59, defaultValue: DefaultSettings.useFixedSizeGridTiles)
   bool useFixedSizeGridTiles;
 
   @HiveField(60, defaultValue: DefaultSettings.fixedGridTileSize)
   int fixedGridTileSize;
 
-  @HiveField(61, defaultValue: true)
+  @HiveField(61, defaultValue: DefaultSettings.allowSplitScreen)
   bool allowSplitScreen;
 
   @HiveField(62, defaultValue: DefaultSettings.splitScreenPlayerWidth)

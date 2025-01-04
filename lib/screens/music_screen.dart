@@ -131,7 +131,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         onPressed: () async {
           try {
             await _audioServiceHelper.shuffleAll(
-                FinampSettingsHelper.finampSettings.onlyShowFavourite);
+                FinampSettingsHelper.finampSettings.onlyShowFavourites);
           } catch (e) {
             GlobalSnackbar.error(e);
           }
@@ -325,12 +325,12 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       if (!finampSettings.isOffline ||
                           finampSettings.trackOfflineFavorites)
                         IconButton(
-                          icon: finampSettings.onlyShowFavourite
+                          icon: finampSettings.onlyShowFavourites
                               ? const Icon(Icons.favorite)
                               : const Icon(Icons.favorite_outline),
                           onPressed: () =>
-                              FinampSettingsHelper.setOnlyShowFavourite(
-                                  !finampSettings.onlyShowFavourite),
+                              FinampSettingsHelper.setonlyShowFavourites(
+                                  !finampSettings.onlyShowFavourites),
                           tooltip: AppLocalizations.of(context)!.favourites,
                         ),
                       IconButton(

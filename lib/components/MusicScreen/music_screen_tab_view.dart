@@ -106,7 +106,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
-        filters: settings.onlyShowFavourite ? "IsFavorite" : null,
+        filters: settings.onlyShowFavourites ? "IsFavorite" : null,
         startIndex: pageKey,
         limit: _pageSize,
       );
@@ -144,7 +144,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           viewFilter: widget.view?.id,
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
           onlyFavorites:
-              settings.onlyShowFavourite && settings.trackOfflineFavorites);
+              settings.onlyShowFavourites && settings.trackOfflineFavorites);
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
           nameFilter: widget.searchTerm,
@@ -160,7 +160,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           nullableViewFilters: widget.tabContentType == TabContentType.albums &&
               settings.showDownloadsWithUnknownLibrary,
           onlyFavorites:
-              settings.onlyShowFavourite && settings.trackOfflineFavorites);
+              settings.onlyShowFavourites && settings.trackOfflineFavorites);
     }
 
     var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
@@ -302,7 +302,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           var settings = box.get("FinampSettings")!;
           var newRefreshHash = Object.hash(
             widget.searchTerm,
-            settings.onlyShowFavourite,
+            settings.onlyShowFavourites,
             settings.tabSortBy[widget.tabContentType],
             settings.tabSortOrder[widget.tabContentType],
             settings.onlyShowFullyDownloaded,
@@ -343,8 +343,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                   icon: TablerIcons.filter_x,
                   text: AppLocalizations.of(context)!.resetFiltersButton,
                   onPressed: () {
-                    FinampSettingsHelper.setOnlyShowFavourite(false);
-                    FinampSettingsHelper.setOnlyShowFullyDownloaded(false);
+                    FinampSettingsHelper.setonlyShowFavourites(
+                        DefaultSettings.onlyShowFavourites);
+                    FinampSettingsHelper.setOnlyShowFullyDownloaded(
+                        DefaultSettings.onlyShowFullyDownloaded);
                   },
                 )
               ],

@@ -567,7 +567,7 @@ class AndroidAutoHelper {
 
     try {
       await audioServiceHelper
-          .shuffleAll(FinampSettingsHelper.finampSettings.onlyShowFavourite);
+          .shuffleAll(FinampSettingsHelper.finampSettings.onlyShowFavourites);
     } catch (err) {
       _androidAutoHelperLogger.severe("Error while shuffling all songs", err);
     }
