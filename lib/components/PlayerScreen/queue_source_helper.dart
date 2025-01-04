@@ -84,7 +84,7 @@ Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
             item.name ?? "item", parent.name ?? "playlist"),
         confirmButtonText:
             AppLocalizations.of(context)!.removeFromPlaylistConfirm,
-        abortButtonText: AppLocalizations.of(context)!.removeFromPlaylistCancel,
+        abortButtonText: AppLocalizations.of(context)!.genericCancel,
         onConfirmed: () {
           isConfirmed = true;
         },

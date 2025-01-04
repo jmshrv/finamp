@@ -61,7 +61,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                         confirmButtonText: AppLocalizations.of(context)!
                             .deleteDownloadsConfirmButtonText,
                         abortButtonText: AppLocalizations.of(context)!
-                            .deleteDownloadsAbortButtonText,
+                            .genericCancel,
                         onConfirmed: () async {
                           await downloadsService.deleteDownload(stub: album);
                           if (mounted) {

@@ -15,17 +15,25 @@ import '../services/downloads_service.dart';
 import '../services/finamp_settings_helper.dart';
 import 'downloads_location_screen.dart';
 
-class DownloadsSettingsScreen extends StatelessWidget {
+class DownloadsSettingsScreen extends StatefulWidget {
   const DownloadsSettingsScreen({super.key});
-
   static const routeName = "/settings/downloads";
+  @override
+  State<DownloadsSettingsScreen> createState() =>
+      _DownloadsSettingsScreenState();
+}
 
+class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     var userHelper = GetIt.instance<FinampUserHelper>();
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloadSettings),
+        actions: [
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+              context, FinampSettingsHelper.resetDownloadSettings)
+        ],
       ),
       body: ListView(
         children: [

@@ -350,7 +350,6 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsAbortButtonText": "Cancel",
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",
@@ -1582,7 +1581,6 @@
     }
   },
   "removeFromPlaylistConfirm": "Remove",
-  "removeFromPlaylistCancel": "Cancel",
   "removeFromPlaylistPrompt": "Remove '{itemName}' from playlist '{playlistName}'?",
   "@removeFromPlaylistPrompt": {
     "placeholders": {
@@ -1813,5 +1811,21 @@
   "resetFiltersButton": "Reset filters",
   "@resetFiltersButton": {
     "description": "Button to reset filters on a list of items"
+  },
+  "resetSettingsPromptGlobal": "Are you sure you want to reset ALL settings to their defaults?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "Reset ALL settings",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "resetSettingsPromptLocal": "Do you want to reset these settings back to their defaults?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "genericCancel": "Cancel",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
   }
 }

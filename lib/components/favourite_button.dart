@@ -39,7 +39,7 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
 
     bool isFav = ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
     if (widget.onlyIfFav) {
-      if (isFav && !FinampSettingsHelper.finampSettings.onlyShowFavourite) {
+      if (isFav && !FinampSettingsHelper.finampSettings.onlyShowFavourites) {
         return Icon(
           Icons.favorite,
           color: Colors.red,

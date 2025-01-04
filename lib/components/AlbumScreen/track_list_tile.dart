@@ -142,7 +142,7 @@ class TrackListTile extends StatelessWidget {
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
             onlyFavorites:
-                settings.onlyShowFavourite && settings.trackOfflineFavorites,
+                settings.onlyShowFavourites && settings.trackOfflineFavorites,
           );
 
           var items =
