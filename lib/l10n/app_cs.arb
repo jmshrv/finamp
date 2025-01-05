@@ -1836,5 +1836,21 @@
     "description": "subtitle for Download Bitrate settings slider"
   },
   "fiveLatestAlbumsSettingSubtitle": "Stažené soubory budou po jejich vypršení smazány.  Uzamkněte stažený soubor pro zabránění smazání alba.",
-  "@fiveLatestAlbumsSettingSubtitle": {}
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "resetSettingsPromptGlobalConfirm": "Resetovat VŠECHNA nastavení",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "genericCancel": "Zrušit",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "resetSettingsPromptLocal": "Opravdu chcete resetovat tato nastavení na jejich výchozí hodnoty?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "resetSettingsPromptGlobal": "Opravdu chcete resetovat VŠECHNA nastavení na jejich výchozí hodnoty?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  }
 }
