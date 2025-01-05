@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
-import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/main.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -13,7 +13,6 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -29,6 +28,7 @@ import '../../services/music_player_background_task.dart';
 import '../../services/process_artist.dart';
 import '../../services/queue_service.dart';
 import '../album_image.dart';
+import '../padded_custom_scrollview.dart';
 import '../themed_bottom_sheet.dart';
 import 'queue_source_helper.dart';
 
@@ -220,8 +220,8 @@ class _QueueListState extends State<QueueList> {
             previousTracksHeaderKey: widget.previousTracksHeaderKey),
       ),
       const SliverPadding(
-        padding: EdgeInsets.only(bottom: 80.0, top: 40.0),
-      )
+        padding: EdgeInsets.only(bottom: 50.0, top: 40.0),
+      ),
     ];
 
     return ScrollbarTheme(
@@ -234,7 +234,7 @@ class _QueueListState extends State<QueueList> {
           thickness: MaterialStateProperty.all(12.0),
           // thumbVisibility: MaterialStateProperty.all(true),
           trackVisibility: MaterialStateProperty.all(false)),
-      child: CustomScrollView(
+      child: PaddedCustomScrollview(
         controller: widget.scrollController,
         scrollBehavior: const FinampScrollBehavior(interactive: true),
         physics: const BouncingScrollPhysics(),

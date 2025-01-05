@@ -14,6 +14,7 @@ import '../AlbumScreen/album_screen_content.dart';
 import '../AlbumScreen/download_button.dart';
 import '../albums_sliver_list.dart';
 import '../favourite_button.dart';
+import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 
 class ArtistScreenContent extends StatefulWidget {
@@ -117,7 +118,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               .take(5)
               .toList();
 
-          return CustomScrollView(slivers: <Widget>[
+          return PaddedCustomScrollview(slivers: <Widget>[
             SliverAppBar(
               title: Text(widget.parent.name ??
                   AppLocalizations.of(context)!.unknownName),
@@ -177,11 +178,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             AlbumsSliverList(
               childrenForList: albums,
               parent: widget.parent,
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                height: MediaQuery.paddingOf(context).bottom,
-              ),
             )
           ]);
         });
