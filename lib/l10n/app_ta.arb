@@ -55,7 +55,7 @@
   "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "காணாமல் போன படங்களை பதிவிறக்கவும்",
   "@downloadMissingImages": {},
-  "downloadCount": "{எண்ணிக்கை, பன்மை, = 1 {{count} பதிவிறக்கம்} பிற {{count} பதிவிறக்கங்கள்}}",
+  "downloadCount": "{count, plural, one {{count} பதிவிறக்கம்} other {{count} பதிவிறக்கங்கள்}}",
   "@downloadCount": {
     "placeholders": {
       "count": {
@@ -63,7 +63,7 @@
       }
     }
   },
-  "downloadedCountUnified": "{பாடல், பன்மை, = 1 {{songCount} டிராக்} பிற {{songCount} டிராக்குகள்}}, {இமேச்வவுண்ட், பன்மை, = 1 {{imageCount} படம்} பிற {{imageCount} படங்கள்}}\n {ஒத்திசைவு, பன்மை, = 1 {{syncCount} முனை ஒத்திசைவு} பிற {{syncCount} முனைகள் ஒத்திசைத்தல்}} {பழுதுபார்ப்பு, பன்மை, = 0 {} பிற {\n தற்போது பழுதுபார்க்கும்}}",
+  "downloadedCountUnified": "{songCount, plural, one {{songCount} டிராக்} other {{songCount} டிராக்குகள்}}, {imageCount, plural, one {{imageCount} படம்} other {{imageCount} படங்கள்}}, {syncCount, plural, one {{syncCount} முனை ஒத்திசைவு} other {{syncCount} முனைகள் ஒத்திசைத்தல்}}, {repairing, plural, =0 {} other {நடப்பு பழுதுபார்ப்பு}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
@@ -151,7 +151,7 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "playCountValue": "{PlayCount, பன்மை, = 1 {{playCount} Play} பிற {{playCount} நாடகங்கள்}}",
+  "playCountValue": "{playCount, plural, one {{playCount} விளையாட்டு} other {{playCount} விளையாட்டுகள்}}",
   "@playCountValue": {
     "placeholders": {
       "playCount": {
@@ -160,7 +160,7 @@
       }
     }
   },
-  "couldNotLoad": "ஏற்றவில்லை } வகை {album} கலைஞர் {playlist} பாடல் {track mix} நெக்ச்ட் அப்} நெக்ச்ட் அப்} நெக்ச்டுஅப் பிளேலிச்ட் {artist mix} நெக்ச்ட்அபார்டிச்ட் {album mix} பிற {}}",
+  "couldNotLoad": "ஏற்ற முடியவில்லை {source}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -207,7 +207,7 @@
   "@fixedGridSizeSwitchTitle": {},
   "fixedGridSizeSwitchSubtitle": "கட்டம் ஓடு அளவுகள் சாளரம்/திரை அளவிற்கு பதிலளிக்காது.",
   "@fixedGridSizeSwitchSubtitle": {},
-  "fixedGridTileSizeEnum": "{அளவு, தேர்ந்தெடுக்கவும், சிறிய {Small} நடுத்தர {Medium} பெரிய {Large} மிகப் பெரிய {Very Large} பிற} ???}}",
+  "fixedGridTileSizeEnum": "{size, select, small {சிறிய} medium {நடுத்தர} large {பெரிய} veryLarge {மிகப் பெரிய} other {}}",
   "@fixedGridTileSizeEnum": {
     "placeholders": {
       "size": {
@@ -456,7 +456,7 @@
   "@random": {},
   "activeDownloads": "செயலில் பதிவிறக்கங்கள்",
   "@activeDownloads": {},
-  "downloadedMissingImages": "{எண்ணிக்கை, பன்மை, = 0 {No missing images found} = 1 {பதிவிறக்கம் செய்யப்பட்ட {count} காணாமல் போன படம்} பிற {பதிவிறக்கம் {count} காணாமல் போன படங்கள்}}",
+  "downloadedMissingImages": "{count, plural, =0 {No missing images found} =1 {பதிவிறக்கம் செய்யப்பட்ட {count} காணாமல் போன படம்} other {பதிவிறக்கம் {count} காணாமல் போன படங்கள்}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -505,7 +505,7 @@
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "பதிவிறக்க ஐடியிலிருந்து கண்காணிப்பதில் தோல்வி",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "இந்த சாதனத்திலிருந்து {itemtype, Select, Select, Select, Select, Select, Select, Select, Select, Select, {album} ARTINAL} ENGRE} LIBRARY} LIBRARY} பிற {playlist} '{artist}' ?",
+  "deleteDownloadsPrompt": "இந்த சாதனத்திலிருந்து {itemType, select, album {ஆல்பம்} artist {கலைஞர்} playlist {பிளேலிச்ட்} other {}} '{itemName}' நீக்கவா?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -537,7 +537,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "கலக்கு",
   "@shuffleButtonLabel": {},
-  "songCount": "{எண்ணிக்கை, பன்மை, = 1 {{count} டிராக்} பிற {{count} தடங்கள்}}",
+  "songCount": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -545,7 +545,7 @@
       }
     }
   },
-  "offlineSongCount": "{எண்ணிக்கை, பன்மை, = 1 {{count} டிராக்} பிற {{count} தடங்கள்}}, {downloads} பதிவிறக்கம் செய்யப்பட்டன",
+  "offlineSongCount": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}}, {downloads} பதிவிறக்கம் செய்யப்பட்டன",
   "@offlineSongCount": {
     "placeholders": {
       "count": {
@@ -556,7 +556,7 @@
       }
     }
   },
-  "offlineSongCountArtist": "{எண்ணிக்கை, பன்மை, = 1 {{count} டிராக்} பிற {{count} தடங்கள்}} பதிவிறக்கம் செய்யப்பட்டன",
+  "offlineSongCountArtist": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}} பதிவிறக்கம் செய்யப்பட்டன",
   "@offlineSongCountArtist": {
     "placeholders": {
       "count": {
@@ -586,7 +586,7 @@
   "@shareLogs": {},
   "stackTrace": "ச்டாக் சுவடு",
   "@stackTrace": {},
-  "applicationLegalese": "மொசில்லா பொது உரிமம் 2.0 உடன் உரிமம் பெற்றது.\n மூலக் குறியீடு {rourcecodelink on இல் கிடைக்கிறது.",
+  "applicationLegalese": "மொசில்லா பொது உரிமம் 2.0 உடன் உரிமம் பெற்றது.\n மூலக் குறியீடு {sourceCodeLink} இல் கிடைக்கிறது.",
   "@applicationLegalese": {
     "placeholders": {
       "sourceCodeLink": {
@@ -707,7 +707,7 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "gridCrossAxisCountSubtitle": "{மதிப்பு w போது ஒவ்வொரு வரிசையையும் பயன்படுத்த கட்டம் ஓடுகளின் அளவு.",
+  "gridCrossAxisCountSubtitle": "{value} போது ஒவ்வொரு வரிசையையும் பயன்படுத்த கட்டம் ஓடுகளின் அளவு.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -769,11 +769,11 @@
   "@minutes": {},
   "cancelSleepTimer": "ச்லீப் டைமரை ரத்து செய்யவா?",
   "@cancelSleepTimer": {},
-  "timeFractionTooltip": "{மொத்தம் {currentTime}",
+  "timeFractionTooltip": "மொத்த {totalTime} இல் {currentTime}",
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "trackCountTooltip": "மின்தடம் trountrackIndex} of {currentTrackIndex}",
+  "trackCountTooltip": "மின்தடம் {currentTrackIndex} of {totalTrackCount}",
   "@trackCountTooltip": {
     "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
     "placeholders": {
@@ -787,7 +787,7 @@
       }
     }
   },
-  "invalidNumber": "தவறான எண்",
+  "invalidNumber": "செல்லாத எண்",
   "@invalidNumber": {},
   "sleepTimerTooltip": "தூக்க நேரங்குறிகருவி",
   "@sleepTimerTooltip": {},
@@ -944,7 +944,7 @@
   "@removeFromMix": {},
   "addToMix": "கலக்க சேர்க்கவும்",
   "@addToMix": {},
-  "redownloadedItems": "{எண்ணிக்கை, பன்மை, = 0 {Redownloads தேவையில்லை.",
+  "redownloadedItems": "{count, plural, =0 {Redownloads தேவையில்லை} other {Redownloads தேவை}}",
   "@redownloadedItems": {
     "placeholders": {
       "count": {
@@ -1006,16 +1006,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "confirmPlayNext": "{தட்டச்சு செய்க",
-  "@confirmPlayNext": {
-    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
-    "placeholders": {
-      "type": {
-        "type": "String"
-      }
-    }
-  },
-  "confirmAddToNextUp": "சேர்க்கப்பட்டது {type, தேர்ந்தெடுக்கவும், டிராக் {Track} ஆல்பம் {album} கலைஞர் {artist} பிளேலிச்ட் {playlist} வகை {genre} பிற {item}}",
+  "confirmAddToNextUp": "சேர்க்கப்பட்டது {type, select, டிராக் {Track} ஆல்பம் {album} கலைஞர் {artist} பிளேலிச்ட் {playlist} வகை {genre} other {item}}",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -1072,7 +1063,7 @@
       }
     }
   },
-  "playingFromType": "{மூலத்திலிருந்து, தேர்ந்தெடுக்கவும், ஆல்பம் {Album} பிளேலிச்ட் {Playlist} பாடல்மிக்ச் {Track Mix} கலைஞர்மிக்ச் {Artist Mix} அல்புமிக்ச் வகை} கலைஞர் {Album Mix} பாடல் {Genre Mix} நெக்ச்டுபல்பம் {Favorites} நெக்ச்ட்அப் பிளேலிச்ட் {All Tracks} நெக்ச்ட்அபார்டிச்ட் {Tracks} பிற {}}",
+  "playingFromType": "{source, select, album {ஆல்பம்} playlist {பிளேலிச்ட்} trackMix {பாடல்மிக்ச்} artistMix {கலைஞர்மிக்ச்} albumMix {ஆல்பமிக்ச்} genreMix {வகைமிக்ச்} favorites {பிடித்தவை} allTracks {அனைத்து தடங்கள்} tracks {தடங்கள்} other {}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1142,7 +1133,7 @@
       }
     }
   },
-  "queueRestoreSubtitle2": "{எண்ணிக்கை, பன்மை, = 1 {1 Track} பிற {{count} தடங்கள்}}, {remaining} திறக்கப்படாதது",
+  "queueRestoreSubtitle2": "{count, plural, one {1 Track} other {{count} தடங்கள்}}, {remaining} திறக்கப்படாதது",
   "@queueRestoreSubtitle2": {
     "description": "Description of length of a saved queue",
     "placeholders": {
@@ -1192,7 +1183,7 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "albumCount": "{எண்ணிக்கை, பன்மை, = 1 {{count} ஆல்பம்} பிற {{count} ஆல்பங்கள்}}",
+  "albumCount": "{count, plural, one {{count} ஆல்பம்} other {{count} ஆல்பங்கள்}}",
   "@albumCount": {
     "placeholders": {
       "count": {
@@ -1318,7 +1309,7 @@
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
-  "activeDownloadsListHeader": "{itemCount} {typename, தேர்ந்தெடுக்கவும், பதிவிறக்கம் {Running} தோல்வியுற்ற {Failed} ஒத்திசைக்கப்படாத {Repeatedly Unsynced}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{பதிவிறக்கம்} failed{தோல்வியுற்ற} repeatedlyUnsynced{ஒத்திசைக்கப்படாத} enqueued{Queued} other{}} {itemCount, plural, one{Download} other{Downloads}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1351,7 +1342,7 @@
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
   },
-  "queueRestoreError": "எச்சரிக்கை: {எண்ணிக்கை, பன்மை, = 1 {{count} டிராக்} பிற {{count} தடங்கள்} the வரிசையில் மீட்டெடுக்க முடியாது.",
+  "queueRestoreError": "எச்சரிக்கை: {count, plural, one {{count} டிராக்} other {{count} தடங்கள்}} வரிசையில் மீட்டெடுக்க முடியாது.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
@@ -1432,7 +1423,7 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, Select, ஆல்பம் {Album} பிளேலிச்ட் {Playlist} கலைஞர் {Artist} வகை {Genre} பாடல் {ட்ராக் {நூலகம் {Track} அறியப்படாத {Library} பிற {{itemType}} {itemType}",
+  "itemTypeSubtitle": "{itemType, select, album{ஆல்பம்} playlist{பிளேலிச்ட்} artist{கலைஞர்} genre{வகை} song{நூலகம்} library{அறியப்படாத} unknown{Item} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1445,7 +1436,7 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "incidentalDownloadTooltip": "இந்த உருப்படியை {பெற்றோர் பெயர் by ஆல் பதிவிறக்கம் செய்ய வேண்டும்.",
+  "incidentalDownloadTooltip": "இந்த உருப்படியை {parentName} ஆல் பதிவிறக்கம் செய்ய வேண்டும்.",
   "@incidentalDownloadTooltip": {
     "placeholders": {
       "parentName": {
@@ -1454,7 +1445,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, பிடித்தவை {Favorites} allplaylists {All Playlists} fivelatestalbums {5 Latest Albums} allplaylistsmetadata {Playlist Metadata} பிற {{itemType}}}",
+  "finampCollectionNames": "{itemType, select, favorites{பிடித்தவை} allplaylists {All Playlists} fivelatestalbums {5 Latest Albums} allplaylistsmetadata {Playlist Metadata} other {{itemType}}}",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1475,7 +1466,7 @@
   "@transcodingStreamingContainerTitle": {
     "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
-  "downloadTranscodeEnableOption": "{விருப்பம், தேர்ந்தெடுக்கவும், எப்போதும் {Always} ஒருபோதும் {ஒருபோதும் {Never} கேளுங்கள் {Ask} பிற {{option}}}",
+  "downloadTranscodeEnableOption": "{option, select, always{எப்போதும்} never{ஒருபோதும்} ask{கேளுங்கள்} other{{option}}}",
   "@downloadTranscodeEnableOption": {
     "placeholders": {
       "option": {
@@ -1498,7 +1489,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "collectionDownloadInfo": "{size} {கோடெக், தேர்ந்தெடுக்கவும், அசல் {} பிற {{codec} {{bitrate}}}}",
+  "collectionDownloadInfo": "{size} {codec, select, original {} other {{codec} {{bitrate}}}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1516,7 +1507,7 @@
     },
     "description": "Collection info line in downloads screen lists"
   },
-  "dontTranscode": "அசல் {விளக்கத்தைப் பதிவிறக்குங்கள், தேர்ந்தெடுக்கவும், சுழிய {} பிற { - {description}}}",
+  "dontTranscode": "அசல் {description, select, null{} other{ - {description}}}",
   "@dontTranscode": {
     "placeholders": {
       "description": {
@@ -1526,7 +1517,7 @@
     },
     "description": "Dropdown option to download original version of tracks"
   },
-  "doTranscode": "{codec} @ {bitrate} {அளவு, தேர்ந்தெடுக்கவும், சுழிய {} பிற { - ~ {size}}}",
+  "doTranscode": "{codec} @ {bitrate} {size, select, null{} other { - ~ {size}}}",
   "@doTranscode": {
     "placeholders": {
       "bitrate": {
@@ -1544,7 +1535,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "downloadInfo": "{size} {codec} {பிட்ரேட், தேர்ந்தெடுக்கவும், சுழிய {} பிற { @ {bitrate} டிரான்ச்கோடட்}}}",
+  "downloadInfo": "{size} {codec} {bitrate, select, null{} other{ @ {bitrate} டிரான்ச்கோடட்}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1784,7 +1775,8 @@
   },
   "artwork": "ஒளிமறைப்பு",
   "@artwork": {},
-  "artworkTooltip": "{தலைப்பு க்கு க்கான கலைப்படைப்பு",
+
+  "artworkTooltip": "{title} க்கு க்கான கலைப்படைப்பு",
   "@artworkTooltip": {
     "placeholders": {
       "title": {
@@ -1794,7 +1786,7 @@
     },
     "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
   },
-  "playerAlbumArtworkTooltip": "{தலைப்பு க்கு க்கான கலைப்படைப்பு. பிளேபேக்கை மாற்றுவதைத் தட்டவும். தடங்களை மாற்ற இடது அல்லது வலதுபுறமாக ச்வைப் செய்யவும்.",
+  "playerAlbumArtworkTooltip": "{title} க்கு க்கான கலைப்படைப்பு. பிளேபேக்கை மாற்றுவதைத் தட்டவும். தடங்களை மாற்ற இடது அல்லது வலதுபுறமாக ச்வைப் செய்யவும்.",
   "@playerAlbumArtworkTooltip": {
     "placeholders": {
       "title": {
