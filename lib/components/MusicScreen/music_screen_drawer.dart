@@ -28,6 +28,7 @@ class MusicScreenDrawer extends StatelessWidget {
         // Manually handle padding in leading/trailing icons
         horizontalTitleGap: 0,
         child: PaddedCustomScrollview(
+          bottomPadding: 0.0,
           slivers: [
             SliverList(
               delegate: SliverChildListDelegate.fixed(

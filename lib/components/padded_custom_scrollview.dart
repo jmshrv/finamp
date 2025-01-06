@@ -23,7 +23,7 @@ class PaddedCustomScrollview extends CustomScrollView {
     super.restorationId,
     super.clipBehavior,
     super.hitTestBehavior,
-    this.bottomPadding = 0.0,
+    this.bottomPadding = 32.0,
   });
 
   /// Additional bottom padding to add in addition to system element padding
