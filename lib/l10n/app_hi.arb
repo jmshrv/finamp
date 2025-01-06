@@ -389,7 +389,7 @@
   },
   "removeFromPlaylistConfirm": "निकालें",
   "@removeFromPlaylistConfirm": {},
-  "removeFromPlaylistPrompt": "प्लेलिस्ट '{playlistName}' में से '{item name}' निकलें?",
+  "removeFromPlaylistPrompt": "प्लेलिस्ट '{playlistName}' में से '{itemName}' निकलें?",
   "@removeFromPlaylistPrompt": {
     "placeholders": {
       "itemName": {

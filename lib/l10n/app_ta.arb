@@ -1,4 +1,5 @@
 {
+  "@@locale": "ta",
   "finamp": "பொருள்",
   "@finamp": {
     "description": "App name, possibly translated"
@@ -1006,7 +1007,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "confirmAddToNextUp": "சேர்க்கப்பட்டது {type, select, டிராக் {Track} ஆல்பம் {album} கலைஞர் {artist} பிளேலிச்ட் {playlist} வகை {genre} other {item}}",
+  "confirmAddToNextUp": "சேர்க்கப்பட்டது {type, select, track{டிராக்} album{ஆல்பம்} artist{கலைஞர்} playlist{பிளேலிச்ட்} genre{வகை} other {item}}",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -1489,7 +1490,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "collectionDownloadInfo": "{size} {codec, select, original {} other {{codec} {{bitrate}}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
