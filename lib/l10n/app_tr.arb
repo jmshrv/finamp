@@ -41,11 +41,11 @@
   "@playlists": {},
   "startMix": "Mix'i başlat",
   "@startMix": {},
-  "startMixNoSongsArtist": "Mix'i başlatmadan önce bir sanatçıya uzun basarak mix'e ekleyip çıkar",
+  "startMixNoSongsArtist": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir sanatçıya uzun basın",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Mix'i başlatmadan önce bir albüme uzun basarak mix'e ekleyip çıkar",
+  "startMixNoSongsAlbum": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir albüme uzun basın",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -146,17 +146,17 @@
   "@stackTrace": {},
   "downloadLocations": "İndirilenler Konumları",
   "@downloadLocations": {},
-  "transcoding": "Yeniden kodlama (transcoding)",
+  "transcoding": "Kod dönüştürme",
   "@transcoding": {},
   "notAvailableInOfflineMode": "Çevrim dışı modda mevcut değil",
   "@notAvailableInOfflineMode": {},
   "logOut": "Çıkış Yap",
   "@logOut": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin transcoding için AAC kullanıyor",
+  "jellyfinUsesAACForTranscoding": "Jellyfin kod dönüştürme için AAC kullanıyor",
   "@jellyfinUsesAACForTranscoding": {},
-  "enableTranscoding": "Transcoding'i aktifleştir",
+  "enableTranscoding": "Kod dönüştürmeyi etkinleştir",
   "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "Sunucu tarafında müzik akışlarını yeniden kodlar.",
+  "enableTranscodingSubtitle": "Sunucu tarafındaki ses akışlarının kodunu dönüştürür.",
   "@enableTranscodingSubtitle": {},
   "bitrate": "Bit oranı",
   "@bitrate": {},
@@ -280,7 +280,7 @@
   "@queueReplaced": {},
   "removedFromPlaylist": "Oynatma listesinden çıkarıldı.",
   "@removedFromPlaylist": {},
-  "startingInstantMix": "Anlık mix başlatılıyor.",
+  "startingInstantMix": "Hızlı karışım başlatılıyor.",
   "@startingInstantMix": {},
   "anErrorHasOccured": "Bir hata meydana geldi.",
   "@anErrorHasOccured": {},
@@ -434,7 +434,7 @@
   "@showUncensoredLogMessage": {},
   "resetTabs": "Sekmeleri sıfırla",
   "@resetTabs": {},
-  "playNext": "Ardından Oynat",
+  "playNext": "Ardından oynat",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
@@ -1330,5 +1330,223 @@
   "volumeNormalizationModeSelectorDescription": "Hibrit (Parça + Albüm):\nParça kazancı normal çalma için kullanılır, ancak bir albüm çalıyorsa (ana çalma kuyruğu kaynağı olduğu için veya bir noktada kuyruğa eklendiği için), bunun yerine albüm kazancı kullanılır.\n\nParça tabanlı:\nParça kazancı, albümün çalınıp çalınmadığına bakılmaksızın her zaman kullanılır.\n\nYalnızca albümler:\nSes Düzeyi Normalleştirmesi yalnızca albümler oynatılırken uygulanır (albüm kazanımı kullanılarak), ancak tek tek parçalar için uygulanmaz.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "nextUp": "Sonrakiler",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "volumeNormalizationSwitchTitle": "Ses Ölçülü Etkinleştir",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "autoloadLastQueueOnStartup": "Son Sırayı Otomatik Geri Yükle",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "showCoversOnAlbumScreenTitle": "Parçalar için Albüm Kapaklarını Göster",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "offlineSongCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}, {downloads} İndirildi",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "timeFractionTooltip": "{currentTime} / {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "playbackModeTranscoding": "Kod dönüştürme",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "clearNextUp": "Sonrakileri Temizle",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "addToNextUp": "Sonrakilere Ekle",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleNext": "Sonrakileri karıştır",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "mix": "{mixSource} - Karışım",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "queuesScreen": "Şimdi Yürütülüyoru Geri Yükle",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "Ses Ölçülü ne zaman ve nasıl uygulansın",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorTitle": "Ses Ölçülü Kipi",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "showNullLibraryItemsTitle": "Bilinmeyen Kitaplığa Sahip Ortamı Göster.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "preferQuickSyncSwitch": "Hızlı Eşitlemeleri Tercih Edin",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "transcodingStreamingContainerTitle": "Kod dönüştürme kalıbını seçin",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "Kodu dönüştürülmüş ses akışı sırasında kullanılacak bölüm kapsayıcısını seçin. Zaten sıraya alınmış parçalar etkilenmeyecektir.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "downloadTranscodeEnableTitle": "Kodu dönüştürülmüş indirmeleri etkinleştir",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "transcodeHint": "Kod dönüştürme?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "downloadBitrateSubtitle": "Daha yüksek bit hızı, daha fazla depolama gereksinimleri pahasına daha yüksek kalitede ses sağlar.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Kod Dönüştürülmüş}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "showArtistChipImageSubtitle": "Bu, oynatıcı ekranı gibi küçük sanatçı görseli ön izlemelerini etkiler.",
+  "@showArtistChipImageSubtitle": {},
+  "addRemoveFromPlaylist": "Oynatma Listelerine Ekle / Kaldır",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "alignmentOptionCenter": "Merkez",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "Son",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "keepScreenOnSubtitle": "Ekran ne zaman açık tutulmalı",
+  "@keepScreenOnSubtitle": {},
+  "emptyTopTracksList": "Bu sanatçının henüz hiçbir parçasını dinlemediniz.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "queueRestoreButtonLabel": "Geri Yükle",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "{date} kaydedildi",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueLoadingMessage": "Sıra geri yükleniyor...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "queueRetryMessage": "Sıra geri yüklenemedi. Yeniden denemek ister misiniz?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Uygulama başlatıldığında son oynatılan sırayı geri yüklemeyi dene.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Mevcut sıra sunucuya raporlansın mı?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "redownloadcomplete": "Kod dönüştürme sonrası yeniden İndirme işlemi sıraya alındı.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "redownloadTitle": "Kodu dönüştürülenleri otomatik olarak yeniden indirin",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "volumeNormalizationSettingsTitle": "Ses Ölçülü",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "resetSettingsPromptLocal": "Bu ayarları varsayılan değerlerine sıfırlamak istiyor musunuz?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "genericCancel": "İptal",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "startMixNoSongsGenre": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir türe uzun basın",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "offlineSongCountArtist": "{count,plural,=1{{count} Parça} other{{count} Parça}} İndirildi",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "En az albüm kapağı dolgusu",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Etkinleştirildiğinde, parçalar sekmesinde bir parçaya dokunulduğunda, yalnızca tek bir parçayı çalmak yerine o parçadan hızlı karışım başlatılır.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Oynatıcı ekranında albüm kapağı çevresinde, ekran genişliğinin %'si cinsinden en az dolgu.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showCoversOnAlbumScreenSubtitle": "Albüm ekranında her parçanın albüm kapaklarını ayrı göster.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetSettingsPromptGlobalConfirm": "TÜM ayarları sıfırla",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "resetSettingsPromptGlobal": "TÜM ayarları varsayılan değerlerine sıfırlamak istediğinizden emin misiniz?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
   }
 }
