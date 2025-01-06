@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 
 import '../components/AlbumScreen/album_screen_content.dart';
 import '../components/now_playing_bar.dart';
+import '../components/padded_custom_scrollview.dart';
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 import '../services/downloads_service.dart';
@@ -77,7 +78,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                       displayChildren: items,
                       queueChildren: playableItems);
                 } else if (snapshot.hasError) {
-                  return CustomScrollView(
+                  return PaddedCustomScrollview(
                     physics: const NeverScrollableScrollPhysics(),
                     slivers: [
                       SliverAppBar(
@@ -91,7 +92,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 } else {
                   // We return all of this so that we can have an app bar while loading.
                   // This is especially important for iOS, where there isn't a hardware back button.
-                  return CustomScrollView(
+                  return PaddedCustomScrollview(
                     physics: const NeverScrollableScrollPhysics(),
                     slivers: [
                       SliverAppBar(

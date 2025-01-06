@@ -5,17 +5,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../screens/downloads_screen.dart';
 import '../../screens/logs_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../services/finamp_user_helper.dart';
+import '../padded_custom_scrollview.dart';
 import 'offline_mode_switch_list_tile.dart';
 import 'view_list_tile.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
-  const MusicScreenDrawer({Key? key}) : super(key: key);
+  const MusicScreenDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,8 @@ class MusicScreenDrawer extends StatelessWidget {
         contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
         // Manually handle padding in leading/trailing icons
         horizontalTitleGap: 0,
-        child: CustomScrollView(
+        child: PaddedCustomScrollview(
+          bottomPadding: 0.0,
           slivers: [
             SliverList(
               delegate: SliverChildListDelegate.fixed(

@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
 
 import '../../services/locale_helper.dart';
+import '../padded_custom_scrollview.dart';
 
 class LanguageList extends StatefulWidget {
   const LanguageList({super.key});
@@ -29,7 +30,7 @@ class _LanguageListState extends State<LanguageList> {
     return ValueListenableBuilder(
       valueListenable: LocaleHelper.localeListener,
       builder: (_, __, ___) {
-        return CustomScrollView(
+        return PaddedCustomScrollview(
           slivers: [
             // For some reason, setting the null (system) LanguageListTile to
             // const stops it from switching when going to/from the same

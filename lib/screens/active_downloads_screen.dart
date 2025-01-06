@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../components/DownloadsErrorScreen/download_error_list.dart';
 import '../components/global_snackbar.dart';
+import '../components/padded_custom_scrollview.dart';
 import '../models/finamp_models.dart';
 import '../services/downloads_service.dart';
 
@@ -52,7 +53,7 @@ class ActiveDownloadsScreen extends StatelessWidget {
                   ),
                 );
               } else {
-                return CustomScrollView(slivers: [
+                return PaddedCustomScrollview(slivers: [
                   if (snapshot.data![0].isNotEmpty)
                     DownloadErrorList(
                         state: DownloadItemState.syncFailed,
