@@ -218,10 +218,7 @@ class _QueueListState extends State<QueueList> {
         ),
         sliver: QueueTracksList(
             previousTracksHeaderKey: widget.previousTracksHeaderKey),
-      ),
-      const SliverPadding(
-        padding: EdgeInsets.only(bottom: 50.0, top: 40.0),
-      ),
+      )
     ];
 
     return ScrollbarTheme(
@@ -239,6 +236,8 @@ class _QueueListState extends State<QueueList> {
         scrollBehavior: const FinampScrollBehavior(interactive: true),
         physics: const BouncingScrollPhysics(),
         slivers: _contents,
+        // Additional padding to allow for the jump to current track button
+        bottomPadding: 90.0,
       ),
     );
   }

@@ -23,7 +23,11 @@ class PaddedCustomScrollview extends CustomScrollView {
     super.restorationId,
     super.clipBehavior,
     super.hitTestBehavior,
+    this.bottomPadding = 0.0,
   });
+
+  /// Additional bottom padding to add in addition to system element padding
+  final double bottomPadding;
 
   @override
   List<Widget> buildSlivers(BuildContext context) {
@@ -43,7 +47,9 @@ class PaddedCustomScrollview extends CustomScrollView {
             data: strippedMediaQuery,
             child: x,
           )),
-      SliverPadding(padding: EdgeInsets.only(bottom: mediaQuery.padding.bottom))
+      SliverPadding(
+          padding: EdgeInsets.only(
+              bottom: mediaQuery.padding.bottom + bottomPadding))
     ];
   }
 }
