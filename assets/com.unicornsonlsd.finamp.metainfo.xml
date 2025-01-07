@@ -54,7 +54,6 @@
         </p>
         <ul>
           <li>Fixed "Finamp has crashed" warning when closing the app on iOS</li>
-          <li>Fixed some track numbers getting squished on some devices</li>
           <li>Fixed reported playback not properly stopping (or reappearing later) on the server</li>
           <li>Fixed some offline plays not being logged correctly</li>
           <li>Fixed weirdly formatted track numbers on the album screen</li>
