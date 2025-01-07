@@ -5,14 +5,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL phải bắt đầu bằng http:// hoặc https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL không được có dấu gạch chéo",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Tên người dùng",
   "@username": {},
   "password": "Mật khẩu",
@@ -105,22 +97,6 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} vật} other{{count} vật}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} ảnh} other{{count} ảnh}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlComplete": "{count} đã hoàn thành",
   "@dlComplete": {
     "placeholders": {
@@ -153,10 +129,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Lỗi tải xuống",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Không có lỗi!",
-  "@noErrors": {},
   "errorScreenError": "Đã có lỗi xảy ra khi lấy danh sách lỗi! Bạn nên tạo một Issue trên trang Github và xoá dữ liệu ứng dụng",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Lấy bài hát từ ID tải Thất Bại",
@@ -290,22 +262,6 @@
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "downloadErrors": "Lỗi tải",
-  "@downloadErrors": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "downloadsQueued": "Đã thêm tải xuống.",
   "@downloadsQueued": {},
   "areYouSure": "Bạn chắc chứ?",
@@ -328,8 +284,6 @@
   "@playlistNameUpdated": {},
   "noArtist": "Không có Nghệ sĩ",
   "@noArtist": {},
-  "direct": "TRỰC TIẾP",
-  "@direct": {},
   "addFavourite": "Thêm vào Yêu thích",
   "@addFavourite": {},
   "startingInstantMix": "Bắt đầu tuyển tập nhạc tức thời.",
@@ -425,14 +379,6 @@
   "@noItem": {},
   "unknownArtist": "Nghệ sĩ không rõ",
   "@unknownArtist": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "downloaded": "ĐÃ TẢI XUỐNG",
-  "@downloaded": {},
-  "transcode": "CHUYỂN MÃ",
-  "@transcode": {},
-  "statusError": "LỖI TRẠNG THÁI",
-  "@statusError": {},
   "queue": "Hàng chờ",
   "@queue": {},
   "addToQueue": "Thêm vào Hàng chờ",

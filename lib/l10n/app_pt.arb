@@ -9,13 +9,9 @@
   "@addFavourite": {},
   "addedToQueue": "Adicionado à fila.",
   "@addedToQueue": {},
-  "internalExternalIpExplanation": "Se pretende aceder ao seu servidor Jellyfin remotamente, será necessário utilizar o seu IP público.\n\nNo caso do seu servidor utilizar uma das portas padrão do HTTP (80/443), não vai precisar de indicar uma porta. Este será o caso mais provável caso utilize um proxy inverso.",
+  "internalExternalIpExplanation": "Se pretender aceder ao seu servidor Jellyfin remotamente, deve usar o seu IP público.\n\nSe o seu servidor estiver numa porta padrão de HTTP (80 ou 443) ou na porta padrão do Jellyfin (8096), não precisa de especificar a porta.\n\nSe o URL estiver correto, deverá ver algumas informações sobre o seu servidor aparecerem abaixo do campo de entrada.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
-  },
-  "urlStartWithHttps": "O URL deverá começar com http:// ou https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   },
   "password": "Palavra-passe",
   "@password": {},
@@ -23,23 +19,21 @@
   "@logs": {},
   "next": "Próximo",
   "@next": {},
-  "noErrors": "Sem erros!",
-  "@noErrors": {},
   "errorScreenError": "Ocorreu um erro ao aceder à lista de erros! Neste caso, recomendados que abra um issue no nosso GitHub e que limpe os dados da aplicação",
   "@errorScreenError": {},
-  "shuffleButtonLabel": "MISTURAR",
+  "shuffleButtonLabel": "Aleatório",
   "@shuffleButtonLabel": {},
   "location": "Localização",
   "@location": {},
-  "downloadsQueued": "Descargas adicionadas.",
+  "downloadsQueued": "Transferência preparada, a descarregar ficheiros",
   "@downloadsQueued": {},
-  "downloadedSongsWillNotBeDeleted": "Músicas descarregadas não serão apagadas",
+  "downloadedSongsWillNotBeDeleted": "As músicas transferidas não serão eliminadas",
   "@downloadedSongsWillNotBeDeleted": {},
-  "areYouSure": "Tem certeza?",
+  "areYouSure": "Tem a certeza?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC para transcodificação",
+  "jellyfinUsesAACForTranscoding": "O Jellyfin utiliza AAC para transcodificação",
   "@jellyfinUsesAACForTranscoding": {},
-  "bitrateSubtitle": "Uma taxa de bits mais alta resulta em áudio de maior qualidade, ao custo de maior largura de banda.",
+  "bitrateSubtitle": "Uma taxa de bits mais alta oferece áudio de melhor qualidade, mas consome uma largura de banda maior.",
   "@bitrateSubtitle": {},
   "enterLowPriorityStateOnPause": "Entrar Estado de Baixa-Prioridade durante Pausa",
   "@enterLowPriorityStateOnPause": {},
@@ -77,19 +71,15 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlTrailingSlash": "O URL não pode ter uma barra no fim",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
-  "username": "Utilizador",
+  "username": "Nome de utilizador",
   "@username": {},
   "couldNotFindLibraries": "Não foi possível encontrar nenhuma biblioteca.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "unknownName": "Nome desconhecido",
+  "unknownName": "Nome Desconhecido",
   "@unknownName": {},
-  "selectMusicLibraries": "Seleccione as suas bibliotecas de música",
+  "selectMusicLibraries": "Selecionar Bibliotecas de Música",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -157,8 +147,6 @@
   "@runtime": {},
   "downloadMissingImages": "Transferir imagens inexistentes",
   "@downloadMissingImages": {},
-  "downloadErrors": "Erros de transferência",
-  "@downloadErrors": {},
   "downloadedMissingImages": "{count,plural, =0{Não foram encontradas imagens em falta} =1{{count} imagem em falta transferida} other{{count} imagens em falta descarregadas}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
@@ -173,20 +161,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },
@@ -222,8 +196,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erros de Transferência",
-  "@downloadErrorsTitle": {},
   "failedToGetSongFromDownloadId": "Falha ao adquirir música do ID da descarga",
   "@failedToGetSongFromDownloadId": {},
   "error": "Erro",
@@ -236,7 +208,7 @@
       }
     }
   },
-  "playButtonLabel": "REPRODUZIR",
+  "playButtonLabel": "Reproduzir",
   "@playButtonLabel": {},
   "editPlaylistNameTooltip": "Editar nome da lista de reprodução",
   "@editPlaylistNameTooltip": {},
@@ -244,51 +216,51 @@
   "@editPlaylistNameTitle": {},
   "required": "Obrigatório",
   "@required": {},
-  "updateButtonLabel": "ACTUALIZAR",
+  "updateButtonLabel": "Atualizar",
   "@updateButtonLabel": {},
   "playlistNameUpdated": "Nome da lista de reprodução atualizado.",
   "@playlistNameUpdated": {},
   "favourite": "Favorito",
   "@favourite": {},
-  "downloadsDeleted": "Descargas apagadas.",
+  "downloadsDeleted": "Transferências eliminadas.",
   "@downloadsDeleted": {},
-  "addDownloads": "Adicionar Descargas",
+  "addDownloads": "Adicionar Transferências",
   "@addDownloads": {},
   "message": "Mensagem",
   "@message": {},
   "stackTrace": "Traçado da Pilha",
   "@stackTrace": {},
-  "addButtonLabel": "ADICIONAR",
+  "addButtonLabel": "Adicionar",
   "@addButtonLabel": {},
   "shareLogs": "Compartilhar relatórios",
   "@shareLogs": {},
   "logsCopied": "Relatórios copiados.",
   "@logsCopied": {},
-  "applicationLegalese": "Licenciado com a Licença Pública Mozilla 2.0. Código-fonte disponível em:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Licenciado com a Mozilla Public License 2.0.\nO código-fonte está disponível em {sourceCodeLink}.",
   "@applicationLegalese": {},
-  "transcoding": "Transcodificando",
+  "transcoding": "Transcodificação",
   "@transcoding": {},
-  "downloadLocations": "Locais de Descargas",
+  "downloadLocations": "Locais de Transferências",
   "@downloadLocations": {},
   "audioService": "Serviço de Áudio",
   "@audioService": {},
-  "layoutAndTheme": "Composição & Tema",
+  "layoutAndTheme": "Disposição e Tema",
   "@layoutAndTheme": {},
-  "notAvailableInOfflineMode": "Não disponível no modo desconectado",
+  "notAvailableInOfflineMode": "Não disponível no modo offline",
   "@notAvailableInOfflineMode": {},
-  "logOut": "Sair",
+  "logOut": "Terminar Sessão",
   "@logOut": {},
   "enableTranscoding": "Ativar Transcodificação",
   "@enableTranscoding": {},
   "bitrate": "Taxa de bits",
   "@bitrate": {},
-  "customLocation": "Localização Customizada",
+  "customLocation": "Localização Personalizada",
   "@customLocation": {},
   "appDirectory": "Diretório de apps",
   "@appDirectory": {},
-  "addDownloadLocation": "Adicionar Localização de Descargas",
+  "addDownloadLocation": "Adicionar Local de Transferências",
   "@addDownloadLocation": {},
-  "selectDirectory": "Selecione Diretório",
+  "selectDirectory": "Selecione o Diretório",
   "@selectDirectory": {},
   "unknownError": "Erro Desconhecido",
   "@unknownError": {},
@@ -362,16 +334,6 @@
   "@noItem": {},
   "noArtist": "Nenhum Artista",
   "@noArtist": {},
-  "streaming": "TRANSMITINDO",
-  "@streaming": {},
-  "downloaded": "DESCARREGADO",
-  "@downloaded": {},
-  "transcode": "TRANSCODIFICAR",
-  "@transcode": {},
-  "direct": "DIRETO",
-  "@direct": {},
-  "statusError": "ERRO DE CONDIÇÃO",
-  "@statusError": {},
   "queue": "Fila",
   "@queue": {},
   "addToQueue": "Adicionar à Fila",
@@ -406,7 +368,7 @@
   "@removedFromPlaylist": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Ocultar artistas da música se forem iguais aos artistas do álbum",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "startMixNoSongsAlbum": "Antes de iniciar uma mistura, faça um toque longo num álbum para adicioná-lo ao editor de misturas",
+  "startMixNoSongsAlbum": "Pressione e segure um álbum para o adicionar ou remover do construtor de mistura antes de iniciar uma mistura",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -416,7 +378,7 @@
   "@bufferDuration": {},
   "showUncensoredLogMessage": "Este log contém suas informações de login. Mostrar?",
   "@showUncensoredLogMessage": {},
-  "enableTranscodingSubtitle": "Transcodifica fluxos de música no lado do servidor.",
+  "enableTranscodingSubtitle": "Transcodifica transmissões de música no lado do servidor.",
   "@enableTranscodingSubtitle": {},
   "removeFromPlaylistTitle": "Remover da Lista de Reprodução",
   "@removeFromPlaylistTitle": {},
@@ -438,17 +400,9 @@
   },
   "useCoverAsBackground": "Mostrar capa desfocada como plano de fundo do player",
   "@useCoverAsBackground": {},
-  "startMixNoSongsArtist": "Antes de iniciar uma mistura, faça um toque longo num artista para adicionar ou remover o mesmo do editor de misturas",
+  "startMixNoSongsArtist": "Pressione e segure um artista para o adicionar ou remover do construtor de misturas antes de iniciar uma mistura",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
   },
   "minutes": "Minutos",
   "@minutes": {},
@@ -476,14 +430,6 @@
   "@resetTabs": {},
   "disableGesture": "Desativar gestos",
   "@disableGesture": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "disableGestureSubtitle": "Se deseja desativar gestos.",
   "@disableGestureSubtitle": {},
   "startupError": "Ocorreu um erro durante o arranque da aplicação. O erro foi:{error}\n\nPor favor, abra um \"Issue\" em github.com/UnicornsOnLSD/finamp que contenha uma captura deste ecrã. Caso o problema persista, tente limpar os dados da aplicação para a repor para o estado original.",
@@ -508,10 +454,518 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsAbortButtonText": "Cancelar",
-  "@deleteDownloadsAbortButtonText": {},
   "showFastScroller": "Mostrar rolagem rápida",
   "@showFastScroller": {},
   "syncDownloadedPlaylists": "Sincronizar listas de reprodução descarregadas",
-  "@syncDownloadedPlaylists": {}
+  "@syncDownloadedPlaylists": {},
+  "about": "Sobre o Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "finampTagline": "Um leitor de música Jellyfin open source",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "loginFlowWelcomeHeading": "Bem vindo ao",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "aboutContributionPrompt": "Feito por pessoas incríveis no seu tempo livre.\nVocê também pode ser uma delas!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "Contribua para o Finamp no GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "Leia as notas da última versão:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "Ajude a traduzir o Finamp para o seu idioma:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "aboutThanks": "Obrigado por usar o Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowSlogan": "A sua música, à sua maneira.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "viewLogs": "Ver Logs",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "changeLanguage": "Alterar Idioma",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "back": "Voltar",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "loginFlowGetStarted": "Começar!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "loginFlowServerSelectionHeading": "Conectar ao Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "connectingToServer": "Conectando ao servidor...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "serverUrlHint": "ex.: demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "serverUrlInfoButtonTooltip": "Ajuda para o URL do Servidor",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "loginFlowLocalNetworkServers": "Servidores na rede local:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowCustomUser": "Utilizador Personalizado",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "backToAccountSelection": "Voltar à Seleção de Conta",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowAuthenticationHeading": "Inicie sessão na sua conta",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "Use o código Quick Connect",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectDisabled": "O Quick Connect está desativado neste servidor.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "orDivider": "ou",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowSelectAUser": "Selecione um utilizador",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameHint": "Insira o seu nome de utilizador",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Por favor, insira um nome de utilizador",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "Insira a sua palavra-passe",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Iniciar Sessão",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "startMixNoSongsGenre": "Pressione e segure um género para o adicionar ou remover do construtor de mistura antes de iniciar uma mistura",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "title": "Título",
+  "@title": {},
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} faixa} other{{songCount} faixas}}, {imageCount,plural,=1{{imageCount} imagem} other{{imageCount} imagens}}\n{syncCount,plural,=1{{syncCount} nó a sincronizar} other{{syncCount} nós a sincronizar}}{repairing,plural,=0{} other{\nA reparar neste momento}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "activeDownloads": "Transferências em Progresso",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Transferências em Progresso",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Sem transferências em progresso.",
+  "@noActiveDownloads": {},
+  "offlineSongCount": "{count,plural,=1{{count} Música} other{{count} Músicas}}, {downloads} Transferidas",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCountArtist": "{count,plural,=1{{count} Música} other{{count} Músicas}} Transferidas",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmDownloadStarted": "Transferência iniciada",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "interactions": "Interações",
+  "@interactions": {},
+  "customizationSettingsTitle": "Personalização",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "Visibilidade da Velocidade de Reprodução",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "playbackSpeedControlSettingSubtitle": "Se os controlos de velocidade de reprodução são exibidos no menu do ecrã do leitor",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "automatic": "Automático",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Exibido",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Oculto",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Velocidade",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "Repor",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Aplicar",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "addToMorePlaylistsTooltip": "Adicionar a mais playlists",
+  "@addToMorePlaylistsTooltip": {},
+  "goToArtist": "Ir para o Artista",
+  "@goToArtist": {},
+  "previousTracks": "Faixas Anteriores",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "playingFrom": "A Reproduzir de",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "playbackHistory": "Histórico de Reprodução",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "playbackOrderShuffledButtonLabel": "A Reproduzir Aleatoriamente",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "loopModeOneButtonLabel": "A Repetir Esta Faixa",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeNoneButtonLabel": "Sem Repetição",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeAllButtonLabel": "A Repetir Todos",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "volumeNormalizationSwitchTitle": "Ativar Normalização de Volume",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationSwitchSubtitle": "Usar informações de ganho para normalizar o volume das faixas (\"Replay Gain\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeTrackBased": "Baseado em Faixas",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Ganho Base",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "transcodingStreamingContainerTitle": "Selecionar Contentor de Transcodificação",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "downloadTranscodeEnableTitle": "Ativar Transferências Transcodificadas",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadBitrate": "Taxa de Transferência",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "lockDownload": "Manter Sempre no Dispositivo",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "scrollToCurrentTrack": "Voltar à faixa atual",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "enableAutoScroll": "Ativar scroll automático",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "deleteDownloadsPrompt": "Tem a certeza de que pretende eliminar o/a {itemType, select, album{álbum} playlist{playlist} artist{artista} genre{género} song{música} library{biblioteca} other{item}} '{itemName}' deste dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "downloadBitrateSubtitle": "Uma taxa de bits mais alta oferece áudio de melhor qualidade, mas exige mais espaço de armazenamento.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "transcodingStreamingContainerSubtitle": "Selecione o contentor de segmentos a usar ao transmitir áudio transcodificado. As faixas já na fila não serão afetadas.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "volumeNormalizationSettingsTitle": "Normalização de Volume",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Procurando servidores...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "backToServerSelection": "Voltar à Seleção de Servidor",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "Utilizador Sem Nome",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowAccountSelectionHeading": "Selecione a sua conta",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "volumeNormalizationModeAlbumOnly": "Apenas Álbuns",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "loginFlowQuickConnectInstructions": "Abra a aplicação ou o site do Jellyfin, clique no ícone do seu utilizador e selecione Quick Connect.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Atualmente, a Normalização de Volume no iOS requer a alteração do volume de reprodução para emular a mudança de ganho. Como não podemos aumentar o volume acima de 100%, precisamos diminuir o volume por padrão para podermos aumentar o volume das faixas mais baixas. O valor é em decibéis (dB), onde -10 dB corresponde a ~30% de volume, -4,5 dB a ~60% de volume e -2 dB a ~80% de volume.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "Quando e como aplicar a Normalização de Volume",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "playbackSpeedControlSettingDescription": "Automático:\nO Finamp tenta identificar se a faixa que está a reproduzir é um podcast ou (parte de) um audiolivro. Isto é considerado verdadeiro se a faixa tiver mais de {trackDuration} minutos, se o álbum da faixa tiver mais de {albumDuration} horas, ou se a faixa tiver pelo menos um destes géneros atribuídos: {genreList}.\nOs controlos de velocidade de reprodução serão então exibidos no menu do ecrã do leitor.\n\nExibido:\nOs controlos de velocidade de reprodução serão sempre exibidos no menu do ecrã do leitor.\n\nOculto:\nOs controlos de velocidade de reprodução no menu do ecrã do leitor estão sempre ocultos.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "volumeNormalizationModeSelectorTitle": "Modo de Normalização de Volume",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "playbackOrderLinearButtonLabel": "A Reproduzir em Ordem",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "volumeNormalizationModeSelectorDescription": "Híbrido (Faixa + Álbum):\nO ganho da faixa é usado para reprodução normal, mas, se um álbum estiver a ser reproduzido (seja porque é a principal fonte da fila de reprodução ou porque foi adicionado à fila em algum momento), o ganho do álbum será usado em vez disso.\n\nBaseado em Faixas:\nO ganho da faixa é sempre usado, independentemente de um álbum estar a ser reproduzido ou não.\n\nApenas Álbuns:\nA Normalização de Volume é aplicada apenas ao reproduzir álbuns (usando o ganho do álbum), mas não para faixas individuais.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "volumeNormalizationModeHybrid": "Híbrido (Faixa + Álbum)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationModeAlbumBased": "Baseado em Álbuns",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Espaçamento Mínimo da Capa do Álbum",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Espaçamento mínimo ao redor da capa do álbum na tela de reprodução, em % da largura da tela.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopSongs": "Mostrar faixas principais na vista do artista",
+  "@showArtistsTopSongs": {},
+  "showArtistsTopSongsSubtitle": "Indica se deve mostrar as 5 faixas mais ouvidas de um artista.",
+  "@showArtistsTopSongsSubtitle": {},
+  "playerScreen": "Tela de Reprodução",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "hours": "Horas",
+  "@hours": {},
+  "seconds": "Segundos",
+  "@seconds": {},
+  "timeFractionTooltip": "{currentTime} de {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "trackCountTooltip": "Faixa {currentTrackIndex} de {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "sleepTimerRemainingTime": "Dormindo em {time} minutos",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTitle": "Adicionar a Mais Playlists",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistNamedTooltip": "Remover da playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Remover da playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "playlistActionsMenuButtonTooltip": "Toque para adicionar à playlist. Pressione e segure para alternar favorito.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "unknownAlbum": "Álbum Desconhecido",
+  "@unknownAlbum": {},
+  "playbackModeDirectPlaying": "Reprodução Direta",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "Reprodução Transcodificada",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Reprodução Local",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToGenre": "Ir para o Género",
+  "@goToGenre": {},
+  "confirmFavoriteAdded": "Favorito Adicionado",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Favorito Removido",
+  "@confirmFavoriteRemoved": {},
+  "confirmAddedToPlaylist": "Adicionado à playlist.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "skipToPreviousTrackButtonTooltip": "Ir para o início ou para a faixa anterior",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "skipToNextTrackButtonTooltip": "Ir para a próxima faixa",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "togglePlaybackButtonTooltip": "Alternar reprodução",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "nextUp": "Próximas Faixas",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "swipeInsertQueueNext": "Reproduzir Faixa Deslizada a Seguir",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Ativar para inserir uma faixa como próximo item na fila ao ser deslizada na lista de faixas, em vez de adicioná-la ao final.",
+  "@swipeInsertQueueNextSubtitle": {}
 }

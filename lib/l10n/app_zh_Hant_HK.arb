@@ -5,14 +5,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL 必須以 http:// 或 https:// 開頭",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL 不能以「/」作結",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "用戶名稱",
   "@username": {},
   "password": "密碼",
@@ -89,14 +81,6 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count}個項目} other{{count}個項目}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlComplete": "{count} 完成",
   "@dlComplete": {
     "placeholders": {
@@ -121,10 +105,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "下載錯誤",
-  "@downloadErrorsTitle": {},
-  "noErrors": "沒有錯誤！",
-  "@noErrors": {},
   "errorScreenError": "讀取錯誤資訊時發生錯誤！建議在 GitHub 上回報此問題及重設應用程式。",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "無法從下載 ID 中取得歌曲",
@@ -281,12 +261,6 @@
   "@playlistCreated": {},
   "unknownArtist": "未知的歌手",
   "@unknownArtist": {},
-  "direct": "直接播放",
-  "@direct": {},
-  "streaming": "串流中",
-  "@streaming": {},
-  "statusError": "錯誤",
-  "@statusError": {},
   "addToQueue": "加入至播放佇列",
   "@addToQueue": {},
   "queue": "播放佇列",
@@ -385,32 +359,8 @@
   "@shuffleAll": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "downloadErrors": "下載錯誤",
-  "@downloadErrors": {},
   "dlFailed": "{count} 失敗",
   "@dlFailed": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}， {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count}張圖片} other{{count}張圖片}}",
-  "@downloadedImagesCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -463,10 +413,6 @@
   "@noArtist": {},
   "noItem": "沒有任何項目",
   "@noItem": {},
-  "downloaded": "已下載",
-  "@downloaded": {},
-  "transcode": "轉碼",
-  "@transcode": {},
   "responseError401": "{error}（代碼：{statusCode}）。此錯誤有可能因為用戶名稱／密碼輸入錯誤或您已被登出而導致。",
   "@responseError401": {
     "placeholders": {
@@ -524,55 +470,14 @@
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
-  "deleteDownloadsAbortButtonText": "取消",
-  "@deleteDownloadsAbortButtonText": {},
   "syncDownloadedPlaylists": "同步已下載播放清單",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "顯示快速卷軸",
   "@showFastScroller": {},
-  "redesignBeta": "測試版",
-  "@redesignBeta": {},
   "swipeInsertQueueNext": "滑動插播",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "在歌曲列表中輕掃歌曲時，將其插入至播放佇列的最頭而不是最後。",
   "@swipeInsertQueueNextSubtitle": {},
-  "skipToNext": "下一首歌",
-  "@skipToNext": {},
-  "skipToPrevious": "上一首歌",
-  "@skipToPrevious": {},
-  "download": "下載",
-  "@download": {},
-  "deleteFromDevice": "從裝置中刪除",
-  "@deleteFromDevice": {},
-  "downloadArtist": "下載 {artist}所有的專輯",
-  "@downloadArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "playArtist": "播放{artist}所有的專輯",
-  "@playArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
-  "shuffleArtist": "隨機播放{artist}的專輯",
-  "@shuffleArtist": {
-    "placeholders": {
-      "artist": {
-        "type": "String",
-        "example": "The Beatles"
-      }
-    }
-  },
   "about": "關於 Finamp",
-  "@about": {},
-  "sync": "與伺服器同步",
-  "@sync": {}
+  "@about": {}
 }

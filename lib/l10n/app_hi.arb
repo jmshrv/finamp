@@ -1,0 +1,1855 @@
+{
+  "confirmShuffleNext": "आगे शफ़ल किया जाएगा",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "placeholderSource": "कहीं",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "playbackHistory": "प्लेबैक इतिहास",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "yourLikes": "आपके लाइक",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "shuffleAllQueueSource": "सभी शफ़ल करें",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "एक कतार में चला रहे",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderLinearButtonTooltip": "एक कतार में चला रहे। शफ़ल करने के लिए टैप करें।",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "ट्रैक को शफ़ल किया जा रहा है",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "ट्रैक को शफ़ल किया जा रहा है। एक कतार में चलाने के लिए टैप करें।",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedButtonLabel": "x{speed} कि गति से चल रहा",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "loopModeOneButtonLabel": "इस ट्रैक को लूप किया जा रहा",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeAllButtonLabel": "सभी को लूप किया जा रहा",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "Now Playing पुनर्स्थापित करें",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "पुनर्स्थापित करें",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "{date} को सहेजा गया",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "चल रहा: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "queueLoadingMessage": "कतार को पुनर्स्थापित किया जा रहा…",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "autoloadLastQueueOnStartup": "आखिरी कतार को अपने-आप पुनर्स्थापित करें",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "सर्वर को वर्तमान कतार की रिपोर्ट करें?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "प्लेबैक सत्र अपडेट होने की फ्रिक्वेंसी",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "albumCount": "{count,plural,=1{{count} एल्बम} other{{count} एल्बम}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleAlbums": "एल्बम शफ़ल करें",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsNext": "एल्बम शफ़ल करें अगला",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "couldNotLoad": "{source, select, album{album} playlist{प्लेलिस्ट} songMix{ट्रैक मिक्स} artistMix{कलाकार मिक्स} albumMix{एल्बम मिक्स} genreMix{शैली मिक्स} favorites{पसंदीदा} allSongs{सभी ट्रैक} filteredList{ट्रैक} genre{शैली} artist{कलाकार} song{ट्रैक} nextUpAlbum{next up में एल्बम} nextUpPlaylist{next up में प्लेलिस्ट} nextUpArtist{next up में कलाकार} other{}} को लोड नहीं किया जा सका",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "confirm": "पुष्टि",
+  "@confirm": {},
+  "close": "बंद",
+  "@close": {},
+  "showUncensoredLogMessage": "इस लॉग में आपकी लॉगिन जानकारी शामिल है। दिखाएं?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "टैब रीसेट करें",
+  "@resetTabs": {},
+  "noMusicLibrariesTitle": "कोई संगीत लाइब्रेरी नहीं",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "refresh": "रिफ्रेश",
+  "@refresh": {},
+  "moreInfo": "अधिक जानकारी",
+  "@moreInfo": {},
+  "volumeNormalizationSettingsTitle": "वॉल्यूम सामान्यीकरण",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "volumeNormalizationSwitchTitle": "वॉल्यूम सामान्यीकरण सक्षम करें",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationSwitchSubtitle": "ट्रैक की लाउडनेस को सामान्य करने के लिए गेन जानकारी का उपयोग करें (\"रिप्ले गेन\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "वॉल्यूम सामान्यीकरण कब और कैसे लागू करें",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorDescription": "हाइब्रिड (ट्रैक + एल्बम):\nट्रैक गेन का उपयोग नियमित प्लेबैक के लिए किया जाता है, लेकिन यदि कोई एल्बम चल रहा है (या तो इसलिए कि यह मुख्य प्लेबैक कतार स्रोत है, या क्योंकि इसे किसी समय पर कतार में जोड़ा गया था), तो इसके बजाय एल्बम गेन का उपयोग किया जाएगा।\n\nट्रैक-आधारित:\nट्रैक गेन का उपयोग हमेशा किया जाएगा, चाहे कोई एल्बम चल रहा हो या नहीं।\n\nकेवल एल्बम:\nवॉल्यूम सामान्यीकरण केवल एल्बम चलाते समय लागू होगा (एल्बम गेन का उपयोग करके), लेकिन व्यक्तिगत ट्रैक के लिए नहीं।",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "volumeNormalizationModeHybrid": "हाइब्रिड (ट्रैक + एल्बम)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationModeTrackBased": "ट्रैक-आधारित",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "swipeInsertQueueNext": "स्वाइप किया गया ट्रैक अगला चलाएं",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "ट्रैक सूची में स्वाइप करने पर उसे अंत में जोड़ने के बजाय कतार में अगले आइटम के रूप में सम्मिलित करने को सक्षम करें।",
+  "@swipeInsertQueueNextSubtitle": {},
+  "startInstantMixForIndividualTracksSwitchTitle": "व्यक्तिगत ट्रैक के लिए इंस्टेंट मिक्स शुरू करें",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "सक्षम होने पर, ट्रैक टैब पर किसी ट्रैक को टैप करने से केवल एक ट्रैक चलाने के बजाय उस ट्रैक का इंस्टेंट मिक्स शुरू हो जाएगा।",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "downloadItem": "डाउनलोड",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "deleteItem": "डिवाइस से हटाएं",
+  "@deleteItem": {
+    "description": "Option to delete item in long-press menu."
+  },
+  "repairComplete": "डाउनलोड मरम्मत पूरा हुआ।",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "syncComplete": "सभी डाउनलोड दोबारा सिंक्रोनाइज किए गए।",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "syncDownloads": "गुम आइटम को सिंक करें और डाउनलोड करें।",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "डाउनलोड की गई फ़ाइलों या मेटाडाटा से संबंधित समस्याओं को सुधारें।",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "requireWifiForDownloads": "WiFi पर ही डाउनलोड करें।",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "queueRestoreError": "चेतावनी: {count,plural, =1{{count} ट्रैक} other{{count} ट्रैक}} कतार में पुनर्स्थापित नहीं किए जा सके।",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadLibraryPrompt": "क्या आप वाकई लाइब्रेरी ''{libraryName}'' की सभी सामग्री डाउनलोड करना चाहते हैं?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionInterrupted": "कनेक्शन बाधित, डाउनलोड रोका जा रहा है।",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "बैकग्राउंड में डाउनलोड करते समय कनेक्शन बाधित हुआ। यह OS की सेटिंग के कारण हो सकता है।",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "activeDownloadSize": "डाउनलोड हो रहा…",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "मिट रहा…",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "सिंक्रोनाइज हो रहा…",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "downloadSettings": "डाउनलोड की सेटिंग",
+  "@downloadSettings": {},
+  "maxConcurrentDownloads": "अधिकतम कॉन्क्युरेंट डाउनलोड",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "downloadsWorkersSetting": "डाउनलोड वर्कर मात्रा",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{count} डाउनलोड वर्कर",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOnStartupSwitch": "स्टार्टअप पर डाउनलोड को अपने-आप सिंक करें",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "preferQuickSyncSwitch": "क्विक सिंक को प्राथमिकता दें",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "preferQuickSyncSwitchSubtitle": "सिंक करते समय, कुछ सामान्यतः स्थिर आइटम (जैसे ट्रैक और एल्बम) अपडेट नहीं किए जाएँगे। डाउनलोड रिपेयर हमेशा पूर्ण सिंक करेगा।",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "incidentalDownloadTooltip": "इस आइटम को {parentName} द्वारा डाउनलोड किया जाना आवश्यक है।",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "finampCollectionNames": "{itemType, select, favorites{पसंदीदा} allPlaylists{सभी प्लेलिस्ट} fiveLatestAlbums{5 नवीनतम एल्बम} allPlaylistsMetadata{प्लेलिस्ट मेटाडाटा} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "transcodingStreamingContainerTitle": "ट्रांसकोडिंग कंटेनर चुनें",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "downloadTranscodeCodecTitle": "डाउनलोड Codec चुनें",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadBitrate": "डाउनलोड का बिटरेट",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "transcodeHint": "ट्रांसकोड?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "doTranscode": "ऐसे डाउनलोड करें {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "redownloadTitle": "ट्रांसकोड को अपने-आप पुनः डाउनलोड करें",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "defaultDownloadLocationButton": "डिफ़ॉल्ट डाउनलोड स्थान के रूप में सेट करें।  प्रति डाउनलोड के लिए अक्षम करें।",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "fixedGridSizeSwitchTitle": "निश्चित आकार की ग्रिड टाइलों का उपयोग करें",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeSwitchSubtitle": "ग्रिड टाइल का आकार विंडो/स्क्रीन के आकार के अनुरूप नहीं होगा।",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "allowSplitScreenTitle": "स्प्लिटस्क्रीन मोड की अनुमति दें",
+  "@allowSplitScreenTitle": {},
+  "allowSplitScreenSubtitle": "प्लेयर को अन्य दृश्यों के साथ व्यापक डिस्प्ले पर प्रदर्शित किया जाएगा।",
+  "@allowSplitScreenSubtitle": {},
+  "enableVibration": "वाइब्रेशन सक्षम करें",
+  "@enableVibration": {},
+  "enableVibrationSubtitle": "वाइब्रेशन सक्षम करें या नहीं।",
+  "@enableVibrationSubtitle": {},
+  "hidePlayerBottomActions": "नीचे की क्रियाएं छिपाएं",
+  "@hidePlayerBottomActions": {},
+  "prioritizePlayerCover": "एल्बम कवर को प्राथमिकता दें",
+  "@prioritizePlayerCover": {},
+  "suppressPlayerPadding": "प्लेयर नियंत्रण पैडिंग को सप्रेस करें",
+  "@suppressPlayerPadding": {},
+  "suppressPlayerPaddingSubtitle": "जब एल्बम कवर पूर्ण आकार में नहीं हो, तो प्लेयर स्क्रीन नियंत्रणों के बीच पैडिंग को पूरी तरह से न्यूनतम कर दिया जाएगा।",
+  "@suppressPlayerPaddingSubtitle": {},
+  "showArtistChipImage": "कलाकार के नाम के साथ कलाकार का चित्र भी दिखाएं",
+  "@showArtistChipImage": {},
+  "showArtistChipImageSubtitle": "इससे छोटी कलाकार छवि प्रिव्यू प्रभावित होती है, जैसे कि प्लेयर स्क्रीन पर।",
+  "@showArtistChipImageSubtitle": {},
+  "enableAutoScroll": "ऑटो-स्क्रॉल सक्षम करें",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "remainingDuration": "{duration} बचा हुआ",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "removeFromPlaylistConfirm": "निकालें",
+  "@removeFromPlaylistConfirm": {},
+  "removeFromPlaylistPrompt": "प्लेलिस्ट '{playlistName}' में से '{itemName}' निकलें?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "trackMenuButtonTooltip": "ट्रैक मेनू",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "trackOfflineFavorites": "सभी पसंदीदा स्थितियों को सिंक करें",
+  "@trackOfflineFavorites": {},
+  "allPlaylistsInfoSetting": "प्लेलिस्ट मेटाडाटा डाउनलोड करें",
+  "@allPlaylistsInfoSetting": {},
+  "cacheLibraryImagesSettingsSubtitle": "वर्तमान में सक्रिय लाइब्रेरी में सभी एल्बम, कलाकार, शैली और प्लेलिस्ट कवर डाउनलोड किए जाएंगे।",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "showProgressOnNowPlayingBarSubtitle": "यह नियंत्रित करता है कि संगीत स्क्रीन के नीचे स्थित इन-ऐप मिनी प्लेयर / Now Playing बार प्रगति बार के रूप में कार्य करता है या नहीं।",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "lyricsScreen": "बोल दृश्यता",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showStopButtonOnMediaNotificationTitle": "मीडिया नोटिफिकेशन पर स्टॉप बटन दिखाएं",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "मीडिया नोटिफिकेशन पर सीक नियंत्रण (Seek Control) दिखाएं",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "यह नियंत्रित करता है कि मीडिया नोटिफिकेशन में सीक किए जाने योग्य प्रगति बार है या नहीं। यह आपको ऐप खोले बिना प्लेबैक स्थिति बदलने देता है।",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionStart": "Start",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "Center",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "End",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "छोटा",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "fontSizeOptionMedium": "मीडियम",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "lyricsAlignmentTitle": "बोल एलाइनमेंट",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsAlignmentSubtitle": "बोल दृश्य में बोल एलाइनमेंट को नियंत्रित करता है।",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeTitle": "बोल फ़ॉन्ट आकार",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "keepScreenOn": "स्क्रीन सक्रिय रखें",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnDisabled": "असक्षम",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnWhilePlaying": "संगीत चलने के दौरान",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhilePluggedIn": "स्क्रीन को केवल प्लग इन होने पर ही सक्रिय रखें",
+  "@keepScreenOnWhilePluggedIn": {},
+  "genericToggleButtonTooltip": "टॉगल करने के लिए टैप करें।",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "artwork": "कलाकृति",
+  "@artwork": {},
+  "additionalPeople": "लोग",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "size": "Size",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "sampleRate": "Sample Rate",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "albumScreen": "एल्बम स्क्रीन",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenSubtitle": "एल्बम स्क्रीन पर प्रत्येक ट्रैक के लिए अलग से एल्बम कवर दिखाएं।",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "emptyFilteredListSubtitle": "कोई भी आइटम फ़िल्टर से मेल नहीं खाता। फ़िल्टर बंद करें या खोज शब्द बदलें।",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetFiltersButton": "रीसेट फ़िल्टर",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "finamp": "फ़िनएम्प",
+  "@finamp": {
+    "description": "App name, possibly translated"
+  },
+  "finampTagline": "एक खुला स्त्रोत जेलिफ़िन संगीत प्लेयर",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutThanks": "फ़िनएम्प इस्तमाल करने के लिए धन्यवाद!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "about": "फ़िनएम्प के बारे में",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "aboutContributionPrompt": "शानदार लोगों द्वारा उनके खाली समय में बनाया गया।\nआप भी उनमें से एक हो सकते है!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "GitHub पर फ़िनएम्प के लिए योगदान करें:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "नवीनतम रिलीज़ नोट्स पढ़ें:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "अपनी भाषा में फ़िनएम्प को अनुवाद करें:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "loginFlowSlogan": "आपके संगीत, आपके हिसाब से।",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "शुरू करें!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "loginFlowWelcomeHeading": "स्वागत है,",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "changeLanguage": "भाषा बदलें",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "जेलिफ़िन से जोड़ें",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "serverUrl": "सर्वर URL",
+  "@serverUrl": {},
+  "back": "पीछे",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlHint": "e.g. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "emptyServerUrl": "सर्वर URL खाली नहीं रह सकता",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "connectingToServer": "सर्वर से जोड़ा जा रहा…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "आपके स्थानीय नेटवर्क पर सर्वर:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "सर्वर को ढूंढ रहे…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "अपना खाता चुनें",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "अनाम उपयोगकर्ता",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "कस्टम उपयोगकर्ता",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAuthenticationHeading": "अपने खाते में लॉगिन करें",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "backToAccountSelection": "खाता चयन पर वापस जाएँ",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "Quick Connect कोड का इस्तेमाल करें",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectInstructions": "जेलिफ़िन ऐप या वेबसाइट खोलें, अपना खाता चुनें, और फिर Quick Connect चुनें।",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectDisabled": "इस सर्वर पर Quick Connect बंद है।",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "orDivider": "या",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowSelectAUser": "उपयोगकर्ता चुनें",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "username": "उपयोगकर्ता नाम",
+  "@username": {},
+  "password": "पासवर्ड",
+  "@password": {},
+  "passwordHint": "अपना पासवर्ड भरें",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "लॉगिन",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "logs": "लॉग",
+  "@logs": {},
+  "next": "अगला",
+  "@next": {},
+  "selectMusicLibraries": "संगीत लाइब्रेरी चुनें",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "unknownName": "अज्ञात नाम",
+  "@unknownName": {},
+  "albums": "एल्बम",
+  "@albums": {},
+  "artists": "कलाकार",
+  "@artists": {},
+  "genres": "शैली",
+  "@genres": {},
+  "playlists": "प्लेलिस्ट",
+  "@playlists": {},
+  "startMix": "मिक्स शुरू करें",
+  "@startMix": {},
+  "usernameHint": "अपना उपयोगकर्ता नाम भरें",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "songs": "ट्रैक",
+  "@songs": {},
+  "music": "संगीत",
+  "@music": {},
+  "clear": "मिटाएं",
+  "@clear": {},
+  "favourites": "पसंदीदा",
+  "@favourites": {},
+  "shuffleAll": "सभी शफ़ल",
+  "@shuffleAll": {},
+  "downloads": "डाउनलोड्स",
+  "@downloads": {},
+  "settings": "सेटिंग्स",
+  "@settings": {},
+  "offlineMode": "ऑफलाइन मोड",
+  "@offlineMode": {},
+  "sortOrder": "छांट अनुक्रम",
+  "@sortOrder": {},
+  "sortBy": "ऐसे छांटें",
+  "@sortBy": {},
+  "title": "शीर्षक द्वारा",
+  "@title": {},
+  "album": "एल्बम द्वारा",
+  "@album": {},
+  "albumArtist": "एल्बम कलाकार द्वारा",
+  "@albumArtist": {},
+  "artist": "कलाकार द्वारा",
+  "@artist": {},
+  "budget": "बजट द्वारा",
+  "@budget": {},
+  "criticRating": "आलोचक रेटिंग द्वारा",
+  "@criticRating": {},
+  "dateAdded": "जोड़े गए तिथि द्वारा",
+  "@dateAdded": {},
+  "playCount": "चलाए गए गिनती द्वारा",
+  "@playCount": {},
+  "premiereDate": "प्रीमियर तिथि द्वारा",
+  "@premiereDate": {},
+  "name": "नाम द्वारा",
+  "@name": {},
+  "random": "कैसे भी",
+  "@random": {},
+  "revenue": "आय द्वारा",
+  "@revenue": {},
+  "runtime": "रनटाइम द्वारा",
+  "@runtime": {},
+  "downloadMissingImages": "गायब छवियाँ डाउनलोड करें",
+  "@downloadMissingImages": {},
+  "activeDownloads": "सक्रिय डाउनलोड",
+  "@activeDownloads": {},
+  "downloadCount": "{count,plural, =1{{count} डाउनलोड} other{{count} डाउनलोड}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} असफल",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} पूर्ण",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} कतार में",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} हो रहे",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeDownloadsTitle": "सक्रिय डाउनलोड",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "कोई सक्रिय डाउनलोड नहीं।",
+  "@noActiveDownloads": {},
+  "failedToGetSongFromDownloadId": "डाउनलोड आईडी से गाना प्राप्त करने में असफल",
+  "@failedToGetSongFromDownloadId": {},
+  "error": "त्रुटि",
+  "@error": {},
+  "discNumber": "डिस्क {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "चलाएं",
+  "@playButtonLabel": {},
+  "deleteDownloadsConfirmButtonText": "हाँ मिटाएं",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "shuffleButtonLabel": "शफ़ल",
+  "@shuffleButtonLabel": {},
+  "editPlaylistNameTooltip": "प्लेलिस्ट का नाम संपादित करें",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "प्लेलिस्ट नाम संपादन",
+  "@editPlaylistNameTitle": {},
+  "songCount": "{count,plural,=1{{count} ट्रैक} other {{count} ट्रैक}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCount": "{count,plural,=1{{count} ट्रैक} other{{count} ट्रैक}}, {downloads} डाउनलोड किए गए",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCountArtist": "{count,plural,=1{{count} ट्रैक} other{{count} ट्रैक}} डाउनलोड किए गए",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addButtonLabel": "जोड़ें",
+  "@addButtonLabel": {},
+  "shareLogs": "लॉग शेयर करें",
+  "@shareLogs": {},
+  "message": "संदेश",
+  "@message": {},
+  "stackTrace": "स्टैक ट्रेस",
+  "@stackTrace": {},
+  "transcoding": "ट्रांसकोडिंग",
+  "@transcoding": {},
+  "downloadLocations": "डाउनलोड स्थान",
+  "@downloadLocations": {},
+  "audioService": "ऑडियो सेवा",
+  "@audioService": {},
+  "interactions": "इंटरैक्शन",
+  "@interactions": {},
+  "layoutAndTheme": "लेआउट और थीम",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "ऑफ़लाइन मोड में उपलब्ध नहीं है",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "लॉग आउट",
+  "@logOut": {},
+  "jellyfinUsesAACForTranscoding": "जेलीफ़िन ट्रांसकोडिंग के लिए AAC का उपयोग करता है",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "ट्रांसकोडिंग सक्षम करें",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "संगीत स्ट्रीम को सर्वर पर ही ट्रांसकोड करता है।",
+  "@enableTranscodingSubtitle": {},
+  "bitrate": "बिटरेट",
+  "@bitrate": {},
+  "bitrateSubtitle": "उच्चतर बिटरेट, उच्चतर बैंडविड्थ की कीमत पर उच्चतर गुणवत्ता वाला ऑडियो देता है।",
+  "@bitrateSubtitle": {},
+  "customLocation": "कस्टम स्थान",
+  "@customLocation": {},
+  "appDirectory": "ऐप डायरेक्टरी",
+  "@appDirectory": {},
+  "selectDirectory": "डायरेक्टरी चुनें",
+  "@selectDirectory": {},
+  "pathReturnSlashErrorMessage": "\"/\" लौटने वाले पथ का उपयोग नहीं किया जा सकता",
+  "@pathReturnSlashErrorMessage": {},
+  "directoryMustBeEmpty": "डायरेक्टरी खाली होना चाहिए",
+  "@directoryMustBeEmpty": {},
+  "viewTypeSubtitle": "संगीत स्क्रीन के लिए दृश्य प्रकार",
+  "@viewTypeSubtitle": {},
+  "viewType": "दृश्य प्रकार",
+  "@viewType": {},
+  "grid": "ग्रिड",
+  "@grid": {},
+  "customizationSettingsTitle": "कस्टमाइजेशन",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "shuffleAllSongCount": "सभी ट्रैक को शफ़ल करने की संख्या",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "सभी ट्रैक शफ़ल करने वाले बटन का उपयोग करते समय लोड किए जाने वाले ट्रैकों की मात्रा।",
+  "@shuffleAllSongCountSubtitle": {},
+  "enterLowPriorityStateOnPause": "रोकने के दौरान Low-Priority State में जाएं",
+  "@enterLowPriorityStateOnPause": {},
+  "automatic": "ऑटोमैटिक",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "दिखाएं",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "छिपाएं",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "गति",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "रीसेट",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "लागू",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "portrait": "पोर्ट्रेट",
+  "@portrait": {},
+  "landscape": "लैंडस्केप",
+  "@landscape": {},
+  "showTextOnGridView": "ग्रिड व्यू में टेक्स्ट दिखाएं",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "ग्रिड संगीत स्क्रीन पर टैक्स्ट (शीर्षक, कलाकार आदि) को दिखाएं या नहीं।",
+  "@showTextOnGridViewSubtitle": {},
+  "useCoverAsBackground": "धुंधले कवर को पृष्ठभूमि के रूप में उपयोग करें",
+  "@useCoverAsBackground": {},
+  "playerScreenMinimumCoverPaddingEditorTitle": "न्यूनतम एल्बम कवर पैडिंग",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "प्लेयर स्क्रीन पर एल्बम कवर के आसपास न्यूनतम पैडिंग, स्क्रीन चौड़ाई के % में।",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "एल्बम स्क्रीन पर ट्रैक कलाकारों को दिखाएं या नहीं, यदि वे एल्बम कलाकारों से भिन्न न हों।",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "showArtistsTopSongsSubtitle": "किसी कलाकार के सर्वाधिक सुने गए शीर्ष 5 ट्रैक दिखाए जाएं या नहीं।",
+  "@showArtistsTopSongsSubtitle": {},
+  "disableGesture": "जेस्चर को बंद करना",
+  "@disableGesture": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "यदि एल्बम कलाकारों के समान हो तो ट्रैक के कलाकारों को छिपाएं",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "showArtistsTopSongs": "कलाकार दृश्य में शीर्ष ट्रैक दिखाएं",
+  "@showArtistsTopSongs": {},
+  "disableGestureSubtitle": "जेस्चर को बंद करें या नहीं।",
+  "@disableGestureSubtitle": {},
+  "showFastScroller": "फास्ट स्क्रॉलर दिखाएं",
+  "@showFastScroller": {},
+  "theme": "थीम",
+  "@theme": {},
+  "light": "लाइट",
+  "@light": {},
+  "dark": "डार्क",
+  "@dark": {},
+  "cancelSleepTimer": "क्या स्लीप टाइमर को रद्द करें?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "हाँ",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "नहीं",
+  "@noButtonLabel": {},
+  "setSleepTimer": "स्लीप टाइमर सेट करें",
+  "@setSleepTimer": {},
+  "hours": "घंटे",
+  "@hours": {},
+  "seconds": "सेकंड",
+  "@seconds": {},
+  "minutes": "मिनट",
+  "@minutes": {},
+  "timeFractionTooltip": "{totalTime} का {currentTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "invalidNumber": "अमान्य संख्या",
+  "@invalidNumber": {},
+  "sleepTimerTooltip": "स्लीप टाइमर",
+  "@sleepTimerTooltip": {},
+  "sleepTimerRemainingTime": "{time} मिनट में सोना",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToPlaylistTitle": "प्लेलिस्ट में जोड़ें",
+  "@addToPlaylistTitle": {},
+  "addToMorePlaylistsTooltip": "और अधिक प्लेलिस्ट में जोड़ें",
+  "@addToMorePlaylistsTooltip": {},
+  "removeFromPlaylistTooltip": "इस प्लेलिस्ट से निकालें",
+  "@removeFromPlaylistTooltip": {},
+  "newPlaylist": "नई प्लेलिस्ट",
+  "@newPlaylist": {},
+  "createButtonLabel": "बनाएं",
+  "@createButtonLabel": {},
+  "playlistCreated": "प्लेलिस्ट बनाई गई।",
+  "@playlistCreated": {},
+  "noItem": "कोई आइटम नहीं",
+  "@noItem": {},
+  "noArtist": "कोई कलाकार नहीं",
+  "@noArtist": {},
+  "unknownArtist": "अज्ञात कलाकार",
+  "@unknownArtist": {},
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Locally Playing",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "queue": "कतार",
+  "@queue": {},
+  "addToQueue": "कतार में जोड़ें",
+  "@addToQueue": {
+    "description": "Popup menu item title for adding an item to the end of the play queue."
+  },
+  "replaceQueue": "कतार बदलें",
+  "@replaceQueue": {},
+  "instantMix": "इंस्टेंट मिक्स",
+  "@instantMix": {},
+  "goToAlbum": "एल्बम पर जाएं",
+  "@goToAlbum": {},
+  "goToArtist": "कलाकार पर जाएं",
+  "@goToArtist": {},
+  "goToGenre": "शैली पर जाएं",
+  "@goToGenre": {},
+  "removeFavourite": "पसंदीदा से निकलें",
+  "@removeFavourite": {},
+  "addFavourite": "पसंदीदा बनाएं",
+  "@addFavourite": {},
+  "confirmFavoriteAdded": "पसंदीदा बनाया गया",
+  "@confirmFavoriteAdded": {},
+  "insertedIntoQueue": "कतार के बीच में जोड़ा गया।",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "confirmAddedToPlaylist": "प्लेलिस्ट में जोड़ा गया।",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "removedFromPlaylist": "प्लेलिस्ट से निकाला गया।",
+  "@removedFromPlaylist": {},
+  "responseError": "{error} स्टेटस कोड {statusCode}।",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "bufferDuration": "बफ़र अवधि",
+  "@bufferDuration": {},
+  "language": "भाषा",
+  "@language": {},
+  "skipToPreviousTrackButtonTooltip": "पहले या पिछले ट्रैक पर जाएं",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "previousTracks": "पिछला ट्रैक",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "nextUp": "Next Up",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Next Up मिटाएं",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "playNext": "अगला चलाएं",
+  "@playNext": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "addToNextUp": "Next Up में जोड़ें",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleToNextUp": "Next Up तक शफ़ल करें",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "viewLogs": "लॉग देखें",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "startupError": "शुरुआत के दौरान कुछ गड़बड़ी हुई। गड़बड़ थी: {error}\n\nकृपया स्क्रीनशॉट के साथ github.com/UnicornsOnLSD/finamp पर यह मुद्दा बनाएं। अगर यह समस्या बनी रहती है तो अपना ऐप डाटा साफ़ कर ऐप को रीसेट करें।",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "serverUrlInfoButtonTooltip": "सर्वर URL मदद",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "communityRating": "समुदाय रेटिंग द्वारा",
+  "@communityRating": {},
+  "usernameValidationMissingUsername": "कृपया उपयोगकर्ता नाम भरें",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "internalExternalIpExplanation": "अगर आप जेलिफ़िन सर्वर को दूर से (Remotely) पहुंचना चाहते है तो आपको अपने बाहरी (External) IP का इस्तमाल करना होगा।\n\nअगर आपका सर्वर HTTP के डिफॉल्ट पोर्ट (80 या 443) या जेलिफ़िन के डिफॉल्ट पोर्ट (8096) पर है तो आपको पोर्ट निर्दिष्ट करने की आवश्यकता नहीं है।\n\nअगर आपका URL सही है तो आपको इनपुट फ़ील्ड के नीचे अपने सर्वर के बारे में कुछ जानकारी दिखाई देगी।",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "backToServerSelection": "सर्वर चयन पर वापस जाएं",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "couldNotFindLibraries": "कोई लाइब्रेरी नहीं मिली।",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "startMixNoSongsArtist": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी कलाकार को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "startMixNoSongsAlbum": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी एल्बम को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "startMixNoSongsGenre": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी शैली को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "datePlayed": "चलाए गए तिथि द्वारा",
+  "@datePlayed": {},
+  "downloadedMissingImages": "{count,plural, =0{कोई गायब छवि नहीं} =1{{count} छवियां डाउनलोड की गईं} other{{count} छवियां डाउनलोड की गईं}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorScreenError": "त्रुटियों की सूची प्राप्त करते समय त्रुटि हुई! आपको संभवतः GitHub पर एक मुद्दा बनाना चाहिए और ऐप डाटा को मिटाना चाहिए",
+  "@errorScreenError": {},
+  "productionYear": "उत्पादन वर्ष द्वारा",
+  "@productionYear": {},
+  "syncDownloadedPlaylists": "डाउनलोड की गई प्लेलिस्ट को सिंक करें",
+  "@syncDownloadedPlaylists": {},
+  "applicationLegalese": "Mozilla Public License 2.0 के तहत लाइसेंस किया गया।\nस्त्रोत (Source) कोड यहाँ उपलब्ध है {sourceCodeLink}।",
+  "@applicationLegalese": {
+    "placeholders": {
+      "sourceCodeLink": {
+        "type": "String",
+        "example": "https://github.com/jmshrv/finamp"
+      }
+    }
+  },
+  "unknownError": "अज्ञात त्रुटि",
+  "@unknownError": {},
+  "updateButtonLabel": "लागू करें",
+  "@updateButtonLabel": {},
+  "favourite": "पसंद",
+  "@favourite": {},
+  "confirmDownloadStarted": "डाउनलोड शुरू हुआ",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "location": "स्थान",
+  "@location": {},
+  "downloadsQueued": "डाउनलोड तैयार है, फ़ाइलें डाउनलोड हो रही हैं",
+  "@downloadsQueued": {},
+  "logsCopied": "लॉग कॉपी किए गए।",
+  "@logsCopied": {},
+  "required": "आवश्यक",
+  "@required": {},
+  "playbackSpeedControlSettingSubtitle": "प्लेबैक गति के नियंत्रण प्लेयर स्क्रीन मेनू में दिखाए",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "playlistNameUpdated": "प्लेलिस्ट का नाम बदला गया।",
+  "@playlistNameUpdated": {},
+  "savedQueue": "सहेजी गई कतार",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "addDownloads": "डाउनलोड्स में जोड़ें",
+  "@addDownloads": {},
+  "playbackSpeedFeatureText": "x{speed} गति",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "trackCountTooltip": "{totalTrackCount} ट्रैक में से {currentTrackIndex}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "downloadsDeleted": "डाउनलोड्स मिटाए गए।",
+  "@downloadsDeleted": {},
+  "gridCrossAxisCountSubtitle": "प्रति पंक्ति उपयोग की जाने वाली ग्रिड टाइल्स की मात्रा जब {value}।",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "areYouSure": "क्या आप निश्चित हैं?",
+  "@areYouSure": {},
+  "addDownloadLocation": "डाउनलोड स्थान जोड़ें",
+  "@addDownloadLocation": {},
+  "shareOfflineListens": "ऑफलाइन दौरान सुने गए को साझा करें",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "confirmAddToNextUp": "{type, select, track{ट्रैक} album{एल्बम} artist{कलाकार} playlist{प्लेलिस्ट} genre{शैली} other{आइटम}} Next Up में जोड़ा गया",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "customLocationsBuggy": "अनुमतियों से जुड़ी समस्याओं के कारण कस्टम लोकेशन में बहुत ज़्यादा बग हैं। मैं इसे ठीक करने के तरीकों के बारे में सोच रहा हूँ, और अभी मैं इनका इस्तेमाल करने की सलाह नहीं दूँगा।",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPauseSubtitle": "यह नोटिफिकेशन को रोके जाने पर स्वाइप करके हटा देता है। साथ ही, यह एंड्रॉयड को रोके जाने पर सेवा को बंद करने की अनुमति भी देता है।",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "system": "सिस्टम",
+  "@system": {},
+  "mix": "{mixSource} - मिक्स",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "confirmShuffleToNextUp": "Next Up तक शफ़ल किया गया",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "playbackModeTranscoding": "ट्रांसकोडिंग",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "list": "लिस्ट",
+  "@list": {},
+  "playerScreen": "प्लेयर स्क्रीन",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "playbackSpeedControlSetting": "प्लेबैक गति दृश्यता",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "unknownAlbum": "अज्ञात एल्बम",
+  "@unknownAlbum": {},
+  "playbackSpeedControlSettingDescription": "ऑटोमैटिक:\nफ़िनएम्प यह पहचानने का प्रयास करता है कि आप जो ट्रैक चला रहे हैं वह पॉडकास्ट है या ऑडियोबुक (का हिस्सा) है। ऐसा तब माना जाता है जब ट्रैक {trackDuration} मिनट से अधिक लंबा हो, यदि ट्रैक का एल्बम {albumDuration} घंटे से अधिक लंबा है, या यदि ट्रैक में इनमें से कम से कम एक शैली निर्दिष्ट है: {genreList}\nतब प्लेबैक गति के नियंत्रण प्लेयर स्क्रीन में दिखाए जाएंगे।\n\nदिखाएं:\nप्लेबैक गति के नियंत्रण प्लेयर स्क्रीन में हमेशा दिखाए जाएंगे।\n\nछिपाएं:\nप्लेबैक गति के नियंत्रण प्लेयर स्क्रीन में नहीं दिखाए जाएंगे।",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "gridCrossAxisCount": "{value} ग्रिड क्रॉस-एक्सिस मात्रा",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "noAlbum": "कोई एल्बम नहीं",
+  "@noAlbum": {},
+  "addToPlaylistTooltip": "प्लेलिस्ट में जोड़ें",
+  "@addToPlaylistTooltip": {},
+  "tabs": "टैब",
+  "@tabs": {},
+  "useCoverAsBackgroundSubtitle": "ऐप के विभिन्न भागों में पृष्ठभूमि के रूप में धुंधले एल्बम कवर का उपयोग करें या नहीं।",
+  "@useCoverAsBackgroundSubtitle": {},
+  "startingInstantMix": "इंस्टेंट मिक्स शुरू किया जा रहा है।",
+  "@startingInstantMix": {},
+  "redownloadedItems": "{count,plural, =0{दोबारा डाउनलोड करने की आवश्यकता नहीं} =1{{count} आइटम दोबारा डाउनलोड किया गया} other{{count} आइटम दोबारा डाउनलोड किया गया}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTooltip": "प्लेलिस्ट '{playlistName}' से निकालें",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "addedToQueue": "कतार में जोड़ा गया।",
+  "@addedToQueue": {
+    "description": "Snackbar message that shows when the user successfully adds items to the end of the play queue."
+  },
+  "removeFromMix": "मिक्स से निकालें",
+  "@removeFromMix": {},
+  "tracksFormerNextUp": "Next Up द्वारा जोड़े गए ट्रैक",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "addToMorePlaylistsTitle": "और अधिक प्लेलिस्ट में जोड़ें",
+  "@addToMorePlaylistsTitle": {},
+  "confirmFavoriteRemoved": "पसंदीदा से निकाला गया",
+  "@confirmFavoriteRemoved": {},
+  "playingFrom": "चलाया जा रहा",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "queueReplaced": "कतार बदली गई।",
+  "@queueReplaced": {},
+  "skipToNextTrackButtonTooltip": "अगले ट्रैक पर जाएं",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "anErrorHasOccured": "कोई त्रुटि हुई।",
+  "@anErrorHasOccured": {},
+  "shuffleToQueue": "कतार तक शफ़ल करें",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "responseError401": "{error} स्टेटस कोड {statusCode}. शायद आपने गलत उपयोगकर्ता नाम/पासवर्ड का उपयोग किया है, या आपका क्लाइंट अब लॉगिन नहीं है।",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "addToMix": "मिक्स में जोड़ें",
+  "@addToMix": {},
+  "bufferDurationSubtitle": "प्लेयर को कितना बफ़र करना चाहिए, सेकंड में। रिस्टार्ट की आवश्यकता पड़ेगी।",
+  "@bufferDurationSubtitle": {},
+  "togglePlaybackButtonTooltip": "टॉगल प्लेबैक",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "removeFromPlaylistTitle": "इस प्लेलिस्ट से निकालें",
+  "@removeFromPlaylistTitle": {},
+  "playlistActionsMenuButtonTooltip": "प्लेलिस्ट में जोड़ने के लिए टैप करें। पसंदीदा टॉगल करने के लिए लंबे समय तक दबाएं।",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "playbackModeDirectPlaying": "Direct Playing",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "shuffleNext": "अगला शफ़ल करें",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "ऐप शुरू होने पर, अंतिम बार चलाए गए कतार को पुनर्स्थापित करने का प्रयास करें।",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "confirmPlayNext": "{type, select, track{ट्रैक} album{एल्बम} artist{कलाकार} playlist{प्लेलिस्ट} genre{शैली} other{आइटम}} अगला चलेगा",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToQueue": "{type, select, track{ट्रैक} album{एल्बम} artist{कलाकार} playlist{प्लेलिस्ट} genre{शैली} other{आइटम}} कतार में जोड़ा गया",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleToQueue": "कतार तक शफ़ल किया गया",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "playingFromType": "यहां से चला रहे {source, select, album{एल्बम} playlist{प्लेलिस्ट} songMix{ट्रैक मिक्स} artistMix{कलाकार मिक्स} albumMix{एल्बम मिक्स} genreMix{शैली मिक्स} favorites{पसंदीदा} allSongs{सभी ट्रैक} filteredList{ट्रैक} genre{शैली} artist{कलाकार} song{ट्रैक} nextUpAlbum{Next Up में एल्बम} nextUpPlaylist{Next Up में प्लेलिस्ट} nextUpArtist{Next Up में कलाकार} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteDownloadsPrompt": "क्या आप यकीन से {itemType, select, album{एल्बम} playlist{प्लेलिस्ट} artist{कलाकार} genre{शैली} song{ट्रैक} library{लाइब्रेरी} other{आइटम}} '{itemName}' को इस डिवाइस से हटाना चाहते हैं?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "playbackSpeedDecreaseLabel": "प्लेबैक गति घटाएं",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "queueRetryMessage": "कतार को पुनर्स्थापित करने में असफल। दोबारा प्रयास करें?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} ट्रैक} other{{songCount} ट्रैक}}, {imageCount,plural,=1{{imageCount} छवि} other{{imageCount} छवियां}}\n{syncCount,plural,=1{{syncCount} नोड सिंकिंग} other{{syncCount} नोड सिंकिंग}}{repairing, plural, =0{} other{\nअभी मरम्मत हो रही}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadedSongsWillNotBeDeleted": "डाउनलोड किए गए ट्रैक को मिटाया नहीं जाएगा",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "playbackSpeedIncreaseLabel": "प्लेबैक गति बढ़ाएं",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeNoneButtonLabel": "लूप नहीं किया जा रहा",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 ट्रैक} other{{count} ट्रैक}}, {remaining} Unplayed",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "resetToDefaults": "डिफ़ॉल्ट के लिए रीसेट करें",
+  "@resetToDefaults": {},
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "सर्वर को वर्तमान प्लेबैक स्थिति कितने समय में भेजी जाए, सेकंड में। सत्र का समय समाप्त होने से रोकने के लिए यह 5 मिनट (300 सेकंड) से कम होना चाहिए।",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topSongs": "शीर्ष ट्रैक",
+  "@topSongs": {},
+  "reportQueueToServerSubtitle": "सक्षम होने पर, फ़िनएम्प वर्तमान कतार को सर्वर पर भेजेगा। वर्तमान में इसका बहुत कम उपयोग है, और इससे नेटवर्क ट्रैफ़िक बढ़ता है।",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "filesystemFull": "शेष डाउनलोड पूरे नहीं किए जा सकते। फ़ाइल सिस्टम भरा हुआ है।",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} चलाए गए} other{{playCount} चलाए गए}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "volumeNormalizationModeAlbumOnly": "केवल एल्बम के लिए",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{एल्बम} playlist{प्लेलिस्ट} artist{कलाकार} genre{शैली} song{ट्रैक} library{लाइब्रेरी} unknown{आइटम} other{{itemType}}} {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "runRepairWarning": "डाउनलोड माइग्रेशन को अंतिम रूप देने के लिए सर्वर से संपर्क नहीं किया जा सका। कृपया जैसे ही आप ऑनलाइन वापस आएँ, डाउनलोड स्क्रीन से 'रिपेयर डाउनलोड' चलाएं।",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "cacheLibraryImagesName": "'{libraryName}' के लिए कैश की गई छवियां",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "fixedGridSizeTitle": "ग्रिड टाइल का आकार",
+  "@fixedGridSizeTitle": {},
+  "periodicPlaybackSessionUpdateFrequencyDetails": "यदि जेलिफ़िन सर्वर को पिछले 5 मिनट में क्लाइंट से कोई अपडेट नहीं मिलता है, तो वह मान लेता है कि प्लेबैक समाप्त हो गया है। इसका मतलब है कि 5 मिनट से ज़्यादा लंबे ट्रैक के लिए, गलत प्लेबैक रिपोर्ट की जा सकती है, जिससे प्लेबैक रिपोर्टिंग डाटा की गुणवत्ता कम हो जाती है।",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "onlyShowFullyDownloaded": "केवल पूरी तरह से डाउनलोड किए गए एल्बम दिखाएं",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "volumeNormalizationModeAlbumBased": "एल्बम-आधारित",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "shuffleAlbumsToNextUp": "Next Up तक एल्बम शफ़ल करें",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsToQueue": "कतार तक एल्बम शफ़ल करें",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "noMusicLibrariesBody": "फ़िनएम्प को कोई संगीत लाइब्रेरी नहीं मिली। कृपया सुनिश्चित करें कि आपके जेलिफ़िन सर्वर में कम से कम एक लाइब्रेरी हो, जिसका कंटेंट टाइप \"संगीत\" पर सेट हो।",
+  "@noMusicLibrariesBody": {},
+  "volumeNormalizationIOSBaseGainEditorTitle": "बेस गेन",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{हो रहा} failed{असफल} syncFailed{बार-बार सिंक असफल} enqueued{कतार में} other{}} {itemCount, plural, =1{डाउनलोड} other{डाउनलोड}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadBitrateSubtitle": "उच्चतर बिटरेट, अधिक भंडारण आवश्यकताओं की कीमत पर उच्चतर गुणवत्ता वाला ऑडियो प्रदान करता है।",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{हमेशा} never{कभी नहीं} ask{पूछें} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "fixedGridTileSizeEnum": "{size, select, small{छोटा} medium{मीडियम} large{बड़ा} veryLarge{बहुत बड़ा} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "scrollToCurrentTrack": "वर्तमान ट्रैक पर स्क्रॉल करें",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "connectionInterruptedBackgroundAndroid": "बैकग्राउंड में डाउनलोड करते समय कनेक्शन बाधित हुआ। ऐसा 'रोकने के दौरान Low-Priority State में जाएं' सक्षम करने या OS की सेटिंग के कारण हो सकता है।",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "वर्तमान में, iOS पर वॉल्यूम सामान्यीकरण के लिए प्लेबैक वॉल्यूम को इस तरह बदलने की आवश्यकता है जिससे वह गेन में बदलाव को इमूलेट कर सके। चूँकि हम वॉल्यूम को 100% से अधिक नहीं बढ़ा सकते हैं, इसलिए हमें डिफ़ॉल्ट रूप से वॉल्यूम कम करना होगा ताकि हम शांत ट्रैक का वॉल्यूम बढ़ा सकें। मान डेसिबल (dB) में है, जहाँ -10 dB ~30% वॉल्यूम है, -4.5 dB ~60% वॉल्यूम है और -2 dB ~80% वॉल्यूम है।",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "fiveLatestAlbumsSettingSubtitle": "डाउनलोड पुराने हो जाने पर उन्हें हटा दिया जाएगा। किसी एल्बम को हटाए जाने से रोकने के लिए डाउनलोड को लॉक करें।",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "maxConcurrentDownloadsLabel": "{count} कॉन्क्युरेंट डाउनलोड",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "showNullLibraryItemsSubtitle": "कुछ मीडिया को किसी अज्ञात लाइब्रेरी से डाउनलोड किया जा सकता है। इन्हें उनके मूल संग्रह से बाहर छिपाने के लिए इसे बंद करें।",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "showNullLibraryItemsTitle": "अज्ञात लाइब्रेरी वाली मीडिया दिखाएं।",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "quickActions": "क्विक एक्शन्स",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "downloadsWorkersSettingSubtitle": "मेटाडाटा को सिंक करने और डाउनलोड को हटाने के लिए वर्कर्स की मात्रा। डाउनलोड वर्कर्स को बढ़ाने से डाउनलोड सिंकिंग और डिलीट करने की गति बढ़ सकती है, खासकर जब सर्वर लेटेंसी अधिक हो, लेकिन इससे लैग भी हो सकता है।",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "trackOfflineFavoritesSubtitle": "इससे ऑफ़लाइन रहते हुए भी अधिक अप-टू-डेट पसंदीदा स्थितियां दिखाई जा सकती हैं। कोई अतिरिक्त फ़ाइल डाउनलोड नहीं होती।",
+  "@trackOfflineFavoritesSubtitle": {},
+  "maxConcurrentDownloadsSubtitle": "कॉन्क्युरेंट डाउनलोड की संख्या बढ़ाने से पृष्ठभूमि में डाउनलोड की गति बढ़ सकती है, लेकिन यदि डाउनलोड बहुत बड़े हों तो कुछ डाउनलोड असफल हो सकते हैं, या कुछ मामलों में अत्यधिक विलंब हो सकता है।",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "cacheLibraryImagesSettings": "वर्तमान लाइब्रेरी छवियों को कैश करें",
+  "@cacheLibraryImagesSettings": {},
+  "downloadAllPlaylistsSetting": "सभी प्लेलिस्ट डाउनलोड करें",
+  "@downloadAllPlaylistsSetting": {},
+  "bitDepth": "Bit Depth",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "showCoversOnAlbumScreenTitle": "ट्रैक पर एल्बम कवर दिखाएं",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "volumeNormalizationModeSelectorTitle": "वॉल्यूम सामान्यीकरण मोड",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "यह नियंत्रित करता है कि एल्बम कवर को स्क्रॉल किए जाने से पहले बोल के ऊपर दिखाया जाए या नहीं।",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "artworkTooltip": "{title} के लिए कलाकृति",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "fontSizeOptionLarge": "बड़ा",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "addRemoveFromPlaylist": "प्लेलिस्ट से जोड़ें/निकालें",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "bitRate": "Bit Rate",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "showFeatureChipsToggleTitle": "एडवांस्ड ट्रैक जानकारी दिखाएं",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "transcodingStreamingContainerSubtitle": "ट्रांसकोडेड ऑडियो स्ट्रीम करते समय उपयोग करने के लिए सेगमेंट कंटेनर चुनें। पहले से कतारबद्ध ट्रैक प्रभावित नहीं होंगे।",
+  "@transcodingStreamingContainerSubtitle": {},
+  "downloadTranscodeEnableTitle": "ट्रांसकोडेड डाउनलोड सक्षम करें",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "dontTranscode": "ओरिजिनल डाउनलोड करें {description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "hidePlayerBottomActionsSubtitle": "प्लेयर स्क्रीन पर कतार और बोल बटन छिपाएँ। कतार तक पहुँचने के लिए ऊपर की ओर स्वाइप करें, यदि उपलब्ध हो तो बोल देखने के लिए बाईं ओर (एल्बम कवर के नीचे) स्वाइप करें।",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "showProgressOnNowPlayingBarTitle": "इन-ऐप मिनीप्लेयर पर ट्रैक प्रगति दिखाएं",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "fiveLatestAlbumsSetting": "5 नवीनतम एल्बम डाउनलोड करें",
+  "@fiveLatestAlbumsSetting": {},
+  "playbackMode": "प्लेबैक मोड",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "redownloadcomplete": "ट्रांसकोड पुनःडाउनलोड कतारबद्ध।",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "lockDownload": "हमेशा डिवाइस पर रखें",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "showFeatureChipsToggleSubtitle": "प्लेयर स्क्रीन पर codec, bit rate, आदि जैसी एडवांस्ड ट्रैक जानकारी दिखाएं।",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "emptyFilteredListTitle": "कोई आइटम नहीं मिला",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "redownloadSubtitle": "उन ट्रैक्स को अपने-आप पुनः डाउनलोड करें जिनकी मूल संग्रह में परिवर्तन के कारण भिन्न गुणवत्ता होने की संभावना है।",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "prioritizePlayerCoverSubtitle": "प्लेयर स्क्रीन पर बड़े एल्बम कवर को दिखाने को प्राथमिकता दें। छोटे स्क्रीन साइज़ पर गैर-महत्वपूर्ण नियंत्रण अधिक आक्रामक तरीके से छिपाए जाएंगे।",
+  "@prioritizePlayerCoverSubtitle": {},
+  "showLyricsTimestampsTitle": "सिंक्रोनाइज्ड बोल के लिए टाइमस्टैम्प दिखाएं",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "यह नियंत्रित करता है कि मीडिया नोटिफिकेशन में पॉज़ बटन के अलावा स्टॉप बटन है या नहीं। इससे आप ऐप खोले बिना प्लेबैक रोक सकते हैं।",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "addPlaylistSubheader": "प्लेलिस्ट में ट्रैक जोड़ें",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "allPlaylistsInfoSettingSubtitle": "अपने प्लेलिस्ट अनुभव को बेहतर बनाने के लिए सभी प्लेलिस्ट के मेटाडाटा को सिंक करें",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "downloadFavoritesSetting": "सभी पसंदीदा डाउनलोड करें",
+  "@downloadFavoritesSetting": {},
+  "showLyricsTimestampsSubtitle": "यदि उपलब्ध हो तो यह नियंत्रित करता है कि प्रत्येक बोल पंक्ति का टाइमस्टैम्प बोल दृश्य में दिखाया जाए या नहीं।",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "keepScreenOnWhileLyrics": "बोल दिखाने के दौरान",
+  "@keepScreenOnWhileLyrics": {},
+  "removeFromPlaylistNamedTitle": "प्लेलिस्ट '{playlistName}' से निकालें",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "lyricsFontSizeSubtitle": "बोल दृश्य में बोल के फ़ॉन्ट आकार को नियंत्रित करता है।",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "keepScreenOnWhilePluggedInSubtitle": "यदि डिवाइस अनप्लग है तो स्क्रीन सक्रिय रखें सेटिंग को अनदेखा करें",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "showLyricsScreenAlbumPreludeTitle": "बोल से पहले एल्बम दिखाएं",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnSubtitle": "स्क्रीन कब चालू रखें",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnAlwaysOn": "हमेशा सक्रिय",
+  "@keepScreenOnAlwaysOn": {},
+  "normalizationGain": "Gain",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "playerAlbumArtworkTooltip": "{title} के लिए कलाकृति। प्लेबैक टॉगल करने के लिए टैप करें। ट्रैक स्विच करने के लिए बाएं या दाएं स्वाइप करें।",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "nowPlayingBarTooltip": "प्लेयर स्क्रीन खोलें",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "codec": "Codec",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "emptyTopTracksList": "आपने अभी तक इस कलाकार का कोई ट्रैक नहीं सुना है।",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  }
+}

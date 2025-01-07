@@ -5,14 +5,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL сервера должно начинаться с http:// или https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL сервера не должен иметь / в конце",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "selectMusicLibraries": "Выбрать музыкальные библиотеки",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
@@ -51,16 +43,6 @@
   "@name": {},
   "random": "Случайно",
   "@random": {},
-  "downloadErrors": "Ошибки Скачивания",
-  "@downloadErrors": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} изображение} few{{count} изображения} other{{count} изображений}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlComplete": "{count} завершено",
   "@dlComplete": {
     "placeholders": {
@@ -203,16 +185,6 @@
   "@noArtist": {},
   "unknownArtist": "Неизвестный Исполнитель",
   "@unknownArtist": {},
-  "streaming": "СТРИМИНГ",
-  "@streaming": {},
-  "downloaded": "ЗАГРУЖЕНО",
-  "@downloaded": {},
-  "transcode": "ТРАНСКОДИРОВАНО",
-  "@transcode": {},
-  "direct": "ПРЯМОЙ",
-  "@direct": {},
-  "statusError": "ОШИБКА СТАТУСА",
-  "@statusError": {},
   "queue": "Очередь",
   "@queue": {},
   "addToQueue": "Добавить в Очередь",
@@ -348,33 +320,11 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} файл} few{{count} файла} other{{count} файлы}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlFailed": "{count} не удалось",
   "@dlFailed": {
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },
@@ -394,12 +344,8 @@
       }
     }
   },
-  "downloadErrorsTitle": "Ошибки Загрузки",
-  "@downloadErrorsTitle": {},
   "addDownloads": "Добавить в загрузки",
   "@addDownloads": {},
-  "noErrors": "Ошибок нет!",
-  "@noErrors": {},
   "errorScreenError": "Ошибка при получении списка ошибок! Скорее всего, вам нужно очистить данные приложения и сообщить о данной ошибке на Github",
   "@errorScreenError": {},
   "location": "Расположение",
@@ -504,8 +450,6 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsAbortButtonText": "Отмена",
-  "@deleteDownloadsAbortButtonText": {},
   "noMusicLibrariesTitle": "Нет музыкальных библиотек",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
@@ -532,8 +476,6 @@
   "@interactions": {},
   "swipeInsertQueueNext": "Воспроизвести смахнутую песню следующей",
   "@swipeInsertQueueNext": {},
-  "redesignBeta": "Новый дизайн (бета)",
-  "@redesignBeta": {},
   "showFastScroller": "Показать быструю прокрутку",
   "@showFastScroller": {}
 }

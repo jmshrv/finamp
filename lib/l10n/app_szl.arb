@@ -2,14 +2,6 @@
   "@@locale": "szl",
   "serverUrl": "Adresa URL ôd serwera",
   "@serverUrl": {},
-  "urlStartWithHttps": "URL musi sie zaczynać ôd http:// abo https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL niy może sie kōńczyć znakym „/”",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Miano ôd używocza",
   "@username": {},
   "password": "Hasło",
@@ -48,14 +40,6 @@
   "@dateAdded": {},
   "dlRunning": "{count} two",
   "@dlRunning": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} elymynt} other{{count} elymyntōw}}",
-  "@downloadedItemsCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -116,10 +100,6 @@
   "@noArtist": {},
   "unknownArtist": "Niyznōmy artysta",
   "@unknownArtist": {},
-  "streaming": "STRUMIYNIOWANIE",
-  "@streaming": {},
-  "downloaded": "POBRANE",
-  "@downloaded": {},
   "emptyServerUrl": "Adresa URL ôd serwera niy może być prōzno",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
@@ -132,20 +112,6 @@
   "@startMix": {},
   "premiereDate": "Datōm prymiery",
   "@premiereDate": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "startMixNoSongsAlbum": "Prziciś dugo na album, żeby go dodać abo wymazać ze budowanio miksu, podwiela go puścisz",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
@@ -192,8 +158,6 @@
   "@productionYear": {},
   "downloadMissingImages": "Pobier ôbrazy, co brakujōm",
   "@downloadMissingImages": {},
-  "downloadErrors": "Felery pobiyranio",
-  "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} pobranie} other{{count} pobrań}}",
   "@downloadCount": {
     "placeholders": {
@@ -245,14 +209,6 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} ôbroz} other{{count} ôbrazōw}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlComplete": "{count} podarzōne",
   "@dlComplete": {
     "placeholders": {
@@ -287,10 +243,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Felery pobiyranio",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Bez felerōw!",
-  "@noErrors": {},
   "errorScreenError": "Doszło do feleru przi pobiyraniu wykazu felerōw! We takim przipodku chyba nojlepij to zgłosić na GitHubie i skasować dane ôd aplikacyje",
   "@errorScreenError": {},
   "shuffleButtonLabel": "LŌSOWO",
@@ -373,8 +325,6 @@
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "dark": "Ciymny",
   "@dark": {},
-  "statusError": "FELER STATUSU",
-  "@statusError": {},
   "queue": "Raja",
   "@queue": {},
   "setSleepTimer": "Nasztaluj ôdliczanie do zastawiynio",
@@ -385,8 +335,6 @@
   "@createButtonLabel": {},
   "playlistCreated": "Playlista stworzōno.",
   "@playlistCreated": {},
-  "direct": "BEZPOSTRZEDNIE",
-  "@direct": {},
   "instantMix": "Wartki mix",
   "@instantMix": {},
   "anErrorHasOccured": "Doszło do feleru.",
@@ -412,8 +360,6 @@
   "@addToPlaylistTitle": {},
   "newPlaylist": "Nowo playlista",
   "@newPlaylist": {},
-  "transcode": "TRANSKODOWANIE",
-  "@transcode": {},
   "replaceQueue": "Zastōmp raja",
   "@replaceQueue": {},
   "startupError": "Coś poszło źle przi ôtwiyraniu aplikacyje. Feler to: {error}\n\nZgłoś to na github.com/UnicornsOnLSD/finamp ze zopisym ekranu tyj strōny. Jeźli ta strōna niy przestowo sie pokazować, to wymaż dane aplikacyje, żeby ja zresetować.",
