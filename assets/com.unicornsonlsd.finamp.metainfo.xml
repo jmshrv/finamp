@@ -39,6 +39,31 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
+    <release version="0.9.13-beta" date="2025-01-08">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.13-beta</url>
+      <description>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Added a button for opening the media output switched on the player screen (Android only, iOS already had the AirPlay button)</li>
+          <li>Added reset buttons for all settings pages</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fixed "Finamp has crashed" warning when closing the app on iOS</li>
+          <li>Fixed some track numbers getting squished on some devices</li>
+          <li>Fixed reported playback not properly stopping (or reappearing later) on the server</li>
+          <li>Fixed some offline plays not being logged correctly</li>
+          <li>Fixed weirdly formatted track numbers on the album screen</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
     <release version="0.9.12-beta" date="2024-11-12">
       <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.12-beta</url>
       <description>
