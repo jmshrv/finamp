@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.6.25+49
 
 environment:
-  sdk: ">=2.19.4 <3.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -26,13 +26,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  json_annotation: ^4.8.0
-  chopper: 7.1.1
-  get_it: ^7.2.0
+  json_annotation: ^4.9.0
+  chopper: ^7.4.0
+  get_it: ^8.0.3
   just_audio: ^0.9.42
   audio_service: ^0.18.15
   audio_session: ^0.1.21
-  rxdart: ^0.27.7
+  rxdart: ^0.28.0
   simple_gesture_detector: ^0.2.0
   flutter_downloader:
     git:
@@ -44,22 +44,22 @@ dependencies:
   file_sizes: ^1.0.6
   logging: ^1.1.1
   clipboard: ^0.1.3
-  file_picker: ^5.2.8
+  file_picker: ^8.1.7
   permission_handler: ^11.0.0
   provider: ^6.0.5
-  uuid: ^3.0.7
+  uuid: ^4.5.1
   infinite_scroll_pagination: ^4.0.0
-  flutter_sticky_header: ^0.6.5
-  device_info_plus: ^9.0.3
-  package_info_plus: ^4.1.0
+  flutter_sticky_header: ^0.7.0
+  device_info_plus: ^11.2.0
+  package_info_plus: ^8.1.2
   octo_image: ^2.0.0
-  share_plus: ^7.1.0
+  share_plus: ^10.1.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
   path: ^1.8.2
-  android_id: ^0.3.5
+  android_id: ^0.4.0
   intl: ^0.19.0
   auto_size_text: ^3.0.0
   flutter_riverpod: ^2.3.4
@@ -78,11 +78,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.3.3
-  chopper_generator: 7.1.1
+  chopper_generator: ^7.4.0
   hive_generator: ^2.0.0
   json_serializable: ^6.6.1
-  flutter_launcher_icons: ^0.13.0
-  flutter_lints: ^2.0.1
+  flutter_launcher_icons: ^0.14.2
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

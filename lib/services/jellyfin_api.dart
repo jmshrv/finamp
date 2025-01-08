@@ -417,7 +417,8 @@ Future<String> getAuthHeader() async {
   }
 
   if (finampUserHelper.currentUser?.accessToken != null) {
-    authHeader = '${authHeader}Token="${finampUserHelper.currentUser!.accessToken}", ';
+    authHeader =
+        '${authHeader}Token="${finampUserHelper.currentUser!.accessToken}", ';
   }
 
   authHeader = '${authHeader}Client="Finamp", ';

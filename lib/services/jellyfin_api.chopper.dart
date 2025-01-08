@@ -8,7 +8,7 @@ part of 'jellyfin_api.dart';
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-class _$JellyfinApi extends JellyfinApi {
+final class _$JellyfinApi extends JellyfinApi {
   _$JellyfinApi([ChopperClient? client]) {
     if (client == null) return;
     this.client = client;
