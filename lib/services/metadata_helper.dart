@@ -152,7 +152,7 @@ class MetaData {
         return serverInfo.toJson();
       case MetaDataType.DeviceInfo:
         return deviceInfo.toJson();
-      case MetaDataType.All:
+      default:
         return {
           "appInfo": appInfo.toJson(),
           "serverInfo": serverInfo.toJson(),
