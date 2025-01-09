@@ -12,6 +12,7 @@ class ConfirmationPromptDialog extends AlertDialog {
     required this.abortButtonText,
     required this.onConfirmed,
     required this.onAborted,
+    this.centerText = false
   }) : super(key: key);
 
   final String promptText;
@@ -19,6 +20,7 @@ class ConfirmationPromptDialog extends AlertDialog {
   final String abortButtonText;
   final void Function()? onConfirmed;
   final void Function()? onAborted;
+  final bool centerText;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class ConfirmationPromptDialog extends AlertDialog {
       title: Text(
         promptText,
         style: const TextStyle(fontSize: 18),
+        textAlign: centerText ? TextAlign.center : null,
       ),
       actions: [
         Container(

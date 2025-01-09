@@ -4010,179 +4010,215 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       hasLyrics: json['HasLyrics'] as bool?,
     )..finampOffline = json['FinampOffline'] as bool?;
 
-Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Name', instance.name);
-  writeNotNull('OriginalTitle', instance.originalTitle);
-  writeNotNull('ServerId', instance.serverId);
-  val['Id'] = instance.id;
-  writeNotNull('Etag', instance.etag);
-  writeNotNull('PlaylistItemId', instance.playlistItemId);
-  writeNotNull('DateCreated', instance.dateCreated);
-  writeNotNull('ExtraType', instance.extraType);
-  writeNotNull('AirsBeforeSeasonNumber', instance.airsBeforeSeasonNumber);
-  writeNotNull('AirsAfterSeasonNumber', instance.airsAfterSeasonNumber);
-  writeNotNull('AirsBeforeEpisodeNumber', instance.airsBeforeEpisodeNumber);
-  writeNotNull('CanDelete', instance.canDelete);
-  writeNotNull('CanDownload', instance.canDownload);
-  writeNotNull('HasSubtitles', instance.hasSubtitles);
-  writeNotNull('PreferredMetadataLanguage', instance.preferredMetadataLanguage);
-  writeNotNull(
-      'PreferredMetadataCountryCode', instance.preferredMetadataCountryCode);
-  writeNotNull('SupportsSync', instance.supportsSync);
-  writeNotNull('Container', instance.container);
-  writeNotNull('SortName', instance.sortName);
-  writeNotNull('ForcedSortName', instance.forcedSortName);
-  writeNotNull('Video3DFormat', instance.video3DFormat);
-  writeNotNull('PremiereDate', instance.premiereDate);
-  writeNotNull(
-      'ExternalUrls', instance.externalUrls?.map((e) => e.toJson()).toList());
-  writeNotNull(
-      'MediaSources', instance.mediaSources?.map((e) => e.toJson()).toList());
-  writeNotNull('CriticRating', instance.criticRating);
-  writeNotNull('ProductionLocations', instance.productionLocations);
-  writeNotNull('Path', instance.path);
-  writeNotNull('OfficialRating', instance.officialRating);
-  writeNotNull('CustomRating', instance.customRating);
-  writeNotNull('ChannelId', instance.channelId);
-  writeNotNull('ChannelName', instance.channelName);
-  writeNotNull('Overview', instance.overview);
-  writeNotNull('Taglines', instance.taglines);
-  writeNotNull('Genres', instance.genres);
-  writeNotNull('CommunityRating', instance.communityRating);
-  writeNotNull('RunTimeTicks', instance.runTimeTicks);
-  writeNotNull('PlayAccess', instance.playAccess);
-  writeNotNull('AspectRatio', instance.aspectRatio);
-  writeNotNull('ProductionYear', instance.productionYear);
-  writeNotNull('Number', instance.number);
-  writeNotNull('ChannelNumber', instance.channelNumber);
-  writeNotNull('IndexNumber', instance.indexNumber);
-  writeNotNull('IndexNumberEnd', instance.indexNumberEnd);
-  writeNotNull('ParentIndexNumber', instance.parentIndexNumber);
-  writeNotNull('RemoteTrailers',
-      instance.remoteTrailers?.map((e) => e.toJson()).toList());
-  writeNotNull('ProviderIds', instance.providerIds);
-  writeNotNull('IsFolder', instance.isFolder);
-  writeNotNull('ParentId', instance.parentId);
-  writeNotNull('Type', instance.type);
-  writeNotNull('People', instance.people?.map((e) => e.toJson()).toList());
-  writeNotNull('Studios', instance.studios?.map((e) => e.toJson()).toList());
-  writeNotNull(
-      'GenreItems', instance.genreItems?.map((e) => e.toJson()).toList());
-  writeNotNull('ParentLogoItemId', instance.parentLogoItemId);
-  writeNotNull('ParentBackdropItemId', instance.parentBackdropItemId);
-  writeNotNull('ParentBackdropImageTags', instance.parentBackdropImageTags);
-  writeNotNull('LocalTrailerCount', instance.localTrailerCount);
-  writeNotNull('UserData', instance.userData?.toJson());
-  writeNotNull('RecursiveItemCount', instance.recursiveItemCount);
-  writeNotNull('ChildCount', instance.childCount);
-  writeNotNull('SeriesName', instance.seriesName);
-  writeNotNull('SeriesId', instance.seriesId);
-  writeNotNull('SeasonId', instance.seasonId);
-  writeNotNull('SpecialFeatureCount', instance.specialFeatureCount);
-  writeNotNull('DisplayPreferencesId', instance.displayPreferencesId);
-  writeNotNull('Status', instance.status);
-  writeNotNull('AirTime', instance.airTime);
-  writeNotNull('AirDays', instance.airDays);
-  writeNotNull('Tags', instance.tags);
-  writeNotNull('PrimaryImageAspectRatio', instance.primaryImageAspectRatio);
-  writeNotNull('Artists', instance.artists);
-  writeNotNull(
-      'ArtistItems', instance.artistItems?.map((e) => e.toJson()).toList());
-  writeNotNull('Album', instance.album);
-  writeNotNull('CollectionType', instance.collectionType);
-  writeNotNull('DisplayOrder', instance.displayOrder);
-  writeNotNull('AlbumId', instance.albumId);
-  writeNotNull('AlbumPrimaryImageTag', instance.albumPrimaryImageTag);
-  writeNotNull('SeriesPrimaryImageTag', instance.seriesPrimaryImageTag);
-  writeNotNull('AlbumArtist', instance.albumArtist);
-  writeNotNull(
-      'AlbumArtists', instance.albumArtists?.map((e) => e.toJson()).toList());
-  writeNotNull('SeasonName', instance.seasonName);
-  writeNotNull(
-      'MediaStreams', instance.mediaStreams?.map((e) => e.toJson()).toList());
-  writeNotNull('PartCount', instance.partCount);
-  writeNotNull('ImageTags', instance.imageTags);
-  writeNotNull('BackdropImageTags', instance.backdropImageTags);
-  writeNotNull('ParentLogoImageTag', instance.parentLogoImageTag);
-  writeNotNull('ParentArtItemId', instance.parentArtItemId);
-  writeNotNull('ParentArtImageTag', instance.parentArtImageTag);
-  writeNotNull('SeriesThumbImageTag', instance.seriesThumbImageTag);
-  writeNotNull('SeriesStudio', instance.seriesStudio);
-  writeNotNull('ParentThumbItemId', instance.parentThumbItemId);
-  writeNotNull('ParentThumbImageTag', instance.parentThumbImageTag);
-  writeNotNull('ParentPrimaryImageItemId', instance.parentPrimaryImageItemId);
-  writeNotNull('ParentPrimaryImageTag', instance.parentPrimaryImageTag);
-  writeNotNull('Chapters', instance.chapters?.map((e) => e.toJson()).toList());
-  writeNotNull('LocationType', instance.locationType);
-  writeNotNull('MediaType', instance.mediaType);
-  writeNotNull('EndDate', instance.endDate);
-  writeNotNull('LockedFields', instance.lockedFields);
-  writeNotNull('LockData', instance.lockData);
-  writeNotNull('Width', instance.width);
-  writeNotNull('Height', instance.height);
-  writeNotNull('CameraMake', instance.cameraMake);
-  writeNotNull('CameraModel', instance.cameraModel);
-  writeNotNull('Software', instance.software);
-  writeNotNull('ExposureTime', instance.exposureTime);
-  writeNotNull('FocalLength', instance.focalLength);
-  writeNotNull('ImageOrientation', instance.imageOrientation);
-  writeNotNull('Aperture', instance.aperture);
-  writeNotNull('ShutterSpeed', instance.shutterSpeed);
-  writeNotNull('Latitude', instance.latitude);
-  writeNotNull('Longitude', instance.longitude);
-  writeNotNull('Altitude', instance.altitude);
-  writeNotNull('IsoSpeedRating', instance.isoSpeedRating);
-  writeNotNull('SeriesTimerId', instance.seriesTimerId);
-  writeNotNull('ChannelPrimaryImageTag', instance.channelPrimaryImageTag);
-  writeNotNull('StartDate', instance.startDate);
-  writeNotNull('CompletionPercentage', instance.completionPercentage);
-  writeNotNull('IsRepeat', instance.isRepeat);
-  writeNotNull('EpisodeTitle', instance.episodeTitle);
-  writeNotNull('IsMovie', instance.isMovie);
-  writeNotNull('IsSports', instance.isSports);
-  writeNotNull('IsSeries', instance.isSeries);
-  writeNotNull('IsLive', instance.isLive);
-  writeNotNull('IsNews', instance.isNews);
-  writeNotNull('IsKids', instance.isKids);
-  writeNotNull('IsPremiere', instance.isPremiere);
-  writeNotNull('TimerId', instance.timerId);
-  writeNotNull('CurrentProgram', instance.currentProgram);
-  writeNotNull('MovieCount', instance.movieCount);
-  writeNotNull('SeriesCount', instance.seriesCount);
-  writeNotNull('AlbumCount', instance.albumCount);
-  writeNotNull('SongCount', instance.songCount);
-  writeNotNull('MusicVideoCount', instance.musicVideoCount);
-  writeNotNull('SourceType', instance.sourceType);
-  writeNotNull('DateLastMediaAdded', instance.dateLastMediaAdded);
-  writeNotNull('EnableMediaSourceDisplay', instance.enableMediaSourceDisplay);
-  writeNotNull('CumulativeRunTimeTicks', instance.cumulativeRunTimeTicks);
-  writeNotNull('IsPlaceHolder', instance.isPlaceHolder);
-  writeNotNull('IsHD', instance.isHD);
-  writeNotNull('VideoType', instance.videoType);
-  writeNotNull('MediaSourceCount', instance.mediaSourceCount);
-  writeNotNull('ScreenshotImageTags', instance.screenshotImageTags);
-  writeNotNull('ImageBlurHashes', instance.imageBlurHashes?.toJson());
-  writeNotNull('IsoType', instance.isoType);
-  writeNotNull('TrailerCount', instance.trailerCount);
-  writeNotNull('ProgramCount', instance.programCount);
-  writeNotNull('EpisodeCount', instance.episodeCount);
-  writeNotNull('ArtistCount', instance.artistCount);
-  writeNotNull('ProgramId', instance.programId);
-  writeNotNull('ChannelType', instance.channelType);
-  writeNotNull('Audio', instance.audio);
-  writeNotNull('NormalizationGain', instance.normalizationGain);
-  writeNotNull('HasLyrics', instance.hasLyrics);
-  writeNotNull('FinampOffline', instance.finampOffline);
-  return val;
-}
+Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
+    <String, dynamic>{
+      if (instance.name case final value?) 'Name': value,
+      if (instance.originalTitle case final value?) 'OriginalTitle': value,
+      if (instance.serverId case final value?) 'ServerId': value,
+      'Id': instance.id,
+      if (instance.etag case final value?) 'Etag': value,
+      if (instance.playlistItemId case final value?) 'PlaylistItemId': value,
+      if (instance.dateCreated case final value?) 'DateCreated': value,
+      if (instance.extraType case final value?) 'ExtraType': value,
+      if (instance.airsBeforeSeasonNumber case final value?)
+        'AirsBeforeSeasonNumber': value,
+      if (instance.airsAfterSeasonNumber case final value?)
+        'AirsAfterSeasonNumber': value,
+      if (instance.airsBeforeEpisodeNumber case final value?)
+        'AirsBeforeEpisodeNumber': value,
+      if (instance.canDelete case final value?) 'CanDelete': value,
+      if (instance.canDownload case final value?) 'CanDownload': value,
+      if (instance.hasSubtitles case final value?) 'HasSubtitles': value,
+      if (instance.preferredMetadataLanguage case final value?)
+        'PreferredMetadataLanguage': value,
+      if (instance.preferredMetadataCountryCode case final value?)
+        'PreferredMetadataCountryCode': value,
+      if (instance.supportsSync case final value?) 'SupportsSync': value,
+      if (instance.container case final value?) 'Container': value,
+      if (instance.sortName case final value?) 'SortName': value,
+      if (instance.forcedSortName case final value?) 'ForcedSortName': value,
+      if (instance.video3DFormat case final value?) 'Video3DFormat': value,
+      if (instance.premiereDate case final value?) 'PremiereDate': value,
+      if (instance.externalUrls?.map((e) => e.toJson()).toList()
+          case final value?)
+        'ExternalUrls': value,
+      if (instance.mediaSources?.map((e) => e.toJson()).toList()
+          case final value?)
+        'MediaSources': value,
+      if (instance.criticRating case final value?) 'CriticRating': value,
+      if (instance.productionLocations case final value?)
+        'ProductionLocations': value,
+      if (instance.path case final value?) 'Path': value,
+      if (instance.officialRating case final value?) 'OfficialRating': value,
+      if (instance.customRating case final value?) 'CustomRating': value,
+      if (instance.channelId case final value?) 'ChannelId': value,
+      if (instance.channelName case final value?) 'ChannelName': value,
+      if (instance.overview case final value?) 'Overview': value,
+      if (instance.taglines case final value?) 'Taglines': value,
+      if (instance.genres case final value?) 'Genres': value,
+      if (instance.communityRating case final value?) 'CommunityRating': value,
+      if (instance.runTimeTicks case final value?) 'RunTimeTicks': value,
+      if (instance.playAccess case final value?) 'PlayAccess': value,
+      if (instance.aspectRatio case final value?) 'AspectRatio': value,
+      if (instance.productionYear case final value?) 'ProductionYear': value,
+      if (instance.number case final value?) 'Number': value,
+      if (instance.channelNumber case final value?) 'ChannelNumber': value,
+      if (instance.indexNumber case final value?) 'IndexNumber': value,
+      if (instance.indexNumberEnd case final value?) 'IndexNumberEnd': value,
+      if (instance.parentIndexNumber case final value?)
+        'ParentIndexNumber': value,
+      if (instance.remoteTrailers?.map((e) => e.toJson()).toList()
+          case final value?)
+        'RemoteTrailers': value,
+      if (instance.providerIds case final value?) 'ProviderIds': value,
+      if (instance.isFolder case final value?) 'IsFolder': value,
+      if (instance.parentId case final value?) 'ParentId': value,
+      if (instance.type case final value?) 'Type': value,
+      if (instance.people?.map((e) => e.toJson()).toList() case final value?)
+        'People': value,
+      if (instance.studios?.map((e) => e.toJson()).toList() case final value?)
+        'Studios': value,
+      if (instance.genreItems?.map((e) => e.toJson()).toList()
+          case final value?)
+        'GenreItems': value,
+      if (instance.parentLogoItemId case final value?)
+        'ParentLogoItemId': value,
+      if (instance.parentBackdropItemId case final value?)
+        'ParentBackdropItemId': value,
+      if (instance.parentBackdropImageTags case final value?)
+        'ParentBackdropImageTags': value,
+      if (instance.localTrailerCount case final value?)
+        'LocalTrailerCount': value,
+      if (instance.userData?.toJson() case final value?) 'UserData': value,
+      if (instance.recursiveItemCount case final value?)
+        'RecursiveItemCount': value,
+      if (instance.childCount case final value?) 'ChildCount': value,
+      if (instance.seriesName case final value?) 'SeriesName': value,
+      if (instance.seriesId case final value?) 'SeriesId': value,
+      if (instance.seasonId case final value?) 'SeasonId': value,
+      if (instance.specialFeatureCount case final value?)
+        'SpecialFeatureCount': value,
+      if (instance.displayPreferencesId case final value?)
+        'DisplayPreferencesId': value,
+      if (instance.status case final value?) 'Status': value,
+      if (instance.airTime case final value?) 'AirTime': value,
+      if (instance.airDays case final value?) 'AirDays': value,
+      if (instance.tags case final value?) 'Tags': value,
+      if (instance.primaryImageAspectRatio case final value?)
+        'PrimaryImageAspectRatio': value,
+      if (instance.artists case final value?) 'Artists': value,
+      if (instance.artistItems?.map((e) => e.toJson()).toList()
+          case final value?)
+        'ArtistItems': value,
+      if (instance.album case final value?) 'Album': value,
+      if (instance.collectionType case final value?) 'CollectionType': value,
+      if (instance.displayOrder case final value?) 'DisplayOrder': value,
+      if (instance.albumId case final value?) 'AlbumId': value,
+      if (instance.albumPrimaryImageTag case final value?)
+        'AlbumPrimaryImageTag': value,
+      if (instance.seriesPrimaryImageTag case final value?)
+        'SeriesPrimaryImageTag': value,
+      if (instance.albumArtist case final value?) 'AlbumArtist': value,
+      if (instance.albumArtists?.map((e) => e.toJson()).toList()
+          case final value?)
+        'AlbumArtists': value,
+      if (instance.seasonName case final value?) 'SeasonName': value,
+      if (instance.mediaStreams?.map((e) => e.toJson()).toList()
+          case final value?)
+        'MediaStreams': value,
+      if (instance.partCount case final value?) 'PartCount': value,
+      if (instance.imageTags case final value?) 'ImageTags': value,
+      if (instance.backdropImageTags case final value?)
+        'BackdropImageTags': value,
+      if (instance.parentLogoImageTag case final value?)
+        'ParentLogoImageTag': value,
+      if (instance.parentArtItemId case final value?) 'ParentArtItemId': value,
+      if (instance.parentArtImageTag case final value?)
+        'ParentArtImageTag': value,
+      if (instance.seriesThumbImageTag case final value?)
+        'SeriesThumbImageTag': value,
+      if (instance.seriesStudio case final value?) 'SeriesStudio': value,
+      if (instance.parentThumbItemId case final value?)
+        'ParentThumbItemId': value,
+      if (instance.parentThumbImageTag case final value?)
+        'ParentThumbImageTag': value,
+      if (instance.parentPrimaryImageItemId case final value?)
+        'ParentPrimaryImageItemId': value,
+      if (instance.parentPrimaryImageTag case final value?)
+        'ParentPrimaryImageTag': value,
+      if (instance.chapters?.map((e) => e.toJson()).toList() case final value?)
+        'Chapters': value,
+      if (instance.locationType case final value?) 'LocationType': value,
+      if (instance.mediaType case final value?) 'MediaType': value,
+      if (instance.endDate case final value?) 'EndDate': value,
+      if (instance.lockedFields case final value?) 'LockedFields': value,
+      if (instance.lockData case final value?) 'LockData': value,
+      if (instance.width case final value?) 'Width': value,
+      if (instance.height case final value?) 'Height': value,
+      if (instance.cameraMake case final value?) 'CameraMake': value,
+      if (instance.cameraModel case final value?) 'CameraModel': value,
+      if (instance.software case final value?) 'Software': value,
+      if (instance.exposureTime case final value?) 'ExposureTime': value,
+      if (instance.focalLength case final value?) 'FocalLength': value,
+      if (instance.imageOrientation case final value?)
+        'ImageOrientation': value,
+      if (instance.aperture case final value?) 'Aperture': value,
+      if (instance.shutterSpeed case final value?) 'ShutterSpeed': value,
+      if (instance.latitude case final value?) 'Latitude': value,
+      if (instance.longitude case final value?) 'Longitude': value,
+      if (instance.altitude case final value?) 'Altitude': value,
+      if (instance.isoSpeedRating case final value?) 'IsoSpeedRating': value,
+      if (instance.seriesTimerId case final value?) 'SeriesTimerId': value,
+      if (instance.channelPrimaryImageTag case final value?)
+        'ChannelPrimaryImageTag': value,
+      if (instance.startDate case final value?) 'StartDate': value,
+      if (instance.completionPercentage case final value?)
+        'CompletionPercentage': value,
+      if (instance.isRepeat case final value?) 'IsRepeat': value,
+      if (instance.episodeTitle case final value?) 'EpisodeTitle': value,
+      if (instance.isMovie case final value?) 'IsMovie': value,
+      if (instance.isSports case final value?) 'IsSports': value,
+      if (instance.isSeries case final value?) 'IsSeries': value,
+      if (instance.isLive case final value?) 'IsLive': value,
+      if (instance.isNews case final value?) 'IsNews': value,
+      if (instance.isKids case final value?) 'IsKids': value,
+      if (instance.isPremiere case final value?) 'IsPremiere': value,
+      if (instance.timerId case final value?) 'TimerId': value,
+      if (instance.currentProgram case final value?) 'CurrentProgram': value,
+      if (instance.movieCount case final value?) 'MovieCount': value,
+      if (instance.seriesCount case final value?) 'SeriesCount': value,
+      if (instance.albumCount case final value?) 'AlbumCount': value,
+      if (instance.songCount case final value?) 'SongCount': value,
+      if (instance.musicVideoCount case final value?) 'MusicVideoCount': value,
+      if (instance.sourceType case final value?) 'SourceType': value,
+      if (instance.dateLastMediaAdded case final value?)
+        'DateLastMediaAdded': value,
+      if (instance.enableMediaSourceDisplay case final value?)
+        'EnableMediaSourceDisplay': value,
+      if (instance.cumulativeRunTimeTicks case final value?)
+        'CumulativeRunTimeTicks': value,
+      if (instance.isPlaceHolder case final value?) 'IsPlaceHolder': value,
+      if (instance.isHD case final value?) 'IsHD': value,
+      if (instance.videoType case final value?) 'VideoType': value,
+      if (instance.mediaSourceCount case final value?)
+        'MediaSourceCount': value,
+      if (instance.screenshotImageTags case final value?)
+        'ScreenshotImageTags': value,
+      if (instance.imageBlurHashes?.toJson() case final value?)
+        'ImageBlurHashes': value,
+      if (instance.isoType case final value?) 'IsoType': value,
+      if (instance.trailerCount case final value?) 'TrailerCount': value,
+      if (instance.programCount case final value?) 'ProgramCount': value,
+      if (instance.episodeCount case final value?) 'EpisodeCount': value,
+      if (instance.artistCount case final value?) 'ArtistCount': value,
+      if (instance.programId case final value?) 'ProgramId': value,
+      if (instance.channelType case final value?) 'ChannelType': value,
+      if (instance.audio case final value?) 'Audio': value,
+      if (instance.normalizationGain case final value?)
+        'NormalizationGain': value,
+      if (instance.hasLyrics case final value?) 'HasLyrics': value,
+      if (instance.finampOffline case final value?) 'FinampOffline': value,
+    };
 
 ExternalUrl _$ExternalUrlFromJson(Map json) => ExternalUrl(
       name: json['Name'] as String?,
@@ -4250,62 +4286,59 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
           .toList(),
     );
 
-Map<String, dynamic> _$MediaSourceInfoToJson(MediaSourceInfo instance) {
-  final val = <String, dynamic>{
-    'Protocol': instance.protocol,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Id', instance.id);
-  writeNotNull('Path', instance.path);
-  writeNotNull('EncoderPath', instance.encoderPath);
-  writeNotNull('EncoderProtocol', instance.encoderProtocol);
-  val['Type'] = instance.type;
-  writeNotNull('Container', instance.container);
-  writeNotNull('Size', instance.size);
-  writeNotNull('Name', instance.name);
-  val['IsRemote'] = instance.isRemote;
-  writeNotNull('RunTimeTicks', instance.runTimeTicks);
-  val['SupportsTranscoding'] = instance.supportsTranscoding;
-  val['SupportsDirectStream'] = instance.supportsDirectStream;
-  val['SupportsDirectPlay'] = instance.supportsDirectPlay;
-  val['IsInfiniteStream'] = instance.isInfiniteStream;
-  val['RequiresOpening'] = instance.requiresOpening;
-  writeNotNull('OpenToken', instance.openToken);
-  val['RequiresClosing'] = instance.requiresClosing;
-  writeNotNull('LiveStreamId', instance.liveStreamId);
-  writeNotNull('BufferMs', instance.bufferMs);
-  val['RequiresLooping'] = instance.requiresLooping;
-  val['SupportsProbing'] = instance.supportsProbing;
-  writeNotNull('Video3DFormat', instance.video3DFormat);
-  val['MediaStreams'] = instance.mediaStreams.map((e) => e.toJson()).toList();
-  writeNotNull('Formats', instance.formats);
-  writeNotNull('Bitrate', instance.bitrate);
-  writeNotNull('Timestamp', instance.timestamp);
-  writeNotNull('RequiredHttpHeaders', instance.requiredHttpHeaders);
-  writeNotNull('TranscodingUrl', instance.transcodingUrl);
-  writeNotNull('TranscodingSubProtocol', instance.transcodingSubProtocol);
-  writeNotNull('TranscodingContainer', instance.transcodingContainer);
-  writeNotNull('AnalyzeDurationMs', instance.analyzeDurationMs);
-  val['ReadAtNativeFramerate'] = instance.readAtNativeFramerate;
-  writeNotNull('DefaultAudioStreamIndex', instance.defaultAudioStreamIndex);
-  writeNotNull(
-      'DefaultSubtitleStreamIndex', instance.defaultSubtitleStreamIndex);
-  writeNotNull('Etag', instance.etag);
-  val['IgnoreDts'] = instance.ignoreDts;
-  val['IgnoreIndex'] = instance.ignoreIndex;
-  val['GenPtsInput'] = instance.genPtsInput;
-  writeNotNull('VideoType', instance.videoType);
-  writeNotNull('IsoType', instance.isoType);
-  writeNotNull('MediaAttachments',
-      instance.mediaAttachments?.map((e) => e.toJson()).toList());
-  return val;
-}
+Map<String, dynamic> _$MediaSourceInfoToJson(MediaSourceInfo instance) =>
+    <String, dynamic>{
+      'Protocol': instance.protocol,
+      if (instance.id case final value?) 'Id': value,
+      if (instance.path case final value?) 'Path': value,
+      if (instance.encoderPath case final value?) 'EncoderPath': value,
+      if (instance.encoderProtocol case final value?) 'EncoderProtocol': value,
+      'Type': instance.type,
+      if (instance.container case final value?) 'Container': value,
+      if (instance.size case final value?) 'Size': value,
+      if (instance.name case final value?) 'Name': value,
+      'IsRemote': instance.isRemote,
+      if (instance.runTimeTicks case final value?) 'RunTimeTicks': value,
+      'SupportsTranscoding': instance.supportsTranscoding,
+      'SupportsDirectStream': instance.supportsDirectStream,
+      'SupportsDirectPlay': instance.supportsDirectPlay,
+      'IsInfiniteStream': instance.isInfiniteStream,
+      'RequiresOpening': instance.requiresOpening,
+      if (instance.openToken case final value?) 'OpenToken': value,
+      'RequiresClosing': instance.requiresClosing,
+      if (instance.liveStreamId case final value?) 'LiveStreamId': value,
+      if (instance.bufferMs case final value?) 'BufferMs': value,
+      'RequiresLooping': instance.requiresLooping,
+      'SupportsProbing': instance.supportsProbing,
+      if (instance.video3DFormat case final value?) 'Video3DFormat': value,
+      'MediaStreams': instance.mediaStreams.map((e) => e.toJson()).toList(),
+      if (instance.formats case final value?) 'Formats': value,
+      if (instance.bitrate case final value?) 'Bitrate': value,
+      if (instance.timestamp case final value?) 'Timestamp': value,
+      if (instance.requiredHttpHeaders case final value?)
+        'RequiredHttpHeaders': value,
+      if (instance.transcodingUrl case final value?) 'TranscodingUrl': value,
+      if (instance.transcodingSubProtocol case final value?)
+        'TranscodingSubProtocol': value,
+      if (instance.transcodingContainer case final value?)
+        'TranscodingContainer': value,
+      if (instance.analyzeDurationMs case final value?)
+        'AnalyzeDurationMs': value,
+      'ReadAtNativeFramerate': instance.readAtNativeFramerate,
+      if (instance.defaultAudioStreamIndex case final value?)
+        'DefaultAudioStreamIndex': value,
+      if (instance.defaultSubtitleStreamIndex case final value?)
+        'DefaultSubtitleStreamIndex': value,
+      if (instance.etag case final value?) 'Etag': value,
+      'IgnoreDts': instance.ignoreDts,
+      'IgnoreIndex': instance.ignoreIndex,
+      'GenPtsInput': instance.genPtsInput,
+      if (instance.videoType case final value?) 'VideoType': value,
+      if (instance.isoType case final value?) 'IsoType': value,
+      if (instance.mediaAttachments?.map((e) => e.toJson()).toList()
+          case final value?)
+        'MediaAttachments': value,
+    };
 
 MediaStream _$MediaStreamFromJson(Map json) => MediaStream(
       codec: json['Codec'] as String?,
@@ -4357,64 +4390,59 @@ MediaStream _$MediaStreamFromJson(Map json) => MediaStream(
       ..localizedDefault = json['LocalizedDefault'] as String?
       ..localizedForced = json['LocalizedForced'] as String?;
 
-Map<String, dynamic> _$MediaStreamToJson(MediaStream instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Codec', instance.codec);
-  writeNotNull('CodecTag', instance.codecTag);
-  writeNotNull('Language', instance.language);
-  writeNotNull('ColorTransfer', instance.colorTransfer);
-  writeNotNull('ColorPrimaries', instance.colorPrimaries);
-  writeNotNull('ColorSpace', instance.colorSpace);
-  writeNotNull('Comment', instance.comment);
-  writeNotNull('TimeBase', instance.timeBase);
-  writeNotNull('CodecTimeBase', instance.codecTimeBase);
-  writeNotNull('Title', instance.title);
-  writeNotNull('VideoRange', instance.videoRange);
-  writeNotNull('DisplayTitle', instance.displayTitle);
-  writeNotNull('NalLengthSize', instance.nalLengthSize);
-  val['IsInterlaced'] = instance.isInterlaced;
-  writeNotNull('IsAVC', instance.isAVC);
-  writeNotNull('ChannelLayout', instance.channelLayout);
-  writeNotNull('BitRate', instance.bitRate);
-  writeNotNull('BitDepth', instance.bitDepth);
-  writeNotNull('RefFrames', instance.refFrames);
-  writeNotNull('PacketLength', instance.packetLength);
-  writeNotNull('Channels', instance.channels);
-  writeNotNull('SampleRate', instance.sampleRate);
-  val['IsDefault'] = instance.isDefault;
-  val['IsForced'] = instance.isForced;
-  writeNotNull('Height', instance.height);
-  writeNotNull('Width', instance.width);
-  writeNotNull('AverageFrameRate', instance.averageFrameRate);
-  writeNotNull('RealFrameRate', instance.realFrameRate);
-  writeNotNull('Profile', instance.profile);
-  val['Type'] = instance.type;
-  writeNotNull('AspectRatio', instance.aspectRatio);
-  val['Index'] = instance.index;
-  writeNotNull('Score', instance.score);
-  val['IsExternal'] = instance.isExternal;
-  writeNotNull('DeliveryMethod', instance.deliveryMethod);
-  writeNotNull('DeliveryUrl', instance.deliveryUrl);
-  writeNotNull('IsExternalUrl', instance.isExternalUrl);
-  val['IsTextSubtitleStream'] = instance.isTextSubtitleStream;
-  val['SupportsExternalStream'] = instance.supportsExternalStream;
-  writeNotNull('Path', instance.path);
-  writeNotNull('PixelFormat', instance.pixelFormat);
-  writeNotNull('Level', instance.level);
-  writeNotNull('IsAnamorphic', instance.isAnamorphic);
-  writeNotNull('ColorRange', instance.colorRange);
-  writeNotNull('LocalizedUndefined', instance.localizedUndefined);
-  writeNotNull('LocalizedDefault', instance.localizedDefault);
-  writeNotNull('LocalizedForced', instance.localizedForced);
-  return val;
-}
+Map<String, dynamic> _$MediaStreamToJson(MediaStream instance) =>
+    <String, dynamic>{
+      if (instance.codec case final value?) 'Codec': value,
+      if (instance.codecTag case final value?) 'CodecTag': value,
+      if (instance.language case final value?) 'Language': value,
+      if (instance.colorTransfer case final value?) 'ColorTransfer': value,
+      if (instance.colorPrimaries case final value?) 'ColorPrimaries': value,
+      if (instance.colorSpace case final value?) 'ColorSpace': value,
+      if (instance.comment case final value?) 'Comment': value,
+      if (instance.timeBase case final value?) 'TimeBase': value,
+      if (instance.codecTimeBase case final value?) 'CodecTimeBase': value,
+      if (instance.title case final value?) 'Title': value,
+      if (instance.videoRange case final value?) 'VideoRange': value,
+      if (instance.displayTitle case final value?) 'DisplayTitle': value,
+      if (instance.nalLengthSize case final value?) 'NalLengthSize': value,
+      'IsInterlaced': instance.isInterlaced,
+      if (instance.isAVC case final value?) 'IsAVC': value,
+      if (instance.channelLayout case final value?) 'ChannelLayout': value,
+      if (instance.bitRate case final value?) 'BitRate': value,
+      if (instance.bitDepth case final value?) 'BitDepth': value,
+      if (instance.refFrames case final value?) 'RefFrames': value,
+      if (instance.packetLength case final value?) 'PacketLength': value,
+      if (instance.channels case final value?) 'Channels': value,
+      if (instance.sampleRate case final value?) 'SampleRate': value,
+      'IsDefault': instance.isDefault,
+      'IsForced': instance.isForced,
+      if (instance.height case final value?) 'Height': value,
+      if (instance.width case final value?) 'Width': value,
+      if (instance.averageFrameRate case final value?)
+        'AverageFrameRate': value,
+      if (instance.realFrameRate case final value?) 'RealFrameRate': value,
+      if (instance.profile case final value?) 'Profile': value,
+      'Type': instance.type,
+      if (instance.aspectRatio case final value?) 'AspectRatio': value,
+      'Index': instance.index,
+      if (instance.score case final value?) 'Score': value,
+      'IsExternal': instance.isExternal,
+      if (instance.deliveryMethod case final value?) 'DeliveryMethod': value,
+      if (instance.deliveryUrl case final value?) 'DeliveryUrl': value,
+      if (instance.isExternalUrl case final value?) 'IsExternalUrl': value,
+      'IsTextSubtitleStream': instance.isTextSubtitleStream,
+      'SupportsExternalStream': instance.supportsExternalStream,
+      if (instance.path case final value?) 'Path': value,
+      if (instance.pixelFormat case final value?) 'PixelFormat': value,
+      if (instance.level case final value?) 'Level': value,
+      if (instance.isAnamorphic case final value?) 'IsAnamorphic': value,
+      if (instance.colorRange case final value?) 'ColorRange': value,
+      if (instance.localizedUndefined case final value?)
+        'LocalizedUndefined': value,
+      if (instance.localizedDefault case final value?)
+        'LocalizedDefault': value,
+      if (instance.localizedForced case final value?) 'LocalizedForced': value,
+    };
 
 MediaUrl _$MediaUrlFromJson(Map json) => MediaUrl(
       url: json['Url'] as String?,
@@ -4472,28 +4500,22 @@ UserItemDataDto _$UserItemDataDtoFromJson(Map json) => UserItemDataDto(
       itemId: json['ItemId'] as String?,
     );
 
-Map<String, dynamic> _$UserItemDataDtoToJson(UserItemDataDto instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Rating', instance.rating);
-  writeNotNull('PlayedPercentage', instance.playedPercentage);
-  writeNotNull('UnplayedItemCount', instance.unplayedItemCount);
-  val['PlaybackPositionTicks'] = instance.playbackPositionTicks;
-  val['PlayCount'] = instance.playCount;
-  val['IsFavorite'] = instance.isFavorite;
-  writeNotNull('Likes', instance.likes);
-  writeNotNull('LastPlayedDate', instance.lastPlayedDate);
-  val['Played'] = instance.played;
-  writeNotNull('Key', instance.key);
-  writeNotNull('ItemId', instance.itemId);
-  return val;
-}
+Map<String, dynamic> _$UserItemDataDtoToJson(UserItemDataDto instance) =>
+    <String, dynamic>{
+      if (instance.rating case final value?) 'Rating': value,
+      if (instance.playedPercentage case final value?)
+        'PlayedPercentage': value,
+      if (instance.unplayedItemCount case final value?)
+        'UnplayedItemCount': value,
+      'PlaybackPositionTicks': instance.playbackPositionTicks,
+      'PlayCount': instance.playCount,
+      'IsFavorite': instance.isFavorite,
+      if (instance.likes case final value?) 'Likes': value,
+      if (instance.lastPlayedDate case final value?) 'LastPlayedDate': value,
+      'Played': instance.played,
+      if (instance.key case final value?) 'Key': value,
+      if (instance.itemId case final value?) 'ItemId': value,
+    };
 
 NameIdPair _$NameIdPairFromJson(Map json) => NameIdPair(
       name: json['Name'] as String?,
@@ -4656,30 +4678,22 @@ ImageBlurHashes _$ImageBlurHashesFromJson(Map json) => ImageBlurHashes(
       ),
     );
 
-Map<String, dynamic> _$ImageBlurHashesToJson(ImageBlurHashes instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Primary', instance.primary);
-  writeNotNull('Art', instance.art);
-  writeNotNull('Backdrop', instance.backdrop);
-  writeNotNull('Banner', instance.banner);
-  writeNotNull('Logo', instance.logo);
-  writeNotNull('Thumb', instance.thumb);
-  writeNotNull('Disc', instance.disc);
-  writeNotNull('Box', instance.box);
-  writeNotNull('Screenshot', instance.screenshot);
-  writeNotNull('Menu', instance.menu);
-  writeNotNull('Chapter', instance.chapter);
-  writeNotNull('BoxRear', instance.boxRear);
-  writeNotNull('Profile', instance.profile);
-  return val;
-}
+Map<String, dynamic> _$ImageBlurHashesToJson(ImageBlurHashes instance) =>
+    <String, dynamic>{
+      if (instance.primary case final value?) 'Primary': value,
+      if (instance.art case final value?) 'Art': value,
+      if (instance.backdrop case final value?) 'Backdrop': value,
+      if (instance.banner case final value?) 'Banner': value,
+      if (instance.logo case final value?) 'Logo': value,
+      if (instance.thumb case final value?) 'Thumb': value,
+      if (instance.disc case final value?) 'Disc': value,
+      if (instance.box case final value?) 'Box': value,
+      if (instance.screenshot case final value?) 'Screenshot': value,
+      if (instance.menu case final value?) 'Menu': value,
+      if (instance.chapter case final value?) 'Chapter': value,
+      if (instance.boxRear case final value?) 'BoxRear': value,
+      if (instance.profile case final value?) 'Profile': value,
+    };
 
 MediaAttachment _$MediaAttachmentFromJson(Map json) => MediaAttachment(
       codec: json['Codec'] as String?,
