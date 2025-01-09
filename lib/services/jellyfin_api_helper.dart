@@ -283,6 +283,10 @@ class JellyfinApiHelper {
     });
   }
 
+  Future<dynamic> deleteItem(String itemId) async {
+    return await jellyfinApi.deleteItem(itemId);
+  }
+
   Future<List<BaseItemDto>?> getLatestItems({
     BaseItemDto? parentItem,
     String? includeItemTypes,

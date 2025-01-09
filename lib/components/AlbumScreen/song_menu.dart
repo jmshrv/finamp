@@ -4,6 +4,8 @@ import 'package:finamp/components/AlbumScreen/speed_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
+import 'package:finamp/components/confirm_prompt_dialog_with_actions.dart';
+import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
@@ -19,6 +21,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -132,6 +135,9 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   // Makes sure that widget doesn't just disappear after press while menu is visible
   bool speedWidgetWasVisible = false;
   bool showSpeedMenu = false;
+  bool isDeletable = false;
+  bool deletableGotUpdated = false;
+
   double initialSheetExtent = 0.0;
   double inputStep = 0.9;
   double oldExtent = 0.0;
@@ -193,6 +199,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
   @override
   Widget build(BuildContext context) {
+    Logger("buildinggg").info("Building again!!!!");
+     updateDeleteButton();
     final menuEntries = _menuEntries(context);
     var stackHeight = widget.showPlaybackControls ? 255.0 : 155.0;
     stackHeight += menuEntries
@@ -205,6 +213,25 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       return widget.childBuilder(
           stackHeight, menu(context, menuEntries, metadata.value));
     });
+  }
+
+  void updateDeleteButton() {
+    // dont need to check if offline since delete button defaults to false
+    if (!widget.isOffline && !deletableGotUpdated) {
+      // make sure to only update once, else it will be stuck in a loop
+      deletableGotUpdated = true;
+      _jellyfinApiHelper.getItemById(widget.item.id)
+        .then((response) {
+          // default to true in case the api failed but deleting is still possible
+          var canDelete = response.canDelete ?? true;
+          // only rerender if value updates
+          if (canDelete) {
+            setState(() {
+              isDeletable = canDelete;
+            });
+          }
+        });
+    }
   }
 
   // Normal song menu entries, excluding headers
@@ -575,6 +602,31 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           },
         ),
       ),
+      Visibility(
+        visible: isDeletable,
+        child: ListTile(
+          leading: Icon(
+            Icons.delete_forever,
+            color: iconColor,
+          ),
+          title: Text("Delete from Server"),
+          enabled: isDeletable,
+          onTap: () async {
+            await showDialog(context: context, builder: (context) => ConfirmationPromptDialog(
+              promptText: "This will remove the track permanently from your library and storage.\nAre you sure you want to delete this track from the Servers Filesystem?",
+              confirmButtonText: "Delete from Server",
+              abortButtonText: "Cancel",
+              onConfirmed: () {
+                _jellyfinApiHelper.deleteItem(widget.item.id)
+                  .then((_) { GlobalSnackbar.message((_) => "Track got deleted from Server", isConfirmation: true); })
+                  .catchError((err) { GlobalSnackbar.error(err); });
+              },
+              onAborted: (){},
+              centerText: true
+            ));
+          }
+        )
+      )
     ];
   }
 
