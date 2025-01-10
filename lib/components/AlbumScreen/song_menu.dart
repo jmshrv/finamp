@@ -144,23 +144,12 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   double inputStep = 0.9;
   double oldExtent = 0.0;
 
-  DownloadStub? localItem;
-
   @override
   void initState() {
     super.initState();
 
     initialSheetExtent = widget.showPlaybackControls ? 0.6 : 0.45;
     oldExtent = initialSheetExtent;
-
-    GetIt.instance<DownloadsService>().getSongInfo(item: widget.item)
-      .then((m) {
-        setState(() {
-          localItem = m;
-        });
-      })
-    ;
-
   }
 
   bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
