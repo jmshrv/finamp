@@ -138,6 +138,7 @@ class DefaultSettings {
   static const showDownloadsWithUnknownLibrary = true;
   static const downloadWorkers = 5;
   static const maxConcurrentDownloads = 10;
+  static const allowDeleteFromServer = false;
 }
 
 @HiveType(typeId: 28)
@@ -240,7 +241,10 @@ class FinampSettings {
       this.hasDownloadedPlaylistInfo =
           DefaultSettings.hasDownloadedPlaylistInfo,
       this.transcodingSegmentContainer =
-          DefaultSettings.transcodingSegmentContainer});
+          DefaultSettings.transcodingSegmentContainer,
+      this.allowDeleteFromServer = 
+          DefaultSettings.allowDeleteFromServer
+      });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -497,6 +501,9 @@ class FinampSettings {
 
   @HiveField(77, defaultValue: DefaultSettings.showCoversOnAlbumScreen)
   bool showCoversOnAlbumScreen;
+
+  @HiveField(78, defaultValue: DefaultSettings.allowDeleteFromServer)
+  bool allowDeleteFromServer;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

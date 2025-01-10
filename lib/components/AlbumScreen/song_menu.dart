@@ -22,6 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -148,7 +149,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   @override
   void initState() {
     super.initState();
-    canDeleteFromServer = widget.item.canDelete ?? false;
+
     initialSheetExtent = widget.showPlaybackControls ? 0.6 : 0.45;
     oldExtent = initialSheetExtent;
 
@@ -212,16 +213,14 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
   @override
   Widget build(BuildContext context) {
-    // although the initial delete value is the one stored locally
-    // double check with the jellyfin api
 
     final menuEntries = _menuEntries(context);
     var stackHeight = widget.showPlaybackControls ? 255.0 : 155.0;
     stackHeight += menuEntries
             .where((element) =>
                 switch (element) { Visibility e => e.visible, _ => true })
-            .length *
-        56;
+            .length * 56;
+
     return Consumer(builder: (context, ref, child) {
       updateDeleteButton();
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
@@ -232,21 +231,34 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
   void updateDeleteButton() {
     // dont need to check if offline since delete button defaults to false
-    if (!widget.isOffline && !deletableGotUpdated) {
-      // make sure to only update once, else it will be stuck in a loop
-      deletableGotUpdated = true;
-      _jellyfinApiHelper.getItemById(widget.item.id)
-        .then((response) {
-          // default to true in case the api failed but deleting is still possible
-          var canDelete = response.canDelete ?? true;
-          // only rerender if value updates
-          if (canDelete) {
-            setState(() {
-              canDeleteFromServer = canDelete;
-            });
-          }
-        });
+    if (widget.isOffline) {return;}
+
+    // make sure to only update once, else it will be stuck in a loop
+    if (deletableGotUpdated) {return;}
+
+    // prevent second execution
+    deletableGotUpdated = true;
+
+    // no need to bother if setting is disabled
+    Box<FinampSettings> box = Hive.box<FinampSettings>("FinampSettings");
+    if (!(box.get("FinampSettings")?.allowDeleteFromServer ?? false)) {
+      return;
     }
+
+    // temporary value until the server replies
+    canDeleteFromServer = widget.item.canDelete ?? false;
+
+    _jellyfinApiHelper.getItemById(widget.item.id)
+      .then((response) {
+        // default to true in case the api failed but deleting is still possible
+        var canDelete = response.canDelete ?? true;
+        // only rerender if value updates
+        if (canDelete) {
+          setState(() {
+            canDeleteFromServer = canDelete;
+          });
+        }
+      });
   }
 
   // Normal song menu entries, excluding headers

@@ -191,6 +191,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodingSegmentContainer: fields[75] == null
           ? FinampSegmentContainer.fragmentedMp4
           : fields[75] as FinampSegmentContainer,
+      allowDeleteFromServer: fields[78] == null ? false : fields[78] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -200,7 +201,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(74)
+      ..writeByte(75)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -348,7 +349,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(76)
       ..write(obj.featureChipsConfiguration)
       ..writeByte(77)
-      ..write(obj.showCoversOnAlbumScreen);
+      ..write(obj.showCoversOnAlbumScreen)
+      ..writeByte(78)
+      ..write(obj.allowDeleteFromServer);
   }
 
   @override

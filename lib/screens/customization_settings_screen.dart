@@ -34,6 +34,7 @@ class _CustomizationSettingsScreenState
           const PlaybackSpeedControlVisibilityDropdownListTile(),
           if (!Platform.isIOS) const ShowStopButtonOnMediaNotificationToggle(),
           const ShowSeekControlsOnMediaNotificationToggle(),
+          const ShowDeleteFromServerOptionToggle()
         ],
       ),
     );
@@ -97,6 +98,34 @@ class ShowSeekControlsOnMediaNotificationToggle extends StatelessWidget {
                       value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
+        );
+      },
+    );
+  }
+}
+
+class ShowDeleteFromServerOptionToggle extends StatelessWidget {
+  const ShowDeleteFromServerOptionToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? showDeleteFromServerOption = 
+          box.get("FinampSettings")?.allowDeleteFromServer ?? false;
+
+        return SwitchListTile.adaptive(
+          title: Text("Allow deletion from server"),
+          subtitle: Text("Enable and disable the option to permanently delete a track from the servers file system when deletion is possible."),
+          value: showDeleteFromServerOption,
+          onChanged: (value) {
+            FinampSettings finampSettingsTemp =
+                box.get("FinampSettings")!;
+            finampSettingsTemp.allowDeleteFromServer =
+                value;
+            box.put("FinampSettings", finampSettingsTemp);
+          },
         );
       },
     );
