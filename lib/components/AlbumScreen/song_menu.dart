@@ -4,6 +4,7 @@ import 'package:finamp/components/AlbumScreen/speed_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
+import 'package:finamp/components/confirm_prompt_dialog_with_actions.dart';
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -134,7 +136,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   // Makes sure that widget doesn't just disappear after press while menu is visible
   bool speedWidgetWasVisible = false;
   bool showSpeedMenu = false;
-  bool isDeletable = false;
+  bool canDeleteFromServer = false;
   bool deletableGotUpdated = false;
 
   double initialSheetExtent = 0.0;
@@ -146,7 +148,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   @override
   void initState() {
     super.initState();
-    isDeletable = widget.item.canDelete ?? false;
+    canDeleteFromServer = widget.item.canDelete ?? false;
     initialSheetExtent = widget.showPlaybackControls ? 0.6 : 0.45;
     oldExtent = initialSheetExtent;
 
@@ -212,7 +214,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   Widget build(BuildContext context) {
     // although the initial delete value is the one stored locally
     // double check with the jellyfin api
-    updateDeleteButton();
 
     final menuEntries = _menuEntries(context);
     var stackHeight = widget.showPlaybackControls ? 255.0 : 155.0;
@@ -222,6 +223,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             .length *
         56;
     return Consumer(builder: (context, ref, child) {
+      updateDeleteButton();
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
       return widget.childBuilder(
           stackHeight, menu(context, menuEntries, metadata.value));
@@ -240,7 +242,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           // only rerender if value updates
           if (canDelete) {
             setState(() {
-              isDeletable = canDelete;
+              canDeleteFromServer = canDelete;
             });
           }
         });
@@ -424,21 +426,96 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         ),
       ),
       Visibility(
-        visible: downloadStatus.isRequired,
+        visible: downloadStatus.isRequired || canDeleteFromServer,
         child: ListTile(
           leading: Icon(
-            Icons.delete_outlined,
+            downloadStatus.isRequired && canDeleteFromServer
+            ? Icons.delete_forever_outlined // server and device
+            : downloadStatus.isRequired 
+              ? Icons.delete_outlined // device
+              : Icons.delete_forever, // server
             color: iconColor,
           ),
-          title: Text(AppLocalizations.of(context)!.deleteItem),
-          enabled: downloadStatus.isRequired,
+          title: downloadStatus.isRequired && canDeleteFromServer
+            ? Text("Delete") // server and device
+            : downloadStatus.isRequired 
+              ? Text(AppLocalizations.of(context)!.deleteItem) // device
+              : Text("Delete from server"), // server
+          enabled: downloadStatus.isRequired || canDeleteFromServer,
           onTap: () async {
-            var item = DownloadStub.fromItem(
-                type: DownloadItemType.song, item: widget.item);
-            unawaited(downloadsService.deleteDownload(stub: item));
-            if (mounted) {
-              Navigator.pop(context);
+
+            void deleteFromServer() {
+              _jellyfinApiHelper.deleteItem(widget.item.id)
+                .then((_) { GlobalSnackbar.message((_) => "Track got deleted from Server", isConfirmation: true); })
+                .catchError((err) { GlobalSnackbar.error(err); });
             }
+
+            void deleteFromDevice() {
+              var item = DownloadStub.fromItem(
+                  type: DownloadItemType.song, item: widget.item);
+              downloadsService.deleteDownload(stub: item)
+                .then((_) {
+                  GlobalSnackbar.message((_) => "Track deleted", isConfirmation: true);
+                  if (mounted) {
+                    Navigator.pop(context);
+                  }
+                })
+                .catchError((err) { GlobalSnackbar.error(err); });
+            }
+
+            Future<void> serverDeleteDialog() async {
+              await showDialog(
+                context: context, 
+                builder: (builder) => ConfirmationPromptDialog(
+                  promptText: "Attention!\nYou are about to delete this track from the servers library and file system.\nThis action cannot be reverted.",
+                  confirmButtonText: "Delete from server",
+                  abortButtonText: "Cancel",
+                  onConfirmed: deleteFromServer,
+                  onAborted: () {},
+                  centerText: true,
+                )
+              );
+            }
+
+            Future<void> deviceDeleteDialog() async {
+              await showDialog(
+                context: context,
+                builder: (context) => ConfirmationPromptDialog(
+                  promptText: "Are you sure you want to delete this track from your device?",
+                  confirmButtonText: "Delete from device",
+                  abortButtonText: "Cancel",
+                  onConfirmed: deleteFromDevice,
+                  onAborted: () {},
+                  centerText: true
+              ));
+            }
+
+            if (downloadStatus.isRequired && canDeleteFromServer) {
+              await showDialog(
+                context: context,
+                builder: (context) => ConfirmationPromptDialogWithActions(
+                  promptText: "You can choose one of the following options",
+                  labels: [
+                    "Delete from Device",
+                    "Delete from Server",
+                    "Delete from both"
+                  ],
+                  functions: [
+                    deviceDeleteDialog,
+                    serverDeleteDialog,
+                    () async {
+                      await serverDeleteDialog();
+                      await deviceDeleteDialog();
+                    },
+                  ],
+                  onAborted: () {},
+                )
+              );
+            } else if (downloadStatus.isRequired) {
+              await deviceDeleteDialog();
+            } else {
+              await serverDeleteDialog();
+            } 
           },
         ),
       ),
@@ -615,47 +692,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           },
         ),
       ),
-      Visibility(
-        visible: localItem != null,
-        child: ListTile(
-          leading: Icon(
-            Icons.delete,
-            color: iconColor
-          ),
-          title: Text("Delete from Device"),
-          enabled: localItem != null,
-          onTap: () async {
-            await DownloadsDeleteService(downloadsService).syncDelete(localItem!.isarId);
-            await downloadsService.deleteDownload(stub: localItem!);
-            GlobalSnackbar.message((_) => "Track Deleted", isConfirmation: true);
-          },
-        ),
-      ),
-      Visibility(
-        visible: isDeletable,
-        child: ListTile(
-          leading: Icon(
-            Icons.delete_forever,
-            color: iconColor,
-          ),
-          title: Text("Delete from Server"),
-          enabled: isDeletable,
-          onTap: () async {
-            await showDialog(context: context, builder: (context) => ConfirmationPromptDialog(
-              promptText: "This will remove the track permanently from your library and storage.\nAre you sure you want to delete this track from the Servers Filesystem?",
-              confirmButtonText: "Delete from Server",
-              abortButtonText: "Cancel",
-              onConfirmed: () {
-                _jellyfinApiHelper.deleteItem(widget.item.id)
-                  .then((_) { GlobalSnackbar.message((_) => "Track got deleted from Server", isConfirmation: true); })
-                  .catchError((err) { GlobalSnackbar.error(err); });
-              },
-              onAborted: (){},
-              centerText: true
-            ));
-          }
-        )
-      ),
+
 
     ];
   }

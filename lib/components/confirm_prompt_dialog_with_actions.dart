@@ -11,7 +11,7 @@ class ConfirmationPromptDialogWithActions extends AlertDialog {
 
   final String promptText;
   final List<String> labels;
-  final List<void Function()> functions;
+  final List<Future<void> Function()> functions;
   final void Function() onAborted;
 
   @override
@@ -27,9 +27,9 @@ class ConfirmationPromptDialogWithActions extends AlertDialog {
             maxWidth: 300.0
           ),
           child: TextButton(
-            onPressed: () {
+            onPressed: () async {
+              await functions[index]();
               Navigator.of(context).pop();
-              functions[index]();
             },
             child: Text(
               labels[index],
