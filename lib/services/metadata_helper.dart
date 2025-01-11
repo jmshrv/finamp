@@ -1,22 +1,16 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:get_it/get_it.dart';
 import 'dart:io';
+
+final getIt = GetIt.instance;
 
 class DeviceInfo {
   late String osVersion;
   late String deviceModel;
   late String deviceType;
 
-  // Private constructor
-  DeviceInfo._internal();
-
-  // Singleton instance
-  static final DeviceInfo _instance = DeviceInfo._internal();
-
-  // Factory constructor to return the singleton instance
-  factory DeviceInfo() {
-    return _instance;
-  }
+  DeviceInfo();
 
   Future<void> init() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -52,16 +46,7 @@ class AppInfo {
   late DateTime installationDate;
   late List<Map<String, String>> updateHistory;
 
-  // Private constructor
-  AppInfo._internal();
-
-  // Singleton instance
-  static final AppInfo _instance = AppInfo._internal();
-
-  // Factory constructor to return the singleton instance
-  factory AppInfo() {
-    return _instance;
-  }
+  AppInfo();
 
   Future<void> init() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -97,16 +82,7 @@ class ServerInfo {
   late String protocol;
   late AddressType addressType;
 
-  // Private constructor
-  ServerInfo._internal();
-
-  // Singleton instance
-  static final ServerInfo _instance = ServerInfo._internal();
-
-  // Factory constructor to return the singleton instance
-  factory ServerInfo() {
-    return _instance;
-  }
+  ServerInfo();
 
   Future<void> init() async {
     // Fetch server information dynamically
@@ -133,9 +109,9 @@ class MetaData {
   late DeviceInfo deviceInfo;
 
   MetaData() {
-    appInfo = AppInfo();
-    serverInfo = ServerInfo();
-    deviceInfo = DeviceInfo();
+    appInfo = getIt<AppInfo>();
+    serverInfo = getIt<ServerInfo>();
+    deviceInfo = getIt<DeviceInfo>();
   }
 
   Future<void> init() async {
@@ -160,4 +136,10 @@ class MetaData {
         };
     }
   }
+}
+
+void setupLocator() {
+  getIt.registerLazySingleton(() => DeviceInfo());
+  getIt.registerLazySingleton(() => AppInfo());
+  getIt.registerLazySingleton(() => ServerInfo());
 }
