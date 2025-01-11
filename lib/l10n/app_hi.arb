@@ -228,21 +228,21 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "activeDownloadSize": "डाउनलोड हो रहा…",
+  "activeDownloadSize": "डाउनलोड किया जा रहा…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "missingDownloadSize": "मिट रहा…",
+  "missingDownloadSize": "मिटाया जा रहा…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
-  "syncingDownloadSize": "सिंक्रोनाइज हो रहा…",
+  "syncingDownloadSize": "सिंक्रोनाइज किया जा रहा…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
-  "downloadSettings": "डाउनलोड की सेटिंग",
+  "downloadSettings": "डाउनलोड सेटिंग",
   "@downloadSettings": {},
-  "maxConcurrentDownloads": "अधिकतम कॉन्क्युरेंट डाउनलोड",
+  "maxConcurrentDownloads": "अधिकतम इकट्ठे डाउनलोड",
   "@maxConcurrentDownloads": {
     "description": "Title of setting controlling max concurrent downloads."
   },
@@ -743,7 +743,7 @@
       }
     }
   },
-  "dlRunning": "{count} हो रहे",
+  "dlRunning": "{count} किए जा रहे",
   "@dlRunning": {
     "placeholders": {
       "count": {
@@ -769,7 +769,7 @@
   },
   "playButtonLabel": "चलाएं",
   "@playButtonLabel": {},
-  "deleteDownloadsConfirmButtonText": "हाँ मिटाएं",
+  "deleteDownloadsConfirmButtonText": "मिटाएं",
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
@@ -1146,13 +1146,13 @@
   "@updateButtonLabel": {},
   "favourite": "पसंद",
   "@favourite": {},
-  "confirmDownloadStarted": "डाउनलोड शुरू हुआ",
+  "confirmDownloadStarted": "डाउनलोड शुरू किया गया",
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
   },
   "location": "स्थान",
   "@location": {},
-  "downloadsQueued": "डाउनलोड तैयार है, फ़ाइलें डाउनलोड हो रही हैं",
+  "downloadsQueued": "डाउनलोड तैयार है, फ़ाइलें डाउनलोड की जा रही हैं",
   "@downloadsQueued": {},
   "logsCopied": "लॉग कॉपी किए गए।",
   "@logsCopied": {},
@@ -1168,7 +1168,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "addDownloads": "डाउनलोड्स में जोड़ें",
+  "addDownloads": "डाउनलोड्स जोड़ें",
   "@addDownloads": {},
   "playbackSpeedFeatureText": "x{speed} गति",
   "@playbackSpeedFeatureText": {
@@ -1559,7 +1559,7 @@
   "@volumeNormalizationIOSBaseGainEditorTitle": {
     "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{हो रहा} failed{असफल} syncFailed{बार-बार सिंक असफल} enqueued{कतार में} other{}} {itemCount, plural, =1{डाउनलोड} other{डाउनलोड}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{डाउनलोड हो रहे} failed{डाउनलोड असफल} syncFailed{सिंक असफल} enqueued{डाउनलोड कतार में} other{}} {itemCount, plural, =1{डाउनलोड} other{डाउनलोड}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1617,7 +1617,7 @@
   },
   "fiveLatestAlbumsSettingSubtitle": "डाउनलोड पुराने हो जाने पर उन्हें हटा दिया जाएगा। किसी एल्बम को हटाए जाने से रोकने के लिए डाउनलोड को लॉक करें।",
   "@fiveLatestAlbumsSettingSubtitle": {},
-  "maxConcurrentDownloadsLabel": "{count} कॉन्क्युरेंट डाउनलोड",
+  "maxConcurrentDownloadsLabel": "{count} इकट्ठे डाउनलोड",
   "@maxConcurrentDownloadsLabel": {
     "description": "Label of values on max concurrent downloads slider",
     "placeholders": {
@@ -1653,7 +1653,7 @@
   },
   "trackOfflineFavoritesSubtitle": "इससे ऑफ़लाइन रहते हुए भी अधिक अप-टू-डेट पसंदीदा स्थितियां दिखाई जा सकती हैं। कोई अतिरिक्त फ़ाइल डाउनलोड नहीं होती।",
   "@trackOfflineFavoritesSubtitle": {},
-  "maxConcurrentDownloadsSubtitle": "कॉन्क्युरेंट डाउनलोड की संख्या बढ़ाने से पृष्ठभूमि में डाउनलोड की गति बढ़ सकती है, लेकिन यदि डाउनलोड बहुत बड़े हों तो कुछ डाउनलोड असफल हो सकते हैं, या कुछ मामलों में अत्यधिक विलंब हो सकता है।",
+  "maxConcurrentDownloadsSubtitle": "इकट्ठे डाउनलोड की संख्या बढ़ाने से पृष्ठभूमि में डाउनलोड की गति बढ़ सकती है, लेकिन यदि डाउनलोड बहुत बड़े हों तो कुछ डाउनलोड असफल हो सकते हैं, या कुछ मामलों में अत्यधिक विलंब हो सकता है।",
   "@maxConcurrentDownloadsSubtitle": {
     "description": "Description of setting controlling max concurrent downloads."
   },
@@ -1851,5 +1851,21 @@
   "emptyTopTracksList": "आपने अभी तक इस कलाकार का कोई ट्रैक नहीं सुना है।",
   "@emptyTopTracksList": {
     "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "resetSettingsPromptGlobal": "क्या आपको यकीन है कि आप सभी सेटिंग्स को उनके डिफ़ॉल्ट रूप में रीसेट करना चाहते हैं?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "सभी सेटिंग्स रीसेट करें",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "resetSettingsPromptLocal": "क्या आप इन सेटिंग्स को वापस अपने डिफ़ॉल्ट रूप में बदलना चाहते हैं?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "genericCancel": "रद्द करें",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
   }
 }
