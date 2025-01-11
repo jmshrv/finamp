@@ -477,5 +477,13 @@
   "swipeInsertQueueNext": "Воспроизвести смахнутую песню следующей",
   "@swipeInsertQueueNext": {},
   "showFastScroller": "Показать быструю прокрутку",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "about": "О программе Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "finampTagline": "Музыкальный плеер Jellyfish с открытым исходным кодом",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  }
 }
