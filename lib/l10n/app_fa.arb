@@ -1,1 +1,405 @@
-{}
+{
+  "aboutReleaseNotes": "واپسین یادداشت عرضه را بخوانید:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "finampTagline": "یک پخش‌کننده آهنگ جلی‌فین متن‌باز",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "internalExternalIpExplanation": "اگر می‌خواهید که از دور به سرور Jellyfin دسترسی داشته باشید، باید از IP خارجی خود استفاده کنید.\n\nاگر سرورتان روی درگاه پیش‌فرض HTTP (درگاه 80 یا 443) یا درگاه پیش‌فرض Jellyfin (درگاه 8096) روشن است، می‌توانید درگاه را مشخص نکنید.\n\nاگر آدرس درست است، باید اطلاعاتی از سرورتان زیر فیلد آشکار شود.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "loginFlowSelectAUser": "یک کاربر انتخاب کنید",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "loginFlowAccountSelectionHeading": "حساب کاربری خود را انتخاب کنید",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "genres": "ژانرها",
+  "@genres": {},
+  "aboutThanks": "از این‌که از فین‌امپ استفاده می‌کنید، سپاسگزاریم!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "usernameHint": "نام کاربری خود را وارد کنید",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "startMixNoSongsArtist": "روی یک هنرمند لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "serverUrlInfoButtonTooltip": "راهنمای آدرس سرور",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "loginFlowLocalNetworkServers": "سرورهای شبکه محلی شما:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "password": "رمزعبور",
+  "@password": {},
+  "backToAccountSelection": "برگشت به گزینش حساب کاربری",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectInstructions": "نرم‌افزار یا وبگاه Jellyfin را باز کنید، روی تصویر کاربرتان کلیک کنید و اتصال سریع را انتخاب کنید.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "login": "ورود",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "selectMusicLibraries": "کتابخانه‌های موسیقی را انتخاب کنید",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "کتابخانه‌ای یافت نشد.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "finamp": "فین‌امپ",
+  "@finamp": {
+    "description": "App name, possibly translated"
+  },
+  "about": "درباره‌ی فین‌امپ",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "aboutContributionLink": "در فین‌امپ روی گیت‌هاب مشارکت کنید:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutTranslations": "فین‌امپ را در ترجمه به زبان خود یاری کنید:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "خوش آمدید به",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowGetStarted": "آغاز کنید!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "loginFlowSlogan": "آهنگ شما، به همان شیوه که می‌خواهید.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "viewLogs": "دیدن رخدادها",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "changeLanguage": "تغییر زبان",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "به Jellyfin وصل شوید",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "برگشت",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrl": "آدرس سرور",
+  "@serverUrl": {},
+  "serverUrlHint": "برای نمونه demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "emptyServerUrl": "آدرس سرور نمی‌تواند خالی باشد",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "connectingToServer": "درحال اتصال به سرور...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "پیمایش برای سرورها...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "backToServerSelection": "برگشت به گزینش سرور",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "کاربر بی‌نام",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "کاربر سفارشی",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAuthenticationHeading": "به حساب کاربری خود وارد شوید",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "استفاده کردن از کد اتصال سریع",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectDisabled": "اتصال سریع روی این سرور غیرفعال است.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "orDivider": "یا",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "username": "نام کاربری",
+  "@username": {},
+  "usernameValidationMissingUsername": "لطفاً یک نام کاربری انتخاب کنید",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "رمزعبور خود را وارد کنید",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "logs": "رخدادها",
+  "@logs": {},
+  "next": "بعدی",
+  "@next": {},
+  "unknownName": "نام ناشناخته",
+  "@unknownName": {},
+  "songs": "قطعه‌ها",
+  "@songs": {},
+  "albums": "آلبوم‌ها",
+  "@albums": {},
+  "artists": "هنرمندان",
+  "@artists": {},
+  "playlists": "فهرست پخش‌ها",
+  "@playlists": {},
+  "startMix": "آغاز میکس",
+  "@startMix": {},
+  "music": "آهنگ",
+  "@music": {},
+  "clear": "پاک کردن",
+  "@clear": {},
+  "favourites": "مورد علاقه‌ها",
+  "@favourites": {},
+  "shuffleAll": "بر زدن همه",
+  "@shuffleAll": {},
+  "settings": "تنظیمات",
+  "@settings": {},
+  "offlineMode": "حالت آفلاین",
+  "@offlineMode": {},
+  "sortOrder": "ترتیب مرتب سازی",
+  "@sortOrder": {},
+  "sortBy": "مرتب سازی بر اساس",
+  "@sortBy": {},
+  "title": "عنوان",
+  "@title": {},
+  "albumArtist": "هنرمند آلبوم",
+  "@albumArtist": {},
+  "communityRating": "امتیاز جامعه",
+  "@communityRating": {},
+  "criticRating": "امتیاز منتقدین",
+  "@criticRating": {},
+  "datePlayed": "تاریخ پخش شده",
+  "@datePlayed": {},
+  "premiereDate": "تاریخ رونمایی",
+  "@premiereDate": {},
+  "productionYear": "تاریخ تولید",
+  "@productionYear": {},
+  "random": "تصادفی",
+  "@random": {},
+  "runtime": "مدت زمان",
+  "@runtime": {},
+  "syncDownloadedPlaylists": "هماهنگ کردن فهرست پخش بارگیری شده",
+  "@syncDownloadedPlaylists": {},
+  "activeDownloads": "بارگیری‌های فعال",
+  "@activeDownloads": {},
+  "downloadCount": "{count,plural, =1{{count} بارگیری} other{{count} بارگیری‌ها}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "پخش",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "بر زدن",
+  "@shuffleButtonLabel": {},
+  "shareLogs": "اشتراک گذاری رخدادها",
+  "@shareLogs": {},
+  "logsCopied": "رخدادها کپی شدند.",
+  "@logsCopied": {},
+  "message": "پیام",
+  "@message": {},
+  "favourite": "مورد علاقه",
+  "@favourite": {},
+  "addDownloads": "افزودن بارگیری‌ها",
+  "@addDownloads": {},
+  "location": "مکان",
+  "@location": {},
+  "downloadsQueued": "بارگیری آماده شد، در حال بارگیری فایل‌ها",
+  "@downloadsQueued": {},
+  "playlistNameUpdated": "نام فهرست پخش بروزرسانی شد.",
+  "@playlistNameUpdated": {},
+  "interactions": "برهم کنش",
+  "@interactions": {},
+  "layoutAndTheme": "طرح‌بندی و تم",
+  "@layoutAndTheme": {},
+  "logOut": "خروج",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "قطعه‌های بارگیری شده پاک نخواهند شد",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "areYouSure": "آیا مطمئن هستید؟",
+  "@areYouSure": {},
+  "transcoding": "رمزگردانی (transcoding)",
+  "@transcoding": {},
+  "audioService": "سرویس صدا",
+  "@audioService": {},
+  "jellyfinUsesAACForTranscoding": "جلی‌فین از AAC برای رمزگردانی (transcoding) استفاده می‌کند",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "فعال کردن رمزگردانی (transcoding)",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "آهنگ را سمت سرور رمزگردانی می‌کند.",
+  "@enableTranscodingSubtitle": {},
+  "bitrate": "نرخ انتقال",
+  "@bitrate": {},
+  "bitrateSubtitle": "نرخ انتقال بالاتر کیفیت صدای بهتری در قبال پهنای باند بیشتر می‌دهد.",
+  "@bitrateSubtitle": {},
+  "appDirectory": "پوشه نرم‌افزار",
+  "@appDirectory": {},
+  "addDownloadLocation": "افزودن مکان بارگیری",
+  "@addDownloadLocation": {},
+  "selectDirectory": "پوشه را انتخاب کنید",
+  "@selectDirectory": {},
+  "pathReturnSlashErrorMessage": "آدرس‌هایی که \"/\" را برمی‌گردانند قابل استفاده نیستند",
+  "@pathReturnSlashErrorMessage": {},
+  "directoryMustBeEmpty": "پوشه باید خالی باشد",
+  "@directoryMustBeEmpty": {},
+  "shuffleAllSongCount": "بر زدن همه‌ی تعداد قطعه",
+  "@shuffleAllSongCount": {},
+  "viewType": "نوع نما",
+  "@viewType": {},
+  "viewTypeSubtitle": "نوع نما برای صفحه‌ی آهنگ",
+  "@viewTypeSubtitle": {},
+  "list": "فهرست",
+  "@list": {},
+  "grid": "جدول",
+  "@grid": {},
+  "playbackSpeedControlSetting": "نمایش تندی پخش",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "speed": "تندی",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "بازنشانی",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "اعمال کردن",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "portrait": "رخ نگاشت",
+  "@portrait": {},
+  "landscape": "چشم‌انداز",
+  "@landscape": {},
+  "downloadFavoritesSetting": "بارگیری همه‌ی مورد علاقه‌ها",
+  "@downloadFavoritesSetting": {},
+  "downloadAllPlaylistsSetting": "بارگیری همه‌ی فهرست پخش‌ها",
+  "@downloadAllPlaylistsSetting": {},
+  "fiveLatestAlbumsSetting": "بارگیری ۵ آلبوم واپسین",
+  "@fiveLatestAlbumsSetting": {},
+  "startupError": "مشکلی حین راه اندازی نرم‌افزار رخ داد. مشکل رخ داده: {error}\n\nلطفاً یک مسأله روی github.com/UnicornsOnLSD/finamp به همراه تصویری از صفحه ایجاد کنید. اگر این مشکل ادامه‌دار است، می‌توانید داده‌ی نرم‌افزارتان را پاک کنید تا نرم‌افزار را بازنشانی شود.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "aboutContributionPrompt": "ساخته‌ی افراد خفن و باحال در اوقات فراغتشان.\nشما هم می‌توانید یکی از آن‌ها باشید!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "startMixNoSongsGenre": "روی یک ژانر لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "budget": "بودجه",
+  "@budget": {},
+  "updateButtonLabel": "بروزرسانی",
+  "@updateButtonLabel": {},
+  "downloadLocations": "مکان‌های بارگیری",
+  "@downloadLocations": {},
+  "startMixNoSongsAlbum": "روی یک آلبوم لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "dateAdded": "تاریخ اضافه شدن",
+  "@dateAdded": {},
+  "downloads": "بارگیری‌ها",
+  "@downloads": {},
+  "album": "آلبوم",
+  "@album": {},
+  "artist": "هنرمند",
+  "@artist": {},
+  "downloadMissingImages": "بارگیری نگاره‌های از قلم افتاده",
+  "@downloadMissingImages": {},
+  "downloadedMissingImages": "{count,plural, =0{نگاره‌ی مفقودی پیدا نشد} =1{{count} نگاره‌ی از قلم افتاده بارگیری شد} other{{count} نگاره‌های از قلم افتاده بارگیری شد}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playCount": "تعداد پخش",
+  "@playCount": {},
+  "name": "نام",
+  "@name": {},
+  "revenue": "درآمد",
+  "@revenue": {},
+  "addButtonLabel": "افزودن",
+  "@addButtonLabel": {},
+  "unknownError": "مشکل ناشناخته",
+  "@unknownError": {},
+  "allPlaylistsInfoSetting": "بارگیری فراداده‌ی فهرست پخش",
+  "@allPlaylistsInfoSetting": {},
+  "notAvailableInOfflineMode": "در حالت آفلاین در دسترس نیست",
+  "@notAvailableInOfflineMode": {},
+  "customLocation": "مکان سفارشی",
+  "@customLocation": {},
+  "customLocationsBuggy": "مکان‌های سفارشی به دلیل مسائل دسترسی‌ها بسیار مشکل آفرین هستند. من دارم راه‌کارهایی را پیدا می‌کنم، ولی برای الان استفاده از آن‌ها را پیشنهاد نمی‌کنم.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPause": "در توقف پخش وارد حالت کم اهمیت شو",
+  "@enterLowPriorityStateOnPause": {},
+  "enterLowPriorityStateOnPauseSubtitle": "در توقف پخش به اعلان اجازه‌ی رد شدن می‌دهد. همچنین به اندروید اجازه می‌دهد تا در توقف پخش به سرویس پایان دهد.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "shuffleAllSongCountSubtitle": "تعداد قطعه‌ها برای بارگذاری زمانی که دکمه‌ی بر زدن همه‌ی قطعه‌ها استفاده می‌شود.",
+  "@shuffleAllSongCountSubtitle": {},
+  "downloadsDeleted": "بارگیری‌ها پاک شدند.",
+  "@downloadsDeleted": {},
+  "confirmDownloadStarted": "بارگیری آغاز شد",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "allPlaylistsInfoSettingSubtitle": "هماهنگ سازی فراداده برای همه‌ی فهرست پخش‌ها تا تجربه‌ی فهرست پخش شما بهبود یابد",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "customizationSettingsTitle": "شخصی‌سازی",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSettingSubtitle": "آیا واپایش تندی پخش در منوی صفحه‌ی پخش نمایش داده شود یا نه",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  }
+}
