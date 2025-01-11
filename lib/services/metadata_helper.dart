@@ -120,7 +120,7 @@ class MetaData {
     await deviceInfo.init();
   }
 
-  Map<String, dynamic> toJson(MetaDataType type) {
+  Map<String, dynamic> toJson({required MetaDataType type}) {
     switch (type) {
       case MetaDataType.AppInfo:
         return appInfo.toJson();
@@ -128,7 +128,7 @@ class MetaData {
         return serverInfo.toJson();
       case MetaDataType.DeviceInfo:
         return deviceInfo.toJson();
-      case MetaDataType.All:
+      default:
         return {
           "appInfo": appInfo.toJson(),
           "serverInfo": serverInfo.toJson(),
