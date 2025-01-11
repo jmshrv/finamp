@@ -64,8 +64,7 @@ class FinampLogsHelper {
     final metadata = getIt<MetaData>();
     await metadata.init();
     final metadataFile = File(path_helper.join(tempDir.path, "metadata.json"));
-    await metadataFile
-        .writeAsString(metadata.toJson(MetaDataType.All).toString());
+    await metadataFile.writeAsString(metadata.toJson().toString());
     encoder.addFile(metadataFile);
 
     // Close the zip encoder
