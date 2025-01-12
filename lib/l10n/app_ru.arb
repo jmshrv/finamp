@@ -67,7 +67,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Случайный",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} трек} few{{count} трека} other{{count} треков}}",
+  "songCount": "{count,plural,=1{{count} трек} other{{count} треков}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -257,7 +257,7 @@
   "@offlineMode": {},
   "startMix": "Начать Микс",
   "@startMix": {},
-  "internalExternalIpExplanation": "Чтобы получить удалённый доступ к серверу Jellyfin, используйте внешний IP-адрес.\n\nЕсли ваш сервер работает на портах HTTP(S) 80/443, указывать порт не нужно. Это обычно так, если сервер находится за обратным прокси-сервером.",
+  "internalExternalIpExplanation": "Чтобы получить удалённый доступ к серверу Jellyfin, используйте внешний IP-адрес.\n\nЕсли ваш сервер работает на портах HTTP (80 или 443), или к порту Jellyfin по умолчанию (8096), вам не нужно указывать порт.\n\nЕсли URL-адрес указан верно, вы увидите некоторую информацию о вашем сервере, которая появится под полем ввода.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -758,5 +758,57 @@
   "playbackModeDirectPlaying": "Прямое Воспроизведение",
   "@playbackModeDirectPlaying": {
     "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "previousTracks": "Предыдущие треки",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "timeFractionTooltip": "{currentTime} из {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "removeFromPlaylistNamedTooltip": "Удалить из плейлиста '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Удалить из Плейлиста '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "playlistActionsMenuButtonTooltip": "Нажмите, чтобы добавить в плейлист. Длительное нажатие позволяет выбрать \"Избранное\".",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "skipToPreviousTrackButtonTooltip": "Перейти к началу или к предыдущему треку",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "skipToNextTrackButtonTooltip": "Перейти к следующему треку",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "nextUp": "Следующий",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playingFrom": "Играть с",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "confirmAddedToPlaylist": "Добавлено в плейлист.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
   }
 }
