@@ -946,7 +946,7 @@
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{In corso} failed{Fallito} syncFailed{Non sincronizzato ripetutamente} enqueued{Messo in coda} other{}} {itemCount, plural, =1{Download} other{Download}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1174,7 +1174,7 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artista} genre{Genere} song{Brano} library{Libreria} unknown{Elemento} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1331,5 +1331,528 @@
   "requireWifiForDownloads": "Richiedi la connessione WiFi quando effettui il download.",
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "showArtistChipImageSubtitle": "Ciò influisce sulle piccole anteprime delle immagini degli artisti, come ad esempio sullo schermo del lettore.",
+  "@showArtistChipImageSubtitle": {},
+  "scrollToCurrentTrack": "Scorri fino al brano corrente",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "showProgressOnNowPlayingBarSubtitle": "Controlla se il miniplayer in-app / la barra in riproduzione nella parte inferiore della schermata musicale funzionano come una barra di avanzamento.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "genericCancel": "Annulla",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "queuesScreen": "Ripristina Ora in riproduzione",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreSubtitle1": "In riproduzione: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Brano} other{{count} Brani}}, {remaining} Non riprodotti",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "autoloadLastQueueOnStartupSubtitle": "All'avvio dell'app, prova a ripristinare l'ultima coda riprodotta.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "reportQueueToServerSubtitle": "Se abilitato, Finamp invierà la coda corrente al server. Al momento sembra che ci sia poca utilità per questa funzionalità, inoltre aumenta il traffico di rete.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "topSongs": "Brani più ascoltati",
+  "@topSongs": {},
+  "albumCount": "{count,plural,=1{{count} Album} other{{count} Album}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "preferQuickSyncSwitchSubtitle": "Quando si eseguono le sincronizzazioni alcuni elementi tipicamente statici (come brani e album) non verranno aggiornati. La riparazione del download eseguirà sempre una sincronizzazione completa.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "downloadBitrateSubtitle": "Un bitrate più alto garantisce una qualità audio più alta al costo di un maggiore consumo di spazio di archiviazione.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "transcodeHint": "Transcodificare?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "doTranscode": "Scarica come {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcodificato}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ come {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "dontTranscode": "Scarica originali{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "redownloadTitle": "Scarica nuovamente in modo automatico i file transcodificati",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "redownloadcomplete": "Download con Transcodifica messo nuovamente in coda.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "defaultDownloadLocationButton": "Imposta come percorso di download predefinito.  Disabilita per selezionare manualmente per ciascun download.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "redownloadSubtitle": "Scarica nuovamente in modo automatico i brani che si prevede abbiano una qualità diversa a causa delle modifiche alla raccolta principale.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "fixedGridSizeSwitchTitle": "Usa riquadri della griglia di dimensioni fisse",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeTitle": "Dimensione del riquadro della griglia",
+  "@fixedGridSizeTitle": {},
+  "fixedGridTileSizeEnum": "{size, select, small{Piccolo} medium{Medio} large{Grande} veryLarge{Molto Grande} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "allowSplitScreenSubtitle": "Il lettore verrà visualizzato insieme ad altre viste su display più ampi.",
+  "@allowSplitScreenSubtitle": {},
+  "allowSplitScreenTitle": "Abilita modalità \"Split Screen\"",
+  "@allowSplitScreenTitle": {},
+  "prioritizePlayerCover": "Dai priorità alla copertina dell'album",
+  "@prioritizePlayerCover": {},
+  "hidePlayerBottomActions": "Nascondi le azioni in basso",
+  "@hidePlayerBottomActions": {},
+  "prioritizePlayerCoverSubtitle": "Dai la priorità alla visualizzazione di una copertina dell'album più grande sullo schermo del lettore. I controlli non critici verranno nascosti in modo più aggressivo su schermi di piccole dimensioni.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "suppressPlayerPadding": "Sopprimere la spaziatura dei controlli del lettore",
+  "@suppressPlayerPadding": {},
+  "removeFromPlaylistConfirm": "Rimuovi",
+  "@removeFromPlaylistConfirm": {},
+  "removeFromPlaylistPrompt": "Rimuovere '{itemName}' dalla playlist '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "addRemoveFromPlaylist": "Aggiungi/Rimuovi dalle Playlist",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "trackOfflineFavorites": "Sincronizza tutti gli stati dei favoriti",
+  "@trackOfflineFavorites": {},
+  "trackOfflineFavoritesSubtitle": "Ciò consente di mostrare gli stati dei preferiti più aggiornati mentre si è offline.  Non scarica alcun file aggiuntivo.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "addPlaylistSubheader": "Aggiungi brano alla playlist",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "allPlaylistsInfoSettingSubtitle": "Sincronizza i metadati per tutte le playlist per migliorare la tua esperienza con le playlist",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "downloadFavoritesSetting": "Scarica tutti i preferiti",
+  "@downloadFavoritesSetting": {},
+  "lyricsScreen": "Visualizzazione dei testi",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsTitle": "Mostra il timestamp per i testi sincronizzati",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showLyricsTimestampsSubtitle": "Controlla se il timestamp di ogni riga del testo deve essere mostrato nel visualizzatore di testi, quando disponibile.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationTitle": "Mostra il pulsante stop nella notifica multimediale",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Controlla se la notifica multimediale deve disporre di un pulsante di stop oltre al pulsante di pausa. Ciò ti consente di interrompere la riproduzione senza aprire l'app.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Controlla se la notifica multimediale deve avere un indicatore di stato scorrevole. Ciò ti consente di modificare la posizione di riproduzione senza aprire l'app.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionStart": "A sinistra",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Piccolo",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "fontSizeOptionMedium": "Medio",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "fontSizeOptionLarge": "Grande",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "lyricsAlignmentTitle": "Giustificazione dei Testi",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeTitle": "Mostra l'album prima dei testi",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOn": "Mantieni lo Schermo Acceso",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "Controlla se la copertina dell'album deve essere mostrata sopra i testi prima di essere fatta scorrere via.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnWhilePluggedIn": "Mantieni lo schermo acceso solo quando collegato in ricarica",
+  "@keepScreenOnWhilePluggedIn": {},
+  "keepScreenOnWhileLyrics": "Quando sono visualizzati i Testi",
+  "@keepScreenOnWhileLyrics": {},
+  "keepScreenOnWhilePluggedInSubtitle": "Ignora l'impostazione Mantieni Schermo Acceso se il dispositivo non è in ricarica",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "artwork": "Copertina",
+  "@artwork": {},
+  "genericToggleButtonTooltip": "Premi per attivare/disattivare.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "artworkTooltip": "Copertina di {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "playerAlbumArtworkTooltip": "Copertina di {title}. Premi per attivare/disattivare la riproduzione. Scorri verso sinistra o destra per cambiare traccia.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "nowPlayingBarTooltip": "Apri la Schermata del Lettore",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "additionalPeople": "Persone",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "playbackMode": "Modalità di riproduzione",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "bitRate": "Bit Rate",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "bitDepth": "Profondità di Bit",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "Dimensioni",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "codec": "Codec",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "showFeatureChipsToggleSubtitle": "Mostra sullo schermo del lettore informazioni avanzate sul brano come codec, bit rate e altro.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showFeatureChipsToggleTitle": "Mostra informazioni avanzate sul brano",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "albumScreen": "Schermata dell'Album",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "emptyTopTracksList": "Non hai ancora ascoltato nessun brano di questo artista.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "showCoversOnAlbumScreenTitle": "Mostra le Copertine degli Album per ciascun Brano",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Mostra le copertine degli album per ciascun brano separatamente nella schermata dell'album.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "emptyFilteredListTitle": "Nessun elemento trovato",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "emptyFilteredListSubtitle": "Nessun elemento corrisponde al filtro. Prova a disattivare il filtro o a modificare il termine di ricerca.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetFiltersButton": "Resetta il filtro",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "queueRestoreButtonLabel": "Ripristina",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "Salvato {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueLoadingMessage": "Ripristino la coda...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "queueRetryMessage": "Impossibile ripristinare la coda. Ritentare?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartup": "Ripristino automaticamente l'ultima coda",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Inoltrare la coda corrente al server?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Frequenza di aggiornamento della sessione di riproduzione",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "La frequenza con cui inviare lo stato di riproduzione corrente al server, in secondi. Deve essere inferiore a 5 minuti (300 secondi) per evitare il timeout della sessione.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "downloadBitrate": "Bitrate per i download",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "fixedGridSizeSwitchSubtitle": "Le dimensioni dei riquadri della griglia non rispondono alle dimensioni della finestra/schermo.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "hidePlayerBottomActionsSubtitle": "Nascondi i pulsanti della coda e dei testi nella schermata del lettore. Scorri verso l'alto per accedere alla coda, scorri verso sinistra (sotto la copertina dell'album) per visualizzare i testi, se disponibili.",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "suppressPlayerPaddingSubtitle": "Riduce completamente la spaziatura tra i controlli dello schermo del lettore quando la copertina dell'album non è a grandezza naturale.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "lockDownload": "Tieni sempre sul dispositivo",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "showArtistChipImage": "Mostra le immagini dell'artista con il nome dell'artista",
+  "@showArtistChipImage": {},
+  "enableAutoScroll": "Abilita lo scorrimento automatico",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "trackMenuButtonTooltip": "Menu del Brano",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "quickActions": "Azioni Veloci",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "remainingDuration": "{duration} rimasti",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "allPlaylistsInfoSetting": "Scarica i Metadati della Playlist",
+  "@allPlaylistsInfoSetting": {},
+  "downloadAllPlaylistsSetting": "Scarica tutte le playlist",
+  "@downloadAllPlaylistsSetting": {},
+  "fiveLatestAlbumsSetting": "Scarica gli ultimi 5 album",
+  "@fiveLatestAlbumsSetting": {},
+  "fiveLatestAlbumsSettingSubtitle": "I download verranno rimossi man mano che invecchiano. Blocca il download per impedire che un album venga rimosso.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "cacheLibraryImagesSettings": "Memorizzare nella cache le immagini della libreria corrente",
+  "@cacheLibraryImagesSettings": {},
+  "cacheLibraryImagesSettingsSubtitle": "Verranno scaricate tutte le copertine di album, artisti, generi e playlist della libreria attualmente attiva.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "showProgressOnNowPlayingBarTitle": "Mostra l'avanzamento del brano sul miniplayer in-app",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Mostra i controlli di scorrimento nella notifica multimediale",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionCenter": "Al centro",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "A destra",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "lyricsAlignmentSubtitle": "Controlla l'allineamento dei testi nel visualizzatore dei testi.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeTitle": "Dimensione del carattere dei testi",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeSubtitle": "Controlla la dimensione del carattere dei testi nel visualizzatore dei testi.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "keepScreenOnSubtitle": "Quando mantenere lo schermo acceso",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnDisabled": "Disattivo",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnAlwaysOn": "Sempre acceso",
+  "@keepScreenOnAlwaysOn": {},
+  "keepScreenOnWhilePlaying": "Quando la musica è in riproduzione",
+  "@keepScreenOnWhilePlaying": {},
+  "normalizationGain": "Guadagno",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "sampleRate": "Frequenza di campionamento",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "resetSettingsPromptGlobal": "Sei sicuro di voler ripristinare TUTTE le impostazioni ai valori predefiniti?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "Ripristina TUTTE le impostazioni",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "resetSettingsPromptLocal": "Vuoi ripristinare queste impostazioni ai valori predefiniti?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Se il server Jellyfin non ha ricevuto alcun aggiornamento da un client negli ultimi 5 minuti, presume che la riproduzione sia terminata. Ciò significa che per i brani più lunghi di 5 minuti la riproduzione potrebbe essere erroneamente segnalata come terminata, riducendo la qualità dei dati di segnalazione della riproduzione.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   }
 }
