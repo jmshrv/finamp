@@ -185,7 +185,7 @@
   "@clear": {},
   "favourites": "مورد علاقه‌ها",
   "@favourites": {},
-  "shuffleAll": "بر زدن همه",
+  "shuffleAll": "بُر زدن همه",
   "@shuffleAll": {},
   "settings": "تنظیمات",
   "@settings": {},
@@ -227,7 +227,7 @@
   },
   "playButtonLabel": "پخش",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "بر زدن",
+  "shuffleButtonLabel": "بُر زدن",
   "@shuffleButtonLabel": {},
   "shareLogs": "اشتراک گذاری رخدادها",
   "@shareLogs": {},
@@ -279,7 +279,7 @@
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "پوشه باید خالی باشد",
   "@directoryMustBeEmpty": {},
-  "shuffleAllSongCount": "بر زدن همه‌ی تعداد قطعه",
+  "shuffleAllSongCount": "بُر زدن همه‌ی تعداد قطعه",
   "@shuffleAllSongCount": {},
   "viewType": "نوع نما",
   "@viewType": {},
@@ -380,11 +380,11 @@
   "@customLocation": {},
   "customLocationsBuggy": "مکان‌های سفارشی به دلیل مسائل دسترسی‌ها بسیار مشکل آفرین هستند. من دارم راه‌کارهایی را پیدا می‌کنم، ولی برای الان استفاده از آن‌ها را پیشنهاد نمی‌کنم.",
   "@customLocationsBuggy": {},
-  "enterLowPriorityStateOnPause": "در توقف پخش وارد حالت کم اهمیت شو",
+  "enterLowPriorityStateOnPause": "ورود به حالت کم اهمیت به هنگام توقف",
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "در توقف پخش به اعلان اجازه‌ی رد شدن می‌دهد. همچنین به اندروید اجازه می‌دهد تا در توقف پخش به سرویس پایان دهد.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCountSubtitle": "تعداد قطعه‌ها برای بارگذاری زمانی که دکمه‌ی بر زدن همه‌ی قطعه‌ها استفاده می‌شود.",
+  "shuffleAllSongCountSubtitle": "تعداد قطعه‌ها برای بارگذاری زمانی که دکمه‌ی بُر زدن همه‌ی قطعه‌ها استفاده می‌شود.",
   "@shuffleAllSongCountSubtitle": {},
   "downloadsDeleted": "بارگیری‌ها پاک شدند.",
   "@downloadsDeleted": {},
@@ -398,7 +398,7 @@
   "@customizationSettingsTitle": {
     "description": "Title for the customization settings screen"
   },
-  "playbackSpeedControlSettingSubtitle": "آیا واپایش تندی پخش در منوی صفحه‌ی پخش نمایش داده شود یا نه",
+  "playbackSpeedControlSettingSubtitle": "اینکه واپایش تندی پخش در منوی صفحه‌ی پخش نمایش داده شود یا نه",
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
@@ -839,7 +839,7 @@
       }
     }
   },
-  "playlistActionsMenuButtonTooltip": "برای افزودن به فهرست پخش بزنید. برای تغییر وضعیت علاقه نگه دارید.",
+  "playlistActionsMenuButtonTooltip": "برای افزودن به فهرست پخش لمس کنید. برای تغییر وضعیت علاقه نگه دارید.",
   "@playlistActionsMenuButtonTooltip": {
     "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
   },
@@ -862,5 +862,388 @@
   "addedToQueue": "به صف افزوده شد.",
   "@addedToQueue": {
     "description": "Snackbar message that shows when the user successfully adds items to the end of the play queue."
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} ک.بیت بر ثانیه",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "shuffleToQueue": "بُر زدن و سپس افزودن به صف",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "confirmShuffleNext": "بعدی بُر زده خواهد شد",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmShuffleToNextUp": "بُر زده و به موارد بعدی افزوده شد",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "بُر زده و به صف افزوده شد",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "placeholderSource": "یه جایی",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "playbackHistory": "تاریخچه‌ی پخش",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "yourLikes": "مورد علاقه‌های شما",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "mix": "{mixSource} - میکس",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "tracksFormerNextUp": "قطعه‌های افزوده شده با «موارد بعدی»",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "savedQueue": "صف ذخیره شد",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "shuffleAllQueueSource": "بُر زدن همه",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonTooltip": "در حال پخش به ترتیب. برای بُر زدن لمس کنید.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "در حال بُر زدن قطعه‌ها",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedFeatureText": "تندی {speed}x",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "کاهش تندی پخش",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "loopModeOneButtonLabel": "در حال تکرار این قطعه",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "queuesScreen": "بازگردانی پخش کنونی",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreTitle": "{date} ذخیره شد",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "در حال پخش: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "queueLoadingMessage": "در حال بازگردانی صف...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "autoloadLastQueueOnStartup": "بازگردانی خودکار واپسین صف",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "تلاش برای بازگردانی واپسین صف پخش شده پس از شروع برنامه.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "فرکانس بروزرسانی نشست پخش",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topSongs": "قطعه‌های برتر",
+  "@topSongs": {},
+  "shuffleAlbums": "بُر زدن آلبوم‌ها",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsToNextUp": "بُر زدن آلبوم‌ها و افزودن آن‌ها به پایان بعدی",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} بار پخش شده} other{{playCount} بار پخش شده}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "resetTabs": "بازنشانی سربرگ‌ها",
+  "@resetTabs": {},
+  "resetToDefaults": "بازنشانی به پیش‌فرض‌ها",
+  "@resetToDefaults": {},
+  "noMusicLibrariesTitle": "هیچ کتاب‌خانه‌ی آهنگی نیست",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "confirm": "پذیرش",
+  "@confirm": {},
+  "refresh": "دوباره سازی",
+  "@refresh": {},
+  "volumeNormalizationModeSelectorTitle": "حالت عادی‌سازی حجم صدا",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "چه زمان و چگونه عادی‌سازی حجم صدا به کار بسته شود",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "moreInfo": "اطلاعات بیشتر",
+  "@moreInfo": {},
+  "volumeNormalizationSettingsTitle": "عادی‌سازی حجم صدا",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "deleteItem": "حذف از دستگاه",
+  "@deleteItem": {
+    "description": "Option to delete item in long-press menu."
+  },
+  "requireWifiForDownloads": "الزام اتصال به WiFi هنگام بارگیری.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "downloadLibraryPrompt": "آیا مطمئنید که می‌خواهید همه‌ی محتوای کتاب‌خانه‌ی «{libraryName}» را بارگیری کنید؟",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "filesystemFull": "بارگیری‌های جامانده را نمی‌توان کامل کرد. سیستم پر است و جا ندارد.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "اتصال بریده شد، درحال متوقف کردن بارگیری‌ها.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "activeDownloadSize": "در حال بارگیری...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "در حال حذف...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "در حال هماهنگ سازی...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "queueRetryMessage": "در بازگردانی صف ناکام ماندیم. دوباره تلاش کنیم؟",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "queueRestoreButtonLabel": "بازگردانی",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "shuffleToNextUp": "بُر زدن و سپس افزودن به موارد بعدی",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "confirmAddToNextUp": "{type, select, track{قطعه} album{آلبوم} artist{هنرمند} playlist{فهرست پخش} genre{ژانر} other{آیتم}} به موارد بعدی افزوده شد",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackOrderLinearButtonLabel": "پخش به ترتیب",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "در حال بُر زدن قطعه‌ها. برای پخش به ترتیب لمس کنید.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "reportQueueToServer": "صف فعلی به سرور گزارش شود؟",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "playbackSpeedIncreaseLabel": "افزایش تندی پخش",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "confirmPlayNext": "بعدی {type, select, track{قطعه} album{آلبوم} artist{هنرمند} playlist{فهرست پخش} genre{ژانر} other{آیتم}} پخش خواهد شد",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackSpeedButtonLabel": "در حال پخش با تندی {speed}x",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "confirmAddToQueue": "{type, select, track{قطعه} album{آلبوم} artist{هنرمند} playlist{فهرست پخش} genre{ژانر} other{آیتم}} به صف افزوده شد",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "shareOfflineListens": "اشتراک گذاری شنیده شده‌ها به صورت آفلاین",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "loopModeNoneButtonLabel": "تکرار غیرفعال است",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "playingFromType": "در حال پخش از {source, select, album{آلبوم} playlist{فهرست پخش} songMix{میکس قطعه} artistMix{میکس هنرمند} albumMix{میکس آلبوم} genreMix{میکس ژانر} favorites{مورد علاقه‌ها} allSongs{همه‌ی قطعه‌ها} filteredList{قطعه‌ها} genre{ژانر} artist{هنرمند} song{قطعه} nextUpAlbum{آلبوم در «مورد بعدی»} nextUpPlaylist{فهرست پخش در «مورد بعدی»} nextUpArtist{هنرمند در «مورد بعدی»} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "loopModeAllButtonLabel": "در حال تکرار همه",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 قطعه} other{{count} قطعه}}, {remaining} پخش نشده",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "showUncensoredLogMessage": "این رخداد شامل اطلاعات ورود شماست. نمایش داده شود؟",
+  "@showUncensoredLogMessage": {},
+  "reportQueueToServerSubtitle": "اگر فعال شود، فین‌امپ صف کنونی را به سرور می‌فرستد. اکنون کاربرد خاصی برای این وجود ندارد و فقط شدآمد (traffic) شبکه را افزایش می‌دهد.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "close": "بستن",
+  "@close": {},
+  "noMusicLibrariesBody": "فین‌امپ هیچ کتاب‌خانه‌ی آهنگی پیدا نکرد. لطفاً مطمئن شوید که سرور Jellyfin شما حداقل یک کتاب‌خانه با نوع محتوای \"Music\" دارا باشد.",
+  "@noMusicLibrariesBody": {},
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "هر چند وقت وضعیت پخش کنونی به سرور فرستاده شود، به ثانیه. به خاطر اینکه از خروج نشست جلوگیری شود، این باید کمتر از ۵ دقیقه (۳۰۰ ثانیه) باشد.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "shuffleAlbumsNext": "بُر زدن آلبوم‌ها و افزودن آن به آغاز بعدی",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "onlyShowFullyDownloaded": "تنها آلبوم‌های کامل بارگیری‌شده را نمایش بده",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "activeDownloadsListHeader": "{itemCount} {itemCount, plural, =1{بارگیری} other{بارگیری}} {typeName, select, downloading{جاری} failed{ناکام} syncFailed{مکرراً هماهنگ نشده} enqueued{به صف شده} other{}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "اگر سرور جلی‌فین (Jellyfin) بروزرسانی‌ای از سرویس گیرنده در ۵ دقیقه دریافت نکند، می‌پندارد که پخش پایان یافته‌است. این بدان معناست که برای قطعه‌های بلندتر از ۵ دقیقه، پخش آن می‌تواند اشتباهاً به عنوان پایان یافته گزارش شود، که منجر به کاهش کیفیت داده‌ی گزارش پخش (Playback Reporting Data) می‌شود.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "albumCount": "{count,plural,=1{{count} آلبوم} other{{count} آلبوم}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncComplete": "همه‌ی بارگیری‌ها دوباره هماهنگ شد.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "volumeNormalizationSwitchTitle": "فعال کردن عادی‌سازی حجم صدا",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "syncDownloads": "هماهنگ سازی و بارگیری آیتم‌های از قلم افتاده.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "تعمیر مشکلات مربوط به فایل‌ها یا فراداده‌های بارگیری شده.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "queueRestoreError": "هشدار: {count,plural, =1{{count} قطعه} other{{count} قطعه}} را نمی‌توان به صف بازگردانی کرد.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectionInterruptedBackground": "به هنگام بارگیری در پس‌زمینه، اتصال بریده شد. می‌تواند توسط تنظیمات سیستم‌عامل اتفاق افتاده باشد.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "connectionInterruptedBackgroundAndroid": "به هنگام بارگیری در پس‌زمینه، اتصال بریده شد. این مشکل می‌تواند از فعال بودن تنظیم «ورود به حالت کم اهمیت به هنگام توقف» یا تنظیمات سیستم‌عامل باشد.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   }
 }
