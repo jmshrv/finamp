@@ -151,7 +151,7 @@
   "@unknownError": {},
   "enterLowPriorityStateOnPause": "Entra nello Stato a Bassa-Priorità quando in Pausa",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Riproduci Casualmente Tutte Le Canzoni Conteggiate",
+  "shuffleAllSongCount": "Riproduci Casualmente Tutti i Brani Conteggiati",
   "@shuffleAllSongCount": {},
   "grid": "Griglia",
   "@grid": {},
@@ -197,7 +197,7 @@
   "@useCoverAsBackgroundSubtitle": {},
   "light": "Chiaro",
   "@light": {},
-  "noButtonLabel": "NO",
+  "noButtonLabel": "No",
   "@noButtonLabel": {},
   "setSleepTimer": "Imposta Timer di Spegnimento",
   "@setSleepTimer": {},
@@ -207,7 +207,7 @@
   "@tabs": {},
   "theme": "Tema",
   "@theme": {},
-  "yesButtonLabel": "SI",
+  "yesButtonLabel": "Si",
   "@yesButtonLabel": {},
   "invalidNumber": "Numero non valido",
   "@invalidNumber": {},
@@ -318,7 +318,7 @@
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "applicationLegalese": "Concesso in licenza con \"Mozilla Public License 2.0\". Codice Sorgente disponibile su:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Concesso in licenza con \"Mozilla Public License 2.0\".\nCodice sorgente disponibile su: {sourceCodeLink}.",
   "@applicationLegalese": {},
   "startMixNoSongsArtist": "Effettua una pressione prolungata su un artista per aggiungerlo o rimuoverlo dal mix builder prima di far partire un mix",
   "@startMixNoSongsArtist": {
@@ -394,7 +394,7 @@
   "@customLocation": {},
   "dark": "Scuro",
   "@dark": {},
-  "createButtonLabel": "CREA",
+  "createButtonLabel": "Crea",
   "@createButtonLabel": {},
   "customLocationsBuggy": "Le posizioni personalizzate sono estremamente instabili a causa di problemi con i permessi. Sto pensando a un modo di aggiustarle, ma per adesso non ne consiglio l'utilizzo.",
   "@customLocationsBuggy": {},
@@ -420,9 +420,9 @@
       }
     }
   },
-  "removeFromPlaylistTooltip": "Rimuovi dalla playlist",
+  "removeFromPlaylistTooltip": "Rimuovi da questa playlist",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Rimuovi dalla playlist",
+  "removeFromPlaylistTitle": "Rimuovi da Questa Playlist",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Rimosso dalla playlist.",
   "@removedFromPlaylist": {},
@@ -430,23 +430,23 @@
   "@language": {},
   "showUncensoredLogMessage": "Questo log contiene le tue credenziali di accesso. Vuoi vederlo?",
   "@showUncensoredLogMessage": {},
-  "insertedIntoQueue": "Inserito nella coda.",
+  "insertedIntoQueue": "Aggiunto alla coda.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
-  "refresh": "AGGIORNA",
+  "refresh": "Aggiorna",
   "@refresh": {},
   "confirm": "Conferma",
   "@confirm": {},
-  "playNext": "Suona il prossimo",
+  "playNext": "Riproduci come successivo",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
-  "resetTabs": "Resettare le schede",
+  "resetTabs": "Reimposta le schede",
   "@resetTabs": {},
-  "noMusicLibrariesBody": "Finamp non è riuscito a trovare nessuna raccolta musicale. Sei pregato di controllare che il tuo server Jellyfin contenga almeno una raccolta con il genere configurato come \"Musica\".",
+  "noMusicLibrariesBody": "Finamp non è riuscito a trovare nessuna libreria musicale. Sei pregato di controllare che il tuo server Jellyfin contenga almeno una libreria con \"Tipo di contenuto\" impostato come \"Musica\".",
   "@noMusicLibrariesBody": {},
-  "noMusicLibrariesTitle": "Nessuna raccolta musicale",
+  "noMusicLibrariesTitle": "Nessuna Libreria musicale",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
@@ -662,5 +662,288 @@
         "type": "int"
       }
     }
+  },
+  "playbackSpeedControlSettingDescription": "Automatico:\nFinamp cerca di riconoscere se il brano che stai riproducendo è un podcast o un audiolibro (o parte di esso). Ciò si verifica se il brano è più lungo di {trackDuration} minuti, se la durata totale dell'album del brano è più lunga di {albumDuration} ore, o se il brano rientra in almeno uno dei seguenti generi: {genreList}\nI controlli della Velocità di riproduzione saranno allora mostrati nel menu della schermata del lettore.\n\nVisibile:\nI controlli della Velocità di riproduzione nel menu della schermata del lettore sono sempre visibili.\n\nNascosto:\nI controlli della Velocità di riproduzione nel menu della schermata del lettore sono sempre nascosti.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "shuffleAlbums": "Riproduci casualmente gli Album",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "confirmPlayNext": "{type, select, brano{Track} album{Album} artista{Artist} playlist{Playlist} genere{Genre} other{Item}} sarà riprodotto subito dopo",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "shuffleNext": "Riproduci casualmente come successivo nella coda \"Next Up\"",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "couldNotLoad": "Non posso caricare {source, select, album{album} playlist{playlist} Mix del brano{track mix} Mix dell'artista{artist mix} Mix dell'album{album mix} Mix del genere{genre mix} preferiti{favorites} tutti i brani{all tracks} Lista filtrata di brani{tracks} genere{genre} artista{artist} brano{track} Album nella coda A Seguire{album in next up} Playlist nella coda A Seguire{playlist in next up} Artista nella coda A Seguire{artist in next up} other{}}",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "volumeNormalizationSwitchSubtitle": "Usa le informazioni di guadagno per normalizzare il volume dei brani (\"Replay Gain\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeSelectorDescription": "Ibrida (Brano + Album):\nIl guadagno del brano è usato per la normale riproduzione, ma se un album è in riproduzione (sia perché è la sorgente principale della coda di riproduzione o perché è stata aggiunta alla coda ad un certo punto), il guadagno dell'album viene usato invece. \nTrack gain is used for regular playback, but if an album is playing (either because it''s the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nbasata sul brano:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "interactions": "Interazioni",
+  "@interactions": {},
+  "customizationSettingsTitle": "Personalizzazione",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "Visibilità della Velocità di riproduzione",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "automatic": "Automatica",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Mostra sempre",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "reset": "Resetta",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Applica",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Padding minimo della cover dell'album",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreen": "Schermata di riproduzione",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "hours": "Ore",
+  "@hours": {},
+  "seconds": "Secondi",
+  "@seconds": {},
+  "sleepTimerRemainingTime": "Spegnimento in {time} minuti",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTooltip": "Aggiungi a più playlist",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "Aggiungi a Più Playlist",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistNamedTooltip": "Rimuovi dalla playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Rimuovi dalla Playlist '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "playlistActionsMenuButtonTooltip": "Premi per aggiungere alla playlist. Premi a lungo per aggiungere/rimuovere dai favoriti.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "unknownAlbum": "Album Sconosciuto",
+  "@unknownAlbum": {},
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "goToGenre": "Vai a Genere",
+  "@goToGenre": {},
+  "confirmFavoriteAdded": "Aggiunto ai Favoriti",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Rimosso dai Favoriti",
+  "@confirmFavoriteRemoved": {},
+  "skipToNextTrackButtonTooltip": "Vai al brano successivo",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "skipToPreviousTrackButtonTooltip": "Torna all'inizio o al brano precedente",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "previousTracks": "Brani precedenti",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "togglePlaybackButtonTooltip": "Avvia/Ferma la riproduzione",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "clearNextUp": "Svuota la Coda",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "nextUp": "In Coda",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playingFrom": "In riproduzione da",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "addToNextUp": "Aggiungi alla coda \"Next Up\"",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleToQueue": "Riproduci casualmente alla fine della coda",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "shuffleToNextUp": "Riproduci casualmente alla fine della coda \"Next Up\"",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleAlbumsToQueue": "Riproduci casualmente gli Album e aggiungi alla fine della coda",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "shuffleAlbumsToNextUp": "Riproduci casualmente gli Album e aggiungi alla fine di A Seguire",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} riproduzione} other{{playCount} riproduzioni}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "resetToDefaults": "Reimposta valori di default",
+  "@resetToDefaults": {},
+  "moreInfo": "Più informazioni",
+  "@moreInfo": {},
+  "volumeNormalizationSettingsTitle": "Normalizzazione del volume",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "Quando e come applicare la Normalizzazione del volume",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorTitle": "Modalità di Normalizzazione del volume",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "playbackModeDirectPlaying": "Riproduzione diretta",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "Transcodifica",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "playbackModeLocal": "Riproduzione locale",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToArtist": "Vai ad Artista",
+  "@goToArtist": {},
+  "confirmAddedToPlaylist": "Aggiunto alla playlist.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "showFastScroller": "Mostra lo scorrimento veloce",
+  "@showFastScroller": {},
+  "swipeInsertQueueNext": "Striscia per riprodurre come prossimo brano",
+  "@swipeInsertQueueNext": {},
+  "playbackSpeedControlSettingSubtitle": "Se i controlli della velocità di riproduzione vengono visualizzati nel menu della schermata del lettore",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "hidden": "Nascondi sempre",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Velocità",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "showArtistsTopSongs": "Mostra i brani top nella visualizzazione artista",
+  "@showArtistsTopSongs": {},
+  "showArtistsTopSongsSubtitle": "Se mostrare o no i 5 brani più ascoltati di un artista.",
+  "@showArtistsTopSongsSubtitle": {},
+  "timeFractionTooltip": "{currentTime} di {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "trackCountTooltip": "Brano {currentTrackIndex} di {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "shuffleAlbumsNext": "Riproduci casualmente gli Album e aggiungi all'inizio di A Seguire",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "close": "Chiudi",
+  "@close": {},
+  "volumeNormalizationSwitchTitle": "Attiva Normalizzazione del volume",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
   }
 }
