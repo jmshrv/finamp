@@ -401,5 +401,466 @@
   "playbackSpeedControlSettingSubtitle": "آیا واپایش تندی پخش در منوی صفحه‌ی پخش نمایش داده شود یا نه",
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
+  },
+  "dlEnqueued": "{count} به صف شده",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeDownloadsTitle": "بارگیری‌های فعال",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "هیچ بارگیری‌ای فعال نیست.",
+  "@noActiveDownloads": {},
+  "failedToGetSongFromDownloadId": "در گرفتن قطعه از ID بارگیری ناکام ماندیم",
+  "@failedToGetSongFromDownloadId": {},
+  "deleteDownloadsConfirmButtonText": "حذف",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "error": "خطا",
+  "@error": {},
+  "discNumber": "دیسک {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCount": "{count,plural,=1{{count} قطعه} other{{count} قطعه}}, {downloads} بارگیری شد",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "songCount": "{count,plural,=1{{count} قطعه} other{{count} قطعه}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCountArtist": "{count,plural,=1{{count} قطعه} other{{count} قطعه}} بارگیری شد",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "ویرایش نام فهرست پخش",
+  "@editPlaylistNameTooltip": {},
+  "editPlaylistNameTitle": "ویرایش نام فهرست پخش",
+  "@editPlaylistNameTitle": {},
+  "required": "الزامی",
+  "@required": {},
+  "stackTrace": "ردیابی پشته (Stack Trace)",
+  "@stackTrace": {},
+  "shown": "نشان داده شده",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "پنهان",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "showTextOnGridView": "نشان دادن متن در نمایش جدولی",
+  "@showTextOnGridView": {},
+  "showTextOnGridViewSubtitle": "اینکه متن (عنوان، هنرمند و ...) روی صفحه‌ی جدولی آهنگ نمایش داده شود یا نه.",
+  "@showTextOnGridViewSubtitle": {},
+  "showFastScroller": "نشان دادن اسکرول کننده سریع",
+  "@showFastScroller": {},
+  "theme": "تم",
+  "@theme": {},
+  "noButtonLabel": "نه",
+  "@noButtonLabel": {},
+  "yesButtonLabel": "آره",
+  "@yesButtonLabel": {},
+  "setSleepTimer": "تنظیم زمان‌سنج خواب",
+  "@setSleepTimer": {},
+  "hours": "ساعت",
+  "@hours": {},
+  "seconds": "ثانیه",
+  "@seconds": {},
+  "minutes": "دقیقه",
+  "@minutes": {},
+  "trackCountTooltip": "قطعه‌ی {currentTrackIndex} از {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "addToPlaylistTooltip": "افزودن به فهرست پخش",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "افزودن به فهرست پخش",
+  "@addToPlaylistTitle": {},
+  "addToMorePlaylistsTooltip": "افزودن به فهرست پخش‌های بیشتر",
+  "@addToMorePlaylistsTooltip": {},
+  "removeFromPlaylistTooltip": "حذف از این فهرست پخش",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistNamedTitle": "حذف از فهرست پخش '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "newPlaylist": "فهرست پخش جدید",
+  "@newPlaylist": {},
+  "createButtonLabel": "ساختن",
+  "@createButtonLabel": {},
+  "noAlbum": "هیچ آلبومی نیست",
+  "@noAlbum": {},
+  "noItem": "هیچ آیتمی نیست",
+  "@noItem": {},
+  "noArtist": "هیچ هنرمندی نیست",
+  "@noArtist": {},
+  "unknownArtist": "هنرمند ناشناخته",
+  "@unknownArtist": {},
+  "unknownAlbum": "آلبوم ناشناخته",
+  "@unknownAlbum": {},
+  "playbackModeTranscoding": "درحال رمزگردانی",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "addToQueue": "افزودن به صف",
+  "@addToQueue": {
+    "description": "Popup menu item title for adding an item to the end of the play queue."
+  },
+  "goToAlbum": "رفتن به آلبوم",
+  "@goToAlbum": {},
+  "goToArtist": "رفتن به صفحه‌ی هنرمند",
+  "@goToArtist": {},
+  "goToGenre": "رفتن به ژانر",
+  "@goToGenre": {},
+  "removeFavourite": "حذف مورد علاقه",
+  "@removeFavourite": {},
+  "addFavourite": "افزودن مورد علاقه",
+  "@addFavourite": {},
+  "confirmFavoriteRemoved": "مورد علاقه حذف شد",
+  "@confirmFavoriteRemoved": {},
+  "insertedIntoQueue": "در صف قرار گرفت.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "confirmAddedToPlaylist": "به فهرست پخش اضافه شد.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "removedFromPlaylist": "از فهرست پخش حذف شد.",
+  "@removedFromPlaylist": {},
+  "startingInstantMix": "در حال آغاز میکس آنی.",
+  "@startingInstantMix": {},
+  "removeFromMix": "حذف از میکس",
+  "@removeFromMix": {},
+  "addToMix": "افزودن به میکس",
+  "@addToMix": {},
+  "bufferDuration": "مدت زمان بافر",
+  "@bufferDuration": {},
+  "language": "زبان",
+  "@language": {},
+  "skipToNextTrackButtonTooltip": "پرش به قطعه‌ی بعدی",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "togglePlaybackButtonTooltip": "تنظیم پخش",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "nextUp": "مورد بعدی",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "پاک کردن مورد بعدی",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "playNext": "پخش کردن بعدی",
+  "@playNext": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "addToNextUp": "افزودن به مورد بعدی",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleNext": "بُر زدن بعدی",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "light": "روز",
+  "@light": {},
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "حداقل فاصله‌ی درونی دور جلد آلبوم روی صفحه‌ی پخش، درصد عرض صفحه.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "disableGesture": "غیرفعال کردن حرکات لمسی",
+  "@disableGesture": {},
+  "dark": "شب",
+  "@dark": {},
+  "dlRunning": "{count} جاری",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "automatic": "خودکار",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "addToMorePlaylistsTitle": "افزودن به فهرست پخش‌های بیشتر",
+  "@addToMorePlaylistsTitle": {},
+  "deleteDownloadsPrompt": "آیا مطمئن هستید که می‌خواهید {itemType, select, album{آلبوم} playlist{فهرست پخش} artist{هنرمند} genre{ژانر} song{قطعه} library{کتاب‌خانه} other{آیتم}} '{itemName}' را از دستگاه حذف کنید؟",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "applicationLegalese": "پروانه شده با پروانه‌ی عمومی موزیلا 2.0.\nکد منبع در {sourceCodeLink} در دسترس است.",
+  "@applicationLegalese": {
+    "placeholders": {
+      "sourceCodeLink": {
+        "type": "String",
+        "example": "https://github.com/jmshrv/finamp"
+      }
+    }
+  },
+  "queueReplaced": "صف جایگزین شد.",
+  "@queueReplaced": {},
+  "disableGestureSubtitle": "اینکه حرکت لمسی غیرفعال باشند یا نه.",
+  "@disableGestureSubtitle": {},
+  "anErrorHasOccured": "خطایی رخ داد.",
+  "@anErrorHasOccured": {},
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} قطعه} other{{songCount} قطعه‌ها}}, {imageCount,plural,=1{{imageCount} نگاره} other{{imageCount} نگاره‌ها}}\n{syncCount,plural,=1{{syncCount} هماهنگ‌سازی گره} other{{syncCount} هماهنگ‌سازی گره‌ها}}{repairing, plural, =0{} other{\nهم‌اکنون در حال تعمیر}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} پایان یافته",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} معیوب",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeFractionTooltip": "{currentTime} از {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "errorScreenError": "یک مشکل به هنگام دریافت فهرست مشکلات رخ داد! در این وضعیت، شاید که ساخت مسأله‌ای در گیت‌هاب و پاک کردن داده‌ی نرم‌افزار به صلاح باشد",
+  "@errorScreenError": {},
+  "skipToPreviousTrackButtonTooltip": "پرش به آغاز یا به قطعه‌ی قبلی",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "playbackSpeedControlSettingDescription": "خودکار:\nفین‌امپ تلاش می‌کند تا مشخص کند قطعه‌ای که شما در حال پخش کردن هستید پادپخش (پادکست) است یا کتاب صوتی. این مورد زمانی در نظر گرفته می‌شود که قطعه از {trackDuration} دقیقه بیشتر باشد، یا قطعه از {albumDuration} ساعت بیشتر باشد، یا به قطعه حداقل یکی از این ژانرها اختصاص داده شده باشد:‌{genreList}\nسپس واپایش‌های تندی پخش در منوی صفحه‌ی پخش نشان داده می‌شوند.\n\nنشان داده شده:\nواپایش‌های تندی پخش همیشه در منوی صفحه‌ی پخش نشان داده می‌شوند\n\nپنهان:\nواپایش‌های تندی پخش در منوی صفحه‌ی پخش همیشه پنهان باشند.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "gridCrossAxisCountSubtitle": "اندازه‌ای از کاشی‌های جدول که به ازای هر ردیف استفاده می‌شوند زمانی که {value} باشد.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showArtistsTopSongs": "نشان دادن قطعه‌های برتر در نمایش هنرمند",
+  "@showArtistsTopSongs": {},
+  "gridCrossAxisCount": "{value} تعداد محور افقی جدول",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "playerScreen": "صفحه‌ی پخش",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "useCoverAsBackgroundSubtitle": "اینکه از جلد آلبوم مبهم شده به عنوان پس‌زمینه در بخش های مختلف نرم‌افزار استفاده شود یا نه.",
+  "@useCoverAsBackgroundSubtitle": {},
+  "useCoverAsBackground": "از جلد مبهم شده به عنوان پس‌زمینه استفاده شود",
+  "@useCoverAsBackground": {},
+  "playerScreenMinimumCoverPaddingEditorTitle": "حداقل فاصله‌ی درونی جلد آلبوم",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "hideSongArtistsIfSameAsAlbumArtists": "پنهان کردن هنرمندان قطعه اگر با هنرمندان آلبوم یکی بودند",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "اینکه هنرمندان قطعه روی صفحه‌ی آلبوم اگر با هنرمندان آلبوم تفاوتی نداشتند نمایش داده شوند یا نه.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "cancelSleepTimer": "لغو زمان‌سنج خواب؟",
+  "@cancelSleepTimer": {},
+  "showArtistsTopSongsSubtitle": "اینکه ۵ قطعه‌ی برتر هنرمند نمایش داده شود یا نه.",
+  "@showArtistsTopSongsSubtitle": {},
+  "removeFromPlaylistNamedTooltip": "حذف از فهرست پخش '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "system": "سیستم",
+  "@system": {},
+  "tabs": "سربرگ‌ها",
+  "@tabs": {},
+  "sleepTimerTooltip": "زمان‌سنج خواب",
+  "@sleepTimerTooltip": {},
+  "sleepTimerRemainingTime": "خوابیدن در {time} دقیقه",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "responseError": "{error} کد وضعیت {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "redownloadedItems": "{count,plural, =0{.بارگیری مجددی نیاز نیست} =1{{count} آیتم مجدد بارگیری شد} other{{count} آیتم مجدد بارگیری شد}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDurationSubtitle": "پخش‌کننده باید چقدر بافر کند، به ثانیه. راه‌اندازی مجدد نیاز دارد.",
+  "@bufferDurationSubtitle": {},
+  "previousTracks": "قطعه‌های قبلی",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "playingFrom": "در حال پخش از",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "invalidNumber": "شماره‌ی غیر قابل قبول",
+  "@invalidNumber": {},
+  "removeFromPlaylistTitle": "حذف از این فهرست پخش",
+  "@removeFromPlaylistTitle": {},
+  "playlistCreated": "فهرست پخش ساخته شد.",
+  "@playlistCreated": {},
+  "responseError401": "{error} کد وضعیت {statusCode}. احتمالاً بدان معناست که شما نام کاربری/رمزعبور اشتباهی را وارد کرده‌اید یا سرویس گیرنده دیگر وارد نیست.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "playlistActionsMenuButtonTooltip": "برای افزودن به فهرست پخش بزنید. برای تغییر وضعیت علاقه نگه دارید.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "playbackModeDirectPlaying": "پخش مستقیم",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "playbackModeLocal": "پخش محلی",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "queue": "صف",
+  "@queue": {},
+  "replaceQueue": "جایگزینی صف",
+  "@replaceQueue": {},
+  "instantMix": "میکس آنی",
+  "@instantMix": {},
+  "confirmFavoriteAdded": "مورد علاقه افزوده شد",
+  "@confirmFavoriteAdded": {},
+  "addedToQueue": "به صف افزوده شد.",
+  "@addedToQueue": {
+    "description": "Snackbar message that shows when the user successfully adds items to the end of the play queue."
   }
 }
