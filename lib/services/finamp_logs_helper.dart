@@ -1,48 +1,40 @@
 import 'dart:io';
-import 'dart:math';
-
+import 'package:archive/archive_io.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:finamp/services/censored_log.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:finamp/services/metadata_helper.dart';
 import 'package:logging/logging.dart';
-import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:path/path.dart' as path_helper;
+import 'package:hive/hive.dart';
 
 class FinampLogsHelper {
   final List<LogRecord> logs = [];
-  IOSink? _logFileWriter;
+  late final Box logBox;
+
+  FinampLogsHelper() {
+    _initializeLogBox();
+  }
+
+  Future<void> _initializeLogBox() async {
+    logBox = await Hive.openBox('logs');
+  }
 
   Future<void> openLog() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final basePath = (Platform.isAndroid || Platform.isIOS)
-        ? await getApplicationDocumentsDirectory()
-        : await getApplicationSupportDirectory();
-    final logFile = File(path_helper.join(basePath.path, "finamp-logs.txt"));
-    if (logFile.existsSync() && logFile.lengthSync() >= 1024 * 1024 * 10) {
-      logFile
-          .renameSync(path_helper.join(basePath.path, "finamp-logs-old.txt"));
-    }
-    _logFileWriter = logFile.openWrite(mode: FileMode.writeOnlyAppend);
+    await _initializeLogBox();
   }
 
   void addLog(LogRecord log) {
     logs.add(log);
-    if (_logFileWriter != null) {
-      // This fails if we log an event before setting up userHelper
-      var message = log.censoredMessage;
-      if (log.stackTrace == null) {
-        // Truncate long messages from chopper, but leave long stack traces
-        message = message.substring(0, min(1024 * 5, message.length));
-      }
-      _logFileWriter!.writeln(message);
-    }
 
     // We don't want to keep logs forever due to memory constraints.
-    if (logs.length > (kDebugMode ? 10000 : 1000)) {
+    if (logs.length > 1000) {
       logs.removeAt(0);
     }
+
+    // Write log to Hive box
+    logBox.add(log.censoredMessage);
   }
 
   /// Sanitises all logs and returns a massive string
@@ -62,32 +54,33 @@ class FinampLogsHelper {
   /// Write logs to a file and share the file
   Future<void> shareLogs() async {
     final tempDir = await getTemporaryDirectory();
-    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
-    tempFile.createSync();
+    final zipFile = File(path_helper.join(tempDir.path, "finamp-logs.zip"));
 
-    if (_logFileWriter != null) {
-      final basePath = (Platform.isAndroid || Platform.isIOS)
-          ? await getApplicationDocumentsDirectory()
-          : await getApplicationSupportDirectory();
-      var oldLogs =
-          File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
-      var newLogs = File(path_helper.join(basePath.path, "finamp-logs.txt"));
-      if (oldLogs.existsSync()) {
-        await tempFile.writeAsBytes(await oldLogs.readAsBytes(),
-            mode: FileMode.writeOnly);
-      }
-      if (newLogs.existsSync()) {
-        await tempFile.writeAsBytes(await newLogs.readAsBytes(),
-            mode: FileMode.writeOnlyAppend);
-      }
-    } else {
-      await tempFile.writeAsString(getSanitisedLogs());
-    }
+    // Create a zip encoder
+    final encoder = ZipFileEncoder();
+    encoder.create(zipFile.path);
 
-    final xFile = XFile(tempFile.path, mimeType: "text/plain");
+    // Add log file to the zip
+    final logFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
+    await logFile.writeAsString(getSanitisedLogs());
+    encoder.addFile(logFile);
 
+    // Add metadata.json to the zip
+    final metadata = getIt<MetaData>();
+    await metadata.init();
+    final metadataFile = File(path_helper.join(tempDir.path, "metadata.json"));
+    await metadataFile.writeAsString(metadata.toJson().toString());
+    encoder.addFile(metadataFile);
+
+    // Close the zip encoder
+    encoder.close();
+
+    // Share the zip file
+    final xFile = XFile(zipFile.path, mimeType: "application/zip");
     await Share.shareXFiles([xFile]);
 
-    await tempFile.delete();
+    // Clean up temporary files
+    await metadataFile.delete();
+    await zipFile.delete();
   }
 }
