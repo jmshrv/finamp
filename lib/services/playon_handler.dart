@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/screens/active_downloads_screen.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:finamp/services/favorite_provider.dart';
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../services/music_player_background_task.dart';
@@ -30,7 +31,8 @@ var reconnectionSubscription = null;
 
 
 class PlayonHandler {
-
+  late WidgetRef ref;
+  
   Future<void> initialize() async {
 
     // Turn on/off when offline mode is toggled
@@ -141,6 +143,13 @@ class PlayonHandler {
                 // Waiting for planned issue #500 to be resolved to adjust volume
                 // We now have to report to jellyfin server, probably through playback_history_service, that we updated volume
             }
+            break;
+          case "UserDataChanged":
+            var item = await jellyfinApiHelper.getItemById(request['Data']['UserDataList'][0]['ItemId']);
+
+            // Handle favoritig from remote client
+            _playOnHandlerLogger.info("Updating favorite ui state");
+            ref.read(isFavoriteProvider(FavoriteRequest(item)).notifier).updateState(item.userData!.isFavorite);
             break;
           default:
             switch (request['Data']['Command']) {

@@ -167,7 +167,6 @@ Future<void> _setupDownloadsHelper() async {
 
 Future<void> _setupPlayonHandler() async {
   GetIt.instance.registerSingleton(PlayonHandler());
-  unawaited(GetIt.instance<PlayonHandler>().initialize());
 }
 
 Future<void> _setupKeepScreenOnHelper() async {
