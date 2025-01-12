@@ -305,9 +305,9 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "portrait": "رخ نگاشت",
+  "portrait": "عمودی",
   "@portrait": {},
-  "landscape": "چشم‌انداز",
+  "landscape": "افقی",
   "@landscape": {},
   "downloadFavoritesSetting": "بارگیری همه‌ی مورد علاقه‌ها",
   "@downloadFavoritesSetting": {},
