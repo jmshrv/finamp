@@ -101,7 +101,7 @@
   "@downloadsDeleted": {},
   "editPlaylistNameTitle": "Modifica il Nome della Playlist",
   "@editPlaylistNameTitle": {},
-  "favourite": "Preferiti",
+  "favourite": "Preferito",
   "@favourite": {},
   "location": "Posizione",
   "@location": {},
@@ -111,7 +111,7 @@
   "@required": {},
   "updateButtonLabel": "Aggiornamento",
   "@updateButtonLabel": {},
-  "downloadsQueued": "Download aggiunti.",
+  "downloadsQueued": "Download preparato, scarico i file",
   "@downloadsQueued": {},
   "logsCopied": "Log copiati.",
   "@logsCopied": {},
@@ -187,7 +187,7 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Nascondi l'artista del brano se uguale all'artista dell'album",
+  "hideSongArtistsIfSameAsAlbumArtists": "Nascondi gli artisti del brano se uguali agli artisti dell'album",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "useCoverAsBackground": "Mostra le copertine sfocate quando il player è in background",
   "@useCoverAsBackground": {},
@@ -277,7 +277,7 @@
   "@albums": {},
   "bitrateSubtitle": "Un bitrate più alto permette di avere una qualità audio più alta al costo di un più alto consumo della connessione dati.",
   "@bitrateSubtitle": {},
-  "shuffleAllSongCountSubtitle": "Numero di brani da caricare quando si usa il tasto per la riproduzione casuale di tutti i brani.",
+  "shuffleAllSongCountSubtitle": "Numero di brani da mettere in coda quando si usa il tasto per la riproduzione casuale di tutti i brani.",
   "@shuffleAllSongCountSubtitle": {},
   "errorScreenError": "Si è verificato un errore mentre tentavo di ottenere la lista degli errori! A questo punto probabilmente dovresti aprire una issue su GitHub e cancellare i dati dell'app",
   "@errorScreenError": {},
@@ -430,7 +430,7 @@
   "@language": {},
   "showUncensoredLogMessage": "Questo log contiene le tue credenziali di accesso. Vuoi vederlo?",
   "@showUncensoredLogMessage": {},
-  "insertedIntoQueue": "Aggiunto alla coda.",
+  "insertedIntoQueue": "Inserito nella coda.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
@@ -685,7 +685,7 @@
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
   },
-  "confirmPlayNext": "{type, select, brano{Track} album{Album} artista{Artist} playlist{Playlist} genere{Genre} other{Item}} sarà riprodotto subito dopo",
+  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} sarà riprodotto subito dopo",
   "@confirmPlayNext": {
     "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
     "placeholders": {
@@ -694,11 +694,11 @@
       }
     }
   },
-  "shuffleNext": "Riproduci casualmente come successivo nella coda \"Next Up\"",
+  "shuffleNext": "Riproduci casualmente come successivo nella coda A Seguire",
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
-  "couldNotLoad": "Non posso caricare {source, select, album{album} playlist{playlist} Mix del brano{track mix} Mix dell'artista{artist mix} Mix dell'album{album mix} Mix del genere{genre mix} preferiti{favorites} tutti i brani{all tracks} Lista filtrata di brani{tracks} genere{genre} artista{artist} brano{track} Album nella coda A Seguire{album in next up} Playlist nella coda A Seguire{playlist in next up} Artista nella coda A Seguire{artist in next up} other{}}",
+  "couldNotLoad": "Non posso caricare {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -710,7 +710,7 @@
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "volumeNormalizationModeSelectorDescription": "Ibrida (Brano + Album):\nIl guadagno del brano è usato per la normale riproduzione, ma se un album è in riproduzione (sia perché è la sorgente principale della coda di riproduzione o perché è stata aggiunta alla coda ad un certo punto), il guadagno dell'album viene usato invece. \nTrack gain is used for regular playback, but if an album is playing (either because it''s the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nbasata sul brano:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
+  "volumeNormalizationModeSelectorDescription": "Ibrida (Brano + Album):\nPer la normale riproduzione sono usate le informazioni di guadagno del brano, ma se un album è in riproduzione (sia perché è la sorgente principale della coda di riproduzione o perché è stata aggiunta alla coda ad un certo punto), vengono invece usate le informazioni di guadagno dell'album.\n\nbasata sul Brano:\nSono sempre usate le informazioni di guadagno del brano, indipendentemente dal fatto che un album sia o meno in riproduzione.\n\nbasata solo sull'Album:\nLa Normalizzazione del volume viene applicata solo mentre si riproducono degli album (utilizzando le informazioni di guadagno dell'album), ma non per i singoli brani.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -740,7 +740,7 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "playerScreenMinimumCoverPaddingEditorTitle": "Padding minimo della cover dell'album",
+  "playerScreenMinimumCoverPaddingEditorTitle": "Spaziatura minima della cover dell'album",
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
@@ -835,7 +835,7 @@
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
   },
-  "addToNextUp": "Aggiungi alla coda \"Next Up\"",
+  "addToNextUp": "Aggiungi alla fine della coda A Seguire",
   "@addToNextUp": {
     "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
   },
@@ -843,7 +843,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "shuffleToNextUp": "Riproduci casualmente alla fine della coda \"Next Up\"",
+  "shuffleToNextUp": "Riproduci casualmente alla fine della coda A Seguire",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
@@ -945,5 +945,391 @@
   "volumeNormalizationSwitchTitle": "Attiva Normalizzazione del volume",
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "queueRestoreError": "Attenzione: {count,plural, =1{{count} brano} other{{count} brani}} non possono essere ripristinati nella coda.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mix": "{mixSource} - Mix",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "finampCollectionNames": "{itemType, select, favorites{Preferiti} allPlaylists{Tutte le Playlists} fiveLatestAlbums{i 5 Ultimi Album} allPlaylistsMetadata{Metadata delle Playlist} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "missingDownloadSize": "Cancello...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "placeholderSource": "Da qualche parte",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "tracksFormerNextUp": "Brani aggiunti nella coda A Seguire",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "incidentalDownloadTooltip": "Il download di questo elemento è richiesto da {parentName}.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "maxConcurrentDownloadsSubtitle": "aumentare il numero di download contemporanei può permettere di aumentare il download in background, ma potrebbe causare l'errore di qualche download se molto grandi o in alcuni casi causare un lag eccessivo.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "savedQueue": "Coda salvata",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "confirmShuffleToQueue": "Sarà riprodotto casualmente alla fine della coda",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "yourLikes": "I tuoi Like",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "playbackOrderLinearButtonTooltip": "Riproduco in ordine. Premi per riprodurre casualmente.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Riproduco casualmente i brani. Premi per riprodurre in ordine.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedIncreaseLabel": "Aumenta velocità di riproduzione",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "playingFromType": "Riproduco da {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Spaziatura minima intorno alla cover dell'album nella visualizzazione del player, in % della larghezza dello schermo.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "confirmShuffleNext": "Sarà riprodotto casualmente subito dopo nella coda A Seguire",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmAddToQueue": "Aggiunto {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} alla coda",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackHistory": "Cronologia di riproduzione",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "shareOfflineListens": "Condividi offline i conteggi di riproduzione",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "playbackOrderLinearButtonLabel": "Riproduci in ordine",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "shuffleAllQueueSource": "Riproduci casualmente Tutti",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderShuffledButtonLabel": "Riproduco casualmente i brani",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedFeatureText": "velocità {speed}x",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "loopModeOneButtonLabel": "Riproduco questo brano in loop",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeNoneButtonLabel": "Riproduzione non in loop",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "volumeNormalizationModeHybrid": "Ibrida (Brano + Album)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationModeTrackBased": "basata sul Brano",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumBased": "basata sull'Album",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumOnly": "basata solo sull'Album",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Valore base del Guadagno",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "downloadItem": "Scarica",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "syncComplete": "tutti i download sono stati ri-sincronizzati.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "syncDownloads": "Sincronizza e scarica gli elementi mancanti.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "Ripara i problemi con i file scaricati e con i metadati.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "downloadsWorkersSetting": "numero di processi di download",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "maxConcurrentDownloadsLabel": "{count} Download contemporanei",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadsWorkersSettingSubtitle": "Numero di processi per sincronizzare i metadati ed eliminare i download. Aumentare i processi di download può velocizzare la sincronizzazione e l'eliminazione dei download, specialmente quando la latenza del server è alta, ma potrebbe introdurre del lag.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{count} Processi di Download",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "preferQuickSyncSwitch": "Preferisci la sincronizzazione veloce",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "cacheLibraryImagesName": "Immagini in cache per '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "transcodingStreamingContainerTitle": "Seleziona l'estensione dei file di transcodifica",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "Seleziona l'estensione per i segmenti di file quando si effettua lo streaming di audio transcodificato. I brani già in coda non saranno interessati.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "confirmAddToNextUp": "Aggiunto {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} alla coda A Seguire",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleToNextUp": "Sarà riprodotto casualmente alla fine della coda A Seguire",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "playbackSpeedButtonLabel": "Riproduco ad una velocità {speed}x",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Diminuisci velocità di riproduzione",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "loopModeAllButtonLabel": "Riproduco in loop tutto",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "activeDownloadSize": "In download...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "syncingDownloadSize": "Sincronizzo...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "runRepairWarning": "Non si è potuto contattare il server per finalizzare la migrazione dei download. Si prega di avviare 'Ripara i Download' dalla schermata dei download appena sarai tornato online.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "downloadSettings": "Impostazioni di Download",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "Mostra i Media di una Libreria Sconosciuta.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "showNullLibraryItemsSubtitle": "Qualche media potrebbe essere scaricato con una libreria sconosciuta. Disattiva l'opzione per nasconderli al di fuori della loro collezione originale.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloads": "numero massimo di download contemporanei",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "syncOnStartupSwitch": "All'avvio sincronizza automaticamente i Download",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "downloadTranscodeEnableTitle": "Attiva i Download Transcodificati",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadTranscodeCodecTitle": "Seleziona il Codec per i Download",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{Sempre} never{Mai} ask{Chiedi} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Al momento la Normalizzazione del volume su iOS richiede di cambiare il volume di riproduzione per simulare il cambio di guadagno. Dato che non è possibile aumentare il volume oltre il 100%, dobbiamo diminuire il volume di default così che sia possibile aumentare il volume dei brani silenziosi. I valori sono in decibel (dB), dove -10 db corrispondono al ~30% di volume, -4.5 dB al ~60% di volume e -2 dB a ~80% di volume.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "swipeInsertQueueNextSubtitle": "Attiva per far si che quando si striscia il dito su un brano nella lista dei brani, questo venga aggiunto come prossimo elemento della coda invece di essere aggiunto alla fine della coda.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "startInstantMixForIndividualTracksSwitchTitle": "Fai partire un Mix Istantaneo per i singoli Brani",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Quando attivo premere su un brano nella scheda dei brani farà partire un Mix Istantaneo di quel brano invece di riprodurre semplicemente il singolo brano.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "deleteItem": "Elimina dal dispositivo",
+  "@deleteItem": {
+    "description": "Option to delete item in long-press menu."
+  },
+  "repairComplete": "riparazione dei Download completata.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "downloadLibraryPrompt": "Sei sicuro di voler scaricare tutto il contenuto della libreria ''{libraryName}''?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Mostra solo gli album completamente scaricati",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "filesystemFull": "I download rimanenti non possono essere completati. La memoria di archiviazione del dispositivo è piena.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "Connessione interrotta, metto in pausa i download.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "La connessione è stata interrotta mentre scaricavo in background. Ciò può essere avvenuto a causa di impostazioni dell'OS.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "connectionInterruptedBackgroundAndroid": "La connessione è stata interrotta mentre scaricavo in background. Ciò può essere avvenuto perché hai attivato l'opzione 'Entra nello stato a bassa-priorità quando in pausa' o a causa di impostazioni dell'OS.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "requireWifiForDownloads": "Richiedi la connessione WiFi quando effettui il download.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
   }
 }
