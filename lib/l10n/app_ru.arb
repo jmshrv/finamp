@@ -117,7 +117,7 @@
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin использует AAC для транскодирования",
   "@jellyfinUsesAACForTranscoding": {},
-  "enableTranscoding": "Включить транскодирование",
+  "enableTranscoding": "Включить Перекодирование",
   "@enableTranscoding": {},
   "bitrate": "Битрейт",
   "@bitrate": {},
@@ -352,7 +352,7 @@
   "@location": {},
   "addButtonLabel": "Добавить",
   "@addButtonLabel": {},
-  "enableTranscodingSubtitle": "Треки будут транскодированы сервером.",
+  "enableTranscodingSubtitle": "Треки будут перекодированы сервером.",
   "@enableTranscodingSubtitle": {},
   "notAvailableInOfflineMode": "Недоступно без интернета",
   "@notAvailableInOfflineMode": {},
@@ -689,5 +689,74 @@
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
   "showArtistsTopSongs": "Показывать лучшие треки в режиме просмотра исполнителя",
-  "@showArtistsTopSongs": {}
+  "@showArtistsTopSongs": {},
+  "fontSizeOptionLarge": "Большой",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "activeDownloadsTitle": "Активные Загрузки",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Активных загрузок нет.",
+  "@noActiveDownloads": {},
+  "sleepTimerRemainingTime": "Засыпание через {time} минут",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTooltip": "Добавить в другие плейлисты",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "Добавить в Другие Плейлисты",
+  "@addToMorePlaylistsTitle": {},
+  "unknownAlbum": "Неизвестный Альбом",
+  "@unknownAlbum": {},
+  "playbackModeTranscoding": "Перекодирование",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "goToArtist": "Перейти к Исполнителю",
+  "@goToArtist": {},
+  "goToGenre": "Перейти к Жанру",
+  "@goToGenre": {},
+  "confirmFavoriteAdded": "Добавлено в Избранное",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Удалено из Избранного",
+  "@confirmFavoriteRemoved": {},
+  "alignmentOptionStart": "Слева",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "По центру",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "Справа",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Маленький",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "fontSizeOptionMedium": "Средний",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "playbackModeDirectPlaying": "Прямое Воспроизведение",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  }
 }
