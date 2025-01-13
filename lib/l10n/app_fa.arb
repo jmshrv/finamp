@@ -175,7 +175,7 @@
   "@albums": {},
   "artists": "هنرمندان",
   "@artists": {},
-  "playlists": "فهرست پخش‌ها",
+  "playlists": "فهرست‌های پخش",
   "@playlists": {},
   "startMix": "آغاز میکس",
   "@startMix": {},
@@ -187,7 +187,7 @@
   "@favourites": {},
   "shuffleAll": "بُر زدن همه",
   "@shuffleAll": {},
-  "settings": "تنظیمات",
+  "settings": "پیکربندی",
   "@settings": {},
   "offlineMode": "حالت آفلاین",
   "@offlineMode": {},
@@ -213,7 +213,7 @@
   "@random": {},
   "runtime": "مدت زمان",
   "@runtime": {},
-  "syncDownloadedPlaylists": "هماهنگ کردن فهرست پخش بارگیری شده",
+  "syncDownloadedPlaylists": "همگام‌سازی فهرست پخش بارگیری شده",
   "@syncDownloadedPlaylists": {},
   "activeDownloads": "بارگیری‌های فعال",
   "@activeDownloads": {},
@@ -311,7 +311,7 @@
   "@landscape": {},
   "downloadFavoritesSetting": "بارگیری همه‌ی مورد علاقه‌ها",
   "@downloadFavoritesSetting": {},
-  "downloadAllPlaylistsSetting": "بارگیری همه‌ی فهرست پخش‌ها",
+  "downloadAllPlaylistsSetting": "بارگیری همه‌ی فهرست‌های پخش",
   "@downloadAllPlaylistsSetting": {},
   "fiveLatestAlbumsSetting": "بارگیری ۵ آلبوم واپسین",
   "@fiveLatestAlbumsSetting": {},
@@ -392,7 +392,7 @@
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
   },
-  "allPlaylistsInfoSettingSubtitle": "هماهنگ سازی فراداده برای همه‌ی فهرست پخش‌ها تا تجربه‌ی فهرست پخش شما بهبود یابد",
+  "allPlaylistsInfoSettingSubtitle": "همگام‌سازی فراداده برای همه‌ی فهرست‌های پخش تا تجربه‌ی فهرست پخش شما بهبود یابد",
   "@allPlaylistsInfoSettingSubtitle": {},
   "customizationSettingsTitle": "شخصی‌سازی",
   "@customizationSettingsTitle": {
@@ -511,7 +511,7 @@
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "افزودن به فهرست پخش",
   "@addToPlaylistTitle": {},
-  "addToMorePlaylistsTooltip": "افزودن به فهرست پخش‌های بیشتر",
+  "addToMorePlaylistsTooltip": "افزودن به فهرست‌های پخش بیشتر",
   "@addToMorePlaylistsTooltip": {},
   "removeFromPlaylistTooltip": "حذف از این فهرست پخش",
   "@removeFromPlaylistTooltip": {},
@@ -660,7 +660,7 @@
   "@disableGestureSubtitle": {},
   "anErrorHasOccured": "خطایی رخ داد.",
   "@anErrorHasOccured": {},
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} قطعه} other{{songCount} قطعه‌ها}}, {imageCount,plural,=1{{imageCount} نگاره} other{{imageCount} نگاره‌ها}}\n{syncCount,plural,=1{{syncCount} هماهنگ‌سازی گره} other{{syncCount} هماهنگ‌سازی گره‌ها}}{repairing, plural, =0{} other{\nهم‌اکنون در حال تعمیر}}",
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} قطعه} other{{songCount} قطعه}}, {imageCount,plural,=1{{imageCount} نگاره} other{{imageCount} نگاره}}\n{syncCount,plural,=1{{syncCount} گره در حال همگام شدن} other{{syncCount} گره در حال همگام شدن}}{repairing, plural, =0{} other{\nهم‌اکنون در حال تعمیر}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
@@ -704,7 +704,7 @@
   "@skipToPreviousTrackButtonTooltip": {
     "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
   },
-  "playbackSpeedControlSettingDescription": "خودکار:\nفین‌امپ تلاش می‌کند تا مشخص کند قطعه‌ای که شما در حال پخش کردن هستید پادپخش (پادکست) است یا کتاب صوتی. این مورد زمانی در نظر گرفته می‌شود که قطعه از {trackDuration} دقیقه بیشتر باشد، یا قطعه از {albumDuration} ساعت بیشتر باشد، یا به قطعه حداقل یکی از این ژانرها اختصاص داده شده باشد:‌{genreList}\nسپس واپایش‌های تندی پخش در منوی صفحه‌ی پخش نشان داده می‌شوند.\n\nنشان داده شده:\nواپایش‌های تندی پخش همیشه در منوی صفحه‌ی پخش نشان داده می‌شوند\n\nپنهان:\nواپایش‌های تندی پخش در منوی صفحه‌ی پخش همیشه پنهان باشند.",
+  "playbackSpeedControlSettingDescription": "خودکار:\nفین‌امپ تلاش می‌کند تا مشخص کند قطعه‌ای که شما در حال پخش کردن هستید پادپخش (پادکست) است یا کتاب صوتی. این مورد زمانی در نظر گرفته می‌شود که قطعه از {trackDuration} دقیقه بیشتر باشد، یا قطعه از {albumDuration} ساعت بیشتر باشد، یا به قطعه دست کم یکی از این ژانرها اختصاص داده شده باشد:‌{genreList}\nسپس واپایش‌های تندی پخش در منوی صفحه‌ی پخش نشان داده می‌شوند.\n\nنشان داده شده:\nواپایش‌های تندی پخش همیشه در منوی صفحه‌ی پخش نشان داده می‌شوند\n\nپنهان:\nواپایش‌های تندی پخش در منوی صفحه‌ی پخش همیشه پنهان باشند.",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -1066,7 +1066,7 @@
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
-  "syncingDownloadSize": "در حال هماهنگ سازی...",
+  "syncingDownloadSize": "در حال همگام‌سازی...",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1175,7 +1175,7 @@
   },
   "close": "بستن",
   "@close": {},
-  "noMusicLibrariesBody": "فین‌امپ هیچ کتاب‌خانه‌ی آهنگی پیدا نکرد. لطفاً مطمئن شوید که سرور Jellyfin شما حداقل یک کتاب‌خانه با نوع محتوای \"Music\" دارا باشد.",
+  "noMusicLibrariesBody": "فین‌امپ هیچ کتاب‌خانه‌ی آهنگی پیدا نکرد. لطفاً مطمئن شوید که سرور Jellyfin شما دست کم یک کتاب‌خانه با نوع محتوای \"Music\" دارا باشد.",
   "@noMusicLibrariesBody": {},
   "periodicPlaybackSessionUpdateFrequencySubtitle": "هر چند وقت وضعیت پخش کنونی به سرور فرستاده شود، به ثانیه. به خاطر اینکه از خروج نشست جلوگیری شود، این باید کمتر از ۵ دقیقه (۳۰۰ ثانیه) باشد.",
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
@@ -1189,7 +1189,7 @@
   "@onlyShowFullyDownloaded": {
     "description": "Tooltip for button that hides all partially downloaded albums"
   },
-  "activeDownloadsListHeader": "{itemCount} {itemCount, plural, =1{بارگیری} other{بارگیری}} {typeName, select, downloading{جاری} failed{ناکام} syncFailed{مکرراً هماهنگ نشده} enqueued{به صف شده} other{}}",
+  "activeDownloadsListHeader": "{itemCount} {itemCount, plural, =1{بارگیری} other{بارگیری}} {typeName, select, downloading{جاری} failed{ناکام} syncFailed{مکرراً همگام نشده} enqueued{به صف شده} other{}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1213,7 +1213,7 @@
       }
     }
   },
-  "syncComplete": "همه‌ی بارگیری‌ها دوباره هماهنگ شد.",
+  "syncComplete": "همه‌ی بارگیری‌ها دوباره همگام شد.",
   "@syncComplete": {
     "description": "Message displayed after download sync completes."
   },
@@ -1221,7 +1221,7 @@
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "syncDownloads": "هماهنگ سازی و بارگیری آیتم‌های از قلم افتاده.",
+  "syncDownloads": "همگام‌سازی و بارگیری آیتم‌های از قلم افتاده.",
   "@syncDownloads": {
     "description": "Tooltip for downloads sync button."
   },
@@ -1245,5 +1245,392 @@
   "connectionInterruptedBackgroundAndroid": "به هنگام بارگیری در پس‌زمینه، اتصال بریده شد. این مشکل می‌تواند از فعال بودن تنظیم «ورود به حالت کم اهمیت به هنگام توقف» یا تنظیمات سیستم‌عامل باشد.",
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "shuffleAlbumsToQueue": "بُر زدن آلبوم‌ها و افزودن آن‌ها به صف",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "volumeNormalizationModeHybrid": "آمیخته (قطعه + آلبوم)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationSwitchSubtitle": "استفاده از اطلاعات گین (gain) برای عادی‌سازی بلندی صدای قطعه‌ها",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeTrackBased": "بر پایه‌ی قطعه",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "گین (gain) پایه",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "swipeInsertQueueNext": "پخش کردن قطعه‌ی کشیده شده (سوآیپ) به عنوان بعدی",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "برای نشاندن یک قطعه به عنوان آیتم بعدی در صف زمانی که در لیست قطعه‌ها کشیده می‌شود به جای این‌که به آخر افزوده شود.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "startInstantMixForIndividualTracksSwitchTitle": "آغاز میکس آنی برای قطعه‌های منفرد",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "زمانی که فعال است، میکس آنی آن قطعه به هنگام لمس پخش می‌شود به جای این‌که تنها یک قطعه تکی پخش شود.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "downloadItem": "بارگیری",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "repairComplete": "تعمیر بارگیری‌ها پایان یافت.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "runRepairWarning": "ارتباط با سرور صورت نمی‌پذیرد تا انتقال داده‌ها پایان یابد. لطفاً «تعمیر بارگیری‌ها» از صفحه‌ی بارگیری‌ها را هر زمان که برخط شدید اجرا کنید.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "downloadSettings": "پیکربندی بارگیری",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "نمایش رسانه‌های دارای کتاب‌خانه‌ی ناشناخته.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloads": "بیشینه بارگیری همزمان",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsSubtitle": "افزایش بارگیری‌های همزمان ممکن است افزایش بارگیری در پس‌زمینه را اجازه دهد اما شاید برخی بارگیری‌ها را اگر بسیار سنگین باشند، ناکام بگذارد یا در برخی از موارد سبب کندی گزاف شود.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsLabel": "{count} بارگیری همزمان",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadsWorkersSetting": "شمار کارکن‌های بارگیری",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{count} کارکن بارگیری",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOnStartupSwitch": "همگام‌سازی بارگیری‌ها هنگام راه‌اندازی به طور خودکار",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "preferQuickSyncSwitch": "همگام‌سازی‌های سریع را ترجیح دادن",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{آلبوم} playlist{فهرست پخش} artist{هنرمند} genre{ژانر} song{قطعه} library{کتاب‌خانه} unknown{آیتم} other{{itemType}}} {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "incidentalDownloadTooltip": "این آیتم نیاز دارد که به دست {parentName} بارگیری شود.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "cacheLibraryImagesName": "نگاره‌های کَش شده برای '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "transcodingStreamingContainerTitle": "گزینش ظرف رمزگردانی (Transcoding Container)",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "ظرف سگمنت را انتخاب کنید تا به هنگام پخش لحظه‌ای صدای رمزگردانی شده به کار بسته شود. قطعه‌های به صف شده کنونی تحت تأثیر قرار نمی‌گیرند.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "downloadBitrate": "نرخ انتقال بارگیری",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "downloadBitrateSubtitle": "نرخ انتقال بالاتر کیفیت صدای بالاتری در قبال فضای ذخیره‌سازی بزرگت‌تر ارائه می‌کند.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "transcodeHint": "رمزگردانی؟",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "dontTranscode": "بارگیری اصلی{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "redownloadcomplete": "بارگیری دوباره رمزگردانی به صف شد.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "redownloadTitle": "بارگیری کردن دوباره خودکار رمزگردانی‌ها",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "fixedGridSizeSwitchTitle": "استفاده از کاشی‌های جدول با اندازه‌های ثابت",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeSwitchSubtitle": "اندازه‌ی کاشی‌های جدول تحت تاثیر اندازه‌ی پنجره/صفحه قرار نمی‌گیرند.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "fixedGridSizeTitle": "اندازه‌ی کاشی‌های جدول",
+  "@fixedGridSizeTitle": {},
+  "fixedGridTileSizeEnum": "{size, select, small{کوچک} medium{میانه} large{بزرگ} veryLarge{بسیار بزرگ} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "allowSplitScreenSubtitle": "پخش‌کننده کنار نماهای دیگر روی نمایشگرهای عریض نمایش داده می‌شود.",
+  "@allowSplitScreenSubtitle": {},
+  "enableVibrationSubtitle": "این‌که لرزش فعال شود یا نه.",
+  "@enableVibrationSubtitle": {},
+  "hidePlayerBottomActions": "پنهان کردن عملیات‌های پایین",
+  "@hidePlayerBottomActions": {},
+  "prioritizePlayerCover": "در اولویت قرار دادن نگاره‌ی آلبوم",
+  "@prioritizePlayerCover": {},
+  "suppressPlayerPadding": "سرکوب کردن فاصله‌ی واپایش‌های پخش‌کننده",
+  "@suppressPlayerPadding": {},
+  "suppressPlayerPaddingSubtitle": "زمانی که نگاره‌ی آلبوم در اندازه‌ی کامل نباشد، فاصله‌ی بین واپایش‌های صفحه پخش را به حداقل می‌رساند.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "showArtistChipImage": "نمایش نگاره‌ی هنرمند به همراه نام هنرمند",
+  "@showArtistChipImage": {},
+  "scrollToCurrentTrack": "اسکرول کردن به قطعه کنونی",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "removeFromPlaylistConfirm": "حذف",
+  "@removeFromPlaylistConfirm": {},
+  "removeFromPlaylistPrompt": "'{itemName}' از فهرست پخش '{playlistName}' حذف شود؟",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "trackMenuButtonTooltip": "منوی قطعه",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "addRemoveFromPlaylist": "افزودن به/حذف از فهرست‌های پخش",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "افزودن قطعه به یک فهرست پخش",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "volumeNormalizationModeAlbumBased": "بر پایه‌ی آلبوم",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumOnly": "تنها برای آلبوم‌ها",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "couldNotLoad": "{source, select, album{آلبوم} playlist{فهرست پخش} songMix{میکس قطعه} artistMix{میکس هنرمند} albumMix{میکس آلبوم} genreMix{میکس ژانر} favorites{مورد علاقه‌ها} allSongs{همه‌ی قطعه‌ها} filteredList{قطعه‌ها} genre{ژانر} artist{هنرمند} song{قطعه} nextUpAlbum{آلبوم بعدی} nextUpPlaylist{فهرست پخش بعدی} nextUpArtist{هنرمند بعدی} other{}} بارگذاری نشد",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "showArtistChipImageSubtitle": "این پیش‌نمایش کوچک نگاره‌ی هنرمند را تحت تاثیر قرار می‌دهد،‌ مانند روی صفحه‌ی پخش.",
+  "@showArtistChipImageSubtitle": {},
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "در حال حاضر، عادی‌سازی بلندی صدا روی iOS نیاز دارد که بلندی پخش را تغییر دهد تا تغییر گین (gain) را شبیه‌سازی کند. از آن‌جا که نمی‌توانیم صدا را بلندتر از ۱۰۰٪ کنیم، باید بلندی را به صورت پیش‌فرض کم کنیم تا بتوانیم صدای قطعه‌های ساکت را بلندتر کنیم. مقدار به دسی‌بل (dB) است که منفی ۱۰ دسی‌بل تقریباً ۳۰٪، منفی ۴.۵ دسی‌بل تقریباً ۶۰٪ و منفی ۲ دسی‌بل تقریباً ۸۰٪ است.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "volumeNormalizationModeSelectorDescription": "آمیخته (قطعه + آلبوم):\nگین قطعه برای بپخش معمولی به کار گرفته می‌شود. اما اگر آلبومی در حال پخش شدن باشد (شاید چون که خاستگاه صف آغازین است یا زمانی به صف افزوده شده)، از گین آلبوم استفاده می‌شود.\n\nبر پایه‌ی قطعه:\nگین قطعه همیشه به کار برده می‌شود، بدون توجه به این‌که آلبومی در حال پخش است یا نه.\n\nتنها برای آلبوم‌ها:\nعادی‌سازی بلندی صدا فقط برای پخش آلبوم‌ها به کار بسته می‌شود (با استفاده از گین آلبوم) و برای قطعه‌های منفرد نمی‌شود.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "showNullLibraryItemsSubtitle": "برخی رسانه‌ها ممکن است با کتاب‌خانه‌ای ناشناخته بارگیری شوند. برای پنهان کردن این‌ها خارج از مجموعه اصلی این گزینه را غیرفعال کنید.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "downloadsWorkersSettingSubtitle": "شمار کارکن‌ها برای همگام‌سازی فراداده و پاک‌سازی بارگیری‌ها. افزایش کارکن‌های بارگیری ممکن است سرعت بارگیری همگام‌سازی یا پاک‌سازی را بالا ببرد، به ویژه زمانی که تأخیر سرور بالاست، اما می‌تواند کندی ایجاد کند.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "preferQuickSyncSwitchSubtitle": "زمانی که همگام‌سازی صورت می‌گیرد، بیشتر برخی آیتم‌های راکد (مانند قطعه‌ها و آلبوم‌ها) بروزرسانی نخواند شد. تعمیر بارگیری همواره همگام‌سازی کامل را اجرا می‌کند.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "downloadTranscodeCodecTitle": "گزینش کدک بارگیری",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadTranscodeEnableTitle": "فعال کردن بارگیری‌های رمزگردانی شده",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{همیشه} never{هرگز} ask{پرسیده شود} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "finampCollectionNames": "{itemType, select, favorites{مورد علاقه‌ها} allPlaylists{همه‌ی فهرست‌های پخش} fiveLatestAlbums{۵ آلبوم اخیر} allPlaylistsMetadata{فراداده‌ی فهرست پخش} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} رمزگردانی شد}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "doTranscode": "بارگیری به عنوان {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "remainingDuration": "{duration} مانده",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "redownloadSubtitle": "به صورت خودکار قطعه‌هایی که انتظار می‌رود در کیفیت متفاوت به دلیل تغییرات مجموعه والد باشند، دوباره بارگیری می‌شوند.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "defaultDownloadLocationButton": "به عنوان مکان پیش‌فرض بارگیری قرار می‌گیرد.  غیرفعال کنید تا برای هر بارگیری انتخاب کنید.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "hidePlayerBottomActionsSubtitle": "دکمه‌های صف و متن شعر روی صفحه‌ی پخش‌کننده را پنهان می‌کند. برای دسترسی به صف به بالا بکشید، برای دیدن متن شعر اگر در دسترس باشد به چپ بکشید (زیر نگاره‌ی آلبوم).",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "lockDownload": "همیشه روی دستگاه نگهش دار",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ به عنوان {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "allowSplitScreenTitle": "مجاز بودن حالت صفحه نمایش دو بخشی (SplitScreen)",
+  "@allowSplitScreenTitle": {},
+  "enableVibration": "فعال کردن لرزش",
+  "@enableVibration": {},
+  "numberAsKiloHertz": "",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "prioritizePlayerCoverSubtitle": "نمایش نگاره‌ی آلبوم بزرگ‌تر روی صفحه‌ی پخش را در اولویت قرار می‌دهد. واپایش‌های غیر ضروری در صفحه‌های کوجک سهمگین‌تر پنهان می‌شوند.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "enableAutoScroll": "فعال کردن اسکرول خودکار",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "quickActions": "عملیات‌های آنی",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
   }
 }
