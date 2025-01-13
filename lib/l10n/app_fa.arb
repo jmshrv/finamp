@@ -1614,7 +1614,7 @@
   "@allowSplitScreenTitle": {},
   "enableVibration": "فعال کردن لرزش",
   "@enableVibration": {},
-  "numberAsKiloHertz": "",
+  "numberAsKiloHertz": "{kiloHertz} کیلوهرتز",
   "@numberAsKiloHertz": {
     "description": "Value for the sample rate of a track, in kilohertz",
     "placeholders": {
@@ -1632,5 +1632,240 @@
   "quickActions": "عملیات‌های آنی",
   "@quickActions": {
     "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "numberAsBit": "{bit} بیت",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "trackOfflineFavorites": "همگام‌سازی وضعیت علایق",
+  "@trackOfflineFavorites": {},
+  "trackOfflineFavoritesSubtitle": "اجازه می‌دهد وضعیت علایق بروزتری در حالت آفلاین نشان داده شود.  هیچ فایل اضافه‌ای بارگیری نمی‌کند.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "fiveLatestAlbumsSettingSubtitle": "بارگیری‌ها زمانی که کهنه شوند پاک خواهند شد.  برای اینکه از پاک شدن یک آلبوم جلوگیری کنید، آن را قفل کنید.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "cacheLibraryImagesSettings": "کَش کردن نگاره‌های کتاب‌خانه‌ی کنونی",
+  "@cacheLibraryImagesSettings": {},
+  "cacheLibraryImagesSettingsSubtitle": "همه‌ی نگاره‌های آلبوم، هنرمند، ژانر و فهرست پخش که در کتاب‌خانه‌ی فعال کنونی هستند، بارگیری خواهد شد.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "lyricsScreen": "نمای متن شعر",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsTitle": "نمایش برچسب‌های زمانی برای متن شعرهای همگام شده",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showLyricsTimestampsSubtitle": "این‌که برچسب زمانی هر خطِ متن شعر در نمای متن شعرها نمایش داده شود را واپایش می‌کند، اگر در دسترس باشد.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showSeekControlsOnMediaNotificationTitle": "نمایش واپایش‌های پرش روی اعلان رسانه",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionStart": "آغاز",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "میانه",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "fontSizeOptionMedium": "میانه",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "lyricsFontSizeTitle": "اندازه‌ی فونت متن شعرها",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeSubtitle": "اندازه‌ی فونت متن شعرها را در نمای متن شعر واپایش می‌کند.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "این‌که نگاره‌ی آلبوم بالای متن شعر پیش از این‌که رد شود، نمایش داده شود را واپایش می‌کند.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOn": "صفحه را روشن نگهدار",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnSubtitle": "زمانی که صفحه روشن نگه داشته شود",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnWhilePlaying": "زمانی که آهنگ پخش می‌شود",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhilePluggedInSubtitle": "از روشن نگهداشتن صفحه چشم پوشی شود اگر دستگاه در حال شارژ نیست",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "keepScreenOnWhilePluggedIn": "فقط در حال شارژ صفحه را روشن نگه‌داشته شود",
+  "@keepScreenOnWhilePluggedIn": {},
+  "artwork": "نگاره",
+  "@artwork": {},
+  "artworkTooltip": "نگاره برای {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "playerAlbumArtworkTooltip": "نگاره برای {title}. برای تغییر وضعیت پخش بزنید. برای تغییر قطعه‌ها به چپ یا راست بکشید.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "nowPlayingBarTooltip": "باز کردن صفحه‌ی پخش",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "codec": "کدک",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "bitDepth": "ژرفای بیت",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "اندازه",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "normalizationGain": "گین (gain)",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "sampleRate": "نرخ نمونه",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "albumScreen": "صفحه‌ی آلبوم",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenTitle": "نمایش نگاره‌ی آلبوم برای قطعه‌ها",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "showCoversOnAlbumScreenSubtitle": "نگاره‌ی آلبوم را برای هر قطعه به صورت جداگانه روی صفحه‌ی آلبوم نمایش می‌دهد.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "emptyFilteredListTitle": "هیچ آیتمی پیدا نشد",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetFiltersButton": "بازنشانی پالایش",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "resetSettingsPromptLocal": "آیا می‌خواهید که این پیکربندی‌ها را به حالت پیشٰ‌فرض بازگردانید؟",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "lyricsAlignmentSubtitle": "هم‌ترازی متن شعرها را در نمای متن شعر واپایش می‌کند.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "showFeatureChipsToggleSubtitle": "داده‌های پیشرفته قطعه مانند کدک، نرخ انتقال و ... را روی صفحه‌ی پخش نمایش می‌دهد.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "keepScreenOnWhileLyrics": "زمانی که متن شعر نمایش داده می‌شود",
+  "@keepScreenOnWhileLyrics": {},
+  "showProgressOnNowPlayingBarSubtitle": "این‌که پخش‌کننده‌ی کوچک/میله‌ی پخش کنونی در پایین صفحه‌ی آهنگ مانند یک میله‌ی پیشروری رفتار کند را واپایش می‌کند.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "keepScreenOnAlwaysOn": "همیشه روشن",
+  "@keepScreenOnAlwaysOn": {},
+  "alignmentOptionEnd": "پایان",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "کوچک",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "genericToggleButtonTooltip": "برای تغییر وضعیت بزنید.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "lyricsAlignmentTitle": "هم‌ترازی متن شعرها",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "playbackMode": "حالت پخش",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "showProgressOnNowPlayingBarTitle": "نمایش پیشروی قطعه روی پخش‌کننده‌ی کوچک درون برنامه",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "showStopButtonOnMediaNotificationTitle": "نمایش دکمه‌ی ایست روی اعلان رسانه",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "این‌که اعلان رسانه، یک دکمه‌ی ایست افزون بر دکمه‌ی وقفه داشته باشد را واپایش می‌کند. این به شما اجازه می‌دهد که پخش را بدون باز کردن نرم‌افزار قطع کنید.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "این‌که اعلان رسانه یک میله‌ی پیشروی پرش‌پذیر داشته‌باشد را واپایش می‌کند. این به شما اجازه می‌دهد که مکان پخش را بدون باز کردن نرم‌افزار تغییر دهید.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "fontSizeOptionLarge": "بزرگ",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "showLyricsScreenAlbumPreludeTitle": "نمایش نگاره‌ی آلبوم پیش از متن شعر",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "additionalPeople": "افراد",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "keepScreenOnDisabled": "غیرفعال",
+  "@keepScreenOnDisabled": {},
+  "bitRate": "نرخ انتقال",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "showFeatureChipsToggleTitle": "نمایش داده‌های پیشرفته قطعه",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "emptyTopTracksList": "شما به هیچ‌کدام از قطعه‌های این هنرمند گوش نداده‌اید.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "emptyFilteredListSubtitle": "هیج آیتمی که با پالایش شما همخوانی داشته باشد یافت نشد. پالایش‌گر را خاموش کنید یا شرایط جست‌وجو را تغییر دهید.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetSettingsPromptGlobal": "آیا مطمئنید که می‌خواهید همه‌ی پیکربندی‌ها را به حالت پیش‌فرض بازگردانید؟",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "همه‌ی پیکربندی‌ها را به حالت پیش‌فرض بازگردان",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "genericCancel": "لغو",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
   }
 }
