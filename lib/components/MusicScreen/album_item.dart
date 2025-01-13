@@ -115,7 +115,9 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
   bool deletableGotUpdated = false;
   bool canDeleteFromServer = false;
 
-  void checkAllowDeleteFromServer() {
+  void checkAllowDeleteFromServer() {    
+    // no need to bother if setting is disabled
+    if (!(box.get("FinampSettings")?.allowDeleteFromServer ?? false)) return;
     // dont need to check if in offline mode since delete button defaults to false
     if (isOffline) return;
     // check whether widget is album or playlist
@@ -124,9 +126,6 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
     if (deletableGotUpdated) return;
     // prevent second execution
     deletableGotUpdated = true;
-    // no need to bother if setting is disabled
-    Box<FinampSettings> box = Hive.box<FinampSettings>("FinampSettings");
-    if (!(box.get("FinampSettings")?.allowDeleteFromServer ?? false)) return;
     // temporary value until the server replies
     canDeleteFromServer = widget.album.canDelete ?? false;
     _jellyfinApiHelper.getItemById(widget.album.id).then((response) {
@@ -314,7 +313,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               enabled: canDeleteFromServer,
               child: ListTile(
                 leading: const Icon(Icons.delete_forever),
-                title: Text("Delete from Server"),
+                title: Text(AppLocalizations.of(context)!.deleteFromServer),
               ),
             ),
         ],

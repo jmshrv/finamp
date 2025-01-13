@@ -1827,5 +1827,21 @@
   "genericCancel": "Cancel",
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "deleteFromServer":"Delete from Server",
+  "@deleteFromServer": {
+    "description": "Universally used in context menus to delete items (song, playlist, ...) from the server instead of just the device"
+  },
+  "confirmDeleteFromServer":"Attention!\nYou are about to delete this track from the servers library and file system.{downloadStatus, select, canDelete{ Additionally this will also delete the track from this device.} cantDelete{ The track will stay on the device until the next repair.} notDownloaded {} other{}}\nThis action cannot be reverted.",
+  "@confirmDeleteFromServer": {
+    "description": "Confirmation prompt shown before deleting downloaded media from the server and the local device, destructive action"
+  },
+  "genericDelete": "Delete",
+  "@genericDelete": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} got deleted from {deviceType, select, device{Device} server{Server} other{unkown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   }
 }

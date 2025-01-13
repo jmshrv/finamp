@@ -284,7 +284,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           type: DownloadItemType.song, item: widget.item);
       downloadsService.deleteDownload(stub: item)
         .then((_) {
-          GlobalSnackbar.message((_) => "Track deleted", isConfirmation: true);
+          GlobalSnackbar.message((_) => AppLocalizations.of(context)!.itemDeletedSnackbar("device", "track"), isConfirmation: true);
           if (mounted) {
             Navigator.pop(context);
           }
@@ -295,7 +295,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     void deleteFromServer()  {
       _jellyfinApiHelper.deleteItem(widget.item.id)
         .then((_) {
-          GlobalSnackbar.message((_) => "Track got deleted from Server", isConfirmation: true);
+          GlobalSnackbar.message((_) => AppLocalizations.of(context)!.itemDeletedSnackbar("server", "track"), isConfirmation: true);
           if (downloadStatus.isRequired) deleteFromDevice();
         })
         .catchError((err) { GlobalSnackbar.error(err); });
@@ -461,9 +461,9 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             await showDialog(
               context: context,
               builder: (context) => ConfirmationPromptDialog(
-                promptText: "Are you sure you want to delete this track from your device?",
-                confirmButtonText: "Delete from device",
-                abortButtonText: "Cancel",
+                promptText: AppLocalizations.of(context)!.deleteDownloadsPrompt(widget.item.name ?? "", "song",),
+                confirmButtonText: AppLocalizations.of(context)!.genericDelete,
+                abortButtonText: AppLocalizations.of(context)!.genericCancel,
                 onConfirmed: deleteFromDevice,
                 onAborted: () {},
                 centerText: true
@@ -651,15 +651,15 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             Icons.delete_forever,
             color: iconColor,
           ),
-          title: Text("Delete from server"),
+          title: Text(AppLocalizations.of(context)!.deleteFromServer),
           enabled: canDeleteFromServer,
           onTap: () async {
             await showDialog(
               context: context, 
               builder: (builder) => ConfirmationPromptDialog(
-                promptText: "Attention!\nYou are about to delete this track from the servers library and file system. ${downloadStatus.isRequired ? "Additionally this will also delete the track from this device." : "The track will stay on the device until the next repair."}\nThis action cannot be reverted.",
-                confirmButtonText: "Delete from server",
-                abortButtonText: "Cancel",
+                promptText: AppLocalizations.of(context)!.confirmDeleteFromServer(downloadStatus.isRequired ? "canDelete" : (downloadStatus != DownloadItemStatus.notNeeded ? "cantDelete" : "notDownloaded")),
+                confirmButtonText: AppLocalizations.of(context)!.deleteFromServer,
+                abortButtonText: AppLocalizations.of(context)!.genericCancel,
                 onConfirmed: deleteFromServer,
                 onAborted: () {},
                 centerText: true,
