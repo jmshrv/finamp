@@ -10,7 +10,6 @@ import '../../screens/downloads_screen.dart';
 import '../../screens/logs_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../services/finamp_user_helper.dart';
-import '../padded_custom_scrollview.dart';
 import 'offline_mode_switch_list_tile.dart';
 import 'view_list_tile.dart';
 
@@ -27,8 +26,7 @@ class MusicScreenDrawer extends StatelessWidget {
         contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
         // Manually handle padding in leading/trailing icons
         horizontalTitleGap: 0,
-        child: PaddedCustomScrollview(
-          bottomPadding: 0.0,
+        child: CustomScrollView(
           slivers: [
             SliverList(
               delegate: SliverChildListDelegate.fixed(
