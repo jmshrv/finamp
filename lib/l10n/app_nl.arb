@@ -284,7 +284,7 @@
   "@viewType": {},
   "viewTypeSubtitle": "Type voor het muziekscherm bekijken",
   "@viewTypeSubtitle": {},
-  "shuffleAllSongCount": "Aantal liedjes in de shuffle",
+  "shuffleAllSongCount": "Aantal nummers in de shuffle",
   "@shuffleAllSongCount": {},
   "list": "Lijst",
   "@list": {},
@@ -784,5 +784,38 @@
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
   "addToMorePlaylistsTooltip": "Toevoegen aan meer afspeellijsten",
-  "@addToMorePlaylistsTooltip": {}
+  "@addToMorePlaylistsTooltip": {},
+  "offlineSongCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} gedownload",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCount": "{count,plural,=1{{count} nummer} other{{count} nummers}}, {downloads} gedownload",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteDownloadsPrompt": "Weet je zeker dat je {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' wilt verwijderen van dit apparaat?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  }
 }
