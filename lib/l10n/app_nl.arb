@@ -129,7 +129,7 @@
   },
   "serverUrl": "Server URL",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "Om toegang tot de Jellyfin server te krijgen op afstand, dien je een extern IP te gebruiken.\n\nWanneer de server een HTTP-poort (80 of 443) gebruikt, hoef je deze niet in te vullen. Dit is waarschijnlijk het geval wanneer de server zich achter een reverse proxy bevindt.",
+  "internalExternalIpExplanation": "Om toegang tot de Jellyfin server te krijgen op afstand, dien je een extern IP te gebruiken.\n\nWanneer de server een HTTP-standaardpoort (80 of 443) of Jellyfins standaardpoort (8096) gebruikt, hoef je deze niet in te vullen.\n\nAls de URL correct is, zou hieronder er wat informatie moeten verschijnen over jouw server.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -147,7 +147,7 @@
   },
   "unknownName": "Onbekende Naam",
   "@unknownName": {},
-  "songs": "Liedjes",
+  "songs": "Nummers",
   "@songs": {},
   "playlists": "Afspeellijsten",
   "@playlists": {},
@@ -433,5 +433,51 @@
   "confirm": "Bevestigen",
   "@confirm": {},
   "showUncensoredLogMessage": "Dit logboek bevat uw inloggegevens. Tonen?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "viewLogs": "Logboeken bekijken",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "loginFlowNamelessUser": "Naamloze Gebruiker",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "Eigen gebruiker",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "aboutContributionPrompt": "Gemaakt door geweldige mensen in hun vrije tijd.\nJij zou er ook een van kunnen zijn!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "serverUrlInfoButtonTooltip": "Server URL Help",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "startMixNoSongsGenre": "Druk lang op een genre om deze toe te voegen of te verwijderen van de mix-bouwer alvorens een mix te starten",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "loginFlowQuickConnectInstructions": "Open de Jellyfin app of website, klik op je gebruikersicoon, en selecteer Quick Connect.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} nummer} other{{songCount} nummers}}, {imageCount,plural,=1{{imageCount} plaatje} other{{imageCount} plaatjes}}\n\n{syncCount,plural,=1{{syncCount} synchroniseert} other{{syncCount} synchroniseren}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  }
 }
