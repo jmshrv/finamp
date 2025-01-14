@@ -57,7 +57,7 @@
   },
   "addDownloadLocation": "Voeg een downloadlocatie toe",
   "@addDownloadLocation": {},
-  "shuffleAllSongCountSubtitle": "Hoeveelheid liedjes geladen moeten worden bij gebruik van de shuffle knop.",
+  "shuffleAllSongCountSubtitle": "Hoeveelheid nummers die geladen moeten worden bij gebruik van de shuffle knop.",
   "@shuffleAllSongCountSubtitle": {},
   "dlComplete": "{count} volledig",
   "@dlComplete": {
@@ -83,7 +83,7 @@
       }
     }
   },
-  "errorScreenError": "Er is een fout opgetreden bij het opvragen van de lijst. Probeer een issue te maken op GitHub en verwijder app data",
+  "errorScreenError": "Er is een fout opgetreden bij het opvragen van de lijst met foutmeldingen! Waarschijnlijk kun je het beste proberen een issue aan te maken op GitHub, en de app data te verwijderen",
   "@errorScreenError": {},
   "areYouSure": "Bent u zeker?",
   "@areYouSure": {},
@@ -117,7 +117,7 @@
   "@customLocation": {},
   "dark": "Donker",
   "@dark": {},
-  "createButtonLabel": "CREËER",
+  "createButtonLabel": "Creëer",
   "@createButtonLabel": {},
   "songCount": "{count,plural,=1{{count} Nummer} other{{count} Nummers}}",
   "@songCount": {
@@ -232,15 +232,15 @@
   "@failedToGetSongFromDownloadId": {},
   "error": "Fout",
   "@error": {},
-  "playButtonLabel": "AFSPELEN",
+  "playButtonLabel": "Afspelen",
   "@playButtonLabel": {},
   "editPlaylistNameTooltip": "Pas de naam van de playlist aan",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Pas de naam van de Playlist aan",
   "@editPlaylistNameTitle": {},
-  "shuffleButtonLabel": "SHUFFLE",
+  "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
-  "updateButtonLabel": "UPDATE",
+  "updateButtonLabel": "Update",
   "@updateButtonLabel": {},
   "playlistNameUpdated": "De naam van de playlist is aangepast.",
   "@playlistNameUpdated": {},
@@ -256,7 +256,7 @@
   "@shareLogs": {},
   "stackTrace": "Strack-trace",
   "@stackTrace": {},
-  "applicationLegalese": "Uitgegeven onder de Mozilla Public License 2.0. Broncode beschikbaar op:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Uitgegeven onder de Mozilla Public License 2.0.\nBroncode beschikbaar op {sourceCodeLink}.",
   "@applicationLegalese": {},
   "downloadLocations": "Downloadlocaties",
   "@downloadLocations": {},
@@ -477,6 +477,222 @@
       },
       "repairing": {
         "type": "int"
+      }
+    }
+  },
+  "about": "Over Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "aboutReleaseNotes": "Lees de notities over de laatste uitgave:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutThanks": "Bedankt voor het gebruiken van Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowSlogan": "Jouw muziek, zoals jij het wilt.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "Aan de slag!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "changeLanguage": "Verander Taal",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "serverUrlHint": "bijv. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Zoeken naar servers…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "Selecteer jouw account",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "passwordHint": "Vul je wachtwoord in",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "activeDownloads": "Actieve Downloads",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Actieve Downloads",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Geen actieve downloads.",
+  "@noActiveDownloads": {},
+  "playbackSpeedControlSetting": "Zichtbaarheid Afspeelsnelheid",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "emptyFilteredListTitle": "Niets gevonden",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "deleteDownloadsConfirmButtonText": "Verwijderen",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "back": "Terug",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "bitDepth": "Bit Diepte",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "Grootte",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "sampleRate": "Sample Rate",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "showCoversOnAlbumScreenTitle": "Laat Album Hoezen Zien Voor Nummers",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetFiltersButton": "Verwijder filters",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Laat voor ieder nummer de bijbehorende album hoes zien, waar nummers geselecteerd kunnen worden.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetSettingsPromptGlobal": "Weet je zeker dat je ALLE instellingen wilt terugzetten naar de standaard waarden?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "Reset ALLE instellingen",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "genericCancel": "Stoppen",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "loginFlowServerSelectionHeading": "Verbinden met Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "resetSettingsPromptLocal": "Wil je deze instellingen terugzetten naar de standaard waarden?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "emptyFilteredListSubtitle": "Niets komt overeen met deze filter. Zet het filter uit, of probeer een andere zoekterm.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "loginFlowWelcomeHeading": "Welkom bij",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "aboutTranslations": "Help Finamp vertalen in jouw taal:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "backToServerSelection": "Terug naar Server Selectie",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowAuthenticationHeading": "Log in op je account",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "login": "Log In",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "usernameHint": "Vul je gebruikersnaam in",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Vul alsjeblieft een gebruikersnaam in",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "loginFlowQuickConnectPrompt": "Gebruik Quick Connect code",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "confirmDownloadStarted": "Download gestart",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "loginFlowQuickConnectDisabled": "Quick Connect staat uitgeschakeld op deze server.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "loginFlowSelectAUser": "Selecteer een gebruiker",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "emptyTopTracksList": "Je hebt nog niet naar muziek geluisterd van deze artiest.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "title": "Titel",
+  "@title": {},
+  "interactions": "Interacties",
+  "@interactions": {},
+  "playbackSpeedControlSettingSubtitle": "Of de afspeelsnelheid-knoppen zichtbaar moeten zijn in het speler menu",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "customizationSettingsTitle": "Aanpassingen",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "orDivider": "of",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "backToAccountSelection": "Terug naar Account Selectie",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowLocalNetworkServers": "Servers in jouw lokale netwerk:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "aboutContributionLink": "Draag bij aan Finamp op GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "connectingToServer": "Verbindt met server…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "finampTagline": "Een open source Jellyfin muziekspeler",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "syncDownloadedPlaylists": "Sync gedownloade afspeellijsten",
+  "@syncDownloadedPlaylists": {},
+  "removeFromPlaylistNamedTooltip": "Verwijderen van afspeellijst '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Verwijderen van Afspeellijst '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
       }
     }
   }
