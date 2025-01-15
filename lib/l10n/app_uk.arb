@@ -1698,5 +1698,157 @@
   "fontSizeOptionSmall": "Маленький",
   "@fontSizeOptionSmall": {
     "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "keepScreenOn": "Лишати екран увімененим",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "showLyricsScreenAlbumPreludeTitle": "Показувати альбом перед текстом пісень",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnWhileLyrics": "Коли показано текст пісні",
+  "@keepScreenOnWhileLyrics": {},
+  "artworkTooltip": "Ілюстрація для {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "genericToggleButtonTooltip": "Натисніть щоб перемкнути.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "artwork": "Ілюстрація",
+  "@artwork": {},
+  "keepScreenOnWhilePluggedInSubtitle": "Ігнорувати \"Лишати екран увімкненим\" якщо девайс від'єднано",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "playerAlbumArtworkTooltip": "Ілюстрація для {title}. Торкніться, щоб перемкнути відтворення. Проведіть пальцем вліво або вправо, щоб перемикати треки.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "codec": "Кодек",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "playbackMode": "Режим відтворення",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "sampleRate": "Частота дискретизації",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "normalizationGain": "Підсилення",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "lyricsAlignmentSubtitle": "Керує вирівнюванням текстів у поданні текстів пісень.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "bitDepth": "Бітова глибина",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "bitRate": "Швидкість передавання",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "additionalPeople": "Люди",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "nowPlayingBarTooltip": "Відкрити екран відтворювача",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "keepScreenOnWhilePluggedIn": "Лишати екран увімкненим лише якщо під'єднано до мережі",
+  "@keepScreenOnWhilePluggedIn": {},
+  "keepScreenOnWhilePlaying": "Коли відтворюється музика",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnAlwaysOn": "Завжди увімкнено",
+  "@keepScreenOnAlwaysOn": {},
+  "keepScreenOnDisabled": "Вимкнено",
+  "@keepScreenOnDisabled": {},
+  "lyricsFontSizeSubtitle": "Керує розміром шрифту тексту пісень у відповідному поданні.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "size": "Розмір",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "albumScreen": "Екран альбому",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Показувати обкладинки альбому для кожної композиції окремо на екрані альбому.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetSettingsPromptGlobal": "ВИ впевнені що хочете скинути УСІ налаштування до значень за вмовчанням?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptLocal": "Ви хочете скинути налаштування до значень за вмовчанням?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "resetFiltersButton": "Скинути фільтри",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "emptyFilteredListSubtitle": "Не знайдено жодного об'єкта за даними фільтрами. Спробуйте скинути їх чи змінити запит.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "genericCancel": "Скасувати",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "resetSettingsPromptGlobalConfirm": "Скинути УСІ налаштування",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "lyricsFontSizeTitle": "Розмір шрифту тексту пісень",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "emptyTopTracksList": "Ви ще не слухали жодної композиції від цього виконавця.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "keepScreenOnSubtitle": "Коли лишати екран увімкненим",
+  "@keepScreenOnSubtitle": {},
+  "emptyFilteredListTitle": "Не знайдено об'єктів",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "showFeatureChipsToggleSubtitle": "Показувати розширену інформацію про композицію (бітрейт, кодек, тощо) на екрані відтворювача.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "Дозволяє контролювати, чи показувати обкладинку альбому над текстом пісень перед прокруткою.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "showCoversOnAlbumScreenTitle": "Показувати обкладинки альбомів для композицій.",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "showFeatureChipsToggleTitle": "Показувати розширену інформацію про композицію",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   }
 }
