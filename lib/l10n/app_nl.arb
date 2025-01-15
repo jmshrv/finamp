@@ -316,9 +316,9 @@
   "@light": {},
   "tabs": "Tabs",
   "@tabs": {},
-  "yesButtonLabel": "JA",
+  "yesButtonLabel": "Ja",
   "@yesButtonLabel": {},
-  "noButtonLabel": "NEE",
+  "noButtonLabel": "Nee",
   "@noButtonLabel": {},
   "setSleepTimer": "Slaaptimer instellen",
   "@setSleepTimer": {},
@@ -394,7 +394,7 @@
   "@pathReturnSlashErrorMessage": {},
   "customLocationsBuggy": "Persoonlijke locaties hebben veel bug door permissies. We denken over oplossingen hiervoor. Voor nu raden we aan deze niet te gebruiken.",
   "@customLocationsBuggy": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Liedartiest verbergen wanneer deze hetzelfde is als de albumartiest",
+  "hideSongArtistsIfSameAsAlbumArtists": "Artiest van nummer verbergen wanneer deze hetzelfde is als de albumartiest",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "useCoverAsBackground": "Geblurde cover op spelerachtergrond tonen",
   "@useCoverAsBackground": {},
@@ -402,7 +402,7 @@
   "@useCoverAsBackgroundSubtitle": {},
   "disableGesture": "Gebaren uitschakelen",
   "@disableGesture": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Liedjesartiest tonen wanneer deze hetzelfde is als de albumartiest.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Artiest van nummer tonen wanneer deze hetzelfde is als de albumartiest.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "system": "Systeem",
   "@system": {},
@@ -420,9 +420,9 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "removeFromPlaylistTooltip": "Verwijder van afspeellijst",
+  "removeFromPlaylistTooltip": "Verwijder van deze afspeellijst",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Verwijder van afspeellijst",
+  "removeFromPlaylistTitle": "Verwijder Van Deze Afspeellijst",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Verwijderd van afspeellijst.",
   "@removedFromPlaylist": {},
@@ -695,5 +695,94 @@
         "example": "My Favorite Tracks"
       }
     }
-  }
+  },
+  "hidden": "Verborgen",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Snelheid",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "apply": "Toepassen",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Minimale ruimte rond albumhoes",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopSongs": "Laat meest beluisterde nummers zien in artiest scherm",
+  "@showArtistsTopSongs": {},
+  "playerScreen": "Speler Scherm",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "hours": "Uren",
+  "@hours": {},
+  "timeFractionTooltip": "{currentTime} van {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "seconds": "Seconden",
+  "@seconds": {},
+  "trackCountTooltip": "Nummer {currentTrackIndex} van {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "sleepTimerRemainingTime": "Slapen over {time} minuten",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTitle": "Toevoegen aan Meer Afspeellijsten",
+  "@addToMorePlaylistsTitle": {},
+  "showFastScroller": "Laat snelle scroller zien",
+  "@showFastScroller": {},
+  "playbackSpeedControlSettingDescription": "Automatisch:\nFinamp probeert in te schatten of het nummer waar je momenteel naar luistert een podcast is, of het (een onderdeel van) een audioboek is. Dit wordt aangenomen als het nummer langer duurt dan {trackDuration} minuten, of als het gehele album langer duurt dan {albumDuration} uur, of als het nummer tot één van de volgende genres behoort: {genreList}\nDe knoppen om de afspeelsnelheid te bedienen worden dan zichtbaar gemaakt in het muziekspeler scherm.\n\nZichtbaar:\nDe knoppen om de afspeelsnelheid te bedienen zullen altijd zichtbaar zijn in het muziekspeler scherm.\n\nVerborgen:\nDe knoppen om de afspeelsnelheid te bedienen zullen niet zichtbaar zijn in het muziekspeler scherm.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "automatic": "Automatisch",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Zichtbaar",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimale ruimte rond albumhoes in het scherm van de muziekspeler, in % van breedte van het scherm.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "addToMorePlaylistsTooltip": "Toevoegen aan meer afspeellijsten",
+  "@addToMorePlaylistsTooltip": {}
 }
