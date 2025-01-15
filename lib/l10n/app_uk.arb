@@ -1636,5 +1636,67 @@
   "downloadTranscodeEnableTitle": "Увімкнути транскодовані завантаження",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "lyricsScreen": "Текст пісні",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "fontSizeOptionLarge": "Великий",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "lyricsAlignmentTitle": "Вирівнювання тексту пісень",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "cacheLibraryImagesSettingsSubtitle": "Обкладинки усіх альбомів, виконавців, жанрів, та списків відтворення у поточній активній бібліотеці будуть завантажені.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "showProgressOnNowPlayingBarTitle": "Показувати прогрес композиції у внутрішньому міні-відтворювачі",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "showLyricsTimestampsSubtitle": "Керує тим, чи показувати мітку часу для кожного рядка тексту у поданні тексту, якщо вона доступна.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationTitle": "Показувати кнопку зупинення у медіа сповіщеннях",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Показати індикатор керування прогресом в медіа сповіщенні",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionStart": "Початок",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "Центр",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "Кінець",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Керує тим чи медіа сповіщення має індикатор прогресу. Він дозволить змінювати позицію відтворення без потреби відкривати застосунок.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showLyricsTimestampsTitle": "Показувати часові мітки для синхронізованих текстів пісень",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Керує тим, чи показувати кнопку зупинки разом із кнопкою павзи. Це дозволить зупинити відтворення без потреби відкривати застосунок.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "fontSizeOptionMedium": "Середній",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "fontSizeOptionSmall": "Маленький",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
   }
 }
