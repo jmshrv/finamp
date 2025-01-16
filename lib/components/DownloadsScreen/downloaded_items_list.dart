@@ -50,27 +50,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                     ),
                   IconButton(
                     icon: const Icon(Icons.delete),
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => ConfirmationPromptDialog(
-                        promptText:
-                            AppLocalizations.of(context)!.deleteDownloadsPrompt(
-                          album.name,
-                          album.baseItemType.idString ?? "",
-                        ),
-                        confirmButtonText: AppLocalizations.of(context)!
-                            .deleteDownloadsConfirmButtonText,
-                        abortButtonText:
-                            AppLocalizations.of(context)!.genericCancel,
-                        onConfirmed: () async {
-                          await downloadsService.deleteDownload(stub: album);
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        },
-                        onAborted: () {},
-                      ),
-                    ),
+                    onPressed: () => downloadsService.askBeforeDeleteDownloadFromDevice(context, album, album.baseItemType.name)
                   ),
                 ],
               ),

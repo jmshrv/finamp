@@ -211,45 +211,14 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         56;
 
     return Consumer(builder: (context, ref, child) {
-      updateDeleteButton();
+      GetIt.instance<DownloadsService>()
+        .canDeleteFromServer(itemId: widget.item.id, alreadyChecked: deletableGotUpdated)
+        .then((canDelete) => setState(() {
+          canDeleteFromServer = canDelete;
+        }));
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
       return widget.childBuilder(
           stackHeight, menu(context, menuEntries, metadata.value));
-    });
-  }
-
-  void updateDeleteButton() {
-    // dont need to check if offline since delete button defaults to false
-    if (widget.isOffline) {
-      return;
-    }
-
-    // make sure to only update once, else it will be stuck in a loop
-    if (deletableGotUpdated) {
-      return;
-    }
-
-    // prevent second execution
-    deletableGotUpdated = true;
-
-    // no need to bother if setting is disabled
-    Box<FinampSettings> box = Hive.box<FinampSettings>("FinampSettings");
-    if (!(box.get("FinampSettings")?.allowDeleteFromServer ?? false)) {
-      return;
-    }
-
-    // temporary value until the server replies
-    canDeleteFromServer = widget.item.canDelete ?? false;
-
-    _jellyfinApiHelper.getItemById(widget.item.id).then((response) {
-      // default to true in case the api failed but deleting is still possible
-      var canDelete = response.canDelete ?? true;
-      // only rerender if value updates
-      if (canDelete) {
-        setState(() {
-          canDeleteFromServer = canDelete;
-        });
-      }
     });
   }
 

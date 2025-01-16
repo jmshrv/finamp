@@ -122,7 +122,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                     title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
                     enabled: true,
                     onTap: () => downloadsService
-                          .askBeforeDeleteDownloadFromDevice(context, downloadStub, "album")
+                          .askBeforeDeleteDownloadFromDevice(context, downloadStub, downloadStub.baseItemType.name)
                   )),
                   PopupMenuItem(
                     value: null,
@@ -131,7 +131,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                     title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
                     enabled: true,
                     onTap: () => downloadsService
-                          .askBeforeDeleteDownloadFromServer(context, downloadStub, "album")
+                          .askBeforeDeleteDownloadFromServer(context, downloadStub, downloadStub.baseItemType.name)
                   ))
                 ];
               },
@@ -145,7 +145,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               // If they did, AlbumScreen would show an error since the item no longer exists.
               // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
               onPressed: () {
-                downloadsService.askBeforeDeleteDownloadFromDevice(context, downloadStub, "album");
+                downloadsService.askBeforeDeleteDownloadFromDevice(context, downloadStub, downloadStub.baseItemType.name);
 
                 // .whenComplete(() => checkIfDownloaded());
               },
@@ -155,7 +155,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               icon: const Icon(Icons.delete_forever),
               tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
               onPressed: () {
-                downloadsService.askBeforeDeleteDownloadFromServer(context, downloadStub, "album");
+                downloadsService.askBeforeDeleteDownloadFromServer(context, downloadStub, downloadStub.baseItemType.name);
               },              
             )
             : Visibility(visible: false, child: Text(""))

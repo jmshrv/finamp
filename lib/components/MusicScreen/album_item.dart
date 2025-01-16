@@ -117,38 +117,17 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
   bool deletableGotUpdated = false;
   bool canDeleteFromServer = false;
 
-  void checkAllowDeleteFromServer() {
-    // no need to bother if setting is disabled
-    if (!(box.get("FinampSettings")?.allowDeleteFromServer ?? false)) return;
-    // dont need to check if in offline mode since delete button defaults to false
-    if (isOffline) return;
-    // check whether widget is album or playlist
-    if (!(widget.isPlaylist || widget.album.type == "MusicAlbum")) return;
-    // make sure to only update once, else it will be stuck in a loop
-    if (deletableGotUpdated) return;
-    // prevent second execution
-    deletableGotUpdated = true;
-    // temporary value until the server replies
-    canDeleteFromServer = widget.album.canDelete ?? false;
-    _jellyfinApiHelper.getItemById(widget.album.id).then((response) {
-      // default to true in case the api failed but deleting is still possible
-      var canDelete = response.canDelete ?? true;
-      // only rerender if value updates
-      if (canDelete) {
-        setState(() {
-          canDeleteFromServer = canDelete;
-        });
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     local = AppLocalizations.of(context)!;
 
     final screenSize = MediaQuery.of(context).size;
 
-    checkAllowDeleteFromServer();
+    GetIt.instance<DownloadsService>()
+      .canDeleteFromServer(itemId: widget.album.id, alreadyChecked: deletableGotUpdated)
+      .then((canDelete) => setState(() {
+        canDeleteFromServer = canDelete;
+      }));
 
     void menuCallback({
       required Offset localPosition,
