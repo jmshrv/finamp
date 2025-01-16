@@ -242,9 +242,7 @@ class FinampSettings {
           DefaultSettings.hasDownloadedPlaylistInfo,
       this.transcodingSegmentContainer =
           DefaultSettings.transcodingSegmentContainer,
-      this.allowDeleteFromServer = 
-          DefaultSettings.allowDeleteFromServer
-      });
+      this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer});
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -257,8 +255,7 @@ class FinampSettings {
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
 
-  @HiveField(4,
-      defaultValue: DefaultSettings.androidStopForegroundOnPause)
+  @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
@@ -2437,7 +2434,6 @@ class FinampFeatureChipsConfiguration {
     );
   }
 }
-
 
 @HiveType(typeId: 76)
 class DeviceInfo {

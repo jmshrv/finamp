@@ -284,7 +284,8 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                   value: _AlbumListTileMenuItems.deleteFromDevice,
                   child: ListTile(
                     leading: const Icon(Icons.delete),
-                    title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
+                    title: Text(AppLocalizations.of(context)!
+                        .deleteFromTargetConfirmButton("")),
                   ),
                 )
               : PopupMenuItem<_AlbumListTileMenuItems>(
@@ -312,9 +313,9 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               value: _AlbumListTileMenuItems.deleteFromServer,
               enabled: canDeleteFromServer,
               child: ListTile(
-                leading: const Icon(Icons.delete_forever),
-                title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"))
-              ),
+                  leading: const Icon(Icons.delete_forever),
+                  title: Text(AppLocalizations.of(context)!
+                      .deleteFromTargetConfirmButton("server"))),
             ),
         ],
       );
@@ -665,11 +666,13 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.deleteFromDevice:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await downloadsService.askBeforeDeleteDownloadFromDevice(context, item, widget.album.type != "Playlist" ? "album" : "playlist");
+          await downloadsService.askBeforeDeleteDownloadFromDevice(context,
+              item, widget.album.type != "Playlist" ? "album" : "playlist");
         case _AlbumListTileMenuItems.deleteFromServer:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await downloadsService.askBeforeDeleteDownloadFromServer(context, item, widget.album.type != "Playlist" ? "album" : "playlist");
+          await downloadsService.askBeforeDeleteDownloadFromServer(context,
+              item, widget.album.type != "Playlist" ? "album" : "playlist");
       }
     }
 

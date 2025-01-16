@@ -514,7 +514,8 @@ class DownloadsService {
         builder: (context) => ConfirmationPromptDialog(
             promptText: AppLocalizations.of(context)!
                 .deleteFromTargetDialogText("device", type),
-            confirmButtonText: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("device"),
+            confirmButtonText: AppLocalizations.of(context)!
+                .deleteFromTargetConfirmButton("device"),
             abortButtonText: AppLocalizations.of(context)!.genericCancel,
             onConfirmed: () {
               deleteDownload(stub: stub);
@@ -527,7 +528,6 @@ class DownloadsService {
   /// /// As of writing this code the following options exist: album, playlist, artist, genre, song, library
   Future<void> askBeforeDeleteDownloadFromServer(
       BuildContext context, DownloadStub stub, String type) async {
-
     DownloadItemStatus status = getStatus(stub, null);
 
     String deleteType = status.isRequired
@@ -541,7 +541,8 @@ class DownloadsService {
         builder: (context) => ConfirmationPromptDialog(
             promptText: AppLocalizations.of(context)!
                 .deleteFromTargetDialogText("server", type),
-            confirmButtonText: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
+            confirmButtonText: AppLocalizations.of(context)!
+                .deleteFromTargetConfirmButton("server"),
             abortButtonText: AppLocalizations.of(context)!.genericCancel,
             onConfirmed: () {
               if (status.isRequired) {

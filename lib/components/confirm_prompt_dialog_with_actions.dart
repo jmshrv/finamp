@@ -21,44 +21,31 @@ class ConfirmationPromptDialogWithActions extends AlertDialog {
     for (var index = 0; index < labels.length; index++) {
       optionButtons.add(
         Container(
-          width: 300,
-          padding: const EdgeInsets.all(5.0),
-          constraints: const BoxConstraints(
-            maxWidth: 300.0
-          ),
-          child: TextButton(
-            onPressed: () async {
-              await functions[index]();
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              labels[index],
-              textAlign: TextAlign.center,
-              softWrap: true
-            ))
-        ),
+            width: 300,
+            padding: const EdgeInsets.all(5.0),
+            constraints: const BoxConstraints(maxWidth: 300.0),
+            child: TextButton(
+                onPressed: () async {
+                  await functions[index]();
+                  Navigator.of(context).pop();
+                },
+                child: Text(labels[index],
+                    textAlign: TextAlign.center, softWrap: true))),
       );
     }
 
     optionButtons.add(
       Container(
-        width: 130,
-        padding: const EdgeInsets.all(5.0),
-        constraints: const BoxConstraints(
-          maxWidth: 150.0
-        ),
-        child: TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            onAborted();
-          },
-          child: Text(
-            "Cancel",
-            textAlign: TextAlign.center,
-            softWrap: true
-          )
-        )
-      ),
+          width: 130,
+          padding: const EdgeInsets.all(5.0),
+          constraints: const BoxConstraints(maxWidth: 150.0),
+          child: TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onAborted();
+              },
+              child:
+                  Text("Cancel", textAlign: TextAlign.center, softWrap: true))),
     );
 
     return AlertDialog(

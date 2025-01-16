@@ -458,22 +458,21 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         ),
       ),
       Visibility(
-        visible: downloadStatus.isRequired,
-        child: ListTile(
-            leading: Icon(
-              Icons.delete_outlined,
-              color: iconColor,
-            ),
-            title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
-            enabled: downloadStatus.isRequired,
-            onTap: () async {
-              var item = DownloadStub.fromItem(
-                type: DownloadItemType.song, item: widget.item);
-              await GetIt.instance<DownloadsService>()
-                .askBeforeDeleteDownloadFromDevice(context, item, "song");
-            }
-        )
-      ),
+          visible: downloadStatus.isRequired,
+          child: ListTile(
+              leading: Icon(
+                Icons.delete_outlined,
+                color: iconColor,
+              ),
+              title: Text(AppLocalizations.of(context)!
+                  .deleteFromTargetConfirmButton("")),
+              enabled: downloadStatus.isRequired,
+              onTap: () async {
+                var item = DownloadStub.fromItem(
+                    type: DownloadItemType.song, item: widget.item);
+                await GetIt.instance<DownloadsService>()
+                    .askBeforeDeleteDownloadFromDevice(context, item, "song");
+              })),
       Visibility(
         visible: downloadStatus == DownloadItemStatus.notNeeded,
         child: ListTile(
@@ -654,14 +653,15 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               Icons.delete_forever,
               color: iconColor,
             ),
-            title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
+            title: Text(AppLocalizations.of(context)!
+                .deleteFromTargetConfirmButton("server")),
             enabled: canDeleteFromServer,
             onTap: () async {
               var item = DownloadStub.fromItem(
-                type: DownloadItemType.song, item: widget.item);
+                  type: DownloadItemType.song, item: widget.item);
               await GetIt.instance<DownloadsService>()
-                .askBeforeDeleteDownloadFromServer(context, item, "song");
-              },
+                  .askBeforeDeleteDownloadFromServer(context, item, "song");
+            },
           )),
     ];
   }
