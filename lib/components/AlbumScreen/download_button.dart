@@ -86,7 +86,8 @@ class DownloadButton extends ConsumerWidget {
       // If they did, AlbumScreen would show an error since the item no longer exists.
       // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
       onPressed: () {
-        downloadsService.askBeforeDeleteDownloadFromDevice(context, item, item.baseItemType.name);
+        downloadsService.askBeforeDeleteDownloadFromDevice(
+            context, item, item.baseItemType.name);
         // .whenComplete(() => checkIfDownloaded());
       },
     );

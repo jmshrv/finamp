@@ -505,13 +505,16 @@ class DownloadsService {
     restartDownloads();
   }
 
-   String _convertItemTypeToTranslation(String type) {
+  String _convertItemTypeToTranslation(String type) {
     switch (type) {
-      case "MusicAlbum": return "album";
-      case "Playlist": return "playlist";
-      default: return type;
+      case "MusicAlbum":
+        return "album";
+      case "Playlist":
+        return "playlist";
+      default:
+        return type;
     }
-   }
+  }
 
   /// type needs to be a key of the itemDeletedSnackbar replacement
   /// As of writing this code the following options exist: album, playlist, artist, genre, song, library
@@ -571,19 +574,26 @@ class DownloadsService {
             centerText: true));
   }
 
-  Future<bool> canDeleteFromServer({required String itemId, alreadyChecked = false}) async {
-
+  Future<bool> canDeleteFromServer(
+      {required String itemId, alreadyChecked = false}) async {
     // To prevent a rerendering loop
-    if (alreadyChecked) {return false;}
+    if (alreadyChecked) {
+      return false;
+    }
 
     // Cant delete from server when offline anyway
-    if (FinampSettingsHelper.finampSettings.isOffline) {return false;}
-    
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return false;
+    }
+
     // Cant delete if setting is disabled anyway
-    if (!FinampSettingsHelper.finampSettings.allowDeleteFromServer) {return false;}
-    
+    if (!FinampSettingsHelper.finampSettings.allowDeleteFromServer) {
+      return false;
+    }
+
     try {
-      var response = await GetIt.instance<JellyfinApiHelper>().getItemById(itemId);
+      var response =
+          await GetIt.instance<JellyfinApiHelper>().getItemById(itemId);
       // fallback to true in case the reponse is invalid but the user could delete still
       // worst case would be an error messing when trying to delete
       var canDelete = response.canDelete ?? true;
@@ -591,7 +601,6 @@ class DownloadsService {
     } catch (_) {
       return false;
     }
-
   }
 
   /// Re-syncs every download node.

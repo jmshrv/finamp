@@ -36,20 +36,20 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   final downloadsService = GetIt.instance<DownloadsService>();
   bool canDeleteFromServer = false;
-  
+
   @override
   Widget build(BuildContext context) {
-    final downloadStub = DownloadStub.fromItem(type: DownloadItemType.collection, item: widget.parent);
-    final downloadStatus = this.downloadsService.getStatus(
-              downloadStub,
-              null);
+    final downloadStub = DownloadStub.fromItem(
+        type: DownloadItemType.collection, item: widget.parent);
+    final downloadStatus = this.downloadsService.getStatus(downloadStub, null);
 
-    downloadsService.canDeleteFromServer(itemId: widget.parent.id)
-      .then((canDelete) {
-        setState(() {
-          canDeleteFromServer = canDelete;
-        });
+    downloadsService
+        .canDeleteFromServer(itemId: widget.parent.id)
+        .then((canDelete) {
+      setState(() {
+        canDeleteFromServer = canDelete;
       });
+    });
 
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but
@@ -101,64 +101,77 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 !FinampSettingsHelper.finampSettings.isOffline)
               PlaylistNameEditButton(playlist: widget.parent),
             FavoriteButton(item: widget.parent),
-
             if (downloadStatus == DownloadItemStatus.notNeeded)
               DownloadButton(
-                item: DownloadStub.fromItem(
-                    type: DownloadItemType.collection, item: widget.parent),
-                children: widget.displayChildren.length),
-
+                  item: DownloadStub.fromItem(
+                      type: DownloadItemType.collection, item: widget.parent),
+                  children: widget.displayChildren.length),
             downloadStatus.isRequired && canDeleteFromServer
-            ? PopupMenuButton<Null>(
-              enableFeedback: true,
-              icon: const Icon(TablerIcons.dots_vertical),
-              onOpened: () => {},
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    value: null,
-                    child: ListTile(
-                    leading: Icon(Icons.delete_outline),
-                    title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
-                    enabled: true,
-                    onTap: () => downloadsService
-                          .askBeforeDeleteDownloadFromDevice(context, downloadStub, downloadStub.baseItemType.name)
-                  )),
-                  PopupMenuItem(
-                    value: null,
-                    child: ListTile(
-                    leading: Icon(Icons.delete_forever),
-                    title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
-                    enabled: true,
-                    onTap: () => downloadsService
-                          .askBeforeDeleteDownloadFromServer(context, downloadStub, downloadStub.baseItemType.name)
-                  ))
-                ];
-              },
-            )
-            : downloadStatus.isRequired
-            ? IconButton(
-              icon: const Icon(Icons.delete),
-              tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("device"),
-              // If offline, we don't allow the user to delete items.
-              // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
-              // If they did, AlbumScreen would show an error since the item no longer exists.
-              // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
-              onPressed: () {
-                downloadsService.askBeforeDeleteDownloadFromDevice(context, downloadStub, downloadStub.baseItemType.name);
+                ? PopupMenuButton<Null>(
+                    enableFeedback: true,
+                    icon: const Icon(TablerIcons.dots_vertical),
+                    onOpened: () => {},
+                    itemBuilder: (context) {
+                      return [
+                        PopupMenuItem(
+                            value: null,
+                            child: ListTile(
+                                leading: Icon(Icons.delete_outline),
+                                title: Text(AppLocalizations.of(context)!
+                                    .deleteFromTargetConfirmButton("")),
+                                enabled: true,
+                                onTap: () => downloadsService
+                                    .askBeforeDeleteDownloadFromDevice(
+                                        context,
+                                        downloadStub,
+                                        downloadStub.baseItemType.name))),
+                        PopupMenuItem(
+                            value: null,
+                            child: ListTile(
+                                leading: Icon(Icons.delete_forever),
+                                title: Text(AppLocalizations.of(context)!
+                                    .deleteFromTargetConfirmButton("server")),
+                                enabled: true,
+                                onTap: () => downloadsService
+                                    .askBeforeDeleteDownloadFromServer(
+                                        context,
+                                        downloadStub,
+                                        downloadStub.baseItemType.name)))
+                      ];
+                    },
+                  )
+                : downloadStatus.isRequired
+                    ? IconButton(
+                        icon: const Icon(Icons.delete),
+                        tooltip: AppLocalizations.of(context)!
+                            .deleteFromTargetConfirmButton("device"),
+                        // If offline, we don't allow the user to delete items.
+                        // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
+                        // If they did, AlbumScreen would show an error since the item no longer exists.
+                        // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
+                        onPressed: () {
+                          downloadsService.askBeforeDeleteDownloadFromDevice(
+                              context,
+                              downloadStub,
+                              downloadStub.baseItemType.name);
 
-                // .whenComplete(() => checkIfDownloaded());
-              },
-            )
-            : canDeleteFromServer
-            ? IconButton(
-              icon: const Icon(Icons.delete_forever),
-              tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
-              onPressed: () {
-                downloadsService.askBeforeDeleteDownloadFromServer(context, downloadStub, downloadStub.baseItemType.name);
-              },              
-            )
-            : Visibility(visible: false, child: Text(""))
+                          // .whenComplete(() => checkIfDownloaded());
+                        },
+                      )
+                    : canDeleteFromServer
+                        ? IconButton(
+                            icon: const Icon(Icons.delete_forever),
+                            tooltip: AppLocalizations.of(context)!
+                                .deleteFromTargetConfirmButton("server"),
+                            onPressed: () {
+                              downloadsService
+                                  .askBeforeDeleteDownloadFromServer(
+                                      context,
+                                      downloadStub,
+                                      downloadStub.baseItemType.name);
+                            },
+                          )
+                        : Visibility(visible: false, child: Text(""))
           ],
         ),
         if (widget.displayChildren.length > 1 &&

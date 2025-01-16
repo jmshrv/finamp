@@ -124,10 +124,11 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
     final screenSize = MediaQuery.of(context).size;
 
     GetIt.instance<DownloadsService>()
-      .canDeleteFromServer(itemId: widget.album.id, alreadyChecked: deletableGotUpdated)
-      .then((canDelete) => setState(() {
-        canDeleteFromServer = canDelete;
-      }));
+        .canDeleteFromServer(
+            itemId: widget.album.id, alreadyChecked: deletableGotUpdated)
+        .then((canDelete) => setState(() {
+              canDeleteFromServer = canDelete;
+            }));
 
     void menuCallback({
       required Offset localPosition,

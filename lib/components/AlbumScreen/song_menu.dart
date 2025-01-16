@@ -212,10 +212,11 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
     return Consumer(builder: (context, ref, child) {
       GetIt.instance<DownloadsService>()
-        .canDeleteFromServer(itemId: widget.item.id, alreadyChecked: deletableGotUpdated)
-        .then((canDelete) => setState(() {
-          canDeleteFromServer = canDelete;
-        }));
+          .canDeleteFromServer(
+              itemId: widget.item.id, alreadyChecked: deletableGotUpdated)
+          .then((canDelete) => setState(() {
+                canDeleteFromServer = canDelete;
+              }));
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
       return widget.childBuilder(
           stackHeight, menu(context, menuEntries, metadata.value));

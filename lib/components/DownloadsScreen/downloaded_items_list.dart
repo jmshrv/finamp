@@ -49,9 +49,10 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                       },
                     ),
                   IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => downloadsService.askBeforeDeleteDownloadFromDevice(context, album, album.baseItemType.name)
-                  ),
+                      icon: const Icon(Icons.delete),
+                      onPressed: () =>
+                          downloadsService.askBeforeDeleteDownloadFromDevice(
+                              context, album, album.baseItemType.name)),
                 ],
               ),
               subtitle: ItemFileSize(
