@@ -551,6 +551,18 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setCurrentVolume(double newVolume) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    if (newVolume < 0) {
+      newVolume = 0.0;
+    } else if (newVolume > 1) {
+      newVolume = 1.0;
+    }
+    finampSettingsTemp.currentVolume = newVolume;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static IconButton makeSettingsResetButtonWithDialog(
       BuildContext context, Function() resetFunction,
       {bool isGlobal = false}) {

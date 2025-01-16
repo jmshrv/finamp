@@ -6,6 +6,7 @@ import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
+import 'package:finamp/components/PlayerScreen/output_panel.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
@@ -433,7 +434,17 @@ class _PlayerScreenContent extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Spacer(),
+              Flexible(
+                fit: FlexFit.tight,
+                child: SimpleButton(
+                  inactive: !isLyricsAvailable,
+                  text: "Output",
+                  icon: TablerIcons.device_speaker,
+                  onPressed: () async {
+                    await showOutputMenu(context: context);
+                  },
+                ),
+              ),
               const Flexible(fit: FlexFit.tight, child: QueueButton()),
               Flexible(
                 fit: FlexFit.tight,

@@ -189,6 +189,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     FinampSettingsHelper.finampSettingsListener.addListener(() {
+      final finampSettings = FinampSettingsHelper.finampSettings;
       // update replay gain settings every time settings are changed
       iosBaseVolumeGainFactor = pow(
               10.0,
@@ -196,13 +197,16 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                       .finampSettings.volumeNormalizationIOSBaseGain /
                   20.0)
           as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
-      if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
+      if (finampSettings.volumeNormalizationActive) {
         _loudnessEnhancerEffect?.setEnabled(true);
         _applyVolumeNormalization(mediaItem.valueOrNull);
       } else {
         _loudnessEnhancerEffect?.setEnabled(false);
-        _player.setVolume(1.0); // disable replay gain on iOS
+        _player.setVolume(
+            finampSettings.currentVolume); // disable replay gain on iOS
         _volumeNormalizationLogger.info("Replay gain disabled");
+        _volumeNormalizationLogger
+            .info("Current volume: ${finampSettings.currentVolume}");
       }
     });
 
@@ -733,6 +737,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       if (effectiveGainChange != null) {
         _volumeNormalizationLogger.info("Gain change: $effectiveGainChange");
         if (Platform.isAndroid) {
+          _player.setVolume(FinampSettingsHelper.finampSettings.currentVolume);
           _loudnessEnhancerEffect?.setTargetGain(effectiveGainChange /
               10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
         } else {
@@ -743,14 +748,19 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                       20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
           final newVolumeClamped = newVolume.clamp(0.0, 1.0);
           _volumeNormalizationLogger
-              .finer("new volume: $newVolume ($newVolumeClamped clipped)");
-          _player.setVolume(newVolumeClamped);
+              .finer(
+              "current volume: ${FinampSettingsHelper.finampSettings.currentVolume}");
+          _volumeNormalizationLogger.finer(
+              "new normalization volume: $newVolume ($newVolumeClamped clipped)");
+          _player.setVolume(FinampSettingsHelper.finampSettings.currentVolume *
+              newVolumeClamped);
         }
       } else {
         // reset gain offset
         _loudnessEnhancerEffect?.setTargetGain(0 /
             10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856ua630329c4e6 is merged)
         _player.setVolume(
+           FinampSettingsHelper.finampSettings.currentVolume *
             iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without normalization gain information don't fall back to full volume, but to the base volume for iOS
       }
     }
