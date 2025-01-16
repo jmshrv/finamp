@@ -85,7 +85,9 @@ class DefaultSettings {
   static const showArtistsTopSongs = true;
   static const disableGesture = false;
   static const showFastScroller = true;
+  static const bufferDisableSizeConstraints = false;
   static const bufferDurationSeconds = 600;
+  static const bufferSizeMegabytes = 50;
   static const tabOrder = TabContentType.values;
   static const swipeInsertQueueNext = true;
   static const loopMode = FinampLoopMode.none;
@@ -175,7 +177,10 @@ class FinampSettings {
       this.playerScreenCoverMinimumPadding =
           DefaultSettings.playerScreenCoverMinimumPadding,
       this.showArtistsTopSongs = DefaultSettings.showArtistsTopSongs,
+      this.bufferDisableSizeConstraints =
+          DefaultSettings.bufferDisableSizeConstraints,
       this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
+      this.bufferSizeMegabytes = DefaultSettings.bufferSizeMegabytes,
       required this.tabSortBy,
       required this.tabSortOrder,
       this.loopMode = DefaultSettings.loopMode,
@@ -497,6 +502,12 @@ class FinampSettings {
 
   @HiveField(77, defaultValue: DefaultSettings.showCoversOnAlbumScreen)
   bool showCoversOnAlbumScreen;
+
+  @HiveField(78, defaultValue: DefaultSettings.bufferDisableSizeConstraints)
+  bool bufferDisableSizeConstraints;
+
+  @HiveField(79, defaultValue: DefaultSettings.bufferSizeMegabytes)
+  int bufferSizeMegabytes;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
