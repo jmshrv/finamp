@@ -1,6 +1,9 @@
+import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../components/favourite_button.dart';
 import '../../models/finamp_models.dart';
@@ -31,8 +34,23 @@ class AlbumScreenContent extends StatefulWidget {
 }
 
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
+  final downloadsService = GetIt.instance<DownloadsService>();
+  bool canDeleteFromServer = false;
+  
   @override
   Widget build(BuildContext context) {
+    final downloadStub = DownloadStub.fromItem(type: DownloadItemType.collection, item: widget.parent);
+    final downloadStatus = this.downloadsService.getStatus(
+              downloadStub,
+              null);
+
+    downloadsService.canDeleteFromServer(itemId: widget.parent.id)
+      .then((canDelete) {
+        setState(() {
+          canDeleteFromServer = canDelete;
+        });
+      });
+
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but
       // SongsSliverList gets passed some weird split version of children to
@@ -83,10 +101,64 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                 !FinampSettingsHelper.finampSettings.isOffline)
               PlaylistNameEditButton(playlist: widget.parent),
             FavoriteButton(item: widget.parent),
-            DownloadButton(
+
+            if (downloadStatus == DownloadItemStatus.notNeeded)
+              DownloadButton(
                 item: DownloadStub.fromItem(
                     type: DownloadItemType.collection, item: widget.parent),
-                children: widget.displayChildren.length)
+                children: widget.displayChildren.length),
+
+            downloadStatus.isRequired && canDeleteFromServer
+            ? PopupMenuButton<Null>(
+              enableFeedback: true,
+              icon: const Icon(TablerIcons.dots_vertical),
+              onOpened: () => {},
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    value: null,
+                    child: ListTile(
+                    leading: Icon(Icons.delete_outline),
+                    title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
+                    enabled: true,
+                    onTap: () => downloadsService
+                          .askBeforeDeleteDownloadFromDevice(context, downloadStub, "album")
+                  )),
+                  PopupMenuItem(
+                    value: null,
+                    child: ListTile(
+                    leading: Icon(Icons.delete_forever),
+                    title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
+                    enabled: true,
+                    onTap: () => downloadsService
+                          .askBeforeDeleteDownloadFromServer(context, downloadStub, "album")
+                  ))
+                ];
+              },
+            )
+            : downloadStatus.isRequired
+            ? IconButton(
+              icon: const Icon(Icons.delete),
+              tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("device"),
+              // If offline, we don't allow the user to delete items.
+              // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
+              // If they did, AlbumScreen would show an error since the item no longer exists.
+              // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
+              onPressed: () {
+                downloadsService.askBeforeDeleteDownloadFromDevice(context, downloadStub, "album");
+
+                // .whenComplete(() => checkIfDownloaded());
+              },
+            )
+            : canDeleteFromServer
+            ? IconButton(
+              icon: const Icon(Icons.delete_forever),
+              tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
+              onPressed: () {
+                downloadsService.askBeforeDeleteDownloadFromServer(context, downloadStub, "album");
+              },              
+            )
+            : Visibility(visible: false, child: Text(""))
           ],
         ),
         if (widget.displayChildren.length > 1 &&
