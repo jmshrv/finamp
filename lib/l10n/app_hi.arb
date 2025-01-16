@@ -178,10 +178,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "डिवाइस से हटाएं",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "डाउनलोड मरम्मत पूरा हुआ।",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."

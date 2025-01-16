@@ -1026,10 +1026,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "Vom Gerät löschen",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "requireWifiForDownloads": "Erfordert WiFi beim Herunterladen.",
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"

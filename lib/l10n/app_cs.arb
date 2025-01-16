@@ -957,10 +957,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "Smazat ze zařízení",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "Oprava stažených dokončena.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."

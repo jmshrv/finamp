@@ -858,10 +858,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "Cihazdan sil",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "İndirmeler onarımı tamamlandı.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
