@@ -416,7 +416,7 @@
       }
     }
   },
-  "bufferDurationSubtitle": "Kolik sekund dopředu by měl přehrávač uložit do vyrovnávací paměti. Vyžaduje restart aplikace.",
+  "bufferDurationSubtitle": "Maximální doba trvání, která má být uložena do vyrovnávací paměti, v sekundách. Vyžaduje restart aplikace.",
   "@bufferDurationSubtitle": {},
   "startupError": "Při spouštění aplikace se něco pokazilo. Chyba: {error}\n\nNahlaste prosím problém na stránce github.com/UnicornsOnLSD/finamp společně se snímkem obrazovky této stránky. Pokud tento problém přetrvává, můžete vymazat data aplikace pro její obnovení.",
   "@startupError": {
@@ -1852,5 +1852,13 @@
   "resetSettingsPromptGlobal": "Opravdu chcete resetovat VŠECHNA nastavení na jejich výchozí hodnoty?",
   "@resetSettingsPromptGlobal": {
     "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
-  }
+  },
+  "bufferDisableSizeConstraintsTitle": "Neomezovat velikost vyrovnávací paměti",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeTitle": "Velikost vyrovnávací paměti",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "Maximální velikost vyrovnávací paměti v MB. Vyžaduje restart",
+  "@bufferSizeSubtitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "Zakáže omezení velikosti vyrovnávací paměti. Vyrovnávací paměť bude vždy načtena na nastavené trvání, i pro velmi velké soubory. Může způsobit pády. Vyžaduje restart.",
+  "@bufferDisableSizeConstraintsSubtitle": {}
 }
