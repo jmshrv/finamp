@@ -999,6 +999,16 @@
       }
     }
   },
+  "currentVolumeFeatureText": "{volume}% volume",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
   "playbackSpeedDecreaseLabel": "Decrease playback speed",
   "@playbackSpeedDecreaseLabel": {
     "description": "Label for the button in the speed menu that decreases the playback speed."
