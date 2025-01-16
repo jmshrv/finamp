@@ -1517,7 +1517,7 @@
       }
     }
   },
-  "queueRestoreError": "Warnung: {count,plural, =1{{count} lied} other{{count} lieder}}  konntent nicht aus der Warteschlange wiederhergestellt werden.",
+  "queueRestoreError": "Warnung: {count,plural, =1{{count} lied} other{{count} lieder}}  konnten nicht aus der Warteschlange wiederhergestellt werden.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
