@@ -506,24 +506,6 @@
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "பதிவிறக்க ஐடியிலிருந்து கண்காணிப்பதில் தோல்வி",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "இந்த சாதனத்திலிருந்து {itemType, select, album {ஆல்பம்} artist {கலைஞர்} playlist {பிளேலிச்ட்} other {}} '{itemName}' நீக்கவா?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
-  "deleteDownloadsConfirmButtonText": "நீக்கு",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "error": "பிழை",
   "@error": {},
   "discNumber": "வட்டு {number}",

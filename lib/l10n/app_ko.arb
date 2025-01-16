@@ -123,24 +123,6 @@
   },
   "failedToGetSongFromDownloadId": "다운로드 ID에서 곡을 가져오지 못했습니다",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "이 기기에서 {itemType, select, album{앨범} playlist{플레이리스트} artist{아티스트} genre{장르} song{곡} library{라이브러리} other{아이템}} '{itemName}'를 삭제하시겠습니까?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
-  "deleteDownloadsConfirmButtonText": "삭제",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "playButtonLabel": "재생",
   "@playButtonLabel": {},
   "shuffleButtonLabel": "임의 재생",

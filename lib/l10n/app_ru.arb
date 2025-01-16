@@ -446,10 +446,6 @@
   },
   "noMusicLibrariesBody": "Finamp не обнаружил музыкальных библиотек. Убедитесь, что на вашем сервере Jellyfin есть хотя бы одна библиотека с типом контента \"Музыка\".",
   "@noMusicLibrariesBody": {},
-  "deleteDownloadsConfirmButtonText": "Удалить",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "noMusicLibrariesTitle": "Нет музыкальных библиотек",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
@@ -458,20 +454,6 @@
   "@syncDownloadedPlaylists": {},
   "swipeInsertQueueNextSubtitle": "Разрешить вставлять песню следующей в очереди при свайпе в списке песен, а не добавлять ее в конец.",
   "@swipeInsertQueueNextSubtitle": {},
-  "deleteDownloadsPrompt": "Вы уверены, что хотите удалить {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' с этого устройства?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "interactions": "Взаимодействия",
   "@interactions": {},
   "swipeInsertQueueNext": "Воспроизвести смахнутую песню следующей",

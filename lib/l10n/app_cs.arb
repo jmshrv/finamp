@@ -313,20 +313,6 @@
       }
     }
   },
-  "deleteDownloadsPrompt": "Opravdu chcete odstranit {itemType, select, album{album} playlist{seznam skladeb} artist{umělce} genre{žánr} song{skladbu} library{knihovnu} other{položku}} '{itemName}' z tohoto zařízení?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "playButtonLabel": "Přehrát",
   "@playButtonLabel": {},
   "songCount": "{count,plural,=1{{count} skladba} few{{count} skladby} other{{count} skladeb}}",
@@ -450,10 +436,6 @@
   "@name": {},
   "random": "Náhodně",
   "@random": {},
-  "deleteDownloadsConfirmButtonText": "Odstranit",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "error": "Chyba",
   "@error": {},
   "enterLowPriorityStateOnPauseSubtitle": "Umožní odstranění notifikace při pozastavení. Také umožní systému ukončit službu.",
