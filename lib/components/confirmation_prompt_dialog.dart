@@ -5,15 +5,15 @@ import '../models/jellyfin_models.dart';
 import 'global_snackbar.dart';
 
 class ConfirmationPromptDialog extends AlertDialog {
-  const ConfirmationPromptDialog({
-    Key? key,
-    required this.promptText,
-    required this.confirmButtonText,
-    required this.abortButtonText,
-    required this.onConfirmed,
-    required this.onAborted,
-    this.centerText = false
-  }) : super(key: key);
+  const ConfirmationPromptDialog(
+      {Key? key,
+      required this.promptText,
+      required this.confirmButtonText,
+      required this.abortButtonText,
+      required this.onConfirmed,
+      required this.onAborted,
+      this.centerText = false})
+      : super(key: key);
 
   final String promptText;
   final String confirmButtonText;

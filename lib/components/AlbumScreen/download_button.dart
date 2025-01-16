@@ -80,7 +80,7 @@ class DownloadButton extends ConsumerWidget {
     );
     var deleteButton = IconButton(
       icon: const Icon(Icons.delete),
-      tooltip: AppLocalizations.of(context)!.deleteItem,
+      tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton(""),
       // If offline, we don't allow the user to delete items.
       // If we did, we'd have to implement listeners for MusicScreenTabView so that the user can't delete a parent, go back, and select the same parent.
       // If they did, AlbumScreen would show an error since the item no longer exists.
@@ -93,8 +93,7 @@ class DownloadButton extends ConsumerWidget {
                 item.baseItem?.name ?? "", item.baseItemType.name),
             confirmButtonText:
                 AppLocalizations.of(context)!.deleteDownloadsConfirmButtonText,
-            abortButtonText:
-                AppLocalizations.of(context)!.genericCancel,
+            abortButtonText: AppLocalizations.of(context)!.genericCancel,
             onConfirmed: () async {
               try {
                 await downloadsService.deleteDownload(stub: item);

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
@@ -502,6 +503,61 @@ class DownloadsService {
       _userDeleteRunning = false;
     }
     restartDownloads();
+  }
+
+  /// type needs to be a key of the itemDeletedSnackbar replacement
+  /// As of writing this code the following options exist: album, playlist, artist, genre, song, library
+  Future<void> askBeforeDeleteDownloadFromDevice(
+      BuildContext context, DownloadStub stub, String type) async {
+    await showDialog(
+        context: context,
+        builder: (context) => ConfirmationPromptDialog(
+            promptText: AppLocalizations.of(context)!
+                .deleteFromTargetDialogText("device", type),
+            confirmButtonText: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("device"),
+            abortButtonText: AppLocalizations.of(context)!.genericCancel,
+            onConfirmed: () {
+              deleteDownload(stub: stub);
+            },
+            onAborted: () {},
+            centerText: true));
+  }
+
+  /// type needs to be a key of the itemDeletedSnackbar replacement
+  /// /// As of writing this code the following options exist: album, playlist, artist, genre, song, library
+  Future<void> askBeforeDeleteDownloadFromServer(
+      BuildContext context, DownloadStub stub, String type) async {
+
+    DownloadItemStatus status = getStatus(stub, null);
+
+    String deleteType = status.isRequired
+        ? "canDelete"
+        : (status != DownloadItemStatus.notNeeded
+            ? "cantDelete"
+            : "notDownloaded");
+
+    await showDialog(
+        context: context,
+        builder: (context) => ConfirmationPromptDialog(
+            promptText: AppLocalizations.of(context)!
+                .deleteFromTargetDialogText("server", type),
+            confirmButtonText: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
+            abortButtonText: AppLocalizations.of(context)!.genericCancel,
+            onConfirmed: () {
+              if (status.isRequired) {
+                deleteDownload(stub: stub);
+              }
+              GetIt.instance<JellyfinApiHelper>().deleteItem(stub.id).then((_) {
+                GlobalSnackbar.message(
+                    (_) => AppLocalizations.of(context)!
+                        .itemDeletedSnackbar("server", type),
+                    isConfirmation: true);
+              }).catchError((err) {
+                GlobalSnackbar.error(err);
+              });
+            },
+            onAborted: () {},
+            centerText: true));
   }
 
   /// Re-syncs every download node.

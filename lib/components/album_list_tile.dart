@@ -187,7 +187,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
                   value: AlbumListTileMenuItems.delete,
                   child: ListTile(
                     leading: const Icon(Icons.delete),
-                    title: Text(AppLocalizations.of(context)!.deleteItem),
+                    title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
                   ),
                 )
               : PopupMenuItem<AlbumListTileMenuItems>(

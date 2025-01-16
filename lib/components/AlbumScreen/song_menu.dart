@@ -202,13 +202,13 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
   @override
   Widget build(BuildContext context) {
-
     final menuEntries = _menuEntries(context);
     var stackHeight = widget.showPlaybackControls ? 255.0 : 155.0;
     stackHeight += menuEntries
             .where((element) =>
                 switch (element) { Visibility e => e.visible, _ => true })
-            .length * 56;
+            .length *
+        56;
 
     return Consumer(builder: (context, ref, child) {
       updateDeleteButton();
@@ -220,10 +220,14 @@ class _SongMenuState extends ConsumerState<SongMenu> {
 
   void updateDeleteButton() {
     // dont need to check if offline since delete button defaults to false
-    if (widget.isOffline) {return;}
+    if (widget.isOffline) {
+      return;
+    }
 
     // make sure to only update once, else it will be stuck in a loop
-    if (deletableGotUpdated) {return;}
+    if (deletableGotUpdated) {
+      return;
+    }
 
     // prevent second execution
     deletableGotUpdated = true;
@@ -237,17 +241,16 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     // temporary value until the server replies
     canDeleteFromServer = widget.item.canDelete ?? false;
 
-    _jellyfinApiHelper.getItemById(widget.item.id)
-      .then((response) {
-        // default to true in case the api failed but deleting is still possible
-        var canDelete = response.canDelete ?? true;
-        // only rerender if value updates
-        if (canDelete) {
-          setState(() {
-            canDeleteFromServer = canDelete;
-          });
-        }
-      });
+    _jellyfinApiHelper.getItemById(widget.item.id).then((response) {
+      // default to true in case the api failed but deleting is still possible
+      var canDelete = response.canDelete ?? true;
+      // only rerender if value updates
+      if (canDelete) {
+        setState(() {
+          canDeleteFromServer = canDelete;
+        });
+      }
+    });
   }
 
   // Normal song menu entries, excluding headers
@@ -280,25 +283,31 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     }
 
     void deleteFromDevice() {
-      var item = DownloadStub.fromItem(
-          type: DownloadItemType.song, item: widget.item);
-      downloadsService.deleteDownload(stub: item)
-        .then((_) {
-          GlobalSnackbar.message((_) => AppLocalizations.of(context)!.itemDeletedSnackbar("device", "track"), isConfirmation: true);
-          if (mounted) {
-            Navigator.pop(context);
-          }
-        })
-        .catchError((err) { GlobalSnackbar.error(err); });
+      var item =
+          DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item);
+      downloadsService.deleteDownload(stub: item).then((_) {
+        GlobalSnackbar.message(
+            (_) => AppLocalizations.of(context)!
+                .itemDeletedSnackbar("device", "track"),
+            isConfirmation: true);
+        if (mounted) {
+          Navigator.pop(context);
+        }
+      }).catchError((err) {
+        GlobalSnackbar.error(err);
+      });
     }
 
-    void deleteFromServer()  {
-      _jellyfinApiHelper.deleteItem(widget.item.id)
-        .then((_) {
-          GlobalSnackbar.message((_) => AppLocalizations.of(context)!.itemDeletedSnackbar("server", "track"), isConfirmation: true);
-          if (downloadStatus.isRequired) deleteFromDevice();
-        })
-        .catchError((err) { GlobalSnackbar.error(err); });
+    void deleteFromServer() {
+      _jellyfinApiHelper.deleteItem(widget.item.id).then((_) {
+        GlobalSnackbar.message(
+            (_) => AppLocalizations.of(context)!
+                .itemDeletedSnackbar("server", "track"),
+            isConfirmation: true);
+        if (downloadStatus.isRequired) deleteFromDevice();
+      }).catchError((err) {
+        GlobalSnackbar.error(err);
+      });
     }
 
     return [
@@ -451,25 +460,19 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       Visibility(
         visible: downloadStatus.isRequired,
         child: ListTile(
-          leading: Icon(
-            Icons.delete_outlined,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.deleteItem),
-          enabled: downloadStatus.isRequired,
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (context) => ConfirmationPromptDialog(
-                promptText: AppLocalizations.of(context)!.deleteDownloadsPrompt(widget.item.name ?? "", "song",),
-                confirmButtonText: AppLocalizations.of(context)!.genericDelete,
-                abortButtonText: AppLocalizations.of(context)!.genericCancel,
-                onConfirmed: deleteFromDevice,
-                onAborted: () {},
-                centerText: true
-            ));
-          }
-        ),
+            leading: Icon(
+              Icons.delete_outlined,
+              color: iconColor,
+            ),
+            title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
+            enabled: downloadStatus.isRequired,
+            onTap: () async {
+              var item = DownloadStub.fromItem(
+                type: DownloadItemType.song, item: widget.item);
+              await GetIt.instance<DownloadsService>()
+                .askBeforeDeleteDownloadFromDevice(context, item, "song");
+            }
+        )
       ),
       Visibility(
         visible: downloadStatus == DownloadItemStatus.notNeeded,
@@ -645,31 +648,21 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         ),
       ),
       Visibility(
-        visible: canDeleteFromServer,
-        child: ListTile(
-          leading: Icon(
-            Icons.delete_forever,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.deleteFromServer),
-          enabled: canDeleteFromServer,
-          onTap: () async {
-            await showDialog(
-              context: context, 
-              builder: (builder) => ConfirmationPromptDialog(
-                promptText: AppLocalizations.of(context)!.confirmDeleteFromServer(downloadStatus.isRequired ? "canDelete" : (downloadStatus != DownloadItemStatus.notNeeded ? "cantDelete" : "notDownloaded")),
-                confirmButtonText: AppLocalizations.of(context)!.deleteFromServer,
-                abortButtonText: AppLocalizations.of(context)!.genericCancel,
-                onConfirmed: deleteFromServer,
-                onAborted: () {},
-                centerText: true,
-              )
-            );
-          },
-        )
-         
-
-      ),
+          visible: canDeleteFromServer,
+          child: ListTile(
+            leading: Icon(
+              Icons.delete_forever,
+              color: iconColor,
+            ),
+            title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
+            enabled: canDeleteFromServer,
+            onTap: () async {
+              var item = DownloadStub.fromItem(
+                type: DownloadItemType.song, item: widget.item);
+              await GetIt.instance<DownloadsService>()
+                .askBeforeDeleteDownloadFromServer(context, item, "song");
+              },
+          )),
     ];
   }
 
