@@ -810,7 +810,7 @@
       }
     }
   },
-  "bufferDurationSubtitle": "پخش‌کننده باید چقدر بافر کند، به ثانیه. راه‌اندازی مجدد نیاز دارد.",
+  "bufferDurationSubtitle": "بیشینه‌ی زمانی که باید بافر شود، به ثانیه. راه‌اندازی مجدد نیاز دارد.",
   "@bufferDurationSubtitle": {},
   "previousTracks": "قطعه‌های قبلی",
   "@previousTracks": {
@@ -1867,5 +1867,13 @@
   "genericCancel": "لغو",
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
-  }
+  },
+  "bufferSizeTitle": "اندازه‌ی بافر",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "بیشینه‌ی اندازه‌ی بافر به مگابایت. نیازمند راه‌اندازی مجدد است",
+  "@bufferSizeSubtitle": {},
+  "bufferDisableSizeConstraintsTitle": "اندازه‌ی بافر را محدود نکن",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "ثابت‌های اندازه‌ی بافر (\"‌اندازه‌ی بافر\") را غیرفعال می‌کند. بافر همیشه به اندازه‌ی بافر پیکربندی شده ('اندازه‌ی بافر') بارگذاری خواهد شد، حتی برای پرونده‌های بسیار بزرگ. می‌تواند موجب خرابی شود. نیازمند راه‌اندازی مجدد است.",
+  "@bufferDisableSizeConstraintsSubtitle": {}
 }
