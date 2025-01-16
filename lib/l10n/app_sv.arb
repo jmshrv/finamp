@@ -60,8 +60,6 @@
   "@revenue": {},
   "runtime": "Längd",
   "@runtime": {},
-  "downloadErrors": "Nedladdningsfel",
-  "@downloadErrors": {},
   "dlComplete": "{count} färdiga",
   "@dlComplete": {
     "placeholders": {
@@ -94,14 +92,6 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} bild} other{{count} bilder}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "discNumber": "Skiva {number}",
   "@discNumber": {
     "placeholders": {
@@ -110,8 +100,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Nedladdningsfel",
-  "@downloadErrorsTitle": {},
   "error": "Fel",
   "@error": {},
   "failedToGetSongFromDownloadId": "Kunde inte hämta låt med hjälp av nedladdnings-ID",
@@ -128,8 +116,6 @@
       }
     }
   },
-  "noErrors": "Inga fel!",
-  "@noErrors": {},
   "required": "Obligatoriskt",
   "@required": {},
   "playlistNameUpdated": "Spellistans namn är ändrat.",
@@ -198,8 +184,6 @@
   "@unknownArtist": {},
   "addToQueue": "Lägg till i Uppspelningskö",
   "@addToQueue": {},
-  "direct": "DIREKT",
-  "@direct": {},
   "goToAlbum": "Gå till Album",
   "@goToAlbum": {},
   "addedToQueue": "Tillagd i uppspelningskön.",
@@ -247,23 +231,7 @@
   "@password": {},
   "pathReturnSlashErrorMessage": "Sökvägar som returnerar ett \"/\" kan inte användas",
   "@pathReturnSlashErrorMessage": {},
-  "downloaded": "NEDLADDAD",
-  "@downloaded": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
-  "internalExternalIpExplanation": "Om du vill ha åtkomst till din Jellyfin-server utanför hemmet, behöver du använda din externa IP-adress.\n\nOm din server är bakom en HTTP-port (80/443) så behöver du inte manuellt specificera en port. Detta är troligtvis fallet om din server finns bakom en omvänd proxy.",
+  "internalExternalIpExplanation": "Om du vill kunna komma åt din Jellyfin-server på distans måste du använda din externa IP.\n\nOm din server är på en HTTP-standardport (80 eller 443) eller Jellyfins standardport (8096), behöver du inte ange porten.\n\nOm webbadressen är korrekt bör du se viss information om din server dyka upp under inmatningsfältet.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -275,8 +243,6 @@
   "@enableTranscodingSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtists": "Dölj låtartister om samma som albumartister",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "transcode": "OMKODA",
-  "@transcode": {},
   "enableTranscoding": "Aktivera Omkodning",
   "@enableTranscoding": {},
   "albumArtist": "Albumartist",
@@ -338,14 +304,6 @@
   "@shuffleButtonLabel": {},
   "audioService": "Ljudtjänst",
   "@audioService": {},
-  "urlTrailingSlash": "URL:en får inte innehålla ett avslutande snedstreck",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
-  "urlStartWithHttps": "URL:en måste börja med antingen http:// eller https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "username": "Användarnamn",
   "@username": {},
   "logs": "Loggar",
@@ -380,14 +338,6 @@
   "@communityRating": {},
   "downloadMissingImages": "Hämta saknade bilder",
   "@downloadMissingImages": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} objekt} other{{count} objekt}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlRunning": "{count} pågående",
   "@dlRunning": {
     "placeholders": {
@@ -438,10 +388,6 @@
   "@useCoverAsBackgroundSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Om låtartister ska visas på albumskärmen om de inte skiljer sig från albumartister.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "streaming": "STRÖMNING",
-  "@streaming": {},
-  "statusError": "STATUSFEL",
-  "@statusError": {},
   "instantMix": "Snabbmix",
   "@instantMix": {},
   "noItem": "Inget objekt",
@@ -522,8 +468,72 @@
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
-  "deleteDownloadsAbortButtonText": "Avbryt",
-  "@deleteDownloadsAbortButtonText": {},
   "syncDownloadedPlaylists": "Synkronisera nedladdade spellistor",
-  "@syncDownloadedPlaylists": {}
+  "@syncDownloadedPlaylists": {},
+  "interactions": "Interaktioner",
+  "@interactions": {},
+  "about": "Om Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "changeLanguage": "Ändra språk",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "viewLogs": "Visa loggar",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "loginFlowGetStarted": "Kom igång!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "aboutTranslations": "Hjälp att översätta Finamp till ditt språk:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "finampTagline": "En öppen källkod Jellyfin musikspelare",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionLink": "Bidra till Finamp på GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutThanks": "Tack för att du använder Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "Välkommen till",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowSlogan": "Din musik, på ditt sätt.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowServerSelectionHeading": "Anslut till Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "Tillbaka",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlInfoButtonTooltip": "Server webbadress hjälp",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "connectingToServer": "Ansluter till server...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "Servrar på ditt lokala nätverk:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowAccountSelectionHeading": "Välj ditt konto",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  }
 }

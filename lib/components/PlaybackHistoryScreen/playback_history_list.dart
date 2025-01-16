@@ -1,17 +1,13 @@
-import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
-import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/locale_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/playback_history_service.dart';
-import 'playback_history_list_tile.dart';
+import '../padded_custom_scrollview.dart';
 
 class PlaybackHistoryList extends StatelessWidget {
   const PlaybackHistoryList({super.key});
@@ -32,7 +28,7 @@ class PlaybackHistoryList extends StatelessWidget {
             groupedHistory =
                 playbackHistoryService.getHistoryGroupedDynamically();
 
-            return CustomScrollView(
+            return PaddedCustomScrollview(
               // use nested SliverList.builder()s to show history items grouped by date
               slivers: groupedHistory.indexed.map((indexedGroup) {
                 final groupIndex = indexedGroup.$1;

@@ -5,10 +5,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "العنوان يجب ان يبدأ مع \"//:http\" أو \"//:https\"",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "logs": "السجلات",
   "@logs": {},
   "username": "اسم المستعمل",
@@ -101,24 +97,6 @@
       }
     }
   },
-  "downloadErrors": "اخطأ التنزيل",
-  "@downloadErrors": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} صورة} other{{count} صور}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} بند} other{{count} بنود}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "dlComplete": "{count} متكمل",
   "@dlComplete": {
     "placeholders": {
@@ -143,8 +121,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "اخطأ التنزيل",
-  "@downloadErrorsTitle": {},
   "dlRunning": "{count} يتم تنزيل الآن",
   "@dlRunning": {
     "placeholders": {
@@ -153,8 +129,6 @@
       }
     }
   },
-  "noErrors": "لا يوجد اخطأ!",
-  "@noErrors": {},
   "error": "خطأ",
   "@error": {},
   "discNumber": "القرس {number}",
@@ -297,28 +271,18 @@
   "@unknownArtist": {},
   "playlistCreated": "تم إنشاء قائمة الأغاني.",
   "@playlistCreated": {},
-  "streaming": "بث",
-  "@streaming": {},
   "noAlbum": "بدون البوم",
   "@noAlbum": {},
   "noItem": "لا يوجد بند",
   "@noItem": {},
-  "transcode": "تحويل",
-  "@transcode": {},
   "goToAlbum": "إذهب إلى الألبوم",
   "@goToAlbum": {},
   "addToQueue": "إضافة إلى قائمة الانتظار",
   "@addToQueue": {},
-  "downloaded": "نزلت",
-  "@downloaded": {},
   "queue": "قائمة الإنتظار",
   "@queue": {},
-  "direct": "مباشر",
-  "@direct": {},
   "instantMix": "خلط فوري",
   "@instantMix": {},
-  "statusError": "خطأ حالة",
-  "@statusError": {},
   "addFavourite": "إضافة إلى المفضلات",
   "@addFavourite": {},
   "addedToQueue": "تم إضافة إالى قائمة الانتظار",
@@ -367,20 +331,6 @@
   "@bitrateSubtitle": {},
   "dateAdded": "تاريخ الإضافة",
   "@dateAdded": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "productionYear": "سنة الإنتاج",
   "@productionYear": {},
   "removeFavourite": "إزالة من المفضلات",
@@ -419,10 +369,6 @@
   "@pathReturnSlashErrorMessage": {},
   "useCoverAsBackground": "أظهر مخلاف البوم غائم على مشغل الموسيقى",
   "@useCoverAsBackground": {},
-  "urlTrailingSlash": "العنوان لا يمكن ان ينهي مع \"/\"",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "enterLowPriorityStateOnPauseSubtitle": "إذا ممكن، يمكن ان تمسح الإعلام عنمدا توقف مؤقتاً للاستماع. و يمكن \"اندرويد\" ان يقتل الخدمة.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "سواء ان تخفي فنانين الأغنية من صفحة الألبوم إذا يختلف من فنانين الألبوم.",

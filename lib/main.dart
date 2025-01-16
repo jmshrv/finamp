@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -111,11 +112,8 @@ void main() async {
       FlutterError.presentError(details);
       flutterLogger.severe(error, error, details.stack);
     };
-    // On iOS, the status bar will have black icons by default on the login
-    // screen as it does not have an AppBar. To fix this, we set the
-    // brightness to dark manually on startup.
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+
+    DartPluginRegistrant.ensureInitialized();
 
     await findSystemLocale();
     await initializeDateFormatting();
@@ -131,6 +129,12 @@ Future<void> _setupEdgeToEdgeOverlayStyle() async {
         systemNavigationBarColor: Colors.transparent));
     final binding = WidgetsFlutterBinding.ensureInitialized();
     binding.addObserver(UIOverlaySetterObserver());
+  } else if (Platform.isIOS) {
+    // On iOS, the status bar will have black icons by default on the login
+    // screen as it does not have an AppBar. To fix this, we set the
+    // brightness to dark manually on startup.
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
   }
 }
 
@@ -262,7 +266,7 @@ Future<void> setupHive() async {
 
   // If no ThemeMode is set, we set it to the default (system)
   Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
-  if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
+  if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(DefaultSettings.theme);
 
   final isar = await Isar.open(
     [

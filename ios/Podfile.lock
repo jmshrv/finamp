@@ -1,5 +1,5 @@
 PODS:
-  - app_set_id (1.2.0):
+  - app_set_id (1.2.1):
     - Flutter
   - audio_service (0.0.1):
     - Flutter
@@ -172,13 +172,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  app_set_id: a4d12ebbc7915f987b4a04983b4c0104c64d5e02
+  app_set_id: e0349a05a0ecc6d5c937d42869aa941f90801c9c
   audio_service: f509d65da41b9521a61f1c404dd58651f265a567
   audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
   background_downloader: 9f788ffc5de45acf87d6380e91ca0841066c18cf
-  battery_plus: 1ff2e16ba75af2a78387f65476057a390b47885e
+  battery_plus: 34f72fa2afeeea83bbae306c72a25828d3ec727a
   CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
-  device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
+  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -194,7 +194,7 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
-  share_plus: 8875f4f2500512ea181eef553c3e27dba5135aad
+  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe

@@ -1,0 +1,603 @@
+{
+  "unknownError": "Tuntematon virhe",
+  "@unknownError": {},
+  "removedFromPlaylist": "Poistettu soittolistalta.",
+  "@removedFromPlaylist": {},
+  "addFavourite": "Lisää suosikki",
+  "@addFavourite": {},
+  "goToAlbum": "Mene albumiin",
+  "@goToAlbum": {},
+  "downloads": "Lataukset",
+  "@downloads": {},
+  "settings": "Asetukset",
+  "@settings": {},
+  "shareLogs": "Jaa lokit",
+  "@shareLogs": {},
+  "removeFavourite": "Poista suosikki",
+  "@removeFavourite": {},
+  "playNext": "Toista seuraava",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "confirm": "Vahvista",
+  "@confirm": {},
+  "language": "Kieli",
+  "@language": {},
+  "refresh": "VIRKISTÄ",
+  "@refresh": {},
+  "serverUrl": "Palvelimen URL",
+  "@serverUrl": {},
+  "emptyServerUrl": "Palvelimen URL ei voi olla tyhjä",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "username": "Käyttäjätunnus",
+  "@username": {},
+  "password": "Salasana",
+  "@password": {},
+  "logs": "Lokit",
+  "@logs": {},
+  "next": "Seuraava",
+  "@next": {},
+  "selectMusicLibraries": "Valitse musiikkikirjastot",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Yhtään kirjastoa ei löytynyt.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "unknownName": "Tuntematon Nimi",
+  "@unknownName": {},
+  "songs": "Kappaleet",
+  "@songs": {},
+  "albums": "Albumit",
+  "@albums": {},
+  "artists": "Artistit",
+  "@artists": {},
+  "genres": "Tyylilajit",
+  "@genres": {},
+  "playlists": "Soittolistat",
+  "@playlists": {},
+  "music": "Musiikki",
+  "@music": {},
+  "clear": "Tyhjennä",
+  "@clear": {},
+  "favourites": "Suosikit",
+  "@favourites": {},
+  "offlineMode": "Offline tila",
+  "@offlineMode": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "sortOrder": "Lajittelujärjestys",
+  "@sortOrder": {},
+  "album": "Albumi",
+  "@album": {},
+  "albumArtist": "Albumin artisti",
+  "@albumArtist": {},
+  "artist": "Artisti",
+  "@artist": {},
+  "name": "Nimi",
+  "@name": {},
+  "random": "Satunnainen",
+  "@random": {},
+  "criticRating": "Kriitikoiden arvostelu",
+  "@criticRating": {},
+  "downloadMissingImages": "Lataa puuttuvat kuvat",
+  "@downloadMissingImages": {},
+  "syncDownloadedPlaylists": "Synkronoi ladatut soittolistat",
+  "@syncDownloadedPlaylists": {},
+  "dlFailed": "{count} epäonnistui",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} valmistunut",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} käynnissä",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteDownloadsConfirmButtonText": "Poista",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "error": "Virhe",
+  "@error": {},
+  "playButtonLabel": "TOISTA",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "SEKOITA",
+  "@shuffleButtonLabel": {},
+  "discNumber": "Levy {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTitle": "Muokkaa soittolistan nimeä",
+  "@editPlaylistNameTitle": {},
+  "editPlaylistNameTooltip": "Muokkaa soittolistan nimeä",
+  "@editPlaylistNameTooltip": {},
+  "playlistNameUpdated": "Soittolistan nimi päivitetty.",
+  "@playlistNameUpdated": {},
+  "favourite": "Suosikki",
+  "@favourite": {},
+  "addDownloads": "Lisää lataukset",
+  "@addDownloads": {},
+  "updateButtonLabel": "PÄIVITÄ",
+  "@updateButtonLabel": {},
+  "downloadsDeleted": "Lataukset poistettu.",
+  "@downloadsDeleted": {},
+  "location": "Sijainti",
+  "@location": {},
+  "addButtonLabel": "LISÄÄ",
+  "@addButtonLabel": {},
+  "logsCopied": "Lokit kopioitu.",
+  "@logsCopied": {},
+  "message": "Viesti",
+  "@message": {},
+  "downloadLocations": "Latauksen sijainnit",
+  "@downloadLocations": {},
+  "transcoding": "Transkoodaus",
+  "@transcoding": {},
+  "notAvailableInOfflineMode": "Ei saatavilla offline tilassa",
+  "@notAvailableInOfflineMode": {},
+  "areYouSure": "Oletko varma?",
+  "@areYouSure": {},
+  "logOut": "Kirjaudu ulos",
+  "@logOut": {},
+  "downloadedSongsWillNotBeDeleted": "Ladattuja kappaleita ei poisteta",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin käyttää AAC:tä transkoodaukseen",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "Ota transkoodaus käyttöön",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "Transkoodaa musiikin suoratoiston palvelimen päässä.",
+  "@enableTranscodingSubtitle": {},
+  "shuffleAll": "Sekoita kaikki",
+  "@shuffleAll": {},
+  "budget": "Budjetti",
+  "@budget": {},
+  "communityRating": "Yhteisön arvostelu",
+  "@communityRating": {},
+  "dateAdded": "Lisäämisen päivämäärä",
+  "@dateAdded": {},
+  "datePlayed": "Toiston päivämäärä",
+  "@datePlayed": {},
+  "playCount": "Toistolaskuri",
+  "@playCount": {},
+  "productionYear": "Tuotantovuosi",
+  "@productionYear": {},
+  "revenue": "Tulot",
+  "@revenue": {},
+  "runtime": "Kesto",
+  "@runtime": {},
+  "dlEnqueued": "{count} Jonossa",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "required": "Pakollinen",
+  "@required": {},
+  "layoutAndTheme": "Asettelu ja Teema",
+  "@layoutAndTheme": {},
+  "viewType": "Näkymän Tyyppi",
+  "@viewType": {},
+  "list": "Lista",
+  "@list": {},
+  "grid": "Ruudukko",
+  "@grid": {},
+  "portrait": "Pysty",
+  "@portrait": {},
+  "landscape": "Vaaka",
+  "@landscape": {},
+  "showTextOnGridView": "Näytä teksti ruudukkonäkymässä",
+  "@showTextOnGridView": {},
+  "theme": "Teema",
+  "@theme": {},
+  "system": "Järjestelmä",
+  "@system": {},
+  "light": "Vaalea",
+  "@light": {},
+  "tabs": "Välilehdet",
+  "@tabs": {},
+  "cancelSleepTimer": "Peruuta uniajastin?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "KYLLÄ",
+  "@yesButtonLabel": {},
+  "setSleepTimer": "Aseta uniajastin",
+  "@setSleepTimer": {},
+  "minutes": "Minuutit",
+  "@minutes": {},
+  "sleepTimerTooltip": "Uniajastin",
+  "@sleepTimerTooltip": {},
+  "addToPlaylistTooltip": "Lisää soittolistalle",
+  "@addToPlaylistTooltip": {},
+  "removeFromPlaylistTooltip": "Poista soittolistalta",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Poista soittolistalta",
+  "@removeFromPlaylistTitle": {},
+  "queue": "Jono",
+  "@queue": {},
+  "addedToQueue": "Lisätty jonoon.",
+  "@addedToQueue": {
+    "description": "Snackbar message that shows when the user successfully adds items to the end of the play queue."
+  },
+  "anErrorHasOccured": "Tapahtui virhe.",
+  "@anErrorHasOccured": {},
+  "bufferDuration": "Puskurin kesto",
+  "@bufferDuration": {},
+  "dark": "Tumma",
+  "@dark": {},
+  "noButtonLabel": "EI",
+  "@noButtonLabel": {},
+  "newPlaylist": "Uusi soittolista",
+  "@newPlaylist": {},
+  "createButtonLabel": "LUO",
+  "@createButtonLabel": {},
+  "noAlbum": "Ei albumia",
+  "@noAlbum": {},
+  "addToPlaylistTitle": "Lisää soittolistalle",
+  "@addToPlaylistTitle": {},
+  "playlistCreated": "Soittolista on luotu.",
+  "@playlistCreated": {},
+  "noArtist": "Ei Artistia",
+  "@noArtist": {},
+  "unknownArtist": "Tuntematon artisti",
+  "@unknownArtist": {},
+  "addToQueue": "Lisää jonoon",
+  "@addToQueue": {
+    "description": "Popup menu item title for adding an item to the end of the play queue."
+  },
+  "resetTabs": "Nollaa välilehdet",
+  "@resetTabs": {},
+  "noMusicLibrariesTitle": "Ei musiikkikirjastoja",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "downloadCount": "{count,plural, =1{{count} lataus} other{{count} lataukset}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hideSongArtistsIfSameAsAlbumArtists": "Piilota kappaleen artistit, jos samat kuin albumin artistit",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "insertedIntoQueue": "Asetettu jonoon.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "responseError": "{error} Tilakoodi {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "showUncensoredLogMessage": "Tämä loki sisältää kirjautumistietosi. Näytä?",
+  "@showUncensoredLogMessage": {},
+  "directoryMustBeEmpty": "Hakemiston pitää olla tyhjä",
+  "@directoryMustBeEmpty": {},
+  "selectDirectory": "Valitse hakemisto",
+  "@selectDirectory": {},
+  "songCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaleita}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sortBy": "Järjestä",
+  "@sortBy": {},
+  "premiereDate": "Ensiesityspäivä",
+  "@premiereDate": {},
+  "interactions": "Vuorovaikutukset",
+  "@interactions": {},
+  "audioService": "Äänipalvelu",
+  "@audioService": {},
+  "bitrate": "Bitrate",
+  "@bitrate": {},
+  "bitrateSubtitle": "Suurempi bitrate antaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
+  "@bitrateSubtitle": {},
+  "customLocation": "Mukautettu sijainti",
+  "@customLocation": {},
+  "appDirectory": "Sovelluksen hakemisto",
+  "@appDirectory": {},
+  "addDownloadLocation": "Lisää latauksen hakemisto",
+  "@addDownloadLocation": {},
+  "pathReturnSlashErrorMessage": "Polkuja jotka palauttavat \"/\" ei voi käyttää",
+  "@pathReturnSlashErrorMessage": {},
+  "disableGesture": "Poista eleet käytöstä",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Poistaa eleet käytöstä.",
+  "@disableGestureSubtitle": {},
+  "invalidNumber": "Virheellinen numero",
+  "@invalidNumber": {},
+  "noItem": "Ei kohdetta",
+  "@noItem": {},
+  "noMusicLibrariesBody": "Finamp ei löytänyt musiikkikirjastoja. Varmista, että Jellyfin-palvelimellasi on vähintään yksi kirjasto, jonka sisältötyypiksi on asetettu \"Musiikki\".",
+  "@noMusicLibrariesBody": {},
+  "instantMix": "Välitön Sekoitus",
+  "@instantMix": {},
+  "replaceQueue": "Korvaa Jono",
+  "@replaceQueue": {},
+  "queueReplaced": "Jono korvattu.",
+  "@queueReplaced": {},
+  "startingInstantMix": "Käynnistetään välitön sekoitus.",
+  "@startingInstantMix": {},
+  "addToMix": "Lisää Sekoitukseen",
+  "@addToMix": {},
+  "removeFromMix": "Poista Sekoituksesta",
+  "@removeFromMix": {},
+  "bufferDurationSubtitle": "Kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.",
+  "@bufferDurationSubtitle": {},
+  "swipeInsertQueueNext": "Toista Pyyhkäisty Kappale Seuraavaksi",
+  "@swipeInsertQueueNext": {},
+  "startMix": "Aloita sekoitus",
+  "@startMix": {},
+  "failedToGetSongFromDownloadId": "Kappaleen nouto lataus ID:stä epäonnistui",
+  "@failedToGetSongFromDownloadId": {},
+  "stackTrace": "Pinon jäljitys",
+  "@stackTrace": {},
+  "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä. Lähdekoodi saatavilla osoitteessa:\n\ngithub.com/jmshrv/finamp",
+  "@applicationLegalese": {},
+  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia käyttöoikeusongelmien vuoksi. Mietin tapoja korjata tämä, mutta toistaiseksi en suosittele niiden käyttöä.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "startupError": "Jokin meni pieleen sovelluksen käynnistyksen aikana. Virhe oli: {error}\n\nOle hyvä ja luo virheilmoitus osoitteessa github.com/UnicornsOnLSD/finamp, jossa on kuvakaappaus tästä sivusta. Jos ongelma jatkuu, voit tyhjentää sovelluksen tiedot nollataksesi sovelluksen.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "internalExternalIpExplanation": "Jos haluat käyttää Jellyfin-palvelintasi etänä, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi käyttää joko HTTP-oletusporttia (80/443) tai Jellyfinin oletusporttia (8096),  sinun ei tarvitse määritellä porttia erikseen. Näin todennäköisesti on, mikäli palvelimesi on reverse proxyn takana.\nJos syötit serverin osoitteen oikein,  osoitekentän alle pitäisi ilmestyä perustietoja serveristäsi.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "startMixNoSongsAlbum": "Paina albumia pitkään lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "downloadedMissingImages": "{count,plural, =0{Puuttuvia kuvia ei löytynyt} =1{Ladattu {count} puuttuvaa kuvaa} other{ladattu {count} puuttuvia kuvia}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorScreenError": "Virhe tapahtui virheiden luettelon hakemisessa! Tässä vaiheessa sinun pitäisi luultavasti vain luoda virheilmoitus GitHubiin ja poistaa sovelluksen tiedot",
+  "@errorScreenError": {},
+  "deleteDownloadsPrompt": "Oletko varma, että haluat poistaa {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' tästä laitteesta?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "enterLowPriorityStateOnPause": "Siirtyminen matalan prioriteetin tilaan tauon aikana",
+  "@enterLowPriorityStateOnPause": {},
+  "shuffleAllSongCount": "Kaikkien sekoitettujen kappaleiden määrä",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "Ladattavien kappaleiden määrä, kun käytät sekoita kaikki kappaleet painiketta.",
+  "@shuffleAllSongCountSubtitle": {},
+  "gridCrossAxisCount": "{value} Ruudukon poikittaisakselien lukumäärä",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "gridCrossAxisCountSubtitle": "Rivikohtaisesti käytettävien ruudukkotiilien määrä, kun {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridViewSubtitle": "Näytetäänkö teksti (nimi, artisti jne.) ruudukon musiikkinäytöllä vai ei.",
+  "@showTextOnGridViewSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Näytetäänkö kappaleiden artistit albumin näytöllä, jos ne eivät poikkea albumin artisteista.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "showFastScroller": "Näytä nopea vieritin",
+  "@showFastScroller": {},
+  "responseError401": "{error} Tilakoodi {statusCode}. Tämä tarkoittaa todennäköisesti, että olet käyttänyt väärää käyttäjätunnusta/salasanaa tai että sovellus ei ole enää kirjautuneena sisään.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "redownloadedItems": "{count,plural, =0{Ei tarvitse ladata uudelleen.} =1{Uudelleenladattu {count} kohde} other{Uudelleenladatut {count} kohteet}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "swipeInsertQueueNextSubtitle": "Mahdollistaa kappaleen lisäämisen jonon seuraavaksi kohteeksi, kun sitä pyyhkäistään kappaleiden luettelossa sen sijaan, että se liitettäisiin loppuun.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "startMixNoSongsArtist": "Paina pitkään artistia lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "viewTypeSubtitle": "Musiikkinäytön näkymätyyppi",
+  "@viewTypeSubtitle": {},
+  "loginFlowAccountSelectionHeading": "Valitse tilisi",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "orDivider": "tai",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "aboutReleaseNotes": "Uusimmat päivitystiedot:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "loginFlowServerSelectionHeading": "Yhdistä Jellyfiniin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "usernameHint": "Syötä käyttäjätunnus",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Ole hyvä ja syötä käyttäjätunnus",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "loginFlowQuickConnectInstructions": "Avaa Jellyfin-sovellus tai sivu, klikkaa käyttäjäkuvaketta, ja valitse Pikayhdistys.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "backToAccountSelection": "Takaisin tilin valintaan",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowSlogan": "Oma musiikkikirjastosi, juuri niin kuin sen haluat.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowSelectAUser": "Valitse käyttäjä",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "loginFlowWelcomeHeading": "Tervetuloa sovellukseen",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "changeLanguage": "Vaihda kieltä",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "backToServerSelection": "Takaisin palvelimen valintaan",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "Käytä pikayhdistyskoodia",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "about": "Tietoa Finampista",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "aboutThanks": "Kiitos, että käytät Finampia!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowGetStarted": "Aloita tästä!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "viewLogs": "Näytä lokitiedot",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "back": "Takaisin",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlHint": "esim. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "connectingToServer": "Yhdistetään palvelimeen..",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "Palvelimet paikallisverkossasi:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Etsitään palvelimia..",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowNamelessUser": "Anonyymi käyttäjä",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowAuthenticationHeading": "Kirjaudu tilillesi",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "loginFlowQuickConnectDisabled": "Pikayhdistys poistettu käytöstä tällä palvelimella.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "passwordHint": "Syötä salasana",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Kirjaudu sisään",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "aboutContributionLink": "Osallistu Finampin kehittämiseen GitHubissa:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "serverUrlInfoButtonTooltip": "Apua palvelinosoitteen syöttämiseen",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "aboutTranslations": "Auta kääntämään Finampia omalle kielellesi:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  }
+}

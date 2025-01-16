@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -7,6 +6,7 @@ import '../../components/favourite_button.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../padded_custom_scrollview.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
 import 'playlist_name_edit_button.dart';
@@ -61,7 +61,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
       }
     }
 
-    return CustomScrollView(
+    return PaddedCustomScrollview(
       slivers: [
         SliverAppBar(
           title: Text(
@@ -119,12 +119,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             childrenForQueue: Future.value(widget.queueChildren),
             parent: widget.parent,
             onRemoveFromList: onDelete,
-          ),
-        SliverToBoxAdapter(
-          child: Container(
-            height: MediaQuery.paddingOf(context).bottom,
-          ),
-        )
+          )
       ],
     );
   }

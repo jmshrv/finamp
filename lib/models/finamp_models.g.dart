@@ -71,9 +71,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodeBitrate: fields[2] == null ? 320000 : fields[2] as int,
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause:
-          fields[4] == null ? false : fields[4] as bool,
+          fields[4] == null ? true : fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
-      onlyShowFavourite: fields[6] == null ? false : fields[6] as bool,
+      onlyShowFavourites: fields[6] == null ? false : fields[6] as bool,
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
@@ -102,7 +102,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : fields[48] as double,
       showArtistsTopSongs: fields[54] == null ? true : fields[54] as bool,
+      bufferDisableSizeConstraints:
+          fields[78] == null ? false : fields[78] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
+      bufferSizeMegabytes: fields[79] == null ? 50 : fields[79] as int,
       tabSortBy: fields[20] == null
           ? {}
           : (fields[20] as Map).cast<TabContentType, SortBy>(),
@@ -125,11 +128,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       autoloadLastQueueOnStartup:
           fields[28] == null ? true : fields[28] as bool,
       hasCompletedBlurhashImageMigration:
-          fields[23] == null ? false : fields[23] as bool,
+          fields[23] == null ? true : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
-          fields[24] == null ? false : fields[24] as bool,
+          fields[24] == null ? true : fields[24] as bool,
       hasCompletedDownloadsServiceMigration:
-          fields[34] == null ? false : fields[34] as bool,
+          fields[34] == null ? true : fields[34] as bool,
       requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
       showDownloadsWithUnknownLibrary:
@@ -139,11 +142,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       resyncOnStartup: fields[40] == null ? true : fields[40] as bool,
       preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
-          fields[42] == null ? false : fields[42] as bool,
-      downloadTranscodingCodec: fields[43] as FinampTranscodingCodec?,
+          fields[42] == null ? true : fields[42] as bool,
       downloadTranscodeBitrate: fields[45] as int?,
       shouldTranscodeDownloads: fields[44] == null
-          ? TranscodeDownloadsSetting.never
+          ? TranscodeDownloadsSetting.ask
           : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
@@ -184,17 +186,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       keepScreenOnWhilePluggedIn:
           fields[73] == null ? true : fields[73] as bool,
       featureChipsConfiguration: fields[76] == null
-          ? const FinampFeatureChipsConfiguration(enabled: true, features: [
-              FinampFeatureChipType.playCount,
-              FinampFeatureChipType.additionalPeople,
-              FinampFeatureChipType.playbackMode,
-              FinampFeatureChipType.codec,
-              FinampFeatureChipType.bitRate,
-              FinampFeatureChipType.bitDepth,
-              FinampFeatureChipType.sampleRate,
-              FinampFeatureChipType.size,
-              FinampFeatureChipType.normalizationGain
-            ])
+          ? DefaultSettings.featureChipsConfiguration
           : fields[76] as FinampFeatureChipsConfiguration,
       showCoversOnAlbumScreen: fields[77] == null ? false : fields[77] as bool,
       hasDownloadedPlaylistInfo:
@@ -211,7 +203,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(75)
+      ..writeByte(76)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -225,7 +217,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(5)
       ..write(obj.showTabs)
       ..writeByte(6)
-      ..write(obj.onlyShowFavourite)
+      ..write(obj.onlyShowFavourites)
       ..writeByte(7)
       ..write(obj.sortBy)
       ..writeByte(8)
@@ -292,8 +284,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.preferQuickSyncs)
       ..writeByte(42)
       ..write(obj.hasCompletedIsarUserMigration)
-      ..writeByte(43)
-      ..write(obj.downloadTranscodingCodec)
       ..writeByte(44)
       ..write(obj.shouldTranscodeDownloads)
       ..writeByte(45)
@@ -361,7 +351,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(76)
       ..write(obj.featureChipsConfiguration)
       ..writeByte(77)
-      ..write(obj.showCoversOnAlbumScreen);
+      ..write(obj.showCoversOnAlbumScreen)
+      ..writeByte(78)
+      ..write(obj.bufferDisableSizeConstraints)
+      ..writeByte(79)
+      ..write(obj.bufferSizeMegabytes);
   }
 
   @override
@@ -588,13 +582,14 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
       artist: fields[4] as String?,
       album: fields[5] as String?,
       trackMbid: fields[6] as String?,
+      deviceInfo: fields[7] as DeviceInfo?,
     );
   }
 
   @override
   void write(BinaryWriter writer, OfflineListen obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.timestamp)
       ..writeByte(1)
@@ -608,7 +603,9 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
       ..writeByte(5)
       ..write(obj.album)
       ..writeByte(6)
-      ..write(obj.trackMbid);
+      ..write(obj.trackMbid)
+      ..writeByte(7)
+      ..write(obj.deviceInfo);
   }
 
   @override
@@ -1017,6 +1014,43 @@ class FinampFeatureChipsConfigurationAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampFeatureChipsConfigurationAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
+  @override
+  final int typeId = 76;
+
+  @override
+  DeviceInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DeviceInfo(
+      name: fields[0] as String,
+      id: fields[1] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, DeviceInfo obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.id);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DeviceInfoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

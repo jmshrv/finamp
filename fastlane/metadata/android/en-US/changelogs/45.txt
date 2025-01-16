@@ -1,0 +1,1 @@
+Fixed a bug where the artist screen would show albums from the whole library instead of the specific artist.

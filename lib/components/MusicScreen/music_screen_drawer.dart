@@ -14,7 +14,7 @@ import 'offline_mode_switch_list_tile.dart';
 import 'view_list_tile.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
-  const MusicScreenDrawer({Key? key}) : super(key: key);
+  const MusicScreenDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

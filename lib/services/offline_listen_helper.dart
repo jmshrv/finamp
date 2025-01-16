@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/jellyfin_api.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
@@ -38,6 +39,8 @@ class OfflineListenLogHelper {
   Future<void> logOfflineListen(MediaItem item) async {
     final itemJson = item.extras!["itemJson"];
 
+    final deviceInfo = await getDeviceInfo();
+
     final offlineListen = OfflineListen(
       timestamp: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       userId: _finampUserHelper.currentUserId!,
@@ -46,6 +49,7 @@ class OfflineListenLogHelper {
       artist: itemJson["AlbumArtist"],
       album: itemJson["Album"],
       trackMbid: itemJson["ProviderIds"]?["MusicBrainzTrack"],
+      deviceInfo: deviceInfo,
     );
 
     return _logOfflineListen(offlineListen);
@@ -73,6 +77,10 @@ class OfflineListenLogHelper {
       'album': listen.album,
       'track_mbid': listen.trackMbid,
       'user_id': listen.userId,
+      'device': {
+        'name': listen.deviceInfo?.name,
+        'id': listen.deviceInfo?.id,
+      },
     };
     final content = json.encode(data) + Platform.lineTerminator;
 

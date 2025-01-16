@@ -9,6 +9,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -61,6 +62,51 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   double iosBaseVolumeGainFactor = 1.0;
 
+  final outputSwitcherChannel =
+      MethodChannel('com.unicornsonlsd.finamp/output_switcher');
+
+  Future<void> showOutputSwitcherDialog() async {
+    try {
+      print("Showing output switcher dialog");
+      await outputSwitcherChannel.invokeMethod('showOutputSwitcherDialog');
+      print("Output switcher dialog shown");
+    } on PlatformException catch (e) {
+      print("Failed to show output switcher dialog: ${e.message}");
+    } catch (e) {
+      print("Failed to show output switcher dialog: $e");
+    }
+  }
+
+  Future<void> getRoutes() async {
+    try {
+      await outputSwitcherChannel.invokeMethod('getRoutes');
+    } on PlatformException catch (e) {
+      print("Failed to get routes: ${e.message}");
+    } catch (e) {
+      print("Failed to get routes: $e");
+    }
+  }
+
+  Future<void> setOutputToDeviceSpeaker() async {
+    try {
+      await outputSwitcherChannel.invokeMethod('setOutputToDeviceSpeaker');
+    } on PlatformException catch (e) {
+      print("Failed to switch output: ${e.message}");
+    } catch (e) {
+      print("Failed to switch output: $e");
+    }
+  }
+
+  Future<void> setOutputToBluetoothDevice() async {
+    try {
+      await outputSwitcherChannel.invokeMethod('setOutputToBluetoothDevice');
+    } on PlatformException catch (e) {
+      print("Failed to switch output: ${e.message}");
+    } catch (e) {
+      print("Failed to switch output: $e");
+    }
+  }
+
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
 
@@ -68,7 +114,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger
           .info("Initializing media-kit for Windows/Linux");
       JustAudioMediaKit.title = "Finamp";
-      JustAudioMediaKit.prefetchPlaylist = true; // cache upcoming tracks
+      JustAudioMediaKit.prefetchPlaylist =
+          true; // cache upcoming tracks, enable gapless playback
       JustAudioMediaKit.ensureInitialized(
         linux: true,
         windows: true,
@@ -96,15 +143,26 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _player = AudioPlayer(
       audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
-          minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
-          maxBufferDuration: FinampSettingsHelper
-                  .finampSettings.bufferDuration *
-              1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
-          prioritizeTimeOverSizeThresholds: true,
+          targetBufferBytes:
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
+                  ? null
+                  : 1024 *
+                      1024 *
+                      FinampSettingsHelper.finampSettings.bufferSizeMegabytes,
+          // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
+          minBufferDuration: Duration(seconds: 60), // when to fetch more data
+          maxBufferDuration: FinampSettingsHelper.finampSettings
+              .bufferDuration, // allows the player to fetch a bit more data in exchange for reduced request frequency
+          prioritizeTimeOverSizeThresholds: FinampSettingsHelper.finampSettings
+              .bufferDisableSizeConstraints, // targetBufferBytes sets the absolute maximum, but if this false and maxBufferDuration is reached, buffering will end
         ),
         darwinLoadControl: DarwinLoadControl(
+          // preferredForwardBufferDuration:
+          //     FinampSettingsHelper.finampSettings.bufferDuration,
           preferredForwardBufferDuration:
-              FinampSettingsHelper.finampSettings.bufferDuration,
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
+                  ? FinampSettingsHelper.finampSettings.bufferDuration
+                  : null, // let system decide
         ),
       ),
       audioPipeline: _audioPipeline,

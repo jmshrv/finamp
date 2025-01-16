@@ -94,7 +94,7 @@ class DownloadButton extends ConsumerWidget {
             confirmButtonText:
                 AppLocalizations.of(context)!.deleteDownloadsConfirmButtonText,
             abortButtonText:
-                AppLocalizations.of(context)!.deleteDownloadsAbortButtonText,
+                AppLocalizations.of(context)!.genericCancel,
             onConfirmed: () async {
               try {
                 await downloadsService.deleteDownload(stub: item);

@@ -71,14 +71,6 @@
   "@noArtist": {},
   "unknownArtist": "Невідомий виконавець",
   "@unknownArtist": {},
-  "downloaded": "ЗАВАНТАЖЕНО",
-  "@downloaded": {},
-  "direct": "ПРЯМЕ ВІДТВОРЕННЯ",
-  "@direct": {},
-  "streaming": "ВІДТВОРЮЄТЬСЯ ЗАРАЗ",
-  "@streaming": {},
-  "statusError": "ПОМИЛКОВИЙ СТАТУС",
-  "@statusError": {},
   "queue": "Черга",
   "@queue": {},
   "replaceQueue": "Замінити чергу",
@@ -174,8 +166,6 @@
   "@playCount": {},
   "premiereDate": "Датою прем'єри",
   "@premiereDate": {},
-  "downloadErrors": "Завантажити помилки",
-  "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} Завантажено} other{{count} Завантажень}}",
   "@downloadCount": {
     "placeholders": {
@@ -249,8 +239,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Завантажити помилки",
-  "@downloadErrorsTitle": {},
   "editPlaylistNameTitle": "Редагувати назву плейлисту",
   "@editPlaylistNameTitle": {},
   "transcoding": "Транскодування",
@@ -329,8 +317,6 @@
   "@invalidNumber": {},
   "addToPlaylistTooltip": "Додати до плейлисту",
   "@addToPlaylistTooltip": {},
-  "transcode": "ПЕРЕКОДОВУЄТЬСЯ",
-  "@transcode": {},
   "removeFromPlaylistTitle": "Видалити з плейлисту",
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Новий плейлист",
@@ -364,22 +350,6 @@
   },
   "bufferDuration": "Тривалість буферу",
   "@bufferDuration": {},
-  "downloadedItemsCount": "{count,plural,=1{{count} елементів} other{{count} елементів}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} Зображення} other{{count} зображень}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "offlineMode": "Оффлайн режим",
   "@offlineMode": {},
   "sortOrder": "Порядок сортування",
@@ -387,14 +357,6 @@
   "emptyServerUrl": "URL серверу не може бути порожнім",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "urlStartWithHttps": "URL має починатися з http:// або http://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL-адреса не повинна містити косу риску в кінці",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
   },
   "username": "Логін",
   "@username": {},
@@ -446,8 +408,6 @@
   "@runtime": {},
   "downloadMissingImages": "Завантажити відсутні зображення",
   "@downloadMissingImages": {},
-  "noErrors": "Немає помилок!",
-  "@noErrors": {},
   "playButtonLabel": "ГРАТИ",
   "@playButtonLabel": {},
   "shuffleButtonLabel": "ПЕРЕМІШАТИ",
@@ -468,20 +428,6 @@
   "@message": {},
   "stackTrace": "Трасування стека",
   "@stackTrace": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "confirm": "Підтвердити",
   "@confirm": {},
   "showUncensoredLogMessage": "Цей журнал містить ваші дані для входу. Показати?",
@@ -504,8 +450,6 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsAbortButtonText": "Скасувати",
-  "@deleteDownloadsAbortButtonText": {},
   "insertedIntoQueue": "Вставлено в чергу.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."

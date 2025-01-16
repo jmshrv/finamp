@@ -4,6 +4,7 @@ import 'dart:io' show HttpClient, Platform;
 import 'package:app_set_id/app_set_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/io_client.dart' as http;
@@ -606,35 +607,10 @@ Future<String> getAuthHeader() async {
   }
 
   authHeader = '${authHeader}Client="Finamp", ';
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  if (Platform.isAndroid) {
-    AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-    final appSetId = await AppSetId().getIdentifier();
-    authHeader = '${authHeader}Device="${androidDeviceInfo.model}", ';
-    authHeader = '${authHeader}DeviceId="$appSetId", ';
-  } else if (Platform.isIOS) {
-    IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-    final appSetId = await AppSetId().getIdentifier();
-    authHeader = '${authHeader}Device="${iosDeviceInfo.name}", ';
-    authHeader = '${authHeader}DeviceId="$appSetId", ';
-  } else if (Platform.isWindows) {
-    WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
-    authHeader = '${authHeader}Device="${windowsDeviceInfo.computerName}", ';
-    final windowsId = windowsDeviceInfo.deviceId;
-    authHeader = '${authHeader}DeviceId="$windowsId", ';
-  } else if (Platform.isLinux) {
-    LinuxDeviceInfo linuxDeviceInfo = await deviceInfo.linuxInfo;
-    authHeader = '${authHeader}Device="${linuxDeviceInfo.name}", ';
-    final linuxId = linuxDeviceInfo.machineId;
-    authHeader = '${authHeader}DeviceId="$linuxId", ';
-  } else if (Platform.isMacOS) {
-    MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
-    authHeader = '${authHeader}Device="${macOsDeviceInfo.computerName}", ';
-    final macId = macOsDeviceInfo.systemGUID;
-    authHeader = '${authHeader}DeviceId="$macId", ';
-  } else {
-    throw Exception("Unsupported platform");
-  }
+
+  final deviceInfo = await getDeviceInfo();
+  authHeader =
+      '${authHeader}Device="${deviceInfo.name}",DeviceId="${deviceInfo.id}", ';
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   authHeader = '${authHeader}Version="${packageInfo.version}"';
@@ -642,4 +618,50 @@ Future<String> getAuthHeader() async {
   // In some cases non-ASCII characters can end up in the header, usually via
   // iOS device name
   return authHeader.replaceAll(notAsciiRegex, "_");
+}
+
+// return type for deviceInfo
+
+Future<DeviceInfo> getDeviceInfo() async {
+  DeviceInfo info;
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  if (Platform.isAndroid) {
+    AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+    final appSetId = await AppSetId().getIdentifier();
+    info = DeviceInfo(
+      name: androidDeviceInfo.model,
+      id: appSetId,
+    );
+  } else if (Platform.isIOS) {
+    IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+    final appSetId = await AppSetId().getIdentifier();
+    info = DeviceInfo(
+      name: iosDeviceInfo.name,
+      id: appSetId,
+    );
+  } else if (Platform.isWindows) {
+    WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
+    final windowsId = windowsDeviceInfo.deviceId;
+    info = DeviceInfo(
+      name: windowsDeviceInfo.computerName,
+      id: windowsId,
+    );
+  } else if (Platform.isLinux) {
+    LinuxDeviceInfo linuxDeviceInfo = await deviceInfo.linuxInfo;
+    final linuxId = linuxDeviceInfo.machineId;
+    info = DeviceInfo(
+      name: linuxDeviceInfo.name,
+      id: linuxId,
+    );
+  } else if (Platform.isMacOS) {
+    MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
+    final macId = macOsDeviceInfo.systemGUID;
+    info = DeviceInfo(
+      name: macOsDeviceInfo.computerName,
+      id: macId,
+    );
+  } else {
+    throw Exception("Unsupported platform");
+  }
+  return info;
 }

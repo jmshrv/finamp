@@ -73,6 +73,14 @@ If you're experiencing software bugs or other issues with Finamp, be sure to tak
 
 Finamp is a community-driven project and relies on people like **you** and their contributions. To learn how you could help out with making Finamp even better, take a look at our [Contribution Guidelines](CONTRIBUTING.md)
 
+### Tranlations
+
+You can also contribute by helping to translate Finamp! This is done through our Weblate instance here: <https://hosted.weblate.org/engage/finamp/>. The current translation status is this:
+
+<a href="https://hosted.weblate.org/engage/finamp/">
+  <img src="https://hosted.weblate.org/widget/finamp/finamp/horizontal-auto.svg" alt="Translation status" />
+</a>
+
 ## Known Issues
 
 This app is still a work in progress, and has some bugs/issues that haven't been fixed yet. Here is a list of currently known issues:

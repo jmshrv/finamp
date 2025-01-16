@@ -228,7 +228,7 @@ class QueueService {
       _queueServiceLogger.fine("Queue is empty");
       _currentTrack = null;
       _audioHandler.playbackState.add(PlaybackState(
-        processingState: AudioProcessingState.idle,
+        processingState: AudioProcessingState.completed,
         playing: false,
         queueIndex: 0,
         updatePosition: Duration.zero,
@@ -457,8 +457,10 @@ class QueueService {
         source: source,
         order: order,
         initialIndex: startingIndex);
+    _queueServiceLogger.info(
+        "Started playing '${GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? source.name.getLocalized(GlobalSnackbar.materialAppScaffoldKey.currentContext!) : source.name.type}' (${source.type}) in order $order from index $startingIndex");
     _queueServiceLogger
-        .info("Started playing '${source.name}' (${source.type})");
+        .info("Items for queue: [${items.map((e) => e.name).join(", ")}]");
   }
 
   /// Replaces the queue with the given list of items. If startAtIndex is specified, Any items below it
@@ -546,9 +548,10 @@ class QueueService {
       _queueFromConcatenatingAudioSource();
 
       if (beginPlaying) {
-        await _audioHandler.play();
+        unawaited(_audioHandler
+            .play()); // don't await this, because it will not return until playback is finished
       } else {
-        await _audioHandler.pause();
+        unawaited(_audioHandler.pause());
       }
 
       _audioHandler.nextInitialIndex = null;
@@ -566,14 +569,14 @@ class QueueService {
       _savedQueueState = SavedQueueState.saving;
     }
 
-    await _audioHandler.stopPlayback();
-
     await _queueAudioSource.clear();
 
-    await _audioHandler.initializeAudioSource(_queueAudioSource,
-        preload: false);
-
     _queueFromConcatenatingAudioSource();
+
+    await _audioHandler.stopPlayback();
+
+    // await _audioHandler.initializeAudioSource(_queueAudioSource,
+    //     preload: false);
 
     return;
   }

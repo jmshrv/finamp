@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/services/playon_handler.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:logging/logging.dart';
 
-import 'package:finamp/services/downloads_service.dart';
 import '../components/MusicScreen/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
@@ -137,7 +137,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         onPressed: () async {
           try {
             await _audioServiceHelper.shuffleAll(
-                FinampSettingsHelper.finampSettings.onlyShowFavourite);
+                FinampSettingsHelper.finampSettings.onlyShowFavourites);
           } catch (e) {
             GlobalSnackbar.error(e);
           }
@@ -331,12 +331,12 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       if (!finampSettings.isOffline ||
                           finampSettings.trackOfflineFavorites)
                         IconButton(
-                          icon: finampSettings.onlyShowFavourite
+                          icon: finampSettings.onlyShowFavourites
                               ? const Icon(Icons.favorite)
                               : const Icon(Icons.favorite_outline),
                           onPressed: () =>
-                              FinampSettingsHelper.setOnlyShowFavourite(
-                                  !finampSettings.onlyShowFavourite),
+                              FinampSettingsHelper.setonlyShowFavourites(
+                                  !finampSettings.onlyShowFavourites),
                           tooltip: AppLocalizations.of(context)!.favourites,
                         ),
                       IconButton(

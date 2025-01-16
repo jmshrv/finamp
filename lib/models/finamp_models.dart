@@ -56,185 +56,218 @@ class FinampUser {
   BaseItemDto? get currentView => views[currentViewId];
 }
 
-// These consts are so that we can easily keep the same default for
-// FinampSettings's constructor and Hive's defaultValue.
-const _isOfflineDefault = false;
-const _shouldTranscodeDefault = false;
-const _transcodeBitrateDefault = 320000;
-const _androidStopForegroundOnPauseDefault = false;
-const _isFavouriteDefault = false;
-const _songShuffleItemCountDefault = 250;
-const _volumeNormalizationActiveDefault = true;
-// 80% volume in dB. In my testing, most tracks were louder than the default target
-// of -18.0 LUFS, so the gain rarely needed to be increased. -2.0 gives us a bit of
-// headroom in case we need to boost a track (since volume can't go above 1.0),
-// without reducing the volume too much.
-// Ideally the maximum gain in each library should be fetched from the server, and this volume should be adjusted accordingly
-const _volumeNormalizationIOSBaseGainDefault = -2.0;
-const _volumeNormalizationModeDefault = VolumeNormalizationMode.hybrid;
-const _contentViewType = ContentViewType.list;
-const _playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
-const _contentGridViewCrossAxisCountPortrait = 2;
-const _contentGridViewCrossAxisCountLandscape = 3;
-const _showTextOnGridView = true;
-const _sleepTimerSeconds = 1800; // 30 Minutes
-const _useCoverAsBackground = true;
-const _playerScreenCoverMinimumPadding = 1.5;
-const _showArtistsTopSongs = true;
-const _disableGesture = false;
-const _showFastScroller = true;
-const _bufferDurationSeconds = 600;
-const _tabOrder = TabContentType.values;
-const _swipeInsertQueueNext = true;
-const _defaultLoopMode = FinampLoopMode.none;
-const _defaultPlaybackSpeed = 1.0;
-const _autoLoadLastQueueOnStartup = true;
-const _shouldTranscodeDownloadsDefault = TranscodeDownloadsSetting.ask;
-const _shouldRedownloadTranscodesDefault = false;
-const _defaultResyncOnStartup = true;
-const _fixedGridTileSizeDefault = 150;
-const _defaultSplitScreenPlayerWidth = 400.0;
-const _enableVibration = true;
-const _prioritizeCoverFactor = 8.0;
-const _suppressPlayerPadding = false;
-const _hidePlayerBottomActions = false;
-const _reportQueueToServerDefault = false;
-const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
-const _showArtistChipImage = true;
-const _trackOfflineFavoritesDefault = true;
-const _showProgressOnNowPlayingBarDefault = true;
-const _startInstantMixForIndividualTracksDefault = true;
-const _showLyricsTimestampsDefault = true;
-const _lyricsAlignmentDefault = LyricsAlignment.start;
-const _lyricsFontSizeDefault = LyricsFontSize.medium;
-const _showLyricsScreenAlbumPreludeDefault = true;
-const _showStopButtonOnMediaNotificationDefault = false;
-const _showSeekControlsOnMediaNotificationDefault = true;
-const _keepScreenOnOption = KeepScreenOnOption.whileLyrics;
-const _keepScreenOnWhilePluggedIn = true;
-const _hasDownloadedPlaylistInfoDefault = false;
-const _defaultTranscodingSegmentContainer =
-    FinampSegmentContainer.fragmentedMp4;
-const _featureChipsConfigurationDefault =
-    FinampFeatureChipsConfiguration(enabled: true, features: [
-  FinampFeatureChipType.playCount,
-  FinampFeatureChipType.additionalPeople,
-  FinampFeatureChipType.playbackMode,
-  FinampFeatureChipType.codec,
-  FinampFeatureChipType.bitRate,
-  FinampFeatureChipType.bitDepth,
-  FinampFeatureChipType.sampleRate,
-  FinampFeatureChipType.size,
-  FinampFeatureChipType.normalizationGain,
-]);
-const _showCoversOnAlbumScreenDefault = false;
+class DefaultSettings {
+  // These consts are so that we can easily keep the same default for
+  // FinampSettings's constructor and Hive's defaultValue.
+  static const isOffline = false;
+  static const theme = ThemeMode.system;
+  static const shouldTranscode = false;
+  static const transcodeBitrate = 320000;
+  static const androidStopForegroundOnPause = true;
+  static const onlyShowFavourites = false;
+  static const songShuffleItemCount = 250;
+  static const volumeNormalizationActive = true;
+  // 80% volume in dB. In my testing, most tracks were louder than the default target
+  // of -18.0 LUFS, so the gain rarely needed to be increased. -2.0 gives us a bit of
+  // headroom in case we need to boost a track (since volume can't go above 1.0),
+  // without reducing the volume too much.
+  // Ideally the maximum gain in each library should be fetched from the server, and this volume should be adjusted accordingly
+  static const volumeNormalizationIOSBaseGain = -2.0;
+  static const volumeNormalizationMode = VolumeNormalizationMode.hybrid;
+  static const contentViewType = ContentViewType.list;
+  static const playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
+  static const contentGridViewCrossAxisCountPortrait = 2;
+  static const contentGridViewCrossAxisCountLandscape = 3;
+  static const showTextOnGridView = true;
+  static const sleepTimerSeconds = 1800; // 30 Minutes
+  static const useCoverAsBackground = true;
+  static const playerScreenCoverMinimumPadding = 1.5;
+  static const showArtistsTopSongs = true;
+  static const disableGesture = false;
+  static const showFastScroller = true;
+  static const bufferDisableSizeConstraints = false;
+  static const bufferDurationSeconds = 600;
+  static const bufferSizeMegabytes = 50;
+  static const tabOrder = TabContentType.values;
+  static const swipeInsertQueueNext = true;
+  static const loopMode = FinampLoopMode.none;
+  static const playbackSpeed = 1.0;
+  static const autoLoadLastQueueOnStartup = true;
+  static const shouldTranscodeDownloads = TranscodeDownloadsSetting.ask;
+  static const shouldRedownloadTranscodes = false;
+  static const resyncOnStartup = true;
+  static const fixedGridTileSize = 150;
+  static const useFixedSizeGridTiles = false;
+  static const splitScreenPlayerWidth = 400.0;
+  static const enableVibration = true;
+  static const prioritizeCoverFactor = 8.0;
+  static const suppressPlayerPadding = false;
+  static const hidePlayerBottomActions = false;
+  static const reportQueueToServer = false;
+  static const periodicPlaybackSessionUpdateFrequencySeconds = 150;
+  static const showArtistChipImage = true;
+  static const trackOfflineFavorites = true;
+  static const showProgressOnNowPlayingBar = true;
+  static const startInstantMixForIndividualTracks = true;
+  static const showLyricsTimestamps = true;
+  static const lyricsAlignment = LyricsAlignment.start;
+  static const lyricsFontSize = LyricsFontSize.medium;
+  static const showLyricsScreenAlbumPrelude = true;
+  static const showStopButtonOnMediaNotification = false;
+  static const showSeekControlsOnMediaNotification = true;
+  static const keepScreenOnOption = KeepScreenOnOption.whileLyrics;
+  static const keepScreenOnWhilePluggedIn = true;
+  static const hasDownloadedPlaylistInfo = false;
+  static const transcodingSegmentContainer =
+      FinampSegmentContainer.fragmentedMp4;
+  static const featureChipsConfiguration =
+      FinampFeatureChipsConfiguration(enabled: true, features: [
+    FinampFeatureChipType.playCount,
+    FinampFeatureChipType.additionalPeople,
+    FinampFeatureChipType.playbackMode,
+    FinampFeatureChipType.codec,
+    FinampFeatureChipType.bitRate,
+    FinampFeatureChipType.bitDepth,
+    FinampFeatureChipType.sampleRate,
+    FinampFeatureChipType.size,
+    FinampFeatureChipType.normalizationGain,
+  ]);
+  static const showCoversOnAlbumScreen = false;
+  static const allowSplitScreen = true;
+  static const requireWifiForDownloads = false;
+  static const onlyShowFullyDownloaded = false;
+  static const preferQuickSyncs = true;
+  static const showDownloadsWithUnknownLibrary = true;
+  static const downloadWorkers = 5;
+  static const maxConcurrentDownloads = 10;
+}
 
 @HiveType(typeId: 28)
 class FinampSettings {
   FinampSettings(
-      {this.isOffline = _isOfflineDefault,
-      this.shouldTranscode = _shouldTranscodeDefault,
-      this.transcodeBitrate = _transcodeBitrateDefault,
+      {this.isOffline = DefaultSettings.isOffline,
+      this.shouldTranscode = DefaultSettings.shouldTranscode,
+      this.transcodeBitrate = DefaultSettings.transcodeBitrate,
       // downloadLocations is required since the other values can be created with
       // default values. create() is used to return a FinampSettings with
       // downloadLocations.
       required this.downloadLocations,
-      this.androidStopForegroundOnPause = _androidStopForegroundOnPauseDefault,
+      this.androidStopForegroundOnPause =
+          DefaultSettings.androidStopForegroundOnPause,
       required this.showTabs,
-      this.onlyShowFavourite = _isFavouriteDefault,
+      this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
       this.sortBy = SortBy.sortName,
       this.sortOrder = SortOrder.ascending,
-      this.songShuffleItemCount = _songShuffleItemCountDefault,
-      this.volumeNormalizationActive = _volumeNormalizationActiveDefault,
+      this.songShuffleItemCount = DefaultSettings.songShuffleItemCount,
+      this.volumeNormalizationActive =
+          DefaultSettings.volumeNormalizationActive,
       this.volumeNormalizationIOSBaseGain =
-          _volumeNormalizationIOSBaseGainDefault,
-      this.volumeNormalizationMode = _volumeNormalizationModeDefault,
-      this.contentViewType = _contentViewType,
-      this.playbackSpeedVisibility = _playbackSpeedVisibility,
+          DefaultSettings.volumeNormalizationIOSBaseGain,
+      this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
+      this.contentViewType = DefaultSettings.contentViewType,
+      this.playbackSpeedVisibility = DefaultSettings.playbackSpeedVisibility,
       this.contentGridViewCrossAxisCountPortrait =
-          _contentGridViewCrossAxisCountPortrait,
+          DefaultSettings.contentGridViewCrossAxisCountPortrait,
       this.contentGridViewCrossAxisCountLandscape =
-          _contentGridViewCrossAxisCountLandscape,
-      this.showTextOnGridView = _showTextOnGridView,
-      this.sleepTimerSeconds = _sleepTimerSeconds,
+          DefaultSettings.contentGridViewCrossAxisCountLandscape,
+      this.showTextOnGridView = DefaultSettings.showTextOnGridView,
+      this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
       required this.downloadLocationsMap,
-      this.useCoverAsBackground = _useCoverAsBackground,
-      this.playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding,
-      this.showArtistsTopSongs = _showArtistsTopSongs,
-      this.bufferDurationSeconds = _bufferDurationSeconds,
+      this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
+      this.playerScreenCoverMinimumPadding =
+          DefaultSettings.playerScreenCoverMinimumPadding,
+      this.showArtistsTopSongs = DefaultSettings.showArtistsTopSongs,
+      this.bufferDisableSizeConstraints =
+          DefaultSettings.bufferDisableSizeConstraints,
+      this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
+      this.bufferSizeMegabytes = DefaultSettings.bufferSizeMegabytes,
       required this.tabSortBy,
       required this.tabSortOrder,
-      this.loopMode = _defaultLoopMode,
-      this.playbackSpeed = _defaultPlaybackSpeed,
-      this.tabOrder = _tabOrder,
-      this.autoloadLastQueueOnStartup = _autoLoadLastQueueOnStartup,
-      this.hasCompletedBlurhashImageMigration = true,
-      this.hasCompletedBlurhashImageMigrationIdFix = true,
-      this.hasCompletedDownloadsServiceMigration = true,
-      this.requireWifiForDownloads = false,
-      this.onlyShowFullyDownloaded = false,
-      this.showDownloadsWithUnknownLibrary = true,
-      this.maxConcurrentDownloads = 10,
-      this.downloadWorkers = 5,
-      this.resyncOnStartup = _defaultResyncOnStartup,
-      this.preferQuickSyncs = true,
-      this.hasCompletedIsarUserMigration = true,
+      this.loopMode = DefaultSettings.loopMode,
+      this.playbackSpeed = DefaultSettings.playbackSpeed,
+      this.tabOrder = DefaultSettings.tabOrder,
+      this.autoloadLastQueueOnStartup =
+          DefaultSettings.autoLoadLastQueueOnStartup,
+      this.hasCompletedBlurhashImageMigration =
+          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+      this.hasCompletedBlurhashImageMigrationIdFix =
+          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+      this.hasCompletedDownloadsServiceMigration =
+          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+      this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
+      this.onlyShowFullyDownloaded = DefaultSettings.onlyShowFullyDownloaded,
+      this.showDownloadsWithUnknownLibrary =
+          DefaultSettings.showDownloadsWithUnknownLibrary,
+      this.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads,
+      this.downloadWorkers = DefaultSettings.downloadWorkers,
+      this.resyncOnStartup = DefaultSettings.resyncOnStartup,
+      this.preferQuickSyncs = DefaultSettings.preferQuickSyncs,
+      this.hasCompletedIsarUserMigration =
+          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
       this.downloadTranscodingCodec,
       this.downloadTranscodeBitrate,
-      this.shouldTranscodeDownloads = _shouldTranscodeDownloadsDefault,
-      this.shouldRedownloadTranscodes = _shouldRedownloadTranscodesDefault,
-      this.swipeInsertQueueNext = _swipeInsertQueueNext,
-      this.useFixedSizeGridTiles = false,
-      this.fixedGridTileSize = _fixedGridTileSizeDefault,
-      this.allowSplitScreen = true,
-      this.splitScreenPlayerWidth = _defaultSplitScreenPlayerWidth,
-      this.enableVibration = _enableVibration,
-      this.prioritizeCoverFactor = _prioritizeCoverFactor,
-      this.suppressPlayerPadding = _suppressPlayerPadding,
-      this.hidePlayerBottomActions = _hidePlayerBottomActions,
-      this.reportQueueToServer = _reportQueueToServerDefault,
+      this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
+      this.shouldRedownloadTranscodes =
+          DefaultSettings.shouldRedownloadTranscodes,
+      this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
+      this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
+      this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
+      this.allowSplitScreen = DefaultSettings.allowSplitScreen,
+      this.splitScreenPlayerWidth = DefaultSettings.splitScreenPlayerWidth,
+      this.enableVibration = DefaultSettings.enableVibration,
+      this.prioritizeCoverFactor = DefaultSettings.prioritizeCoverFactor,
+      this.suppressPlayerPadding = DefaultSettings.suppressPlayerPadding,
+      this.hidePlayerBottomActions = DefaultSettings.hidePlayerBottomActions,
+      this.reportQueueToServer = DefaultSettings.reportQueueToServer,
       this.periodicPlaybackSessionUpdateFrequencySeconds =
-          _periodicPlaybackSessionUpdateFrequencySecondsDefault,
-      this.showArtistChipImage = _showArtistChipImage,
-      this.trackOfflineFavorites = _trackOfflineFavoritesDefault,
-      this.showProgressOnNowPlayingBar = _showProgressOnNowPlayingBarDefault,
+          DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+      this.showArtistChipImage = DefaultSettings.showArtistChipImage,
+      this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
+      this.showProgressOnNowPlayingBar =
+          DefaultSettings.showProgressOnNowPlayingBar,
       this.startInstantMixForIndividualTracks =
-          _startInstantMixForIndividualTracksDefault,
-      this.showLyricsTimestamps = _showLyricsTimestampsDefault,
-      this.lyricsAlignment = _lyricsAlignmentDefault,
-      this.lyricsFontSize = _lyricsFontSizeDefault,
-      this.showLyricsScreenAlbumPrelude = _showLyricsScreenAlbumPreludeDefault,
+          DefaultSettings.startInstantMixForIndividualTracks,
+      this.showLyricsTimestamps = DefaultSettings.showLyricsTimestamps,
+      this.lyricsAlignment = DefaultSettings.lyricsAlignment,
+      this.lyricsFontSize = DefaultSettings.lyricsFontSize,
+      this.showLyricsScreenAlbumPrelude =
+          DefaultSettings.showLyricsScreenAlbumPrelude,
       this.showStopButtonOnMediaNotification =
-          _showStopButtonOnMediaNotificationDefault,
+          DefaultSettings.showStopButtonOnMediaNotification,
       this.showSeekControlsOnMediaNotification =
-          _showSeekControlsOnMediaNotificationDefault,
-      this.keepScreenOnOption = _keepScreenOnOption,
-      this.keepScreenOnWhilePluggedIn = _keepScreenOnWhilePluggedIn,
-      this.featureChipsConfiguration = _featureChipsConfigurationDefault,
-      this.showCoversOnAlbumScreen = _showCoversOnAlbumScreenDefault,
-      this.hasDownloadedPlaylistInfo = _hasDownloadedPlaylistInfoDefault,
-      this.transcodingSegmentContainer = _defaultTranscodingSegmentContainer});
+          DefaultSettings.showSeekControlsOnMediaNotification,
+      this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
+      this.keepScreenOnWhilePluggedIn =
+          DefaultSettings.keepScreenOnWhilePluggedIn,
+      this.featureChipsConfiguration =
+          DefaultSettings.featureChipsConfiguration,
+      this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
+      this.hasDownloadedPlaylistInfo =
+          DefaultSettings.hasDownloadedPlaylistInfo,
+      this.transcodingSegmentContainer =
+          DefaultSettings.transcodingSegmentContainer});
 
-  @HiveField(0, defaultValue: _isOfflineDefault)
+  @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
-  @HiveField(1, defaultValue: _shouldTranscodeDefault)
+  @HiveField(1, defaultValue: DefaultSettings.shouldTranscode)
   bool shouldTranscode;
-  @HiveField(2, defaultValue: _transcodeBitrateDefault)
+  @HiveField(2, defaultValue: DefaultSettings.transcodeBitrate)
   int transcodeBitrate;
 
   @Deprecated("Use downloadedLocationsMap instead")
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
 
-  @HiveField(4, defaultValue: _androidStopForegroundOnPauseDefault)
+  @HiveField(4,
+      defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
 
   /// Used to remember if the user has set their music screen to favourites
   /// mode.
-  @HiveField(6, defaultValue: _isFavouriteDefault)
-  bool onlyShowFavourite;
+  @HiveField(6, defaultValue: DefaultSettings.onlyShowFavourites)
+  bool onlyShowFavourites;
 
   /// Current sort by setting.
   @Deprecated("Use per-tab sort by instead")
@@ -247,44 +280,46 @@ class FinampSettings {
   SortOrder sortOrder;
 
   /// Amount of songs to get when shuffling songs.
-  @HiveField(9, defaultValue: _songShuffleItemCountDefault)
+  @HiveField(9, defaultValue: DefaultSettings.songShuffleItemCount)
   int songShuffleItemCount;
 
   /// The content view type used by the music screen.
-  @HiveField(10, defaultValue: _contentViewType)
+  @HiveField(10, defaultValue: DefaultSettings.contentViewType)
   ContentViewType contentViewType;
 
   /// Amount of grid tiles to use per-row when portrait.
-  @HiveField(11, defaultValue: _contentGridViewCrossAxisCountPortrait)
+  @HiveField(11,
+      defaultValue: DefaultSettings.contentGridViewCrossAxisCountPortrait)
   int contentGridViewCrossAxisCountPortrait;
 
   /// Amount of grid tiles to use per-row when landscape.
-  @HiveField(12, defaultValue: _contentGridViewCrossAxisCountLandscape)
+  @HiveField(12,
+      defaultValue: DefaultSettings.contentGridViewCrossAxisCountLandscape)
   int contentGridViewCrossAxisCountLandscape;
 
   /// Whether or not to show the text (title, artist etc) on the grid music
   /// screen.
-  @HiveField(13, defaultValue: _showTextOnGridView)
-  bool showTextOnGridView = _showTextOnGridView;
+  @HiveField(13, defaultValue: DefaultSettings.showTextOnGridView)
+  bool showTextOnGridView = DefaultSettings.showTextOnGridView;
 
   /// The number of seconds to wait in a sleep timer. This is so that the app
   /// can remember the last duration. I'd use a Duration type here but Hive
   /// doesn't come with an adapter for it by default.
-  @HiveField(14, defaultValue: _sleepTimerSeconds)
+  @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds)
   int sleepTimerSeconds;
 
   @HiveField(15, defaultValue: {})
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
-  @HiveField(16, defaultValue: _useCoverAsBackground)
-  bool useCoverAsBackground = _useCoverAsBackground;
+  @HiveField(16, defaultValue: DefaultSettings.useCoverAsBackground)
+  bool useCoverAsBackground = DefaultSettings.useCoverAsBackground;
 
-  @HiveField(18, defaultValue: _bufferDurationSeconds)
+  @HiveField(18, defaultValue: DefaultSettings.bufferDurationSeconds)
   int bufferDurationSeconds;
 
-  @HiveField(19, defaultValue: _disableGesture)
-  bool disableGesture = _disableGesture;
+  @HiveField(19, defaultValue: DefaultSettings.disableGesture)
+  bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: {})
   Map<TabContentType, SortBy> tabSortBy;
@@ -292,171 +327,187 @@ class FinampSettings {
   @HiveField(21, defaultValue: {})
   Map<TabContentType, SortOrder> tabSortOrder;
 
-  @HiveField(22, defaultValue: _tabOrder)
+  @HiveField(22, defaultValue: DefaultSettings.tabOrder)
   List<TabContentType> tabOrder;
 
-  @HiveField(23, defaultValue: false)
+  @HiveField(23,
+      defaultValue:
+          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedBlurhashImageMigration;
 
-  @HiveField(24, defaultValue: false)
+  @HiveField(24,
+      defaultValue:
+          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedBlurhashImageMigrationIdFix;
 
-  @HiveField(25, defaultValue: _showFastScroller)
-  bool showFastScroller = _showFastScroller;
+  @HiveField(25, defaultValue: DefaultSettings.showFastScroller)
+  bool showFastScroller = DefaultSettings.showFastScroller;
 
-  @HiveField(26, defaultValue: _swipeInsertQueueNext)
+  @HiveField(26, defaultValue: DefaultSettings.swipeInsertQueueNext)
   bool swipeInsertQueueNext;
 
-  @HiveField(27, defaultValue: _defaultLoopMode)
+  @HiveField(27, defaultValue: DefaultSettings.loopMode)
   FinampLoopMode loopMode;
 
-  @HiveField(28, defaultValue: _autoLoadLastQueueOnStartup)
+  @HiveField(28, defaultValue: DefaultSettings.autoLoadLastQueueOnStartup)
   bool autoloadLastQueueOnStartup;
 
-  @HiveField(29, defaultValue: _volumeNormalizationActiveDefault)
+  @HiveField(29, defaultValue: DefaultSettings.volumeNormalizationActive)
   bool volumeNormalizationActive;
 
-  @HiveField(30, defaultValue: _volumeNormalizationIOSBaseGainDefault)
+  @HiveField(30, defaultValue: DefaultSettings.volumeNormalizationIOSBaseGain)
   double volumeNormalizationIOSBaseGain;
 
-  @HiveField(33, defaultValue: _volumeNormalizationModeDefault)
+  @HiveField(33, defaultValue: DefaultSettings.volumeNormalizationMode)
   VolumeNormalizationMode volumeNormalizationMode;
 
-  @HiveField(34, defaultValue: false)
+  @HiveField(34,
+      defaultValue:
+          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedDownloadsServiceMigration;
 
-  @HiveField(35, defaultValue: false)
+  @HiveField(35, defaultValue: DefaultSettings.requireWifiForDownloads)
   bool requireWifiForDownloads;
 
-  @HiveField(36, defaultValue: false)
+  @HiveField(36, defaultValue: DefaultSettings.onlyShowFullyDownloaded)
   bool onlyShowFullyDownloaded;
 
-  @HiveField(37, defaultValue: true)
+  @HiveField(37, defaultValue: DefaultSettings.showDownloadsWithUnknownLibrary)
   bool showDownloadsWithUnknownLibrary;
 
-  @HiveField(38, defaultValue: 10)
+  @HiveField(38, defaultValue: DefaultSettings.maxConcurrentDownloads)
   int maxConcurrentDownloads;
 
-  @HiveField(39, defaultValue: 5)
+  @HiveField(39, defaultValue: DefaultSettings.downloadWorkers)
   int downloadWorkers;
 
-  @HiveField(40, defaultValue: _defaultResyncOnStartup)
+  @HiveField(40, defaultValue: DefaultSettings.resyncOnStartup)
   bool resyncOnStartup;
 
-  @HiveField(41, defaultValue: true)
+  @HiveField(41, defaultValue: DefaultSettings.preferQuickSyncs)
   bool preferQuickSyncs;
 
-  @HiveField(42, defaultValue: false)
+  @HiveField(42, defaultValue: true)
   bool hasCompletedIsarUserMigration;
-
-  @HiveField(43)
   FinampTranscodingCodec? downloadTranscodingCodec;
 
-  @HiveField(44, defaultValue: _shouldTranscodeDownloadsDefault)
+  @HiveField(44, defaultValue: DefaultSettings.shouldTranscodeDownloads)
   TranscodeDownloadsSetting shouldTranscodeDownloads;
 
   @HiveField(45)
   int? downloadTranscodeBitrate;
 
-  @HiveField(46, defaultValue: _shouldRedownloadTranscodesDefault)
+  @HiveField(46, defaultValue: DefaultSettings.shouldRedownloadTranscodes)
   bool shouldRedownloadTranscodes;
 
-  @HiveField(47, defaultValue: _enableVibration)
+  @HiveField(47, defaultValue: DefaultSettings.enableVibration)
   bool enableVibration;
 
-  @HiveField(48, defaultValue: _playerScreenCoverMinimumPadding)
-  double playerScreenCoverMinimumPadding = _playerScreenCoverMinimumPadding;
+  @HiveField(48, defaultValue: DefaultSettings.playerScreenCoverMinimumPadding)
+  double playerScreenCoverMinimumPadding =
+      DefaultSettings.playerScreenCoverMinimumPadding;
 
-  @HiveField(49, defaultValue: _prioritizeCoverFactor)
+  @HiveField(49, defaultValue: DefaultSettings.prioritizeCoverFactor)
   double prioritizeCoverFactor;
 
-  @HiveField(50, defaultValue: _suppressPlayerPadding)
+  @HiveField(50, defaultValue: DefaultSettings.suppressPlayerPadding)
   bool suppressPlayerPadding;
 
-  @HiveField(51, defaultValue: _hidePlayerBottomActions)
+  @HiveField(51, defaultValue: DefaultSettings.hidePlayerBottomActions)
   bool hidePlayerBottomActions;
 
-  @HiveField(52, defaultValue: _reportQueueToServerDefault)
+  @HiveField(52, defaultValue: DefaultSettings.reportQueueToServer)
   bool reportQueueToServer;
 
   @HiveField(53,
-      defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+      defaultValue:
+          DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   @HiveField(53,
-      defaultValue: _periodicPlaybackSessionUpdateFrequencySecondsDefault)
+      defaultValue:
+          DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
-  @HiveField(54, defaultValue: _showArtistsTopSongs)
-  bool showArtistsTopSongs = _showArtistsTopSongs;
+  @HiveField(54, defaultValue: DefaultSettings.showArtistsTopSongs)
+  bool showArtistsTopSongs = DefaultSettings.showArtistsTopSongs;
 
-  @HiveField(55, defaultValue: _showArtistChipImage)
+  @HiveField(55, defaultValue: DefaultSettings.showArtistChipImage)
   bool showArtistChipImage;
 
-  @HiveField(56, defaultValue: _defaultPlaybackSpeed)
+  @HiveField(56, defaultValue: DefaultSettings.playbackSpeed)
   double playbackSpeed;
 
   /// The content playback speed type defining how and whether to display the playback speed controls in the song menu
-  @HiveField(57, defaultValue: _playbackSpeedVisibility)
+  @HiveField(57, defaultValue: DefaultSettings.playbackSpeedVisibility)
   PlaybackSpeedVisibility playbackSpeedVisibility;
 
   @HiveField(58, defaultValue: null)
   String? defaultDownloadLocation;
 
-  @HiveField(59, defaultValue: false)
+  @HiveField(59, defaultValue: DefaultSettings.useFixedSizeGridTiles)
   bool useFixedSizeGridTiles;
 
-  @HiveField(60, defaultValue: _fixedGridTileSizeDefault)
+  @HiveField(60, defaultValue: DefaultSettings.fixedGridTileSize)
   int fixedGridTileSize;
 
-  @HiveField(61, defaultValue: true)
+  @HiveField(61, defaultValue: DefaultSettings.allowSplitScreen)
   bool allowSplitScreen;
 
-  @HiveField(62, defaultValue: _defaultSplitScreenPlayerWidth)
+  @HiveField(62, defaultValue: DefaultSettings.splitScreenPlayerWidth)
   double splitScreenPlayerWidth;
 
-  @HiveField(63, defaultValue: _trackOfflineFavoritesDefault)
+  @HiveField(63, defaultValue: DefaultSettings.trackOfflineFavorites)
   bool trackOfflineFavorites;
 
-  @HiveField(64, defaultValue: _showProgressOnNowPlayingBarDefault)
+  @HiveField(64, defaultValue: DefaultSettings.showProgressOnNowPlayingBar)
   bool showProgressOnNowPlayingBar;
 
-  @HiveField(65, defaultValue: _startInstantMixForIndividualTracksDefault)
+  @HiveField(65,
+      defaultValue: DefaultSettings.startInstantMixForIndividualTracks)
   bool startInstantMixForIndividualTracks;
 
-  @HiveField(66, defaultValue: _showLyricsTimestampsDefault)
+  @HiveField(66, defaultValue: DefaultSettings.showLyricsTimestamps)
   bool showLyricsTimestamps;
 
-  @HiveField(67, defaultValue: _lyricsAlignmentDefault)
+  @HiveField(67, defaultValue: DefaultSettings.lyricsAlignment)
   LyricsAlignment lyricsAlignment;
 
-  @HiveField(68, defaultValue: _showStopButtonOnMediaNotificationDefault)
+  @HiveField(68,
+      defaultValue: DefaultSettings.showStopButtonOnMediaNotification)
   bool showStopButtonOnMediaNotification;
 
-  @HiveField(69, defaultValue: _showSeekControlsOnMediaNotificationDefault)
+  @HiveField(69,
+      defaultValue: DefaultSettings.showSeekControlsOnMediaNotification)
   bool showSeekControlsOnMediaNotification;
 
-  @HiveField(70, defaultValue: _lyricsFontSizeDefault)
+  @HiveField(70, defaultValue: DefaultSettings.lyricsFontSize)
   LyricsFontSize lyricsFontSize;
 
-  @HiveField(71, defaultValue: _showLyricsScreenAlbumPreludeDefault)
+  @HiveField(71, defaultValue: DefaultSettings.showLyricsScreenAlbumPrelude)
   bool showLyricsScreenAlbumPrelude;
 
-  @HiveField(72, defaultValue: _keepScreenOnOption)
+  @HiveField(72, defaultValue: DefaultSettings.keepScreenOnOption)
   KeepScreenOnOption keepScreenOnOption;
 
-  @HiveField(73, defaultValue: _keepScreenOnWhilePluggedIn)
+  @HiveField(73, defaultValue: DefaultSettings.keepScreenOnWhilePluggedIn)
   bool keepScreenOnWhilePluggedIn;
 
-  @HiveField(74, defaultValue: _hasDownloadedPlaylistInfoDefault)
+  @HiveField(74, defaultValue: DefaultSettings.hasDownloadedPlaylistInfo)
   bool hasDownloadedPlaylistInfo;
 
-  @HiveField(75, defaultValue: _defaultTranscodingSegmentContainer)
+  @HiveField(75, defaultValue: DefaultSettings.transcodingSegmentContainer)
   FinampSegmentContainer transcodingSegmentContainer;
 
-  @HiveField(76, defaultValue: _featureChipsConfigurationDefault)
+  @HiveField(76, defaultValue: DefaultSettings.featureChipsConfiguration)
   FinampFeatureChipsConfiguration featureChipsConfiguration;
 
-  @HiveField(77, defaultValue: _showCoversOnAlbumScreenDefault)
+  @HiveField(77, defaultValue: DefaultSettings.showCoversOnAlbumScreen)
   bool showCoversOnAlbumScreen;
+
+  @HiveField(78, defaultValue: DefaultSettings.bufferDisableSizeConstraints)
+  bool bufferDisableSizeConstraints;
+
+  @HiveField(79, defaultValue: DefaultSettings.bufferSizeMegabytes)
+  int bufferSizeMegabytes;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1406,6 +1457,7 @@ class OfflineListen {
     this.artist,
     this.album,
     this.trackMbid,
+    this.deviceInfo,
   });
 
   /// The stop timestamp of the listen, measured in seconds since the epoch.
@@ -1430,6 +1482,9 @@ class OfflineListen {
   // The MusicBrainz ID of the track, if available.
   @HiveField(6)
   String? trackMbid;
+
+  @HiveField(7)
+  DeviceInfo? deviceInfo;
 }
 
 @HiveType(typeId: 50)
@@ -2385,4 +2440,19 @@ class FinampFeatureChipsConfiguration {
       features: features ?? this.features,
     );
   }
+}
+
+
+@HiveType(typeId: 76)
+class DeviceInfo {
+  DeviceInfo({
+    required this.name,
+    required this.id,
+  });
+
+  @HiveField(0)
+  String name;
+
+  @HiveField(1)
+  String? id;
 }

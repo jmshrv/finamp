@@ -15,20 +15,12 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "l'URL deve iniziare con http:// o https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "logs": "Log",
   "@logs": {},
   "next": "Avanti",
   "@next": {},
   "password": "Password",
   "@password": {},
-  "urlTrailingSlash": "l'URL non deve contenere il carattere (/) alla fine",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Nome utente",
   "@username": {},
   "artists": "Artisti",
@@ -81,27 +73,11 @@
   "@random": {},
   "runtime": "Tempo di esecuzione",
   "@runtime": {},
-  "downloadErrors": "Errori durante il download",
-  "@downloadErrors": {},
   "dlComplete": "{count} finito",
   "@dlComplete": {
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },
@@ -113,14 +89,10 @@
       }
     }
   },
-  "downloadErrorsTitle": "Errori durante il Download",
-  "@downloadErrorsTitle": {},
   "error": "Errore",
   "@error": {},
   "failedToGetSongFromDownloadId": "Impossibile ottenere il brano dall'ID di download",
   "@failedToGetSongFromDownloadId": {},
-  "noErrors": "Nessun errore!",
-  "@noErrors": {},
   "playButtonLabel": "RIPRODUCI",
   "@playButtonLabel": {},
   "shuffleButtonLabel": "RIPRODUCI CASUALMENTE",
@@ -245,22 +217,14 @@
   "@sleepTimerTooltip": {},
   "playlistCreated": "Playlist creata.",
   "@playlistCreated": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
   "unknownArtist": "Artista Sconosciuto",
   "@unknownArtist": {},
-  "downloaded": "Scaricato",
-  "@downloaded": {},
   "instantMix": "Mix Istantaneo",
   "@instantMix": {},
   "queue": "Coda",
   "@queue": {},
   "replaceQueue": "Sostituisci Coda",
   "@replaceQueue": {},
-  "statusError": "ERRORE DI STATO",
-  "@statusError": {},
-  "transcode": "TRANSCODIFICA",
-  "@transcode": {},
   "queueReplaced": "Coda sostituita.",
   "@queueReplaced": {},
   "removeFavourite": "Rimuovi Preferito",
@@ -315,7 +279,7 @@
   "@bitrateSubtitle": {},
   "shuffleAllSongCountSubtitle": "Numero di brani da caricare quando si usa il tasto per la riproduzione casuale di tutti i brani.",
   "@shuffleAllSongCountSubtitle": {},
-  "errorScreenError": "Si è verificato un errore mentre tentavo di ottenere la lista degli errori! A questo punto probabilmente puoi solo aprire una issue su GitHub e cancellare i dati dell'app",
+  "errorScreenError": "Si è verificato un errore mentre tentavo di ottenere la lista degli errori! A questo punto probabilmente dovresti aprire una issue su GitHub e cancellare i dati dell'app",
   "@errorScreenError": {},
   "anErrorHasOccured": "Si è verificato un errore.",
   "@anErrorHasOccured": {},
@@ -432,24 +396,6 @@
   "@dark": {},
   "createButtonLabel": "CREA",
   "@createButtonLabel": {},
-  "direct": "DIRETTO",
-  "@direct": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} immagine} other{{count} immagini}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} oggetto} other{{count} oggetti}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "customLocationsBuggy": "Le posizioni personalizzate sono estremamente instabili a causa di problemi con i permessi. Sto pensando a un modo di aggiustarle, ma per adesso non ne consiglio l'utilizzo.",
   "@customLocationsBuggy": {},
   "removeFromMix": "Rimuovi dal Mix",
@@ -507,5 +453,11 @@
   "enableVibration": "Abilita vibrazione",
   "@enableVibration": {},
   "enableVibrationSubtitle": "Se vuoi abilitare la vibrazione.",
-  "@enableVibrationSubtitle": {}
+  "@enableVibrationSubtitle": {},
+  "syncDownloadedPlaylists": "Sincronizza playlists scaricate",
+  "@syncDownloadedPlaylists": {},
+  "deleteDownloadsConfirmButtonText": "Elimina",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  }
 }

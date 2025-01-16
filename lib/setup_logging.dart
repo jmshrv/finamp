@@ -35,30 +35,31 @@ Future<void> setupLogging() async {
   final deviceInfo = DeviceInfoPlugin();
 
   startupLogger.info(
-      "This is ${packageInfo.appName} version ${packageInfo.version}+${packageInfo.buildNumber} (Signature ${packageInfo.buildSignature}), installed via ${packageInfo.installerStore}.");
+      "This is ${packageInfo.appName} version ${packageInfo.version}+${packageInfo.buildNumber} (Signature '${packageInfo.buildSignature}'), installed via ${packageInfo.installerStore}.");
 
-  startupLogger.info("Device info:");
+  String deviceInfoString;
   if (Platform.isAndroid) {
     final androidInfo = await deviceInfo.androidInfo;
-    startupLogger.info(
-        "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})");
+    deviceInfoString =
+        "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})";
   } else if (Platform.isIOS) {
     final iosInfo = await deviceInfo.iosInfo;
-    startupLogger.info("iOS ${iosInfo.systemVersion} on ${iosInfo.model}");
+    deviceInfoString = "${iosInfo.systemVersion} on ${iosInfo.model}";
   } else if (Platform.isMacOS) {
     final macosInfo = await deviceInfo.macOsInfo;
-    startupLogger.info(
-        "macOS ${macosInfo.majorVersion}.${macosInfo.minorVersion}.${macosInfo.patchVersion} on ${macosInfo.model}");
+    deviceInfoString =
+        "macOS ${macosInfo.majorVersion}.${macosInfo.minorVersion}.${macosInfo.patchVersion} on ${macosInfo.model}";
   } else if (Platform.isLinux) {
     final linuxInfo = await deviceInfo.linuxInfo;
-    startupLogger.info("Linux ${linuxInfo.version} on ${linuxInfo.id}");
+    deviceInfoString = "${linuxInfo.version} on ${linuxInfo.id}";
   } else if (Platform.isWindows) {
     final windowsInfo = await deviceInfo.windowsInfo;
-    startupLogger.info(
-        "Windows ${windowsInfo.displayVersion} on ${windowsInfo.deviceId}");
+    deviceInfoString =
+        "Windows ${windowsInfo.displayVersion} on ${windowsInfo.deviceId}";
   } else {
     final webInfo = await deviceInfo.webBrowserInfo;
-    startupLogger
-        .info("Web browser ${webInfo.userAgent} on ${webInfo.platform}");
+    deviceInfoString =
+        "Web browser ${webInfo.userAgent} on ${webInfo.platform}";
   }
+  startupLogger.info("Running on $deviceInfoString.");
 }

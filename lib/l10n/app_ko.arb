@@ -1,0 +1,1032 @@
+{
+  "internalExternalIpExplanation": "귀하의 Jellyfin 서버에 원격으로 접속하려면, 외부 IP 주소를 사용해야 합니다.\n\n귀하의 서버가 HTTP 기본 포트(80/443)에 있거나 젤리핀 Jellyfin 기본 포트(8096)에 있을 경우, 포트를 지정할 필요는 없습니다.\n\n주소가 정확하다면 입력란 아래에 서버 정보가 뜨는 것을 볼 수 있을 것입니다.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "next": "다음",
+  "@next": {},
+  "selectMusicLibraries": "음악 라이브러리 선택",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "genres": "장르",
+  "@genres": {},
+  "startMix": "믹스 시작하기",
+  "@startMix": {},
+  "serverUrl": "서버 URL",
+  "@serverUrl": {},
+  "emptyServerUrl": "서버 URL은 필수값 입니다",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "username": "사용자 이름(아이디)",
+  "@username": {},
+  "password": "암호",
+  "@password": {},
+  "logs": "로그(사용기록)",
+  "@logs": {},
+  "couldNotFindLibraries": "라이브러리를 찾을 수 없습니다.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "unknownName": "알 수 없는 이름",
+  "@unknownName": {},
+  "songs": "곡들",
+  "@songs": {},
+  "albums": "앨범",
+  "@albums": {},
+  "artists": "아티스트",
+  "@artists": {},
+  "playlists": "플레이리스트",
+  "@playlists": {},
+  "startMixNoSongsAlbum": "믹스를 시작하기 전에 '앨범'을 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
+  "@startMixNoSongsAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "music": "음악",
+  "@music": {},
+  "clear": "삭제(비우기)",
+  "@clear": {},
+  "shuffleAll": "임의 재생(모두)",
+  "@shuffleAll": {},
+  "finamp": "핀앰프(Finamp)",
+  "@finamp": {},
+  "sortOrder": "정렬 순서",
+  "@sortOrder": {},
+  "sortBy": "정렬 기준",
+  "@sortBy": {},
+  "budget": "예산",
+  "@budget": {},
+  "communityRating": "커뮤니티 평점",
+  "@communityRating": {},
+  "criticRating": "비평가 평점",
+  "@criticRating": {},
+  "dateAdded": "추가된 날짜",
+  "@dateAdded": {},
+  "datePlayed": "재생한 날짜",
+  "@datePlayed": {},
+  "premiereDate": "초연(프리미어) 날짜",
+  "@premiereDate": {},
+  "productionYear": "제작년도",
+  "@productionYear": {},
+  "name": "이름",
+  "@name": {},
+  "random": "랜덤",
+  "@random": {},
+  "revenue": "수익",
+  "@revenue": {},
+  "runtime": "런타임(상영 시간)",
+  "@runtime": {},
+  "syncDownloadedPlaylists": "다운로드한 플레이리스트 동기화",
+  "@syncDownloadedPlaylists": {},
+  "downloadMissingImages": "누락된 이미지 다운로드",
+  "@downloadMissingImages": {},
+  "downloadCount": "{count,plural, =1{{count}건 다운로드} other{{count}건 다운로드}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count}건 완료",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count}건 실패",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count}건 대기열에 추가됨",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count}건 진행중",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "failedToGetSongFromDownloadId": "다운로드 ID에서 곡을 가져오지 못했습니다",
+  "@failedToGetSongFromDownloadId": {},
+  "deleteDownloadsPrompt": "이 기기에서 {itemType, select, album{앨범} playlist{플레이리스트} artist{아티스트} genre{장르} song{곡} library{라이브러리} other{아이템}} '{itemName}'를 삭제하시겠습니까?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "삭제",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "playButtonLabel": "재생",
+  "@playButtonLabel": {},
+  "shuffleButtonLabel": "임의 재생",
+  "@shuffleButtonLabel": {},
+  "songCount": "{count,plural,=1{{count} 곡} other{{count} 곡}}",
+  "@songCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "플레이리스트 이름 수정",
+  "@editPlaylistNameTooltip": {},
+  "required": "필수 항목",
+  "@required": {},
+  "updateButtonLabel": "업데이트",
+  "@updateButtonLabel": {},
+  "favourite": "즐겨찾기",
+  "@favourite": {},
+  "addDownloads": "다운로드 추가",
+  "@addDownloads": {},
+  "location": "위치",
+  "@location": {},
+  "shareLogs": "로그(사용기록) 공유",
+  "@shareLogs": {},
+  "logsCopied": "로그(사용기록) 복사함.",
+  "@logsCopied": {},
+  "message": "메시지",
+  "@message": {},
+  "stackTrace": "스택 추적",
+  "@stackTrace": {},
+  "applicationLegalese": "Mozilla Public License 2.0에 따라 라이선스가 부여됐습니다.\n소스 코드는 {sourceCodeLink}에서 확인할 수 있습니다.",
+  "@applicationLegalese": {},
+  "transcoding": "트랜스코딩",
+  "@transcoding": {},
+  "downloadLocations": "다운로드 위치",
+  "@downloadLocations": {},
+  "interactions": "상호작용",
+  "@interactions": {},
+  "layoutAndTheme": "레이아웃 & 테마",
+  "@layoutAndTheme": {},
+  "downloadedSongsWillNotBeDeleted": "다운로드한 곡들은 삭제되지 않습니다",
+  "@downloadedSongsWillNotBeDeleted": {},
+  "areYouSure": "확실한가요?",
+  "@areYouSure": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin은 트랜스코딩에 AAC를 사용합니다",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "트랜스코딩 활성화",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "서버 측에서 음악 스트리밍을 트랜스코딩 합니다.",
+  "@enableTranscodingSubtitle": {},
+  "bitrate": "비트레이트",
+  "@bitrate": {},
+  "customLocation": "사용자 지정 위치",
+  "@customLocation": {},
+  "unknownError": "알수 없는 오류",
+  "@unknownError": {},
+  "directoryMustBeEmpty": "디렉토리는 비어 있어야 합니다",
+  "@directoryMustBeEmpty": {},
+  "shuffleAllSongCount": "전곡 임의 재생시 곡 수",
+  "@shuffleAllSongCount": {},
+  "shuffleAllSongCountSubtitle": "'전곡 임의 재생' 버튼을 사용할 때 불러올 곡의 개수입니다.",
+  "@shuffleAllSongCountSubtitle": {},
+  "viewTypeSubtitle": "음악 화면 보기 유형",
+  "@viewTypeSubtitle": {},
+  "list": "목록",
+  "@list": {},
+  "grid": "그리드(격자)",
+  "@grid": {},
+  "portrait": "세로 보기",
+  "@portrait": {},
+  "landscape": "가로 보기",
+  "@landscape": {},
+  "gridCrossAxisCount": "{value} 그리드 열 갯수",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "showTextOnGridView": "그리드 보기에서 텍스트를 보여줌",
+  "@showTextOnGridView": {},
+  "hideSongArtistsIfSameAsAlbumArtists": "앨범 아티스트와 동일한 경우, 곡 아티스트를 숨김",
+  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "showTextOnGridViewSubtitle": "그리드 음악 화면에서 '텍스트(곡목, 아티스트 등)' 표시 여부를 설정합니다.",
+  "@showTextOnGridViewSubtitle": {},
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "앨범 화면에서 앨범 아티스트와 동일한 '곡 아티스트' 표시 여부를 설정합니다.",
+  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "제스처 비활성화",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "제스처 비활성화 여부를 설정합니다.",
+  "@disableGestureSubtitle": {},
+  "showFastScroller": "빠른 스크롤 표시",
+  "@showFastScroller": {},
+  "theme": "테마",
+  "@theme": {},
+  "system": "시스템",
+  "@system": {},
+  "light": "밝은 테마",
+  "@light": {},
+  "tabs": "탭",
+  "@tabs": {},
+  "yesButtonLabel": "네",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "아니오",
+  "@noButtonLabel": {},
+  "setSleepTimer": "취침 타이머 설정",
+  "@setSleepTimer": {},
+  "minutes": "분",
+  "@minutes": {},
+  "invalidNumber": "잘못된 숫자",
+  "@invalidNumber": {},
+  "addToPlaylistTooltip": "플레이리스트에 추가",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "플레이리스트에 추가",
+  "@addToPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "이 플레이리스트에서 삭제",
+  "@removeFromPlaylistTooltip": {},
+  "newPlaylist": "새 플레이리스트",
+  "@newPlaylist": {},
+  "createButtonLabel": "만들기",
+  "@createButtonLabel": {},
+  "noAlbum": "앨범 없음",
+  "@noAlbum": {},
+  "noItem": "곡 없음",
+  "@noItem": {},
+  "noArtist": "아티스트 없음",
+  "@noArtist": {},
+  "unknownArtist": "알 수 없는 아티스트",
+  "@unknownArtist": {},
+  "queue": "대기열",
+  "@queue": {},
+  "addToQueue": "대기열에 추가",
+  "@addToQueue": {
+    "description": "Popup menu item title for adding an item to the end of the play queue."
+  },
+  "instantMix": "인스턴트 믹스",
+  "@instantMix": {},
+  "goToAlbum": "앨범으로 이동",
+  "@goToAlbum": {},
+  "addFavourite": "즐겨찾기 추가",
+  "@addFavourite": {},
+  "insertedIntoQueue": "대기열 사이에 추가됨.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "queueReplaced": "대기열이 교체됨.",
+  "@queueReplaced": {},
+  "startingInstantMix": "인스턴트 믹스 시작.",
+  "@startingInstantMix": {},
+  "anErrorHasOccured": "오류가 발생했습니다.",
+  "@anErrorHasOccured": {},
+  "responseError": "{error} 상태 코드 {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "responseError401": "{error} 상태 코드 {statusCode}. 이것은 아마도 잘못된 로그인 정보를 사용했거나, 더 이상 로그인되어 있지 않음을 의미합니다.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "removeFromMix": "믹스에서 삭제",
+  "@removeFromMix": {},
+  "addToMix": "믹스에 추가",
+  "@addToMix": {},
+  "redownloadedItems": "{count,plural, =0{다시 다운로드할 필요가 없습니다.} =1{{count} 아이템 다시 다운로드함} other{{count} 아이템 다시 다운로드함}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "버퍼 시간",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "플레이어가 버퍼링해야 하는 시간(초) 입니다. 다시 시작해야 합니다.",
+  "@bufferDurationSubtitle": {},
+  "language": "언어",
+  "@language": {},
+  "showUncensoredLogMessage": "이 로그(사용기록)는 귀하의 로그인 정보를 포함합니다. 표시할까요?",
+  "@showUncensoredLogMessage": {},
+  "resetTabs": "탭 초기화",
+  "@resetTabs": {},
+  "noMusicLibrariesTitle": "음악 라이브러리 없음",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "noMusicLibrariesBody": "핀앰프 Finamp가 음악 라이브러리를 찾을 수 없습니다. 귀하의 젤리핀 Jellyfin 서버에 콘텐츠 유형이 \"음악\"으로 설정된 라이브러리가 하나 이상 있는지 확인하세요.",
+  "@noMusicLibrariesBody": {},
+  "startMixNoSongsArtist": "믹스를 시작하기 전에 '아티스트'를 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "playCount": "재생 횟수",
+  "@playCount": {},
+  "downloadedMissingImages": "{count,plural, =0{누락된 이미지 없음} =1{누락된 이미지 {count}건 다운로드} other{누락된 이미지 {count}건 다운로드}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favourites": "즐겨찾기",
+  "@favourites": {},
+  "album": "앨범",
+  "@album": {},
+  "downloads": "다운로드",
+  "@downloads": {},
+  "settings": "설정",
+  "@settings": {},
+  "offlineMode": "오프라인 모드",
+  "@offlineMode": {},
+  "albumArtist": "앨범 아티스트",
+  "@albumArtist": {},
+  "artist": "아티스트",
+  "@artist": {},
+  "refresh": "새로고침",
+  "@refresh": {},
+  "errorScreenError": "오류 목록을 가져오지 못했습니다! 이 시점에서는 GitHub에 문제를 등록하고 앱 데이터를 삭제해야 합니다",
+  "@errorScreenError": {},
+  "error": "오류",
+  "@error": {},
+  "discNumber": "디스크 {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadsDeleted": "다운로드 항목을 삭제했습니다.",
+  "@downloadsDeleted": {},
+  "editPlaylistNameTitle": "플레이리스트 이름 수정",
+  "@editPlaylistNameTitle": {},
+  "playlistNameUpdated": "플레이리스트 이름을 갱신했습니다.",
+  "@playlistNameUpdated": {},
+  "addButtonLabel": "추가",
+  "@addButtonLabel": {},
+  "audioService": "오디오 서비스",
+  "@audioService": {},
+  "notAvailableInOfflineMode": "오프라인 모드에서는 사용할 수 없습니다",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "로그아웃",
+  "@logOut": {},
+  "bitrateSubtitle": "비트레이트가 높으면 고품질의 음악을 들을 수 있습니다. 데이터 사용량도 증가합니다.",
+  "@bitrateSubtitle": {},
+  "appDirectory": "앱 디렉토리",
+  "@appDirectory": {},
+  "addDownloadLocation": "다운로드 위치 추가",
+  "@addDownloadLocation": {},
+  "selectDirectory": "디렉토리 선택",
+  "@selectDirectory": {},
+  "pathReturnSlashErrorMessage": "\"/(슬래시)\"로 끝나는 경로는 사용할 수 없습니다",
+  "@pathReturnSlashErrorMessage": {},
+  "gridCrossAxisCountSubtitle": "{value} 일때 한 행당 그리드 타일의 개수.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "customLocationsBuggy": "사용자 지정 위치는 권한 문제 때문에 버그가 매우 많습니다. 이 문제를 해결할 방법을 찾을 때 까지는 사용을 권장하지 않습니다.",
+  "@customLocationsBuggy": {},
+  "enterLowPriorityStateOnPause": "일시 중지시 낮은 우선순위 상태로 전환합니다",
+  "@enterLowPriorityStateOnPause": {},
+  "enterLowPriorityStateOnPauseSubtitle": "일시 중지시 알림창을 밀어서 사라지게 합니다. 안드로이드(OS)에서는 일시 중지시 서비스를 강제 종료할 수 있게 합니다.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "viewType": "보기 유형",
+  "@viewType": {},
+  "dark": "어두운 테마",
+  "@dark": {},
+  "sleepTimerTooltip": "취침 타이머",
+  "@sleepTimerTooltip": {},
+  "cancelSleepTimer": "취침 타이머를 취소할까요?",
+  "@cancelSleepTimer": {},
+  "removeFromPlaylistTitle": "이 플레이리스트에서 삭제",
+  "@removeFromPlaylistTitle": {},
+  "playlistCreated": "플레이리스트 생성됨.",
+  "@playlistCreated": {},
+  "replaceQueue": "대기열 교체",
+  "@replaceQueue": {},
+  "addedToQueue": "대기열 끝에 추가됨.",
+  "@addedToQueue": {
+    "description": "Snackbar message that shows when the user successfully adds items to the end of the play queue."
+  },
+  "removedFromPlaylist": "플레이리스트에서 삭제됨.",
+  "@removedFromPlaylist": {},
+  "playNext": "다음 곡 재생",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "removeFavourite": "즐겨찾기 삭제",
+  "@removeFavourite": {},
+  "confirm": "확인",
+  "@confirm": {},
+  "swipeInsertQueueNext": "스와이프한 곡 다음 재생",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "곡 목록에서 스와이프 했을 때, 곡을 대기열 끝에 추가하는 대신 바로 다음 곡으로 삽입할 수 있습니다.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "startupError": "앱 시작중에 문제가 발생했습니다. 오류 내용:{error}\n\n\"github.com/UnicornsOnLSD/finamp\"에 이 페이지의 캡처 화면을 첨부하여 '이슈'를 등록 해주세요. 이 문제가 지속되면 당신은 앱 데이터를 삭제하여 앱을 초기화 할 수 있습니다.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "about": "Finamp(핀앰프) 소개",
+  "@about": {},
+  "changeLanguage": "언어 변경",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "젤리핀 Jellyfin에 연결하기",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "aboutContributionPrompt": "대박 멋진 사람들이 여가 시간을 할애하여 만들었습니다.\n당신도 기여할 수 있습니다!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "maxConcurrentDownloadsSubtitle": "동시 다운로드 최대값을 증가시킬 경우, 백드라운드 다운로드 작업이 증가할 수 있습니다. 하지만 용량이 매우 큰 경우 다운로드가 실패할 수 있으며 어떤 경우에는 과도한 지연이 발생할 수 있습니다.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloads": "동시 다운로드 최대값",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "aboutThanks": "핀앰프 Finamp와 함께 해주셔서 고맙습니다!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "runRepairWarning": "다운로드 마이그레이션을 완료하기 위한 서버 연결이 안됩니다. 다시 온라인에 접속하면 즉시 다운로드 화면에서 '다운로드 복구'를 실행하십시오.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "finampTagline": "오픈소스 Jellyfin 젤리핀 음악 플레이어",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionLink": "Github의 핀앰프 Finamp에 기여하기:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "최신 릴리즈 노트 읽어보기:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "핀앰프 Finamp를 당신의 언어로 번역해주세요:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "환영해요, 핀앰프 Finamp 입니다",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowSlogan": "당신의 음악을 원하는 방식으로 들어보세요.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "시작합니다!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "viewLogs": "로그 보기",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "back": "뒤로가기",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "downloadSettings": "다운로드 설정",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "알 수 없는 라이브러리의 미디어 보여주기.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloadsLabel": "{count} 동시 다운로드",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadsWorkersSetting": "다운로드 작업자 개수",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "serverUrlInfoButtonTooltip": "서버 주소 도움말",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "connectingToServer": "서버 접속중…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "backToServerSelection": "‘서버 선택’으로 돌아가기",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "미등록된 사용자",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "계정 직접 입력하기",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "backToAccountSelection": "‘계정 선택’으로 돌아가기",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "‘퀵 커넥트’ 코드 사용하기",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectInstructions": "젤리핀 Jellyfin을 앱이나 웹사이트로 여세요. 사용자 아이콘을 클릭하세요. ‘퀵 커넥트’를 선택하세요.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "orDivider": "또는",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowSelectAUser": "사용자 선택",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameValidationMissingUsername": "사용자 이름을 입력하세요",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "암호를 입력하세요",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "activeDownloads": "진행중인 다운로드",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "진행중인 다운로드",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "진행중인 다운로드가 없음.",
+  "@noActiveDownloads": {},
+  "confirmDownloadStarted": "다운로드 시작함",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "downloadsQueued": "파일을 다운로드 합니다",
+  "@downloadsQueued": {},
+  "offlineSongCountArtist": "{count,plural,=1{{count} 곡} other{{count} 곡}} 다운로드 됨",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackSpeedControlSetting": "‘재생 속도 제어’ 표시 여부",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "apply": "적용",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "useCoverAsBackground": "흐릿한 앨범 커버를 배경화면으로 사용하기",
+  "@useCoverAsBackground": {},
+  "playerScreenMinimumCoverPaddingEditorTitle": "앨범 커버 여백 최소값",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopSongsSubtitle": "아티스트의 최다 청취곡(5곡 까지) 표시 여부를 설정.",
+  "@showArtistsTopSongsSubtitle": {},
+  "hours": "시간",
+  "@hours": {},
+  "trackCountTooltip": "{currentTrackIndex} / {totalTrackCount} 곡",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "sleepTimerRemainingTime": "취침 타이머 {time}분 남음",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTooltip": "더 많은 플레이리스트에 추가하기",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "더 많은 플레이리스트에 추가하기",
+  "@addToMorePlaylistsTitle": {},
+  "unknownAlbum": "알 수 없는 앨범",
+  "@unknownAlbum": {},
+  "playbackModeDirectPlaying": "직접 재생",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "confirmFavoriteRemoved": "즐겨찾기에서 삭제됨",
+  "@confirmFavoriteRemoved": {},
+  "skipToPreviousTrackButtonTooltip": "곡의 처음 또는 이전 곡으로 넘기기",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "skipToNextTrackButtonTooltip": "다음 곡으로 넘기기",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "shuffleNext": "다음에 임의 재생",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "playbackSpeedIncreaseLabel": "재생 속도 빠르게",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeNoneButtonLabel": "반복 안 함",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "queuesScreen": "‘지금 재생중’ 복원",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "복원",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "{date}에 저장됨",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "재생중: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "loopModeOneButtonLabel": "이 곡 반복",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "queueLoadingMessage": "대기열 복원중…",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "queueRetryMessage": "대기열 복원에 실패했습니다. 다시 시도할까요?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "reportQueueToServer": "현재 대기열을 서버로 보고할까요?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "앱 시작할 때, ‘마지막으로 재생한 대기열’ 복원을 시도합니다.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "재생 세션 갱신 빈도",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "현재 재생 상태를 서버로 보내는 주기를 초단위로 설정합니다. 설정값은 세션 타임아웃을 방지하기 위해 300초(5분) 미만이어야 합니다.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topSongs": "주요 곡들",
+  "@topSongs": {},
+  "albumCount": "{count,plural,=1{{count} 앨범} other{{count} 앨범}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackSpeedControlSettingSubtitle": "재생 화면에서 ‘재생 속도 제어’ 표시 여부를 정합니다",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "usernameHint": "사용자 이름을 입력하세요",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "loginFlowQuickConnectDisabled": "이 서버는 퀵 커넥트 접속이 비활성화 되어있습니다.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "login": "로그인",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "startMixNoSongsGenre": "믹스를 시작하기 전에 '장르'를 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "title": "제목",
+  "@title": {},
+  "customizationSettingsTitle": "사용자 정의",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "hidden": "숨기기",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "playbackSpeedControlSettingDescription": "자동:\n핀앰프 Finamp는 재생중인 곡이 팟캐스트나 오디오북인지 식별을 시도합니다. 곡이 {trackDuration} 분보다 길거나, 앨범이 {albumDuration} 시간보다 길거나, 곡에 장르가 {genreList}중 하나라도 지정된 경우,\n‘재생 속도 제어’가 재생 화면 메뉴에 나타납니다.\n\n보이기:\n‘재생 속도 제어’가 항상 재생 화면 메뉴에 나타납니다.\n\n숨기기:\n‘재생 속도 제어’가 항상 재생 화면 메뉴에 나타나지 않습니다.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "automatic": "자동",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "보이기",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "속도",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "초기화",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "loginFlowLocalNetworkServers": "로컬 네트워크의 서버:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "offlineSongCount": "{count,plural,=1{{count} 곡} other{{count} 곡}}, {downloads} 다운로드 됨",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 곡} other{{count} 곡}}, {remaining} 남음",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "serverUrlHint": "(예시) demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "seconds": "초",
+  "@seconds": {},
+  "loginFlowAuthenticationHeading": "계정 로그인하기",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "showArtistsTopSongs": "아티스트 보기에서 주요 곡들을 보여줍니다",
+  "@showArtistsTopSongs": {},
+  "useCoverAsBackgroundSubtitle": "앱 배경화면으로 흐릿한 앨범 커버를 사용할지 여부를 설정.",
+  "@useCoverAsBackgroundSubtitle": {},
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "재생 화면에서 앨범 커버 가장자리의 최소 여백 값을 설정 (화면 너비 기준 %단위).",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "removeFromPlaylistNamedTooltip": "'{playlistName}' 플레이리스트에서 삭제",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "timeFractionTooltip": "{currentTime} / {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "playlistActionsMenuButtonTooltip": "탭하여 플레이리스트에 추가합니다. 길게 탭하여 즐겨찾기에 추가/삭제 합니다.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "playerScreen": "재생 화면",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "removeFromPlaylistNamedTitle": "'{playlistName}' 플레이리스트에서 삭제",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "goToArtist": "아티스트로 가기",
+  "@goToArtist": {},
+  "playbackModeTranscoding": "트랜스코딩",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "playbackModeLocal": "다운로드 재생",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "confirmFavoriteAdded": "즐겨찾기에 추가됨",
+  "@confirmFavoriteAdded": {},
+  "togglePlaybackButtonTooltip": "재생 또는 일시정지",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "confirmAddedToPlaylist": "플레이리스트에 추가됨.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "previousTracks": "이전 곡들",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "clearNextUp": "넥스트 업 지우기",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} 곡} other{{songCount} 곡}}, {imageCount,plural,=1{{imageCount} 이미지} other{{imageCount} 이미지}}\n{syncCount,plural,=1{{syncCount} 동기화 노드} other{{syncCount} 동기화 노드}}{repairing, plural, =0{} other{\n현재 복구중}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "loopModeAllButtonLabel": "전체 반복",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "autoloadLastQueueOnStartup": "마지막 대기열 자동 복원",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "reportQueueToServerSubtitle": "활성화시 핀앰프 Finamp는 현재 대기열을 서버로 보냅니다. 현재 거의 안쓰는 기능이며 네트워크 트래픽이 증가합니다.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "젤리핀 Jellyfin서버가 최근 5분 동안 클라이언트로부터 어떠한 업데이트도 받지 못하면, 서버는 재생이 종료된 것으로 간주합니다. 이는 5분 이상의 곡의 경우 재생이 종료된 것으로 잘못 보고되어 재생 보고 데이터의 품질이 저하될 수 있음을 의미합니다.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "서버 검색중…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "계정을 선택하세요",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "goToGenre": "장르로 가기",
+  "@goToGenre": {},
+  "nextUp": "넥스트 업",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "shuffleToQueue": "대기열 끝에 임의 재생 추가",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "playingFrom": "다음에서 재생중",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "addToNextUp": "넥스트 업에 추가",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleToNextUp": "넥스트 업에 임의 재생 추가",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "confirmAddToNextUp": "넥스트 업에 추가됨 : {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}}",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmPlayNext": "다음 재생 : {type, select, track{곡} album{앨범} artist{아티스트} playlist{플레이리스트} genre{장르} other{아이템}}",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  }
+}

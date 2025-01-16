@@ -47,26 +47,6 @@
       }
     }
   },
-  "downloadedImagesCount": "{count,plural,=1{{count} 张图像} other{{count} 张图像}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} 个项目} other{{count} 个项目}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadErrorsTitle": "下载错误",
-  "@downloadErrorsTitle": {},
-  "noErrors": "没有错误！",
-  "@noErrors": {},
   "error": "错误",
   "@error": {},
   "playButtonLabel": "播放",
@@ -163,14 +143,8 @@
   "@setSleepTimer": {},
   "sleepTimerTooltip": "睡眠定时器",
   "@sleepTimerTooltip": {},
-  "streaming": "串流",
-  "@streaming": {},
   "unknownArtist": "未知艺术家",
   "@unknownArtist": {},
-  "transcode": "转码",
-  "@transcode": {},
-  "direct": "直接播放",
-  "@direct": {},
   "instantMix": "即时混音",
   "@instantMix": {},
   "replaceQueue": "替换队列",
@@ -301,8 +275,6 @@
   "@datePlayed": {},
   "dark": "深色",
   "@dark": {},
-  "downloaded": "下载",
-  "@downloaded": {},
   "discNumber": "唱片 {number}",
   "@discNumber": {
     "placeholders": {
@@ -311,8 +283,6 @@
       }
     }
   },
-  "downloadErrors": "下载错误",
-  "@downloadErrors": {},
   "directoryMustBeEmpty": "目录必须为空",
   "@directoryMustBeEmpty": {},
   "downloadedSongsWillNotBeDeleted": "下载的歌曲不会被删除",
@@ -401,18 +371,8 @@
   },
   "tabs": "选项卡",
   "@tabs": {},
-  "statusError": "状态错误",
-  "@statusError": {},
   "theme": "主题",
   "@theme": {},
-  "urlTrailingSlash": "URL 不得包含尾部斜杠",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
-  "urlStartWithHttps": "URL 必须以 http:// 或 https:// 开头",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
   "gridCrossAxisCount": "{value} 网格横轴数量",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -438,20 +398,6 @@
   },
   "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "是否在专辑屏幕上隐藏歌曲艺术家（如果他们与专辑艺术家没有区别）。",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "removeFromMix": "从混音中删除",
   "@removeFromMix": {},
   "addToMix": "添加到混音",
@@ -508,8 +454,6 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsAbortButtonText": "取消",
-  "@deleteDownloadsAbortButtonText": {},
   "deleteDownloadsPrompt": "您确定要从此设备中删除 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}'吗?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
@@ -527,5 +471,57 @@
   "syncDownloadedPlaylists": "同步下载的播放列表",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "显示快速滚动条",
-  "@showFastScroller": {}
+  "@showFastScroller": {},
+  "swipeInsertQueueNext": "播放滑动的下一首歌曲",
+  "@swipeInsertQueueNext": {},
+  "interactions": "交互",
+  "@interactions": {},
+  "swipeInsertQueueNextSubtitle": "在歌曲列表中滑动时，可以将歌曲作为队列中的下一个项目插入，而不是将其附加到末尾。",
+  "@swipeInsertQueueNextSubtitle": {},
+  "about": "关于 Finamp",
+  "@about": {},
+  "changeLanguage": "切换语言",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowLocalNetworkServers": "在您本地网络上的服务器：",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "aboutThanks": "感谢使用 Finamp！",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "back": "返回",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "connectingToServer": "正在连接到服务器...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "goToArtist": "前往艺术家",
+  "@goToArtist": {},
+  "remainingDuration": "剩余 {duration}",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "lyricsFontSizeTitle": "歌词字体大小",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "loginFlowServerSelectionHeading": "连接到 Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "previousTracks": "历史播放",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  }
 }

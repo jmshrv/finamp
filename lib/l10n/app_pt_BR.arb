@@ -5,14 +5,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "URL deve começar com http:// ou https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL não pode incluir a barra final",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "username": "Usuário",
   "@username": {},
   "password": "Senha",
@@ -76,43 +68,11 @@
       }
     }
   },
-  "downloadErrors": "Erros de transferência",
-  "@downloadErrors": {},
   "downloadCount": "{count,plural, =1{{count} baixada} other{{count} baixadas}}",
   "@downloadCount": {
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} itens}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} imagem} other{{count} imagens}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
       }
     }
   },
@@ -140,10 +100,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "Erros de Transferência",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Sem erros!",
-  "@noErrors": {},
   "songs": "Músicas",
   "@songs": {},
   "startupError": "Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, crie um problema/issue em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro persistir, limpe os dados para restaurar o aplicativo.",
@@ -332,10 +288,6 @@
   "@noAlbum": {},
   "noItem": "Nenhum Ítem",
   "@noItem": {},
-  "direct": "DIRETO",
-  "@direct": {},
-  "statusError": "ERRO DE CONDIÇÃO",
-  "@statusError": {},
   "addToQueue": "Adicionar à Fila",
   "@addToQueue": {},
   "cancelSleepTimer": "Cancelar o Cronômetro de Sono?",
@@ -344,8 +296,6 @@
   "@addToPlaylistTitle": {},
   "playlistCreated": "Lista de reprodução criada.",
   "@playlistCreated": {},
-  "downloaded": "TRANSFERIDO",
-  "@downloaded": {},
   "invalidNumber": "Número Inválido",
   "@invalidNumber": {},
   "addToPlaylistTooltip": "Adicionar à lista de reprodução",
@@ -358,8 +308,6 @@
   "@replaceQueue": {},
   "yesButtonLabel": "SIM",
   "@yesButtonLabel": {},
-  "streaming": "TRANSMITINDO",
-  "@streaming": {},
   "instantMix": "Mistura Instantânea",
   "@instantMix": {},
   "goToAlbum": "Ir para Álbum",
@@ -368,8 +316,6 @@
   "@newPlaylist": {},
   "noArtist": "Nenhum Artista",
   "@noArtist": {},
-  "transcode": "TRANSCODIFICAR",
-  "@transcode": {},
   "startMixNoSongsArtist": "Aperte e segure num artista para adicionar ou remover da mistura antes de iniciá-la",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
@@ -380,7 +326,7 @@
   },
   "budget": "Orçamento",
   "@budget": {},
-  "errorScreenError": "Um erro ocorreu acessando a lista de erros! A este ponto, você deveria provavelmente catalogar um defeito no Github e apagar os dados do aplicativo",
+  "errorScreenError": "Um erro ocorreu acessando a lista de erros! A este ponto, você provavelmente deve criar um defeito (issue) no GitHub e apagar os dados do aplicativo",
   "@errorScreenError": {},
   "error": "Erro",
   "@error": {},
@@ -503,5 +449,35 @@
   "noMusicLibrariesTitle": "Sem Bibliotecas de Música",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  }
+  },
+  "interactions": "Interações",
+  "@interactions": {},
+  "swipeInsertQueueNext": "Tocar Música Deslizada em Seguida",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Adicionar uma música como próximo item na lista quando for deslizada, ao invés de adicionar no final.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "deleteDownloadsPrompt": "Você tem certeza que quer deletar {itemType, select, album{o álbum} playlist{a lista de reprodução} artist{o artista} genre{o gênero} track{a música} other{}} '{itemName}' desse dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Deletar",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "syncDownloadedPlaylists": "Sincronizar listas de reprodução baixadas",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Mostrar rolagem rápida",
+  "@showFastScroller": {},
+  "about": "Sobre Finamp",
+  "@about": {}
 }

@@ -142,7 +142,7 @@ class TrackListTile extends StatelessWidget {
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
             onlyFavorites:
-                settings.onlyShowFavourite && settings.trackOfflineFavorites,
+                settings.onlyShowFavourites && settings.trackOfflineFavorites,
           );
 
           var items =
@@ -652,20 +652,25 @@ class TrackListItemTile extends StatelessWidget {
             if (showIndex && actualIndex != null)
               Padding(
                 padding: showCover
-                    ? const EdgeInsets.only(left: 2.0, right: 6.0)
+                    ? const EdgeInsets.only(left: 2.0, right: 8.0)
                     : const EdgeInsets.only(left: 6.0, right: 0.0),
-                child: SizedBox.fromSize(
-                    size: const Size(22.0, defaultTileHeight),
-                    child: Center(
-                        child: Text(
-                      actualIndex.toString(),
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ))),
+                child: Container(
+                  constraints: const BoxConstraints(
+                    minWidth: 22.0,
+                  ),
+                  child: Text(
+                    actualIndex.toString(),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.clip,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               ),
             if (showCover)
               AlbumImage(

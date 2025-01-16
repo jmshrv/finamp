@@ -6,6 +6,7 @@ import '../components/DownloadsScreen/downloaded_items_list.dart';
 import '../components/DownloadsScreen/downloads_overview.dart';
 import '../components/DownloadsScreen/repair_downloads_button.dart';
 import '../components/DownloadsScreen/sync_downloads_button.dart';
+import '../components/padded_custom_scrollview.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class DownloadsScreen extends StatelessWidget {
           DownloadErrorScreenButton()
         ],
       ),
-      body: CustomScrollView(
+      body: PaddedCustomScrollview(
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate([
