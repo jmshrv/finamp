@@ -895,5 +895,9 @@
   "backToAccountSelection": "Wróć do wyboru konta",
   "@backToAccountSelection": {
     "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "playbackSpeedControlSettingSubtitle": "Czy elementy sterujące prędkością odtwarzania mają być wyświetlane w menu ekranu odtwarzacza",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
   }
 }
