@@ -140,8 +140,8 @@ class PlayonHandler {
                 break;
               case "SetVolume":
                 _playOnHandlerLogger.info("Server requested a volume adjustment");
-                // Waiting for planned issue #500 to be resolved to adjust volume
-                // We now have to report to jellyfin server, probably through playback_history_service, that we updated volume
+                final desiredVolume=request['Data']['Arguments']['Volume'];
+                FinampSettingsHelper.setCurrentVolume(double.parse(desiredVolume)/100.0);
             }
             break;
           case "UserDataChanged":
