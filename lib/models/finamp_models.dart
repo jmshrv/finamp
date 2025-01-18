@@ -140,6 +140,7 @@ class DefaultSettings {
   static const showDownloadsWithUnknownLibrary = true;
   static const downloadWorkers = 5;
   static const maxConcurrentDownloads = 10;
+  static const double currentVolume = 1.0;
 }
 
 @HiveType(typeId: 28)
@@ -245,7 +246,9 @@ class FinampSettings {
       this.hasDownloadedPlaylistInfo =
           DefaultSettings.hasDownloadedPlaylistInfo,
       this.transcodingSegmentContainer =
-          DefaultSettings.transcodingSegmentContainer});
+        DefaultSettings.transcodingSegmentContainer,
+    this.currentVolume = DefaultSettings.currentVolume,
+  });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -508,6 +511,9 @@ class FinampSettings {
 
   @HiveField(79, defaultValue: DefaultSettings.bufferSizeMegabytes)
   int bufferSizeMegabytes;
+
+  @HiveField(80, defaultValue: DefaultSettings.currentVolume)
+  double currentVolume;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
