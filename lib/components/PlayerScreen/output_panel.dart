@@ -92,7 +92,7 @@ Future<void> showOutputMenu({
                 padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
                 child: Center(
                   child: Text(
-                      AppLocalizations.of(context)!.addRemoveFromPlaylist,
+                      AppLocalizations.of(context)!.outputMenuTitle,
                       style: TextStyle(
                           color: Theme.of(context).textTheme.bodyLarge!.color!,
                           fontSize: 18,
@@ -106,7 +106,8 @@ Future<void> showOutputMenu({
             header: Padding(
               padding: const EdgeInsets.only(
                   top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text("Available Outputs",
+              child: Text(
+                  AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
             sliver: MenuMask(
@@ -120,7 +121,8 @@ Future<void> showOutputMenu({
             header: Padding(
               padding: const EdgeInsets.only(
                   top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text("Available Outputs",
+              child: Text(
+                  AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
             sliver: MenuMask(
@@ -468,6 +470,7 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
                   "${(currentValue * 100).round()}%",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
+                        color: Colors.white,
                       ),
                 ),
               ),

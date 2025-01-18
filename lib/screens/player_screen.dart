@@ -437,7 +437,6 @@ class _PlayerScreenContent extends ConsumerWidget {
               Flexible(
                 fit: FlexFit.tight,
                 child: SimpleButton(
-                  inactive: !isLyricsAvailable,
                   text: "Output",
                   icon: TablerIcons.device_speaker,
                   onPressed: () async {
