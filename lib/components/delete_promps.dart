@@ -18,11 +18,14 @@ Future<void> askBeforeDeleteDownloadFromDevice(
           confirmButtonText: AppLocalizations.of(context)!
               .deleteFromTargetConfirmButton("device"),
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
-          onConfirmed: () {
-            GetIt.instance<DownloadsService>().deleteDownload(stub: stub);
+          onConfirmed: () async {
+            await GetIt.instance<DownloadsService>().deleteDownload(stub: stub);
           },
           onAborted: () {},
           centerText: true));
+  // if (context.mounted) {
+  //   Navigator.of(context).pop();
+  // }
 }
 
 Future<void> askBeforeDeleteDownloadFromServer(
@@ -60,4 +63,7 @@ Future<void> askBeforeDeleteDownloadFromServer(
           },
           onAborted: () {},
           centerText: true));
+  // if (context.mounted) {
+  //   Navigator.of(context).pop();
+  // }
 }

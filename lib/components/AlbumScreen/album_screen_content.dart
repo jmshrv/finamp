@@ -47,15 +47,15 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
     final downloadStatus = downloadsService.getStatus(downloadStub, null);
 
     if (!canDeleteGotUpdated) {
-      GetIt.instance<JellyfinApiHelper>()
-          .canDeleteFromServer(widget.parent.id)
-          .then((canDelete) {
-        setState(() {
-          canDeleteGotUpdated = true;
-          canDeleteFromServer = canDelete;
-        });
-      });
+      canDeleteGotUpdated = true;
+      var deletable = GetIt.instance<JellyfinApiHelper>()
+        .canDeleteFromServer(widget.parent);
+      canDeleteFromServer = deletable.initialValue;
+      deletable.realValue?.then((canDelete) => setState(() {
+        canDeleteFromServer = canDelete;
+      }));
     }
+
 
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but

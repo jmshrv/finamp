@@ -1364,6 +1364,7 @@ enum DownloadItemStatus {
   // downloaded over a parent
   incidental(false, false, true),
   incidentalOutdated(false, true, true),
+
   /// downloaded separately
   required(true, false, false),
   requiredOutdated(true, true, false);
