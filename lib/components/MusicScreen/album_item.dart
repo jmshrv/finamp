@@ -123,12 +123,14 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
 
     final screenSize = MediaQuery.of(context).size;
 
-    GetIt.instance<DownloadsService>()
-        .canDeleteFromServer(
-            itemId: widget.album.id, alreadyChecked: deletableGotUpdated)
-        .then((canDelete) => setState(() {
-              canDeleteFromServer = canDelete;
-            }));
+    if (!deletableGotUpdated) {
+      _jellyfinApiHelper
+          .canDeleteFromServer(widget.album.id)
+          .then((canDelete) => setState(() {
+                deletableGotUpdated = true;
+                canDeleteFromServer = canDelete;
+              }));
+    }
 
     void menuCallback({
       required Offset localPosition,

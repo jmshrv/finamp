@@ -1,4 +1,5 @@
 import 'package:finamp/services/downloads_service.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -36,20 +37,24 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   final downloadsService = GetIt.instance<DownloadsService>();
   bool canDeleteFromServer = false;
+  bool canDeleteGotUpdated = false;
 
   @override
   Widget build(BuildContext context) {
     final downloadStub = DownloadStub.fromItem(
         type: DownloadItemType.collection, item: widget.parent);
-    final downloadStatus = this.downloadsService.getStatus(downloadStub, null);
+    final downloadStatus = downloadsService.getStatus(downloadStub, null);
 
-    downloadsService
-        .canDeleteFromServer(itemId: widget.parent.id)
-        .then((canDelete) {
-      setState(() {
-        canDeleteFromServer = canDelete;
+    if (!canDeleteGotUpdated) {
+      GetIt.instance<JellyfinApiHelper>()
+          .canDeleteFromServer(widget.parent.id)
+          .then((canDelete) {
+        setState(() {
+          canDeleteGotUpdated = true;
+          canDeleteFromServer = canDelete;
+        });
       });
-    });
+    }
 
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but

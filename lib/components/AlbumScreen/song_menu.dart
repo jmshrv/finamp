@@ -211,12 +211,14 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         56;
 
     return Consumer(builder: (context, ref, child) {
-      GetIt.instance<DownloadsService>()
-          .canDeleteFromServer(
-              itemId: widget.item.id, alreadyChecked: deletableGotUpdated)
-          .then((canDelete) => setState(() {
-                canDeleteFromServer = canDelete;
-              }));
+      if (!deletableGotUpdated) {
+        GetIt.instance<JellyfinApiHelper>()
+            .canDeleteFromServer(widget.item.id)
+            .then((canDelete) => setState(() {
+                  deletableGotUpdated = true;
+                  canDeleteFromServer = canDelete;
+                }));
+      }
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
       return widget.childBuilder(
           stackHeight, menu(context, menuEntries, metadata.value));
