@@ -210,11 +210,11 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       if (!deletableGotUpdated) {
         deletableGotUpdated = true;
         var deletable = GetIt.instance<JellyfinApiHelper>()
-          .canDeleteFromServer(widget.item);
+            .canDeleteFromServer(widget.item);
         canDeleteFromServer = deletable.initialValue;
         deletable.realValue?.then((canDelete) => setState(() {
-          canDeleteFromServer = canDelete;
-        }));
+              canDeleteFromServer = canDelete;
+            }));
       }
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
       return widget.childBuilder(
@@ -262,18 +262,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         if (mounted) {
           Navigator.pop(context);
         }
-      }).catchError((err) {
-        GlobalSnackbar.error(err);
-      });
-    }
-
-    void deleteFromServer() {
-      _jellyfinApiHelper.deleteItem(widget.item.id).then((_) {
-        GlobalSnackbar.message(
-            (_) => AppLocalizations.of(context)!
-                .itemDeletedSnackbar("server", "track"),
-            isConfirmation: true);
-        if (downloadStatus.isRequired) deleteFromDevice();
       }).catchError((err) {
         GlobalSnackbar.error(err);
       });

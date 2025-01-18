@@ -127,8 +127,8 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       var deletable = _jellyfinApiHelper.canDeleteFromServer(widget.album);
       canDeleteFromServer = deletable.initialValue;
       deletable.realValue?.then((canDelete) => setState(() {
-        canDeleteFromServer = canDelete;
-      }));
+            canDeleteFromServer = canDelete;
+          }));
     }
 
     void menuCallback({
