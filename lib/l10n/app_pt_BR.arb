@@ -1331,5 +1331,318 @@
         "type": "int"
       }
     }
-  }
+  },
+  "downloadBitrate": "Bitrate das transferências",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "fixedGridSizeTitle": "Tamanho do bloco da grade",
+  "@fixedGridSizeTitle": {},
+  "suppressPlayerPaddingSubtitle": "Minimiza o espaçamento entre os controles do reprodutor quando a capa do álbum não entá em tamanho integral.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "quickActions": "Ações rápidas",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "trackOfflineFavorites": "Sincronizar todas as informações de favoritos",
+  "@trackOfflineFavorites": {},
+  "trackOfflineFavoritesSubtitle": "Permite exibir informações mais atualizadas dos favoritos em modo offline. Não transfere nenhum arquivo adicional.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "downloadAllPlaylistsSetting": "Transferir todas as listas de reprodução",
+  "@downloadAllPlaylistsSetting": {},
+  "fiveLatestAlbumsSetting": "Transferir os 5 álbuns mais recentes",
+  "@fiveLatestAlbumsSetting": {},
+  "fiveLatestAlbumsSettingSubtitle": "Transferências serão removidas à medida que envelhecem. Bloqueia a transferência de forma a previnir que o álbum seja removido.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "cacheLibraryImagesSettings": "Colocar em cache imagens da biblioteca atual",
+  "@cacheLibraryImagesSettings": {},
+  "downloadTranscodeEnableOption": "{option, select, always{Sempre} never{Nunca} ask{Perguntar} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} transcodificado}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ como {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "enableVibrationSubtitle": "Habilitar/desabilitar vibração.",
+  "@enableVibrationSubtitle": {},
+  "allowSplitScreenSubtitle": "O reprodutor será exibido ao lado de outras janelas em telas mais largas.",
+  "@allowSplitScreenSubtitle": {},
+  "suppressPlayerPadding": "Suprimir espaçamento dos controles do reprodutor",
+  "@suppressPlayerPadding": {},
+  "downloadsWorkersSetting": "Número de gerenciadores de transferência",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{count} gerenciadores de transferência",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOnStartupSwitch": "Sincronizar transferências automaticamente durante a inicialização",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "preferQuickSyncSwitch": "Peferir sincronização rápida",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "preferQuickSyncSwitchSubtitle": "Ao executar sincronizações, alguns itens tipicamente estáticos, como faixas e álbuns, não serão atualizados. A reparação de transferência sempre executará um sincronismo completo.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "incidentalDownloadTooltip": "{parentName} requer que esse ítem seja transferido.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "cacheLibraryImagesName": "Imagens em cache para '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "transcodingStreamingContainerTitle": "Selecionar contêiner de transcodificação",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "Selecione o contêiner de segmento a ser usado ao transmitir áudio transcodificado. As faixas que já estejam na fila não serão afetadas.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "downloadTranscodeEnableTitle": "Habilitar transferências transcodificadas",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadBitrateSubtitle": "Um valor mais alto de bitrate fornece maior qualidade de áudio, com um custo maior de armazenamento.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "transcodeHint": "Transcodificar?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "redownloadcomplete": "Retranscodificação de transferências enfileiradas.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "redownloadTitle": "Retranscodificar transferências automaticamente",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "defaultDownloadLocationButton": "Define como local padrão para transferências. Desabilita a seleção individual por transferência.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "fixedGridSizeSwitchTitle": "Usar blocos de tamanho fixo para a grade",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeSwitchSubtitle": "Os blocos da grade não serão afetados pelo tamanho da tela/janela.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "enableVibration": "Habilitar vibração",
+  "@enableVibration": {},
+  "hidePlayerBottomActions": "Ocultar botões",
+  "@hidePlayerBottomActions": {},
+  "hidePlayerBottomActionsSubtitle": "Ocultar os botões de fila e letras na tela do reprodutor. Deslizar para cima para acessar a fila, deslizar para a esquerda (abaixo da capa do álbum) para visualizar as letras, se disponíveis.",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "prioritizePlayerCover": "Priorizar capa do álbum",
+  "@prioritizePlayerCover": {},
+  "lockDownload": "Sempre manter no dispositivo",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "showArtistChipImage": "Mostrar imagens do artista juntamente com nome",
+  "@showArtistChipImage": {},
+  "showArtistChipImageSubtitle": "Afeta a visualização de imagens pequenas de artistas, como na tela do reprodutor.",
+  "@showArtistChipImageSubtitle": {},
+  "scrollToCurrentTrack": "Ir para a faixa atual",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "remainingDuration": "{duration} restante",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "removeFromPlaylistConfirm": "Remover",
+  "@removeFromPlaylistConfirm": {},
+  "removeFromPlaylistPrompt": "Remover '{itemName}' da lista de reprodução '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "addRemoveFromPlaylist": "Adicionar/remover das listas de reprodução",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "Adicionar faixa à lista de reprodução",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "allPlaylistsInfoSetting": "Transferir metadados da lista de reprodução",
+  "@allPlaylistsInfoSetting": {},
+  "allPlaylistsInfoSettingSubtitle": "Sincroniza metadados de todas as listas de reprodução visando melhora da experiência",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "downloadFavoritesSetting": "Transferir todos os favoritos",
+  "@downloadFavoritesSetting": {},
+  "cacheLibraryImagesSettingsSubtitle": "Todas as capas de álbum, artista, gênero e lista de reprodução da atual biblioteca serão transferidos.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "downloadsWorkersSettingSubtitle": "Número de gerenciadores de transferência para sincronizar metadados e apagar transferências. Aumentar a quantidade de gerenciadores pode aumentar a velocidade de sincronização e exclusão de transferências, especialemente quando a latência do servidor for elevada, porém pode introduzir lentidão.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "doTranscode": "Transferir como {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "downloadTranscodeCodecTitle": "Selecione o codec a ser utilizado para transferências",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "itemTypeSubtitle": "{itemType, select, album{Álbum} playlist{Lista de reprodução} artist{Artista} genre{Gênero} song{Faixa} library{Biblioteca} unknown{Item} other{{itemType}}} {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "finampCollectionNames": "{itemType, select, favorites{Favoritos} allPlaylists{Todas as listas de reprodução} fiveLatestAlbums{5 álbuns mais recentes} allPlaylistsMetadata{Metadados da lista de reprodução} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "dontTranscode": "Transferir original{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "prioritizePlayerCoverSubtitle": "Prioriza a exibição mais ampla da capa do ábum na tela do reprodudor. Controles não críticos serão ocultados de maneira mais agressiva em telas de menor tamanho.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "redownloadSubtitle": "Retransfere automaticamente faixas que estejam em qualidade divergente devido a alterações na coleção principal.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "showProgressOnNowPlayingBarTitle": "Exibir progresso da faixa no mini reprodutor",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "enableAutoScroll": "Habiliar rolagem automática",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "fixedGridTileSizeEnum": "{size, select, small{Pequeno} medium{Médio} large{Grande} veryLarge{Muito grande} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "allowSplitScreenTitle": "Permitir modo de divisão de tela",
+  "@allowSplitScreenTitle": {}
 }
