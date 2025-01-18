@@ -1359,9 +1359,12 @@ enum DownloadItemState {
 /// The status of a download, as used to determine download button state.
 /// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
+  /// not downloaded
   notNeeded(false, false, false),
+  // downloaded over a parent
   incidental(false, false, true),
   incidentalOutdated(false, true, true),
+  /// downloaded separately
   required(true, false, false),
   requiredOutdated(true, true, false);
 

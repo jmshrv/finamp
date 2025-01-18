@@ -1,3 +1,4 @@
+import 'package:finamp/components/delete_promps.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
@@ -125,11 +126,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                 title: Text(AppLocalizations.of(context)!
                                     .deleteFromTargetConfirmButton("")),
                                 enabled: true,
-                                onTap: () => downloadsService
-                                    .askBeforeDeleteDownloadFromDevice(
-                                        context,
-                                        downloadStub,
-                                        downloadStub.baseItemType.name))),
+                                onTap: () => askBeforeDeleteDownloadFromDevice(
+                                    context, downloadStub))),
                         PopupMenuItem(
                             value: null,
                             child: ListTile(
@@ -137,11 +135,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                 title: Text(AppLocalizations.of(context)!
                                     .deleteFromTargetConfirmButton("server")),
                                 enabled: true,
-                                onTap: () => downloadsService
-                                    .askBeforeDeleteDownloadFromServer(
-                                        context,
-                                        downloadStub,
-                                        downloadStub.baseItemType.name)))
+                                onTap: () => askBeforeDeleteDownloadFromServer(
+                                    context, downloadStub)))
                       ];
                     },
                   )
@@ -155,10 +150,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                         // If they did, AlbumScreen would show an error since the item no longer exists.
                         // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
                         onPressed: () {
-                          downloadsService.askBeforeDeleteDownloadFromDevice(
-                              context,
-                              downloadStub,
-                              downloadStub.baseItemType.name);
+                          askBeforeDeleteDownloadFromDevice(
+                              context, downloadStub);
 
                           // .whenComplete(() => checkIfDownloaded());
                         },
@@ -169,11 +162,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                             tooltip: AppLocalizations.of(context)!
                                 .deleteFromTargetConfirmButton("server"),
                             onPressed: () {
-                              downloadsService
-                                  .askBeforeDeleteDownloadFromServer(
-                                      context,
-                                      downloadStub,
-                                      downloadStub.baseItemType.name);
+                              askBeforeDeleteDownloadFromServer(
+                                  context, downloadStub);
                             },
                           )
                         : Visibility(visible: false, child: Text(""))

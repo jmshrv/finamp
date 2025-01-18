@@ -1,3 +1,4 @@
+import 'package:finamp/components/delete_promps.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
@@ -86,8 +87,7 @@ class DownloadButton extends ConsumerWidget {
       // If they did, AlbumScreen would show an error since the item no longer exists.
       // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
       onPressed: () {
-        downloadsService.askBeforeDeleteDownloadFromDevice(
-            context, item, item.baseItemType.name);
+        askBeforeDeleteDownloadFromDevice(context, item);
         // .whenComplete(() => checkIfDownloaded());
       },
     );

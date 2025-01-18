@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
-import 'package:finamp/components/confirmation_prompt_dialog.dart';
+import 'package:finamp/components/delete_promps.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -11,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-import 'package:logging/logging.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
@@ -648,13 +647,11 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.deleteFromDevice:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await downloadsService.askBeforeDeleteDownloadFromDevice(context,
-              item, widget.album.type != "Playlist" ? "album" : "playlist");
+          await askBeforeDeleteDownloadFromDevice(context, item);
         case _AlbumListTileMenuItems.deleteFromServer:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await downloadsService.askBeforeDeleteDownloadFromServer(context,
-              item, widget.album.type != "Playlist" ? "album" : "playlist");
+          await askBeforeDeleteDownloadFromServer(context, item);
       }
     }
 

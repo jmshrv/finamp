@@ -1,12 +1,11 @@
+import 'package:finamp/components/delete_promps.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/downloads_service.dart';
 import '../album_image.dart';
-import '../confirmation_prompt_dialog.dart';
 import 'item_file_size.dart';
 
 class DownloadedItemsList extends StatefulWidget {
@@ -51,8 +50,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                   IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () =>
-                          downloadsService.askBeforeDeleteDownloadFromDevice(
-                              context, album, album.baseItemType.name)),
+                          askBeforeDeleteDownloadFromDevice(context, album)),
                 ],
               ),
               subtitle: ItemFileSize(
