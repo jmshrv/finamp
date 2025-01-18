@@ -6,6 +6,7 @@ import 'package:finamp/components/LoginScreen/login_server_selection_page.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/view_selector.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
@@ -50,6 +51,7 @@ class _LoginFlowState extends State<LoginFlow> {
         key: loginNavigatorKey,
         initialRoute: LoginSplashPage.routeName,
         onGenerateRoute: (RouteSettings settings) {
+          final queueService = GetIt.instance<QueueService>();
           Route route;
 
           Route createRoute(Widget page) => PageRouteBuilder(
