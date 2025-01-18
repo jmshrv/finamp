@@ -262,12 +262,13 @@ class PlayonHandler {
                     request['Data']['StartIndex'] = 0;
                   }
                   var items = await jellyfinApiHelper.getItems(
-                    sortBy: "IndexNumber",
+                    // sortBy: "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                     includeItemTypes: "Audio",
                     itemIds:
                         List<String>.from(request['Data']['ItemIds'] as List),
                   );
                   if (items!.isNotEmpty) {
+                    //TODO check if all tracks in the request are in the upcoming queue (peekQueue). If they are, we should try to only reorder the upcoming queue instead of treating it as a new queue, and then skip to the correct index.
                     unawaited(queueService.startPlayback(
                       items: items,
                       source: QueueItemSource(
@@ -277,7 +278,8 @@ class PlayonHandler {
                         type: QueueItemSourceType.song,
                         id: items[0].id,
                       ),
-                      startingIndex: request['Data']['StartIndex'],
+                      startingIndex: request['Data'][
+                          'StartIndex'], // seems like Jellyfin isn't always sending the correct index
                     ));
                   } else {
                     _playOnHandlerLogger
