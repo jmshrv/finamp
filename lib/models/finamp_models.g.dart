@@ -102,7 +102,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : fields[48] as double,
       showArtistsTopSongs: fields[54] == null ? true : fields[54] as bool,
+      bufferDisableSizeConstraints:
+          fields[78] == null ? false : fields[78] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
+      bufferSizeMegabytes: fields[79] == null ? 50 : fields[79] as int,
       tabSortBy: fields[20] == null
           ? {}
           : (fields[20] as Map).cast<TabContentType, SortBy>(),
@@ -200,7 +203,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(74)
+      ..writeByte(76)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -348,7 +351,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(76)
       ..write(obj.featureChipsConfiguration)
       ..writeByte(77)
-      ..write(obj.showCoversOnAlbumScreen);
+      ..write(obj.showCoversOnAlbumScreen)
+      ..writeByte(78)
+      ..write(obj.bufferDisableSizeConstraints)
+      ..writeByte(79)
+      ..write(obj.bufferSizeMegabytes);
   }
 
   @override

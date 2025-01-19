@@ -119,6 +119,14 @@ class RenderCachePaint extends RenderProxyBox {
   static final Map<int, (List<RenderCachePaint>, ui.Image?)> _cache = {};
 
   @override
+  void performLayout() {
+    child?.layout(BoxConstraints.tightFor(
+        width: _screenSize.width, height: _screenSize.height));
+    size = constraints.biggest;
+    return;
+  }
+
+  @override
   bool get isRepaintBoundary => true;
 
   @override

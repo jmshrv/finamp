@@ -143,15 +143,26 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _player = AudioPlayer(
       audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
-          minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
-          maxBufferDuration: FinampSettingsHelper
-                  .finampSettings.bufferDuration *
-              1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
-          prioritizeTimeOverSizeThresholds: true,
+          targetBufferBytes:
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
+                  ? null
+                  : 1024 *
+                      1024 *
+                      FinampSettingsHelper.finampSettings.bufferSizeMegabytes,
+          // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
+          minBufferDuration: Duration(seconds: 60), // when to fetch more data
+          maxBufferDuration: FinampSettingsHelper.finampSettings
+              .bufferDuration, // allows the player to fetch a bit more data in exchange for reduced request frequency
+          prioritizeTimeOverSizeThresholds: FinampSettingsHelper.finampSettings
+              .bufferDisableSizeConstraints, // targetBufferBytes sets the absolute maximum, but if this false and maxBufferDuration is reached, buffering will end
         ),
         darwinLoadControl: DarwinLoadControl(
+          // preferredForwardBufferDuration:
+          //     FinampSettingsHelper.finampSettings.bufferDuration,
           preferredForwardBufferDuration:
-              FinampSettingsHelper.finampSettings.bufferDuration,
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
+                  ? FinampSettingsHelper.finampSettings.bufferDuration
+                  : null, // let system decide
         ),
       ),
       audioPipeline: _audioPipeline,
