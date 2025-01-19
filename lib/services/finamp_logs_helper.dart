@@ -37,7 +37,7 @@ class FinampLogsHelper {
     }
 
     // We don't want to keep logs forever due to memory constraints.
-    if (logs.length > 1000) {
+    if (logs.length > (kDebugMode ? 10000 : 1000)) {
       logs.removeAt(0);
     }
 
