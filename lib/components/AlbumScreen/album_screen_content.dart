@@ -125,8 +125,11 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                 title: Text(AppLocalizations.of(context)!
                                     .deleteFromTargetConfirmButton("")),
                                 enabled: true,
-                                onTap: () => askBeforeDeleteDownloadFromDevice(
-                                    context, downloadStub))),
+                                onTap: () async {
+                                  await askBeforeDeleteDownloadFromDevice(
+                                      context, downloadStub, pop: true);
+                                  Navigator.of(context).pop();
+                                })),
                         PopupMenuItem(
                             value: null,
                             child: ListTile(
@@ -134,8 +137,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                 title: Text(AppLocalizations.of(context)!
                                     .deleteFromTargetConfirmButton("server")),
                                 enabled: true,
-                                onTap: () => askBeforeDeleteDownloadFromServer(
-                                    context, downloadStub)))
+                                onTap: () async {
+                                  await askBeforeDeleteDownloadFromServer(
+                                      context, downloadStub, pop: true);
+                                }))
                       ];
                     },
                   )
