@@ -28,6 +28,13 @@ class FinampLogsHelper {
 
   void addLog(LogRecord log) {
     logs.add(log);
+    
+    if (log.stackTrace == null) {
+        // Truncate long messages from chopper, but leave long stack traces
+        message = message.substring(0, min(1024 * 5, message.length));
+      }
+      _logFileWriter!.writeln(message);
+    }
 
     // We don't want to keep logs forever due to memory constraints.
     if (logs.length > 1000) {
