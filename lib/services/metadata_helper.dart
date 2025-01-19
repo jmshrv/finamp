@@ -148,8 +148,9 @@ class MetaData {
   }
 }
 
-void setupLocator() {
+Future setupLocator() async {
   getIt.registerLazySingleton(() => DeviceInfo());
   getIt.registerLazySingleton(() => AppInfo());
   getIt.registerLazySingleton(() => ServerInfo());
+  getIt.registerLazySingleton(() => MetaData());
 }

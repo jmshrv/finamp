@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:archive/archive_io.dart';
+import 'package:get_it/get_it.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:finamp/services/censored_log.dart';
 import 'package:finamp/services/metadata_helper.dart';
@@ -13,9 +14,9 @@ class FinampLogsHelper {
   final List<LogRecord> logs = [];
   late final Box logBox;
 
-  FinampLogsHelper() {
-    _initializeLogBox();
-  }
+  // FinampLogsHelper() {
+  //   _initializeLogBox();
+  // }
 
   Future<void> _initializeLogBox() async {
     logBox = await Hive.openBox('logs');
@@ -53,34 +54,58 @@ class FinampLogsHelper {
 
   /// Write logs to a file and share the file
   Future<void> shareLogs() async {
-    final tempDir = await getTemporaryDirectory();
-    final zipFile = File(path_helper.join(tempDir.path, "finamp-logs.zip"));
+    final downloadsDir = await getDownloadsDirectory();
+
+    if (downloadsDir == null) {
+      return;
+    }
+
+    final zipFile =
+        File(path_helper.join(downloadsDir.path, "finamp-logs.zip"));
+
+    final logsFile =
+        File(path_helper.join(downloadsDir.path, "finamp-logs.txt"));
+    final metadataFile =
+        File(path_helper.join(downloadsDir.path, "metadata.json"));
 
     // Create a zip encoder
     final encoder = ZipFileEncoder();
     encoder.create(zipFile.path);
 
-    // Add log file to the zip
-    final logFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
-    await logFile.writeAsString(getSanitisedLogs());
-    encoder.addFile(logFile);
+    // Initialize metadata
+    final metadata = GetIt.instance<MetaData>();
+    await metadata.init(); // Init metadata
 
-    // Add metadata.json to the zip
-    final metadata = getIt<MetaData>();
-    await metadata.init();
-    final metadataFile = File(path_helper.join(tempDir.path, "metadata.json"));
-    await metadataFile.writeAsString(metadata.toJson().toString());
-    encoder.addFile(metadataFile);
+    // write finamp logs to a file and add it to the zip
+    await writeAndSaveToZip(
+        fileContent: getSanitisedLogs(), file: logsFile, encoder: encoder);
+
+    // Write metadata to a file and add it to the zip
+    await writeAndSaveToZip(
+        fileContent: metadata.toJson().toString(),
+        file: metadataFile,
+        encoder: encoder);
 
     // Close the zip encoder
-    encoder.close();
+    await encoder.close();
 
-    // Share the zip file
-    final xFile = XFile(zipFile.path, mimeType: "application/zip");
-    await Share.shareXFiles([xFile]);
+    if (Platform.isAndroid || Platform.isIOS) {
+      // Share the zip file
+      final xFile = XFile(zipFile.path, mimeType: "application/zip");
+      await Share.shareXFiles([xFile]);
+    }
 
     // Clean up temporary files
+    await logsFile.delete();
     await metadataFile.delete();
-    await zipFile.delete();
+    //await zipFile.delete();
+  }
+
+  Future<void> writeAndSaveToZip(
+      {required String fileContent,
+      required File file,
+      required ZipFileEncoder encoder}) async {
+    await file.writeAsString(fileContent);
+    await encoder.addFile(file);
   }
 }
