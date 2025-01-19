@@ -1,4 +1,4 @@
-import 'package:finamp/components/delete_promps.dart';
+import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';

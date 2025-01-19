@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
-import 'package:finamp/components/delete_promps.dart';
+import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';

@@ -1,4 +1,4 @@
-import 'package:finamp/components/delete_promps.dart';
+import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
