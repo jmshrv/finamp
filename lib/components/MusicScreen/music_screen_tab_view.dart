@@ -389,6 +389,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   album: item,
                                   isPlaylist: widget.tabContentType ==
                                       TabContentType.playlists,
+                                  refresh: _refresh,
                                 ),
                         ),
                       );
@@ -421,6 +422,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                               widget.tabContentType == TabContentType.playlists,
                           isGrid: true,
                           gridAddSettingsListener: false,
+                          refresh: _refresh
                         ),
                       );
                     },

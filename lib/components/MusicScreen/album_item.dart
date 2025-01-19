@@ -53,6 +53,7 @@ class AlbumItem extends ConsumerStatefulWidget {
     this.onTap,
     this.isGrid = false,
     this.gridAddSettingsListener = false,
+    this.refresh,
   });
 
   /// The album (or item, I just used to call items albums before Finamp
@@ -78,6 +79,9 @@ class AlbumItem extends ConsumerStatefulWidget {
   /// or not to show the text. You'll want to set this to false if the
   /// [AlbumItem] would be rebuilt by FinampSettings anyway.
   final bool gridAddSettingsListener;
+
+  // gets called when an item got delete in order to rerender the parent
+  final void Function()? refresh;
 
   @override
   ConsumerState<AlbumItem> createState() => _AlbumItemState();
@@ -648,10 +652,12 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
           await askBeforeDeleteDownloadFromDevice(context, item);
+          widget.refresh != null ? widget.refresh!() : null;
         case _AlbumListTileMenuItems.deleteFromServer:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
           await askBeforeDeleteDownloadFromServer(context, item);
+          widget.refresh != null ? widget.refresh!() : null;
       }
     }
 
