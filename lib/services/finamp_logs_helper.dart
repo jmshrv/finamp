@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:hive/hive.dart';
+import 'package:flutter/foundation.dart';
 
 class FinampLogsHelper {
   final List<LogRecord> logs = [];
