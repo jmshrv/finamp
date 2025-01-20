@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:archive/archive_io.dart';
 import 'package:get_it/get_it.dart';
 import 'package:clipboard/clipboard.dart';
@@ -29,21 +30,20 @@ class FinampLogsHelper {
 
   void addLog(LogRecord log) {
     logs.add(log);
-    
-    if (log.stackTrace == null) {
-        // Truncate long messages from chopper, but leave long stack traces
-        message = message.substring(0, min(1024 * 5, message.length));
-      }
-      _logFileWriter!.writeln(message);
-    }
 
     // We don't want to keep logs forever due to memory constraints.
     if (logs.length > (kDebugMode ? 10000 : 1000)) {
       logs.removeAt(0);
     }
+    
+    var message = log.censoredMessage;
+    if (log.stackTrace == null) {
+      // Truncate long messages from chopper, but leave long stack traces
+      message = message.substring(0, min(1024 * 5, message.length));
+    }
 
     // Write log to Hive box
-    logBox.add(log.censoredMessage);
+    logBox.add(message);
   }
 
   /// Sanitises all logs and returns a massive string
