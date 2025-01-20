@@ -1359,7 +1359,7 @@
   },
   "addToMix": "मिक्स में जोड़ें",
   "@addToMix": {},
-  "bufferDurationSubtitle": "प्लेयर को कितना बफ़र करना चाहिए, सेकंड में। रिस्टार्ट की आवश्यकता पड़ेगी।",
+  "bufferDurationSubtitle": "बफ़र करने की अधिकतम अवधि, सेकंड में। रिस्टार्ट की आवश्यकता पड़ेगी।",
   "@bufferDurationSubtitle": {},
   "togglePlaybackButtonTooltip": "टॉगल प्लेबैक",
   "@togglePlaybackButtonTooltip": {
@@ -1867,5 +1867,13 @@
   "genericCancel": "रद्द करें",
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
-  }
+  },
+  "bufferDisableSizeConstraintsTitle": "बफ़र साइज को सीमित न करें",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeTitle": "बफ़र साइज",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "बफ़र करने की अधिकतम साइज MB में। रिस्टार्ट करने की आवश्यकता पड़ेगी",
+  "@bufferSizeSubtitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "बफ़र साइज बाधाओं ('Buffer Size') को अक्षम करता है। बफ़र हमेशा कॉन्फ़िगर की गई अवधि ('Buffer Duration') तक लोड किया जाएगा, यहां तक कि बहुत बड़ी फ़ाइलों के लिए भी। क्रैश का कारण बन सकता है। रिस्टार्ट करने की आवश्यकता पड़ेगी।",
+  "@bufferDisableSizeConstraintsSubtitle": {}
 }
