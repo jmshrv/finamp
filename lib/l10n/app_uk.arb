@@ -106,7 +106,7 @@
   "@removeFromMix": {},
   "addToMix": "Додати до міксу",
   "@addToMix": {},
-  "bufferDurationSubtitle": "Скільки плеєр має буферизувати, у секундах. Вимагає перезавантаження.",
+  "bufferDurationSubtitle": "Максимальна тривалість, яка може бути буферизована, у секундах. Вимагає перезавантаження.",
   "@bufferDurationSubtitle": {},
   "language": "Мова",
   "@language": {},
@@ -1850,5 +1850,17 @@
   "showFeatureChipsToggleTitle": "Показувати розширену інформацію про композицію",
   "@showFeatureChipsToggleTitle": {
     "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
-  }
+  },
+  "showProgressOnNowPlayingBarSubtitle": "Дозволяє керувати тим, чи функціонує панель міні-відтворювача у програмі / панель відтворення у кнопці на музичному екрані як індикатор прогресу.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "bufferDisableSizeConstraintsSubtitle": "Вимикає обмеження розміру буфера ('Розмір буферу'). Буфер завжди завантажуватиметься протягом заданої тривалості ('Тривалість буферу'), навіть для дуже великих файлів. Може спричиняти збої. Потребує перезапуску.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bufferDisableSizeConstraintsTitle": "Не обмежувати розмір буферу",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeTitle": "Розмір буферу",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "Максимальний розмір буферу в МБ. Вимагає перезапуску",
+  "@bufferSizeSubtitle": {}
 }
