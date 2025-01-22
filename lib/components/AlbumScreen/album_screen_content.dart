@@ -24,7 +24,7 @@ class AlbumScreenContent extends StatefulWidget {
     super.key,
     required this.parent,
     required this.displayChildren,
-    required this.queueChildren,
+    required this.queueChildren
   });
 
   final BaseItemDto parent;
@@ -127,7 +127,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                 enabled: true,
                                 onTap: () async {
                                   await askBeforeDeleteDownloadFromDevice(
-                                      context, downloadStub, pop: true);
+                                      context, downloadStub);
                                   Navigator.of(context).pop();
                                 })),
                         PopupMenuItem(
@@ -139,7 +139,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                 enabled: true,
                                 onTap: () async {
                                   await askBeforeDeleteDownloadFromServer(
-                                      context, downloadStub, pop: true);
+                                      context, downloadStub, popIt: true);
                                 }))
                       ];
                     },

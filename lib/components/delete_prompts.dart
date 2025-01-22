@@ -7,16 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void _pop(BuildContext context, bool pop) {
-  if (pop) {
-    if (context.mounted) {
-      Navigator.of(context).pop();
-    }
-  }
-}
-
 Future<void> askBeforeDeleteDownloadFromDevice(
-    BuildContext context, DownloadStub stub, {bool pop = false}) async {
+    BuildContext context, DownloadStub stub) async {
   String type = stub.baseItemType.name;
   await showDialog(
       context: context,
@@ -26,18 +18,20 @@ Future<void> askBeforeDeleteDownloadFromDevice(
           confirmButtonText: AppLocalizations.of(context)!
               .deleteFromTargetConfirmButton("device"),
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
-          onConfirmed: () async {
-            await GetIt.instance<DownloadsService>().deleteDownload(stub: stub);
-            _pop(context, pop);
+          onConfirmed: () {
+            GetIt.instance<DownloadsService>().deleteDownload(stub: stub)
+              .then((_) => GlobalSnackbar
+                .message((cntxt) => AppLocalizations.of(context)!
+                      .itemDeletedSnackbar("server", type)
+                ))
+              .catchError((err)=>GlobalSnackbar.error(err));
           },
-          onAborted: () {
-            _pop(context, pop);
-          },
+          onAborted: () {},
           centerText: true));
 }
 
 Future<void> askBeforeDeleteDownloadFromServer(
-    BuildContext context, DownloadStub stub, {bool pop = false}) async {
+    BuildContext context, DownloadStub stub, {bool popIt = false}) async {
   DownloadItemStatus status =
       GetIt.instance<DownloadsService>().getStatus(stub, null);
   String type = stub.baseItemType.name;
@@ -57,22 +51,36 @@ Future<void> askBeforeDeleteDownloadFromServer(
               .deleteFromTargetConfirmButton("server"),
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
           onConfirmed: () {
-            if (status.isRequired) {
-              GetIt.instance<DownloadsService>().deleteDownload(stub: stub);
-            }
-            GetIt.instance<JellyfinApiHelper>().deleteItem(stub.id).then((_) {
-              GlobalSnackbar.message(
-                  (_) => AppLocalizations.of(context)!
-                      .itemDeletedSnackbar("server", type),
+            GetIt.instance<JellyfinApiHelper>()
+              .deleteItem(stub.id)
+              .then((_) {
+                GlobalSnackbar.message(
+                  (cntxt) {
+                    if (popIt) {
+                      Navigator.of(cntxt).pop();
+                    }
+                    return AppLocalizations.of(context)!
+                      .itemDeletedSnackbar("server", type);
+                    },
                   isConfirmation: true);
-              _pop(context, pop);
+                  if (status.isRequired) {
+                    GetIt.instance<DownloadsService>()
+                    .deleteDownload(stub: stub)
+                    .then((_) {
+                      GlobalSnackbar.message(
+                        (_) => AppLocalizations.of(context)!
+                            .itemDeletedSnackbar("device", type));
+                    })
+                    .catchError((err) {
+                      GlobalSnackbar.error(err);
+                    });
+                  }
+
+              
             }).catchError((err) {
               GlobalSnackbar.error(err);
-              _pop(context, pop);
             });
           },
-          onAborted: () {
-            _pop(context, pop);
-          },
+          onAborted: () {},
           centerText: true));
 }
