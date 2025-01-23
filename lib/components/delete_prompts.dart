@@ -2,6 +2,7 @@ import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/downloads_service.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -18,13 +19,20 @@ Future<void> askBeforeDeleteDownloadFromDevice(
           confirmButtonText: AppLocalizations.of(context)!
               .deleteFromTargetConfirmButton("device"),
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
-          onConfirmed: () {
-            GetIt.instance<DownloadsService>().deleteDownload(stub: stub)
-              .then((_) => GlobalSnackbar
-                .message((cntxt) => AppLocalizations.of(context)!
-                      .itemDeletedSnackbar("server", type)
-                ))
-              .catchError((err)=>GlobalSnackbar.error(err));
+          onConfirmed: () async {
+            try {
+              await GetIt.instance<DownloadsService>().deleteDownload(stub: stub);
+              GlobalSnackbar
+                .message((_) => AppLocalizations.of(context)!
+                      .itemDeletedSnackbar("device", type)
+                );
+
+              if (context.mounted && FinampSettingsHelper.finampSettings.isOffline) {
+                Navigator.of(context).pop();
+              }
+            } catch (err) {
+              GlobalSnackbar.error(err);
+            }
           },
           onAborted: () {},
           centerText: true));
@@ -44,43 +52,38 @@ Future<void> askBeforeDeleteDownloadFromServer(
 
   await showDialog(
       context: context,
-      builder: (context) => ConfirmationPromptDialog(
+      builder: (_) => ConfirmationPromptDialog(
           promptText: AppLocalizations.of(context)!
               .deleteFromTargetDialogText(deleteType, "server", type),
           confirmButtonText: AppLocalizations.of(context)!
               .deleteFromTargetConfirmButton("server"),
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
-          onConfirmed: () {
-            GetIt.instance<JellyfinApiHelper>()
-              .deleteItem(stub.id)
-              .then((_) {
-                GlobalSnackbar.message(
-                  (cntxt) {
-                    if (popIt) {
-                      Navigator.of(cntxt).pop();
-                    }
-                    return AppLocalizations.of(context)!
-                      .itemDeletedSnackbar("server", type);
-                    },
-                  isConfirmation: true);
-                  if (status.isRequired) {
-                    GetIt.instance<DownloadsService>()
-                    .deleteDownload(stub: stub)
-                    .then((_) {
-                      GlobalSnackbar.message(
-                        (_) => AppLocalizations.of(context)!
-                            .itemDeletedSnackbar("device", type));
-                    })
-                    .catchError((err) {
-                      GlobalSnackbar.error(err);
-                    });
-                  }
+          onConfirmed: () async {
+            try {
+              if (status.isRequired) {
+                await GetIt.instance<DownloadsService>()
+                  .deleteDownload(stub: stub);
+                GlobalSnackbar
+                  .message((_) => AppLocalizations.of(context)!
+                        .itemDeletedSnackbar("device", type)
+                  );
+              }
 
+              await GetIt.instance<JellyfinApiHelper>()
+                .deleteItem(stub.id);
+              GlobalSnackbar
+                .message((_) => AppLocalizations.of(context)!
+                      .itemDeletedSnackbar("server", type)
+                );
               
-            }).catchError((err) {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+            } catch (err) {
               GlobalSnackbar.error(err);
-            });
+            }
           },
           onAborted: () {},
-          centerText: true));
+          centerText: true
+      ));
 }
