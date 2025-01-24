@@ -1312,7 +1312,7 @@
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
-  "downloadSettings": "Download Settings",
+  "downloadSettings": "Downloads",
   "@downloadSettings": {},
   "showNullLibraryItemsTitle": "Show Media with Unknown Library.",
   "@showNullLibraryItemsTitle": {
