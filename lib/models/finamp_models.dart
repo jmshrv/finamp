@@ -134,7 +134,7 @@ class DefaultSettings {
   ]);
   static const showCoversOnAlbumScreen = false;
   static const allowSplitScreen = true;
-  static const requireWifiForDownloads = false;
+  static const requireWifiForDownloads = true;
   static const onlyShowFullyDownloaded = false;
   static const preferQuickSyncs = true;
   static const showDownloadsWithUnknownLibrary = true;
