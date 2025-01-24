@@ -133,7 +133,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[24] == null ? true : fields[24] as bool,
       hasCompletedDownloadsServiceMigration:
           fields[34] == null ? true : fields[34] as bool,
-      requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
+      requireWifiForDownloads: fields[35] == null ? true : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
       showDownloadsWithUnknownLibrary:
           fields[37] == null ? true : fields[37] as bool,
