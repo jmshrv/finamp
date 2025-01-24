@@ -30,7 +30,7 @@ dependencies:
   json_annotation: ^4.8.1
   chopper: ^8.0.0
   get_it: ^7.2.0
-  just_audio: ^0.9.42
+  just_audio: ^0.9.43
   just_audio_media_kit: ^2.0.6
   media_kit_libs_linux: ^1.1.3
 
