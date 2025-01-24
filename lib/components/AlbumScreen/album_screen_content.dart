@@ -138,7 +138,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                     .deleteFromTargetConfirmButton("server")),
                                 enabled: true,
                                 onTap: () async {
-                                  await askBeforeDeleteDownloadFromServer(
+                                  await askBeforeDeleteFromServerAndDevice(
                                       context, downloadStub, popIt: true);
                                 }))
                       ];
@@ -166,7 +166,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                             tooltip: AppLocalizations.of(context)!
                                 .deleteFromTargetConfirmButton("server"),
                             onPressed: () {
-                              askBeforeDeleteDownloadFromServer(
+                              askBeforeDeleteFromServerAndDevice(
                                   context, downloadStub);
                             },
                           )

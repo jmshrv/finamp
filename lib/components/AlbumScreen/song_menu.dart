@@ -615,7 +615,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             onTap: () async {
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.song, item: widget.item);
-              await askBeforeDeleteDownloadFromServer(context, item);
+              await askBeforeDeleteFromServerAndDevice(context, item);
             },
           )),
     ];

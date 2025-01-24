@@ -656,7 +656,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.deleteFromServer:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteDownloadFromServer(context, item);
+          await askBeforeDeleteFromServerAndDevice(context, item);
           widget.refresh != null ? widget.refresh!() : null;
       }
     }

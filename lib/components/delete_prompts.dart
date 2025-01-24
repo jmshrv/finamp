@@ -39,7 +39,7 @@ Future<void> askBeforeDeleteDownloadFromDevice(
           centerText: true));
 }
 
-Future<void> askBeforeDeleteDownloadFromServer(
+Future<void> askBeforeDeleteFromServerAndDevice(
     BuildContext context, DownloadStub stub, {bool popIt = false}) async {
   DownloadItemStatus status =
       GetIt.instance<DownloadsService>().getStatus(stub, null);
