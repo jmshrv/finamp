@@ -29,7 +29,12 @@ Future<void> askBeforeDeleteDownloadFromDevice(
                 );
 
               if (context.mounted && FinampSettingsHelper.finampSettings.isOffline) {
-                Navigator.of(context).pop();
+                Navigator.of(context).popUntil((route) {
+                  return route.settings.name != null // unnamed dialog
+                      &&
+                      route.settings.name !=
+                          AlbumScreen.routeName; // albums screen
+                });
               }
             } catch (err) {
               GlobalSnackbar.error(err);
