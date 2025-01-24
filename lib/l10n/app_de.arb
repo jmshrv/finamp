@@ -1579,5 +1579,13 @@
         "example": "12"
       }
     }
+  },
+  "volumeNormalizationSwitchSubtitle": "Verwende Gain-Informationen, um die Lautstärke von Tracks zu normalisieren (\"Replay Gain\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Update Häufigkeit der Wiedergabesitzung",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   }
 }
