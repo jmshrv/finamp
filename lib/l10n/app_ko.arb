@@ -337,7 +337,7 @@
   },
   "bufferDuration": "버퍼 시간",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "플레이어가 버퍼링해야 하는 시간(초) 입니다. 다시 시작해야 합니다.",
+  "bufferDurationSubtitle": "버퍼링 해야 하는 최대 시간(초) 입니다. 변경시 다시 시작해야 합니다.",
   "@bufferDurationSubtitle": {},
   "language": "언어",
   "@language": {},
@@ -1028,5 +1028,20 @@
         "type": "String"
       }
     }
-  }
+  },
+  "bufferSizeTitle": "버퍼 크기",
+  "@bufferSizeTitle": {},
+  "confirmAddToQueue": "대기열에 {type, select, track{곡} album{앨범} artist{아티스트} playlist{플레이리스트} genre{장르} other{아이템}} 추가됨",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "bufferDisableSizeConstraintsTitle": "버퍼 크기를 제한하지 않습니다",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeSubtitle": "버퍼의 최대 크기(MB단위). 변경시 재시작이 필요합니다",
+  "@bufferSizeSubtitle": {}
 }

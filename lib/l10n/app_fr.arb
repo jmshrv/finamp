@@ -3,7 +3,7 @@
   "@downloadsQueued": {},
   "grid": "Mosaïque",
   "@grid": {},
-  "startupError": "Une erreur est survenue lors du démarrage de l'application. L'erreur est: {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si le problème persiste, supprimez les données de l'application pour la réinitialiser.",
+  "startupError": "Une erreur est survenue lors du démarrage de l'application. L'erreur est : {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si le problème persiste, supprimez les données de l'application pour la réinitialiser.",
   "@startupError": {
     "description": "Le message d'erreur affiché lorsque le démarrage de l'application échoue.",
     "placeholders": {
@@ -27,7 +27,7 @@
   "@username": {},
   "password": "Mot de passe",
   "@password": {},
-  "logs": "Logs",
+  "logs": "Journaux",
   "@logs": {},
   "next": "Prochain",
   "@next": {},
@@ -49,7 +49,7 @@
   "@artists": {},
   "genres": "Genres",
   "@genres": {},
-  "playlists": "Playlists",
+  "playlists": "Listes de lectures",
   "@playlists": {},
   "startMix": "Commencer un Mix",
   "@startMix": {},
@@ -132,7 +132,7 @@
       }
     }
   },
-  "dlComplete": "{count,plural,=1{{count} complété} other{{count} complétés}}",
+  "dlComplete": "{count,plural,=1{{count} achevé} other{{count} achevés}}",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -210,7 +210,7 @@
   },
   "editPlaylistNameTooltip": "Modifier le titre de la playlist",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Edit Playlist Name",
+  "editPlaylistNameTitle": "Modifier le nom de la liste de lecture",
   "@editPlaylistNameTitle": {},
   "required": "Requis",
   "@required": {},
@@ -234,7 +234,7 @@
   "@logsCopied": {},
   "message": "Message",
   "@message": {},
-  "stackTrace": "Stack Trace",
+  "stackTrace": "Trace d'appels",
   "@stackTrace": {},
   "applicationLegalese": "Soumis à la licence Mozilla Public License 2.0.\nLe code source est disponible sur :{sourceCodeLink}",
   "@applicationLegalese": {},
@@ -382,7 +382,7 @@
   "@unknownArtist": {},
   "queue": "File d'attente",
   "@queue": {},
-  "playNext": "Suivant",
+  "playNext": "Jouer ensuite",
   "@playNext": {
     "description": "Titre de l'élément du menu contextuel pour insérer un élément dans la file d'attente de lecture après l'élément en cours de lecture."
   },
@@ -472,7 +472,7 @@
   },
   "noMusicLibrariesBody": "Finamp n'a pas trouvé de bibliothèques musicales. Veuillez vous assurer que votre serveur Jellyfin contient au moins une bibliothèque avec le type de contenu défini sur \"Musique\".",
   "@noMusicLibrariesBody": {},
-  "refresh": "RAFRAÎCHIR",
+  "refresh": "Rafraîchir",
   "@refresh": {},
   "swipeInsertQueueNext": "Lire la chanson balayée en prochain",
   "@swipeInsertQueueNext": {},
@@ -496,11 +496,11 @@
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "aboutContributionLink": "Contribuez à Finamp sur GitHub:",
+  "aboutContributionLink": "Contribuez à Finamp sur GitHub :",
   "@aboutContributionLink": {
     "description": "Link to the Finamp GitHub repository, shown in the about screen."
   },
-  "aboutReleaseNotes": "Lisez les dernières notes de version:",
+  "aboutReleaseNotes": "Lisez les dernières notes de version :",
   "@aboutReleaseNotes": {
     "description": "Link to the release notes, shown in the about screen."
   },
@@ -869,5 +869,132 @@
   "shuffleToNextUp": "Queue",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "volumeNormalizationSettingsTitle": "Normalisation du volume",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "queueRestoreButtonLabel": "Restorer",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "confirmAddToNextUp": "{type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} ajouté à Suivants",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} sera joué ensuite",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToQueue": "{type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} ajouté à la file de lecture",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "yourLikes": "Vos Favoris",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "mix": "{mixSource} - Mix",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "savedQueue": "File enregistrée",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "playingFromType": "Joué à partir de {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Réduire la vitesse de lecture",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Augmenter la vitesse de lecture",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Track} other{{count} Tracks}}, {remaining} Non joués",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleAlbums": "Mélanger les albums",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} play} other{{playCount} lectures}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "close": "Fermer",
+  "@close": {},
+  "moreInfo": "Plus d'informations",
+  "@moreInfo": {},
+  "volumeNormalizationModeSelectorSubtitle": "Quand et comment appliquer la normalisation du volume",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "placeholderSource": "Quelque part",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "playbackHistory": "Historique de lecture",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "shareOfflineListens": "Partager les actions hors ligne",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "volumeNormalizationSwitchTitle": "Activer la normalisation du volume",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
   }
 }

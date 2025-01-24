@@ -135,7 +135,7 @@
   },
   "serverUrl": "Server-URL",
   "@serverUrl": {},
-  "shuffleAll": "Alle mischen",
+  "shuffleAll": "Alle zufällig wiedergeben",
   "@shuffleAll": {},
   "downloads": "Downloads",
   "@downloads": {},
@@ -199,7 +199,7 @@
   "@failedToGetSongFromDownloadId": {},
   "playButtonLabel": "Wiedergabe",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "Mischen",
+  "shuffleButtonLabel": "Zufallswiedergabe",
   "@shuffleButtonLabel": {},
   "editPlaylistNameTitle": "Wiedergabeliste-Name editieren",
   "@editPlaylistNameTitle": {},
@@ -311,7 +311,7 @@
   "@goToAlbum": {},
   "addFavourite": "Favorit hinzufügen",
   "@addFavourite": {},
-  "addedToQueue": "Zur Warteschlange hinzugefügt.",
+  "addedToQueue": "In Warteschlange eingefügt.",
   "@addedToQueue": {},
   "queueReplaced": "Warteschlange ausgetauscht.",
   "@queueReplaced": {},
@@ -432,9 +432,9 @@
   "@topSongs": {},
   "shuffleAlbums": "Alben mischen",
   "@shuffleAlbums": {},
-  "couldNotLoad": "{source, select, album{album} playlist{playlist} songMix{song mix} artistMix{artist mix} albumMix{album mix} favorites{favorites} allSongs{all songs} filteredList{songs} genre{genre} artist{artist} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}} konnte nicht geladen werden",
+  "couldNotLoad": "{source, select, album{Album} playlist{Wiedergabeliste} songMix{Titelmix} artistMix{Künstlermix} albumMix{Albummix} favorites{Favoriten} allSongs{Alle Titel} filteredList{Lieder} genre{Genre} artist{Künstler} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}} konnte nicht geladen werden",
   "@couldNotLoad": {},
-  "bufferDurationSubtitle": "Wie viel gepuffert werden soll, in Sekunden. Neustart erforderlich.",
+  "bufferDurationSubtitle": "Die maximale Pufferdauer in Sekunden. Neustart erforderlich.",
   "@bufferDurationSubtitle": {},
   "language": "Sprache",
   "@language": {},
@@ -444,7 +444,7 @@
   "@showUncensoredLogMessage": {},
   "resetTabs": "Tabs zurücksetzen",
   "@resetTabs": {},
-  "insertedIntoQueue": "Zur Warteschlange hinzufügen.",
+  "insertedIntoQueue": "Zur Warteschlange hinzugefügt.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
@@ -472,7 +472,7 @@
   "@showFastScroller": {},
   "swipeInsertQueueNext": "Gewischten Titel als Nächstes abspielen",
   "@swipeInsertQueueNext": {},
-  "swipeInsertQueueNextSubtitle": "Aktivieren, um das in der Liste nach links/rechts gewischte Lied als Nächstes abzuspielen, statt es am Ende der Warteschlange einzufügen.",
+  "swipeInsertQueueNextSubtitle": "Aktivieren, um den in der Liste nach links/rechts gewischten Titel als Nächstes abzuspielen, statt es am Ende der Warteschlange einzufügen.",
   "@swipeInsertQueueNextSubtitle": {},
   "playNext": "Als Nächstes wiedergeben",
   "@playNext": {
@@ -669,7 +669,7 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "shuffleNext": "Zufälligewiedergabe der nächsten tracks",
+  "shuffleNext": "In zufälliger Reihenfolge als Nächstes wiedergeben",
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
@@ -812,7 +812,7 @@
   "@confirmAddedToPlaylist": {
     "description": "Snackbar message that shows when the user successfully adds items to a playlist."
   },
-  "skipToNextTrackButtonTooltip": "Überspringe zum nächsten track",
+  "skipToNextTrackButtonTooltip": "Zum nächsten Titel springen",
   "@skipToNextTrackButtonTooltip": {
     "description": "Tooltip for the button that skips to the next track"
   },
@@ -836,7 +836,7 @@
   "@addToNextUp": {
     "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
   },
-  "shuffleToNextUp": "Zufälligewiedergabe der nächsten tracks",
+  "shuffleToNextUp": "Zufallswiedergabe an nächste Titel anhängen",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
@@ -876,7 +876,7 @@
       }
     }
   },
-  "queueLoadingMessage": "Wiederherstellung der Queue...",
+  "queueLoadingMessage": "Warteschlange wird wiederhergestellt…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1386,7 +1386,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "queueRestoreSubtitle2": "{count,plural,=1{1 Lied} other{{count}  Lieder}}, {remaining} Ungespielt",
+  "queueRestoreSubtitle2": "{count,plural,other{{count} Titel}}, {remaining} ungespielt",
   "@queueRestoreSubtitle2": {
     "description": "Description of length of a saved queue",
     "placeholders": {
@@ -1481,7 +1481,7 @@
       }
     }
   },
-  "confirmPlayNext": "{type, select, track{Lied} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} wird als nächstes spielen",
+  "confirmPlayNext": "{type, select, track{Lied} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} wird als nächstes abgespielt",
   "@confirmPlayNext": {
     "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
     "placeholders": {
@@ -1517,7 +1517,7 @@
       }
     }
   },
-  "queueRestoreError": "Warnung: {count,plural, =1{{count} lied} other{{count} lieder}}  konntent nicht aus der Warteschlange wiederhergestellt werden.",
+  "queueRestoreError": "Warnung: {count,plural, =1{{count} lied} other{{count} lieder}}  konnten nicht aus der Warteschlange wiederhergestellt werden.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
@@ -1542,5 +1542,50 @@
   "loopModeOneButtonLabel": "Dieser Titel wird wiederholt",
   "@loopModeOneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Zufallswiedergabe",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Zufallswiedergabe. Antippen, um in ursprünglicher Reihenfolge wiederzugeben.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "downloadTranscodeCodecTitle": "Download-Codec auswählen",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadBitrate": "Download-Bitrate",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "downloadTranscodeEnableTitle": "Transkodierte Downloads aktivieren",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "bufferDisableSizeConstraintsTitle": "Puffergröße nicht limitieren",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "Deaktiviert die Begrenzung der Puffergröße. Der Puffer wird immer bis zur eingestellten Pufferdauer gefüllt, auch für Dateien mit hohen Bitraten. Kann zu Abstürzen führen. Neustart erforderlich.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bufferSizeTitle": "Puffergröße",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "Die maximale Größe des Puffers in MB. Neustart erforderlich.",
+  "@bufferSizeSubtitle": {},
+  "playCountValue": "{playCount,plural,=1{{playCount} Wiedergabe} other{{playCount} Wiedergaben}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "volumeNormalizationSwitchSubtitle": "Verwende Gain-Informationen, um die Lautstärke von Tracks zu normalisieren (\"Replay Gain\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Update Häufigkeit der Wiedergabesitzung",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   }
 }
