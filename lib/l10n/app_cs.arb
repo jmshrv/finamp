@@ -1014,7 +1014,7 @@
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
-  "downloadSettings": "Nastavení stahování",
+  "downloadSettings": "Stahování",
   "@downloadSettings": {},
   "maxConcurrentDownloads": "Maximální počet souběžných stahování",
   "@maxConcurrentDownloads": {
