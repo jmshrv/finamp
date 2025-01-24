@@ -44,6 +44,9 @@ Future<void> askBeforeDeleteDownloadFromServer(
       GetIt.instance<DownloadsService>().getStatus(stub, null);
   String type = stub.baseItemType.name;
 
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final downloadsService = GetIt.instance<DownloadsService>();
+
   String deleteType = status.isRequired
       ? "canDelete"
       : (status != DownloadItemStatus.notNeeded
@@ -60,25 +63,27 @@ Future<void> askBeforeDeleteDownloadFromServer(
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
           onConfirmed: () async {
             try {
+              await jellyfinApiHelper.deleteItem(stub.id);
+              GlobalSnackbar
+                .message((_) => AppLocalizations.of(context)!
+                      .itemDeletedSnackbar("server", type)
+                );
+
+
               if (status.isRequired) {
-                await GetIt.instance<DownloadsService>()
-                  .deleteDownload(stub: stub);
+                
+                await downloadsService.deleteDownload(stub: stub);
                 GlobalSnackbar
                   .message((_) => AppLocalizations.of(context)!
                         .itemDeletedSnackbar("device", type)
                   );
               }
 
-              await GetIt.instance<JellyfinApiHelper>()
-                .deleteItem(stub.id);
-              GlobalSnackbar
-                .message((_) => AppLocalizations.of(context)!
-                      .itemDeletedSnackbar("server", type)
-                );
-              
+
               if (context.mounted) {
                 Navigator.of(context).pop();
               }
+
             } catch (err) {
               GlobalSnackbar.error(err);
             }
