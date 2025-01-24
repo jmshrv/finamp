@@ -694,9 +694,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               },
             ));
           }
-          // re-trigger the playbackState update to update the notification
-          final event = _transformEvent(_player.playbackEvent);
-          return playbackState.add(event);
+          return refreshPlaybackStateAndMediaNotification();
         default:
         // NOP, handled below
       }
@@ -707,6 +705,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     // only called if no custom action was found
     return await super.customAction(name, extras);
+  }
+
+  Future<void> refreshPlaybackStateAndMediaNotification() async {
+    // re-trigger the playbackState update to update the notification
+    final event = _transformEvent(_player.playbackEvent);
+    return playbackState.add(event);
   }
 
   // triggers when skipping to specific item in android auto queue

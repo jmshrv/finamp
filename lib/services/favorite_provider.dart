@@ -1,3 +1,5 @@
+import 'package:finamp/services/music_player_background_task.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
@@ -77,6 +79,8 @@ class IsFavorite extends _$IsFavorite {
     assert(value.item != null);
     final isOffline = FinampSettingsHelper.finampSettings.isOffline;
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final queueService = GetIt.instance<QueueService>();
     if (isOffline) {
       FeedbackHelper.feedback(FeedbackType.error);
       GlobalSnackbar.message(
@@ -108,6 +112,10 @@ class IsFavorite extends _$IsFavorite {
       }
     });
     state = isFavorite;
+    // If the current track is the one being toggled, update the playback state (and media notification)
+    if (value.item!.id == queueService.getCurrentTrack()?.baseItem?.id) {
+      audioHandler.refreshPlaybackStateAndMediaNotification();
+    }
     return state;
   }
 
