@@ -36,6 +36,7 @@ extension CensoredMessage on LogRecord {
         workingLogString = workingLogString.replaceAll(
             CaseInsensitivePattern(tempUriMatcher.host.toString()),
             "TEMP_HOST");
+
       }
     }
 
@@ -51,6 +52,8 @@ extension CensoredMessage on LogRecord {
             CaseInsensitivePattern(user.baseUrl), "BASEURL");
         workingLogString = workingLogString.replaceAll(
             CaseInsensitivePattern(user.accessToken), "TOKEN");
+        workingLogString = workingLogString.replaceAll(
+            CaseInsensitivePattern(user.id), "USER_ID");
       }
     }
 
