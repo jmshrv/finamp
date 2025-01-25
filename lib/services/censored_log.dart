@@ -37,6 +37,10 @@ extension CensoredMessage on LogRecord {
             CaseInsensitivePattern(tempUriMatcher.host.toString()),
             "TEMP_HOST");
 
+        // remove anything between the quotes in "Failed host lookup: ''"
+        workingLogString = workingLogString.replaceAll(
+            RegExp(r"host: [^,]+, port: \d+"), "HOST");
+
       }
     }
 
