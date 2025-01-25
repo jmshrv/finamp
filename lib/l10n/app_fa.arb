@@ -1298,7 +1298,7 @@
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
-  "downloadSettings": "پیکربندی بارگیری",
+  "downloadSettings": "بارگیری‌ها",
   "@downloadSettings": {},
   "showNullLibraryItemsTitle": "نمایش رسانه‌های دارای کتاب‌خانه‌ی ناشناخته.",
   "@showNullLibraryItemsTitle": {
