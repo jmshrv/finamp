@@ -122,11 +122,11 @@ void main() async {
 
 Future<void> _setupEdgeToEdgeOverlayStyle() async {
   if (Platform.isAndroid) {
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent));
-    final binding = WidgetsFlutterBinding.ensureInitialized();
-    binding.addObserver(UIOverlaySetterObserver());
+    // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //     systemNavigationBarColor: Colors.transparent));
+    // final binding = WidgetsFlutterBinding.ensureInitialized();
+    // binding.addObserver(UIOverlaySetterObserver());
   } else if (Platform.isIOS) {
     // On iOS, the status bar will have black icons by default on the login
     // screen as it does not have an AppBar. To fix this, we set the
