@@ -510,7 +510,7 @@ class FinampSettings {
   @HiveField(79, defaultValue: DefaultSettings.bufferSizeMegabytes)
   int bufferSizeMegabytes;
   
-  @HiveField(90, defaultValue: DefaultSettings.allowDeleteFromServer)
+  @HiveField(80, defaultValue: DefaultSettings.allowDeleteFromServer)
   bool allowDeleteFromServer;
 
   static Future<FinampSettings> create() async {
