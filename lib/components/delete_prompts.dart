@@ -10,7 +10,9 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> askBeforeDeleteDownloadFromDevice(
-    BuildContext context, DownloadStub stub) async {
+    BuildContext context, DownloadStub stub, {
+      VoidCallback? refresh
+    }) async {
   String type = stub.baseItemType.name;
   await showDialog(
       context: context,
@@ -38,6 +40,8 @@ Future<void> askBeforeDeleteDownloadFromDevice(
               }
             } catch (err) {
               GlobalSnackbar.error(err);
+            } finally {
+              refresh != null ? refresh() : null;
             }
           },
           onAborted: () {},
