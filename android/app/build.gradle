@@ -35,9 +35,6 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
 
     defaultConfig {
         applicationId "com.unicornsonlsd.finamp"
@@ -64,6 +61,10 @@ android {
             applicationIdSuffix '.debug'
             minifyEnabled true // avoid dexing issues
         }
+    }
+    namespace 'com.unicornsonlsd.finamp'
+    lint {
+        disable 'InvalidPackage'
     }
 }
 
