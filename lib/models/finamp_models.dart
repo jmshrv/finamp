@@ -1356,6 +1356,15 @@ enum DownloadItemState {
   }
 }
 
+enum DeleteType {
+  canDelete("canDelete"),
+  cantDelete("cantDelete"),
+  notDownloaded("notDownloaded");
+  const DeleteType(this.textForm);
+  final String textForm;
+
+}
+
 /// The status of a download, as used to determine download button state.
 /// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
@@ -1370,6 +1379,14 @@ enum DownloadItemStatus {
   requiredOutdated(true, true, false);
 
   const DownloadItemStatus(this.isRequired, this.outdated, this.isIncidental);
+
+  DeleteType toDeleteType() {
+    return isRequired
+      ? DeleteType.canDelete
+      : (outdated || isIncidental
+          ? DeleteType.cantDelete
+          : DeleteType.notDownloaded);
+  }
 
   final bool isRequired;
   final bool outdated;

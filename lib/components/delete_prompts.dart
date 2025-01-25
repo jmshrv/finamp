@@ -53,17 +53,13 @@ Future<void> askBeforeDeleteFromServerAndDevice(
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
 
-  String deleteType = status.isRequired
-      ? "canDelete"
-      : (status != DownloadItemStatus.notNeeded
-          ? "cantDelete"
-          : "notDownloaded");
+  final deleteType = status.toDeleteType();
 
   await showDialog(
       context: context,
       builder: (_) => ConfirmationPromptDialog(
           promptText: AppLocalizations.of(context)!
-              .deleteFromTargetDialogText(deleteType, "server", type),
+              .deleteFromTargetDialogText(deleteType.textForm, "server", type),
           confirmButtonText: AppLocalizations.of(context)!
               .deleteFromTargetConfirmButton("server"),
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
