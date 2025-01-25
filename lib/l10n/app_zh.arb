@@ -946,7 +946,7 @@
   "@deleteItem": {
     "description": "Option to delete item in long-press menu."
   },
-  "downloadSettings": "下载设置",
+  "downloadSettings": "下载",
   "@downloadSettings": {},
   "downloadsWorkersSettingLabel": "{count} 个下载工作进程",
   "@downloadsWorkersSettingLabel": {
