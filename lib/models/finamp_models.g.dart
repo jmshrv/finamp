@@ -194,7 +194,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodingSegmentContainer: fields[75] == null
           ? FinampSegmentContainer.fragmentedMp4
           : fields[75] as FinampSegmentContainer,
-      allowDeleteFromServer: fields[78] == null ? false : fields[78] as bool,
+      allowDeleteFromServer: fields[90] == null ? false : fields[90] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -357,7 +357,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.bufferDisableSizeConstraints)
       ..writeByte(79)
       ..write(obj.bufferSizeMegabytes)
-      ..writeByte(80)
+      ..writeByte(90)
       ..write(obj.allowDeleteFromServer);
   }
 
