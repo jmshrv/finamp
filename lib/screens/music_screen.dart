@@ -269,8 +269,17 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                 controller: _tabController,
                 tabs: sortedTabs
                     .map((tabType) => Tab(
-                          text:
-                              tabType.toLocalisedString(context).toUpperCase(),
+                            child: Container(
+                          constraints: const BoxConstraints(minWidth: 50),
+                          alignment: Alignment.center,
+                          child: Text(
+                            tabType.toLocalisedString(context).toUpperCase(),
+                            // style: TextStyle(
+                            //   fontSize: 12,
+                            //   fontWeight: FontWeight.bold,
+                            // ),
+                          ),
+                        )
                         ))
                     .toList(),
                 isScrollable: true,
