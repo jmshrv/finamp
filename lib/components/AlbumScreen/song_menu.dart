@@ -251,22 +251,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       }
     }
 
-    void deleteFromDevice() {
-      var item =
-          DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item);
-      downloadsService.deleteDownload(stub: item).then((_) {
-        GlobalSnackbar.message(
-            (_) => AppLocalizations.of(context)!
-                .itemDeletedSnackbar("device", "track"),
-            isConfirmation: true);
-        if (mounted) {
-          Navigator.pop(context);
-        }
-      }).catchError((err) {
-        GlobalSnackbar.error(err);
-      });
-    }
-
     return [
       Visibility(
         visible: !widget.isOffline,
