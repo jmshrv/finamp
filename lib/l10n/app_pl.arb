@@ -456,9 +456,9 @@
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Pokaż szybkie przewijanie",
   "@showFastScroller": {},
-  "refresh": "ODŚWIEŻ",
+  "refresh": "Odśwież",
   "@refresh": {},
-  "swipeInsertQueueNext": "Odtwórz Przewiniętą Piosenkę Następnie",
+  "swipeInsertQueueNext": "Następny utwór do odtworzenia",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Włącz wstawianie utworu jako następnego elementu w kolejce po przesunięciu palcem na liście utworów zamiast dołączania go na końcu.",
   "@swipeInsertQueueNextSubtitle": {},
@@ -899,5 +899,222 @@
   "playbackSpeedControlSettingSubtitle": "Czy elementy sterujące prędkością odtwarzania mają być wyświetlane w menu ekranu odtwarzacza",
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
+  },
+  "albumCount": "{count,plural,=1{{count} Album} =3{{count} Albumy} =4{{count} Albumy} other{{count} Albumów}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "moreInfo": "Więcej informacji",
+  "@moreInfo": {},
+  "volumeNormalizationSwitchTitle": "Włącz Normalizację Dźwięku",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeHybrid": "Hybrydowe (Utwór + Album)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationModeAlbumBased": "Oparte na albumach",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Po uruchomieniu aplikacji podjęta zostanie próba przywrócenia ostatnio odtwarzanej kolejki.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "resetToDefaults": "Przywróć domyślne",
+  "@resetToDefaults": {},
+  "playbackSpeedDecreaseLabel": "Zmniejsz prędkość odtwarzania",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "queueRestoreSubtitle1": "Odtwarzam: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "queueLoadingMessage": "Przywracanie kolejki...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "volumeNormalizationSettingsTitle": "Normalizacja dźwięku",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "close": "Zamknij",
+  "@close": {},
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Częstotliwość wysyłania bieżącego stanu odtwarzania do serwera, w sekundach. Powinno to być mniej niż 5 minut (300 sekund), aby zapobiec przekroczeniu limitu czasu sesji.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "shuffleAlbumsToNextUp": "Odtwarzaj Albumy Losowo do Odtwarzaj Następnie",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "playbackOrderLinearButtonLabel": "Odtwarzam w kolejności",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "shuffleAllQueueSource": "Losuj Wszystko",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonTooltip": "Odtwarzam w kolejności. Naciśnij, aby przetasować.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Odtwarzam utwory losowo. Naciśnij, aby odtwarzać w kolejności.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedButtonLabel": "Odtwarzam przy prędkości x{speed}",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedIncreaseLabel": "Zwiększ prędkość odtwarzania",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeAllButtonLabel": "Zapętlaj wszystkie",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queueRestoreTitle": "Zapisano {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "autoloadLastQueueOnStartup": "Automatycznie przywróć ostatnią kolejkę",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Raportować bieżącą kolejkę do serwera?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "reportQueueToServerSubtitle": "Po włączeniu Finamp wyśle bieżącą kolejkę do serwera. Obecnie wydaje się to mało przydatne i zwiększa ruch sieciowy.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "playbackOrderShuffledButtonLabel": "Wybieram utwory losowo",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedFeatureText": "Prędkość x{speed}",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "loopModeNoneButtonLabel": "Bez zapętlania",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeOneButtonLabel": "Zapętlam ten utwór",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "queuesScreen": "Przywróć Teraz odtwarzane",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "Przywróć",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRetryMessage": "Nie udało się przywrócić kolejki. Spróbować ponownie?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Częstotliwość aktualizacji sesji odtwarzania",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Jeśli serwer Jellyfin nie otrzymał żadnych aktualizacji od klienta w ciągu ostatnich 5 minut, zakłada, że odtwarzanie zostało zakończone. Oznacza to, że w przypadku ścieżek dłuższych niż 5 minut, odtwarzanie mogło zostać nieprawidłowo zgłoszone jako zakończone, co obniżyło jakość danych raportowania odtwarzania.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topSongs": "Najczęściej odtwarzane utwory",
+  "@topSongs": {},
+  "shuffleAlbums": "Odtwarzaj Albumy Losowo",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsNext": "Odtwarzaj Albumy Losowo (Następnie)",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "shuffleAlbumsToQueue": "Odtwarzaj Albumy Losowo do Kolejki",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} odtworzenie} =2{{playCount} odtworzenia} =3{{playCount} odtworzenia} =4{{playCount} odtworzenia} other{{playCount} odtworzeń}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "volumeNormalizationModeSelectorTitle": "Tryb Normalizacji Dźwięku",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "Kiedy i jak stosować Normalizację Dźwięku",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeTrackBased": "Oparte na utworze",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumOnly": "Tylko dla Albumów",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "volumeNormalizationSwitchSubtitle": "Użyj informacji o wzmocnieniu, aby znormalizować głośność utworów („Replay Gain”)",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeSelectorDescription": "Hybrydowe (Utwór + Album):\nWzmocnienie utworu jest używane do zwykłego odtwarzania, ale jeśli odtwarzany jest album (ponieważ jest to główne źródło kolejki odtwarzania lub ponieważ został dodany do kolejki w pewnym momencie), zamiast tego używane jest wzmocnienie albumu.\n\nOparte na utworze:\nWzmocnienie utworu jest zawsze używane, niezależnie od tego, czy odtwarzany jest album.\n\nTylko albumy:\nNormalizacja głośności jest stosowana tylko podczas odtwarzania albumów (przy użyciu wzmocnienia albumu), ale nie dla poszczególnych utworów.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Obecnie normalizacja dźwięku w systemie iOS wymaga zmiany głośności odtwarzania w celu emulacji zmiany wzmocnienia. Ponieważ nie możemy zwiększyć głośności powyżej 100%, musimy domyślnie zmniejszyć głośność, abyśmy mogli zwiększyć głośność cichych utworów. Wartość jest wyrażona w decybelach (dB), gdzie -10 dB to ~30% głośności, -4,5 dB to ~60% głośności, a -2 dB to ~80% głośności.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   }
 }
