@@ -261,7 +261,7 @@
   "@audioService": {},
   "jellyfinUsesAACForTranscoding": "جلی‌فین از AAC برای رمزگردانی (transcoding) استفاده می‌کند",
   "@jellyfinUsesAACForTranscoding": {},
-  "enableTranscoding": "فعال کردن رمزگردانی (transcoding)",
+  "enableTranscoding": "فعال‌سازی رمزگردانی (transcoding)",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "آهنگ را سمت سرور رمزگردانی می‌کند.",
   "@enableTranscodingSubtitle": {},
