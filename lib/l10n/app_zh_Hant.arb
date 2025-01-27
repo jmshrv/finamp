@@ -13,7 +13,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "如果您希望能夠遠程訪問您的 Jellyfin 伺服器，則需要使用您的外部 IP。\n\n如果您的伺服器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的伺服器位於反向代理後面，則可能會出現這種情況。\n如果網址正確，輸入欄位下方應該會出現一些關於你的伺服器的相關資訊。",
+  "internalExternalIpExplanation": "如果您希望能夠遠程訪問您的 Jellyfin 伺服器，則需要使用您的外部 IP。\n\n如果您的伺服器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的伺服器位於反向代理後面，則可能會出現這種情況。\n\n如果網址正確，輸入欄位下方應該會出現一些關於你的伺服器的相關資訊。",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -204,13 +204,13 @@
   "@addDownloads": {},
   "location": "位置",
   "@location": {},
-  "downloadsQueued": "已添加下載。",
+  "downloadsQueued": "已準備好下載，正在下載檔案",
   "@downloadsQueued": {},
   "addButtonLabel": "添加",
   "@addButtonLabel": {},
   "shareLogs": "分享紀錄檔",
   "@shareLogs": {},
-  "applicationLegalese": "獲得 Mozilla 公共授權條款 2.0 的許可。 源代碼位於：\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "依照 Mozilla 公開授權條款 2.0 授權。\n原始碼可於 {sourceCodeLink} 獲得。",
   "@applicationLegalese": {},
   "logsCopied": "已複制紀錄檔。",
   "@logsCopied": {},
@@ -408,9 +408,9 @@
   "@disableGesture": {},
   "disableGestureSubtitle": "是否禁用「手勢」功能。",
   "@disableGestureSubtitle": {},
-  "removeFromPlaylistTooltip": "從播放列表中移除歌曲",
+  "removeFromPlaylistTooltip": "從播放清單中移除歌曲",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "從播放列表中移除",
+  "removeFromPlaylistTitle": "從播放清單中移除",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "已從播放列表中移除。",
   "@removedFromPlaylist": {},
@@ -450,7 +450,7 @@
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
-  "deleteDownloadsPrompt": "您確定要將 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}'從設備中刪除嗎?",
+  "deleteDownloadsPrompt": "您確定要將 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}'從設備中刪除嗎?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -619,5 +619,259 @@
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "標題",
-  "@title": {}
+  "@title": {},
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} 首歌曲} other{{songCount} 首歌曲}}, {imageCount,plural,=1{{imageCount} 張圖片} other{{imageCount} 張圖片}}\n{syncCount,plural,=1{{syncCount} 個節點同步中} other{{syncCount} 個節點同步中}}{repairing, plural, =0{} other{\n目前正在修復}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "timeFractionTooltip": "{currentTime} / {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "seconds": "秒",
+  "@seconds": {},
+  "playlistActionsMenuButtonTooltip": "點擊以新增到播放清單。長按以切換收藏狀態。",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "showFeatureChipsToggleSubtitle": "在播放器畫面上顯示包含編解碼器、比特率等進階音軌資料。",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "resetSettingsPromptGlobalConfirm": "重置所有設定",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或音軌的類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放器畫面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "activeDownloads": "正在下載中",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "正在下載",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "目前沒有正在下載的項目。",
+  "@noActiveDownloads": {},
+  "offlineSongCount": "{count,plural,=1{{count} 首曲目} other{{count} 首曲目}}，{downloads} 次下載",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCountArtist": "{count,plural,=1{{count} 首曲目} other{{count} 首曲目}} 已下載",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "automatic": "自動",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "playerScreen": "播放器畫面",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "playbackModeLocal": "本地播放",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "goToArtist": "前往歌手頁面",
+  "@goToArtist": {},
+  "goToGenre": "前往類型",
+  "@goToGenre": {},
+  "normalizationGain": "增益",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "sampleRate": "取樣率",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "showArtistsTopSongsSubtitle": "是否顯示某位藝術家最常收聽的前五首歌曲。",
+  "@showArtistsTopSongsSubtitle": {},
+  "hours": "小時",
+  "@hours": {},
+  "trackCountTooltip": "第 {currentTrackIndex} 首，共 {totalTrackCount} 首",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "sleepTimerRemainingTime": "{time} 分鐘後進入睡眠",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTooltip": "新增至更多播放清單",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "新增至更多播放清單",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistNamedTooltip": "從播放清單「 '{playlistName}'」移除",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "從播放清單「 '{playlistName}'」移除",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "unknownAlbum": "未知專輯",
+  "@unknownAlbum": {},
+  "playbackModeDirectPlaying": "原生播放",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "轉碼",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "playbackMode": "重播模式",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "codec": "編碼格式",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "bitRate": "位元率",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "bitDepth": "位深度",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "檔案大小",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "showFeatureChipsToggleTitle": "顯示歌曲詳情",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "albumScreen": "專輯頁面",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenTitle": "顯示歌曲專輯封面",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "showCoversOnAlbumScreenSubtitle": "在專輯畫面中，為每首歌曲單獨顯示專輯封面。",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "emptyTopTracksList": "您還沒聆聽過這位藝人的任何音樂。",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "emptyFilteredListTitle": "找不到符合的項目",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "emptyFilteredListSubtitle": "找不到符合的項目。試著取消篩選條件或更改搜索詞。",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetSettingsPromptLocal": "您確定要將這些設定重置為預設值嗎？",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "resetSettingsPromptGlobal": "確定要將所有設定重置為預設值嗎？",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetFiltersButton": "重置篩選條件",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "genericCancel": "取消",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "confirmDownloadStarted": "下載已開始",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "customizationSettingsTitle": "客製化",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "播放速度可見性",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "playbackSpeedControlSettingSubtitle": "播放速度控制是否顯示在播放器畫面的選單中",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  }
 }
