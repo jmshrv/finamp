@@ -458,7 +458,7 @@
   "@syncDownloadedPlaylists": {},
   "swipeInsertQueueNextSubtitle": "Включите чтобы вставлять композицию следующей в очереди при смахивании в списке композиций вместо того чтобы добавлять ее в конец.",
   "@swipeInsertQueueNextSubtitle": {},
-  "deleteDownloadsPrompt": "Вы уверены что хотите удалить {itemType, select, album{альбом} playlist{плейлист} artist{исполнителя} genre{жанр} song{композицию} library{библиотеку} other{объект}} '{itemName}' с этого устройства?",
+  "deleteDownloadsPrompt": "Вы уверены что хотите удалить {itemType, select, album{альбом} playlist{плейлист} artist{исполнителя} genre{жанр} song{композицию} library{библиотеку} other{элемент}} '{itemName}' с этого устройства?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -532,7 +532,7 @@
   "@loginFlowSlogan": {
     "description": "Slogan shown on the login screen."
   },
-  "loginFlowGetStarted": "Приступайте к работе!",
+  "loginFlowGetStarted": "Приступаем!",
   "@loginFlowGetStarted": {
     "description": "Button label for the login/splash screen."
   },
@@ -576,7 +576,7 @@
   "@backToServerSelection": {
     "description": "Label for the button that takes the user back to the server selection step during the login flow."
   },
-  "loginFlowNamelessUser": "Неназванный пользователь",
+  "loginFlowNamelessUser": "Безымянный пользователь",
   "@loginFlowNamelessUser": {
     "description": "Name for a user that doesn't have a name set on the server."
   },
@@ -933,7 +933,7 @@
   },
   "fixedGridSizeSwitchSubtitle": "Размеры плиток в сетке не будут изменяться в зависимости от размера окна/экрана.",
   "@fixedGridSizeSwitchSubtitle": {},
-  "hidePlayerBottomActionsSubtitle": "Скрыть кнопки очереди и текста на экране плеера. Проведите вверх, чтобы получить доступ к очереди, проведите влево (под обложкой альбома), чтобы просмотреть текст, если он доступен.",
+  "hidePlayerBottomActionsSubtitle": "Скрыть кнопки очереди и текста песен на экране плеера. Проведите вверх, чтобы получить доступ к очереди, проведите влево (под обложкой альбома), чтобы просмотреть текст песни, если он доступен.",
   "@hidePlayerBottomActionsSubtitle": {},
   "doTranscode": "Загрузить как {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
   "@doTranscode": {
@@ -1066,7 +1066,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "confirmPlayNext": "{type, select, track{Композиция} album{Альбом} artist{Исполнитель} playlist{Плейлист} genre{Жанр} other{Объект}} будет играть дальше",
+  "confirmPlayNext": "{type, select, track{Композиция} album{Альбом} artist{Исполнитель} playlist{Плейлист} genre{Жанр} other{Элемент}} будет играть дальше",
   "@confirmPlayNext": {
     "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
     "placeholders": {
@@ -1367,7 +1367,7 @@
   "@maxConcurrentDownloads": {
     "description": "Title of setting controlling max concurrent downloads."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Альбом} playlist{Плейлист} artist{Артист} genre{Жанр} song{Композиция} library{Библиотека} unknown{Объект} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Альбом} playlist{Плейлист} artist{Артист} genre{Жанр} song{Композиция} library{Библиотека} unknown{Элемент} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1737,8 +1737,130 @@
   "@showSeekControlsOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
   },
-  "lyricsAlignmentTitle": "Расположение текстов песен",
+  "lyricsAlignmentTitle": "Расположение текста песен",
   "@lyricsAlignmentTitle": {
     "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "resetSettingsPromptLocal": "Вы хотите сбросить эти настройки к значениям по умолчанию?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "bitDepth": "Разрядность",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "lyricsFontSizeSubtitle": "Управляет размером шрифта текстов песен в просмотре текстов.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "keepScreenOn": "Не отключать экран",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnSubtitle": "Когда держать экран включенным",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnWhileLyrics": "Пока отображаются тексты песен",
+  "@keepScreenOnWhileLyrics": {},
+  "keepScreenOnWhilePluggedIn": "Не отключать экран только на зарядке",
+  "@keepScreenOnWhilePluggedIn": {},
+  "artworkTooltip": "Обложка для {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "additionalPeople": "Люди",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "playbackMode": "Режим воспроизведения",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "codec": "Кодек",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "normalizationGain": "Усиление",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "sampleRate": "Частота дискретизации",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "albumScreen": "Экран альбома",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "emptyFilteredListTitle": "Ничего не найдено",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "emptyFilteredListSubtitle": "Ни один элемент не соответствует фильтру. Попробуйте отключить фильтр или изменить поисковый запрос.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetFiltersButton": "Сбросить фильтры",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "showLyricsScreenAlbumPreludeTitle": "Показывать альбом перед текстом песни",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnAlwaysOn": "Всегда включен",
+  "@keepScreenOnAlwaysOn": {},
+  "nowPlayingBarTooltip": "Открыть экран плеера",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "size": "Размер",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "genericCancel": "Отмена",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "lyricsFontSizeTitle": "Размер шрифта текстов песен",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "keepScreenOnDisabled": "Отключено",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnWhilePlaying": "Пока играет музыка",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhilePluggedInSubtitle": "Игнорировать настройку \"Не отключать экран\", если устройство не подключено к сети",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "genericToggleButtonTooltip": "Нажмите, чтобы переключить.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "artwork": "Обложка",
+  "@artwork": {},
+  "bitRate": "Битрейт",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "resetSettingsPromptGlobal": "Вы уверены, что хотите сбросить ВСЕ настройки к значениям по умолчанию?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "Сбросить ВСЕ настройки",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "lyricsAlignmentSubtitle": "Управляет расположением текста песен в просмотре текстов песен.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "Управляет тем, будет ли показываться обложка альбома над текстом песни, прежде чем она будет прокручена.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   }
 }
