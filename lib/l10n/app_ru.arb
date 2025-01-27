@@ -478,7 +478,7 @@
   "@swipeInsertQueueNext": {},
   "showFastScroller": "Показать быструю прокрутку",
   "@showFastScroller": {},
-  "about": "О программе Finamp",
+  "about": "О Finamp",
   "@about": {
     "description": "Label for the about/info button on the settings screen"
   },
