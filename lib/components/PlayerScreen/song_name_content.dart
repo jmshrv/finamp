@@ -44,21 +44,77 @@ class SongNameContent extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    constraints: const BoxConstraints(
-                      maxWidth: 280,
-                    ),
-                    child: ScrollingTextHelper(
-                      id: ValueKey(currentTrack.item.id),
-                      text: currentTrack.item.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        height: 1.2,
-                        fontWeight:
-                            Theme.of(context).brightness == Brightness.light
-                                ? FontWeight.w500
-                                : FontWeight.w600,
-                      ),
-                      alignment: TextAlign.center,
+                    constraints: const BoxConstraints(maxWidth: 280),
+                    child: Builder(
+                      builder: (context) {
+                        final text = currentTrack.item.title;
+                        final textStyle = TextStyle(
+                          fontSize: 20,
+                          height: 1.2,
+                          fontWeight:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? FontWeight.w500
+                                  : FontWeight.w600,
+                        );
+
+                        // Measure text width to determine if it's truly single line
+                        final textSpan = TextSpan(text: text, style: textStyle);
+                        final textPainter = TextPainter(
+                          text: textSpan,
+                          textDirection: TextDirection.ltr,
+                        )..layout(maxWidth: 280);
+
+                        // If text fits in single line width, always show as normal text
+                        if (textPainter.width <= 260) {
+                          return Text(
+                            text,
+                            style: textStyle,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                          );
+                        }
+
+                        // For multi-line text, check if it fits in two lines
+                        textPainter.maxLines = 2;
+                        textPainter.layout(maxWidth: 280);
+                        final exceedsTwoLines = textPainter.didExceedMaxLines;
+
+                        if (controller
+                            .shouldShow(PlayerHideable.twoLineTitle)) {
+                          // TWO LINE MODE: Use marquee only if text exceeds two lines
+                          if (exceedsTwoLines) {
+                            return SizedBox(
+                              width: 280,
+                              height: 30,
+                              child: ScrollingTextHelper(
+                                id: ValueKey(currentTrack.item.id),
+                                text: text,
+                                style: textStyle,
+                                alignment: TextAlign.center,
+                              ),
+                            );
+                          }
+                          return Text(
+                            text,
+                            style: textStyle,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        }
+
+                        // ONE LINE MODE: Force marquee for multi-line text
+                        return SizedBox(
+                          width: 280,
+                          height: 30,
+                          child: ScrollingTextHelper(
+                            id: ValueKey(currentTrack.item.id),
+                            text: text,
+                            style: textStyle,
+                            alignment: TextAlign.center,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
