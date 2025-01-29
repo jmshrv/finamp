@@ -29,14 +29,13 @@ class ScrollingTextHelper extends StatelessWidget {
       builder: (context, box, child) {
         bool oneLineMarquee =
             box.get("FinampSettings")?.oneLineMarqueeTextButton ?? false;
+        bool useEllipsis =
+            box.get("FinampSettings")?.marqueeOrTruncateButton ?? false;
 
         return LayoutBuilder(
           builder: (context, constraints) {
             final textPainter = TextPainter(
-              text: TextSpan(
-                text: text,
-                style: style,
-              ),
+              text: TextSpan(text: text, style: style),
               textDirection: TextDirection.ltr,
             )..layout(maxWidth: constraints.maxWidth);
 
@@ -44,7 +43,21 @@ class ScrollingTextHelper extends StatelessWidget {
             final textHeight = textPainter.size.height;
             final lineCount = (textHeight / lineHeight).ceil();
 
-            if (oneLineMarquee && lineCount > 1 || lineCount > 2) {
+            if (useEllipsis) {
+              return Container(
+                width: constraints.maxWidth,
+                height:
+                    lineHeight * 2, // Always use 2 lines height for consistency
+                alignment: Alignment.center,
+                child: BalancedText(
+                  text,
+                  style: style,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2, // Always allow 2 lines when using ellipsis
+                  textAlign: alignment,
+                ),
+              );
+            } else if (oneLineMarquee && lineCount > 1 || lineCount > 2) {
               return Container(
                 alignment: Alignment.center,
                 height: lineHeight,

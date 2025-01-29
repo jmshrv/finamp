@@ -323,11 +323,11 @@ class FinampSettingsHelper {
   }
 
   static void resetCustomizationSettings() {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.playbackSpeedVisibility =
-        PlaybackSpeedVisibility.automatic;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
+    final settings =
+        Hive.box<FinampSettings>("FinampSettings").get("FinampSettings")!;
+    settings.oneLineMarqueeTextButton = false;
+    settings.marqueeOrTruncateButton = false;
+    Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", settings);
   }
 
   static void setSwipeInsertQueueNext(bool swipeInsertQueueNext) {
