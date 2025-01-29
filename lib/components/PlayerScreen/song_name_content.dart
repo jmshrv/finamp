@@ -8,7 +8,6 @@ import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:get_it/get_it.dart';
 
 import '../../services/queue_service.dart';
-import 'album_chip.dart';
 import 'artist_chip.dart';
 
 class SongNameContent extends StatelessWidget {
@@ -82,13 +81,62 @@ class SongNameContent extends StatelessWidget {
                     ),
                   ],
                 ),
-                AlbumChip(
-                  item: songBaseItemDto,
-                  backgroundColor:
-                      IconTheme.of(context).color!.withOpacity(0.1),
-                  key: songBaseItemDto?.album == null
-                      ? null
-                      : ValueKey("${songBaseItemDto!.album}-album"),
+                Center(
+                  child: Builder(
+                    builder: (context) {
+                      final text = currentTrack.item.album ?? "";
+                      final textStyle = TextStyle(
+                        fontSize: 14,
+                        height: 1.0,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      );
+
+                      final textSpan = TextSpan(text: text, style: textStyle);
+                      final textPainter = TextPainter(
+                        text: textSpan,
+                        textDirection: TextDirection.ltr,
+                        maxLines: 1,
+                      )..layout();
+
+                      if (textPainter.width > 260) {
+                        return Container(
+                          constraints: const BoxConstraints(maxWidth: 280),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0, vertical: 2.0),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceVariant
+                                .withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: ScrollingTextHelper(
+                            id: ValueKey('album-${currentTrack.item.id}'),
+                            text: text,
+                            style: textStyle,
+                            alignment: TextAlign.center,
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0, vertical: 2.0),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceVariant
+                                .withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Text(
+                            text,
+                            style: textStyle,
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ],
             ),

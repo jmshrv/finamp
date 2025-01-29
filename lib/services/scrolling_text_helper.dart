@@ -38,7 +38,7 @@ class ScrollingTextHelper extends StatelessWidget {
         final textPainter = TextPainter(
           text: textSpan,
           textDirection: TextDirection.ltr,
-          maxLines: oneLineMode ? 1 : 2,
+          maxLines: 1,
           textAlign: alignment,
         );
 
@@ -46,9 +46,7 @@ class ScrollingTextHelper extends StatelessWidget {
         final doesTextFit = !textPainter.didExceedMaxLines;
         final actualTextHeight = textPainter.height;
 
-        final containerHeight = oneLineMode
-            ? (actualTextHeight > 24.0 ? actualTextHeight : 24.0)
-            : actualTextHeight + 4.0;
+        final containerHeight = actualTextHeight;
 
         if (!doesTextFit) {
           return SizedBox(
