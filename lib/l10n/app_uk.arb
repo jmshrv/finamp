@@ -1568,7 +1568,7 @@
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "downloadSettings": "Налаштування завантажень",
+  "downloadSettings": "Завантаження",
   "@downloadSettings": {},
   "incidentalDownloadTooltip": "Цей об'єкт має бути завантаженим з {parentName}.",
   "@incidentalDownloadTooltip": {
@@ -1843,7 +1843,7 @@
   "@showLyricsScreenAlbumPreludeSubtitle": {
     "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
-  "showCoversOnAlbumScreenTitle": "Показувати обкладинки альбомів для композицій.",
+  "showCoversOnAlbumScreenTitle": "Показувати обкладинки альбомів для композицій",
   "@showCoversOnAlbumScreenTitle": {
     "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
   },
