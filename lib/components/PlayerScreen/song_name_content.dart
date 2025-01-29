@@ -91,6 +91,7 @@ class SongNameContent extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       );
 
+                      // Measure text width
                       final textSpan = TextSpan(text: text, style: textStyle);
                       final textPainter = TextPainter(
                         text: textSpan,
@@ -98,43 +99,37 @@ class SongNameContent extends StatelessWidget {
                         maxLines: 1,
                       )..layout();
 
-                      if (textPainter.width > 260) {
-                        return Container(
-                          constraints: const BoxConstraints(maxWidth: 280),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4.0, vertical: 2.0),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceVariant
-                                .withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: ScrollingTextHelper(
-                            id: ValueKey('album-${currentTrack.item.id}'),
-                            text: text,
-                            style: textStyle,
-                            alignment: TextAlign.center,
-                          ),
-                        );
-                      } else {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4.0, vertical: 2.0),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceVariant
-                                .withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Text(
-                            text,
-                            style: textStyle,
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      }
+                      // Use actual text width + small padding for short text
+                      final contentWidth = textPainter.width + 16.0;
+                      final needsMarquee = contentWidth > 280.0;
+                      final width = needsMarquee ? 280.0 : contentWidth;
+
+                      return Container(
+                        width: width,
+                        height: 20.0,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 4.0, vertical: 2.0),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceVariant
+                              .withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: needsMarquee
+                            ? ScrollingTextHelper(
+                                id: ValueKey('album-${currentTrack.item.id}'),
+                                text: text,
+                                style: textStyle,
+                                alignment: TextAlign.center,
+                              )
+                            : Text(
+                                text,
+                                style: textStyle,
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                              ),
+                      );
                     },
                   ),
                 ),
