@@ -1,97 +1,85 @@
-import 'package:balanced_text/balanced_text.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
-import 'package:hive/hive.dart';
 
-import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
 
 class ScrollingTextHelper extends StatelessWidget {
-  final Key id;
-  final String text;
-  final TextStyle? style;
-  final TextAlign? alignment;
-  final bool useMarqueeCondition;
-
   const ScrollingTextHelper({
-    Key? key,
+    super.key,
     required this.id,
     required this.text,
     this.style,
-    required this.alignment,
-    this.useMarqueeCondition = true,
-  }) : super(key: key);
+    this.alignment = TextAlign.start,
+  });
+
+  final Key id;
+  final String text;
+  final TextStyle? style;
+  final TextAlign alignment;
+
+  get math => null;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool oneLineMarquee =
-            box.get("FinampSettings")?.oneLineMarqueeTextButton ?? false;
-        bool useEllipsis =
-            box.get("FinampSettings")?.marqueeOrTruncateButton ?? false;
+    final oneLineMode =
+        FinampSettingsHelper.finampSettings.oneLineMarqueeTextButton;
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final textPainter = TextPainter(
-              text: TextSpan(text: text, style: style),
-              textDirection: TextDirection.ltr,
-            )..layout(maxWidth: constraints.maxWidth);
+    final effectiveStyle =
+        (style ?? Theme.of(context).textTheme.bodyMedium)?.copyWith(
+      height: 1.1,
+    );
 
-            final lineHeight = textPainter.preferredLineHeight;
-            final textHeight = textPainter.size.height;
-            final lineCount = (textHeight / lineHeight).ceil();
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final textSpan = TextSpan(
+          text: text,
+          style: effectiveStyle,
+        );
+        final textPainter = TextPainter(
+          text: textSpan,
+          textDirection: TextDirection.ltr,
+          maxLines: oneLineMode ? 1 : 2,
+          textAlign: alignment,
+        );
 
-            if (useEllipsis) {
-              return Container(
-                width: constraints.maxWidth,
-                height:
-                    lineHeight * 2, // Always use 2 lines height for consistency
-                alignment: Alignment.center,
-                child: BalancedText(
-                  text,
-                  style: style,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2, // Always allow 2 lines when using ellipsis
-                  textAlign: alignment,
-                ),
-              );
-            } else if (oneLineMarquee && lineCount > 1 || lineCount > 2) {
-              return Container(
-                alignment: Alignment.center,
-                height: lineHeight,
-                width: constraints.maxWidth,
-                child: Marquee(
-                  key: id,
-                  text: text,
-                  style: style,
-                  scrollAxis: Axis.horizontal,
-                  blankSpace: 20.0,
-                  velocity: 50.0,
-                  pauseAfterRound: const Duration(seconds: 3),
-                  accelerationDuration: const Duration(seconds: 1),
-                  accelerationCurve: Curves.linear,
-                  decelerationDuration: const Duration(milliseconds: 500),
-                  decelerationCurve: Curves.easeOut,
-                  textDirection: TextDirection.ltr,
-                ),
-              );
-            } else {
-              return Container(
-                width: constraints.maxWidth,
-                height: lineHeight * (oneLineMarquee ? 1 : 2),
-                alignment: Alignment.center,
-                child: BalancedText(
-                  text,
-                  style: style,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: oneLineMarquee ? 1 : 2,
-                  textAlign: alignment,
-                ),
-              );
-            }
-          },
+        textPainter.layout(maxWidth: constraints.maxWidth);
+        final doesTextFit = !textPainter.didExceedMaxLines;
+        final actualTextHeight = textPainter.height;
+
+        final containerHeight = oneLineMode
+            ? (actualTextHeight > 24.0 ? actualTextHeight : 24.0)
+            : actualTextHeight + 4.0;
+
+        if (!doesTextFit) {
+          return SizedBox(
+            width: constraints.maxWidth,
+            height: containerHeight,
+            child: Marquee(
+              key: id,
+              text: text,
+              style: effectiveStyle,
+              scrollAxis: Axis.horizontal,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              blankSpace: 60.0,
+              velocity: 40.0,
+              pauseAfterRound: const Duration(seconds: 1),
+              startAfter: const Duration(seconds: 1),
+            ),
+          );
+        }
+
+        return SizedBox(
+          width: constraints.maxWidth,
+          height: containerHeight,
+          child: Center(
+            child: Text(
+              text,
+              style: effectiveStyle,
+              textAlign: alignment,
+              maxLines: oneLineMode ? 1 : 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         );
       },
     );

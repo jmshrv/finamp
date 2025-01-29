@@ -25,7 +25,6 @@ class SongNameContent extends StatelessWidget {
       stream: GetIt.instance<QueueService>().getQueueStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.currentTrack == null) {
-          // show loading indicator
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -46,22 +45,21 @@ class SongNameContent extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    constraints: BoxConstraints(
+                    constraints: const BoxConstraints(
                       maxWidth: 280,
                     ),
                     child: ScrollingTextHelper(
                       id: ValueKey(currentTrack.item.id),
-                      alignment: TextAlign.center,
                       text: currentTrack.item.title,
                       style: TextStyle(
                         fontSize: 20,
-                        height: 26 / 20,
+                        height: 1.2,
                         fontWeight:
                             Theme.of(context).brightness == Brightness.light
                                 ? FontWeight.w500
                                 : FontWeight.w600,
                       ),
-                      useMarqueeCondition: false,
+                      alignment: TextAlign.center,
                     ),
                   ),
                 ),
