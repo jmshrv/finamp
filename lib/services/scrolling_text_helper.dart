@@ -46,7 +46,7 @@ class ScrollingTextHelper extends StatelessWidget {
 
             if (oneLineMarquee && lineCount > 1 || lineCount > 2) {
               return Container(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 height: lineHeight,
                 width: constraints.maxWidth,
                 child: Marquee(
@@ -67,6 +67,8 @@ class ScrollingTextHelper extends StatelessWidget {
             } else {
               return Container(
                 width: constraints.maxWidth,
+                height: lineHeight * (oneLineMarquee ? 1 : 2),
+                alignment: Alignment.center,
                 child: BalancedText(
                   text,
                   style: style,
