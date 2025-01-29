@@ -315,7 +315,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       ),
       ListTile(
         leading: Icon(
-          TablerIcons.playlist,
+          Icons.playlist_add,
           color: iconColor,
         ),
         title: Text(AppLocalizations.of(context)!.addToQueue),
@@ -838,16 +838,15 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       OneLineMarqueeHelper(
-                        key: ValueKey(
-                            widget.item.id),
+                        key: ValueKey(widget.item.id),
                         text: widget.item.name ??
                             AppLocalizations.of(context)!.unknownName,
                         style: TextStyle(
                           fontSize: widget.condensed ? 16 : 18,
                           height: 1.2,
                           color:
-                          Theme.of(context).textTheme.bodyMedium?.color ??
-                              Colors.white,
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white,
                         ),
                       ),
                       Padding(
@@ -869,14 +868,8 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                       if (!widget.condensed)
                         AlbumChip(
                           item: widget.item,
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
-                          backgroundColor: IconTheme.of(context)
-                                  .color
-                                  ?.withOpacity(0.1) ??
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                              Colors.white,
+                          backgroundColor:
+                              IconTheme.of(context).color!.withOpacity(0.1),
                           key: widget.item.album == null
                               ? null
                               : ValueKey("${widget.item.album}-album"),
