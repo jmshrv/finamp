@@ -17,8 +17,6 @@ class ScrollingTextHelper extends StatelessWidget {
   final TextStyle? style;
   final TextAlign alignment;
 
-  get math => null;
-
   @override
   Widget build(BuildContext context) {
     final oneLineMode =
@@ -35,20 +33,39 @@ class ScrollingTextHelper extends StatelessWidget {
           text: text,
           style: effectiveStyle,
         );
-        final textPainter = TextPainter(
+
+        // First check if text fits in one line
+        final singleLinePainter = TextPainter(
           text: textSpan,
           textDirection: TextDirection.ltr,
           maxLines: 1,
           textAlign: alignment,
-        );
+        )..layout(maxWidth: constraints.maxWidth);
 
-        textPainter.layout(maxWidth: constraints.maxWidth);
-        final doesTextFit = !textPainter.didExceedMaxLines;
-        final actualTextHeight = textPainter.height;
+        // Then check if it fits in two lines
+        final twoLinePainter = TextPainter(
+          text: textSpan,
+          textDirection: TextDirection.ltr,
+          maxLines: 2,
+          textAlign: alignment,
+        )..layout(maxWidth: constraints.maxWidth);
 
-        final containerHeight = actualTextHeight;
+        final needsMoreThanOneLine = singleLinePainter.didExceedMaxLines;
+        final needsMoreThanTwoLines = twoLinePainter.didExceedMaxLines;
 
-        if (!doesTextFit) {
+        // Use marquee if:
+        // 1. oneLineMode is ON, and text needs more than one line
+        // 2. oneLineMode is OFF, and text needs more than two lines
+        final useMarquee =
+            oneLineMode ? needsMoreThanOneLine : needsMoreThanTwoLines;
+
+        // Dynamic height based on actual text height plus minimal padding
+        final containerHeight = useMarquee
+            ? (oneLineMode ? 24.0 : 36.0) // Keep existing heights for marquee
+            : twoLinePainter.height +
+                4.0; // Only change: dynamic height for normal text
+
+        if (useMarquee) {
           return SizedBox(
             width: constraints.maxWidth,
             height: containerHeight,
