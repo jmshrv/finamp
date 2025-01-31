@@ -43,7 +43,7 @@
   "@songs": {},
   "albums": "專輯",
   "@albums": {},
-  "artists": "藝術家",
+  "artists": "藝人",
   "@artists": {},
   "genres": "曲風",
   "@genres": {},
@@ -51,11 +51,11 @@
   "@playlists": {},
   "startMix": "開始混音",
   "@startMix": {},
-  "startMixNoSongsArtist": "在開始混音之前，長按藝術家以在混音生成器中添加或刪除它們",
+  "startMixNoSongsArtist": "長按藝人可將其加入或移除混音清單，準備好後再開始混音",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "在開始混音之前，長按專輯以在混音生成器中添加或刪除它們",
+  "startMixNoSongsAlbum": "長按專輯可將其加入或移除混音清單，準備好後再開始混音",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -264,7 +264,7 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "啓用後，通知可以在暫停時滑動。 啓用此功能還允許 Android 在暫停時終止服務。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "隨機播放所有歌曲計數",
+  "shuffleAllSongCount": "隨機播放所有歌曲次數",
   "@shuffleAllSongCount": {},
   "shuffleAllSongCountSubtitle": "使用隨機播放所有歌曲按鈕時要加載的歌曲數量。",
   "@shuffleAllSongCountSubtitle": {},
@@ -304,11 +304,11 @@
   "@showTextOnGridView": {},
   "useCoverAsBackground": "將模糊的封面應用為播放器背景",
   "@useCoverAsBackground": {},
-  "useCoverAsBackgroundSubtitle": "是否在播放器螢幕上使用模糊的封面作為背景。",
+  "useCoverAsBackgroundSubtitle": "是否在 App 的各個介面使用模糊化的專輯封面作為背景。",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "如果與專輯藝術家相同，則隱藏歌曲藝術家",
+  "hideSongArtistsIfSameAsAlbumArtists": "如果與專輯藝人相同，則隱藏歌曲藝人",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "是否在專輯螢幕上隱藏歌曲歌手（如果他們與專輯歌手沒有區別）。",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "當歌曲藝人與專輯藝人相同時，是否在專輯介面顯示歌曲藝人。",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "主題",
   "@theme": {},
@@ -442,7 +442,7 @@
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
-  "resetTabs": "重設分頁",
+  "resetTabs": "重置分頁",
   "@resetTabs": {},
   "noMusicLibrariesBody": "找不到音樂庫。請確保 Jellyfin 中至少有一個資料庫的類別需設置成\"音樂\"。",
   "@noMusicLibrariesBody": {},
@@ -614,7 +614,7 @@
   "@usernameHint": {
     "description": "Hint text for the username input field."
   },
-  "startMixNoSongsGenre": "長按一個類型可將其加入或移除混音編輯器，再開始混音",
+  "startMixNoSongsGenre": "長按一個類型可將其加入或移除混音清單，準備好後再開始混音",
   "@startMixNoSongsGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
@@ -648,7 +648,7 @@
   "@playlistActionsMenuButtonTooltip": {
     "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
   },
-  "showFeatureChipsToggleSubtitle": "在播放器畫面上顯示包含編解碼器、比特率等進階音軌資料。",
+  "showFeatureChipsToggleSubtitle": "在播放器介面上顯示包含編解碼器、比特率等進階音軌資料。",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -656,7 +656,7 @@
   "@resetSettingsPromptGlobalConfirm": {
     "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
   },
-  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或音軌的類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放器畫面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
+  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或音軌的類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放器介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -680,7 +680,7 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "目前沒有正在下載的項目。",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} 首曲目} other{{count} 首曲目}}，{downloads} 次下載",
+  "offlineSongCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}，{downloads} 次下載",
   "@offlineSongCount": {
     "placeholders": {
       "count": {
@@ -691,7 +691,7 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} 首曲目} other{{count} 首曲目}} 已下載",
+  "offlineSongCountArtist": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}} 已下載",
   "@offlineSongCountArtist": {
     "placeholders": {
       "count": {
@@ -703,7 +703,7 @@
   "@automatic": {
     "description": "Used as an option in the playback speed visibility settings"
   },
-  "playerScreen": "播放器畫面",
+  "playerScreen": "播放器介面",
   "@playerScreen": {
     "description": "Name for the expanded player"
   },
@@ -721,7 +721,7 @@
       }
     }
   },
-  "goToArtist": "前往歌手頁面",
+  "goToArtist": "前往藝人介面",
   "@goToArtist": {},
   "goToGenre": "前往類型",
   "@goToGenre": {},
@@ -733,7 +733,7 @@
   "@sampleRate": {
     "description": "Label for the feature chips showing the sample rate of a track"
   },
-  "showArtistsTopSongsSubtitle": "是否顯示某位藝術家最常收聽的前五首歌曲。",
+  "showArtistsTopSongsSubtitle": "是否顯示某位藝人最常收聽的前五首歌曲。",
   "@showArtistsTopSongsSubtitle": {},
   "hours": "小時",
   "@hours": {},
@@ -818,7 +818,7 @@
   "@showFeatureChipsToggleTitle": {
     "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "albumScreen": "專輯頁面",
+  "albumScreen": "專輯介面",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
@@ -826,7 +826,7 @@
   "@showCoversOnAlbumScreenTitle": {
     "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
   },
-  "showCoversOnAlbumScreenSubtitle": "在專輯畫面中，為每首歌曲單獨顯示專輯封面。",
+  "showCoversOnAlbumScreenSubtitle": "在專輯介面中，為每首歌曲單獨顯示專輯封面。",
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
   },
@@ -870,8 +870,90 @@
   "@playbackSpeedControlSetting": {
     "description": "Title of the visibility setting of the playback speed controls"
   },
-  "playbackSpeedControlSettingSubtitle": "播放速度控制是否顯示在播放器畫面的選單中",
+  "playbackSpeedControlSettingSubtitle": "播放速度控制是否顯示在播放器介面的選單中",
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
-  }
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "專輯封面最小邊距",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "confirmFavoriteAdded": "已收藏",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "已移除收藏",
+  "@confirmFavoriteRemoved": {},
+  "lyricsScreen": "歌詞介面",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "hidden": "隱藏",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "速度",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "重置",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "套用",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "skipToNextTrackButtonTooltip": "切換到下一首",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "bufferDisableSizeConstraintsTitle": "不要限制緩衝區大小",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "關閉「緩衝區大小」的限制，無論檔案大小多大，緩衝區都會依照設定的「緩衝區持續時間」載入。不過，這可能會導致程式當機，並且需要重新啟動才能生效。",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bufferSizeTitle": "緩衝區大小",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "緩衝區最大值 (MB)，變更後請重新啟動系統",
+  "@bufferSizeSubtitle": {},
+  "skipToPreviousTrackButtonTooltip": "從頭播放或切換至前一首",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "togglePlaybackButtonTooltip": "切換播放狀態",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "previousTracks": "先前歌曲",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "nextUp": "即將播放",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playingFrom": "播放自",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "shown": "顯示",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "專輯封面在播放器介面上的最小間隔距離，以螢幕寬度的百分比計算。",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "addToNextUp": "添加至下一首",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "confirmAddedToPlaylist": "已新增至播放清單。",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "clearNextUp": "取消播放下一首",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "showArtistsTopSongs": "在藝人介面顯示熱門歌曲",
+  "@showArtistsTopSongs": {}
 }
