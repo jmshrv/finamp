@@ -1,6 +1,4 @@
-// Use this helper in places that don't require
-// two lines marquee
-
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:balanced_text/balanced_text.dart';
@@ -18,6 +16,15 @@ class OneLineMarqueeHelper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!FinampSettingsHelper.finampSettings.oneLineMarqueeTextButton) {
+      return Text(
+        text,
+        style: style,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      );
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final textPainter = TextPainter(

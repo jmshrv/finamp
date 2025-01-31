@@ -1,4 +1,5 @@
 import 'package:finamp/screens/player_screen.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
@@ -48,6 +49,11 @@ class SongNameContent extends StatelessWidget {
                     child: Builder(
                       builder: (context) {
                         final text = currentTrack.item.title;
+                        final isTwoLineMode =
+                            controller.shouldShow(PlayerHideable.twoLineTitle);
+                        final isMarqueeEnabled = FinampSettingsHelper
+                            .finampSettings.oneLineMarqueeTextButton;
+
                         final textStyle = TextStyle(
                           fontSize: 20,
                           height: 1.2,
@@ -57,32 +63,26 @@ class SongNameContent extends StatelessWidget {
                                   : FontWeight.w600,
                         );
 
-                        // Measure text width to determine if it's truly single line
                         final textSpan = TextSpan(text: text, style: textStyle);
                         final textPainter = TextPainter(
                           text: textSpan,
                           textDirection: TextDirection.ltr,
+                          maxLines: 2,
                         )..layout(maxWidth: 280);
 
-                        // If text fits in single line width, always show as normal text
-                        if (textPainter.width <= 260) {
+                        final numLines =
+                            textPainter.computeLineMetrics().length;
+
+                        if (!isTwoLineMode) {
                           return Text(
                             text,
                             style: textStyle,
-                            textAlign: TextAlign.center,
                             maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
                           );
-                        }
-
-                        // For multi-line text, check if it fits in two lines
-                        textPainter.maxLines = 2;
-                        textPainter.layout(maxWidth: 280);
-                        final exceedsTwoLines = textPainter.didExceedMaxLines;
-
-                        if (controller
-                            .shouldShow(PlayerHideable.twoLineTitle)) {
-                          // TWO LINE MODE: Use marquee only if text exceeds two lines
-                          if (exceedsTwoLines) {
+                        } else {
+                          if (isMarqueeEnabled) {
                             return SizedBox(
                               width: 280,
                               height: 30,
@@ -93,27 +93,29 @@ class SongNameContent extends StatelessWidget {
                                 alignment: TextAlign.center,
                               ),
                             );
+                          } else {
+                            if (numLines <= 2) {
+                              return Text(
+                                text,
+                                style: textStyle,
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              );
+                            } else {
+                              return SizedBox(
+                                width: 280,
+                                height: 30,
+                                child: ScrollingTextHelper(
+                                  id: ValueKey(currentTrack.item.id),
+                                  text: text,
+                                  style: textStyle,
+                                  alignment: TextAlign.center,
+                                ),
+                              );
+                            }
                           }
-                          return Text(
-                            text,
-                            style: textStyle,
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          );
                         }
-
-                        // ONE LINE MODE: Force marquee for multi-line text
-                        return SizedBox(
-                          width: 280,
-                          height: 30,
-                          child: ScrollingTextHelper(
-                            id: ValueKey(currentTrack.item.id),
-                            text: text,
-                            style: textStyle,
-                            alignment: TextAlign.center,
-                          ),
-                        );
                       },
                     ),
                   ),
@@ -147,7 +149,6 @@ class SongNameContent extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       );
 
-                      // Measure text width
                       final textSpan = TextSpan(text: text, style: textStyle);
                       final textPainter = TextPainter(
                         text: textSpan,
@@ -155,7 +156,6 @@ class SongNameContent extends StatelessWidget {
                         maxLines: 1,
                       )..layout();
 
-                      // Use actual text width + small padding for short text
                       final contentWidth = textPainter.width + 16.0;
                       final needsMarquee = contentWidth > 280.0;
                       final width = needsMarquee ? 280.0 : contentWidth;
