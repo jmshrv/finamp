@@ -216,5 +216,31 @@
   "login": "Inici de sessió",
   "@login": {
     "description": "Label for the login button."
-  }
+  },
+  "selectMusicLibraries": "Selecciona la llibreria de música",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "No s'ha trobat cap llibreria.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "albums": "Àlbums",
+  "@albums": {},
+  "playlists": "Llistes de reproducció",
+  "@playlists": {},
+  "startMix": "Començar la mescla",
+  "@startMix": {},
+  "startMixNoSongsArtist": "Prém sostingudament per afegir o eliminar un artista de la llista de cançons abans de començar la llista",
+  "@startMixNoSongsArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "unknownName": "Nom desconegut",
+  "@unknownName": {},
+  "artists": "Artistes",
+  "@artists": {},
+  "genres": "Gèneres",
+  "@genres": {},
+  "songs": "Pistes",
+  "@songs": {}
 }
