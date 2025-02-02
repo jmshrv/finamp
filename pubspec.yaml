@@ -55,7 +55,7 @@ dependencies:
     logging: ^1.1.1
     collection: ^1.18.0
     clipboard: ^0.1.3
-    file_picker: ^8.0.3
+    file_picker: ^5.5.0
     permission_handler: ^11.3.1
     provider: ^6.0.5
     uuid: ^3.0.7
@@ -73,7 +73,7 @@ dependencies:
     share_plus: ^9.0.0
     isar: ^3.1.0
     isar_flutter_libs: ^3.1.0
-    custom_lint_core: ^0.6.10
+    custom_lint_core: ^0.5.7
     path: ^1.9.0
     intl: ">=0.18.1 < 1.0.0"
     auto_size_text: ^3.0.0
@@ -99,13 +99,15 @@ dependencies:
     flutter_blurhash: ^0.8.2
     scroll_to_index: ^3.0.1
     window_manager: ^0.3.8
-    url_launcher: ^6.2.6
+    url_launcher: ^6.2.5
     isar_generator: ^3.1.0+1
 
 # Fix for marquee dependency after Flutter 3.2.2 upgrade
 dependency_overrides:
     fading_edge_scrollview: ^4.1.1
     analyzer: ^6.0.0
+    url_launcher_ios: ^6.3.2
+    file_picker: ^8.0.0+1
 
 dev_dependencies:
     flutter_test:
@@ -172,6 +174,22 @@ flutter:
     #
     # For details regarding fonts from package dependencies,
     # see https://flutter.dev/custom-fonts/#from-packages
+
+    plugin:
+        platforms:
+            ios:
+                default_package: file_picker
+            android:
+                default_package: file_picker
+            # Remove or comment out other platforms if not needed
+            # linux:
+            #   default_package: file_picker
+            # macos:
+            #   default_package: file_picker
+            # windows:
+            #   default_package: file_picker
+            # web:
+            #   default_package: file_picker
 
 flutter_launcher_icons:
     android: true
