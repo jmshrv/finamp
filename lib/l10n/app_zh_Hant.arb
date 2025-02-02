@@ -266,7 +266,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllSongCount": "隨機播放所有歌曲次數",
   "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "使用隨機播放所有歌曲按鈕時要加載的歌曲數量。",
+  "shuffleAllSongCountSubtitle": "使用隨機播放按鈕時載入的歌曲數量。",
   "@shuffleAllSongCountSubtitle": {},
   "viewType": "顯示類型",
   "@viewType": {},
@@ -955,5 +955,110 @@
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
   "showArtistsTopSongs": "在藝人介面顯示熱門歌曲",
-  "@showArtistsTopSongs": {}
+  "@showArtistsTopSongs": {},
+  "shuffleToNextUp": "隨機加入「即將播放」佇列末端",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "shareOfflineListens": "分享離線收聽",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "allowSplitScreenSubtitle": "在寬螢幕環境下，播放器將與其他介面一同顯示。",
+  "@allowSplitScreenSubtitle": {},
+  "shuffleNext": "隨機播放下一首",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "shuffleToQueue": "隨機加入佇列末端",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "confirmAddToNextUp": "已將 {type, select, track{曲目} album{專輯} artist{藝人} playlist{播放清單} genre{類型} other{項目}} 新增至「即將播放」",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToQueue": "已將{type, select, track{歌曲} album{專輯} artist{歌手} playlist{播放清單} genre{類型} other{項目}}新增至播放佇列",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleNext": "已隨機排列至下一首",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmShuffleToNextUp": "已隨機排列至即將播放",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "已隨機排序並加入佇列",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "placeholderSource": "未知來源",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "playbackHistory": "播放記錄",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "yourLikes": "你的最愛",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "mix": "{mixSource} - 混音版",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "tracksFormerNextUp": "已加入過即將播放佇列的歌曲",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "savedQueue": "已儲存的佇列",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} songMix{精選單曲混合} artistMix{精選藝人混合} albumMix{精選專輯混合} genreMix{精選類型混合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選歌曲} genre{音樂類型} artist{藝人} song{單曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "playCountValue": "{playCount, plural, =1{{playCount} 次播放} other{{playCount} 次播放}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "confirmPlayNext": "已將{type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} other{項目}}新增至播放佇列，將會在下一首播放",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  }
 }
