@@ -100,7 +100,6 @@ const _prioritizeCoverFactor = 8.0;
 const _suppressPlayerPadding = false;
 const _hideQueueButton = false;
 const _oneLineMarqueeTextButton = false;
-const _marqueeOrTruncateButton = false;
 const _reportQueueToServerDefault = false;
 const _periodicPlaybackSessionUpdateFrequencySecondsDefault = 150;
 const _showArtistChipImage = true;
@@ -174,7 +173,6 @@ class FinampSettings {
     this.suppressPlayerPadding = _suppressPlayerPadding,
     this.hideQueueButton = _hideQueueButton,
     this.oneLineMarqueeTextButton = _oneLineMarqueeTextButton,
-    this.marqueeOrTruncateButton = _marqueeOrTruncateButton,
     this.reportQueueToServer = _reportQueueToServerDefault,
     this.periodicPlaybackSessionUpdateFrequencySeconds =
         _periodicPlaybackSessionUpdateFrequencySecondsDefault,
@@ -398,9 +396,6 @@ class FinampSettings {
 
   @HiveField(67, defaultValue: _oneLineMarqueeTextButton)
   bool oneLineMarqueeTextButton;
-
-  @HiveField(68, defaultValue: _oneLineMarqueeTextButton)
-  bool marqueeOrTruncateButton;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

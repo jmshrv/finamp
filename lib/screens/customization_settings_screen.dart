@@ -38,7 +38,6 @@ class _CustomizationSettingsScreenState
         children: const [
           PlaybackSpeedControlVisibilityDropdownListTile(),
           OneLineMarqueeTextSwitch(),
-          MarqueeOrTruncate(),
         ],
       ),
     );
@@ -67,36 +66,6 @@ class OneLineMarqueeTextSwitch extends StatelessWidget {
                   FinampSettings finampSettingsTemp =
                       box.get("FinampSettings")!;
                   finampSettingsTemp.oneLineMarqueeTextButton = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
-    );
-  }
-}
-
-class MarqueeOrTruncate extends StatelessWidget {
-  const MarqueeOrTruncate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? oneLineMarquee =
-            box.get("FinampSettings")?.marqueeOrTruncateButton;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.marqueeOrTruncateButton),
-          subtitle: Text(
-              AppLocalizations.of(context)!.marqueeOrTruncateButtonSubtitle),
-          value: oneLineMarquee ?? false,
-          onChanged: oneLineMarquee == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.marqueeOrTruncateButton = value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
         );

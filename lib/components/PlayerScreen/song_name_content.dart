@@ -70,8 +70,7 @@ class SongNameContent extends StatelessWidget {
                           maxLines: 2,
                         )..layout(maxWidth: 280);
 
-                        final numLines =
-                            textPainter.computeLineMetrics().length;
+                        final wouldOverflow = textPainter.didExceedMaxLines;
 
                         if (!isTwoLineMode) {
                           return Text(
@@ -82,27 +81,16 @@ class SongNameContent extends StatelessWidget {
                             textAlign: TextAlign.center,
                           );
                         } else {
-                          if (isMarqueeEnabled) {
-                            return SizedBox(
-                              width: 280,
-                              height: 30,
-                              child: ScrollingTextHelper(
-                                id: ValueKey(currentTrack.item.id),
-                                text: text,
-                                style: textStyle,
-                                alignment: TextAlign.center,
-                              ),
+                          if (!wouldOverflow) {
+                            return Text(
+                              text,
+                              style: textStyle,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             );
                           } else {
-                            if (numLines <= 2) {
-                              return Text(
-                                text,
-                                style: textStyle,
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              );
-                            } else {
+                            if (isMarqueeEnabled) {
                               return SizedBox(
                                 width: 280,
                                 height: 30,
@@ -112,6 +100,14 @@ class SongNameContent extends StatelessWidget {
                                   style: textStyle,
                                   alignment: TextAlign.center,
                                 ),
+                              );
+                            } else {
+                              return Text(
+                                text,
+                                style: textStyle,
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               );
                             }
                           }

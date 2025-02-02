@@ -326,7 +326,6 @@ class FinampSettingsHelper {
     final settings =
         Hive.box<FinampSettings>("FinampSettings").get("FinampSettings")!;
     settings.oneLineMarqueeTextButton = false;
-    settings.marqueeOrTruncateButton = false;
     Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", settings);
   }
 
