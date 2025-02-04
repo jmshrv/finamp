@@ -3,7 +3,7 @@
   "@serverUrl": {},
   "showTextOnGridViewSubtitle": "是否在網格音樂螢幕上顯示文字（標題、歌手等）。",
   "@showTextOnGridViewSubtitle": {},
-  "startupError": "應用程序啓動期間出現問題！ 錯誤是：{error}\n\n請在 github.com/UnicornsOnLSD/finamp 上提出一個 Github 問題，並附上此頁面的螢幕截圖。 如果此頁面一直顯示，請清除您的應用數據以重置應用。",
+  "startupError": "應用程式啓動時出現問題！ 錯誤訊息：{error}\n\n請在 github.com/UnicornsOnLSD/finamp 上提出一個 Github 問題，並附上此頁面的螢幕截圖。 如果此頁面一直顯示，請清除您的應用程式資料以重置應用程式。",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -160,7 +160,7 @@
       }
     }
   },
-  "errorScreenError": "獲取錯誤列表時出錯！您可以在 GitHub 上提出問題並清除應用數據",
+  "errorScreenError": "獲取錯誤列表時出錯！您可以在 GitHub 上提出問題並清除應用程式資料",
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "從下載 ID 獲取歌曲失敗",
   "@failedToGetSongFromDownloadId": {},
@@ -226,7 +226,7 @@
   "@audioService": {},
   "layoutAndTheme": "佈局和主題",
   "@layoutAndTheme": {},
-  "notAvailableInOfflineMode": "在離線模式下不可用",
+  "notAvailableInOfflineMode": "在離線模式下不能使用",
   "@notAvailableInOfflineMode": {},
   "logOut": "登出",
   "@logOut": {},
@@ -238,7 +238,7 @@
   "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "啓用轉碼",
   "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "如果啓用，音樂流將由伺服器轉碼。",
+  "enableTranscodingSubtitle": "如果啓用，音樂串流將由伺服器轉碼。",
   "@enableTranscodingSubtitle": {},
   "bitrate": "位元速率",
   "@bitrate": {},
@@ -514,7 +514,7 @@
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "aboutContributionPrompt": "由一群超棒的人在空閒時間製作完成。\n你也可以成為其中一員！",
+  "aboutContributionPrompt": "由一群超棒的人用美國時間完成。\n你也可以成為其中一員！",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
