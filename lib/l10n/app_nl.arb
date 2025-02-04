@@ -278,7 +278,7 @@
   "@unknownError": {},
   "directoryMustBeEmpty": "Folder moet leeg zijn",
   "@directoryMustBeEmpty": {},
-  "enterLowPriorityStateOnPause": "Ga naar een lage prioriteit wanneer gepauseerd",
+  "enterLowPriorityStateOnPause": "Ga naar Lage-Prioriteit Staat tijdens Pauzeren",
   "@enterLowPriorityStateOnPause": {},
   "viewType": "Type bekijken",
   "@viewType": {},
@@ -817,5 +817,375 @@
       }
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "playlistActionsMenuButtonTooltip": "Tik om toe te voegen aan afspeellijst. Houd ingedrukt om toe te voegen aan favorieten.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "bufferDisableSizeConstraintsSubtitle": "Schakelt buffergrootte beperking uit ('Buffergrootte'). De buffer zal altijd ingeladen worden zoals geconfigureerd volgens de bufferlengte ('Bufferlengte'), zelfs voor grotere bestanden. Dit kan een crash veroorzaken. Vereist een herstart.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bitRate": "Bitrate",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "goToArtist": "Ga naar Artiest",
+  "@goToArtist": {},
+  "connectionInterruptedBackgroundAndroid": "Connectie werd onderbroken terwijl downloads bezig waren. Dit kan veroorzaakt zijn door aanzetten 'Ga naar Lage-Prioriteit Staat tijdens Pauzeren' of OS instellingen.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "playingFromType": "Afspelen Van {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "loopModeOneButtonLabel": "Herhaal dit nummer",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "playbackHistory": "Afspeel Geschiedenis",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "reset": "Herstel",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "showArtistsTopSongsSubtitle": "Wel of niet laten zien van top 5 beluisterde nummers van een artiest.",
+  "@showArtistsTopSongsSubtitle": {},
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Lokaal Afspelen",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToGenre": "Ga naar Genre",
+  "@goToGenre": {},
+  "confirmAddedToPlaylist": "Toegevoegd aan afspeellijst.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "insertedIntoQueue": "Toegevoegd aan wachtrij.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "skipToNextTrackButtonTooltip": "Ga naar volgende nummer",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "placeholderSource": "Ergens",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "mix": "{mixSource} - Mix",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Laat alleen volledig gedownloade albums zien",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "alignmentOptionStart": "Begin",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "Centrum",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "fontSizeOptionLarge": "Groot",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "keepScreenOn": "Houd Scherm Aan",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnSubtitle": "Wanneer het scherm aan te houden",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnDisabled": "Uitgeschakeld",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnAlwaysOn": "Altijd Aan",
+  "@keepScreenOnAlwaysOn": {},
+  "keepScreenOnWhilePlaying": "Tijdens Muziek Afspelen",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhilePluggedIn": "Houd Scherm Aan alleen tijdens opladen",
+  "@keepScreenOnWhilePluggedIn": {},
+  "artwork": "Albumhoes",
+  "@artwork": {},
+  "artworkTooltip": "Albumhoes voor {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "keepScreenOnWhilePluggedInSubtitle": "Negeer de Houd Scherm Aan instelling als apparaat niet oplaad",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "genericToggleButtonTooltip": "Tik om te schakelen.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "playbackMode": "Afspeelmodus",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "additionalPeople": "Mensen",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "albumScreen": "Albumscherm",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showFeatureChipsToggleTitle": "Zichtbaarheid Geavanceerde Nummer Informatie",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "previousTracks": "Vorige Nummers",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "confirmAddToNextUp": "{type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} toegevoegd aan Volgende",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "fontSizeOptionMedium": "Gemiddeld",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "alignmentOptionEnd": "Einde",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Klein",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "nowPlayingBarTooltip": "Open Spelerscherm",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "codec": "Codec",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "confirmAddToQueue": "{type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} toegevoegd aan wachtrij",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleToNextUp": "Geshuffeld naar Volgende",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "normalizationGain": "Gain",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "savedQueue": "Opgeslagen Wachtrij",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "bufferDisableSizeConstraintsTitle": "Beperk bufferlimiet niet",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeTitle": "Buffergrootte",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "De maximale buffergrootte in MB. Vereist een herstart",
+  "@bufferSizeSubtitle": {},
+  "skipToPreviousTrackButtonTooltip": "Ga naar begin of naar vorige nummer",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "nextUp": "Volgende",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Verwijder Volgende",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "playingFrom": "Afspelen van",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "playNext": "Hierna afspelen",
+  "@playNext": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "addToNextUp": "Toevoegen aan Volgende",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleNext": "Shuffle als volgende",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "shuffleToNextUp": "Shuffle naar Volgende",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} zal hierna afspelen",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleNext": "Zal hierna shuffelen",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "Geshuffeld naar wachtrij",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "shareOfflineListens": "Deel offline geluisterd",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "yourLikes": "Mijn Favorieten",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "tracksFormerNextUp": "Nummers toegevoegd aan Volgende",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "shuffleAllQueueSource": "Shuffle Alles",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "Afspelen op volgorde",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderLinearButtonTooltip": "Afspelen op volgorde. Tik om te shuffelen.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Shuffel nummers",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Shuffel nummers. Tik voor afspelen op volgorde.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedFeatureText": "x{speed} snelheid",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedButtonLabel": "Afspelen op x{speed} snelheid",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Verlaag afspeelsnelheid",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Verhoog afspeelsnelheid",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeNoneButtonLabel": "Niet herhalen",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeAllButtonLabel": "Herhaal alles",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "filesystemFull": "Overgebleven downloads kunnen niet worden afgewerkt. Het bestandssysteem zit vol.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "Connectie is onderbroken, pauzeren van downloads.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "activeDownloadSize": "Downloaden...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "Verwijderen...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "Synchroniseren...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "maxConcurrentDownloads": "Max Gelijktijdige Downloads",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "showFeatureChipsToggleSubtitle": "Laat geavanceerde nummer informatie als codec, bitrate, en meer zien op het spelerscherm.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "unknownAlbum": "Onbekend Album",
+  "@unknownAlbum": {},
+  "playbackModeTranscoding": "Transcoderen",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "playbackModeDirectPlaying": "Direct Afspelen",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "confirmFavoriteAdded": "Toevoegen aan Favorieten",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Verwijderen uit Favorieten",
+  "@confirmFavoriteRemoved": {},
+  "shuffleToQueue": "Shuffle naar Wachtrij",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "connectionInterruptedBackground": "Connectie werd onderbroken terwijl downloads bezig waren. Dit kan veroorzaakt zijn door instellingen in het OS.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   }
 }
