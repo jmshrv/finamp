@@ -196,7 +196,7 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Falha ao adquirir música do ID da descarga",
+  "failedToGetSongFromDownloadId": "Falha a obter música com o ID do download",
   "@failedToGetSongFromDownloadId": {},
   "error": "Erro",
   "@error": {},
@@ -232,7 +232,7 @@
   "@stackTrace": {},
   "addButtonLabel": "Adicionar",
   "@addButtonLabel": {},
-  "shareLogs": "Compartilhar relatórios",
+  "shareLogs": "Partilhar relatórios",
   "@shareLogs": {},
   "logsCopied": "Relatórios copiados.",
   "@logsCopied": {},
@@ -382,7 +382,7 @@
   "@enableTranscodingSubtitle": {},
   "removeFromPlaylistTitle": "Remover da Lista de Reprodução",
   "@removeFromPlaylistTitle": {},
-  "songCount": "{count,plural,=1{{count} Música} other{{count} Músicas}}",
+  "songCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -412,7 +412,7 @@
   "@confirm": {},
   "language": "Linguagem",
   "@language": {},
-  "playNext": "Jogue a seguir",
+  "playNext": "Reproduzir a próxima",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
@@ -462,7 +462,7 @@
   "@about": {
     "description": "Label for the about/info button on the settings screen"
   },
-  "finampTagline": "Um leitor de música Jellyfin open source",
+  "finampTagline": "Um leitor de música open source para o Jellyfin",
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
@@ -681,7 +681,7 @@
   "@playbackHistory": {
     "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
   },
-  "playbackOrderShuffledButtonLabel": "A Reproduzir Aleatoriamente",
+  "playbackOrderShuffledButtonLabel": "A reproduzir aleatoriamente",
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
@@ -960,12 +960,402 @@
   "@togglePlaybackButtonTooltip": {
     "description": "Tooltip for the button that toggles playback"
   },
-  "nextUp": "Próximas Faixas",
+  "nextUp": "Próximas",
   "@nextUp": {
     "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
   "swipeInsertQueueNext": "Reproduzir Faixa Deslizada a Seguir",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Ativar para inserir uma faixa como próximo item na fila ao ser deslizada na lista de faixas, em vez de adicioná-la ao final.",
-  "@swipeInsertQueueNextSubtitle": {}
+  "@swipeInsertQueueNextSubtitle": {},
+  "periodicPlaybackSessionUpdateFrequency": "Frequência de atualização da sessão de reprodução",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "clearNextUp": "Limpar Próximas",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "confirmShuffleNext": "Próxima aleatória",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "yourLikes": "As Tuas Favoritas",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "playingFromType": "A Tocar de {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Tentar restaurar a última Fila ao iniciar.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "queueRestoreError": "Aviso: {count,plural, =1{{count} track} other{{count} tracks}} não pode ser restaurada para a Fila.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleAlbumsNext": "Aleatorizar Álbuns a Seguir",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Se o servidor do Jellyfin não recebeu nenhuma atualização de nenhum cliente nos últimos 5 minutos, assume que a reprodução acabou. Isto significa que, para faixas maiores do que 5 minutos, a reprodução pode ser incorretamente reportada como terminada, o que reduz a qualidade dos dados reportados sobre a reprodução.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "couldNotLoad": "Não foi possível carregar {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadItem": "Download",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "connectionInterruptedBackgroundAndroid": "A conexão foi interrompida durante o download. Isto pode ser causado por ativar 'Entrar em Estado de Baixa Prioridade na Pausa' ou por configurações de sistema.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "runRepairWarning": "Não foi possível contactar o servidor para finalizar a migração dos downloads. Por favor corre 'Reparar Downloads' através do ecrã de downloads logo que estejas online.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "shuffleNext": "Próxima aleatória",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "shuffleToNextUp": "Aleatória no final das Próximas",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleToQueue": "Adicionar à Fila aleatoriamente",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "confirmShuffleToQueue": "Adicionada como aleatória à Fila",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "playbackSpeedButtonLabel": "A tocar à velocidade de x{speed}",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedIncreaseLabel": "Aumentar velocidade de reprodução",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "playbackSpeedDecreaseLabel": "Diminuir velocidade de reprodução",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "queueRestoreSubtitle1": "A Tocar: {song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionInterruptedBackground": "A conexão foi interrompida enquanto fazia o download. Isto pode ser causado por configurações de sistema.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "showNullLibraryItemsSubtitle": "Alguma media pode ter sido baixada com uma biblioteca desconhecida. Desativa para esconder a coleção original.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloads": "Máximo de Downloads em Simultâneo",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "mix": "Mistura - {mixSource}",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "requireWifiForDownloads": "É necessário WiFi para fazer download.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "connectionInterrupted": "Conexão interrompida, a pausar os downloads.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "bufferDisableSizeConstraintsTitle": "Não limitar o tamanho do buffer",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "Desativa as restrições do tamanho do buffer. O buffer será sempre carregado de acordo com a duração configurada, mesmo para ficheiros muito grandes. Pode causar instabilidade. É necessário restart.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bufferSizeTitle": "Tamanho do buffer",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "O tamanho máximo do buffer em MB. É necessário restart",
+  "@bufferSizeSubtitle": {},
+  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} vai tocar a seguir",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "addToNextUp": "Adicionar às Próximas",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "confirmAddToNextUp": "Adicionar {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} às Próximas",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToQueue": "Adicionaste {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} à Fila",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleToNextUp": "Adicionada como aleatória às Próximas",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "placeholderSource": "Algures",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "tracksFormerNextUp": "Faixas adicionadas através das Próximas",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "shareOfflineListens": "Partilhar ouvidas offline",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "savedQueue": "Fila Gravada",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "shuffleAllQueueSource": "Todas Aleatórias",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonTooltip": "A tocar por ordem. Clica para aleatório.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "A tocar aleatoriamente. Clica para tocar por ordem.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedFeatureText": "Velocidade x{speed}",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "queuesScreen": "Restaurar A Tocar",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "Restaurar",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "Gravado {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Track} other{{count} Tracks}}, {remaining} Por Tocar",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "queueLoadingMessage": "A restaurar a Fila...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "queueRetryMessage": "Falha a restaurar a fila. Tentar novamente?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartup": "Auto-restaurar a Última Fila",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Reportar a Fila atual ao servidor?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Com que frequência deve enviar o estado da reprodução atual para o servido. Deverá ser menos de 5 minutos (300 segundos), para evitar que a sessão expire.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topSongs": "Temas Mais Tocados",
+  "@topSongs": {},
+  "albumCount": "{count,plural,=1{{count} Álbum} other{{count} Álbuns}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleAlbums": "Aleatorizar Álbuns",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsToQueue": "Aleatorizar Álbuns Na Fila",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "shuffleAlbumsToNextUp": "Tocar álbuns aleatoriamente nas Próximas",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} reprodução} other{{playCount} reproduções}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "startInstantMixForIndividualTracksSwitchTitle": "Iniciar Mistura Instantânea para Temas Individuais",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Quando ativado, clicar num tema na tab dos temas começa uma mistura instantânea desse tema, em vez de apenas tocar esse tema.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "deleteItem": "Apagar do dispositivo",
+  "@deleteItem": {
+    "description": "Option to delete item in long-press menu."
+  },
+  "repairComplete": "Reparação dos Downloads completa.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "syncComplete": "Todos os downloads foram sincronizados.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "syncDownloads": "Sincronizar e fazer download dos itens em falta.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "Problemas com a reparação de download de ficheiros ou metadados.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadLibraryPrompt": "Tens a certeza que queres fazer download de todo o conteúdo da biblioteca ''{libraryName}''?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Mostrar apenas álbuns descarregados",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "filesystemFull": "Downloads em falta não podem ser completados. O sistema de ficheiros está cheio.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "activeDownloadSize": "A fazer download...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "A Apagar...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "A Sincronizar...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "downloadSettings": "Downloads",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "Mostrar Media com Biblioteca Desconhecida.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloadsLabel": "{count} Downloads Concorrentes",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "reportQueueToServerSubtitle": "Quando ativado, o Finamp vai enviar a Fila atual para o servidor. Esta funcionalidade não é muito utilizada e aumenta o tráfego na rede.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "maxConcurrentDownloadsSubtitle": "Aumentar o número de downloads concorrentes pode permitir aumento de download, mas pode também causar falhas se o ficheiro for muito grande ou causar lag excessivo em alguns casos.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  }
 }
