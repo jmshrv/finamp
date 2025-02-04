@@ -44,6 +44,8 @@ Some of its features include:
 <sup>Note: The F-Droid release may take a day or two to get updates because since [F-Droid only builds once a day](https://www.f-droid.org/en/docs/FAQ_-_App_Developers/#ive-published-a-new-release-why-is-it-not-in-the-repository).</sup>  
 The app is also available as an APK from the [releases page](https://github.com/jmshrv/finamp/releases).
 
+The SHA-256 fingerprint of Finamp's signing certificate is `20:61:C5:C9:28:9C:00:02:08:81:B7:E5:33:4D:93:A0:2D:FA:4B:E9:80:AF:20:C0:5D:B4:E5:29:C8:DA:5B:54`. Google Play releases and provided APKs will be signed with this certificate. F-Droid releases will be signed with F-Droid's own signing certificates.
+
 ### Frequently Asked Questions
 
 #### Before Installing
