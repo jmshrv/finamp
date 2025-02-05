@@ -122,7 +122,7 @@
   },
   "serverUrl": "URL серверу",
   "@serverUrl": {},
-  "couldNotFindLibraries": "Неможливо знайти будь-яку музичну бібліотеку.",
+  "couldNotFindLibraries": "Не вдається знайти жодної бібліотеки.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
@@ -464,7 +464,7 @@
   "@noMusicLibrariesBody": {},
   "resetTabs": "Скинути вкладки",
   "@resetTabs": {},
-  "syncDownloadedPlaylists": "Синхронізувати завантажені плейлисти",
+  "syncDownloadedPlaylists": "Синхронізувати завантажені списки відтворення",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Показувати швидку прокрутку",
   "@showFastScroller": {},
