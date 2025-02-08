@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/components/AddToPlaylistScreen/playlist_actions_menu.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -78,67 +80,67 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
 
     var controller = PlayerHideableController();
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation:
-            0.0, // disable tint/shadow when content is scrolled under the app bar
-        centerTitle: true,
-        toolbarHeight: toolbarHeight,
-        title: PlayerScreenAppBarTitle(
-          maxLines: maxLines,
-        ),
-        leading: FinampAppBarButton(
-          dismissDirection: AxisDirection.right,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          if (Platform.isIOS)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: AirPlayRoutePickerView(
-                tintColor: IconTheme.of(context).color ?? Colors.white,
-                activeTintColor: jellyfinBlueColor,
-                onShowPickerView: () =>
-                    FeedbackHelper.feedback(FeedbackType.selection),
-              ),
+    return SimpleGestureDetector(
+        onVerticalSwipe: (direction) {
+          if (direction == SwipeDirection.up) {
+            // This should never actually be called until widget finishes build and controller is initialized
+            if (!FinampSettingsHelper.finampSettings.disableGesture ||
+                !controller.shouldShow(PlayerHideable.bottomActions)) {
+              showQueueBottomSheet(context);
+            }
+          }
+        },
+        onHorizontalSwipe: (direction) {
+          if (direction == SwipeDirection.right) {
+            if (!FinampSettingsHelper.finampSettings.disableGesture) {
+              Navigator.of(context).pop();
+            }
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation:
+                0.0, // disable tint/shadow when content is scrolled under the app bar
+            centerTitle: true,
+            toolbarHeight: toolbarHeight,
+            title: PlayerScreenAppBarTitle(
+              maxLines: maxLines,
             ),
-        ],
-      ),
-      // Required for sleep timer input
-      resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
-            const BlurredPlayerScreenBackground(),
-          SafeArea(
-            minimum: EdgeInsets.only(top: toolbarHeight),
-            child: LayoutBuilder(builder: (context, constraints) {
-              controller.setSize(
-                  Size(constraints.maxWidth, constraints.maxHeight),
-                  MediaQuery.orientationOf(context));
-              if (controller.useLandscape) {
-                return SimpleGestureDetector(
-                    onHorizontalSwipe: (direction) {
-                      if (direction == SwipeDirection.right) {
-                        if (!FinampSettingsHelper
-                            .finampSettings.disableGesture) {
-                          Navigator.of(context).pop();
-                        }
-                      }
-                    },
-                    child: const LyricsView());
-              } else {
-                return SimpleGestureDetector(
-                  onHorizontalSwipe: (direction) {
-                    if (direction == SwipeDirection.right) {
-                      if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                        Navigator.of(context).pop();
-                      }
-                    }
-                  },
-                  child: Column(
+            leading: FinampAppBarButton(
+              dismissDirection: AxisDirection.right,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            actions: [
+              if (Platform.isIOS)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: AirPlayRoutePickerView(
+                    tintColor: IconTheme.of(context).color ?? Colors.white,
+                    activeTintColor: jellyfinBlueColor,
+                    onShowPickerView: () =>
+                        FeedbackHelper.feedback(FeedbackType.selection),
+                  ),
+                ),
+            ],
+          ),
+          // Required for sleep timer input
+          resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+          body: Stack(
+            children: [
+              if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+                const BlurredPlayerScreenBackground(),
+              SafeArea(
+                minimum: EdgeInsets.only(top: toolbarHeight),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  controller.setSize(
+                      Size(constraints.maxWidth, constraints.maxHeight),
+                      MediaQuery.orientationOf(context));
+                  if (controller.useLandscape) {
+                    return const LyricsView();
+                  } else {
+                    return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const Expanded(
@@ -163,14 +165,14 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                               )
                             ],
                           ))
-                    ],
-                  ),
-                );
-              }
-            }),
+                      ],
+                    );
+                  }
+                }),
+              ),
+            ],
           ),
-        ],
-      ),
+        )
     );
   }
 }
