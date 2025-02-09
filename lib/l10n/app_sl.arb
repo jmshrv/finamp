@@ -1,1 +1,28 @@
-{}
+{
+  "finampTagline": "Odprtokodni glasbeni predvajalnik za Jellyfin",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionLink": "Prispevaj k Finamp na GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "finamp": "Finamp",
+  "@finamp": {
+    "description": "App name, possibly translated"
+  },
+  "about": "O Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "startupError": "Pri zagonu aplikacije je prislo do napake. Napaka: {error}\n\nUstvarite težavo na github.com/UnicornsOnLSD/finamp s posnetkom zaslona te strani. Če se ta težava ponovi, lahko izbrišete podatke aplikacije, da ponastavite aplikacijo.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  }
+}
