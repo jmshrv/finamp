@@ -476,7 +476,7 @@
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "Directory must be empty",
   "@directoryMustBeEmpty": {},
-  "customLocationsBuggy": "Custom locations are extremely buggy due to issues with permissions. I'm thinking of ways to fix this, but for now I wouldn't recommend using them.",
+  "customLocationsBuggy": "Custom locations can be extremely buggy and are not recommended in most cases. Locations under the system 'Music' folder prevent saving album covers due to OS limitations.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "Enter Low-Priority State on Pause",
   "@enterLowPriorityStateOnPause": {},
@@ -1835,5 +1835,14 @@
   "genericCancel": "Cancel",
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "largeDownloadWarning": "Warning: You are about to download {count} tracks.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

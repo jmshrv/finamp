@@ -54,12 +54,19 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            resValue "string", "app_name", "Finamp"
             // shrinkResources false
             // minifyEnabled false
+        }
+        profile {
+            applicationIdSuffix '.profile'
+            minifyEnabled true // avoid dexing issues
+            resValue "string", "app_name", "Finamp Profile"
         }
         debug {
             applicationIdSuffix '.debug'
             minifyEnabled true // avoid dexing issues
+            resValue "string", "app_name", "Finamp Debug"
         }
     }
     namespace 'com.unicornsonlsd.finamp'
