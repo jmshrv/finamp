@@ -13,7 +13,7 @@ import '../../services/finamp_user_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
-const songWarningCutoff = 250;
+const songWarningCutoff = 150;
 
 class DownloadDialog extends StatefulWidget {
   const DownloadDialog._build({
