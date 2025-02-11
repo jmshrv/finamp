@@ -1,12 +1,12 @@
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
+import '../../models/jellyfin_models.dart';
 import '../../services/downloads_service.dart';
 import '../confirmation_prompt_dialog.dart';
 import '../global_snackbar.dart';
@@ -21,14 +21,15 @@ class DownloadButton extends ConsumerWidget {
   });
 
   final DownloadStub item;
-  final int? children;
+  final List<BaseItemDto>? children;
   final bool isLibrary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    DownloadItemStatus? status =
-        ref.watch(downloadsService.statusProvider((item, children))).value;
+    DownloadItemStatus? status = ref
+        .watch(downloadsService.statusProvider((item, children?.length)))
+        .value;
     var isOffline = ref.watch(finampSettingsProvider
             .select((value) => value.valueOrNull?.isOffline)) ??
         true;
@@ -73,7 +74,16 @@ class DownloadButton extends ConsumerWidget {
                     onAborted: () {},
                   ));
         } else {
-          await DownloadDialog.show(context, item, viewId);
+          int? songCount = switch (item.baseItemType) {
+            BaseItemDtoType.album ||
+            BaseItemDtoType.playlist =>
+              children?.length,
+            BaseItemDtoType.artist || BaseItemDtoType.genre => children
+                ?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
+            _ => null
+          };
+          await DownloadDialog.show(context, item, viewId,
+              songCount: songCount);
         }
       },
       tooltip: parentTooltip,
@@ -93,8 +103,7 @@ class DownloadButton extends ConsumerWidget {
                 item.baseItem?.name ?? "", item.baseItemType.name),
             confirmButtonText:
                 AppLocalizations.of(context)!.deleteDownloadsConfirmButtonText,
-            abortButtonText:
-                AppLocalizations.of(context)!.genericCancel,
+            abortButtonText: AppLocalizations.of(context)!.genericCancel,
             onConfirmed: () async {
               try {
                 await downloadsService.deleteDownload(stub: item);

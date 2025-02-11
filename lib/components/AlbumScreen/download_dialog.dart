@@ -41,7 +41,8 @@ class DownloadDialog extends StatefulWidget {
   /// if transcode downloads is set to ask.  If neither is needed, the
   /// download is initiated immediately with no dialog.
   static Future<void> show(
-      BuildContext context, DownloadStub item, String? viewId) async {
+      BuildContext context, DownloadStub item, String? viewId,
+      {int? songCount}) async {
     if (viewId == null) {
       final finampUserHelper = GetIt.instance<FinampUserHelper>();
       viewId = finampUserHelper.currentUser!.currentViewId;
@@ -70,25 +71,29 @@ class DownloadDialog extends StatefulWidget {
       }
     }
 
-    // Fetch children if possible for size and songcount determinations
+    // If transcoding an album or playlist, fetch children for size calculation.
+    // If songCount was not supplied, fetch children to calculate for all types
+    // where this can be determined in one query.
     JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     List<BaseItemDto>? children;
-    int? songCount;
-    if (item.baseItemType == BaseItemDtoType.album ||
-        item.baseItemType == BaseItemDtoType.playlist) {
+    if ((item.baseItemType == BaseItemDtoType.album ||
+            item.baseItemType == BaseItemDtoType.playlist) &&
+        (needTranscode || songCount == null)) {
       children = await jellyfinApiHelper.getItems(
           parentItem: item.baseItem!,
           includeItemTypes: BaseItemDtoType.song.idString,
           fields:
               "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
       songCount = children?.length;
-    } else if (item.baseItemType == BaseItemDtoType.artist ||
-        item.baseItemType == BaseItemDtoType.genre) {
-      children = await jellyfinApiHelper.getItems(
+    } else if ((item.baseItemType == BaseItemDtoType.artist ||
+            item.baseItemType == BaseItemDtoType.genre) &&
+        songCount == null) {
+      // Only song children are expected by dialog, so do not save album children.
+      List<BaseItemDto>? artistChildren = await jellyfinApiHelper.getItems(
         parentItem: item.baseItem!,
         includeItemTypes: BaseItemDtoType.album.idString,
       );
-      songCount = children?.fold<int>(
+      songCount = artistChildren?.fold<int>(
           0, (count, item) => count + (item.childCount ?? 0));
     }
 
@@ -133,6 +138,9 @@ class _DownloadDialogState extends State<DownloadDialog> {
 
   @override
   Widget build(BuildContext context) {
+    assert(widget.children?.every((child) =>
+            BaseItemDtoType.fromItem(child) == BaseItemDtoType.song) ??
+        true);
     String originalDescription = "null";
     String transcodeDescription = "null";
     var transcodeProfile =
