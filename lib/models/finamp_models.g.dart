@@ -7122,20 +7122,11 @@ FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
               Map<String, dynamic>.from(json['Library'] as Map)),
     );
 
-Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) {
-  final val = <String, dynamic>{
-    'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Library', instance.library?.toJson());
-  return val;
-}
+Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) =>
+    <String, dynamic>{
+      'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
+      if (instance.library?.toJson() case final value?) 'Library': value,
+    };
 
 const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.favorites: 'favorites',

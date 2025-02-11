@@ -530,6 +530,10 @@ class PlaybackHistoryService {
         playMethod: item.item.extras?["shouldTranscode"] ?? false
             ? "Transcode"
             : "DirectPlay",
+        playbackOrder:
+            _queueService.playbackOrder == FinampPlaybackOrder.shuffled
+                ? "Shuffle"
+                : "Default",
         nowPlayingQueue:
             getQueueToReport(includeNowPlayingQueue: includeNowPlayingQueue),
         playlistItemId: _queueService.getQueue().source.id,
@@ -573,6 +577,10 @@ class PlaybackHistoryService {
         playMethod: _currentTrack!.item.item.extras!["shouldTranscode"]
             ? "Transcode"
             : "DirectPlay",
+        playbackOrder:
+            _queueService.playbackOrder == FinampPlaybackOrder.shuffled
+                ? "Shuffle"
+                : "Default",
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
         nowPlayingQueue: getQueueToReport(),
         playlistItemId: _queueService.getQueue().source.id,

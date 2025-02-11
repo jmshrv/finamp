@@ -3075,6 +3075,7 @@ class PlaybackProgressInfo {
     this.liveStreamId,
     this.playSessionId,
     required this.repeatMode,
+    this.playbackOrder,
     this.nowPlayingQueue,
     this.playlistItemId,
   });
@@ -3121,6 +3122,10 @@ class PlaybackProgressInfo {
   /// Enum: "Transcode" "DirectStream" "DirectPlay"
   /// Gets or sets the play method.
   String playMethod;
+
+  /// Enum: "Default" "Shuffle"
+  /// Gets or sets the playback order.
+  String playbackOrder;
 
   /// Gets or sets the live stream identifier.
   String? liveStreamId;
