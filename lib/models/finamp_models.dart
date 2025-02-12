@@ -2096,11 +2096,15 @@ enum PlaybackSpeedVisibility {
 }
 
 enum FinampCollectionType {
-  favorites,
-  allPlaylists,
-  latest5Albums,
-  libraryImages,
-  allPlaylistsMetadata;
+  favorites(true),
+  allPlaylists(true),
+  latest5Albums(true),
+  libraryImages(false),
+  allPlaylistsMetadata(false);
+
+  const FinampCollectionType(this.hasAudio);
+
+  final bool hasAudio;
 }
 
 @JsonSerializable(
