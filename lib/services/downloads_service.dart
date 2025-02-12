@@ -691,6 +691,17 @@ class DownloadsService {
         syncItemDownloadSettings(item);
       }
     });
+    _isar.writeTxnSync(() {
+      var itemsWithFiles = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.song)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
+          .findAllSync();
+      for (var item in itemsWithFiles) {
+        syncItemDownloadSettings(item);
+      }
+    });
     markOutdatedTranscodes();
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
