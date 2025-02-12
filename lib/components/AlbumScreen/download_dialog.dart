@@ -13,8 +13,6 @@ import '../../services/finamp_user_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
-const songWarningCutoff = 150;
-
 class DownloadDialog extends StatefulWidget {
   const DownloadDialog._build({
     super.key,
@@ -76,6 +74,7 @@ class DownloadDialog extends StatefulWidget {
     // where this can be determined in one query.
     JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     List<BaseItemDto>? children;
+    print((await jellyfinApiHelper.getItemById(item.id)).toJson());
     if ((item.baseItemType == BaseItemDtoType.album ||
             item.baseItemType == BaseItemDtoType.playlist) &&
         (needTranscode || songCount == null)) {
@@ -99,7 +98,8 @@ class DownloadDialog extends StatefulWidget {
 
     if (!needTranscode &&
         downloadLocation != null &&
-        (songCount ?? 0) < songWarningCutoff) {
+        (songCount ?? 0) <
+            FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff) {
       final downloadsService = GetIt.instance<DownloadsService>();
       var profile = FinampSettingsHelper
                   .finampSettings.shouldTranscodeDownloads ==
@@ -225,7 +225,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
                         .dontTranscode(originalDescription)),
                   )
                 ]),
-          if ((widget.songCount ?? 0) >= songWarningCutoff)
+          if ((widget.songCount ?? 0) >=
+              FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff)
             Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                 child: Text(AppLocalizations.of(context)!

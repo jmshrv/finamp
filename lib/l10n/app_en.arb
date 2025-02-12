@@ -1844,5 +1844,13 @@
         "type": "int"
       }
     }
+  },
+  "downloadSizeWarningCutoff": "Download Size Warning Cutoff",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "downloadSizeWarningCutoffSubtitle": "A warning message will be displayed when downloading more than this many songs at once.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
   }
 }

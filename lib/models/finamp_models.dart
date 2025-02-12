@@ -140,6 +140,7 @@ class DefaultSettings {
   static const showDownloadsWithUnknownLibrary = true;
   static const downloadWorkers = 5;
   static const maxConcurrentDownloads = 10;
+  static const downloadSizeWarningCutoff = 150;
 }
 
 @HiveType(typeId: 28)
@@ -245,7 +246,9 @@ class FinampSettings {
       this.hasDownloadedPlaylistInfo =
           DefaultSettings.hasDownloadedPlaylistInfo,
       this.transcodingSegmentContainer =
-          DefaultSettings.transcodingSegmentContainer});
+          DefaultSettings.transcodingSegmentContainer,
+      this.downloadSizeWarningCutoff =
+          DefaultSettings.downloadSizeWarningCutoff});
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -258,8 +261,7 @@ class FinampSettings {
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
 
-  @HiveField(4,
-      defaultValue: DefaultSettings.androidStopForegroundOnPause)
+  @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
@@ -508,6 +510,9 @@ class FinampSettings {
 
   @HiveField(79, defaultValue: DefaultSettings.bufferSizeMegabytes)
   int bufferSizeMegabytes;
+
+  @HiveField(80, defaultValue: DefaultSettings.downloadSizeWarningCutoff)
+  int downloadSizeWarningCutoff;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2441,7 +2446,6 @@ class FinampFeatureChipsConfiguration {
     );
   }
 }
-
 
 @HiveType(typeId: 76)
 class DeviceInfo {
