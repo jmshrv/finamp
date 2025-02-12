@@ -410,7 +410,7 @@
   "@disableGesture": {},
   "minutes": "Minuti",
   "@minutes": {},
-  "bufferDurationSubtitle": "Quanto buffer, in secondi, deve avere il player. Richiede riavvio.",
+  "bufferDurationSubtitle": "La durata massima che deve essere bufferizzata. Richiede il riavvio.",
   "@bufferDurationSubtitle": {},
   "redownloadedItems": "{count,plural, =0{Non è necessario riscaricare nulla.} =1{Riscaricato {count} oggetto} other{Riscaricati {count} oggetti}}",
   "@redownloadedItems": {
@@ -1244,7 +1244,7 @@
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
-  "downloadSettings": "Impostazioni di Download",
+  "downloadSettings": "Downloads",
   "@downloadSettings": {},
   "showNullLibraryItemsTitle": "Mostra i Media di una Libreria Sconosciuta.",
   "@showNullLibraryItemsTitle": {
@@ -1854,5 +1854,13 @@
   "periodicPlaybackSessionUpdateFrequencyDetails": "Se il server Jellyfin non ha ricevuto alcun aggiornamento da un client negli ultimi 5 minuti, presume che la riproduzione sia terminata. Ciò significa che per i brani più lunghi di 5 minuti la riproduzione potrebbe essere erroneamente segnalata come terminata, riducendo la qualità dei dati di segnalazione della riproduzione.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
-  }
+  },
+  "bufferSizeTitle": "Dimensione del buffer",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "La dimensione massima del buffer, in MB. Richiede un riavvio.",
+  "@bufferSizeSubtitle": {},
+  "bufferDisableSizeConstraintsTitle": "Non limitare la dimensione del buffer",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "Disattiva i vincoli sulla dimensione del buffer (\"Buffer Size\"). Il buffer verrà sempre caricato fino alla durata configurata (\"Buffer Duration\"), anche per file di grandi dimensioni. Può causare arresti anomali. Richiede un riavvio.",
+  "@bufferDisableSizeConstraintsSubtitle": {}
 }
