@@ -219,7 +219,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
     InputDecoration inputFieldDecoration(String placeholder) {
       return InputDecoration(
         filled: true,
-        fillColor: Theme.of(context).colorScheme.surfaceVariant,
+        fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         label: Text(placeholder),
@@ -300,16 +300,16 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
   final bool? connected;
 
   const JellyfinServerSelectionWidget({
-    Key? key,
+    super.key,
     required this.baseUrl,
     required this.serverInfo,
     this.onPressed,
     this.connected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    buildContent() {
+    Row buildContent() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

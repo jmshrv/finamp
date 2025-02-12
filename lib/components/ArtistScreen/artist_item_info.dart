@@ -10,11 +10,11 @@ import '../icon_and_text.dart';
 
 class ArtistItemInfo extends StatelessWidget {
   const ArtistItemInfo({
-    Key? key,
+    super.key,
     required this.item,
     required this.itemSongs,
     required this.itemAlbums,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final int itemSongs;
@@ -51,7 +51,7 @@ class ArtistItemInfo extends StatelessWidget {
 }
 
 class _GenreIconAndText extends StatelessWidget {
-  const _GenreIconAndText({Key? key, required this.genres}) : super(key: key);
+  const _GenreIconAndText({super.key, required this.genres});
 
   final List<NameLongIdPair> genres;
 

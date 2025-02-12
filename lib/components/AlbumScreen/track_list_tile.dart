@@ -96,7 +96,7 @@ class TrackListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    trackListTileOnTap(bool playable) async {
+    Future<void> trackListTileOnTap(bool playable) async {
       final queueService = GetIt.instance<QueueService>();
       final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 

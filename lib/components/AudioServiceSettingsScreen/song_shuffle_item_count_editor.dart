@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class SongShuffleItemCountEditor extends StatefulWidget {
-  const SongShuffleItemCountEditor({Key? key}) : super(key: key);
+  const SongShuffleItemCountEditor({super.key});
 
   @override
   State<SongShuffleItemCountEditor> createState() =>

@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import '../../services/finamp_logs_helper.dart';
 
 class CopyLogsButton extends StatefulWidget {
-  const CopyLogsButton({Key? key}) : super(key: key);
+  const CopyLogsButton({super.key});
 
   @override
   State<CopyLogsButton> createState() => _CopyLogsButtonState();

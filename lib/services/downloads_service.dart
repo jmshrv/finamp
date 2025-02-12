@@ -668,7 +668,7 @@ class DownloadsService {
     for (var item in itemsWithFiles) {
       switch (item.state) {
         case DownloadItemState.complete:
-          await _verifyDownload(item);
+          _verifyDownload(item);
         case DownloadItemState.notDownloaded:
           break;
         case DownloadItemState.enqueued: // fall through
@@ -712,7 +712,7 @@ class DownloadsService {
         .filter()
         .typeEqualTo(DownloadItemType.song)
         .findAllSync();
-    final JellyfinApiHelper _jellyfinApiData =
+    final JellyfinApiHelper jellyfinApiData =
         GetIt.instance<JellyfinApiHelper>();
     for (var item in allItems) {
       if (item.baseItem?.mediaStreams
@@ -729,7 +729,7 @@ class DownloadsService {
         idsWithLyrics[item.isarId] = null;
         LyricDto? lyrics;
         try {
-          lyrics = await _jellyfinApiData.getLyrics(itemId: item.id);
+          lyrics = await jellyfinApiData.getLyrics(itemId: item.id);
           _downloadsLogger.finer("Fetched lyrics for ${item.name}");
           idsWithLyrics[item.isarId] = lyrics;
         } catch (e) {

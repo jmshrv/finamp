@@ -22,15 +22,15 @@ class CTALarge extends StatelessWidget {
         onPressed();
       },
       style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
           const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         ),
-        backgroundColor: MaterialStateProperty.all<Color>(
+        backgroundColor: WidgetStateProperty.all<Color>(
             Theme.of(context).brightness == Brightness.dark
                 ? accentColor.withOpacity(0.3)
                 : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white)),

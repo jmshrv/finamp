@@ -74,7 +74,6 @@ import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
-import 'services/ui_overlay_setter_observer.dart';
 import 'setup_logging.dart';
 
 void main() async {

@@ -22,7 +22,7 @@ class DownloadErrorList extends StatelessWidget {
       DownloadItemState.failed => Theme.of(context).colorScheme.errorContainer,
       DownloadItemState.syncFailed =>
         Theme.of(context).colorScheme.errorContainer,
-      _ => Theme.of(context).colorScheme.surfaceVariant,
+      _ => Theme.of(context).colorScheme.surfaceContainerHighest,
     };
     return SliverStickyHeader(
         header: Container(

@@ -752,7 +752,7 @@ class AndroidAutoHelper {
               (item.albumArtists?.any((artist) =>
                       (artist.name?.isNotEmpty ?? false) &&
                       (wantedArtist
-                              ?.toString()
+                              .toString()
                               .toLowerCase()
                               .contains(artist.name?.toLowerCase() ?? "") ??
                           false)) ??
@@ -846,7 +846,7 @@ class AndroidAutoHelper {
               (item.albumArtists?.any((artist) =>
                       (artist.name?.isNotEmpty ?? false) &&
                       (wantedArtist
-                              ?.toString()
+                              .toString()
                               .toLowerCase()
                               .contains(artist.name?.toLowerCase() ?? "") ??
                           false)) ??

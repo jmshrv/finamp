@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class PlayerScreenMinimumCoverPaddingEditor extends StatefulWidget {
-  const PlayerScreenMinimumCoverPaddingEditor({Key? key}) : super(key: key);
+  const PlayerScreenMinimumCoverPaddingEditor({super.key});
 
   @override
   State<PlayerScreenMinimumCoverPaddingEditor> createState() =>

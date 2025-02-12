@@ -25,7 +25,7 @@ class _PlayerSettingsScreenState extends State<PlayerSettingsScreen> {
           ]),
       body: ListView(
         children: const [
-          const ShowFeatureChipsToggle(),
+          ShowFeatureChipsToggle(),
           PlayerScreenMinimumCoverPaddingEditor(),
           SuppressPlayerPaddingSwitch(),
           PrioritizeCoverSwitch(),

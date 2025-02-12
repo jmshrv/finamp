@@ -12,7 +12,7 @@ import '../../services/music_player_background_task.dart';
 import '../global_snackbar.dart';
 
 class LogoutListTile extends StatefulWidget {
-  const LogoutListTile({Key? key}) : super(key: key);
+  const LogoutListTile({super.key});
 
   @override
   State<LogoutListTile> createState() => _LogoutListTileState();

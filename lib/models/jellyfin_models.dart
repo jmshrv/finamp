@@ -6,6 +6,7 @@
 /// Jellyfin's API documentation (https://api.jellyfin.org)
 ///
 /// These classes should be correct with Jellyfin 10.7.5
+library;
 
 import 'package:collection/collection.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -1735,6 +1736,7 @@ class BaseItemDto with RunTimeTickDuration {
   double? communityRating;
 
   /// Gets or sets the run time ticks.
+  @override
   @HiveField(35)
   int? runTimeTicks;
 
@@ -2415,6 +2417,7 @@ class MediaSourceInfo with RunTimeTickDuration {
   @HiveField(9)
   bool isRemote;
 
+  @override
   @HiveField(10)
   int? runTimeTicks;
 

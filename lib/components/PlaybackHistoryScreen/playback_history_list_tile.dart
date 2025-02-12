@@ -12,7 +12,7 @@ import '../../services/theme_provider.dart';
 import '../album_image.dart';
 
 class PlaybackHistoryListTile extends StatefulWidget {
-  PlaybackHistoryListTile({
+  const PlaybackHistoryListTile({
     super.key,
     required this.actualIndex,
     required this.item,

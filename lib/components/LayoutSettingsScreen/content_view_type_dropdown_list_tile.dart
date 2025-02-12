@@ -6,7 +6,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class ContentViewTypeDropdownListTile extends StatelessWidget {
-  const ContentViewTypeDropdownListTile({Key? key}) : super(key: key);
+  const ContentViewTypeDropdownListTile({super.key});
 
   @override
   Widget build(BuildContext context) {

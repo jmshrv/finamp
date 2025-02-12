@@ -5,8 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class PeriodicPlaybackSessionUpdateFrequencyEditor extends StatefulWidget {
-  const PeriodicPlaybackSessionUpdateFrequencyEditor({Key? key})
-      : super(key: key);
+  const PeriodicPlaybackSessionUpdateFrequencyEditor({super.key});
 
   @override
   State<PeriodicPlaybackSessionUpdateFrequencyEditor> createState() =>

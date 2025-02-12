@@ -9,7 +9,7 @@ import '../components/DownloadsScreen/sync_downloads_button.dart';
 import '../components/padded_custom_scrollview.dart';
 
 class DownloadsScreen extends StatelessWidget {
-  const DownloadsScreen({Key? key}) : super(key: key);
+  const DownloadsScreen({super.key});
 
   static const routeName = "/downloads";
 

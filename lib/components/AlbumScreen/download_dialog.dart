@@ -15,7 +15,6 @@ import '../global_snackbar.dart';
 
 class DownloadDialog extends StatefulWidget {
   const DownloadDialog._build({
-    super.key,
     required this.item,
     required this.viewId,
     required this.downloadLocationId,

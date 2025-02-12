@@ -13,11 +13,11 @@ final _borderRadius = BorderRadius.circular(4);
 
 class AlbumChip extends StatelessWidget {
   const AlbumChip({
-    Key? key,
+    super.key,
     this.item,
     this.backgroundColor,
     this.color,
-  }) : super(key: key);
+  });
 
   final BaseItemDto? item;
   final Color? backgroundColor;
@@ -38,7 +38,7 @@ class AlbumChip extends StatelessWidget {
 }
 
 class _EmptyAlbumChip extends StatelessWidget {
-  const _EmptyAlbumChip({Key? key}) : super(key: key);
+  const _EmptyAlbumChip({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +54,11 @@ class _EmptyAlbumChip extends StatelessWidget {
 
 class _AlbumChipContent extends StatelessWidget {
   const _AlbumChipContent({
-    Key? key,
+    super.key,
     required this.item,
     required this.backgroundColor,
     required this.color,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final Color? backgroundColor;
@@ -67,7 +67,7 @@ class _AlbumChipContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final _isarDownloader = GetIt.instance<DownloadsService>();
+    final isarDownloader = GetIt.instance<DownloadsService>();
 
     final albumName = item.album ?? AppLocalizations.of(context)!.noAlbum;
 
@@ -84,7 +84,7 @@ class _AlbumChipContent extends StatelessWidget {
         child: InkWell(
           borderRadius: _borderRadius,
           onTap: FinampSettingsHelper.finampSettings.isOffline
-              ? () => _isarDownloader.getCollectionInfo(id: item.albumId!).then(
+              ? () => isarDownloader.getCollectionInfo(id: item.albumId!).then(
                   (album) => Navigator.of(context).pushNamed(
                       AlbumScreen.routeName,
                       arguments: album!.baseItem!))

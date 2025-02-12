@@ -3,10 +3,10 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class ViewIcon extends StatelessWidget {
   const ViewIcon({
-    Key? key,
+    super.key,
     required this.collectionType,
     this.color,
-  }) : super(key: key);
+  });
 
   final String? collectionType;
   final Color? color;

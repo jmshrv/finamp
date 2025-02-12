@@ -222,7 +222,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           _buildTabController();
         }
 
-        Timer? _debounce;
+        Timer? debounce;
 
         return PopScope(
           canPop: !isSearching,
@@ -246,8 +246,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.search,
                       onChanged: (value) {
-                        if (_debounce?.isActive ?? false) _debounce!.cancel();
-                        _debounce =
+                        if (debounce?.isActive ?? false) debounce!.cancel();
+                        debounce =
                             Timer(const Duration(milliseconds: 400), () {
                           setState(() {
                             searchQuery = value;

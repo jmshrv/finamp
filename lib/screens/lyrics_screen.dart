@@ -33,7 +33,7 @@ import 'blurred_player_screen_background.dart';
 import 'player_screen.dart';
 
 class LyricsScreen extends ConsumerWidget {
-  const LyricsScreen({Key? key}) : super(key: key);
+  const LyricsScreen({super.key});
 
   static const routeName = "/lyrics";
 
@@ -64,9 +64,7 @@ class LyricsScreen extends ConsumerWidget {
 }
 
 class _LyricsScreenContent extends StatefulWidget {
-  const _LyricsScreenContent({
-    super.key,
-  });
+  const _LyricsScreenContent();
 
   @override
   State<_LyricsScreenContent> createState() => _LyricsScreenContentState();

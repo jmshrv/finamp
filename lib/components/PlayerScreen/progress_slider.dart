@@ -15,12 +15,12 @@ typedef DragCallback = void Function(double? value);
 
 class ProgressSlider extends StatefulWidget {
   const ProgressSlider({
-    Key? key,
+    super.key,
     this.allowSeeking = true,
     this.showBuffer = true,
     this.showDuration = true,
     this.showPlaceholder = true,
-  }) : super(key: key);
+  });
 
   final bool allowSeeking;
   final bool showBuffer;
@@ -125,10 +125,10 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
 class _ProgressSliderDuration extends StatelessWidget {
   const _ProgressSliderDuration({
-    Key? key,
+    super.key,
     required this.position,
     this.itemDuration,
-  }) : super(key: key);
+  });
 
   final Duration position;
   final Duration? itemDuration;
@@ -169,13 +169,13 @@ class _ProgressSliderDuration extends StatelessWidget {
 
 class _PlaybackProgressSlider extends ConsumerStatefulWidget {
   const _PlaybackProgressSlider({
-    Key? key,
+    super.key,
     required this.allowSeeking,
     this.mediaItem,
     required this.playbackState,
     required this.position,
     required this.onDrag,
-  }) : super(key: key);
+  });
 
   final bool allowSeeking;
   final MediaItem? mediaItem;

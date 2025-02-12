@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Made CircularProgressIndicator adaptive
 
 class FirstPageProgressIndicator extends StatelessWidget {
-  const FirstPageProgressIndicator({Key? key}) : super(key: key);
+  const FirstPageProgressIndicator({super.key});
 
   @override
   Widget build(BuildContext context) => const Padding(

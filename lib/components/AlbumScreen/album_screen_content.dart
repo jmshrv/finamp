@@ -99,7 +99,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   horizontal: 16.0,
                   vertical: 16.0,
                 ),
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Text(
                   AppLocalizations.of(context)!
                       .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
@@ -127,14 +127,14 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
 
 class SongsSliverList extends StatefulWidget {
   const SongsSliverList({
-    Key? key,
+    super.key,
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
     this.onRemoveFromList,
     this.showPlayCount = false,
     this.isOnArtistScreen = false,
-  }) : super(key: key);
+  });
 
   final List<BaseItemDto> childrenForList;
   final Future<List<BaseItemDto>> childrenForQueue;

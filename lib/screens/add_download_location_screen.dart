@@ -10,7 +10,7 @@ import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
 class AddDownloadLocationScreen extends StatefulWidget {
-  const AddDownloadLocationScreen({Key? key}) : super(key: key);
+  const AddDownloadLocationScreen({super.key});
 
   static const routeName = "/settings/downloadlocations/add";
 

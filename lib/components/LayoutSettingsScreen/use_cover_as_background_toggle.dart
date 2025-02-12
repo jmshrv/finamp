@@ -6,7 +6,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class UseCoverAsBackgroundToggle extends StatelessWidget {
-  const UseCoverAsBackgroundToggle({Key? key}) : super(key: key);
+  const UseCoverAsBackgroundToggle({super.key});
 
   @override
   Widget build(BuildContext context) {

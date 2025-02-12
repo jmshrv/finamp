@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 class ShareOfflineListensButton extends StatelessWidget {
-  const ShareOfflineListensButton({Key? key}) : super(key: key);
+  const ShareOfflineListensButton({super.key});
 
   @override
   Widget build(BuildContext context) {

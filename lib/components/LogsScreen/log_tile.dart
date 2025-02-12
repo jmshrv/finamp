@@ -8,7 +8,7 @@ import 'package:logging/logging.dart';
 import '../global_snackbar.dart';
 
 class LogTile extends StatefulWidget {
-  const LogTile({Key? key, required this.logRecord}) : super(key: key);
+  const LogTile({super.key, required this.logRecord});
 
   final LogRecord logRecord;
 
@@ -145,7 +145,7 @@ class _LogTileState extends State<LogTile> {
 }
 
 class _LogIcon extends StatelessWidget {
-  const _LogIcon({Key? key, required this.level}) : super(key: key);
+  const _LogIcon({super.key, required this.level});
 
   final Level level;
 
@@ -164,7 +164,7 @@ class _LogIcon extends StatelessWidget {
 }
 
 class _LogMessageContent extends StatelessWidget {
-  const _LogMessageContent(this.content, {Key? key}) : super(key: key);
+  const _LogMessageContent(this.content, {super.key});
 
   final String content;
 

@@ -175,7 +175,7 @@ class PlaybackHistoryService {
     // }
   }
 
-  get history => _history;
+  List<FinampHistoryItem> get history => _history;
   BehaviorSubject<List<FinampHistoryItem>> get historyStream => _historyStream;
 
   void _resetPeriodicUpdates() {
@@ -192,7 +192,7 @@ class PlaybackHistoryService {
   /// method that converts history into a list grouped by date
   List<MapEntry<DateTime, List<FinampHistoryItem>>>
       getHistoryGroupedDynamically() {
-    byDateGroupingConstructor(FinampHistoryItem element) {
+    DateTime byDateGroupingConstructor(FinampHistoryItem element) {
       final now = DateTime.now();
       if (now.year == element.startTime.year &&
           now.month == element.startTime.month &&
@@ -230,7 +230,7 @@ class PlaybackHistoryService {
 
   /// method that converts history into a list grouped by date
   List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByDate() {
-    byDateGroupingConstructor(FinampHistoryItem element) {
+    DateTime byDateGroupingConstructor(FinampHistoryItem element) {
       return DateTime(
         element.startTime.year,
         element.startTime.month,
@@ -243,7 +243,7 @@ class PlaybackHistoryService {
 
   /// method that converts history into a list grouped by hour
   List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByHour() {
-    byHourGroupingConstructor(FinampHistoryItem element) {
+    DateTime byHourGroupingConstructor(FinampHistoryItem element) {
       return DateTime(
         element.startTime.year,
         element.startTime.month,

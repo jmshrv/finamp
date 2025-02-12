@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/cupertino.dart';

@@ -29,11 +29,11 @@ enum AlbumMenuItems {
 
 class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
   const AlbumScreenContentFlexibleSpaceBar({
-    Key? key,
+    super.key,
     required this.parentItem,
     required this.isPlaylist,
     required this.items,
-  }) : super(key: key);
+  });
 
   final BaseItemDto parentItem;
   final bool isPlaylist;

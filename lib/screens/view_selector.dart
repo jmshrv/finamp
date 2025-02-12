@@ -10,7 +10,7 @@ import '../services/jellyfin_api_helper.dart';
 import 'music_screen.dart';
 
 class ViewSelector extends StatefulWidget {
-  const ViewSelector({Key? key}) : super(key: key);
+  const ViewSelector({super.key});
 
   static const routeName = "/settings/views";
 

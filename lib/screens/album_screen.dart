@@ -15,9 +15,9 @@ import '../services/music_player_background_task.dart';
 
 class AlbumScreen extends StatefulWidget {
   const AlbumScreen({
-    Key? key,
+    super.key,
     this.parent,
-  }) : super(key: key);
+  });
 
   static const routeName = "/music/album";
 

@@ -165,7 +165,7 @@ class PlayerScreen extends ConsumerWidget {
 
 class _PlayerScreenContent extends ConsumerWidget {
   const _PlayerScreenContent(
-      {super.key, required this.airplayTheme, required this.playerScreen});
+      {required this.airplayTheme, required this.playerScreen});
 
   final Color airplayTheme;
   final Widget playerScreen;

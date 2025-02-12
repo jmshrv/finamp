@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
 
 class CustomizationSettingsScreen extends StatefulWidget {
-  const CustomizationSettingsScreen({Key? key}) : super(key: key);
+  const CustomizationSettingsScreen({super.key});
 
   static const routeName = "/settings/customization";
 

@@ -116,7 +116,6 @@ class PlayerButtons extends StatelessWidget {
 
 class _RoundedIconButton extends StatelessWidget {
   const _RoundedIconButton({
-    super.key,
     required this.icon,
     this.borderRadius,
     this.width = 48,
@@ -153,18 +152,19 @@ class _RoundedIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _borderRadius = borderRadius ?? BorderRadius.circular(height);
-    final _icon = icon is Icon ? _addDropShadow(icon as Icon, context) : icon;
+    final actualBorderRadius = borderRadius ?? BorderRadius.circular(height);
+    final actualIcon =
+        icon is Icon ? _addDropShadow(icon as Icon, context) : icon;
     return SizedBox(
       width: width,
       height: height,
       child: Material(
-        borderRadius: _borderRadius,
+        borderRadius: actualBorderRadius,
         color: IconTheme.of(context).color!.withOpacity(0.15),
         child: InkWell(
-          borderRadius: _borderRadius,
+          borderRadius: actualBorderRadius,
           onTap: onTap,
-          child: _icon,
+          child: actualIcon,
         ),
       ),
     );

@@ -6,7 +6,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class ShowTextOnGridViewSelector extends StatelessWidget {
-  const ShowTextOnGridViewSelector({Key? key}) : super(key: key);
+  const ShowTextOnGridViewSelector({super.key});
 
   @override
   Widget build(BuildContext context) {

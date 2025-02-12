@@ -10,7 +10,7 @@ import '../../services/finamp_user_helper.dart';
 import '../view_icon.dart';
 
 class ViewListTile extends ConsumerWidget {
-  const ViewListTile({Key? key, required this.view}) : super(key: key);
+  const ViewListTile({super.key, required this.view});
 
   final BaseItemDto view;
 

@@ -14,11 +14,11 @@ import '../album_image.dart';
 /// directly, use AlbumItem instead.
 class AlbumItemListTile extends StatelessWidget {
   const AlbumItemListTile({
-    Key? key,
+    super.key,
     required this.item,
     this.parentType,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final String? parentType;

@@ -32,12 +32,12 @@ enum ArtistMenuItems {
 
 class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
   const ArtistScreenContentFlexibleSpaceBar({
-    Key? key,
+    super.key,
     required this.parentItem,
     required this.isGenre,
     required this.allSongs,
     required this.albumCount,
-  }) : super(key: key);
+  });
 
   final BaseItemDto parentItem;
   final bool isGenre;

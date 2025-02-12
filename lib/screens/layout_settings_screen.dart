@@ -154,7 +154,7 @@ class AllowSplitScreenSwitch extends StatelessWidget {
 }
 
 class FixedGridTileSizeDropdownListTile extends StatelessWidget {
-  const FixedGridTileSizeDropdownListTile({Key? key}) : super(key: key);
+  const FixedGridTileSizeDropdownListTile({super.key});
 
   @override
   Widget build(BuildContext context) {
