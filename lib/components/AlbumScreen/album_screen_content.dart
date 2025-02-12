@@ -1,3 +1,4 @@
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
@@ -20,12 +21,11 @@ import 'track_list_tile.dart';
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
 class AlbumScreenContent extends StatefulWidget {
-  const AlbumScreenContent({
-    super.key,
-    required this.parent,
-    required this.displayChildren,
-    required this.queueChildren
-  });
+  const AlbumScreenContent(
+      {super.key,
+      required this.parent,
+      required this.displayChildren,
+      required this.queueChildren});
 
   final BaseItemDto parent;
   final List<BaseItemDto> displayChildren;
@@ -139,7 +139,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                 enabled: true,
                                 onTap: () async {
                                   await askBeforeDeleteFromServerAndDevice(
-                                      context, downloadStub, popIt: true);
+                                      context, downloadStub,
+                                      popIt: true,
+                                      refresh: () => musicScreenRefreshStream.add(
+                                          null)); // trigger a refresh of the music screen
                                 }))
                       ];
                     },
@@ -155,7 +158,9 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                         // Also, the user could delete the parent and immediately redownload it, which will either cause unwanted network usage or cause more errors because the user is offline.
                         onPressed: () {
                           askBeforeDeleteDownloadFromDevice(
-                              context, downloadStub);
+                              context, downloadStub,
+                              refresh: () => musicScreenRefreshStream.add(
+                                  null)); // trigger a refresh of the music screen
 
                           // .whenComplete(() => checkIfDownloaded());
                         },
@@ -167,7 +172,10 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                 .deleteFromTargetConfirmButton("server"),
                             onPressed: () {
                               askBeforeDeleteFromServerAndDevice(
-                                  context, downloadStub);
+                                  context, downloadStub,
+                                  popIt: true,
+                                  refresh: () => musicScreenRefreshStream.add(
+                                      null)); // trigger a refresh of the music screen
                             },
                           )
                         : Visibility(visible: false, child: Text(""))

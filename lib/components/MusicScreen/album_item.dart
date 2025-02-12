@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -53,7 +54,6 @@ class AlbumItem extends ConsumerStatefulWidget {
     this.onTap,
     this.isGrid = false,
     this.gridAddSettingsListener = false,
-    this.refresh,
   });
 
   /// The album (or item, I just used to call items albums before Finamp
@@ -79,9 +79,6 @@ class AlbumItem extends ConsumerStatefulWidget {
   /// or not to show the text. You'll want to set this to false if the
   /// [AlbumItem] would be rebuilt by FinampSettings anyway.
   final bool gridAddSettingsListener;
-
-  // gets called when an item got delete in order to rerender the parent
-  final void Function()? refresh;
 
   @override
   ConsumerState<AlbumItem> createState() => _AlbumItemState();
@@ -638,8 +635,8 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             GlobalSnackbar.error(e);
             return;
           }
-          if (mounted) {
-            Navigator.of(context)
+          if (context.mounted) {
+            await Navigator.of(context)
                 .pushNamed(ArtistScreen.routeName, arguments: artist);
           }
         case null:
@@ -651,17 +648,14 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.deleteFromDevice:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteDownloadFromDevice(context, item);
-          widget.refresh != null
-          ? unawaited(Future.delayed(Duration(seconds: 1)).then((value) => widget.refresh!()))
-          : null;
+          await askBeforeDeleteDownloadFromDevice(context, item,
+              refresh: () => musicScreenRefreshStream.add(null));
         case _AlbumListTileMenuItems.deleteFromServer:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteFromServerAndDevice(context, item);
-          widget.refresh != null
-          ? unawaited(Future.delayed(Duration(seconds: 1)).then((value) => widget.refresh!()))
-          : null;
+          await askBeforeDeleteFromServerAndDevice(context, item,
+              refresh: () => musicScreenRefreshStream
+                  .add(null)); // trigger a refresh of the music screen
       }
     }
 

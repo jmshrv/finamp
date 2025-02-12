@@ -1,3 +1,4 @@
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -10,9 +11,8 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> askBeforeDeleteDownloadFromDevice(
-    BuildContext context, DownloadStub stub, {
-      VoidCallback? refresh
-    }) async {
+    BuildContext context, DownloadStub stub,
+    {VoidCallback? refresh}) async {
   String type = stub.baseItemType.name;
   await showDialog(
       context: context,
@@ -24,13 +24,13 @@ Future<void> askBeforeDeleteDownloadFromDevice(
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
           onConfirmed: () async {
             try {
-              await GetIt.instance<DownloadsService>().deleteDownload(stub: stub);
-              GlobalSnackbar
-                .message((_) => AppLocalizations.of(context)!
-                      .itemDeletedSnackbar("device", type)
-                );
+              await GetIt.instance<DownloadsService>()
+                  .deleteDownload(stub: stub);
+              GlobalSnackbar.message((_) => AppLocalizations.of(context)!
+                  .itemDeletedSnackbar("device", type));
 
-              if (context.mounted && FinampSettingsHelper.finampSettings.isOffline) {
+              if (context.mounted &&
+                  FinampSettingsHelper.finampSettings.isOffline) {
                 Navigator.of(context).popUntil((route) {
                   return route.settings.name != null // unnamed dialog
                       &&
@@ -49,7 +49,8 @@ Future<void> askBeforeDeleteDownloadFromDevice(
 }
 
 Future<void> askBeforeDeleteFromServerAndDevice(
-    BuildContext context, DownloadStub stub, {bool popIt = false}) async {
+    BuildContext context, DownloadStub stub,
+    {VoidCallback? refresh, bool popIt = false}) async {
   DownloadItemStatus status =
       GetIt.instance<DownloadsService>().getStatus(stub, null);
   String type = stub.baseItemType.name;
@@ -69,36 +70,32 @@ Future<void> askBeforeDeleteFromServerAndDevice(
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
           onConfirmed: () async {
             try {
-
               await jellyfinApiHelper.deleteItem(stub.id);
-              GlobalSnackbar
-                .message((_) => AppLocalizations.of(context)!
-                      .itemDeletedSnackbar("server", type)
-                );
+              GlobalSnackbar.message((_) => AppLocalizations.of(context)!
+                  .itemDeletedSnackbar("server", type));
 
               if (status.isRequired) {
-                
                 await downloadsService.deleteDownload(stub: stub);
-                GlobalSnackbar
-                  .message((_) => AppLocalizations.of(context)!
-                        .itemDeletedSnackbar("device", type)
-                  );
+                GlobalSnackbar.message((_) => AppLocalizations.of(context)!
+                    .itemDeletedSnackbar("device", type));
               }
 
               if (context.mounted) {
-                Navigator.of(context).popUntil((route) {
-                  return route.settings.name != null // unnamed dialog
-                      &&
-                      route.settings.name !=
-                          AlbumScreen.routeName; // albums screen
-                });
+                if (popIt) {
+                  Navigator.of(context).popUntil((route) {
+                    return route.settings.name != null // unnamed dialog
+                        &&
+                        route.settings.name !=
+                            AlbumScreen.routeName; // albums screen
+                  });
+                }
               }
-
             } catch (err) {
               GlobalSnackbar.error(err);
+            } finally {
+              refresh != null ? refresh() : null;
             }
           },
           onAborted: () {},
-          centerText: true
-      ));
+          centerText: true));
 }

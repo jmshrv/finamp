@@ -26,6 +26,9 @@ import '../new_page_progress_indicator.dart';
 import 'album_item.dart';
 import 'alphabet_item_list.dart';
 
+// this is used to allow refreshing the music screen from other parts of the app, e.g. after deleting items from the server
+final musicScreenRefreshStream = StreamController<void>.broadcast();
+
 class MusicScreenTabView extends StatefulWidget {
   const MusicScreenTabView({
     super.key,
@@ -61,7 +64,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _isarDownloader = GetIt.instance<DownloadsService>();
-  StreamSubscription<void>? _refreshStream;
+  StreamSubscription<void>? _musicScreenRefreshStreamSubscription;
+  StreamSubscription<void>? _downloadsRefreshStreamSubscription;
 
   late AutoScrollController controller;
   int _requestedPageKey = -1;
@@ -188,7 +192,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         viewportBoundaryGetter: () =>
             Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
         axis: Axis.vertical);
-    _refreshStream = _isarDownloader.offlineDeletesStream.listen((event) {
+    _musicScreenRefreshStreamSubscription =
+        musicScreenRefreshStream.stream.listen((_) {
+      _refresh();
+    });
+    _downloadsRefreshStreamSubscription =
+        _isarDownloader.offlineDeletesStream.listen((event) {
       _refresh();
     });
     super.initState();
@@ -274,7 +283,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   @override
   void dispose() {
-    _refreshStream?.cancel();
+    _musicScreenRefreshStreamSubscription?.cancel();
+    _downloadsRefreshStreamSubscription?.cancel();
     _pagingController.dispose();
     timer?.cancel();
     super.dispose();
@@ -389,7 +399,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   album: item,
                                   isPlaylist: widget.tabContentType ==
                                       TabContentType.playlists,
-                                  refresh: _refresh,
                                 ),
                         ),
                       );
@@ -422,7 +431,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                               widget.tabContentType == TabContentType.playlists,
                           isGrid: true,
                           gridAddSettingsListener: false,
-                          refresh: _refresh
                         ),
                       );
                     },
