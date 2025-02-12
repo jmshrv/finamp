@@ -600,8 +600,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.song, item: widget.item);
               await askBeforeDeleteFromServerAndDevice(context, item);
-              final BaseItemDto newAlbum =
-                  await _jellyfinApiHelper.getItemById(widget.item.albumId!);
+              final BaseItemDto newAlbumOrPlaylist =
+                  await _jellyfinApiHelper.getItemById(widget.parentItem!.id);
               if (context.mounted) {
                 Navigator.pop(context); // close dialog
                 // pop current album screen and reload with new album data
@@ -612,7 +612,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                           AlbumScreen.routeName; // albums screen
                 });
                 await Navigator.of(context)
-                    .pushNamed(AlbumScreen.routeName, arguments: newAlbum);
+                    .pushNamed(AlbumScreen.routeName,
+                    arguments: newAlbumOrPlaylist);
               }
             },
           )),
