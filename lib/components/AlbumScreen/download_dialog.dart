@@ -74,7 +74,6 @@ class DownloadDialog extends StatefulWidget {
     // where this can be determined in one query.
     JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     List<BaseItemDto>? children;
-    print((await jellyfinApiHelper.getItemById(item.id)).toJson());
     if ((item.baseItemType == BaseItemDtoType.album ||
             item.baseItemType == BaseItemDtoType.playlist) &&
         (needTranscode || songCount == null)) {
