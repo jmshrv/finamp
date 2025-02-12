@@ -3075,7 +3075,7 @@ class PlaybackProgressInfo {
     this.liveStreamId,
     this.playSessionId,
     required this.repeatMode,
-    this.playbackOrder,
+    this.playbackOrder = "Default",
     this.nowPlayingQueue,
     this.playlistItemId,
   });

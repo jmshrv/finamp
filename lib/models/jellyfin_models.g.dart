@@ -4604,7 +4604,7 @@ PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map json) =>
       liveStreamId: json['LiveStreamId'] as String?,
       playSessionId: json['PlaySessionId'] as String?,
       repeatMode: json['RepeatMode'] as String,
-      playbackOrder: json['PlaybackOrder'] as String,
+      playbackOrder: json['PlaybackOrder'] as String? ?? "Default",
       nowPlayingQueue: (json['NowPlayingQueue'] as List<dynamic>?)
           ?.map((e) => QueueItem.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
