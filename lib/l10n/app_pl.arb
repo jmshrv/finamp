@@ -290,7 +290,7 @@
   "@setSleepTimer": {},
   "enterLowPriorityStateOnPause": "Przechodź w stan niskiego priorytetu w trakcie trwania pauzy",
   "@enterLowPriorityStateOnPause": {},
-  "songCount": "{count,plural,=1{{count} Utwór} =2..4{{count} Utwory} other{{count} Utworów}}",
+  "songCount": "{count,plural,=1{{count} Utwór} many{{count} Utwory} other{{count} Utworów}}",
   "@songCount": {
     "placeholders": {
       "count": {
@@ -882,7 +882,7 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "albumCount": "{count,plural,=1{{count} Album} =3{{count} Albumy} =4{{count} Albumy} other{{count} Albumów}}",
+  "albumCount": "{count,plural,=1{{count} Album} many{{count} Albumy} other{{count} Albumów}}",
   "@albumCount": {
     "placeholders": {
       "count": {
@@ -1062,7 +1062,7 @@
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
-  "playCountValue": "{playCount,plural,=1{{playCount} odtworzenie} =2{{playCount} odtworzenia} =3{{playCount} odtworzenia} =4{{playCount} odtworzenia} other{{playCount} odtworzeń}}",
+  "playCountValue": "{playCount,plural,=1{{playCount} odtworzenie} many{{playCount} odtworzenia} other{{playCount} odtworzeń}}",
   "@playCountValue": {
     "placeholders": {
       "playCount": {
@@ -1451,7 +1451,7 @@
   "@confirmShuffleNext": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
   },
-  "queueRestoreSubtitle2": "{count,plural,=1{1 utwór} =2..4{{count} Utwory} other{{count} Utworów}}, {remaining} nieodtworzonych",
+  "queueRestoreSubtitle2": "{count,plural,=1{1 utwór} many{{count} Utwory} other{{count} Utworów}}, {remaining} nieodtworzonych",
   "@queueRestoreSubtitle2": {
     "description": "Description of length of a saved queue",
     "placeholders": {

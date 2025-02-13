@@ -1230,8 +1230,8 @@
     }
   },
   "shuffleAlbums": "Aleatorizar Álbuns",
-    "description": "Label for action that shuffles all albums of an artist or genre"
   "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
   },
   "shuffleAlbumsToQueue": "Aleatorizar Álbuns Na Fila",
   "@shuffleAlbumsToQueue": {
