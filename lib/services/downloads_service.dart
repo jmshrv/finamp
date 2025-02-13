@@ -963,7 +963,7 @@ class DownloadsService {
         .first;
     if (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
         (bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000) &&
-            item.type == DownloadItemType.song)) {
+            item.type != DownloadItemType.image)) {
       _downloadsLogger.finest("Updating download settings for ${item.name}");
       item.syncTranscodingProfile = bestProfile;
       if ((item.state == DownloadItemState.enqueued ||
