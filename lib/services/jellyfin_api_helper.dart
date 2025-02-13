@@ -283,6 +283,10 @@ class JellyfinApiHelper {
     });
   }
 
+  Future<dynamic> deleteItem(String itemId) async {
+    return await jellyfinApi.deleteItem(itemId);
+  }
+
   Future<List<BaseItemDto>?> getLatestItems({
     BaseItemDto? parentItem,
     String? includeItemTypes,
@@ -860,4 +864,32 @@ class JellyfinApiHelper {
 
     return uri;
   }
+
+  CanDeleteFromServerResponse canDeleteFromServer(BaseItemDto item) {
+    // Cant delete from server when offline anyway
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return CanDeleteFromServerResponse(false, null);
+    }
+
+    // Cant delete if setting is disabled anyway
+    if (!FinampSettingsHelper.finampSettings.allowDeleteFromServer) {
+      return CanDeleteFromServerResponse(false, null);
+    }
+
+    // fallback to true in case the response is invalid but the user could delete still
+    // worst case would be an error messing when trying to delete
+    var request = getItemById(item.id).then((response) {
+      return response.canDelete ?? true;
+    }).catchError((_) {
+      return false;
+    });
+    return CanDeleteFromServerResponse(item.canDelete ?? true, request);
+  }
+}
+
+class CanDeleteFromServerResponse {
+  final bool initialValue;
+  final Future<bool>? realValue;
+
+  CanDeleteFromServerResponse(this.initialValue, this.realValue);
 }

@@ -140,6 +140,7 @@ class DefaultSettings {
   static const showDownloadsWithUnknownLibrary = true;
   static const downloadWorkers = 5;
   static const maxConcurrentDownloads = 10;
+  static const allowDeleteFromServer = false;
 }
 
 @HiveType(typeId: 28)
@@ -245,7 +246,8 @@ class FinampSettings {
       this.hasDownloadedPlaylistInfo =
           DefaultSettings.hasDownloadedPlaylistInfo,
       this.transcodingSegmentContainer =
-          DefaultSettings.transcodingSegmentContainer});
+          DefaultSettings.transcodingSegmentContainer,
+      this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer});
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -258,8 +260,7 @@ class FinampSettings {
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
 
-  @HiveField(4,
-      defaultValue: DefaultSettings.androidStopForegroundOnPause)
+  @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
@@ -508,6 +509,9 @@ class FinampSettings {
 
   @HiveField(79, defaultValue: DefaultSettings.bufferSizeMegabytes)
   int bufferSizeMegabytes;
+  
+  @HiveField(80, defaultValue: DefaultSettings.allowDeleteFromServer)
+  bool allowDeleteFromServer;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1363,16 +1367,37 @@ enum DownloadItemState {
   }
 }
 
+enum DeleteType {
+  canDelete("canDelete"),
+  cantDelete("cantDelete"),
+  notDownloaded("notDownloaded");
+  const DeleteType(this.textForm);
+  final String textForm;
+
+}
+
 /// The status of a download, as used to determine download button state.
 /// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
+  /// not downloaded
   notNeeded(false, false, false),
+  // downloaded over a parent
   incidental(false, false, true),
   incidentalOutdated(false, true, true),
+
+  /// downloaded separately
   required(true, false, false),
   requiredOutdated(true, true, false);
 
   const DownloadItemStatus(this.isRequired, this.outdated, this.isIncidental);
+
+  DeleteType toDeleteType() {
+    return isRequired
+      ? DeleteType.canDelete
+      : (outdated || isIncidental
+          ? DeleteType.cantDelete
+          : DeleteType.notDownloaded);
+  }
 
   final bool isRequired;
   final bool outdated;
@@ -2441,7 +2466,6 @@ class FinampFeatureChipsConfiguration {
     );
   }
 }
-
 
 @HiveType(typeId: 76)
 class DeviceInfo {

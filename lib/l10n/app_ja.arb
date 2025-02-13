@@ -413,20 +413,6 @@
   "@resetTabs": {},
   "viewTypeSubtitle": "ミュージック画面の表示形式",
   "@viewTypeSubtitle": {},
-  "deleteDownloadsPrompt": "このデバイスから {itemType, select, album{アルバム} playlist{プレイリスト} artist{アーティスト} genre{ジャンル} song{曲} library{ライブラリ} other{アイテム}}「{itemName}」を削除してもよろしいですか？",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "insertedIntoQueue": "キューに挿入されました。",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
@@ -452,10 +438,6 @@
   "@showUncensoredLogMessage": {},
   "syncDownloadedPlaylists": "ダウンロードしたプレイリストの同期",
   "@syncDownloadedPlaylists": {},
-  "deleteDownloadsConfirmButtonText": "削除",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "applicationLegalese": "Mozilla Public License 2.0 のもとでライセンスされています。\nソースコードは {sourceCodeLink} で入手できます。",
   "@applicationLegalese": {},
   "customLocationsBuggy": "カスタムの場所は、権限の問題により、非常にバグが多くなります。これを修正する方法を考えていますが、今のところは使用しないことをお勧めします。",

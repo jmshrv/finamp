@@ -450,24 +450,6 @@
   },
   "disableGestureSubtitle": "Huruvida man ska inaktivera gester.",
   "@disableGestureSubtitle": {},
-  "deleteDownloadsConfirmButtonText": "Ta bort",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
-  "deleteDownloadsPrompt": "Är du säker på att du vill ta bort {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' från den här enheten?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "syncDownloadedPlaylists": "Synkronisera nedladdade spellistor",
   "@syncDownloadedPlaylists": {},
   "interactions": "Interaktioner",

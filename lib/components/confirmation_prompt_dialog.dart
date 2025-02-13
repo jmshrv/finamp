@@ -5,20 +5,22 @@ import '../models/jellyfin_models.dart';
 import 'global_snackbar.dart';
 
 class ConfirmationPromptDialog extends AlertDialog {
-  const ConfirmationPromptDialog({
-    super.key,
-    required this.promptText,
-    required this.confirmButtonText,
-    required this.abortButtonText,
-    required this.onConfirmed,
-    required this.onAborted,
-  });
+  const ConfirmationPromptDialog(
+      {Key? key,
+      required this.promptText,
+      required this.confirmButtonText,
+      required this.abortButtonText,
+      required this.onConfirmed,
+      required this.onAborted,
+      this.centerText = false})
+      : super(key: key);
 
   final String promptText;
   final String confirmButtonText;
   final String abortButtonText;
   final void Function()? onConfirmed;
   final void Function()? onAborted;
+  final bool centerText;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class ConfirmationPromptDialog extends AlertDialog {
       title: Text(
         promptText,
         style: const TextStyle(fontSize: 18),
+        textAlign: centerText ? TextAlign.center : null,
       ),
       actions: [
         Container(

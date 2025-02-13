@@ -178,10 +178,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "डिवाइस से हटाएं",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "डाउनलोड मरम्मत पूरा हुआ।",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
@@ -769,10 +765,6 @@
   },
   "playButtonLabel": "चलाएं",
   "@playButtonLabel": {},
-  "deleteDownloadsConfirmButtonText": "मिटाएं",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "shuffleButtonLabel": "शफ़ल",
   "@shuffleButtonLabel": {},
   "editPlaylistNameTooltip": "प्लेलिस्ट का नाम संपादित करें",
@@ -1413,20 +1405,6 @@
         "type": "String"
       }
     }
-  },
-  "deleteDownloadsPrompt": "क्या आप यकीन से {itemType, select, album{एल्बम} playlist{प्लेलिस्ट} artist{कलाकार} genre{शैली} song{ट्रैक} library{लाइब्रेरी} other{आइटम}} '{itemName}' को इस डिवाइस से हटाना चाहते हैं?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "playbackSpeedDecreaseLabel": "प्लेबैक गति घटाएं",
   "@playbackSpeedDecreaseLabel": {
