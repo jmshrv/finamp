@@ -7,7 +7,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   static const routeName = "/login";
 

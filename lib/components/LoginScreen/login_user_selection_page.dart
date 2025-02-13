@@ -22,7 +22,7 @@ class LoginUserSelectionPage extends StatefulWidget {
   final void Function(UserDto?) onUserSelected;
   final void Function()? onAuthenticated;
 
-  LoginUserSelectionPage({
+  const LoginUserSelectionPage({
     super.key,
     required this.serverState,
     required this.connectionState,
@@ -41,14 +41,14 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
     await Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
       final quickConnectState = await jellyfinApiHelper
-          .updateQuickConnect(widget.connectionState!.quickConnectState!);
-      widget.connectionState!.quickConnectState = quickConnectState;
+          .updateQuickConnect(widget.connectionState.quickConnectState!);
+      widget.connectionState.quickConnectState = quickConnectState;
       _quickConnectLogger
           .fine("Quick connect state: ${quickConnectState.toString()}");
       return !(quickConnectState?.authenticated ?? false) && mounted;
     });
     await jellyfinApiHelper.authenticateWithQuickConnect(
-        widget.connectionState!.quickConnectState!);
+        widget.connectionState.quickConnectState!);
 
     if (!mounted) return;
     widget.onAuthenticated?.call();
@@ -210,7 +210,7 @@ class QuickConnectSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return connectionState!.quickConnectState != null
+    return connectionState.quickConnectState != null
         ? Column(
             children: [
               Text(
@@ -225,7 +225,7 @@ class QuickConnectSection extends StatelessWidget {
                         fontFamily: "monospace",
                         letterSpacing: 5.0,
                       ),
-                  semanticsLabel: connectionState!.quickConnectState?.code
+                  semanticsLabel: connectionState.quickConnectState?.code
                       ?.split("")
                       .join(" "),
                   textAlign: TextAlign.center,
@@ -274,10 +274,10 @@ class JellyfinUserWidget extends StatelessWidget {
   final VoidCallback? onPressed;
 
   JellyfinUserWidget({
-    Key? key,
+    super.key,
     this.user,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -290,7 +290,7 @@ class JellyfinUserWidget extends StatelessWidget {
 
     const double avatarSize = 72.0;
 
-    getUserImage() {
+    Widget getUserImage() {
       if (user != null) {
         if (avatarUrl != null) {
           return Image.network(
@@ -331,7 +331,7 @@ class JellyfinUserWidget extends StatelessWidget {
       }
     }
 
-    getUserNameText() {
+    String getUserNameText() {
       if (user != null) {
         return user!.name != null && user!.name!.isNotEmpty
             ? user!.name!
@@ -341,7 +341,7 @@ class JellyfinUserWidget extends StatelessWidget {
       }
     }
 
-    buildContent() {
+    SizedBox buildContent() {
       return SizedBox(
         width: 96,
         child: Column(

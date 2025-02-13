@@ -1,7 +1,7 @@
 {
   "message": "Meddelande",
   "@message": {},
-  "noButtonLabel": "NEJ",
+  "noButtonLabel": "Nej",
   "@noButtonLabel": {},
   "responseError401": "{error} Statuskod {statusCode}. Detta betyder troligtvis att du använt fel användarnamn/lösenord, eller att din klientapplikation inte längre är autentiserad.",
   "@responseError401": {
@@ -106,7 +106,7 @@
   "@failedToGetSongFromDownloadId": {},
   "favourite": "Lägg till som favorit",
   "@favourite": {},
-  "updateButtonLabel": "UPPDATERA",
+  "updateButtonLabel": "Uppdatera",
   "@updateButtonLabel": {},
   "songCount": "{count,plural,=1{{count} Låt} other{{count} Låtar}}",
   "@songCount": {
@@ -122,7 +122,7 @@
   "@playlistNameUpdated": {},
   "downloadedSongsWillNotBeDeleted": "Nedladdade låtar kommer inte att raderas",
   "@downloadedSongsWillNotBeDeleted": {},
-  "addButtonLabel": "LÄGG TILL",
+  "addButtonLabel": "Lägg till",
   "@addButtonLabel": {},
   "logOut": "Logga Ut",
   "@logOut": {},
@@ -132,7 +132,7 @@
   "@addDownloads": {},
   "layoutAndTheme": "Layout & Tema",
   "@layoutAndTheme": {},
-  "applicationLegalese": "Licensierad med Mozilla Public License 2.0. Källkoden finns att se på:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Licensierad med Mozilla Public License 2.0.\nKällkoden är tillgänglig på {sourceCodeLink}.",
   "@applicationLegalese": {},
   "location": "Plats",
   "@location": {},
@@ -178,7 +178,7 @@
   "@cancelSleepTimer": {},
   "dark": "Mörkt",
   "@dark": {},
-  "yesButtonLabel": "JA",
+  "yesButtonLabel": "Ja",
   "@yesButtonLabel": {},
   "unknownArtist": "Okänd Artist",
   "@unknownArtist": {},
@@ -215,7 +215,7 @@
   "@noArtist": {},
   "notAvailableInOfflineMode": "Inte tillgänglig i offlineläge",
   "@notAvailableInOfflineMode": {},
-  "playButtonLabel": "SPELA UPP",
+  "playButtonLabel": "Spela upp",
   "@playButtonLabel": {},
   "artists": "Artister",
   "@artists": {},
@@ -274,7 +274,7 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "downloadsQueued": "Nedladdningar tillagda.",
+  "downloadsQueued": "Nedladdning förberedd, laddar ner filer",
   "@downloadsQueued": {},
   "startupError": "Någonting gick fel under uppstart. Felet var: {error}\n\nSkapa gärna ett ärende på github.com/UnicornsOnLSD/finamp med en skärmdump av denna sida. Om problemet fortsätter kan du rensa appdatan för att återställa appen.",
   "@startupError": {
@@ -300,7 +300,7 @@
   "@shuffleAllSongCountSubtitle": {},
   "shuffleAll": "Shuffle (alla)",
   "@shuffleAll": {},
-  "shuffleButtonLabel": "SHUFFLE",
+  "shuffleButtonLabel": "Blanda",
   "@shuffleButtonLabel": {},
   "audioService": "Ljudtjänst",
   "@audioService": {},
@@ -414,7 +414,7 @@
   },
   "removeFromPlaylistTitle": "Ta bort från spellista",
   "@removeFromPlaylistTitle": {},
-  "bufferDurationSubtitle": "Hur mycket spelaren ska buffra, i sekunder. Kräver omstart.",
+  "bufferDurationSubtitle": "Den maximala tiden som ska buffras, i sekunder. Kräver omstart.",
   "@bufferDurationSubtitle": {},
   "insertedIntoQueue": "Insatt i kön.",
   "@insertedIntoQueue": {
@@ -426,7 +426,7 @@
   "@confirm": {},
   "language": "Språk",
   "@language": {},
-  "playNext": "Spela Nästa",
+  "playNext": "Spela nästa",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
@@ -517,5 +517,85 @@
   "loginFlowAccountSelectionHeading": "Välj ditt konto",
   "@loginFlowAccountSelectionHeading": {
     "description": "Heading for the account selection step during the login flow."
+  },
+  "aboutReleaseNotes": "Läs om det senaste uppdateringarna:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "serverUrlHint": "t.ex. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Letar efter servrar...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAuthenticationHeading": "Logga in på ditt konto",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "orDivider": "eller",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowSelectAUser": "Välj en änvändare",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameHint": "Skriv in ditt användarnamn",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "passwordHint": "Skriv in ditt lösenord",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Logga in",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "usernameValidationMissingUsername": "Vänligen skriv in ditt användarnamn",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "title": "Titel",
+  "@title": {},
+  "activeDownloadsTitle": "Aktiva nedladdningar",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Inga aktiva nedladdningar.",
+  "@noActiveDownloads": {},
+  "activeDownloads": "Aktiva nedladdningar",
+  "@activeDownloads": {},
+  "confirmDownloadStarted": "Nedladdning startad",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "hours": "Timmar",
+  "@hours": {},
+  "seconds": "Sekunder",
+  "@seconds": {},
+  "timeFractionTooltip": "{currentTime} av {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "addToMorePlaylistsTooltip": "Lägg till i flera spellistor",
+  "@addToMorePlaylistsTooltip": {},
+  "confirmAddedToPlaylist": "Tillagd i spellista.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "addToMorePlaylistsTitle": "Lägg till i flera spellistor",
+  "@addToMorePlaylistsTitle": {},
+  "bufferDisableSizeConstraintsTitle": "Begränsa inte bufferstorlek",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeTitle": "Bufferstorlek",
+  "@bufferSizeTitle": {},
+  "playbackHistory": "Uppspelningshistorik",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "shuffleAllQueueSource": "Blanda allt",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   }
 }

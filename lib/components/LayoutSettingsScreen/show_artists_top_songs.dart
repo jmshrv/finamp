@@ -6,7 +6,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class ShowArtistsTopSongsSelector extends StatelessWidget {
-  const ShowArtistsTopSongsSelector({Key? key}) : super(key: key);
+  const ShowArtistsTopSongsSelector({super.key});
 
   @override
   Widget build(BuildContext context) {

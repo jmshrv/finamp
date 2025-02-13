@@ -46,14 +46,14 @@ class QueueList extends StatefulWidget {
   static const routeName = "/queue";
 
   const QueueList({
-    Key? key,
+    super.key,
     required this.scrollController,
     required this.previousTracksHeaderKey,
     required this.currentTrackKey,
     required this.nextUpHeaderKey,
     required this.queueHeaderKey,
     required this.jumpToCurrentKey,
-  }) : super(key: key);
+  });
 
   final ScrollController scrollController;
   final GlobalKey previousTracksHeaderKey;
@@ -223,14 +223,14 @@ class _QueueListState extends State<QueueList> {
 
     return ScrollbarTheme(
       data: ScrollbarThemeData(
-          thumbColor: MaterialStateProperty.all(
+          thumbColor: WidgetStateProperty.all(
               Theme.of(context).colorScheme.primary.withOpacity(0.7)),
-          trackColor: MaterialStateProperty.all(
+          trackColor: WidgetStateProperty.all(
               Theme.of(context).colorScheme.primary.withOpacity(0.2)),
           radius: const Radius.circular(6.0),
-          thickness: MaterialStateProperty.all(12.0),
+          thickness: WidgetStateProperty.all(12.0),
           // thumbVisibility: MaterialStateProperty.all(true),
-          trackVisibility: MaterialStateProperty.all(false)),
+          trackVisibility: WidgetStateProperty.all(false)),
       child: PaddedCustomScrollview(
         controller: widget.scrollController,
         scrollBehavior: const FinampScrollBehavior(interactive: true),
@@ -408,9 +408,9 @@ class PreviousTracksList extends StatefulWidget {
   final GlobalKey previousTracksHeaderKey;
 
   const PreviousTracksList({
-    Key? key,
+    super.key,
     required this.previousTracksHeaderKey,
-  }) : super(key: key);
+  });
 
   @override
   State<PreviousTracksList> createState() => _PreviousTracksListState();
@@ -497,9 +497,9 @@ class NextUpTracksList extends StatefulWidget {
   final GlobalKey previousTracksHeaderKey;
 
   const NextUpTracksList({
-    Key? key,
+    super.key,
     required this.previousTracksHeaderKey,
-  }) : super(key: key);
+  });
 
   @override
   State<NextUpTracksList> createState() => _NextUpTracksListState();
@@ -590,9 +590,9 @@ class QueueTracksList extends StatefulWidget {
   final GlobalKey previousTracksHeaderKey;
 
   const QueueTracksList({
-    Key? key,
+    super.key,
     required this.previousTracksHeaderKey,
-  }) : super(key: key);
+  });
 
   @override
   State<QueueTracksList> createState() => _QueueTracksListState();
@@ -682,8 +682,8 @@ class _QueueTracksListState extends State<QueueTracksList> {
 
 class CurrentTrack extends StatefulWidget {
   const CurrentTrack({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<CurrentTrack> createState() => _CurrentTrackState();

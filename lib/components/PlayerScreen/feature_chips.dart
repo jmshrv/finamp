@@ -279,7 +279,6 @@ class Features extends StatelessWidget {
 
 class _FeatureContent extends StatelessWidget {
   const _FeatureContent({
-    super.key,
     required this.feature,
     required this.backgroundColor,
     this.color,

@@ -74,7 +74,6 @@ import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
-import 'services/ui_overlay_setter_observer.dart';
 import 'setup_logging.dart';
 
 void main() async {
@@ -122,11 +121,11 @@ void main() async {
 
 Future<void> _setupEdgeToEdgeOverlayStyle() async {
   if (Platform.isAndroid) {
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent));
-    final binding = WidgetsFlutterBinding.ensureInitialized();
-    binding.addObserver(UIOverlaySetterObserver());
+    // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //     systemNavigationBarColor: Colors.transparent));
+    // final binding = WidgetsFlutterBinding.ensureInitialized();
+    // binding.addObserver(UIOverlaySetterObserver());
   } else if (Platform.isIOS) {
     // On iOS, the status bar will have black icons by default on the login
     // screen as it does not have an AppBar. To fix this, we set the

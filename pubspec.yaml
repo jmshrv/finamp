@@ -117,7 +117,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.1
   flutter_lints: ^5.0.0
   riverpod_generator: ^2.6.1
-  custom_lint:
+  custom_lint: 
   riverpod_lint: ^2.6.1
   isar_generator: ^3.1.0+1
   msix: ^3.16.7

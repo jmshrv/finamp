@@ -61,6 +61,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   double iosBaseVolumeGainFactor = 1.0;
+  Duration minBufferDuration = Duration(seconds: 90);
 
   final outputSwitcherChannel =
       MethodChannel('com.unicornsonlsd.finamp/output_switcher');
@@ -140,6 +141,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       darwinAudioEffects: _iosAudioEffects,
     );
 
+
     _player = AudioPlayer(
       audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
@@ -149,12 +151,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                   : 1024 *
                       1024 *
                       FinampSettingsHelper.finampSettings.bufferSizeMegabytes,
-          // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
-          minBufferDuration: Duration(seconds: 60), // when to fetch more data
-          maxBufferDuration: FinampSettingsHelper.finampSettings
-              .bufferDuration, // allows the player to fetch a bit more data in exchange for reduced request frequency
+          // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration, //!!! there are issues with the bufferForPlaybackDuration setting, the min duration seemingly has to be smaller than that. so we're using the default
+          minBufferDuration: minBufferDuration,
+          maxBufferDuration: Duration(
+              seconds: max(
+                  minBufferDuration.inSeconds,
+                  FinampSettingsHelper.finampSettings.bufferDuration
+                      .inSeconds)), // allows the player to fetch a bit more data in exchange for reduced request frequency
           prioritizeTimeOverSizeThresholds: FinampSettingsHelper.finampSettings
               .bufferDisableSizeConstraints, // targetBufferBytes sets the absolute maximum, but if this false and maxBufferDuration is reached, buffering will end
+          bufferForPlaybackDuration: Duration(seconds: 5),
+          bufferForPlaybackAfterRebufferDuration: Duration(seconds: 10),
         ),
         darwinLoadControl: DarwinLoadControl(
           // preferredForwardBufferDuration:

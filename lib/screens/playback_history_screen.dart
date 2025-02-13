@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../components/now_playing_bar.dart';
 
 class PlaybackHistoryScreen extends StatelessWidget {
-  const PlaybackHistoryScreen({Key? key}) : super(key: key);
+  const PlaybackHistoryScreen({super.key});
 
   static const routeName = "/playbackhistory";
 

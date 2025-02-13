@@ -6,10 +6,10 @@ import 'album_list_tile.dart';
 
 class AlbumsSliverList extends StatefulWidget {
   const AlbumsSliverList({
-    Key? key,
+    super.key,
     required this.childrenForList,
     required this.parent,
-  }) : super(key: key);
+  });
 
   final List<BaseItemDto> childrenForList;
   final BaseItemDto parent;

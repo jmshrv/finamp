@@ -7,7 +7,7 @@ import '../../services/finamp_settings_helper.dart';
 import '../global_snackbar.dart';
 
 class RepairDownloadsButton extends StatefulWidget {
-  const RepairDownloadsButton({Key? key}) : super(key: key);
+  const RepairDownloadsButton({super.key});
 
   @override
   State<RepairDownloadsButton> createState() =>

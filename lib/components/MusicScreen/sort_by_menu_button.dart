@@ -6,7 +6,7 @@ import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class SortByMenuButton extends StatelessWidget {
-  const SortByMenuButton(this.tabType, {Key? key}) : super(key: key);
+  const SortByMenuButton(this.tabType, {super.key});
 
   final TabContentType tabType;
 

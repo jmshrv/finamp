@@ -121,7 +121,6 @@ class ArtistChip extends ConsumerWidget {
 
 class _ArtistChipContent extends StatelessWidget {
   const _ArtistChipContent({
-    super.key,
     required this.item,
     required this.backgroundColor,
     required this.color,

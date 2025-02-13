@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../components/LayoutSettingsScreen/TabsSettingsScreen/hide_tab_toggle.dart';
 
 class TabsSettingsScreen extends StatefulWidget {
-  const TabsSettingsScreen({Key? key}) : super(key: key);
+  const TabsSettingsScreen({super.key});
 
   static const routeName = "/settings/tabs";
 

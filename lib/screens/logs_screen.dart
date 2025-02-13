@@ -6,7 +6,7 @@ import '../components/LogsScreen/logs_view.dart';
 import '../components/LogsScreen/share_logs_button.dart';
 
 class LogsScreen extends StatelessWidget {
-  const LogsScreen({Key? key}) : super(key: key);
+  const LogsScreen({super.key});
 
   static const routeName = "/logs";
 

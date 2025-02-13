@@ -1649,7 +1649,7 @@ class QueueItemSourceName {
   @HiveField(2)
   final String? localizationParameter;
 
-  getLocalized(BuildContext context) {
+  String getLocalized(BuildContext context) {
     switch (type) {
       case QueueItemSourceNameType.preTranslated:
         return pretranslatedName ?? "";

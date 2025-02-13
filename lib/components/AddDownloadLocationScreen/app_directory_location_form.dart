@@ -7,8 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../models/finamp_models.dart';
 
 class AppDirectoryLocationForm extends StatefulWidget {
-  const AppDirectoryLocationForm({Key? key, required this.formKey})
-      : super(key: key);
+  const AppDirectoryLocationForm({super.key, required this.formKey});
 
   final Key formKey;
 

@@ -8,8 +8,7 @@ import '../../../models/finamp_models.dart';
 import '../../../services/finamp_settings_helper.dart';
 
 class PlaybackSpeedControlVisibilityDropdownListTile extends StatelessWidget {
-  const PlaybackSpeedControlVisibilityDropdownListTile({Key? key})
-      : super(key: key);
+  const PlaybackSpeedControlVisibilityDropdownListTile({super.key});
 
   @override
   Widget build(BuildContext context) {

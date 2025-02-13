@@ -29,19 +29,19 @@ class CTAMedium extends StatelessWidget {
         onPressed();
       },
       style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
           EdgeInsets.only(
               left: 8 + paddingHorizontal,
               right: 8,
               top: paddingVertical,
               bottom: paddingVertical),
         ),
-        backgroundColor: MaterialStateProperty.all<Color>(
+        backgroundColor: WidgetStateProperty.all<Color>(
           Theme.of(context).brightness == Brightness.dark
               ? accentColor.withOpacity(0.3)
               : accentColor,

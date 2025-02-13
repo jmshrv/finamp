@@ -378,7 +378,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Jos haluat käyttää Jellyfin-palvelintasi etänä, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi käyttää joko HTTP-oletusporttia (80/443) tai Jellyfinin oletusporttia (8096),  sinun ei tarvitse määritellä porttia erikseen. Näin todennäköisesti on, mikäli palvelimesi on reverse proxyn takana.\nJos syötit serverin osoitteen oikein,  osoitekentän alle pitäisi ilmestyä perustietoja serveristäsi.",
+  "internalExternalIpExplanation": "Jos haluat päästä etäkäyttöön Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on oikea, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },

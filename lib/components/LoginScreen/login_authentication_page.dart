@@ -110,7 +110,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
     InputDecoration inputFieldDecoration(String placeholder) {
       return InputDecoration(
         filled: true,
-        fillColor: Theme.of(context).colorScheme.surfaceVariant,
+        fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         label: Text(placeholder),

@@ -1,5 +1,4 @@
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
-import 'package:finamp/screens/layout_settings_screen.dart';
 import 'package:finamp/services/locale_helper.dart';
 import 'package:finamp/services/theme_mode_helper.dart';
 import 'package:flutter/foundation.dart';

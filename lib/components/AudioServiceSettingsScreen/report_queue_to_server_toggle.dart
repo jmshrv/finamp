@@ -6,7 +6,7 @@ import '../../services/finamp_settings_helper.dart';
 import '../../models/finamp_models.dart';
 
 class ReportQueueToServerToggle extends StatelessWidget {
-  const ReportQueueToServerToggle({Key? key}) : super(key: key);
+  const ReportQueueToServerToggle({super.key});
 
   @override
   Widget build(BuildContext context) {

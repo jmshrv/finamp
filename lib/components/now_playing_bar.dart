@@ -43,8 +43,8 @@ class NowPlayingBar extends ConsumerWidget {
                 blurRadius: 12.0,
                 spreadRadius: 8.0,
                 color: Theme.of(context).brightness == Brightness.light
-                    ? darkColorScheme.background.withOpacity(0.15)
-                    : darkColorScheme.background.withOpacity(0.7))
+                    ? darkColorScheme.surface.withOpacity(0.15)
+                    : darkColorScheme.surface.withOpacity(0.7))
           ]);
 
   Color getProgressBackgroundColor(BuildContext context) {

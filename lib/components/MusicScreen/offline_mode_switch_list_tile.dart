@@ -7,8 +7,8 @@ import '../../services/finamp_settings_helper.dart';
 
 class OfflineModeSwitchListTile extends StatelessWidget {
   const OfflineModeSwitchListTile({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../services/finamp_logs_helper.dart';
 
 class ShareLogsButton extends StatelessWidget {
-  const ShareLogsButton({Key? key}) : super(key: key);
+  const ShareLogsButton({super.key});
 
   @override
   Widget build(BuildContext context) {

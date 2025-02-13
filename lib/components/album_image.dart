@@ -207,7 +207,7 @@ class BareAlbumImage extends ConsumerWidget {
 }
 
 class _AlbumImageErrorPlaceholder extends StatelessWidget {
-  const _AlbumImageErrorPlaceholder({super.key});
+  const _AlbumImageErrorPlaceholder();
 
   @override
   Widget build(BuildContext context) {

@@ -15,8 +15,8 @@ class PlayerButtonsRepeating extends StatelessWidget {
   final queueService = GetIt.instance<QueueService>();
 
   PlayerButtonsRepeating({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -25,7 +25,7 @@ extension LocalizedName on VolumeNormalizationMode {
 }
 
 class VolumeNormalizationModeSelector extends StatelessWidget {
-  const VolumeNormalizationModeSelector({Key? key}) : super(key: key);
+  const VolumeNormalizationModeSelector({super.key});
 
   @override
   Widget build(BuildContext context) {

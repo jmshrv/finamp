@@ -11,12 +11,12 @@ import '../album_image.dart';
 /// use AlbumItem instead.
 class AlbumItemCard extends StatelessWidget {
   const AlbumItemCard({
-    Key? key,
+    super.key,
     required this.item,
     this.parentType,
     this.onTap,
     this.addSettingsListener = false,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final String? parentType;
@@ -73,10 +73,10 @@ class AlbumItemCard extends StatelessWidget {
 
 class _AlbumItemCardText extends StatelessWidget {
   const _AlbumItemCardText({
-    Key? key,
+    super.key,
     required this.item,
     required this.parentType,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final String? parentType;

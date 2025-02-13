@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../../services/music_player_background_task.dart';
 
 class SleepTimerCancelDialog extends StatelessWidget {
-  const SleepTimerCancelDialog({Key? key}) : super(key: key);
+  const SleepTimerCancelDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

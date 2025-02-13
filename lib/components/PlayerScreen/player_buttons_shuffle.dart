@@ -15,7 +15,7 @@ class PlayerButtonsShuffle extends StatelessWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
 
-  PlayerButtonsShuffle({Key? key}) : super(key: key);
+  PlayerButtonsShuffle({super.key});
 
   @override
   Widget build(BuildContext context) {

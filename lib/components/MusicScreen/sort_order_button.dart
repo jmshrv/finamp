@@ -7,7 +7,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class SortOrderButton extends StatelessWidget {
-  const SortOrderButton(this.tabType, {Key? key}) : super(key: key);
+  const SortOrderButton(this.tabType, {super.key});
 
   final TabContentType tabType;
 

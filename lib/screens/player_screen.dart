@@ -165,7 +165,7 @@ class PlayerScreen extends ConsumerWidget {
 
 class _PlayerScreenContent extends ConsumerWidget {
   const _PlayerScreenContent(
-      {super.key, required this.airplayTheme, required this.playerScreen});
+      {required this.airplayTheme, required this.playerScreen});
 
   final Color airplayTheme;
   final Widget playerScreen;
@@ -219,9 +219,15 @@ class _PlayerScreenContent extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          systemOverlayStyle: Theme.of(context).brightness == Brightness.dark
-              ? SystemUiOverlayStyle.light
-              : SystemUiOverlayStyle.dark,
+          toolbarOpacity: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle(
+              // this is needed to ensure the player screen stays in full screen mode WITHOUT having contrast issues in the status bar
+              systemNavigationBarColor: Colors.transparent,
+              systemStatusBarContrastEnforced: false,
+              statusBarIconBrightness:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Brightness.light
+                      : Brightness.dark),
           elevation: 0,
           scrolledUnderElevation:
               0.0, // disable tint/shadow when content is scrolled under the app bar

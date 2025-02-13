@@ -9,7 +9,7 @@ import '../album_image.dart';
 import 'item_file_size.dart';
 
 class DownloadedItemsList extends StatefulWidget {
-  const DownloadedItemsList({Key? key}) : super(key: key);
+  const DownloadedItemsList({super.key});
 
   @override
   State<DownloadedItemsList> createState() => _DownloadedItemsListState();

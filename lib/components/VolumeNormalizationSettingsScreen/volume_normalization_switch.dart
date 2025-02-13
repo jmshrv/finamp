@@ -6,7 +6,7 @@ import '../../services/finamp_settings_helper.dart';
 import '../../models/finamp_models.dart';
 
 class VolumeNormalizationSwitch extends StatelessWidget {
-  const VolumeNormalizationSwitch({Key? key}) : super(key: key);
+  const VolumeNormalizationSwitch({super.key});
 
   @override
   Widget build(BuildContext context) {

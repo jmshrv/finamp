@@ -79,7 +79,7 @@ class QueueService {
   int _saveUpdateCycleCount = 0;
   bool _saveUpdateImmediate = false;
   SavedQueueState _savedQueueState = SavedQueueState.preInit;
-  FinampStorableQueueInfo? _failedSavedQueue = null;
+  FinampStorableQueueInfo? _failedSavedQueue;
   static const int _maxSavedQueues = 60;
 
   QueueService() {

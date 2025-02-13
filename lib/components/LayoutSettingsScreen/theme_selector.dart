@@ -22,7 +22,7 @@ extension LocalisedName on ThemeMode {
 }
 
 class ThemeSelector extends StatelessWidget {
-  const ThemeSelector({Key? key}) : super(key: key);
+  const ThemeSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
