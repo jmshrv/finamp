@@ -57,7 +57,7 @@
   },
   "addDownloadLocation": "Voeg een downloadlocatie toe",
   "@addDownloadLocation": {},
-  "shuffleAllSongCountSubtitle": "Hoeveelheid liedjes geladen moeten worden bij gebruik van de shuffle knop.",
+  "shuffleAllSongCountSubtitle": "Hoeveelheid nummers die geladen moeten worden bij gebruik van de shuffle knop.",
   "@shuffleAllSongCountSubtitle": {},
   "dlComplete": "{count} volledig",
   "@dlComplete": {
@@ -83,7 +83,7 @@
       }
     }
   },
-  "errorScreenError": "Er is een fout opgetreden bij het opvragen van de lijst. Probeer een issue te maken op GitHub en verwijder app data",
+  "errorScreenError": "Er is een fout opgetreden bij het opvragen van de lijst met foutmeldingen! Waarschijnlijk kun je het beste proberen een issue aan te maken op GitHub, en de app data te verwijderen",
   "@errorScreenError": {},
   "areYouSure": "Bent u zeker?",
   "@areYouSure": {},
@@ -97,22 +97,6 @@
   "@communityRating": {},
   "downloadCount": "{count,plural, =1{{count} download} other{{count} downloads}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural,=1{{count} plaatje} other{{count} plaatjes}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural,=1{{count} item} other{{count} items}}",
-  "@downloadedItemsCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -133,10 +117,8 @@
   "@customLocation": {},
   "dark": "Donker",
   "@dark": {},
-  "createButtonLabel": "CREËER",
+  "createButtonLabel": "Creëer",
   "@createButtonLabel": {},
-  "direct": "DIRECT",
-  "@direct": {},
   "songCount": "{count,plural,=1{{count} Nummer} other{{count} Nummers}}",
   "@songCount": {
     "placeholders": {
@@ -147,7 +129,7 @@
   },
   "serverUrl": "Server URL",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "Om toegang tot de Jellyfin server te krijgen op afstand, dien je een extern IP te gebruiken.\n\nWanneer de server een HTTP-poort (80 of 443) gebruikt, hoef je deze niet in te vullen. Dit is waarschijnlijk het geval wanneer de server zich achter een reverse proxy bevindt.",
+  "internalExternalIpExplanation": "Om toegang tot de Jellyfin server te krijgen op afstand, dien je een extern IP te gebruiken.\n\nWanneer de server een HTTP-standaardpoort (80 of 443) of Jellyfins standaardpoort (8096) gebruikt, hoef je deze niet in te vullen.\n\nAls de URL correct is, zou hieronder er wat informatie moeten verschijnen over jouw server.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -159,17 +141,13 @@
   "@logs": {},
   "next": "Volgende",
   "@next": {},
-  "urlTrailingSlash": "De URL mag geen / bevatten aan het einde",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "selectMusicLibraries": "Selecteer Muziekbibliotheken",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
   "unknownName": "Onbekende Naam",
   "@unknownName": {},
-  "songs": "Liedjes",
+  "songs": "Nummers",
   "@songs": {},
   "playlists": "Afspeellijsten",
   "@playlists": {},
@@ -234,22 +212,6 @@
       }
     }
   },
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
-  "downloadErrors": "Download fouten",
-  "@downloadErrors": {},
   "dlEnqueued": "{count} gepland",
   "@dlEnqueued": {
     "placeholders": {
@@ -266,23 +228,19 @@
       }
     }
   },
-  "downloadErrorsTitle": "Download Fouten",
-  "@downloadErrorsTitle": {},
-  "noErrors": "Geen fouten!",
-  "@noErrors": {},
   "failedToGetSongFromDownloadId": "Het nummer kon niet gevonden worden met deze download ID",
   "@failedToGetSongFromDownloadId": {},
   "error": "Fout",
   "@error": {},
-  "playButtonLabel": "AFSPELEN",
+  "playButtonLabel": "Afspelen",
   "@playButtonLabel": {},
   "editPlaylistNameTooltip": "Pas de naam van de playlist aan",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Pas de naam van de Playlist aan",
   "@editPlaylistNameTitle": {},
-  "shuffleButtonLabel": "SHUFFLE",
+  "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
-  "updateButtonLabel": "UPDATE",
+  "updateButtonLabel": "Update",
   "@updateButtonLabel": {},
   "playlistNameUpdated": "De naam van de playlist is aangepast.",
   "@playlistNameUpdated": {},
@@ -298,7 +256,7 @@
   "@shareLogs": {},
   "stackTrace": "Strack-trace",
   "@stackTrace": {},
-  "applicationLegalese": "Uitgegeven onder de Mozilla Public License 2.0. Broncode beschikbaar op:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Uitgegeven onder de Mozilla Public License 2.0.\nBroncode beschikbaar op {sourceCodeLink}.",
   "@applicationLegalese": {},
   "downloadLocations": "Downloadlocaties",
   "@downloadLocations": {},
@@ -320,13 +278,13 @@
   "@unknownError": {},
   "directoryMustBeEmpty": "Folder moet leeg zijn",
   "@directoryMustBeEmpty": {},
-  "enterLowPriorityStateOnPause": "Ga naar een lage prioriteit wanneer gepauseerd",
+  "enterLowPriorityStateOnPause": "Ga naar Lage-Prioriteit Staat tijdens Pauzeren",
   "@enterLowPriorityStateOnPause": {},
   "viewType": "Type bekijken",
   "@viewType": {},
   "viewTypeSubtitle": "Type voor het muziekscherm bekijken",
   "@viewTypeSubtitle": {},
-  "shuffleAllSongCount": "Aantal liedjes in de shuffle",
+  "shuffleAllSongCount": "Aantal nummers in de shuffle",
   "@shuffleAllSongCount": {},
   "list": "Lijst",
   "@list": {},
@@ -358,9 +316,9 @@
   "@light": {},
   "tabs": "Tabs",
   "@tabs": {},
-  "yesButtonLabel": "JA",
+  "yesButtonLabel": "Ja",
   "@yesButtonLabel": {},
-  "noButtonLabel": "NEE",
+  "noButtonLabel": "Nee",
   "@noButtonLabel": {},
   "setSleepTimer": "Slaaptimer instellen",
   "@setSleepTimer": {},
@@ -382,12 +340,6 @@
   "@noArtist": {},
   "unknownArtist": "Onbekende artiest",
   "@unknownArtist": {},
-  "streaming": "STREAMING",
-  "@streaming": {},
-  "downloaded": "GEDOWNLOAD",
-  "@downloaded": {},
-  "statusError": "STATUS FOUT",
-  "@statusError": {},
   "queue": "Afspeelrij",
   "@queue": {},
   "replaceQueue": "Afspeelrij vervangen",
@@ -442,7 +394,7 @@
   "@pathReturnSlashErrorMessage": {},
   "customLocationsBuggy": "Persoonlijke locaties hebben veel bug door permissies. We denken over oplossingen hiervoor. Voor nu raden we aan deze niet te gebruiken.",
   "@customLocationsBuggy": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Liedartiest verbergen wanneer deze hetzelfde is als de albumartiest",
+  "hideSongArtistsIfSameAsAlbumArtists": "Artiest van nummer verbergen wanneer deze hetzelfde is als de albumartiest",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
   "useCoverAsBackground": "Geblurde cover op spelerachtergrond tonen",
   "@useCoverAsBackground": {},
@@ -450,12 +402,10 @@
   "@useCoverAsBackgroundSubtitle": {},
   "disableGesture": "Gebaren uitschakelen",
   "@disableGesture": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Liedjesartiest tonen wanneer deze hetzelfde is als de albumartiest.",
+  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Artiest van nummer tonen wanneer deze hetzelfde is als de albumartiest.",
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "system": "Systeem",
   "@system": {},
-  "transcode": "CONVERTEREN",
-  "@transcode": {},
   "startupError": "Er ging iets mis bij het starten van de app. Dit was de foutmelding: {error}\n\nCreëer een issue op github.com/UnicornsOnLSD/finamp met een schermafbeelding van deze pagina. Wanneer het probleem zich vaker voordoet, kan je de app-data verwijderen om de app te resetten.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -470,13 +420,9 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlStartWithHttps": "De URL moet beginnen met http:// of https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "removeFromPlaylistTooltip": "Verwijder van afspeellijst",
+  "removeFromPlaylistTooltip": "Verwijder van deze afspeellijst",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Verwijder van afspeellijst",
+  "removeFromPlaylistTitle": "Verwijder Van Deze Afspeellijst",
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Verwijderd van afspeellijst.",
   "@removedFromPlaylist": {},
@@ -487,5 +433,759 @@
   "confirm": "Bevestigen",
   "@confirm": {},
   "showUncensoredLogMessage": "Dit logboek bevat uw inloggegevens. Tonen?",
-  "@showUncensoredLogMessage": {}
+  "@showUncensoredLogMessage": {},
+  "viewLogs": "Logboeken bekijken",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "loginFlowNamelessUser": "Naamloze Gebruiker",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "Eigen gebruiker",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "aboutContributionPrompt": "Gemaakt door geweldige mensen in hun vrije tijd.\nJij zou er ook een van kunnen zijn!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "serverUrlInfoButtonTooltip": "Server URL Help",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "startMixNoSongsGenre": "Druk lang op een genre om deze toe te voegen of te verwijderen van de mix-bouwer alvorens een mix te starten",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "loginFlowQuickConnectInstructions": "Open de Jellyfin app of website, klik op je gebruikersicoon, en selecteer Quick Connect.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} nummer} other{{songCount} nummers}}, {imageCount,plural,=1{{imageCount} plaatje} other{{imageCount} plaatjes}}\n\n{syncCount,plural,=1{{syncCount} synchroniseert} other{{syncCount} synchroniseren}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "about": "Over Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "aboutReleaseNotes": "Lees de notities over de laatste uitgave:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutThanks": "Bedankt voor het gebruiken van Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowSlogan": "Jouw muziek, zoals jij het wilt.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "Aan de slag!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "changeLanguage": "Verander Taal",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "serverUrlHint": "bijv. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Zoeken naar servers…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "Selecteer jouw account",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "passwordHint": "Vul je wachtwoord in",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "activeDownloads": "Actieve Downloads",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Actieve Downloads",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Geen actieve downloads.",
+  "@noActiveDownloads": {},
+  "playbackSpeedControlSetting": "Zichtbaarheid Afspeelsnelheid",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "emptyFilteredListTitle": "Niets gevonden",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "deleteDownloadsConfirmButtonText": "Verwijderen",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "back": "Terug",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "bitDepth": "Bit Diepte",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "Grootte",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "sampleRate": "Sample Rate",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "showCoversOnAlbumScreenTitle": "Laat Album Hoezen Zien Voor Nummers",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetFiltersButton": "Verwijder filters",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Laat voor ieder nummer de bijbehorende album hoes zien, waar nummers geselecteerd kunnen worden.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetSettingsPromptGlobal": "Weet je zeker dat je ALLE instellingen wilt terugzetten naar de standaard waarden?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "Reset ALLE instellingen",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "genericCancel": "Stoppen",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "loginFlowServerSelectionHeading": "Verbinden met Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "resetSettingsPromptLocal": "Wil je deze instellingen terugzetten naar de standaard waarden?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "emptyFilteredListSubtitle": "Niets komt overeen met deze filter. Zet het filter uit, of probeer een andere zoekterm.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "loginFlowWelcomeHeading": "Welkom bij",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "aboutTranslations": "Help Finamp vertalen in jouw taal:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "backToServerSelection": "Terug naar Server Selectie",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowAuthenticationHeading": "Log in op je account",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "login": "Log In",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "usernameHint": "Vul je gebruikersnaam in",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Vul alsjeblieft een gebruikersnaam in",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "loginFlowQuickConnectPrompt": "Gebruik Quick Connect code",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "confirmDownloadStarted": "Download gestart",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "loginFlowQuickConnectDisabled": "Quick Connect staat uitgeschakeld op deze server.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "loginFlowSelectAUser": "Selecteer een gebruiker",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "emptyTopTracksList": "Je hebt nog niet naar muziek geluisterd van deze artiest.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "title": "Titel",
+  "@title": {},
+  "interactions": "Interacties",
+  "@interactions": {},
+  "playbackSpeedControlSettingSubtitle": "Of de afspeelsnelheid-knoppen zichtbaar moeten zijn in het speler menu",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "customizationSettingsTitle": "Aanpassingen",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "orDivider": "of",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "backToAccountSelection": "Terug naar Account Selectie",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowLocalNetworkServers": "Servers in jouw lokale netwerk:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "aboutContributionLink": "Draag bij aan Finamp op GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "connectingToServer": "Verbindt met server…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "finampTagline": "Een open source Jellyfin muziekspeler",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "syncDownloadedPlaylists": "Sync gedownloade afspeellijsten",
+  "@syncDownloadedPlaylists": {},
+  "removeFromPlaylistNamedTooltip": "Verwijderen van afspeellijst '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Verwijderen van Afspeellijst '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "hidden": "Verborgen",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Snelheid",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "apply": "Toepassen",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Minimale ruimte rond albumhoes",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopSongs": "Laat meest beluisterde nummers zien in artiest scherm",
+  "@showArtistsTopSongs": {},
+  "playerScreen": "Speler Scherm",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "hours": "Uren",
+  "@hours": {},
+  "timeFractionTooltip": "{currentTime} van {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "seconds": "Seconden",
+  "@seconds": {},
+  "trackCountTooltip": "Nummer {currentTrackIndex} van {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "sleepTimerRemainingTime": "Slapen over {time} minuten",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "addToMorePlaylistsTitle": "Toevoegen aan Meer Afspeellijsten",
+  "@addToMorePlaylistsTitle": {},
+  "showFastScroller": "Laat snelle scroller zien",
+  "@showFastScroller": {},
+  "playbackSpeedControlSettingDescription": "Automatisch:\nFinamp probeert in te schatten of het nummer waar je momenteel naar luistert een podcast is, of het (een onderdeel van) een audioboek is. Dit wordt aangenomen als het nummer langer duurt dan {trackDuration} minuten, of als het gehele album langer duurt dan {albumDuration} uur, of als het nummer tot één van de volgende genres behoort: {genreList}\nDe knoppen om de afspeelsnelheid te bedienen worden dan zichtbaar gemaakt in het muziekspeler scherm.\n\nZichtbaar:\nDe knoppen om de afspeelsnelheid te bedienen zullen altijd zichtbaar zijn in het muziekspeler scherm.\n\nVerborgen:\nDe knoppen om de afspeelsnelheid te bedienen zullen niet zichtbaar zijn in het muziekspeler scherm.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "automatic": "Automatisch",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Zichtbaar",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimale ruimte rond albumhoes in het scherm van de muziekspeler, in % van breedte van het scherm.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "addToMorePlaylistsTooltip": "Toevoegen aan meer afspeellijsten",
+  "@addToMorePlaylistsTooltip": {},
+  "offlineSongCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} gedownload",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCount": "{count,plural,=1{{count} nummer} other{{count} nummers}}, {downloads} gedownload",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteDownloadsPrompt": "Weet je zeker dat je {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' wilt verwijderen van dit apparaat?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "playlistActionsMenuButtonTooltip": "Tik om toe te voegen aan afspeellijst. Houd ingedrukt om toe te voegen aan favorieten.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "bufferDisableSizeConstraintsSubtitle": "Schakelt buffergrootte beperking uit ('Buffergrootte'). De buffer zal altijd ingeladen worden zoals geconfigureerd volgens de bufferlengte ('Bufferlengte'), zelfs voor grotere bestanden. Dit kan een crash veroorzaken. Vereist een herstart.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bitRate": "Bitrate",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "goToArtist": "Ga naar Artiest",
+  "@goToArtist": {},
+  "connectionInterruptedBackgroundAndroid": "Connectie werd onderbroken terwijl downloads bezig waren. Dit kan veroorzaakt zijn door aanzetten 'Ga naar Lage-Prioriteit Staat tijdens Pauzeren' of OS instellingen.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "playingFromType": "Afspelen Van {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "loopModeOneButtonLabel": "Herhaal dit nummer",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "playbackHistory": "Afspeel Geschiedenis",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "reset": "Herstel",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "showArtistsTopSongsSubtitle": "Wel of niet laten zien van top 5 beluisterde nummers van een artiest.",
+  "@showArtistsTopSongsSubtitle": {},
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Lokaal Afspelen",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToGenre": "Ga naar Genre",
+  "@goToGenre": {},
+  "confirmAddedToPlaylist": "Toegevoegd aan afspeellijst.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "insertedIntoQueue": "Toegevoegd aan wachtrij.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "skipToNextTrackButtonTooltip": "Ga naar volgende nummer",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "placeholderSource": "Ergens",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "mix": "{mixSource} - Mix",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Laat alleen volledig gedownloade albums zien",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "alignmentOptionStart": "Begin",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "Centrum",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "fontSizeOptionLarge": "Groot",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "keepScreenOn": "Houd Scherm Aan",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnSubtitle": "Wanneer het scherm aan te houden",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnDisabled": "Uitgeschakeld",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnAlwaysOn": "Altijd Aan",
+  "@keepScreenOnAlwaysOn": {},
+  "keepScreenOnWhilePlaying": "Tijdens Muziek Afspelen",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhilePluggedIn": "Houd Scherm Aan alleen tijdens opladen",
+  "@keepScreenOnWhilePluggedIn": {},
+  "artwork": "Albumhoes",
+  "@artwork": {},
+  "artworkTooltip": "Albumhoes voor {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "keepScreenOnWhilePluggedInSubtitle": "Negeer de Houd Scherm Aan instelling als apparaat niet oplaad",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "genericToggleButtonTooltip": "Tik om te schakelen.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "playbackMode": "Afspeelmodus",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "additionalPeople": "Mensen",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "albumScreen": "Albumscherm",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showFeatureChipsToggleTitle": "Zichtbaarheid Geavanceerde Nummer Informatie",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "previousTracks": "Vorige Nummers",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "confirmAddToNextUp": "{type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} toegevoegd aan Volgende",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "fontSizeOptionMedium": "Gemiddeld",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "alignmentOptionEnd": "Einde",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Klein",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "nowPlayingBarTooltip": "Open Spelerscherm",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "codec": "Codec",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "confirmAddToQueue": "{type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} toegevoegd aan wachtrij",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleToNextUp": "Geshuffeld naar Volgende",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "normalizationGain": "Gain",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "savedQueue": "Opgeslagen Wachtrij",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "bufferDisableSizeConstraintsTitle": "Beperk bufferlimiet niet",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeTitle": "Buffergrootte",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "De maximale buffergrootte in MB. Vereist een herstart",
+  "@bufferSizeSubtitle": {},
+  "skipToPreviousTrackButtonTooltip": "Ga naar begin of naar vorige nummer",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "nextUp": "Volgende",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Verwijder Volgende",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "playingFrom": "Afspelen van",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "playNext": "Hierna afspelen",
+  "@playNext": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "addToNextUp": "Toevoegen aan Volgende",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleNext": "Shuffle als volgende",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "shuffleToNextUp": "Shuffle naar Volgende",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} zal hierna afspelen",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleNext": "Zal hierna shuffelen",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "Geshuffeld naar wachtrij",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "shareOfflineListens": "Deel offline geluisterd",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "yourLikes": "Mijn Favorieten",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "tracksFormerNextUp": "Nummers toegevoegd aan Volgende",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "shuffleAllQueueSource": "Shuffle Alles",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "Afspelen op volgorde",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderLinearButtonTooltip": "Afspelen op volgorde. Tik om te shuffelen.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Shuffel nummers",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Shuffel nummers. Tik voor afspelen op volgorde.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedFeatureText": "x{speed} snelheid",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedButtonLabel": "Afspelen op x{speed} snelheid",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Verlaag afspeelsnelheid",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Verhoog afspeelsnelheid",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeNoneButtonLabel": "Niet herhalen",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeAllButtonLabel": "Herhaal alles",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "filesystemFull": "Overgebleven downloads kunnen niet worden afgewerkt. Het bestandssysteem zit vol.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "Connectie is onderbroken, pauzeren van downloads.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "activeDownloadSize": "Downloaden...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "Verwijderen...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "Synchroniseren...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "maxConcurrentDownloads": "Max Gelijktijdige Downloads",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "showFeatureChipsToggleSubtitle": "Laat geavanceerde nummer informatie als codec, bitrate, en meer zien op het spelerscherm.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "unknownAlbum": "Onbekend Album",
+  "@unknownAlbum": {},
+  "playbackModeTranscoding": "Transcoderen",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "playbackModeDirectPlaying": "Direct Afspelen",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "confirmFavoriteAdded": "Toevoegen aan Favorieten",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Verwijderen uit Favorieten",
+  "@confirmFavoriteRemoved": {},
+  "shuffleToQueue": "Shuffle naar Wachtrij",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "connectionInterruptedBackground": "Connectie werd onderbroken terwijl downloads bezig waren. Dit kan veroorzaakt zijn door instellingen in het OS.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  }
 }

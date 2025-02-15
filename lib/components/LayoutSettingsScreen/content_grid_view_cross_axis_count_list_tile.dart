@@ -42,9 +42,9 @@ enum ContentGridViewCrossAxisCountType {
 
 class ContentGridViewCrossAxisCountListTile extends StatefulWidget {
   const ContentGridViewCrossAxisCountListTile({
-    Key? key,
+    super.key,
     required this.type,
-  }) : super(key: key);
+  });
 
   final ContentGridViewCrossAxisCountType type;
 

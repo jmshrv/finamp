@@ -1,15 +1,13 @@
 {
-  "noErrors": "エラーなし!",
-  "@noErrors": {},
   "error": "エラー",
   "@error": {},
   "serverUrl": "サーバー URL",
   "@serverUrl": {},
-  "internalExternalIpExplanation": "Jellyfinサーバーをリモートでアクセスするには、外部 IP を指定して下さい。\n\nサーバーが HTTP ポート(80／443)で動いてる場合はポートを指定する必要はありません。サーバーがリバースプロクシの後段にある場合これが一般的です。",
+  "internalExternalIpExplanation": "リモートからJellyfinサーバーにアクセスするには外部IPを指定する必要があります。\n\nサーバーがHTTPポート(80/443)やJellyfinのデフォルトポート(8096)で動作している場合、ポートを指定する必要はありません。\n\nURLが正しい場合、入力フィールドの下にサーバーに関する情報が表示されるはずです。",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "emptyServerUrl": "サーバー URL は空であってはなりません",
+  "emptyServerUrl": "サーバーURLを入力してください",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
@@ -21,14 +19,6 @@
   "@username": {},
   "next": "次",
   "@next": {},
-  "urlStartWithHttps": "URL は http:// か https:// で始まらなければなりません",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
-  },
-  "urlTrailingSlash": "URL の末尾にスラッシュがあってはなりません",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "unknownName": "タイトル不明",
   "@unknownName": {},
   "couldNotFindLibraries": "ライブラリが見つかりません。",
@@ -61,11 +51,11 @@
   "@startMix": {},
   "favourites": "お気に入り",
   "@favourites": {},
-  "startMixNoSongsArtist": "アーティスト名をロングプレスして、ミックス開始前にミックスビルダーに追加や外すことができます",
+  "startMixNoSongsArtist": "アーティスト名を長押しすることでミックス対象に追加または削除できます",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "アーティスト名をロングプレスして、ミックス開始前にミックスビルダーに追加や外すことができます",
+  "startMixNoSongsAlbum": "アルバムを長押しすることでミックス対象に追加または削除できます",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -101,30 +91,12 @@
   "@communityRating": {},
   "random": "ランダム",
   "@random": {},
-  "downloadErrors": "ダウンロード・エラー",
-  "@downloadErrors": {},
   "downloadMissingImages": "欠けている画像をダウンロード",
   "@downloadMissingImages": {},
   "revenue": "収入",
   "@revenue": {},
   "downloadCount": "{count,plural, =1{{count} 個ダウンロード} other{{count}個ダウンロード}}",
   "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedItemsCount": "{count,plural, =1{{count} アイテム} other{{count}アイテム}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadedImagesCount": "{count,plural, =1{{count} 枚の画像} other{{count}枚の画像}}",
-  "@downloadedImagesCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -139,8 +111,6 @@
       }
     }
   },
-  "downloadErrorsTitle": "ダウンロード・エラー",
-  "@downloadErrorsTitle": {},
   "dlEnqueued": "{count} 個キューに追加",
   "@dlEnqueued": {
     "placeholders": {
@@ -305,14 +275,6 @@
   "@noArtist": {},
   "unknownArtist": "アーティスト不明",
   "@unknownArtist": {},
-  "streaming": "ストリーミング",
-  "@streaming": {},
-  "downloaded": "ダウンロード済み",
-  "@downloaded": {},
-  "transcode": "トランスコード",
-  "@transcode": {},
-  "statusError": "ステータス・エラー",
-  "@statusError": {},
   "removeFavourite": "お気に入りを削除",
   "@removeFavourite": {},
   "addFavourite": "お気に入りを追加",
@@ -325,8 +287,6 @@
   "@anErrorHasOccured": {},
   "instantMix": "インスタント・ミックス",
   "@instantMix": {},
-  "direct": "直接",
-  "@direct": {},
   "queue": "キュー",
   "@queue": {},
   "addToQueue": "キューに追加",
@@ -368,7 +328,7 @@
   "@logsCopied": {},
   "message": "メッセージ",
   "@message": {},
-  "failedToGetSongFromDownloadId": "ダウンロード ID から曲が取得できません",
+  "failedToGetSongFromDownloadId": "ダウンロードIDから曲を取得できませんでした",
   "@failedToGetSongFromDownloadId": {},
   "downloadedMissingImages": "{count,plural, =0{欠けている画像が見つかりません} =1{欠けている画像を {count} 枚ダウンロード} other{欠けている画像を {count} 枚ダウンロード}}",
   "@downloadedMissingImages": {
@@ -381,9 +341,9 @@
   },
   "goToAlbum": "アルバムに行く",
   "@goToAlbum": {},
-  "errorScreenError": "エラーリスト取得時にエラーが発生しました！この時点では、GitHub でイシューを作成し、アプリデータを削除することをお勧めします",
+  "errorScreenError": "エラーリスト取得時にエラーが発生しました！この時点では、GitHub で issue を作成し、アプリデータを削除することをお勧めします",
   "@errorScreenError": {},
-  "startupError": "起動時に問題が起こりました。エラー: {error}\n\ngithub.com/UnicornsOnLSD/finamp でイシューを作成し、このページのスクリーンショットを付けてください。問題が継続した場合はアプリデータをクリアしてアプリを初期化して下さい。",
+  "startupError": "起動時に問題が起こりました。エラー内容: {error}\n\ngithub.com/UnicornsOnLSD/finamp でイシューを作成し、このページのスクリーンショットを付けてください。問題が継続した場合はアプリデータをクリアしてアプリを初期化して下さい。",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -417,25 +377,11 @@
   "@bufferDuration": {},
   "language": "言語",
   "@language": {},
-  "finamp": "フィナンプ",
+  "finamp": "Finamp",
   "@finamp": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
   "areYouSure": "よろしいですか？",
   "@areYouSure": {},
-  "appDirectory": "アプリディレクトリ",
+  "appDirectory": "Appのディレクトリ",
   "@appDirectory": {},
   "shuffleAllSongCount": "曲がシャッフル化される回数",
   "@shuffleAllSongCount": {},
@@ -453,7 +399,7 @@
       }
     }
   },
-  "customLocation": "カスタム場所",
+  "customLocation": "指定の場所",
   "@customLocation": {},
   "refresh": "リフレッシュ",
   "@refresh": {},
@@ -464,5 +410,255 @@
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
   "resetTabs": "タブリセット",
-  "@resetTabs": {}
+  "@resetTabs": {},
+  "viewTypeSubtitle": "ミュージック画面の表示形式",
+  "@viewTypeSubtitle": {},
+  "deleteDownloadsPrompt": "このデバイスから {itemType, select, album{アルバム} playlist{プレイリスト} artist{アーティスト} genre{ジャンル} song{曲} library{ライブラリ} other{アイテム}}「{itemName}」を削除してもよろしいですか？",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "insertedIntoQueue": "キューに挿入されました。",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "responseError401": "{error} Status code {statusCode}. ユーザー名/パスワードが間違っているか、クライアントがログインしていません。",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "noMusicLibrariesBody": "Finamp は音楽ライブラリを見つけることができませんでした。Jellyfin サーバーに、コンテンツ タイプが「音楽」に設定されているライブラリが少なくとも 1 つ含まれていることを確認してください。",
+  "@noMusicLibrariesBody": {},
+  "swipeInsertQueueNextSubtitle": "曲リストでスワイプしたときに、曲を最後に追加するのではなく、キューの次の項目として挿入できるようにします。",
+  "@swipeInsertQueueNextSubtitle": {},
+  "showUncensoredLogMessage": "このログはあなたのログイン情報を含みます。表示しますか？",
+  "@showUncensoredLogMessage": {},
+  "syncDownloadedPlaylists": "ダウンロードしたプレイリストの同期",
+  "@syncDownloadedPlaylists": {},
+  "deleteDownloadsConfirmButtonText": "削除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "applicationLegalese": "Mozilla Public License 2.0 のもとでライセンスされています。\nソースコードは {sourceCodeLink} で入手できます。",
+  "@applicationLegalese": {},
+  "customLocationsBuggy": "カスタムの場所は、権限の問題により、非常にバグが多くなります。これを修正する方法を考えていますが、今のところは使用しないことをお勧めします。",
+  "@customLocationsBuggy": {},
+  "showFastScroller": "高速スクロールを表示",
+  "@showFastScroller": {},
+  "swipeInsertQueueNext": "スワイプした曲を再生する",
+  "@swipeInsertQueueNext": {},
+  "noMusicLibrariesTitle": "音楽ライブラリなし",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "changeLanguage": "言語を変更",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "serverUrlHint": "例: demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "startMixNoSongsGenre": "ミックスを開始する前に、ジャンルを長押ししてミックスビルダーに追加または削除してください",
+  "@startMixNoSongsGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} 曲} other{{songCount} 曲}}, {imageCount,plural,=1{{imageCount} 画像} other{{imageCount} 画像}}\n{syncCount,plural,=1{{syncCount} ノードを同期中} other{{syncCount} ノードを同期中}}{repairing, plural, =0{} other{\n現在修復中}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "songCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "usernameValidationMissingUsername": "ユーザー名を入力してください",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "パスワードを入力してください",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "confirmDownloadStarted": "ダウンロードを開始しました",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "about": "Finamp について",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "finampTagline": "オープンソースのJellyfin音楽プレーヤー",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionLink": "GitHub で Finamp に貢献する:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "最新のリリースノートを読む:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutContributionPrompt": "素晴らしい人々が空き時間に作りました。\nあなたもその一員になれるかもしれません！",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutTranslations": "Finamp をあなたの言語に翻訳する手伝いをしてください:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "aboutThanks": "Finamp をご利用いただきありがとうございます！",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowSlogan": "あなたの音楽を、あなたの思い通りに。",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "始めましょう！",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "viewLogs": "ログを表示",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "loginFlowServerSelectionHeading": "Jellyfin に接続",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "戻る",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlInfoButtonTooltip": "サーバーURLのヘルプ",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "connectingToServer": "サーバーに接続中…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "ローカルネットワーク上のサーバー:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "サーバーをスキャン中…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "アカウントを選択してください",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "backToServerSelection": "サーバー選択に戻る",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "名前なしユーザー",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "カスタムユーザー",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAuthenticationHeading": "アカウントにログインしてください",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "backToAccountSelection": "アカウント選択に戻る",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "Quick Connect コードを使用する",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectInstructions": "Jellyfinアプリまたはウェブサイトを開き、ユーザーアイコンをクリックして「Quick Connect」を選択してください。",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectDisabled": "このサーバーでは、Quick Connect が無効になっています。",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "orDivider": "または",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowSelectAUser": "ユーザーを選択",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameHint": "ユーザー名を入力してください",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "login": "ログイン",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "title": "タイトル",
+  "@title": {},
+  "activeDownloads": "アクティブなダウンロード",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "アクティブなダウンロード",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "アクティブなダウンロードはありません。",
+  "@noActiveDownloads": {},
+  "offlineSongCount": "{count,plural,=1{{count} 曲} other{{count} 曲}}, {downloads} ダウンロード済み",
+  "@offlineSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineSongCountArtist": "{count,plural,=1{{count} 曲} other{{count} 曲}} ダウンロード済み",
+  "@offlineSongCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customizationSettingsTitle": "カスタマイズ",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "再生速度の表示",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  }
 }

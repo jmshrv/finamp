@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class IconAndText extends StatelessWidget {
   const IconAndText({
-    Key? key,
+    super.key,
     required this.iconData,
     required this.textSpan,
-  }) : super(key: key);
+  });
 
   final IconData iconData;
   final TextSpan textSpan;

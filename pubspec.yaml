@@ -15,185 +15,193 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.7+107
+version: 0.9.13+113
 
 environment:
-    sdk: ">=3.3.0 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
-    flutter:
-        sdk: flutter
-    flutter_localizations:
-        sdk: flutter
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
-    background_downloader: ^8.4.1
-    json_annotation: ^4.8.1
-    chopper: ^8.0.0
-    get_it: ^7.2.0
-    just_audio: ^0.9.37
-    just_audio_media_kit: ^2.0.4
-    media_kit_libs_linux: ^1.1.3
+  background_downloader: ^8.6.0
+  json_annotation: ^4.8.1
+  chopper: ^8.0.0
+  get_it: ^7.2.0
+  just_audio: ^0.9.43
+  just_audio_media_kit: ^2.0.6
+  media_kit_libs_linux: ^1.1.3
 
-    # Transcoding does not work on windows with current media-kit release.  This fork uses the most recent
-    # build of MPV from https://github.com/zhongfly/mpv-winbuild, which works correctly while transcoding.
-    media_kit_libs_windows_audio: #^1.0.9
-        git:
-            url: https://github.com/Komodo5197/media-kit.git
-            ref: 475a08cc97b94702f774bc906e1472b5bddc932b
-            path: libs/windows/media_kit_libs_windows_audio
-    smtc_windows: ^0.1.2
-    audio_service: ^0.18.13
-    audio_service_mpris: ^0.1.3
-    audio_service_platform_interface: ^0.1.1
-    audio_session: ^0.1.18
-    rxdart: ^0.27.7
-    simple_gesture_detector: ^0.2.0
-    path_provider: ^2.0.14
-    hive: ^2.2.3
-    hive_flutter: ^1.1.0
-    file_sizes: ^1.0.6
-    logging: ^1.1.1
-    collection: ^1.18.0
-    clipboard: ^0.1.3
-    file_picker: ^8.0.3
-    permission_handler: ^11.3.1
-    provider: ^6.0.5
-    uuid: ^3.0.7
-    infinite_scroll_pagination: ^4.0.0
-    flutter_sticky_header: ^0.7.0
-    device_info_plus: ^10.0.1
-    package_info_plus: ^8.0.0
-    octo_image: ^2.0.0
-    # Main split view package does not seem actively maintained.  Use fork with ability to specify
-    # handle visual vs grabbable sizes separately.
-    split_view:
-        git:
-            url: https://github.com/odriverobotics/split_view.git
-            ref: 8b2b0f0e1c8470183cb2df40815a05bfdb3fe219
-    share_plus: ^9.0.0
-    isar: ^3.1.0
-    isar_flutter_libs: ^3.1.0
-    custom_lint_core: ^0.6.10
-    path: ^1.9.0
-    intl: ">=0.18.1 < 1.0.0"
-    auto_size_text: ^3.0.0
-    marquee: ^2.2.3
-    palette_generator:
-        git:
-            url: https://github.com/jmshrv/packages.git
-            branch: pallete-generator-isolates
-            ref: 4992c3b
-            path: packages/palette_generator
-    flutter_tabler_icons: ^1.27.0
-    flutter_riverpod: ^2.4.9
-    riverpod_annotation: ^2.3.3
-    locale_names: ^1.1.1
-    flutter_vibrate: ^1.3.0
-    mini_music_visualizer: ^1.0.2
-    # fix not showing elipses when maxLines==1
-    balanced_text:
-        git:
-            url: https://github.com/Komodo5197/flutter-balanced-text.git
-            ref: e387fcaef4fabf7a24e8c7d9dbb9c967ab1582f4
-    flutter_to_airplay: ^2.0.4
-    flutter_blurhash: ^0.8.2
-    scroll_to_index: ^3.0.1
-    window_manager: ^0.3.8
-    url_launcher: ^6.2.6
-    isar_generator: ^3.1.0+1
+  # Transcoding does not work on windows with current media-kit release.  This fork uses the most recent
+  # build of MPV from https://github.com/zhongfly/mpv-winbuild, which works correctly while transcoding.
+  media_kit_libs_windows_audio: #^1.0.9
+    git:
+      url: https://github.com/Komodo5197/media-kit.git
+      ref: 475a08cc97b94702f774bc906e1472b5bddc932b
+      path: libs/windows/media_kit_libs_windows_audio
+  smtc_windows: ^1.0.0
+  audio_service: ^0.18.15
+  audio_service_mpris: ^0.1.5
+  audio_service_platform_interface: ^0.1.1
+  audio_session: ^0.1.21
+  rxdart: ^0.28.0
+  simple_gesture_detector: ^0.2.0
+  path_provider: ^2.0.14
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  file_sizes: ^1.0.6
+  logging: ^1.3.0
+  collection: ^1.18.0
+  clipboard: ^0.1.3
+  file_picker: ^8.1.3
+  permission_handler: ^11.3.1
+  provider: ^6.0.5
+  uuid: ^4.5.1
+  infinite_scroll_pagination: ^4.0.0
+  flutter_sticky_header: ^0.7.0
+  device_info_plus: ^11.1.0
+  app_set_id: ^1.2.1
+  package_info_plus: ^8.0.0
+  octo_image: ^2.0.0
+  # Main split view package does not seem actively maintained.  Use fork with ability to specify
+  # handle visual vs grabbable sizes separately.
+  split_view:
+    git:
+      url: https://github.com/odriverobotics/split_view.git
+      ref: 8b2b0f0e1c8470183cb2df40815a05bfdb3fe219
+  share_plus: ^10.1.1
+  isar: ^3.1.0
+  isar_flutter_libs: ^3.1.0
 
-# Fix for marquee dependency after Flutter 3.2.2 upgrade
-dependency_overrides:
-    fading_edge_scrollview: ^4.1.1
-    analyzer: ^6.0.0
+  path: ^1.9.0
+  intl: '>=0.18.1 < 1.0.0'
+  auto_size_text: ^3.0.0
+  marquee: ^2.3.0
+  palette_generator:
+    git:
+      url: https://github.com/jmshrv/packages.git
+      branch: pallete-generator-isolates
+      ref: 4992c3b
+      path: packages/palette_generator
+  flutter_tabler_icons: ^1.27.0
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+  locale_names: ^1.1.1
+  flutter_vibrate: ^1.3.0
+  flutter_cache_manager: ^3.4.1
+  # fix not showing elipses when maxLines==1
+  balanced_text:
+    git:
+      url: https://github.com/Komodo5197/flutter-balanced-text.git
+      ref: e387fcaef4fabf7a24e8c7d9dbb9c967ab1582f4
+  flutter_to_airplay: ^2.0.4
+  flutter_blurhash: ^0.8.2
+  scroll_to_index: ^3.0.1
+  window_manager: ^0.4.3
+  url_launcher: ^6.3.1
+  wakelock_plus: ^1.2.8
+  battery_plus: ^6.2.0
+  focus_on_it: ^2.0.1
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
-    flutter_test:
-        sdk: flutter
-    build_runner: ^2.3.3
-    chopper_generator: ^8.0.0
-    hive_generator: ^2.0.0
-    json_serializable: ^6.7.1
-    flutter_launcher_icons: ^0.13.1
-    flutter_lints: ^4.0.0
-    riverpod_generator: ^2.3.9
-    custom_lint:
-    #riverpod_lint: ^2.3.7
-    # isar_generator requires analyzer <6.0.0 by default, but 6.x.0 doesn't have breaking changes
-    # Using fork of 3.1.0+1 with pubspec updated to analyzer: "^6.0.0"
-    # isar_generator:
-    #     git:
-    #         url: https://github.com/ndelanou/isar.git
-    #         ref: 70a5abd2b36d265a2eef0141f98f312a8710e60c
-    #         path: packages/isar_generator
-    msix: ^3.16.7
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.3.3
+  flutter_gen_runner:
+  chopper_generator: ^8.0.0
+  hive_generator: ^2.0.0
+  json_serializable: ^6.7.1
+  flutter_launcher_icons: ^0.14.1
+  flutter_lints: ^5.0.0
+  riverpod_generator: ^2.6.1
+  custom_lint: 
+  riverpod_lint: ^2.6.1
+  isar_generator: ^3.1.0+1
+  msix: ^3.16.7
+
+dependency_overrides:
+  # isar_generator requires analyzer <6.0.0 by default, but 6.x.0 doesn't have breaking changes
+  # Overriding the package version allows us to use the latest version.
+  analyzer: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-    # The following line ensures that the Material Icons font is
-    # included with your application, so that you can use the icons in
-    # the material Icons class.
-    uses-material-design: true
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
 
-    # To add assets to your application, add an assets section, like this:
-    assets:
-        - images/finamp.png
-        - images/finamp_cropped.png
-        - images/jellyfin-icon-transparent.png
-    #   - images/a_dot_ham.jpeg
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - images/finamp.png
+    - images/album_white.png
+    - images/finamp_cropped.png
+    - images/finamp_cropped.svg
+    - images/jellyfin-icon-transparent.png
+  #   - images/a_dot_ham.jpeg
 
-    generate: true
+  generate: true
 
-    # An image asset can refer to one or more resolution-specific "variants", see
-    # https://flutter.dev/assets-and-images/#resolution-aware.
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
 
-    # For details regarding adding assets from package dependencies, see
-    # https://flutter.dev/assets-and-images/#from-packages
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
 
-    # To add custom fonts to your application, add a fonts section here,
-    # in this "flutter" section. Each entry in this list should have a
-    # "family" key with the font family name, and a "fonts" key with a
-    # list giving the asset and other descriptors for the font. For
-    # example:
-    # fonts:
-    #   - family: Schyler
-    #     fonts:
-    #       - asset: fonts/Schyler-Regular.ttf
-    #       - asset: fonts/Schyler-Italic.ttf
-    #         style: italic
-    #   - family: Trajan Pro
-    #     fonts:
-    #       - asset: fonts/TrajanPro.ttf
-    #       - asset: fonts/TrajanPro_Bold.ttf
-    #         weight: 700
-    #
-    # For details regarding fonts from package dependencies,
-    # see https://flutter.dev/custom-fonts/#from-packages
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
 
 flutter_launcher_icons:
-    android: true
-    ios: true
-    image_path: "assets/icon/icon_combined.png"
-    adaptive_icon_foreground: "assets/icon/icon_foreground.png"
-    adaptive_icon_background: "#000B25"
-    remove_alpha_ios: true
-    macos:
-        generate: true
-        image_path: "assets/icon/icon_combined_macos.png"
+  android: true
+  ios: true
+  image_path: "assets/icon/icon_combined.png"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  adaptive_icon_background: "#000B25"
+  remove_alpha_ios: true
+  macos:
+    generate: true
+    image_path: "assets/icon/icon_combined_macos.png"
 
 msix_config:
-    display_name: Finamp
-    publisher_display_name: Jellyfin
-    identity_name: com.unicornsonlsd.finamp
-    msix_version: 0.9.7.0
-    logo_path: ./images/finamp_cropped.png
-    trim_logo: false # don't force logo to be square, it will be stretched
-    capabilities: internetClientServer
-    enable_at_startup: true
-    certificate_path: ./windows/runner/resources/MSIX_LOCAL_CERTIFICATE.pfx
-    certificate_password: finamp
-    # Building during msix:create is currently bugged, so build manually beforehand.
-    build_windows: false
+  display_name: Finamp
+  publisher_display_name: jmshrv
+  identity_name: com.unicornsonlsd.finamp
+  msix_version: 0.9.13.0
+  logo_path: ./images/finamp_cropped.png
+  trim_logo: false # don't force logo to be square, it will be stretched
+  # backgroundMediaPlayback prevents apps from getting muted or killed when being in the background (won't build if included at the moment)
+  # internetClient is used to allow access to remote Jellyfin servers through the internet
+  # privateNetworkClientServer is used for local network access, so that Jellyfin servers on the local network can be discovered
+  # musicLibrary is used to get access to the local and nextwork-based music directories (e.g. to store downloads there)
+  # globalMediaControl is used to get full access to the playback sessions (won't build if included at the moment)
+  # more info: https://learn.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
+  # capabilities: backgroundMediaPlayback,internetClient,musicLibrary,privateNetworkClientServer,globalMediaControl
+  capabilities: internetClient,musicLibrary,privateNetworkClientServer
+  enable_at_startup: false
+  certificate_path: ./windows/runner/resources/MSIX_LOCAL_CERTIFICATE.pfx
+  certificate_password: finamp
+  # Building during msix:create is currently bugged, so build manually beforehand.
+  build_windows: false

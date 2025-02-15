@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/components/AddToPlaylistScreen/playlist_actions_menu.dart';
+import 'package:finamp/components/AlbumScreen/song_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -30,7 +33,7 @@ import 'blurred_player_screen_background.dart';
 import 'player_screen.dart';
 
 class LyricsScreen extends ConsumerWidget {
-  const LyricsScreen({Key? key}) : super(key: key);
+  const LyricsScreen({super.key});
 
   static const routeName = "/lyrics";
 
@@ -61,9 +64,7 @@ class LyricsScreen extends ConsumerWidget {
 }
 
 class _LyricsScreenContent extends StatefulWidget {
-  const _LyricsScreenContent({
-    super.key,
-  });
+  const _LyricsScreenContent();
 
   @override
   State<_LyricsScreenContent> createState() => _LyricsScreenContentState();
@@ -77,67 +78,67 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
 
     var controller = PlayerHideableController();
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation:
-            0.0, // disable tint/shadow when content is scrolled under the app bar
-        centerTitle: true,
-        toolbarHeight: toolbarHeight,
-        title: PlayerScreenAppBarTitle(
-          maxLines: maxLines,
-        ),
-        leading: FinampAppBarButton(
-          dismissDirection: AxisDirection.right,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          if (Platform.isIOS)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: AirPlayRoutePickerView(
-                tintColor: IconTheme.of(context).color ?? Colors.white,
-                activeTintColor: jellyfinBlueColor,
-                onShowPickerView: () =>
-                    FeedbackHelper.feedback(FeedbackType.selection),
-              ),
+    return SimpleGestureDetector(
+        onVerticalSwipe: (direction) {
+          if (direction == SwipeDirection.up) {
+            // This should never actually be called until widget finishes build and controller is initialized
+            if (!FinampSettingsHelper.finampSettings.disableGesture ||
+                !controller.shouldShow(PlayerHideable.bottomActions)) {
+              showQueueBottomSheet(context);
+            }
+          }
+        },
+        onHorizontalSwipe: (direction) {
+          if (direction == SwipeDirection.right) {
+            if (!FinampSettingsHelper.finampSettings.disableGesture) {
+              Navigator.of(context).pop();
+            }
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation:
+                0.0, // disable tint/shadow when content is scrolled under the app bar
+            centerTitle: true,
+            toolbarHeight: toolbarHeight,
+            title: PlayerScreenAppBarTitle(
+              maxLines: maxLines,
             ),
-        ],
-      ),
-      // Required for sleep timer input
-      resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
-            const BlurredPlayerScreenBackground(),
-          SafeArea(
-            minimum: EdgeInsets.only(top: toolbarHeight),
-            child: LayoutBuilder(builder: (context, constraints) {
-              controller.setSize(
-                  Size(constraints.maxWidth, constraints.maxHeight),
-                  MediaQuery.orientationOf(context));
-              if (controller.useLandscape) {
-                return SimpleGestureDetector(
-                    onHorizontalSwipe: (direction) {
-                      if (direction == SwipeDirection.right) {
-                        if (!FinampSettingsHelper
-                            .finampSettings.disableGesture) {
-                          Navigator.of(context).pop();
-                        }
-                      }
-                    },
-                    child: const LyricsView());
-              } else {
-                return SimpleGestureDetector(
-                  onHorizontalSwipe: (direction) {
-                    if (direction == SwipeDirection.right) {
-                      if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                        Navigator.of(context).pop();
-                      }
-                    }
-                  },
-                  child: Column(
+            leading: FinampAppBarButton(
+              dismissDirection: AxisDirection.right,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            actions: [
+              if (Platform.isIOS)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: AirPlayRoutePickerView(
+                    tintColor: IconTheme.of(context).color ?? Colors.white,
+                    activeTintColor: jellyfinBlueColor,
+                    onShowPickerView: () =>
+                        FeedbackHelper.feedback(FeedbackType.selection),
+                  ),
+                ),
+            ],
+          ),
+          // Required for sleep timer input
+          resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+          body: Stack(
+            children: [
+              if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+                const BlurredPlayerScreenBackground(),
+              SafeArea(
+                minimum: EdgeInsets.only(top: toolbarHeight),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  controller.setSize(
+                      Size(constraints.maxWidth, constraints.maxHeight),
+                      MediaQuery.orientationOf(context));
+                  if (controller.useLandscape) {
+                    return const LyricsView();
+                  } else {
+                    return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const Expanded(
@@ -162,14 +163,14 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                               )
                             ],
                           ))
-                    ],
-                  ),
-                );
-              }
-            }),
+                      ],
+                    );
+                  }
+                }),
+              ),
+            ],
           ),
-        ],
-      ),
+        )
     );
   }
 }
@@ -233,9 +234,10 @@ class _LyricsViewState extends ConsumerState<LyricsView>
 
   @override
   Widget build(BuildContext context) {
-    final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
-
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+
+    final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
+    final finampSettings = ref.watch(finampSettingsProvider).value;
 
     //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current song yet, we want to show the loading state, and not the lyrics for the previous track
     _isSynchronizedLyrics =
@@ -280,7 +282,8 @@ class _LyricsViewState extends ConsumerState<LyricsView>
         message: "Loading lyrics...",
         icon: TablerIcons.microphone_2,
       );
-    } else if (!metadata.hasValue || metadata.value == null ||
+    } else if (!metadata.hasValue ||
+        metadata.value == null ||
         metadata.value!.hasLyrics &&
             metadata.value!.lyrics == null &&
             !metadata.isLoading) {
@@ -367,6 +370,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                                     (nextLine.start ?? 0) ~/ 10);
 
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         if (index == 0)
                           AutoScrollTag(
@@ -378,7 +382,11 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                               child: Center(
                                   child: SizedBox(
                                       height: constraints.maxHeight * 0.55,
-                                      child: const PlayerScreenAlbumImage())),
+                                      child: (finampSettings
+                                                  ?.showLyricsScreenAlbumPrelude ??
+                                              true)
+                                          ? const PlayerScreenAlbumImage()
+                                          : null)),
                             ),
                           ),
                         AutoScrollTag(
@@ -439,7 +447,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
   }
 }
 
-class _LyricLine extends StatelessWidget {
+class _LyricLine extends ConsumerWidget {
   final LyricLine line;
   final bool isCurrentLine;
   final VoidCallback? onTap;
@@ -451,51 +459,63 @@ class _LyricLine extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final lowlightLine = !isCurrentLine && line.start != null;
     final isSynchronized = line.start != null;
+
+    final finampSettings = ref.watch(finampSettingsProvider).value;
 
     return GestureDetector(
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (line.start != null)
-              Text(
-                "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
-                style: TextStyle(
-                  color: lowlightLine
-                      ? Colors.grey
-                      : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontSize: 16,
-                  height: 1.75,
-                ),
-              ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: Text(
-                  line.text ?? "<missing lyric line>",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: lowlightLine
-                        ? Colors.grey
-                        : Theme.of(context).textTheme.bodyLarge!.color,
-                    fontWeight: lowlightLine || !isSynchronized
-                        ? FontWeight.normal
-                        : FontWeight.w500,
-                    letterSpacing: lowlightLine || !isSynchronized
-                        ? 0.05
-                        : -0.045, // keep text width consistent across the different weights
-                    fontSize: isSynchronized ? 26 : 20,
-                    height: 1.25,
+        child: Text.rich(
+          textAlign: lyricsAlignmentToTextAlign(
+              finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+          softWrap: true,
+          TextSpan(children: [
+            if (line.start != null &&
+                (line.text?.trim().isNotEmpty ?? false) &&
+                (finampSettings?.showLyricsTimestamps ?? true))
+              WidgetSpan(
+                alignment: PlaceholderAlignment.bottom,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Text(
+                    "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
+                    style: TextStyle(
+                      color: lowlightLine
+                          ? Colors.grey
+                          : Theme.of(context).textTheme.bodyLarge!.color,
+                      fontSize: 16,
+                      height: 1.75 *
+                          (lyricsFontSizeToSize(
+                                  finampSettings?.lyricsFontSize ??
+                                      LyricsFontSize.medium) /
+                              26),
+                    ),
                   ),
                 ),
               ),
+            TextSpan(
+              text: line.text ?? "<missing lyric line>",
+              style: TextStyle(
+                color: lowlightLine
+                    ? Colors.grey
+                    : Theme.of(context).textTheme.bodyLarge!.color,
+                fontWeight: lowlightLine || !isSynchronized
+                    ? FontWeight.normal
+                    : FontWeight.w500,
+                letterSpacing: lowlightLine || !isSynchronized
+                    ? 0.05
+                    : -0.045, // keep text width consistent across the different weights
+                fontSize: lyricsFontSizeToSize(finampSettings?.lyricsFontSize ??
+                        LyricsFontSize.medium) *
+                    (isSynchronized ? 1.0 : 0.75),
+                height: 1.25,
+              ),
             ),
-          ],
+          ]),
         ),
       ),
     );
@@ -573,5 +593,27 @@ class EnableAutoScrollButton extends StatelessWidget {
             ),
           )
         : const SizedBox.shrink();
+  }
+}
+
+TextAlign lyricsAlignmentToTextAlign(LyricsAlignment alignment) {
+  switch (alignment) {
+    case LyricsAlignment.start:
+      return TextAlign.start;
+    case LyricsAlignment.center:
+      return TextAlign.center;
+    case LyricsAlignment.end:
+      return TextAlign.end;
+  }
+}
+
+int lyricsFontSizeToSize(LyricsFontSize fontSize) {
+  switch (fontSize) {
+    case LyricsFontSize.small:
+      return 20;
+    case LyricsFontSize.medium:
+      return 26;
+    case LyricsFontSize.large:
+      return 32;
   }
 }

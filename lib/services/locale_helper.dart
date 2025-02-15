@@ -10,6 +10,15 @@ class LocaleHelper {
 
   static Locale? get locale => Hive.box<Locale?>(boxName).get(boxName);
 
+  static String? get localeString {
+    final locale = LocaleHelper.locale;
+    return locale != null
+        ? (locale.countryCode != null
+            ? "${locale.languageCode.toLowerCase()}_${locale.countryCode?.toUpperCase()}"
+            : locale.toString())
+        : null;
+  }
+
   static void setLocale(Locale? locale) {
     Hive.box<Locale?>(boxName).put(boxName, locale);
   }

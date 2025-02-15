@@ -71,9 +71,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodeBitrate: fields[2] == null ? 320000 : fields[2] as int,
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause:
-          fields[4] == null ? false : fields[4] as bool,
+          fields[4] == null ? true : fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
-      onlyShowFavourite: fields[6] == null ? false : fields[6] as bool,
+      onlyShowFavourites: fields[6] == null ? false : fields[6] as bool,
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
       songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
@@ -101,10 +101,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : fields[48] as double,
-      hideSongArtistsIfSameAsAlbumArtists:
-          fields[17] == null ? true : fields[17] as bool,
       showArtistsTopSongs: fields[54] == null ? true : fields[54] as bool,
+      bufferDisableSizeConstraints:
+          fields[78] == null ? false : fields[78] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
+      bufferSizeMegabytes: fields[79] == null ? 50 : fields[79] as int,
       tabSortBy: fields[20] == null
           ? {}
           : (fields[20] as Map).cast<TabContentType, SortBy>(),
@@ -127,12 +128,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       autoloadLastQueueOnStartup:
           fields[28] == null ? true : fields[28] as bool,
       hasCompletedBlurhashImageMigration:
-          fields[23] == null ? false : fields[23] as bool,
+          fields[23] == null ? true : fields[23] as bool,
       hasCompletedBlurhashImageMigrationIdFix:
-          fields[24] == null ? false : fields[24] as bool,
-      hasCompleteddownloadsServiceMigration:
-          fields[34] == null ? false : fields[34] as bool,
-      requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
+          fields[24] == null ? true : fields[24] as bool,
+      hasCompletedDownloadsServiceMigration:
+          fields[34] == null ? true : fields[34] as bool,
+      requireWifiForDownloads: fields[35] == null ? true : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
       showDownloadsWithUnknownLibrary:
           fields[37] == null ? true : fields[37] as bool,
@@ -141,11 +142,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       resyncOnStartup: fields[40] == null ? true : fields[40] as bool,
       preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
-          fields[42] == null ? false : fields[42] as bool,
-      downloadTranscodingCodec: fields[43] as FinampTranscodingCodec?,
+          fields[42] == null ? true : fields[42] as bool,
       downloadTranscodeBitrate: fields[45] as int?,
       shouldTranscodeDownloads: fields[44] == null
-          ? TranscodeDownloadsSetting.never
+          ? TranscodeDownloadsSetting.ask
           : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
@@ -157,8 +157,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       enableVibration: fields[47] == null ? true : fields[47] as bool,
       prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
       suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
-      hideQueueButton: fields[51] == null ? false : fields[51] as bool,
-      oneLineMarqueeTextButton: fields[67] == null ? false : fields[67] as bool,
+      hidePlayerBottomActions: fields[51] == null ? false : fields[51] as bool,
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : fields[53] as int,
@@ -168,6 +167,35 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[64] == null ? true : fields[64] as bool,
       startInstantMixForIndividualTracks:
           fields[65] == null ? true : fields[65] as bool,
+      showLyricsTimestamps: fields[66] == null ? true : fields[66] as bool,
+      lyricsAlignment: fields[67] == null
+          ? LyricsAlignment.start
+          : fields[67] as LyricsAlignment,
+      lyricsFontSize: fields[70] == null
+          ? LyricsFontSize.medium
+          : fields[70] as LyricsFontSize,
+      showLyricsScreenAlbumPrelude:
+          fields[71] == null ? true : fields[71] as bool,
+      showStopButtonOnMediaNotification:
+          fields[68] == null ? false : fields[68] as bool,
+      showSeekControlsOnMediaNotification:
+          fields[69] == null ? true : fields[69] as bool,
+      keepScreenOnOption: fields[72] == null
+          ? KeepScreenOnOption.whileLyrics
+          : fields[72] as KeepScreenOnOption,
+      keepScreenOnWhilePluggedIn:
+          fields[73] == null ? true : fields[73] as bool,
+      featureChipsConfiguration: fields[76] == null
+          ? DefaultSettings.featureChipsConfiguration
+          : fields[76] as FinampFeatureChipsConfiguration,
+      showCoversOnAlbumScreen: fields[77] == null ? false : fields[77] as bool,
+      hasDownloadedPlaylistInfo:
+          fields[74] == null ? false : fields[74] as bool,
+      transcodingSegmentContainer: fields[75] == null
+          ? FinampSegmentContainer.fragmentedMp4
+          : fields[75] as FinampSegmentContainer,
+      downloadSizeWarningCutoff: fields[80] == null ? 150 : fields[80] as int,
+      oneLineMarqueeTextButton: fields[81] == null ? false : fields[81] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -177,7 +205,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(65)
+      ..writeByte(78)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -191,7 +219,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(5)
       ..write(obj.showTabs)
       ..writeByte(6)
-      ..write(obj.onlyShowFavourite)
+      ..write(obj.onlyShowFavourites)
       ..writeByte(7)
       ..write(obj.sortBy)
       ..writeByte(8)
@@ -212,8 +240,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.downloadLocationsMap)
       ..writeByte(16)
       ..write(obj.useCoverAsBackground)
-      ..writeByte(17)
-      ..write(obj.hideSongArtistsIfSameAsAlbumArtists)
       ..writeByte(18)
       ..write(obj.bufferDurationSeconds)
       ..writeByte(19)
@@ -243,7 +269,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(33)
       ..write(obj.volumeNormalizationMode)
       ..writeByte(34)
-      ..write(obj.hasCompleteddownloadsServiceMigration)
+      ..write(obj.hasCompletedDownloadsServiceMigration)
       ..writeByte(35)
       ..write(obj.requireWifiForDownloads)
       ..writeByte(36)
@@ -260,8 +286,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.preferQuickSyncs)
       ..writeByte(42)
       ..write(obj.hasCompletedIsarUserMigration)
-      ..writeByte(43)
-      ..write(obj.downloadTranscodingCodec)
       ..writeByte(44)
       ..write(obj.shouldTranscodeDownloads)
       ..writeByte(45)
@@ -277,7 +301,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(50)
       ..write(obj.suppressPlayerPadding)
       ..writeByte(51)
-      ..write(obj.hideQueueButton)
+      ..write(obj.hidePlayerBottomActions)
       ..writeByte(52)
       ..write(obj.reportQueueToServer)
       ..writeByte(53)
@@ -306,7 +330,37 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.showProgressOnNowPlayingBar)
       ..writeByte(65)
       ..write(obj.startInstantMixForIndividualTracks)
+      ..writeByte(66)
+      ..write(obj.showLyricsTimestamps)
       ..writeByte(67)
+      ..write(obj.lyricsAlignment)
+      ..writeByte(68)
+      ..write(obj.showStopButtonOnMediaNotification)
+      ..writeByte(69)
+      ..write(obj.showSeekControlsOnMediaNotification)
+      ..writeByte(70)
+      ..write(obj.lyricsFontSize)
+      ..writeByte(71)
+      ..write(obj.showLyricsScreenAlbumPrelude)
+      ..writeByte(72)
+      ..write(obj.keepScreenOnOption)
+      ..writeByte(73)
+      ..write(obj.keepScreenOnWhilePluggedIn)
+      ..writeByte(74)
+      ..write(obj.hasDownloadedPlaylistInfo)
+      ..writeByte(75)
+      ..write(obj.transcodingSegmentContainer)
+      ..writeByte(76)
+      ..write(obj.featureChipsConfiguration)
+      ..writeByte(77)
+      ..write(obj.showCoversOnAlbumScreen)
+      ..writeByte(78)
+      ..write(obj.bufferDisableSizeConstraints)
+      ..writeByte(79)
+      ..write(obj.bufferSizeMegabytes)
+      ..writeByte(80)
+      ..write(obj.downloadSizeWarningCutoff)
+      ..writeByte(81)
       ..write(obj.oneLineMarqueeTextButton);
   }
 
@@ -534,13 +588,14 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
       artist: fields[4] as String?,
       album: fields[5] as String?,
       trackMbid: fields[6] as String?,
+      deviceInfo: fields[7] as DeviceInfo?,
     );
   }
 
   @override
   void write(BinaryWriter writer, OfflineListen obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.timestamp)
       ..writeByte(1)
@@ -554,7 +609,9 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
       ..writeByte(5)
       ..write(obj.album)
       ..writeByte(6)
-      ..write(obj.trackMbid);
+      ..write(obj.trackMbid)
+      ..writeByte(7)
+      ..write(obj.deviceInfo);
   }
 
   @override
@@ -882,6 +939,124 @@ class FinampStorableQueueInfoAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampStorableQueueInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
+  @override
+  final int typeId = 69;
+
+  @override
+  MediaItemId read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return MediaItemId(
+      contentType: fields[0] as TabContentType,
+      parentType: fields[1] as MediaItemParentType,
+      itemId: fields[2] as String?,
+      parentId: fields[3] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaItemId obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.contentType)
+      ..writeByte(1)
+      ..write(obj.parentType)
+      ..writeByte(2)
+      ..write(obj.itemId)
+      ..writeByte(3)
+      ..write(obj.parentId);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaItemIdAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampFeatureChipsConfigurationAdapter
+    extends TypeAdapter<FinampFeatureChipsConfiguration> {
+  @override
+  final int typeId = 75;
+
+  @override
+  FinampFeatureChipsConfiguration read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return FinampFeatureChipsConfiguration(
+      enabled: fields[0] as bool,
+      features: (fields[1] as List).cast<FinampFeatureChipType>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampFeatureChipsConfiguration obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.enabled)
+      ..writeByte(1)
+      ..write(obj.features);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampFeatureChipsConfigurationAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
+  @override
+  final int typeId = 76;
+
+  @override
+  DeviceInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DeviceInfo(
+      name: fields[0] as String,
+      id: fields[1] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, DeviceInfo obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.id);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DeviceInfoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -1619,6 +1794,301 @@ class PlaybackSpeedVisibilityAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PlaybackSpeedVisibilityAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
+  @override
+  final int typeId = 68;
+
+  @override
+  MediaItemParentType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return MediaItemParentType.collection;
+      case 1:
+        return MediaItemParentType.rootCollection;
+      case 2:
+        return MediaItemParentType.instantMix;
+      default:
+        return MediaItemParentType.collection;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, MediaItemParentType obj) {
+    switch (obj) {
+      case MediaItemParentType.collection:
+        writer.writeByte(0);
+        break;
+      case MediaItemParentType.rootCollection:
+        writer.writeByte(1);
+        break;
+      case MediaItemParentType.instantMix:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MediaItemParentTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
+  @override
+  final int typeId = 70;
+
+  @override
+  LyricsAlignment read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return LyricsAlignment.start;
+      case 1:
+        return LyricsAlignment.center;
+      case 2:
+        return LyricsAlignment.end;
+      default:
+        return LyricsAlignment.start;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, LyricsAlignment obj) {
+    switch (obj) {
+      case LyricsAlignment.start:
+        writer.writeByte(0);
+        break;
+      case LyricsAlignment.center:
+        writer.writeByte(1);
+        break;
+      case LyricsAlignment.end:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricsAlignmentAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
+  @override
+  final int typeId = 71;
+
+  @override
+  LyricsFontSize read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return LyricsFontSize.small;
+      case 1:
+        return LyricsFontSize.medium;
+      case 2:
+        return LyricsFontSize.large;
+      default:
+        return LyricsFontSize.small;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, LyricsFontSize obj) {
+    switch (obj) {
+      case LyricsFontSize.small:
+        writer.writeByte(0);
+        break;
+      case LyricsFontSize.medium:
+        writer.writeByte(1);
+        break;
+      case LyricsFontSize.large:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricsFontSizeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
+  @override
+  final int typeId = 72;
+
+  @override
+  KeepScreenOnOption read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return KeepScreenOnOption.disabled;
+      case 1:
+        return KeepScreenOnOption.alwaysOn;
+      case 2:
+        return KeepScreenOnOption.whilePlaying;
+      case 3:
+        return KeepScreenOnOption.whileLyrics;
+      default:
+        return KeepScreenOnOption.disabled;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, KeepScreenOnOption obj) {
+    switch (obj) {
+      case KeepScreenOnOption.disabled:
+        writer.writeByte(0);
+        break;
+      case KeepScreenOnOption.alwaysOn:
+        writer.writeByte(1);
+        break;
+      case KeepScreenOnOption.whilePlaying:
+        writer.writeByte(2);
+        break;
+      case KeepScreenOnOption.whileLyrics:
+        writer.writeByte(3);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is KeepScreenOnOptionAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampSegmentContainerAdapter
+    extends TypeAdapter<FinampSegmentContainer> {
+  @override
+  final int typeId = 73;
+
+  @override
+  FinampSegmentContainer read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return FinampSegmentContainer.mpegTS;
+      case 1:
+        return FinampSegmentContainer.fragmentedMp4;
+      default:
+        return FinampSegmentContainer.mpegTS;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampSegmentContainer obj) {
+    switch (obj) {
+      case FinampSegmentContainer.mpegTS:
+        writer.writeByte(0);
+        break;
+      case FinampSegmentContainer.fragmentedMp4:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampSegmentContainerAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
+  @override
+  final int typeId = 74;
+
+  @override
+  FinampFeatureChipType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return FinampFeatureChipType.playCount;
+      case 1:
+        return FinampFeatureChipType.additionalPeople;
+      case 2:
+        return FinampFeatureChipType.playbackMode;
+      case 3:
+        return FinampFeatureChipType.codec;
+      case 4:
+        return FinampFeatureChipType.bitRate;
+      case 5:
+        return FinampFeatureChipType.bitDepth;
+      case 6:
+        return FinampFeatureChipType.size;
+      case 7:
+        return FinampFeatureChipType.normalizationGain;
+      case 8:
+        return FinampFeatureChipType.sampleRate;
+      default:
+        return FinampFeatureChipType.playCount;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, FinampFeatureChipType obj) {
+    switch (obj) {
+      case FinampFeatureChipType.playCount:
+        writer.writeByte(0);
+        break;
+      case FinampFeatureChipType.additionalPeople:
+        writer.writeByte(1);
+        break;
+      case FinampFeatureChipType.playbackMode:
+        writer.writeByte(2);
+        break;
+      case FinampFeatureChipType.codec:
+        writer.writeByte(3);
+        break;
+      case FinampFeatureChipType.bitRate:
+        writer.writeByte(4);
+        break;
+      case FinampFeatureChipType.bitDepth:
+        writer.writeByte(5);
+        break;
+      case FinampFeatureChipType.size:
+        writer.writeByte(6);
+        break;
+      case FinampFeatureChipType.normalizationGain:
+        writer.writeByte(7);
+        break;
+      case FinampFeatureChipType.sampleRate:
+        writer.writeByte(8);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FinampFeatureChipTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -6658,20 +7128,11 @@ FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
               Map<String, dynamic>.from(json['Library'] as Map)),
     );
 
-Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) {
-  final val = <String, dynamic>{
-    'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Library', instance.library?.toJson());
-  return val;
-}
+Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) =>
+    <String, dynamic>{
+      'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
+      if (instance.library?.toJson() case final value?) 'Library': value,
+    };
 
 const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.favorites: 'favorites',
@@ -6679,4 +7140,63 @@ const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.latest5Albums: 'latest5Albums',
   FinampCollectionType.libraryImages: 'libraryImages',
   FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
+};
+
+MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(
+      contentType: $enumDecode(_$TabContentTypeEnumMap, json['contentType']),
+      parentType: $enumDecode(_$MediaItemParentTypeEnumMap, json['parentType']),
+      itemId: json['itemId'] as String?,
+      parentId: json['parentId'] as String?,
+    );
+
+Map<String, dynamic> _$MediaItemIdToJson(MediaItemId instance) =>
+    <String, dynamic>{
+      'contentType': _$TabContentTypeEnumMap[instance.contentType]!,
+      'parentType': _$MediaItemParentTypeEnumMap[instance.parentType]!,
+      'itemId': instance.itemId,
+      'parentId': instance.parentId,
+    };
+
+const _$TabContentTypeEnumMap = {
+  TabContentType.albums: 'albums',
+  TabContentType.artists: 'artists',
+  TabContentType.playlists: 'playlists',
+  TabContentType.genres: 'genres',
+  TabContentType.songs: 'songs',
+};
+
+const _$MediaItemParentTypeEnumMap = {
+  MediaItemParentType.collection: 'collection',
+  MediaItemParentType.rootCollection: 'rootCollection',
+  MediaItemParentType.instantMix: 'instantMix',
+};
+
+FinampFeatureChipsConfiguration _$FinampFeatureChipsConfigurationFromJson(
+        Map<String, dynamic> json) =>
+    FinampFeatureChipsConfiguration(
+      enabled: json['enabled'] as bool,
+      features: (json['features'] as List<dynamic>)
+          .map((e) => $enumDecode(_$FinampFeatureChipTypeEnumMap, e))
+          .toList(),
+    );
+
+Map<String, dynamic> _$FinampFeatureChipsConfigurationToJson(
+        FinampFeatureChipsConfiguration instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'features': instance.features
+          .map((e) => _$FinampFeatureChipTypeEnumMap[e]!)
+          .toList(),
+    };
+
+const _$FinampFeatureChipTypeEnumMap = {
+  FinampFeatureChipType.playCount: 'playCount',
+  FinampFeatureChipType.additionalPeople: 'additionalPeople',
+  FinampFeatureChipType.playbackMode: 'playbackMode',
+  FinampFeatureChipType.codec: 'codec',
+  FinampFeatureChipType.bitRate: 'bitRate',
+  FinampFeatureChipType.bitDepth: 'bitDepth',
+  FinampFeatureChipType.size: 'size',
+  FinampFeatureChipType.normalizationGain: 'normalizationGain',
+  FinampFeatureChipType.sampleRate: 'sampleRate',
 };

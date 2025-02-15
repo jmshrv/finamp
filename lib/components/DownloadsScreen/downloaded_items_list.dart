@@ -10,7 +10,7 @@ import '../confirmation_prompt_dialog.dart';
 import 'item_file_size.dart';
 
 class DownloadedItemsList extends StatefulWidget {
-  const DownloadedItemsList({Key? key}) : super(key: key);
+  const DownloadedItemsList({super.key});
 
   @override
   State<DownloadedItemsList> createState() => _DownloadedItemsListState();
@@ -61,7 +61,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                         confirmButtonText: AppLocalizations.of(context)!
                             .deleteDownloadsConfirmButtonText,
                         abortButtonText: AppLocalizations.of(context)!
-                            .deleteDownloadsAbortButtonText,
+                            .genericCancel,
                         onConfirmed: () async {
                           await downloadsService.deleteDownload(stub: album);
                           if (mounted) {

@@ -9,9 +9,9 @@ import 'download_location_delete_dialog.dart';
 
 class DownloadLocationListTile extends ConsumerWidget {
   const DownloadLocationListTile({
-    Key? key,
+    super.key,
     required this.downloadLocation,
-  }) : super(key: key);
+  });
 
   final DownloadLocation downloadLocation;
 

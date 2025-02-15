@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class VolumeNormalizationIOSBaseGainEditor extends StatefulWidget {
-  const VolumeNormalizationIOSBaseGainEditor({Key? key}) : super(key: key);
+  const VolumeNormalizationIOSBaseGainEditor({super.key});
 
   @override
   State<VolumeNormalizationIOSBaseGainEditor> createState() =>
@@ -29,7 +29,8 @@ class _VolumeNormalizationIOSBaseGainEditorState
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+          keyboardType: const TextInputType.numberWithOptions(
+              decimal: true, signed: true),
           onChanged: (value) {
             final valueDouble = double.tryParse(value);
 

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:finamp/at_contrast.dart';
 import 'package:finamp/services/queue_service.dart';

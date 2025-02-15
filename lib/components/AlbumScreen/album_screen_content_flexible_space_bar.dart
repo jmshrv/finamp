@@ -1,8 +1,8 @@
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -29,11 +29,11 @@ enum AlbumMenuItems {
 
 class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
   const AlbumScreenContentFlexibleSpaceBar({
-    Key? key,
+    super.key,
     required this.parentItem,
     required this.isPlaylist,
     required this.items,
-  }) : super(key: key);
+  });
 
   final BaseItemDto parentItem;
   final bool isPlaylist;
@@ -260,7 +260,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                               children: [
                                 CTAMedium(
                                   text: AppLocalizations.of(context)!
-                                      .playButtonLabel,
+                                      .playButtonLabel
+                                      .toUpperCase(),
                                   icon: TablerIcons.player_play,
                                   onPressed: () => playAlbum(),
                                   // set the minimum width as 25% of the screen width,
@@ -345,7 +346,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                               children: [
                                 CTAMedium(
                                   text: AppLocalizations.of(context)!
-                                      .shuffleButtonLabel,
+                                      .shuffleButtonLabel
+                                      .toUpperCase(),
                                   icon: TablerIcons.arrows_shuffle,
                                   onPressed: () => shuffleAlbum(),
                                   // set the minimum width as 25% of the screen width,

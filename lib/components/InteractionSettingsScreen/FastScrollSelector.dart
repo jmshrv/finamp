@@ -6,7 +6,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class FastScrollSelector extends StatelessWidget {
-  const FastScrollSelector({Key? key}) : super(key: key);
+  const FastScrollSelector({super.key});
 
   @override
   Widget build(BuildContext context) {

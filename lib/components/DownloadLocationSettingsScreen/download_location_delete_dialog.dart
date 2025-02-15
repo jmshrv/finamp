@@ -4,9 +4,9 @@ import '../../services/finamp_settings_helper.dart';
 
 class DownloadLocationDeleteDialog extends StatelessWidget {
   const DownloadLocationDeleteDialog({
-    Key? key,
+    super.key,
     required this.id,
-  }) : super(key: key);
+  });
 
   final String id;
 

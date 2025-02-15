@@ -50,6 +50,10 @@ class ItemFileSize extends ConsumerWidget {
           } else {
             var profile =
                 item.userTranscodingProfile ?? item.syncTranscodingProfile;
+            //Suppress codec display on downloads without audio files
+            if (!(item.finampCollection?.type.hasAudio ?? true)) {
+              profile = null;
+            }
             var codec =
                 profile?.codec.name ?? FinampTranscodingCodec.original.name;
             return isarDownloader.getFileSize(item).then((value) =>

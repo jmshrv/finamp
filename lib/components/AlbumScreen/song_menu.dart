@@ -626,7 +626,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                 final loopModeTooltips = {
                   FinampLoopMode.none:
                       AppLocalizations.of(context)?.loopModeNoneButtonLabel ??
-                          "Looping off",
+                          "Not looping",
                   FinampLoopMode.one:
                       AppLocalizations.of(context)?.loopModeOneButtonLabel ??
                           "Looping this song",
@@ -868,6 +868,9 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                       if (!widget.condensed)
                         AlbumChip(
                           item: widget.item,
+                          color:
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white,
                           backgroundColor:
                               IconTheme.of(context).color!.withOpacity(0.1),
                           key: widget.item.album == null

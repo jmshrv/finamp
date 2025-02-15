@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../components/LayoutSettingsScreen/TabsSettingsScreen/hide_tab_toggle.dart';
 
 class TabsSettingsScreen extends StatefulWidget {
-  const TabsSettingsScreen({Key? key}) : super(key: key);
+  const TabsSettingsScreen({super.key});
 
   static const routeName = "/settings/tabs";
 
@@ -20,15 +20,8 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.tabs),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                FinampSettingsHelper.resetTabs();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            tooltip: AppLocalizations.of(context)!.resetTabs,
-          )
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+              context, FinampSettingsHelper.resetTabsSettings)
         ],
       ),
       body: ReorderableListView.builder(

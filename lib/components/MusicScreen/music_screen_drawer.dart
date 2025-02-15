@@ -2,6 +2,7 @@ import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
@@ -13,7 +14,7 @@ import 'offline_mode_switch_list_tile.dart';
 import 'view_list_tile.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
-  const MusicScreenDrawer({Key? key}) : super(key: key);
+  const MusicScreenDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +38,8 @@ class MusicScreenDrawer extends StatelessWidget {
                         alignment: Alignment.topCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Image.asset(
-                            'images/finamp_cropped.png',
+                          child: SvgPicture.asset(
+                            'images/finamp_cropped.svg',
                             width: 56,
                             height: 56,
                           ),

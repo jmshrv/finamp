@@ -15,17 +15,25 @@ import '../services/downloads_service.dart';
 import '../services/finamp_settings_helper.dart';
 import 'downloads_location_screen.dart';
 
-class DownloadsSettingsScreen extends StatelessWidget {
+class DownloadsSettingsScreen extends StatefulWidget {
   const DownloadsSettingsScreen({super.key});
-
   static const routeName = "/settings/downloads";
+  @override
+  State<DownloadsSettingsScreen> createState() =>
+      _DownloadsSettingsScreenState();
+}
 
+class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     var userHelper = GetIt.instance<FinampUserHelper>();
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloadSettings),
+        actions: [
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+              context, FinampSettingsHelper.resetDownloadSettings)
+        ],
       ),
       body: ListView(
         children: [
@@ -88,6 +96,7 @@ class DownloadsSettingsScreen extends StatelessWidget {
           const DownloadWorkersSelector(),
           // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           if (!Platform.isIOS) const ConcurentDownloadsSelector(),
+          const DownloadSizeWarningCutoffTile(),
         ],
       ),
     );
@@ -367,6 +376,48 @@ class RedownloadTranscodesSwitch extends ConsumerWidget {
                     AppLocalizations.of(scaffold)!.redownloadcomplete);
               }
             },
+    );
+  }
+}
+
+class DownloadSizeWarningCutoffTile extends StatefulWidget {
+  const DownloadSizeWarningCutoffTile({super.key});
+
+  @override
+  State<DownloadSizeWarningCutoffTile> createState() =>
+      _BufferSizeListTileState();
+}
+
+class _BufferSizeListTileState extends State<DownloadSizeWarningCutoffTile> {
+  final _controller = TextEditingController(
+      text: FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff
+          .toString());
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.downloadSizeWarningCutoff),
+      subtitle:
+          Text(AppLocalizations.of(context)!.downloadSizeWarningCutoffSubtitle),
+      trailing: SizedBox(
+        width: 50 * MediaQuery.of(context).textScaleFactor,
+        child: TextField(
+          controller: _controller,
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.number,
+          onChanged: (value) {
+            var valueInt = int.tryParse(value);
+
+            if (valueInt != null && !valueInt.isNegative) {
+              FinampSettings finampSettingsTemp =
+                  FinampSettingsHelper.finampSettings;
+              finampSettingsTemp.downloadSizeWarningCutoff = valueInt;
+              Hive.box<FinampSettings>("FinampSettings")
+                  .put("FinampSettings", finampSettingsTemp);
+            }
+          },
+        ),
+      ),
     );
   }
 }

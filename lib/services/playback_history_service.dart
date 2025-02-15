@@ -48,8 +48,8 @@ class PlaybackHistoryService {
 
   PlaybackHistoryService() {
     _queueService.getCurrentTrackStream().listen((currentTrack) {
-      if (_audioService.playbackState.valueOrNull?.processingState !=
-          AudioProcessingState.completed) {
+      if (![AudioProcessingState.idle, AudioProcessingState.completed]
+          .contains(_audioService.playbackState.valueOrNull?.processingState)) {
         updateCurrentTrack(currentTrack);
       } else if (_audioService.playbackState.valueOrNull?.processingState ==
               AudioProcessingState.completed ||
@@ -175,7 +175,7 @@ class PlaybackHistoryService {
     // }
   }
 
-  get history => _history;
+  List<FinampHistoryItem> get history => _history;
   BehaviorSubject<List<FinampHistoryItem>> get historyStream => _historyStream;
 
   void _resetPeriodicUpdates() {
@@ -192,7 +192,7 @@ class PlaybackHistoryService {
   /// method that converts history into a list grouped by date
   List<MapEntry<DateTime, List<FinampHistoryItem>>>
       getHistoryGroupedDynamically() {
-    byDateGroupingConstructor(FinampHistoryItem element) {
+    DateTime byDateGroupingConstructor(FinampHistoryItem element) {
       final now = DateTime.now();
       if (now.year == element.startTime.year &&
           now.month == element.startTime.month &&
@@ -230,7 +230,7 @@ class PlaybackHistoryService {
 
   /// method that converts history into a list grouped by date
   List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByDate() {
-    byDateGroupingConstructor(FinampHistoryItem element) {
+    DateTime byDateGroupingConstructor(FinampHistoryItem element) {
       return DateTime(
         element.startTime.year,
         element.startTime.month,
@@ -243,7 +243,7 @@ class PlaybackHistoryService {
 
   /// method that converts history into a list grouped by hour
   List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByHour() {
-    byHourGroupingConstructor(FinampHistoryItem element) {
+    DateTime byHourGroupingConstructor(FinampHistoryItem element) {
       return DateTime(
         element.startTime.year,
         element.startTime.month,
@@ -338,19 +338,21 @@ class PlaybackHistoryService {
     PlaybackState? previousState,
     bool skippingForward,
   ) async {
+    final shouldReportPreviousTrack = previousItem != null &&
+        previousState != null &&
+        // don't submit stop events for idle tracks (at position 0 and not playing)
+        (previousState.playing ||
+            previousState.updatePosition != Duration.zero);
+
     if (FinampSettingsHelper.finampSettings.isOffline) {
-      if (previousItem != null) {
-        _offlineListenLogHelper.logOfflineListen(previousItem.item);
+      if (shouldReportPreviousTrack) {
+        await _offlineListenLogHelper.logOfflineListen(previousItem.item);
       }
       return;
     }
 
     jellyfin_models.PlaybackProgressInfo? previousTrackPlaybackData;
-    if (previousItem != null &&
-        previousState != null &&
-        // don't submit stop events for idle tracks (at position 0 and not playing)
-        (previousState.playing ||
-            previousState.updatePosition != Duration.zero)) {
+    if (shouldReportPreviousTrack) {
       previousTrackPlaybackData = generatePlaybackProgressInfoFromState(
         previousItem,
         previousState,
@@ -381,7 +383,7 @@ class PlaybackHistoryService {
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
         if (previousItem != null) {
-          _offlineListenLogHelper.logOfflineListen(previousItem.item);
+          await _offlineListenLogHelper.logOfflineListen(previousItem.item);
         }
       }
     }
@@ -395,7 +397,7 @@ class PlaybackHistoryService {
         await _jellyfinApiHelper.reportPlaybackStart(newTrackplaybackData);
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
-        //!!! don't catch with offline listen log helper, as only stop events are logged
+        // don't log start event to offline listen log helper, as only stop events are logged
       }
     }
   }
@@ -432,7 +434,7 @@ class PlaybackHistoryService {
           }
         } catch (e) {
           _playbackHistoryServiceLogger.warning(e);
-          _offlineListenLogHelper.logOfflineListen(currentItem.item);
+          await _offlineListenLogHelper.logOfflineListen(currentItem.item);
         }
       }
     }
@@ -459,23 +461,23 @@ class PlaybackHistoryService {
   }
 
   Future<void> _reportPlaybackStopped() async {
-    if (FinampSettingsHelper.finampSettings.isOffline) {
-      if (_currentTrack != null) {
-        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
-      }
-      return;
-    }
     final playbackInfo = generateGenericPlaybackProgressInfo();
     if (playbackInfo != null) {
       try {
         _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
         if (_lastReportedTrackStopped?.id != _currentTrack?.item.id) {
           _lastReportedTrackStopped = _currentTrack?.item;
-          await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+          if (FinampSettingsHelper.finampSettings.isOffline) {
+            await _offlineListenLogHelper
+                .logOfflineListen(_currentTrack!.item.item);
+          } else {
+            await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
+          }
         }
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
-        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
+        await _offlineListenLogHelper
+            .logOfflineListen(_currentTrack!.item.item);
       }
     }
   }
@@ -498,7 +500,6 @@ class PlaybackHistoryService {
         }
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
-        _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
       }
     }
   }
@@ -517,7 +518,7 @@ class PlaybackHistoryService {
   }) {
     try {
       return jellyfin_models.PlaybackProgressInfo(
-        itemId: item.item.extras?["itemJson"]["Id"] ?? "",
+        itemId: item.baseItem?.id ?? "",
         playSessionId: _queueService.getQueue().id,
         isPaused: isPaused,
         isMuted: isMuted,
@@ -529,9 +530,13 @@ class PlaybackHistoryService {
         playMethod: item.item.extras?["shouldTranscode"] ?? false
             ? "Transcode"
             : "DirectPlay",
+        playbackOrder:
+            _queueService.playbackOrder == FinampPlaybackOrder.shuffled
+                ? "Shuffle"
+                : "Default",
         nowPlayingQueue:
             getQueueToReport(includeNowPlayingQueue: includeNowPlayingQueue),
-        playlistItemId: item.id,
+        playlistItemId: _queueService.getQueue().source.id,
       );
     } catch (e) {
       _playbackHistoryServiceLogger.warning(e);
@@ -560,7 +565,7 @@ class PlaybackHistoryService {
       }
 
       return jellyfin_models.PlaybackProgressInfo(
-        itemId: _currentTrack!.item.item.extras?["itemJson"]["Id"],
+        itemId: _currentTrack!.item.baseItem?.id ?? "",
         playSessionId: _queueService.getQueue().id,
         canSeek: true,
         isPaused: _audioService.paused,
@@ -572,9 +577,13 @@ class PlaybackHistoryService {
         playMethod: _currentTrack!.item.item.extras!["shouldTranscode"]
             ? "Transcode"
             : "DirectPlay",
+        playbackOrder:
+            _queueService.playbackOrder == FinampPlaybackOrder.shuffled
+                ? "Shuffle"
+                : "Default",
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
         nowPlayingQueue: getQueueToReport(),
-        playlistItemId: _currentTrack?.item.id,
+        playlistItemId: _queueService.getQueue().source.id,
       );
     } catch (e) {
       _playbackHistoryServiceLogger.warning(e);
@@ -590,7 +599,7 @@ class PlaybackHistoryService {
           .peekQueue(next: _maxQueueLengthToReport)
           .map((e) => jellyfin_models.QueueItem(
                 id: e.item.id,
-                playlistItemId: e.source.id,
+                playlistItemId: e.type.name,
               ))
           .toList();
       return queue;

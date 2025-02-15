@@ -1,6 +1,8 @@
+import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/customization_settings_screen.dart';
 import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_songs.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
+import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive/hive.dart';
@@ -8,7 +10,6 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../components/LayoutSettingsScreen/content_grid_view_cross_axis_count_list_tile.dart';
 import '../components/LayoutSettingsScreen/content_view_type_dropdown_list_tile.dart';
-import '../components/LayoutSettingsScreen/hide_song_artists_if_same_as_album_artists_selector.dart';
 import '../components/LayoutSettingsScreen/show_artist_chip_image_toggle.dart';
 import '../components/LayoutSettingsScreen/show_text_on_grid_view_selector.dart';
 import '../components/LayoutSettingsScreen/theme_selector.dart';
@@ -17,11 +18,14 @@ import '../services/finamp_settings_helper.dart';
 import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
 import 'tabs_settings_screen.dart';
 
-class LayoutSettingsScreen extends StatelessWidget {
+class LayoutSettingsScreen extends StatefulWidget {
   const LayoutSettingsScreen({super.key});
-
   static const routeName = "/settings/layout";
+  @override
+  State<LayoutSettingsScreen> createState() => _LayoutSettingsScreenState();
+}
 
+class _LayoutSettingsScreenState extends State<LayoutSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampSettings>>(
@@ -30,6 +34,10 @@ class LayoutSettingsScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.layoutAndTheme),
+              actions: [
+                FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+                    context, FinampSettingsHelper.resetLayoutSettings)
+              ],
             ),
             body: ListView(
               children: [
@@ -45,6 +53,18 @@ class LayoutSettingsScreen extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.playerScreen),
                   onTap: () => Navigator.of(context)
                       .pushNamed(PlayerSettingsScreen.routeName),
+                ),
+                ListTile(
+                  leading: const Icon(TablerIcons.microphone_2),
+                  title: Text(AppLocalizations.of(context)!.lyricsScreen),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(LyricsSettingsScreen.routeName),
+                ),
+                ListTile(
+                  leading: const Icon(TablerIcons.disc),
+                  title: Text(AppLocalizations.of(context)!.albumScreen),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(AlbumSettingsScreen.routeName),
                 ),
                 ListTile(
                   leading: const Icon(Icons.tab),
@@ -64,9 +84,9 @@ class LayoutSettingsScreen extends StatelessWidget {
                 const ShowTextOnGridViewSelector(),
                 const UseCoverAsBackgroundToggle(),
                 const ShowArtistChipImageToggle(),
+                const ShowArtistsTopSongsSelector(),
                 const AllowSplitScreenSwitch(),
-                const HideSongArtistsIfSameAsAlbumArtistsSelector(),
-                const ShowProgressOnNowPlayingBar(),
+                const ShowProgressOnNowPlayingBarToggle(),
               ],
             ),
           );
@@ -134,7 +154,7 @@ class AllowSplitScreenSwitch extends StatelessWidget {
 }
 
 class FixedGridTileSizeDropdownListTile extends StatelessWidget {
-  const FixedGridTileSizeDropdownListTile({Key? key}) : super(key: key);
+  const FixedGridTileSizeDropdownListTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -167,20 +187,22 @@ class FixedGridTileSizeDropdownListTile extends StatelessWidget {
   }
 }
 
-class ShowProgressOnNowPlayingBar extends StatelessWidget {
-  const ShowProgressOnNowPlayingBar({super.key});
+class ShowProgressOnNowPlayingBarToggle extends StatelessWidget {
+  const ShowProgressOnNowPlayingBarToggle({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, child) {
-        bool? showProgressOnNowPlayingBar = box.get("FinampSettings")?.showProgressOnNowPlayingBar;
+        bool? showProgressOnNowPlayingBar =
+            box.get("FinampSettings")?.showProgressOnNowPlayingBar;
 
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarSubtitle),
+          title: Text(
+              AppLocalizations.of(context)!.showProgressOnNowPlayingBarTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .showProgressOnNowPlayingBarSubtitle),
           value: showProgressOnNowPlayingBar ?? false,
           onChanged: showProgressOnNowPlayingBar == null
               ? null

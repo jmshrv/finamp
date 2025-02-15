@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:finamp/components/padded_custom_scrollview.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -201,7 +202,7 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
   }
 
   Widget menu(ScrollController scrollController, List<Widget> slivers) {
-    var scrollview = CustomScrollView(
+    var scrollview = PaddedCustomScrollview(
       controller: scrollController,
       slivers: slivers,
     );

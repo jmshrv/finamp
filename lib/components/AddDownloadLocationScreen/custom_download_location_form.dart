@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 import '../../models/finamp_models.dart';
 
 class CustomDownloadLocationForm extends StatefulWidget {
-  const CustomDownloadLocationForm({Key? key, required this.formKey})
-      : super(key: key);
+  const CustomDownloadLocationForm({super.key, required this.formKey});
 
   final Key formKey;
 

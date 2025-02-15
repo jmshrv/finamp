@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.unicornsonlsd.finamp</id>
+  <name>Finamp</name>
+  <summary>Open source Jellyfin music player</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MPL-2.0</project_license>
+  <recommends>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </recommends>
+  <developer id="com.unicornsonlsd">
+    <name>
+      jmshrv
+    </name>
+  </developer>
+  <url type="homepage">https://github.com/jmshrv/finamp</url>
+  <description>
+    <p>Finamp is an open source, cross-platform Jellyfin music player that supports streaming playback and offline downloads, playlists, favourites and shuffle. Linux support is currently in Beta.</p> 
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/jmshrv/finamp/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view.png</image>
+      <caption>Individual album view with a track playing on desktop</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/jmshrv/finamp/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_list_view.png</image>
+      <caption>List of albums on desktop</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/jmshrv/finamp/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view_dark.png</image>
+      <caption>List of albums on desktop in dark mode</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/jmshrv/finamp/e9a274e599abca628aec014a07f7f4fa6b47bbf8/images/screenshots/linux/album_playing_view_mobile.png</image>
+      <caption>List of albums on mobile</caption>
+    </screenshot>
+  </screenshots>
+  <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
+  <releases>
+    <release version="0.9.13-beta" date="2025-01-08">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.13-beta</url>
+      <description>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Added a button for opening the media output switched on the player screen (Android only, iOS already had the AirPlay button)</li>
+          <li>Added reset buttons for all settings pages</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fixed "Finamp has crashed" warning when closing the app on iOS</li>
+          <li>Fixed reported playback not properly stopping (or reappearing later) on the server</li>
+          <li>Fixed some offline plays not being logged correctly</li>
+          <li>Fixed weirdly formatted track numbers on the album screen</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
+    <release version="0.9.12-beta" date="2024-11-12">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.12-beta</url>
+      <description>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>New look for tracks</li>
+          <li>Improved transcoding</li>
+          <li>More accessibility improvements</li>
+          <li>Hide advanced track info on the player screen</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fixed shuffling and source names in offline mode</li>
+          <li>Properly show durations longer than 1h</li>
+          <li>Fixed downloads migration from stable to beta</li>
+          <li>Updated dependencies, might fix some other bugs</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
+    <release version="0.9.11-beta" date="2024-09-17">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.11-beta</url>
+      <description>
+        <p>This is a hotfix for a bug introduced with 0.9.10</p>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fix white overlay preventing further interaction when using the fast scroller / alphabet list</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
+    <release version="0.9.10-beta" date="2024-09-15">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.10-beta</url>
+      <description>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Added setting to keep the screen on</li>
+          <li>Accessibility improvements</li>
+          <li>More lyrics screen customizations</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Improved handling of non-square album covers</li>
+          <li>Improve fast scroller</li>
+          <li>Fixed fully black offline mode toggle</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
+    <release version="0.9.9-beta" date="2024-07-21">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.9-beta</url>
+      <description>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Improve Android Auto search logic</li>
+          <li>Fix refresh on music screen</li>
+          <li>Fix artist top song settings item not showing</li>
+          <li>Fix Chinese font rendering on Windows</li>
+          <li>Fix invisible text in about dialog</li>
+          <li>Fix graphical glitches on some Android phones (disable Impeller)</li>
+          <li>Fix Android Auto album art when the server uses a custom port</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.9.8-beta" date="2024-06-13">
+    <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.8-beta</url>
+      <description>
+        <p>
+          Bug Fixes:
+        </p>
+        <ul>
+          <li>Fixed download issues introduced with 0.9.7. You might have to run a download repair.</li>
+          <li>Fixed playlist download for mixed-media playlists</li>
+        </ul>
+        <p>
+          New Features:
+        </p>
+        <ul>
+          <li>Android Auto support!</li>
+          <li>Like button in media notification (on Android)</li>
+          <li>Lyrics customization settings</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
+    <release version="0.9.7-beta" date="2024-05-23">
+    <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.7-beta</url>
+      <description>
+        <p>
+          New Features:
+        </p>
+        <ul>
+          <li>Favorite button now opens a menu that allows adding a track to playlists. Long press to like.</li>
+          <li>Faster image loading and caching options for your music library</li>
+          <li>Favorites-only filter in offline mode</li>
+          <li>Lyrics indicator in track lists</li>
+          <li>"Song" renamed to "Track" throughout the app</li>
+          <li>Download a library now includes tracks that don't belong to any album</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
+  </releases>
+  <content_rating type="oars-1.1" />
+  <update_contact>nne66vse2@mozmail.com</update_contact>
+  <branding>
+    <color type="primary" scheme_preference="light">#ccf2ff</color>
+    <color type="primary" scheme_preference="dark">#00394d</color>
+  </branding>
+</component>

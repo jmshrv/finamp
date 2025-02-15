@@ -6,7 +6,7 @@ part of 'favorite_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$isFavoriteHash() => r'4c20e32cb59b9ae69ad7cfc9f79ae1061ecae760';
+String _$isFavoriteHash() => r'f6e513ebcd6a726080e093d3cb537fc804ea2096';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -155,6 +155,8 @@ class IsFavoriteProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin IsFavoriteRef on AutoDisposeNotifierProviderRef<bool> {
   /// The parameter `value` of this provider.
   FavoriteRequest get value;
@@ -169,4 +171,4 @@ class _IsFavoriteProviderElement
   FavoriteRequest get value => (origin as IsFavoriteProvider).value;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

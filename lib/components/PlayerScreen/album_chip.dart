@@ -1,5 +1,6 @@
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:finamp/services/scrolling_text_helper.dart';
@@ -18,10 +19,12 @@ class AlbumChip extends StatelessWidget {
     super.key,
     required this.item,
     required this.backgroundColor,
+    required this.color,
   });
 
-  final jellyfin_models.BaseItemDto? item;
-  final Color backgroundColor;
+  final BaseItemDto item;
+  final Color? backgroundColor;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class AlbumChip extends StatelessWidget {
       height: 32,
       width: shouldScroll ? screenWidth : textWidth,
       decoration: BoxDecoration(
-        color: backgroundColor.withOpacity(0.1),
+        color: backgroundColor?.withOpacity(0.1),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Material(
@@ -85,7 +88,7 @@ class AlbumChip extends StatelessWidget {
 }
 
 class _EmptyAlbumChip extends StatelessWidget {
-  const _EmptyAlbumChip({Key? key}) : super(key: key);
+  const _EmptyAlbumChip({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -101,11 +104,11 @@ class _EmptyAlbumChip extends StatelessWidget {
 
 class _AlbumChipContent extends StatelessWidget {
   const _AlbumChipContent({
-    Key? key,
+    super.key,
     required this.item,
     required this.backgroundColor,
     required this.color,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final Color? backgroundColor;
@@ -114,31 +117,41 @@ class _AlbumChipContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final _isarDownloader = GetIt.instance<DownloadsService>();
+    final isarDownloader = GetIt.instance<DownloadsService>();
 
-    return Material(
-      color: backgroundColor ?? Colors.white.withOpacity(0.1),
-      borderRadius: _borderRadius,
-      child: InkWell(
+    final albumName = item.album ?? AppLocalizations.of(context)!.noAlbum;
+
+    return Semantics.fromProperties(
+      properties: SemanticsProperties(
+        label: "$albumName (${AppLocalizations.of(context)!.album})",
+        button: true,
+      ),
+      excludeSemantics: true,
+      container: true,
+      child: Material(
+        color: backgroundColor ?? Colors.white.withOpacity(0.1),
         borderRadius: _borderRadius,
-        onTap: FinampSettingsHelper.finampSettings.isOffline
-            ? () => _isarDownloader.getCollectionInfo(id: item.albumId!).then(
-                (album) => Navigator.of(context).pushNamed(
-                    AlbumScreen.routeName,
-                    arguments: album!.baseItem!))
-            : () => jellyfinApiHelper.getItemById(item.albumId!).then((album) =>
-                Navigator.of(context)
-                    .pushNamed(AlbumScreen.routeName, arguments: album)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-          child: Text(
-            item.album ?? AppLocalizations.of(context)!.noAlbum,
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            style: TextStyle(
-              color: color ??
-                  Theme.of(context).textTheme.bodySmall!.color ??
-                  Colors.white,
+        child: InkWell(
+          borderRadius: _borderRadius,
+          onTap: FinampSettingsHelper.finampSettings.isOffline
+              ? () => isarDownloader.getCollectionInfo(id: item.albumId!).then(
+                  (album) => Navigator.of(context).pushNamed(
+                      AlbumScreen.routeName,
+                      arguments: album!.baseItem!))
+              : () => jellyfinApiHelper.getItemById(item.albumId!).then(
+                  (album) => Navigator.of(context)
+                      .pushNamed(AlbumScreen.routeName, arguments: album)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+            child: Text(
+              albumName,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: TextStyle(
+                color: color ??
+                    Theme.of(context).textTheme.bodySmall!.color ??
+                    Colors.white,
+              ),
             ),
           ),
         ),

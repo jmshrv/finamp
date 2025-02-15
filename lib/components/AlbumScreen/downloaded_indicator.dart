@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -30,22 +31,26 @@ class DownloadedIndicator extends ConsumerWidget {
         case DownloadItemState.downloading:
         case DownloadItemState.needsRedownload:
           return Icon(
-            Icons.download_outlined,
-            color: Colors.grey.withOpacity(0.5),
+            TablerIcons.cloud_download,
+            color: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .color
+                ?.withOpacity(0.75),
             size: size,
           );
         case DownloadItemState.failed:
         case DownloadItemState.syncFailed:
           return Icon(
-            Icons.error,
+            TablerIcons.download_off,
             color: Colors.red,
             size: size,
           );
         case DownloadItemState.complete:
         case DownloadItemState.needsRedownloadComplete:
           return Icon(
-            Icons.download,
-            color: Theme.of(context).colorScheme.secondary,
+            TablerIcons.device_sd_card,
+            color: Theme.of(context).textTheme.bodyMedium!.color,
             size: size,
           );
       }

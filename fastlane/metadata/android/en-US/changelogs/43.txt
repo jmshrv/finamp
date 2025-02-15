@@ -1,0 +1,1 @@
+New features and bug fixes. Full changelog at https://github.com/jmshrv/finamp/releases/tag/0.6.21

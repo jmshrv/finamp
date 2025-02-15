@@ -34,7 +34,7 @@ class FinampLogsHelper {
       var message = log.censoredMessage;
       if (log.stackTrace == null) {
         // Truncate long messages from chopper, but leave long stack traces
-        message = message.substring(0, min(1024, message.length));
+        message = message.substring(0, min(1024 * 5, message.length));
       }
       _logFileWriter!.writeln(message);
     }

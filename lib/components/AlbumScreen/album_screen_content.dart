@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -7,10 +6,11 @@ import '../../components/favourite_button.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../padded_custom_scrollview.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
 import 'playlist_name_edit_button.dart';
-import 'song_list_tile.dart';
+import 'track_list_tile.dart';
 
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
@@ -61,7 +61,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
       }
     }
 
-    return CustomScrollView(
+    return PaddedCustomScrollview(
       slivers: [
         SliverAppBar(
           title: Text(
@@ -86,7 +86,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             DownloadButton(
                 item: DownloadStub.fromItem(
                     type: DownloadItemType.collection, item: widget.parent),
-                children: widget.displayChildren.length)
+                children: widget.displayChildren)
           ],
         ),
         if (widget.displayChildren.length > 1 &&
@@ -99,7 +99,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   horizontal: 16.0,
                   vertical: 16.0,
                 ),
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Text(
                   AppLocalizations.of(context)!
                       .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
@@ -119,12 +119,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             childrenForQueue: Future.value(widget.queueChildren),
             parent: widget.parent,
             onRemoveFromList: onDelete,
-          ),
-        SliverToBoxAdapter(
-          child: Container(
-            height: MediaQuery.paddingOf(context).bottom,
-          ),
-        )
+          )
       ],
     );
   }
@@ -132,14 +127,14 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
 
 class SongsSliverList extends StatefulWidget {
   const SongsSliverList({
-    Key? key,
+    super.key,
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
     this.onRemoveFromList,
     this.showPlayCount = false,
     this.isOnArtistScreen = false,
-  }) : super(key: key);
+  });
 
   final List<BaseItemDto> childrenForList;
   final Future<List<BaseItemDto>> childrenForQueue;
@@ -163,7 +158,22 @@ class _SongsSliverListState extends State<SongsSliverList> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
+    if (widget.childrenForList.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+          child: Text(
+            AppLocalizations.of(context)!.emptyTopTracksList,
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+    return SliverFixedExtentList(
+      itemExtent: TrackListItemTile.defaultTileHeight +
+          TrackListItemTile.defaultTitleGap,
+      // return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           // When user selects song from disc other than first, index number is
@@ -185,10 +195,13 @@ class _SongsSliverListState extends State<SongsSliverList> {
             return item;
           }
 
-          return SongListTile(
+          return TrackListTile(
             item: item,
             children: widget.childrenForQueue,
             index: indexOffset,
+            showIndex: item.albumId == widget.parent.id,
+            showCover: item.albumId != widget.parent.id ||
+                FinampSettingsHelper.finampSettings.showCoversOnAlbumScreen,
             parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();
@@ -198,24 +211,6 @@ class _SongsSliverListState extends State<SongsSliverList> {
             },
             isInPlaylist: widget.parent.type == "Playlist",
             isOnArtistScreen: widget.isOnArtistScreen,
-            // show artists except for this one scenario
-            showArtists: !(
-                    // we're on album screen
-                    widget.parent.type == "MusicAlbum"
-                        // "hide song artists if they're the same as album artists" == true
-                        &&
-                        FinampSettingsHelper
-                            .finampSettings.hideSongArtistsIfSameAsAlbumArtists
-                        // song artists == album artists
-                        &&
-                        setEquals(
-                            widget.parent.albumArtists
-                                ?.map((e) => e.name)
-                                .toSet(),
-                            item.artists?.toSet()))
-                // hide song artist if on the artist screen
-                &&
-                widget.parent.type != "MusicArtist",
             showPlayCount: widget.showPlayCount,
           );
         },

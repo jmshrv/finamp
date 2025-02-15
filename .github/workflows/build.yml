@@ -93,10 +93,11 @@ jobs:
     # copy icon assets and desktop file next to bundle location for easy including in tar archive
     - run: |
         cp -r assets/icon/linux/ build/linux/x64/release/icons \
-        && cp assets/finamp.desktop.m4 build/linux/x64/release/
+        && cp assets/finamp.desktop.m4 build/linux/x64/release/ \
+        && cp assets/com.unicornsonlsd.finamp.metainfo.xml build/linux/x64/release/
     # archive bundle and generate checksum
     - run: |
-        tar -czf finamp-linux-release.tar.gz --directory build/linux/x64/release/ bundle icons finamp.desktop.m4 \
+        tar -czf finamp-linux-release.tar.gz --directory build/linux/x64/release/ bundle icons finamp.desktop.m4 com.unicornsonlsd.finamp.metainfo.xml \
         && sha256sum finamp-linux-release.tar.gz > finamp-linux-release.tar.gz.sha256sum
     - uses: actions/upload-artifact@v4
       with:
@@ -120,6 +121,8 @@ jobs:
     #   with:
     #     distribution: 'zulu'
     #     java-version: '17'
+    - name: Set up Rust (for smtc_windows)
+      uses: hecrj/setup-rust-action@v2
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:

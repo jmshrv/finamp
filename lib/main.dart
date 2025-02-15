@@ -1,25 +1,31 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
+import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/gen/assets.gen.dart';
+import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
+import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:audio_session/audio_session.dart';
-import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,8 +34,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
@@ -73,6 +81,7 @@ void main() async {
   bool hasFailed = false;
   try {
     await setupLogging();
+    await _setupEdgeToEdgeOverlayStyle();
     await setupHive();
     _migrateDownloadLocations();
     _migrateSortOptions();
@@ -80,7 +89,9 @@ void main() async {
     await _setupJellyfinApiData();
     _setupOfflineListenLogHelper();
     await _setupDownloadsHelper();
+    await _setupOSIntegration();
     await _setupPlaybackServices();
+    await _setupKeepScreenOnHelper();
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -98,38 +109,29 @@ void main() async {
       FlutterError.presentError(details);
       flutterLogger.severe(error, error, details.stack);
     };
+
+    DartPluginRegistrant.ensureInitialized();
+
+    await findSystemLocale();
+    await initializeDateFormatting();
+
+    runApp(const Finamp());
+  }
+}
+
+Future<void> _setupEdgeToEdgeOverlayStyle() async {
+  if (Platform.isAndroid) {
+    // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //     systemNavigationBarColor: Colors.transparent));
+    // final binding = WidgetsFlutterBinding.ensureInitialized();
+    // binding.addObserver(UIOverlaySetterObserver());
+  } else if (Platform.isIOS) {
     // On iOS, the status bar will have black icons by default on the login
     // screen as it does not have an AppBar. To fix this, we set the
     // brightness to dark manually on startup.
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
-
-    final String localeString = (LocaleHelper.locale != null)
-        ? ((LocaleHelper.locale?.countryCode != null)
-            ? "${LocaleHelper.locale?.languageCode.toLowerCase()}_${LocaleHelper.locale?.countryCode?.toUpperCase()}"
-            : LocaleHelper.locale.toString())
-        : "en_US";
-    await initializeDateFormatting(localeString, null);
-
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      WidgetsFlutterBinding.ensureInitialized();
-      await windowManager.ensureInitialized();
-      WindowOptions windowOptions = const WindowOptions(
-        size: Size(1200, 800),
-        center: true,
-        backgroundColor: Colors.transparent,
-        skipTaskbar: false,
-        titleBarStyle: TitleBarStyle.normal,
-        minimumSize: Size(400, 250),
-      );
-      unawaited(
-          WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.show();
-        await windowManager.focus();
-      }));
-    }
-
-    runApp(const Finamp());
   }
 }
 
@@ -153,7 +155,7 @@ Future<void> _setupDownloadsHelper() async {
   final downloadsService = GetIt.instance<DownloadsService>();
 
   if (!FinampSettingsHelper
-      .finampSettings.hasCompleteddownloadsServiceMigration) {
+      .finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
     FinampSettingsHelper.setHasCompleteddownloadsServiceMigration(true);
   }
@@ -162,6 +164,10 @@ Future<void> _setupDownloadsHelper() async {
       .configure(globalConfig: (Config.checkAvailableSpace, 1024));
   await FileDownloader().resumeFromBackground();
   await downloadsService.startQueues();
+}
+
+Future<void> _setupKeepScreenOnHelper() async {
+  GetIt.instance.registerSingleton(KeepScreenOnHelper());
 }
 
 Future<void> setupHive() async {
@@ -225,6 +231,12 @@ Future<void> setupHive() async {
   Hive.registerAdapter(LyricMetadataAdapter());
   Hive.registerAdapter(LyricLineAdapter());
   Hive.registerAdapter(LyricDtoAdapter());
+  Hive.registerAdapter(LyricsAlignmentAdapter());
+  Hive.registerAdapter(LyricsFontSizeAdapter());
+  Hive.registerAdapter(KeepScreenOnOptionAdapter());
+  Hive.registerAdapter(FinampSegmentContainerAdapter());
+  Hive.registerAdapter(FinampFeatureChipsConfigurationAdapter());
+  Hive.registerAdapter(FinampFeatureChipTypeAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
@@ -247,7 +259,7 @@ Future<void> setupHive() async {
 
   // If no ThemeMode is set, we set it to the default (system)
   Box<ThemeMode> themeModeBox = Hive.box("ThemeMode");
-  if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(ThemeMode.system);
+  if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(DefaultSettings.theme);
 
   final isar = await Isar.open(
     [
@@ -262,6 +274,45 @@ Future<void> setupHive() async {
   GetIt.instance.registerSingleton(isar);
 }
 
+Future<void> _setupOSIntegration() async {
+  // set up window manager on desktop, mainly to restrict minimum size
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await windowManager.ensureInitialized();
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(1200, 800),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.normal,
+      minimumSize: Size(400, 250),
+    );
+    unawaited(
+        WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    }));
+  }
+
+  // Load the album image from assets and save it to the documents directory for use in Android Auto
+  final applicationSupportDirectory = await getApplicationSupportDirectory();
+  final albumImageFile = File(path_helper.join(
+      applicationSupportDirectory.absolute.path,
+      Assets.images.albumWhite.path));
+  if (!(await albumImageFile.exists())) {
+    final albumImageBytes =
+        await rootBundle.load(Assets.images.albumWhite.path);
+    final albumBuffer = albumImageBytes.buffer;
+    await albumImageFile.create(recursive: true);
+    await albumImageFile.writeAsBytes(
+      albumBuffer.asUint8List(
+        albumImageBytes.offsetInBytes,
+        albumImageBytes.lengthInBytes,
+      ),
+    );
+  }
+}
+
 Future<void> _setupPlaybackServices() async {
   if (Platform.isWindows) {
     AudioServiceSMTC.registerWith();
@@ -269,18 +320,34 @@ Future<void> _setupPlaybackServices() async {
   final session = await AudioSession.instance;
   await session.configure(const AudioSessionConfiguration.music());
 
+  GetIt.instance.registerSingleton<AndroidAutoHelper>(AndroidAutoHelper());
+
   final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
     config: AudioServiceConfig(
-      androidStopForegroundOnPause:
-          FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
-      androidNotificationChannelName: "Playback",
-      androidNotificationIcon: "mipmap/white",
-      androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
-    ),
+        androidStopForegroundOnPause:
+            FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
+        androidNotificationChannelName: "Finamp",
+        androidNotificationIcon: "mipmap/white",
+        androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
+        // notificationColor: TODO use the theme color for older versions of Android,
+        preloadArtwork: false,
+        androidBrowsableRootExtras: <String, dynamic>{
+          // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
+          "android.media.browse.SEARCH_SUPPORTED": true,
+          // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
+          "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT":
+              FinampSettingsHelper.finampSettings.contentViewType ==
+                      ContentViewType.list
+                  ? 1
+                  : 2,
+          "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT":
+              FinampSettingsHelper.finampSettings.contentViewType ==
+                      ContentViewType.list
+                  ? 1
+                  : 2,
+        }),
   );
-  // GetIt.instance.registerSingletonAsync<AudioHandler>(
-  //     () async => );
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
   GetIt.instance.registerSingleton(QueueService());
@@ -351,7 +418,7 @@ Future<void> _setupFinampUserHelper() async {
 }
 
 class Finamp extends ConsumerStatefulWidget {
-  const Finamp({Key? key}) : super(key: key);
+  const Finamp({super.key});
 
   @override
   ConsumerState<Finamp> createState() => _FinampState();
@@ -458,11 +525,18 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                           const CustomizationSettingsScreen(),
                       PlayerSettingsScreen.routeName: (context) =>
                           const PlayerSettingsScreen(),
+                      LyricsSettingsScreen.routeName: (context) =>
+                          const LyricsSettingsScreen(),
                       LanguageSelectionScreen.routeName: (context) =>
                           const LanguageSelectionScreen(),
+                      AlbumSettingsScreen.routeName: (context) =>
+                          const AlbumSettingsScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
-                    navigatorObservers: [SplitScreenNavigatorObserver()],
+                    navigatorObservers: [
+                      SplitScreenNavigatorObserver(),
+                      KeepScreenOnObserver()
+                    ],
                     builder: buildPlayerSplitScreenScaffold,
                     theme: ThemeData(
                       brightness: Brightness.light,
@@ -588,9 +662,11 @@ class ErrorScreen extends StatelessWidget {
           AppLocalizations.of(context)!.startupError(error.toString()),
         ),
       ),
-      bottomNavigationBar: const Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [ShareLogsButton(), CopyLogsButton()],
+      bottomNavigationBar: const SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [ShareLogsButton(), CopyLogsButton()],
+        ),
       ),
     );
   }

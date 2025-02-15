@@ -14,6 +14,7 @@ import '../AlbumScreen/album_screen_content.dart';
 import '../AlbumScreen/download_button.dart';
 import '../albums_sliver_list.dart';
 import '../favourite_button.dart';
+import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 
 class ArtistScreenContent extends StatefulWidget {
@@ -61,7 +62,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                   relatedTo: widget.parent);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
-          return artistAlbums.map((e) => e.baseItem).whereNotNull().toList();
+          return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
         }),
       ]);
       allSongs = Future.sync(() async {
@@ -91,11 +92,11 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           )
         else
           Future.value(null),
-        // Get Albums sorted by Production Year
+        // Get Albums sorted by Premiere Date
         jellyfinApiHelper.getItems(
           parentItem: widget.parent,
           filters: "Artist=${widget.parent.name}",
-          sortBy: "ProductionYear",
+          sortBy: "PremiereDate,SortName",
           includeItemTypes: "MusicAlbum",
         ),
       ]);
@@ -112,8 +113,12 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         builder: (context, snapshot) {
           var songs = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
+          var topTracks = songs
+              .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+              .take(5)
+              .toList();
 
-          return CustomScrollView(slivers: <Widget>[
+          return PaddedCustomScrollview(slivers: <Widget>[
             SliverAppBar(
               title: Text(widget.parent.name ??
                   AppLocalizations.of(context)!.unknownName),
@@ -139,7 +144,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 DownloadButton(
                     item: DownloadStub.fromItem(
                         item: widget.parent, type: DownloadItemType.collection),
-                    children: albums.length)
+                    children: albums)
               ],
             ),
             if (!isOffline &&
@@ -156,7 +161,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             if (!isOffline &&
                 FinampSettingsHelper.finampSettings.showArtistsTopSongs)
               SongsSliverList(
-                childrenForList: songs.take(5).toList(),
+                childrenForList: topTracks,
                 childrenForQueue: Future.value(songs),
                 showPlayCount: true,
                 isOnArtistScreen: true,
@@ -173,11 +178,6 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             AlbumsSliverList(
               childrenForList: albums,
               parent: widget.parent,
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                height: MediaQuery.paddingOf(context).bottom,
-              ),
             )
           ]);
         });

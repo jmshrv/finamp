@@ -12,9 +12,11 @@ import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -163,7 +165,7 @@ class PlayerScreen extends ConsumerWidget {
 
 class _PlayerScreenContent extends ConsumerWidget {
   const _PlayerScreenContent(
-      {super.key, required this.airplayTheme, required this.playerScreen});
+      {required this.airplayTheme, required this.playerScreen});
 
   final Color airplayTheme;
   final Widget playerScreen;
@@ -198,14 +200,15 @@ class _PlayerScreenContent extends ConsumerWidget {
         } else if (direction == SwipeDirection.up) {
           // This should never actually be called until widget finishes build and controller is initialized
           if (!FinampSettingsHelper.finampSettings.disableGesture ||
-              !controller.shouldShow(PlayerHideable.queueButton)) {
+              !controller.shouldShow(PlayerHideable.bottomActions)) {
             showQueueBottomSheet(context);
           }
         }
       },
       onHorizontalSwipe: (direction) {
         if (direction == SwipeDirection.left && isLyricsAvailable) {
-          if (!FinampSettingsHelper.finampSettings.disableGesture) {
+          if (!FinampSettingsHelper.finampSettings.disableGesture ||
+              !controller.shouldShow(PlayerHideable.bottomActions)) {
             Navigator.of(context).push(_buildSlideRouteTransition(
                 playerScreen, const LyricsScreen(),
                 routeSettings:
@@ -216,6 +219,15 @@ class _PlayerScreenContent extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          toolbarOpacity: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle(
+              // this is needed to ensure the player screen stays in full screen mode WITHOUT having contrast issues in the status bar
+              systemNavigationBarColor: Colors.transparent,
+              systemStatusBarContrastEnforced: false,
+              statusBarIconBrightness:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Brightness.light
+                      : Brightness.dark),
           elevation: 0,
           scrolledUnderElevation:
               0.0, // disable tint/shadow when content is scrolled under the app bar
@@ -245,10 +257,23 @@ class _PlayerScreenContent extends ConsumerWidget {
                   ),
                 ),
               ),
+            if (Platform.isAndroid)
+              IconButton(
+                icon: Icon(TablerIcons.cast),
+                onPressed: () {
+                  final audioHandler =
+                      GetIt.instance<MusicPlayerBackgroundTask>();
+                  audioHandler.getRoutes();
+                  // audioHandler.setOutputToDeviceSpeaker();
+                  // audioHandler.setOutputToBluetoothDevice();
+                  audioHandler.showOutputSwitcherDialog();
+                },
+              ),
           ],
         ),
         // Required for sleep timer input
-        resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
         body: Stack(
           children: [
             if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
@@ -286,11 +311,16 @@ class _PlayerScreenContent extends ConsumerWidget {
                             const Spacer(flex: 4),
                             ControlArea(controller),
                             if (controller
-                                .shouldShow(PlayerHideable.queueButton))
+                                .shouldShow(PlayerHideable.bottomActions))
                               const Spacer(flex: 10),
                             if (controller
-                                .shouldShow(PlayerHideable.queueButton))
-                              _buildBottomActions(context, controller),
+                                .shouldShow(PlayerHideable.bottomActions))
+                              _buildBottomActions(
+                                context,
+                                controller,
+                                isLyricsLoading: isLyricsLoading,
+                                isLyricsAvailable: isLyricsAvailable,
+                              ),
                             const Spacer(
                               flex: 4,
                             ),
@@ -302,7 +332,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                   );
                 } else {
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
@@ -319,7 +349,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                             SongNameContent(controller),
                             ControlArea(controller),
                             if (controller
-                                .shouldShow(PlayerHideable.queueButton))
+                                .shouldShow(PlayerHideable.bottomActions))
                               _buildBottomActions(
                                 context,
                                 controller,
@@ -327,7 +357,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                                 isLyricsAvailable: isLyricsAvailable,
                               ),
                             if (!controller
-                                .shouldShow(PlayerHideable.queueButton))
+                                .shouldShow(PlayerHideable.bottomActions))
                               const SizedBox(
                                 height: 5,
                               )
@@ -438,7 +468,7 @@ class _PlayerScreenContent extends ConsumerWidget {
 
 enum PlayerHideable {
   bigPlayButton(14, 14, 1),
-  queueButton(0, 27, 2),
+  bottomActions(0, 27, 2),
   progressSlider(0, 14, 4),
   twoLineTitle(0, 27, 3),
   features(0, 20, 3),
@@ -467,7 +497,7 @@ class PlayerHideableController {
   final verticalHideOrder = [
     PlayerHideable.controlsPaddingBig,
     PlayerHideable.bigPlayButton,
-    PlayerHideable.queueButton,
+    PlayerHideable.bottomActions,
     PlayerHideable.controlsPaddingSmall,
     PlayerHideable.features,
     PlayerHideable.twoLineTitle,
@@ -509,9 +539,12 @@ class PlayerHideableController {
         size.height - maxAlbumSize * (1 - (minAlbumPadding / 100.0) * 2);
     var paddedControlsHeight = max(_getSize().height, desiredHeight);
     _target = Size(targetWidth, _controlsInternalHeight(paddedControlsHeight));
+    // 1/3 of padding goes under the controls and is added by the Column, the other
+    // 2/3 should be included in the album cover region
+    var controlsBottomPadding = (paddedControlsHeight - _target!.height) / 3.0;
     // Do not let album size go negative, use full width
     _album = Size(size.width,
-        (size.height - paddedControlsHeight).clamp(1.0, size.width));
+        max(1.0, size.height - _target!.height - controlsBottomPadding));
   }
 
   /// Update player screen hidden elements based on usable area in landscape mode.
@@ -601,12 +634,16 @@ class PlayerHideableController {
     _album = null;
     _useLandscape = null;
     _visible = List.from(PlayerHideable.values);
-    if (FinampSettingsHelper.finampSettings.hideQueueButton) {
-      _visible.remove(PlayerHideable.queueButton);
+    if (FinampSettingsHelper.finampSettings.hidePlayerBottomActions) {
+      _visible.remove(PlayerHideable.bottomActions);
     }
     if (FinampSettingsHelper.finampSettings.suppressPlayerPadding) {
       _visible.remove(PlayerHideable.controlsPaddingSmall);
       _visible.remove(PlayerHideable.controlsPaddingBig);
+    }
+    if (!FinampSettingsHelper
+        .finampSettings.featureChipsConfiguration.enabled) {
+      _visible.remove(PlayerHideable.features);
     }
   }
 

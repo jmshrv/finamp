@@ -74,18 +74,24 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
           request.maxWidth.toString() +
           request.maxHeight.toString();
     }
-    return CachedImage(NetworkImage(imageUrl.toString()), key);
+    // Allow drawing albums up to 4X intrinsic size by setting scale
+    return CachedImage(NetworkImage(imageUrl.toString(), scale: 0.25), key);
   }
 
   // downloads are already de-dupped by blurHash and do not need CachedImage
-  ImageProvider out = FileImage(downloadedImage!.file!);
+  // Allow drawing albums up to 4X intrinsic size by setting scale
+  ImageProvider out = FileImage(downloadedImage!.file!, scale: 0.25);
   if (request.maxWidth != null && request.maxHeight != null) {
     // Limit memory cached image size to twice displayed size
     // This helps keep cache usage by fileImages in check
     // Caching smaller at 2X size results in blurriness comparable to
     // NetworkImages fetched with display size
-    out = ResizeImage(out,
-        width: request.maxWidth! * 2, height: request.maxHeight! * 2);
+    out = ResizeImage(
+      out,
+      width: request.maxWidth! * 2,
+      height: request.maxHeight! * 2,
+      policy: ResizeImagePolicy.fit,
+    );
   }
   return out;
 });

@@ -156,8 +156,9 @@ class ServerState {
   }) : clientDiscoveryHandler = JellyfinServerClientDiscovery();
 
   onBaseUrlChanged(String baseUrl) {
-    if (connectionTestDebounceTimer?.isActive ?? false)
+    if (connectionTestDebounceTimer?.isActive ?? false) {
       connectionTestDebounceTimer?.cancel();
+    }
     connectionTestDebounceTimer =
         Timer(const Duration(milliseconds: 500), () async {
       updateCallback?.call();
@@ -178,7 +179,7 @@ class ServerState {
       bool unspecifiedProtocol = false;
       bool unspecifiedPort = false;
 
-      String baseUrlToTest = baseUrl!;
+      String baseUrlToTest = baseUrl;
 
       // We trim the base url in case the user accidentally added some trailing whitespace
       baseUrlToTest = baseUrlToTest.trim();
@@ -270,21 +271,25 @@ class ConnectionState {
 class JellyfinServerClientDiscovery {
   static final _clientDiscoveryLogger = Logger("JellyfinServerClientDiscovery");
 
-  late RawDatagramSocket socket;
-  bool isDisposed = false;
+  RawDatagramSocket? _socket;
+  bool _isDisposed = false;
 
   void discoverServers(
       void Function(ClientDiscoveryResponse response) onServerFound) async {
-    isDisposed = false;
+    _isDisposed = false;
 
-    socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-    socket.broadcastEnabled =
+    _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
+
+    // We have to use ? throughout since _socket isn't final, although at this
+    // point in the code it should never be null
+
+    _socket?.broadcastEnabled =
         true; // important to allow sending to broadcast address
-    socket.multicastHops = 5; // to account for weird network setups
+    _socket?.multicastHops = 5; // to account for weird network setups
 
-    socket.listen((event) {
+    _socket?.listen((event) {
       if (event == RawSocketEvent.read) {
-        final datagram = socket.receive();
+        final datagram = _socket?.receive();
         if (datagram != null) {
           _clientDiscoveryLogger
               .finest("Received datagram: ${utf8.decode(datagram.data)}");
@@ -305,16 +310,16 @@ class JellyfinServerClientDiscovery {
 
     _clientDiscoveryLogger.fine("Sending discovery messages");
 
-    socket.send(message.codeUnits, broadcastAddress, destinationPort);
+    _socket?.send(message.codeUnits, broadcastAddress, destinationPort);
 
-    while (!isDisposed) {
+    while (!_isDisposed) {
       await Future.delayed(const Duration(milliseconds: 1500));
-      socket.send(message.codeUnits, broadcastAddress, destinationPort);
+      _socket?.send(message.codeUnits, broadcastAddress, destinationPort);
     }
   }
 
   void dispose() {
-    isDisposed = true;
-    socket.close();
+    _isDisposed = true;
+    _socket?.close();
   }
 }

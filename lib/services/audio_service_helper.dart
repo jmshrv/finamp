@@ -19,7 +19,7 @@ class AudioServiceHelper {
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Shuffles every song in the user's current view.
-  Future<void> shuffleAll(bool isFavourite) async {
+  Future<void> shuffleAll(bool onlyShowFavourites) async {
     List<jellyfin_models.BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -27,7 +27,10 @@ class AudioServiceHelper {
       // This is a bit inefficient since we have to get all of the songs and
       // shuffle them before making a sublist, but I couldn't think of a better
       // way.
-      items = (await _isarDownloader.getAllSongs())
+      items = (await _isarDownloader.getAllSongs(
+              viewFilter: _finampUserHelper.currentUser?.currentView?.id,
+              nullableViewFilters: FinampSettingsHelper
+                  .finampSettings.showDownloadsWithUnknownLibrary))
           .map((e) => e.baseItem!)
           .toList();
       items.shuffle();
@@ -41,7 +44,7 @@ class AudioServiceHelper {
       items = await _jellyfinApiHelper.getItems(
         parentItem: _finampUserHelper.currentUser!.currentView,
         includeItemTypes: "Audio",
-        filters: isFavourite ? "IsFavorite" : null,
+        filters: onlyShowFavourites ? "IsFavorite" : null,
         limit: FinampSettingsHelper.finampSettings.songShuffleItemCount,
         sortBy: "Random",
       );
@@ -51,11 +54,11 @@ class AudioServiceHelper {
       await _queueService.startPlayback(
         items: items,
         source: QueueItemSource(
-          type: isFavourite
+          type: onlyShowFavourites
               ? QueueItemSourceType.favorites
               : QueueItemSourceType.allSongs,
           name: QueueItemSourceName(
-            type: isFavourite
+            type: onlyShowFavourites
                 ? QueueItemSourceNameType.yourLikes
                 : QueueItemSourceNameType.shuffleAll,
           ),

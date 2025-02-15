@@ -6,7 +6,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class DisableVibrationSelector extends StatelessWidget {
-  const DisableVibrationSelector({Key? key}) : super(key: key);
+  const DisableVibrationSelector({super.key});
 
   @override
   Widget build(BuildContext context) {

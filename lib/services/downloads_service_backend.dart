@@ -4,6 +4,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
+import 'package:chopper/chopper.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/downloads_service.dart';
@@ -999,7 +1000,7 @@ class DownloadsSyncService {
           try {
             var collectionChildren = await Future.wait(collectionIds.map((e) =>
                 _getCollectionInfo(e, DownloadItemType.collection, false)));
-            infoChildren.addAll(collectionChildren.whereNotNull());
+            infoChildren.addAll(collectionChildren.nonNulls);
           } catch (e) {
             _syncLogger
                 .info("Failed to download metadata for ${item.name}: $e");
@@ -1133,7 +1134,7 @@ class DownloadsSyncService {
         // the parent's download settings already may be skipped.
         for (var child in _isar.downloadItems
             .getAllSync(requiredChanges.$2.toList())
-            .whereNotNull()) {
+            .nonNulls) {
           if (child.syncTranscodingProfile !=
               canonParent!.syncTranscodingProfile) {
             _downloadsService.syncItemDownloadSettings(child);
@@ -1148,6 +1149,10 @@ class DownloadsSyncService {
         if (canonParent!.syncDownloadLocation == null) {
           _syncLogger.severe(
               "could not download ${parent.name}, no download location found.");
+          _isar.writeTxnSync(() {
+            _downloadsService.updateItemState(
+                canonParent!, DownloadItemState.failed);
+          });
         } else {
           await _initiateDownload(canonParent!);
         }
@@ -1174,7 +1179,7 @@ class DownloadsSyncService {
     var missingChildIds = newChildIds.difference(oldChildIds);
     var childrenToUnlink =
         (_isar.downloadItems.getAllSync(childIdsToUnlink.toList()))
-            .whereNotNull()
+            .nonNulls
             .toList();
     // anyOf filter allows all objects when given empty list, but we want no objects
     var childIdsToLink = (missingChildIds.isEmpty)
@@ -1288,8 +1293,8 @@ class DownloadsSyncService {
 
     if (_childCache.containsKey(item.id)) {
       var childIds = await _childCache[item.id]!;
-      return Future.wait(childIds.map((e) => _metadataCache[e]).whereNotNull())
-          .then((value) => value.whereNotNull().toList());
+      return Future.wait(childIds.map((e) => _metadataCache[e]).nonNulls)
+          .then((value) => value.nonNulls.toList());
     }
     Completer<List<String>> itemFetch = Completer();
     // This prevents errors in itemFetch being reported as unhandled.
@@ -1430,8 +1435,7 @@ class DownloadsSyncService {
         in (userHelper.currentUser?.views.values ?? <BaseItemDto>[])) {
       var children = await _getCollectionChildren(
           DownloadStub.fromItem(type: DownloadItemType.collection, item: view));
-      var childIds =
-          children.map((e) => e.baseItem?.id).whereNotNull().toList();
+      var childIds = children.map((e) => e.baseItem?.id).nonNulls.toList();
       if (childIds.contains(albumId)) {
         return view.id;
       }
@@ -1561,7 +1565,13 @@ class DownloadsSyncService {
         _syncLogger.finer("Fetched lyrics for ${item.name}");
       } catch (e) {
         _syncLogger.warning("Failed to fetch lyrics for ${item.name}.");
-        rethrow;
+        //!!! don't fail download if local metadata is outdated and server has no lyrics
+        if (e is Response && e.statusCode == 404) {
+          _syncLogger.finer("No lyrics for ${item.name}");
+        } else {
+          _syncLogger.warning("Failed to fetch lyrics for ${item.name}.");
+          rethrow;
+        }
       }
     } else {
       _syncLogger.finer("No lyrics for ${item.name}");

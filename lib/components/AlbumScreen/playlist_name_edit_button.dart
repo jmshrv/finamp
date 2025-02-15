@@ -6,9 +6,9 @@ import 'playlist_name_edit_dialog.dart';
 
 class PlaylistNameEditButton extends StatelessWidget {
   const PlaylistNameEditButton({
-    Key? key,
+    super.key,
     required this.playlist,
-  }) : super(key: key);
+  });
 
   final BaseItemDto playlist;
 

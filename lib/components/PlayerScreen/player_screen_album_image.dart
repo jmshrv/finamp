@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/current_album_image_provider.dart';
 import '../../services/favorite_provider.dart';
@@ -32,92 +33,97 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
             child: CircularProgressIndicator(),
           );
         }
+        final currentTrack = snapshot.data!.currentTrack;
 
-        return GestureDetector(
-          onSecondaryTapDown: (_) async {
-            var queueItem = snapshot.data!.currentTrack;
-            if (queueItem?.baseItem != null) {
-              var inPlaylist = queueItemInPlaylist(queueItem);
-              await showModalSongMenu(
-                context: context,
-                item: queueItem!.baseItem!,
-                usePlayerTheme: true,
-                showPlaybackControls: true,
-                // show controls on player screen
-                parentItem: inPlaylist ? queueItem.source.item : null,
-                isInPlaylist: inPlaylist,
-              );
-            }
-          },
-          child: SimpleGestureDetector(
-            //TODO replace with PageView, this is just a placeholder
-            onTap: () {
-              final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
-              audioService.togglePlayback();
-              FeedbackHelper.feedback(FeedbackType.selection);
-            },
-            onDoubleTap: () {
-              final currentTrack = queueService.getCurrentTrack();
-              if (currentTrack?.baseItem != null &&
-                  !FinampSettingsHelper.finampSettings.isOffline) {
-                ref
-                    .read(isFavoriteProvider(
-                            FavoriteRequest(currentTrack!.baseItem))
-                        .notifier)
-                    .toggleFavorite();
+        return Semantics(
+          label: AppLocalizations.of(context)!.playerAlbumArtworkTooltip(
+              currentTrack?.item.title ??
+                  AppLocalizations.of(context)!.unknownName),
+          excludeSemantics:
+              true, // replace child semantics with custom semantics
+          container: true,
+          child: GestureDetector(
+            onSecondaryTapDown: (_) async {
+              var queueItem = snapshot.data!.currentTrack;
+              if (queueItem?.baseItem != null) {
+                var inPlaylist = queueItemInPlaylist(queueItem);
+                await showModalSongMenu(
+                  context: context,
+                  item: queueItem!.baseItem!,
+                  usePlayerTheme: true,
+                  showPlaybackControls: true,
+                  // show controls on player screen
+                  parentItem: inPlaylist ? queueItem.source.item : null,
+                  isInPlaylist: inPlaylist,
+                );
               }
             },
-            onHorizontalSwipe: (direction) {
-              final queueService = GetIt.instance<QueueService>();
-              if (direction == SwipeDirection.left) {
-                if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                  queueService.skipByOffset(1);
-                  FeedbackHelper.feedback(FeedbackType.selection);
+            child: SimpleGestureDetector(
+              //TODO replace with PageView, this is just a placeholder
+              onTap: () {
+                final audioService =
+                    GetIt.instance<MusicPlayerBackgroundTask>();
+                audioService.togglePlayback();
+                FeedbackHelper.feedback(FeedbackType.selection);
+              },
+              onDoubleTap: () {
+                final currentTrack = queueService.getCurrentTrack();
+                if (currentTrack?.baseItem != null &&
+                    !FinampSettingsHelper.finampSettings.isOffline) {
+                  ref
+                      .read(isFavoriteProvider(
+                              FavoriteRequest(currentTrack!.baseItem))
+                          .notifier)
+                      .toggleFavorite();
                 }
-              } else if (direction == SwipeDirection.right) {
-                if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                  queueService.skipByOffset(-1);
-                  FeedbackHelper.feedback(FeedbackType.selection);
+              },
+              onHorizontalSwipe: (direction) {
+                final queueService = GetIt.instance<QueueService>();
+                if (direction == SwipeDirection.left) {
+                  if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                    queueService.skipByOffset(1);
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                  }
+                } else if (direction == SwipeDirection.right) {
+                  if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                    queueService.skipByOffset(-1);
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                  }
                 }
-              }
-            },
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              //aspectRatio: 0.5,
-              child: Align(
-                alignment: Alignment.center,
-                child: LayoutBuilder(builder: (context, constraints) {
-                  //print(
-                  //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
-                  final horizontalPadding = constraints.maxWidth *
-                      (FinampSettingsHelper
-                              .finampSettings.playerScreenCoverMinimumPadding /
-                          100.0);
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      left: horizontalPadding,
-                      right: horizontalPadding,
+              },
+              child: LayoutBuilder(builder: (context, constraints) {
+                //print(
+                //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
+                final horizontalPadding = constraints.maxWidth *
+                    (FinampSettingsHelper
+                            .finampSettings.playerScreenCoverMinimumPadding /
+                        100.0);
+                final verticalPadding = constraints.maxHeight *
+                    (FinampSettingsHelper
+                            .finampSettings.playerScreenCoverMinimumPadding /
+                        100.0);
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: verticalPadding,
+                  ),
+                  child: AlbumImage(
+                    imageListenable: currentAlbumImageProvider,
+                    borderRadius: BorderRadius.circular(8.0),
+                    // Load player cover at max size to allow more seamless scaling
+                    autoScale: false,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 24,
+                          offset: const Offset(0, 4),
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ],
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 24,
-                            offset: const Offset(0, 4),
-                            color: Colors.black.withOpacity(0.3),
-                          )
-                        ],
-                      ),
-                      child: AlbumImage(
-                        imageListenable: currentAlbumImageProvider,
-                        borderRadius: BorderRadius.circular(8.0),
-                        // Load player cover at max size to allow more seamless scaling
-                        autoScale: false,
-                      ),
-                    ),
-                  );
-                }),
-              ),
+                  ),
+                );
+              }),
             ),
           ),
         );

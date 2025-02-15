@@ -5,7 +5,7 @@ import '../../services/finamp_logs_helper.dart';
 import 'log_tile.dart';
 
 class LogsView extends StatelessWidget {
-  const LogsView({Key? key}) : super(key: key);
+  const LogsView({super.key});
 
   @override
   Widget build(BuildContext context) {

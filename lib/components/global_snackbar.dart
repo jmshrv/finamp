@@ -86,7 +86,7 @@ class GlobalSnackbar {
   /// Show an unlocalized error message to the user
   static void error(dynamic event) => _enqueue(() => _error(event));
   static void _error(dynamic event) {
-    _logger.warning("Displaying error: $event");
+    _logger.warning("Displaying error: $event", event);
     if (event is Error && event.stackTrace != null) {
       _logger.warning(event.stackTrace);
     }

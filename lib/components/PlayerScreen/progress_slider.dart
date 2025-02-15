@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/music_player_background_task.dart';
 
@@ -11,12 +15,12 @@ typedef DragCallback = void Function(double? value);
 
 class ProgressSlider extends StatefulWidget {
   const ProgressSlider({
-    Key? key,
+    super.key,
     this.allowSeeking = true,
     this.showBuffer = true,
     this.showDuration = true,
     this.showPlaceholder = true,
-  }) : super(key: key);
+  });
 
   final bool allowSeeking;
   final bool showBuffer;
@@ -121,30 +125,39 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
 class _ProgressSliderDuration extends StatelessWidget {
   const _ProgressSliderDuration({
-    Key? key,
+    super.key,
     required this.position,
     this.itemDuration,
-  }) : super(key: key);
+  });
 
   final Duration position;
   final Duration? itemDuration;
 
   @override
   Widget build(BuildContext context) {
+    final showRemaining = Platform.isIOS || Platform.isMacOS;
+    final currentPosition =
+        Duration(seconds: (position.inMilliseconds / 1000).round());
+    final roundedDuration =
+        Duration(seconds: ((itemDuration?.inMilliseconds ?? 0) / 1000).round());
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          printDuration(
-            Duration(microseconds: position.inMicroseconds),
-          ),
+          printDuration(currentPosition),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 height: 0.5, // reduce line height
               ),
         ),
         Text(
-          printDuration(itemDuration),
+          printDuration(
+            // display remaining time if on iOS or macOS
+            showRemaining
+                ? (roundedDuration - currentPosition)
+                : roundedDuration,
+            isRemaining: showRemaining,
+          ),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 height: 0.5, // reduce line height
               ),
@@ -156,13 +169,13 @@ class _ProgressSliderDuration extends StatelessWidget {
 
 class _PlaybackProgressSlider extends ConsumerStatefulWidget {
   const _PlaybackProgressSlider({
-    Key? key,
+    super.key,
     required this.allowSeeking,
     this.mediaItem,
     required this.playbackState,
     required this.position,
     required this.onDrag,
-  }) : super(key: key);
+  });
 
   final bool allowSeeking;
   final MediaItem? mediaItem;
@@ -213,18 +226,38 @@ class __PlaybackProgressSliderState
         min: 0.0,
         max: widget.mediaItem?.duration == null
             ? widget.playbackState.bufferedPosition.inMicroseconds.toDouble()
-            : widget.mediaItem!.duration!.inMicroseconds.toDouble(),
+            : widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0,
         value: (_dragValue ?? widget.position.inMicroseconds)
-            .clamp(0, widget.mediaItem!.duration!.inMicroseconds.toDouble())
+            .clamp(
+                0, widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0)
             .toDouble(),
+        semanticFormatterCallback: (double value) {
+          final positionFullMinutes =
+              Duration(microseconds: value.toInt()).inMinutes % 60;
+          final positionFullHours =
+              Duration(microseconds: value.toInt()).inHours;
+          final positionSeconds =
+              Duration(microseconds: value.toInt()).inSeconds % 60;
+          final durationFullHours = (widget.mediaItem?.duration?.inHours ?? 0);
+          final durationFullMinutes =
+              (widget.mediaItem?.duration?.inMinutes ?? 0) % 60;
+          final durationSeconds =
+              (widget.mediaItem?.duration?.inSeconds ?? 0) % 60;
+          final positionString =
+              "${positionFullHours > 0 ? "$positionFullHours ${AppLocalizations.of(context)!.hours} " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$positionSeconds ${AppLocalizations.of(context)!.seconds}";
+          final durationString =
+              "${durationFullHours > 0 ? "$durationFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationSeconds ${AppLocalizations.of(context)!.seconds}";
+          return AppLocalizations.of(context)!
+              .timeFractionTooltip(positionString, durationString);
+        },
         secondaryTrackValue:
             widget.mediaItem?.extras?["downloadedSongPath"] == null
                 ? widget.playbackState.bufferedPosition.inMicroseconds
                     .clamp(
                       0.0,
-                      widget.mediaItem!.duration == null
+                      widget.mediaItem?.duration == null
                           ? widget.playbackState.bufferedPosition.inMicroseconds
-                          : widget.mediaItem!.duration!.inMicroseconds,
+                          : widget.mediaItem?.duration?.inMicroseconds ?? 0,
                     )
                     .toDouble()
                 : 0,

@@ -6,7 +6,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class DisableGestureSelector extends StatelessWidget {
-  const DisableGestureSelector({Key? key}) : super(key: key);
+  const DisableGestureSelector({super.key});
 
   @override
   Widget build(BuildContext context) {

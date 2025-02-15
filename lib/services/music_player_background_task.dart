@@ -1,22 +1,36 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/favorite_provider.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
 
 import 'finamp_settings_helper.dart';
+import 'locale_helper.dart';
+import 'android_auto_helper.dart';
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
 class MusicPlayerBackgroundTask extends BaseAudioHandler {
+  final _androidAutoHelper = GetIt.instance<AndroidAutoHelper>();
+
+  AppLocalizations? _appLocalizations;
+
   late final AudioPlayer _player;
   late final AudioPipeline _audioPipeline;
   late final List<AndroidAudioEffect> _androidAudioEffects;
@@ -47,6 +61,52 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   double iosBaseVolumeGainFactor = 1.0;
+  Duration minBufferDuration = Duration(seconds: 90);
+
+  final outputSwitcherChannel =
+      MethodChannel('com.unicornsonlsd.finamp/output_switcher');
+
+  Future<void> showOutputSwitcherDialog() async {
+    try {
+      print("Showing output switcher dialog");
+      await outputSwitcherChannel.invokeMethod('showOutputSwitcherDialog');
+      print("Output switcher dialog shown");
+    } on PlatformException catch (e) {
+      print("Failed to show output switcher dialog: ${e.message}");
+    } catch (e) {
+      print("Failed to show output switcher dialog: $e");
+    }
+  }
+
+  Future<void> getRoutes() async {
+    try {
+      await outputSwitcherChannel.invokeMethod('getRoutes');
+    } on PlatformException catch (e) {
+      print("Failed to get routes: ${e.message}");
+    } catch (e) {
+      print("Failed to get routes: $e");
+    }
+  }
+
+  Future<void> setOutputToDeviceSpeaker() async {
+    try {
+      await outputSwitcherChannel.invokeMethod('setOutputToDeviceSpeaker');
+    } on PlatformException catch (e) {
+      print("Failed to switch output: ${e.message}");
+    } catch (e) {
+      print("Failed to switch output: $e");
+    }
+  }
+
+  Future<void> setOutputToBluetoothDevice() async {
+    try {
+      await outputSwitcherChannel.invokeMethod('setOutputToBluetoothDevice');
+    } on PlatformException catch (e) {
+      print("Failed to switch output: ${e.message}");
+    } catch (e) {
+      print("Failed to switch output: $e");
+    }
+  }
 
   MusicPlayerBackgroundTask() {
     _audioServiceBackgroundTaskLogger.info("Starting audio service");
@@ -55,7 +115,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger
           .info("Initializing media-kit for Windows/Linux");
       JustAudioMediaKit.title = "Finamp";
-      JustAudioMediaKit.prefetchPlaylist = true; // cache upcoming tracks
+      JustAudioMediaKit.prefetchPlaylist =
+          true; // cache upcoming tracks, enable gapless playback
       JustAudioMediaKit.ensureInitialized(
         linux: true,
         windows: true,
@@ -80,18 +141,35 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       darwinAudioEffects: _iosAudioEffects,
     );
 
+
     _player = AudioPlayer(
       audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
-          minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
-          maxBufferDuration: FinampSettingsHelper
-                  .finampSettings.bufferDuration *
-              1.5, // allows the player to fetch a bit more data in exchange for reduced request frequency
-          prioritizeTimeOverSizeThresholds: true,
+          targetBufferBytes:
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
+                  ? null
+                  : 1024 *
+                      1024 *
+                      FinampSettingsHelper.finampSettings.bufferSizeMegabytes,
+          // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration, //!!! there are issues with the bufferForPlaybackDuration setting, the min duration seemingly has to be smaller than that. so we're using the default
+          minBufferDuration: minBufferDuration,
+          maxBufferDuration: Duration(
+              seconds: max(
+                  minBufferDuration.inSeconds,
+                  FinampSettingsHelper.finampSettings.bufferDuration
+                      .inSeconds)), // allows the player to fetch a bit more data in exchange for reduced request frequency
+          prioritizeTimeOverSizeThresholds: FinampSettingsHelper.finampSettings
+              .bufferDisableSizeConstraints, // targetBufferBytes sets the absolute maximum, but if this false and maxBufferDuration is reached, buffering will end
+          bufferForPlaybackDuration: Duration(seconds: 5),
+          bufferForPlaybackAfterRebufferDuration: Duration(seconds: 10),
         ),
         darwinLoadControl: DarwinLoadControl(
+          // preferredForwardBufferDuration:
+          //     FinampSettingsHelper.finampSettings.bufferDuration,
           preferredForwardBufferDuration:
-              FinampSettingsHelper.finampSettings.bufferDuration,
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
+                  ? FinampSettingsHelper.finampSettings.bufferDuration
+                  : null, // let system decide
         ),
       ),
       audioPipeline: _audioPipeline,
@@ -159,6 +237,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.info(
           "Loop mode changed to ${event.repeatMode} (${_player.loopMode}).");
     });
+
+    // This listener basically just kicks the playback state into updating
+    // whenever a song changes, since some stuff. Done to fix the favorite state
+    // not updating between songs (https://github.com/jmshrv/finamp/issues/844)
+    mediaItem.listen((_) {
+      final event = _transformEvent(_player.playbackEvent);
+      playbackState.add(event);
+    });
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
@@ -181,11 +267,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     } on PlayerException catch (e) {
       _audioServiceBackgroundTaskLogger
           .severe("Player error code ${e.code}: ${e.message}");
+      GlobalSnackbar.error(e);
     } on PlayerInterruptedException catch (e) {
       _audioServiceBackgroundTaskLogger
           .warning("Player interrupted: ${e.message}");
+      GlobalSnackbar.error(e);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe("Player error ${e.toString()}");
+      GlobalSnackbar.error(e);
     }
   }
 
@@ -429,6 +518,214 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  /// Returns the top-level browsable categories for use in a media browser.
+  List<MediaItem> _getRootMenu() {
+    return [
+      MediaItem(
+        id: MediaItemId(
+                contentType: TabContentType.albums,
+                parentType: MediaItemParentType.rootCollection)
+            .toString(),
+        title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
+        playable: false,
+      ),
+      MediaItem(
+        id: MediaItemId(
+                contentType: TabContentType.artists,
+                parentType: MediaItemParentType.rootCollection)
+            .toString(),
+        title: _appLocalizations?.artists ?? TabContentType.artists.toString(),
+        playable: false,
+      ),
+      MediaItem(
+        id: MediaItemId(
+                contentType: TabContentType.playlists,
+                parentType: MediaItemParentType.rootCollection)
+            .toString(),
+        title:
+            _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
+        playable: false,
+      ),
+      MediaItem(
+        id: MediaItemId(
+                contentType: TabContentType.genres,
+                parentType: MediaItemParentType.rootCollection)
+            .toString(),
+        title: _appLocalizations?.genres ?? TabContentType.genres.toString(),
+        playable: false,
+      )
+    ];
+  }
+
+  /// Implements a media browser, like used in Android Auto.
+  /// Called with the ID of a non-playable (and therefore browsable) [MediaItem], and returns a list of its children.
+  /// We jerry-rig the [parentMediaId] to be a JSON string that can be parsed into a [MediaItemId] object, otherwise we don't have a way to tell which item the parentMediaId refers to.
+  /// There are some special IDs that might be passed to this method:
+  /// - [AudioService.browsableRootId] is passed when the client requests the root menu (the list of top-level categories)
+  /// - [AudioService.recentRootId] is passed when the client requests the recent items (e.g. in the "For you" section of Android Auto).
+  @override
+  Future<List<MediaItem>> getChildren(String parentMediaId,
+      [Map<String, dynamic>? options]) async {
+    // display root category/parent
+    if (parentMediaId == AudioService.browsableRootId) {
+      _appLocalizations ??= await AppLocalizations.delegate
+          .load(LocaleHelper.locale ?? const Locale("en", "US"));
+
+      return _getRootMenu();
+    } else if (parentMediaId == AudioService.recentRootId) {
+      // return await _androidAutoHelper.getRecentItems();
+      // return playlists for now
+      return await _androidAutoHelper.getMediaItems(MediaItemId(
+          contentType: TabContentType.playlists,
+          parentType: MediaItemParentType.rootCollection));
+    } else {
+      try {
+        final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId));
+
+        return await _androidAutoHelper.getMediaItems(itemId);
+      } catch (e) {
+        _audioServiceBackgroundTaskLogger.severe(e);
+        return super.getChildren(parentMediaId);
+      }
+    }
+  }
+
+  /// Called when a media item is requested to be played.
+  /// We jerry-rig the [mediaId] to be a JSON string that can be parsed into a [MediaItemId] object, otherwise we don't have a way to tell which item the mediaId refers to.
+  @override
+  Future<void> playFromMediaId(String mediaId,
+      [Map<String, dynamic>? extras]) async {
+    try {
+      final mediaItemId = MediaItemId.fromJson(jsonDecode(mediaId));
+
+      return await _androidAutoHelper.playFromMediaId(mediaItemId);
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(e);
+      return super.playFromMediaId(mediaId, extras);
+    }
+  }
+
+  /// Called when a media browser performs a search, e.g. using a search bar or to correct a voice search.
+  /// Currently, the [extras] parameter isn't passed correctly by AudioService, so some of the metadata available during a voice search isn't available here, that's why we store the [lastSearchQuery] to use it here.
+  @override
+  Future<List<MediaItem>> search(String query,
+      [Map<String, dynamic>? extras]) async {
+    _audioServiceBackgroundTaskLogger.info("search: $query ; extras: $extras");
+
+    final previousItemTitle = _androidAutoHelper
+        .lastSearchQuery?.extras?["android.intent.extra.title"];
+
+    final currentSearchQuery = AndroidAutoSearchQuery(query, extras);
+
+    if (previousItemTitle != null) {
+      // when voice searching for a song with title + artist, Android Auto / Google Assistant combines the title and artist into a single query, with no way to differentiate them
+      // so we try to instead use the title provided in the extras right after the voice search, and just search for that
+      if (query.contains(previousItemTitle)) {
+        // if the the title is fully contained in the query, we can assume that the user clicked on the "Search Results" button on the player screen
+        currentSearchQuery.rawQuery = previousItemTitle;
+        currentSearchQuery.extras = _androidAutoHelper.lastSearchQuery?.extras;
+      } else {
+        // otherwise, we assume they're searching for something else, and discard the previous search query
+        _androidAutoHelper.setLastSearchQuery(null);
+      }
+    }
+
+    final results = await _androidAutoHelper.searchItems(currentSearchQuery);
+    return results;
+  }
+
+  /// Called when the user asks for an item to be played based on a query.
+  /// In this case, the search needs to be performed and the "best" result should be played immediately.
+  /// [extras] can contain additional information about the search, like the original query, a title, artist, or album (all optional and filled in by e.g. the Voice Assistant for popular items. Provided fields can indicate which type of item was requested).
+  @override
+  Future<void> playFromSearch(String query,
+      [Map<String, dynamic>? extras]) async {
+    _audioServiceBackgroundTaskLogger
+        .info("playFromSearch: $query ; extras: $extras");
+    final searchQuery = AndroidAutoSearchQuery(query, extras);
+    _androidAutoHelper.setLastSearchQuery(searchQuery);
+    await _androidAutoHelper.playFromSearch(searchQuery);
+  }
+
+  @override
+  Future<dynamic> customAction(String name,
+      [Map<String, dynamic>? extras]) async {
+    try {
+      final action = CustomPlaybackActions.values
+          .firstWhere((element) => element.name == name);
+      switch (action) {
+        case CustomPlaybackActions.shuffle:
+          final queueService = GetIt.instance<QueueService>();
+          return queueService.togglePlaybackOrder();
+        case CustomPlaybackActions.toggleFavorite:
+          jellyfin_models.BaseItemDto? currentItem;
+
+          if (mediaItem.valueOrNull?.extras?["itemJson"] != null) {
+            currentItem = jellyfin_models.BaseItemDto.fromJson(mediaItem
+                .valueOrNull?.extras!["itemJson"] as Map<String, dynamic>);
+          } else {
+            return;
+          }
+
+          bool isFavorite = currentItem.userData?.isFavorite ?? false;
+          if (GlobalSnackbar.materialAppScaffoldKey.currentContext != null) {
+            // get current favorite status from the provider
+            isFavorite = ProviderScope.containerOf(
+                    GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                    listen: false)
+                .read(isFavoriteProvider(FavoriteRequest(currentItem)));
+            // update favorite status with the value returned by the provider
+            isFavorite = ProviderScope.containerOf(
+                    GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                    listen: false)
+                .read(isFavoriteProvider(FavoriteRequest(currentItem)).notifier)
+                .updateFavorite(!isFavorite);
+          } else {
+            // fallback if we can't find the context
+            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+            if (isFavorite) {
+              await jellyfinApiHelper.removeFavourite(currentItem.id);
+            } else {
+              await jellyfinApiHelper.addFavourite(currentItem.id);
+            }
+            isFavorite = !isFavorite;
+            final newUserData = currentItem.userData;
+            if (newUserData != null) {
+              newUserData.isFavorite = isFavorite;
+            }
+            currentItem.userData = newUserData;
+            mediaItem.add(mediaItem.valueOrNull?.copyWith(
+              extras: {
+                ...mediaItem.valueOrNull?.extras ?? {},
+                "itemJson": currentItem.toJson(),
+              },
+            ));
+          }
+          return refreshPlaybackStateAndMediaNotification();
+        default:
+        // NOP, handled below
+      }
+    } catch (e) {
+      _audioServiceBackgroundTaskLogger.severe(
+          "Custom action '$name' not found.", e);
+    }
+
+    // only called if no custom action was found
+    return await super.customAction(name, extras);
+  }
+
+  Future<void> refreshPlaybackStateAndMediaNotification() async {
+    // re-trigger the playbackState update to update the notification
+    final event = _transformEvent(_player.playbackEvent);
+    return playbackState.add(event);
+  }
+
+  // triggers when skipping to specific item in android auto queue
+  @override
+  Future<void> skipToQueueItem(int index) async {
+    return skipToIndex(index);
+  }
+
   void setNextInitialIndex(int index) {
     nextInitialIndex = index;
   }
@@ -506,19 +803,68 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// just_audio player will be transformed into an audio_service state so that
   /// it can be broadcast to audio_service clients.
   PlaybackState _transformEvent(PlaybackEvent event) {
+    jellyfin_models.BaseItemDto? currentItem;
+    bool isFavorite = false;
+
+    if (mediaItem.valueOrNull?.extras?["itemJson"] != null) {
+      currentItem = jellyfin_models.BaseItemDto.fromJson(
+          mediaItem.valueOrNull?.extras!["itemJson"] as Map<String, dynamic>);
+      if (GlobalSnackbar.materialAppScaffoldKey.currentContext != null) {
+        isFavorite = ProviderScope.containerOf(
+                GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                listen: false)
+            .read(isFavoriteProvider(FavoriteRequest(currentItem)));
+      } else {
+        isFavorite = currentItem.userData?.isFavorite ?? false;
+      }
+    }
+
     return PlaybackState(
       controls: [
         MediaControl.skipToPrevious,
         if (_player.playing) MediaControl.pause else MediaControl.play,
-        MediaControl.stop,
         MediaControl.skipToNext,
+        MediaControl.custom(
+          name: CustomPlaybackActions.toggleFavorite.name,
+          androidIcon: isFavorite
+              ? "drawable/baseline_heart_filled_24"
+              : "drawable/baseline_heart_24",
+          label: isFavorite
+              ? (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
+                  ? AppLocalizations.of(GlobalSnackbar
+                          .materialAppScaffoldKey.currentContext!)!
+                      .removeFavourite
+                  : "Remove favorite")
+              : (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
+                  ? AppLocalizations.of(GlobalSnackbar
+                          .materialAppScaffoldKey.currentContext!)!
+                      .addFavourite
+                  : "Add favorite"),
+        ),
+        //!!! Android Auto adds a shuffle toggle button automatically, adding it here would result in a duplicate button
+        // MediaControl.custom(
+        //     name: CustomPlaybackActions.shuffle.name,
+        //     androidIcon: _player.shuffleModeEnabled
+        //         ? "drawable/baseline_shuffle_on_24"
+        //         : "drawable/baseline_shuffle_24",
+        //     label: _player.shuffleModeEnabled ?
+        //       (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderShuffledButtonLabel : "Shuffle enabled") :
+        //       (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderLinearButtonLabel : "Shuffle disabled"),
+        // ),
+        if (FinampSettingsHelper
+            .finampSettings.showStopButtonOnMediaNotification)
+          MediaControl.stop.copyWith(androidIcon: "drawable/baseline_stop_24"),
+        // MediaControl.stop,
       ],
-      systemActions: const {
-        MediaAction.seek,
-        MediaAction.seekForward,
-        MediaAction.seekBackward,
-      },
-      androidCompactActionIndices: const [0, 1, 3],
+      systemActions: FinampSettingsHelper
+              .finampSettings.showSeekControlsOnMediaNotification
+          ? const {
+              MediaAction.seek,
+              MediaAction.seekForward,
+              MediaAction.seekBackward,
+            }
+          : {},
+      androidCompactActionIndices: const [0, 1, 2],
       processingState: const {
         ProcessingState.idle: AudioProcessingState.idle,
         ProcessingState.loading: AudioProcessingState.loading,

@@ -434,8 +434,8 @@ class DownloadsService {
   /// it to the anchor as required and then syncing.
   Future<void> addDownload({
     required DownloadStub stub,
-    required String viewId,
     required DownloadProfile transcodeProfile,
+    String? viewId,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure
@@ -667,7 +667,7 @@ class DownloadsService {
     for (var item in itemsWithFiles) {
       switch (item.state) {
         case DownloadItemState.complete:
-          await _verifyDownload(item);
+          _verifyDownload(item);
         case DownloadItemState.notDownloaded:
           break;
         case DownloadItemState.enqueued: // fall through
@@ -691,6 +691,17 @@ class DownloadsService {
         syncItemDownloadSettings(item);
       }
     });
+    _isar.writeTxnSync(() {
+      var itemsWithFiles = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.song)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
+          .findAllSync();
+      for (var item in itemsWithFiles) {
+        syncItemDownloadSettings(item);
+      }
+    });
     markOutdatedTranscodes();
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
@@ -711,7 +722,7 @@ class DownloadsService {
         .filter()
         .typeEqualTo(DownloadItemType.song)
         .findAllSync();
-    final JellyfinApiHelper _jellyfinApiData =
+    final JellyfinApiHelper jellyfinApiData =
         GetIt.instance<JellyfinApiHelper>();
     for (var item in allItems) {
       if (item.baseItem?.mediaStreams
@@ -728,7 +739,7 @@ class DownloadsService {
         idsWithLyrics[item.isarId] = null;
         LyricDto? lyrics;
         try {
-          lyrics = await _jellyfinApiData.getLyrics(itemId: item.id);
+          lyrics = await jellyfinApiData.getLyrics(itemId: item.id);
           _downloadsLogger.finer("Fetched lyrics for ${item.name}");
           idsWithLyrics[item.isarId] = lyrics;
         } catch (e) {
@@ -932,9 +943,6 @@ class DownloadsService {
   /// location and transcode settings with the highest quality are selected.
   /// This should only be called inside an isar write transaction.
   void syncItemDownloadSettings(DownloadItem item) {
-    if (item.type == DownloadItemType.image) {
-      return;
-    }
     var transcodeProfiles =
         item.requiredBy.filter().syncTranscodingProfileProperty().findAllSync();
     if (transcodeProfiles.isEmpty) {
@@ -943,27 +951,25 @@ class DownloadsService {
       return;
     }
     transcodeProfiles.add(item.userTranscodingProfile);
-    if (transcodeProfiles.whereNotNull().isEmpty) {
+    if (transcodeProfiles.nonNulls.isEmpty) {
       _downloadsLogger
           .severe("No valid download profiles for required item ${item.name}");
       return;
     }
 
     // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    DownloadProfile bestProfile = transcodeProfiles
-        .whereNotNull()
+    DownloadProfile bestProfile = transcodeProfiles.nonNulls
         .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
         .first;
-    if (!transcodeProfiles
-            .whereNotNull()
-            .contains(item.syncTranscodingProfile) ||
-        bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000)) {
+    if (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
+        (bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000) &&
+            item.type != DownloadItemType.image)) {
       _downloadsLogger.finest("Updating download settings for ${item.name}");
       item.syncTranscodingProfile = bestProfile;
       if ((item.state == DownloadItemState.enqueued ||
               item.state == DownloadItemState.downloading ||
               item.state == DownloadItemState.complete) &&
-          item.type == DownloadItemType.song &&
+          item.type.hasFiles &&
           FinampSettingsHelper.finampSettings.shouldRedownloadTranscodes) {
         if (item.state == DownloadItemState.complete) {
           updateItemState(item, DownloadItemState.needsRedownloadComplete,
@@ -989,6 +995,8 @@ class DownloadsService {
       var items = _isar.downloadItems
           .where()
           .typeEqualTo(DownloadItemType.song)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
           .filter()
           .not()
           .stateEqualTo(DownloadItemState.notDownloaded)
@@ -1204,7 +1212,9 @@ class DownloadsService {
       }
 
       isarItem.state = DownloadItemState.complete;
-      isarItem.viewId = parent.viewId;
+      if (isarItem.baseItemType != BaseItemDtoType.playlist) {
+        isarItem.viewId = parent.viewId;
+      }
 
       _isar.writeTxnSync(() {
         _isar.downloadItems.putSync(isarItem);
@@ -1221,6 +1231,26 @@ class DownloadsService {
         isarItem.info.saveSync();
       });
     }
+  }
+
+  Future<void> addDefaultPlaylistInfoDownload() async {
+    String? downloadLocation =
+        FinampSettingsHelper.finampSettings.defaultDownloadLocation;
+    if (!FinampSettingsHelper.finampSettings.downloadLocationsMap
+        .containsKey(downloadLocation)) {
+      downloadLocation = null;
+    }
+    downloadLocation ??= FinampSettingsHelper.finampSettings.internalSongDir.id;
+
+    // Automatically download playlist metadata (to enhance the playlist actions dialog and offline mode)
+    await addDownload(
+      stub: DownloadStub.fromFinampCollection(
+          FinampCollection(type: FinampCollectionType.allPlaylistsMetadata)),
+      transcodeProfile: DownloadProfile(
+        transcodeCodec: FinampTranscodingCodec.original,
+        downloadLocationId: downloadLocation,
+      ),
+    );
   }
 
   /// Get all user-downloaded items.  Used to show items on downloads screen.

@@ -8,9 +8,9 @@ import '../global_snackbar.dart';
 
 class PlaylistNameEditDialog extends StatefulWidget {
   const PlaylistNameEditDialog({
-    Key? key,
+    super.key,
     required this.playlist,
-  }) : super(key: key);
+  });
 
   final BaseItemDto playlist;
 

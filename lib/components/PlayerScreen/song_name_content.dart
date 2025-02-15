@@ -6,7 +6,11 @@ import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dar
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/screens/player_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/queue_service.dart';
 import 'artist_chip.dart';
@@ -46,62 +50,50 @@ class SongNameContent extends StatelessWidget {
                 Center(
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 280),
-                    child: Builder(
-                      builder: (context) {
-                        final text = currentTrack.item.title;
-                        final isTwoLineMode =
-                            controller.shouldShow(PlayerHideable.twoLineTitle);
-                        final isMarqueeEnabled = FinampSettingsHelper
-                            .finampSettings.oneLineMarqueeTextButton;
+                    child: Semantics.fromProperties(
+                      properties: SemanticsProperties(
+                        label:
+                            "${currentTrack.item.title} (${AppLocalizations.of(context)!.title})",
+                      ),
+                      excludeSemantics: true,
+                      container: true,
+                      child: Builder(
+                        builder: (context) {
+                          final text = currentTrack.item.title;
+                          final isTwoLineMode = controller
+                              .shouldShow(PlayerHideable.twoLineTitle);
+                          final isMarqueeEnabled = FinampSettingsHelper
+                              .finampSettings.oneLineMarqueeTextButton;
 
-                        final textStyle = TextStyle(
-                          fontSize: 20,
-                          height: 1.2,
-                          fontWeight:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? FontWeight.w500
-                                  : FontWeight.w600,
-                        );
-
-                        final textSpan = TextSpan(text: text, style: textStyle);
-                        final textPainter = TextPainter(
-                          text: textSpan,
-                          textDirection: TextDirection.ltr,
-                          maxLines: 2,
-                        )..layout(maxWidth: 280);
-
-                        final wouldOverflow = textPainter.didExceedMaxLines;
-
-                        if (!isTwoLineMode) {
-                          return Text(
-                            text,
-                            style: textStyle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
+                          final textStyle = TextStyle(
+                            fontSize: 20,
+                            height: 1.2,
+                            fontWeight:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? FontWeight.w500
+                                    : FontWeight.w600,
                           );
-                        } else {
-                          if (!wouldOverflow) {
+
+                          final textSpan =
+                              TextSpan(text: text, style: textStyle);
+                          final textPainter = TextPainter(
+                            text: textSpan,
+                            textDirection: TextDirection.ltr,
+                            maxLines: 2,
+                          )..layout(maxWidth: 280);
+
+                          final wouldOverflow = textPainter.didExceedMaxLines;
+
+                          if (!isTwoLineMode) {
                             return Text(
                               text,
                               style: textStyle,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                             );
                           } else {
-                            if (isMarqueeEnabled) {
-                              return SizedBox(
-                                width: 280,
-                                height: 30,
-                                child: ScrollingTextHelper(
-                                  id: ValueKey(currentTrack.item.id),
-                                  text: text,
-                                  style: textStyle,
-                                  alignment: TextAlign.center,
-                                ),
-                              );
-                            } else {
+                            if (!wouldOverflow) {
                               return Text(
                                 text,
                                 style: textStyle,
@@ -109,10 +101,31 @@ class SongNameContent extends StatelessWidget {
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               );
+                            } else {
+                              if (isMarqueeEnabled) {
+                                return SizedBox(
+                                  width: 280,
+                                  height: 30,
+                                  child: ScrollingTextHelper(
+                                    id: ValueKey(currentTrack.item.id),
+                                    text: text,
+                                    style: textStyle,
+                                    alignment: TextAlign.center,
+                                  ),
+                                );
+                              } else {
+                                return Text(
+                                  text,
+                                  style: textStyle,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              }
                             }
                           }
-                        }
-                      },
+                        },
+                      ),
                     ),
                   ),
                 ),

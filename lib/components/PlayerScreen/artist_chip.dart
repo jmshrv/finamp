@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -105,7 +106,8 @@ class ArtistChip extends ConsumerWidget {
     final BaseItemDto? localArtist;
     if (artist != null &&
         FinampSettingsHelper.finampSettings.showArtistChipImage) {
-      localArtist = ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
+      localArtist =
+          ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
     } else {
       localArtist = artist;
     }
@@ -119,7 +121,6 @@ class ArtistChip extends ConsumerWidget {
 
 class _ArtistChipContent extends StatelessWidget {
   const _ArtistChipContent({
-    super.key,
     required this.item,
     required this.backgroundColor,
     required this.color,
@@ -138,45 +139,52 @@ class _ArtistChipContent extends StatelessWidget {
         ? item?.name
         : (item?.artists?.firstOrNull ?? item?.albumArtist);
 
-    return SizedBox(
-      height: _height,
-      child: Material(
-        color: backgroundColor,
-        borderRadius: _borderRadius,
-        child: InkWell(
-          // We shouldn't click through to artists if not passed one
-          onTap: !isArtist
-              ? null
-              : () => Navigator.of(context)
-                  .pushNamed(ArtistScreen.routeName, arguments: item),
+    return Semantics.fromProperties(
+      properties: SemanticsProperties(
+        label: "$name (${AppLocalizations.of(context)!.artist})",
+        button: true,
+      ),
+      container: true,
+      child: SizedBox(
+        height: _height,
+        child: Material(
+          color: backgroundColor,
           borderRadius: _borderRadius,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (isArtist && item?.imageId != null)
-                AlbumImage(
-                  item: item,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: _radius,
-                    bottomLeft: _radius,
-                  ),
-                ),
-              Center(
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 220),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Text(
-                      name ?? AppLocalizations.of(context)!.unknownArtist,
-                      style: TextStyle(
-                          color: color, overflow: TextOverflow.ellipsis),
-                      softWrap: false,
-                      overflow: TextOverflow.ellipsis,
+          child: InkWell(
+            // We shouldn't click through to artists if not passed one
+            onTap: !isArtist
+                ? null
+                : () => Navigator.of(context)
+                    .pushNamed(ArtistScreen.routeName, arguments: item),
+            borderRadius: _borderRadius,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isArtist && item?.imageId != null)
+                  AlbumImage(
+                    item: item,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: _radius,
+                      bottomLeft: _radius,
                     ),
                   ),
-                ),
-              )
-            ],
+                Center(
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 220),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Text(
+                        name ?? AppLocalizations.of(context)!.unknownArtist,
+                        style: TextStyle(
+                            color: color, overflow: TextOverflow.ellipsis),
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -230,6 +230,59 @@ class JellyfinApiHelper {
     });
   }
 
+  Future<List<BaseItemDto>?> getArtists({
+    BaseItemDto? parentItem,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    String? filters,
+    String? fields,
+
+    /// The record index to start at. All items with a lower index will be
+    /// dropped from the results.
+    int? startIndex,
+
+    /// The maximum number of records to return.
+    int? limit,
+  }) async {
+    final currentUserId = _finampUserHelper.currentUser?.id;
+    if (currentUserId == null) {
+      // When logging out, this request causes errors since currentUser is
+      // required sometimes. We just return an empty list since this error
+      // usually happens because the listeners on MusicScreenTabView update
+      // milliseconds before the page is popped. This shouldn't happen in normal
+      // use.
+      return [];
+    }
+    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    fields ??=
+        defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
+
+    if (parentItem != null) {
+      _jellyfinApiHelperLogger
+          .fine("Getting artists which are children of ${parentItem.name}");
+    } else {
+      _jellyfinApiHelperLogger.fine("Getting artists.");
+    }
+
+    return _runInIsolate((api) async {
+      dynamic response;
+
+      response = await api.getArtists(
+        parentId: parentItem?.id,
+        searchTerm: searchTerm,
+        fields: fields,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        filters: filters,
+        startIndex: startIndex,
+        limit: limit,
+      );
+
+      return QueryResult_BaseItemDto.fromJson(response).items;
+    });
+  }
+
   Future<List<BaseItemDto>?> getLatestItems({
     BaseItemDto? parentItem,
     String? includeItemTypes,
@@ -514,8 +567,15 @@ class JellyfinApiHelper {
       playlistId: playlistId,
       entryIds: entryIds?.join(","),
     );
-    if (response.error != null) {
-      throw response.error!;
+    if (response.statusCode == 403) {
+      _jellyfinApiHelperLogger.warning(
+          "Failed to remove items from playlist due to insufficient permissions. Status code: ${response.statusCode}");
+      throw "You do not have permission to remove items from this playlist. Status code: ${response.statusCode}";
+    } else if (response.error != null) {
+      if (response.error == "") {
+        throw "An unknown error occurred while removing items from the playlist. Status code: ${response.statusCode}";
+      }
+      throw "${response.error}. Status code: ${response.statusCode}";
     }
   }
 

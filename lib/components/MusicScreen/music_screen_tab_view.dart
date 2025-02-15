@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -15,7 +17,7 @@ import '../../models/jellyfin_models.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../AlbumScreen/song_list_tile.dart';
+import '../AlbumScreen/track_list_tile.dart';
 import '../first_page_progress_indicator.dart';
 import '../global_snackbar.dart';
 import '../new_page_progress_indicator.dart';
@@ -102,7 +104,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
-        filters: settings.onlyShowFavourite ? "IsFavorite" : null,
+        filters: settings.onlyShowFavourites ? "IsFavorite" : null,
         startIndex: pageKey,
         limit: _pageSize,
       );
@@ -140,7 +142,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           viewFilter: widget.view?.id,
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
           onlyFavorites:
-              settings.onlyShowFavourite && settings.trackOfflineFavorites);
+              settings.onlyShowFavourites && settings.trackOfflineFavorites);
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
           nameFilter: widget.searchTerm,
@@ -156,10 +158,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           nullableViewFilters: widget.tabContentType == TabContentType.albums &&
               settings.showDownloadsWithUnknownLibrary,
           onlyFavorites:
-              settings.onlyShowFavourite && settings.trackOfflineFavorites);
+              settings.onlyShowFavourites && settings.trackOfflineFavorites);
     }
 
-    var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
+    var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
 
     items = sortItems(items, settings.tabSortBy[widget.tabContentType],
         settings.tabSortOrder[widget.tabContentType]);
@@ -298,7 +300,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           var settings = box.get("FinampSettings")!;
           var newRefreshHash = Object.hash(
             widget.searchTerm,
-            settings.onlyShowFavourite,
+            settings.onlyShowFavourites,
             settings.tabSortBy[widget.tabContentType],
             settings.tabSortOrder[widget.tabContentType],
             settings.onlyShowFullyDownloaded,
@@ -313,6 +315,41 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             _refresh();
             refreshHash = newRefreshHash;
           }
+
+          final emptyListIndicator = Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+            child: Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.emptyFilteredListTitle,
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  AppLocalizations.of(context)!.emptyFilteredListSubtitle,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                CTAMedium(
+                  icon: TablerIcons.filter_x,
+                  text: AppLocalizations.of(context)!.resetFiltersButton,
+                  onPressed: () {
+                    FinampSettingsHelper.setonlyShowFavourites(
+                        DefaultSettings.onlyShowFavourites);
+                    FinampSettingsHelper.setOnlyShowFullyDownloaded(
+                        DefaultSettings.onlyShowFullyDownloaded);
+                  },
+                )
+              ],
+            ),
+          );
 
           var tabContent = box.get("FinampSettings")!.contentViewType ==
                       ContentViewType.list ||
@@ -337,12 +374,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           controller: controller,
                           index: index,
                           child: widget.tabContentType == TabContentType.songs
-                              ? SongListTile(
+                              ? TrackListTile(
                                   key: ValueKey(item.id),
                                   item: item,
                                   isSong: true,
                                   index: Future.value(index),
                                   isShownInSearch: widget.searchTerm != null,
+                                  allowDismiss: false,
                                 )
                               : AlbumItem(
                                   key: ValueKey(item.id),
@@ -357,6 +395,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         const FirstPageProgressIndicator(),
                     newPageProgressIndicatorBuilder: (_) =>
                         const NewPageProgressIndicator(),
+                    noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
                   ),
                   separatorBuilder: (context, index) => const SizedBox.shrink(),
                 )
@@ -387,6 +426,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         const FirstPageProgressIndicator(),
                     newPageProgressIndicatorBuilder: (_) =>
                         const NewPageProgressIndicator(),
+                    noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
                   ),
                   gridDelegate: FinampSettingsHelper
                           .finampSettings.useFixedSizeGridTiles
@@ -405,7 +445,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 );
 
           return RefreshIndicator(
-            onRefresh: () async => _refresh,
+            onRefresh: () async => _refresh(),
             child: box.get("FinampSettings")!.showFastScroller &&
                     settings.tabSortBy[widget.tabContentType] == SortBy.sortName
                 ? AlphabetList(
@@ -482,53 +522,55 @@ class _DeferredLoadingAlwaysScrollableScrollPhysics
 
 List<BaseItemDto> sortItems(
     List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
-  itemsToSort.sort((a, b) {
-    switch (sortBy ?? SortBy.sortName) {
-      case SortBy.sortName:
-        if (a.nameForSorting == null || b.nameForSorting == null) {
-          // Returning 0 is the same as both being the same
-          return 0;
-        } else {
-          return a.nameForSorting!.compareTo(b.nameForSorting!);
-        }
-      case SortBy.albumArtist:
-        if (a.albumArtist == null || b.albumArtist == null) {
-          return 0;
-        } else {
-          return a.albumArtist!.compareTo(b.albumArtist!);
-        }
-      case SortBy.communityRating:
-        if (a.communityRating == null || b.communityRating == null) {
-          return 0;
-        } else {
-          return a.communityRating!.compareTo(b.communityRating!);
-        }
-      case SortBy.criticRating:
-        if (a.criticRating == null || b.criticRating == null) {
-          return 0;
-        } else {
-          return a.criticRating!.compareTo(b.criticRating!);
-        }
-      case SortBy.dateCreated:
-        if (a.dateCreated == null || b.dateCreated == null) {
-          return 0;
-        } else {
-          return a.dateCreated!.compareTo(b.dateCreated!);
-        }
-      case SortBy.premiereDate:
-        if (a.premiereDate == null || b.premiereDate == null) {
-          return 0;
-        } else {
-          return a.premiereDate!.compareTo(b.premiereDate!);
-        }
-      case SortBy.random:
-        // We subtract the result by one so that we can get -1 values
-        // (see comareTo documentation)
-        return Random().nextInt(2) - 1;
-      default:
-        throw UnimplementedError("Unimplemented offline sort mode $sortBy");
-    }
-  });
+  if (sortBy == SortBy.random) {
+    itemsToSort.shuffle();
+  } else {
+    itemsToSort.sort((a, b) {
+      switch (sortBy ?? SortBy.sortName) {
+        case SortBy.sortName:
+          if (a.nameForSorting == null || b.nameForSorting == null) {
+            // Returning 0 is the same as both being the same
+            return 0;
+          } else {
+            return a.nameForSorting!.compareTo(b.nameForSorting!);
+          }
+        case SortBy.albumArtist:
+          if (a.albumArtist == null || b.albumArtist == null) {
+            return 0;
+          } else {
+            return a.albumArtist!.compareTo(b.albumArtist!);
+          }
+        case SortBy.communityRating:
+          if (a.communityRating == null || b.communityRating == null) {
+            return 0;
+          } else {
+            return a.communityRating!.compareTo(b.communityRating!);
+          }
+        case SortBy.criticRating:
+          if (a.criticRating == null || b.criticRating == null) {
+            return 0;
+          } else {
+            return a.criticRating!.compareTo(b.criticRating!);
+          }
+        case SortBy.dateCreated:
+          if (a.dateCreated == null || b.dateCreated == null) {
+            return 0;
+          } else {
+            return a.dateCreated!.compareTo(b.dateCreated!);
+          }
+        case SortBy.premiereDate:
+          if (a.premiereDate == null || b.premiereDate == null) {
+            return 0;
+          } else {
+            return a.premiereDate!.compareTo(b.premiereDate!);
+          }
+        // SortBy.random is handled outside this switch as per-comparison logic does not produce a good shuffle
+        default:
+          throw UnimplementedError("Unimplemented offline sort mode $sortBy");
+      }
+    });
+  }
+
   return sortOrder == SortOrder.descending
       ? itemsToSort.reversed.toList()
       : itemsToSort;

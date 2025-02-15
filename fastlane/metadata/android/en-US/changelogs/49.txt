@@ -1,0 +1,1 @@
+Updated dependencies, fixed F-Droid build. Changes are now only happening on the redesign beta, check it out on GitHub!

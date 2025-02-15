@@ -6,10 +6,10 @@ import '../../../models/finamp_models.dart';
 
 class HideTabToggle extends StatelessWidget {
   const HideTabToggle({
-    Key? key,
+    super.key,
     required this.index,
     required this.tabContentType,
-  }) : super(key: key);
+  });
 
   final TabContentType tabContentType;
   final int index;

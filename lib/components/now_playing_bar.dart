@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
+import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -10,6 +11,7 @@ import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -42,8 +44,8 @@ class NowPlayingBar extends ConsumerWidget {
                 blurRadius: 12.0,
                 spreadRadius: 8.0,
                 color: Theme.of(context).brightness == Brightness.light
-                    ? darkColorScheme.background.withOpacity(0.15)
-                    : darkColorScheme.background.withOpacity(0.7))
+                    ? darkColorScheme.surface.withOpacity(0.15)
+                    : darkColorScheme.surface.withOpacity(0.7))
           ]);
 
   Color getProgressBackgroundColor(BuildContext context) {
@@ -146,8 +148,13 @@ class NowPlayingBar extends ConsumerWidget {
     final progressBackgroundColor = getProgressBackgroundColor(context);
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+        child: Padding(
+      padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+      child: Semantics.fromProperties(
+        properties: SemanticsProperties(
+          label: AppLocalizations.of(context)!.nowPlayingBarTooltip,
+          button: true,
+        ),
         child: SimpleGestureDetector(
           onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
           child: Dismissible(
@@ -240,6 +247,8 @@ class NowPlayingBar extends ConsumerWidget {
                                           color: Color.fromRGBO(0, 0, 0, 0.3),
                                         ),
                                         child: IconButton(
+                                          tooltip: AppLocalizations.of(context)!
+                                              .togglePlaybackButtonTooltip,
                                           onPressed: () {
                                             FeedbackHelper.feedback(
                                                 FeedbackType.light);
@@ -381,92 +390,123 @@ class NowPlayingBar extends ConsumerWidget {
                                                                       .ellipsis),
                                                         ),
                                                       ),
-                                                      Row(
-                                                        children: [
-                                                          StreamBuilder<
-                                                                  Duration>(
-                                                              stream:
-                                                                  AudioService
-                                                                      .position,
-                                                              initialData:
-                                                                  audioHandler
-                                                                      .playbackState
-                                                                      .value
-                                                                      .position,
-                                                              builder: (context,
-                                                                  snapshot) {
-                                                                final TextStyle
-                                                                    style =
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.8),
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                );
-                                                                if (snapshot
-                                                                    .hasData) {
-                                                                  playbackPosition =
-                                                                      snapshot
-                                                                          .data;
-                                                                  return Text(
-                                                                    // '0:00',
-                                                                    playbackPosition!.inHours >=
-                                                                            1.0
-                                                                        ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
-                                                                        : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                                                                    style:
-                                                                        style,
-                                                                  );
-                                                                } else {
-                                                                  return Text(
-                                                                    "0:00",
-                                                                    style:
-                                                                        style,
-                                                                  );
-                                                                }
-                                                              }),
-                                                          const SizedBox(
-                                                              width: 2),
-                                                          Text(
-                                                            '/',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                      0.8),
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 2),
-                                                          Text(
-                                                            // '3:44',
-                                                            (mediaState.mediaItem?.duration
-                                                                            ?.inHours ??
-                                                                        0.0) >=
-                                                                    1.0
-                                                                ? "${mediaState.mediaItem?.duration?.inHours.toString()}:${((mediaState.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
-                                                                : "${mediaState.mediaItem?.duration?.inMinutes.toString()}:${((mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                      0.8),
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
+                                                      StreamBuilder<Duration>(
+                                                          stream: AudioService
+                                                              .position,
+                                                          initialData:
+                                                              audioHandler
+                                                                  .playbackState
+                                                                  .value
+                                                                  .position,
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (snapshot
+                                                                .hasData) {
+                                                              playbackPosition =
+                                                                  snapshot.data;
+                                                              final positionFullMinutes =
+                                                                  (playbackPosition
+                                                                              ?.inMinutes ??
+                                                                          0) %
+                                                                      60;
+                                                              final positionFullHours =
+                                                                  (playbackPosition
+                                                                          ?.inHours ??
+                                                                      0);
+                                                              final positionSeconds =
+                                                                  (playbackPosition
+                                                                              ?.inSeconds ??
+                                                                          0) %
+                                                                      60;
+                                                              final durationFullHours = (mediaState
+                                                                      .mediaItem
+                                                                      ?.duration
+                                                                      ?.inHours ??
+                                                                  0);
+                                                              final durationFullMinutes = (mediaState
+                                                                          .mediaItem
+                                                                          ?.duration
+                                                                          ?.inMinutes ??
+                                                                      0) %
+                                                                  60;
+                                                              final durationSeconds = (mediaState
+                                                                          .mediaItem
+                                                                          ?.duration
+                                                                          ?.inSeconds ??
+                                                                      0) %
+                                                                  60;
+                                                              return Semantics
+                                                                  .fromProperties(
+                                                                properties:
+                                                                    SemanticsProperties(
+                                                                  label:
+                                                                      "${positionFullHours > 0 ? "$positionFullHours hours " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes minutes " : ""}$positionSeconds seconds of ${durationFullHours > 0 ? "$durationFullHours hours " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes minutes " : ""}$durationSeconds seconds",
+                                                                ),
+                                                                excludeSemantics:
+                                                                    true,
+                                                                container: true,
+                                                                child: Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      printDuration(
+                                                                          playbackPosition,
+                                                                          leadingZeroes:
+                                                                              false),
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withOpacity(0.8),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            2),
+                                                                    Text(
+                                                                      '/',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withOpacity(0.8),
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            2),
+                                                                    Text(
+                                                                      // '3:44',
+                                                                      (mediaState.mediaItem?.duration?.inHours ?? 0.0) >=
+                                                                              1.0
+                                                                          ? "${mediaState.mediaItem?.duration?.inHours.toString()}:${((mediaState.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
+                                                                          : "${mediaState.mediaItem?.duration?.inMinutes.toString()}:${((mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withOpacity(0.8),
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            } else {
+                                                              return const SizedBox
+                                                                  .shrink();
+                                                            }
+                                                          })
                                                     ],
                                                   ),
                                                 ],
@@ -512,7 +552,7 @@ class NowPlayingBar extends ConsumerWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 
   @override
@@ -536,28 +576,32 @@ class NowPlayingBar extends ConsumerWidget {
                   color: imageTheme.primary,
                 ),
           ),
-          child: StreamBuilder<FinampQueueInfo?>(
-              stream: queueService.getQueueStream(),
-              initialData: queueService.getQueue(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData &&
-                    snapshot.data!.saveState == SavedQueueState.loading &&
-                    !usingPlayerSplitScreen) {
-                  return buildLoadingQueueBar(context, null);
-                } else if (snapshot.hasData &&
-                    snapshot.data!.saveState == SavedQueueState.failed &&
-                    !usingPlayerSplitScreen) {
-                  return buildLoadingQueueBar(
-                      context, queueService.retryQueueLoad);
-                } else if (snapshot.hasData &&
-                    snapshot.data!.currentTrack != null &&
-                    !usingPlayerSplitScreen) {
-                  return buildNowPlayingBar(
-                      context, snapshot.data!.currentTrack!);
-                } else {
-                  return const SizedBox.shrink();
-                }
-              }),
+          // Scaffold ignores system elements padding if bottom bar is present, so we must
+          // use SafeArea in all cases to include it in our height
+          child: SafeArea(
+            child: StreamBuilder<FinampQueueInfo?>(
+                stream: queueService.getQueueStream(),
+                initialData: queueService.getQueue(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData &&
+                      snapshot.data!.saveState == SavedQueueState.loading &&
+                      !usingPlayerSplitScreen) {
+                    return buildLoadingQueueBar(context, null);
+                  } else if (snapshot.hasData &&
+                      snapshot.data!.saveState == SavedQueueState.failed &&
+                      !usingPlayerSplitScreen) {
+                    return buildLoadingQueueBar(
+                        context, queueService.retryQueueLoad);
+                  } else if (snapshot.hasData &&
+                      snapshot.data!.currentTrack != null &&
+                      !usingPlayerSplitScreen) {
+                    return buildNowPlayingBar(
+                        context, snapshot.data!.currentTrack!);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }),
+          ),
         ));
   }
 }

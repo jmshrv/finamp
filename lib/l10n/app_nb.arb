@@ -31,8 +31,6 @@
   "@productionYear": {},
   "runtime": "Lengde",
   "@runtime": {},
-  "downloadErrorsTitle": "Nedlastingsfeil",
-  "@downloadErrorsTitle": {},
   "required": "Påkrevd",
   "@required": {},
   "shareLogs": "Del logger",
@@ -78,10 +76,6 @@
   "@noArtist": {},
   "unknownArtist": "Ukjent artist",
   "@unknownArtist": {},
-  "downloaded": "Nedlastet",
-  "@downloaded": {},
-  "statusError": "Statusfeil",
-  "@statusError": {},
   "addToQueue": "Legg til i kø",
   "@addToQueue": {},
   "replaceQueue": "Erstatt kø",
@@ -106,8 +100,6 @@
   "@playlistNameUpdated": {},
   "criticRating": "Kritikervurdering",
   "@criticRating": {},
-  "downloadErrors": "Nedlastingsfeil",
-  "@downloadErrors": {},
   "artist": "Artist",
   "@artist": {},
   "budget": "Budsjett",
@@ -192,16 +184,10 @@
   "@addToMix": {},
   "minutes": "Minutter",
   "@minutes": {},
-  "transcode": "Transkod",
-  "@transcode": {},
-  "streaming": "Strømming",
-  "@streaming": {},
   "queue": "Kø",
   "@queue": {},
   "instantMix": "Umiddelbar miks",
   "@instantMix": {},
-  "direct": "Direkte",
-  "@direct": {},
   "startingInstantMix": "Starter umiddelbar miks …",
   "@startingInstantMix": {},
   "responseError401": "{error} Statuskode {statusCode}. Dette betyr antagelig at du bruker feil brukernavn eller passord, eller at klienten din ikke lenger er innloget.",
@@ -224,10 +210,6 @@
         "type": "int"
       }
     }
-  },
-  "urlStartWithHttps": "Nettadressen må starte med http:// eller https://",
-  "@urlStartWithHttps": {
-    "description": "Error message that shows when the user submits a server URL that doesn't start with http:// or https:// (for example, ftp://0.0.0.0"
   },
   "dlComplete": "{count} fullført",
   "@dlComplete": {
@@ -283,10 +265,6 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "urlTrailingSlash": "Nettadressen kan ikke inneholde avsluttende skråstrek",
-  "@urlTrailingSlash": {
-    "description": "Error message that shows when the user submits a server URL that ends with a trailing slash (for example, http://0.0.0.0/)"
-  },
   "internalExternalIpExplanation": "Hvis du vil ha tilgang til Jellyfin-tjeneren din annensteds fra må du bruke din eksterne IP-adresse.\n\nHvis tjeneren din er på en HTTP-port (80/443) må du angi en port. Dette er sannsynligvis tilfelle hvis tjeneren din er bak en omvendt mellomtjener.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
@@ -320,14 +298,6 @@
       }
     }
   },
-  "downloadedItemsCount": "{count,plural,=1{{count} element} other{{count} elementer}}",
-  "@downloadedItemsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "error": "Feil",
   "@error": {},
   "discNumber": "Disk {number}",
@@ -342,22 +312,6 @@
   "@playButtonLabel": {},
   "editPlaylistNameTooltip": "Rediger spillelistenavn",
   "@editPlaylistNameTooltip": {},
-  "downloadedItemsImagesCount": "{downloadedItems}, {downloadedImages}",
-  "@downloadedItemsImagesCount": {
-    "description": "This is for merging downloadedItemsCount and downloadedImagesCount as Flutter's intl stuff doesn't support multiple plurals in one string. https://github.com/flutter/flutter/issues/86906",
-    "placeholders": {
-      "downloadedItems": {
-        "type": "String",
-        "example": "12 downloads"
-      },
-      "downloadedImages": {
-        "type": "String",
-        "example": "1 image"
-      }
-    }
-  },
-  "noErrors": "Ingen feil.",
-  "@noErrors": {},
   "stackTrace": "Stabelspor",
   "@stackTrace": {},
   "applicationLegalese": "Lisensiert MPL 2.0, med kildekode tilgjengelig på\n\ngithub.com/jmshrv/finamp",
@@ -380,14 +334,6 @@
   "@location": {},
   "downloadLocations": "Nedlastingssteder",
   "@downloadLocations": {},
-  "downloadedImagesCount": "{count,plural,=1{{count} bilde} other{{count} bilder}}",
-  "@downloadedImagesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "errorScreenError": "En feil inntraff under innhenting av listen over feil. Herfra bør du kanskje opprette en feilrapport på GitHub og slette programdataen.",
   "@errorScreenError": {},
   "songCount": "{count,plural,=1{{count} spor} other{{count} spor}}",
