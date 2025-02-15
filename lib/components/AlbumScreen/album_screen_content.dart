@@ -86,7 +86,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
             DownloadButton(
                 item: DownloadStub.fromItem(
                     type: DownloadItemType.collection, item: widget.parent),
-                children: widget.displayChildren.length)
+                children: widget.displayChildren)
           ],
         ),
         if (widget.displayChildren.length > 1 &&

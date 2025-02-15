@@ -74,10 +74,10 @@ packages:
     dependency: "direct main"
     description:
       name: audio_service_mpris
-      sha256: b16db3584a4b2464c0bfd575c1a21765723d257931222f8adfcb0511f940d352
+      sha256: fdab1ae1f659c6db36d5cc396e46e4ee9663caefa6153f8453fcd01d57567c08
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.5"
+    version: "0.2.0"
   audio_service_platform_interface:
     dependency: "direct main"
     description:

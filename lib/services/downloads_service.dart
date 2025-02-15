@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -692,6 +691,17 @@ class DownloadsService {
         syncItemDownloadSettings(item);
       }
     });
+    _isar.writeTxnSync(() {
+      var itemsWithFiles = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.song)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
+          .findAllSync();
+      for (var item in itemsWithFiles) {
+        syncItemDownloadSettings(item);
+      }
+    });
     markOutdatedTranscodes();
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
@@ -933,9 +943,6 @@ class DownloadsService {
   /// location and transcode settings with the highest quality are selected.
   /// This should only be called inside an isar write transaction.
   void syncItemDownloadSettings(DownloadItem item) {
-    if (item.type == DownloadItemType.image) {
-      return;
-    }
     var transcodeProfiles =
         item.requiredBy.filter().syncTranscodingProfileProperty().findAllSync();
     if (transcodeProfiles.isEmpty) {
@@ -944,27 +951,25 @@ class DownloadsService {
       return;
     }
     transcodeProfiles.add(item.userTranscodingProfile);
-    if (transcodeProfiles.whereNotNull().isEmpty) {
+    if (transcodeProfiles.nonNulls.isEmpty) {
       _downloadsLogger
           .severe("No valid download profiles for required item ${item.name}");
       return;
     }
 
     // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    DownloadProfile bestProfile = transcodeProfiles
-        .whereNotNull()
+    DownloadProfile bestProfile = transcodeProfiles.nonNulls
         .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
         .first;
-    if (!transcodeProfiles
-            .whereNotNull()
-            .contains(item.syncTranscodingProfile) ||
-        bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000)) {
+    if (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
+        (bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000) &&
+            item.type != DownloadItemType.image)) {
       _downloadsLogger.finest("Updating download settings for ${item.name}");
       item.syncTranscodingProfile = bestProfile;
       if ((item.state == DownloadItemState.enqueued ||
               item.state == DownloadItemState.downloading ||
               item.state == DownloadItemState.complete) &&
-          item.type == DownloadItemType.song &&
+          item.type.hasFiles &&
           FinampSettingsHelper.finampSettings.shouldRedownloadTranscodes) {
         if (item.state == DownloadItemState.complete) {
           updateItemState(item, DownloadItemState.needsRedownloadComplete,
@@ -990,6 +995,8 @@ class DownloadsService {
       var items = _isar.downloadItems
           .where()
           .typeEqualTo(DownloadItemType.song)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
           .filter()
           .not()
           .stateEqualTo(DownloadItemState.notDownloaded)

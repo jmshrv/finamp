@@ -62,7 +62,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                   relatedTo: widget.parent);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
-          return artistAlbums.map((e) => e.baseItem).whereNotNull().toList();
+          return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
         }),
       ]);
       allSongs = Future.sync(() async {
@@ -144,7 +144,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 DownloadButton(
                     item: DownloadStub.fromItem(
                         item: widget.parent, type: DownloadItemType.collection),
-                    children: albums.length)
+                    children: albums)
               ],
             ),
             if (!isOffline &&
