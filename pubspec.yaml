@@ -43,7 +43,7 @@ dependencies:
       path: libs/windows/media_kit_libs_windows_audio
   smtc_windows: ^1.0.0
   audio_service: ^0.18.15
-  audio_service_mpris: ^0.2.0
+  audio_service_mpris: ^0.1.5
   audio_service_platform_interface: ^0.1.1
   audio_session: ^0.1.21
   rxdart: ^0.28.0

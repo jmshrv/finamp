@@ -141,6 +141,7 @@ class DefaultSettings {
   static const downloadWorkers = 5;
   static const maxConcurrentDownloads = 10;
   static const downloadSizeWarningCutoff = 150;
+  static const oneLineMarqueeTextButton = false;
 }
 
 @HiveType(typeId: 28)
@@ -248,7 +249,9 @@ class FinampSettings {
       this.transcodingSegmentContainer =
           DefaultSettings.transcodingSegmentContainer,
       this.downloadSizeWarningCutoff =
-          DefaultSettings.downloadSizeWarningCutoff});
+          DefaultSettings.downloadSizeWarningCutoff,
+    this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
+      });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -513,6 +516,10 @@ class FinampSettings {
 
   @HiveField(80, defaultValue: DefaultSettings.downloadSizeWarningCutoff)
   int downloadSizeWarningCutoff;
+
+  @HiveField(81, defaultValue: DefaultSettings.oneLineMarqueeTextButton)
+  bool oneLineMarqueeTextButton;
+
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

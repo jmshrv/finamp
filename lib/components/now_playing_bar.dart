@@ -7,6 +7,7 @@ import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -146,7 +147,8 @@ class NowPlayingBar extends ConsumerWidget {
 
     final progressBackgroundColor = getProgressBackgroundColor(context);
 
-    return Padding(
+    return SafeArea(
+        child: Padding(
       padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
       child: Semantics.fromProperties(
         properties: SemanticsProperties(
@@ -342,15 +344,25 @@ class NowPlayingBar extends ConsumerWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    currentTrack.item.title,
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
+                                                  SizedBox(
+                                                    height: 20,
+                                                    child: OneLineMarqueeHelper(
+                                                      key: ValueKey(
+                                                          currentTrack.item.id),
+                                                      text: currentTrack
+                                                          .item.title,
+                                                      style: TextStyle(
                                                         fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
+                                                        height: 26 / 20,
+                                                        color: Colors.white,
+                                                        fontWeight: Theme.of(
+                                                                        context)
+                                                                    .brightness ==
+                                                                Brightness.light
+                                                            ? FontWeight.w500
+                                                            : FontWeight.w600,
+                                                      ),
+                                                    ),
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Row(
@@ -540,7 +552,7 @@ class NowPlayingBar extends ConsumerWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 
   @override

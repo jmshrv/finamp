@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/finamp_models.dart';
@@ -334,6 +335,8 @@ class FinampSettingsHelper {
         DefaultSettings.showStopButtonOnMediaNotification;
     finampSettingsTemp.showSeekControlsOnMediaNotification =
         DefaultSettings.showSeekControlsOnMediaNotification;
+    finampSettingsTemp.oneLineMarqueeTextButton =
+        DefaultSettings.oneLineMarqueeTextButton;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -441,6 +444,8 @@ class FinampSettingsHelper {
     finampSettingsTemp.downloadWorkers = DefaultSettings.downloadWorkers;
     finampSettingsTemp.maxConcurrentDownloads =
         DefaultSettings.maxConcurrentDownloads;
+    finampSettingsTemp.downloadSizeWarningCutoff =
+        DefaultSettings.downloadSizeWarningCutoff;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
