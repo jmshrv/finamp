@@ -75,11 +75,13 @@ import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
 import 'setup_logging.dart';
+import 'services/metadata_helper.dart';
 
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
   try {
+    await setupLocator();
     await setupLogging();
     await _setupEdgeToEdgeOverlayStyle();
     await setupHive();
