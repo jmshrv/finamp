@@ -16,6 +16,7 @@ import '../../screens/artist_screen.dart';
 import '../../services/downloads_service.dart';
 import '../../services/favorite_provider.dart';
 import '../../services/jellyfin_api_helper.dart';
+import '../AddToPlaylistScreen/playlist_actions_menu.dart';
 import '../AlbumScreen/download_dialog.dart';
 import '../global_snackbar.dart';
 import 'album_item_card.dart';
@@ -34,6 +35,7 @@ enum _AlbumListTileMenuItems {
   addToQueue,
   shuffleToQueue,
   goToArtist,
+  addToPlaylist,
 }
 
 //TODO should this be unified with artist screen version?
@@ -274,6 +276,13 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                 title: Text(AppLocalizations.of(context)!.goToArtist),
               ),
             ),
+          PopupMenuItem<_AlbumListTileMenuItems>(
+            value: _AlbumListTileMenuItems.addToPlaylist,
+            child: ListTile(
+              leading: const Icon(Icons.playlist_add),
+              title: Text(local.addToPlaylistTitle),
+            ),
+          ),
         ],
       );
 
@@ -610,8 +619,8 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             GlobalSnackbar.error(e);
             return;
           }
-          if (mounted) {
-            Navigator.of(context)
+          if (context.mounted) {
+            await Navigator.of(context)
                 .pushNamed(ArtistScreen.routeName, arguments: artist);
           }
         case null:
@@ -624,6 +633,14 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
           await downloadsService.deleteDownload(stub: item);
+        case _AlbumListTileMenuItems.addToPlaylist:
+          if (context.mounted) {
+            await showPlaylistActionsMenu(
+              context: context,
+              item: widget.album,
+              parentPlaylist: null,
+            );
+          }
       }
     }
 

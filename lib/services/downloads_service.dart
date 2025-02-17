@@ -1456,7 +1456,7 @@ class DownloadsService {
   /// needed, such as when building ImageProviders.  Exactly one of the two arguments
   /// should be provided.
   DownloadItem? getImageDownload({BaseItemDto? item, String? blurHash}) {
-    assert((item?.blurHash == null) != (blurHash == null));
+    assert((item == null) != (blurHash == null));
     String? imageId = blurHash ?? item!.blurHash ?? item!.imageId;
     if (imageId == null) {
       return null;
