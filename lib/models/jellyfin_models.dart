@@ -3362,6 +3362,7 @@ class NewPlaylist {
     required this.ids,
     this.userId,
     this.mediaType,
+    this.isPublic,
   });
 
   /// Gets or sets the name of the new playlist.
@@ -3376,6 +3377,9 @@ class NewPlaylist {
 
   /// Gets or sets the media type.
   String? mediaType;
+
+  /// Whether the playlist should be publicly visible
+  bool? isPublic;
 
   factory NewPlaylist.fromJson(Map<String, dynamic> json) =>
       _$NewPlaylistFromJson(json);
