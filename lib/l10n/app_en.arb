@@ -1629,11 +1629,11 @@
   "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded.",
   "showProgressOnNowPlayingBarTitle": "Show track progress on in-app miniplayer",
   "@showProgressOnNowPlayingBarTitle": {
-    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar.",
+  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar.",
   "@showProgressOnNowPlayingBarSubtitle": {
-    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
   "lyricsScreen": "Lyrics View",
   "@lyricsScreen": {
