@@ -1788,7 +1788,7 @@
   "@showFeatureChipsToggleTitle": {
     "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bit rate, and more on the player screen.",
+  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bitrate, and more on the player screen.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
