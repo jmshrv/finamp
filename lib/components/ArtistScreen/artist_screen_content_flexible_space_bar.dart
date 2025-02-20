@@ -35,13 +35,13 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     super.key,
     required this.parentItem,
     required this.isGenre,
-    required this.allSongs,
+    required this.allTracks,
     required this.albumCount,
   });
 
   final BaseItemDto parentItem;
   final bool isGenre;
-  final Future<List<BaseItemDto>?> allSongs;
+  final Future<List<BaseItemDto>?> allTracks;
   final int albumCount;
 
   @override
@@ -206,14 +206,14 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     }
 
     void shuffleAlbumsFromArtist(List<BaseItemDto> items) {
-      var songs =
+      var tracks =
           (items.groupListsBy((element) => element.albumId).values.toList()
                 ..shuffle())
               .flattened
               .toList();
 
       queueService.startPlayback(
-        items: songs,
+        items: tracks,
         source: QueueItemSource(
           type:
               isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
@@ -229,14 +229,14 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     }
 
     void shuffleAlbumsFromArtistNext(List<BaseItemDto> items) {
-      var songs =
+      var tracks =
           (items.groupListsBy((element) => element.albumId).values.toList()
                 ..shuffle())
               .flattened
               .toList();
 
       queueService.addNext(
-        items: songs,
+        items: tracks,
         source: QueueItemSource(
           type: isGenre
               ? QueueItemSourceType.genre
@@ -255,14 +255,14 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     }
 
     void shuffleAlbumsFromArtistToNextUp(List<BaseItemDto> items) {
-      var songs =
+      var tracks =
           (items.groupListsBy((element) => element.albumId).values.toList()
                 ..shuffle())
               .flattened
               .toList();
 
       queueService.addToNextUp(
-        items: songs,
+        items: tracks,
         source: QueueItemSource(
           type: isGenre
               ? QueueItemSourceType.genre
@@ -281,14 +281,14 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     }
 
     void shuffleAlbumsFromArtistToQueue(List<BaseItemDto> items) {
-      var songs =
+      var tracks =
           (items.groupListsBy((element) => element.albumId).values.toList()
                 ..shuffle())
               .flattened
               .toList();
 
       queueService.addToQueue(
-        items: songs,
+        items: tracks,
         source: QueueItemSource(
           type:
               isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
@@ -324,12 +324,12 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 4),
                     ),
                     FutureBuilder(
-                      future: allSongs,
+                      future: allTracks,
                       builder: (context, snapshot) => Expanded(
                         flex: 2,
                         child: ArtistItemInfo(
                           item: parentItem,
-                          itemSongs: snapshot.data?.length ?? 0,
+                          itemTracks: snapshot.data?.length ?? 0,
                           itemAlbums: albumCount,
                         ),
                       ),
@@ -353,7 +353,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     text: AppLocalizations.of(context)!
                                         .playButtonLabel,
                                     icon: TablerIcons.player_play,
-                                    onPressed: () => allSongs.then((items) =>
+                                    onPressed: () => allTracks.then((items) =>
                                         playAllFromArtist(items ?? [])),
                                     // set the minimum width as 25% of the screen width,
                                     minWidth:
@@ -409,51 +409,51 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                         (ArtistMenuItems selection) async {
                                       switch (selection) {
                                         case ArtistMenuItems.playNext:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               addArtistNext(items ?? []));
                                           break;
                                         case ArtistMenuItems.addToNextUp:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               addArtistToNextUp(items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleNext:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAllFromArtistNext(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleToNextUp:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAllFromArtistToNextUp(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems.addToQueue:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               addArtistToQueue(items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleToQueue:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAllFromArtistToQueue(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleAlbums:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAlbumsFromArtist(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleAlbumsNext:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAlbumsFromArtistNext(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems
                                               .shuffleAlbumsToNextUp:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAlbumsFromArtistToNextUp(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems
                                               .shuffleAlbumsToQueue:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAlbumsFromArtistToQueue(
                                                   items ?? []));
                                           break;
@@ -472,7 +472,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                     text: AppLocalizations.of(context)!
                                         .shuffleButtonLabel,
                                     icon: TablerIcons.arrows_shuffle,
-                                    onPressed: () => allSongs.then((items) =>
+                                    onPressed: () => allTracks.then((items) =>
                                         shuffleAllFromArtist(items ?? [])),
                                     // set the minimum width as 25% of the screen width,
                                     minWidth:
@@ -576,51 +576,51 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                         (ArtistMenuItems selection) async {
                                       switch (selection) {
                                         case ArtistMenuItems.playNext:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               addArtistNext(items ?? []));
                                           break;
                                         case ArtistMenuItems.addToNextUp:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               addArtistToNextUp(items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleNext:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAllFromArtistNext(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleToNextUp:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAllFromArtistToNextUp(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems.addToQueue:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               addArtistToQueue(items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleToQueue:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAllFromArtistToQueue(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleAlbums:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAlbumsFromArtist(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems.shuffleAlbumsNext:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAlbumsFromArtistNext(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems
                                               .shuffleAlbumsToNextUp:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAlbumsFromArtistToNextUp(
                                                   items ?? []));
                                           break;
                                         case ArtistMenuItems
                                               .shuffleAlbumsToQueue:
-                                          allSongs.then((items) =>
+                                          allTracks.then((items) =>
                                               shuffleAlbumsFromArtistToQueue(
                                                   items ?? []));
                                           break;

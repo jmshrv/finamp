@@ -38,7 +38,7 @@ class _LogoutListTileState extends State<LogoutListTile> {
       subtitle: FinampSettingsHelper.finampSettings.isOffline
           ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
           : Text(
-              AppLocalizations.of(context)!.downloadedSongsWillNotBeDeleted,
+              AppLocalizations.of(context)!.downloadedTracksWillNotBeDeleted,
               style: const TextStyle(color: Colors.red),
             ),
       enabled: !FinampSettingsHelper.finampSettings.isOffline,

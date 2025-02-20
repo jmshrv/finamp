@@ -34,7 +34,7 @@ final currentAlbumImageProvider = Provider<(ImageProvider?, String?)>((ref) {
     }
   }
 
-  final currentTrack = ref.watch(currentSongProvider).value?.baseItem;
+  final currentTrack = ref.watch(currentTrackProvider).value?.baseItem;
   if (currentTrack != null) {
     final request = AlbumImageRequest(
       item: currentTrack,
@@ -44,5 +44,5 @@ final currentAlbumImageProvider = Provider<(ImageProvider?, String?)>((ref) {
   return (null, null);
 });
 
-final currentSongProvider = StreamProvider(
+final currentTrackProvider = StreamProvider(
     (_) => GetIt.instance<QueueService>().getCurrentTrackStream());

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
@@ -46,7 +46,7 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
 
     void menuCallback() async {
       unawaited(Feedback.forLongPress(context));
-      await showModalSongMenu(
+      await showModalTrackMenu(
           context: context, item: baseItem, themeProvider: _menuTheme);
     }
 

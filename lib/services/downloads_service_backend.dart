@@ -258,7 +258,7 @@ class IsarTaskQueue implements TaskQueue {
         .or()
         .stateEqualTo(DownloadItemState.downloading)
         .filter()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.track)
         .or()
         .typeEqualTo(DownloadItemType.image)
         .findAllSync()) {
@@ -342,8 +342,8 @@ class IsarTaskQueue implements TaskQueue {
             // Base URL shouldn't be null at this point (user has to be logged in
             // to get to the point where they can add downloads).
             var url = switch (task.type) {
-              DownloadItemType.song => _jellyfinApiData
-                  .getSongDownloadUrl(
+              DownloadItemType.track => _jellyfinApiData
+                  .getTrackDownloadUrl(
                       item: task.baseItem!,
                       transcodingProfile: task.fileTranscodingProfile)
                   .toString(),
@@ -557,7 +557,7 @@ class DownloadsDeleteService {
   }
 
   /// This processes a node for potential deletion based on incoming info and requires links.
-  /// Required nodes will not be altered.  Info song nodes will have downloaded files
+  /// Required nodes will not be altered.  Info track nodes will have downloaded files
   /// deleted and info links cleared.  Other types of info node will have requires links
   /// cleared.  Nodes with no incoming links at all are deleted.  All unlinked children
   /// are added to delete buffer fro recursive sync deleting.
@@ -620,8 +620,8 @@ class DownloadsDeleteService {
           return;
         }
         if (infoForCount > 0) {
-          if (transactionItem.type == DownloadItemType.song) {
-            // Non-required songs cannot have info links to collections, but they
+          if (transactionItem.type == DownloadItemType.track) {
+            // Non-required tracks cannot have info links to collections, but they
             // can still require their images.
             childIds.addAll(
                 transactionItem.info.filter().isarIdProperty().findAllSync());
@@ -675,15 +675,15 @@ class DownloadsDeleteService {
     }
 
     if (item.file != null && item.fileDownloadLocation!.useHumanReadableNames) {
-      Directory songDirectory = item.file!.parent;
+      Directory trackDirectory = item.file!.parent;
       try {
-        if (await songDirectory.list().isEmpty) {
-          _deleteLogger.info("${songDirectory.path} is empty, deleting");
-          await songDirectory.delete();
+        if (await trackDirectory.list().isEmpty) {
+          _deleteLogger.info("${trackDirectory.path} is empty, deleting");
+          await trackDirectory.delete();
         }
       } on PathNotFoundException {
         _deleteLogger
-            .finer("Directory ${songDirectory.path} missing during delete.");
+            .finer("Directory ${trackDirectory.path} missing during delete.");
       }
     }
 
@@ -694,7 +694,7 @@ class DownloadsDeleteService {
             transactionItem, DownloadItemState.notDownloaded);
       }
 
-      if (item.type == DownloadItemType.song) {
+      if (item.type == DownloadItemType.track) {
         // delete corresponding lyrics if they exist, using the same ID
         if (_isar.downloadedLyrics.deleteSync(item.isarId)) {
           _deleteLogger.finer("Deleted lyrics for ${item.name}");
@@ -863,7 +863,7 @@ class DownloadsSyncService {
   /// Syncs a downloaded item with the latest data from the server, then recursively
   /// syncs children.  The item should already be present in Isar.  Items can be synced
   /// as required or info.  Info collections will only have info child nodes, and info
-  /// songs will only have required nodes.  Info songs will not be downloaded.
+  /// tracks will only have required nodes.  Info tracks will not be downloaded.
   /// Image/anchor nodes always process as required, so this flag has no effect.  Nodes
   /// processed as info may be required via another parent, so children/files only needed
   /// for required nodes should be left in place, and will be handled by [_syncDelete]
@@ -976,7 +976,7 @@ class DownloadsSyncService {
           infoChildren.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
-      case DownloadItemType.song:
+      case DownloadItemType.track:
         var item = newBaseItem ?? parent.baseItem!;
         if ((item.blurHash ?? item.imageId) != null) {
           requiredChildren.add(
@@ -1087,8 +1087,8 @@ class DownloadsSyncService {
           requiredChanges =
               _updateChildren(canonParent!, true, requiredChildren);
           infoChanges = _updateChildren(canonParent!, false, infoChildren);
-        } else if (canonParent!.type == DownloadItemType.song) {
-          // For info only songs, we put image link into required so that we can delete
+        } else if (canonParent!.type == DownloadItemType.track) {
+          // For info only tracks, we put image link into required so that we can delete
           // all info links in _syncDelete, so if not processing as required only
           // update that and ignore info links
           requiredChanges =
@@ -1102,7 +1102,7 @@ class DownloadsSyncService {
             canonParent!.type == DownloadItemType.collection &&
             !canonParent!.baseItemType.expectChangesInChildren &&
             canonParent!.state == DownloadItemState.complete) {
-          // When quicksyncing, unchanged songs/albums do not need to be resynced.
+          // When quicksyncing, unchanged tracks/albums do not need to be resynced.
           // Items we just linked may need download settings updated.
           var quicksyncRequiredIds =
               requiredChanges.$1.union(requiredChanges.$2);
@@ -1116,7 +1116,7 @@ class DownloadsSyncService {
               viewId);
         }
         // If we are a collection, move out of syncFailed because we just completed a
-        // successful sync.  songs/images will be moved out by _initiateDownload.
+        // successful sync.  tracks/images will be moved out by _initiateDownload.
         // If our linked children just changed, recalculate state with new children.
         if (!canonParent!.type.hasFiles &&
             (canonParent!.state == DownloadItemState.syncFailed ||
@@ -1273,8 +1273,8 @@ class DownloadsSyncService {
     assert(parent.baseItemType.downloadType == DownloadItemType.collection);
     switch (parent.baseItemType) {
       case BaseItemDtoType.playlist || BaseItemDtoType.album:
-        childType = DownloadItemType.song;
-        childFilter = BaseItemDtoType.song;
+        childType = DownloadItemType.track;
+        childFilter = BaseItemDtoType.track;
         fields =
             "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName";
         sortOrder = "ParentIndexNumber,IndexNumber,SortName";
@@ -1312,20 +1312,20 @@ class DownloadsSyncService {
       var childStubs = childItems
           .map((e) => DownloadStub.fromItem(type: childType, item: e))
           .toList();
-      // If we are a library, we need to get orphan songs to download in addition to
-      // songs which are contained in albums.
+      // If we are a library, we need to get orphan tracks to download in addition to
+      // tracks which are contained in albums.
       if (parent.baseItemType == BaseItemDtoType.library) {
-        var songChildItems = await _jellyfinApiData.getItems(
+        var trackChildItems = await _jellyfinApiData.getItems(
                 parentItem: item,
-                includeItemTypes: BaseItemDtoType.song.idString,
+                includeItemTypes: BaseItemDtoType.track.idString,
                 recursive: false,
                 fields:
                     "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName") ??
             [];
-        childItems.addAll(songChildItems);
-        var songChildStubs = songChildItems.map(
-            (e) => DownloadStub.fromItem(type: DownloadItemType.song, item: e));
-        childStubs.addAll(songChildStubs);
+        childItems.addAll(trackChildItems);
+        var trackChildStubs = trackChildItems.map(
+            (e) => DownloadStub.fromItem(type: DownloadItemType.track, item: e));
+        childStubs.addAll(trackChildStubs);
       }
       itemFetch.complete(childItems.map((e) => e.id).toList());
       for (var element in childStubs) {
@@ -1461,7 +1461,7 @@ class DownloadsSyncService {
     if (stub.baseItem?.sortName == null) {
       return true;
     }
-    if (stub.type == DownloadItemType.song &&
+    if (stub.type == DownloadItemType.track &&
         (stub.baseItem?.mediaSources == null ||
             stub.baseItem?.mediaStreams == null)) {
       return true;
@@ -1492,8 +1492,8 @@ class DownloadsSyncService {
     }
 
     switch (item.type) {
-      case DownloadItemType.song:
-        return _downloadSong(item);
+      case DownloadItemType.track:
+        return _downloadTrack(item);
       case DownloadItemType.image:
         return _downloadImage(item);
       case _:
@@ -1501,15 +1501,15 @@ class DownloadsSyncService {
     }
   }
 
-  /// Removes unsafe characters from file names.  Used by [_downloadSong] and
+  /// Removes unsafe characters from file names.  Used by [_downloadTrack] and
   /// [_downloadImage] for human readable download locations.
   String? _filesystemSafe(String? unsafe) =>
       unsafe?.replaceAll(RegExp('[/?<>\\:*|"]'), "_");
 
-  /// Prepares for downloading of a given song by filling in the path information
+  /// Prepares for downloading of a given track by filling in the path information
   /// and media sources, and marking item as enqueued in isar.
-  Future<void> _downloadSong(DownloadItem downloadItem) async {
-    assert(downloadItem.type == DownloadItemType.song &&
+  Future<void> _downloadTrack(DownloadItem downloadItem) async {
+    assert(downloadItem.type == DownloadItemType.track &&
         downloadItem.syncDownloadLocation != null);
     var item = downloadItem.baseItem!;
     var downloadLocation = downloadItem.syncDownloadLocation!;
@@ -1543,12 +1543,12 @@ class DownloadsSyncService {
       }
       subDirectory =
           path_helper.join("Finamp", _filesystemSafe(item.albumArtist));
-      // We use a regex to filter out bad characters from song/album names.
+      // We use a regex to filter out bad characters from track/album names.
       fileName = _filesystemSafe(
           "${item.album} - ${item.indexNumber ?? 0} - ${item.name}$extension")!;
     } else {
       fileName = "${item.id}$extension";
-      subDirectory = "songs";
+      subDirectory = "tracks";
     }
 
     if (downloadLocation.baseDirectory.baseDirectory == BaseDirectory.root) {
@@ -1594,7 +1594,7 @@ class DownloadsSyncService {
       canonItem.fileTranscodingProfile = canonItem.syncTranscodingProfile;
       if (canonItem.state != DownloadItemState.notDownloaded) {
         _syncLogger.severe(
-            "Song ${canonItem.name} changed state to ${canonItem.state} while initiating download.");
+            "Track ${canonItem.name} changed state to ${canonItem.state} while initiating download.");
       } else {
         _downloadsService.updateItemState(canonItem, DownloadItemState.enqueued,
             alwaysPut: true);
@@ -1607,7 +1607,7 @@ class DownloadsSyncService {
     });
   }
 
-  /// Prepares for downloading of a given song by filling in the path information
+  /// Prepares for downloading of a given track by filling in the path information
   /// and marking item as enqueued in isar.
   Future<void> _downloadImage(DownloadItem downloadItem) async {
     assert(downloadItem.type == DownloadItemType.image &&

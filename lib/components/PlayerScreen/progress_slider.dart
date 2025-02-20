@@ -251,7 +251,7 @@ class __PlaybackProgressSliderState
               .timeFractionTooltip(positionString, durationString);
         },
         secondaryTrackValue:
-            widget.mediaItem?.extras?["downloadedSongPath"] == null
+            widget.mediaItem?.extras?["downloadedTrackPath"] == null
                 ? widget.playbackState.bufferedPosition.inMicroseconds
                     .clamp(
                       0.0,

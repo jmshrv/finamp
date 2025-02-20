@@ -252,20 +252,20 @@ class MenuMask extends SingleChildRenderObjectWidget {
   final double height;
 
   @override
-  RenderSongMenuMask createRenderObject(BuildContext context) {
-    return RenderSongMenuMask(height);
+  RenderTrackMenuMask createRenderObject(BuildContext context) {
+    return RenderTrackMenuMask(height);
   }
 
   @override
   void updateRenderObject(
-      BuildContext context, RenderSongMenuMask renderObject) {
+      BuildContext context, RenderTrackMenuMask renderObject) {
     renderObject.updateHeight(height);
     super.updateRenderObject(context, renderObject);
   }
 }
 
-class RenderSongMenuMask extends RenderProxySliver {
-  RenderSongMenuMask(this.height);
+class RenderTrackMenuMask extends RenderProxySliver {
+  RenderTrackMenuMask(this.height);
 
   double height;
 

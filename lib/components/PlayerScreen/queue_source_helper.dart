@@ -46,13 +46,13 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
       Navigator.of(context)
           .pushNamed(ArtistScreen.routeName, arguments: source.item);
       break;
-    case QueueItemSourceType.allSongs:
+    case QueueItemSourceType.allTracks:
       Navigator.of(context).pushNamed(MusicScreen.routeName,
           arguments: FinampSettingsHelper.finampSettings.showTabs.entries
               .where((element) => element.value == true)
               .map((e) => e.key)
               .toList()
-              .indexOf(TabContentType.songs));
+              .indexOf(TabContentType.tracks));
       break;
     case QueueItemSourceType.nextUp:
       break;
@@ -61,7 +61,7 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     case QueueItemSourceType.unknown:
       break;
     case QueueItemSourceType.favorites:
-    case QueueItemSourceType.songMix:
+    case QueueItemSourceType.trackMix:
     case QueueItemSourceType.filteredList:
     case QueueItemSourceType.downloads:
     default:

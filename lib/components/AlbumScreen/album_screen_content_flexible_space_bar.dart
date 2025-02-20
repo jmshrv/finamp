@@ -242,7 +242,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                       flex: 2,
                       child: ItemInfo(
                         item: parentItem,
-                        itemSongs: items.length,
+                        itemTracks: items.length,
                       ),
                     )
                   ],

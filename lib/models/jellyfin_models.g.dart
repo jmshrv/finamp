@@ -1437,7 +1437,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       movieCount: fields[128] as int?,
       seriesCount: fields[129] as int?,
       albumCount: fields[130] as int?,
-      songCount: fields[131] as int?,
+      trackCount: fields[131] as int?,
       musicVideoCount: fields[132] as int?,
       sourceType: fields[133] as String?,
       dateLastMediaAdded: fields[134] as String?,
@@ -1729,7 +1729,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       ..writeByte(130)
       ..write(obj.albumCount)
       ..writeByte(131)
-      ..write(obj.songCount)
+      ..write(obj.trackCount)
       ..writeByte(132)
       ..write(obj.musicVideoCount)
       ..writeByte(133)
@@ -3981,7 +3981,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       movieCount: (json['MovieCount'] as num?)?.toInt(),
       seriesCount: (json['SeriesCount'] as num?)?.toInt(),
       albumCount: (json['AlbumCount'] as num?)?.toInt(),
-      songCount: (json['SongCount'] as num?)?.toInt(),
+      trackCount: (json['TrackCount'] as num?)?.toInt(),
       musicVideoCount: (json['MusicVideoCount'] as num?)?.toInt(),
       sourceType: json['SourceType'] as String?,
       dateLastMediaAdded: json['DateLastMediaAdded'] as String?,
@@ -4188,7 +4188,7 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       if (instance.movieCount case final value?) 'MovieCount': value,
       if (instance.seriesCount case final value?) 'SeriesCount': value,
       if (instance.albumCount case final value?) 'AlbumCount': value,
-      if (instance.songCount case final value?) 'SongCount': value,
+      if (instance.trackCount case final value?) 'TrackCount': value,
       if (instance.musicVideoCount case final value?) 'MusicVideoCount': value,
       if (instance.sourceType case final value?) 'SourceType': value,
       if (instance.dateLastMediaAdded case final value?)

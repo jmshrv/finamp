@@ -175,7 +175,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(BaseItemDtoAdapter());
   Hive.registerAdapter(UserItemDataDtoAdapter());
   Hive.registerAdapter(NameIdPairAdapter());
-  Hive.registerAdapter(DownloadedSongAdapter());
+  Hive.registerAdapter(DownloadedTrackAdapter());
   Hive.registerAdapter(DownloadedParentAdapter());
   Hive.registerAdapter(MediaSourceInfoAdapter());
   Hive.registerAdapter(MediaStreamAdapter());

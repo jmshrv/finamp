@@ -132,7 +132,7 @@ class _ArtistChipContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // We do this so that we can pass the song item here to show an actual value
+    // We do this so that we can pass the track item here to show an actual value
     // instead of empty
     bool isArtist = item?.isArtist ?? false;
     final name = isArtist

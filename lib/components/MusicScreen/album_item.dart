@@ -321,7 +321,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             List<BaseItemDto>? albumTracks;
             if (isOffline) {
               albumTracks = await downloadsService
-                  .getCollectionSongs(widget.album, playable: true);
+                  .getCollectionTracks(widget.album, playable: true);
             } else {
               albumTracks = await jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
@@ -367,7 +367,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             List<BaseItemDto>? albumTracks;
             if (isOffline) {
               albumTracks = await downloadsService
-                  .getCollectionSongs(widget.album, playable: true);
+                  .getCollectionTracks(widget.album, playable: true);
             } else {
               albumTracks = await jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
@@ -413,7 +413,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             List<BaseItemDto>? albumTracks;
             if (isOffline) {
               albumTracks = await downloadsService
-                  .getCollectionSongs(widget.album, playable: true);
+                  .getCollectionTracks(widget.album, playable: true);
               albumTracks.shuffle();
             } else {
               albumTracks = await jellyfinApiHelper.getItems(
@@ -460,7 +460,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             List<BaseItemDto>? albumTracks;
             if (isOffline) {
               albumTracks = await downloadsService
-                  .getCollectionSongs(widget.album, playable: true);
+                  .getCollectionTracks(widget.album, playable: true);
               albumTracks.shuffle();
             } else {
               albumTracks = await jellyfinApiHelper.getItems(
@@ -507,7 +507,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             List<BaseItemDto>? albumTracks;
             if (isOffline) {
               albumTracks = await downloadsService
-                  .getCollectionSongs(widget.album, playable: true);
+                  .getCollectionTracks(widget.album, playable: true);
             } else {
               albumTracks = await jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
@@ -553,7 +553,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             List<BaseItemDto>? albumTracks;
             if (isOffline) {
               albumTracks = await downloadsService
-                  .getCollectionSongs(widget.album, playable: true);
+                  .getCollectionTracks(widget.album, playable: true);
               albumTracks.shuffle();
             } else {
               albumTracks = await jellyfinApiHelper.getItems(

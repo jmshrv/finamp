@@ -12,9 +12,9 @@ import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
 import '../artists_text_spans.dart';
 
-/// Creates some text that shows the song's name, album and the artist.
-class SongName extends StatelessWidget {
-  const SongName({super.key});
+/// Creates some text that shows the track's name, album and the artist.
+class TrackName extends StatelessWidget {
+  const TrackName({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +29,12 @@ class SongName extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final MediaItem mediaItem = snapshot.data!;
-          BaseItemDto songBaseItemDto =
+          BaseItemDto trackBaseItemDto =
               BaseItemDto.fromJson(mediaItem.extras!["itemJson"]);
 
           List<TextSpan> separatedArtistTextSpans = [];
 
-          if (songBaseItemDto.artistItems?.isEmpty ?? true) {
+          if (trackBaseItemDto.artistItems?.isEmpty ?? true) {
             separatedArtistTextSpans = [
               TextSpan(
                 text: AppLocalizations.of(context)!.unknownArtist,
@@ -42,7 +42,7 @@ class SongName extends StatelessWidget {
               )
             ];
           } else {
-            songBaseItemDto.artistItems
+            trackBaseItemDto.artistItems
                 ?.map((e) => TextSpan(
                     text: e.name,
                     style: TextStyle(color: textColour),
@@ -69,19 +69,19 @@ class SongName extends StatelessWidget {
             separatedArtistTextSpans.removeLast();
           }
 
-          return SongNameContent(
-              songBaseItemDto: songBaseItemDto,
+          return TrackNameContent(
+              trackBaseItemDto: trackBaseItemDto,
               mediaItem: mediaItem,
               separatedArtistTextSpans: buildArtistsTextSpans(
-                songBaseItemDto,
+                trackBaseItemDto,
                 textColour,
                 context,
                 true,
               ));
         }
 
-        return const SongNameContent(
-          songBaseItemDto: null,
+        return const TrackNameContent(
+          trackBaseItemDto: null,
           mediaItem: null,
           separatedArtistTextSpans: [],
         );
@@ -90,14 +90,14 @@ class SongName extends StatelessWidget {
   }
 }
 
-class SongNameContent extends StatelessWidget {
-  const SongNameContent({
+class TrackNameContent extends StatelessWidget {
+  const TrackNameContent({
     super.key,
-    required this.songBaseItemDto,
+    required this.trackBaseItemDto,
     required this.mediaItem,
     required this.separatedArtistTextSpans,
   });
-  final BaseItemDto? songBaseItemDto;
+  final BaseItemDto? trackBaseItemDto;
   final MediaItem? mediaItem;
   final List<TextSpan> separatedArtistTextSpans;
 
@@ -115,10 +115,10 @@ class SongNameContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: songBaseItemDto == null
+            onTap: trackBaseItemDto == null
                 ? null
                 : () => jellyfinApiHelper
-                    .getItemById(songBaseItemDto!.albumId as String)
+                    .getItemById(trackBaseItemDto!.albumId as String)
                     .then((album) => Navigator.of(context).popAndPushNamed(
                         AlbumScreen.routeName,
                         arguments: album)),

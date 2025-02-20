@@ -81,7 +81,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         .elementAt(_tabController!.index)
         .key;
     if (_tabController != null &&
-        (tabKey == TabContentType.songs ||
+        (tabKey == TabContentType.tracks ||
             tabKey == TabContentType.artists ||
             tabKey == TabContentType.albums)) {
       setState(() {
@@ -124,8 +124,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
   FloatingActionButton? getFloatingActionButton(
       List<TabContentType> sortedTabs) {
-    // Show the floating action button only on the albums, artists, generes and songs tab.
-    if (_tabController!.index == sortedTabs.indexOf(TabContentType.songs)) {
+    // Show the floating action button only on the albums, artists, generes and tracks tab.
+    if (_tabController!.index == sortedTabs.indexOf(TabContentType.tracks)) {
       return FloatingActionButton(
         tooltip: AppLocalizations.of(context)!.shuffleAll,
         onPressed: () async {
@@ -146,7 +146,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             try {
               if (_jellyfinApiHelper.selectedMixArtists.isEmpty) {
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoSongsArtist);
+                    AppLocalizations.of(context)!.startMixNoTracksArtist);
               } else {
                 await _audioServiceHelper.startInstantMixForArtists(
                     _jellyfinApiHelper.selectedMixArtists);
@@ -165,7 +165,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             try {
               if (_jellyfinApiHelper.selectedMixAlbums.isEmpty) {
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoSongsAlbum);
+                    AppLocalizations.of(context)!.startMixNoTracksAlbum);
               } else {
                 await _audioServiceHelper.startInstantMixForAlbums(
                     _jellyfinApiHelper.selectedMixAlbums);
@@ -183,7 +183,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             try {
               if (_jellyfinApiHelper.selectedMixGenres.isEmpty) {
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoSongsGenre);
+                    AppLocalizations.of(context)!.startMixNoTracksGenre);
               } else {
                 await _audioServiceHelper.startInstantMixForGenres(
                     _jellyfinApiHelper.selectedMixGenres);

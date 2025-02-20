@@ -122,9 +122,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSongShuffleItemCount(int songShuffleItemCount) {
+  static void setTrackShuffleItemCount(int trackShuffleItemCount) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.songShuffleItemCount = songShuffleItemCount;
+    finampSettingsTemp.trackShuffleItemCount = trackShuffleItemCount;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -221,9 +221,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setShowArtistsTopSongs(bool showArtistsTopSongs) {
+  static void setShowArtistsTopTracks(bool showArtistsTopTracks) {
     FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showArtistsTopSongs = showArtistsTopSongs;
+    finampSettingsTemp.showArtistsTopTracks = showArtistsTopTracks;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -397,8 +397,8 @@ class FinampSettingsHelper {
     setUseCoverAsBackground(DefaultSettings.useCoverAsBackground);
     finampSettingsTemp.showArtistChipImage =
         DefaultSettings.showArtistChipImage;
-    finampSettingsTemp.showArtistsTopSongs =
-        DefaultSettings.showArtistsTopSongs;
+    finampSettingsTemp.showArtistsTopTracks =
+        DefaultSettings.showArtistsTopTracks;
     finampSettingsTemp.allowSplitScreen = DefaultSettings.allowSplitScreen;
     finampSettingsTemp.showProgressOnNowPlayingBar =
         DefaultSettings.showProgressOnNowPlayingBar;
@@ -449,8 +449,8 @@ class FinampSettingsHelper {
   static void resetAudioServiceSettings() {
     setAndroidStopForegroundOnPause(
         DefaultSettings.androidStopForegroundOnPause);
-    setSongShuffleItemCount(
-        DefaultSettings.songShuffleItemCount); // DOES NOT update UI
+    setTrackShuffleItemCount(
+        DefaultSettings.trackShuffleItemCount); // DOES NOT update UI
     setBufferDuration(Duration(
         seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
     setAutoloadLastQueueOnStartup(DefaultSettings.autoLoadLastQueueOnStartup);

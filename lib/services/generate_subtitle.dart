@@ -23,7 +23,7 @@ String? generateSubtitle(
               .join(", ")
           : processArtist(item.albumArtist, context);
     case "Playlist":
-      return AppLocalizations.of(context)!.songCount(item.childCount!);
+      return AppLocalizations.of(context)!.trackCount(item.childCount!);
     // case "MusicGenre":
     // case "MusicArtist":
     //   return Text("${item.albumCount} Albums");

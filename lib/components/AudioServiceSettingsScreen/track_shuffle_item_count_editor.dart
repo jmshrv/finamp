@@ -3,25 +3,25 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-class SongShuffleItemCountEditor extends StatefulWidget {
-  const SongShuffleItemCountEditor({super.key});
+class TrackShuffleItemCountEditor extends StatefulWidget {
+  const TrackShuffleItemCountEditor({super.key});
 
   @override
-  State<SongShuffleItemCountEditor> createState() =>
-      _SongShuffleItemCountEditorState();
+  State<TrackShuffleItemCountEditor> createState() =>
+      _TrackShuffleItemCountEditorState();
 }
 
-class _SongShuffleItemCountEditorState
-    extends State<SongShuffleItemCountEditor> {
+class _TrackShuffleItemCountEditorState
+    extends State<TrackShuffleItemCountEditor> {
   final _controller = TextEditingController(
       text:
-          FinampSettingsHelper.finampSettings.songShuffleItemCount.toString());
+          FinampSettingsHelper.finampSettings.trackShuffleItemCount.toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.shuffleAllSongCount),
-      subtitle: Text(AppLocalizations.of(context)!.shuffleAllSongCountSubtitle),
+      title: Text(AppLocalizations.of(context)!.shuffleAllTrackCount),
+      subtitle: Text(AppLocalizations.of(context)!.shuffleAllTrackCountSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -32,7 +32,7 @@ class _SongShuffleItemCountEditorState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null) {
-              FinampSettingsHelper.setSongShuffleItemCount(valueInt);
+              FinampSettingsHelper.setTrackShuffleItemCount(valueInt);
             }
           },
         ),

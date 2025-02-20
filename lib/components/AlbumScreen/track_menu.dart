@@ -36,11 +36,11 @@ import '../album_image.dart';
 import '../global_snackbar.dart';
 import 'download_dialog.dart';
 
-const Duration songMenuDefaultAnimationDuration = Duration(milliseconds: 750);
-const Curve songMenuDefaultInCurve = Curves.easeOutCubic;
-const Curve songMenuDefaultOutCurve = Curves.easeInCubic;
+const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 750);
+const Curve trackMenuDefaultInCurve = Curves.easeOutCubic;
+const Curve trackMenuDefaultOutCurve = Curves.easeInCubic;
 
-Future<void> showModalSongMenu({
+Future<void> showModalTrackMenu({
   required BuildContext context,
   required BaseItemDto item,
   bool showPlaybackControls = false,
@@ -59,9 +59,9 @@ Future<void> showModalSongMenu({
   await showThemedBottomSheet(
       context: context,
       item: item,
-      routeName: SongMenu.routeName,
+      routeName: TrackMenu.routeName,
       buildWrapper: (context, dragController, childBuilder) {
-        return SongMenu(
+        return TrackMenu(
           key: ValueKey(item.id),
           item: item,
           parentItem: parentItem,
@@ -83,10 +83,10 @@ Future<void> showModalSongMenu({
       themeProvider: themeProvider);
 }
 
-class SongMenu extends ConsumerStatefulWidget {
-  static const routeName = "/song-menu";
+class TrackMenu extends ConsumerStatefulWidget {
+  static const routeName = "/track-menu";
 
-  const SongMenu({
+  const TrackMenu({
     super.key,
     required this.item,
     required this.isOffline,
@@ -120,10 +120,10 @@ class SongMenu extends ConsumerStatefulWidget {
   final DraggableScrollableController dragController;
 
   @override
-  ConsumerState<SongMenu> createState() => _SongMenuState();
+  ConsumerState<TrackMenu> createState() => _TrackMenuState();
 }
 
-class _SongMenuState extends ConsumerState<SongMenu> {
+class _TrackMenuState extends ConsumerState<TrackMenu> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -184,8 +184,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         scrollController.size == inputStep) {
       scrollController.animateTo(
         percentage ?? oldExtent,
-        duration: songMenuDefaultAnimationDuration,
-        curve: songMenuDefaultInCurve,
+        duration: trackMenuDefaultAnimationDuration,
+        curve: trackMenuDefaultInCurve,
       );
     }
     oldExtent = currentSize;
@@ -207,11 +207,11 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     });
   }
 
-  // Normal song menu entries, excluding headers
+  // Normal track menu entries, excluding headers
   List<Widget> _menuEntries(BuildContext context) {
     final downloadsService = GetIt.instance<DownloadsService>();
     final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item),
+        DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item),
         null);
     var iconColor = Theme.of(context).colorScheme.primary;
 
@@ -227,7 +227,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
       var parent = downloadsService.getFirstRequiringItem(DownloadStub.fromItem(
-          type: DownloadItemType.song, item: widget.item));
+          type: DownloadItemType.track, item: widget.item));
       if (parent != null) {
         var parentName = AppLocalizations.of(context)!
             .itemTypeSubtitle(parent.baseItemType.name, parent.name);
@@ -394,7 +394,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           enabled: downloadStatus.isRequired,
           onTap: () async {
             var item = DownloadStub.fromItem(
-                type: DownloadItemType.song, item: widget.item);
+                type: DownloadItemType.track, item: widget.item);
             unawaited(downloadsService.deleteDownload(stub: item));
             if (mounted) {
               Navigator.pop(context);
@@ -414,7 +414,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               downloadStatus == DownloadItemStatus.notNeeded,
           onTap: () async {
             var item = DownloadStub.fromItem(
-                type: DownloadItemType.song, item: widget.item);
+                type: DownloadItemType.track, item: widget.item);
             await DownloadDialog.show(context, item, null);
             if (context.mounted) {
               Navigator.pop(context);
@@ -435,7 +435,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             enabled: !widget.isOffline && downloadStatus.isIncidental,
             onTap: () async {
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.song, item: widget.item);
+                  type: DownloadItemType.track, item: widget.item);
               await DownloadDialog.show(context, item, null);
               if (context.mounted) {
                 Navigator.pop(context);
@@ -578,13 +578,13 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     ];
   }
 
-  // All song menu slivers, including headers
+  // All track menu slivers, including headers
   List<Widget> menu(BuildContext context, List<Widget> menuEntries,
       MetadataProvider? metadata) {
     var iconColor = Theme.of(context).colorScheme.primary;
     return [
       SliverPersistentHeader(
-        delegate: SongMenuSliverAppBar(
+        delegate: TrackMenuSliverAppBar(
           item: widget.item,
           useThemeImage: widget.usePlayerTheme,
         ),
@@ -628,7 +628,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                           "Not looping",
                   FinampLoopMode.one:
                       AppLocalizations.of(context)?.loopModeOneButtonLabel ??
-                          "Looping this song",
+                          "Looping this track",
                   FinampLoopMode.all:
                       AppLocalizations.of(context)?.loopModeAllButtonLabel ??
                           "Looping all",
@@ -724,9 +724,9 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             )),
       SliverToBoxAdapter(
         child: AnimatedSwitcher(
-          duration: songMenuDefaultAnimationDuration,
-          switchInCurve: songMenuDefaultInCurve,
-          switchOutCurve: songMenuDefaultOutCurve,
+          duration: trackMenuDefaultAnimationDuration,
+          switchInCurve: trackMenuDefaultInCurve,
+          switchOutCurve: trackMenuDefaultOutCurve,
           transitionBuilder: (child, animation) {
             return SizeTransition(sizeFactor: animation, child: child);
           },
@@ -746,11 +746,11 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   }
 }
 
-class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
+class TrackMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
   bool useThemeImage;
 
-  SongMenuSliverAppBar({
+  TrackMenuSliverAppBar({
     required this.item,
     this.useThemeImage = false,
   });
@@ -758,7 +758,7 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SongInfo(
+    return TrackInfo(
       item: item,
       useThemeImage: useThemeImage,
     );
@@ -775,14 +775,14 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
       true;
 }
 
-class SongInfo extends ConsumerStatefulWidget {
-  const SongInfo({
+class TrackInfo extends ConsumerStatefulWidget {
+  const TrackInfo({
     super.key,
     required this.item,
     required this.useThemeImage,
   }) : condensed = false;
 
-  const SongInfo.condensed({
+  const TrackInfo.condensed({
     super.key,
     required this.item,
     required this.useThemeImage,
@@ -793,10 +793,10 @@ class SongInfo extends ConsumerStatefulWidget {
   final bool condensed;
 
   @override
-  ConsumerState createState() => _SongInfoState();
+  ConsumerState createState() => _TrackInfoState();
 }
 
-class _SongInfoState extends ConsumerState<SongInfo> {
+class _TrackInfoState extends ConsumerState<TrackInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -76,7 +76,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       onlyShowFavourites: fields[6] == null ? false : fields[6] as bool,
       sortBy: fields[7] as SortBy,
       sortOrder: fields[8] as SortOrder,
-      songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
+      trackShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
       volumeNormalizationActive: fields[29] == null ? true : fields[29] as bool,
       volumeNormalizationIOSBaseGain:
           fields[30] == null ? -2.0 : fields[30] as double,
@@ -101,7 +101,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : fields[48] as double,
-      showArtistsTopSongs: fields[54] == null ? true : fields[54] as bool,
+      showArtistsTopTracks: fields[54] == null ? true : fields[54] as bool,
       bufferDisableSizeConstraints:
           fields[78] == null ? false : fields[78] as bool,
       bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
@@ -122,7 +122,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               TabContentType.artists,
               TabContentType.playlists,
               TabContentType.genres,
-              TabContentType.songs
+              TabContentType.tracks
             ]
           : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
@@ -224,7 +224,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(8)
       ..write(obj.sortOrder)
       ..writeByte(9)
-      ..write(obj.songShuffleItemCount)
+      ..write(obj.trackShuffleItemCount)
       ..writeByte(10)
       ..write(obj.contentViewType)
       ..writeByte(11)
@@ -306,7 +306,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(53)
       ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds)
       ..writeByte(54)
-      ..write(obj.showArtistsTopSongs)
+      ..write(obj.showArtistsTopTracks)
       ..writeByte(55)
       ..write(obj.showArtistChipImage)
       ..writeByte(56)
@@ -423,18 +423,18 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
           typeId == other.typeId;
 }
 
-class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
+class DownloadedTrackAdapter extends TypeAdapter<DownloadedTrack> {
   @override
   final int typeId = 3;
 
   @override
-  DownloadedSong read(BinaryReader reader) {
+  DownloadedTrack read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return DownloadedSong(
-      song: fields[0] as BaseItemDto,
+    return DownloadedTrack(
+      track: fields[0] as BaseItemDto,
       mediaSourceInfo: fields[1] as MediaSourceInfo,
       downloadId: fields[2] as String,
       requiredBy: (fields[3] as List).cast<String>(),
@@ -447,11 +447,11 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
   }
 
   @override
-  void write(BinaryWriter writer, DownloadedSong obj) {
+  void write(BinaryWriter writer, DownloadedTrack obj) {
     writer
       ..writeByte(9)
       ..writeByte(0)
-      ..write(obj.song)
+      ..write(obj.track)
       ..writeByte(1)
       ..write(obj.mediaSourceInfo)
       ..writeByte(2)
@@ -476,7 +476,7 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DownloadedSongAdapter &&
+      other is DownloadedTrackAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -1074,7 +1074,7 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
       case 3:
         return TabContentType.genres;
       case 4:
-        return TabContentType.songs;
+        return TabContentType.tracks;
       default:
         return TabContentType.albums;
     }
@@ -1095,7 +1095,7 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
       case TabContentType.genres:
         writer.writeByte(3);
         break;
-      case TabContentType.songs:
+      case TabContentType.tracks:
         writer.writeByte(4);
         break;
     }
@@ -1246,7 +1246,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 1:
         return QueueItemSourceType.playlist;
       case 2:
-        return QueueItemSourceType.songMix;
+        return QueueItemSourceType.trackMix;
       case 3:
         return QueueItemSourceType.artistMix;
       case 4:
@@ -1254,7 +1254,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 5:
         return QueueItemSourceType.favorites;
       case 6:
-        return QueueItemSourceType.allSongs;
+        return QueueItemSourceType.allTracks;
       case 7:
         return QueueItemSourceType.filteredList;
       case 8:
@@ -1280,7 +1280,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 18:
         return QueueItemSourceType.genreMix;
       case 19:
-        return QueueItemSourceType.song;
+        return QueueItemSourceType.track;
       default:
         return QueueItemSourceType.album;
     }
@@ -1295,7 +1295,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case QueueItemSourceType.playlist:
         writer.writeByte(1);
         break;
-      case QueueItemSourceType.songMix:
+      case QueueItemSourceType.trackMix:
         writer.writeByte(2);
         break;
       case QueueItemSourceType.artistMix:
@@ -1307,7 +1307,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case QueueItemSourceType.favorites:
         writer.writeByte(5);
         break;
-      case QueueItemSourceType.allSongs:
+      case QueueItemSourceType.allTracks:
         writer.writeByte(6);
         break;
       case QueueItemSourceType.filteredList:
@@ -1346,7 +1346,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case QueueItemSourceType.genreMix:
         writer.writeByte(18);
         break;
-      case QueueItemSourceType.song:
+      case QueueItemSourceType.track:
         writer.writeByte(19);
         break;
     }
@@ -3807,7 +3807,7 @@ const _DownloadItembaseItemTypeEnumValueMap = {
   'artist': 2,
   'playlist': 3,
   'genre': 4,
-  'song': 5,
+  'track': 5,
   'library': 6,
   'folder': 7,
   'musicVideo': 8,
@@ -3824,7 +3824,7 @@ const _DownloadItembaseItemTypeValueEnumMap = {
   2: BaseItemDtoType.artist,
   3: BaseItemDtoType.playlist,
   4: BaseItemDtoType.genre,
-  5: BaseItemDtoType.song,
+  5: BaseItemDtoType.track,
   6: BaseItemDtoType.library,
   7: BaseItemDtoType.folder,
   8: BaseItemDtoType.musicVideo,
@@ -3857,14 +3857,14 @@ const _DownloadItemstateValueEnumMap = {
 };
 const _DownloadItemtypeEnumValueMap = {
   'collection': 0,
-  'song': 1,
+  'track': 1,
   'image': 2,
   'anchor': 3,
   'finampCollection': 4,
 };
 const _DownloadItemtypeValueEnumMap = {
   0: DownloadItemType.collection,
-  1: DownloadItemType.song,
+  1: DownloadItemType.track,
   2: DownloadItemType.image,
   3: DownloadItemType.anchor,
   4: DownloadItemType.finampCollection,
@@ -7043,9 +7043,9 @@ extension DownloadProfileQueryObject
 // JsonSerializableGenerator
 // **************************************************************************
 
-DownloadedSong _$DownloadedSongFromJson(Map json) => DownloadedSong(
-      song:
-          BaseItemDto.fromJson(Map<String, dynamic>.from(json['song'] as Map)),
+DownloadedTrack _$DownloadedTrackFromJson(Map json) => DownloadedTrack(
+      track:
+          BaseItemDto.fromJson(Map<String, dynamic>.from(json['track'] as Map)),
       mediaSourceInfo: MediaSourceInfo.fromJson(
           Map<String, dynamic>.from(json['mediaSourceInfo'] as Map)),
       downloadId: json['downloadId'] as String,
@@ -7059,9 +7059,9 @@ DownloadedSong _$DownloadedSongFromJson(Map json) => DownloadedSong(
       downloadLocationId: json['downloadLocationId'] as String?,
     );
 
-Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
+Map<String, dynamic> _$DownloadedTrackToJson(DownloadedTrack instance) =>
     <String, dynamic>{
-      'song': instance.song.toJson(),
+      'track': instance.track.toJson(),
       'mediaSourceInfo': instance.mediaSourceInfo.toJson(),
       'downloadId': instance.downloadId,
       'requiredBy': instance.requiredBy,
@@ -7093,7 +7093,7 @@ Map<String, dynamic> _$DownloadStubToJson(DownloadStub instance) =>
 
 const _$DownloadItemTypeEnumMap = {
   DownloadItemType.collection: 'collection',
-  DownloadItemType.song: 'song',
+  DownloadItemType.track: 'track',
   DownloadItemType.image: 'image',
   DownloadItemType.anchor: 'anchor',
   DownloadItemType.finampCollection: 'finampCollection',
@@ -7105,7 +7105,7 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.artist: 'artist',
   BaseItemDtoType.playlist: 'playlist',
   BaseItemDtoType.genre: 'genre',
-  BaseItemDtoType.song: 'song',
+  BaseItemDtoType.track: 'track',
   BaseItemDtoType.library: 'library',
   BaseItemDtoType.folder: 'folder',
   BaseItemDtoType.musicVideo: 'musicVideo',
@@ -7159,7 +7159,7 @@ const _$TabContentTypeEnumMap = {
   TabContentType.artists: 'artists',
   TabContentType.playlists: 'playlists',
   TabContentType.genres: 'genres',
-  TabContentType.songs: 'songs',
+  TabContentType.tracks: 'tracks',
 };
 
 const _$MediaItemParentTypeEnumMap = {

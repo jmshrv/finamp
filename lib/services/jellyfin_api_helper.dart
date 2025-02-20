@@ -208,7 +208,7 @@ class JellyfinApiHelper {
           fields: fields,
         );
       } else {
-        // This will be run when getting albums, songs in albums, and stuff like
+        // This will be run when getting albums, tracks in albums, and stuff like
         // that.
         response = await api.getItems(
           userId: currentUserId,
@@ -822,7 +822,7 @@ class JellyfinApiHelper {
   }
 
   /// Returns the correct URL for the given item.
-  Uri getSongDownloadUrl({
+  Uri getTrackDownloadUrl({
     required BaseItemDto item,
     required DownloadProfile? transcodingProfile,
   }) {
