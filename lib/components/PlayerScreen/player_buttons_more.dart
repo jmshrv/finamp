@@ -1,4 +1,4 @@
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/music_player_background_task.dart';
@@ -38,7 +38,7 @@ class PlayerButtonsMore extends ConsumerWidget {
           onPressed: () async {
             if (item == null) return;
             var inPlaylist = queueItemInPlaylist(queueItem);
-            await showModalSongMenu(
+            await showModalTrackMenu(
               context: context,
               item: item!,
               usePlayerTheme: true,

@@ -239,8 +239,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     // This listener basically just kicks the playback state into updating
-    // whenever a song changes, since some stuff. Done to fix the favorite state
-    // not updating between songs (https://github.com/jmshrv/finamp/issues/844)
+    // whenever a track changes, since some stuff. Done to fix the favorite state
+    // not updating between tracks (https://github.com/jmshrv/finamp/issues/844)
     mediaItem.listen((_) {
       final event = _transformEvent(_player.playbackEvent);
       playbackState.add(event);
@@ -618,7 +618,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     final currentSearchQuery = AndroidAutoSearchQuery(query, extras);
 
     if (previousItemTitle != null) {
-      // when voice searching for a song with title + artist, Android Auto / Google Assistant combines the title and artist into a single query, with no way to differentiate them
+      // when voice searching for a track with title + artist, Android Auto / Google Assistant combines the title and artist into a single query, with no way to differentiate them
       // so we try to instead use the title provided in the extras right after the voice search, and just search for that
       if (query.contains(previousItemTitle)) {
         // if the the title is fully contained in the query, we can assume that the user clicked on the "Search Results" button on the player screen

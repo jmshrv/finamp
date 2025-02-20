@@ -23,13 +23,13 @@ class QueueRestoreTile extends StatelessWidget {
     final isarDownloader = GetIt.instance<DownloadsService>();
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final queueService = GetIt.instance<QueueService>();
-    int remainingSongs = info.songCount - info.previousTracks.length;
+    int remainingTracks = info.trackCount - info.previousTracks.length;
     Future<BaseItemDto?> track;
     if (info.currentTrack == null) {
       track = Future.value(null);
     } else if (FinampSettingsHelper.finampSettings.isOffline) {
       track = isarDownloader
-          .getSongInfo(id: info.currentTrack!)
+          .getTrackInfo(id: info.currentTrack!)
           .then((value) => value?.baseItem);
     } else {
       track = jellyfinApiHelper
@@ -62,7 +62,7 @@ class QueueRestoreTile extends StatelessWidget {
                 children: ((snapshot.data?.name == null)
                         ? <Text>[]
                         : [
-                            // exclude subtitle line 1 if song name is null
+                            // exclude subtitle line 1 if track name is null
                             Text(
                                 AppLocalizations.of(context)!
                                     .queueRestoreSubtitle1(
@@ -71,7 +71,7 @@ class QueueRestoreTile extends StatelessWidget {
                           ]) +
                     [
                       Text(AppLocalizations.of(context)!.queueRestoreSubtitle2(
-                          info.songCount, remainingSongs))
+                          info.trackCount, remainingTracks))
                     ])),
         trailing: IconButton(
             icon: const Icon(Icons.arrow_circle_right_outlined),

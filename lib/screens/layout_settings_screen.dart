@@ -1,6 +1,6 @@
 import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/customization_settings_screen.dart';
-import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_songs.dart';
+import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_tracks.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +84,7 @@ class _LayoutSettingsScreenState extends State<LayoutSettingsScreen> {
                 const ShowTextOnGridViewSelector(),
                 const UseCoverAsBackgroundToggle(),
                 const ShowArtistChipImageToggle(),
-                const ShowArtistsTopSongsSelector(),
+                const ShowArtistsTopTracksSelector(),
                 const AllowSplitScreenSwitch(),
                 const ShowProgressOnNowPlayingBarToggle(),
               ],

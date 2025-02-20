@@ -10,7 +10,7 @@ import '../components/AudioServiceSettingsScreen/buffer_duration_list_tile.dart'
 import '../components/AudioServiceSettingsScreen/loadQueueOnStartup_selector.dart';
 import '../components/AudioServiceSettingsScreen/periodic_playback_session_update_frequency_editor.dart';
 import '../components/AudioServiceSettingsScreen/report_queue_to_server_toggle.dart';
-import '../components/AudioServiceSettingsScreen/song_shuffle_item_count_editor.dart';
+import '../components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 import '../components/AudioServiceSettingsScreen/stop_foreground_selector.dart';
 
 class AudioServiceSettingsScreen extends StatefulWidget {
@@ -44,7 +44,7 @@ class _AudioServiceSettingsScreenState
       body: ListView(
         children: [
           if (Platform.isAndroid) StopForegroundSelector(key: _updateChildren),
-          SongShuffleItemCountEditor(key: _updateChildren),
+          TrackShuffleItemCountEditor(key: _updateChildren),
           if (Platform.isAndroid) BufferSizeListTile(key: _updateChildren),
           BufferDurationListTile(key: _updateChildren),
           BufferDisableSizeConstraintsSelector(key: _updateChildren),

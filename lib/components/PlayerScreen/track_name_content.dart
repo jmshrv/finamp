@@ -13,8 +13,8 @@ import '../../services/queue_service.dart';
 import 'album_chip.dart';
 import 'artist_chip.dart';
 
-class SongNameContent extends StatelessWidget {
-  const SongNameContent(
+class TrackNameContent extends StatelessWidget {
+  const TrackNameContent(
     this.controller, {
     super.key,
   });
@@ -35,7 +35,7 @@ class SongNameContent extends StatelessWidget {
 
         final currentTrack = snapshot.data!.currentTrack!;
 
-        final jellyfin_models.BaseItemDto? songBaseItemDto =
+        final jellyfin_models.BaseItemDto? trackBaseItemDto =
             currentTrack.baseItem;
 
         return LayoutBuilder(builder: (context, constraints) {
@@ -91,27 +91,27 @@ class SongNameContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     PlayerButtonsMore(
-                        item: songBaseItemDto, queueItem: currentTrack),
+                        item: trackBaseItemDto, queueItem: currentTrack),
                     Flexible(
                       child: ArtistChips(
-                        baseItem: songBaseItemDto,
+                        baseItem: trackBaseItemDto,
                         backgroundColor:
                             IconTheme.of(context).color!.withOpacity(0.1),
                       ),
                     ),
                     AddToPlaylistButton(
-                      item: songBaseItemDto,
+                      item: trackBaseItemDto,
                       queueItem: currentTrack,
                     ),
                   ],
                 ),
                 AlbumChip(
-                  item: songBaseItemDto,
+                  item: trackBaseItemDto,
                   backgroundColor:
                       IconTheme.of(context).color!.withOpacity(0.1),
-                  key: songBaseItemDto?.album == null
+                  key: trackBaseItemDto?.album == null
                       ? null
-                      : ValueKey("${songBaseItemDto!.album}-album"),
+                      : ValueKey("${trackBaseItemDto!.album}-album"),
                 ),
               ],
             ),

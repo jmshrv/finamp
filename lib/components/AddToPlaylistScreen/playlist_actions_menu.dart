@@ -13,7 +13,7 @@ import '../../services/feedback_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../../services/theme_provider.dart';
-import '../AlbumScreen/song_menu.dart';
+import '../AlbumScreen/track_menu.dart';
 import '../global_snackbar.dart';
 import '../themed_bottom_sheet.dart';
 import 'add_to_playlist_list.dart';
@@ -45,7 +45,7 @@ Future<void> showPlaylistActionsMenu({
         );
 
         final menuEntries = [
-          SongInfo.condensed(
+          TrackInfo.condensed(
             item: item,
             useThemeImage: usePlayerTheme,
           ),
@@ -92,7 +92,7 @@ Future<void> showPlaylistActionsMenu({
                 if (snapshot.data != null) {
                   return AddToPlaylistTile(
                     playlist: snapshot.data!,
-                    song: item,
+                    track: item,
                     playlistItemId: item.playlistItemId,
                   );
                 } else {

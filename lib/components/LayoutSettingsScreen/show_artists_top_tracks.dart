@@ -5,8 +5,8 @@ import 'package:hive/hive.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-class ShowArtistsTopSongsSelector extends StatelessWidget {
-  const ShowArtistsTopSongsSelector({super.key});
+class ShowArtistsTopTracksSelector extends StatelessWidget {
+  const ShowArtistsTopTracksSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +14,12 @@ class ShowArtistsTopSongsSelector extends StatelessWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showArtistsTopSongs),
+          title: Text(AppLocalizations.of(context)!.showArtistsTopTracks),
           subtitle:
-              Text(AppLocalizations.of(context)!.showArtistsTopSongsSubtitle),
-          value: FinampSettingsHelper.finampSettings.showArtistsTopSongs,
+              Text(AppLocalizations.of(context)!.showArtistsTopTracksSubtitle),
+          value: FinampSettingsHelper.finampSettings.showArtistsTopTracks,
           onChanged: (value) =>
-              FinampSettingsHelper.setShowArtistsTopSongs(value),
+              FinampSettingsHelper.setShowArtistsTopTracks(value),
         );
       },
     );

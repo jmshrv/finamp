@@ -93,7 +93,7 @@ class FeatureState {
       }
 
       if (feature == FinampFeatureChipType.playbackMode) {
-        if (currentTrack?.item.extras?["downloadedSongPath"] != null) {
+        if (currentTrack?.item.extras?["downloadedTrackPath"] != null) {
           features.add(
             FeatureProperties(
               type: feature,

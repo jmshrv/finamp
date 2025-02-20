@@ -496,7 +496,7 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String itemId,
   });
 
-  /// Requests lyrics for a song.
+  /// Requests lyrics for a track.
   @FactoryConverter(
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,

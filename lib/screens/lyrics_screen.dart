@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/playlist_actions_menu.dart';
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -25,7 +25,7 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
 import '../components/PlayerScreen/queue_list.dart';
-import '../components/PlayerScreen/song_name_content.dart';
+import '../components/PlayerScreen/track_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/theme_provider.dart';
@@ -156,7 +156,7 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                           },
                           child: Column(
                             children: [
-                              SongNameContent(controller),
+                              TrackNameContent(controller),
                               ControlArea(controller),
                               const SizedBox(
                                 height: 12,
@@ -239,7 +239,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
     final finampSettings = ref.watch(finampSettingsProvider).value;
 
-    //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current song yet, we want to show the loading state, and not the lyrics for the previous track
+    //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current track yet, we want to show the loading state, and not the lyrics for the previous track
     _isSynchronizedLyrics =
         metadata.valueOrNull?.lyrics?.lyrics?.first.start != null;
 

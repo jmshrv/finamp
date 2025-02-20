@@ -35,7 +35,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
   Widget build(BuildContext context) {
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but
-      // SongsSliverList gets passed some weird split version of children to
+      // TracksSliverList gets passed some weird split version of children to
       // handle multi-disc albums and it's 00:35 so I can't be bothered to get
       // it to return an index
       setState(() {
@@ -106,7 +106,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   style: const TextStyle(fontSize: 20.0),
                 ),
               ),
-              sliver: SongsSliverList(
+              sliver: TracksSliverList(
                 childrenForList: childrenOfThisDisc,
                 childrenForQueue: Future.value(widget.queueChildren),
                 parent: widget.parent,
@@ -114,7 +114,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               ),
             )
         else if (widget.displayChildren.isNotEmpty)
-          SongsSliverList(
+          TracksSliverList(
             childrenForList: widget.displayChildren,
             childrenForQueue: Future.value(widget.queueChildren),
             parent: widget.parent,
@@ -125,8 +125,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
   }
 }
 
-class SongsSliverList extends StatefulWidget {
-  const SongsSliverList({
+class TracksSliverList extends StatefulWidget {
+  const TracksSliverList({
     super.key,
     required this.childrenForList,
     required this.childrenForQueue,
@@ -144,10 +144,10 @@ class SongsSliverList extends StatefulWidget {
   final bool isOnArtistScreen;
 
   @override
-  State<SongsSliverList> createState() => _SongsSliverListState();
+  State<TracksSliverList> createState() => _TracksSliverListState();
 }
 
-class _SongsSliverListState extends State<SongsSliverList> {
+class _TracksSliverListState extends State<TracksSliverList> {
   final GlobalKey<SliverAnimatedListState> sliverListKey =
       GlobalKey<SliverAnimatedListState>();
 
@@ -176,9 +176,9 @@ class _SongsSliverListState extends State<SongsSliverList> {
       // return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          // When user selects song from disc other than first, index number is
-          // incorrect and song with the same index on first disc is played instead.
-          // Adding this offset ensures playback starts for nth song on correct disc.
+          // When user selects track from disc other than first, index number is
+          // incorrect and track with the same index on first disc is played instead.
+          // Adding this offset ensures playback starts for nth track on correct disc.
           final indexOffset = widget.childrenForQueue.then((childrenForQueue) =>
               childrenForQueue.indexWhere(
                   (element) => element.id == widget.childrenForList[index].id));

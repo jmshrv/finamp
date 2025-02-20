@@ -13,7 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/current_album_image_provider.dart';
 import '../../services/favorite_provider.dart';
-import '../AlbumScreen/song_menu.dart';
+import '../AlbumScreen/track_menu.dart';
 import '../album_image.dart';
 
 class PlayerScreenAlbumImage extends ConsumerWidget {
@@ -47,7 +47,7 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
               var queueItem = snapshot.data!.currentTrack;
               if (queueItem?.baseItem != null) {
                 var inPlaylist = queueItemInPlaylist(queueItem);
-                await showModalSongMenu(
+                await showModalTrackMenu(
                   context: context,
                   item: queueItem!.baseItem!,
                   usePlayerTheme: true,
