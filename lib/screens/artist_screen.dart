@@ -22,8 +22,10 @@ class ArtistScreen extends StatelessWidget {
 
     return Scaffold(
       extendBody: true,
-      body: ArtistScreenContent(
-        parent: artist,
+      body: SafeArea(
+        child: ArtistScreenContent(
+         parent: artist,
+        ),
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );

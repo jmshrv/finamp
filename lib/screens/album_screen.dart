@@ -40,7 +40,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
     return Scaffold(
       extendBody: true,
-      body: ValueListenableBuilder<Box<FinampSettings>>(
+      body: SafeArea(
+        child: ValueListenableBuilder<Box<FinampSettings>>(
           valueListenable: FinampSettingsHelper.finampSettingsListener,
           builder: (context, box, widget) {
             bool isOffline = box.get("FinampSettings")?.isOffline ?? false;
@@ -109,7 +110,9 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 }
               },
             );
-          }),
+          }
+        ),
+      ),
       bottomNavigationBar: const NowPlayingBar(),
     );
   }
