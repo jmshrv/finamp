@@ -432,24 +432,6 @@
   "@confirm": {},
   "showUncensoredLogMessage": "Цей журнал містить ваші дані для входу. Показати?",
   "@showUncensoredLogMessage": {},
-  "deleteDownloadsPrompt": "Ви дійсно хочете видалити {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' з цього пристрою?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
-  "deleteDownloadsConfirmButtonText": "Видалити",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "insertedIntoQueue": "Вставлено в чергу.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
@@ -1618,10 +1600,6 @@
   "downloadItem": "Завантажити",
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
-  },
-  "deleteItem": "Видалити з девайсу",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
   },
   "repairComplete": "Відновлення завантажень завершено.",
   "@repairComplete": {

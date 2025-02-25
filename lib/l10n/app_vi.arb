@@ -530,10 +530,6 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "Không có hoạt động tải xuống.",
   "@noActiveDownloads": {},
-  "deleteDownloadsConfirmButtonText": "Xoá",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "offlineSongCount": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}}, {downloads} Đã tải xuống",
   "@offlineSongCount": {
     "placeholders": {
@@ -592,20 +588,6 @@
   "connectingToServer": "Đang kết nối đến máy chủ...",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
-  },
-  "deleteDownloadsPrompt": "Bạn có chắc muốn xoá {itemType, select, album{album} playlist{danh sách phát} artist{nghệ sĩ} genre{thể loại} song{bài hát} library{thư viện} other{item}} '{itemName}' khỏi thiết bị này?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "downloadedCountUnified": "{songCount,plural,=1{{songCount} bản nhạc} other{{songCount} bản nhạc}}, {imageCount,plural,=1{{imageCount} hình ảnh} other{{imageCount} hình ảnh}}\n{syncCount,plural,=1{{syncCount} đồng bộ hóa nút} other{{syncCount} đồng bộ hóa nút}}{repairing, plural, =0{} other{\nHiện đang sửa chữa}}",
   "@downloadedCountUnified": {
