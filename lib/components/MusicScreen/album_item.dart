@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
+import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
@@ -27,7 +30,7 @@ enum _AlbumListTileMenuItems {
   addToMixList,
   removeFromMixList,
   download,
-  delete,
+  deleteFromDevice,
   playNext,
   addToNextUp,
   shuffleNext,
@@ -35,6 +38,7 @@ enum _AlbumListTileMenuItems {
   addToQueue,
   shuffleToQueue,
   goToArtist,
+  deleteFromServer,
   addToPlaylist,
 }
 
@@ -109,11 +113,26 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         };
   }
 
+  Box<FinampSettings> box = Hive.box<FinampSettings>("FinampSettings");
+  bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
+  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  bool deletableGotUpdated = false;
+  bool canDeleteFromServer = false;
+
   @override
   Widget build(BuildContext context) {
     local = AppLocalizations.of(context)!;
 
     final screenSize = MediaQuery.of(context).size;
+
+    if (!deletableGotUpdated) {
+      deletableGotUpdated = true;
+      var deletable = _jellyfinApiHelper.canDeleteFromServer(widget.album);
+      canDeleteFromServer = deletable.initialValue;
+      deletable.realValue?.then((canDelete) => setState(() {
+            canDeleteFromServer = canDelete;
+          }));
+    }
 
     void menuCallback({
       required Offset localPosition,
@@ -121,16 +140,11 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
     }) async {
       unawaited(Feedback.forLongPress(context));
 
-      final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-
-      final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
       final downloadsService = GetIt.instance<DownloadsService>();
-      final bool explicitlyDownloaded = downloadsService
-          .getStatus(
-              DownloadStub.fromItem(
-                  type: DownloadItemType.collection, item: widget.album),
-              null)
-          .isRequired;
+      final downloadStatus = downloadsService.getStatus(
+          DownloadStub.fromItem(
+              type: DownloadItemType.collection, item: widget.album),
+          null);
       final albumArtistId = widget.album.albumArtists?.firstOrNull?.id ??
           widget.album.artistItems?.firstOrNull?.id;
       String itemType;
@@ -180,7 +194,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                     title: Text(local.addFavourite),
                   ),
                 ),
-          jellyfinApiHelper.selectedMixAlbums
+          _jellyfinApiHelper.selectedMixAlbums
                   .map((e) => e.id)
                   .contains(mutableAlbum.id)
               ? PopupMenuItem<_AlbumListTileMenuItems>(
@@ -249,12 +263,20 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               title: Text(local.shuffleToQueue),
             ),
           ),
-          explicitlyDownloaded
+          PopupMenuItem<_AlbumListTileMenuItems>(
+            value: _AlbumListTileMenuItems.addToPlaylist,
+            child: ListTile(
+              leading: const Icon(Icons.playlist_add),
+              title: Text(local.addToPlaylistTitle),
+            ),
+          ),
+          downloadStatus.isRequired
               ? PopupMenuItem<_AlbumListTileMenuItems>(
-                  value: _AlbumListTileMenuItems.delete,
+                  value: _AlbumListTileMenuItems.deleteFromDevice,
                   child: ListTile(
                     leading: const Icon(Icons.delete),
-                    title: Text(AppLocalizations.of(context)!.deleteItem),
+                    title: Text(AppLocalizations.of(context)!
+                        .deleteFromTargetConfirmButton("")),
                   ),
                 )
               : PopupMenuItem<_AlbumListTileMenuItems>(
@@ -276,16 +298,17 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                 title: Text(AppLocalizations.of(context)!.goToArtist),
               ),
             ),
-          PopupMenuItem<_AlbumListTileMenuItems>(
-            value: _AlbumListTileMenuItems.addToPlaylist,
-            child: ListTile(
-              leading: const Icon(Icons.playlist_add),
-              title: Text(local.addToPlaylistTitle),
+          if (canDeleteFromServer)
+            PopupMenuItem<_AlbumListTileMenuItems>(
+              value: _AlbumListTileMenuItems.deleteFromServer,
+              enabled: canDeleteFromServer,
+              child: ListTile(
+                  leading: const Icon(Icons.delete_forever),
+                  title: Text(AppLocalizations.of(context)!
+                      .deleteFromTargetConfirmButton("server"))),
             ),
-          ),
         ],
       );
-
       if (!mounted) return;
 
       switch (selection) {
@@ -302,11 +325,11 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.addToMixList:
           try {
             if (mutableAlbum.type == "MusicArtist") {
-              jellyfinApiHelper.addArtistToMixBuilderList(mutableAlbum);
+              _jellyfinApiHelper.addArtistToMixBuilderList(mutableAlbum);
             } else if (mutableAlbum.type == "MusicAlbum") {
-              jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
+              _jellyfinApiHelper.addAlbumToMixBuilderList(mutableAlbum);
             } else if (mutableAlbum.type == "MusicGenre") {
-              jellyfinApiHelper.addGenreToMixBuilderList(mutableAlbum);
+              _jellyfinApiHelper.addGenreToMixBuilderList(mutableAlbum);
             }
             setState(() {});
           } catch (e) {
@@ -316,9 +339,9 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.removeFromMixList:
           try {
             if (mutableAlbum.type == "MusicArtist") {
-              jellyfinApiHelper.removeArtistFromMixBuilderList(mutableAlbum);
+              _jellyfinApiHelper.removeArtistFromMixBuilderList(mutableAlbum);
             } else if (mutableAlbum.type == "MusicAlbum") {
-              jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
+              _jellyfinApiHelper.removeAlbumFromMixBuilderList(mutableAlbum);
             }
             setState(() {});
           } catch (e) {
@@ -332,7 +355,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               albumTracks = await downloadsService
                   .getCollectionSongs(widget.album, playable: true);
             } else {
-              albumTracks = await jellyfinApiHelper.getItems(
+              albumTracks = await _jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
@@ -378,7 +401,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               albumTracks = await downloadsService
                   .getCollectionSongs(widget.album, playable: true);
             } else {
-              albumTracks = await jellyfinApiHelper.getItems(
+              albumTracks = await _jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
@@ -425,7 +448,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                   .getCollectionSongs(widget.album, playable: true);
               albumTracks.shuffle();
             } else {
-              albumTracks = await jellyfinApiHelper.getItems(
+              albumTracks = await _jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
                 sortBy: "Random",
                 includeItemTypes: "Audio",
@@ -472,7 +495,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                   .getCollectionSongs(widget.album, playable: true);
               albumTracks.shuffle();
             } else {
-              albumTracks = await jellyfinApiHelper.getItems(
+              albumTracks = await _jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
                 sortBy: "Random",
                 includeItemTypes: "Audio",
@@ -518,7 +541,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               albumTracks = await downloadsService
                   .getCollectionSongs(widget.album, playable: true);
             } else {
-              albumTracks = await jellyfinApiHelper.getItems(
+              albumTracks = await _jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
@@ -565,7 +588,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                   .getCollectionSongs(widget.album, playable: true);
               albumTracks.shuffle();
             } else {
-              albumTracks = await jellyfinApiHelper.getItems(
+              albumTracks = await _jellyfinApiHelper.getItems(
                 parentItem: mutableAlbum,
                 sortBy: "Random",
                 includeItemTypes: "Audio",
@@ -613,7 +636,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                       id: albumArtistId!))!
                   .baseItem!;
             } else {
-              artist = await jellyfinApiHelper.getItemById(albumArtistId!);
+              artist = await _jellyfinApiHelper.getItemById(albumArtistId!);
             }
           } catch (e) {
             GlobalSnackbar.error(e);
@@ -629,10 +652,17 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
           await DownloadDialog.show(context, item, null);
-        case _AlbumListTileMenuItems.delete:
+        case _AlbumListTileMenuItems.deleteFromDevice:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await downloadsService.deleteDownload(stub: item);
+          await askBeforeDeleteDownloadFromDevice(context, item,
+              refresh: () => musicScreenRefreshStream.add(null));
+        case _AlbumListTileMenuItems.deleteFromServer:
+          var item = DownloadStub.fromItem(
+              type: DownloadItemType.collection, item: widget.album);
+          await askBeforeDeleteFromServerAndDevice(context, item,
+              refresh: () => musicScreenRefreshStream
+                  .add(null)); // trigger a refresh of the music screen
         case _AlbumListTileMenuItems.addToPlaylist:
           if (context.mounted) {
             await showPlaylistActionsMenu(

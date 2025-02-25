@@ -102,3 +102,4 @@ class ShowSeekControlsOnMediaNotificationToggle extends StatelessWidget {
     );
   }
 }
+

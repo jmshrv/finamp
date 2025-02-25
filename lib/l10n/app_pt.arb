@@ -450,10 +450,6 @@
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
-  "deleteDownloadsConfirmButtonText": "Apagar",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "showFastScroller": "Mostrar rolagem rápida",
   "@showFastScroller": {},
   "syncDownloadedPlaylists": "Sincronizar listas de reprodução descarregadas",
@@ -746,20 +742,6 @@
   "enableAutoScroll": "Ativar scroll automático",
   "@enableAutoScroll": {
     "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
-  },
-  "deleteDownloadsPrompt": "Tens a certeza que queres eliminar o/a {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' deste dispositivo?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "downloadBitrateSubtitle": "Uma taxa de bits mais alta oferece áudio de melhor qualidade, mas exige mais espaço de armazenamento.",
   "@downloadBitrateSubtitle": {

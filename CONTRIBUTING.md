@@ -21,7 +21,7 @@ Because Dart doesn't support macros and stuff, a few dependencies rely on code g
 * Chopper - For talking to Jellyfin over HTTP
     * This layer (`lib/services/jellyfin_api.dart`) is not used by the app directly. The user-facing API is located at `lib/services/jellyfin_api_helper.dart`.
 
-To rebuild these files, run `dart run build_runner build --delete-conflicting-outputs`. This must be done when:
+To rebuild these files, run `dart run build_runner build --delete-conflicting-outputs`. If you cant run (`flutter run`) finamp after generating code you may need to run `flutter clean` before running the builder. This must be done when:
 
 * Modifying a class that is returned by Jellyfin (such as the classes in `lib/models/jellyfin_models.dart`)
 * Adding fields to a database class (annotated with `@HiveType`)

@@ -332,24 +332,6 @@
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get track from download ID",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' from this device?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
-  "deleteDownloadsConfirmButtonText": "Delete",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",
@@ -1222,10 +1204,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "Delete from device",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "Downloads Repair complete.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
@@ -1835,6 +1813,18 @@
   "genericCancel": "Cancel",
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Track} library{Library} other{Item}} got deleted from {deviceType, select, device{Device} server{Server} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "deleteFromTargetDialogText": "You are about to delete this {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} from {device, select, device{this device} server{the servers file system and library.{deleteType, select, canDelete{ This will also Delete this item from this Device.} cantDelete{ This item will stay on this device until the next sync.} notDownloaded{} other{}}\nThis action cannot be reverted} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "deleteFromTargetConfirmButton": "Delete{target, select, device{ from Device} server{ from Server} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
   },
   "largeDownloadWarning": "Warning: You are about to download {count} tracks.",
   "@largeDownloadWarning": {

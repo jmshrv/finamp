@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
