@@ -1,5 +1,6 @@
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +36,11 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           SwipeInsertQueueNextSelector(),
           StartInstantMixForIndividualTracksSwitch(),
           FastScrollSelector(),
+          ShowDeleteFromServerOptionToggle(),
           DisableGestureSelector(),
           DisableVibrationSelector(),
           KeepScreenOnDropdownListTile(),
-          KeepScreenOnWhilePluggedInSelector()
+          KeepScreenOnWhilePluggedInSelector(),
         ],
       ),
     );
@@ -70,6 +72,36 @@ class StartInstantMixForIndividualTracksSwitch extends StatelessWidget {
                   finampSettingsTemp.startInstantMixForIndividualTracks = value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
+        );
+      },
+    );
+  }
+}
+
+class ShowDeleteFromServerOptionToggle extends StatelessWidget {
+  const ShowDeleteFromServerOptionToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? showDeleteFromServerOption =
+            box.get("FinampSettings")?.allowDeleteFromServer ?? false;
+
+        return SwitchListTile.adaptive(
+          title: Text("Allow deletion from server"),
+          subtitle: Text(
+              "Enable and disable the option to permanently delete a track from the servers file system when deletion is possible."),
+          value: showDeleteFromServerOption,
+          onChanged: (value) {
+            FinampSettings finampSettingsTemp = box.get("FinampSettings")!;
+            finampSettingsTemp.allowDeleteFromServer = value;
+            box.put("FinampSettings", finampSettingsTemp);
+
+            musicScreenRefreshStream
+                .add(null); // refresh current tab to show/hide delete button
+          },
         );
       },
     );

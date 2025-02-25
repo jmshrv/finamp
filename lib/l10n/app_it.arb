@@ -410,7 +410,7 @@
   "@disableGesture": {},
   "minutes": "Minuti",
   "@minutes": {},
-  "bufferDurationSubtitle": "Quanto buffer, in secondi, deve avere il player. Richiede riavvio.",
+  "bufferDurationSubtitle": "La durata massima che deve essere bufferizzata. Richiede il riavvio.",
   "@bufferDurationSubtitle": {},
   "redownloadedItems": "{count,plural, =0{Non è necessario riscaricare nulla.} =1{Riscaricato {count} oggetto} other{Riscaricati {count} oggetti}}",
   "@redownloadedItems": {
@@ -456,10 +456,6 @@
   "@enableVibrationSubtitle": {},
   "syncDownloadedPlaylists": "Sincronizza playlists scaricate",
   "@syncDownloadedPlaylists": {},
-  "deleteDownloadsConfirmButtonText": "Elimina",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "about": "Riguardo Finamp",
   "@about": {
     "description": "Label for the about/info button on the settings screen"
@@ -513,20 +509,6 @@
         "type": "int"
       }
     }
-  },
-  "deleteDownloadsPrompt": "Sei sicuro di voler eliminare {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' da questo dispositivo?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "finampTagline": "Un player musicale open source per Jellyfin",
   "@finampTagline": {
@@ -1291,10 +1273,6 @@
   },
   "startInstantMixForIndividualTracksSwitchSubtitle": "Quando attivo premere su un brano nella scheda dei brani farà partire un Mix Istantaneo di quel brano invece di riprodurre semplicemente il singolo brano.",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
-  "deleteItem": "Elimina dal dispositivo",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "riparazione dei Download completata.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
@@ -1854,5 +1832,13 @@
   "periodicPlaybackSessionUpdateFrequencyDetails": "Se il server Jellyfin non ha ricevuto alcun aggiornamento da un client negli ultimi 5 minuti, presume che la riproduzione sia terminata. Ciò significa che per i brani più lunghi di 5 minuti la riproduzione potrebbe essere erroneamente segnalata come terminata, riducendo la qualità dei dati di segnalazione della riproduzione.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
-  }
+  },
+  "bufferSizeTitle": "Dimensione del buffer",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "La dimensione massima del buffer, in MB. Richiede un riavvio.",
+  "@bufferSizeSubtitle": {},
+  "bufferDisableSizeConstraintsTitle": "Non limitare la dimensione del buffer",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "Disattiva i vincoli sulla dimensione del buffer (\"Buffer Size\"). Il buffer verrà sempre caricato fino alla durata configurata (\"Buffer Duration\"), anche per file di grandi dimensioni. Può causare arresti anomali. Richiede un riavvio.",
+  "@bufferDisableSizeConstraintsSubtitle": {}
 }

@@ -450,24 +450,6 @@
   "@refresh": {},
   "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de \"Música\".",
   "@noMusicLibrariesBody": {},
-  "deleteDownloadsConfirmButtonText": "Borrar",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
-  "deleteDownloadsPrompt": "¿Estás seguro de que quieres eliminar la {itemType, select, album{album} playlist{playlist} artist{artist} genre{género} track{song} other{}} '{itemName}' de este dispositivo?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "showFastScroller": "Mostrar desplazamiento rápido",
   "@showFastScroller": {},
   "syncDownloadedPlaylists": "Sincroniza las listas de reproducción descargadas",

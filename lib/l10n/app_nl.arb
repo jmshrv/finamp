@@ -534,10 +534,6 @@
   "@emptyFilteredListTitle": {
     "description": "Message shown when a list of items is filtered and no items match the filter"
   },
-  "deleteDownloadsConfirmButtonText": "Verwijderen",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "back": "Terug",
   "@back": {
     "description": "Label for the back button."
@@ -803,20 +799,6 @@
         "type": "int"
       }
     }
-  },
-  "deleteDownloadsPrompt": "Weet je zeker dat je {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' wilt verwijderen van dit apparaat?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "playlistActionsMenuButtonTooltip": "Tik om toe te voegen aan afspeellijst. Houd ingedrukt om toe te voegen aan favorieten.",
   "@playlistActionsMenuButtonTooltip": {

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
@@ -1456,7 +1457,7 @@ class DownloadsService {
   /// needed, such as when building ImageProviders.  Exactly one of the two arguments
   /// should be provided.
   DownloadItem? getImageDownload({BaseItemDto? item, String? blurHash}) {
-    assert((item?.blurHash == null) != (blurHash == null));
+    assert((item == null) != (blurHash == null));
     String? imageId = blurHash ?? item!.blurHash ?? item!.imageId;
     if (imageId == null) {
       return null;

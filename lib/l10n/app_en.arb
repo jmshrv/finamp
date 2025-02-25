@@ -332,24 +332,6 @@
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Failed to get track from download ID",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' from this device?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
-  "deleteDownloadsConfirmButtonText": "Delete",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",
@@ -1222,10 +1204,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "Delete from device",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "Downloads Repair complete.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
@@ -1635,11 +1613,11 @@
   "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded.",
   "showProgressOnNowPlayingBarTitle": "Show track progress on in-app miniplayer",
   "@showProgressOnNowPlayingBarTitle": {
-    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar.",
+  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar.",
   "@showProgressOnNowPlayingBarSubtitle": {
-    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
   "lyricsScreen": "Lyrics View",
   "@lyricsScreen": {
@@ -1794,7 +1772,7 @@
   "@showFeatureChipsToggleTitle": {
     "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bit rate, and more on the player screen.",
+  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bitrate, and more on the player screen.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -1842,6 +1820,18 @@
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
   },
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Track} library{Library} other{Item}} got deleted from {deviceType, select, device{Device} server{Server} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "deleteFromTargetDialogText": "You are about to delete this {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} from {device, select, device{this device} server{the servers file system and library.{deleteType, select, canDelete{ This will also Delete this item from this Device.} cantDelete{ This item will stay on this device until the next sync.} notDownloaded{} other{}}\nThis action cannot be reverted} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "deleteFromTargetConfirmButton": "Delete{target, select, device{ from Device} server{ from Server} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
   "largeDownloadWarning": "Warning: You are about to download {count} tracks.",
   "@largeDownloadWarning": {
     "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
@@ -1858,5 +1848,22 @@
   "downloadSizeWarningCutoffSubtitle": "A warning message will be displayed when downloading more than this many songs at once.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "confirmAddAlbumToPlaylist": "Are you sure you want add all tracks from {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' to this playlist?  They can only be removed individually.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "publiclyVisiblePlaylist": "Publicly Visible:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
   }
 }

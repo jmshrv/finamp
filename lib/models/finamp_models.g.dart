@@ -195,7 +195,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           ? FinampSegmentContainer.fragmentedMp4
           : fields[75] as FinampSegmentContainer,
       downloadSizeWarningCutoff: fields[80] == null ? 150 : fields[80] as int,
-      oneLineMarqueeTextButton: fields[81] == null ? false : fields[81] as bool,
+      allowDeleteFromServer: fields[81] == null ? false : fields[81] as bool,
+      oneLineMarqueeTextButton: fields[82] == null ? false : fields[82] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -205,7 +206,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(78)
+      ..writeByte(79)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -361,6 +362,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(80)
       ..write(obj.downloadSizeWarningCutoff)
       ..writeByte(81)
+      ..write(obj.allowDeleteFromServer)
+      ..writeByte(82)
       ..write(obj.oneLineMarqueeTextButton);
   }
 

@@ -168,24 +168,6 @@
   "@errorScreenError": {},
   "failedToGetSongFromDownloadId": "Le titre n’a pas pu être récupéré à l’aide de l’ID de téléchargement",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "Êtes vour sûr de vouloir supprimer {itemType, select, album{l'album} playlist{la playlist} artist{l'artiste} genre{le genre} track{le titre} other{}} '{itemName}' de cet appareil ?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Invite de confirmation affichée avant de supprimer les médias téléchargés du périphérique local, action destructrice, n'affecte pas les médias sur le serveur."
-  },
-  "deleteDownloadsConfirmButtonText": "Supprimer",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Affiché dans la boîte de dialogue de confirmation pour la suppression des médias téléchargés du périphérique local."
-  },
   "error": "Erreur",
   "@error": {},
   "discNumber": "Disque {number}",

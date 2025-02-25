@@ -141,6 +141,7 @@ class DefaultSettings {
   static const downloadWorkers = 5;
   static const maxConcurrentDownloads = 10;
   static const downloadSizeWarningCutoff = 150;
+  static const allowDeleteFromServer = false;
   static const oneLineMarqueeTextButton = false;
 }
 
@@ -250,7 +251,8 @@ class FinampSettings {
           DefaultSettings.transcodingSegmentContainer,
       this.downloadSizeWarningCutoff =
           DefaultSettings.downloadSizeWarningCutoff,
-    this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
+    this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
+      this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
       });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -517,9 +519,11 @@ class FinampSettings {
   @HiveField(80, defaultValue: DefaultSettings.downloadSizeWarningCutoff)
   int downloadSizeWarningCutoff;
 
-  @HiveField(81, defaultValue: DefaultSettings.oneLineMarqueeTextButton)
-  bool oneLineMarqueeTextButton;
+  @HiveField(81, defaultValue: DefaultSettings.allowDeleteFromServer)
+  bool allowDeleteFromServer;
 
+  @HiveField(82, defaultValue: DefaultSettings.oneLineMarqueeTextButton)
+  bool oneLineMarqueeTextButton;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1375,16 +1379,37 @@ enum DownloadItemState {
   }
 }
 
+enum DeleteType {
+  canDelete("canDelete"),
+  cantDelete("cantDelete"),
+  notDownloaded("notDownloaded");
+
+  const DeleteType(this.textForm);
+  final String textForm;
+}
+
 /// The status of a download, as used to determine download button state.
 /// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
+  /// not downloaded
   notNeeded(false, false, false),
+  // downloaded over a parent
   incidental(false, false, true),
   incidentalOutdated(false, true, true),
+
+  /// downloaded separately
   required(true, false, false),
   requiredOutdated(true, true, false);
 
   const DownloadItemStatus(this.isRequired, this.outdated, this.isIncidental);
+
+  DeleteType toDeleteType() {
+    return isRequired
+        ? DeleteType.canDelete
+        : (outdated || isIncidental
+            ? DeleteType.cantDelete
+            : DeleteType.notDownloaded);
+  }
 
   final bool isRequired;
   final bool outdated;

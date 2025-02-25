@@ -448,10 +448,6 @@
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
-  "deleteDownloadsConfirmButtonText": "Usuń",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "syncDownloadedPlaylists": "Synchronizuj pobrane playlisty",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Pokaż szybkie przewijanie",
@@ -462,20 +458,6 @@
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Włącz wstawianie utworu jako następnego elementu w kolejce po przesunięciu palcem na liście utworów zamiast dołączania go na końcu.",
   "@swipeInsertQueueNextSubtitle": {},
-  "deleteDownloadsPrompt": "Czy na pewno chcesz usunąć {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' z tego urządzenia?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "noMusicLibrariesBody": "Finamp nie mógł znaleźć żadnych bibliotek muzycznych. Upewnij się, że serwer Jellyfin zawiera co najmniej jedną bibliotekę z typem zawartości ustawionym na \"Muzyka\".",
   "@noMusicLibrariesBody": {},
   "serverUrlHint": "np. demo.jellyfin.org/stable",
@@ -900,7 +882,7 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "albumCount": "{count,plural,=1{{count} Album} =2{{count} Albumów} few{{count} Albumy} many{{count} Albumów} other{{count} Albumów}}",
+  "albumCount": "{count,plural,=1{{count} Album} =2{{count} Albumów} few{{count} Albumy} other{{count} Albumów}}",
   "@albumCount": {
     "placeholders": {
       "count": {
@@ -1257,10 +1239,6 @@
   "downloadItem": "Pobierz",
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
-  },
-  "deleteItem": "Usuń z urządzenia",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
   },
   "repairComplete": "Naprawa pobranych utworów zakończona.",
   "@repairComplete": {
