@@ -20,6 +20,7 @@ class DownloadDialog extends StatefulWidget {
     required this.downloadLocationId,
     required this.needsTranscode,
     required this.children,
+    required this.songCount,
   });
 
   final DownloadStub item;
@@ -27,6 +28,7 @@ class DownloadDialog extends StatefulWidget {
   final String? downloadLocationId;
   final bool needsTranscode;
   final List<BaseItemDto>? children;
+  final int? songCount;
 
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
@@ -36,7 +38,8 @@ class DownloadDialog extends StatefulWidget {
   /// if transcode downloads is set to ask.  If neither is needed, the
   /// download is initiated immediately with no dialog.
   static Future<void> show(
-      BuildContext context, DownloadStub item, String? viewId) async {
+      BuildContext context, DownloadStub item, String? viewId,
+      {int? songCount}) async {
     if (viewId == null) {
       final finampUserHelper = GetIt.instance<FinampUserHelper>();
       viewId = finampUserHelper.currentUser!.currentViewId;
@@ -44,11 +47,7 @@ class DownloadDialog extends StatefulWidget {
     bool needTranscode =
         FinampSettingsHelper.finampSettings.shouldTranscodeDownloads ==
                 TranscodeDownloadsSetting.ask &&
-            // Skip asking for transcode for image only collection
-            item.finampCollection?.type != FinampCollectionType.libraryImages &&
-            // Skip asking for transcode for metadata +image collection
-            item.finampCollection?.type !=
-                FinampCollectionType.allPlaylistsMetadata;
+            (item.finampCollection?.type.hasAudio ?? true);
     String? downloadLocation =
         FinampSettingsHelper.finampSettings.defaultDownloadLocation;
     if (!FinampSettingsHelper.finampSettings.downloadLocationsMap
@@ -64,7 +63,37 @@ class DownloadDialog extends StatefulWidget {
         downloadLocation = locations.first.id;
       }
     }
-    if (!needTranscode && downloadLocation != null) {
+
+    // If transcoding an album or playlist, fetch children for size calculation.
+    // If songCount was not supplied, fetch children to calculate for all types
+    // where this can be determined in one query.
+    JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    List<BaseItemDto>? children;
+    if ((item.baseItemType == BaseItemDtoType.album ||
+            item.baseItemType == BaseItemDtoType.playlist) &&
+        (needTranscode || songCount == null)) {
+      children = await jellyfinApiHelper.getItems(
+          parentItem: item.baseItem!,
+          includeItemTypes: BaseItemDtoType.song.idString,
+          fields:
+              "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
+      songCount = children?.length;
+    } else if ((item.baseItemType == BaseItemDtoType.artist ||
+            item.baseItemType == BaseItemDtoType.genre) &&
+        songCount == null) {
+      // Only song children are expected by dialog, so do not save album children.
+      List<BaseItemDto>? artistChildren = await jellyfinApiHelper.getItems(
+        parentItem: item.baseItem!,
+        includeItemTypes: BaseItemDtoType.album.idString,
+      );
+      songCount = artistChildren?.fold<int>(
+          0, (count, item) => count + (item.childCount ?? 0));
+    }
+
+    if (!needTranscode &&
+        downloadLocation != null &&
+        (songCount ?? 0) <
+            FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff) {
       final downloadsService = GetIt.instance<DownloadsService>();
       var profile = FinampSettingsHelper
                   .finampSettings.shouldTranscodeDownloads ==
@@ -81,16 +110,6 @@ class DownloadDialog extends StatefulWidget {
           .then((value) => GlobalSnackbar.message(
               (scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued)));
     } else {
-      JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-      List<BaseItemDto>? children;
-      if (item.baseItemType == BaseItemDtoType.album ||
-          item.baseItemType == BaseItemDtoType.playlist) {
-        children = await jellyfinApiHelper.getItems(
-            parentItem: item.baseItem!,
-            includeItemTypes: "Audio",
-            fields:
-                "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
-      }
       if (!context.mounted) return;
       await showDialog(
         context: context,
@@ -100,6 +119,7 @@ class DownloadDialog extends StatefulWidget {
           downloadLocationId: downloadLocation,
           needsTranscode: needTranscode,
           children: children,
+          songCount: songCount,
         ),
       );
     }
@@ -112,6 +132,9 @@ class _DownloadDialogState extends State<DownloadDialog> {
 
   @override
   Widget build(BuildContext context) {
+    assert(widget.children?.every((child) =>
+            BaseItemDtoType.fromItem(child) == BaseItemDtoType.song) ??
+        true);
     String originalDescription = "null";
     String transcodeDescription = "null";
     var transcodeProfile =
@@ -145,7 +168,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
           .map((e) => e.mediaSources?.first.mediaStreams.first.codec)
           .toSet();
 
-      if (formats.length == 1) {
+      if (formats.length == 1 && formats.first != null) {
         originalDescription += " ${formats.first!.toUpperCase()}";
       }
     }
@@ -154,6 +177,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
       title: Text(AppLocalizations.of(context)!.addDownloads),
       content: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (widget.downloadLocationId == null)
             DropdownButton<DownloadLocation>(
@@ -195,6 +219,12 @@ class _DownloadDialogState extends State<DownloadDialog> {
                         .dontTranscode(originalDescription)),
                   )
                 ]),
+          if ((widget.songCount ?? 0) >=
+              FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff)
+            Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                child: Text(AppLocalizations.of(context)!
+                    .largeDownloadWarning(widget.songCount!)))
         ],
       ),
       actions: [

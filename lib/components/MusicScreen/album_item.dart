@@ -19,6 +19,7 @@ import '../../screens/artist_screen.dart';
 import '../../services/downloads_service.dart';
 import '../../services/favorite_provider.dart';
 import '../../services/jellyfin_api_helper.dart';
+import '../AddToPlaylistScreen/playlist_actions_menu.dart';
 import '../AlbumScreen/download_dialog.dart';
 import '../global_snackbar.dart';
 import 'album_item_card.dart';
@@ -37,7 +38,8 @@ enum _AlbumListTileMenuItems {
   addToQueue,
   shuffleToQueue,
   goToArtist,
-  deleteFromServer
+  deleteFromServer,
+  addToPlaylist,
 }
 
 //TODO should this be unified with artist screen version?
@@ -289,7 +291,6 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                 title: Text(AppLocalizations.of(context)!.goToArtist),
               ),
             ),
-
           if (canDeleteFromServer)
             PopupMenuItem<_AlbumListTileMenuItems>(
               value: _AlbumListTileMenuItems.deleteFromServer,
@@ -299,9 +300,15 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                   title: Text(AppLocalizations.of(context)!
                       .deleteFromTargetConfirmButton("server"))),
             ),
+          PopupMenuItem<_AlbumListTileMenuItems>(
+            value: _AlbumListTileMenuItems.addToPlaylist,
+            child: ListTile(
+              leading: const Icon(Icons.playlist_add),
+              title: Text(local.addToPlaylistTitle),
+            ),
+          ),
         ],
       );
-
       if (!mounted) return;
 
       switch (selection) {
@@ -656,6 +663,14 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           await askBeforeDeleteFromServerAndDevice(context, item,
               refresh: () => musicScreenRefreshStream
                   .add(null)); // trigger a refresh of the music screen
+        case _AlbumListTileMenuItems.addToPlaylist:
+          if (context.mounted) {
+            await showPlaylistActionsMenu(
+              context: context,
+              item: widget.album,
+              parentPlaylist: null,
+            );
+          }
       }
     }
 

@@ -110,7 +110,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               DownloadButton(
                   item: DownloadStub.fromItem(
                       type: DownloadItemType.collection, item: widget.parent),
-                  children: widget.displayChildren.length),
+                  children: widget.displayChildren),
             downloadStatus.isRequired && canDeleteFromServer
                 ? PopupMenuButton<Null>(
                     enableFeedback: true,
@@ -178,7 +178,11 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                                       null)); // trigger a refresh of the music screen
                             },
                           )
-                        : Visibility(visible: false, child: Text(""))
+                        : Visibility(visible: false, child: Text("")),
+            DownloadButton(
+                item: DownloadStub.fromItem(
+                    type: DownloadItemType.collection, item: widget.parent),
+                children: widget.displayChildren)
           ],
         ),
         if (widget.displayChildren.length > 1 &&

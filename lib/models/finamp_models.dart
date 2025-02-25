@@ -140,6 +140,7 @@ class DefaultSettings {
   static const showDownloadsWithUnknownLibrary = true;
   static const downloadWorkers = 5;
   static const maxConcurrentDownloads = 10;
+  static const downloadSizeWarningCutoff = 150;
   static const allowDeleteFromServer = false;
 }
 
@@ -247,6 +248,8 @@ class FinampSettings {
           DefaultSettings.hasDownloadedPlaylistInfo,
       this.transcodingSegmentContainer =
           DefaultSettings.transcodingSegmentContainer,
+      this.downloadSizeWarningCutoff =
+          DefaultSettings.downloadSizeWarningCutoff,
       this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer});
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -509,8 +512,11 @@ class FinampSettings {
 
   @HiveField(79, defaultValue: DefaultSettings.bufferSizeMegabytes)
   int bufferSizeMegabytes;
-  
-  @HiveField(80, defaultValue: DefaultSettings.allowDeleteFromServer)
+
+  @HiveField(80, defaultValue: DefaultSettings.downloadSizeWarningCutoff)
+  int downloadSizeWarningCutoff;
+
+  @HiveField(81, defaultValue: DefaultSettings.allowDeleteFromServer)
   bool allowDeleteFromServer;
 
   static Future<FinampSettings> create() async {
@@ -1371,9 +1377,9 @@ enum DeleteType {
   canDelete("canDelete"),
   cantDelete("cantDelete"),
   notDownloaded("notDownloaded");
+
   const DeleteType(this.textForm);
   final String textForm;
-
 }
 
 /// The status of a download, as used to determine download button state.
@@ -1393,10 +1399,10 @@ enum DownloadItemStatus {
 
   DeleteType toDeleteType() {
     return isRequired
-      ? DeleteType.canDelete
-      : (outdated || isIncidental
-          ? DeleteType.cantDelete
-          : DeleteType.notDownloaded);
+        ? DeleteType.canDelete
+        : (outdated || isIncidental
+            ? DeleteType.cantDelete
+            : DeleteType.notDownloaded);
   }
 
   final bool isRequired;
@@ -2116,11 +2122,15 @@ enum PlaybackSpeedVisibility {
 }
 
 enum FinampCollectionType {
-  favorites,
-  allPlaylists,
-  latest5Albums,
-  libraryImages,
-  allPlaylistsMetadata;
+  favorites(true),
+  allPlaylists(true),
+  latest5Albums(true),
+  libraryImages(false),
+  allPlaylistsMetadata(false);
+
+  const FinampCollectionType(this.hasAudio);
+
+  final bool hasAudio;
 }
 
 @JsonSerializable(

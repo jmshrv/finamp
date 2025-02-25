@@ -458,7 +458,7 @@
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "Directory must be empty",
   "@directoryMustBeEmpty": {},
-  "customLocationsBuggy": "Custom locations are extremely buggy due to issues with permissions. I'm thinking of ways to fix this, but for now I wouldn't recommend using them.",
+  "customLocationsBuggy": "Custom locations can be extremely buggy and are not recommended in most cases. Locations under the system 'Music' folder prevent saving album covers due to OS limitations.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "Enter Low-Priority State on Pause",
   "@enterLowPriorityStateOnPause": {},
@@ -1607,11 +1607,11 @@
   "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded.",
   "showProgressOnNowPlayingBarTitle": "Show track progress on in-app miniplayer",
   "@showProgressOnNowPlayingBarTitle": {
-    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar.",
+  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar.",
   "@showProgressOnNowPlayingBarSubtitle": {
-    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
   "lyricsScreen": "Lyrics View",
   "@lyricsScreen": {
@@ -1766,7 +1766,7 @@
   "@showFeatureChipsToggleTitle": {
     "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bit rate, and more on the player screen.",
+  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bitrate, and more on the player screen.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -1825,5 +1825,39 @@
   "deleteFromTargetConfirmButton": "Delete{target, select, device{ from Device} server{ from Server} other{}}",
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "largeDownloadWarning": "Warning: You are about to download {count} tracks.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadSizeWarningCutoff": "Download Size Warning Cutoff",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "downloadSizeWarningCutoffSubtitle": "A warning message will be displayed when downloading more than this many songs at once.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "confirmAddAlbumToPlaylist": "Are you sure you want add all tracks from {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' to this playlist?  They can only be removed individually.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "publiclyVisiblePlaylist": "Publicly Visible:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
   }
 }
