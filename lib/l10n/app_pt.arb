@@ -743,20 +743,6 @@
   "@enableAutoScroll": {
     "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
   },
-  "deleteDownloadsPrompt": "Tens a certeza que queres eliminar o/a {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' deste dispositivo?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "downloadBitrateSubtitle": "Uma taxa de bits mais alta oferece áudio de melhor qualidade, mas exige mais espaço de armazenamento.",
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
@@ -1270,10 +1256,6 @@
   },
   "startInstantMixForIndividualTracksSwitchSubtitle": "Quando ativado, pressionar num tema na tab dos temas começa uma mistura instantânea desse tema, em vez de apenas tocar esse tema.",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
-  "deleteItem": "Apagar do dispositivo",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "Reparação dos Downloads completa.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."

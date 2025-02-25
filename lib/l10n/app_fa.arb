@@ -416,10 +416,6 @@
   "@noActiveDownloads": {},
   "failedToGetSongFromDownloadId": "در گرفتن قطعه از ID بارگیری ناکام ماندیم",
   "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsConfirmButtonText": "حذف",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "error": "خطا",
   "@error": {},
   "discNumber": "دیسک {number}",
@@ -631,20 +627,6 @@
   },
   "addToMorePlaylistsTitle": "افزودن به فهرست پخش‌های بیشتر",
   "@addToMorePlaylistsTitle": {},
-  "deleteDownloadsPrompt": "آیا مطمئن هستید که می‌خواهید {itemType, select, album{آلبوم} playlist{فهرست پخش} artist{هنرمند} genre{ژانر} song{قطعه} library{کتاب‌خانه} other{آیتم}} '{itemName}' را از دستگاه حذف کنید؟",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "applicationLegalese": "پروانه شده با پروانه‌ی عمومی موزیلا 2.0.\nکد منبع در {sourceCodeLink} در دسترس است.",
   "@applicationLegalese": {
     "placeholders": {
@@ -1032,10 +1014,6 @@
   "volumeNormalizationSettingsTitle": "عادی‌سازی حجم صدا",
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
-  },
-  "deleteItem": "حذف از دستگاه",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
   },
   "requireWifiForDownloads": "الزام اتصال به WiFi هنگام بارگیری.",
   "@requireWifiForDownloads": {

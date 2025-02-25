@@ -456,10 +456,6 @@
   "@enableVibrationSubtitle": {},
   "syncDownloadedPlaylists": "Sincronizza playlists scaricate",
   "@syncDownloadedPlaylists": {},
-  "deleteDownloadsConfirmButtonText": "Elimina",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "about": "Riguardo Finamp",
   "@about": {
     "description": "Label for the about/info button on the settings screen"
@@ -513,20 +509,6 @@
         "type": "int"
       }
     }
-  },
-  "deleteDownloadsPrompt": "Sei sicuro di voler eliminare {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' da questo dispositivo?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "finampTagline": "Un player musicale open source per Jellyfin",
   "@finampTagline": {
@@ -1291,10 +1273,6 @@
   },
   "startInstantMixForIndividualTracksSwitchSubtitle": "Quando attivo premere su un brano nella scheda dei brani farà partire un Mix Istantaneo di quel brano invece di riprodurre semplicemente il singolo brano.",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
-  "deleteItem": "Elimina dal dispositivo",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "riparazione dei Download completata.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
