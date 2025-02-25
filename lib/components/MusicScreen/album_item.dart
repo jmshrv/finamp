@@ -263,6 +263,13 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               title: Text(local.shuffleToQueue),
             ),
           ),
+          PopupMenuItem<_AlbumListTileMenuItems>(
+            value: _AlbumListTileMenuItems.addToPlaylist,
+            child: ListTile(
+              leading: const Icon(Icons.playlist_add),
+              title: Text(local.addToPlaylistTitle),
+            ),
+          ),
           downloadStatus.isRequired
               ? PopupMenuItem<_AlbumListTileMenuItems>(
                   value: _AlbumListTileMenuItems.deleteFromDevice,
@@ -300,13 +307,6 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                   title: Text(AppLocalizations.of(context)!
                       .deleteFromTargetConfirmButton("server"))),
             ),
-          PopupMenuItem<_AlbumListTileMenuItems>(
-            value: _AlbumListTileMenuItems.addToPlaylist,
-            child: ListTile(
-              leading: const Icon(Icons.playlist_add),
-              title: Text(local.addToPlaylistTitle),
-            ),
-          ),
         ],
       );
       if (!mounted) return;
