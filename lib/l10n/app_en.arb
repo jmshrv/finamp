@@ -1852,5 +1852,22 @@
   "downloadSizeWarningCutoffSubtitle": "A warning message will be displayed when downloading more than this many songs at once.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "confirmAddAlbumToPlaylist": "Are you sure you want add all tracks from {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' to this playlist?  They can only be removed individually.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "publiclyVisiblePlaylist": "Publicly Visible:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
   }
 }
