@@ -456,6 +456,24 @@
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Habilita a adição de uma faixa como próximo item na lista quando ela for deslizada, ao invés de adicioná-la ao final.",
   "@swipeInsertQueueNextSubtitle": {},
+  "deleteDownloadsPrompt": "Você tem certeza que deseja deletar {itemType, select, album{o álbum} playlist{a lista de reprodução} artist{o artista} genre{o gênero} song{a faixa} library{a biblioteca} other{item}} '{itemName}' desse dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Deletar",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
   "syncDownloadedPlaylists": "Sincronizar listas de reprodução baixadas",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Mostrar rolagem rápida",

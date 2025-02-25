@@ -450,6 +450,24 @@
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
+  "deleteDownloadsConfirmButtonText": "删除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsPrompt": "你确定要从此设备中删除{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} song{歌曲} library{库} other{项目}} '{itemName}'吗?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
   "syncDownloadedPlaylists": "同步下载的播放列表",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "显示快速滚动条",
