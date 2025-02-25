@@ -1570,7 +1570,7 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "albumCount": "{count,plural,=1{{count} Album} =3{{count} Albumy} =4{{count} Albumy} other{{count} Albumów}}",
+  "albumCount": "{count,plural,=1{{count} Album} =2{{count} Albumów} few{{count} Albumy} other{{count} Albumów}}",
   "@albumCount": {
     "placeholders": {
       "count": {
@@ -1750,7 +1750,7 @@
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
-  "playCountValue": "{playCount,plural,=1{{playCount} odtworzenie} =2{{playCount} odtworzenia} =3{{playCount} odtworzenia} =4{{playCount} odtworzenia} other{{playCount} odtworzeń}}",
+  "playCountValue": "{playCount,plural,=1{{playCount} odtworzenie} few{{playCount} odtworzenia} other{{playCount} odtworzeń}}",
   "@playCountValue": {
     "placeholders": {
       "playCount": {
