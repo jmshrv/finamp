@@ -1,10 +1,7 @@
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:finamp/services/scrolling_text_helper.dart';
-import 'package:marquee/marquee.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
@@ -17,73 +14,26 @@ final _borderRadius = BorderRadius.circular(4);
 class AlbumChip extends StatelessWidget {
   const AlbumChip({
     super.key,
-    required this.item,
-    required this.backgroundColor,
-    required this.color,
+    this.item,
+    this.backgroundColor,
+    this.color,
   });
 
-  final BaseItemDto item;
+  final BaseItemDto? item;
   final Color? backgroundColor;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    if (item?.album == null) return const SizedBox.shrink();
-
-    // Calculate text width
-    final textSpan = TextSpan(
-      text: item?.album ?? '',
-      style: Theme.of(context).textTheme.bodyMedium,
-    );
-    final textPainter = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-    )..layout();
-
-    final textWidth = textPainter.width + 24;
-    final screenWidth = MediaQuery.of(context).size.width - 32;
-    final shouldScroll = textWidth > screenWidth;
+    if (item == null) return const _EmptyAlbumChip();
 
     return Container(
-      height: 32,
-      width: shouldScroll ? screenWidth : textWidth,
-      decoration: BoxDecoration(
-        color: backgroundColor?.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Material(
-        type: MaterialType.transparency,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(4),
-          onTap: () => Navigator.of(context).pushNamed(
-            AlbumScreen.routeName,
-            arguments: item?.albumId,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Center(
-              child: shouldScroll
-                  ? Marquee(
-                      text: item?.album ?? '',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      scrollAxis: Axis.horizontal,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      blankSpace: 50.0,
-                      velocity: 30.0,
-                      pauseAfterRound: const Duration(seconds: 1),
-                      startAfter: const Duration(seconds: 1),
-                      fadingEdgeStartFraction: 0.1,
-                      fadingEdgeEndFraction: 0.1,
-                    )
-                  : Text(
-                      item?.album ?? '',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-            ),
-          ),
-        ),
-      ),
-    );
+        constraints: const BoxConstraints(minWidth: 10),
+        child: _AlbumChipContent(
+          item: item!,
+          color: color,
+          backgroundColor: backgroundColor,
+        ));
   }
 }
 

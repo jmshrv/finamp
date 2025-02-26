@@ -1,3 +1,4 @@
+import 'package:finamp/components/PlayerScreen/album_chip.dart';
 import 'package:finamp/screens/player_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/scrolling_text_helper.dart';
@@ -148,58 +149,31 @@ class SongNameContent extends StatelessWidget {
                     ),
                   ],
                 ),
-                Center(
-                  child: Builder(
-                    builder: (context) {
-                      final text = currentTrack.item.album ?? "";
-                      final textStyle = TextStyle(
-                        fontSize: 14,
-                        height: 1.0,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      );
-
-                      final textSpan = TextSpan(text: text, style: textStyle);
-                      final textPainter = TextPainter(
-                        text: textSpan,
-                        textDirection: TextDirection.ltr,
-                        maxLines: 1,
-                      )..layout();
-
-                      final contentWidth = textPainter.width + 16.0;
-                      final needsMarquee = contentWidth > 280.0;
-                      final width = needsMarquee ? 280.0 : contentWidth;
-
-                      return Container(
-                        width: width,
-                        height: 20.0,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 4.0, vertical: 2.0),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceVariant
-                              .withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        child: needsMarquee
-                            ? ScrollingTextHelper(
-                                id: ValueKey('album-${currentTrack.item.id}'),
-                                text: text,
-                                style: textStyle,
-                                alignment: TextAlign.center,
+                  Center(
+                      child: Container(
+                          constraints: const BoxConstraints(maxWidth: 280),
+                          child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Wrap(
+                                spacing: 4.0,
+                                runSpacing: 4.0,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  AlbumChip(
+                                    item: songBaseItemDto!,
+                                    backgroundColor: IconTheme.of(context)
+                                        .color!
+                                        .withOpacity(0.1),
+                                    key: songBaseItemDto?.album == null
+                                        ? null
+                                        : ValueKey(
+                                            "${songBaseItemDto!.album}-album"),
+                                  ),
+                                ],
                               )
-                            : Text(
-                                text,
-                                style: textStyle,
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                              ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+                  )))
+                ],
+              )
           );
         });
       },

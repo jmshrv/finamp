@@ -11,7 +11,6 @@ import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/metadata_provider.dart';
-import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
@@ -330,7 +329,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       ),
       ListTile(
         leading: Icon(
-          Icons.playlist_add,
+          TablerIcons.playlist,
           color: iconColor,
         ),
         title: Text(AppLocalizations.of(context)!.addToQueue),
@@ -879,10 +878,10 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      OneLineMarqueeHelper(
-                        key: ValueKey(widget.item.id),
-                        text: widget.item.name ??
+                      Text(
+                        widget.item.name ??
                             AppLocalizations.of(context)!.unknownName,
+                        textAlign: TextAlign.start,
                         style: TextStyle(
                           fontSize: widget.condensed ? 16 : 18,
                           height: 1.2,
@@ -890,6 +889,9 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                               Theme.of(context).textTheme.bodyMedium?.color ??
                                   Colors.white,
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        maxLines: 2,
                       ),
                       Padding(
                         padding: widget.condensed
@@ -908,17 +910,29 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                         ),
                       ),
                       if (!widget.condensed)
-                        AlbumChip(
-                          item: widget.item,
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
-                          backgroundColor:
-                              IconTheme.of(context).color!.withOpacity(0.1),
-                          key: widget.item.album == null
-                              ? null
-                              : ValueKey("${widget.item.album}-album"),
-                        ),
+                        SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                                spacing: 4.0,
+                                runSpacing: 4.0,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  AlbumChip(
+                                    item: widget.item,
+                                    backgroundColor: IconTheme.of(context)
+                                            .color
+                                            ?.withOpacity(0.1) ??
+                                        Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color ??
+                                        Colors.white,
+                                    key: widget.item.album == null
+                                        ? null
+                                        : ValueKey(
+                                            "${widget.item.album}-album"),
+                                  ),
+                                ]))
                     ],
                   ),
                 ),
