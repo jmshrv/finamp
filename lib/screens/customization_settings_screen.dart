@@ -5,6 +5,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 
 class CustomizationSettingsScreen extends StatefulWidget {
@@ -34,8 +35,39 @@ class _CustomizationSettingsScreenState
           const PlaybackSpeedControlVisibilityDropdownListTile(),
           if (!Platform.isIOS) const ShowStopButtonOnMediaNotificationToggle(),
           const ShowSeekControlsOnMediaNotificationToggle(),
+          const OneLineMarqueeTextSwitch(),
         ],
       ),
+    );
+  }
+}
+
+class OneLineMarqueeTextSwitch extends StatelessWidget {
+  const OneLineMarqueeTextSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? oneLineMarquee =
+            box.get("FinampSettings")?.oneLineMarqueeTextButton;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!.oneLineMarqueeTextButton),
+          subtitle: Text(
+              AppLocalizations.of(context)!.oneLineMarqueeTextButtonSubtitle),
+          value: oneLineMarquee ?? false,
+          onChanged: oneLineMarquee == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.oneLineMarqueeTextButton = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
     );
   }
 }

@@ -11,6 +11,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -847,15 +848,24 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        currentTrack?.item.title ??
-                                            AppLocalizations.of(context)!
-                                                .unknownName,
-                                        style: const TextStyle(
-                                            color: Colors.white,
+                                      SizedBox(
+                                        height: 20,
+                                        child: OneLineMarqueeHelper(
+                                          key: ValueKey(currentTrack?.item.id),
+                                          text: currentTrack?.item.title ??
+                                              AppLocalizations.of(context)!
+                                                  .unknownName,
+                                          style: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            overflow: TextOverflow.ellipsis),
+                                            height: 26 / 20,
+                                            color: Colors.white,
+                                            fontWeight:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? FontWeight.w500
+                                                    : FontWeight.w600,
+                                          ),
+                                        ),
                                       ),
                                       const SizedBox(height: 4),
                                       Row(

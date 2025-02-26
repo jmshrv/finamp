@@ -169,17 +169,14 @@ class _ArtistChipContent extends StatelessWidget {
                     ),
                   ),
                 Center(
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 220),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: Text(
-                        name ?? AppLocalizations.of(context)!.unknownArtist,
-                        style: TextStyle(
-                            color: color, overflow: TextOverflow.ellipsis),
-                        softWrap: false,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Text(
+                      name ?? AppLocalizations.of(context)!.unknownArtist,
+                      style: TextStyle(
+                          color: color, overflow: TextOverflow.ellipsis),
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 )
