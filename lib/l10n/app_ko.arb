@@ -410,7 +410,7 @@
       }
     }
   },
-  "customLocationsBuggy": "사용자 지정 위치는 권한 문제 때문에 버그가 매우 많습니다. 이 문제를 해결할 방법을 찾을 때 까지는 사용을 권장하지 않습니다.",
+  "customLocationsBuggy": "사용자 지정 위치는 대부분의 상황에서 권장하지 않습니다(버그가 매우 많이 발생할 수 있습니다). 운영체제 '음악'폴더 위치의 경우 시스템 제한 때문에 앨범 커버를 저장할 수 없습니다.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "일시 중지시 낮은 우선순위 상태로 전환합니다",
   "@enterLowPriorityStateOnPause": {},
@@ -524,7 +524,7 @@
   "@back": {
     "description": "Label for the back button."
   },
-  "downloadSettings": "다운로드 설정",
+  "downloadSettings": "다운로드",
   "@downloadSettings": {},
   "showNullLibraryItemsTitle": "알 수 없는 라이브러리의 미디어 보여주기.",
   "@showNullLibraryItemsTitle": {
@@ -1025,5 +1025,49 @@
   "bufferDisableSizeConstraintsTitle": "버퍼 크기를 제한하지 않습니다",
   "@bufferDisableSizeConstraintsTitle": {},
   "bufferSizeSubtitle": "버퍼의 최대 크기(MB단위). 변경시 재시작이 필요합니다",
-  "@bufferSizeSubtitle": {}
+  "@bufferSizeSubtitle": {},
+  "placeholderSource": "출처 미상",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "confirmShuffleToQueue": "대기열에 임의 재생으로 추가됨",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "shareOfflineListens": "오프라인 청취(재생 이력) 공유(Export)",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "playbackHistory": "재생 이력",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "yourLikes": "내가 좋아하는 노래들",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "mix": "{mixSource} - 믹스",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "confirmShuffleToNextUp": "넥스트 업에 임의 재생으로 추가됨",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleNext": "다음 곡은 임의 재생합니다",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "bufferDisableSizeConstraintsSubtitle": "버퍼 크기 제한을 비활성화 합니다(버퍼 크기). 버퍼는 항상 설정한 시간만큼 로드되며(버퍼 시간), 용량이 아주 큰 파일에서는 충돌을 일으킬 수 있습니다. 옵션 적용을 위해 재시작이 필요합니다.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "tracksFormerNextUp": "넥스트 업으로 추가된 곡들",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  }
 }

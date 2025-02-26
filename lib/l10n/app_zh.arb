@@ -269,7 +269,7 @@
   "@criticRating": {},
   "downloads": "下载",
   "@downloads": {},
-  "customLocationsBuggy": "由于权限问题，自定义位置存在很多问题。 我正在考虑解决此问题的方法，但目前我不建议使用它们。",
+  "customLocationsBuggy": "自定义位置可能会有很多错误，在大多数情况下不建议使用。由于操作系统的限制，系统“Music”文件夹下无法保存专辑封面。",
   "@customLocationsBuggy": {},
   "datePlayed": "播放日期",
   "@datePlayed": {},
@@ -502,7 +502,7 @@
   "@loginFlowServerSelectionHeading": {
     "description": "Heading for the server selection step during the login flow."
   },
-  "previousTracks": "之前歌曲",
+  "previousTracks": "历史播放",
   "@previousTracks": {
     "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
   },
@@ -1838,5 +1838,51 @@
   "showArtistsTopSongs": "在艺术家视图中显示最热门歌曲",
   "@showArtistsTopSongs": {},
   "showArtistsTopSongsSubtitle": "显示该艺术家收听次数最多的前 5 首歌曲。",
-  "@showArtistsTopSongsSubtitle": {}
+  "@showArtistsTopSongsSubtitle": {},
+  "downloadSizeWarningCutoff": "下载文件大小警告",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "publiclyVisiblePlaylist": "公开可见：",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "downloadSizeWarningCutoffSubtitle": "如果一次下载的歌曲超过此数量，系统将显示警告信息。",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "largeDownloadWarning": "警告： 您将下载 {count} 首歌曲。",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} song{歌曲} library{库} other{项目}} 被删除自 {deviceType, select, device{设备} server{服务器} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "confirmAddAlbumToPlaylist": "您确定要将{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} other{item}} '{itemName}'中的所有歌曲添加到此播放列表吗？  只能单独删除它们。",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteFromTargetConfirmButton": "{target, select, device{从设备中} server{从服务器中} other{}}删除",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "deleteFromTargetDialogText": "你将删除此{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} song{歌曲} library{库} other{item}}自{device, select, device{此设备} server{此服务器文件系统和库。{deleteType, select, canDelete{这也将从设备中删除此项目。} cantDelete{此项目将保留在此设备上，直到下次同步。} notDownloaded{} other{}}\n该操作不可撤销} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  }
 }
