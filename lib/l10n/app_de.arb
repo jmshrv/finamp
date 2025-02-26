@@ -237,7 +237,7 @@
   "@selectDirectory": {},
   "pathReturnSlashErrorMessage": "Pfade, die „/“ zurückgeben, können nicht verwendet werden",
   "@pathReturnSlashErrorMessage": {},
-  "customLocationsBuggy": "Benutzerdefinierte Orte sind extrem fehlerbehaftet aufgrund von Problemen mit Berechtigungen. Ich denke über Möglichkeiten nach, um dies zu beheben, aber im Moment würde ich davon abraten, diese zu nutzen.",
+  "customLocationsBuggy": "Benutzerdefinierte Speicherorte können äußerst fehlerhaft sein und werden in den meisten Fällen nicht empfohlen. Speicherorte unterhalb des 'Musik'-Systemordners verhindern das Speichern von Albumcovern aufgrund von Betriebssystembeschränkungen.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "Niedrige Priorität-Modus beim Pausieren aktivieren",
   "@enterLowPriorityStateOnPause": {},
@@ -1565,5 +1565,17 @@
   "periodicPlaybackSessionUpdateFrequency": "Update Häufigkeit der Wiedergabesitzung",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "runRepairWarning": "Der Server konnte nicht erreicht werden, um die Migration der Downloads abzuschließen. Bitte führen sie \"Downloads reparieren\" vom Download Bildschirm aus, sobald Sie wieder online sind.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "syncOnStartupSwitch": "Downloads automatisch beim Start synchronisieren",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "connectionInterruptedBackgroundAndroid": "Die Verbindung wurde während des Downloads im Hintergrund unterbrochen. Dies kann durch die Aktivierung von 'In den Niedrigprioritätszustand wechseln bei Pause' oder durch Betriebssystemeinstellungen verursacht werden.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   }
 }
