@@ -291,7 +291,7 @@
       }
     }
   },
-  "customLocationsBuggy": "Власні локації надзвичайно баговані через проблеми із дозволами. Я у пошуках рішення, але наразі я не рекомендую використовувати їх.",
+  "customLocationsBuggy": "Користувацькі розташування можуть бути дуже помилковими, тому в більшості випадків не рекомендуються. Розташування в системній папці «Музика» не дозволяють зберігати обкладинки альбомів через обмеження ОС.",
   "@customLocationsBuggy": {},
   "grid": "Таблиця",
   "@grid": {},
@@ -1813,7 +1813,7 @@
   "@emptyFilteredListTitle": {
     "description": "Message shown when a list of items is filtered and no items match the filter"
   },
-  "showFeatureChipsToggleSubtitle": "Показувати розширену інформацію про композицію (бітрейт, кодек, тощо) на екрані відтворювача.",
+  "showFeatureChipsToggleSubtitle": "Показувати на екрані програвача розширену інформацію про композицію, як-от кодек, бітрейт тощо.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -1829,7 +1829,7 @@
   "@showFeatureChipsToggleTitle": {
     "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Дозволяє керувати тим, чи функціонує панель міні-відтворювача у програмі / панель відтворення у кнопці на музичному екрані як індикатор прогресу.",
+  "showProgressOnNowPlayingBarSubtitle": "Контролює, чи міні-програвач у програмі/панель зараз відтворюється внизу екрана музики функціонує як панель прогресу.",
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
   },
@@ -1840,5 +1840,63 @@
   "bufferSizeTitle": "Розмір буферу",
   "@bufferSizeTitle": {},
   "bufferSizeSubtitle": "Максимальний розмір буферу в МБ. Вимагає перезапуску",
-  "@bufferSizeSubtitle": {}
+  "@bufferSizeSubtitle": {},
+  "marqueeOrTruncateButton": "Використовуйте три крапки для довгих заголовків",
+  "@marqueeOrTruncateButton": {},
+  "oneLineMarqueeTextButton": "Довгі заголовки з автоматичним прокручуванням",
+  "@oneLineMarqueeTextButton": {},
+  "hideQueueButtonSubtitle": "Приховати кнопку черги на екрані плеєра. Проведіть пальцем угору, щоб отримати доступ до черги.",
+  "@hideQueueButtonSubtitle": {},
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Track} library{Library} other{Item}} видалено з {deviceType, select, device{Device} server{Server} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "deleteFromTargetDialogText": "Ви збираєтеся видалити цей {itemType, select, album{album} playlist {playlist} artist{artist} genre{genre} song{track} library{library} other{item}} з {device, select, device{this device} server{файлової системи та бібліотеки сервера.{deleteType, select, canDelete{ Це також видалить цей елемент із цього пристрою.} cantDelete{ Цей елемент залишиться на цьому пристрої до наступної синхронізації.} notDownloaded{} other{}} \nЦю дію неможливо скасувати} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "downloadSizeWarningCutoff": "Завантажте обмеження попередження про розмір",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "publiclyVisiblePlaylist": "Загальнодоступні:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "downloadSizeWarningCutoffSubtitle": "У разі завантаження більшої кількості пісень одночасно з’явиться попередження.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "hideQueueButton": "Кнопка приховати чергу",
+  "@hideQueueButton": {},
+  "oneLineMarqueeTextButtonSubtitle": "Автоматично прокручуйте назви пісень, які задовгі для відображення, у два рядки",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "marqueeOrTruncateButtonSubtitle": "Показувати ... в кінці довгих заголовків замість тексту, що прокручується",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "deleteFromTargetConfirmButton": "Видалити{target, select, device{ from Device} server{ from Server} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "largeDownloadWarning": "Попередження: ви збираєтеся завантажити {count} треків.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmAddAlbumToPlaylist": "Ви впевнені, що хочете додати всі треки з {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' до цього списку відтворення?  Їх можна видалити лише окремо.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  }
 }
