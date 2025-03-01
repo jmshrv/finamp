@@ -47,15 +47,15 @@
   "@artists": {},
   "genres": "曲風",
   "@genres": {},
-  "playlists": "播放列表",
+  "playlists": "播放清單",
   "@playlists": {},
-  "startMix": "開始混音",
+  "startMix": "生成組合",
   "@startMix": {},
-  "startMixNoSongsArtist": "長按藝人可將其加入或移除混音清單，準備好後再開始混音",
+  "startMixNoSongsArtist": "長按藝人可將其加入或移除組合清單，準備好後再開始組合",
   "@startMixNoSongsArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "長按專輯可將其加入或移除混音清單，準備好後再開始混音",
+  "startMixNoSongsAlbum": "長按專輯可將其加入或移除組合清單，準備好後再開始組合",
   "@startMixNoSongsAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -81,7 +81,7 @@
   "@sortBy": {},
   "album": "專輯",
   "@album": {},
-  "albumArtist": "專輯歌手",
+  "albumArtist": "專輯藝人",
   "@albumArtist": {},
   "artist": "歌手",
   "@artist": {},
@@ -186,15 +186,15 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "編輯播放列表名稱",
+  "editPlaylistNameTooltip": "編輯播放清單名稱",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "編輯播放列表名稱",
+  "editPlaylistNameTitle": "編輯播放清單名稱",
   "@editPlaylistNameTitle": {},
   "required": "必需的",
   "@required": {},
   "updateButtonLabel": "更新",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "播放列表名稱已更新。",
+  "playlistNameUpdated": "播放清單名稱已更新。",
   "@playlistNameUpdated": {},
   "favourite": "最愛",
   "@favourite": {},
@@ -258,7 +258,7 @@
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "目錄必須為空",
   "@directoryMustBeEmpty": {},
-  "customLocationsBuggy": "由於權限問題，自定義位置存在很多問題。 我正在考慮解決此問題的方法，但目前我不建議使用它們。",
+  "customLocationsBuggy": "自訂位置可能會導致嚴重錯誤，通常不建議使用。存放於系統「音樂」資料夾內的位置，因作業系統的限制，無法儲存專輯封面。",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "暫停時進入低優先級狀態",
   "@enterLowPriorityStateOnPause": {},
@@ -334,31 +334,31 @@
   "@invalidNumber": {},
   "sleepTimerTooltip": "睡眠定時器",
   "@sleepTimerTooltip": {},
-  "addToPlaylistTooltip": "添加至播放列表",
+  "addToPlaylistTooltip": "添加至播放清單",
   "@addToPlaylistTooltip": {},
-  "addToPlaylistTitle": "添加至播放列表",
+  "addToPlaylistTitle": "添加至播放清單",
   "@addToPlaylistTitle": {},
-  "newPlaylist": "新建播放列表",
+  "newPlaylist": "建立播放清單",
   "@newPlaylist": {},
   "createButtonLabel": "創建",
   "@createButtonLabel": {},
-  "playlistCreated": "播放列表已創建。",
+  "playlistCreated": "播放清單已創建。",
   "@playlistCreated": {},
-  "noAlbum": "沒有專輯",
+  "noAlbum": "無專輯",
   "@noAlbum": {},
-  "noItem": "沒有項目",
+  "noItem": "無項目",
   "@noItem": {},
-  "noArtist": "沒有歌手",
+  "noArtist": "無歌手",
   "@noArtist": {},
   "unknownArtist": "未知歌手",
   "@unknownArtist": {},
-  "queue": "隊列",
+  "queue": "播放佇列",
   "@queue": {},
-  "addToQueue": "添加至隊列",
+  "addToQueue": "加入至播放佇列",
   "@addToQueue": {},
-  "replaceQueue": "替換隊列",
+  "replaceQueue": "更換佇列",
   "@replaceQueue": {},
-  "instantMix": "即時混音",
+  "instantMix": "即時組合",
   "@instantMix": {},
   "goToAlbum": "前往專輯",
   "@goToAlbum": {},
@@ -366,11 +366,11 @@
   "@removeFavourite": {},
   "addFavourite": "添加至最愛",
   "@addFavourite": {},
-  "addedToQueue": "添加至隊列。",
+  "addedToQueue": "已加入至播放佇列。",
   "@addedToQueue": {},
-  "queueReplaced": "隊列已被替換。",
+  "queueReplaced": "佇列已被取代。",
   "@queueReplaced": {},
-  "startingInstantMix": "開始即時混音。",
+  "startingInstantMix": "開始即時組合。",
   "@startingInstantMix": {},
   "anErrorHasOccured": "發生了一個錯誤。",
   "@anErrorHasOccured": {},
@@ -400,9 +400,9 @@
       }
     }
   },
-  "removeFromMix": "從混音中刪除",
+  "removeFromMix": "從組合中刪除",
   "@removeFromMix": {},
-  "addToMix": "添加到混音",
+  "addToMix": "添加到組合",
   "@addToMix": {},
   "disableGesture": "禁用手勢",
   "@disableGesture": {},
@@ -412,9 +412,9 @@
   "@removeFromPlaylistTooltip": {},
   "removeFromPlaylistTitle": "從播放清單中移除",
   "@removeFromPlaylistTitle": {},
-  "removedFromPlaylist": "已從播放列表中移除。",
+  "removedFromPlaylist": "已從播放清單中移除。",
   "@removedFromPlaylist": {},
-  "bufferDurationSubtitle": "播放器可以預先載入多少的音樂（秒）。需重啟以套用設定。",
+  "bufferDurationSubtitle": "最大緩衝持續時間（秒）。變更後需重新啟動。",
   "@bufferDurationSubtitle": {},
   "bufferDuration": "緩衝時長",
   "@bufferDuration": {},
@@ -438,7 +438,7 @@
   "@refresh": {},
   "confirm": "確認",
   "@confirm": {},
-  "playNext": "插播為下一首",
+  "playNext": "下一首",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
@@ -456,7 +456,7 @@
   "@interactions": {},
   "showFastScroller": "顯示快速滾動條",
   "@showFastScroller": {},
-  "swipeInsertQueueNext": "滑動歌曲接著播放",
+  "swipeInsertQueueNext": "滑動接續播放歌曲",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "開啟後滑動清單中的歌曲，可以將歌曲接著播放，而不是加到播放清單的最後一首。",
   "@swipeInsertQueueNextSubtitle": {},
@@ -596,7 +596,7 @@
   "@usernameHint": {
     "description": "Hint text for the username input field."
   },
-  "startMixNoSongsGenre": "長按一個類型可將其加入或移除混音清單，準備好後再開始混音",
+  "startMixNoSongsGenre": "長按一個類型可將其加入或移除組合清單，準備好後再開始組合",
   "@startMixNoSongsGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
@@ -630,7 +630,7 @@
   "@playlistActionsMenuButtonTooltip": {
     "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
   },
-  "showFeatureChipsToggleSubtitle": "在播放器介面上顯示包含編解碼器、比特率等進階音軌資料。",
+  "showFeatureChipsToggleSubtitle": "在播放器介面上顯示包含編解碼器、位元率等進階音軌資料。",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -956,7 +956,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "confirmAddToNextUp": "已將 {type, select, track{曲目} album{專輯} artist{藝人} playlist{播放清單} genre{類型} other{項目}} 新增至「即將播放」",
+  "confirmAddToNextUp": "已將 {type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} other{項目}} 新增至「即將播放」",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -998,7 +998,7 @@
   "@yourLikes": {
     "description": "Title for the queue source when the user is playing their liked tracks"
   },
-  "mix": "{mixSource} - 混音版",
+  "mix": "{mixSource} - 合輯",
   "@mix": {
     "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
     "placeholders": {
@@ -1016,7 +1016,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} songMix{精選單曲混合} artistMix{精選藝人混合} albumMix{精選專輯混合} genreMix{精選類型混合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選歌曲} genre{音樂類型} artist{藝人} song{單曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
+  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} songMix{單曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選歌曲} genre{音樂類型} artist{藝人} song{單曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1042,5 +1042,199 @@
         "type": "String"
       }
     }
+  },
+  "playbackSpeedButtonLabel": "以 x{speed} 倍速播放",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedFeatureText": "x{speed} 倍速",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "reportQueueToServerSubtitle": "啟用後，Finamp 會將當前播放佇列回報至 Jellyfin 伺服器。目前此功能的實際用途有限，且可能增加網路流量。",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "設定向 Jellyfin 伺服器回報當前播放狀態頻率（秒）的進階細節。設定向伺服器回報當前播放狀態的頻率（以秒計算）。此數值應小於 5 分鐘（300 秒），以防止會話逾時。",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "resetToDefaults": "恢復預設值",
+  "@resetToDefaults": {},
+  "couldNotLoad": "無法載入 {source, select, album{專輯} playlist{播放清單} songMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選後的歌曲} genre{音樂類型} artist{藝人} song{歌曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "調整目前播放狀態向 Jellyfin 伺服器回報頻率（秒數）的進階細節。若 Jellyfin 伺服器在過去 5 分鐘內未收到來自客戶端的更新，則會假設播放已結束。這表示對於長度超過 5 分鐘的歌曲，系統可能會錯誤地判定播放已結束，從而降低播放回報數據的準確性。",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topSongs": "熱門歌曲",
+  "@topSongs": {},
+  "albumCount": "{count,plural,=1{{count} 張專輯} other{{count} 張專輯}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "close": "關閉",
+  "@close": {},
+  "volumeNormalizationSwitchSubtitle": "使用增益資訊來標準化歌曲的音量（「重放增益」）",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "播放狀態更新頻率",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "loopModeOneButtonLabel": "單曲循環",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeAllButtonLabel": "全部循環",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "恢復正在播放",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "恢復",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "{date} 已儲存",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "正在播放：{song}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "song": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 首歌曲} other{{count} 首歌曲}}，{remaining} 首未播放",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "queueLoadingMessage": "正在恢復播放佇列...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "queueRetryMessage": "無法還原佇列。是否要重試？",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartup": "自動恢復上次佇列",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "應用程式啟動時，嘗試恢復上次播放佇列。",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "將當前佇列回報至伺服器？",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "shuffleAlbums": "隨機播放專輯",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsNext": "隨機選擇專輯並設為下一首播放",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "shuffleAlbumsToNextUp": "隨機選擇專輯加入即將播放清單",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsToQueue": "隨機播放專輯並優先加入播放佇列",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "shuffleAllQueueSource": "隨機播放",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "依序播放",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "隨機播放",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderLinearButtonTooltip": "目前為依序播放。點擊切換隨機播放。",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "目前為隨機播放，點擊切換依序播放。",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedDecreaseLabel": "降低播放速度",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "提升播放速度",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeNoneButtonLabel": "關閉循環",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "moreInfo": "詳細資訊",
+  "@moreInfo": {},
+  "volumeNormalizationSettingsTitle": "音量標準化",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "volumeNormalizationSwitchTitle": "啟用音量標準化",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "音量正規化的適用時機與方法",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorTitle": "音量標準化模式",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
   }
 }
