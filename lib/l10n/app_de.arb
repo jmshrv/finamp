@@ -1170,7 +1170,7 @@
   },
   "fixedGridSizeSwitchSubtitle": "Die Größe der Rasterkacheln reagiert nicht auf die Fenster-/Bildschirmgröße.",
   "@fixedGridSizeSwitchSubtitle": {},
-  "downloadSettings": "Herunterladeeinstellungen",
+  "downloadSettings": "Herunterladen",
   "@downloadSettings": {},
   "doTranscode": "Als {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}} herunterladen",
   "@doTranscode": {
@@ -1384,7 +1384,7 @@
   "@syncComplete": {
     "description": "Message displayed after download sync completes."
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Downloaden} failed{Fehlgeschlagen} syncFailed{Synchronisation Fehlgeschlagen} enqueued{Warten} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Laufende} failed{Fehlgeschlagene} syncFailed{Synchronisation Fehlgeschlagen} enqueued{Eingereihte} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1441,7 +1441,7 @@
       }
     }
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} lied} other{{songCount} lieder}}, {imageCount,plural,=1{{imageCount} bild} other{{imageCount} bilder}}\n{syncCount,plural,=1{{syncCount} Synchronisiert} other{{syncCount} Synchronisieren}}{repairing, plural, =0{} other{\nAm Reparieren}}",
+  "downloadedCountUnified": "{songCount,plural,=1{{songCount} Lied} other{{songCount} Lieder}}, {imageCount,plural,=1{{imageCount} Bild} other{{imageCount} Bilder}}\n{syncCount,plural,=1{{syncCount} Synchronisiert} other{{syncCount} Synchronisieren}}{repairing, plural, =0{} other{\nAm Reparieren}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
@@ -1577,5 +1577,111 @@
   "connectionInterruptedBackgroundAndroid": "Die Verbindung wurde während des Downloads im Hintergrund unterbrochen. Dies kann durch die Aktivierung von 'In den Niedrigprioritätszustand wechseln bei Pause' oder durch Betriebssystemeinstellungen verursacht werden.",
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
-  }
+  },
+  "preferQuickSyncSwitchSubtitle": "Beim Synchronisieren typisch statische Elemente (z.B. Lieder und Alben) nicht aktualisieren. Eine Download-Reparatur wir immer eine vollständige Synchronisation durchführen.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "oneLineMarqueeTextButtonSubtitle": "Automatisch Songtitel scrollen, die zu lang sind um sie in zwei Zeilen anzuzeigen",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "hideQueueButtonSubtitle": "Verstecke den Warteschlangen-Knopf im Wiedergabefenster. Wische hoch, um auf die Warteschlange zuzugreifen.",
+  "@hideQueueButtonSubtitle": {},
+  "hideQueueButton": "Wiedergabelisten-Knopf verstecken",
+  "@hideQueueButton": {},
+  "transcodingStreamingContainerSubtitle": "Transkodierungscontainer, der beim streamen transkodierter Audio verwendet wird. Lieder, die sich bereits in der Warteschlange befinden werden nicht beinflusst.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "downloadTranscodeEnableOption": "{option, select, always{Immer} never{Niemals} ask{Fragen} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "downloadBitrateSubtitle": "Eine höhere Bitrate führt zu besserer Audioqualität auf Kosten von höherem Speicherplatzverbrauch.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "dontTranscode": "Original Herunterladen{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "defaultDownloadLocationButton": "Als Standard Download-Ort festlegen.  Ausschalten, um den Ort per Download festzulegen.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "allowSplitScreenSubtitle": "Das Wiedergabefenster wird auf breiterenBildschirmen neben anderen Ansichten gezeigt.",
+  "@allowSplitScreenSubtitle": {},
+  "allowSplitScreenTitle": "Geteilter-Bildschirm-Modus erlauben",
+  "@allowSplitScreenTitle": {},
+  "hidePlayerBottomActions": "Untere Aktionen verstecken",
+  "@hidePlayerBottomActions": {},
+  "showNullLibraryItemsSubtitle": "Manche Medien könnten mit einer unbekannten Bibliothek heruntergeladen werden. Deaktivieren um diese außerhalb ihrer Sammlung zu verstecken.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "preferQuickSyncSwitch": "Schnelle Synchronisationen bevorzugen",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ als {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "shuffleAlbumsToNextUp": "Zufallswiedergabe der Alben zur Wiedergabeliste hinzufügen",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsNext": "Zufallswiedergabe der Alben als nächstes",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Startet beim Tippen auf ein Lied im \"Lieder\"-Tab einen Sofort Mix anstatt nur ein einzelnes LIed abzuspielen.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "maxConcurrentDownloadsSubtitle": "Einen Erhöhung der gleichzeitigen Downloads kann zu erhöhten herunterladen im Hintergrund führen, kann aber zu Fehlern bei sehr großen Downloads oder zu exzessiven Verzögerungen führen.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "downloadsWorkersSetting": "Anzahl der Download-Worker",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{count} Download Workers",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadsWorkersSettingSubtitle": "Anzahl der Download-Worker zur Synchronisierung von Metadaten und zur Löschung von Downloads. Erhöhung des Wertes kann die Download-Synchronisierung und das Löschen beschleunigen, vor allem wenn die Server-Verzögerung hoch ist, kann allerdings auch Verzögerungen hervorrufen.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "oneLineMarqueeTextButton": "Auto-scrollen bei langen Titeln.",
+  "@oneLineMarqueeTextButton": {},
+  "marqueeOrTruncateButtonSubtitle": "Am Ende zu langer Songtitel ... anzeigen, statt zu scrollen",
+  "@marqueeOrTruncateButtonSubtitle": {}
 }
