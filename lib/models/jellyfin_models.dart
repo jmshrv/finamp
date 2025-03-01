@@ -1583,7 +1583,7 @@ class BaseItemDto with RunTimeTickDuration {
     this.movieCount,
     this.seriesCount,
     this.albumCount,
-    this.trackCount,
+    this.songCount,
     this.musicVideoCount,
     this.sourceType,
     this.dateLastMediaAdded,
@@ -2117,7 +2117,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   /// Gets or sets the track count.
   @HiveField(131)
-  int? trackCount;
+  int? songCount;
 
   /// Gets or sets the music video count.
   @HiveField(132)

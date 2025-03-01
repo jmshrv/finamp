@@ -1,0 +1,692 @@
+{
+  "serverUrl": "URL của Máy chủ",
+  "@serverUrl": {},
+  "emptyServerUrl": "URL của máy chủ không thể để trống",
+  "@emptyServerUrl": {
+    "description": "Error message that shows when the user submits a login without a server URL"
+  },
+  "username": "Tên người dùng",
+  "@username": {},
+  "password": "Mật khẩu",
+  "@password": {},
+  "logs": "Nhật kí hoạt động",
+  "@logs": {},
+  "next": "Tiếp theo",
+  "@next": {},
+  "selectMusicLibraries": "Chọn Thư viện Nhạc",
+  "@selectMusicLibraries": {
+    "description": "App bar title for library select screen"
+  },
+  "couldNotFindLibraries": "Không thể tìm thấy bất kì thư viện nào.",
+  "@couldNotFindLibraries": {
+    "description": "Error message when the user does not have any libraries"
+  },
+  "unknownName": "Không có tên",
+  "@unknownName": {},
+  "tracks": "Bản nhạc",
+  "@tracks": {},
+  "albums": "Albums",
+  "@albums": {},
+  "artists": "Nghệ sĩ",
+  "@artists": {},
+  "genres": "Thể loại",
+  "@genres": {},
+  "startMix": "Bắt đầu Mix",
+  "@startMix": {},
+  "startMixNoTracksArtist": "Bấm giữ một nghệ sĩ để thêm hoặc loại bỏ ra khỏi bộ Mix trước khi bắt đầu một tuyển tập Mix",
+  "@startMixNoTracksArtist": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+  },
+  "music": "Nhạc",
+  "@music": {},
+  "clear": "Loại bỏ",
+  "@clear": {},
+  "favourites": "Yêu thích",
+  "@favourites": {},
+  "shuffleAll": "Trộn hết",
+  "@shuffleAll": {},
+  "finamp": "Finamp",
+  "@finamp": {},
+  "downloads": "Tải xuống",
+  "@downloads": {},
+  "settings": "Cài đặt",
+  "@settings": {},
+  "offlineMode": "Chế độ ngoại tuyến",
+  "@offlineMode": {},
+  "sortOrder": "Sắp thứ tự",
+  "@sortOrder": {},
+  "sortBy": "Sắp theo",
+  "@sortBy": {},
+  "album": "Album",
+  "@album": {},
+  "albumArtist": "Album Nghệ Sĩ",
+  "@albumArtist": {},
+  "artist": "Nghệ sĩ",
+  "@artist": {},
+  "budget": "Chi phí",
+  "@budget": {},
+  "criticRating": "Đánh giá nhà phê bình",
+  "@criticRating": {},
+  "dateAdded": "Ngày được thêm",
+  "@dateAdded": {},
+  "datePlayed": "Ngày phát",
+  "@datePlayed": {},
+  "playCount": "Số lần phát",
+  "@playCount": {},
+  "premiereDate": "Ngày phát hành",
+  "@premiereDate": {},
+  "productionYear": "Năm sản xuất",
+  "@productionYear": {},
+  "name": "Tên",
+  "@name": {},
+  "random": "Ngẫu nhiên",
+  "@random": {},
+  "revenue": "Lợi nhuận",
+  "@revenue": {},
+  "runtime": "Thời gian phát",
+  "@runtime": {},
+  "downloadMissingImages": "Tải ảnh thiếu",
+  "@downloadMissingImages": {},
+  "playlists": "Danh sách phát",
+  "@playlists": {},
+  "downloadCount": "{count,plural, =1{{count} đang tải xuống} other{{count} đang tải xuống}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} đã hoàn thành",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlFailed": "{count} thất bại",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} đang hàng đợi",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} đang chạy",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorScreenError": "Đã có lỗi xảy ra khi lấy danh sách lỗi! Tại thời điểm này, có lẽ bạn nên tạo một Issue trên trang GitHub và xoá dữ liệu ứng dụng",
+  "@errorScreenError": {},
+  "failedToGetTrackFromDownloadId": "Không thể tải bản nhạc từ ID tải xuống",
+  "@failedToGetTrackFromDownloadId": {},
+  "error": "Lỗi",
+  "@error": {},
+  "discNumber": "Đĩa {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playButtonLabel": "Phát",
+  "@playButtonLabel": {},
+  "trackCount": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}}",
+  "@trackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "required": "Được yêu cầu",
+  "@required": {},
+  "updateButtonLabel": "Cập nhật",
+  "@updateButtonLabel": {},
+  "favourite": "Yêu thích",
+  "@favourite": {},
+  "downloadsDeleted": "Đã xóa tải xuống.",
+  "@downloadsDeleted": {},
+  "addDownloads": "Thêm tải xuống",
+  "@addDownloads": {},
+  "location": "Vị trí",
+  "@location": {},
+  "addButtonLabel": "Thêm",
+  "@addButtonLabel": {},
+  "shareLogs": "Chia sẻ bản ghi",
+  "@shareLogs": {},
+  "logsCopied": "Đã sao chép bản ghi.",
+  "@logsCopied": {},
+  "message": "Tin nhắn",
+  "@message": {},
+  "stackTrace": "Dấu vết Ngăn xếp",
+  "@stackTrace": {},
+  "transcoding": "Chuyển Mã",
+  "@transcoding": {},
+  "downloadLocations": "Vị trí tải xuống",
+  "@downloadLocations": {},
+  "audioService": "Dịch vụ âm thanh",
+  "@audioService": {},
+  "layoutAndTheme": "Bố cục & Chủ đề",
+  "@layoutAndTheme": {},
+  "notAvailableInOfflineMode": "Không khả dụng ở chế độ ngoại tuyến",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "Đăng xuất",
+  "@logOut": {},
+  "downloadedTracksWillNotBeDeleted": "Các bài hát được tải xuống sẽ không bị xoá",
+  "@downloadedTracksWillNotBeDeleted": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin dùng codec AAC để chuyển đổi",
+  "@jellyfinUsesAACForTranscoding": {},
+  "enableTranscoding": "Bật chuyển đổi",
+  "@enableTranscoding": {},
+  "enableTranscodingSubtitle": "Chuyển đổi các luồng truyền phát nhạc trên phía máy chủ.",
+  "@enableTranscodingSubtitle": {},
+  "editPlaylistNameTooltip": "Chỉnh sửa tên danh sách phát",
+  "@editPlaylistNameTooltip": {},
+  "customLocation": "Vị trí tuỳ chỉnh",
+  "@customLocation": {},
+  "appDirectory": "Đường dẫn ứng dụng",
+  "@appDirectory": {},
+  "addDownloadLocation": "Thêm đường dẫn tải xuống",
+  "@addDownloadLocation": {},
+  "selectDirectory": "Chọn đường dẫn",
+  "@selectDirectory": {},
+  "pathReturnSlashErrorMessage": "Đường dẫn mà trả về \"/\" không dùng được",
+  "@pathReturnSlashErrorMessage": {},
+  "directoryMustBeEmpty": "Đường dẫn phải trống",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPause": "Vào trạng thái Ưu Tiên Thấp khi Dừng",
+  "@enterLowPriorityStateOnPause": {},
+  "enterLowPriorityStateOnPauseSubtitle": "Để thông báo được gạt đi khi dừng. Ngoài ra cho phép Android tắt dịch vụ khi dừng.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "shuffleAllTrackCount": "Trộn tất cả bài hát",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Số lượng bài hát được tải khi dùng nút trộn tất cả bài hát.",
+  "@shuffleAllTrackCountSubtitle": {},
+  "viewTypeSubtitle": "Loại xem cho màn hình nhạc",
+  "@viewTypeSubtitle": {},
+  "list": "Danh sách",
+  "@list": {},
+  "addToPlaylistTooltip": "Thêm vào danh sách phát",
+  "@addToPlaylistTooltip": {},
+  "addToPlaylistTitle": "Thêm vào Danh sách phát",
+  "@addToPlaylistTitle": {},
+  "removeFromPlaylistTooltip": "Loại bỏ khỏi danh sách phát",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Loại bỏ khỏi Danh sách phát",
+  "@removeFromPlaylistTitle": {},
+  "newPlaylist": "Danh sách phát mới",
+  "@newPlaylist": {},
+  "startupError": "Đã xảy ra lỗi khi khởi động ứng dụng. Lỗi: {error}\n\nXin hãy tạo một Issue trên github.com/UnicornsOnLSD/finamp với ảnh chụp màn hình của trang này. Nếu vấn đề tái diễn bạn có thể dọn dữ liệu ứng dụng để thiết lập lại ứng dụng.",
+  "@startupError": {
+    "description": "The error message that shows when startup fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Failed to open download DB"
+      }
+    }
+  },
+  "internalExternalIpExplanation": "Nếu bạn muốn có thể truy cập máy chủ Jellyfin của mình từ xa, bạn cần sử dụng IP bên ngoài của mình.\n\nNếu máy chủ của bạn sử dụng cổng HTTP (cổng mặc định 80/443 (80 hoặc 443) hoặc cổng mặc định của Jellyfin (8096), thì bạn không cần phải chỉ định cổng đó. Điều này có thể xảy ra nếu máy chủ của bạn sử dụng proxy ngược\n\nNếu URL chính xác, bạn sẽ thấy một số thông tin về máy chủ của mình bật lên bên dưới trường nhập.",
+  "@internalExternalIpExplanation": {
+    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "communityRating": "Đánh giá cộng đồng",
+  "@communityRating": {},
+  "downloadedMissingImages": "{count,plural, =0{Không ảnh thiếu được tìm} =1{Đã tải {count} ảnh thiếu} other{Đã tải {count} ảnh thiếu}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleButtonLabel": "Xáo trộn",
+  "@shuffleButtonLabel": {},
+  "startMixNoTracksAlbum": "Bấm giữ một Album để thêm hoặc loại bỏ ra khỏi bộ Mix trước khi bắt đầu một tuyển tập Mix",
+  "@startMixNoTracksAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "downloadsQueued": "Tải xuống đã chuẩn bị, đang tải tệp",
+  "@downloadsQueued": {},
+  "areYouSure": "Bạn chắc chứ?",
+  "@areYouSure": {},
+  "unknownError": "Lỗi không xác định",
+  "@unknownError": {},
+  "applicationLegalese": "Được cấp phép với Mozilla Public License 2.0.\nMã nguồn có sẵn tại {sourceCodeLink}.",
+  "@applicationLegalese": {},
+  "bitrate": "Tốc độ bit",
+  "@bitrate": {},
+  "bitrateSubtitle": "Một tốc độ bit cao hơn mang lại âm thanh tốt hơn trong khi dùng băng thông lớn hơn.",
+  "@bitrateSubtitle": {},
+  "customLocationsBuggy": "Vị trí tùy chỉnh khá nhiều lỗi do lỗi với việc cấp quyền. Tôi đang tìm biện pháp để sửa, hiện tại tôi không khuyến khích dùng chúng.",
+  "@customLocationsBuggy": {},
+  "editPlaylistNameTitle": "Chỉnh sửa Tên Danh sách phát",
+  "@editPlaylistNameTitle": {},
+  "viewType": "Loại Xem",
+  "@viewType": {},
+  "playlistNameUpdated": "Tên danh sách phát đã được cập nhật.",
+  "@playlistNameUpdated": {},
+  "noArtist": "Không có Nghệ sĩ",
+  "@noArtist": {},
+  "addFavourite": "Thêm vào Yêu thích",
+  "@addFavourite": {},
+  "startingInstantMix": "Bắt đầu tuyển tập nhạc tức thời.",
+  "@startingInstantMix": {},
+  "responseError401": "{error} Mã {statusCode}. Có thể bạn đã nhập sai tên người dùng/mật khẩu, hoặc client của bạn bị đăng xuất.",
+  "@responseError401": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unauthorized"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "401"
+      }
+    }
+  },
+  "addToMix": "Thêm vào Mix",
+  "@addToMix": {},
+  "noButtonLabel": "KHÔNG",
+  "@noButtonLabel": {},
+  "setSleepTimer": "Đặt đồng hồ hẹn giờ ngủ",
+  "@setSleepTimer": {},
+  "grid": "Lưới",
+  "@grid": {},
+  "portrait": "Dọc",
+  "@portrait": {},
+  "landscape": "Ngang",
+  "@landscape": {},
+  "gridCrossAxisCount": "{value} Số Lưới Trục-Chéo",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "gridCrossAxisCountSubtitle": "Số lượng lưới dùng mỗi hàng khi {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "showTextOnGridViewSubtitle": "Cho dù có hay không hiện thông tin (tiêu đề, nghệ sĩ,...) trên lưới nhạc.",
+  "@showTextOnGridViewSubtitle": {},
+  "showTextOnGridView": "Hiện thông tin trong khung lưới",
+  "@showTextOnGridView": {},
+  "useCoverAsBackground": "Dùng ảnh bìa mờ làm nền trình phát",
+  "@useCoverAsBackground": {},
+  "useCoverAsBackgroundSubtitle": "Có hay không dùng ảnh bìa mờ làm nền trình phát trên phần phát nhạc.",
+  "@useCoverAsBackgroundSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Ẩn tên ca sĩ bài hát nếu giống ca sĩ album",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Có hay không hiện nghệ sĩ bài hát trên phần album nếu không khác ca sĩ album.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "Tắt cử chỉ",
+  "@disableGesture": {},
+  "disableGestureSubtitle": "Có nên tắt cử chỉ.",
+  "@disableGestureSubtitle": {},
+  "theme": "Chủ đề",
+  "@theme": {},
+  "system": "Hệ thống",
+  "@system": {},
+  "light": "Sáng",
+  "@light": {},
+  "dark": "Tối",
+  "@dark": {},
+  "tabs": "Trang",
+  "@tabs": {},
+  "cancelSleepTimer": "Tắt Đồng hồ Hẹn Giờ Ngủ?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "CÓ",
+  "@yesButtonLabel": {},
+  "minutes": "Phút",
+  "@minutes": {},
+  "invalidNumber": "Số không hợp lệ",
+  "@invalidNumber": {},
+  "sleepTimerTooltip": "Đồng hồ hẹn giờ ngủ",
+  "@sleepTimerTooltip": {},
+  "createButtonLabel": "TẠO",
+  "@createButtonLabel": {},
+  "playlistCreated": "Đã tạo danh sách phát.",
+  "@playlistCreated": {},
+  "noAlbum": "Không có Album",
+  "@noAlbum": {},
+  "noItem": "Không có vật phẩm",
+  "@noItem": {},
+  "unknownArtist": "Nghệ sĩ không rõ",
+  "@unknownArtist": {},
+  "queue": "Hàng chờ",
+  "@queue": {},
+  "addToQueue": "Thêm vào Hàng chờ",
+  "@addToQueue": {},
+  "replaceQueue": "Thay thế Hàng chờ",
+  "@replaceQueue": {},
+  "goToAlbum": "Đi tới Album",
+  "@goToAlbum": {},
+  "removeFavourite": "Xóa yêu thích",
+  "@removeFavourite": {},
+  "addedToQueue": "Đã thêm vào hàng chờ.",
+  "@addedToQueue": {},
+  "queueReplaced": "Đã thay thế hàng chờ.",
+  "@queueReplaced": {},
+  "removedFromPlaylist": "Đã loại bỏ khỏi danh sách.",
+  "@removedFromPlaylist": {},
+  "anErrorHasOccured": "Đã có lỗi xảy ra.",
+  "@anErrorHasOccured": {},
+  "responseError": "{error} Mã {statusCode}.",
+  "@responseError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Forbidden"
+      },
+      "statusCode": {
+        "type": "int",
+        "example": "403"
+      }
+    }
+  },
+  "redownloadedItems": "{count,plural, =0{Không cần tải lại.} =1{Đã tải lại {count} bài} other{Đã tải lại {count} bài}}",
+  "@redownloadedItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDuration": "Thời gian bộ đệm",
+  "@bufferDuration": {},
+  "bufferDurationSubtitle": "Trình phát nên tạo bộ đệm trong bao lâu giây. Cần khởi động lại app.",
+  "@bufferDurationSubtitle": {},
+  "instantMix": "Instant Mix",
+  "@instantMix": {},
+  "removeFromMix": "Loại bỏ khỏi Mix",
+  "@removeFromMix": {},
+  "language": "Ngôn ngữ",
+  "@language": {},
+  "about": "Giới thiệu về Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "finampTagline": "Trình phát nhạc Jellyfin mã nguồn mở",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionLink": "Đóng góp cho Finamp trên GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutTranslations": "Giúp dịch Finamp sang ngôn ngữ của bạn:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "aboutThanks": "Cảm ơn bạn đã sử dụng Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowSlogan": "Âm nhạc của bạn, theo cách bạn muốn.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "viewLogs": "Xem nhật ký",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "loginFlowServerSelectionHeading": "Kết nối với Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "Quay lại",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlInfoButtonTooltip": "Trợ giúp URL máy chủ",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "loginFlowLocalNetworkServers": "Máy chủ trên mạng cục bộ của bạn:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Đang quét máy chủ...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "Chọn tài khoản của bạn",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "backToServerSelection": "Quay lại Lựa chọn máy chủ",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "Người dùng chưa đặt tên",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "Người dùng tuỳ chỉnh",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAuthenticationHeading": "Đăng nhập vào tài khoản của bạn",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "backToAccountSelection": "Quay lại Lựa chọn tài khoản",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectDisabled": "Kết nối nhanh bị tắt trên máy chủ này.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "loginFlowSelectAUser": "Chọn người dùng",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameHint": "Nhập tên tài khoản",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Hãy nhập tên tài khoản",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "Nhập mật khẩu",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Đăng Nhập",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "activeDownloads": "Hoạt động Tải xuống",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Hoạt động Tải xuống",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Không có hoạt động tải xuống.",
+  "@noActiveDownloads": {},
+  "offlineTrackCount": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}}, {downloads} Đã tải xuống",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "interactions": "Tương tác",
+  "@interactions": {},
+  "automatic": "Tự động",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "loginFlowWelcomeHeading": "Chào mừng tới",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowGetStarted": "Bắt đầu!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "title": "Tiêu đề",
+  "@title": {},
+  "aboutContributionPrompt": "Được thực hiện bởi những người tuyệt vời trong thời gian rảnh rỗi của họ.\nBạn có thể trở thành một trong số họ!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutReleaseNotes": "Đọc ghi chú phát hành mới nhất:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "loginFlowQuickConnectPrompt": "Sử dụng mã Kết nối nhanh",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectInstructions": "Mở ứng dụng hoặc trang web Jellyfin, nhấp vào biểu tượng người dùng của bạn và chọn Kết nối nhanh.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "serverUrlHint": "VD: demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "changeLanguage": "Thay đổi ngôn ngữ",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "orDivider": "hoặc",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "connectingToServer": "Đang kết nối đến máy chủ...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} bản nhạc} other{{trackCount} bản nhạc}}, {imageCount,plural,=1{{imageCount} hình ảnh} other{{imageCount} hình ảnh}}\n{syncCount,plural,=1{{syncCount} đồng bộ hóa nút} other{{syncCount} đồng bộ hóa nút}}{repairing, plural, =0{} other{\nHiện đang sửa chữa}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "showArtistsTopTracksSubtitle": "Có hiển thị top 5 bài hát được nghe nhiều nhất của một nghệ sĩ hay không.",
+  "@showArtistsTopTracksSubtitle": {},
+  "customizationSettingsTitle": "Tùy chỉnh",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "speed": "Tốc độ",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "playbackSpeedControlSettingDescription": "Tự động:\nFinamp cố gắng xác định xem bản nhạc bạn đang phát là podcast hay (một phần) sách nói. Điều này được coi là xảy ra nếu bản nhạc dài hơn {trackDuration} phút, nếu album của bản nhạc dài hơn {albumDuration} giờ hoặc nếu bản nhạc được chỉ định ít nhất một trong các thể loại sau: {genreList}\nSau đó, điều khiển tốc độ phát lại sẽ được hiển thị trong menu màn hình trình phát.\n\nHiển thị:\nCác điều khiển tốc độ phát lại sẽ luôn được hiển thị trong menu màn hình trình phát.\n\nẨn:\nCác điều khiển tốc độ phát lại trong menu màn hình trình phát luôn bị ẩn.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "showArtistsTopTracks": "Hiển thị các bản nhạc hàng đầu trong chế độ xem nghệ sĩ",
+  "@showArtistsTopTracks": {},
+  "startMixNoTracksGenre": "Nhấn và giữ một thể loại để thêm hoặc xóa nó khỏi trình tạo hỗn hợp trước khi bắt đầu kết hợp",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "syncDownloadedPlaylists": "Đồng bộ danh sách phát đã tải xuống",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Hiển thị thanh cuộn nhanh",
+  "@showFastScroller": {},
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}} Đã tải xuống",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmDownloadStarted": "Đã bắt đầu tải xuống",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "playbackSpeedControlSetting": "Hiển thị Tốc độ Phát lại",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "playbackSpeedControlSettingSubtitle": "Các điều khiển tốc độ phát lại có được hiển thị trong menu màn hình trình phát hay không",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "shown": "Hiển thị",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Ẩn",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "reset": "Đặt lại",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Áp dụng",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Khoảng đệm bìa album tối thiểu",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Khoảng đệm tối thiểu xung quanh bìa album trên màn hình trình phát, tính bằng % chiều rộng màn hình.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  }
+}
