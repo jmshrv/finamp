@@ -1268,7 +1268,7 @@
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "deleteFromTargetDialogText": "您即將從{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} song{歌曲} library{音樂庫} other{項目}}刪除此{device, select,device{裝置}server{伺服器的檔案系統與音樂庫。{deleteType, select,canDelete{ 這也會將此項目從此裝置中刪除。}cantDelete{ 此項目將保留於此裝置，直到下一次同步。}notDownloaded{}other{}} \n此操作無法還原。}other{}}。",
+  "deleteFromTargetDialogText": "您即將從{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} song{歌曲} library{音樂庫} other{項目}}刪除此{device, select,device{裝置}server{伺服器的檔案系統與音樂庫。{deleteType, select,canDelete{ 此項目將從此裝置永久刪除。}cantDelete{ 此項目將暫時保留於此裝置，直至下次同步為止。}notDownloaded{}other{}} \n此操作無法還原。}other{}}。",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
@@ -1322,5 +1322,291 @@
       }
     },
     "description": "Tooltip for the album artwork on the player screen"
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "在 iOS 上，音量標準化的實作方式是透過調整播放音量來模擬增益變化。由於無法將音量提高超過 100%，我們預設會先降低音量，使較安靜的音軌在需要時能夠獲得額外的音量提升。該數值以分貝（dB）為單位，-10 dB 對應約 30% 音量，-4.5 dB 對應約 60% 音量，而 -2 dB 對應約 80% 音量。",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "startInstantMixForIndividualTracksSwitchTitle": "為單曲啟動即時組合",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "volumeNormalizationModeTrackBased": "基於歌曲",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "開啟此功能後，在「歌曲」標籤頁點擊某首歌曲時，系統將會立即產生該歌曲的即時組合，而非僅播放該歌曲本身。",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "repairComplete": "下載修復完成。",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "syncComplete": "所有下載內容已重新同步完成。",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "repairDownloads": "修復已下載檔案或中繼資料的問題。",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "requireWifiForDownloads": "僅在 Wi-Fi 環境下允許下載。",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "downloadLibraryPrompt": "您確定要下載整個媒體庫 {libraryName} 的所有內容嗎？",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionInterrupted": "連線中斷，暫停下載。",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "連線在背景下載時中斷，這可能是作業系統設定導致的，請確認您的系統允許背景下載。",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "missingDownloadSize": "正在刪除···",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "downloadSettings": "下載",
+  "@downloadSettings": {},
+  "syncingDownloadSize": "正在同步···",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "showNullLibraryItemsSubtitle": "某些媒體可能來自未知媒體庫。關閉此選項可將這些媒體隱藏，使其僅顯示於原始收藏中。",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "showNullLibraryItemsTitle": "顯示未知媒體庫中的媒體。",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "downloadsWorkersSettingLabel": "{count} 個下載工作執行緒",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadTranscodeEnableTitle": "啟用轉碼下載",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadBitrate": "下載位元速率",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "downloadBitrateSubtitle": "提高位元速率可提升音訊品質，但同時會佔用更多儲存空間。",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "activeDownloadsListHeader": "{itemCount} 個{typeName, select, downloading{下載中} failed{下載失敗} syncFailed{同步異常} enqueued{排隊等待} other{}}的{itemCount, plural, =1{下載項目} other{下載項目}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadsWorkersSettingSubtitle": "設定同步下載中繼資料與刪除檔案時所使用的執行緒數量。當伺服器延遲較高時，提高此數值可提升下載同步與刪除的速度，但可能會導致系統運作延遲。",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "downloadsWorkersSetting": "下載工作執行緒數量",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "queueRestoreError": "警告：{count, plural, =1{{count} 首歌曲} other{{count} 首歌曲}} 無法重新加入播放佇列。",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filesystemFull": "剩餘的下載無法完成，檔案系統空間已用盡。",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "activeDownloadSize": "正在下載···",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "maxConcurrentDownloads": "最大同時下載數量",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "transcodeHint": "是否要轉碼？",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} 已轉碼}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "基礎增益",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "downloadItem": "下載",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "syncDownloads": "同步並下載缺少的項目。",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "connectionInterruptedBackgroundAndroid": "背景下載時發生連線中斷。這可能是由於您啟用了「暫停時進入低優先級狀態」或作業系統的設定限制了背景下載，請確認相關設定。",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "maxConcurrentDownloadsSubtitle": "調高同時下載的數量可能增加背景下載的速度，但當下載檔案過大時，可能會導致部分下載失敗，或在特定情況下造成顯著的延遲。",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "runRepairWarning": "無法聯繫伺服器以完成下載遷移。請在您恢復網路連線後，立即從下載畫面執行「修復下載」。",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "syncOnStartupSwitch": "啟動時自動同步下載",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "maxConcurrentDownloadsLabel": "最大同時下載數：{count}",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "incidentalDownloadTooltip": "此項目必須由 {parentName} 下載。",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "cacheLibraryImagesName": "'{libraryName}'的快取影像",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "transcodingStreamingContainerTitle": "選擇轉碼器格式",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "選擇串流轉碼音訊時要使用的區段容器。已排入佇列的歌曲將不受影響。",
+  "@transcodingStreamingContainerSubtitle": {},
+  "downloadTranscodeCodecTitle": "選擇下載用的轉碼器",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{總是} never{從不} ask{詢問} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "preferQuickSyncSwitch": "優先快速同步",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "confirmAddAlbumToPlaylist": "確定要將 {itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} other{項目}} '{itemName}'的所有歌曲加入播放清單嗎？請注意，這些歌曲只能逐首刪除，無法一次移除所有內容。",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "doTranscode": "下載 格式：{codec}，位元率：@{bitrate}，大小：{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
   }
 }
