@@ -29,11 +29,11 @@
   "@logs": {},
   "next": "下一個",
   "@next": {},
-  "selectMusicLibraries": "選擇音樂庫",
+  "selectMusicLibraries": "選擇音樂媒體庫",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "couldNotFindLibraries": "找不到任何庫。",
+  "couldNotFindLibraries": "找不到任何媒體庫。",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
@@ -63,7 +63,7 @@
   "@music": {},
   "clear": "清除",
   "@clear": {},
-  "favourites": "最愛",
+  "favourites": "我的最愛",
   "@favourites": {},
   "shuffleAll": "全部隨機播放",
   "@shuffleAll": {},
@@ -196,7 +196,7 @@
   "@updateButtonLabel": {},
   "playlistNameUpdated": "播放清單名稱已更新。",
   "@playlistNameUpdated": {},
-  "favourite": "最愛",
+  "favourite": "我的最愛",
   "@favourite": {},
   "downloadsDeleted": "已刪除下載。",
   "@downloadsDeleted": {},
@@ -362,9 +362,9 @@
   "@instantMix": {},
   "goToAlbum": "前往專輯",
   "@goToAlbum": {},
-  "removeFavourite": "刪除最愛",
+  "removeFavourite": "刪除我的最愛",
   "@removeFavourite": {},
-  "addFavourite": "添加至最愛",
+  "addFavourite": "添加至我的最愛",
   "@addFavourite": {},
   "addedToQueue": "已加入至播放佇列。",
   "@addedToQueue": {},
@@ -444,9 +444,9 @@
   },
   "resetTabs": "重置分頁",
   "@resetTabs": {},
-  "noMusicLibrariesBody": "找不到音樂庫。請確保 Jellyfin 中至少有一個資料庫的類別需設置成\"音樂\"。",
+  "noMusicLibrariesBody": "找不到音樂媒體庫。請確保 Jellyfin 中至少有一個媒體庫的類別需設置成\"音樂\"。",
   "@noMusicLibrariesBody": {},
-  "noMusicLibrariesTitle": "尚無音樂庫",
+  "noMusicLibrariesTitle": "尚無音樂媒體庫",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
@@ -596,7 +596,7 @@
   "@usernameHint": {
     "description": "Hint text for the username input field."
   },
-  "startMixNoSongsGenre": "長按一個類型可將其加入或移除組合清單，準備好後再開始組合",
+  "startMixNoSongsGenre": "長按一個曲風可將其加入或移除組合清單，準備好後再開始組合",
   "@startMixNoSongsGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
@@ -638,7 +638,7 @@
   "@resetSettingsPromptGlobalConfirm": {
     "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
   },
-  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或音軌的類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放器介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
+  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或曲風包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放器介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -705,7 +705,7 @@
   },
   "goToArtist": "前往藝人介面",
   "@goToArtist": {},
-  "goToGenre": "前往類型",
+  "goToGenre": "前往曲風",
   "@goToGenre": {},
   "normalizationGain": "增益",
   "@normalizationGain": {
@@ -804,7 +804,7 @@
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
-  "showCoversOnAlbumScreenTitle": "顯示歌曲專輯封面",
+  "showCoversOnAlbumScreenTitle": "顯示歌曲的專輯封面",
   "@showCoversOnAlbumScreenTitle": {
     "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
   },
@@ -956,7 +956,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "confirmAddToNextUp": "已將 {type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} other{項目}} 新增至「即將播放」",
+  "confirmAddToNextUp": "已將 {type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{曲風} other{項目}} 新增至「即將播放」",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -965,7 +965,7 @@
       }
     }
   },
-  "confirmAddToQueue": "已將{type, select, track{歌曲} album{專輯} artist{歌手} playlist{播放清單} genre{類型} other{項目}}新增至播放佇列",
+  "confirmAddToQueue": "已將{type, select, track{歌曲} album{專輯} artist{歌手} playlist{播放清單} genre{曲風} other{項目}}新增至播放佇列",
   "@confirmAddToQueue": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
     "placeholders": {
@@ -1016,7 +1016,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} songMix{單曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選歌曲} genre{音樂類型} artist{藝人} song{單曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
+  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} songMix{單曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選歌曲} genre{曲風} artist{藝人} song{單曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1034,7 +1034,7 @@
       }
     }
   },
-  "confirmPlayNext": "已將{type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} other{項目}}新增至播放佇列，將會在下一首播放",
+  "confirmPlayNext": "已將{type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{曲風} other{項目}}新增至播放佇列，將會在下一首播放",
   "@confirmPlayNext": {
     "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
     "placeholders": {
@@ -1071,7 +1071,7 @@
   },
   "resetToDefaults": "恢復預設值",
   "@resetToDefaults": {},
-  "couldNotLoad": "無法載入 {source, select, album{專輯} playlist{播放清單} songMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選後的歌曲} genre{音樂類型} artist{藝人} song{歌曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
+  "couldNotLoad": "無法載入 {source, select, album{專輯} playlist{播放清單} songMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選後的歌曲} genre{曲風} artist{藝人} song{歌曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1236,5 +1236,91 @@
   "volumeNormalizationModeSelectorTitle": "音量標準化模式",
   "@volumeNormalizationModeSelectorTitle": {
     "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "finampCollectionNames": "{itemType, select, favorites{我的最愛} allPlaylists{全部播放清單} fiveLatestAlbums{最新5張專輯} allPlaylistsMetadata{清單資訊} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "hidePlayerBottomActionsSubtitle": "隱藏播放器畫面的佇列與歌詞按鈕。欲查看播放佇列，請向上滑動；若該歌曲支援歌詞，請在專輯封面下方向左滑動以顯示。",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "volumeNormalizationModeAlbumOnly": "僅用於專輯",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "suppressPlayerPaddingSubtitle": "在專輯封面未達全尺寸時，減少播放器介面控制項的內邊距。",
+  "@suppressPlayerPaddingSubtitle": {},
+  "prioritizePlayerCoverSubtitle": "播放器介面將優先顯示較大的專輯封面顯示，而在較小螢幕上，非必要的操作介面將進一步隱藏，以提升視覺體驗。",
+  "@prioritizePlayerCoverSubtitle": {},
+  "fiveLatestAlbumsSettingSubtitle": "下載內容會在到期後自動移除。若要防止專輯被移除，請鎖定下載。",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "cacheLibraryImagesSettingsSubtitle": "目前啟用的媒體庫內的專輯、藝人、曲風與播放清單封面將會下載。",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "itemDeletedSnackbar": "{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} song{歌曲} library{媒體庫} other{項目}} 已從 {deviceType, select, device{裝置} server{伺服器} other{未知來源}} 刪除",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "volumeNormalizationModeSelectorDescription": "混合模式（單曲 + 專輯）：\n平常播放單曲時會套用單曲音軌增益，確保每首歌曲音量適中。然而，當整張專輯作為播放來源（或是曾經被加入播放佇列）時，將優先使用專輯音軌增益，以維持專輯內歌曲的音量平衡。\n\n依音軌調整：\n不論當前播放的是單曲或是完整專輯，皆使用音軌增益調整音量。\n\n依專輯調整：\n僅在播放完整專輯時套用音軌增益（基於專輯增益），單獨播放歌曲時不會調整音量。",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "deleteFromTargetDialogText": "您即將從{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} song{歌曲} library{音樂庫} other{項目}}刪除此{device, select,device{裝置}server{伺服器的檔案系統與音樂庫。{deleteType, select,canDelete{ 這也會將此項目從此裝置中刪除。}cantDelete{ 此項目將保留於此裝置，直到下一次同步。}notDownloaded{}other{}} \n此操作無法還原。}other{}}。",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "volumeNormalizationModeHybrid": "混合模式（單曲 + 專輯）",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "onlyShowFullyDownloaded": "僅顯示完全下載的專輯",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "showLyricsScreenAlbumPreludeTitle": "顯示專輯封面於歌詞前",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "prioritizePlayerCover": "優先顯示專輯封面",
+  "@prioritizePlayerCover": {},
+  "volumeNormalizationModeAlbumBased": "以專輯為基準",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "preferQuickSyncSwitchSubtitle": "在進行同步時，某些靜態內容（例如歌曲與專輯）不會更新。若執行下載修復，則將強制進行完整同步。",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} song{音軌} library{音樂媒體庫} unknown{項目} other{{itemType}}} - {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "fiveLatestAlbumsSetting": "下載最新的 5 張專輯",
+  "@fiveLatestAlbumsSetting": {},
+  "showLyricsScreenAlbumPreludeSubtitle": "控制是否在歌詞檢視畫面中，於滾動前顯示專輯封面。",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "playerAlbumArtworkTooltip": "{title} 的作品。點擊可播放或暫停，左右滑動可切換歌曲。",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
   }
 }
