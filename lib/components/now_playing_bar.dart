@@ -156,7 +156,24 @@ class NowPlayingBar extends ConsumerWidget {
           button: true,
         ),
         child: SimpleGestureDetector(
-          onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
+          onTap: () => Navigator.of(context).push(
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const PlayerScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(0.0, 1.0);
+                const end = Offset.zero;
+
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: Curves.easeInOut));
+                var offsetAnimation = animation.drive(tween);
+
+                return SlideTransition(position: offsetAnimation, child: child);
+              },
+              settings: const RouteSettings(name: PlayerScreen.routeName),
+            ),
+          ),
           child: Dismissible(
             key: const Key("NowPlayingBarDismiss"),
             direction: FinampSettingsHelper.finampSettings.disableGesture
