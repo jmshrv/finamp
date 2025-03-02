@@ -101,9 +101,9 @@
   "@yesButtonLabel": {},
   "createButtonLabel": "Erstellen",
   "@createButtonLabel": {},
-  "newPlaylist": "Neue Wiedergabeliste",
+  "newPlaylist": "Neue Playlist",
   "@newPlaylist": {},
-  "playlistCreated": "Wiedergabeliste erstellt.",
+  "playlistCreated": "Playlist erstellt.",
   "@playlistCreated": {},
   "removeFavourite": "Favorit entfernen",
   "@removeFavourite": {},
@@ -201,7 +201,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Zufällig",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTitle": "Wiedergabeliste-Name editieren",
+  "editPlaylistNameTitle": "Playlist-Name editieren",
   "@editPlaylistNameTitle": {},
   "updateButtonLabel": "Aktualisieren",
   "@updateButtonLabel": {},
@@ -211,7 +211,7 @@
   "@addDownloads": {},
   "location": "Ort",
   "@location": {},
-  "shareLogs": "Protokolle teilen",
+  "shareLogs": "Logs teilen",
   "@shareLogs": {},
   "stackTrace": "Stacktrace",
   "@stackTrace": {},
@@ -237,23 +237,23 @@
   "@selectDirectory": {},
   "pathReturnSlashErrorMessage": "Pfade, die „/“ zurückgeben, können nicht verwendet werden",
   "@pathReturnSlashErrorMessage": {},
-  "customLocationsBuggy": "Benutzerdefinierte Speicherorte können äußerst fehlerhaft sein und werden in den meisten Fällen nicht empfohlen. Speicherorte unterhalb des 'Musik'-Systemordners verhindern das Speichern von Albumcovern aufgrund von Betriebssystembeschränkungen.",
+  "customLocationsBuggy": "Benutzerdefinierte Speicherorte können zu Fehlern führen und werden in den meisten Fällen nicht empfohlen. Speicherorte unterhalb des 'Musik'-Systemordners verhindern das Speichern von Albumcovern aufgrund von Betriebssystembeschränkungen.",
   "@customLocationsBuggy": {},
-  "enterLowPriorityStateOnPause": "Niedrige Priorität-Modus beim Pausieren aktivieren",
+  "enterLowPriorityStateOnPause": "Niedrige-Priorität-Modus beim Pausieren aktivieren",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Anzahl gemischter Lieder",
+  "shuffleAllSongCount": "Anzahl zufälliger Tracks",
   "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Die Anzahl der zu ladenden Tracks wenn der Zufallsknopf gedrückt wird.",
+  "shuffleAllSongCountSubtitle": "Die Anzahl der zu ladenden Tracks, wenn der Zufällig-Button benutzt wird.",
   "@shuffleAllSongCountSubtitle": {},
   "viewType": "Ansichtsart",
   "@viewType": {},
   "viewTypeSubtitle": "Ansichtsart für den Musik-Bildschirm",
   "@viewTypeSubtitle": {},
-  "portrait": "Portrait",
+  "portrait": "Hochformat",
   "@portrait": {},
-  "landscape": "Landschaft",
+  "landscape": "Querformat",
   "@landscape": {},
-  "gridCrossAxisCountSubtitle": "Menge der zu benutzenden Rasterkacheln wenn {value}.",
+  "gridCrossAxisCountSubtitle": "Anzahl der zu benutzenden Rasterkacheln im {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -267,13 +267,13 @@
   "@showTextOnGridViewSubtitle": {},
   "useCoverAsBackground": "Zeige verschwommene Cover als Player-Hintergrund",
   "@useCoverAsBackground": {},
-  "useCoverAsBackgroundSubtitle": "Ob verschwommene Cover als Hintergrund im Player-Bildschirm benutzt werden sollen.",
+  "useCoverAsBackgroundSubtitle": "Ob verschwommene Cover als Hintergrund in der Wiedergabe-Ansicht benutzt werden sollen.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Verstecke Track-Künstler falls dieser derselbe ist wie der Album-Künstler",
+  "hideSongArtistsIfSameAsAlbumArtists": "Verstecke Track-Künstler, falls dieser dem Album-Künstler entspricht",
   "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "showArtistsTopSongs": "Meistgehörte Lieder von Künstlern anzeigen",
+  "showArtistsTopSongs": "Meistgehörte Tracks von Künstlern anzeigen",
   "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Ob die meistgehörten Lieder eines Künstlers angezeigt werden sollen.",
+  "showArtistsTopSongsSubtitle": "Ob die meistgehörten Tracks eines Künstlers angezeigt werden sollen.",
   "@showArtistsTopSongsSubtitle": {},
   "theme": "Thema",
   "@theme": {},
@@ -291,7 +291,7 @@
   "@setSleepTimer": {},
   "minutes": "Minuten",
   "@minutes": {},
-  "addToPlaylistTitle": "Zur Wiedergabeliste hinzufügen",
+  "addToPlaylistTitle": "Zur Playlist hinzufügen",
   "@addToPlaylistTitle": {},
   "noAlbum": "Kein Album",
   "@noAlbum": {},
@@ -311,7 +311,7 @@
   "@goToAlbum": {},
   "addFavourite": "Favorit hinzufügen",
   "@addFavourite": {},
-  "addedToQueue": "In Warteschlange eingefügt.",
+  "addedToQueue": "Zur Warteschlange hinzugefügt.",
   "@addedToQueue": {},
   "queueReplaced": "Warteschlange ausgetauscht.",
   "@queueReplaced": {},
@@ -348,15 +348,15 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Wiedergabeliste-Name editieren",
+  "editPlaylistNameTooltip": "Playlist-Name editieren",
   "@editPlaylistNameTooltip": {},
-  "playlistNameUpdated": "Wiedergabeliste-Name aktualisiert.",
+  "playlistNameUpdated": "Playlist-Name aktualisiert.",
   "@playlistNameUpdated": {},
-  "logsCopied": "Protokolle kopiert.",
+  "logsCopied": "Logs kopiert.",
   "@logsCopied": {},
   "downloadsQueued": "Downloads hinzugefügt",
   "@downloadsQueued": {},
-  "addButtonLabel": "HINZUFÜGEN",
+  "addButtonLabel": "Hinzufügen",
   "@addButtonLabel": {},
   "applicationLegalese": "Lizenziert mit der Mozilla Public License 2.0.\nQuellcode verfügbar unter {sourceCodeLink}.",
   "@applicationLegalese": {},
@@ -376,7 +376,7 @@
   "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
   "sleepTimerTooltip": "Schlaf-Timer",
   "@sleepTimerTooltip": {},
-  "addToPlaylistTooltip": "Zur Wiedergabeliste hinzufügen",
+  "addToPlaylistTooltip": "Zur Playlist hinzufügen",
   "@addToPlaylistTooltip": {},
   "responseError401": "{error} Status Code {statusCode}. Dies bedeutet vermutlich, dass du den falschen Benutzernamen oder Passwort benutzt hast oder dass dein Client nicht länger authentifiziert ist.",
   "@responseError401": {
@@ -422,15 +422,15 @@
   "@disableGesture": {},
   "disableGestureSubtitle": "Ob Gesten deaktiviert werden sollen.",
   "@disableGestureSubtitle": {},
-  "removeFromPlaylistTooltip": "Aus dieser Wiedergabeliste entfernen",
+  "removeFromPlaylistTooltip": "Aus dieser Playlist entfernen",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Aus dieser Wiedergabeliste entfernen",
+  "removeFromPlaylistTitle": "Aus dieser Playlist entfernen",
   "@removeFromPlaylistTitle": {},
-  "removedFromPlaylist": "Aus der Wiedergabeliste entfernt.",
+  "removedFromPlaylist": "Aus der Playlist entfernt.",
   "@removedFromPlaylist": {},
-  "topSongs": "Top Lieder",
+  "topSongs": "Top Tracks",
   "@topSongs": {},
-  "shuffleAlbums": "Alben mischen",
+  "shuffleAlbums": "Alben zufällig wiedergeben",
   "@shuffleAlbums": {},
   "couldNotLoad": "Laden {source, select, album{des Albums} playlist{der Wiedergabeliste} songMix{des Titelmixes} artistMix{des Künstlermixes} albumMix{des Albummixes} favorites{der Favoriten} allSongs{aller Titel} filteredList{der Tracks} genre{des Genre} artist{des Künstlers} nextUpAlbum{des Album in \\\"Als Nächstes\\\"} nextUpPlaylist{der Playlist in \\\"Als Nächstes\\\"} nextUpArtist{des Künstlers in \\\"Als Nächstes\\\"} other{}} fehlgeschlagen",
   "@couldNotLoad": {},
@@ -444,7 +444,7 @@
   "@showUncensoredLogMessage": {},
   "resetTabs": "Tabs zurücksetzen",
   "@resetTabs": {},
-  "insertedIntoQueue": "Zur Warteschlange hinzugefügt.",
+  "insertedIntoQueue": "In Warteschlange eingefügt.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
@@ -522,7 +522,7 @@
   },
   "title": "Titel",
   "@title": {},
-  "confirmDownloadStarted": "Herunterladen gestartet",
+  "confirmDownloadStarted": "Download gestartet",
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
   },
@@ -586,7 +586,7 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "offlineSongCount": "{count,plural,=1{{count} Titel} other{{count} Titel}}, {downloads} heruntergeladen",
+  "offlineSongCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}, {downloads} heruntergeladen",
   "@offlineSongCount": {
     "placeholders": {
       "count": {
@@ -597,7 +597,7 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Titel} other{{count} Titel}} heruntergeladen",
+  "offlineSongCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} heruntergeladen",
   "@offlineSongCountArtist": {
     "placeholders": {
       "count": {
@@ -621,7 +621,7 @@
   "@automatic": {
     "description": "Used as an option in the playback speed visibility settings"
   },
-  "queueRetryMessage": "Wiederherstellen der Queue Fehlgeschlagen. Erneut versuchen?",
+  "queueRetryMessage": "Wiederherstellen der Warteschlange fehlgeschlagen. Erneut versuchen?",
   "@queueRetryMessage": {
     "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
   },
@@ -647,7 +647,7 @@
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
-  "playerScreenMinimumCoverPaddingEditorTitle": "Minimales Album Cover padding",
+  "playerScreenMinimumCoverPaddingEditorTitle": "Minimaler Abstand um das Album Cover",
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
@@ -699,11 +699,11 @@
   "@customizationSettingsTitle": {
     "description": "Title for the customization settings screen"
   },
-  "playbackSpeedControlSetting": "Abspielgeschwindigkeit Sichtbarkeit",
+  "playbackSpeedControlSetting": "Sichtbarkeit der Abspielgeschwindigkeit",
   "@playbackSpeedControlSetting": {
     "description": "Title of the visibility setting of the playback speed controls"
   },
-  "playbackSpeedControlSettingSubtitle": "Ob die Wiedergabegeschwindigkeits-Einstellungen im Wiedergabe Fenster angezeigt werden",
+  "playbackSpeedControlSettingSubtitle": "Ob die Abspielgeschwindigkeits-Einstellungen in der Wiedergabe-Ansicht angezeigt werden",
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
@@ -723,11 +723,11 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimales padding um das album cover im wiedergame fenster, in % der bildschirm breite.",
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimaler Abstand um das Album Cover in der Wiedergabe-Ansicht, in % der Bildschirmbreite.",
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "playerScreen": "Wiedergabe Fenster",
+  "playerScreen": "Wiedergabe-Ansicht",
   "@playerScreen": {
     "description": "Name for the expanded player"
   },
@@ -739,7 +739,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Schlaftimer in {time} minuten",
+  "sleepTimerRemainingTime": "Schlaftimer endet in {time} Minuten",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -748,9 +748,9 @@
       }
     }
   },
-  "addToMorePlaylistsTooltip": "zu weiteren Playlists hinzufügen",
+  "addToMorePlaylistsTooltip": "Zu weiteren Playlists hinzufügen",
   "@addToMorePlaylistsTooltip": {},
-  "addToMorePlaylistsTitle": "füge zu weiteren Playlists hinzu",
+  "addToMorePlaylistsTitle": "Zu weiteren Playlists hinzufügen",
   "@addToMorePlaylistsTitle": {},
   "removeFromPlaylistNamedTooltip": "Aus Playlist '{playlistName}' entfernen",
   "@removeFromPlaylistNamedTooltip": {
@@ -768,7 +768,7 @@
   "@playbackModeDirectPlaying": {
     "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
   },
-  "playbackModeTranscoding": "Transcodierung",
+  "playbackModeTranscoding": "Transkodierung",
   "@playbackModeTranscoding": {
     "description": "Feature chip that is shown when tracks are being transcoded by the server"
   },
@@ -794,31 +794,31 @@
   "@confirmAddedToPlaylist": {
     "description": "Snackbar message that shows when the user successfully adds items to a playlist."
   },
-  "skipToNextTrackButtonTooltip": "Zum nächsten Titel springen",
+  "skipToNextTrackButtonTooltip": "Zum nächsten Track springen",
   "@skipToNextTrackButtonTooltip": {
     "description": "Tooltip for the button that skips to the next track"
   },
-  "togglePlaybackButtonTooltip": "Wiedergabe umzuschalten",
+  "togglePlaybackButtonTooltip": "Wiedergabe umschalten",
   "@togglePlaybackButtonTooltip": {
     "description": "Tooltip for the button that toggles playback"
   },
-  "previousTracks": "Vorheriger Track",
+  "previousTracks": "Vorherige Tracks",
   "@previousTracks": {
     "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
   },
-  "nextUp": "Nachfolgend",
+  "nextUp": "Als Nächstes",
   "@nextUp": {
     "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
-  "clearNextUp": "Leere Nachfolgende",
+  "clearNextUp": "\"Als Nächstes\" leeren",
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
-  "addToNextUp": "Zu nachfolgende hinzufügen",
+  "addToNextUp": "Zu \"Als Nächstes\" hinzufügen",
   "@addToNextUp": {
     "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
   },
-  "shuffleToNextUp": "Zufallswiedergabe an nächste Titel anhängen",
+  "shuffleToNextUp": "Zufällig an \"Als Nächstes\" anhängen",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
@@ -826,7 +826,7 @@
   "@placeholderSource": {
     "description": "Placeholder text used when the source of the current track/queue is unknown"
   },
-  "playbackHistory": "Wiedergabe Historie",
+  "playbackHistory": "Wiedergabe-Verlauf",
   "@playbackHistory": {
     "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
   },
@@ -862,11 +862,11 @@
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
-  "autoloadLastQueueOnStartup": "Automatisches Wiederherstellen der Letzten Queue",
+  "autoloadLastQueueOnStartup": "Automatisches Wiederherstellen der letzten Warteschlange",
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
-  "reportQueueToServer": "Dem Server die aktuelle Queue mitteilen?",
+  "reportQueueToServer": "Dem Server die aktuelle Warteschlange mitteilen?",
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -908,7 +908,7 @@
   "@showCoversOnAlbumScreenTitle": {
     "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
   },
-  "playlistActionsMenuButtonTooltip": "Klicken um zur playlist hinzuzufügen. Lange Drücken um Favoriten umzuschalten.",
+  "playlistActionsMenuButtonTooltip": "Tippen, um zur Playlist hinzuzufügen. Lange Drücken, um Favoriten umzuschalten.",
   "@playlistActionsMenuButtonTooltip": {
     "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
   },
@@ -918,7 +918,7 @@
   "@emptyTopTracksList": {
     "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
   },
-  "skipToPreviousTrackButtonTooltip": "Springe zum anfang oder letzten track",
+  "skipToPreviousTrackButtonTooltip": "Springe zum Anfang oder letzten Track",
   "@skipToPreviousTrackButtonTooltip": {
     "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
   },
@@ -1301,11 +1301,11 @@
   "@aboutReleaseNotes": {
     "description": "Link to the release notes, shown in the about screen."
   },
-  "shuffleToQueue": "Mische zur Warteschleife",
+  "shuffleToQueue": "Zufällig zur Warteschleife",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "confirmAddToNextUp": "{type, select, track{Lied} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} zu Next Up hinzugefügt",
+  "confirmAddToNextUp": "{type, select, track{Track} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} zu \"Als Nächstes\" hinzugefügt",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -1314,15 +1314,15 @@
       }
     }
   },
-  "confirmShuffleNext": "Wird als nächstes gemischt",
+  "confirmShuffleNext": "Wird zufällig als nächstes gespielt",
   "@confirmShuffleNext": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
   },
-  "confirmShuffleToNextUp": "Mische zu Next Up",
+  "confirmShuffleToNextUp": "Zufällig zu \"Als Nächstes\" hinzugefügt",
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
   },
-  "shareOfflineListens": "Exportiere Offline Wiedergaben",
+  "shareOfflineListens": "Exportiere Offline-Wiedergaben",
   "@shareOfflineListens": {
     "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
   },
@@ -1336,27 +1336,27 @@
       }
     }
   },
-  "tracksFormerNextUp": "Über Next Up Hinzugefügte Songs",
+  "tracksFormerNextUp": "Über \"Als Nächstes\" hinzugefügte Tracks",
   "@tracksFormerNextUp": {
     "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
   },
-  "savedQueue": "Speicher Warteschlange",
+  "savedQueue": "Gespeicherte Warteschlange",
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "shuffleAllQueueSource": "Mische Alles",
+  "shuffleAllQueueSource": "Alles zufällig abspielen",
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
-  "playbackSpeedDecreaseLabel": "Vergeringer Wiedergabegeschwindigkeit",
+  "playbackSpeedDecreaseLabel": "Wiedergabegeschwindigkeit verringern",
   "@playbackSpeedDecreaseLabel": {
     "description": "Label for the button in the speed menu that decreases the playback speed."
   },
-  "playbackSpeedIncreaseLabel": "Erhöhe Wiedergabegeschwindigkeit",
+  "playbackSpeedIncreaseLabel": "Wiedergabegeschwindigkeit erhöhen",
   "@playbackSpeedIncreaseLabel": {
     "description": "Label for the button in the speed menu that increases the playback speed."
   },
-  "loopModeAllButtonLabel": "Wiederholung aller",
+  "loopModeAllButtonLabel": "Alles wiederholen",
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
@@ -1364,7 +1364,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "queueRestoreSubtitle2": "{count,plural,other{{count} Titel}}, {remaining} ungespielt",
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Track} other{{count} Tracks}}, {remaining} ungespielt",
   "@queueRestoreSubtitle2": {
     "description": "Description of length of a saved queue",
     "placeholders": {
@@ -1376,7 +1376,7 @@
       }
     }
   },
-  "autoloadLastQueueOnStartupSubtitle": "Versuche die letzte Warteschlange beim starten der app wiederherzustellen.",
+  "autoloadLastQueueOnStartupSubtitle": "Versuche, die letzte Warteschlange beim Sarten der App wiederherzustellen.",
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
@@ -1400,19 +1400,19 @@
   "@playbackOrderLinearButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "loopModeNoneButtonLabel": "Keine Schleife",
+  "loopModeNoneButtonLabel": "Keine Wiederholung",
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
   },
-  "periodicPlaybackSessionUpdateFrequencySubtitle": "Wie oft (in sekunden) der wiedergabe status an den Server gesendet werden soll. Der Wert sollte unter 5 minuten (300 sekunden) liegen um ein time-out zu verhinden.",
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Wie oft (in Sekunden) der Wiedergabe-Status an den Server gesendet werden soll. Der Wert sollte unter 5 Minuten (300 Sekunden) liegen, um ein Time-out zu verhinden.",
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "playbackOrderLinearButtonTooltip": "Wiedergabe in Reihenfolge. Tippe für Zufallige wiedergabe.",
+  "playbackOrderLinearButtonTooltip": "Wiedergabe in Reihenfolge. Tippe für zufällige Wiedergabe.",
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "playbackSpeedButtonLabel": "Wiedergabe auf {speed}-facher geschwindigkeit",
+  "playbackSpeedButtonLabel": "Wiedergabe auf {speed}-facher Geschwindigkeit",
   "@playbackSpeedButtonLabel": {
     "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
     "placeholders": {
@@ -1421,11 +1421,11 @@
       }
     }
   },
-  "reportQueueToServerSubtitle": "Wenn aktiv sendet Finamp die aktuelle warteschlange an den server. Aktuell scheint es wenig nutzen dafür zu geben und erhöhrt die netzwerk belastung.",
+  "reportQueueToServerSubtitle": "Wenn aktiviert sendet Finamp die aktuelle Warteschlange an den Server. Aktuell scheint es wenig Nutzen dafür zu geben und es erhöht die Netzwerkbelastung.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Nach 5 minuten ohne komunikation zwischen client und server wird der server davon ausgehen das die wiedergabe gestoppt wurde. Das heißt für Lieder die länger als 5 minuten sind könnte es zu fehlerhaften wiedergabe meldungen führen was die qualität dieser daten reduzieren kann.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Nach 5 Minuten ohne Komunikation zwischen Client und Server wird der Server davon ausgehen, dass die Wiedergabe gestoppt wurde. Das heißt: für Tracks, die länger als 5 Minuten sind, könnte es zu fehlerhaften Wiedergabe-Meldungen führen, was die Qualität dieser Daten reduziert.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1433,7 +1433,7 @@
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
   },
-  "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
+  "albumCount": "{count,plural,=1{{count} Album} other{{count} Alben}}",
   "@albumCount": {
     "placeholders": {
       "count": {
@@ -1459,7 +1459,7 @@
       }
     }
   },
-  "confirmPlayNext": "{type, select, track{Lied} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} wird als nächstes abgespielt",
+  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} wird als nächstes abgespielt",
   "@confirmPlayNext": {
     "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
     "placeholders": {
@@ -1477,7 +1477,7 @@
       }
     }
   },
-  "confirmAddToQueue": "{type, select, track{Lied} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} zur Warteschlange hinzugefügt",
+  "confirmAddToQueue": "{type, select, track{Track} album{Album} artist{Künstler} playlist{Playlist} genre{Genre} other{Element}} zur Warteschlange hinzugefügt",
   "@confirmAddToQueue": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
     "placeholders": {
@@ -1486,7 +1486,7 @@
       }
     }
   },
-  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allSongs{All Lieder} filteredList{Lieder} genre{Genre} artist{Künstler} song{Song} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allSongs{allen Tracks} filteredList{Tracks} genre{Genre} artist{Künstler} song{Track} nextUpAlbum{Album in \"Als Nächstes\"} nextUpPlaylist{Playlist in \"Als Nächstes\"} nextUpArtist{Artist in \"Als Nächstes\"} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1495,7 +1495,7 @@
       }
     }
   },
-  "queueRestoreError": "Warnung: {count,plural, =1{{count} Track} other{{count} Tracks}}  konnten nicht aus der Warteschlange wiederhergestellt werden.",
+  "queueRestoreError": "Warnung: {count,plural, =1{{count} Track} other{{count} Tracks}} konnten nicht aus der Warteschlange wiederhergestellt werden.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
@@ -1504,7 +1504,7 @@
       }
     }
   },
-  "confirmShuffleToQueue": "Mische zu Warteschlange",
+  "confirmShuffleToQueue": "Zufällig zur Warteschlange hinzugefügt",
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
@@ -1517,7 +1517,7 @@
       }
     }
   },
-  "loopModeOneButtonLabel": "Dieser Titel wird wiederholt",
+  "loopModeOneButtonLabel": "Dieser Track wird wiederholt",
   "@loopModeOneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
   },
@@ -1525,7 +1525,7 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "playbackOrderShuffledButtonTooltip": "Zufallswiedergabe. Antippen, um in ursprünglicher Reihenfolge wiederzugeben.",
+  "playbackOrderShuffledButtonTooltip": "Zufallswiedergabe. Tippen für Wiedergabe in Reihenfolge.",
   "@playbackOrderShuffledButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
@@ -1547,7 +1547,7 @@
   "@bufferDisableSizeConstraintsSubtitle": {},
   "bufferSizeTitle": "Puffergröße",
   "@bufferSizeTitle": {},
-  "bufferSizeSubtitle": "Die maximale Größe des Puffers in MB. Neustart erforderlich.",
+  "bufferSizeSubtitle": "Die maximale Größe des Puffers in MB. Neustart erforderlich",
   "@bufferSizeSubtitle": {},
   "playCountValue": "{playCount,plural,=1{{playCount} Wiedergabe} other{{playCount} Wiedergaben}}",
   "@playCountValue": {
@@ -1562,7 +1562,7 @@
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Update Häufigkeit der Wiedergabesitzung",
+  "periodicPlaybackSessionUpdateFrequency": "Update-Frequenz der Wiedergabesitzung",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1649,7 +1649,7 @@
     },
     "description": "Collection info line in downloads screen lists"
   },
-  "shuffleAlbumsToNextUp": "Zufallswiedergabe der Alben zur Wiedergabeliste hinzufügen",
+  "shuffleAlbumsToNextUp": "Alben zufällig zu \"Als Nächstes\" hinzufügen",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
@@ -1815,7 +1815,7 @@
   "@showSeekControlsOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
   },
-  "shuffleAlbumsToQueue": "Alben zufällig zur Wiedergabeliste",
+  "shuffleAlbumsToQueue": "Alben zufällig zur Warteschlange hinzufügen",
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
