@@ -675,30 +675,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  hive:
+  hive_ce:
     dependency: "direct main"
     description:
-      name: hive
-      sha256: "8dcf6db979d7933da8217edcec84e9df1bdb4e4edc7fc77dbd5aa74356d6d941"
+      name: hive_ce
+      sha256: ac66daee46ad46486a1ed12cf91e9d7479c875fb46889be8d2c96b557406647f
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
-  hive_flutter:
+    version: "2.10.1"
+  hive_ce_flutter:
     dependency: "direct main"
     description:
-      name: hive_flutter
-      sha256: dca1da446b1d808a51689fb5d0c6c9510c0a2ba01e22805d492c73b68e33eecc
+      name: hive_ce_flutter
+      sha256: "74c1d5f10d803446b4e7913bb272137e2724ba8a56465444f9e7713aeb60a877"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
-  hive_generator:
+    version: "2.2.0"
+  hive_ce_generator:
     dependency: "direct dev"
     description:
-      name: hive_generator
-      sha256: "06cb8f58ace74de61f63500564931f9505368f45f98958bd7a6c35ba24159db4"
+      name: hive_ce_generator
+      sha256: "0b1c750e2d10c55a14cde16d479ada42704be6cef43c54b728ed0e4e02f7d808"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "1.8.2"
   hotreloader:
     dependency: transitive
     description:
@@ -1387,13 +1387,13 @@ packages:
     source: hosted
     version: "1.0.0"
   source_gen:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: source_gen
-      sha256: "14658ba5f669685cd3d63701d01b31ea748310f7ab854e471962670abcf57832"
+      sha256: "35c8150ece9e8c8d263337a265153c3329667640850b9304861faea59fc98f6b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "2.0.0"
   source_helper:
     dependency: transitive
     description:
@@ -1827,6 +1827,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
+  yaml_writer:
+    dependency: transitive
+    description:
+      name: yaml_writer
+      sha256: "69651cd7238411179ac32079937d4aa9a2970150d6b2ae2c6fe6de09402a5dc5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
 sdks:
   dart: ">=3.7.0 <4.0.0"
   flutter: ">=3.27.0"

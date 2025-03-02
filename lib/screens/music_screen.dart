@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:logging/logging.dart';
 
 import '../components/MusicScreen/music_screen_drawer.dart';
@@ -247,8 +247,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       textInputAction: TextInputAction.search,
                       onChanged: (value) {
                         if (debounce?.isActive ?? false) debounce!.cancel();
-                        debounce =
-                            Timer(const Duration(milliseconds: 400), () {
+                        debounce = Timer(const Duration(milliseconds: 400), () {
                           setState(() {
                             searchQuery = value;
                           });
@@ -279,8 +278,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                             //   fontWeight: FontWeight.bold,
                             // ),
                           ),
-                        )
-                        ))
+                        )))
                     .toList(),
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,
