@@ -219,7 +219,6 @@ class _PlayerScreenContent extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          toolbarOpacity: 0.0,
           systemOverlayStyle: SystemUiOverlayStyle(
               // this is needed to ensure the player screen stays in full screen mode WITHOUT having contrast issues in the status bar
               systemNavigationBarColor: Colors.transparent,

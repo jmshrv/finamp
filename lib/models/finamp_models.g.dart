@@ -22,7 +22,9 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       accessToken: fields[2] as String,
       serverId: fields[3] as String,
       currentViewId: fields[4] as String?,
-      views: (fields[5] as Map).cast<String, BaseItemDto>(),
+      views: fields[5] == null
+          ? const {}
+          : (fields[5] as Map).cast<String, BaseItemDto>(),
     );
   }
 
@@ -68,18 +70,20 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
     return FinampSettings(
       isOffline: fields[0] == null ? false : fields[0] as bool,
       shouldTranscode: fields[1] == null ? false : fields[1] as bool,
-      transcodeBitrate: fields[2] == null ? 320000 : fields[2] as int,
+      transcodeBitrate: fields[2] == null ? 320000 : (fields[2] as num).toInt(),
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause:
           fields[4] == null ? true : fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
       onlyShowFavourites: fields[6] == null ? false : fields[6] as bool,
-      sortBy: fields[7] as SortBy,
-      sortOrder: fields[8] as SortOrder,
-      trackShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
+      sortBy: fields[7] == null ? SortBy.sortName : fields[7] as SortBy,
+      sortOrder:
+          fields[8] == null ? SortOrder.ascending : fields[8] as SortOrder,
+      trackShuffleItemCount:
+          fields[9] == null ? 250 : (fields[9] as num).toInt(),
       volumeNormalizationActive: fields[29] == null ? true : fields[29] as bool,
       volumeNormalizationIOSBaseGain:
-          fields[30] == null ? -2.0 : fields[30] as double,
+          fields[30] == null ? -2.0 : (fields[30] as num).toDouble(),
       volumeNormalizationMode: fields[33] == null
           ? VolumeNormalizationMode.hybrid
           : fields[33] as VolumeNormalizationMode,
@@ -90,22 +94,25 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           ? PlaybackSpeedVisibility.automatic
           : fields[57] as PlaybackSpeedVisibility,
       contentGridViewCrossAxisCountPortrait:
-          fields[11] == null ? 2 : fields[11] as int,
+          fields[11] == null ? 2 : (fields[11] as num).toInt(),
       contentGridViewCrossAxisCountLandscape:
-          fields[12] == null ? 3 : fields[12] as int,
+          fields[12] == null ? 3 : (fields[12] as num).toInt(),
       showTextOnGridView: fields[13] == null ? true : fields[13] as bool,
-      sleepTimerSeconds: fields[14] == null ? 1800 : fields[14] as int,
+      sleepTimerSeconds:
+          fields[14] == null ? 1800 : (fields[14] as num).toInt(),
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
       useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
-          fields[48] == null ? 1.5 : fields[48] as double,
+          fields[48] == null ? 1.5 : (fields[48] as num).toDouble(),
       showArtistsTopTracks: fields[54] == null ? true : fields[54] as bool,
       bufferDisableSizeConstraints:
           fields[78] == null ? false : fields[78] as bool,
-      bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
-      bufferSizeMegabytes: fields[79] == null ? 50 : fields[79] as int,
+      bufferDurationSeconds:
+          fields[18] == null ? 600 : (fields[18] as num).toInt(),
+      bufferSizeMegabytes:
+          fields[79] == null ? 50 : (fields[79] as num).toInt(),
       tabSortBy: fields[20] == null
           ? {}
           : (fields[20] as Map).cast<TabContentType, SortBy>(),
@@ -115,7 +122,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       loopMode: fields[27] == null
           ? FinampLoopMode.none
           : fields[27] as FinampLoopMode,
-      playbackSpeed: fields[56] == null ? 1.0 : fields[56] as double,
+      playbackSpeed: fields[56] == null ? 1.0 : (fields[56] as num).toDouble(),
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
@@ -137,13 +144,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
       showDownloadsWithUnknownLibrary:
           fields[37] == null ? true : fields[37] as bool,
-      maxConcurrentDownloads: fields[38] == null ? 10 : fields[38] as int,
-      downloadWorkers: fields[39] == null ? 5 : fields[39] as int,
+      maxConcurrentDownloads:
+          fields[38] == null ? 10 : (fields[38] as num).toInt(),
+      downloadWorkers: fields[39] == null ? 5 : (fields[39] as num).toInt(),
       resyncOnStartup: fields[40] == null ? true : fields[40] as bool,
       preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
           fields[42] == null ? true : fields[42] as bool,
-      downloadTranscodeBitrate: fields[45] as int?,
+      downloadTranscodeBitrate: (fields[45] as num?)?.toInt(),
       shouldTranscodeDownloads: fields[44] == null
           ? TranscodeDownloadsSetting.ask
           : fields[44] as TranscodeDownloadsSetting,
@@ -151,16 +159,18 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
       useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
-      fixedGridTileSize: fields[60] == null ? 150 : fields[60] as int,
+      fixedGridTileSize: fields[60] == null ? 150 : (fields[60] as num).toInt(),
       allowSplitScreen: fields[61] == null ? true : fields[61] as bool,
-      splitScreenPlayerWidth: fields[62] == null ? 400.0 : fields[62] as double,
+      splitScreenPlayerWidth:
+          fields[62] == null ? 400.0 : (fields[62] as num).toDouble(),
       enableVibration: fields[47] == null ? true : fields[47] as bool,
-      prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
+      prioritizeCoverFactor:
+          fields[49] == null ? 8.0 : (fields[49] as num).toDouble(),
       suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
       hidePlayerBottomActions: fields[51] == null ? false : fields[51] as bool,
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
-          fields[53] == null ? 150 : fields[53] as int,
+          fields[53] == null ? 150 : (fields[53] as num).toInt(),
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
@@ -194,7 +204,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodingSegmentContainer: fields[75] == null
           ? FinampSegmentContainer.fragmentedMp4
           : fields[75] as FinampSegmentContainer,
-      downloadSizeWarningCutoff: fields[80] == null ? 150 : fields[80] as int,
+      downloadSizeWarningCutoff:
+          fields[80] == null ? 150 : (fields[80] as num).toInt(),
       allowDeleteFromServer: fields[81] == null ? false : fields[81] as bool,
       oneLineMarqueeTextButton: fields[82] == null ? false : fields[82] as bool,
     )
@@ -584,7 +595,7 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return OfflineListen(
-      timestamp: fields[0] as int,
+      timestamp: (fields[0] as num).toInt(),
       userId: fields[1] as String,
       itemId: fields[2] as String,
       name: fields[3] as String,
@@ -643,7 +654,7 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
       name: fields[1] as QueueItemSourceName,
       id: fields[2] as String,
       item: fields[3] as BaseItemDto?,
-      contextNormalizationGain: fields[4] as double?,
+      contextNormalizationGain: (fields[4] as num?)?.toDouble(),
     );
   }
 
@@ -727,7 +738,9 @@ class FinampQueueItemAdapter extends TypeAdapter<FinampQueueItem> {
     return FinampQueueItem(
       item: fields[1] as MediaItem,
       source: fields[2] as QueueItemSource,
-      type: fields[3] as QueueItemQueueType,
+      type: fields[3] == null
+          ? QueueItemQueueType.queue
+          : fields[3] as QueueItemQueueType,
     )..id = fields[0] as String;
   }
 
@@ -907,10 +920,10 @@ class FinampStorableQueueInfoAdapter
     return FinampStorableQueueInfo(
       previousTracks: (fields[0] as List).cast<String>(),
       currentTrack: fields[1] as String?,
-      currentTrackSeek: fields[2] as int?,
+      currentTrackSeek: (fields[2] as num?)?.toInt(),
       nextUp: (fields[3] as List).cast<String>(),
       queue: (fields[4] as List).cast<String>(),
-      creation: fields[5] as int,
+      creation: (fields[5] as num).toInt(),
       source: fields[6] as QueueItemSource?,
     );
   }
@@ -1091,19 +1104,14 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
     switch (obj) {
       case TabContentType.albums:
         writer.writeByte(0);
-        break;
       case TabContentType.artists:
         writer.writeByte(1);
-        break;
       case TabContentType.playlists:
         writer.writeByte(2);
-        break;
       case TabContentType.genres:
         writer.writeByte(3);
-        break;
       case TabContentType.tracks:
         writer.writeByte(4);
-        break;
     }
   }
 
@@ -1139,10 +1147,8 @@ class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
     switch (obj) {
       case ContentViewType.list:
         writer.writeByte(0);
-        break;
       case ContentViewType.grid:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -1178,10 +1184,8 @@ class FinampPlaybackOrderAdapter extends TypeAdapter<FinampPlaybackOrder> {
     switch (obj) {
       case FinampPlaybackOrder.shuffled:
         writer.writeByte(0);
-        break;
       case FinampPlaybackOrder.linear:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -1219,13 +1223,10 @@ class FinampLoopModeAdapter extends TypeAdapter<FinampLoopMode> {
     switch (obj) {
       case FinampLoopMode.none:
         writer.writeByte(0);
-        break;
       case FinampLoopMode.one:
         writer.writeByte(1);
-        break;
       case FinampLoopMode.all:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1297,64 +1298,44 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
     switch (obj) {
       case QueueItemSourceType.album:
         writer.writeByte(0);
-        break;
       case QueueItemSourceType.playlist:
         writer.writeByte(1);
-        break;
       case QueueItemSourceType.trackMix:
         writer.writeByte(2);
-        break;
       case QueueItemSourceType.artistMix:
         writer.writeByte(3);
-        break;
       case QueueItemSourceType.albumMix:
         writer.writeByte(4);
-        break;
       case QueueItemSourceType.favorites:
         writer.writeByte(5);
-        break;
       case QueueItemSourceType.allTracks:
         writer.writeByte(6);
-        break;
       case QueueItemSourceType.filteredList:
         writer.writeByte(7);
-        break;
       case QueueItemSourceType.genre:
         writer.writeByte(8);
-        break;
       case QueueItemSourceType.artist:
         writer.writeByte(9);
-        break;
       case QueueItemSourceType.nextUp:
         writer.writeByte(10);
-        break;
       case QueueItemSourceType.nextUpAlbum:
         writer.writeByte(11);
-        break;
       case QueueItemSourceType.nextUpPlaylist:
         writer.writeByte(12);
-        break;
       case QueueItemSourceType.nextUpArtist:
         writer.writeByte(13);
-        break;
       case QueueItemSourceType.formerNextUp:
         writer.writeByte(14);
-        break;
       case QueueItemSourceType.downloads:
         writer.writeByte(15);
-        break;
       case QueueItemSourceType.queue:
         writer.writeByte(16);
-        break;
       case QueueItemSourceType.unknown:
         writer.writeByte(17);
-        break;
       case QueueItemSourceType.genreMix:
         writer.writeByte(18);
-        break;
       case QueueItemSourceType.track:
         writer.writeByte(19);
-        break;
     }
   }
 
@@ -1394,16 +1375,12 @@ class QueueItemQueueTypeAdapter extends TypeAdapter<QueueItemQueueType> {
     switch (obj) {
       case QueueItemQueueType.previousTracks:
         writer.writeByte(0);
-        break;
       case QueueItemQueueType.currentTrack:
         writer.writeByte(1);
-        break;
       case QueueItemQueueType.nextUp:
         writer.writeByte(2);
-        break;
       case QueueItemQueueType.queue:
         writer.writeByte(3);
-        break;
     }
   }
 
@@ -1454,31 +1431,22 @@ class QueueItemSourceNameTypeAdapter
     switch (obj) {
       case QueueItemSourceNameType.preTranslated:
         writer.writeByte(0);
-        break;
       case QueueItemSourceNameType.yourLikes:
         writer.writeByte(1);
-        break;
       case QueueItemSourceNameType.shuffleAll:
         writer.writeByte(2);
-        break;
       case QueueItemSourceNameType.mix:
         writer.writeByte(3);
-        break;
       case QueueItemSourceNameType.instantMix:
         writer.writeByte(4);
-        break;
       case QueueItemSourceNameType.nextUp:
         writer.writeByte(5);
-        break;
       case QueueItemSourceNameType.tracksFormerNextUp:
         writer.writeByte(6);
-        break;
       case QueueItemSourceNameType.savedQueue:
         writer.writeByte(7);
-        break;
       case QueueItemSourceNameType.queue:
         writer.writeByte(8);
-        break;
     }
   }
 
@@ -1522,22 +1490,16 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
     switch (obj) {
       case SavedQueueState.preInit:
         writer.writeByte(0);
-        break;
       case SavedQueueState.init:
         writer.writeByte(1);
-        break;
       case SavedQueueState.loading:
         writer.writeByte(2);
-        break;
       case SavedQueueState.saving:
         writer.writeByte(3);
-        break;
       case SavedQueueState.failed:
         writer.writeByte(4);
-        break;
       case SavedQueueState.pendingSave:
         writer.writeByte(5);
-        break;
     }
   }
 
@@ -1576,13 +1538,10 @@ class VolumeNormalizationModeAdapter
     switch (obj) {
       case VolumeNormalizationMode.hybrid:
         writer.writeByte(0);
-        break;
       case VolumeNormalizationMode.trackBased:
         writer.writeByte(1);
-        break;
       case VolumeNormalizationMode.albumOnly:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1628,25 +1587,18 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
     switch (obj) {
       case DownloadLocationType.internalDocuments:
         writer.writeByte(0);
-        break;
       case DownloadLocationType.internalSupport:
         writer.writeByte(1);
-        break;
       case DownloadLocationType.external:
         writer.writeByte(2);
-        break;
       case DownloadLocationType.custom:
         writer.writeByte(3);
-        break;
       case DownloadLocationType.none:
         writer.writeByte(4);
-        break;
       case DownloadLocationType.migrated:
         writer.writeByte(5);
-        break;
       case DownloadLocationType.cache:
         writer.writeByte(6);
-        break;
     }
   }
 
@@ -1687,16 +1639,12 @@ class FinampTranscodingCodecAdapter
     switch (obj) {
       case FinampTranscodingCodec.aac:
         writer.writeByte(0);
-        break;
       case FinampTranscodingCodec.mp3:
         writer.writeByte(1);
-        break;
       case FinampTranscodingCodec.opus:
         writer.writeByte(2);
-        break;
       case FinampTranscodingCodec.original:
         writer.writeByte(3);
-        break;
     }
   }
 
@@ -1735,13 +1683,10 @@ class TranscodeDownloadsSettingAdapter
     switch (obj) {
       case TranscodeDownloadsSetting.always:
         writer.writeByte(0);
-        break;
       case TranscodeDownloadsSetting.never:
         writer.writeByte(1);
-        break;
       case TranscodeDownloadsSetting.ask:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1780,13 +1725,10 @@ class PlaybackSpeedVisibilityAdapter
     switch (obj) {
       case PlaybackSpeedVisibility.automatic:
         writer.writeByte(0);
-        break;
       case PlaybackSpeedVisibility.visible:
         writer.writeByte(1);
-        break;
       case PlaybackSpeedVisibility.hidden:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1824,13 +1766,10 @@ class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
     switch (obj) {
       case MediaItemParentType.collection:
         writer.writeByte(0);
-        break;
       case MediaItemParentType.rootCollection:
         writer.writeByte(1);
-        break;
       case MediaItemParentType.instantMix:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1868,13 +1807,10 @@ class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
     switch (obj) {
       case LyricsAlignment.start:
         writer.writeByte(0);
-        break;
       case LyricsAlignment.center:
         writer.writeByte(1);
-        break;
       case LyricsAlignment.end:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1912,13 +1848,10 @@ class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
     switch (obj) {
       case LyricsFontSize.small:
         writer.writeByte(0);
-        break;
       case LyricsFontSize.medium:
         writer.writeByte(1);
-        break;
       case LyricsFontSize.large:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1958,16 +1891,12 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
     switch (obj) {
       case KeepScreenOnOption.disabled:
         writer.writeByte(0);
-        break;
       case KeepScreenOnOption.alwaysOn:
         writer.writeByte(1);
-        break;
       case KeepScreenOnOption.whilePlaying:
         writer.writeByte(2);
-        break;
       case KeepScreenOnOption.whileLyrics:
         writer.writeByte(3);
-        break;
     }
   }
 
@@ -2004,10 +1933,8 @@ class FinampSegmentContainerAdapter
     switch (obj) {
       case FinampSegmentContainer.mpegTS:
         writer.writeByte(0);
-        break;
       case FinampSegmentContainer.fragmentedMp4:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -2057,31 +1984,22 @@ class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
     switch (obj) {
       case FinampFeatureChipType.playCount:
         writer.writeByte(0);
-        break;
       case FinampFeatureChipType.additionalPeople:
         writer.writeByte(1);
-        break;
       case FinampFeatureChipType.playbackMode:
         writer.writeByte(2);
-        break;
       case FinampFeatureChipType.codec:
         writer.writeByte(3);
-        break;
       case FinampFeatureChipType.bitRate:
         writer.writeByte(4);
-        break;
       case FinampFeatureChipType.bitDepth:
         writer.writeByte(5);
-        break;
       case FinampFeatureChipType.size:
         writer.writeByte(6);
-        break;
       case FinampFeatureChipType.normalizationGain:
         writer.writeByte(7);
-        break;
       case FinampFeatureChipType.sampleRate:
         writer.writeByte(8);
-        break;
     }
   }
 

@@ -4,7 +4,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../components/AudioServiceSettingsScreen/buffer_duration_list_tile.dart';
 import '../components/AudioServiceSettingsScreen/loadQueueOnStartup_selector.dart';
@@ -56,7 +56,6 @@ class _AudioServiceSettingsScreenState
     );
   }
 }
-
 
 class BufferDisableSizeConstraintsSelector extends StatelessWidget {
   const BufferDisableSizeConstraintsSelector({super.key});

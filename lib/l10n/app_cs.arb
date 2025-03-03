@@ -1884,5 +1884,17 @@
         "type": "String"
       }
     }
-  }
+  },
+  "hideQueueButtonSubtitle": "Skrýt tlačítko fronty na obrazovce přehrávače. Přejeďte nahoru pro zobrazení fronty.",
+  "@hideQueueButtonSubtitle": {},
+  "oneLineMarqueeTextButtonSubtitle": "Automaticky posouvat názvy skaldeb, které jsou příliš dlouhé na zobrazení ve dvou řádcích",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "marqueeOrTruncateButton": "Použít výpustku pro dlouhé názvy",
+  "@marqueeOrTruncateButton": {},
+  "marqueeOrTruncateButtonSubtitle": "Namísto posouvajícího se textu zobrazit … na konci dlouhých názvů",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "hideQueueButton": "Skrýt tlačítko fronty",
+  "@hideQueueButton": {},
+  "oneLineMarqueeTextButton": "Automaticky posouvat dlouhé názvy",
+  "@oneLineMarqueeTextButton": {}
 }

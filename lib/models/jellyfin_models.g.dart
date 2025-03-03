@@ -30,7 +30,7 @@ class UserDtoAdapter extends TypeAdapter<UserDto> {
       lastActivityDate: fields[10] as String?,
       configuration: fields[11] as UserConfiguration?,
       policy: fields[12] as UserPolicy?,
-      primaryImageAspectRatio: fields[13] as double?,
+      primaryImageAspectRatio: (fields[13] as num?)?.toDouble(),
     );
   }
 
@@ -169,7 +169,7 @@ class UserPolicyAdapter extends TypeAdapter<UserPolicy> {
       isAdministrator: fields[0] as bool,
       isHidden: fields[1] as bool,
       isDisabled: fields[2] as bool,
-      maxParentalRating: fields[3] as int?,
+      maxParentalRating: (fields[3] as num?)?.toInt(),
       blockedTags: (fields[4] as List?)?.cast<String>(),
       enableUserPreferenceAccess: fields[5] as bool,
       accessSchedules: (fields[6] as List?)?.cast<AccessSchedule>(),
@@ -195,13 +195,13 @@ class UserPolicyAdapter extends TypeAdapter<UserPolicy> {
       enableAllChannels: fields[25] as bool,
       enabledFolders: (fields[26] as List?)?.cast<String>(),
       enableAllFolders: fields[27] as bool,
-      invalidLoginAttemptCount: fields[28] as int,
-      loginAttemptsBeforeLockout: fields[35] as int?,
-      maxActiveSessions: fields[36] as int?,
+      invalidLoginAttemptCount: (fields[28] as num).toInt(),
+      loginAttemptsBeforeLockout: (fields[35] as num?)?.toInt(),
+      maxActiveSessions: (fields[36] as num?)?.toInt(),
       enablePublicSharing: fields[29] as bool,
       blockedMediaFolders: (fields[30] as List?)?.cast<String>(),
       blockedChannels: (fields[31] as List?)?.cast<String>(),
-      remoteClientBitrateLimit: fields[32] as int,
+      remoteClientBitrateLimit: (fields[32] as num).toInt(),
       authenticationProviderId: fields[33] as String?,
       passwordResetProviderId: fields[37] as String?,
       syncPlayAccess: fields[38] as String,
@@ -314,11 +314,11 @@ class AccessScheduleAdapter extends TypeAdapter<AccessSchedule> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AccessSchedule(
-      id: fields[3] as int,
+      id: (fields[3] as num).toInt(),
       userId: fields[4] as String,
       dayOfWeek: fields[0] as String,
-      startHour: fields[1] as double,
-      endHour: fields[2] as double,
+      startHour: (fields[1] as num).toDouble(),
+      endHour: (fields[2] as num).toDouble(),
     );
   }
 
@@ -518,13 +518,13 @@ class PlayerStateInfoAdapter extends TypeAdapter<PlayerStateInfo> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PlayerStateInfo(
-      positionTicks: fields[0] as int?,
+      positionTicks: (fields[0] as num?)?.toInt(),
       canSeek: fields[1] as bool,
       isPaused: fields[2] as bool,
       isMuted: fields[3] as bool,
-      volumeLevel: fields[4] as int?,
-      audioStreamIndex: fields[5] as int?,
-      subtitleStreamIndex: fields[6] as int?,
+      volumeLevel: (fields[4] as num?)?.toInt(),
+      audioStreamIndex: (fields[5] as num?)?.toInt(),
+      subtitleStreamIndex: (fields[6] as num?)?.toInt(),
       mediaSourceId: fields[7] as String?,
       playMethod: fields[8] as String?,
       repeatMode: fields[9] as String?,
@@ -694,17 +694,17 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
       supportedMediaTypes: fields[14] as String?,
       userId: fields[15] as String?,
       albumArtPn: fields[16] as String?,
-      maxAlbumArtWidth: fields[17] as int,
-      maxAlbumArtHeight: fields[18] as int,
-      maxIconWidth: fields[19] as int?,
-      maxIconHeight: fields[20] as int?,
-      maxStreamingBitrate: fields[21] as int?,
-      maxStaticBitrate: fields[22] as int?,
-      musicStreamingTranscodingBitrate: fields[23] as int?,
-      maxStaticMusicBitrate: fields[24] as int?,
+      maxAlbumArtWidth: (fields[17] as num).toInt(),
+      maxAlbumArtHeight: (fields[18] as num).toInt(),
+      maxIconWidth: (fields[19] as num?)?.toInt(),
+      maxIconHeight: (fields[20] as num?)?.toInt(),
+      maxStreamingBitrate: (fields[21] as num?)?.toInt(),
+      maxStaticBitrate: (fields[22] as num?)?.toInt(),
+      musicStreamingTranscodingBitrate: (fields[23] as num?)?.toInt(),
+      maxStaticMusicBitrate: (fields[24] as num?)?.toInt(),
       sonyAggregationFlags: fields[25] as String?,
       protocolInfo: fields[26] as String?,
-      timelineOffsetSeconds: fields[27] as int,
+      timelineOffsetSeconds: (fields[27] as num).toInt(),
       requiresPlainVideoItems: fields[28] as bool,
       requiresPlainFolders: fields[29] as bool,
       enableMSMediaReceiverRegistrar: fields[30] as bool,
@@ -1014,8 +1014,8 @@ class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
       copyTimestamps: fields[8] as bool,
       context: fields[9] as String,
       maxAudioChannels: fields[10] as String?,
-      minSegments: fields[11] as int,
-      segmentLength: fields[12] as int,
+      minSegments: (fields[11] as num).toInt(),
+      segmentLength: (fields[12] as num).toInt(),
       breakOnNonKeyFrames: fields[13] as bool,
       enableSubtitlesInManifest: fields[14] as bool,
     );
@@ -1314,9 +1314,9 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       playlistItemId: fields[5] as String?,
       dateCreated: fields[6] as String?,
       extraType: fields[7] as String?,
-      airsBeforeSeasonNumber: fields[8] as int?,
-      airsAfterSeasonNumber: fields[9] as int?,
-      airsBeforeEpisodeNumber: fields[10] as int?,
+      airsBeforeSeasonNumber: (fields[8] as num?)?.toInt(),
+      airsAfterSeasonNumber: (fields[9] as num?)?.toInt(),
+      airsBeforeEpisodeNumber: (fields[10] as num?)?.toInt(),
       canDelete: fields[11] as bool?,
       canDownload: fields[12] as bool?,
       hasSubtitles: fields[13] as bool?,
@@ -1330,7 +1330,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       premiereDate: fields[21] as String?,
       externalUrls: (fields[22] as List?)?.cast<ExternalUrl>(),
       mediaSources: (fields[23] as List?)?.cast<MediaSourceInfo>(),
-      criticRating: fields[24] as double?,
+      criticRating: (fields[24] as num?)?.toDouble(),
       productionLocations: (fields[25] as List?)?.cast<String>(),
       path: fields[26] as String?,
       officialRating: fields[27] as String?,
@@ -1340,16 +1340,16 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       overview: fields[31] as String?,
       taglines: (fields[32] as List?)?.cast<String>(),
       genres: (fields[33] as List?)?.cast<String>(),
-      communityRating: fields[34] as double?,
-      runTimeTicks: fields[35] as int?,
+      communityRating: (fields[34] as num?)?.toDouble(),
+      runTimeTicks: (fields[35] as num?)?.toInt(),
       playAccess: fields[36] as String?,
       aspectRatio: fields[37] as String?,
-      productionYear: fields[38] as int?,
+      productionYear: (fields[38] as num?)?.toInt(),
       number: fields[39] as String?,
       channelNumber: fields[40] as String?,
-      indexNumber: fields[41] as int?,
-      indexNumberEnd: fields[42] as int?,
-      parentIndexNumber: fields[43] as int?,
+      indexNumber: (fields[41] as num?)?.toInt(),
+      indexNumberEnd: (fields[42] as num?)?.toInt(),
+      parentIndexNumber: (fields[43] as num?)?.toInt(),
       remoteTrailers: (fields[44] as List?)?.cast<MediaUrl>(),
       providerIds: (fields[45] as Map?)?.cast<String, dynamic>(),
       isFolder: fields[46] as bool?,
@@ -1361,20 +1361,20 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       parentLogoItemId: fields[52] as String?,
       parentBackdropItemId: fields[53] as String?,
       parentBackdropImageTags: (fields[54] as List?)?.cast<String>(),
-      localTrailerCount: fields[55] as int?,
+      localTrailerCount: (fields[55] as num?)?.toInt(),
       userData: fields[56] as UserItemDataDto?,
-      recursiveItemCount: fields[57] as int?,
-      childCount: fields[58] as int?,
+      recursiveItemCount: (fields[57] as num?)?.toInt(),
+      childCount: (fields[58] as num?)?.toInt(),
       seriesName: fields[59] as String?,
       seriesId: fields[60] as String?,
       seasonId: fields[61] as String?,
-      specialFeatureCount: fields[62] as int?,
+      specialFeatureCount: (fields[62] as num?)?.toInt(),
       displayPreferencesId: fields[63] as String?,
       status: fields[64] as String?,
       airTime: fields[65] as String?,
       airDays: (fields[66] as List?)?.cast<String>(),
       tags: (fields[67] as List?)?.cast<String>(),
-      primaryImageAspectRatio: fields[68] as double?,
+      primaryImageAspectRatio: (fields[68] as num?)?.toDouble(),
       artists: (fields[69] as List?)?.cast<String>(),
       artistItems: (fields[70] as List?)?.cast<NameIdPair>(),
       album: fields[71] as String?,
@@ -1387,7 +1387,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       albumArtists: (fields[78] as List?)?.cast<NameIdPair>(),
       seasonName: fields[79] as String?,
       mediaStreams: (fields[80] as List?)?.cast<MediaStream>(),
-      partCount: fields[81] as int?,
+      partCount: (fields[81] as num?)?.toInt(),
       imageTags: (fields[82] as Map?)?.cast<dynamic, String>(),
       backdropImageTags: (fields[83] as List?)?.cast<String>(),
       parentLogoImageTag: fields[84] as String?,
@@ -1405,24 +1405,24 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       endDate: fields[96] as String?,
       lockedFields: (fields[97] as List?)?.cast<String>(),
       lockData: fields[98] as bool?,
-      width: fields[99] as int?,
-      height: fields[100] as int?,
+      width: (fields[99] as num?)?.toInt(),
+      height: (fields[100] as num?)?.toInt(),
       cameraMake: fields[101] as String?,
       cameraModel: fields[102] as String?,
       software: fields[103] as String?,
-      exposureTime: fields[104] as double?,
-      focalLength: fields[105] as double?,
+      exposureTime: (fields[104] as num?)?.toDouble(),
+      focalLength: (fields[105] as num?)?.toDouble(),
       imageOrientation: fields[106] as String?,
-      aperture: fields[107] as double?,
-      shutterSpeed: fields[108] as double?,
-      latitude: fields[109] as double?,
-      longitude: fields[110] as double?,
-      altitude: fields[111] as double?,
-      isoSpeedRating: fields[112] as int?,
+      aperture: (fields[107] as num?)?.toDouble(),
+      shutterSpeed: (fields[108] as num?)?.toDouble(),
+      latitude: (fields[109] as num?)?.toDouble(),
+      longitude: (fields[110] as num?)?.toDouble(),
+      altitude: (fields[111] as num?)?.toDouble(),
+      isoSpeedRating: (fields[112] as num?)?.toInt(),
       seriesTimerId: fields[113] as String?,
       channelPrimaryImageTag: fields[114] as String?,
       startDate: fields[115] as String?,
-      completionPercentage: fields[116] as double?,
+      completionPercentage: (fields[116] as num?)?.toDouble(),
       isRepeat: fields[117] as bool?,
       episodeTitle: fields[118] as String?,
       isMovie: fields[119] as bool?,
@@ -1434,30 +1434,30 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       isPremiere: fields[125] as bool?,
       timerId: fields[126] as String?,
       currentProgram: fields[127] as dynamic,
-      movieCount: fields[128] as int?,
-      seriesCount: fields[129] as int?,
-      albumCount: fields[130] as int?,
-      songCount: fields[131] as int?,
-      musicVideoCount: fields[132] as int?,
+      movieCount: (fields[128] as num?)?.toInt(),
+      seriesCount: (fields[129] as num?)?.toInt(),
+      albumCount: (fields[130] as num?)?.toInt(),
+      songCount: (fields[131] as num?)?.toInt(),
+      musicVideoCount: (fields[132] as num?)?.toInt(),
       sourceType: fields[133] as String?,
       dateLastMediaAdded: fields[134] as String?,
       enableMediaSourceDisplay: fields[135] as bool?,
-      cumulativeRunTimeTicks: fields[136] as int?,
+      cumulativeRunTimeTicks: (fields[136] as num?)?.toInt(),
       isPlaceHolder: fields[137] as bool?,
       isHD: fields[138] as bool?,
       videoType: fields[139] as String?,
-      mediaSourceCount: fields[140] as int?,
+      mediaSourceCount: (fields[140] as num?)?.toInt(),
       screenshotImageTags: (fields[141] as List?)?.cast<String>(),
       imageBlurHashes: fields[142] as ImageBlurHashes?,
       isoType: fields[143] as String?,
-      trailerCount: fields[144] as int?,
-      programCount: fields[145] as int?,
-      episodeCount: fields[146] as int?,
-      artistCount: fields[147] as int?,
+      trailerCount: (fields[144] as num?)?.toInt(),
+      programCount: (fields[145] as num?)?.toInt(),
+      episodeCount: (fields[146] as num?)?.toInt(),
+      artistCount: (fields[147] as num?)?.toInt(),
       programId: fields[148] as String?,
       channelType: fields[149] as String?,
       audio: fields[150] as String?,
-      normalizationGain: fields[151] as double?,
+      normalizationGain: (fields[151] as num?)?.toDouble(),
       hasLyrics: fields[152] as bool?,
     );
   }
@@ -1840,10 +1840,10 @@ class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
       encoderProtocol: fields[4] as String?,
       type: fields[5] as String,
       container: fields[6] as String?,
-      size: fields[7] as int?,
+      size: (fields[7] as num?)?.toInt(),
       name: fields[8] as String?,
       isRemote: fields[9] as bool,
-      runTimeTicks: fields[10] as int?,
+      runTimeTicks: (fields[10] as num?)?.toInt(),
       supportsTranscoding: fields[11] as bool,
       supportsDirectStream: fields[12] as bool,
       supportsDirectPlay: fields[13] as bool,
@@ -1852,22 +1852,22 @@ class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
       openToken: fields[16] as String?,
       requiresClosing: fields[17] as bool,
       liveStreamId: fields[18] as String?,
-      bufferMs: fields[19] as int?,
+      bufferMs: (fields[19] as num?)?.toInt(),
       requiresLooping: fields[20] as bool,
       supportsProbing: fields[21] as bool,
       video3DFormat: fields[22] as String?,
       mediaStreams: (fields[23] as List).cast<MediaStream>(),
       formats: (fields[24] as List?)?.cast<String>(),
-      bitrate: fields[25] as int?,
+      bitrate: (fields[25] as num?)?.toInt(),
       timestamp: fields[26] as String?,
       requiredHttpHeaders: (fields[27] as Map?)?.cast<dynamic, String>(),
       transcodingUrl: fields[28] as String?,
       transcodingSubProtocol: fields[29] as String?,
       transcodingContainer: fields[30] as String?,
-      analyzeDurationMs: fields[31] as int?,
+      analyzeDurationMs: (fields[31] as num?)?.toInt(),
       readAtNativeFramerate: fields[32] as bool,
-      defaultAudioStreamIndex: fields[33] as int?,
-      defaultSubtitleStreamIndex: fields[34] as int?,
+      defaultAudioStreamIndex: (fields[33] as num?)?.toInt(),
+      defaultSubtitleStreamIndex: (fields[34] as num?)?.toInt(),
       etag: fields[35] as String?,
       ignoreDts: fields[36] as bool,
       ignoreIndex: fields[37] as bool,
@@ -2006,23 +2006,23 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
       isInterlaced: fields[13] as bool,
       isAVC: fields[14] as bool?,
       channelLayout: fields[15] as String?,
-      bitRate: fields[16] as int?,
-      bitDepth: fields[17] as int?,
-      refFrames: fields[18] as int?,
-      packetLength: fields[19] as int?,
-      channels: fields[20] as int?,
-      sampleRate: fields[21] as int?,
+      bitRate: (fields[16] as num?)?.toInt(),
+      bitDepth: (fields[17] as num?)?.toInt(),
+      refFrames: (fields[18] as num?)?.toInt(),
+      packetLength: (fields[19] as num?)?.toInt(),
+      channels: (fields[20] as num?)?.toInt(),
+      sampleRate: (fields[21] as num?)?.toInt(),
       isDefault: fields[22] as bool,
       isForced: fields[23] as bool,
-      height: fields[24] as int?,
-      width: fields[25] as int?,
-      averageFrameRate: fields[26] as double?,
-      realFrameRate: fields[27] as double?,
+      height: (fields[24] as num?)?.toInt(),
+      width: (fields[25] as num?)?.toInt(),
+      averageFrameRate: (fields[26] as num?)?.toDouble(),
+      realFrameRate: (fields[27] as num?)?.toDouble(),
       profile: fields[28] as String?,
       type: fields[29] as String,
       aspectRatio: fields[30] as String?,
-      index: fields[31] as int,
-      score: fields[32] as int?,
+      index: (fields[31] as num).toInt(),
+      score: (fields[32] as num?)?.toInt(),
       isExternal: fields[33] as bool,
       deliveryMethod: fields[34] as String?,
       deliveryUrl: fields[35] as String?,
@@ -2031,7 +2031,7 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
       supportsExternalStream: fields[38] as bool,
       path: fields[39] as String?,
       pixelFormat: fields[40] as String?,
-      level: fields[41] as double?,
+      level: (fields[41] as num?)?.toDouble(),
       isAnamorphic: fields[42] as bool?,
     )
       ..colorRange = fields[43] as String?
@@ -2257,11 +2257,11 @@ class UserItemDataDtoAdapter extends TypeAdapter<UserItemDataDto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserItemDataDto(
-      rating: fields[0] as double?,
-      playedPercentage: fields[1] as double?,
-      unplayedItemCount: fields[2] as int?,
-      playbackPositionTicks: fields[3] as int,
-      playCount: fields[4] as int,
+      rating: (fields[0] as num?)?.toDouble(),
+      playedPercentage: (fields[1] as num?)?.toDouble(),
+      unplayedItemCount: (fields[2] as num?)?.toInt(),
+      playbackPositionTicks: (fields[3] as num).toInt(),
+      playCount: (fields[4] as num).toInt(),
       isFavorite: fields[5] as bool,
       likes: fields[6] as bool?,
       lastPlayedDate: fields[7] as String?,
@@ -2431,7 +2431,7 @@ class MediaAttachmentAdapter extends TypeAdapter<MediaAttachment> {
       codec: fields[0] as String?,
       codecTag: fields[1] as String?,
       comment: fields[2] as String?,
-      index: fields[3] as int,
+      index: (fields[3] as num).toInt(),
       fileName: fields[4] as String?,
       mimeType: fields[5] as String?,
       deliveryUrl: fields[6] as String?,
@@ -2480,15 +2480,15 @@ class BaseItemAdapter extends TypeAdapter<BaseItem> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BaseItem(
-      size: fields[0] as int?,
+      size: (fields[0] as num?)?.toInt(),
       container: fields[1] as String?,
       dateLastSaved: fields[2] as String?,
       remoteTrailers: (fields[3] as List?)?.cast<MediaUrl>(),
       isHD: fields[4] as bool,
       isShortcut: fields[5] as bool,
       shortcutPath: fields[6] as String?,
-      width: fields[7] as int?,
-      height: fields[8] as int?,
+      width: (fields[7] as num?)?.toInt(),
+      height: (fields[8] as num?)?.toInt(),
       extraIds: (fields[9] as List?)?.cast<String>(),
       supportsExternalTransfer: fields[10] as bool,
     );
@@ -2771,9 +2771,9 @@ class LyricMetadataAdapter extends TypeAdapter<LyricMetadata> {
       album: fields[1] as String?,
       title: fields[2] as String?,
       author: fields[3] as String?,
-      length: fields[4] as int?,
+      length: (fields[4] as num?)?.toInt(),
       by: fields[5] as String?,
-      offset: fields[6] as int?,
+      offset: (fields[6] as num?)?.toInt(),
       creator: fields[7] as String?,
       version: fields[8] as String?,
       isSynced: fields[9] as bool?,
@@ -2829,7 +2829,7 @@ class LyricLineAdapter extends TypeAdapter<LyricLine> {
     };
     return LyricLine(
       text: fields[0] as String?,
-      start: fields[1] as int?,
+      start: (fields[1] as num?)?.toInt(),
     );
   }
 
@@ -2938,49 +2938,34 @@ class SortByAdapter extends TypeAdapter<SortBy> {
     switch (obj) {
       case SortBy.album:
         writer.writeByte(0);
-        break;
       case SortBy.albumArtist:
         writer.writeByte(1);
-        break;
       case SortBy.artist:
         writer.writeByte(2);
-        break;
       case SortBy.budget:
         writer.writeByte(3);
-        break;
       case SortBy.communityRating:
         writer.writeByte(4);
-        break;
       case SortBy.criticRating:
         writer.writeByte(5);
-        break;
       case SortBy.dateCreated:
         writer.writeByte(6);
-        break;
       case SortBy.datePlayed:
         writer.writeByte(7);
-        break;
       case SortBy.playCount:
         writer.writeByte(8);
-        break;
       case SortBy.premiereDate:
         writer.writeByte(9);
-        break;
       case SortBy.productionYear:
         writer.writeByte(10);
-        break;
       case SortBy.sortName:
         writer.writeByte(11);
-        break;
       case SortBy.random:
         writer.writeByte(12);
-        break;
       case SortBy.revenue:
         writer.writeByte(13);
-        break;
       case SortBy.runtime:
         writer.writeByte(14);
-        break;
     }
   }
 
@@ -3016,10 +3001,8 @@ class SortOrderAdapter extends TypeAdapter<SortOrder> {
     switch (obj) {
       case SortOrder.ascending:
         writer.writeByte(0);
-        break;
       case SortOrder.descending:
         writer.writeByte(1);
-        break;
     }
   }
 
