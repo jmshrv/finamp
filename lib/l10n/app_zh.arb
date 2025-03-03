@@ -13,8 +13,8 @@
   "@artists": {},
   "genres": "流派",
   "@genres": {},
-  "songs": "歌曲",
-  "@songs": {},
+  "tracks": "歌曲",
+  "@tracks": {},
   "unknownName": "未知名称",
   "@unknownName": {},
   "playlists": "播放列表",
@@ -57,8 +57,8 @@
   "@required": {},
   "updateButtonLabel": "更新",
   "@updateButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -213,8 +213,8 @@
       }
     }
   },
-  "shuffleAllSongCountSubtitle": "使用随机播放按钮时要加载的歌曲数量。",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "使用随机播放按钮时要加载的歌曲数量。",
+  "@shuffleAllTrackCountSubtitle": {},
   "errorScreenError": "获取错误列表时出错！ 现在您可能应该在 GitHub 上创建一个问题并清除应用数据",
   "@errorScreenError": {},
   "audioService": "音频服务",
@@ -285,18 +285,18 @@
   },
   "directoryMustBeEmpty": "目录必须为空",
   "@directoryMustBeEmpty": {},
-  "downloadedSongsWillNotBeDeleted": "已下载的歌曲不会被删除",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "已下载的歌曲不会被删除",
+  "@downloadedTracksWillNotBeDeleted": {},
   "downloadMissingImages": "下载缺少的图片",
   "@downloadMissingImages": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "如果歌曲艺术家与专辑艺术家相同，则隐藏歌曲艺术家",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "如果歌曲艺术家与专辑艺术家相同，则隐藏歌曲艺术家",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "editPlaylistNameTooltip": "编辑播放列表名称",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "编辑播放列表名称",
   "@editPlaylistNameTitle": {},
-  "failedToGetSongFromDownloadId": "无法通过下载 ID 获取歌曲",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "无法通过下载 ID 获取歌曲",
+  "@failedToGetTrackFromDownloadId": {},
   "favourite": "收藏夹",
   "@favourite": {},
   "grid": "网格",
@@ -327,14 +327,14 @@
   "@noItem": {},
   "applicationLegalese": "以 Mozilla Public License 2.0 协议许可。\n源代码位于：{sourceCodeLink}。",
   "@applicationLegalese": {},
-  "startMixNoSongsAlbum": "长按一个专辑，可在开始生成合辑前将其从合辑生成器中添加或移除",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "长按一个专辑，可在开始生成合辑前将其从合辑生成器中添加或移除",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "serverUrl": "服务器 URL",
   "@serverUrl": {},
-  "startMixNoSongsArtist": "长按一个艺术家，可在开始生成合辑前将其从合辑生成器中添加或移除",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "长按一个艺术家，可在开始生成合辑前将其从合辑生成器中添加或移除",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "notAvailableInOfflineMode": "在离线模式下不可用",
@@ -357,8 +357,8 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "shuffleAllSongCount": "随机播放歌曲数量",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "随机播放歌曲数量",
+  "@shuffleAllTrackCount": {},
   "startupError": "应用程序启动期间出现问题！ 错误是：{error}\n\n请在 github.com/UnicornsOnLSD/finamp 上创建一个 Github 问题，并附上此页面的屏幕截图。 如果问题一直显示，请清除您的应用数据以重置应用。",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -396,8 +396,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "是否在专辑界面隐藏歌曲艺术家（如果他们与专辑艺术家没有区别）。",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "是否在专辑界面隐藏歌曲艺术家（如果他们与专辑艺术家没有区别）。",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "removeFromMix": "从混音中删除",
   "@removeFromMix": {},
   "addToMix": "添加到混音",
@@ -614,8 +614,8 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "startMixNoSongsGenre": "长按一个流派，可在开始生成合辑前将其从合辑生成器中添加或移除",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "长按一个流派，可在开始生成合辑前将其从合辑生成器中添加或移除",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "标题",
@@ -731,8 +731,8 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "topSongs": "最热门歌曲",
-  "@topSongs": {},
+  "topTracks": "最热门歌曲",
+  "@topTracks": {},
   "shuffleAlbums": "随机播放专辑",
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
@@ -1568,11 +1568,11 @@
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
-  "queueRestoreSubtitle1": "正在播放：{song}",
+  "queueRestoreSubtitle1": "正在播放：{track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1683,11 +1683,11 @@
   },
   "bufferDisableSizeConstraintsSubtitle": "禁用缓冲区大小限制（“缓冲区大小”）。缓冲区将始终按配置的持续时间（“缓冲区持续时间”）加载，即使是非常大的文件。可能会导致崩溃。重启生效。",
   "@bufferDisableSizeConstraintsSubtitle": {},
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} 首歌曲} other{{songCount} 首歌曲}}, {imageCount,plural,=1{{imageCount} 张图片} other{{imageCount} 张图片}}\n{syncCount,plural,=1{{syncCount} 个节点同步} other{{syncCount} 个节点同步}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} 首歌曲} other{{trackCount} 首歌曲}}, {imageCount,plural,=1{{imageCount} 张图片} other{{imageCount} 张图片}}\n{syncCount,plural,=1{{syncCount} 个节点同步} other{{syncCount} 个节点同步}}{repairing, plural, =0{} other{\nCurrently repairing}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -1727,7 +1727,7 @@
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "couldNotLoad": "无法加载{source, select, album{专辑} playlist{播放列表} songMix{歌曲合辑} artistMix{ 艺术家合辑} albumMix{专辑合辑} genreMix{流派合辑} favorites{最爱} allSongs{全部歌曲} filteredList{筛选列表} genre{流派} artist{艺术家} song{歌曲} nextUpAlbum{接下来专辑} nextUpPlaylist{接下来播放列表} nextUpArtist{接下来艺术家} other{}}",
+  "couldNotLoad": "无法加载{source, select, album{专辑} playlist{播放列表} trackMix{歌曲合辑} artistMix{ 艺术家合辑} albumMix{专辑合辑} genreMix{流派合辑} favorites{最爱} allTracks{全部歌曲} filteredList{筛选列表} genre{流派} artist{艺术家} track{歌曲} nextUpAlbum{接下来专辑} nextUpPlaylist{接下来播放列表} nextUpArtist{接下来艺术家} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1778,7 +1778,7 @@
   "@redownloadSubtitle": {
     "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
   },
-  "itemTypeSubtitle": "{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} song{歌曲} library{库} unknown{项目} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} track{歌曲} library{库} unknown{项目} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1791,7 +1791,7 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "playingFromType": "播放自{source, select, album{专辑} playlist{播放列表} songMix{歌曲合辑} artistMix{ 艺术家合辑} albumMix{专辑合辑} genreMix{流派合辑} favorites{收藏夹} allSongs{全部歌曲} filteredList{歌曲} genre{流派} artist{艺术家} song{歌曲} nextUpAlbum{接下来专辑} nextUpPlaylist{接下来播放列表} nextUpArtist{接下来艺术家} other{}}",
+  "playingFromType": "播放自{source, select, album{专辑} playlist{播放列表} trackMix{歌曲合辑} artistMix{ 艺术家合辑} albumMix{专辑合辑} genreMix{流派合辑} favorites{收藏夹} allTracks{全部歌曲} filteredList{歌曲} genre{流派} artist{艺术家} track{歌曲} nextUpAlbum{接下来专辑} nextUpPlaylist{接下来播放列表} nextUpArtist{接下来艺术家} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1816,8 +1816,8 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "offlineSongCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}，{downloads} 首已下载",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}，{downloads} 首已下载",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1827,18 +1827,18 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}已下载",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}已下载",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "showArtistsTopSongs": "在艺术家视图中显示最热门歌曲",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "显示该艺术家收听次数最多的前 5 首歌曲。",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracks": "在艺术家视图中显示最热门歌曲",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "显示该艺术家收听次数最多的前 5 首歌曲。",
+  "@showArtistsTopTracksSubtitle": {},
   "downloadSizeWarningCutoff": "下载文件大小警告",
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"
@@ -1853,14 +1853,14 @@
   },
   "largeDownloadWarning": "警告： 您将下载 {count} 首歌曲。",
   "@largeDownloadWarning": {
-    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "itemDeletedSnackbar": "{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} song{歌曲} library{库} other{项目}} 被删除自 {deviceType, select, device{设备} server{服务器} other{unknown}}",
+  "itemDeletedSnackbar": "{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} track{歌曲} library{库} other{项目}} 被删除自 {deviceType, select, device{设备} server{服务器} other{unknown}}",
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
@@ -1881,7 +1881,7 @@
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
   },
-  "deleteFromTargetDialogText": "你将删除此{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} song{歌曲} library{库} other{item}}自{device, select, device{此设备} server{此服务器文件系统和库。{deleteType, select, canDelete{这也将从设备中删除此项目。} cantDelete{此项目将保留在此设备上，直到下次同步。} notDownloaded{} other{}}\n该操作不可撤销} other{}}.",
+  "deleteFromTargetDialogText": "你将删除此{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} track{歌曲} library{库} other{item}}自{device, select, device{此设备} server{此服务器文件系统和库。{deleteType, select, canDelete{这也将从设备中删除此项目。} cantDelete{此项目将保留在此设备上，直到下次同步。} notDownloaded{} other{}}\n该操作不可撤销} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   }

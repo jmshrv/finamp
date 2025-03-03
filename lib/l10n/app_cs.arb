@@ -57,8 +57,8 @@
   },
   "downloadMissingImages": "Stáhnout chybějící obrázky",
   "@downloadMissingImages": {},
-  "failedToGetSongFromDownloadId": "Nepodařilo se získat skladbu z ID stahování",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Nepodařilo se získat skladbu z ID stahování",
+  "@failedToGetTrackFromDownloadId": {},
   "editPlaylistNameTooltip": "Upravit název seznamu skladeb",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Upravit název seznamu skladeb",
@@ -77,8 +77,8 @@
   "@bitrate": {},
   "directoryMustBeEmpty": "Adresář musí být prázdný",
   "@directoryMustBeEmpty": {},
-  "downloadedSongsWillNotBeDeleted": "Stažené skladby nebudou odstraněny",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Stažené skladby nebudou odstraněny",
+  "@downloadedTracksWillNotBeDeleted": {},
   "favourite": "Oblíbené",
   "@favourite": {},
   "gridCrossAxisCountSubtitle": "Počet položek mřížky na řádek {value}.",
@@ -91,14 +91,14 @@
       }
     }
   },
-  "shuffleAllSongCountSubtitle": "Počet skladeb, které se mají načíst při použití tlačítka náhodného přehrávání všech skladeb.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Počet skladeb, které se mají načíst při použití tlačítka náhodného přehrávání všech skladeb.",
+  "@shuffleAllTrackCountSubtitle": {},
   "cancelSleepTimer": "Zrušit časovač spánku?",
   "@cancelSleepTimer": {},
   "grid": "Mřížka",
   "@grid": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Nezobrazovat umělce skladby, pokud je totožný s umělcem alba",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Nezobrazovat umělce skladby, pokud je totožný s umělcem alba",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "addToPlaylistTooltip": "Přidat do seznamu skladeb",
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Přidat do seznamu skladeb",
@@ -174,12 +174,12 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "startMixNoSongsArtist": "Dlouze podržte prst na umělci pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Dlouze podržte prst na umělci pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Dlouze podržte prst na albu pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Dlouze podržte prst na albu pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "budget": "Rozpočet",
@@ -228,8 +228,8 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "Po pozastavení vstoupit do stavu nízké priority",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Počet skladeb pro náhodné přehrávání všeho",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Počet skladeb pro náhodné přehrávání všeho",
+  "@shuffleAllTrackCount": {},
   "portrait": "Na výšku",
   "@portrait": {},
   "viewType": "Typ zobrazení",
@@ -315,8 +315,8 @@
   },
   "playButtonLabel": "Přehrát",
   "@playButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} skladba} few{{count} skladby} other{{count} skladeb}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} skladba} few{{count} skladby} other{{count} skladeb}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -351,8 +351,8 @@
   "@enableTranscodingSubtitle": {},
   "selectDirectory": "Vybrat adresář",
   "@selectDirectory": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Zda zobrazit umělce skladby na obrazovce alba, pokud se neliší od umělců alba.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Zda zobrazit umělce skladby na obrazovce alba, pokud se neliší od umělců alba.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "showFastScroller": "Zobrazit rychlý posuvník",
   "@showFastScroller": {},
   "landscape": "Na šířku",
@@ -426,8 +426,8 @@
   "@playlists": {},
   "sortBy": "Řadit podle",
   "@sortBy": {},
-  "songs": "Skladby",
-  "@songs": {},
+  "tracks": "Skladby",
+  "@tracks": {},
   "criticRating": "Hodnocení kritiků",
   "@criticRating": {},
   "productionYear": "Rok produkce",
@@ -596,8 +596,8 @@
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
-  "startMixNoSongsGenre": "Dlouze podržte prst na žánru pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Dlouze podržte prst na žánru pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "periodicPlaybackSessionUpdateFrequency": "Frekvence aktualizace relace přehrávání",
@@ -701,11 +701,11 @@
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} skladba} few{{songCount} skladby} other{{songCount} skladeb}}, {imageCount,plural,=1{{imageCount} obrázek} few{{imageCount} obrázky} other{{imageCount} obrázků}}\n{syncCount,plural,=1{Synchronizace {syncCount} uzlu} few{Synchronizace {syncCount} uzlů} other{Synchronizace {syncCount} uzlů}}{repairing, plural, =0{} other{\nProbíhá oprava}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} skladba} few{{trackCount} skladby} other{{trackCount} skladeb}}, {imageCount,plural,=1{{imageCount} obrázek} few{{imageCount} obrázky} other{{imageCount} obrázků}}\n{syncCount,plural,=1{Synchronizace {syncCount} uzlu} few{Synchronizace {syncCount} uzlů} other{Synchronizace {syncCount} uzlů}}{repairing, plural, =0{} other{\nProbíhá oprava}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -723,8 +723,8 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongsSubtitle": "Zda zobrazit 5 nejposlouchanějších skladeb na stránce umělce.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "Zda zobrazit 5 nejposlouchanějších skladeb na stránce umělce.",
+  "@showArtistsTopTracksSubtitle": {},
   "confirmDownloadStarted": "Stahování zahájeno",
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
@@ -823,11 +823,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "Přehrávání: {song}",
+  "queueRestoreSubtitle1": "Přehrávání: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -860,8 +860,8 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "topSongs": "Nejlepší skladby",
-  "@topSongs": {},
+  "topTracks": "Nejlepší skladby",
+  "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} album} few{{count} alba} other{{count} alb}}",
   "@albumCount": {
     "placeholders": {
@@ -1294,8 +1294,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "Žádná aktivní stahování.",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} skladba} few{{count} skladby} other{{count} skladeb}}, staženo {downloads}",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} skladba} few{{count} skladby} other{{count} skladeb}}, staženo {downloads}",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1305,8 +1305,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{Stažena {count} skladba} few{Staženy {count} skladby} other{Staženo {count} skladeb}}",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{Stažena {count} skladba} few{Staženy {count} skladby} other{Staženo {count} skladeb}}",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1329,8 +1329,8 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongs": "Zobrazit nejlepší skladby v zobrazení umělce",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracks": "Zobrazit nejlepší skladby v zobrazení umělce",
+  "@showArtistsTopTracks": {},
   "playerScreen": "Obrazovka přehrávače",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -1491,7 +1491,7 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "couldNotLoad": "Nepodařilo se načíst {source, select, album{album} playlist{seznam skladeb} songMix{mix skladby} artistMix{mix umělce} albumMix{mix alba} genreMix{mix žánru} favorites{oblíbené} allSongs{všechny skladby} filteredList{skladby} genre{žánr} artist{umělce} song{skladbu} nextUpAlbum{album v dalších na řadě} nextUpPlaylist{seznam skladeb v dalších na řadě} nextUpArtist{umělce v dalších na řadě} other{}}",
+  "couldNotLoad": "Nepodařilo se načíst {source, select, album{album} playlist{seznam skladeb} trackMix{mix skladby} artistMix{mix umělce} albumMix{mix alba} genreMix{mix žánru} favorites{oblíbené} allTracks{všechny skladby} filteredList{skladby} genre{žánr} artist{umělce} track{skladbu} nextUpAlbum{album v dalších na řadě} nextUpPlaylist{seznam skladeb v dalších na řadě} nextUpArtist{umělce v dalších na řadě} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1580,7 +1580,7 @@
   "@downloadsWorkersSettingSubtitle": {
     "description": "Description of setting controlling download worker count."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Seznam skladeb} artist{Umělec} genre{Žánr} song{Skladba} library{Knihovna} unknown{Položka} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Seznam skladeb} artist{Umělec} genre{Žánr} track{Skladba} library{Knihovna} unknown{Položka} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1733,7 +1733,7 @@
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
-  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} songMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allSongs{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} song{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} other{}}",
+  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1845,14 +1845,14 @@
   },
   "largeDownloadWarning": "Varování: chystáte se stáhnout {count} skladeb.",
   "@largeDownloadWarning": {
-    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "deleteFromTargetDialogText": "Chystáte se odstranit {itemType, select, album{album} playlist{seznam skladeb} artist{umělce} genre{žánr} song{skladbu} library{knihovnu} other{položku}} {device, select, device{z tohoto zařízení} server{ze souborového systému a knihovny serveru.{deleteType, select, canDelete{ Tímto také odstraníte tuto položku z tohoto zařízení.} cantDelete{ Tato položka zůstane na tomto zařízení do příští synchronizace.} notDownloaded{} other{}}\nTato akce je nevratná} other{}}.",
+  "deleteFromTargetDialogText": "Chystáte se odstranit {itemType, select, album{album} playlist{seznam skladeb} artist{umělce} genre{žánr} track{skladbu} library{knihovnu} other{položku}} {device, select, device{z tohoto zařízení} server{ze souborového systému a knihovny serveru.{deleteType, select, canDelete{ Tímto také odstraníte tuto položku z tohoto zařízení.} cantDelete{ Tato položka zůstane na tomto zařízení do příští synchronizace.} notDownloaded{} other{}}\nTato akce je nevratná} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
@@ -1860,7 +1860,7 @@
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"
   },
-  "itemDeletedSnackbar": "{itemType, select, album{Album bylo odstraněno} playlist{Seznam skladeb byl odstraněn} artist{Umělec byl odstraněn} genre{Žánr byl odstraněn} song{Skladba byla odstraněna} library{Knihovna byla odstraněna} other{Předmět byl odstraněn}} ze {deviceType, select, device{zařízení} server{serveru} other{neznámého místa}}",
+  "itemDeletedSnackbar": "{itemType, select, album{Album bylo odstraněno} playlist{Seznam skladeb byl odstraněn} artist{Umělec byl odstraněn} genre{Žánr byl odstraněn} track{Skladba byla odstraněna} library{Knihovna byla odstraněna} other{Předmět byl odstraněn}} ze {deviceType, select, device{zařízení} server{serveru} other{neznámého místa}}",
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },

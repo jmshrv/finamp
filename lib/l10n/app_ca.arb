@@ -231,8 +231,8 @@
   "@playlists": {},
   "startMix": "Començar la mescla",
   "@startMix": {},
-  "startMixNoSongsArtist": "Prém sostingudament per afegir o eliminar un artista de la llista de cançons abans de començar la llista",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Prém sostingudament per afegir o eliminar un artista de la llista de cançons abans de començar la llista",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "unknownName": "Nom desconegut",
@@ -241,6 +241,6 @@
   "@artists": {},
   "genres": "Gèneres",
   "@genres": {},
-  "songs": "Pistes",
-  "@songs": {}
+  "tracks": "Pistes",
+  "@tracks": {}
 }

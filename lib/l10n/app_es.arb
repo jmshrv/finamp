@@ -44,8 +44,8 @@
   "@addToPlaylistTooltip": {},
   "albums": "Álbumes",
   "@albums": {},
-  "songCount": "{count,plural,=1{{count} Canción} other{{count} Canciones}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Canción} other{{count} Canciones}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -90,8 +90,8 @@
       }
     }
   },
-  "downloadedSongsWillNotBeDeleted": "Las canciones descargadas no serán eliminadas",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Las canciones descargadas no serán eliminadas",
+  "@downloadedTracksWillNotBeDeleted": {},
   "downloads": "Descargas",
   "@downloads": {},
   "goToAlbum": "Ir al álbum",
@@ -210,8 +210,8 @@
   },
   "username": "Nombre de usuario",
   "@username": {},
-  "songs": "Canciones",
-  "@songs": {},
+  "tracks": "Canciones",
+  "@tracks": {},
   "unknownName": "Nombre desconocido",
   "@unknownName": {},
   "selectMusicLibraries": "Seleccionar las bibliotecas de música",
@@ -220,12 +220,12 @@
   },
   "startMix": "Empezar mezcla",
   "@startMix": {},
-  "startMixNoSongsAlbum": "Mantén pulsado un álbum para añadirlo o eliminarlo del creador de mezclas antes de empezar una mezcla",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Mantén pulsado un álbum para añadirlo o eliminarlo del creador de mezclas antes de empezar una mezcla",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "startMixNoSongsArtist": "Mantén pulsado un artista para añadirlo o eliminarlo del creador de mezclas antes de empezar una mezcla",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Mantén pulsado un artista para añadirlo o eliminarlo del creador de mezclas antes de empezar una mezcla",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "criticRating": "Valoración de los críticos",
@@ -256,8 +256,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "No se ha podido obtener la canción desde el identificador de descarga",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "No se ha podido obtener la canción desde el identificador de descarga",
+  "@failedToGetTrackFromDownloadId": {},
   "required": "Requerido",
   "@required": {},
   "shuffleButtonLabel": "ALEATORIO",
@@ -328,8 +328,8 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Ocultar los artistas de canciones si son los mismos que los artistas del álbum",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Ocultar los artistas de canciones si son los mismos que los artistas del álbum",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "enterLowPriorityStateOnPauseSubtitle": "Permite que la notificación se pueda deslizar cuando la música esté pausada. También permite a Android matar el servicio cuando la música esté pausada.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "showTextOnGridView": "Mostrar texto en vista de cuadrícula",
@@ -365,8 +365,8 @@
   "@errorScreenError": {},
   "customLocationsBuggy": "Las ubicaciones personalizadas son extremadamente problemáticas por problemas con los permisos. Estoy pensando en maneras de arreglarlo, pero por ahora no recomiendo usarlas.",
   "@customLocationsBuggy": {},
-  "shuffleAllSongCount": "Cantidad de canciones al reproducir aleatoriamente",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Cantidad de canciones al reproducir aleatoriamente",
+  "@shuffleAllTrackCount": {},
   "gridCrossAxisCountSubtitle": "Cantidad de columnas al usar por fila al estar el dispositivo en {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -377,12 +377,12 @@
       }
     }
   },
-  "shuffleAllSongCountSubtitle": "Cantidad de canciones a cargar cuando se use el botón de reproducir todo aleatoriamente.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Cantidad de canciones a cargar cuando se use el botón de reproducir todo aleatoriamente.",
+  "@shuffleAllTrackCountSubtitle": {},
   "showTextOnGridViewSubtitle": "Muestra el texto (título, artista, etc) en la pantalla de música al usar la vista de cuadrícula.",
   "@showTextOnGridViewSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Oculta a los artistas de las canciones en la pantalla del álbum si no son diferentes de los artistas del álbum.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Oculta a los artistas de las canciones en la pantalla del álbum si no son diferentes de los artistas del álbum.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "useCoverAsBackgroundSubtitle": "Usa la carátula del álbum desenfocada como fondo del reproductor.",
   "@useCoverAsBackgroundSubtitle": {},
   "responseError401": "{error} Código de estado {statusCode}. Esto posiblemente significa que has usado el nombre de usuario o la contraseña incorrecta, o que tu cliente ya no está autenticado.",

@@ -3,8 +3,8 @@
   "@applicationLegalese": {},
   "sleepTimerTooltip": "Elalvás időzítő",
   "@sleepTimerTooltip": {},
-  "shuffleAllSongCount": "Az összes szám véletlenszerű lejátszása",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Az összes szám véletlenszerű lejátszása",
+  "@shuffleAllTrackCount": {},
   "startupError": "Hiba történt az alkalmazás indításakor! A hiba a következő volt: {error}\n\nKérjük, hozzon létre egyGithub-problémát a github.com/UnicornsOnLSD/finamp oldalon az oldal képernyőképével. Ha a probléma továbbra is fennáll, törölje az alkalmazás adatait az alkalmazás visszaállításához.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -65,12 +65,12 @@
   "@genres": {},
   "logs": "Naplók",
   "@logs": {},
-  "startMixNoSongsAlbum": "Nyomd meg hosszan az albumot, hogy hozzáadja vagy eltávolítsa őket a mixkészítőből, mielőtt elkezdené a keverést",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Nyomd meg hosszan az albumot, hogy hozzáadja vagy eltávolítsa őket a mixkészítőből, mielőtt elkezdené a keverést",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "startMixNoSongsArtist": "Nyomd meg hosszan az előadót, hogy hozzáadja vagy eltávolítsa őket a mixkészítőből, mielőtt elkezdené a keverést",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Nyomd meg hosszan az előadót, hogy hozzáadja vagy eltávolítsa őket a mixkészítőből, mielőtt elkezdené a keverést",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "music": "Zene",
@@ -109,8 +109,8 @@
   "@settings": {},
   "shuffleAll": "Összes keverése",
   "@shuffleAll": {},
-  "songs": "Dalok",
-  "@songs": {},
+  "tracks": "Dalok",
+  "@tracks": {},
   "sortBy": "Sorrend eszerint",
   "@sortBy": {},
   "sortOrder": "Rendezési sorrend",
@@ -159,8 +159,8 @@
       }
     }
   },
-  "downloadedSongsWillNotBeDeleted": "A letöltött dalok nem törlődnek",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "A letöltött dalok nem törlődnek",
+  "@downloadedTracksWillNotBeDeleted": {},
   "downloadLocations": "Letöltési hely",
   "@downloadLocations": {},
   "downloadsQueued": "Letöltések hozzáadva.",
@@ -175,8 +175,8 @@
   "@enableTranscoding": {},
   "error": "Hiba",
   "@error": {},
-  "failedToGetSongFromDownloadId": "Nem sikerült letölteni a dalt, a letöltési azonosítóból",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Nem sikerült letölteni a dalt, a letöltési azonosítóból",
+  "@failedToGetTrackFromDownloadId": {},
   "favourite": "Kedvenc",
   "@favourite": {},
   "enableTranscodingSubtitle": "Transzkódolja a zenestreameket a szerver oldalon.",
@@ -231,8 +231,8 @@
       }
     }
   },
-  "shuffleAllSongCountSubtitle": "A betöltendő zeneszámok száma az \"Összes dal keverése\" gombbal.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "A betöltendő zeneszámok száma az \"Összes dal keverése\" gombbal.",
+  "@shuffleAllTrackCountSubtitle": {},
   "appDirectory": "Alkalmazás Könyvtára",
   "@appDirectory": {},
   "customLocation": "Egyéni hely",
@@ -359,8 +359,8 @@
   "@invalidNumber": {},
   "downloads": "Letöltések",
   "@downloads": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "A dal előadóinak elrejtése, ha megegyezik az album előadóival",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "A dal előadóinak elrejtése, ha megegyezik az album előadóival",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "internalExternalIpExplanation": "Ha távolról szeretné elérni Jellyfin szerverét, akkor külső IP-címét kell használnia.\n\nHa a szerver HTTP porton (80/443) van, akkor nem kell portot megadnia. Valószínűleg ez a helyzet akkor, ha a szervere fordított proxy mögött van.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
@@ -376,8 +376,8 @@
   },
   "enterLowPriorityStateOnPauseSubtitle": "Lehetővé teszi az értesítés elcsúsztatását, amikor szünetel. Azt is lehetővé teszi, hogy az Android leállítsa a szolgáltatást, amikor szünetel.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Megjeleníti-e a dal előadóit az album képernyőjén, ha nem különbözik az album előadóitól.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Megjeleníti-e a dal előadóit az album képernyőjén, ha nem különbözik az album előadóitól.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "yesButtonLabel": "IGEN",
   "@yesButtonLabel": {},
   "addToMix": "Hozzáadás a Mix-hez",
@@ -394,8 +394,8 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} Song} other{{count} Songs}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"

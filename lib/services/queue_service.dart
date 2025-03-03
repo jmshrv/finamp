@@ -302,7 +302,7 @@ class QueueService {
   Future<void> archiveSavedQueue({bool inInit = false}) async {
     if (_savedQueueState == SavedQueueState.saving || inInit) {
       var latest = _queuesBox.get("latest");
-      if (latest != null && latest.songCount != 0) {
+      if (latest != null && latest.trackCount != 0) {
         await _queuesBox.put(latest.creation.toString(), latest);
       }
     }
@@ -325,7 +325,7 @@ class QueueService {
     SavedQueueState? finalState = SavedQueueState.pendingSave;
     try {
       _savedQueueState = SavedQueueState.loading;
-      if (info.songCount == 0) {
+      if (info.trackCount == 0) {
         return;
       }
       refreshQueueStream();
@@ -360,7 +360,7 @@ class QueueService {
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in missingIds) {
           jellyfin_models.BaseItemDto? item =
-              downloadsService.getSongDownload(id: id)?.baseItem;
+              downloadsService.getTrackDownload(id: id)?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -384,8 +384,8 @@ class QueueService {
         "queue": info.queue.map((e) => idMap[e]).whereNotNull().toList(),
       };
       int sumLengths(int sum, Iterable val) => val.length + sum;
-      int loadedSongs = items.values.fold(0, sumLengths);
-      int droppedSongs = info.songCount - loadedSongs;
+      int loadedTracks = items.values.fold(0, sumLengths);
+      int droppedTracks = info.trackCount - loadedTracks;
 
       if (_savedQueueState != SavedQueueState.loading) {
         finalState = null;
@@ -412,12 +412,12 @@ class QueueService {
       await addToNextUp(items: items["next"]!);
       await seekFuture;
       _queueServiceLogger.info("Loaded saved queue.");
-      if (loadedSongs == 0 && info.songCount > 0) {
+      if (loadedTracks == 0 && info.trackCount > 0) {
         finalState = SavedQueueState.failed;
         _failedSavedQueue = info;
-      } else if (droppedSongs > 0) {
+      } else if (droppedTracks > 0) {
         GlobalSnackbar.message((scaffold) =>
-            AppLocalizations.of(scaffold)!.queueRestoreError(droppedSongs));
+            AppLocalizations.of(scaffold)!.queueRestoreError(droppedTracks));
       }
     } finally {
       if (finalState != null) {
@@ -976,7 +976,7 @@ class QueueService {
     // )
   }
 
-  /// [contextNormalizationGain] is the normalization gain of the context that the song is being played in, e.g. the album
+  /// [contextNormalizationGain] is the normalization gain of the context that the track is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
   Future<MediaItem> generateMediaItem(
     jellyfin_models.BaseItemDto item, {
@@ -1003,13 +1003,13 @@ class QueueService {
 
     bool isDownloaded = false;
     bool isItemPlayable = isPlayable?.call(item: item) ?? true;
-    DownloadItem? downloadedSong;
+    DownloadItem? downloadedTrack;
     DownloadStub? downloadedCollection;
     DownloadItem? downloadedImage;
 
     if (item.type == "Audio") {
-      downloadedSong = downloadsService.getSongDownload(item: item);
-      isDownloaded = downloadedSong != null;
+      downloadedTrack = downloadsService.getTrackDownload(item: item);
+      isDownloaded = downloadedTrack != null;
     } else {
       downloadedCollection =
           await downloadsService.getCollectionInfo(item: item);
@@ -1084,7 +1084,7 @@ class QueueService {
       extras: {
         "itemJson": item.toJson(setOffline: false),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongPath": downloadedSong?.file?.path,
+        "downloadedTrackPath": downloadedTrack?.file?.path,
         "android.media.extra.DOWNLOAD_STATUS": isDownloaded ? 2 : 0,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         "contextNormalizationGain": contextNormalizationGain,
@@ -1097,41 +1097,41 @@ class QueueService {
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _queueItemToAudioSource(FinampQueueItem queueItem) async {
-    if (queueItem.item.extras!["downloadedSongPath"] == null) {
-      // If DownloadedSong wasn't passed, we assume that the item is not
+    if (queueItem.item.extras!["downloadedTrackPath"] == null) {
+      // If downloadedTrack wasn't passed, we assume that the item is not
       // downloaded.
 
       // If offline, we throw an error so that we don't accidentally stream from
-      // the internet. See the big comment in _songUri() to see why this was
+      // the internet. See the big comment in _trackUri() to see why this was
       // passed in extras.
       if (queueItem.item.extras!["isOffline"]) {
         return Future.error(
-            "Offline mode enabled but downloaded song not found.");
+            "Offline mode enabled but downloaded track not found.");
       } else {
         if (queueItem.item.extras!["shouldTranscode"] == true) {
-          return HlsAudioSource(await _songUri(queueItem.item), tag: queueItem);
+          return HlsAudioSource(await _trackUri(queueItem.item), tag: queueItem);
         } else {
-          return AudioSource.uri(await _songUri(queueItem.item),
+          return AudioSource.uri(await _trackUri(queueItem.item),
               tag: queueItem);
         }
       }
     } else {
       // We have to deserialise this because Dart is stupid and can't handle
       // sending classes through isolates.
-      final downloadedSongPath = queueItem.item.extras!["downloadedSongPath"];
+      final downloadedTrackPath = queueItem.item.extras!["downloadedTrackPath"];
 
       // Path verification and stuff is done in AudioServiceHelper, so this path
       // should be valid.
-      final downloadUri = Uri.file(downloadedSongPath);
+      final downloadUri = Uri.file(downloadedTrackPath);
       return AudioSource.uri(downloadUri, tag: queueItem);
     }
   }
 
-  Future<Uri> _songUri(MediaItem mediaItem) async {
+  Future<Uri> _trackUri(MediaItem mediaItem) async {
     // When creating the MediaItem (usually in AudioServiceHelper), we specify
     // whether or not to transcode. We used to pull from FinampSettings here,
     // but since audio_service runs in an isolate (or at least, it does until
-    // 0.18), the value would be wrong if changed while a song was playing since
+    // 0.18), the value would be wrong if changed while a track was playing since
     // Hive is bad at multi-isolate stuff.
 
     final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);

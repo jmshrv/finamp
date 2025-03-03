@@ -92,7 +92,7 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
           const RedownloadTranscodesSwitch(),
-          const ShowPlaylistSongsSwitch(),
+          const ShowPlaylistTracksSwitch(),
           const DownloadWorkersSelector(),
           // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           if (!Platform.isIOS) const ConcurentDownloadsSelector(),
@@ -163,8 +163,8 @@ class SyncFavoritesSwitch extends StatelessWidget {
   }
 }
 
-class ShowPlaylistSongsSwitch extends StatelessWidget {
-  const ShowPlaylistSongsSwitch({super.key});
+class ShowPlaylistTracksSwitch extends StatelessWidget {
+  const ShowPlaylistTracksSwitch({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -29,8 +29,8 @@
   "@next": {},
   "unknownName": "Bilinmeyen ad",
   "@unknownName": {},
-  "songs": "Parçalar",
-  "@songs": {},
+  "tracks": "Parçalar",
+  "@tracks": {},
   "albums": "Albümler",
   "@albums": {},
   "artists": "Sanatçılar",
@@ -41,12 +41,12 @@
   "@playlists": {},
   "startMix": "Mix'i başlat",
   "@startMix": {},
-  "startMixNoSongsArtist": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir sanatçıya uzun basın",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir sanatçıya uzun basın",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir albüme uzun basın",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir albüme uzun basın",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "music": "Müzik",
@@ -84,8 +84,8 @@
   },
   "errorScreenError": "Hata listesi oluşturulurken hata meydana geldi. Bu noktada, GitHub'da bir sorun oluşturmalı ve uygulama verilerini silmelisiniz",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "İndirme kimliğinden parça alınamadı",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "İndirme kimliğinden parça alınamadı",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Hata",
   "@error": {},
   "downloadCount": "{count,plural, =1{{count} tane indirme} other{{count} tane indirme{count}}}",
@@ -108,8 +108,8 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Karıştır",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -180,8 +180,8 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Şarkı duraklatıldığında bildirimin temizlenebilmesini sağlar. Ayrıca Android'in hizmeti kapatmasına izin verir.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Karıştırılacak Tüm Parçaların Sayısı",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Karıştırılacak Tüm Parçaların Sayısı",
+  "@shuffleAllTrackCount": {},
   "viewTypeSubtitle": "Müzik ekranı için görüntüleme tipi",
   "@viewTypeSubtitle": {},
   "list": "Liste",
@@ -206,10 +206,10 @@
   "@showTextOnGridView": {},
   "useCoverAsBackground": "Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını göster",
   "@useCoverAsBackground": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Albüm sanatçılarıyla aynıysa parça sanatçılarını gizle",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Albüm sanatçılarından farklı değilse parça sanatçılarının albüm ekranında gösterilip gösterilmeyeceği.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Albüm sanatçılarıyla aynıysa parça sanatçılarını gizle",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Albüm sanatçılarından farklı değilse parça sanatçılarının albüm ekranında gösterilip gösterilmeyeceği.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "Jestleri devre dışı bırak",
   "@disableGesture": {},
   "disableGestureSubtitle": "Jestleri devre dışı bırakır veya aktifleştirir.",
@@ -385,8 +385,8 @@
   "@message": {},
   "areYouSure": "Emin misiniz?",
   "@areYouSure": {},
-  "downloadedSongsWillNotBeDeleted": "İndirilen parçalar silinmeyecek",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "İndirilen parçalar silinmeyecek",
+  "@downloadedTracksWillNotBeDeleted": {},
   "applicationLegalese": "Mozilla Kamu Lisansı 2.0 ile lisanslanmıştır.\nKaynak kodu {sourceCodeLink} adresinde mevcuttur.",
   "@applicationLegalese": {},
   "audioService": "Ses Servisi",
@@ -395,8 +395,8 @@
   "@layoutAndTheme": {},
   "enterLowPriorityStateOnPause": "Bekletmede Düşük Öncelik Durumuna Geç",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCountSubtitle": "Tüm parçaları karıştır düğmesini kullanırken karıştırılacak parça sayısı.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Tüm parçaları karıştır düğmesini kullanırken karıştırılacak parça sayısı.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Görüntüleme Tipi",
   "@viewType": {},
   "useCoverAsBackgroundSubtitle": "Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını gösterilip gösterilmeyeceğini belirler.",
@@ -672,10 +672,10 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopSongs": "En iyi parçaları sanatçı görünümünde göster",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Bir sanatçının en çok dinlenen ilk 5 parçasının gösterilip gösterilmeyeceği.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracks": "En iyi parçaları sanatçı görünümünde göster",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Bir sanatçının en çok dinlenen ilk 5 parçasının gösterilip gösterilmeyeceği.",
+  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Oynatıcı Ekranı",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -789,11 +789,11 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "queueRestoreSubtitle1": "Oynatılan: {song}",
+  "queueRestoreSubtitle1": "Oynatılan: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -802,8 +802,8 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "En İyi Parçalar",
-  "@topSongs": {},
+  "topTracks": "En İyi Parçalar",
+  "@topTracks": {},
   "shuffleAlbums": "Albümleri Karıştır",
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
@@ -1325,8 +1325,8 @@
   "@showCoversOnAlbumScreenTitle": {
     "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
   },
-  "offlineSongCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}, {downloads} İndirildi",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}, {downloads} İndirildi",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1493,12 +1493,12 @@
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
   },
-  "startMixNoSongsGenre": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir türe uzun basın",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir türe uzun basın",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Parça} other{{count} Parça}} İndirildi",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Parça} other{{count} Parça}} İndirildi",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1527,11 +1527,11 @@
   "@resetSettingsPromptGlobal": {
     "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} parça} other{{songCount} parça}}, {imageCount,plural,=1{{imageCount} görsel} other{{imageCount} görsel}}\n{syncCount,plural,=1{{syncCount} düğüm eşitleniyor} other{{syncCount} düğüm eşitleniyor}}{repairing, plural, =0{} other{\nŞu anda onarılıyor}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} parça} other{{trackCount} parça}}, {imageCount,plural,=1{{imageCount} görsel} other{{imageCount} görsel}}\n{syncCount,plural,=1{{syncCount} düğüm eşitleniyor} other{{syncCount} düğüm eşitleniyor}}{repairing, plural, =0{} other{\nŞu anda onarılıyor}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {

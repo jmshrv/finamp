@@ -61,7 +61,7 @@ dependencies:
   uuid: ^4.5.1
   infinite_scroll_pagination: ^4.0.0
   flutter_sticky_header: ^0.7.0
-  device_info_plus: ^11.3.2
+  device_info_plus: ^11.3.0
   app_set_id: ^1.2.1
   package_info_plus: ^8.3.0
   octo_image: ^2.0.0
@@ -113,7 +113,7 @@ dev_dependencies:
   flutter_gen_runner:
   chopper_generator: ^8.0.0
   hive_ce_generator: ^1.8.2
-  json_serializable: ^6.7.1
+  json_serializable: ^6.9.4
   flutter_launcher_icons: ^0.14.1
   flutter_lints: ^5.0.0
   riverpod_generator: ^2.6.1

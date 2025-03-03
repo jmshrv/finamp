@@ -12,12 +12,12 @@ class ArtistItemInfo extends StatelessWidget {
   const ArtistItemInfo({
     super.key,
     required this.item,
-    required this.itemSongs,
+    required this.itemTracks,
     required this.itemAlbums,
   });
 
   final BaseItemDto item;
-  final int itemSongs;
+  final int itemTracks;
   final int itemAlbums;
 
 // TODO: see if there's a way to expand this column to the row that it's in
@@ -33,8 +33,8 @@ class ArtistItemInfo extends StatelessWidget {
             textSpan: TextSpan(
               text: isOffline
                   ? AppLocalizations.of(context)!
-                      .offlineSongCountArtist(itemSongs)
-                  : AppLocalizations.of(context)!.songCount(itemSongs),
+                      .offlineTrackCountArtist(itemTracks)
+                  : AppLocalizations.of(context)!.trackCount(itemTracks),
             )),
         IconAndText(
             iconData: Icons.book,

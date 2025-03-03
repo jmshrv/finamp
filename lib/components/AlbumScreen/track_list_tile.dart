@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
@@ -49,14 +49,14 @@ class TrackListTile extends StatelessWidget {
     super.key,
     required this.item,
 
-    /// Children that are related to this list tile, such as the other songs in
-    /// the album. This is used to give the audio service all the songs for the
-    /// item. If null, only this song will be given to the audio service.
+    /// Children that are related to this list tile, such as the other tracks in
+    /// the album. This is used to give the audio service all the tracks for the
+    /// item. If null, only this track will be given to the audio service.
     this.children,
 
-    /// Index of the song in whatever parent this widget is in. Used to start
+    /// Index of the track in whatever parent this widget is in. Used to start
     /// the audio service at a certain index, such as when selecting the middle
-    /// song in an album.  Will be -1 if we are offline and the song is not downloaded.
+    /// track in an album.  Will be -1 if we are offline and the track is not downloaded.
     this.index,
     this.parentItem,
 
@@ -65,8 +65,8 @@ class TrackListTile extends StatelessWidget {
     // if leading album cover should be shown
     this.showCover = true,
 
-    /// Whether we are in the songs tab, as opposed to a playlist/album
-    this.isSong = false,
+    /// Whether we are in the tracks tab, as opposed to a playlist/album
+    this.isTrack = false,
     this.onRemoveFromList,
     this.showPlayCount = false,
 
@@ -84,7 +84,7 @@ class TrackListTile extends StatelessWidget {
   final Future<int>? index;
   final bool showIndex;
   final bool showCover;
-  final bool isSong;
+  final bool isTrack;
   final jellyfin_models.BaseItemDto? parentItem;
   final VoidCallback? onRemoveFromList;
   final bool showPlayCount;
@@ -128,16 +128,16 @@ class TrackListTile extends StatelessWidget {
           ),
         );
       } else {
-        // TODO put in a real offline songs implementation
+        // TODO put in a real offline tracks implementation
         if (FinampSettingsHelper.finampSettings.isOffline) {
           final settings = FinampSettingsHelper.finampSettings;
           final downloadsService = GetIt.instance<DownloadsService>();
           final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
-          // get all downloaded songs in order
+          // get all downloaded tracks in order
           List<DownloadStub> offlineItems;
-          // If we're on the songs tab, just get all of the downloaded items
-          offlineItems = await downloadsService.getAllSongs(
+          // If we're on the tracks tab, just get all of the downloaded items
+          offlineItems = await downloadsService.getAllTracks(
             // nameFilter: widget.searchTerm,
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
@@ -148,8 +148,8 @@ class TrackListTile extends StatelessWidget {
           var items =
               offlineItems.map((e) => e.baseItem).whereNotNull().toList();
 
-          items = sortItems(items, settings.tabSortBy[TabContentType.songs],
-              settings.tabSortOrder[TabContentType.songs]);
+          items = sortItems(items, settings.tabSortBy[TabContentType.tracks],
+              settings.tabSortOrder[TabContentType.tracks]);
 
           await queueService.startPlayback(
             items: items,
@@ -163,7 +163,7 @@ class TrackListTile extends StatelessWidget {
                     : QueueItemSourceNameType.instantMix,
                 localizationParameter: item.name ?? "",
               ),
-              type: QueueItemSourceType.allSongs,
+              type: QueueItemSourceType.allTracks,
               id: item.id,
             ),
           );
@@ -178,7 +178,7 @@ class TrackListTile extends StatelessWidget {
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
                     pretranslatedName: item.name),
-                type: QueueItemSourceType.song,
+                type: QueueItemSourceType.track,
                 id: item.id,
               ),
             );
@@ -416,7 +416,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     if (FinampSettingsHelper.finampSettings.isOffline) {
       playable = ref.watch(GetIt.instance<DownloadsService>()
           .stateProvider(DownloadStub.fromItem(
-              type: DownloadItemType.song, item: widget.baseItem))
+              type: DownloadItemType.track, item: widget.baseItem))
           .select((value) => value.value?.isComplete ?? false));
     } else {
       playable = true;
@@ -427,7 +427,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     void menuCallback() async {
       if (playable) {
         FeedbackHelper.feedback(FeedbackType.selection);
-        await showModalSongMenu(
+        await showModalTrackMenu(
           context: context,
           item: widget.baseItem,
           isInPlaylist: widget.isInPlaylist,
@@ -720,7 +720,7 @@ class TrackListItemTile extends StatelessWidget {
                           offset: const Offset(-1.5, 2.5),
                           child: DownloadedIndicator(
                             item: DownloadStub.fromItem(
-                                item: baseItem, type: DownloadItemType.song),
+                                item: baseItem, type: DownloadItemType.track),
                             size: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!

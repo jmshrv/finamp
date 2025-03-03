@@ -31,16 +31,16 @@
   },
   "unknownName": "알 수 없는 이름",
   "@unknownName": {},
-  "songs": "곡들",
-  "@songs": {},
+  "tracks": "곡들",
+  "@tracks": {},
   "albums": "앨범",
   "@albums": {},
   "artists": "아티스트",
   "@artists": {},
   "playlists": "플레이리스트",
   "@playlists": {},
-  "startMixNoSongsAlbum": "믹스를 시작하기 전에 '앨범'을 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "믹스를 시작하기 전에 '앨범'을 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "music": "음악",
@@ -121,14 +121,14 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "다운로드 ID에서 곡을 가져오지 못했습니다",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "다운로드 ID에서 곡을 가져오지 못했습니다",
+  "@failedToGetTrackFromDownloadId": {},
   "playButtonLabel": "재생",
   "@playButtonLabel": {},
   "shuffleButtonLabel": "임의 재생",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} 곡} other{{count} 곡}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} 곡} other{{count} 곡}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -165,8 +165,8 @@
   "@interactions": {},
   "layoutAndTheme": "레이아웃 & 테마",
   "@layoutAndTheme": {},
-  "downloadedSongsWillNotBeDeleted": "다운로드한 곡들은 삭제되지 않습니다",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "다운로드한 곡들은 삭제되지 않습니다",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "확실한가요?",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin은 트랜스코딩에 AAC를 사용합니다",
@@ -183,10 +183,10 @@
   "@unknownError": {},
   "directoryMustBeEmpty": "디렉토리는 비어 있어야 합니다",
   "@directoryMustBeEmpty": {},
-  "shuffleAllSongCount": "전곡 임의 재생시 곡 수",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "'전곡 임의 재생' 버튼을 사용할 때 불러올 곡의 개수입니다.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "전곡 임의 재생시 곡 수",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "'전곡 임의 재생' 버튼을 사용할 때 불러올 곡의 개수입니다.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "음악 화면 보기 유형",
   "@viewTypeSubtitle": {},
   "list": "목록",
@@ -209,12 +209,12 @@
   },
   "showTextOnGridView": "그리드 보기에서 텍스트를 보여줌",
   "@showTextOnGridView": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "앨범 아티스트와 동일한 경우, 곡 아티스트를 숨김",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "앨범 아티스트와 동일한 경우, 곡 아티스트를 숨김",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "showTextOnGridViewSubtitle": "그리드 음악 화면에서 '텍스트(곡목, 아티스트 등)' 표시 여부를 설정합니다.",
   "@showTextOnGridViewSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "앨범 화면에서 앨범 아티스트와 동일한 '곡 아티스트' 표시 여부를 설정합니다.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "앨범 화면에서 앨범 아티스트와 동일한 '곡 아티스트' 표시 여부를 설정합니다.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "제스처 비활성화",
   "@disableGesture": {},
   "disableGestureSubtitle": "제스처 비활성화 여부를 설정합니다.",
@@ -333,8 +333,8 @@
   },
   "noMusicLibrariesBody": "핀앰프 Finamp가 음악 라이브러리를 찾을 수 없습니다. 귀하의 젤리핀 Jellyfin 서버에 콘텐츠 유형이 \"음악\"으로 설정된 라이브러리가 하나 이상 있는지 확인하세요.",
   "@noMusicLibrariesBody": {},
-  "startMixNoSongsArtist": "믹스를 시작하기 전에 '아티스트'를 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "믹스를 시작하기 전에 '아티스트'를 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "playCount": "재생 횟수",
@@ -603,8 +603,8 @@
   },
   "downloadsQueued": "파일을 다운로드 합니다",
   "@downloadsQueued": {},
-  "offlineSongCountArtist": "{count,plural,=1{{count} 곡} other{{count} 곡}} 다운로드 됨",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} 곡} other{{count} 곡}} 다운로드 됨",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -625,8 +625,8 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongsSubtitle": "아티스트의 최다 청취곡(5곡 까지) 표시 여부를 설정.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "아티스트의 최다 청취곡(5곡 까지) 표시 여부를 설정.",
+  "@showArtistsTopTracksSubtitle": {},
   "hours": "시간",
   "@hours": {},
   "trackCountTooltip": "{currentTrackIndex} / {totalTrackCount} 곡",
@@ -713,11 +713,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "재생중: {song}",
+  "queueRestoreSubtitle1": "재생중: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -750,8 +750,8 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "주요 곡들",
-  "@topSongs": {},
+  "topTracks": "주요 곡들",
+  "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} 앨범} other{{count} 앨범}}",
   "@albumCount": {
     "placeholders": {
@@ -776,8 +776,8 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "startMixNoSongsGenre": "믹스를 시작하기 전에 '장르'를 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "믹스를 시작하기 전에 '장르'를 길게 탭하여 믹스 빌더에서 추가하거나 제거하세요",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "제목",
@@ -828,8 +828,8 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "offlineSongCount": "{count,plural,=1{{count} 곡} other{{count} 곡}}, {downloads} 다운로드 됨",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} 곡} other{{count} 곡}}, {downloads} 다운로드 됨",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -861,8 +861,8 @@
   "@loginFlowAuthenticationHeading": {
     "description": "Heading for the authentication step during the login flow."
   },
-  "showArtistsTopSongs": "아티스트 보기에서 주요 곡들을 보여줍니다",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracks": "아티스트 보기에서 주요 곡들을 보여줍니다",
+  "@showArtistsTopTracks": {},
   "useCoverAsBackgroundSubtitle": "앱 배경화면으로 흐릿한 앨범 커버를 사용할지 여부를 설정.",
   "@useCoverAsBackgroundSubtitle": {},
   "playerScreenMinimumCoverPaddingEditorSubtitle": "재생 화면에서 앨범 커버 가장자리의 최소 여백 값을 설정 (화면 너비 기준 %단위).",
@@ -929,11 +929,11 @@
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} 곡} other{{songCount} 곡}}, {imageCount,plural,=1{{imageCount} 이미지} other{{imageCount} 이미지}}\n{syncCount,plural,=1{{syncCount} 동기화 노드} other{{syncCount} 동기화 노드}}{repairing, plural, =0{} other{\n현재 복구중}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} 곡} other{{trackCount} 곡}}, {imageCount,plural,=1{{imageCount} 이미지} other{{imageCount} 이미지}}\n{syncCount,plural,=1{{syncCount} 동기화 노드} other{{syncCount} 동기화 노드}}{repairing, plural, =0{} other{\n현재 복구중}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {

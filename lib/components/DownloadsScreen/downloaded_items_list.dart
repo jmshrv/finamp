@@ -39,7 +39,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if ((!(album.baseItemType == BaseItemDtoType.album ||
-                          album.baseItemType == BaseItemDtoType.song)) &&
+                          album.baseItemType == BaseItemDtoType.track)) &&
                       !FinampSettingsHelper.finampSettings.isOffline)
                     IconButton(
                       icon: const Icon(Icons.sync),
@@ -88,15 +88,15 @@ class _DownloadedChildrenListState extends State<DownloadedChildrenList> {
     var items = downloadsService.getVisibleChildren(widget.parent);
     return Column(children: [
       //TODO use a list builder here
-      for (final song in items)
+      for (final track in items)
         ListTile(
-          title: Text(song.baseItem?.name ?? song.name),
+          title: Text(track.baseItem?.name ?? track.name),
           leading: Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: AlbumImage(item: song.baseItem),
+            child: AlbumImage(item: track.baseItem),
           ),
           subtitle: ItemFileSize(
-            stub: song,
+            stub: track,
           ),
         )
     ]);

@@ -39,8 +39,8 @@
   },
   "unknownName": "未知名稱",
   "@unknownName": {},
-  "songs": "歌曲",
-  "@songs": {},
+  "tracks": "歌曲",
+  "@tracks": {},
   "albums": "專輯",
   "@albums": {},
   "artists": "藝人",
@@ -51,12 +51,12 @@
   "@playlists": {},
   "startMix": "生成組合",
   "@startMix": {},
-  "startMixNoSongsArtist": "長按藝人可將其加入或移除組合清單，準備好後再開始組合",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "長按藝人可將其加入或移除組合清單，準備好後再開始組合",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "長按專輯可將其加入或移除組合清單，準備好後再開始組合",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "長按專輯可將其加入或移除組合清單，準備好後再開始組合",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "music": "音樂",
@@ -162,8 +162,8 @@
   },
   "errorScreenError": "獲取錯誤列表時出錯！您可以在 GitHub 上提出問題並清除應用程式資料",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "從下載 ID 獲取歌曲失敗",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "從下載 ID 獲取歌曲失敗",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "錯誤",
   "@error": {},
   "discNumber": "唱片 {number}",
@@ -178,8 +178,8 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "隨機播放",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -230,8 +230,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "登出",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "下載的歌曲不會被刪除",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "下載的歌曲不會被刪除",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "你確定嗎？",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin 使用 AAC 進行轉碼",
@@ -264,10 +264,10 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "啓用後，通知可以在暫停時滑動。 啓用此功能還允許 Android 在暫停時終止服務。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "隨機播放所有歌曲次數",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "使用隨機播放按鈕時載入的歌曲數量。",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "隨機播放所有歌曲次數",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "使用隨機播放按鈕時載入的歌曲數量。",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "顯示類型",
   "@viewType": {},
   "viewTypeSubtitle": "音樂螢幕的顯示類型",
@@ -306,10 +306,10 @@
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "是否在 App 的各個介面使用模糊化的專輯封面作為背景。",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "如果與專輯藝人相同，則隱藏歌曲藝人",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "當歌曲藝人與專輯藝人相同時，是否在專輯介面顯示歌曲藝人。",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "如果與專輯藝人相同，則隱藏歌曲藝人",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "當歌曲藝人與專輯藝人相同時，是否在專輯介面顯示歌曲藝人。",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "主題",
   "@theme": {},
   "system": "系統",
@@ -596,17 +596,17 @@
   "@usernameHint": {
     "description": "Hint text for the username input field."
   },
-  "startMixNoSongsGenre": "長按一個曲風可將其加入或移除組合清單，準備好後再開始組合",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "長按一個曲風可將其加入或移除組合清單，準備好後再開始組合",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "標題",
   "@title": {},
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} 首歌曲} other{{songCount} 首歌曲}}, {imageCount,plural,=1{{imageCount} 張圖片} other{{imageCount} 張圖片}}\n{syncCount,plural,=1{{syncCount} 個節點同步中} other{{syncCount} 個節點同步中}}{repairing, plural, =0{} other{\n目前正在修復}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} 首歌曲} other{{trackCount} 首歌曲}}, {imageCount,plural,=1{{imageCount} 張圖片} other{{imageCount} 張圖片}}\n{syncCount,plural,=1{{syncCount} 個節點同步中} other{{syncCount} 個節點同步中}}{repairing, plural, =0{} other{\n目前正在修復}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -662,8 +662,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "目前沒有正在下載的項目。",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}，{downloads} 次下載",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}，{downloads} 次下載",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -673,8 +673,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}} 已下載",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}} 已下載",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -715,8 +715,8 @@
   "@sampleRate": {
     "description": "Label for the feature chips showing the sample rate of a track"
   },
-  "showArtistsTopSongsSubtitle": "是否顯示某位藝人最常收聽的前五首歌曲。",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "是否顯示某位藝人最常收聽的前五首歌曲。",
+  "@showArtistsTopTracksSubtitle": {},
   "hours": "小時",
   "@hours": {},
   "trackCountTooltip": "第 {currentTrackIndex} 首，共 {totalTrackCount} 首",
@@ -936,8 +936,8 @@
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
-  "showArtistsTopSongs": "在藝人介面顯示熱門歌曲",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracks": "在藝人介面顯示熱門歌曲",
+  "@showArtistsTopTracks": {},
   "shuffleToNextUp": "隨機加入「即將播放」佇列末端",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
@@ -1016,7 +1016,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} songMix{單曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選歌曲} genre{曲風} artist{藝人} song{單曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
+  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} trackMix{單曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allTracks{所有歌曲} filteredList{篩選歌曲} genre{曲風} artist{藝人} track{單曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1071,7 +1071,7 @@
   },
   "resetToDefaults": "恢復預設值",
   "@resetToDefaults": {},
-  "couldNotLoad": "無法載入 {source, select, album{專輯} playlist{播放清單} songMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allSongs{所有歌曲} filteredList{篩選後的歌曲} genre{曲風} artist{藝人} song{歌曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
+  "couldNotLoad": "無法載入 {source, select, album{專輯} playlist{播放清單} trackMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allTracks{所有歌曲} filteredList{篩選後的歌曲} genre{曲風} artist{藝人} track{歌曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1083,8 +1083,8 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "熱門歌曲",
-  "@topSongs": {},
+  "topTracks": "熱門歌曲",
+  "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} 張專輯} other{{count} 張專輯}}",
   "@albumCount": {
     "placeholders": {
@@ -1130,11 +1130,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "正在播放：{song}",
+  "queueRestoreSubtitle1": "正在播放：{track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1260,7 +1260,7 @@
   "@fiveLatestAlbumsSettingSubtitle": {},
   "cacheLibraryImagesSettingsSubtitle": "目前啟用的媒體庫內的專輯、藝人、曲風與播放清單封面將會下載。",
   "@cacheLibraryImagesSettingsSubtitle": {},
-  "itemDeletedSnackbar": "{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} song{歌曲} library{媒體庫} other{項目}} 已從 {deviceType, select, device{裝置} server{伺服器} other{未知來源}} 刪除",
+  "itemDeletedSnackbar": "{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} track{歌曲} library{媒體庫} other{項目}} 已從 {deviceType, select, device{裝置} server{伺服器} other{未知來源}} 刪除",
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
@@ -1268,7 +1268,7 @@
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "deleteFromTargetDialogText": "您即將從{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} song{歌曲} library{音樂庫} other{項目}}刪除此{device, select,device{裝置}server{伺服器的檔案系統與音樂庫。{deleteType, select,canDelete{ 此項目將從此裝置永久刪除。}cantDelete{ 此項目將暫時保留於此裝置，直至下次同步為止。}notDownloaded{}other{}} \n此操作無法還原。}other{}}。",
+  "deleteFromTargetDialogText": "您即將從{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} track{歌曲} library{音樂庫} other{項目}}刪除此{device, select,device{裝置}server{伺服器的檔案系統與音樂庫。{deleteType, select,canDelete{ 此項目將從此裝置永久刪除。}cantDelete{ 此項目將暫時保留於此裝置，直至下次同步為止。}notDownloaded{}other{}} \n此操作無法還原。}other{}}。",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
@@ -1294,7 +1294,7 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} song{音軌} library{音樂媒體庫} unknown{項目} other{{itemType}}} - {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} track{音軌} library{音樂媒體庫} unknown{項目} other{{itemType}}} - {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {

@@ -39,8 +39,8 @@
   "@logsCopied": {},
   "logOut": "Logg ut",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Nedlastede spor vil ikke slettes",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Nedlastede spor vil ikke slettes",
+  "@downloadedTracksWillNotBeDeleted": {},
   "enableTranscoding": "Skru på transkoding",
   "@enableTranscoding": {},
   "bitrate": "Bitrate",
@@ -118,8 +118,8 @@
   "@dateAdded": {},
   "datePlayed": "Dato avspilt",
   "@datePlayed": {},
-  "songs": "Spor",
-  "@songs": {},
+  "tracks": "Spor",
+  "@tracks": {},
   "genres": "Sjangere",
   "@genres": {},
   "albums": "Album",
@@ -269,12 +269,12 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "startMixNoSongsAlbum": "Lang-trykk et album for å legge til eller fjerne det fra miksbyggeren før du starter en miks",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Lang-trykk et album for å legge til eller fjerne det fra miksbyggeren før du starter en miks",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "startMixNoSongsArtist": "Lang-trykk på en artist for å legge til eller fjerne vedkommende fra miksbyggeren før du starter en miks",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Lang-trykk på en artist for å legge til eller fjerne vedkommende fra miksbyggeren før du starter en miks",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "shuffleAll": "Tilfelding avspilling av alt",
@@ -318,8 +318,8 @@
   "@applicationLegalese": {},
   "transcoding": "Transkoding",
   "@transcoding": {},
-  "failedToGetSongFromDownloadId": "Klarte ikke å hente spor fra nedlastings-ID",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Klarte ikke å hente spor fra nedlastings-ID",
+  "@failedToGetTrackFromDownloadId": {},
   "favourite": "Favorittmerk",
   "@favourite": {},
   "addDownloads": "Legg til nedlastinger",
@@ -336,8 +336,8 @@
   "@downloadLocations": {},
   "errorScreenError": "En feil inntraff under innhenting av listen over feil. Herfra bør du kanskje opprette en feilrapport på GitHub og slette programdataen.",
   "@errorScreenError": {},
-  "songCount": "{count,plural,=1{{count} spor} other{{count} spor}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} spor} other{{count} spor}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -362,10 +362,10 @@
   "@pathReturnSlashErrorMessage": {},
   "customLocationsBuggy": "Egendefinerte steder fungerer dårlig som følge av problemer med tilganger. Måter å løse det på vurderes, men akkurat nå anbefales ikke bruk.",
   "@customLocationsBuggy": {},
-  "shuffleAllSongCount": "Antall spor for tilfeldig avspilling",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Mengden spor å laste inn ved bruk av «Tilfeldig avspilling av alle spor»-knappen.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Antall spor for tilfeldig avspilling",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Mengden spor å laste inn ved bruk av «Tilfeldig avspilling av alle spor»-knappen.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Visningstype",
   "@viewType": {},
   "viewTypeSubtitle": "Visningstype for musikkskjermen",
@@ -404,10 +404,10 @@
   "@showTextOnGridViewSubtitle": {},
   "useCoverAsBackgroundSubtitle": "Hvorvidt tilslørt omslag skal brukes som bakgrunn på avspillerskjermen.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Skjul artister for sporet hvis samme som albumsartister",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Hvorvidt sporartister skal vises på albumsskjermen hvis forskjellig fra albumsartister.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Skjul artister for sporet hvis samme som albumsartister",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Hvorvidt sporartister skal vises på albumsskjermen hvis forskjellig fra albumsartister.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "showTextOnGridView": "Vis tekst i rutenettsvisning",
   "@showTextOnGridView": {},
   "useCoverAsBackground": "Vis tilslørt omslag som avspillerbakgrunn",

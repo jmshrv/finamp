@@ -100,8 +100,8 @@
       }
     }
   },
-  "songs": "Faixas",
-  "@songs": {},
+  "tracks": "Faixas",
+  "@tracks": {},
   "startupError": "Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, crie um problema/issue em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro persistir, limpe os dados para restaurar o aplicativo.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -162,8 +162,8 @@
   "@location": {},
   "enableTranscodingSubtitle": "A transmissão de músicas será transcodificada pelo servidor.",
   "@enableTranscodingSubtitle": {},
-  "songCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -174,8 +174,8 @@
   "@editPlaylistNameTooltip": {},
   "notAvailableInOfflineMode": "Não disponível no modo offline",
   "@notAvailableInOfflineMode": {},
-  "downloadedSongsWillNotBeDeleted": "Faixas transferidas não serão apagadas",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Faixas transferidas não serão apagadas",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Tem certeza?",
   "@areYouSure": {},
   "editPlaylistNameTitle": "Editar nome da lista de reprodução",
@@ -216,8 +216,8 @@
   "@enterLowPriorityStateOnPause": {},
   "useCoverAsBackground": "Utilizar capas desfocadas como plano de fundo",
   "@useCoverAsBackground": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Indica se os nomes dos artistas da faixa devem ser exibidos na tela do álbum se não forem diferentes dos nomes dos artistas do álbum.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Indica se os nomes dos artistas da faixa devem ser exibidos na tela do álbum se não forem diferentes dos nomes dos artistas do álbum.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "bitrateSubtitle": "Uma taxa de bits mais alta resulta em um áudio de maior qualidade, com um custo maior de largura de banda.",
   "@bitrateSubtitle": {},
   "appDirectory": "Diretório de aplicativo",
@@ -232,8 +232,8 @@
   "@directoryMustBeEmpty": {},
   "customLocationsBuggy": "Localizações customizadas são inconsistentes devido a problemas com permissões. Estou pensando em maneiras de solucionar isso, mas por enquanto eu não recomendaria que fossem utilizadas.",
   "@customLocationsBuggy": {},
-  "shuffleAllSongCount": "Contagem de faixas da função embaralhar todas",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Contagem de faixas da função embaralhar todas",
+  "@shuffleAllTrackCount": {},
   "enterLowPriorityStateOnPauseSubtitle": "Quando em pausa, possibilita que a notificação seja descartada e permite ao Android terminar o serviço.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "portrait": "Retrato",
@@ -264,8 +264,8 @@
   },
   "useCoverAsBackgroundSubtitle": "Utilizar ou não a arte das capas dos álbuns desfocadas como plano de fundo do reprodutor.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Esconder o nome dos artistas da faixa se forem os mesmos nomes dos artistas do álbum",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Esconder o nome dos artistas da faixa se forem os mesmos nomes dos artistas do álbum",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "light": "Claro",
   "@light": {},
   "tabs": "Abas",
@@ -316,12 +316,12 @@
   "@newPlaylist": {},
   "noArtist": "Nenhum artista",
   "@noArtist": {},
-  "startMixNoSongsArtist": "Aperte e segure sobre um artista para adicioná-lo ou removê-lo do criador de mix, antes de começar",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Aperte e segure sobre um artista para adicioná-lo ou removê-lo do criador de mix, antes de começar",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Aperte e segure sobre um álbum para adicioná-lo ou removê-lo do criador de mix, antes de começar",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Aperte e segure sobre um álbum para adicioná-lo ou removê-lo do criador de mix, antes de começar",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "budget": "Orçamento",
@@ -346,12 +346,12 @@
   "@applicationLegalese": {},
   "transcoding": "Transcodificando",
   "@transcoding": {},
-  "failedToGetSongFromDownloadId": "Falha em extrair a faixa do ID da transferência",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Falha em extrair a faixa do ID da transferência",
+  "@failedToGetTrackFromDownloadId": {},
   "stackTrace": "Traçado da pilha",
   "@stackTrace": {},
-  "shuffleAllSongCountSubtitle": "Quantidade de faixas para carregar ao utilizar o botão misturar todas as faixas.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Quantidade de faixas para carregar ao utilizar o botão misturar todas as faixas.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Tipo de visualização",
   "@viewType": {},
   "viewTypeSubtitle": "Tipo de visualização para a tela de música",
@@ -542,8 +542,8 @@
   "@title": {},
   "noActiveDownloads": "Nenhum download ativo.",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}, {downloads} Baixadas",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}, {downloads} Baixadas",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -553,8 +553,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Faixa} other{{count} Faixas}} Baixadas",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Faixa} other{{count} Faixas}} Baixadas",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -573,8 +573,8 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopSongs": "Exibir faixas mais tocadas na tela do artista",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracks": "Exibir faixas mais tocadas na tela do artista",
+  "@showArtistsTopTracks": {},
   "hours": "Horas",
   "@hours": {},
   "seconds": "Segundos",
@@ -837,11 +837,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "Reproduzindo: {song}",
+  "queueRestoreSubtitle1": "Reproduzindo: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -878,8 +878,8 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "Faixas mais tocadas",
-  "@topSongs": {},
+  "topTracks": "Faixas mais tocadas",
+  "@topTracks": {},
   "close": "Fechar",
   "@close": {},
   "resetToDefaults": "Retornar para configurações padrão",
@@ -989,17 +989,17 @@
   "@backToAccountSelection": {
     "description": "Label for the button that takes the user back to the account selection step during the login flow."
   },
-  "startMixNoSongsGenre": "Aperte e segure sobre um gênero para adicioná-lo ou removê-lo do criador de mix, antes de começar",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Aperte e segure sobre um gênero para adicioná-lo ou removê-lo do criador de mix, antes de começar",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "bufferSizeSubtitle": "O máximo tamanho do buffer em MB. Requer reinicialização",
   "@bufferSizeSubtitle": {},
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} faixa} other{{songCount} faixas}}, {imageCount,plural,=1{{imageCount} imagem} other{{imageCount} imagens}}\n{syncCount,plural,=1{{syncCount} nó sincronizado} other{{syncCount} nós sincronizados}}{repairing, plural, =0{} other{\nReparando}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} faixa} other{{trackCount} faixas}}, {imageCount,plural,=1{{imageCount} imagem} other{{imageCount} imagens}}\n{syncCount,plural,=1{{syncCount} nó sincronizado} other{{syncCount} nós sincronizados}}{repairing, plural, =0{} other{\nReparando}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -1216,7 +1216,7 @@
   "@volumeNormalizationModeSelectorTitle": {
     "description": "Title for the dropdown that selects the replay gain mode"
   },
-  "couldNotLoad": "Não foi possível carregar {source, select, album{álbum} playlist{lista de reprodução} songMix{mix de faixas} artistMix{mix de artista} albumMix{mix de álbum} genreMix{mix de gênero} favorites{favoritos} allSongs{todas as faixas} filteredList{faixas} genre{gênero} artist{artista} song{faixa} nextUpAlbum{álbum nas próximas} nextUpPlaylist{lista de reprodução nas próximas} nextUpArtist{artista nas próximas} other{}}",
+  "couldNotLoad": "Não foi possível carregar {source, select, album{álbum} playlist{lista de reprodução} trackMix{mix de faixas} artistMix{mix de artista} albumMix{mix de álbum} genreMix{mix de gênero} favorites{favoritos} allTracks{todas as faixas} filteredList{faixas} genre{gênero} artist{artista} track{faixa} nextUpAlbum{álbum nas próximas} nextUpPlaylist{lista de reprodução nas próximas} nextUpArtist{artista nas próximas} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1244,7 +1244,7 @@
   "@playbackOrderShuffledButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "playingFromType": "Reproduzindo {source, select, album{do álbum} playlist{da lista de reprodução} songMix{do mix de faixas} artistMix{do mix do artista} albumMix{do mix do álbum} genreMix{do mix do gênero} favorites{dos favoritos} allSongs{de todas as faixas} filteredList{das faixas} genre{do gênero} artist{do artista} song{faixa} nextUpAlbum{do álbum das próximas} nextUpPlaylist{da lista de reprodução das próximas} nextUpArtist{do artista das próximas} other{}}",
+  "playingFromType": "Reproduzindo {source, select, album{do álbum} playlist{da lista de reprodução} trackMix{do mix de faixas} artistMix{do mix do artista} albumMix{do mix do álbum} genreMix{do mix do gênero} favorites{dos favoritos} allTracks{de todas as faixas} filteredList{das faixas} genre{do gênero} artist{do artista} track{faixa} nextUpAlbum{do álbum das próximas} nextUpPlaylist{da lista de reprodução das próximas} nextUpArtist{do artista das próximas} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1273,8 +1273,8 @@
   "@speed": {
     "description": "Used as a placeholder in the input of the playback speed menu"
   },
-  "showArtistsTopSongsSubtitle": "Indica se as 5 faixas mais reproduzidas de um artista devem ser exibidas.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "Indica se as 5 faixas mais reproduzidas de um artista devem ser exibidas.",
+  "@showArtistsTopTracksSubtitle": {},
   "trackCountTooltip": "Faixa {currentTrackIndex} de {totalTrackCount}",
   "@trackCountTooltip": {
     "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
@@ -1557,7 +1557,7 @@
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
-  "itemTypeSubtitle": "{itemType, select, album{Álbum} playlist{Lista de reprodução} artist{Artista} genre{Gênero} song{Faixa} library{Biblioteca} unknown{Item} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Álbum} playlist{Lista de reprodução} artist{Artista} genre{Gênero} track{Faixa} library{Biblioteca} unknown{Item} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {

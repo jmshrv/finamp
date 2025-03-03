@@ -15,10 +15,10 @@
   "@pathReturnSlashErrorMessage": {},
   "enterLowPriorityStateOnPause": "Перейти у стан низького пріоритету під час паузи",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Перемішати всі композиції",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Кількість композицій для завантаження при використанні кнопки перемішування всіх пісень.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Перемішати всі композиції",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Кількість композицій для завантаження при використанні кнопки перемішування всіх пісень.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "Тип перегляду для музичного екрану",
   "@viewTypeSubtitle": {},
   "list": "Список",
@@ -130,8 +130,8 @@
   "@playlists": {},
   "album": "Альбомами",
   "@album": {},
-  "songCount": "{count,plural,=1{{count} Композиція} other{{count} Композиції}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Композиція} other{{count} Композиції}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -140,8 +140,8 @@
   },
   "dateAdded": "Датою додавання",
   "@dateAdded": {},
-  "startMixNoSongsArtist": "Затисніть виконавця, щоб додати або видалити його з конструктора міксів перед початком міксування",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Затисніть виконавця, щоб додати або видалити його з конструктора міксів перед початком міксування",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "internalExternalIpExplanation": "Якщо ви хочете мати віддалений доступ до свого сервера Jellyfin, вам потрібно використовувати зовнішню IP-адресу.\n\nЯкщо ваш сервер на типовому порті HTTP (80 чи 443), чи типовому порті Jellyfin (8096), вам не потрібно вказувати порт серверу.\n\nЯкщо посилання вказано правильно, під полем введення з'явиться доступна інформація про ваш сервер.",
@@ -152,8 +152,8 @@
   "@startMix": {},
   "artist": "Виконавцями",
   "@artist": {},
-  "startMixNoSongsAlbum": "Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком міксування",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком міксування",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "sortBy": "Сортування за",
@@ -217,8 +217,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Не вдалося отримати композицію із ідентифікатора завантаження",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Не вдалося отримати композицію із ідентифікатора завантаження",
+  "@failedToGetTrackFromDownloadId": {},
   "discNumber": "Платівка {number}",
   "@discNumber": {
     "placeholders": {
@@ -245,8 +245,8 @@
   "@transcoding": {},
   "logsCopied": "Логи скопійовано.",
   "@logsCopied": {},
-  "downloadedSongsWillNotBeDeleted": "Завантажені композиції не будуть видалені",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Завантажені композиції не будуть видалені",
+  "@downloadedTracksWillNotBeDeleted": {},
   "shareLogs": "Поділитися логами",
   "@shareLogs": {},
   "downloadLocations": "Місце завантаження",
@@ -299,16 +299,16 @@
   "@portrait": {},
   "showTextOnGridViewSubtitle": "Показувати чи ні текст (назву, виконавця тощо) на музичному екрані сітки.",
   "@showTextOnGridViewSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Чи показувати виконавців композицій на екрані альбому, якщо вони не відрізняються від виконавців альбому.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Чи показувати виконавців композицій на екрані альбому, якщо вони не відрізняються від виконавців альбому.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "Вимкнути жести",
   "@disableGesture": {},
   "useCoverAsBackground": "Показати розмиту обкладинку як фон гравця",
   "@useCoverAsBackground": {},
   "light": "Світла",
   "@light": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Приховати виконавців композицій, якщо вони збігаються з виконавцями альбомів",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Приховати виконавців композицій, якщо вони збігаються з виконавцями альбомів",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "setSleepTimer": "Встановити таймер сну",
   "@setSleepTimer": {},
   "sleepTimerTooltip": "Таймер сну",
@@ -372,8 +372,8 @@
   },
   "unknownName": "Невідома назва",
   "@unknownName": {},
-  "songs": "Композиції",
-  "@songs": {},
+  "tracks": "Композиції",
+  "@tracks": {},
   "albums": "Альбоми",
   "@albums": {},
   "artists": "Виконавці",
@@ -542,8 +542,8 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "startMixNoSongsGenre": "Натисніть та утримуйте на жанрі для його додавання чи видалення із конструктора міксів перед початком міксування",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Натисніть та утримуйте на жанрі для його додавання чи видалення із конструктора міксів перед початком міксування",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "Заголовок",
@@ -558,8 +558,8 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopSongsSubtitle": "Чи показувати 5 найбільш прослуховуваних композиції виконавця.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "Чи показувати 5 найбільш прослуховуваних композиції виконавця.",
+  "@showArtistsTopTracksSubtitle": {},
   "trackCountTooltip": "Композиція {currentTrackIndex} з {totalTrackCount}",
   "@trackCountTooltip": {
     "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
@@ -636,8 +636,8 @@
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
-  "topSongs": "Найліпші композиції",
-  "@topSongs": {},
+  "topTracks": "Найліпші композиції",
+  "@topTracks": {},
   "shuffleAlbumsNext": "Перемішати альбоми наступними",
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
@@ -702,7 +702,7 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Альбом} playlist{Список відтворення} artist{Виконавець} genre{Жанр} song{Композиція} library{Бібліотека} unknown{Об'єкт} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Альбом} playlist{Список відтворення} artist{Виконавець} genre{Жанр} track{Композиція} library{Бібліотека} unknown{Об'єкт} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -812,11 +812,11 @@
   "@orDivider": {
     "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} композиція} other{{songCount} композиції}}, {imageCount,plural,=1{{imageCount} зображення} other{{imageCount} зображення}}\n{syncCount,plural,=1{{syncCount} синхронізація вузла} other{{syncCount} синхронізація вузлів}}{repairing, plural, =0{} other{\nНаразі виправляється}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} композиція} other{{trackCount} композиції}}, {imageCount,plural,=1{{imageCount} зображення} other{{imageCount} зображення}}\n{syncCount,plural,=1{{syncCount} синхронізація вузла} other{{syncCount} синхронізація вузлів}}{repairing, plural, =0{} other{\nНаразі виправляється}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -856,8 +856,8 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongs": "Показати найкращі композиції в поданні виконавнця",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracks": "Показати найкращі композиції в поданні виконавнця",
+  "@showArtistsTopTracks": {},
   "playbackModeDirectPlaying": "Пряме відтворення",
   "@playbackModeDirectPlaying": {
     "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
@@ -1137,7 +1137,7 @@
     },
     "description": "Dropdown option to download original version of tracks"
   },
-  "playingFromType": "Відтворення з {source, select, album{Альбому} playlist{Списку відтворення} songMix{Міксу композиції} artistMix{Міксу виконавця} albumMix{Міксу альбому} genreMix{Міксу жанру} favorites{Обраного} allSongs{Усіх композицій} filteredList{Композицій} genre{Жанру} artist{Виконавця} song{Композиції} nextUpAlbum{Альбому з Наступного} nextUpPlaylist{Списку відтворення з Наступного} nextUpArtist{Виконавця з наступного} other{}}",
+  "playingFromType": "Відтворення з {source, select, album{Альбому} playlist{Списку відтворення} trackMix{Міксу композиції} artistMix{Міксу виконавця} albumMix{Міксу альбому} genreMix{Міксу жанру} favorites{Обраного} allTracks{Усіх композицій} filteredList{Композицій} genre{Жанру} artist{Виконавця} track{Композиції} nextUpAlbum{Альбому з Наступного} nextUpPlaylist{Списку відтворення з Наступного} nextUpArtist{Виконавця з наступного} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1174,7 +1174,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "couldNotLoad": "Не вдалось завантажити {source, select, album{альбом} playlist{список відтворення} songMix{мікс композицій} artistMix{мікс виконавців} albumMix{мікс альбомів} genreMix{мікс жанрів} favorites{обране} allSongs{усі композиції} filteredList{композиції} genre{жанр} artist{виконавця} song{композицію} nextUpAlbum{альбом у наступному} nextUpPlaylist{список відтворення у наступному} nextUpArtist{виконавця у наступному} other{}}",
+  "couldNotLoad": "Не вдалось завантажити {source, select, album{альбом} playlist{список відтворення} trackMix{мікс композицій} artistMix{мікс виконавців} albumMix{мікс альбомів} genreMix{мікс жанрів} favorites{обране} allTracks{усі композиції} filteredList{композиції} genre{жанр} artist{виконавця} track{композицію} nextUpAlbum{альбом у наступному} nextUpPlaylist{список відтворення у наступному} nextUpArtist{виконавця у наступному} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1409,8 +1409,8 @@
   "@fiveLatestAlbumsSettingSubtitle": {},
   "cacheLibraryImagesSettings": "Кешувати зображення поточної бібліотеки",
   "@cacheLibraryImagesSettings": {},
-  "offlineSongCount": "{count,plural,=1{{count} Композицію} other{{count} Композиції}}, {downloads} завантажено",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Композицію} other{{count} Композиції}}, {downloads} завантажено",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1420,8 +1420,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Композиція} other{{count} Композиції}} завантажено",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Композиція} other{{count} Композиції}} завантажено",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1484,11 +1484,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "Відтворюється: {song}",
+  "queueRestoreSubtitle1": "Відтворюється: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }

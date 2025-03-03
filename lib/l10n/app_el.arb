@@ -21,8 +21,8 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "songs": "Τραγούδια",
-  "@songs": {},
+  "tracks": "Τραγούδια",
+  "@tracks": {},
   "serverUrl": "Διεύθυνση διακομιστή",
   "@serverUrl": {},
   "downloads": "Λήψεις",
@@ -47,16 +47,16 @@
   "@unknownName": {},
   "genres": "Είδη",
   "@genres": {},
-  "startMixNoSongsArtist": "Κράτησε πατημένο έναν καλλιτέχνη, προκειμένου να προστεθεί ή να αφαιρεθεί από τον κατασκευαστή μίξεων, προ-εκκινήσεως μίξης",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Κράτησε πατημένο έναν καλλιτέχνη, προκειμένου να προστεθεί ή να αφαιρεθεί από τον κατασκευαστή μίξεων, προ-εκκινήσεως μίξης",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "playlists": "Λίστες αναπαραγωγής",
   "@playlists": {},
   "startMix": "Έναρξη μίξης",
   "@startMix": {},
-  "startMixNoSongsAlbum": "Κράτησε πατημένο ένα άλμπουμ, προκειμένου να προστεθεί ή να αφαιρεθεί από τον κατασκευαστή μίξεων, προ-εκκινήσεως μίξης",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Κράτησε πατημένο ένα άλμπουμ, προκειμένου να προστεθεί ή να αφαιρεθεί από τον κατασκευαστή μίξεων, προ-εκκινήσεως μίξης",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "music": "Μουσική",
@@ -131,8 +131,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Απέτυχε η λήψη τραγουδιού από το download ID",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Απέτυχε η λήψη τραγουδιού από το download ID",
+  "@failedToGetTrackFromDownloadId": {},
   "playlistNameUpdated": "Ανανεώθηκε το όνομα λίστας αναπαραγωγής.",
   "@playlistNameUpdated": {},
   "runtime": "Διάρκεια",
@@ -194,8 +194,8 @@
   "@downloadsQueued": {},
   "audioService": "Audio Service",
   "@audioService": {},
-  "songCount": "{count,plural,=1{{count} τίτλος} other{{count} τίτλοι}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} τίτλος} other{{count} τίτλοι}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -216,8 +216,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Έξοδος",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Κατεβασμένα τραγούδια δεν θα διαγραφούν",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Κατεβασμένα τραγούδια δεν θα διαγραφούν",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Είσαι σίγουρος?",
   "@areYouSure": {},
   "location": "Τοποθεσία",
@@ -272,16 +272,16 @@
   "@directoryMustBeEmpty": {},
   "enterLowPriorityStateOnPauseSubtitle": "Επιτρέπει την απόσβεση της ειδοποίησης κατά την παύση. Επίσης επιτρέπει στο σύστημα να \"σκοτώνει\" την υπηρεσία κατά την παύση.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCountSubtitle": "Πλήθος τραγουδιών να φορτώσουν όταν χρησιμοποιείται το κουμπί τυχαίας αναπαραγωγής όλων.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Πλήθος τραγουδιών να φορτώσουν όταν χρησιμοποιείται το κουμπί τυχαίας αναπαραγωγής όλων.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "Τρόπος προβολής για την οθόνη μουσικής",
   "@viewTypeSubtitle": {},
   "list": "Λίστα",
   "@list": {},
   "pathReturnSlashErrorMessage": "Μονοπάτια που επιστρέφουν \"/\" δεν μπορούν να χρησιμοποιηθούν",
   "@pathReturnSlashErrorMessage": {},
-  "shuffleAllSongCount": "Τυχαία αναπαραγωγή όλων των Πλήθων τραγουδιών",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Τυχαία αναπαραγωγή όλων των Πλήθων τραγουδιών",
+  "@shuffleAllTrackCount": {},
   "viewType": "Τύπος προβολής",
   "@viewType": {},
   "grid": "Πλέγμα",

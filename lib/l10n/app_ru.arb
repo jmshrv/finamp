@@ -15,8 +15,8 @@
   },
   "unknownName": "Неизвестное имя",
   "@unknownName": {},
-  "songs": "Композиции",
-  "@songs": {},
+  "tracks": "Композиции",
+  "@tracks": {},
   "music": "Музыка",
   "@music": {},
   "finamp": "Finamp",
@@ -51,8 +51,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Не удалось получить композицию по идентификатору загрузки",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Не удалось получить композицию по идентификатору загрузки",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Ошибка",
   "@error": {},
   "discNumber": "Диск {number}",
@@ -67,8 +67,8 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Вперемешку",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Композиция} few{{count} Композиции} other{{count} Композиций}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Композиция} few{{count} Композиции} other{{count} Композиций}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -111,8 +111,8 @@
   "@layoutAndTheme": {},
   "logOut": "Выйти",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Загруженные композиции не будут удалены",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Загруженные композиции не будут удалены",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Вы уверены?",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin использует AAC для транскодирования",
@@ -139,8 +139,8 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Позволяет смахнуть уведомление на паузе. Также позволяет Android остановить сервис на паузе.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCountSubtitle": "Количество композиций для загрузки в режиме случайного проигрывания.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Количество композиций для загрузки в режиме случайного проигрывания.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Способ отображения",
   "@viewType": {},
   "viewTypeSubtitle": "Способ отображения для экрана музыки",
@@ -153,8 +153,8 @@
   "@portrait": {},
   "landscape": "Альбомный",
   "@landscape": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Показывать ли исполнителей композиций на экране альбома, если они не отличаются от исполнителей альбома.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Показывать ли исполнителей композиций на экране альбома, если они не отличаются от исполнителей альбома.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "Тема",
   "@theme": {},
   "system": "Системная",
@@ -281,12 +281,12 @@
   "@sortBy": {},
   "next": "Далее",
   "@next": {},
-  "startMixNoSongsArtist": "Чтобы добавить или удалить исполнителя из микса, нажмите и удерживайте его имя",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Чтобы добавить или удалить исполнителя из микса, нажмите и удерживайте его имя",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Чтобы добавить или удалить альбом из микса, нажмите и удерживайте его",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Чтобы добавить или удалить альбом из микса, нажмите и удерживайте его",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "favourites": "Избранное",
@@ -370,8 +370,8 @@
   "@enterLowPriorityStateOnPause": {},
   "bitrateSubtitle": "Высокий битрейт обеспечивает лучшее качество звука за счет большего потребления трафика.",
   "@bitrateSubtitle": {},
-  "shuffleAllSongCount": "Количество композиций случайного проигрывания",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Количество композиций случайного проигрывания",
+  "@shuffleAllTrackCount": {},
   "gridCrossAxisCount": "{value}, количество элементов сетки",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -390,8 +390,8 @@
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "Использовать ли размытую обложку альбома в качестве фона в различных частях приложения.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Скрывать исполнителей композиций, если они совпадают с исполнителями альбома",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Скрывать исполнителей композиций, если они совпадают с исполнителями альбома",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "startupError": "Что-то пошло не так во время запуска приложения. Возникла ошибка: {error}\n\nПожалуйста, создайте \"issue\" на github.com/UnicornsOnLSD/finamp и приложите скриншот этой страницы. Если проблема будет повторяться, вы можете очистить данные приложения, чтобы сбросить его настройки.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
@@ -606,8 +606,8 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "startMixNoSongsGenre": "Чтобы добавить или удалить жанр из микса, нажмите и удерживайте его",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Чтобы добавить или удалить жанр из микса, нажмите и удерживайте его",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "activeDownloads": "Активные загрузки",
@@ -656,8 +656,8 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongsSubtitle": "Следует ли показывать топ-5 самых прослушиваемых композиций исполнителя.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "Следует ли показывать топ-5 самых прослушиваемых композиций исполнителя.",
+  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Экран проигрывателя",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -670,8 +670,8 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongs": "Показывать лучшие композиции в режиме просмотра исполнителя",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracks": "Показывать лучшие композиции в режиме просмотра исполнителя",
+  "@showArtistsTopTracks": {},
   "fontSizeOptionLarge": "Большой",
   "@fontSizeOptionLarge": {
     "description": "Font size option for things like the lyrics view. Large means a larger font size."
@@ -797,11 +797,11 @@
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} композиция} few{{songCount} композиции} other{{songCount} композиций}}, {imageCount,plural,=1{{imageCount} изображение} few{{imageCount} изображения} other{{imageCount} изображений}}\n{syncCount,plural,=1{{syncCount} элемент синхронизируется} few{{syncCount} элемента синхронизируются} other{{syncCount} элементов синхронизируется}}{repairing, plural, =0{} other{\nСейчас чинится}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} композиция} few{{trackCount} композиции} other{{trackCount} композиций}}, {imageCount,plural,=1{{imageCount} изображение} few{{imageCount} изображения} other{{imageCount} изображений}}\n{syncCount,plural,=1{{syncCount} элемент синхронизируется} few{{syncCount} элемента синхронизируются} other{{syncCount} элементов синхронизируется}}{repairing, plural, =0{} other{\nСейчас чинится}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -831,7 +831,7 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "couldNotLoad": "Не удалось загрузить {source, select, album{альбом} playlist{плейлист} songMix{микс композиций} artistMix{микс исполнителей} albumMix{микс альбомов} genreMix{микс жанров} favorites{избранное} allSongs{все композиции} filteredList{композиции} genre{жанр} artist{исполнителя} song{композицию} nextUpAlbum{альбом в следующих} nextUpPlaylist{плейлист в следующих} nextUpArtist{исполнителя в следующих} other{}}",
+  "couldNotLoad": "Не удалось загрузить {source, select, album{альбом} playlist{плейлист} trackMix{микс композиций} artistMix{микс исполнителей} albumMix{микс альбомов} genreMix{микс жанров} favorites{избранное} allTracks{все композиции} filteredList{композиции} genre{жанр} artist{исполнителя} track{композицию} nextUpAlbum{альбом в следующих} nextUpPlaylist{плейлист в следующих} nextUpArtist{исполнителя в следующих} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -875,7 +875,7 @@
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "playingFromType": "Воспроизведение из {source, select, album{альбома} playlist{плейлиста} songMix{микса композиций} artistMix{микса исполнителей} albumMix{микса альбомов} genreMix{микса жанров} favorites{избранного} allSongs{всех композиций} filteredList{композиций} genre{жанра} artist{исполнителя} song{композиции} nextUpAlbum{альбома в следующих} nextUpPlaylist{плейлиста в следующих} nextUpArtist{исполнителя в следующих} other{}}",
+  "playingFromType": "Воспроизведение из {source, select, album{альбома} playlist{плейлиста} trackMix{микса композиций} artistMix{микса исполнителей} albumMix{микса альбомов} genreMix{микса жанров} favorites{избранного} allTracks{всех композиций} filteredList{композиций} genre{жанра} artist{исполнителя} track{композиции} nextUpAlbum{альбома в следующих} nextUpPlaylist{плейлиста в следующих} nextUpArtist{исполнителя в следующих} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -995,16 +995,16 @@
   },
   "title": "Заголовок",
   "@title": {},
-  "offlineSongCountArtist": "{count,plural,=1{{count} Композиция загружена} few{{count} Композиции загружено} other{{count} Композиций загружено}}",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Композиция загружена} few{{count} Композиции загружено} other{{count} Композиций загружено}}",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "offlineSongCount": "{count,plural,=1{{count} Композиция} few{{count} Компоозиции} other{{count} Композиций}}, {downloads} загружено",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Композиция} few{{count} Компоозиции} other{{count} Композиций}}, {downloads} загружено",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1335,8 +1335,8 @@
   "@emptyTopTracksList": {
     "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
   },
-  "topSongs": "Лучшие композиции",
-  "@topSongs": {},
+  "topTracks": "Лучшие композиции",
+  "@topTracks": {},
   "volumeNormalizationModeAlbumBased": "На основе альбома",
   "@volumeNormalizationModeAlbumBased": {
     "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
@@ -1349,7 +1349,7 @@
   "@maxConcurrentDownloads": {
     "description": "Title of setting controlling max concurrent downloads."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Альбом} playlist{Плейлист} artist{Артист} genre{Жанр} song{Композиция} library{Библиотека} unknown{Элемент} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Альбом} playlist{Плейлист} artist{Артист} genre{Жанр} track{Композиция} library{Библиотека} unknown{Элемент} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1412,11 +1412,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "Воспроизводится: {song}",
+  "queueRestoreSubtitle1": "Воспроизводится: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }

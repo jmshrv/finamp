@@ -11,11 +11,11 @@ class ItemInfo extends StatelessWidget {
   const ItemInfo({
     super.key,
     required this.item,
-    required this.itemSongs,
+    required this.itemTracks,
   });
 
   final BaseItemDto item;
-  final int itemSongs;
+  final int itemTracks;
 
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
@@ -42,11 +42,11 @@ class ItemInfo extends StatelessWidget {
         IconAndText(
             iconData: Icons.music_note,
             textSpan: TextSpan(
-              text: (itemSongs == (item.childCount ?? itemSongs) ||
+              text: (itemTracks == (item.childCount ?? itemTracks) ||
                       !FinampSettingsHelper.finampSettings.isOffline)
-                  ? AppLocalizations.of(context)!.songCount(itemSongs)
+                  ? AppLocalizations.of(context)!.trackCount(itemTracks)
                   : AppLocalizations.of(context)!
-                      .offlineSongCount(item.childCount!, itemSongs),
+                      .offlineTrackCount(item.childCount!, itemTracks),
             )),
         IconAndText(
           iconData: Icons.timer,

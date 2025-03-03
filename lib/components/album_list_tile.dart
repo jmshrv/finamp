@@ -43,14 +43,14 @@ class AlbumListTile extends ConsumerStatefulWidget {
       {super.key,
       required this.item,
 
-      /// Children that are related to this list tile, such as the other songs in
-      /// the album. This is used to give the audio service all the songs for the
-      /// item. If null, only this song will be given to the audio service.
+      /// Children that are related to this list tile, such as the other tracks in
+      /// the album. This is used to give the audio service all the tracks for the
+      /// item. If null, only this track will be given to the audio service.
       this.children,
 
-      /// Index of the song in whatever parent this widget is in. Used to start
+      /// Index of the track in whatever parent this widget is in. Used to start
       /// the audio service at a certain index, such as when selecting the middle
-      /// song in an album.
+      /// track in an album.
       this.index,
       this.parentId,
       this.parentName});

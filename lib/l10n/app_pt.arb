@@ -27,8 +27,8 @@
   "@location": {},
   "downloadsQueued": "Transferência preparada, a descarregar ficheiros",
   "@downloadsQueued": {},
-  "downloadedSongsWillNotBeDeleted": "As músicas transferidas não serão eliminadas",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "As músicas transferidas não serão eliminadas",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Tem a certeza?",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "O Jellyfin utiliza AAC para transcodificação",
@@ -83,8 +83,8 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "songs": "Faixas",
-  "@songs": {},
+  "tracks": "Faixas",
+  "@tracks": {},
   "albums": "Álbuns",
   "@albums": {},
   "artists": "Artistas",
@@ -196,8 +196,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Falha a obter a faixa através do download ID",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Falha a obter a faixa através do download ID",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Erro",
   "@error": {},
   "discNumber": "Disco {number}",
@@ -270,10 +270,10 @@
   "@directoryMustBeEmpty": {},
   "customLocationsBuggy": "Localizações customizadas são extremamente defeituosas devidas à problems com permissões. Estou pensando em maneiras de consertar isso, mas por enquanto não recomendaria usá-las.",
   "@customLocationsBuggy": {},
-  "shuffleAllSongCount": "Contagem da Mistura de Todas as Faixas",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Quantidade de faixas a carregar quando se usa o botão misturar todas as faixas.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Contagem da Mistura de Todas as Faixas",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Quantidade de faixas a carregar quando se usa o botão misturar todas as faixas.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Tipo de Visualização",
   "@viewType": {},
   "grid": "Grade",
@@ -366,10 +366,10 @@
   },
   "removedFromPlaylist": "Removido da lista de reprodução.",
   "@removedFromPlaylist": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Ocultar artistas das faixas, se iguais aos artistas do álbum",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "startMixNoSongsAlbum": "Pressione e segure um álbum para o adicionar ou remover do construtor de mistura antes de iniciar uma mistura",
-  "@startMixNoSongsAlbum": {
+  "hideTrackArtistsIfSameAsAlbumArtists": "Ocultar artistas das faixas, se iguais aos artistas do álbum",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "startMixNoTracksAlbum": "Pressione e segure um álbum para o adicionar ou remover do construtor de mistura antes de iniciar uma mistura",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "removeFromPlaylistTooltip": "Remover desta lista de reprodução",
@@ -382,16 +382,16 @@
   "@enableTranscodingSubtitle": {},
   "removeFromPlaylistTitle": "Remover Desta Lista de Reprodução",
   "@removeFromPlaylistTitle": {},
-  "songCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Se deve mostrar os artistas das faixas no ecrã do álbum, no caso destes não serem diferentes dos do álbum.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Se deve mostrar os artistas das faixas no ecrã do álbum, no caso destes não serem diferentes dos do álbum.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "bufferDurationSubtitle": "A duração máxima que deve ser colocada em buffer, em segundos. Requer reinicialização.",
   "@bufferDurationSubtitle": {},
   "insertedIntoQueue": "Inserido na fila.",
@@ -400,8 +400,8 @@
   },
   "useCoverAsBackground": "Mostrar capa desfocada como plano de fundo do player",
   "@useCoverAsBackground": {},
-  "startMixNoSongsArtist": "Pressione e segure um artista para o adicionar ou remover do construtor de misturas antes de iniciar uma mistura",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Pressione e segure um artista para o adicionar ou remover do construtor de misturas antes de iniciar uma mistura",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "minutes": "Minutos",
@@ -570,17 +570,17 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "startMixNoSongsGenre": "Pressione e segure um estilo para o adicionar ou remover do construtor de mistura antes de iniciar uma mistura",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Pressione e segure um estilo para o adicionar ou remover do construtor de mistura antes de iniciar uma mistura",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "Título",
   "@title": {},
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} faixa} other{{songCount} faixas}}, {imageCount,plural,=1{{imageCount} imagem} other{{imageCount} imagens}}\n{syncCount,plural,=1{{syncCount} nó a sincronizar} other{{syncCount} nós a sincronizar}}{repairing,plural,=0{} other{\nA reparar neste momento}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} faixa} other{{trackCount} faixas}}, {imageCount,plural,=1{{imageCount} imagem} other{{imageCount} imagens}}\n{syncCount,plural,=1{{syncCount} nó a sincronizar} other{{syncCount} nós a sincronizar}}{repairing,plural,=0{} other{\nA reparar neste momento}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -600,8 +600,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "Sem transferências em progresso.",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}, {downloads} Transferidas",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}, {downloads} Transferidas",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -611,8 +611,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Faixa} other{{count} Faixas}} Transferidas",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Faixa} other{{count} Faixas}} Transferidas",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -831,10 +831,10 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongs": "Mostrar faixas principais na vista do artista",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Indica se deve mostrar as 5 faixas mais ouvidas de um artista.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracks": "Mostrar faixas principais na vista do artista",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Indica se deve mostrar as 5 faixas mais ouvidas de um artista.",
+  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Tela de Reprodução",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -966,7 +966,7 @@
   "@yourLikes": {
     "description": "Title for the queue source when the user is playing their liked tracks"
   },
-  "playingFromType": "A Tocar de {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "A Tocar de {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -996,7 +996,7 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "couldNotLoad": "Não foi possível carregar {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "Não foi possível carregar {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1049,11 +1049,11 @@
   "@playbackSpeedDecreaseLabel": {
     "description": "Label for the button in the speed menu that decreases the playback speed."
   },
-  "queueRestoreSubtitle1": "A Tocar: {song}",
+  "queueRestoreSubtitle1": "A Tocar: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1219,8 +1219,8 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "Temas Mais Tocados",
-  "@topSongs": {},
+  "topTracks": "Temas Mais Tocados",
+  "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} Álbum} other{{count} Álbuns}}",
   "@albumCount": {
     "placeholders": {
@@ -1688,7 +1688,7 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {

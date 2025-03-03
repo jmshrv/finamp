@@ -41,7 +41,7 @@ class _AlbumsSliverListState extends State<AlbumsSliverList> {
             parentId: widget.parent.id,
             parentName: widget.parent.name,
             // show artists except for this one scenario
-            // TODO we could do it here like with the song sliver list
+            // TODO we could do it here like with the track sliver list
             // showArtists: false,
           );
         },

@@ -57,8 +57,8 @@
   },
   "addDownloadLocation": "Voeg een downloadlocatie toe",
   "@addDownloadLocation": {},
-  "shuffleAllSongCountSubtitle": "Hoeveelheid nummers die geladen moeten worden bij gebruik van de shuffle knop.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Hoeveelheid nummers die geladen moeten worden bij gebruik van de shuffle knop.",
+  "@shuffleAllTrackCountSubtitle": {},
   "dlComplete": "{count} volledig",
   "@dlComplete": {
     "placeholders": {
@@ -119,8 +119,8 @@
   "@dark": {},
   "createButtonLabel": "Creëer",
   "@createButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Nummer} other{{count} Nummers}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Nummer} other{{count} Nummers}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -147,20 +147,20 @@
   },
   "unknownName": "Onbekende Naam",
   "@unknownName": {},
-  "songs": "Nummers",
-  "@songs": {},
+  "tracks": "Nummers",
+  "@tracks": {},
   "playlists": "Afspeellijsten",
   "@playlists": {},
   "startMix": "Mix starten",
   "@startMix": {},
   "genres": "Genres",
   "@genres": {},
-  "startMixNoSongsArtist": "Druk lang op een artiest om deze toe te voegen of te verwijderen van de mix-bouwer alvorens de mix te starten",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Druk lang op een artiest om deze toe te voegen of te verwijderen van de mix-bouwer alvorens de mix te starten",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Druk lang op een album om deze toe te voegen of te verwijderen van de mix-bouwer alvorens de mix te starten",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Druk lang op een album om deze toe te voegen of te verwijderen van de mix-bouwer alvorens de mix te starten",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "music": "Muziek",
@@ -228,8 +228,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Het nummer kon niet gevonden worden met deze download ID",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Het nummer kon niet gevonden worden met deze download ID",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Fout",
   "@error": {},
   "playButtonLabel": "Afspelen",
@@ -268,8 +268,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Uitloggen",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Gedownloade nummers worden niet verwijderd",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Gedownloade nummers worden niet verwijderd",
+  "@downloadedTracksWillNotBeDeleted": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin gebruikt AAC voor conversie",
   "@jellyfinUsesAACForTranscoding": {},
   "selectDirectory": "Selecteer map",
@@ -284,8 +284,8 @@
   "@viewType": {},
   "viewTypeSubtitle": "Type voor het muziekscherm bekijken",
   "@viewTypeSubtitle": {},
-  "shuffleAllSongCount": "Aantal nummers in de shuffle",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Aantal nummers in de shuffle",
+  "@shuffleAllTrackCount": {},
   "list": "Lijst",
   "@list": {},
   "grid": "Raster",
@@ -394,16 +394,16 @@
   "@pathReturnSlashErrorMessage": {},
   "customLocationsBuggy": "Persoonlijke locaties hebben veel bug door permissies. We denken over oplossingen hiervoor. Voor nu raden we aan deze niet te gebruiken.",
   "@customLocationsBuggy": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Artiest van nummer verbergen wanneer deze hetzelfde is als de albumartiest",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Artiest van nummer verbergen wanneer deze hetzelfde is als de albumartiest",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "useCoverAsBackground": "Geblurde cover op spelerachtergrond tonen",
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "Geblurde coverafbeelding gebruiken als achtergrond van het afspeelscherm.",
   "@useCoverAsBackgroundSubtitle": {},
   "disableGesture": "Gebaren uitschakelen",
   "@disableGesture": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Artiest van nummer tonen wanneer deze hetzelfde is als de albumartiest.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Artiest van nummer tonen wanneer deze hetzelfde is als de albumartiest.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "system": "Systeem",
   "@system": {},
   "startupError": "Er ging iets mis bij het starten van de app. Dit was de foutmelding: {error}\n\nCreëer een issue op github.com/UnicornsOnLSD/finamp met een schermafbeelding van deze pagina. Wanneer het probleem zich vaker voordoet, kan je de app-data verwijderen om de app te resetten.",
@@ -454,19 +454,19 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "startMixNoSongsGenre": "Druk lang op een genre om deze toe te voegen of te verwijderen van de mix-bouwer alvorens een mix te starten",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Druk lang op een genre om deze toe te voegen of te verwijderen van de mix-bouwer alvorens een mix te starten",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "loginFlowQuickConnectInstructions": "Open de Jellyfin app of website, klik op je gebruikersicoon, en selecteer Quick Connect.",
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} nummer} other{{songCount} nummers}}, {imageCount,plural,=1{{imageCount} plaatje} other{{imageCount} plaatjes}}\n\n{syncCount,plural,=1{{syncCount} synchroniseert} other{{syncCount} synchroniseren}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} nummer} other{{trackCount} nummers}}, {imageCount,plural,=1{{imageCount} plaatje} other{{imageCount} plaatjes}}\n\n{syncCount,plural,=1{{syncCount} synchroniseert} other{{syncCount} synchroniseren}}{repairing, plural, =0{} other{\nCurrently repairing}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -708,8 +708,8 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongs": "Laat meest beluisterde nummers zien in artiest scherm",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracks": "Laat meest beluisterde nummers zien in artiest scherm",
+  "@showArtistsTopTracks": {},
   "playerScreen": "Speler Scherm",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -781,16 +781,16 @@
   },
   "addToMorePlaylistsTooltip": "Toevoegen aan meer afspeellijsten",
   "@addToMorePlaylistsTooltip": {},
-  "offlineSongCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} gedownload",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} gedownload",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "offlineSongCount": "{count,plural,=1{{count} nummer} other{{count} nummers}}, {downloads} gedownload",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} nummer} other{{count} nummers}}, {downloads} gedownload",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -816,7 +816,7 @@
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   },
-  "playingFromType": "Afspelen Van {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Afspelen Van {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -837,8 +837,8 @@
   "@reset": {
     "description": "Used for buttons in the playback speed menu and the settings"
   },
-  "showArtistsTopSongsSubtitle": "Wel of niet laten zien van top 5 beluisterde nummers van een artiest.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "Wel of niet laten zien van top 5 beluisterde nummers van een artiest.",
+  "@showArtistsTopTracksSubtitle": {},
   "kiloBitsPerSecondLabel": "{bitrate} kbps",
   "@kiloBitsPerSecondLabel": {
     "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",

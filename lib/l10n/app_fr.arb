@@ -41,8 +41,8 @@
   },
   "unknownName": "Nom inconnu",
   "@unknownName": {},
-  "songs": "Chansons",
-  "@songs": {},
+  "tracks": "Chansons",
+  "@tracks": {},
   "albums": "Albums",
   "@albums": {},
   "artists": "Artistes",
@@ -53,12 +53,12 @@
   "@playlists": {},
   "startMix": "Commencer un Mix",
   "@startMix": {},
-  "startMixNoSongsArtist": "Appuyer longuement sur un artiste pour l'ajouter ou le retirer du mix avant de commencer",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Appuyer longuement sur un artiste pour l'ajouter ou le retirer du mix avant de commencer",
+  "@startMixNoTracksArtist": {
     "description": "Notification qui intervient quand l'utilisateur lance le mix instantané sans avoir sélectionné des artistes"
   },
-  "startMixNoSongsAlbum": "Appuyer longuement sur un album pour l'ajouter ou le retirer du mix avant de commencer",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Appuyer longuement sur un album pour l'ajouter ou le retirer du mix avant de commencer",
+  "@startMixNoTracksAlbum": {
     "description": "Notification qui intervient quand l'utilisateur lance le mix instantané sans avoir sélectionné des albums"
   },
   "music": "Musique",
@@ -166,8 +166,8 @@
   },
   "errorScreenError": "Une erreur est survenue lors de la récupération de la liste des erreurs ! À ce stade, il serait probablement préférable de créer une issue sur GitHub et de supprimer les données de l'application.",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "La chanson n’a pas pu être récupérée à l’aide de l’ID de téléchargement",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "La chanson n’a pas pu être récupérée à l’aide de l’ID de téléchargement",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Erreur",
   "@error": {},
   "discNumber": "Disque {number}",
@@ -182,8 +182,8 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Aléatoire",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} titre} other{{count} titres}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} titre} other{{count} titres}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -234,8 +234,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Déconnexion",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Les chansons téléchargées ne seront pas supprimées",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Les chansons téléchargées ne seront pas supprimées",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Êtes-vous sûr ?",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin utilise AAC lors du transcodage",
@@ -266,10 +266,10 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Permet de supprimer la notification lorsque la lecture est en pause. Permet également à Android de fermer le service lorsqu'il est en pause.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Nombre de titres à mélanger",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Nombre de chansons à charger lors de l'utilisation du bouton 'Tout mélanger'.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Nombre de titres à mélanger",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Nombre de chansons à charger lors de l'utilisation du bouton 'Tout mélanger'.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Disposition de l'affichage",
   "@viewType": {},
   "viewTypeSubtitle": "Règle la manière dont les musiques sont diposées",
@@ -308,8 +308,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons si identiques aux artistes de l'album",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Masquer les artistes des chansons si identiques aux artistes de l'album",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "disableGesture": "Désactiver les gestes",
   "@disableGesture": {},
   "disableGestureSubtitle": "Indique si les gestes doivent être désactivés.",
@@ -384,8 +384,8 @@
   "@enterLowPriorityStateOnPause": {},
   "useCoverAsBackgroundSubtitle": "Utiliser ou non une couverture floutée comme arrière-plan sur l'écran du lecteur.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Afficher ou non les artistes des chansons sur l'écran de l'album si différents des artistes de l'album.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Afficher ou non les artistes des chansons sur l'écran de l'album si différents des artistes de l'album.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "insertedIntoQueue": "Ajouté à la file d'attente.",
   "@insertedIntoQueue": {
     "description": "Notification affichée lorsque l'utilisateur insère avec succès des éléments dans la file d'attente de lecture à un endroit qui n'est pas nécessairement à la fin."
@@ -568,8 +568,8 @@
   "@activeDownloads": {},
   "noActiveDownloads": "Pas de téléchargement en cours.",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} titre} other{{count} titres}}, {downloads} téléchargé(s)",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} titre} other{{count} titres}}, {downloads} téléchargé(s)",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -599,10 +599,10 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongs": "Montrer les top titres sur la page de l’artiste",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Afficher ou non le top 5 des titres les plus écoutés d’un artiste.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracks": "Montrer les top titres sur la page de l’artiste",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Afficher ou non le top 5 des titres les plus écoutés d’un artiste.",
+  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Écran du lecteur",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -712,11 +712,11 @@
   "@loginFlowNamelessUser": {
     "description": "Name for a user that doesn't have a name set on the server."
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} titre} other{{songCount} titres}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} noeud syncing} other{{syncCount} noeuds}}{repairing, plural, =0{} other{\nReparations en cours}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} titre} other{{trackCount} titres}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} noeud syncing} other{{syncCount} noeuds}}{repairing, plural, =0{} other{\nReparations en cours}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -730,8 +730,8 @@
       }
     }
   },
-  "startMixNoSongsGenre": "Avant de commencer à écouter un mix, appuyez longuement sur un genre pour l’ajouter ou le retirer du créateur de mix",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Avant de commencer à écouter un mix, appuyez longuement sur un genre pour l’ajouter ou le retirer du créateur de mix",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "backToAccountSelection": "Retour à la sélection du compte",
@@ -764,8 +764,8 @@
   "@passwordHint": {
     "description": "Hint text for the password input field."
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} titre} other{{count} titres}} telechargé(s)",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} titre} other{{count} titres}} telechargé(s)",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -905,7 +905,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Joué à partir de {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Joué à partir de {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {

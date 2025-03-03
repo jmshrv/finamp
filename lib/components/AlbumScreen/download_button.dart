@@ -75,7 +75,7 @@ class DownloadButton extends ConsumerWidget {
                     onAborted: () {},
                   ));
         } else {
-          int? songCount = switch (item.baseItemType) {
+          int? trackCount = switch (item.baseItemType) {
             BaseItemDtoType.album ||
             BaseItemDtoType.playlist =>
               children?.length,
@@ -84,7 +84,7 @@ class DownloadButton extends ConsumerWidget {
             _ => null
           };
           await DownloadDialog.show(context, item, viewId,
-              songCount: songCount);
+              trackCount: trackCount);
         }
       },
       tooltip: parentTooltip,
@@ -117,12 +117,12 @@ class DownloadButton extends ConsumerWidget {
       }
     }
     var coreButton = status.isRequired ? deleteButton : downloadButton;
-    // Only show sync on album/song if there we know we are outdated due to failed downloads or the like.
+    // Only show sync on album/track if there we know we are outdated due to failed downloads or the like.
     // On playlists/artists/genres, always show if downloaded.
     List<Widget> buttons;
     if (status == DownloadItemStatus.notNeeded ||
         ((item.baseItemType == BaseItemDtoType.album ||
-                item.baseItemType == BaseItemDtoType.song) &&
+                item.baseItemType == BaseItemDtoType.track) &&
             !status.outdated) ||
         isLibrary) {
       buttons = [coreButton];

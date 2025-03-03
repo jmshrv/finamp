@@ -111,8 +111,8 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "songs": "Utwory",
-  "@songs": {},
+  "tracks": "Utwory",
+  "@tracks": {},
   "albums": "Albumy",
   "@albums": {},
   "artists": "Wykonawcy",
@@ -183,8 +183,8 @@
   "@productionYear": {},
   "enableTranscoding": "Włącz transkodowanie",
   "@enableTranscoding": {},
-  "downloadedSongsWillNotBeDeleted": "Pobrane utwory nie zostaną usunięte",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Pobrane utwory nie zostaną usunięte",
+  "@downloadedTracksWillNotBeDeleted": {},
   "light": "Jasny",
   "@light": {},
   "customLocation": "Własna lokalizacja",
@@ -290,28 +290,28 @@
   "@setSleepTimer": {},
   "enterLowPriorityStateOnPause": "Przechodź w stan niskiego priorytetu w trakcie trwania pauzy",
   "@enterLowPriorityStateOnPause": {},
-  "songCount": "{count,plural,=1{{count} Utwór} few{{count} Utwory} other{{count} Utworów}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Utwór} few{{count} Utwory} other{{count} Utworów}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "startMixNoSongsArtist": "Kliknij i przytrzymaj nazwę wykonawcy, aby dodać go do mix-u przed jego rozpoczęciem",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Kliknij i przytrzymaj nazwę wykonawcy, aby dodać go do mix-u przed jego rozpoczęciem",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Kliknij i przytrzymaj nazwę albumu, aby dodać go do mix-u przed jego rozpoczęciem",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Kliknij i przytrzymaj nazwę albumu, aby dodać go do mix-u przed jego rozpoczęciem",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "appDirectory": "Folder aplikacji",
   "@appDirectory": {},
   "bitrateSubtitle": "Wyższy bitrate dostarcza lepszą jakość, ale kosztem większego zużycia transferu danych.",
   "@bitrateSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Ukryj wykonawców utworu jeśli odpowiadają wykonawcom albumu",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Ukryj wykonawców utworu jeśli odpowiadają wykonawcom albumu",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "customLocationsBuggy": "Niestandardowe lokalizacje są bardzo kłopotliwe ze względu na problemy z uprawnieniami. W chwili obecnej ich używanie nie jest zalecane.",
   "@customLocationsBuggy": {},
   "gridCrossAxisCountSubtitle": "Ilość elementów w wierszu - {value}.",
@@ -324,8 +324,8 @@
       }
     }
   },
-  "shuffleAllSongCountSubtitle": "Ilość utworów do załadowania kiedy użyto przycisku \"Losowo\" na wszystkich utworach.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Ilość utworów do załadowania kiedy użyto przycisku \"Losowo\" na wszystkich utworach.",
+  "@shuffleAllTrackCountSubtitle": {},
   "downloadedMissingImages": "{count,plural, =0{Nie brakuje żadnych obrazów} =1{Pobrano {count} brakujący obraz} other{Pobrano {count} brakujących obrazów}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
@@ -335,16 +335,16 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Nie udało się pobrać utworu z ID pobierania",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Nie udało się pobrać utworu z ID pobierania",
+  "@failedToGetTrackFromDownloadId": {},
   "stackTrace": "Stos błędu",
   "@stackTrace": {},
   "enterLowPriorityStateOnPauseSubtitle": "Pozwala usunąć powiadomienie podczas pauzy. Pozwala również systemowi Android na zabicie usługi podczas pauzy.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "viewTypeSubtitle": "Układ elementów",
   "@viewTypeSubtitle": {},
-  "shuffleAllSongCount": "Maksymalna ilość losowych utworów",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Maksymalna ilość losowych utworów",
+  "@shuffleAllTrackCount": {},
   "gridCrossAxisCount": "Elementy siatki ({value})",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -363,8 +363,8 @@
   "@showTextOnGridViewSubtitle": {},
   "viewType": "Widok",
   "@viewType": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Określa czy wyświetlać wykonawców utworów na ekranie albumu, jeśli nie różnią się one od wykonawców albumów.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Określa czy wyświetlać wykonawców utworów na ekranie albumu, jeśli nie różnią się one od wykonawców albumów.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "responseError401": "{error} Kod {statusCode}. To najprawdopodobniej oznacza, że użyłeś/aś nieprawidłowej nazwy użytkownika lub hasła.",
   "@responseError401": {
     "placeholders": {
@@ -568,8 +568,8 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "startMixNoSongsGenre": "Naciśnij i przytrzymaj gatunek, aby dodać lub usunąć go z kreatora miksów przed rozpoczęciem miksowania",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Naciśnij i przytrzymaj gatunek, aby dodać lub usunąć go z kreatora miksów przed rozpoczęciem miksowania",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "Tytuł",
@@ -580,8 +580,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "Brak aktywnych pobrań.",
   "@noActiveDownloads": {},
-  "offlineSongCountArtist": "{count,plural,=1{{count} utwór} other{{count} utworów}} Pobrano",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} utwór} other{{count} utworów}} Pobrano",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -604,10 +604,10 @@
   "@shown": {
     "description": "Used as an option in the playback speed visibility settings"
   },
-  "showArtistsTopSongsSubtitle": "Czy wyświetlać 5 najczęściej słuchanych utworów artysty.",
-  "@showArtistsTopSongsSubtitle": {},
-  "showArtistsTopSongs": "Pokaż najczęściej słuchane utwory w widoku wykonawcy",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracksSubtitle": "Czy wyświetlać 5 najczęściej słuchanych utworów artysty.",
+  "@showArtistsTopTracksSubtitle": {},
+  "showArtistsTopTracks": "Pokaż najczęściej słuchane utwory w widoku wykonawcy",
+  "@showArtistsTopTracks": {},
   "playerScreen": "Ekran odtwarzacza",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -801,11 +801,11 @@
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} track} other{{songCount} tracks}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} track} other{{trackCount} tracks}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -819,8 +819,8 @@
       }
     }
   },
-  "offlineSongCount": "{count,plural,=1{{count} utwór} other{{count} utworów}}, {downloads} Pobrano",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} utwór} other{{count} utworów}}, {downloads} Pobrano",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -924,11 +924,11 @@
   "@playbackSpeedDecreaseLabel": {
     "description": "Label for the button in the speed menu that decreases the playback speed."
   },
-  "queueRestoreSubtitle1": "Odtwarzam: {song}",
+  "queueRestoreSubtitle1": "Odtwarzam: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1048,8 +1048,8 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "Najczęściej odtwarzane utwory",
-  "@topSongs": {},
+  "topTracks": "Najczęściej odtwarzane utwory",
+  "@topTracks": {},
   "shuffleAlbums": "Odtwarzaj Albumy Losowo",
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
@@ -1125,7 +1125,7 @@
   "@maxConcurrentDownloads": {
     "description": "Title of setting controlling max concurrent downloads."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlista} artist{Artysta} genre{Gatunek} song{Utwór} library{Biblioteka} unknown{Element} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlista} artist{Artysta} genre{Gatunek} track{Utwór} library{Biblioteka} unknown{Element} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1211,7 +1211,7 @@
       }
     }
   },
-  "playingFromType": "Odtwarzanie z {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Odtwarzanie z {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1220,7 +1220,7 @@
       }
     }
   },
-  "couldNotLoad": "Nie można załadować {source, select, album{album} playlist{playlista} songMix{miks utworów} artistMix{miks artysty} albumMix{miks albumu} genreMix{miks gatunku} favorites{ulubione} allSongs{wszystkie utwory} filteredList{utwory} genre{gatunek} artist{artysta} song{utwór} nextUpAlbum{album w następnej kolejności} nextUpPlaylist{playlista w następnej kolejności} nextUpArtist{artysta w następnej kolejności} other{}}",
+  "couldNotLoad": "Nie można załadować {source, select, album{album} playlist{playlista} trackMix{miks utworów} artistMix{miks artysty} albumMix{miks albumu} genreMix{miks gatunku} favorites{ulubione} allTracks{wszystkie utwory} filteredList{utwory} genre{gatunek} artist{artysta} track{utwór} nextUpAlbum{album w następnej kolejności} nextUpPlaylist{playlista w następnej kolejności} nextUpArtist{artysta w następnej kolejności} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {

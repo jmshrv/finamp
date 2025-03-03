@@ -2115,7 +2115,7 @@ class BaseItemDto with RunTimeTickDuration {
   @HiveField(130)
   int? albumCount;
 
-  /// Gets or sets the song count.
+  /// Gets or sets the track count.
   @HiveField(131)
   int? songCount;
 
@@ -2238,10 +2238,10 @@ class BaseItemDto with RunTimeTickDuration {
   /// The first primary blurhash of this item.
   String? get blurHash => imageBlurHashes?.primary?.values.first;
 
-  /// The name of the song to use when sorting. This getter strips words that
+  /// The name of the track to use when sorting. This getter strips words that
   /// are removed by Jellyfin (the, a, an).
   String? get nameForSorting {
-    // sortName seems to be of the form {4 digit track number} - {song Name} for songs
+    // sortName seems to be of the form {4 digit track number} - {track Name} for tracks
     // It seems the server uses the unstripped regular name to work around this in some
     // cases?
     if (sortName != null && type != "Audio") {
@@ -3476,8 +3476,8 @@ enum SortBy {
     switch (contentType) {
       case TabContentType.albums:
         return _jellyfinNameMusicAlbums(this);
-      case TabContentType.songs:
-        return _jellyfinNameSongs(this);
+      case TabContentType.tracks:
+        return _jellyfinNameTracks(this);
       default:
         return _jellyfinName(this);
     }
@@ -3623,7 +3623,7 @@ enum SortBy {
     }
   }
 
-  String _jellyfinNameSongs(SortBy sortBy) {
+  String _jellyfinNameTracks(SortBy sortBy) {
     switch (sortBy) {
       case SortBy.album:
         return "Album,SortName";
@@ -3837,15 +3837,15 @@ class LyricMetadata {
     this.isSynced,
   });
 
-  /// Gets or sets the song artist.
+  /// Gets or sets the track artist.
   @HiveField(0)
   String? artist;
 
-  /// Gets or sets the album this song is on.
+  /// Gets or sets the album this track is on.
   @HiveField(1)
   String? album;
 
-  /// Gets or sets the title of the song.
+  /// Gets or sets the title of the track.
   @HiveField(2)
   String? title;
 
@@ -3853,7 +3853,7 @@ class LyricMetadata {
   @HiveField(3)
   String? author;
 
-  /// Gets or sets the length of the song in ticks.
+  /// Gets or sets the length of the track in ticks.
   @HiveField(4)
   int? length;
 

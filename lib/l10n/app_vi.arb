@@ -23,8 +23,8 @@
   },
   "unknownName": "Không có tên",
   "@unknownName": {},
-  "songs": "Bản nhạc",
-  "@songs": {},
+  "tracks": "Bản nhạc",
+  "@tracks": {},
   "albums": "Albums",
   "@albums": {},
   "artists": "Nghệ sĩ",
@@ -33,8 +33,8 @@
   "@genres": {},
   "startMix": "Bắt đầu Mix",
   "@startMix": {},
-  "startMixNoSongsArtist": "Bấm giữ một nghệ sĩ để thêm hoặc loại bỏ ra khỏi bộ Mix trước khi bắt đầu một tuyển tập Mix",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Bấm giữ một nghệ sĩ để thêm hoặc loại bỏ ra khỏi bộ Mix trước khi bắt đầu một tuyển tập Mix",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "music": "Nhạc",
@@ -131,8 +131,8 @@
   },
   "errorScreenError": "Đã có lỗi xảy ra khi lấy danh sách lỗi! Tại thời điểm này, có lẽ bạn nên tạo một Issue trên trang GitHub và xoá dữ liệu ứng dụng",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "Không thể tải bản nhạc từ ID tải xuống",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Không thể tải bản nhạc từ ID tải xuống",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Lỗi",
   "@error": {},
   "discNumber": "Đĩa {number}",
@@ -145,8 +145,8 @@
   },
   "playButtonLabel": "Phát",
   "@playButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -187,8 +187,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Đăng xuất",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Các bài hát được tải xuống sẽ không bị xoá",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Các bài hát được tải xuống sẽ không bị xoá",
+  "@downloadedTracksWillNotBeDeleted": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin dùng codec AAC để chuyển đổi",
   "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Bật chuyển đổi",
@@ -213,10 +213,10 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "Để thông báo được gạt đi khi dừng. Ngoài ra cho phép Android tắt dịch vụ khi dừng.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Trộn tất cả bài hát",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Số lượng bài hát được tải khi dùng nút trộn tất cả bài hát.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Trộn tất cả bài hát",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Số lượng bài hát được tải khi dùng nút trộn tất cả bài hát.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "Loại xem cho màn hình nhạc",
   "@viewTypeSubtitle": {},
   "list": "Danh sách",
@@ -258,8 +258,8 @@
   },
   "shuffleButtonLabel": "Xáo trộn",
   "@shuffleButtonLabel": {},
-  "startMixNoSongsAlbum": "Bấm giữ một Album để thêm hoặc loại bỏ ra khỏi bộ Mix trước khi bắt đầu một tuyển tập Mix",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Bấm giữ một Album để thêm hoặc loại bỏ ra khỏi bộ Mix trước khi bắt đầu một tuyển tập Mix",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "downloadsQueued": "Tải xuống đã chuẩn bị, đang tải tệp",
@@ -341,10 +341,10 @@
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "Có hay không dùng ảnh bìa mờ làm nền trình phát trên phần phát nhạc.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Ẩn tên ca sĩ bài hát nếu giống ca sĩ album",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Có hay không hiện nghệ sĩ bài hát trên phần album nếu không khác ca sĩ album.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Ẩn tên ca sĩ bài hát nếu giống ca sĩ album",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Có hay không hiện nghệ sĩ bài hát trên phần album nếu không khác ca sĩ album.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "Tắt cử chỉ",
   "@disableGesture": {},
   "disableGestureSubtitle": "Có nên tắt cử chỉ.",
@@ -530,8 +530,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "Không có hoạt động tải xuống.",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}}, {downloads} Đã tải xuống",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}}, {downloads} Đã tải xuống",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -589,11 +589,11 @@
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} bản nhạc} other{{songCount} bản nhạc}}, {imageCount,plural,=1{{imageCount} hình ảnh} other{{imageCount} hình ảnh}}\n{syncCount,plural,=1{{syncCount} đồng bộ hóa nút} other{{syncCount} đồng bộ hóa nút}}{repairing, plural, =0{} other{\nHiện đang sửa chữa}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} bản nhạc} other{{trackCount} bản nhạc}}, {imageCount,plural,=1{{imageCount} hình ảnh} other{{imageCount} hình ảnh}}\n{syncCount,plural,=1{{syncCount} đồng bộ hóa nút} other{{syncCount} đồng bộ hóa nút}}{repairing, plural, =0{} other{\nHiện đang sửa chữa}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -607,8 +607,8 @@
       }
     }
   },
-  "showArtistsTopSongsSubtitle": "Có hiển thị top 5 bài hát được nghe nhiều nhất của một nghệ sĩ hay không.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "Có hiển thị top 5 bài hát được nghe nhiều nhất của một nghệ sĩ hay không.",
+  "@showArtistsTopTracksSubtitle": {},
   "customizationSettingsTitle": "Tùy chỉnh",
   "@customizationSettingsTitle": {
     "description": "Title for the customization settings screen"
@@ -635,18 +635,18 @@
       }
     }
   },
-  "showArtistsTopSongs": "Hiển thị các bản nhạc hàng đầu trong chế độ xem nghệ sĩ",
-  "@showArtistsTopSongs": {},
-  "startMixNoSongsGenre": "Nhấn và giữ một thể loại để thêm hoặc xóa nó khỏi trình tạo hỗn hợp trước khi bắt đầu kết hợp",
-  "@startMixNoSongsGenre": {
+  "showArtistsTopTracks": "Hiển thị các bản nhạc hàng đầu trong chế độ xem nghệ sĩ",
+  "@showArtistsTopTracks": {},
+  "startMixNoTracksGenre": "Nhấn và giữ một thể loại để thêm hoặc xóa nó khỏi trình tạo hỗn hợp trước khi bắt đầu kết hợp",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "syncDownloadedPlaylists": "Đồng bộ danh sách phát đã tải xuống",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Hiển thị thanh cuộn nhanh",
   "@showFastScroller": {},
-  "offlineSongCountArtist": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}} Đã tải xuống",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Bài hát} other{{count} Bài hát}} Đã tải xuống",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"

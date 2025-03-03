@@ -21,8 +21,8 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "songs": "Sange",
-  "@songs": {},
+  "tracks": "Sange",
+  "@tracks": {},
   "artists": "Kunstnere",
   "@artists": {},
   "genres": "Genre",
@@ -103,8 +103,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Fejlede under hentning af sang fra overførelse ID",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Fejlede under hentning af sang fra overførelse ID",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Fejl",
   "@error": {},
   "discNumber": "Disk {number}",
@@ -151,8 +151,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Log af",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Overførte sange vil ikke blive slettet",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Overførte sange vil ikke blive slettet",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Er du sikker?",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin bruger AAC ved omkodning",
@@ -179,8 +179,8 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "Tillader notifikationer bliver strøget væk, når afspilning er sat på pause. Dette tillader også Android, at afbryde servicen når den er på pause.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Bland alle sange antal",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Bland alle sange antal",
+  "@shuffleAllTrackCount": {},
   "viewType": "Visning tilstand",
   "@viewType": {},
   "viewTypeSubtitle": "Visningstype for musik skærmen",
@@ -209,8 +209,8 @@
   "@showTextOnGridViewSubtitle": {},
   "useCoverAsBackground": "Vis sløret cover som afspiller baggrund",
   "@useCoverAsBackground": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Vælg om sangens kunstner skal vises på albummet, hvis den ikke er forskellig fra albummets kunstner.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Vælg om sangens kunstner skal vises på albummet, hvis den ikke er forskellig fra albummets kunstner.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "Deaktivér bevægelser",
   "@disableGesture": {},
   "disableGestureSubtitle": "Vælg om bevægelser skal deaktiveres.",
@@ -315,12 +315,12 @@
   "@albums": {},
   "playlists": "Afspilningslister",
   "@playlists": {},
-  "startMixNoSongsArtist": "Tryk (lang tid) på en kunstner for at tilføje eller fjerne den fra blandingen før du starter en blanding",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Tryk (lang tid) på en kunstner for at tilføje eller fjerne den fra blandingen før du starter en blanding",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Tryk (lang tid) på et album for at tilføje eller fjerne det fra blandingen for du starter en blanding",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Tryk (lang tid) på et album for at tilføje eller fjerne det fra blandingen for du starter en blanding",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "runtime": "Spilletid",
@@ -346,8 +346,8 @@
   "@shuffleButtonLabel": {},
   "errorScreenError": "Der opstod en fejl under hentningen af listen med fejl! På dette tidspunkt, bedes du oprette en fejl på Github og slette appens data",
   "@errorScreenError": {},
-  "songCount": "{count,plural,=1{{count} Sang} other{{count} Sange}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Sang} other{{count} Sange}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -374,10 +374,10 @@
   "@noArtist": {},
   "unknownArtist": "Ukendt kunstner",
   "@unknownArtist": {},
-  "shuffleAllSongCountSubtitle": "Mængde af sange der skal indlæses, når bland alle sange knappen bruges.",
-  "@shuffleAllSongCountSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Skjul sang kunstner, hvis det er den samme som albummets kunstner",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "shuffleAllTrackCountSubtitle": "Mængde af sange der skal indlæses, når bland alle sange knappen bruges.",
+  "@shuffleAllTrackCountSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Skjul sang kunstner, hvis det er den samme som albummets kunstner",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "gridCrossAxisCount": "{value} Gitter tværakse antal",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",

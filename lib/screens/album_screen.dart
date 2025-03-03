@@ -52,8 +52,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 // display list and a queue-able list inside AlbumScreenContent to deal
                 // with multi-disc albums, so creating that distinction here seems fine.
                 albumScreenContentFuture ??= Future.wait([
-                  downloadsService.getCollectionSongs(parent, playable: false),
-                  downloadsService.getCollectionSongs(parent, playable: true)
+                  downloadsService.getCollectionTracks(parent, playable: false),
+                  downloadsService.getCollectionTracks(parent, playable: true)
                 ]);
               } else {
                 if (albumScreenContentFuture == null) {

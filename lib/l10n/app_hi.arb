@@ -71,11 +71,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "चल रहा: {song}",
+  "queueRestoreSubtitle1": "चल रहा: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -112,7 +112,7 @@
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
-  "couldNotLoad": "{source, select, album{album} playlist{प्लेलिस्ट} songMix{ट्रैक मिक्स} artistMix{कलाकार मिक्स} albumMix{एल्बम मिक्स} genreMix{शैली मिक्स} favorites{पसंदीदा} allSongs{सभी ट्रैक} filteredList{ट्रैक} genre{शैली} artist{कलाकार} song{ट्रैक} nextUpAlbum{next up में एल्बम} nextUpPlaylist{next up में प्लेलिस्ट} nextUpArtist{next up में कलाकार} other{}} को लोड नहीं किया जा सका",
+  "couldNotLoad": "{source, select, album{album} playlist{प्लेलिस्ट} trackMix{ट्रैक मिक्स} artistMix{कलाकार मिक्स} albumMix{एल्बम मिक्स} genreMix{शैली मिक्स} favorites{पसंदीदा} allTracks{सभी ट्रैक} filteredList{ट्रैक} genre{शैली} artist{कलाकार} track{ट्रैक} nextUpAlbum{next up में एल्बम} nextUpPlaylist{next up में प्लेलिस्ट} nextUpArtist{next up में कलाकार} other{}} को लोड नहीं किया जा सका",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -657,8 +657,8 @@
   "@usernameHint": {
     "description": "Hint text for the username input field."
   },
-  "songs": "ट्रैक",
-  "@songs": {},
+  "tracks": "ट्रैक",
+  "@tracks": {},
   "music": "संगीत",
   "@music": {},
   "clear": "मिटाएं",
@@ -751,8 +751,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "कोई सक्रिय डाउनलोड नहीं।",
   "@noActiveDownloads": {},
-  "failedToGetSongFromDownloadId": "डाउनलोड आईडी से गाना प्राप्त करने में असफल",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "डाउनलोड आईडी से गाना प्राप्त करने में असफल",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "त्रुटि",
   "@error": {},
   "discNumber": "डिस्क {number}",
@@ -771,16 +771,16 @@
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "प्लेलिस्ट नाम संपादन",
   "@editPlaylistNameTitle": {},
-  "songCount": "{count,plural,=1{{count} ट्रैक} other {{count} ट्रैक}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} ट्रैक} other {{count} ट्रैक}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "offlineSongCount": "{count,plural,=1{{count} ट्रैक} other{{count} ट्रैक}}, {downloads} डाउनलोड किए गए",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} ट्रैक} other{{count} ट्रैक}}, {downloads} डाउनलोड किए गए",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -790,8 +790,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} ट्रैक} other{{count} ट्रैक}} डाउनलोड किए गए",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} ट्रैक} other{{count} ट्रैक}} डाउनलोड किए गए",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -850,10 +850,10 @@
   "@customizationSettingsTitle": {
     "description": "Title for the customization settings screen"
   },
-  "shuffleAllSongCount": "सभी ट्रैक को शफ़ल करने की संख्या",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "सभी ट्रैक शफ़ल करने वाले बटन का उपयोग करते समय लोड किए जाने वाले ट्रैकों की मात्रा।",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "सभी ट्रैक को शफ़ल करने की संख्या",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "सभी ट्रैक शफ़ल करने वाले बटन का उपयोग करते समय लोड किए जाने वाले ट्रैकों की मात्रा।",
+  "@shuffleAllTrackCountSubtitle": {},
   "enterLowPriorityStateOnPause": "रोकने के दौरान Low-Priority State में जाएं",
   "@enterLowPriorityStateOnPause": {},
   "automatic": "ऑटोमैटिक",
@@ -898,16 +898,16 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "एल्बम स्क्रीन पर ट्रैक कलाकारों को दिखाएं या नहीं, यदि वे एल्बम कलाकारों से भिन्न न हों।",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopSongsSubtitle": "किसी कलाकार के सर्वाधिक सुने गए शीर्ष 5 ट्रैक दिखाए जाएं या नहीं।",
-  "@showArtistsTopSongsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "एल्बम स्क्रीन पर ट्रैक कलाकारों को दिखाएं या नहीं, यदि वे एल्बम कलाकारों से भिन्न न हों।",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "किसी कलाकार के सर्वाधिक सुने गए शीर्ष 5 ट्रैक दिखाए जाएं या नहीं।",
+  "@showArtistsTopTracksSubtitle": {},
   "disableGesture": "जेस्चर को बंद करना",
   "@disableGesture": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "यदि एल्बम कलाकारों के समान हो तो ट्रैक के कलाकारों को छिपाएं",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "showArtistsTopSongs": "कलाकार दृश्य में शीर्ष ट्रैक दिखाएं",
-  "@showArtistsTopSongs": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "यदि एल्बम कलाकारों के समान हो तो ट्रैक के कलाकारों को छिपाएं",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "showArtistsTopTracks": "कलाकार दृश्य में शीर्ष ट्रैक दिखाएं",
+  "@showArtistsTopTracks": {},
   "disableGestureSubtitle": "जेस्चर को बंद करें या नहीं।",
   "@disableGestureSubtitle": {},
   "showFastScroller": "फास्ट स्क्रॉलर दिखाएं",
@@ -1094,16 +1094,16 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "startMixNoSongsArtist": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी कलाकार को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी कलाकार को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी एल्बम को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी एल्बम को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "startMixNoSongsGenre": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी शैली को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "मिक्स शुरू करने से पहले मिक्स बिल्डर में किसी शैली को जोड़ने या हटाने के लिए उस पर देर तक दबाएं",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "datePlayed": "चलाए गए तिथि द्वारा",
@@ -1397,7 +1397,7 @@
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
-  "playingFromType": "यहां से चला रहे {source, select, album{एल्बम} playlist{प्लेलिस्ट} songMix{ट्रैक मिक्स} artistMix{कलाकार मिक्स} albumMix{एल्बम मिक्स} genreMix{शैली मिक्स} favorites{पसंदीदा} allSongs{सभी ट्रैक} filteredList{ट्रैक} genre{शैली} artist{कलाकार} song{ट्रैक} nextUpAlbum{Next Up में एल्बम} nextUpPlaylist{Next Up में प्लेलिस्ट} nextUpArtist{Next Up में कलाकार} other{}}",
+  "playingFromType": "यहां से चला रहे {source, select, album{एल्बम} playlist{प्लेलिस्ट} trackMix{ट्रैक मिक्स} artistMix{कलाकार मिक्स} albumMix{एल्बम मिक्स} genreMix{शैली मिक्स} favorites{पसंदीदा} allTracks{सभी ट्रैक} filteredList{ट्रैक} genre{शैली} artist{कलाकार} track{ट्रैक} nextUpAlbum{Next Up में एल्बम} nextUpPlaylist{Next Up में प्लेलिस्ट} nextUpArtist{Next Up में कलाकार} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1414,11 +1414,11 @@
   "@queueRetryMessage": {
     "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} ट्रैक} other{{songCount} ट्रैक}}, {imageCount,plural,=1{{imageCount} छवि} other{{imageCount} छवियां}}\n{syncCount,plural,=1{{syncCount} नोड सिंकिंग} other{{syncCount} नोड सिंकिंग}}{repairing, plural, =0{} other{\nअभी मरम्मत हो रही}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} ट्रैक} other{{trackCount} ट्रैक}}, {imageCount,plural,=1{{imageCount} छवि} other{{imageCount} छवियां}}\n{syncCount,plural,=1{{syncCount} नोड सिंकिंग} other{{syncCount} नोड सिंकिंग}}{repairing, plural, =0{} other{\nअभी मरम्मत हो रही}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -1432,8 +1432,8 @@
       }
     }
   },
-  "downloadedSongsWillNotBeDeleted": "डाउनलोड किए गए ट्रैक को मिटाया नहीं जाएगा",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "डाउनलोड किए गए ट्रैक को मिटाया नहीं जाएगा",
+  "@downloadedTracksWillNotBeDeleted": {},
   "playbackSpeedIncreaseLabel": "प्लेबैक गति बढ़ाएं",
   "@playbackSpeedIncreaseLabel": {
     "description": "Label for the button in the speed menu that increases the playback speed."
@@ -1460,8 +1460,8 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "शीर्ष ट्रैक",
-  "@topSongs": {},
+  "topTracks": "शीर्ष ट्रैक",
+  "@topTracks": {},
   "reportQueueToServerSubtitle": "सक्षम होने पर, फ़िनएम्प वर्तमान कतार को सर्वर पर भेजेगा। वर्तमान में इसका बहुत कम उपयोग है, और इससे नेटवर्क ट्रैफ़िक बढ़ता है।",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
@@ -1483,7 +1483,7 @@
   "@volumeNormalizationModeAlbumOnly": {
     "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
   },
-  "itemTypeSubtitle": "{itemType, select, album{एल्बम} playlist{प्लेलिस्ट} artist{कलाकार} genre{शैली} song{ट्रैक} library{लाइब्रेरी} unknown{आइटम} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{एल्बम} playlist{प्लेलिस्ट} artist{कलाकार} genre{शैली} track{ट्रैक} library{लाइब्रेरी} unknown{आइटम} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {

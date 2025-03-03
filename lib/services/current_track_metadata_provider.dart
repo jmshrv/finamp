@@ -29,7 +29,7 @@ final currentTrackMetadataProvider =
     }
   }
 
-  final currentTrack = ref.watch(currentSongProvider).value;
+  final currentTrack = ref.watch(currentTrackProvider).value;
   if (currentTrack?.baseItem != null) {
     final request = MetadataRequest(
       item: currentTrack!.baseItem!,
@@ -44,5 +44,5 @@ final currentTrackMetadataProvider =
   return const AsyncValue.data(null);
 });
 
-final currentSongProvider = StreamProvider(
+final currentTrackProvider = StreamProvider(
     (_) => GetIt.instance<QueueService>().getCurrentTrackStream());

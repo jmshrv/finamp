@@ -25,8 +25,8 @@
   },
   "startMix": "Starte Mix",
   "@startMix": {},
-  "startMixNoSongsAlbum": "Vor dem Starten eines Mixes lange auf einem Album gedrückt halten, um es zum Mix hinzuzufügen oder zu entfernen",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Vor dem Starten eines Mixes lange auf einem Album gedrückt halten, um es zum Mix hinzuzufügen oder zu entfernen",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "clear": "Entfernen",
@@ -39,8 +39,8 @@
   "@next": {},
   "logs": "Logs",
   "@logs": {},
-  "startMixNoSongsArtist": "Vor dem Starten eines Mixes lange auf einem Künstler gedrückt halten, um ihn zum Mix hinzuzufügen oder zu entfernen",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Vor dem Starten eines Mixes lange auf einem Künstler gedrückt halten, um ihn zum Mix hinzuzufügen oder zu entfernen",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "unknownName": "Unbekannter Name",
@@ -51,8 +51,8 @@
   "@genres": {},
   "playlists": "Playlists",
   "@playlists": {},
-  "songs": "Tracks",
-  "@songs": {},
+  "tracks": "Tracks",
+  "@tracks": {},
   "favourites": "Favoriten",
   "@favourites": {},
   "finamp": "Finamp",
@@ -109,8 +109,8 @@
   "@removeFavourite": {},
   "unknownArtist": "Unbekannter Künstler",
   "@unknownArtist": {},
-  "downloadedSongsWillNotBeDeleted": "Heruntergeladene Titel werden nicht gelöscht",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Heruntergeladene Titel werden nicht gelöscht",
+  "@downloadedTracksWillNotBeDeleted": {},
   "favourite": "Favorit",
   "@favourite": {},
   "name": "Name",
@@ -195,8 +195,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Track konnte nicht über die Download-ID abgerufen werden",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Track konnte nicht über die Download-ID abgerufen werden",
+  "@failedToGetTrackFromDownloadId": {},
   "playButtonLabel": "Wiedergabe",
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Zufällig",
@@ -241,10 +241,10 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "Niedrige-Priorität-Modus beim Pausieren aktivieren",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Anzahl zufälliger Tracks",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Die Anzahl der zu ladenden Tracks, wenn der Zufällig-Button benutzt wird.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Anzahl zufälliger Tracks",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Die Anzahl der zu ladenden Tracks, wenn der Zufällig-Button benutzt wird.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Ansichtsart",
   "@viewType": {},
   "viewTypeSubtitle": "Ansichtsart für den Musik-Bildschirm",
@@ -269,12 +269,12 @@
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "Ob verschwommene Cover als Hintergrund in der Wiedergabe-Ansicht benutzt werden sollen.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Verstecke Track-Künstler, falls dieser dem Album-Künstler entspricht",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "showArtistsTopSongs": "Meistgehörte Tracks von Künstlern anzeigen",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Ob die meistgehörten Tracks eines Künstlers angezeigt werden sollen.",
-  "@showArtistsTopSongsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Verstecke Track-Künstler, falls dieser dem Album-Künstler entspricht",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "showArtistsTopTracks": "Meistgehörte Tracks von Künstlern anzeigen",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Ob die meistgehörten Tracks eines Künstlers angezeigt werden sollen.",
+  "@showArtistsTopTracksSubtitle": {},
   "theme": "Thema",
   "@theme": {},
   "system": "System",
@@ -340,8 +340,8 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -372,8 +372,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Ob Titel-Künstler in der Albenansicht angezeigt werden sollen, falls sie sich nicht von den Album-Künstlern unterscheiden.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Ob Titel-Künstler in der Albenansicht angezeigt werden sollen, falls sie sich nicht von den Album-Künstlern unterscheiden.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "sleepTimerTooltip": "Schlaf-Timer",
   "@sleepTimerTooltip": {},
   "addToPlaylistTooltip": "Zur Playlist hinzufügen",
@@ -428,11 +428,11 @@
   "@removeFromPlaylistTitle": {},
   "removedFromPlaylist": "Aus der Playlist entfernt.",
   "@removedFromPlaylist": {},
-  "topSongs": "Top Tracks",
-  "@topSongs": {},
+  "topTracks": "Top Tracks",
+  "@topTracks": {},
   "shuffleAlbums": "Alben zufällig wiedergeben",
   "@shuffleAlbums": {},
-  "couldNotLoad": "Laden {source, select, album{des Albums} playlist{der Wiedergabeliste} songMix{des Titelmixes} artistMix{des Künstlermixes} albumMix{des Albummixes} favorites{der Favoriten} allSongs{aller Titel} filteredList{der Tracks} genre{des Genre} artist{des Künstlers} nextUpAlbum{des Album in \\\"Als Nächstes\\\"} nextUpPlaylist{der Playlist in \\\"Als Nächstes\\\"} nextUpArtist{des Künstlers in \\\"Als Nächstes\\\"} other{}} fehlgeschlagen",
+  "couldNotLoad": "Laden {source, select, album{des Albums} playlist{der Wiedergabeliste} trackMix{des Titelmixes} artistMix{des Künstlermixes} albumMix{des Albummixes} favorites{der Favoriten} allTracks{aller Titel} filteredList{der Tracks} genre{des Genre} artist{des Künstlers} nextUpAlbum{des Album in \\\"Als Nächstes\\\"} nextUpPlaylist{der Playlist in \\\"Als Nächstes\\\"} nextUpArtist{des Künstlers in \\\"Als Nächstes\\\"} other{}} fehlgeschlagen",
   "@couldNotLoad": {},
   "bufferDurationSubtitle": "Die maximale Pufferdauer in Sekunden. Neustart erforderlich.",
   "@bufferDurationSubtitle": {},
@@ -586,8 +586,8 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "offlineSongCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}, {downloads} heruntergeladen",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}, {downloads} heruntergeladen",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -597,8 +597,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} heruntergeladen",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} heruntergeladen",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -635,8 +635,8 @@
     },
     "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
   },
-  "startMixNoSongsGenre": "Drücke lange auf ein Genre, um es vor dem Start eines Mixes hinzuzufügen oder aus dem Mix zu entfernen",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Drücke lange auf ein Genre, um es vor dem Start eines Mixes hinzuzufügen oder aus dem Mix zu entfernen",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "codec": "Codec",
@@ -849,11 +849,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "Wiedergabe: {song}",
+  "queueRestoreSubtitle1": "Wiedergabe: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1441,11 +1441,11 @@
       }
     }
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} Track} other{{songCount} Tracks}}, {imageCount,plural,=1{{imageCount} Bild} other{{imageCount} Bilder}}\n{syncCount,plural,=1{{syncCount} synchronisiert} other{{syncCount} synchronisieren}}{repairing, plural, =0{} other{\nreparieren}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} Track} other{{trackCount} Tracks}}, {imageCount,plural,=1{{imageCount} Bild} other{{imageCount} Bilder}}\n{syncCount,plural,=1{{syncCount} synchronisiert} other{{syncCount} synchronisieren}}{repairing, plural, =0{} other{\nreparieren}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -1486,7 +1486,7 @@
       }
     }
   },
-  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} songMix{Song Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allSongs{allen Tracks} filteredList{Tracks} genre{Genre} artist{Künstler} song{Track} nextUpAlbum{Album in \"Als Nächstes\"} nextUpPlaylist{Playlist in \"Als Nächstes\"} nextUpArtist{Artist in \"Als Nächstes\"} other{}}",
+  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allTracks{allen Tracks} filteredList{Tracks} genre{Genre} artist{Künstler} track{Track} nextUpAlbum{Album in \"Als Nächstes\"} nextUpPlaylist{Playlist in \"Als Nächstes\"} nextUpArtist{Artist in \"Als Nächstes\"} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1696,7 +1696,7 @@
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "lyricsFontSizeSubtitle": "Legt die Schriftgröße von Songtexten in der Songtext-Ansicht fest.",
+  "lyricsFontSizeSubtitle": "Legt die Schriftgröße von Texten in der Songtext-Ansicht fest.",
   "@lyricsFontSizeSubtitle": {
     "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
   },
@@ -1724,7 +1724,7 @@
   "@startInstantMixForIndividualTracksSwitchTitle": {
     "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Künstler} genre{Genre} song{Track} library{Bibliothek} unknown{Item} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Künstler} genre{Genre} track{Track} library{Bibliothek} unknown{Item} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1831,7 +1831,7 @@
   "@marqueeOrTruncateButton": {},
   "cacheLibraryImagesSettings": "Cache derzeitige Bibliotheks-Bilder",
   "@cacheLibraryImagesSettings": {},
-  "lyricsAlignmentSubtitle": "Legt die Ausrichtung von Songexten in der Songtext-Ansicht fest.",
+  "lyricsAlignmentSubtitle": "Legt die Ausrichtung von Trackexten in der Songtext-Ansicht fest.",
   "@lyricsAlignmentSubtitle": {
     "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
   },
@@ -1847,7 +1847,7 @@
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
   },
-  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Künstler} genre{Genre} song{Track} library{Bibliothek} other{Item}} wurde {deviceType, select, device{vom Gerät} server{vom Server} other{unknown}} gelöscht",
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Künstler} genre{Genre} track{Track} library{Bibliothek} other{Item}} wurde {deviceType, select, device{vom Gerät} server{vom Server} other{unknown}} gelöscht",
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
@@ -1857,7 +1857,7 @@
   },
   "largeDownloadWarning": "Warnung: Du bist dabei, {count} Tracks herunterzuladen.",
   "@largeDownloadWarning": {
-    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
     "placeholders": {
       "count": {
         "type": "int"
@@ -1885,7 +1885,7 @@
       }
     }
   },
-  "deleteFromTargetDialogText": "Du bist dabei, {itemType, select, album{das Album} playlist{die Playlist} artist{den Künstler} genre{das Genre} song{den Track} library{die Bibliothek} other{das Item}} {device, select, device{von diesem Gerät zu löschen} server{von der Bibliothek und dem Dateisystem des Servers zu löschen.{deleteType, select, canDelete{ Das Item wird dadurch auch von diesem Gerät gelöscht werden.} cantDelete{ Das Item wird bis zur nächsten Synchronisierung auf diesem Gerät bleiben.} notDownloaded{} other{}}\nDiese Aktion kann nicht rückgängig gemacht werden} other{}}.",
+  "deleteFromTargetDialogText": "Du bist dabei, {itemType, select, album{das Album} playlist{die Playlist} artist{den Künstler} genre{das Genre} track{den Track} library{die Bibliothek} other{das Item}} {device, select, device{von diesem Gerät zu löschen} server{von der Bibliothek und dem Dateisystem des Servers zu löschen.{deleteType, select, canDelete{ Das Item wird dadurch auch von diesem Gerät gelöscht werden.} cantDelete{ Das Item wird bis zur nächsten Synchronisierung auf diesem Gerät bleiben.} notDownloaded{} other{}}\nDiese Aktion kann nicht rückgängig gemacht werden} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   }

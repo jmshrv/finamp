@@ -27,8 +27,8 @@
   "@artists": {},
   "genres": "Generi",
   "@genres": {},
-  "songs": "Brani",
-  "@songs": {},
+  "tracks": "Brani",
+  "@tracks": {},
   "startMix": "Riproduco Mix",
   "@startMix": {},
   "unknownName": "Nome Sconosciuto",
@@ -91,8 +91,8 @@
   },
   "error": "Errore",
   "@error": {},
-  "failedToGetSongFromDownloadId": "Impossibile ottenere il brano dall'ID di download",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Impossibile ottenere il brano dall'ID di download",
+  "@failedToGetTrackFromDownloadId": {},
   "playButtonLabel": "Riproduci",
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Riproduci casualmente",
@@ -151,8 +151,8 @@
   "@unknownError": {},
   "enterLowPriorityStateOnPause": "Entra nello Stato a Bassa-Priorità quando in Pausa",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Riproduci Casualmente Tutti i Brani Conteggiati",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Riproduci Casualmente Tutti i Brani Conteggiati",
+  "@shuffleAllTrackCount": {},
   "grid": "Griglia",
   "@grid": {},
   "landscape": "Visualizzazione orizzontale",
@@ -187,8 +187,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Nascondi gli artisti del brano se uguali agli artisti dell'album",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Nascondi gli artisti del brano se uguali agli artisti dell'album",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "useCoverAsBackground": "Mostra le copertine sfocate quando il player è in background",
   "@useCoverAsBackground": {},
   "showTextOnGridViewSubtitle": "Mostrare il testo (titolo, artista, etc.) nella Vista a griglia della schermata della musica.",
@@ -277,8 +277,8 @@
   "@albums": {},
   "bitrateSubtitle": "Un bitrate più alto permette di avere una qualità audio più alta al costo di un più alto consumo della connessione dati.",
   "@bitrateSubtitle": {},
-  "shuffleAllSongCountSubtitle": "Numero di brani da mettere in coda quando si usa il tasto per la riproduzione casuale di tutti i brani.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Numero di brani da mettere in coda quando si usa il tasto per la riproduzione casuale di tutti i brani.",
+  "@shuffleAllTrackCountSubtitle": {},
   "errorScreenError": "Si è verificato un errore mentre tentavo di ottenere la lista degli errori! A questo punto probabilmente dovresti aprire una issue su GitHub e cancellare i dati dell'app",
   "@errorScreenError": {},
   "anErrorHasOccured": "Si è verificato un errore.",
@@ -300,8 +300,8 @@
       }
     }
   },
-  "downloadedSongsWillNotBeDeleted": "I brani scaricati non saranno cancellati",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "I brani scaricati non saranno cancellati",
+  "@downloadedTracksWillNotBeDeleted": {},
   "downloads": "Download",
   "@downloads": {},
   "editPlaylistNameTooltip": "Modifica il nome della playlist",
@@ -314,14 +314,14 @@
   "@noItem": {},
   "goToAlbum": "Vai all'Album",
   "@goToAlbum": {},
-  "startMixNoSongsAlbum": "Effettua una pressione prolungata su un album per aggiungerlo o rimuoverlo dal mix builder prima di far partire un mix",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Effettua una pressione prolungata su un album per aggiungerlo o rimuoverlo dal mix builder prima di far partire un mix",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "applicationLegalese": "Concesso in licenza con \"Mozilla Public License 2.0\".\nCodice sorgente disponibile su: {sourceCodeLink}.",
   "@applicationLegalese": {},
-  "startMixNoSongsArtist": "Effettua una pressione prolungata su un artista per aggiungerlo o rimuoverlo dal mix builder prima di far partire un mix",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Effettua una pressione prolungata su un artista per aggiungerlo o rimuoverlo dal mix builder prima di far partire un mix",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "noAlbum": "Nessun Album",
@@ -342,8 +342,8 @@
   "@startingInstantMix": {},
   "enterLowPriorityStateOnPauseSubtitle": "Permette di scartare una notifica quando la riproduzione è in pausa. Inoltre consente ad Android di terminare il servizio quando la riproduzione è in pausa.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Se mostrare gli artisti del brano nella visualizzazione album nel caso coincidano con gli artisti dell'album.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Se mostrare gli artisti del brano nella visualizzazione album nel caso coincidano con gli artisti dell'album.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "dlFailed": "{count} falliti",
   "@dlFailed": {
     "placeholders": {
@@ -380,8 +380,8 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} Brano} other{{count} Brani}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Brano} other{{count} Brani}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -492,11 +492,11 @@
   "@usernameValidationMissingUsername": {
     "description": "Error message that shows when the user submits a login without a username"
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} brano} other{{songCount} brani}}, {imageCount,plural,=1{{imageCount} immagine} other{{imageCount} immagini}}\n{syncCount,plural,=1{{syncCount} nodo si sta sincronizzando} other{{syncCount} nodi si stanno sincronizzando}}{repairing, plural, =0{} other{\nAl momento si sta riparando}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} brano} other{{trackCount} brani}}, {imageCount,plural,=1{{imageCount} immagine} other{{imageCount} immagini}}\n{syncCount,plural,=1{{syncCount} nodo si sta sincronizzando} other{{syncCount} nodi si stanno sincronizzando}}{repairing, plural, =0{} other{\nAl momento si sta riparando}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -610,8 +610,8 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "startMixNoSongsGenre": "Premi a lungo su un genere per aggiungerlo o rimuoverlo dal mix builder prima di iniziare un mix",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Premi a lungo su un genere per aggiungerlo o rimuoverlo dal mix builder prima di iniziare un mix",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "Titolo",
@@ -622,8 +622,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "Nessun download attivo.",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} Brano} other{{count} Brani}}, {downloads} Scaricati",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Brano} other{{count} Brani}}, {downloads} Scaricati",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -637,8 +637,8 @@
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Brano} other{{count} Brani}} Scaricati",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Brano} other{{count} Brani}} Scaricati",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -680,7 +680,7 @@
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
-  "couldNotLoad": "Non posso caricare {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "Non posso caricare {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -896,10 +896,10 @@
   "@speed": {
     "description": "Used as a placeholder in the input of the playback speed menu"
   },
-  "showArtistsTopSongs": "Mostra i brani top nella visualizzazione artista",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Se mostrare o no i 5 brani più ascoltati di un artista.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracks": "Mostra i brani top nella visualizzazione artista",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Se mostrare o no i 5 brani più ascoltati di un artista.",
+  "@showArtistsTopTracksSubtitle": {},
   "timeFractionTooltip": "{currentTime} di {totalTime}",
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
@@ -1017,7 +1017,7 @@
   "@playbackSpeedIncreaseLabel": {
     "description": "Label for the button in the speed menu that increases the playback speed."
   },
-  "playingFromType": "Riproduco da {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Riproduco da {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1156,7 +1156,7 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artista} genre{Genere} song{Brano} library{Libreria} unknown{Elemento} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artista} genre{Genere} track{Brano} library{Libreria} unknown{Elemento} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1328,11 +1328,11 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "queueRestoreSubtitle1": "In riproduzione: {song}",
+  "queueRestoreSubtitle1": "In riproduzione: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1357,8 +1357,8 @@
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "topSongs": "Brani più ascoltati",
-  "@topSongs": {},
+  "topTracks": "Brani più ascoltati",
+  "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Album}}",
   "@albumCount": {
     "placeholders": {

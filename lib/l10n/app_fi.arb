@@ -49,8 +49,8 @@
   },
   "unknownName": "Tuntematon Nimi",
   "@unknownName": {},
-  "songs": "Kappaleet",
-  "@songs": {},
+  "tracks": "Kappaleet",
+  "@tracks": {},
   "albums": "Albumit",
   "@albums": {},
   "artists": "Artistit",
@@ -157,8 +157,8 @@
   "@areYouSure": {},
   "logOut": "Kirjaudu ulos",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Ladattuja kappaleita ei poisteta",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Ladattuja kappaleita ei poisteta",
+  "@downloadedTracksWillNotBeDeleted": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin käyttää AAC:tä transkoodaukseen",
   "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Ota transkoodaus käyttöön",
@@ -277,8 +277,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Piilota kappaleen artistit, jos samat kuin albumin artistit",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Piilota kappaleen artistit, jos samat kuin albumin artistit",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "insertedIntoQueue": "Asetettu jonoon.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
@@ -302,8 +302,8 @@
   "@directoryMustBeEmpty": {},
   "selectDirectory": "Valitse hakemisto",
   "@selectDirectory": {},
-  "songCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaleita}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaleita}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -358,13 +358,13 @@
   "@swipeInsertQueueNext": {},
   "startMix": "Aloita sekoitus",
   "@startMix": {},
-  "failedToGetSongFromDownloadId": "Kappaleen nouto lataus ID:stä epäonnistui",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Kappaleen nouto lataus ID:stä epäonnistui",
+  "@failedToGetTrackFromDownloadId": {},
   "stackTrace": "Pinon jäljitys",
   "@stackTrace": {},
   "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä. Lähdekoodi saatavilla osoitteessa:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia käyttöoikeusongelmien vuoksi. Mietin tapoja korjata tämä, mutta toistaiseksi en suosittele niiden käyttöä.",
+  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia käyttöoikeutrackelmien vuoksi. Mietin tapoja korjata tämä, mutta toistaiseksi en suosittele niiden käyttöä.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
@@ -382,8 +382,8 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "startMixNoSongsAlbum": "Paina albumia pitkään lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Paina albumia pitkään lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "downloadedMissingImages": "{count,plural, =0{Puuttuvia kuvia ei löytynyt} =1{Ladattu {count} puuttuvaa kuvaa} other{ladattu {count} puuttuvia kuvia}}",
@@ -399,10 +399,10 @@
   "@errorScreenError": {},
   "enterLowPriorityStateOnPause": "Siirtyminen matalan prioriteetin tilaan tauon aikana",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Kaikkien sekoitettujen kappaleiden määrä",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Ladattavien kappaleiden määrä, kun käytät sekoita kaikki kappaleet painiketta.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Kaikkien sekoitettujen kappaleiden määrä",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Ladattavien kappaleiden määrä, kun käytät sekoita kaikki kappaleet painiketta.",
+  "@shuffleAllTrackCountSubtitle": {},
   "gridCrossAxisCount": "{value} Ruudukon poikittaisakselien lukumäärä",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -425,8 +425,8 @@
   },
   "showTextOnGridViewSubtitle": "Näytetäänkö teksti (nimi, artisti jne.) ruudukon musiikkinäytöllä vai ei.",
   "@showTextOnGridViewSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Näytetäänkö kappaleiden artistit albumin näytöllä, jos ne eivät poikkea albumin artisteista.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Näytetäänkö kappaleiden artistit albumin näytöllä, jos ne eivät poikkea albumin artisteista.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "showFastScroller": "Näytä nopea vieritin",
   "@showFastScroller": {},
   "responseError401": "{error} Tilakoodi {statusCode}. Tämä tarkoittaa todennäköisesti, että olet käyttänyt väärää käyttäjätunnusta/salasanaa tai että sovellus ei ole enää kirjautuneena sisään.",
@@ -452,8 +452,8 @@
   },
   "swipeInsertQueueNextSubtitle": "Mahdollistaa kappaleen lisäämisen jonon seuraavaksi kohteeksi, kun sitä pyyhkäistään kappaleiden luettelossa sen sijaan, että se liitettäisiin loppuun.",
   "@swipeInsertQueueNextSubtitle": {},
-  "startMixNoSongsArtist": "Paina pitkään artistia lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Paina pitkään artistia lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "viewTypeSubtitle": "Musiikkinäytön näkymätyyppi",

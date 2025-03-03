@@ -1,8 +1,8 @@
 {
   "password": "Lozinka",
   "@password": {},
-  "startMixNoSongsAlbum": "Dugo pritisnite album da biste ga dodali ili uklonili iz kreatora miksa pre nego što započnete miks",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Dugo pritisnite album da biste ga dodali ili uklonili iz kreatora miksa pre nego što započnete miks",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "aboutReleaseNotes": "Pročitajte najnovije beleške o izdanju:",
@@ -13,11 +13,11 @@
   "@loginFlowServerSelectionHeading": {
     "description": "Heading for the server selection step during the login flow."
   },
-  "downloadedCountUnified": "{songCount,plural,=1{1 pesma} other{{songCount} pesme}}, {imageCount,plural,=1{1 slika} other{{imageCount} slike}}\n{syncCount,plural,=1{1 čvor se sinhronizuje} other{{syncCount} čvora se sinhronizuju}}{repairing, plural, =0{} other\n{Trenutno se popravlja}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{1 pesma} other{{trackCount} pesme}}, {imageCount,plural,=1{1 slika} other{{imageCount} slike}}\n{syncCount,plural,=1{1 čvor se sinhronizuje} other{{syncCount} čvora se sinhronizuju}}{repairing, plural, =0{} other\n{Trenutno se popravlja}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -159,16 +159,16 @@
   },
   "unknownName": "Nepoznato Ime",
   "@unknownName": {},
-  "songs": "Numere",
-  "@songs": {},
+  "tracks": "Numere",
+  "@tracks": {},
   "albums": "Albumi",
   "@albums": {},
   "artists": "Umetnici",
   "@artists": {},
   "startMix": "Započni Mix",
   "@startMix": {},
-  "startMixNoSongsArtist": "Dugo pritisnite izvođača da biste ga dodali ili uklonili iz kreatora miksa pre nego što započnete miks",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Dugo pritisnite izvođača da biste ga dodali ili uklonili iz kreatora miksa pre nego što započnete miks",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "music": "Muzika",
@@ -312,8 +312,8 @@
   },
   "playlists": "Plejliste",
   "@playlists": {},
-  "startMixNoSongsGenre": "Dugo pritisnite žanr da biste ga dodali ili uklonili iz kreatora miksa pre nego što započnete miks",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Dugo pritisnite žanr da biste ga dodali ili uklonili iz kreatora miksa pre nego što započnete miks",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   }
 }

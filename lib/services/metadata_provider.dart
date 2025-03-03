@@ -40,7 +40,7 @@ class MetadataRequest {
       item.id, queueItem?.id, includeLyrics, checkIfSpeedControlNeeded);
 }
 
-/// A storage container for metadata about a song.  The codec information will reflect
+/// A storage container for metadata about a track.  The codec information will reflect
 /// the downloaded file if appropriate, even for transcoded downloads.  Online
 /// transcoding will not be reflected.
 class MetadataProvider {
@@ -79,7 +79,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
   MediaSourceInfo? playbackInfo;
   MediaSourceInfo? localPlaybackInfo;
 
-  final downloadStub = await downloadsService.getSongInfo(id: request.item.id);
+  final downloadStub = await downloadsService.getTrackInfo(id: request.item.id);
   if (downloadStub != null) {
     final downloadItem =
         await ref.watch(downloadsService.itemProvider(downloadStub).future);

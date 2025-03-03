@@ -29,8 +29,8 @@
   "@usernameHint": {
     "description": "Hint text for the username input field."
   },
-  "startMixNoSongsArtist": "روی یک هنرمند لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "روی یک هنرمند لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "serverUrlInfoButtonTooltip": "راهنمای آدرس سرور",
@@ -169,8 +169,8 @@
   "@next": {},
   "unknownName": "نام ناشناخته",
   "@unknownName": {},
-  "songs": "قطعه‌ها",
-  "@songs": {},
+  "tracks": "قطعه‌ها",
+  "@tracks": {},
   "albums": "آلبوم‌ها",
   "@albums": {},
   "artists": "هنرمندان",
@@ -251,8 +251,8 @@
   "@layoutAndTheme": {},
   "logOut": "خروج",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "قطعه‌های بارگیری شده پاک نخواهند شد",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "قطعه‌های بارگیری شده پاک نخواهند شد",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "آیا مطمئن هستید؟",
   "@areYouSure": {},
   "transcoding": "رمزگردانی (transcoding)",
@@ -279,8 +279,8 @@
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "پوشه باید خالی باشد",
   "@directoryMustBeEmpty": {},
-  "shuffleAllSongCount": "بُر زدن همه‌ی تعداد قطعه",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "بُر زدن همه‌ی تعداد قطعه",
+  "@shuffleAllTrackCount": {},
   "viewType": "نوع نما",
   "@viewType": {},
   "viewTypeSubtitle": "نوع نما برای صفحه‌ی آهنگ",
@@ -329,8 +329,8 @@
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
-  "startMixNoSongsGenre": "روی یک ژانر لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "روی یک ژانر لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "budget": "بودجه",
@@ -339,8 +339,8 @@
   "@updateButtonLabel": {},
   "downloadLocations": "مکان‌های بارگیری",
   "@downloadLocations": {},
-  "startMixNoSongsAlbum": "روی یک آلبوم لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "روی یک آلبوم لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "dateAdded": "تاریخ اضافه شدن",
@@ -384,8 +384,8 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "در توقف پخش به اعلان اجازه‌ی رد شدن می‌دهد. همچنین به اندروید اجازه می‌دهد تا در توقف پخش به سرویس پایان دهد.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCountSubtitle": "تعداد قطعه‌ها برای بارگذاری زمانی که دکمه‌ی بُر زدن همه‌ی قطعه‌ها استفاده می‌شود.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "تعداد قطعه‌ها برای بارگذاری زمانی که دکمه‌ی بُر زدن همه‌ی قطعه‌ها استفاده می‌شود.",
+  "@shuffleAllTrackCountSubtitle": {},
   "downloadsDeleted": "بارگیری‌ها پاک شدند.",
   "@downloadsDeleted": {},
   "confirmDownloadStarted": "بارگیری آغاز شد",
@@ -414,8 +414,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "هیچ بارگیری‌ای فعال نیست.",
   "@noActiveDownloads": {},
-  "failedToGetSongFromDownloadId": "در گرفتن قطعه از ID بارگیری ناکام ماندیم",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "در گرفتن قطعه از ID بارگیری ناکام ماندیم",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "خطا",
   "@error": {},
   "discNumber": "دیسک {number}",
@@ -426,8 +426,8 @@
       }
     }
   },
-  "offlineSongCount": "{count,plural,=1{{count} قطعه} other{{count} قطعه}}, {downloads} بارگیری شد",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} قطعه} other{{count} قطعه}}, {downloads} بارگیری شد",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -437,16 +437,16 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} قطعه} other{{count} قطعه}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} قطعه} other{{count} قطعه}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} قطعه} other{{count} قطعه}} بارگیری شد",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} قطعه} other{{count} قطعه}} بارگیری شد",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -642,11 +642,11 @@
   "@disableGestureSubtitle": {},
   "anErrorHasOccured": "خطایی رخ داد.",
   "@anErrorHasOccured": {},
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} قطعه} other{{songCount} قطعه}}, {imageCount,plural,=1{{imageCount} نگاره} other{{imageCount} نگاره}}\n{syncCount,plural,=1{{syncCount} گره در حال همگام شدن} other{{syncCount} گره در حال همگام شدن}}{repairing, plural, =0{} other{\nهم‌اکنون در حال تعمیر}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} قطعه} other{{trackCount} قطعه}}, {imageCount,plural,=1{{imageCount} نگاره} other{{imageCount} نگاره}}\n{syncCount,plural,=1{{syncCount} گره در حال همگام شدن} other{{syncCount} گره در حال همگام شدن}}{repairing, plural, =0{} other{\nهم‌اکنون در حال تعمیر}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -714,8 +714,8 @@
       }
     }
   },
-  "showArtistsTopSongs": "نشان دادن قطعه‌های برتر در نمایش هنرمند",
-  "@showArtistsTopSongs": {},
+  "showArtistsTopTracks": "نشان دادن قطعه‌های برتر در نمایش هنرمند",
+  "@showArtistsTopTracks": {},
   "gridCrossAxisCount": "{value} تعداد محور افقی جدول",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -738,14 +738,14 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "پنهان کردن هنرمندان قطعه اگر با هنرمندان آلبوم یکی بودند",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "اینکه هنرمندان قطعه روی صفحه‌ی آلبوم اگر با هنرمندان آلبوم تفاوتی نداشتند نمایش داده شوند یا نه.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "پنهان کردن هنرمندان قطعه اگر با هنرمندان آلبوم یکی بودند",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "اینکه هنرمندان قطعه روی صفحه‌ی آلبوم اگر با هنرمندان آلبوم تفاوتی نداشتند نمایش داده شوند یا نه.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "cancelSleepTimer": "لغو زمان‌سنج خواب؟",
   "@cancelSleepTimer": {},
-  "showArtistsTopSongsSubtitle": "اینکه ۵ قطعه‌ی برتر هنرمند نمایش داده شود یا نه.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracksSubtitle": "اینکه ۵ قطعه‌ی برتر هنرمند نمایش داده شود یا نه.",
+  "@showArtistsTopTracksSubtitle": {},
   "removeFromPlaylistNamedTooltip": "حذف از فهرست پخش '{playlistName}'",
   "@removeFromPlaylistNamedTooltip": {
     "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
@@ -945,11 +945,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "در حال پخش: {song}",
+  "queueRestoreSubtitle1": "در حال پخش: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -970,8 +970,8 @@
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "قطعه‌های برتر",
-  "@topSongs": {},
+  "topTracks": "قطعه‌های برتر",
+  "@topTracks": {},
   "shuffleAlbums": "بُر زدن آلبوم‌ها",
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
@@ -1120,7 +1120,7 @@
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
   },
-  "playingFromType": "در حال پخش از {source, select, album{آلبوم} playlist{فهرست پخش} songMix{میکس قطعه} artistMix{میکس هنرمند} albumMix{میکس آلبوم} genreMix{میکس ژانر} favorites{مورد علاقه‌ها} allSongs{همه‌ی قطعه‌ها} filteredList{قطعه‌ها} genre{ژانر} artist{هنرمند} song{قطعه} nextUpAlbum{آلبوم در «مورد بعدی»} nextUpPlaylist{فهرست پخش در «مورد بعدی»} nextUpArtist{هنرمند در «مورد بعدی»} other{}}",
+  "playingFromType": "در حال پخش از {source, select, album{آلبوم} playlist{فهرست پخش} trackMix{میکس قطعه} artistMix{میکس هنرمند} albumMix{میکس آلبوم} genreMix{میکس ژانر} favorites{مورد علاقه‌ها} allTracks{همه‌ی قطعه‌ها} filteredList{قطعه‌ها} genre{ژانر} artist{هنرمند} track{قطعه} nextUpAlbum{آلبوم در «مورد بعدی»} nextUpPlaylist{فهرست پخش در «مورد بعدی»} nextUpArtist{هنرمند در «مورد بعدی»} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1320,7 +1320,7 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{آلبوم} playlist{فهرست پخش} artist{هنرمند} genre{ژانر} song{قطعه} library{کتاب‌خانه} unknown{آیتم} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{آلبوم} playlist{فهرست پخش} artist{هنرمند} genre{ژانر} track{قطعه} library{کتاب‌خانه} unknown{آیتم} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1454,7 +1454,7 @@
   "@volumeNormalizationModeAlbumOnly": {
     "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
   },
-  "couldNotLoad": "{source, select, album{آلبوم} playlist{فهرست پخش} songMix{میکس قطعه} artistMix{میکس هنرمند} albumMix{میکس آلبوم} genreMix{میکس ژانر} favorites{مورد علاقه‌ها} allSongs{همه‌ی قطعه‌ها} filteredList{قطعه‌ها} genre{ژانر} artist{هنرمند} song{قطعه} nextUpAlbum{آلبوم بعدی} nextUpPlaylist{فهرست پخش بعدی} nextUpArtist{هنرمند بعدی} other{}} بارگذاری نشد",
+  "couldNotLoad": "{source, select, album{آلبوم} playlist{فهرست پخش} trackMix{میکس قطعه} artistMix{میکس هنرمند} albumMix{میکس آلبوم} genreMix{میکس ژانر} favorites{مورد علاقه‌ها} allTracks{همه‌ی قطعه‌ها} filteredList{قطعه‌ها} genre{ژانر} artist{هنرمند} track{قطعه} nextUpAlbum{آلبوم بعدی} nextUpPlaylist{فهرست پخش بعدی} nextUpArtist{هنرمند بعدی} other{}} بارگذاری نشد",
   "@couldNotLoad": {
     "placeholders": {
       "source": {

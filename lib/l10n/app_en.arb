@@ -177,8 +177,8 @@
   },
   "unknownName": "Unknown Name",
   "@unknownName": {},
-  "songs": "Tracks",
-  "@songs": {},
+  "tracks": "Tracks",
+  "@tracks": {},
   "albums": "Albums",
   "@albums": {},
   "artists": "Artists",
@@ -189,16 +189,16 @@
   "@playlists": {},
   "startMix": "Start Mix",
   "@startMix": {},
-  "startMixNoSongsArtist": "Long-press an artist to add or remove it from the mix builder before starting a mix",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Long-press an artist to add or remove it from the mix builder before starting a mix",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Long-press an album to add or remove it from the mix builder before starting a mix",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Long-press an album to add or remove it from the mix builder before starting a mix",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "startMixNoSongsGenre": "Long-press an genre to add or remove it from the mix builder before starting a mix",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Long-press an genre to add or remove it from the mix builder before starting a mix",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "music": "Music",
@@ -274,11 +274,11 @@
       }
     }
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} track} other{{songCount} tracks}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} track} other{{trackCount} tracks}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -330,8 +330,26 @@
   "@noActiveDownloads": {},
   "errorScreenError": "An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "Failed to get track from download ID",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Failed to get track from download ID",
+  "@failedToGetTrackFromDownloadId": {},
+  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' from this device?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Delete",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",
@@ -346,16 +364,16 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "offlineSongCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}, {downloads} Downloaded",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}, {downloads} Downloaded",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -365,8 +383,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} Downloaded",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} Downloaded",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -430,8 +448,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Log Out",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Downloaded tracks will not be deleted",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Downloaded tracks will not be deleted",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Are you sure?",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin uses AAC for transcoding",
@@ -464,10 +482,10 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "Lets the notification be swiped away when paused. Also allows Android to kill the service when paused.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Shuffle All Track Count",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Amount of tracks to load when using the shuffle all tracks button.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Shuffle All Track Count",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Amount of tracks to load when using the shuffle all tracks button.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "View Type",
   "@viewType": {},
   "viewTypeSubtitle": "View type for the music screen",
@@ -570,14 +588,14 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Hide track artists if same as album artists",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Whether to show track artists on the album screen if not differing from album artists.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopSongs": "Show top tracks in artist view",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Whether to show the top 5 most listened to tracks of an artist.",
-  "@showArtistsTopSongsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Hide track artists if same as album artists",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Whether to show track artists on the album screen if not differing from album artists.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "showArtistsTopTracks": "Show top tracks in artist view",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Whether to show the top 5 most listened to tracks of an artist.",
+  "@showArtistsTopTracksSubtitle": {},
   "disableGesture": "Disable gestures",
   "@disableGesture": {},
   "disableGestureSubtitle": "Whether to disables gestures.",
@@ -934,7 +952,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1020,11 +1038,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "Playing: {song}",
+  "queueRestoreSubtitle1": "Playing: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1077,8 +1095,8 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "Top Tracks",
-  "@topSongs": {},
+  "topTracks": "Top Tracks",
+  "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {
@@ -1112,7 +1130,7 @@
       }
     }
   },
-  "couldNotLoad": "Couldn''t load {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "Couldn''t load {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1346,7 +1364,7 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1834,7 +1852,7 @@
   },
   "largeDownloadWarning": "Warning: You are about to download {count} tracks.",
   "@largeDownloadWarning": {
-    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
     "placeholders": {
       "count": {
         "type": "int"
@@ -1845,7 +1863,7 @@
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"
   },
-  "downloadSizeWarningCutoffSubtitle": "A warning message will be displayed when downloading more than this many songs at once.",
+  "downloadSizeWarningCutoffSubtitle": "A warning message will be displayed when downloading more than this many tracks at once.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },

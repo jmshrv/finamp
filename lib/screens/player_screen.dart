@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -31,7 +31,7 @@ import '../components/PlayerScreen/player_screen_album_image.dart';
 import '../components/PlayerScreen/player_split_screen_scaffold.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
-import '../components/PlayerScreen/song_name_content.dart';
+import '../components/PlayerScreen/track_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
 import 'blurred_player_screen_background.dart';
 
@@ -63,7 +63,7 @@ class PlayerScreen extends ConsumerWidget {
           return ![
             PlayerScreen.routeName,
             QueueList.routeName,
-            SongMenu.routeName,
+            TrackMenu.routeName,
             playlistActionsMenuRouteName,
             LyricsScreen.routeName,
           ].contains(route.settings.name);
@@ -306,7 +306,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                         child: Column(
                           children: [
                             const Spacer(flex: 4),
-                            SongNameContent(controller),
+                            TrackNameContent(controller),
                             const Spacer(flex: 4),
                             ControlArea(controller),
                             if (controller
@@ -345,7 +345,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SongNameContent(controller),
+                            TrackNameContent(controller),
                             ControlArea(controller),
                             if (controller
                                 .shouldShow(PlayerHideable.bottomActions))

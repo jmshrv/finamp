@@ -65,7 +65,7 @@ class DefaultSettings {
   static const transcodeBitrate = 320000;
   static const androidStopForegroundOnPause = true;
   static const onlyShowFavourites = false;
-  static const songShuffleItemCount = 250;
+  static const trackShuffleItemCount = 250;
   static const volumeNormalizationActive = true;
   // 80% volume in dB. In my testing, most tracks were louder than the default target
   // of -18.0 LUFS, so the gain rarely needed to be increased. -2.0 gives us a bit of
@@ -82,7 +82,7 @@ class DefaultSettings {
   static const sleepTimerSeconds = 1800; // 30 Minutes
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
-  static const showArtistsTopSongs = true;
+  static const showArtistsTopTracks = true;
   static const disableGesture = false;
   static const showFastScroller = true;
   static const bufferDisableSizeConstraints = false;
@@ -161,7 +161,7 @@ class FinampSettings {
     this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
-    this.songShuffleItemCount = DefaultSettings.songShuffleItemCount,
+    this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
     this.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive,
     this.volumeNormalizationIOSBaseGain =
         DefaultSettings.volumeNormalizationIOSBaseGain,
@@ -178,7 +178,7 @@ class FinampSettings {
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
     this.playerScreenCoverMinimumPadding =
         DefaultSettings.playerScreenCoverMinimumPadding,
-    this.showArtistsTopSongs = DefaultSettings.showArtistsTopSongs,
+    this.showArtistsTopTracks = DefaultSettings.showArtistsTopTracks,
     this.bufferDisableSizeConstraints =
         DefaultSettings.bufferDisableSizeConstraints,
     this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
@@ -282,9 +282,9 @@ class FinampSettings {
   @HiveField(8)
   SortOrder sortOrder;
 
-  /// Amount of songs to get when shuffling songs.
-  @HiveField(9, defaultValue: DefaultSettings.songShuffleItemCount)
-  int songShuffleItemCount;
+  /// Amount of tracks to get when shuffling tracks.
+  @HiveField(9, defaultValue: DefaultSettings.trackShuffleItemCount)
+  int trackShuffleItemCount;
 
   /// The content view type used by the music screen.
   @HiveField(10, defaultValue: DefaultSettings.contentViewType)
@@ -430,8 +430,8 @@ class FinampSettings {
           DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
-  @HiveField(54, defaultValue: DefaultSettings.showArtistsTopSongs)
-  bool showArtistsTopSongs = DefaultSettings.showArtistsTopSongs;
+  @HiveField(54, defaultValue: DefaultSettings.showArtistsTopTracks)
+  bool showArtistsTopTracks = DefaultSettings.showArtistsTopTracks;
 
   @HiveField(55, defaultValue: DefaultSettings.showArtistChipImage)
   bool showArtistChipImage;
@@ -439,7 +439,7 @@ class FinampSettings {
   @HiveField(56, defaultValue: DefaultSettings.playbackSpeed)
   double playbackSpeed;
 
-  /// The content playback speed type defining how and whether to display the playback speed controls in the song menu
+  /// The content playback speed type defining how and whether to display the playback speed controls in the track menu
   @HiveField(57, defaultValue: DefaultSettings.playbackSpeedVisibility)
   PlaybackSpeedVisibility playbackSpeedVisibility;
 
@@ -548,9 +548,9 @@ class FinampSettings {
       transcodeCodec: downloadTranscodingCodec,
       bitrate: downloadTranscodeBitrate);
 
-  /// Returns the DownloadLocation that is the internal song dir. This can
+  /// Returns the DownloadLocation that is the internal track dir. This can
   /// technically throw a StateError, but that should never happen™.
-  DownloadLocation get internalSongDir =>
+  DownloadLocation get internalTrackDir =>
       downloadLocationsMap.values.firstWhere((element) =>
           element.baseDirectory ==
           ((Platform.isIOS || Platform.isAndroid)
@@ -601,7 +601,7 @@ class DownloadLocation {
   @HiveField(1)
   String? relativePath;
 
-  /// If true, store songs using their actual names instead of Jellyfin item IDs.
+  /// If true, store tracks using their actual names instead of Jellyfin item IDs.
   @Deprecated("This is here for migration.  Use useHumanReadableNames instead.")
   @HiveField(2)
   bool? legacyUseHumanReadableNames;
@@ -610,7 +610,7 @@ class DownloadLocation {
 
   /// If true, the user can delete this storage location. It's a bit of a hack,
   /// but the only undeletable location is the internal storage dir, so we can
-  /// use this value to get the internal song dir.
+  /// use this value to get the internal track dir.
   @HiveField(3)
   @Deprecated("This is here for migration.  Use baseDirectory instead.")
   bool? legacyDeletable;
@@ -708,15 +708,15 @@ enum TabContentType {
   @HiveField(3)
   genres(BaseItemDtoType.genre),
   @HiveField(4)
-  songs(BaseItemDtoType.song);
+  tracks(BaseItemDtoType.track);
 
   const TabContentType(this.itemType);
 
   final BaseItemDtoType itemType;
 
   /// Human-readable version of the [TabContentType]. For example, toString() on
-  /// [TabContentType.songs], toString() would return "TabContentType.songs".
-  /// With this function, the same input would return "Songs".
+  /// [TabContentType.tracks], toString() would return "TabContentType.tracks".
+  /// With this function, the same input would return "Tracks".
   @override
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
@@ -726,8 +726,8 @@ enum TabContentType {
 
   String _humanReadableName(TabContentType tabContentType) {
     switch (tabContentType) {
-      case TabContentType.songs:
-        return "Songs";
+      case TabContentType.tracks:
+        return "Tracks";
       case TabContentType.albums:
         return "Albums";
       case TabContentType.artists:
@@ -742,8 +742,8 @@ enum TabContentType {
   String _humanReadableLocalisedName(
       TabContentType tabContentType, BuildContext context) {
     switch (tabContentType) {
-      case TabContentType.songs:
-        return AppLocalizations.of(context)!.songs;
+      case TabContentType.tracks:
+        return AppLocalizations.of(context)!.tracks;
       case TabContentType.albums:
         return AppLocalizations.of(context)!.albums;
       case TabContentType.artists:
@@ -758,7 +758,7 @@ enum TabContentType {
   static TabContentType fromItemType(String itemType) {
     switch (itemType) {
       case "Audio":
-        return TabContentType.songs;
+        return TabContentType.tracks;
       case "MusicAlbum":
         return TabContentType.albums;
       case "MusicArtist":
@@ -816,9 +816,9 @@ enum ContentViewType {
   anyMap: true,
 )
 @Deprecated("Hive download schemas are only present to enable migration.")
-class DownloadedSong {
-  DownloadedSong({
-    required this.song,
+class DownloadedTrack {
+  DownloadedTrack({
+    required this.track,
     required this.mediaSourceInfo,
     required this.downloadId,
     required this.requiredBy,
@@ -829,25 +829,25 @@ class DownloadedSong {
     required this.downloadLocationId,
   });
 
-  /// The Jellyfin item for the song
+  /// The Jellyfin item for the track
   @HiveField(0)
-  BaseItemDto song;
+  BaseItemDto track;
 
-  /// The media source info for the song (used to get file format)
+  /// The media source info for the track (used to get file format)
   @HiveField(1)
   MediaSourceInfo mediaSourceInfo;
 
-  /// The download ID of the song (for FlutterDownloader)
+  /// The download ID of the track (for FlutterDownloader)
   @HiveField(2)
   String downloadId;
 
   /// The list of parent item IDs the item is downloaded for. If this is 0, the
-  /// song should be deleted.
+  /// track should be deleted.
   @HiveField(3)
   List<String> requiredBy;
 
-  /// The path of the song file. if [isPathRelative] is true, this will be a
-  /// relative path from the song's DownloadLocation.
+  /// The path of the track file. if [isPathRelative] is true, this will be a
+  /// relative path from the track's DownloadLocation.
   @HiveField(4)
   String path;
 
@@ -870,10 +870,10 @@ class DownloadedSong {
   @HiveField(8)
   String? downloadLocationId;
 
-  factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
-      _$DownloadedSongFromJson(json);
+  factory DownloadedTrack.fromJson(Map<String, dynamic> json) =>
+      _$DownloadedTrackFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
+  Map<String, dynamic> toJson() => _$DownloadedTrackToJson(this);
 }
 
 @HiveType(typeId: 4)
@@ -910,7 +910,7 @@ class DownloadedImage {
   @HiveField(0)
   String id;
 
-  /// The download ID of the song (for FlutterDownloader)
+  /// The download ID of the track (for FlutterDownloader)
   @HiveField(1)
   String downloadId;
 
@@ -975,8 +975,8 @@ class DownloadStub {
             BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
             baseItemType.downloadType == DownloadItemType.collection &&
             baseItemType != BaseItemDtoType.noItem;
-      case DownloadItemType.song:
-        return baseItemType.downloadType == DownloadItemType.song &&
+      case DownloadItemType.track:
+        return baseItemType.downloadType == DownloadItemType.track &&
             baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType;
       case DownloadItemType.image:
@@ -1195,12 +1195,12 @@ class DownloadItem extends DownloadStub {
   @Index()
   DownloadItemState state;
 
-  /// index numbers from backing BaseItemDto.  Used to order songs in albums.
+  /// index numbers from backing BaseItemDto.  Used to order tracks in albums.
   final int? baseIndexNumber;
   final int? parentIndexNumber;
 
   /// List of ordered isarIds of collection children.  This is used to order
-  /// songs in playlists.
+  /// tracks in playlists.
   List<int>? orderedChildren;
 
   /// The path to the downloads file, relative to the download location's currentPath.
@@ -1303,7 +1303,7 @@ class DownloadItem extends DownloadStub {
 /// Enumerated by Isar, do not modify order or delete existing entries.
 enum DownloadItemType {
   collection(true, false),
-  song(true, true),
+  track(true, true),
   image(true, true),
   anchor(false, false),
   finampCollection(false, false);
@@ -1416,19 +1416,20 @@ enum DownloadItemStatus {
 /// Enumerated by Isar, do not modify order or delete existing entries
 enum BaseItemDtoType {
   noItem(null, true, null, null),
-  album("MusicAlbum", false, [song], DownloadItemType.collection),
-  artist("MusicArtist", true, [album, song], DownloadItemType.collection),
-  playlist("Playlist", true, [song], DownloadItemType.collection),
-  genre("MusicGenre", true, [album, song], DownloadItemType.collection),
-  song("Audio", false, [], DownloadItemType.song),
-  library("CollectionFolder", true, [album, song], DownloadItemType.collection),
+  album("MusicAlbum", false, [track], DownloadItemType.collection),
+  artist("MusicArtist", true, [album, track], DownloadItemType.collection),
+  playlist("Playlist", true, [track], DownloadItemType.collection),
+  genre("MusicGenre", true, [album, track], DownloadItemType.collection),
+  track("Audio", false, [], DownloadItemType.track),
+  library(
+      "CollectionFolder", true, [album, track], DownloadItemType.collection),
   folder("Folder", true, null, DownloadItemType.collection),
-  musicVideo("MusicVideo", false, [], DownloadItemType.song),
-  audioBook("AudioBook", false, [], DownloadItemType.song),
-  tvEpisode("Episode", false, [], DownloadItemType.song),
-  video("Video", false, [], DownloadItemType.song),
-  movie("Movie", false, [], DownloadItemType.song),
-  trailer("Trailer", false, [], DownloadItemType.song),
+  musicVideo("MusicVideo", false, [], DownloadItemType.track),
+  audioBook("AudioBook", false, [], DownloadItemType.track),
+  tvEpisode("Episode", false, [], DownloadItemType.track),
+  video("Video", false, [], DownloadItemType.track),
+  movie("Movie", false, [], DownloadItemType.track),
+  trailer("Trailer", false, [], DownloadItemType.track),
   unknown(null, true, null, DownloadItemType.collection);
 
   // All possible types in Jellyfin as of 10.9:
@@ -1450,8 +1451,8 @@ enum BaseItemDtoType {
   bool get expectChangesInChildren =>
       childTypes?.any((x) => x.expectChanges) ?? true;
 
-  // BaseItemDto types that we handle like songs have been handled by returning
-  // the actual song type.  This may be a bad ides?
+  // BaseItemDto types that we handle like tracks have been handled by returning
+  // the actual track type.  This may be a bad idea?
   static BaseItemDtoType fromItem(BaseItemDto item) {
     switch (item.type) {
       case "Audio":
@@ -1461,7 +1462,7 @@ enum BaseItemDtoType {
       case "Video":
       case "Movie":
       case "Trailer":
-        return song;
+        return track;
       case "MusicAlbum":
         return album;
       case "MusicArtist":
@@ -1545,7 +1546,7 @@ enum QueueItemSourceType {
   @HiveField(1)
   playlist,
   @HiveField(2)
-  songMix,
+  trackMix,
   @HiveField(3)
   artistMix,
   @HiveField(4)
@@ -1553,7 +1554,7 @@ enum QueueItemSourceType {
   @HiveField(5)
   favorites,
   @HiveField(6)
-  allSongs,
+  allTracks,
   @HiveField(7)
   filteredList,
   @HiveField(8)
@@ -1579,7 +1580,7 @@ enum QueueItemSourceType {
   @HiveField(18)
   genreMix,
   @HiveField(19)
-  song;
+  track;
 }
 
 @HiveType(typeId: 53)
@@ -1874,7 +1875,7 @@ class FinampStorableQueueInfo {
     return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
   }
 
-  int get songCount {
+  int get trackCount {
     return previousTracks.length +
         ((currentTrack == null) ? 0 : 1) +
         nextUp.length +
@@ -1951,7 +1952,7 @@ enum FinampTranscodingCodec {
   @HiveField(2)
   opus("ogg", false, 2.0),
   @HiveField(3)
-  // Container is null to fall back to real original container per song
+  // Container is null to fall back to real original container per track
   original(null, true, 99999999);
 
   const FinampTranscodingCodec(
@@ -1996,7 +1997,7 @@ class DownloadProfile {
   /// implementation returns the unmodified bitrate if [channels] is 2 or below
   /// (stereo/mono), doubles it if under 6, and triples it otherwise. This
   /// *should* handle the 5.1/7.1 case, apologies if you're reading this after
-  /// wondering why your cinema-grade ∞-channel song sounds terrible when
+  /// wondering why your cinema-grade ∞-channel track sounds terrible when
   /// transcoded.
   int bitrateChannels(int channels) {
     // If stereo/mono, return the base bitrate

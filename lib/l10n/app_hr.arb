@@ -39,8 +39,8 @@
   "@runtime": {},
   "downloadMissingImages": "Preuzmi nedostajuće slike",
   "@downloadMissingImages": {},
-  "failedToGetSongFromDownloadId": "Neuspjelo dohvaćanje pjesme s ID-a preuzimanja",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Neuspjelo dohvaćanje pjesme s ID-a preuzimanja",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Greška",
   "@error": {},
   "playButtonLabel": "Pokreni",
@@ -59,8 +59,8 @@
   "@unknownError": {},
   "pathReturnSlashErrorMessage": "Staze sa znakom „/” se ne mogu koristiti",
   "@pathReturnSlashErrorMessage": {},
-  "shuffleAllSongCount": "Broj svih izmiješanih pjesama",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Broj svih izmiješanih pjesama",
+  "@shuffleAllTrackCount": {},
   "list": "Popis",
   "@list": {},
   "portrait": "Uspravno",
@@ -114,10 +114,10 @@
   "@language": {},
   "unknownName": "Nepoznato ime",
   "@unknownName": {},
-  "songs": "Pjesme",
-  "@songs": {},
-  "startMixNoSongsArtist": "Pritisni dugo na izvođača za dodavanje ili uklanjanje izvođača iz miksera prije pokretanja miksa",
-  "@startMixNoSongsArtist": {
+  "tracks": "Pjesme",
+  "@tracks": {},
+  "startMixNoTracksArtist": "Pritisni dugo na izvođača za dodavanje ili uklanjanje izvođača iz miksera prije pokretanja miksa",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "artists": "Izvođači",
@@ -144,8 +144,8 @@
   "@playCount": {},
   "datePlayed": "Datum reprodukcije",
   "@datePlayed": {},
-  "startMixNoSongsAlbum": "Pritisni dugo na album za dodavanje ili uklanjanje albuma iz miksera prije pokretanja miksa",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Pritisni dugo na album za dodavanje ili uklanjanje albuma iz miksera prije pokretanja miksa",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "shuffleAll": "Izmiješaj sve",
@@ -255,8 +255,8 @@
   "@shuffleButtonLabel": {},
   "addDownloads": "Dodaj preuzimanja",
   "@addDownloads": {},
-  "songCount": "{count,plural,=1{{count} pjesma} few{{count} pjesme} other{{count} pjesama}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} pjesma} few{{count} pjesme} other{{count} pjesama}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -285,8 +285,8 @@
   "@layoutAndTheme": {},
   "customLocationsBuggy": "Prilagođene lokacije su izrazito pune grešaka zbog problema oko dozvola. Razmišljam o načinima da ovo ispravim, ali za sada ne bih preporučio korištenje.",
   "@customLocationsBuggy": {},
-  "shuffleAllSongCountSubtitle": "Broj pjesama koje se učitavaju kada se koristi gumb „Izmiješaj sve pjesme”.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Broj pjesama koje se učitavaju kada se koristi gumb „Izmiješaj sve pjesme”.",
+  "@shuffleAllTrackCountSubtitle": {},
   "noArtist": "Nema izvođača",
   "@noArtist": {},
   "downloadLocations": "Lokacija preuzimanja",
@@ -315,8 +315,8 @@
   "@theme": {},
   "dark": "Tamna",
   "@dark": {},
-  "downloadedSongsWillNotBeDeleted": "Preuzete pjesme se neće izbrisati",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Preuzete pjesme se neće izbrisati",
+  "@downloadedTracksWillNotBeDeleted": {},
   "bitrate": "Brzina prijenosa",
   "@bitrate": {},
   "bitrateSubtitle": "Veća brzina prijenosa daje veću kvalitetu zvuka, ali troši veću količinu prometa.",
@@ -347,8 +347,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Sakrij izvođače pjesama ako su isti kao izvođači albuma",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Sakrij izvođače pjesama ako su isti kao izvođači albuma",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "minutes": "Minute",
   "@minutes": {},
   "viewType": "Vrsta prikaza",
@@ -363,8 +363,8 @@
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Nova playlista",
   "@newPlaylist": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Da li prikazati izvođače pjesama na ekranu albuma ako se ne razlikuju od izvođača albuma.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Da li prikazati izvođače pjesama na ekranu albuma ako se ne razlikuju od izvođača albuma.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGestureSubtitle": "Da li deaktivirati geste.",
   "@disableGestureSubtitle": {},
   "system": "Sustav",
@@ -796,17 +796,17 @@
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
   },
-  "queueRestoreSubtitle1": "Reprodukcija: {song}",
+  "queueRestoreSubtitle1": "Reprodukcija: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
   },
-  "topSongs": "Najslušanije pjesme",
-  "@topSongs": {},
+  "topTracks": "Najslušanije pjesme",
+  "@topTracks": {},
   "playCountValue": "{playCount,plural,=1{{playCount} reprodukcija} few{{playCount} reprodukcije} other{{playCount} reprodukcija}}",
   "@playCountValue": {
     "placeholders": {
@@ -971,14 +971,14 @@
   "@aboutReleaseNotes": {
     "description": "Link to the release notes, shown in the about screen."
   },
-  "startMixNoSongsGenre": "Pritisni dugo na žanr za dodavanje ili uklanjanje žanra iz miksera prije pokretanja miksa",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Pritisni dugo na žanr za dodavanje ili uklanjanje žanra iz miksera prije pokretanja miksa",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "title": "Naslov",
   "@title": {},
-  "offlineSongCount": "{count,plural,=1{{count} pjesma} few{{count} pjesme} other{{count} pjesama}}, {downloads} preuzeto",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} pjesma} few{{count} pjesme} other{{count} pjesama}}, {downloads} preuzeto",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -988,8 +988,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} pjesma preuzeta} few{{count} pjesme preuzete} other{{count} pjesama preuzeto}}",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} pjesma preuzeta} few{{count} pjesme preuzete} other{{count} pjesama preuzeto}}",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1036,10 +1036,10 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopSongs": "Prikaži najslušanije pjesme u prikazu izvođača",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Da li prikazati 5 najslušanijih pjesama izvođača.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracks": "Prikaži najslušanije pjesme u prikazu izvođača",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Da li prikazati 5 najslušanijih pjesama izvođača.",
+  "@showArtistsTopTracksSubtitle": {},
   "hours": "Sati",
   "@hours": {},
   "timeFractionTooltip": "{currentTime} od {totalTime}",

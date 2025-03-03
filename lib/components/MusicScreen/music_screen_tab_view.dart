@@ -98,12 +98,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             : widget.view,
         includeItemTypes: widget.tabContentType.itemType.idString,
 
-        // If we're on the songs tab, sort by "Album,SortName". This is what the
+        // If we're on the tracks tab, sort by "Album,SortName". This is what the
         // Jellyfin web client does. If this isn't the case, sort by "SortName".
         // If widget.sortBy is set, it is used instead.
         sortBy: settings.tabSortBy[widget.tabContentType]
                 ?.jellyfinName(widget.tabContentType) ??
-            (widget.tabContentType == TabContentType.songs
+            (widget.tabContentType == TabContentType.tracks
                 ? "Album,SortName"
                 : "SortName"),
         sortOrder: sortOrder,
@@ -138,10 +138,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     int localRefreshCount = refreshCount;
 
     List<DownloadStub> offlineItems;
-    if (widget.tabContentType == TabContentType.songs) {
-      // If we're on the songs tab, just get all of the downloaded items
+    if (widget.tabContentType == TabContentType.tracks) {
+      // If we're on the tracks tab, just get all of the downloaded items
       // We should probably try to page this, at least if we are sorting by name
-      offlineItems = await _isarDownloader.getAllSongs(
+      offlineItems = await _isarDownloader.getAllTracks(
           nameFilter: widget.searchTerm,
           viewFilter: widget.view?.id,
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
@@ -363,7 +363,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
           var tabContent = box.get("FinampSettings")!.contentViewType ==
                       ContentViewType.list ||
-                  widget.tabContentType == TabContentType.songs
+                  widget.tabContentType == TabContentType.tracks
               ? PagedListView<int, BaseItemDto>.separated(
                   pagingController: _pagingController,
                   scrollController: controller,
@@ -383,11 +383,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           key: ValueKey(index),
                           controller: controller,
                           index: index,
-                          child: widget.tabContentType == TabContentType.songs
+                          child: widget.tabContentType == TabContentType.tracks
                               ? TrackListTile(
                                   key: ValueKey(item.id),
                                   item: item,
-                                  isSong: true,
+                                  isTrack: true,
                                   index: Future.value(index),
                                   isShownInSearch: widget.searchTerm != null,
                                   allowDismiss: false,

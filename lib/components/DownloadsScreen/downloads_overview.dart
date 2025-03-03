@@ -71,7 +71,7 @@ class DownloadsOverview extends StatelessWidget {
                                 Text(
                                   AppLocalizations.of(context)!
                                       .downloadedCountUnified(
-                                          countSnapshot.data?["song"] ?? -1,
+                                          countSnapshot.data?["track"] ?? -1,
                                           countSnapshot.data?["image"] ?? -1,
                                           countSnapshot.data?["sync"] ?? -1,
                                           countSnapshot.data?[
