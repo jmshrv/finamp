@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../components/LayoutSettingsScreen/player_screen_minimum_cover_padding_editor.dart';
 import '../models/finamp_models.dart';
