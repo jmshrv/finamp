@@ -1863,7 +1863,7 @@
   "@publiclyVisiblePlaylist": {
     "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
   },
-  "downloadSizeWarningCutoffSubtitle": "У разі завантаження більшої кількості пісень одночасно з’явиться попередження.",
+  "downloadSizeWarningCutoffSubtitle": "У разі завантаження більшої кількості композицій одночасно з’явиться попередження.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
