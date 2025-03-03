@@ -41,7 +41,7 @@
   },
   "unknownName": "Nom inconnu",
   "@unknownName": {},
-  "songs": "Titres",
+  "songs": "Chansons",
   "@songs": {},
   "albums": "Albums",
   "@albums": {},
@@ -166,7 +166,7 @@
   },
   "errorScreenError": "Une erreur est survenue lors de la récupération de la liste des erreurs ! À ce stade, il serait probablement préférable de créer une issue sur GitHub et de supprimer les données de l'application.",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "Le titre n’a pas pu être récupéré à l’aide de l’ID de téléchargement",
+  "failedToGetSongFromDownloadId": "La chanson n’a pas pu être récupérée à l’aide de l’ID de téléchargement",
   "@failedToGetSongFromDownloadId": {},
   "error": "Erreur",
   "@error": {},
@@ -190,7 +190,7 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Modifier le titre de la playlist",
+  "editPlaylistNameTooltip": "Modifier le nom de la liste de lecture",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Modifier le nom de la liste de lecture",
   "@editPlaylistNameTitle": {},
@@ -198,7 +198,7 @@
   "@required": {},
   "updateButtonLabel": "Mettre à jour",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Titre de la playlist mis à jour.",
+  "playlistNameUpdated": "Nom de la liste de lecture mis à jour.",
   "@playlistNameUpdated": {},
   "favourite": "Favoris",
   "@favourite": {},
@@ -234,7 +234,7 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Déconnexion",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Les titres téléchargés ne seront pas supprimés",
+  "downloadedSongsWillNotBeDeleted": "Les chansons téléchargées ne seront pas supprimées",
   "@downloadedSongsWillNotBeDeleted": {},
   "areYouSure": "Êtes-vous sûr ?",
   "@areYouSure": {},
@@ -262,7 +262,7 @@
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "Le répertoire doit être vide",
   "@directoryMustBeEmpty": {},
-  "customLocationsBuggy": "Les emplacements personnalisés sont très bogués en raison de problèmes de permissions. Je réfléchis à des solutions pour corriger cela, mais pour l'instant, je ne recommande pas de les utiliser.",
+  "customLocationsBuggy": "Les emplacements personnalisés peuvent être extrêmement problématiques et ne sont pas recommandés dans la plupart des cas. Les emplacements situés dans le dossier système \"Musique\" empêchent l'enregistrement des pochettes d'album en raison des limitations de l'OS.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Permet de supprimer la notification lorsque la lecture est en pause. Permet également à Android de fermer le service lorsqu'il est en pause.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
@@ -344,7 +344,7 @@
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Ajouter à une playlist",
   "@addToPlaylistTitle": {},
-  "removeFromPlaylistTooltip": "Retirer de la playlist",
+  "removeFromPlaylistTooltip": "Retirer de cette liste de lecture",
   "@removeFromPlaylistTooltip": {},
   "removeFromPlaylistTitle": "Retirer de la playlist",
   "@removeFromPlaylistTitle": {},
@@ -438,7 +438,7 @@
   },
   "bufferDuration": "Taille du tampon",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "Taille du tampon du lecteur, en secondes. Changer ce paramètre nécessite un redémarrage.",
+  "bufferDurationSubtitle": "Durée maximale de la mise en mémoire tampon, en secondes. Nécessite un redémarrage.",
   "@bufferDurationSubtitle": {},
   "language": "Langue",
   "@language": {},
@@ -458,7 +458,7 @@
   "@refresh": {},
   "swipeInsertQueueNext": "Lire la chanson balayée en prochain",
   "@swipeInsertQueueNext": {},
-  "swipeInsertQueueNextSubtitle": "Activer l'insertion d'une chanson comme élément suivant dans la file d'attente lorsqu'elle est balayée dans la liste des chansons, au lieu de l'ajouter à la fin.",
+  "swipeInsertQueueNextSubtitle": "Placer une chanson comme prochain élément de la file d'attente lorsqu'elle est balayée dans la liste des chansons, au lieu de l'ajouter à la fin de la liste.",
   "@swipeInsertQueueNextSubtitle": {},
   "about": "À propos de Finamp",
   "@about": {},
@@ -978,5 +978,51 @@
   "volumeNormalizationSwitchTitle": "Activer la normalisation du volume",
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
+  },
+  "emptyFilteredListSubtitle": "Aucun élément ne correspond au filtre. Essayez de désactiver le filtre ou de modifier le terme de recherche.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "bufferSizeSubtitle": "Taille maximale de la mémoire tampon en Mo. Nécessite un redémarrage",
+  "@bufferSizeSubtitle": {},
+  "playbackOrderLinearButtonLabel": "Jouer dans l'ordre",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "emptyFilteredListTitle": "Aucun élément trouvé",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetFiltersButton": "Réinitialiser les filtres",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "bufferDisableSizeConstraintsSubtitle": "Désactive les contraintes de taille de la mémoire tampon (\"Taille de la mémoire tampon\"). La mémoire tampon sera toujours chargée pendant la durée configurée (\"Durée de la mémoire tampon\"), même pour les fichiers très volumineux. Peut provoquer des plantages. Nécessite un redémarrage.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bufferSizeTitle": "Taille de la mémoire tampon",
+  "@bufferSizeTitle": {},
+  "syncingDownloadSize": "Synchronisation...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "bufferDisableSizeConstraintsTitle": "Ne pas limiter la taille de la mémoire tampon",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "activeDownloadSize": "Téléchargement...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "Suppression...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
   }
 }
