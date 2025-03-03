@@ -31,24 +31,45 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
   bool _isSubmitting = false;
 
   String? _name;
+  bool? _public;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.newPlaylist),
       content: Form(
         key: _formKey,
-        child: TextFormField(
-          decoration:
-              InputDecoration(labelText: AppLocalizations.of(context)!.name),
-          textInputAction: TextInputAction.done,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.required;
-            }
-            return null;
-          },
-          onFieldSubmitted: (_) async => await _submit(),
-          onSaved: (newValue) => _name = newValue,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.name),
+              textInputAction: TextInputAction.done,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.of(context)!.required;
+                }
+                return null;
+              },
+              onFieldSubmitted: (_) async => await _submit(),
+              onSaved: (newValue) => _name = newValue,
+            ),
+            FormField<bool>(
+              builder: (state) {
+                return CheckboxListTile(
+                  value: state.value,
+                  title: Text(
+                    AppLocalizations.of(context)!.publiclyVisiblePlaylist,
+                    textAlign: TextAlign.end,
+                  ),
+                  onChanged: state.didChange,
+                  contentPadding: EdgeInsets.zero,
+                );
+              },
+              initialValue: true,
+              onSaved: (newValue) => _public = newValue,
+            )
+          ],
         ),
       ),
       actions: [
@@ -58,7 +79,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
           child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
-          onPressed: _isSubmitting ? null : () async => await _submit(),
+          onPressed: () async => await _submit(),
           child: Text(AppLocalizations.of(context)!.createButtonLabel),
         ),
       ],
@@ -66,11 +87,9 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
   }
 
   Future<void> _submit() async {
+    if (_isSubmitting) return;
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-      setState(() {
-        _isSubmitting = true;
-      });
-
+      _isSubmitting = true;
       _formKey.currentState!.save();
 
       Navigator.of(context).pop<(Future<String>, String?)?>((
@@ -79,6 +98,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
             name: _name,
             ids: [widget.itemToAdd],
             userId: _finampUserHelper.currentUser!.id,
+            isPublic: _public,
           ));
 
           GlobalSnackbar.message(

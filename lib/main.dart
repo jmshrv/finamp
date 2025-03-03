@@ -26,6 +26,7 @@ import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
+import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -121,11 +122,11 @@ void main() async {
 
 Future<void> _setupEdgeToEdgeOverlayStyle() async {
   if (Platform.isAndroid) {
-    // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //     systemNavigationBarColor: Colors.transparent));
-    // final binding = WidgetsFlutterBinding.ensureInitialized();
-    // binding.addObserver(UIOverlaySetterObserver());
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent));
+    final binding = WidgetsFlutterBinding.ensureInitialized();
+    binding.addObserver(UIOverlaySetterObserver());
   } else if (Platform.isIOS) {
     // On iOS, the status bar will have black icons by default on the login
     // screen as it does not have an AppBar. To fix this, we set the

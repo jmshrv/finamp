@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -130,14 +131,23 @@ class TrackNameContent extends StatelessWidget {
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-          Text(
-            mediaItem == null
-                ? AppLocalizations.of(context)!.noItem
-                : mediaItem!.title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-            overflow: TextOverflow.fade,
-            softWrap: false,
-            maxLines: 1,
+          Center(
+            child:
+            ScrollingTextHelper(
+              id: ValueKey(mediaItem!.id),
+              alignment: TextAlign.center,
+              text:  mediaItem == null
+                  ? AppLocalizations.of(context)!.noItem
+                  : mediaItem!.title,
+              style: TextStyle(
+                fontSize: 24,
+                height: 26 / 20,
+                fontWeight:
+                Theme.of(context).brightness == Brightness.light
+                    ? FontWeight.w500
+                    : FontWeight.w600,
+              ),
+            ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
           RichText(

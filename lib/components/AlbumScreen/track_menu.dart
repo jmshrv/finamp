@@ -4,6 +4,7 @@ import 'package:finamp/components/AlbumScreen/speed_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
+import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
@@ -132,6 +133,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   // Makes sure that widget doesn't just disappear after press while menu is visible
   bool speedWidgetWasVisible = false;
   bool showSpeedMenu = false;
+  bool canDeleteFromServer = false;
+  bool deletableGotUpdated = false;
+
   double initialSheetExtent = 0.0;
   double inputStep = 0.9;
   double oldExtent = 0.0;
@@ -139,6 +143,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   @override
   void initState() {
     super.initState();
+
     initialSheetExtent = widget.showPlaybackControls ? 0.6 : 0.45;
     oldExtent = initialSheetExtent;
   }
@@ -200,7 +205,17 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 switch (element) { Visibility e => e.visible, _ => true })
             .length *
         56;
+
     return Consumer(builder: (context, ref, child) {
+      if (!deletableGotUpdated) {
+        deletableGotUpdated = true;
+        var deletable = GetIt.instance<JellyfinApiHelper>()
+            .canDeleteFromServer(widget.item);
+        canDeleteFromServer = deletable.initialValue;
+        deletable.realValue?.then((canDelete) => setState(() {
+              canDeleteFromServer = canDelete;
+            }));
+      }
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
       return widget.childBuilder(
           stackHeight, menu(context, menuEntries, metadata.value));
@@ -384,24 +399,20 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         ),
       ),
       Visibility(
-        visible: downloadStatus.isRequired,
-        child: ListTile(
-          leading: Icon(
-            Icons.delete_outlined,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.deleteItem),
-          enabled: downloadStatus.isRequired,
-          onTap: () async {
-            var item = DownloadStub.fromItem(
-                type: DownloadItemType.track, item: widget.item);
-            unawaited(downloadsService.deleteDownload(stub: item));
-            if (mounted) {
-              Navigator.pop(context);
-            }
-          },
-        ),
-      ),
+          visible: downloadStatus.isRequired,
+          child: ListTile(
+              leading: Icon(
+                Icons.delete_outlined,
+                color: iconColor,
+              ),
+              title: Text(AppLocalizations.of(context)!
+                  .deleteFromTargetConfirmButton("")),
+              enabled: downloadStatus.isRequired,
+              onTap: () async {
+                var item = DownloadStub.fromItem(
+                    type: DownloadItemType.track, item: widget.item);
+                await askBeforeDeleteDownloadFromDevice(context, item);
+              })),
       Visibility(
         visible: downloadStatus == DownloadItemStatus.notNeeded,
         child: ListTile(
@@ -575,6 +586,36 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
           },
         ),
       ),
+      Visibility(
+          visible: canDeleteFromServer,
+          child: ListTile(
+            leading: Icon(
+              Icons.delete_forever,
+              color: iconColor,
+            ),
+            title: Text(AppLocalizations.of(context)!
+                .deleteFromTargetConfirmButton("server")),
+            enabled: canDeleteFromServer,
+            onTap: () async {
+              var item = DownloadStub.fromItem(
+                  type: DownloadItemType.track, item: widget.item);
+              await askBeforeDeleteFromServerAndDevice(context, item);
+              final BaseItemDto newAlbumOrPlaylist =
+                  await _jellyfinApiHelper.getItemById(widget.parentItem!.id);
+              if (context.mounted) {
+                Navigator.pop(context); // close dialog
+                // pop current album screen and reload with new album data
+                Navigator.of(context).popUntil((route) {
+                  return route.settings.name != null // unnamed dialog
+                      &&
+                      route.settings.name !=
+                          AlbumScreen.routeName; // albums screen
+                });
+                await Navigator.of(context).pushNamed(AlbumScreen.routeName,
+                    arguments: newAlbumOrPlaylist);
+              }
+            },
+          )),
     ];
   }
 
@@ -868,20 +909,29 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
                         ),
                       ),
                       if (!widget.condensed)
-                        AlbumChip(
-                          item: widget.item,
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
-                          backgroundColor: IconTheme.of(context)
-                                  .color
-                                  ?.withOpacity(0.1) ??
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                              Colors.white,
-                          key: widget.item.album == null
-                              ? null
-                              : ValueKey("${widget.item.album}-album"),
-                        ),
+                        SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                                spacing: 4.0,
+                                runSpacing: 4.0,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  AlbumChip(
+                                    item: widget.item,
+                                    backgroundColor: IconTheme.of(context)
+                                            .color
+                                            ?.withOpacity(0.1) ??
+                                        Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color ??
+                                        Colors.white,
+                                    key: widget.item.album == null
+                                        ? null
+                                        : ValueKey(
+                                            "${widget.item.album}-album"),
+                                  ),
+                                ]))
                     ],
                   ),
                 ),

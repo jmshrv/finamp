@@ -4766,6 +4766,7 @@ NewPlaylist _$NewPlaylistFromJson(Map json) => NewPlaylist(
       ids: (json['Ids'] as List<dynamic>).map((e) => e as String).toList(),
       userId: json['UserId'] as String?,
       mediaType: json['MediaType'] as String?,
+      isPublic: json['IsPublic'] as bool?,
     );
 
 Map<String, dynamic> _$NewPlaylistToJson(NewPlaylist instance) =>
@@ -4774,6 +4775,7 @@ Map<String, dynamic> _$NewPlaylistToJson(NewPlaylist instance) =>
       'Ids': instance.ids,
       'UserId': instance.userId,
       'MediaType': instance.mediaType,
+      'IsPublic': instance.isPublic,
     };
 
 NewPlaylistResponse _$NewPlaylistResponseFromJson(Map json) =>

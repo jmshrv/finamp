@@ -556,8 +556,7 @@ class QueueService {
 
       _audioHandler.nextInitialIndex = null;
     } catch (e) {
-      _queueServiceLogger.severe(e);
-      rethrow;
+      _queueServiceLogger.severe("Error while initializing queue: $e");
     }
   }
 

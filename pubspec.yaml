@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.13+113
+version: 0.9.14+114
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -43,7 +43,7 @@ dependencies:
       path: libs/windows/media_kit_libs_windows_audio
   smtc_windows: ^1.0.0
   audio_service: ^0.18.15
-  audio_service_mpris: ^0.2.0
+  audio_service_mpris: ^0.1.5
   audio_service_platform_interface: ^0.1.1
   audio_session: ^0.1.21
   rxdart: ^0.28.0
@@ -189,7 +189,7 @@ msix_config:
   display_name: Finamp
   publisher_display_name: jmshrv
   identity_name: com.unicornsonlsd.finamp
-  msix_version: 0.9.13.0
+  msix_version: 0.9.14.0
   logo_path: ./images/finamp_cropped.png
   trim_logo: false # don't force logo to be square, it will be stretched
   # backgroundMediaPlayback prevents apps from getting muted or killed when being in the background (won't build if included at the moment)

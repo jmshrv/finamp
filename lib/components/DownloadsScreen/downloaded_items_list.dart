@@ -1,12 +1,11 @@
+import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/downloads_service.dart';
 import '../album_image.dart';
-import '../confirmation_prompt_dialog.dart';
 import 'item_file_size.dart';
 
 class DownloadedItemsList extends StatefulWidget {
@@ -49,29 +48,9 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                       },
                     ),
                   IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => ConfirmationPromptDialog(
-                        promptText:
-                            AppLocalizations.of(context)!.deleteDownloadsPrompt(
-                          album.name,
-                          album.baseItemType.idString ?? "",
-                        ),
-                        confirmButtonText: AppLocalizations.of(context)!
-                            .deleteDownloadsConfirmButtonText,
-                        abortButtonText: AppLocalizations.of(context)!
-                            .genericCancel,
-                        onConfirmed: () async {
-                          await downloadsService.deleteDownload(stub: album);
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        },
-                        onAborted: () {},
-                      ),
-                    ),
-                  ),
+                      icon: const Icon(Icons.delete),
+                      onPressed: () =>
+                          askBeforeDeleteDownloadFromDevice(context, album, refresh: () {setState(() {});})),
                 ],
               ),
               subtitle: ItemFileSize(

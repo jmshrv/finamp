@@ -39,6 +39,31 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
+    <release version="0.9.14-beta" date="2025-02-27">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.14-beta</url>
+      <description>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Add albums, artist, generes, and other playlists to playlists</li>
+          <li>Added ability to delete media from the server</li>
+          <li>Added scrolling text for long titles</li>
+          <li>Improved buffer management</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fix visual glitches on some devices</li>
+          <li>Fixed favorite status in notification not updating sometimes</li>
+          <li>Various download fixes and improvements</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
     <release version="0.9.13-beta" date="2025-01-08">
       <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.13-beta</url>
       <description>
