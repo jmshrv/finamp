@@ -179,10 +179,6 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                             },
                           )
                         : Visibility(visible: false, child: Text("")),
-            DownloadButton(
-                item: DownloadStub.fromItem(
-                    type: DownloadItemType.collection, item: widget.parent),
-                children: widget.displayChildren)
           ],
         ),
         if (widget.displayChildren.length > 1 &&
