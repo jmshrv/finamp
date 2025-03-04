@@ -1883,5 +1883,33 @@
   "publiclyVisiblePlaylist": "Publicly Visible:",
   "@publiclyVisiblePlaylist": {
     "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "releaseDateFormatYear": "Year",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthYear": "Month & Year",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Show Album Release Date on Player Screen",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Show the release date of the album on the player screen, behind the album name.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Release Date Format",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "Controls the format of all release dates shown in the app.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
   }
 }

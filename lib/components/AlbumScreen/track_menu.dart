@@ -909,29 +909,17 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
                         ),
                       ),
                       if (!widget.condensed)
-                        SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Wrap(
-                                spacing: 4.0,
-                                runSpacing: 4.0,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  AlbumChip(
-                                    item: widget.item,
-                                    backgroundColor: IconTheme.of(context)
-                                            .color
-                                            ?.withOpacity(0.1) ??
-                                        Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.color ??
-                                        Colors.white,
-                                    key: widget.item.album == null
-                                        ? null
-                                        : ValueKey(
-                                            "${widget.item.album}-album"),
-                                  ),
-                                ]))
+                        AlbumChips(
+                          baseItem: widget.item,
+                          backgroundColor: IconTheme.of(context)
+                                  .color
+                                  ?.withOpacity(0.1) ??
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white,
+                          key: widget.item.album == null
+                              ? null
+                              : ValueKey("${widget.item.album}-album"),
+                        )
                     ],
                   ),
                 ),

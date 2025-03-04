@@ -143,6 +143,8 @@ class DefaultSettings {
   static const downloadSizeWarningCutoff = 150;
   static const allowDeleteFromServer = false;
   static const oneLineMarqueeTextButton = false;
+  static const showAlbumReleaseDateOnPlayerScreen = false;
+  static const releaseDateFormat = ReleaseDateFormat.year;
 }
 
 @HiveType(typeId: 28)
@@ -249,6 +251,9 @@ class FinampSettings {
     this.downloadSizeWarningCutoff = DefaultSettings.downloadSizeWarningCutoff,
     this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
     this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
+    this.showAlbumReleaseDateOnPlayerScreen =
+        DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
+    this.releaseDateFormat = DefaultSettings.releaseDateFormat,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -520,6 +525,13 @@ class FinampSettings {
 
   @HiveField(82, defaultValue: DefaultSettings.oneLineMarqueeTextButton)
   bool oneLineMarqueeTextButton;
+
+  @HiveField(83,
+      defaultValue: DefaultSettings.showAlbumReleaseDateOnPlayerScreen)
+  bool showAlbumReleaseDateOnPlayerScreen;
+
+  @HiveField(84, defaultValue: DefaultSettings.releaseDateFormat)
+  ReleaseDateFormat releaseDateFormat;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2492,4 +2504,47 @@ class DeviceInfo {
 
   @HiveField(1)
   String? id;
+}
+
+@HiveType(typeId: 77)
+enum ReleaseDateFormat {
+  @HiveField(0)
+  year,
+  @HiveField(1)
+  iso,
+  @HiveField(2)
+  monthYear;
+
+  /// Human-readable version of this enum. I've written longer descriptions on
+  /// enums like [TabContentType], and I can't be bothered to copy and paste it
+  /// again.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(ReleaseDateFormat releaseDateFormat) {
+    switch (releaseDateFormat) {
+      case ReleaseDateFormat.year:
+        return "Year";
+      case ReleaseDateFormat.iso:
+        return "ISO 8601";
+      case ReleaseDateFormat.monthYear:
+        return "Month & Year";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ReleaseDateFormat releaseDateFormat, BuildContext context) {
+    switch (releaseDateFormat) {
+      case ReleaseDateFormat.year:
+        return AppLocalizations.of(context)!.releaseDateFormatYear;
+      case ReleaseDateFormat.iso:
+        return AppLocalizations.of(context)!.releaseDateFormatISO;
+      case ReleaseDateFormat.monthYear:
+        return AppLocalizations.of(context)!.releaseDateFormatMonthYear;
+    }
+  }
 }

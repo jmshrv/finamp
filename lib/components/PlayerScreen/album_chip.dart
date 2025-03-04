@@ -1,3 +1,4 @@
+import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,6 +11,52 @@ import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 
 final _borderRadius = BorderRadius.circular(4);
+
+class AlbumChips extends StatelessWidget {
+  const AlbumChips({
+    super.key,
+    this.baseItem,
+    this.backgroundColor,
+    this.color,
+    this.includeReleaseDate,
+  });
+
+  final BaseItemDto? baseItem;
+  final Color? backgroundColor;
+  final Color? color;
+  final bool? includeReleaseDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Wrap(
+            spacing: 4.0,
+            runSpacing: 4.0,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              AlbumChip(
+                key: const ValueKey(null),
+                backgroundColor: backgroundColor,
+                color: color,
+                item: baseItem,
+              ),
+              if ((includeReleaseDate ?? false) ||
+                  (includeReleaseDate == null &&
+                      FinampSettingsHelper
+                          .finampSettings.showAlbumReleaseDateOnPlayerScreen))
+                _ReleaseDateChip(
+                  baseItem: baseItem,
+                  backgroundColor: backgroundColor,
+                  color: color,
+                )
+            ]),
+      ),
+    );
+  }
+}
 
 class AlbumChip extends StatelessWidget {
   const AlbumChip({
@@ -47,6 +94,50 @@ class _EmptyAlbumChip extends StatelessWidget {
       height: 20,
       child: Material(
         borderRadius: _borderRadius,
+      ),
+    );
+  }
+}
+
+class _ReleaseDateChip extends StatelessWidget {
+  const _ReleaseDateChip({
+    super.key,
+    this.baseItem,
+    this.backgroundColor,
+    this.color,
+  });
+
+  final BaseItemDto? baseItem;
+  final Color? backgroundColor;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final releaseDate = ReleaseDateHelper.autoFormat(baseItem);
+
+    return Semantics.fromProperties(
+      properties: SemanticsProperties(
+        label: "Release date: $releaseDate",
+        button: true,
+      ),
+      excludeSemantics: true,
+      container: true,
+      child: Material(
+        color: backgroundColor ?? Colors.white.withOpacity(0.1),
+        borderRadius: _borderRadius,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+          child: Text(
+            releaseDate,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+            style: TextStyle(
+              color: color ??
+                  Theme.of(context).textTheme.bodySmall!.color ??
+                  Colors.white,
+            ),
+          ),
+        ),
       ),
     );
   }

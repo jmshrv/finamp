@@ -208,6 +208,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[80] == null ? 150 : (fields[80] as num).toInt(),
       allowDeleteFromServer: fields[81] == null ? false : fields[81] as bool,
       oneLineMarqueeTextButton: fields[82] == null ? false : fields[82] as bool,
+      showAlbumReleaseDateOnPlayerScreen:
+          fields[83] == null ? false : fields[83] as bool,
+      releaseDateFormat: fields[84] == null
+          ? ReleaseDateFormat.year
+          : fields[84] as ReleaseDateFormat,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -217,7 +222,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(79)
+      ..writeByte(81)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -375,7 +380,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(81)
       ..write(obj.allowDeleteFromServer)
       ..writeByte(82)
-      ..write(obj.oneLineMarqueeTextButton);
+      ..write(obj.oneLineMarqueeTextButton)
+      ..writeByte(83)
+      ..write(obj.showAlbumReleaseDateOnPlayerScreen)
+      ..writeByte(84)
+      ..write(obj.releaseDateFormat);
   }
 
   @override
@@ -2010,6 +2019,47 @@ class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampFeatureChipTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
+  @override
+  final int typeId = 77;
+
+  @override
+  ReleaseDateFormat read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ReleaseDateFormat.year;
+      case 1:
+        return ReleaseDateFormat.iso;
+      case 2:
+        return ReleaseDateFormat.monthYear;
+      default:
+        return ReleaseDateFormat.year;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ReleaseDateFormat obj) {
+    switch (obj) {
+      case ReleaseDateFormat.year:
+        writer.writeByte(0);
+      case ReleaseDateFormat.iso:
+        writer.writeByte(1);
+      case ReleaseDateFormat.monthYear:
+        writer.writeByte(2);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ReleaseDateFormatAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

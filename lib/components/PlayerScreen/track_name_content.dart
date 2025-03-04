@@ -153,25 +153,15 @@ class TrackNameContent extends StatelessWidget {
                   Center(
                       child: Container(
                           constraints: const BoxConstraints(maxWidth: 280),
-                          child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Wrap(
-                                spacing: 4.0,
-                                runSpacing: 4.0,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  AlbumChip(
-                                    item: trackBaseItemDto!,
-                                    backgroundColor: IconTheme.of(context)
-                                        .color!
-                                        .withOpacity(0.1),
-                                    key: trackBaseItemDto?.album == null
-                                        ? null
-                                        : ValueKey(
-                                            "${trackBaseItemDto!.album}-album"),
+                    child: AlbumChips(
+                      baseItem: trackBaseItemDto!,
+                      backgroundColor:
+                          IconTheme.of(context).color!.withOpacity(0.1),
+                      key: trackBaseItemDto?.album == null
+                          ? null
+                          : ValueKey("${trackBaseItemDto!.album}-album"),
                                   ),
-                                ],
-                              ))))
+                  ))
                 ],
               ));
         });

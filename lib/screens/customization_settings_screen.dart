@@ -36,6 +36,8 @@ class _CustomizationSettingsScreenState
           if (!Platform.isIOS) const ShowStopButtonOnMediaNotificationToggle(),
           const ShowSeekControlsOnMediaNotificationToggle(),
           const OneLineMarqueeTextSwitch(),
+          const ReleaseDateFormatDropdownListTile(),
+          const ShowAlbumReleaseDateOnPlayerScreenToggle(),
         ],
       ),
     );
@@ -129,6 +131,74 @@ class ShowSeekControlsOnMediaNotificationToggle extends StatelessWidget {
                       value;
                   box.put("FinampSettings", finampSettingsTemp);
                 },
+        );
+      },
+    );
+  }
+}
+
+class ShowAlbumReleaseDateOnPlayerScreenToggle extends StatelessWidget {
+  const ShowAlbumReleaseDateOnPlayerScreenToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, child) {
+        bool? showAlbumReleaseDateOnPlayerScreen =
+            box.get("FinampSettings")?.showAlbumReleaseDateOnPlayerScreen;
+
+        return SwitchListTile.adaptive(
+          title: Text(AppLocalizations.of(context)!
+              .showAlbumReleaseDateOnPlayerScreenTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .showAlbumReleaseDateOnPlayerScreenSubtitle),
+          value: showAlbumReleaseDateOnPlayerScreen ?? false,
+          onChanged: showAlbumReleaseDateOnPlayerScreen == null
+              ? null
+              : (value) {
+                  FinampSettings finampSettingsTemp =
+                      box.get("FinampSettings")!;
+                  finampSettingsTemp.showAlbumReleaseDateOnPlayerScreen = value;
+                  box.put("FinampSettings", finampSettingsTemp);
+                },
+        );
+      },
+    );
+  }
+}
+
+class ReleaseDateFormatDropdownListTile extends StatelessWidget {
+  const ReleaseDateFormatDropdownListTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Box<FinampSettings>>(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (_, box, __) {
+        final finampSettings = box.get("FinampSettings")!;
+
+        return ListTile(
+          title: Text(AppLocalizations.of(context)!.releaseDateFormatTitle),
+          subtitle:
+              Text(AppLocalizations.of(context)!.releaseDateFormatSubtitle),
+          trailing: DropdownButton<ReleaseDateFormat>(
+            value: finampSettings.releaseDateFormat,
+            items: ReleaseDateFormat.values
+                .map((e) => DropdownMenuItem<ReleaseDateFormat>(
+                      value: e,
+                      child: Text(e.toLocalisedString(context)),
+                    ))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) {
+                FinampSettings finampSettingsTemp = finampSettings;
+                finampSettingsTemp.releaseDateFormat = value;
+                Hive.box<FinampSettings>("FinampSettings")
+                    .put("FinampSettings", finampSettingsTemp);
+              }
+            },
+          ),
         );
       },
     );
