@@ -1916,5 +1916,37 @@
       }
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "releaseDateFormatMonthYear": "Місяць і рік",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatYear": "Рік",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Показати дату випуску альбому на екрані плеєра за назвою альбому.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthDayYear": "Місяць, день і рік",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Показати дату випуску альбому на екрані програвача",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Формат дати випуску",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "Керує форматом усіх дат випуску, які відображаються в програмі.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
   }
 }
