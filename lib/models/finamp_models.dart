@@ -2513,7 +2513,9 @@ enum ReleaseDateFormat {
   @HiveField(1)
   iso,
   @HiveField(2)
-  monthYear;
+  monthYear,
+  @HiveField(3)
+  monthDayYear;
 
   /// Human-readable version of this enum. I've written longer descriptions on
   /// enums like [TabContentType], and I can't be bothered to copy and paste it
@@ -2533,6 +2535,8 @@ enum ReleaseDateFormat {
         return "ISO 8601";
       case ReleaseDateFormat.monthYear:
         return "Month & Year";
+      case ReleaseDateFormat.monthDayYear:
+        return "Month, Day & Year";
     }
   }
 
@@ -2545,6 +2549,8 @@ enum ReleaseDateFormat {
         return AppLocalizations.of(context)!.releaseDateFormatISO;
       case ReleaseDateFormat.monthYear:
         return AppLocalizations.of(context)!.releaseDateFormatMonthYear;
+      case ReleaseDateFormat.monthDayYear:
+        return AppLocalizations.of(context)!.releaseDateFormatMonthDayYear;
     }
   }
 }

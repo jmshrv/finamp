@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -445,7 +446,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
               alignment: PlaceholderAlignment.top,
             ),
             TextSpan(
-              text: widget.item.productionYearString,
+              text: ReleaseDateHelper.autoFormat(widget.item),
               style: TextStyle(
                   color: Theme.of(context)
                       .textTheme

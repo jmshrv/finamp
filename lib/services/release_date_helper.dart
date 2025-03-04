@@ -22,6 +22,8 @@ class ReleaseDateHelper {
         return premiereDate.toIso8601String().split("T").first;
       case ReleaseDateFormat.monthYear:
         return "${DateFormat.MMMM().format(premiereDate)} ${DateFormat.y().format(premiereDate)}";
+      case ReleaseDateFormat.monthDayYear:
+        return "${DateFormat.MMMM().format(premiereDate)} ${DateFormat.d().format(premiereDate)}, ${DateFormat.y().format(premiereDate)}";
       default:
         return premiereDate.toLocal().toString();
     }

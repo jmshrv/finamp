@@ -1,5 +1,6 @@
 import 'package:finamp/components/PlayerScreen/artist_chip.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -58,7 +59,7 @@ class ItemInfo extends StatelessWidget {
           IconAndText(
               iconData: Icons.event,
               textSpan: TextSpan(
-                text: item.productionYearString,
+                text: ReleaseDateHelper.autoFormat(item),
               ))
       ],
     );

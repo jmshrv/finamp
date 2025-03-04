@@ -1,3 +1,4 @@
+import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -9,7 +10,7 @@ String? generateSubtitle(
     BaseItemDto item, String? parentType, BuildContext context) {
   // If the parentType is MusicArtist, this is being called by an AlbumListTile in an AlbumView of an artist.
   if (parentType == "MusicArtist") {
-    return item.productionYearString;
+    return ReleaseDateHelper.autoFormat(item);
   }
 
   switch (item.type) {

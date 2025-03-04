@@ -2036,6 +2036,8 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
         return ReleaseDateFormat.iso;
       case 2:
         return ReleaseDateFormat.monthYear;
+      case 3:
+        return ReleaseDateFormat.monthDayYear;
       default:
         return ReleaseDateFormat.year;
     }
@@ -2050,6 +2052,8 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
         writer.writeByte(1);
       case ReleaseDateFormat.monthYear:
         writer.writeByte(2);
+      case ReleaseDateFormat.monthDayYear:
+        writer.writeByte(3);
     }
   }
 
