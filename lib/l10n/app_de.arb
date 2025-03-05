@@ -1081,7 +1081,7 @@
   "@fontSizeOptionMedium": {
     "description": "Font size option for things like the lyrics view. Medium means a medium font size."
   },
-  "showLyricsScreenAlbumPreludeTitle": "Album vor dem Songtext anzeigen",
+  "showLyricsScreenAlbumPreludeTitle": "Album vor den Lyrics anzeigen",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1095,7 +1095,7 @@
   "@keepScreenOnAlwaysOn": {},
   "keepScreenOnWhilePlaying": "Beim Abspielen von Musik",
   "@keepScreenOnWhilePlaying": {},
-  "keepScreenOnWhileLyrics": "Beim Anzeigen von Songtexten",
+  "keepScreenOnWhileLyrics": "Beim Anzeigen von Lyrics",
   "@keepScreenOnWhileLyrics": {},
   "keepScreenOnWhilePluggedIn": "Bildschirm nur eingeschaltet lassen, wenn am Stromnetz angeschlossen",
   "@keepScreenOnWhilePluggedIn": {},
@@ -1249,11 +1249,11 @@
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
-  "lyricsFontSizeTitle": "Schriftgröße des Songtextes",
+  "lyricsFontSizeTitle": "Schriftgröße der Lyrics",
   "@lyricsFontSizeTitle": {
     "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
   },
-  "showLyricsTimestampsTitle": "Timestamps für synchronisierte Songtexte anzeigen",
+  "showLyricsTimestampsTitle": "Timestamps für synchronisierte Lyrics anzeigen",
   "@showLyricsTimestampsTitle": {
     "description": "Title for the setting that controls if timestamps are shown for lyrics"
   },
@@ -1261,7 +1261,7 @@
   "@showNullLibraryItemsTitle": {
     "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
-  "lyricsScreen": "Songtext-Ansicht",
+  "lyricsScreen": "Lyrics-Ansicht",
   "@lyricsScreen": {
     "description": "Name for the view/screen that shows lyrics for the currently playing track"
   },
@@ -1273,7 +1273,7 @@
   "@alignmentOptionEnd": {
     "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
   },
-  "lyricsAlignmentTitle": "Ausrichtung des Songtexts",
+  "lyricsAlignmentTitle": "Ausrichtung der Lyrics",
   "@lyricsAlignmentTitle": {
     "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
   },
@@ -1293,7 +1293,7 @@
   "@fontSizeOptionSmall": {
     "description": "Font size option for things like the lyrics view. Small means a smaller font size."
   },
-  "showLyricsTimestampsSubtitle": "Steuert, ob der Timestamp jeder Songtextzeile in der Songtext-Ansicht angezeigt wird, falls verfügbar.",
+  "showLyricsTimestampsSubtitle": "Steuert, ob der Timestamp jeder Lyrics-Zeile in der Lyrics-Ansicht angezeigt wird, falls verfügbar.",
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
@@ -1696,11 +1696,11 @@
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "lyricsFontSizeSubtitle": "Legt die Schriftgröße von Texten in der Songtext-Ansicht fest.",
+  "lyricsFontSizeSubtitle": "Legt die Schriftgröße von Lyrics in der Lyrics-Ansicht fest.",
   "@lyricsFontSizeSubtitle": {
     "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
   },
-  "showLyricsScreenAlbumPreludeSubtitle": "Legt fest, ob das Album Cover über dem Songtext angezeigt wird, bevor es weggescrollt wird.",
+  "showLyricsScreenAlbumPreludeSubtitle": "Legt fest, ob das Album Cover über den Lyrics angezeigt wird, bevor es weggescrollt wird.",
   "@showLyricsScreenAlbumPreludeSubtitle": {
     "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1737,7 +1737,7 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "hidePlayerBottomActionsSubtitle": "Verstecke die Warteschlange- und Songtext-Buttons in der Wiedergabe-Ansicht. Swipe nach oben, um die Warteschlange anzuzeigen, und swipe nach links (unterhalb des Album Covers), um verfügbaren Songtext anzuzeigen.",
+  "hidePlayerBottomActionsSubtitle": "Verstecke die Warteschlange- und Lyrics-Buttons in der Wiedergabe-Ansicht. Swipe nach oben, um die Warteschlange anzuzeigen, und swipe nach links (unterhalb des Album Covers), um verfügbare Lyrics anzuzeigen.",
   "@hidePlayerBottomActionsSubtitle": {},
   "prioritizePlayerCoverSubtitle": "Ein größeres Album Cover in der Wiedergabe-Ansicht bevorzugen. Unwichtigere Optionen werden auf kleineren Bildschirmen mit höherer Wahrscheinlichkeit versteckt.",
   "@prioritizePlayerCoverSubtitle": {},
@@ -1831,7 +1831,7 @@
   "@marqueeOrTruncateButton": {},
   "cacheLibraryImagesSettings": "Cache derzeitige Bibliotheks-Bilder",
   "@cacheLibraryImagesSettings": {},
-  "lyricsAlignmentSubtitle": "Legt die Ausrichtung von Trackexten in der Songtext-Ansicht fest.",
+  "lyricsAlignmentSubtitle": "Legt die Ausrichtung von Lyrics in der Lyrics-Ansicht fest.",
   "@lyricsAlignmentSubtitle": {
     "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
   },
@@ -1888,5 +1888,55 @@
   "deleteFromTargetDialogText": "Du bist dabei, {itemType, select, album{das Album} playlist{die Playlist} artist{den Künstler} genre{das Genre} track{den Track} library{die Bibliothek} other{das Item}} {device, select, device{von diesem Gerät zu löschen} server{von der Bibliothek und dem Dateisystem des Servers zu löschen.{deleteType, select, canDelete{ Das Item wird dadurch auch von diesem Gerät gelöscht werden.} cantDelete{ Das Item wird bis zur nächsten Synchronisierung auf diesem Gerät bleiben.} notDownloaded{} other{}}\nDiese Aktion kann nicht rückgängig gemacht werden} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Zeigt das Release-Datum des Albums nach dem Albumnamen in der Wiedergabe-Ansicht an.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Release-Datum Format",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "deleteDownloadsConfirmButtonText": "Löschen",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsPrompt": "Bist du dir sicher, dass du {itemType, select, album{das Album} playlist{die Playlist} artist{den Künstler} genre{das Genre} track{den Track} library{die Bibliothek} other{das Item}} '{itemName}' von diesem Gerät löschen möchtest?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "releaseDateFormatYear": "Jahr",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Album Release-Datum in der Wiedergabe-Ansicht anzeigen",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatSubtitle": "Steuert das Format aller Release-Daten in der App.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatMonthDayYear": "Monat, Tag & Jahr",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "releaseDateFormatMonthYear": "Monat & Jahr",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
   }
 }
