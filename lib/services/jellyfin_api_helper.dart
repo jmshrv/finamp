@@ -168,6 +168,22 @@ class JellyfinApiHelper {
           userId: currentUserId,
           fields: fields,
         );
+      } else if (includeItemTypes == "MusicVideo") {
+        response = await api.getItems(
+          userId: currentUserId,
+          artists: [
+            parentItem?.name ?? "N/A"
+          ], // TODO: Check if this is the best way to do this
+          includeItemTypes: includeItemTypes,
+          recursive: recursive,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          searchTerm: searchTerm,
+          filters: filters,
+          startIndex: startIndex,
+          limit: limit,
+          fields: fields,
+        );
       } else if (parentItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use albumArtistIds
         // instead of parentId
