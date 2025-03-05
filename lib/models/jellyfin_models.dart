@@ -3459,6 +3459,7 @@ enum SortBy {
         SortBy.dateCreated,
         SortBy.premiereDate,
         SortBy.random,
+        SortBy.playCount,
       ];
 
   /// Human-readable version of the [SortBy]. For example, toString() on
