@@ -1608,5 +1608,41 @@
       }
     },
     "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "redownloadTitle": "自動重新下載轉碼",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "deleteDownloadsConfirmButtonText": "刪除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "dontTranscode": "下載原始{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "deleteDownloadsPrompt": "你確定要將 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} 「{itemName}」從此裝置上刪除嗎？",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "redownloadcomplete": "已排程轉碼重新下載。",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
   }
 }
