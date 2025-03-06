@@ -1644,5 +1644,75 @@
   "redownloadcomplete": "已排程轉碼重新下載。",
   "@redownloadcomplete": {
     "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "fixedGridSizeSwitchSubtitle": "網格大小不會隨著視窗/畫面大小改變。",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "hideQueueButtonSubtitle": "隱藏播放器畫面的隊列按鈕。向上滑動以存取隊列。",
+  "@hideQueueButtonSubtitle": {},
+  "oneLineMarqueeTextButton": "自動捲動較長的標題",
+  "@oneLineMarqueeTextButton": {},
+  "marqueeOrTruncateButton": "在較長的標題使用刪節號",
+  "@marqueeOrTruncateButton": {},
+  "oneLineMarqueeTextButtonSubtitle": "自動捲動長度超過兩行的標題",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "hideQueueButton": "隱藏隊列按鈕",
+  "@hideQueueButton": {},
+  "hidePlayerBottomActions": "隱藏底部按鈕",
+  "@hidePlayerBottomActions": {},
+  "marqueeOrTruncateButtonSubtitle": "在較長的標題盡頭顯示 ... 代替捲動文字",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "showArtistChipImageSubtitle": "這會影響小尺寸的藝術家圖片預覽，例如在播放介面上。",
+  "@showArtistChipImageSubtitle": {},
+  "fixedGridTileSizeEnum": "{size, select, small{小} medium{中} large{大} veryLarge{非常大} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "suppressPlayerPadding": "抑制播放器控制元件之間的距離",
+  "@suppressPlayerPadding": {},
+  "scrollToCurrentTrack": "捲動至當前歌曲",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "fixedGridSizeSwitchTitle": "使用固定大小的網格",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeTitle": "網格大小",
+  "@fixedGridSizeTitle": {},
+  "showArtistChipImage": "和藝術家名字一起顯示藝術家圖片",
+  "@showArtistChipImage": {},
+  "defaultDownloadLocationButton": "設定為預設下載路徑。停用此選項以為每個下載分開指定。",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "redownloadSubtitle": "自動重新下載因為上級改變而可能為更高品質的音軌。",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "allowSplitScreenTitle": "允許分割畫面",
+  "@allowSplitScreenTitle": {},
+  "enableVibration": "啟用震動",
+  "@enableVibration": {},
+  "enableVibrationSubtitle": "是否啟用震動。",
+  "@enableVibrationSubtitle": {},
+  "lockDownload": "永遠保留在裝置上",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "enableAutoScroll": "自動捲動",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
   }
 }
