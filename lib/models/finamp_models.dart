@@ -987,8 +987,8 @@ class DownloadStub {
             BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
             baseItemType.downloadType == DownloadItemType.collection &&
             baseItemType != BaseItemDtoType.noItem;
-      case DownloadItemType.track:
-        return baseItemType.downloadType == DownloadItemType.track &&
+      case DownloadItemType.song:
+        return baseItemType.downloadType == DownloadItemType.song &&
             baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType;
       case DownloadItemType.image:
@@ -1315,7 +1315,7 @@ class DownloadItem extends DownloadStub {
 /// Enumerated by Isar, do not modify order or delete existing entries.
 enum DownloadItemType {
   collection(true, false),
-  track(true, true),
+  song(true, true),
   image(true, true),
   anchor(false, false),
   finampCollection(false, false);
@@ -1432,16 +1432,16 @@ enum BaseItemDtoType {
   artist("MusicArtist", true, [album, track], DownloadItemType.collection),
   playlist("Playlist", true, [track], DownloadItemType.collection),
   genre("MusicGenre", true, [album, track], DownloadItemType.collection),
-  track("Audio", false, [], DownloadItemType.track),
+  track("Audio", false, [], DownloadItemType.song),
   library(
       "CollectionFolder", true, [album, track], DownloadItemType.collection),
   folder("Folder", true, null, DownloadItemType.collection),
-  musicVideo("MusicVideo", false, [], DownloadItemType.track),
-  audioBook("AudioBook", false, [], DownloadItemType.track),
-  tvEpisode("Episode", false, [], DownloadItemType.track),
-  video("Video", false, [], DownloadItemType.track),
-  movie("Movie", false, [], DownloadItemType.track),
-  trailer("Trailer", false, [], DownloadItemType.track),
+  musicVideo("MusicVideo", false, [], DownloadItemType.song),
+  audioBook("AudioBook", false, [], DownloadItemType.song),
+  tvEpisode("Episode", false, [], DownloadItemType.song),
+  video("Video", false, [], DownloadItemType.song),
+  movie("Movie", false, [], DownloadItemType.song),
+  trailer("Trailer", false, [], DownloadItemType.song),
   unknown(null, true, null, DownloadItemType.collection);
 
   // All possible types in Jellyfin as of 10.9:

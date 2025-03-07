@@ -3835,14 +3835,14 @@ const _DownloadItemstateValueEnumMap = {
 };
 const _DownloadItemtypeEnumValueMap = {
   'collection': 0,
-  'track': 1,
+  'song': 1,
   'image': 2,
   'anchor': 3,
   'finampCollection': 4,
 };
 const _DownloadItemtypeValueEnumMap = {
   0: DownloadItemType.collection,
-  1: DownloadItemType.track,
+  1: DownloadItemType.song,
   2: DownloadItemType.image,
   3: DownloadItemType.anchor,
   4: DownloadItemType.finampCollection,
@@ -7071,7 +7071,7 @@ Map<String, dynamic> _$DownloadStubToJson(DownloadStub instance) =>
 
 const _$DownloadItemTypeEnumMap = {
   DownloadItemType.collection: 'collection',
-  DownloadItemType.track: 'track',
+  DownloadItemType.song: 'song',
   DownloadItemType.image: 'image',
   DownloadItemType.anchor: 'anchor',
   DownloadItemType.finampCollection: 'finampCollection',
