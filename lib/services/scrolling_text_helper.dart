@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 
-import 'finamp_settings_helper.dart';
-
 class ScrollingTextHelper extends StatelessWidget {
   const ScrollingTextHelper({
     super.key,

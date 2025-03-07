@@ -1,4 +1,3 @@
-import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';

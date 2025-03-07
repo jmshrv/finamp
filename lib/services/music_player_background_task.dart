@@ -141,7 +141,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       darwinAudioEffects: _iosAudioEffects,
     );
 
-
     _player = AudioPlayer(
       audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(

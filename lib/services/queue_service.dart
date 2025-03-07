@@ -1109,7 +1109,8 @@ class QueueService {
             "Offline mode enabled but downloaded track not found.");
       } else {
         if (queueItem.item.extras!["shouldTranscode"] == true) {
-          return HlsAudioSource(await _trackUri(queueItem.item), tag: queueItem);
+          return HlsAudioSource(await _trackUri(queueItem.item),
+              tag: queueItem);
         } else {
           return AudioSource.uri(await _trackUri(queueItem.item),
               tag: queueItem);

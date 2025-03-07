@@ -10,7 +10,6 @@ import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/downloads_service.dart';
 import '../confirmation_prompt_dialog.dart';
-import '../global_snackbar.dart';
 import 'download_dialog.dart';
 
 class DownloadButton extends ConsumerWidget {

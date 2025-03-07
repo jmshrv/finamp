@@ -85,7 +85,7 @@ class AlbumChip extends StatelessWidget {
 }
 
 class _EmptyAlbumChip extends StatelessWidget {
-  const _EmptyAlbumChip({super.key});
+  const _EmptyAlbumChip();
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,6 @@ class _EmptyAlbumChip extends StatelessWidget {
 
 class _ReleaseDateChip extends StatelessWidget {
   const _ReleaseDateChip({
-    super.key,
     this.baseItem,
     this.backgroundColor,
     this.color,
@@ -145,7 +144,6 @@ class _ReleaseDateChip extends StatelessWidget {
 
 class _AlbumChipContent extends StatelessWidget {
   const _AlbumChipContent({
-    super.key,
     required this.item,
     required this.backgroundColor,
     required this.color,

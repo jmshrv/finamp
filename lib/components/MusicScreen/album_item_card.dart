@@ -73,7 +73,6 @@ class AlbumItemCard extends StatelessWidget {
 
 class _AlbumItemCardText extends StatelessWidget {
   const _AlbumItemCardText({
-    super.key,
     required this.item,
     required this.parentType,
   });

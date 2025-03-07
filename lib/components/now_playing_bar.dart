@@ -169,7 +169,6 @@ class NowPlayingBar extends ConsumerWidget {
               } else {
                 return SlideTransition(position: offsetAnimation, child: child);
               }
-
             },
             settings: const RouteSettings(name: PlayerScreen.routeName),
           ),

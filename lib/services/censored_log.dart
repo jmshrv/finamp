@@ -40,7 +40,6 @@ extension CensoredMessage on LogRecord {
         // remove anything between the quotes in "Failed host lookup: ''"
         workingLogString = workingLogString.replaceAll(
             RegExp(r"host: [^,]+, port: \d+"), "HOST");
-
       }
     }
 

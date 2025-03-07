@@ -11,7 +11,6 @@ import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,10 +22,8 @@ import '../../services/audio_service_helper.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/music_player_background_task.dart';
-import '../../services/process_artist.dart';
 import '../../services/theme_provider.dart';
 import '../album_image.dart';
-import '../favourite_button.dart';
 import '../print_duration.dart';
 import 'downloaded_indicator.dart';
 

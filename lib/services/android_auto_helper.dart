@@ -467,8 +467,8 @@ class AndroidAutoHelper {
         List<BaseItemDto>? items;
 
         if (FinampSettingsHelper.finampSettings.isOffline) {
-          items =
-              await _downloadsService.getCollectionTracks(album, playable: true);
+          items = await _downloadsService.getCollectionTracks(album,
+              playable: true);
         } else {
           items = await _jellyfinApiHelper.getItems(
               parentItem: album,

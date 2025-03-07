@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
-import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
@@ -1241,7 +1240,8 @@ class DownloadsService {
         .containsKey(downloadLocation)) {
       downloadLocation = null;
     }
-    downloadLocation ??= FinampSettingsHelper.finampSettings.internalTrackDir.id;
+    downloadLocation ??=
+        FinampSettingsHelper.finampSettings.internalTrackDir.id;
 
     // Automatically download playlist metadata (to enhance the playlist actions dialog and offline mode)
     await addDownload(
@@ -1568,8 +1568,8 @@ class DownloadsService {
                 ?.stat()
                 .then((value) => value.size)
                 .catchError((e) {
-              _downloadsLogger
-                  .fine("No file for track ${item.name} when calculating size.");
+              _downloadsLogger.fine(
+                  "No file for track ${item.name} when calculating size.");
               return 0;
             }) ??
             0;

@@ -132,18 +132,16 @@ class TrackNameContent extends StatelessWidget {
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
           Center(
-            child:
-            ScrollingTextHelper(
+            child: ScrollingTextHelper(
               id: ValueKey(mediaItem!.id),
               alignment: TextAlign.center,
-              text:  mediaItem == null
+              text: mediaItem == null
                   ? AppLocalizations.of(context)!.noItem
                   : mediaItem!.title,
               style: TextStyle(
                 fontSize: 24,
                 height: 26 / 20,
-                fontWeight:
-                Theme.of(context).brightness == Brightness.light
+                fontWeight: Theme.of(context).brightness == Brightness.light
                     ? FontWeight.w500
                     : FontWeight.w600,
               ),

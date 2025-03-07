@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';

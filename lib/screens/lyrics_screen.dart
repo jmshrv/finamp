@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/AddToPlaylistScreen/playlist_actions_menu.dart';
-import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -139,30 +137,30 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                     return const LyricsView();
                   } else {
                     return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Expanded(
-                        child: LyricsView(),
-                      ),
-                      SimpleGestureDetector(
-                          onVerticalSwipe: (direction) {
-                            if (direction == SwipeDirection.up) {
-                              // This should never actually be called until widget finishes build and controller is initialized
-                              if (!FinampSettingsHelper
-                                  .finampSettings.disableGesture) {
-                                showQueueBottomSheet(context);
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Expanded(
+                          child: LyricsView(),
+                        ),
+                        SimpleGestureDetector(
+                            onVerticalSwipe: (direction) {
+                              if (direction == SwipeDirection.up) {
+                                // This should never actually be called until widget finishes build and controller is initialized
+                                if (!FinampSettingsHelper
+                                    .finampSettings.disableGesture) {
+                                  showQueueBottomSheet(context);
+                                }
                               }
-                            }
-                          },
-                          child: Column(
-                            children: [
-                              TrackNameContent(controller),
-                              ControlArea(controller),
-                              const SizedBox(
-                                height: 12,
-                              )
-                            ],
-                          ))
+                            },
+                            child: Column(
+                              children: [
+                                TrackNameContent(controller),
+                                ControlArea(controller),
+                                const SizedBox(
+                                  height: 12,
+                                )
+                              ],
+                            ))
                       ],
                     );
                   }
@@ -170,8 +168,7 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }
 

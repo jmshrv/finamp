@@ -2,8 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/jellyfin_api.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';

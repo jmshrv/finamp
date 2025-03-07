@@ -51,7 +51,7 @@ class ArtistItemInfo extends StatelessWidget {
 }
 
 class _GenreIconAndText extends StatelessWidget {
-  const _GenreIconAndText({super.key, required this.genres});
+  const _GenreIconAndText({required this.genres});
 
   final List<NameLongIdPair> genres;
 

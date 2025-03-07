@@ -1323,8 +1323,8 @@ class DownloadsSyncService {
                     "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName") ??
             [];
         childItems.addAll(trackChildItems);
-        var trackChildStubs = trackChildItems.map(
-            (e) => DownloadStub.fromItem(type: DownloadItemType.track, item: e));
+        var trackChildStubs = trackChildItems.map((e) =>
+            DownloadStub.fromItem(type: DownloadItemType.track, item: e));
         childStubs.addAll(trackChildStubs);
       }
       itemFetch.complete(childItems.map((e) => e.id).toList());

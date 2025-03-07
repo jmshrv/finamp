@@ -21,7 +21,8 @@ class _TrackShuffleItemCountEditorState
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.shuffleAllTrackCount),
-      subtitle: Text(AppLocalizations.of(context)!.shuffleAllTrackCountSubtitle),
+      subtitle:
+          Text(AppLocalizations.of(context)!.shuffleAllTrackCountSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

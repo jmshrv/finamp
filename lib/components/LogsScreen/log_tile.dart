@@ -145,7 +145,7 @@ class _LogTileState extends State<LogTile> {
 }
 
 class _LogIcon extends StatelessWidget {
-  const _LogIcon({super.key, required this.level});
+  const _LogIcon({required this.level});
 
   final Level level;
 
@@ -164,7 +164,7 @@ class _LogIcon extends StatelessWidget {
 }
 
 class _LogMessageContent extends StatelessWidget {
-  const _LogMessageContent(this.content, {super.key});
+  const _LogMessageContent(this.content);
 
   final String content;
 

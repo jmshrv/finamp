@@ -7,8 +7,6 @@ import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dar
 import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/screens/player_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -152,15 +150,15 @@ class TrackNameContent extends StatelessWidget {
                   ),
                   Center(
                       child: Container(
-                          constraints: const BoxConstraints(maxWidth: 280),
+                    constraints: const BoxConstraints(maxWidth: 280),
                     child: AlbumChips(
                       baseItem: trackBaseItemDto!,
                       backgroundColor:
                           IconTheme.of(context).color!.withOpacity(0.1),
-                      key: trackBaseItemDto?.album == null
+                      key: trackBaseItemDto.album == null
                           ? null
-                          : ValueKey("${trackBaseItemDto!.album}-album"),
-                                  ),
+                          : ValueKey("${trackBaseItemDto.album}-album"),
+                    ),
                   ))
                 ],
               ));

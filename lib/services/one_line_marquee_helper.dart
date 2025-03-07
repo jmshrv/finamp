@@ -6,9 +6,11 @@ import 'package:balanced_text/balanced_text.dart';
 class OneLineMarqueeHelper extends StatelessWidget {
   final String text;
   final TextStyle style;
+  @override
   final Key key;
 
   const OneLineMarqueeHelper({
+    super.key, 
     required this.text,
     required this.style,
     required this.key,
@@ -79,7 +81,7 @@ class OneLineMarqueeHelper extends StatelessWidget {
             ),
           );
         } else {
-          return Container(
+          return SizedBox(
             width: constraints.maxWidth,
             child: BalancedText(
               text,

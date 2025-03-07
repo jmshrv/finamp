@@ -24,7 +24,7 @@ class ArtistScreen extends StatelessWidget {
       extendBody: true,
       body: SafeArea(
         child: ArtistScreenContent(
-         parent: artist,
+          parent: artist,
         ),
       ),
       bottomNavigationBar: const NowPlayingBar(),

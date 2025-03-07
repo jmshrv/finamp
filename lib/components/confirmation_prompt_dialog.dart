@@ -6,16 +6,13 @@ import 'global_snackbar.dart';
 
 class ConfirmationPromptDialog extends AlertDialog {
   const ConfirmationPromptDialog(
-      {Key? key,
+      {super.key, super..key,
       required this.promptText,
       required this.confirmButtonText,
       required this.abortButtonText,
       required this.onConfirmed,
       required this.onAborted,
-      this.centerText = false})
-      : super(key: key);
-
-  final String promptText;
+      this.centerText = false}ptText;
   final String confirmButtonText;
   final String abortButtonText;
   final void Function()? onConfirmed;
