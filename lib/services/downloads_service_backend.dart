@@ -24,6 +24,9 @@ import 'jellyfin_api_helper.dart';
 
 part 'downloads_service_backend.g.dart';
 
+const FINAMP_BASE_DOWNLOAD_DIRECTORY =
+    "songs"; //!!! don't ever change this without implementing a migration, it will break existing downloads
+
 class IsarPersistentStorage implements PersistentStorage {
   final _isar = GetIt.instance<Isar>();
 
@@ -1548,7 +1551,7 @@ class DownloadsSyncService {
           "${item.album} - ${item.indexNumber ?? 0} - ${item.name}$extension")!;
     } else {
       fileName = "${item.id}$extension";
-      subDirectory = "tracks";
+      subDirectory = FINAMP_BASE_DOWNLOAD_DIRECTORY;
     }
 
     if (downloadLocation.baseDirectory.baseDirectory == BaseDirectory.root) {
