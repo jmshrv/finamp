@@ -1936,5 +1936,17 @@
   "showProgressOnNowPlayingBarSubtitle": "控制應用程式內下方的迷你播放器 / 正在播放欄位是否同時作為進度條。",
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
+  },
+  "releaseDateFormatTitle": "發行日期格式",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "控制專輯發行日期於應用程式中顯示的格式。",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "在播放器介面中顯示專輯發行日期於專輯名稱之後。",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
   }
 }
