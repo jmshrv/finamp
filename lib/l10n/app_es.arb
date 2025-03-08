@@ -461,5 +461,29 @@
   "swipeInsertQueueNext": "Reproducir la siguiente canción al deslizarla",
   "@swipeInsertQueueNext": {},
   "about": "Acerca de Finamp",
-  "@about": {}
+  "@about": {},
+  "finampTagline": "Un reproductor de música para Jellyfin de código abierto",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionPrompt": "Hecho por gente increíble en su tiempo libre.\n¡Podrías ser uno de ellos!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "Contribuye a Finamp en GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "Lee los cambios de la ultima actualización:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutThanks": "¡Muchas gracias por usar Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowGetStarted": "¡Empieza!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  }
 }
