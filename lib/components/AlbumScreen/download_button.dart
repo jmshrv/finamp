@@ -4,6 +4,7 @@ import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -99,7 +100,6 @@ class DownloadButton extends ConsumerWidget {
       tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton(""),
       onPressed: () {
         askBeforeDeleteDownloadFromDevice(context, item);
-        // .whenComplete(() => checkIfDownloaded());
       },
     );
     var syncButton = IconButton(
@@ -122,6 +122,39 @@ class DownloadButton extends ConsumerWidget {
       },
     );
 
+    var deleteFromServerCombo = PopupMenuButton<Null>(
+      enableFeedback: true,
+      icon: const Icon(TablerIcons.dots_vertical),
+      onOpened: () => {},
+      itemBuilder: (context) {
+        return [
+          PopupMenuItem(
+              value: null,
+              child: ListTile(
+                  leading: Icon(Icons.delete_outline),
+                  title: Text(AppLocalizations.of(context)!
+                      .deleteFromTargetConfirmButton("")),
+                  enabled: true,
+                  onTap: () {
+                    askBeforeDeleteDownloadFromDevice(context, item);
+                  })),
+          PopupMenuItem(
+              value: null,
+              child: ListTile(
+                  leading: Icon(Icons.delete_forever),
+                  title: Text(AppLocalizations.of(context)!
+                      .deleteFromTargetConfirmButton("server")),
+                  enabled: true,
+                  onTap: () {
+                    askBeforeDeleteFromServerAndDevice(context, item,
+                        popIt: true,
+                        refresh: () => musicScreenRefreshStream.add(
+                            null)); // trigger a refresh of the music screen
+                  }))
+        ];
+      },
+    );
+
     if (isOffline) {
       if (status.isRequired) {
         return deleteButton;
@@ -130,9 +163,13 @@ class DownloadButton extends ConsumerWidget {
       }
     }
 
-    List<Widget> buttons = [status.isRequired ? deleteButton : downloadButton];
-    if (canDeleteFromServer) {
-      buttons.insert(0, serverDeleteButton);
+    List<Widget> buttons;
+    if (canDeleteFromServer && status.isRequired) {
+      buttons = [deleteFromServerCombo];
+    } else if (canDeleteFromServer) {
+      buttons = [serverDeleteButton, downloadButton];
+    } else {
+      buttons = [downloadButton];
     }
     // Only show sync on album/track if there we know we are outdated due to failed downloads or the like.
     // On playlists/artists/genres, always show if downloaded.
