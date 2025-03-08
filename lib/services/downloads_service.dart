@@ -780,12 +780,14 @@ class DownloadsService {
         .where((event) => event is File)
         .map((event) => path_helper.canonicalize(event.path));
     var filePaths = await imageFilePaths.toSet();
-    // This cleans internalSupport/tracks and internalDocuments/tracks
+    // This cleans FINAMP_BASE_DOWNLOAD_DIRECTORY in internalSupport
+    // and internalDocuments
     for (var trackBasePath in FinampSettingsHelper
         .finampSettings.downloadLocationsMap.values
         .where((element) => !element.baseDirectory.needsPath)
         .map((e) => e.currentPath)) {
-      var trackFilePaths = Directory(path_helper.join(trackBasePath, "tracks"))
+      var trackFilePaths = Directory(
+              path_helper.join(trackBasePath, FINAMP_BASE_DOWNLOAD_DIRECTORY))
           .list()
           .handleError((e) => _downloadsLogger
               .info("Error while cleaning track directories: $e"))
