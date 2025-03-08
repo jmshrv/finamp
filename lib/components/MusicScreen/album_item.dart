@@ -123,8 +123,6 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
     local = AppLocalizations.of(context)!;
 
     final screenSize = MediaQuery.of(context).size;
-    var canDeleteFromServer = ref.watch(_jellyfinApiHelper
-        .canDeleteFromServerProvider(CanDeleteRequest(widget.album)));
 
     void menuCallback({
       required Offset localPosition,
@@ -133,6 +131,8 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       unawaited(Feedback.forLongPress(context));
 
       final downloadsService = GetIt.instance<DownloadsService>();
+      final canDeleteFromServer = ref.watch(_jellyfinApiHelper
+          .canDeleteFromServerProvider(CanDeleteRequest(widget.album)));
       final downloadStatus = downloadsService.getStatus(
           DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album),
