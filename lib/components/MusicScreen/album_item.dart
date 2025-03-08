@@ -117,22 +117,14 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
   bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   bool deletableGotUpdated = false;
-  bool canDeleteFromServer = false;
 
   @override
   Widget build(BuildContext context) {
     local = AppLocalizations.of(context)!;
 
     final screenSize = MediaQuery.of(context).size;
-
-    if (!deletableGotUpdated) {
-      deletableGotUpdated = true;
-      var deletable = _jellyfinApiHelper.canDeleteFromServer(widget.album);
-      canDeleteFromServer = deletable.initialValue;
-      deletable.realValue?.then((canDelete) => setState(() {
-            canDeleteFromServer = canDelete;
-          }));
-    }
+    var canDeleteFromServer = ref.watch(_jellyfinApiHelper
+        .canDeleteFromServerProvider(CanDeleteRequest(widget.album)));
 
     void menuCallback({
       required Offset localPosition,
@@ -309,7 +301,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             ),
         ],
       );
-      if (!mounted) return;
+      if (!context.mounted) return;
 
       switch (selection) {
         case _AlbumListTileMenuItems.addFavourite:
@@ -655,8 +647,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.deleteFromDevice:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteDownloadFromDevice(context, item,
-              refresh: () => musicScreenRefreshStream.add(null));
+          await askBeforeDeleteDownloadFromDevice(context, item);
         case _AlbumListTileMenuItems.deleteFromServer:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);

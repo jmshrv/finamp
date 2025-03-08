@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
@@ -865,31 +866,59 @@ class JellyfinApiHelper {
     return uri;
   }
 
-  CanDeleteFromServerResponse canDeleteFromServer(BaseItemDto item) {
-    // Cant delete from server when offline anyway
-    if (FinampSettingsHelper.finampSettings.isOffline) {
-      return CanDeleteFromServerResponse(false, null);
+  late final ProviderFamily<bool, CanDeleteRequest>
+      canDeleteFromServerProvider =
+      ProviderFamily((ref, CanDeleteRequest item) {
+    bool offline = ref.watch(
+        finampSettingsProvider.select((value) => value.requireValue.isOffline));
+    if (offline) {
+      return false;
     }
-
-    // Cant delete if setting is disabled anyway
-    if (!FinampSettingsHelper.finampSettings.allowDeleteFromServer) {
-      return CanDeleteFromServerResponse(false, null);
+    bool deleteEnabled = ref.watch(finampSettingsProvider
+        .select((value) => value.requireValue.allowDeleteFromServer));
+    if (!deleteEnabled) {
+      return false;
     }
+    // do not bother checking server for item types known to not be deletable
+    var itemType = BaseItemDtoType.fromItem(item.item);
+    if (itemType != BaseItemDtoType.album &&
+        itemType != BaseItemDtoType.playlist &&
+        itemType != BaseItemDtoType.track) {
+      return false;
+    }
+    bool? serverReturn =
+        ref.watch(_canDeleteFromServerAsyncProvider(item.item.id)).value;
+    if (serverReturn == null) {
+      // fallback to true in case the response is invalid but the user could delete still
+      // worst case would be an error messing when trying to delete
+      return item.item.canDelete ?? true;
+    } else {
+      return serverReturn;
+    }
+  });
 
-    // fallback to true in case the response is invalid but the user could delete still
-    // worst case would be an error messing when trying to delete
-    var request = getItemById(item.id).then((response) {
-      return response.canDelete ?? true;
+  late final AutoDisposeFutureProviderFamily<bool?, String>
+      _canDeleteFromServerAsyncProvider =
+      AutoDisposeFutureProviderFamily((ref, String id) {
+    return getItemById(id).then((response) {
+      return response.canDelete;
     }).catchError((_) {
       return false;
     });
-    return CanDeleteFromServerResponse(item.canDelete ?? true, request);
-  }
+  });
 }
 
-class CanDeleteFromServerResponse {
-  final bool initialValue;
-  final Future<bool>? realValue;
+/// All CanDeleteRequests with the same BaseItemDto id should be considered equal.
+class CanDeleteRequest {
+  final BaseItemDto item;
 
-  CanDeleteFromServerResponse(this.initialValue, this.realValue);
+  CanDeleteRequest(this.item);
+
+  @override
+  bool operator ==(Object other) {
+    return other is CanDeleteRequest && other.item.id == item.id;
+  }
+
+  @override
+  int get hashCode => item.id.hashCode;
 }
