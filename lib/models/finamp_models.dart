@@ -1312,7 +1312,11 @@ class DownloadItem extends DownloadStub {
 }
 
 /// The primary type of a DownloadItem.
+///
 /// Enumerated by Isar, do not modify order or delete existing entries.
+/// The enum name is used by `DownloadStub.getHash` to calculate the isarId for
+/// the downloads system, DO NOT RENAME ANY ENTRIES IN HERE.
+/// New entries must be appended at the end of this list.
 enum DownloadItemType {
   collection(true, false),
   song(true, true),
