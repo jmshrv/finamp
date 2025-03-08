@@ -147,7 +147,7 @@
   "@dateAdded": {},
   "datePlayed": "Datum gespielt",
   "@datePlayed": {},
-  "playCount": "Anzahl abgespielt",
+  "playCount": "Wiedergaben",
   "@playCount": {},
   "revenue": "Einspielergebnis",
   "@revenue": {},
@@ -219,7 +219,7 @@
   "@downloadLocations": {},
   "audioService": "Audio-Dienst",
   "@audioService": {},
-  "layoutAndTheme": "Layout & Thema",
+  "layoutAndTheme": "Layout & Aussehen",
   "@layoutAndTheme": {},
   "transcoding": "Transkodierung",
   "@transcoding": {},
@@ -1008,7 +1008,7 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "requireWifiForDownloads": "Erfordert WiFi beim Herunterladen.",
+  "requireWifiForDownloads": "Nur über WLAN herunterladen.",
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
@@ -1061,7 +1061,7 @@
   "@addRemoveFromPlaylist": {
     "description": "Header for add to/remove from playlist popup menu"
   },
-  "allPlaylistsInfoSetting": "Metadaten der Playlist herunterladen",
+  "allPlaylistsInfoSetting": "Playlists-Metadaten herunterladen",
   "@allPlaylistsInfoSetting": {},
   "downloadFavoritesSetting": "Alle Favoriten herunterladen",
   "@downloadFavoritesSetting": {},
@@ -1097,7 +1097,7 @@
   "@keepScreenOnWhilePlaying": {},
   "keepScreenOnWhileLyrics": "Beim Anzeigen von Lyrics",
   "@keepScreenOnWhileLyrics": {},
-  "keepScreenOnWhilePluggedIn": "Bildschirm nur eingeschaltet lassen, wenn am Stromnetz angeschlossen",
+  "keepScreenOnWhilePluggedIn": "Bildschirm nur eingeschaltet lassen, während das Gerät geladen wird",
   "@keepScreenOnWhilePluggedIn": {},
   "bitDepth": "Bittiefe",
   "@bitDepth": {
@@ -1793,7 +1793,7 @@
   "@trackOfflineFavoritesSubtitle": {},
   "trackOfflineFavorites": "Alle Favoriten-Markierungen synchronisieren",
   "@trackOfflineFavorites": {},
-  "allPlaylistsInfoSettingSubtitle": "Für eine bessere Nutzererfahrung die Metadaten für alle Playlisten synchronisieren",
+  "allPlaylistsInfoSettingSubtitle": "Metadaten für alle Playlisten synchronisieren, um dein Playlist-Erlebnis zu verbessern",
   "@allPlaylistsInfoSettingSubtitle": {},
   "fiveLatestAlbumsSettingSubtitle": "Downloads werden entfernt, sobald sie nicht mehr aktuell sind. Sperre den Download, um zu verhindern, dass ein Album entfernt wird.",
   "@fiveLatestAlbumsSettingSubtitle": {},
@@ -1829,7 +1829,7 @@
   },
   "marqueeOrTruncateButton": "Ellipse für lange Titel verwenden",
   "@marqueeOrTruncateButton": {},
-  "cacheLibraryImagesSettings": "Cache derzeitige Bibliotheks-Bilder",
+  "cacheLibraryImagesSettings": "Bilder der aktiven Bibliothek zwischenspeichern",
   "@cacheLibraryImagesSettings": {},
   "lyricsAlignmentSubtitle": "Legt die Ausrichtung von Lyrics in der Lyrics-Ansicht fest.",
   "@lyricsAlignmentSubtitle": {
