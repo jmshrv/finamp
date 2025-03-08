@@ -485,5 +485,45 @@
   "loginFlowGetStarted": "¡Empieza!",
   "@loginFlowGetStarted": {
     "description": "Button label for the login/splash screen."
+  },
+  "aboutTranslations": "Ayúdanos a traducir Finamp a tu idioma:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "Bienvenido a",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowSlogan": "Tu música, en la manera que tu quieras.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "viewLogs": "Mostrar los Registros",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "changeLanguage": "Cambiar el idioma",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "Conectarse a Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "Atrás",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlHint": "ej. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "serverUrlInfoButtonTooltip": "Ayuda sobre la URL del servidor",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "connectingToServer": "Conectándose al servidor...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
   }
 }
