@@ -207,7 +207,7 @@
   "@updateButtonLabel": {},
   "downloadsDeleted": "Downloads gelöscht.",
   "@downloadsDeleted": {},
-  "addDownloads": "Downloads hinzufügen",
+  "addDownloads": "Download hinzufügen",
   "@addDownloads": {},
   "location": "Ort",
   "@location": {},
@@ -1004,7 +1004,7 @@
       }
     }
   },
-  "downloadItem": "Download",
+  "downloadItem": "Herunterladen",
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
@@ -1057,7 +1057,7 @@
   "@trackMenuButtonTooltip": {
     "description": "Tooltip for the button that opens the track menu"
   },
-  "addRemoveFromPlaylist": "Zu/Aus Playlist hinzufügen/entfernen",
+  "addRemoveFromPlaylist": "Zu Playlist hinzufügen oder entfernen",
   "@addRemoveFromPlaylist": {
     "description": "Header for add to/remove from playlist popup menu"
   },
@@ -1245,7 +1245,7 @@
       }
     }
   },
-  "addPlaylistSubheader": "Track zur Playlist hinzufügen",
+  "addPlaylistSubheader": "Track zu einer Playlist hinzufügen",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
@@ -1517,7 +1517,7 @@
       }
     }
   },
-  "loopModeOneButtonLabel": "Dieser Track wird wiederholt",
+  "loopModeOneButtonLabel": "Diesen Track wiederholen",
   "@loopModeOneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
   },
