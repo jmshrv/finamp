@@ -338,299 +338,293 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                 if (!isGenre)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Column(
-                      children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CTAMedium(
-                                    text: AppLocalizations.of(context)!
-                                        .playButtonLabel,
-                                    icon: TablerIcons.player_play,
-                                    onPressed: () => allTracks.then((items) =>
-                                        playAllFromArtist(items ?? [])),
-                                    // set the minimum width as 25% of the screen width,
-                                    minWidth:
-                                        MediaQuery.of(context).size.width *
-                                            0.25,
-                                  ),
-                                  PopupMenuButton<ArtistMenuItems>(
-                                    enableFeedback: true,
-                                    // icon: const Icon(TablerIcons.dots_vertical),
-                                    onOpened: () => FeedbackHelper.feedback(
-                                        FeedbackType.light),
-                                    itemBuilder: (context) {
-                                      final queueService =
-                                          GetIt.instance<QueueService>();
-                                      return <PopupMenuEntry<ArtistMenuItems>>[
-                                        if (queueService
-                                            .getQueue()
-                                            .nextUp
-                                            .isNotEmpty)
-                                          PopupMenuItem<ArtistMenuItems>(
-                                            value: ArtistMenuItems.playNext,
-                                            child: ListTile(
-                                              leading: const Icon(TablerIcons
-                                                  .corner_right_down),
-                                              title: Text(
-                                                  AppLocalizations.of(context)!
-                                                      .playNext),
-                                            ),
-                                          ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CTAMedium(
+                                  text: AppLocalizations.of(context)!
+                                      .playButtonLabel,
+                                  icon: TablerIcons.player_play,
+                                  onPressed: () => allTracks.then((items) =>
+                                      playAllFromArtist(items ?? [])),
+                                  // set the minimum width as 25% of the screen width,
+                                  minWidth:
+                                      MediaQuery.of(context).size.width * 0.25,
+                                ),
+                                PopupMenuButton<ArtistMenuItems>(
+                                  enableFeedback: true,
+                                  // icon: const Icon(TablerIcons.dots_vertical),
+                                  onOpened: () => FeedbackHelper.feedback(
+                                      FeedbackType.light),
+                                  itemBuilder: (context) {
+                                    final queueService =
+                                        GetIt.instance<QueueService>();
+                                    return <PopupMenuEntry<ArtistMenuItems>>[
+                                      if (queueService
+                                          .getQueue()
+                                          .nextUp
+                                          .isNotEmpty)
                                         PopupMenuItem<ArtistMenuItems>(
-                                          value: ArtistMenuItems.addToNextUp,
-                                          child: ListTile(
-                                            leading: const Icon(TablerIcons
-                                                .corner_right_down_double),
-                                            title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .addToNextUp),
-                                          ),
-                                        ),
-                                        PopupMenuItem<ArtistMenuItems>(
-                                          value: ArtistMenuItems.addToQueue,
+                                          value: ArtistMenuItems.playNext,
                                           child: ListTile(
                                             leading: const Icon(
-                                                TablerIcons.playlist),
+                                                TablerIcons.corner_right_down),
                                             title: Text(
                                                 AppLocalizations.of(context)!
-                                                    .addToQueue),
+                                                    .playNext),
                                           ),
                                         ),
-                                      ];
-                                    },
-                                    onSelected:
-                                        (ArtistMenuItems selection) async {
-                                      switch (selection) {
-                                        case ArtistMenuItems.playNext:
-                                          allTracks.then((items) =>
-                                              addArtistNext(items ?? []));
-                                          break;
-                                        case ArtistMenuItems.addToNextUp:
-                                          allTracks.then((items) =>
-                                              addArtistToNextUp(items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleNext:
-                                          allTracks.then((items) =>
-                                              shuffleAllFromArtistNext(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleToNextUp:
-                                          allTracks.then((items) =>
-                                              shuffleAllFromArtistToNextUp(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems.addToQueue:
-                                          allTracks.then((items) =>
-                                              addArtistToQueue(items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleToQueue:
-                                          allTracks.then((items) =>
-                                              shuffleAllFromArtistToQueue(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleAlbums:
-                                          allTracks.then((items) =>
-                                              shuffleAlbumsFromArtist(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleAlbumsNext:
-                                          allTracks.then((items) =>
-                                              shuffleAlbumsFromArtistNext(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems
-                                              .shuffleAlbumsToNextUp:
-                                          allTracks.then((items) =>
-                                              shuffleAlbumsFromArtistToNextUp(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems
-                                              .shuffleAlbumsToQueue:
-                                          allTracks.then((items) =>
-                                              shuffleAlbumsFromArtistToQueue(
-                                                  items ?? []));
-                                          break;
-                                        default:
-                                          break;
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CTAMedium(
-                                    text: AppLocalizations.of(context)!
-                                        .shuffleButtonLabel,
-                                    icon: TablerIcons.arrows_shuffle,
-                                    onPressed: () => allTracks.then((items) =>
-                                        shuffleAllFromArtist(items ?? [])),
-                                    // set the minimum width as 25% of the screen width,
-                                    minWidth:
-                                        MediaQuery.of(context).size.width *
-                                            0.25,
-                                  ),
-                                  PopupMenuButton<ArtistMenuItems>(
-                                    enableFeedback: true,
-                                    // icon: const Icon(TablerIcons.dots_vertical),
-                                    onOpened: () => FeedbackHelper.feedback(
-                                        FeedbackType.light),
-                                    itemBuilder: (context) {
-                                      final queueService =
-                                          GetIt.instance<QueueService>();
-                                      return <PopupMenuEntry<ArtistMenuItems>>[
-                                        if (queueService
-                                            .getQueue()
-                                            .nextUp
-                                            .isNotEmpty)
-                                          PopupMenuItem<ArtistMenuItems>(
-                                            value: ArtistMenuItems.shuffleNext,
-                                            child: ListTile(
-                                              leading: const Icon(TablerIcons
-                                                  .corner_right_down),
-                                              title: Text(
-                                                  AppLocalizations.of(context)!
-                                                      .shuffleNext),
-                                            ),
+                                      PopupMenuItem<ArtistMenuItems>(
+                                        value: ArtistMenuItems.addToNextUp,
+                                        child: ListTile(
+                                          leading: const Icon(TablerIcons
+                                              .corner_right_down_double),
+                                          title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .addToNextUp),
+                                        ),
+                                      ),
+                                      PopupMenuItem<ArtistMenuItems>(
+                                        value: ArtistMenuItems.addToQueue,
+                                        child: ListTile(
+                                          leading:
+                                              const Icon(TablerIcons.playlist),
+                                          title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .addToQueue),
+                                        ),
+                                      ),
+                                    ];
+                                  },
+                                  onSelected:
+                                      (ArtistMenuItems selection) async {
+                                    switch (selection) {
+                                      case ArtistMenuItems.playNext:
+                                        allTracks.then((items) =>
+                                            addArtistNext(items ?? []));
+                                        break;
+                                      case ArtistMenuItems.addToNextUp:
+                                        allTracks.then((items) =>
+                                            addArtistToNextUp(items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleNext:
+                                        allTracks.then((items) =>
+                                            shuffleAllFromArtistNext(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleToNextUp:
+                                        allTracks.then((items) =>
+                                            shuffleAllFromArtistToNextUp(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.addToQueue:
+                                        allTracks.then((items) =>
+                                            addArtistToQueue(items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleToQueue:
+                                        allTracks.then((items) =>
+                                            shuffleAllFromArtistToQueue(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleAlbums:
+                                        allTracks.then((items) =>
+                                            shuffleAlbumsFromArtist(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleAlbumsNext:
+                                        allTracks.then((items) =>
+                                            shuffleAlbumsFromArtistNext(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems
+                                            .shuffleAlbumsToNextUp:
+                                        allTracks.then((items) =>
+                                            shuffleAlbumsFromArtistToNextUp(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleAlbumsToQueue:
+                                        allTracks.then((items) =>
+                                            shuffleAlbumsFromArtistToQueue(
+                                                items ?? []));
+                                        break;
+                                      default:
+                                        break;
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CTAMedium(
+                                  text: AppLocalizations.of(context)!
+                                      .shuffleButtonLabel,
+                                  icon: TablerIcons.arrows_shuffle,
+                                  onPressed: () => allTracks.then((items) =>
+                                      shuffleAllFromArtist(items ?? [])),
+                                  // set the minimum width as 25% of the screen width,
+                                  minWidth:
+                                      MediaQuery.of(context).size.width * 0.25,
+                                ),
+                                PopupMenuButton<ArtistMenuItems>(
+                                  enableFeedback: true,
+                                  // icon: const Icon(TablerIcons.dots_vertical),
+                                  onOpened: () => FeedbackHelper.feedback(
+                                      FeedbackType.light),
+                                  itemBuilder: (context) {
+                                    final queueService =
+                                        GetIt.instance<QueueService>();
+                                    return <PopupMenuEntry<ArtistMenuItems>>[
+                                      if (queueService
+                                          .getQueue()
+                                          .nextUp
+                                          .isNotEmpty)
+                                        PopupMenuItem<ArtistMenuItems>(
+                                          value: ArtistMenuItems.shuffleNext,
+                                          child: ListTile(
+                                            leading: const Icon(
+                                                TablerIcons.corner_right_down),
+                                            title: Text(
+                                                AppLocalizations.of(context)!
+                                                    .shuffleNext),
                                           ),
+                                        ),
+                                      PopupMenuItem<ArtistMenuItems>(
+                                        value: ArtistMenuItems.shuffleToNextUp,
+                                        child: ListTile(
+                                          leading: const Icon(TablerIcons
+                                              .corner_right_down_double),
+                                          title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .shuffleToNextUp),
+                                        ),
+                                      ),
+                                      PopupMenuItem<ArtistMenuItems>(
+                                        value: ArtistMenuItems.shuffleToQueue,
+                                        child: ListTile(
+                                          leading:
+                                              const Icon(TablerIcons.playlist),
+                                          title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .shuffleToQueue),
+                                        ),
+                                      ),
+                                      PopupMenuItem<ArtistMenuItems>(
+                                        value: ArtistMenuItems.shuffleAlbums,
+                                        child: ListTile(
+                                          leading:
+                                              const Icon(TablerIcons.playlist),
+                                          title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .shuffleAlbums),
+                                        ),
+                                      ),
+                                      if (queueService
+                                          .getQueue()
+                                          .nextUp
+                                          .isNotEmpty)
                                         PopupMenuItem<ArtistMenuItems>(
                                           value:
-                                              ArtistMenuItems.shuffleToNextUp,
-                                          child: ListTile(
-                                            leading: const Icon(TablerIcons
-                                                .corner_right_down_double),
-                                            title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .shuffleToNextUp),
-                                          ),
-                                        ),
-                                        PopupMenuItem<ArtistMenuItems>(
-                                          value: ArtistMenuItems.shuffleToQueue,
+                                              ArtistMenuItems.shuffleAlbumsNext,
                                           child: ListTile(
                                             leading: const Icon(
-                                                TablerIcons.playlist),
+                                                TablerIcons.corner_right_down),
                                             title: Text(
                                                 AppLocalizations.of(context)!
-                                                    .shuffleToQueue),
+                                                    .shuffleAlbumsNext),
                                           ),
                                         ),
-                                        PopupMenuItem<ArtistMenuItems>(
-                                          value: ArtistMenuItems.shuffleAlbums,
-                                          child: ListTile(
-                                            leading: const Icon(
-                                                TablerIcons.playlist),
-                                            title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .shuffleAlbums),
-                                          ),
+                                      PopupMenuItem<ArtistMenuItems>(
+                                        value: ArtistMenuItems
+                                            .shuffleAlbumsToNextUp,
+                                        child: ListTile(
+                                          leading: const Icon(TablerIcons
+                                              .corner_right_down_double),
+                                          title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .shuffleAlbumsToNextUp),
                                         ),
-                                        if (queueService
-                                            .getQueue()
-                                            .nextUp
-                                            .isNotEmpty)
-                                          PopupMenuItem<ArtistMenuItems>(
-                                            value: ArtistMenuItems
-                                                .shuffleAlbumsNext,
-                                            child: ListTile(
-                                              leading: const Icon(TablerIcons
-                                                  .corner_right_down),
-                                              title: Text(
-                                                  AppLocalizations.of(context)!
-                                                      .shuffleAlbumsNext),
-                                            ),
-                                          ),
-                                        PopupMenuItem<ArtistMenuItems>(
-                                          value: ArtistMenuItems
-                                              .shuffleAlbumsToNextUp,
-                                          child: ListTile(
-                                            leading: const Icon(TablerIcons
-                                                .corner_right_down_double),
-                                            title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .shuffleAlbumsToNextUp),
-                                          ),
+                                      ),
+                                      PopupMenuItem<ArtistMenuItems>(
+                                        value: ArtistMenuItems
+                                            .shuffleAlbumsToQueue,
+                                        child: ListTile(
+                                          leading:
+                                              const Icon(TablerIcons.playlist),
+                                          title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .shuffleAlbumsToQueue),
                                         ),
-                                        PopupMenuItem<ArtistMenuItems>(
-                                          value: ArtistMenuItems
-                                              .shuffleAlbumsToQueue,
-                                          child: ListTile(
-                                            leading: const Icon(
-                                                TablerIcons.playlist),
-                                            title: Text(
-                                                AppLocalizations.of(context)!
-                                                    .shuffleAlbumsToQueue),
-                                          ),
-                                        ),
-                                      ];
-                                    },
-                                    onSelected:
-                                        (ArtistMenuItems selection) async {
-                                      switch (selection) {
-                                        case ArtistMenuItems.playNext:
-                                          allTracks.then((items) =>
-                                              addArtistNext(items ?? []));
-                                          break;
-                                        case ArtistMenuItems.addToNextUp:
-                                          allTracks.then((items) =>
-                                              addArtistToNextUp(items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleNext:
-                                          allTracks.then((items) =>
-                                              shuffleAllFromArtistNext(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleToNextUp:
-                                          allTracks.then((items) =>
-                                              shuffleAllFromArtistToNextUp(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems.addToQueue:
-                                          allTracks.then((items) =>
-                                              addArtistToQueue(items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleToQueue:
-                                          allTracks.then((items) =>
-                                              shuffleAllFromArtistToQueue(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleAlbums:
-                                          allTracks.then((items) =>
-                                              shuffleAlbumsFromArtist(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems.shuffleAlbumsNext:
-                                          allTracks.then((items) =>
-                                              shuffleAlbumsFromArtistNext(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems
-                                              .shuffleAlbumsToNextUp:
-                                          allTracks.then((items) =>
-                                              shuffleAlbumsFromArtistToNextUp(
-                                                  items ?? []));
-                                          break;
-                                        case ArtistMenuItems
-                                              .shuffleAlbumsToQueue:
-                                          allTracks.then((items) =>
-                                              shuffleAlbumsFromArtistToQueue(
-                                                  items ?? []));
-                                          break;
-                                        default:
-                                          break;
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ]),
-                      ],
+                                      ),
+                                    ];
+                                  },
+                                  onSelected:
+                                      (ArtistMenuItems selection) async {
+                                    switch (selection) {
+                                      case ArtistMenuItems.playNext:
+                                        allTracks.then((items) =>
+                                            addArtistNext(items ?? []));
+                                        break;
+                                      case ArtistMenuItems.addToNextUp:
+                                        allTracks.then((items) =>
+                                            addArtistToNextUp(items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleNext:
+                                        allTracks.then((items) =>
+                                            shuffleAllFromArtistNext(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleToNextUp:
+                                        allTracks.then((items) =>
+                                            shuffleAllFromArtistToNextUp(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.addToQueue:
+                                        allTracks.then((items) =>
+                                            addArtistToQueue(items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleToQueue:
+                                        allTracks.then((items) =>
+                                            shuffleAllFromArtistToQueue(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleAlbums:
+                                        allTracks.then((items) =>
+                                            shuffleAlbumsFromArtist(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleAlbumsNext:
+                                        allTracks.then((items) =>
+                                            shuffleAlbumsFromArtistNext(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems
+                                            .shuffleAlbumsToNextUp:
+                                        allTracks.then((items) =>
+                                            shuffleAlbumsFromArtistToNextUp(
+                                                items ?? []));
+                                        break;
+                                      case ArtistMenuItems.shuffleAlbumsToQueue:
+                                        allTracks.then((items) =>
+                                            shuffleAlbumsFromArtistToQueue(
+                                                items ?? []));
+                                        break;
+                                      default:
+                                        break;
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ]),
                     ),
                   )
               ],
