@@ -23,13 +23,13 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "startMix": "Starte Mix",
+  "startMix": "Mix Starten",
   "@startMix": {},
-  "startMixNoTracksAlbum": "Vor dem Starten eines Mixes lange auf einem Album gedrückt halten, um es zum Mix hinzuzufügen oder zu entfernen",
+  "startMixNoTracksAlbum": "Halte ein Album gedrückt, um es zum Mix hinzuzufügen oder zu entfernen, bevor to einen Mix startest",
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "clear": "Entfernen",
+  "clear": "Löschen",
   "@clear": {},
   "internalExternalIpExplanation": "Wenn du aus der Ferne auf deinen Jellyfin-Server zugreifen möchtest, musst du deine externe IP verwenden.\n\nWenn dein Server auf einem HTTP Standardport (80 oder 443) oder Jellyfins Standardport (8096) läuft, musst du den Port nicht angeben.\n\nWenn die URL korrekt ist, solltest du einige Informationen über deinen Server unterhalb des Eingabefeldes sehen.",
   "@internalExternalIpExplanation": {
@@ -39,7 +39,7 @@
   "@next": {},
   "logs": "Logs",
   "@logs": {},
-  "startMixNoTracksArtist": "Vor dem Starten eines Mixes lange auf einem Künstler gedrückt halten, um ihn zum Mix hinzuzufügen oder zu entfernen",
+  "startMixNoTracksArtist": "Halte einen Künstler gedrückt, um ihn zum Mix hinzuzufügen oder zu entfernen, bevor du einen Mix startest",
   "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
@@ -65,7 +65,7 @@
   "@offlineMode": {},
   "sortBy": "Sortieren nach",
   "@sortBy": {},
-  "sortOrder": "Sortier-Reihenfolge",
+  "sortOrder": "Sortierung",
   "@sortOrder": {},
   "productionYear": "Produktionsjahr",
   "@productionYear": {},
@@ -195,13 +195,13 @@
       }
     }
   },
-  "failedToGetTrackFromDownloadId": "Track konnte nicht über die Download-ID abgerufen werden",
+  "failedToGetTrackFromDownloadId": "Keinen Track für diese Download-ID gefunden",
   "@failedToGetTrackFromDownloadId": {},
-  "playButtonLabel": "Wiedergabe",
+  "playButtonLabel": "Wiedergeben",
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Zufällig",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTitle": "Playlist-Name editieren",
+  "editPlaylistNameTitle": "Playlist Umbenennen",
   "@editPlaylistNameTitle": {},
   "updateButtonLabel": "Aktualisieren",
   "@updateButtonLabel": {},
@@ -217,7 +217,7 @@
   "@stackTrace": {},
   "downloadLocations": "Download Orte",
   "@downloadLocations": {},
-  "audioService": "Audio Service",
+  "audioService": "Audio-Dienst",
   "@audioService": {},
   "layoutAndTheme": "Layout & Thema",
   "@layoutAndTheme": {},
@@ -348,7 +348,7 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Playlist-Name editieren",
+  "editPlaylistNameTooltip": "Playlist umbenennen",
   "@editPlaylistNameTooltip": {},
   "playlistNameUpdated": "Playlist-Name aktualisiert.",
   "@playlistNameUpdated": {},
@@ -402,7 +402,7 @@
       }
     }
   },
-  "errorScreenError": "Beim Abrufen der Fehlerliste ist ein Fehler aufgetreten! An diesem Punkt solltest du wahrscheinlich einfach einen Issue auf GitHub erstellen und die App-Daten löschen",
+  "errorScreenError": "Beim Abrufen der Fehlerliste ist ein Fehler aufgetreten! Jetzt ist es vermutlich am besten, einen Issue auf GitHub zu erstellen und die App-Daten zu löschen",
   "@errorScreenError": {},
   "addToMix": "Zu Mix hinzufügen",
   "@addToMix": {},
@@ -484,7 +484,7 @@
   "@aboutContributionLink": {
     "description": "Link to the Finamp GitHub repository, shown in the about screen."
   },
-  "aboutThanks": "Danke für die Nutzung von Finamp!",
+  "aboutThanks": "Danke, dass du Finamp nutzt!",
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
@@ -550,7 +550,7 @@
   "@loginFlowNamelessUser": {
     "description": "Name for a user that doesn't have a name set on the server."
   },
-  "loginFlowAuthenticationHeading": "Bei deinem Konto anmelden",
+  "loginFlowAuthenticationHeading": "Mit deinem Konto anmelden",
   "@loginFlowAuthenticationHeading": {
     "description": "Heading for the authentication step during the login flow."
   },
@@ -635,7 +635,7 @@
     },
     "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
   },
-  "startMixNoTracksGenre": "Drücke lange auf ein Genre, um es vor dem Start eines Mixes hinzuzufügen oder aus dem Mix zu entfernen",
+  "startMixNoTracksGenre": "Drücke lange auf ein Genre, um zum Mixes hinzuzufügen oder zu entfernen, bevor du einen Mix startest",
   "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
@@ -677,7 +677,7 @@
   "@emptyFilteredListSubtitle": {
     "description": "Message shown when a list of items is filtered and no items match the filter"
   },
-  "aboutContributionPrompt": "Ermöglicht von wunderbaren Menschen in ihrer Freizeit.\nDu könntest einer von ihnen sein!",
+  "aboutContributionPrompt": "Von wunderbaren Menschen in ihrer Freizeit gemacht.\nDu könntest eine(r) von ihnen sein!",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
@@ -1495,7 +1495,7 @@
       }
     }
   },
-  "queueRestoreError": "Warnung: {count,plural, =1{{count} Track} other{{count} Tracks}} konnten nicht aus der Warteschlange wiederhergestellt werden.",
+  "queueRestoreError": "Warnung: {count,plural, =1{{count} Track konnte} other{{count} Tracks konnten}} nicht aus der Warteschlange wiederhergestellt werden.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
@@ -1525,7 +1525,7 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "playbackOrderShuffledButtonTooltip": "Zufallswiedergabe. Tippen für Wiedergabe in Reihenfolge.",
+  "playbackOrderShuffledButtonTooltip": "Zufallswiedergabe. Tippen, um der Reihe nach abzuspielen.",
   "@playbackOrderShuffledButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
@@ -1543,7 +1543,7 @@
   },
   "bufferDisableSizeConstraintsTitle": "Puffergröße nicht limitieren",
   "@bufferDisableSizeConstraintsTitle": {},
-  "bufferDisableSizeConstraintsSubtitle": "Deaktiviert die Begrenzung der Puffergröße. Der Puffer wird immer bis zur eingestellten Pufferdauer gefüllt, auch für Dateien mit hohen Bitraten. Kann zu Abstürzen führen. Neustart erforderlich.",
+  "bufferDisableSizeConstraintsSubtitle": "Deaktiviert die Begrenzung der Puffergröße. Der Puffer wird immer bis zur eingestellten Pufferdauer gefüllt, selbst bei sehr großen Dateien. Kann zu Abstürzen führen. Neustart erforderlich.",
   "@bufferDisableSizeConstraintsSubtitle": {},
   "bufferSizeTitle": "Puffergröße",
   "@bufferSizeTitle": {},
@@ -1582,7 +1582,7 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "oneLineMarqueeTextButtonSubtitle": "Automatisch Tracktitel scrollen, die zu lang sind um in zwei Zeilen angezeigt zu werden",
+  "oneLineMarqueeTextButtonSubtitle": "Automatisch Titel scrollen, wenn sie länger als zwei Zeilen sind",
   "@oneLineMarqueeTextButtonSubtitle": {},
   "hideQueueButtonSubtitle": "Verstecke den Warteschlangen-Button in der Wiedergabe-Ansicht. Swipe nach oben, um auf die Warteschlange zuzugreifen.",
   "@hideQueueButtonSubtitle": {},
@@ -1684,7 +1684,7 @@
   "@oneLineMarqueeTextButton": {},
   "marqueeOrTruncateButtonSubtitle": "Am Ende zu langer Tracktitel ... anzeigen, statt zu scrollen",
   "@marqueeOrTruncateButtonSubtitle": {},
-  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nFür normales Playback wird der Track Gain benutzt. Wenn ein Album gespielt wird (entweder direkt als Hauptquelle oder weil es irgendwann zur Warteschlange hinzugefügt wurde), wird stattdessen der Album-Gain verwendet.\n\nTrack-basiert:\nEs wird immer der Track Gain verwendet, unabhängig davon, ob ein ganzes Album gespielt wird oder nicht.\n\nNur Alben:\nLautstärken-Normalisierung wird nur bei der Wiedergabe von Alben (mit dem Album Gain) angewendet, nicht für individuelle Tracks.",
+  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nFür normales Playback wird der Track Gain benutzt. Wenn ein Album gespielt wird (entweder direkt oder weil es irgendwann zur Warteschlange hinzugefügt wurde), wird stattdessen der Album-Gain verwendet.\n\nTrack-basiert:\nEs wird immer der Track Gain verwendet, selbst wenn ein ganzes Album gespielt wird.\n\nNur Alben:\nLautstärken-Normalisierung wird nur bei der Wiedergabe von Alben (mit dem Album Gain) angewendet, aber nicht für individuelle Tracks.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -1847,7 +1847,7 @@
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
   },
-  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Künstler} genre{Genre} track{Track} library{Bibliothek} other{Item}} wurde {deviceType, select, device{vom Gerät} server{vom Server} other{unknown}} gelöscht",
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Künstler} genre{Genre} track{Titel} library{Bibliothek} other{Item}} wurde {deviceType, select, device{vom Gerät} server{vom Server} other{unknown}} gelöscht",
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
@@ -1885,7 +1885,7 @@
       }
     }
   },
-  "deleteFromTargetDialogText": "Du bist dabei, {itemType, select, album{das Album} playlist{die Playlist} artist{den Künstler} genre{das Genre} track{den Track} library{die Bibliothek} other{das Item}} {device, select, device{von diesem Gerät zu löschen} server{von der Bibliothek und dem Dateisystem des Servers zu löschen.{deleteType, select, canDelete{ Das Item wird dadurch auch von diesem Gerät gelöscht werden.} cantDelete{ Das Item wird bis zur nächsten Synchronisierung auf diesem Gerät bleiben.} notDownloaded{} other{}}\nDiese Aktion kann nicht rückgängig gemacht werden} other{}}.",
+  "deleteFromTargetDialogText": "Du bist dabei, {itemType, select, album{das Album} playlist{die Playlist} artist{den Künstler} genre{das Genre} track{den Track} library{die Bibliothek} other{das Item}} {device, select, device{von diesem Gerät zu löschen} server{von der Bibliothek und dem Dateisystem des Servers zu löschen.{deleteType, select, canDelete{ Das Item wird dadurch auch von diesem Gerät gelöscht.} cantDelete{ Das Item wird bis zur nächsten Synchronisierung auf diesem Gerät bleiben.} notDownloaded{} other{}}\nDiese Aktion kann nicht rückgängig gemacht werden} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
