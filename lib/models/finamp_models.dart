@@ -1115,7 +1115,7 @@ class DownloadStub {
 
   /// Calculate a DownloadStub's isarId
   static int getHash(String id, DownloadItemType type) {
-    return _fastHash(type.name + id);
+    return _fastHash(type.isarType + id);
   }
 
   @override
@@ -1302,17 +1302,21 @@ class DownloadItem extends DownloadStub {
 /// The primary type of a DownloadItem.
 ///
 /// Enumerated by Isar, do not modify order or delete existing entries.
-/// The enum name is used by `DownloadStub.getHash` to calculate the isarId for
-/// the downloads system, DO NOT RENAME ANY ENTRIES IN HERE.
 /// New entries must be appended at the end of this list.
 enum DownloadItemType {
-  collection(true, false),
-  song(true, true),
-  image(true, true),
-  anchor(false, false),
-  finampCollection(false, false);
+  collection("collection", true, false),
+  song("song", true, true),
+  image("image", true, true),
+  anchor("anchor", false, false),
+  finampCollection("finampCollection", false, false);
 
-  const DownloadItemType(this.requiresItem, this.hasFiles);
+  const DownloadItemType(this.isarType, this.requiresItem, this.hasFiles);
+
+  ///!!! Used by `DownloadStub.getHash` to calculate the isarId for
+  ///!!! the downloads system, DO NOT EDIT for any existing entries.
+  ///!!! Doing so would invalidate existing downloads
+  ///!!! and cause them to be deleted and re-downloaded.
+  final String isarType;
 
   final bool requiresItem;
   final bool hasFiles;
