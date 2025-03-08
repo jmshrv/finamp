@@ -25,7 +25,7 @@
   },
   "startMix": "Mix Starten",
   "@startMix": {},
-  "startMixNoTracksAlbum": "Halte ein Album gedrückt, um es zum Mix hinzuzufügen oder zu entfernen, bevor to einen Mix startest",
+  "startMixNoTracksAlbum": "Halte ein Album gedrückt, um es zum Mix hinzuzufügen oder zu entfernen, bevor du einen Mix startest",
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
