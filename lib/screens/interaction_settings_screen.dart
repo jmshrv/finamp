@@ -90,9 +90,9 @@ class ShowDeleteFromServerOptionToggle extends StatelessWidget {
             box.get("FinampSettings")?.allowDeleteFromServer ?? false;
 
         return SwitchListTile.adaptive(
-          title: Text("Allow deletion from server"),
-          subtitle: Text(
-              "Enable and disable the option to permanently delete a track from the servers file system when deletion is possible."),
+          title: Text(AppLocalizations.of(context)!.allowDeleteFromServerTitle),
+          subtitle:
+              Text(AppLocalizations.of(context)!.allowDeleteFromServerSubtitle),
           value: showDeleteFromServerOption,
           onChanged: (value) {
             FinampSettings finampSettingsTemp = box.get("FinampSettings")!;

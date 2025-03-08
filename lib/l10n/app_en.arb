@@ -1842,6 +1842,14 @@
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
+  "allowDeleteFromServerTitle": "Allow deletion from server",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "allowDeleteFromServerSubtitle": "Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
   "deleteFromTargetDialogText": "You are about to delete this {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} from {device, select, device{this device} server{the servers file system and library.{deleteType, select, canDelete{ This will also Delete this item from this Device.} cantDelete{ This item will stay on this device until the next sync.} notDownloaded{} other{}}\nThis action cannot be reverted} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
