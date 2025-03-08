@@ -226,7 +226,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   List<Widget> _menuEntries(BuildContext context) {
     final downloadsService = GetIt.instance<DownloadsService>();
     final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item),
+        DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item),
         null);
     var iconColor = Theme.of(context).colorScheme.primary;
 
@@ -242,7 +242,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
       var parent = downloadsService.getFirstRequiringItem(DownloadStub.fromItem(
-          type: DownloadItemType.track, item: widget.item));
+          type: DownloadItemType.song, item: widget.item));
       if (parent != null) {
         var parentName = AppLocalizations.of(context)!
             .itemTypeSubtitle(parent.baseItemType.name, parent.name);
@@ -410,7 +410,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               enabled: downloadStatus.isRequired,
               onTap: () async {
                 var item = DownloadStub.fromItem(
-                    type: DownloadItemType.track, item: widget.item);
+                    type: DownloadItemType.song, item: widget.item);
                 await askBeforeDeleteDownloadFromDevice(context, item);
               })),
       Visibility(
@@ -425,7 +425,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               downloadStatus == DownloadItemStatus.notNeeded,
           onTap: () async {
             var item = DownloadStub.fromItem(
-                type: DownloadItemType.track, item: widget.item);
+                type: DownloadItemType.song, item: widget.item);
             await DownloadDialog.show(context, item, null);
             if (context.mounted) {
               Navigator.pop(context);
@@ -446,7 +446,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             enabled: !widget.isOffline && downloadStatus.isIncidental,
             onTap: () async {
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.track, item: widget.item);
+                  type: DownloadItemType.song, item: widget.item);
               await DownloadDialog.show(context, item, null);
               if (context.mounted) {
                 Navigator.pop(context);
@@ -598,7 +598,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             enabled: canDeleteFromServer,
             onTap: () async {
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.track, item: widget.item);
+                  type: DownloadItemType.song, item: widget.item);
               await askBeforeDeleteFromServerAndDevice(context, item);
               final BaseItemDto newAlbumOrPlaylist =
                   await _jellyfinApiHelper.getItemById(widget.parentItem!.id);
