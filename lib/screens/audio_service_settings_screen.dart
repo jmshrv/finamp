@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:finamp/components/AudioServiceSettingsScreen/audio_fade_out_duration_list_tile.dart';
+import 'package:finamp/components/AudioServiceSettingsScreen/audio_fade_in_duration_list_tile.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +47,8 @@ class _AudioServiceSettingsScreenState
         children: [
           if (Platform.isAndroid) StopForegroundSelector(key: _updateChildren),
           TrackShuffleItemCountEditor(key: _updateChildren),
+          AudioFadeInDurationListTile(key: _updateChildren),
+          AudioFadeOutDurationListTile(key: _updateChildren),
           if (Platform.isAndroid) BufferSizeListTile(key: _updateChildren),
           BufferDurationListTile(key: _updateChildren),
           BufferDisableSizeConstraintsSelector(key: _updateChildren),

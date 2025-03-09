@@ -554,6 +554,20 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAudioFadeOutDuration(Duration audioFadeOutDuration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.audioFadeOutDuration = audioFadeOutDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAudioFadeInDuration(Duration audioFadeOutDuration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.audioFadeInDuration = audioFadeOutDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static IconButton makeSettingsResetButtonWithDialog(
       BuildContext context, Function() resetFunction,
       {bool isGlobal = false}) {
