@@ -11,7 +11,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive_ce/hive.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
@@ -113,10 +112,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         };
   }
 
-  Box<FinampSettings> box = Hive.box<FinampSettings>("FinampSettings");
-  bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  bool deletableGotUpdated = false;
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +129,8 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       final downloadsService = GetIt.instance<DownloadsService>();
       final canDeleteFromServer = ref.watch(_jellyfinApiHelper
           .canDeleteFromServerProvider(CanDeleteRequest(widget.album)));
+      final isOffline = ref.watch(finampSettingsProvider
+          .select((value) => value.requireValue.isOffline));
       final downloadStatus = downloadsService.getStatus(
           DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album),

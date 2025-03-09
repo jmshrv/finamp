@@ -881,16 +881,18 @@ class JellyfinApiHelper {
     }
     // do not bother checking server for item types known to not be deletable
     var itemType = BaseItemDtoType.fromItem(item.item);
-    if (itemType != BaseItemDtoType.album &&
-        itemType != BaseItemDtoType.playlist &&
-        itemType != BaseItemDtoType.track) {
+    if (![
+      BaseItemDtoType.album,
+      BaseItemDtoType.playlist,
+      BaseItemDtoType.track
+    ].contains(itemType)) {
       return false;
     }
     bool? serverReturn =
         ref.watch(_canDeleteFromServerAsyncProvider(item.item.id)).value;
     if (serverReturn == null) {
-      // fallback to true in case the response is invalid but the user could delete still
-      // worst case would be an error messing when trying to delete
+      // fallback to allowing deletion even if the response is invalid, since the user might still be able to delete
+      // worst case would be getting an error message when trying to delete
       return item.item.canDelete ?? true;
     } else {
       return serverReturn;
