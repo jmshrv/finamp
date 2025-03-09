@@ -19,6 +19,7 @@ import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'android_auto_helper.dart';
 import 'finamp_settings_helper.dart';
@@ -62,6 +63,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   double iosBaseVolumeGainFactor = 1.0;
   Duration minBufferDuration = Duration(seconds: 90);
+
+  final _audioFadeStepDuration = Duration(milliseconds: 50);
+  BehaviorSubject<bool> fading = BehaviorSubject.seeded(false);
 
   final outputSwitcherChannel =
       MethodChannel('com.unicornsonlsd.finamp/output_switcher');
@@ -281,8 +285,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> dispose() => _player.dispose();
 
   @override
-  Future<void> play() {
-    return _player.play();
+  Future<void> play() async {
+    if (FinampSettingsHelper.finampSettings.audioFadeInDuration >
+        Duration.zero) {
+      return fadeInAnPlay();
+    } else {
+      return _player.play();
+    }
   }
 
   @override
@@ -291,7 +300,72 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
-  Future<void> pause() => _player.pause();
+  Future<void> pause() async {
+    if (FinampSettingsHelper.finampSettings.audioFadeOutDuration >
+        Duration.zero) {
+      return fadeOutAndPause();
+    } else {
+      return _player.pause();
+    }
+  }
+
+  int getFadeSteps(Duration fadeDuration) {
+    return (fadeDuration.inMilliseconds / _audioFadeStepDuration.inMilliseconds)
+        .toInt();
+  }
+
+  double getVolumeFadeInStepSize(double currentVolume) {
+    final duration = FinampSettingsHelper.finampSettings.audioFadeInDuration;
+    final steps = getFadeSteps(duration);
+    return currentVolume / steps;
+  }
+
+  double getVolumeFadeOutStepSize(double currentVolume) {
+    final duration = FinampSettingsHelper.finampSettings.audioFadeOutDuration;
+    final steps = getFadeSteps(duration);
+    return currentVolume / steps;
+  }
+
+  Future<void> fadeOutAndPause() async {
+    final currentVolume = _player.volume;
+
+    final volumeStep = getVolumeFadeOutStepSize(currentVolume);
+
+    fading.add(true);
+    var volume = currentVolume;
+    await Stream.periodic(_audioFadeStepDuration)
+        .takeWhile((_) => volume > 0.0)
+        .forEach((_) async {
+      volume = max(volume - volumeStep, 0.0);
+      await _player.setVolume(volume);
+    });
+
+    final pauseFut = _player.pause();
+    await _player.setVolume(currentVolume);
+    fading.add(false);
+    return pauseFut;
+  }
+
+  Future<void> fadeInAnPlay() async {
+    final currentVolume = _player.volume;
+
+    final volumeStep = getVolumeFadeInStepSize(currentVolume);
+
+    fading.add(true);
+    await _player.setVolume(0.0);
+    final playFut = _player.play();
+
+    var volume = _player.volume;
+    await Stream.periodic(_audioFadeStepDuration)
+        .takeWhile((_) => volume < currentVolume)
+        .forEach((_) async {
+      volume = min(volume + volumeStep, currentVolume);
+      await _player.setVolume(volume);
+    });
+    fading.add(false);
+
+    return playFut;
+  }
 
   Future<void> togglePlayback() {
     if (_player.playing) {

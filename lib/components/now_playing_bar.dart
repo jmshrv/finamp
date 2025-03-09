@@ -239,8 +239,10 @@ class NowPlayingBar extends ConsumerWidget {
                   child: StreamBuilder<MediaState>(
                     stream: mediaStateStream
                         .where((event) => event.mediaItem != null),
-                    initialData: MediaState(audioHandler.mediaItem.valueOrNull,
-                        audioHandler.playbackState.value),
+                    initialData: MediaState(
+                        audioHandler.mediaItem.valueOrNull,
+                        audioHandler.playbackState.value,
+                        audioHandler.fading.value),
                     builder: (context, snapshot) {
                       final MediaState mediaState = snapshot.data!;
                       // If we have a media item and the player hasn't finished, show
@@ -282,24 +284,26 @@ class NowPlayingBar extends ConsumerWidget {
                                           color: Color.fromRGBO(0, 0, 0, 0.3),
                                         ),
                                         child: IconButton(
-                                          tooltip: AppLocalizations.of(context)!
-                                              .togglePlaybackButtonTooltip,
-                                          onPressed: () {
-                                            FeedbackHelper.feedback(
-                                                FeedbackType.light);
-                                            audioHandler.togglePlayback();
-                                          },
-                                          icon: mediaState.playbackState.playing
-                                              ? const Icon(
-                                                  TablerIcons.player_pause,
-                                                  size: 32,
-                                                )
-                                              : const Icon(
-                                                  TablerIcons.player_play,
-                                                  size: 32,
-                                                ),
-                                          color: Colors.white,
-                                        )),
+                                            tooltip: AppLocalizations
+                                                    .of(context)!
+                                                .togglePlaybackButtonTooltip,
+                                            onPressed: () {
+                                              FeedbackHelper.feedback(
+                                                  FeedbackType.light);
+                                              audioHandler.togglePlayback();
+                                            },
+                                            color: Colors.white,
+                                            icon: mediaState
+                                                    .audioFading
+                                                ? const CircularProgressIndicator()
+                                                : Icon(
+                                                    mediaState.playbackState
+                                                            .playing
+                                                        ? TablerIcons
+                                                            .player_pause
+                                                        : TablerIcons
+                                                            .player_play,
+                                                    size: 32))),
                                   ],
                                 ),
                                 Expanded(
