@@ -164,12 +164,18 @@ class DownloadButton extends ConsumerWidget {
     }
 
     List<Widget> buttons;
-    if (canDeleteFromServer && status.isRequired) {
-      buttons = [deleteFromServerCombo];
-    } else if (canDeleteFromServer) {
-      buttons = [serverDeleteButton, downloadButton];
+    if (canDeleteFromServer) {
+      if (status.isRequired) {
+        buttons = [deleteFromServerCombo];
+      } else {
+        buttons = [serverDeleteButton, downloadButton];
+      }
     } else {
-      buttons = [downloadButton];
+      if (status.isRequired) {
+        buttons = [deleteButton];
+      } else {
+        buttons = [downloadButton];
+      }
     }
     // Only show sync on album/track if there we know we are outdated due to failed downloads or the like.
     // On playlists/artists/genres, always show if downloaded.
