@@ -866,9 +866,8 @@ class JellyfinApiHelper {
     return uri;
   }
 
-  late final ProviderFamily<bool, CanDeleteRequest>
-      canDeleteFromServerProvider =
-      ProviderFamily((ref, CanDeleteRequest item) {
+  late final ProviderFamily<bool, BaseItemDto> canDeleteFromServerProvider =
+      ProviderFamily((ref, BaseItemDto item) {
     bool offline = ref.watch(
         finampSettingsProvider.select((value) => value.requireValue.isOffline));
     if (offline) {
@@ -880,7 +879,7 @@ class JellyfinApiHelper {
       return false;
     }
     // do not bother checking server for item types known to not be deletable
-    var itemType = BaseItemDtoType.fromItem(item.item);
+    var itemType = BaseItemDtoType.fromItem(item);
     if (![
       BaseItemDtoType.album,
       BaseItemDtoType.playlist,
@@ -889,11 +888,11 @@ class JellyfinApiHelper {
       return false;
     }
     bool? serverReturn =
-        ref.watch(_canDeleteFromServerAsyncProvider(item.item.id)).value;
+        ref.watch(_canDeleteFromServerAsyncProvider(item.id)).value;
     if (serverReturn == null) {
       // fallback to allowing deletion even if the response is invalid, since the user might still be able to delete
       // worst case would be getting an error message when trying to delete
-      return item.item.canDelete ?? true;
+      return item.canDelete ?? true;
     } else {
       return serverReturn;
     }
@@ -908,19 +907,4 @@ class JellyfinApiHelper {
       return false;
     });
   });
-}
-
-/// All CanDeleteRequests with the same BaseItemDto id should be considered equal.
-class CanDeleteRequest {
-  final BaseItemDto item;
-
-  CanDeleteRequest(this.item);
-
-  @override
-  bool operator ==(Object other) {
-    return other is CanDeleteRequest && other.item.id == item.id;
-  }
-
-  @override
-  int get hashCode => item.id.hashCode;
 }

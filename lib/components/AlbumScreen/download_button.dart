@@ -38,7 +38,7 @@ class DownloadButton extends ConsumerWidget {
     bool canDeleteFromServer = false;
     if (item.type.requiresItem) {
       canDeleteFromServer = ref.watch(GetIt.instance<JellyfinApiHelper>()
-          .canDeleteFromServerProvider(CanDeleteRequest(item.baseItem!)));
+          .canDeleteFromServerProvider(item.baseItem!));
     }
     String? parentTooltip;
     if (status == null) {

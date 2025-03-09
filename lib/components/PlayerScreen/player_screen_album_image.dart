@@ -72,7 +72,7 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
                     !FinampSettingsHelper.finampSettings.isOffline) {
                   ref
                       .read(isFavoriteProvider(
-                              FavoriteRequest(currentTrack!.baseItem))
+                              currentTrack!.baseItem)
                           .notifier)
                       .toggleFavorite();
                 }

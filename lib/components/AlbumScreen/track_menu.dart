@@ -446,8 +446,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
       ),
       Consumer(
         builder: (context, ref, child) {
-          bool isFav =
-              ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+          bool isFav = ref.watch(isFavoriteProvider(widget.item));
           return ListTile(
             enabled: !widget.isOffline,
             leading: isFav
@@ -468,8 +467,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 : AppLocalizations.of(context)!.addFavourite),
             onTap: () async {
               ref
-                  .read(
-                      isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+                  .read(isFavoriteProvider(widget.item).notifier)
                   .updateFavorite(!isFav);
               if (context.mounted) Navigator.pop(context);
             },
@@ -576,8 +574,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         ),
       ),
       Consumer(builder: (context, ref, _) {
-        var canDelete = ref.watch(_jellyfinApiHelper
-            .canDeleteFromServerProvider(CanDeleteRequest(widget.item)));
+        var canDelete = ref
+            .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
         return Visibility(
             visible: canDelete,
             child: ListTile(

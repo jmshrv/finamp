@@ -127,8 +127,8 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       unawaited(Feedback.forLongPress(context));
 
       final downloadsService = GetIt.instance<DownloadsService>();
-      final canDeleteFromServer = ref.watch(_jellyfinApiHelper
-          .canDeleteFromServerProvider(CanDeleteRequest(widget.album)));
+      final canDeleteFromServer = ref
+          .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.album));
       final isOffline = ref.watch(finampSettingsProvider
           .select((value) => value.requireValue.isOffline));
       final downloadStatus = downloadsService.getStatus(
@@ -165,7 +165,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           screenSize.height - globalPosition.dy,
         ),
         items: [
-          ref.watch(isFavoriteProvider(FavoriteRequest(mutableAlbum)))
+          ref.watch(isFavoriteProvider(mutableAlbum))
               ? PopupMenuItem<_AlbumListTileMenuItems>(
                   enabled: !isOffline,
                   value: _AlbumListTileMenuItems.removeFavourite,
@@ -304,12 +304,12 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       switch (selection) {
         case _AlbumListTileMenuItems.addFavourite:
           ref
-              .read(isFavoriteProvider(FavoriteRequest(mutableAlbum)).notifier)
+              .read(isFavoriteProvider(mutableAlbum).notifier)
               .updateFavorite(true);
           break;
         case _AlbumListTileMenuItems.removeFavourite:
           ref
-              .read(isFavoriteProvider(FavoriteRequest(mutableAlbum)).notifier)
+              .read(isFavoriteProvider(mutableAlbum).notifier)
               .updateFavorite(false);
           break;
         case _AlbumListTileMenuItems.addToMixList:

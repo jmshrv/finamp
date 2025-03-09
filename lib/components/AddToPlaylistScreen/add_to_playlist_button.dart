@@ -45,7 +45,7 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
       return const SizedBox.shrink();
     }
 
-    bool isFav = ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+    bool isFav = ref.watch(isFavoriteProvider(widget.item));
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: AppLocalizations.of(context)!.addToPlaylistTooltip,
@@ -58,7 +58,7 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
         onLongPress: () async {
           FeedbackHelper.feedback(FeedbackType.selection);
           ref
-              .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+              .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(!isFav);
         },
         child: IconButton(
