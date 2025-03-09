@@ -1887,7 +1887,7 @@
   },
   "hideQueueButtonSubtitle": "Skrýt tlačítko fronty na obrazovce přehrávače. Přejeďte nahoru pro zobrazení fronty.",
   "@hideQueueButtonSubtitle": {},
-  "oneLineMarqueeTextButtonSubtitle": "Automaticky posouvat názvy skaldeb, které jsou příliš dlouhé na zobrazení ve dvou řádcích",
+  "oneLineMarqueeTextButtonSubtitle": "Automaticky posouvat názvy skladeb, které jsou příliš dlouhé na zobrazení ve dvou řádcích",
   "@oneLineMarqueeTextButtonSubtitle": {},
   "marqueeOrTruncateButton": "Použít výpustku pro dlouhé názvy",
   "@marqueeOrTruncateButton": {},
@@ -1896,5 +1896,55 @@
   "hideQueueButton": "Skrýt tlačítko fronty",
   "@hideQueueButton": {},
   "oneLineMarqueeTextButton": "Automaticky posouvat dlouhé názvy",
-  "@oneLineMarqueeTextButton": {}
+  "@oneLineMarqueeTextButton": {},
+  "deleteDownloadsPrompt": "Opravdu chcete odstranit {itemType, select, album{album} playlist{seznam skladeb} artist{umělce} genre{žánr} track{skladbu} library{knihovnu} other{položku}} '{itemName}' z tohoto zařízení?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Odstranit",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Zobrazit datum vydání alba na obrazovce přehrávače",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatYear": "Rok",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatMonthDayYear": "Měsíc, den a rok",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Zobrazit datum vydání alba na obrazovce přehrávače, za názvem alba.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Formát data vydání",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "Ovládá formát všech dat vydání zobrazených v aplikaci.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthYear": "Měsíc a rok",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  }
 }

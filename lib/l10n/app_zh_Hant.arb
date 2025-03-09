@@ -212,7 +212,7 @@
   "@shareLogs": {},
   "applicationLegalese": "依照 Mozilla 公開授權條款 2.0 授權。\n原始碼可於 {sourceCodeLink} 獲得。",
   "@applicationLegalese": {},
-  "logsCopied": "已複制紀錄檔。",
+  "logsCopied": "已複製紀錄檔。",
   "@logsCopied": {},
   "message": "消息",
   "@message": {},
@@ -242,7 +242,7 @@
   "@enableTranscodingSubtitle": {},
   "bitrate": "位元速率",
   "@bitrate": {},
-  "bitrateSubtitle": "更高的位元速率以更高的帶寬為代價提供更高質量的音頻。",
+  "bitrateSubtitle": "更高的位元速率可提升音訊品質，但也會消耗更多的頻寬。",
   "@bitrateSubtitle": {},
   "customLocation": "自定義位置",
   "@customLocation": {},
@@ -340,9 +340,9 @@
   "@addToPlaylistTitle": {},
   "newPlaylist": "建立播放清單",
   "@newPlaylist": {},
-  "createButtonLabel": "創建",
+  "createButtonLabel": "建立",
   "@createButtonLabel": {},
-  "playlistCreated": "播放清單已創建。",
+  "playlistCreated": "已建立播放清單。",
   "@playlistCreated": {},
   "noAlbum": "無專輯",
   "@noAlbum": {},
@@ -703,7 +703,7 @@
       }
     }
   },
-  "goToArtist": "前往藝人介面",
+  "goToArtist": "前往藝人",
   "@goToArtist": {},
   "goToGenre": "前往曲風",
   "@goToGenre": {},
@@ -1260,7 +1260,7 @@
   "@fiveLatestAlbumsSettingSubtitle": {},
   "cacheLibraryImagesSettingsSubtitle": "目前啟用的媒體庫內的專輯、藝人、曲風與播放清單封面將會下載。",
   "@cacheLibraryImagesSettingsSubtitle": {},
-  "itemDeletedSnackbar": "{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} track{歌曲} library{媒體庫} other{項目}} 已從 {deviceType, select, device{裝置} server{伺服器} other{未知來源}} 刪除",
+  "itemDeletedSnackbar": "{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} track{音軌} library{媒體庫} other{項目}} 已從 {deviceType, select, device{裝置} server{伺服器} other{未知來源}} 刪除",
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
@@ -1268,7 +1268,7 @@
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "deleteFromTargetDialogText": "您即將從{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} track{歌曲} library{音樂庫} other{項目}}刪除此{device, select,device{裝置}server{伺服器的檔案系統與音樂庫。{deleteType, select,canDelete{ 此項目將從此裝置永久刪除。}cantDelete{ 此項目將暫時保留於此裝置，直至下次同步為止。}notDownloaded{}other{}} \n此操作無法還原。}other{}}。",
+  "deleteFromTargetDialogText": "您即將從{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{曲風} track{音軌} library{音樂庫} other{項目}}刪除此{device, select,device{裝置}server{伺服器的檔案系統與音樂庫。{deleteType, select,canDelete{ 此項目將從此裝置永久刪除。}cantDelete{ 此項目將暫時保留於此裝置，直至下次同步為止。}notDownloaded{}other{}} \n此操作無法還原。}other{}}。",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
@@ -1608,5 +1608,345 @@
       }
     },
     "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "redownloadTitle": "自動重新下載轉碼",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "deleteDownloadsConfirmButtonText": "刪除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "dontTranscode": "下載原始{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "deleteDownloadsPrompt": "你確定要將 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} 「{itemName}」從此裝置上刪除嗎？",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "redownloadcomplete": "已排程轉碼重新下載。",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "fixedGridSizeSwitchSubtitle": "網格大小不會隨著視窗/畫面大小改變。",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "hideQueueButtonSubtitle": "隱藏播放器畫面的隊列按鈕。向上滑動以存取隊列。",
+  "@hideQueueButtonSubtitle": {},
+  "oneLineMarqueeTextButton": "自動捲動較長的標題",
+  "@oneLineMarqueeTextButton": {},
+  "marqueeOrTruncateButton": "在較長的標題使用刪節號",
+  "@marqueeOrTruncateButton": {},
+  "oneLineMarqueeTextButtonSubtitle": "自動捲動長度超過兩行的標題",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "hideQueueButton": "隱藏隊列按鈕",
+  "@hideQueueButton": {},
+  "hidePlayerBottomActions": "隱藏底部按鈕",
+  "@hidePlayerBottomActions": {},
+  "marqueeOrTruncateButtonSubtitle": "在較長的標題盡頭顯示 ... 代替捲動文字",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "showArtistChipImageSubtitle": "這會影響小尺寸的藝術家圖片預覽，例如在播放介面上。",
+  "@showArtistChipImageSubtitle": {},
+  "fixedGridTileSizeEnum": "{size, select, small{小} medium{中} large{大} veryLarge{非常大} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "suppressPlayerPadding": "抑制播放器控制元件之間的距離",
+  "@suppressPlayerPadding": {},
+  "scrollToCurrentTrack": "捲動至當前歌曲",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "fixedGridSizeSwitchTitle": "使用固定大小的網格",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeTitle": "網格大小",
+  "@fixedGridSizeTitle": {},
+  "showArtistChipImage": "和藝術家名字一起顯示藝術家圖片",
+  "@showArtistChipImage": {},
+  "defaultDownloadLocationButton": "設定為預設下載路徑。停用此選項以為每個下載分開指定。",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "redownloadSubtitle": "自動重新下載因為上級改變而可能為更高品質的音軌。",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "allowSplitScreenTitle": "允許分割畫面",
+  "@allowSplitScreenTitle": {},
+  "enableVibration": "啟用震動",
+  "@enableVibration": {},
+  "enableVibrationSubtitle": "是否啟用震動。",
+  "@enableVibrationSubtitle": {},
+  "lockDownload": "永遠保留在裝置上",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "enableAutoScroll": "自動捲動",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "alignmentOptionEnd": "靠右對齊",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "nowPlayingBarTooltip": "打開播放器介面",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "downloadSizeWarningCutoff": "下載檔案大小警告",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthYear": "年和月",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "downloadFavoritesSetting": "下載所有最愛",
+  "@downloadFavoritesSetting": {},
+  "releaseDateFormatYear": "年",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "deleteFromTargetConfirmButton": "從{target, select, device{裝置} server{伺服器} other{}}上刪除",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "downloadAllPlaylistsSetting": "下載所有播放清單",
+  "@downloadAllPlaylistsSetting": {},
+  "trackOfflineFavoritesSubtitle": "這樣可以在離線時顯示最新的最愛狀態。不會下載任何額外的檔案。",
+  "@trackOfflineFavoritesSubtitle": {},
+  "allPlaylistsInfoSettingSubtitle": "同步所有播放清單的詮釋資料以改善播放清單使用體驗",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "showLyricsTimestampsSubtitle": "控制是否在歌詞介面中於可用時顯示每行歌詞的時間戳。",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "publiclyVisiblePlaylist": "公開可見：",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "largeDownloadWarning": "警告：即將下載 {count} 首音軌。",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lyricsAlignmentSubtitle": "控制歌詞介面中的歌詞對齊方式。",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "releaseDateFormatMonthDayYear": "月，日和年",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "在播放器介面上顯示專輯發行日期",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "addRemoveFromPlaylist": "加入播放清單 / 從播放清單中刪除",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "講歌曲加入播放清單",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "cacheLibraryImagesSettings": "快取現在的媒體庫圖片",
+  "@cacheLibraryImagesSettings": {},
+  "showLyricsTimestampsTitle": "顯示同步歌詞的時間戳",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showSeekControlsOnMediaNotificationTitle": "在媒體通知上顯示進度控制",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showStopButtonOnMediaNotificationTitle": "在媒體通知上顯示停止按鈕",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "alignmentOptionCenter": "置中",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "keepScreenOnDisabled": "停用",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnAlwaysOn": "永遠開啟",
+  "@keepScreenOnAlwaysOn": {},
+  "artwork": "圖片",
+  "@artwork": {},
+  "keepScreenOnWhilePluggedInSubtitle": "設備移除電源時忽略保持螢幕開啟的設定",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "fontSizeOptionSmall": "小",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "downloadSizeWarningCutoffSubtitle": "在一次下載超過一首音軌時顯示的的警告。",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "removeFromPlaylistConfirm": "移除",
+  "@removeFromPlaylistConfirm": {},
+  "numberAsBit": "{bit} 位元",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "remainingDuration": "剩餘 {duration}",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "removeFromPlaylistPrompt": "是否確定從播放清單「{playlistName}」中移除「{itemName}」？",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "trackMenuButtonTooltip": "歌曲選單",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "quickActions": "快速動作",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "allPlaylistsInfoSetting": "下載播放清單詮釋資料",
+  "@allPlaylistsInfoSetting": {},
+  "showSeekControlsOnMediaNotificationSubtitle": "控制媒體通知上是否顯示可以調整播放進度的進度條。這可以讓你在不打開應用程式的情況下改變播放位置。",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "控制媒體通知上除了暫停按鈕以外是否還有停止按鈕。這可以讓你在不打開應用程式的情況下停止播放。",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "alignmentOptionStart": "靠左排列",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "fontSizeOptionMedium": "中",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "fontSizeOptionLarge": "大",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "lyricsAlignmentTitle": "歌詞對齊方式",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeTitle": "歌詞字體大小",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeSubtitle": "控制歌詞介面中的歌詞字體大小。",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "keepScreenOn": "保持螢幕開啟",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnSubtitle": "何時保持螢幕開啟",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnWhilePlaying": "播放音樂是保持開啟",
+  "@keepScreenOnWhilePlaying": {},
+  "genericToggleButtonTooltip": "點擊切換。",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "keepScreenOnWhilePluggedIn": "僅在連接電源時保持螢幕開啟",
+  "@keepScreenOnWhilePluggedIn": {},
+  "keepScreenOnWhileLyrics": "顯示歌詞時保持開啟",
+  "@keepScreenOnWhileLyrics": {},
+  "artworkTooltip": "{title} 的圖片",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "additionalPeople": "其他人員",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "trackOfflineFavorites": "同步最愛狀態",
+  "@trackOfflineFavorites": {},
+  "showProgressOnNowPlayingBarTitle": "在應用程式內的迷你播放器上顯示歌曲播放進度",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
+  },
+  "showProgressOnNowPlayingBarSubtitle": "控制應用程式內下方的迷你播放器 / 正在播放欄位是否同時作為進度條。",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
+  },
+  "releaseDateFormatTitle": "發行日期格式",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "控制專輯發行日期於應用程式中顯示的格式。",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "在播放器介面中顯示專輯發行日期於專輯名稱之後。",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
   }
 }
