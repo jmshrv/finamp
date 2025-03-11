@@ -65,7 +65,7 @@
   },
   "playButtonLabel": "Играть",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "Вперемешку",
+  "shuffleButtonLabel": "Перемешать",
   "@shuffleButtonLabel": {},
   "trackCount": "{count,plural,=1{{count} Композиция} few{{count} Композиции} other{{count} Композиций}}",
   "@trackCount": {
@@ -101,7 +101,7 @@
   "@stackTrace": {},
   "applicationLegalese": "Лицензия Mozilla Public License 2.0.\nИсходный код доступен по адресу {sourceCodeLink}.",
   "@applicationLegalese": {},
-  "transcoding": "Перекодирование",
+  "transcoding": "Транскодирование",
   "@transcoding": {},
   "downloadLocations": "Расположение загрузок",
   "@downloadLocations": {},
@@ -127,7 +127,7 @@
   "@selectDirectory": {},
   "unknownError": "Неизвестная ошибка",
   "@unknownError": {},
-  "pathReturnSlashErrorMessage": "Пути ведущие к \"/\" нельзя использовать",
+  "pathReturnSlashErrorMessage": "Пути ведущие к «/» нельзя использовать",
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "Папка должна быть пустой",
   "@directoryMustBeEmpty": {},
@@ -135,7 +135,7 @@
   "@customLocation": {},
   "addDownloadLocation": "Добавить папку для загрузок",
   "@addDownloadLocation": {},
-  "customLocationsBuggy": "Пользовательские папки крайне нестабильны из-за трудностей с правами доступа. Я пытаюсь придумать как это исправить, но пока я бы не рекомендовал их использовать.",
+  "customLocationsBuggy": "Пользовательские папки могут быть крайне нестабильны и не рекомендуются к использованию в подавляющем большинстве случаев. Расположение в пределах системной папки «Музыка» не позволяет сохранять обложки альбомов из-за ограничений операционной системы.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Позволяет смахнуть уведомление на паузе. Также позволяет Android остановить сервис на паузе.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
@@ -147,7 +147,7 @@
   "@viewTypeSubtitle": {},
   "list": "Список",
   "@list": {},
-  "grid": "Решётка",
+  "grid": "Сетка",
   "@grid": {},
   "portrait": "Портретный",
   "@portrait": {},
@@ -277,7 +277,7 @@
   "@genres": {},
   "playlists": "Плейлисты",
   "@playlists": {},
-  "sortBy": "Сортировать по",
+  "sortBy": "Критерий сортировки",
   "@sortBy": {},
   "next": "Далее",
   "@next": {},
@@ -392,7 +392,7 @@
   "@useCoverAsBackgroundSubtitle": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "Скрывать исполнителей композиций, если они совпадают с исполнителями альбома",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "startupError": "Что-то пошло не так во время запуска приложения. Возникла ошибка: {error}\n\nПожалуйста, создайте \"issue\" на github.com/UnicornsOnLSD/finamp и приложите скриншот этой страницы. Если проблема будет повторяться, вы можете очистить данные приложения, чтобы сбросить его настройки.",
+  "startupError": "Что-то пошло не так во время запуска приложения. Возникла ошибка: {error}\n\nПожалуйста, создайте «issue» на github.com/UnicornsOnLSD/finamp и приложите скриншот этой страницы. Если проблема будет повторяться, вы можете очистить данные приложения, чтобы сбросить его настройки.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -444,7 +444,7 @@
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
-  "noMusicLibrariesBody": "Finamp не обнаружил музыкальных библиотек. Убедитесь, что на вашем сервере Jellyfin есть хотя бы одна библиотека с типом контента \"Музыка\".",
+  "noMusicLibrariesBody": "Finamp не обнаружил музыкальных библиотек. Убедитесь, что на вашем сервере Jellyfin есть хотя бы одна библиотека с типом контента «Музыка».",
   "@noMusicLibrariesBody": {},
   "noMusicLibrariesTitle": "Нет музыкальных библиотек",
   "@noMusicLibrariesTitle": {
@@ -454,7 +454,7 @@
   "@syncDownloadedPlaylists": {},
   "swipeInsertQueueNextSubtitle": "Включите чтобы вставлять композицию следующей в очереди при смахивании в списке композиций вместо того чтобы добавлять ее в конец.",
   "@swipeInsertQueueNextSubtitle": {},
-  "interactions": "Взаимодействия",
+  "interactions": "Взаимодействие",
   "@interactions": {},
   "swipeInsertQueueNext": "Воспроизвести смахнутую композицию следующей",
   "@swipeInsertQueueNext": {},
@@ -464,7 +464,7 @@
   "@about": {
     "description": "Label for the about/info button on the settings screen"
   },
-  "finampTagline": "Музыкальный плеер Jellyfish с открытым исходным кодом",
+  "finampTagline": "Музыкальный плеер для Jellyfin с открытым исходным кодом",
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
@@ -574,7 +574,7 @@
   "@loginFlowQuickConnectPrompt": {
     "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
-  "loginFlowQuickConnectInstructions": "Откройте приложение или веб-сайт Jellyfish, нажмите на значок своего пользователя и выберите Быстрое подключение.",
+  "loginFlowQuickConnectInstructions": "Откройте приложение или веб-сайт Jellyfin, нажмите на значок своего пользователя и выберите «Быстрое подключение».",
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
@@ -884,7 +884,7 @@
       }
     }
   },
-  "connectionInterruptedBackgroundAndroid": "Соединение было прервано во время загрузки в фоновом режиме. Это может быть вызвано включением опции \"Использовать режим низкого приоритета на паузе\" или настройками операционной системы.",
+  "connectionInterruptedBackgroundAndroid": "Соединение было прервано во время загрузки в фоновом режиме. Это может быть вызвано включением опции «Использовать режим низкого приоритета на паузе» или настройками операционной системы.",
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   },
@@ -1036,7 +1036,7 @@
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
-  "addToNextUp": "Добавить к следующим",
+  "addToNextUp": "Добавить следующим",
   "@addToNextUp": {
     "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
   },
@@ -1057,7 +1057,7 @@
       }
     }
   },
-  "shuffleToNextUp": "Добавить к следующим вперемешку",
+  "shuffleToNextUp": "Добавить следующим вперемешку",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
@@ -1100,7 +1100,7 @@
       }
     }
   },
-  "shareOfflineListens": "Поделиться прослушиваний в офлайн-режиме",
+  "shareOfflineListens": "Поделиться прослушиваниями в офлайн-режиме",
   "@shareOfflineListens": {
     "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
   },
@@ -1108,7 +1108,7 @@
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
-  "tracksFormerNextUp": "Композиции добавленные из следующего",
+  "tracksFormerNextUp": "Композиции добавленные следующими",
   "@tracksFormerNextUp": {
     "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
   },
@@ -1149,7 +1149,7 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "queuesScreen": "Восстановить \"Проигрываемые сейчас\"",
+  "queuesScreen": "Восстановить очередь",
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
@@ -1216,7 +1216,7 @@
   "@startInstantMixForIndividualTracksSwitchTitle": {
     "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
   },
-  "startInstantMixForIndividualTracksSwitchSubtitle": "Если включено, нажатие на композицию во вкладке \"Композиции\" запустит мгновенный микс этой композиции, вместо того, чтобы просто воспроизвести одну композицию.",
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Если включено, нажатие на композицию во вкладке «Композиции» запустит мгновенный микс этой композиции, вместо того, чтобы просто воспроизвести одну композицию.",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
   "downloadItem": "Загрузить",
   "@downloadItem": {
@@ -1376,7 +1376,7 @@
   "@showArtistChipImageSubtitle": {},
   "bufferDisableSizeConstraintsTitle": "Не ограничивать размер буфера",
   "@bufferDisableSizeConstraintsTitle": {},
-  "bufferDisableSizeConstraintsSubtitle": "Отключает ограничения размера буфера (\"Размер буфера\"). Буфер всегда будет загружаться до заданной длительности (\"Длительность буфера\"), даже для очень больших файлов. Может вызывать сбои. Требует перезапуска.",
+  "bufferDisableSizeConstraintsSubtitle": "Отключает ограничения размера буфера («Размер буфера»). Буфер всегда будет загружаться до заданной длительности («Длительность буфера»), даже для очень больших файлов. Может вызывать сбои. Требует перезапуска.",
   "@bufferDisableSizeConstraintsSubtitle": {},
   "bufferSizeTitle": "Размер буфера",
   "@bufferSizeTitle": {},
@@ -1386,7 +1386,7 @@
   "@togglePlaybackButtonTooltip": {
     "description": "Tooltip for the button that toggles playback"
   },
-  "confirmAddToNextUp": "{type, select, track{Композиция добавлена} album{Альбом добавлен} artist{Исполнитель добавлен} playlist{Плейлист добавлен} genre{Жанр добавлен} other{Элемент добавлен}} к следующим",
+  "confirmAddToNextUp": "{type, select, track{Композиция добавлена} album{Альбом добавлен} artist{Исполнитель добавлен} playlist{Плейлист добавлен} genre{Жанр добавлен} other{Элемент добавлен}} следующим",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -1395,7 +1395,7 @@
       }
     }
   },
-  "confirmShuffleToNextUp": "Добавлено к следующим вперемешку",
+  "confirmShuffleToNextUp": "Добавлено следующим вперемешку",
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
   },
@@ -1453,11 +1453,11 @@
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
-  "volumeNormalizationSwitchSubtitle": "Использовать информацию об усилении для нормализации громкости композиций (\"Replay Gain\")",
+  "volumeNormalizationSwitchSubtitle": "Использовать информацию об усилении для нормализации громкости композиций («Replay Gain»)",
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "shuffleAlbumsToNextUp": "Добавить альбомы к следующим вперемешку",
+  "shuffleAlbumsToNextUp": "Добавить альбомы следующими вперемешку",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
@@ -1522,7 +1522,7 @@
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
-  "runRepairWarning": "Не удалось связаться с сервером для завершения миграции загрузок. Пожалуйста, выполните \"Починку загрузок\" на экране загрузок, как только подключение восстановится.",
+  "runRepairWarning": "Не удалось связаться с сервером для завершения миграции загрузок. Пожалуйста, выполните «Починку загрузок» на экране загрузок, как только подключение восстановится.",
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
@@ -1699,7 +1699,7 @@
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Управляет тем, будет ли мини-плеер в приложении / панель \"сейчас играет\" в нижней части экрана музыки функционировать как индикатор прогресса.",
+  "showProgressOnNowPlayingBarSubtitle": "Управляет тем, будет ли мини-плеер в приложении / панель «сейчас играет» в нижней части экрана музыки функционировать как индикатор прогресса.",
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
   },
@@ -1813,7 +1813,7 @@
   "@keepScreenOnDisabled": {},
   "keepScreenOnWhilePlaying": "Пока играет музыка",
   "@keepScreenOnWhilePlaying": {},
-  "keepScreenOnWhilePluggedInSubtitle": "Игнорировать настройку \"Не отключать экран\", если устройство не подключено к сети",
+  "keepScreenOnWhilePluggedInSubtitle": "Игнорировать настройку «Не отключать экран», если устройство не подключено к сети",
   "@keepScreenOnWhilePluggedInSubtitle": {},
   "genericToggleButtonTooltip": "Нажмите, чтобы переключить.",
   "@genericToggleButtonTooltip": {
@@ -1840,5 +1840,121 @@
   "showLyricsScreenAlbumPreludeSubtitle": "Управляет тем, будет ли показываться обложка альбома над текстом песни, прежде чем она будет прокручена.",
   "@showLyricsScreenAlbumPreludeSubtitle": {
     "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "deleteDownloadsPrompt": "Вы уверены что хотите удалить {itemType, select, album{альбом} playlist{плейлист} artist{исполнителя} genre{жанр} track{композицию} library{библиотеку} other{элемент}} '{itemName}' с этого устройства?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "hideQueueButtonSubtitle": "Спрячьте кнопку очереди на экране проигрывателя. Проведите вверх, чтобы открыть очередь.",
+  "@hideQueueButtonSubtitle": {},
+  "hideQueueButton": "Спрятать кнопку очереди",
+  "@hideQueueButton": {},
+  "oneLineMarqueeTextButton": "Автопрокрутка длинных заголовков",
+  "@oneLineMarqueeTextButton": {},
+  "marqueeOrTruncateButton": "Использовать многоточие в длинных заголовках",
+  "@marqueeOrTruncateButton": {},
+  "deleteFromTargetConfirmButton": "Удалить{target, select, device{ с устройства} server{ с сервера} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "downloadSizeWarningCutoff": "Порог предупреждения размера загрузки",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "publiclyVisiblePlaylist": "Видно всем:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "oneLineMarqueeTextButtonSubtitle": "Автоматическая прокрутка названий композиций, которые не помещаются в две строки",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "allowDeleteFromServerTitle": "Разрешить удалять с сервера",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "allowDeleteFromServerSubtitle": "Включить или отключить возможность перманентного удаления композиции с файловой системы сервера когда удаление возможно.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "releaseDateFormatYear": "Год",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthYear": "Месяц и год",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatTitle": "Формат даты выхода",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "Определяет формат всех дат выхода, отображаемых в приложении.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "marqueeOrTruncateButtonSubtitle": "Показывать «...» в конце длинных заголовков вместо прокрутки текста",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "deleteDownloadsConfirmButtonText": "Удалить",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Отображать дату выхода альбома на экране проигрывателя",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "deleteFromTargetDialogText": "Вы собираетесь удалить {itemType, select, album{этот альбом} playlist{этот плейлист} artist{этого исполнителя} genre{этот жанр} track{эту композицию} library{эту библиотеку} other{этот элемент}} с {device, select, device{этого устройства} server{файловой системы сервера и библиотеки.{deleteType, select, canDelete{ Это также удалит этот элемент с вашего устройства.} cantDelete{ Этот элемент останется на вашем устройстве до следующей синхронизации.} notDownloaded{} other{}}\nЭто действие не может быть отменено} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "confirmAddAlbumToPlaylist": "Вы уверены что хотите добавить все композиции {itemType, select, album{из альбома} playlist{из плейлиста} artist{исполнителя} genre{жанра} other{из элемента}} '{itemName}' в этот плейлист?  Их можно удалить только по отдельности.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "releaseDateFormatMonthDayYear": "Месяц, день и год",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Отображать дату выхода альбома на экране проигрывателя под названием альбома.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{Альбом был удален} playlist{Плейлист был удален} artist{Исполнитель был удален} genre{Жанр был удален} track{Композиция была удалена} library{Библиотека была удалена} other{Элемент был удален}} с {deviceType, select, device{устройства} server{сервера} other{неизвестно}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "largeDownloadWarning": "Внимание: Вы собираетесь загрузить {count} композиций.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadSizeWarningCutoffSubtitle": "При одновременной загрузке более чем этого количества композиций будет показано предупреждение.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
   }
 }
