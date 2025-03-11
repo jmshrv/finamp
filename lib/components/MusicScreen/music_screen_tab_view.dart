@@ -574,6 +574,12 @@ List<BaseItemDto> sortItems(
           } else {
             return a.premiereDate!.compareTo(b.premiereDate!);
           }
+        case SortBy.playCount:
+          if (a.userData?.playCount == null || b.userData?.playCount == null) {
+            return 0;
+          } else {
+            return a.userData!.playCount.compareTo(b.userData!.playCount);
+          }
         // SortBy.random is handled outside this switch as per-comparison logic does not produce a good shuffle
         default:
           throw UnimplementedError("Unimplemented offline sort mode $sortBy");

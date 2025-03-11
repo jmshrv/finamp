@@ -12,11 +12,16 @@ class SortByMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final sortOptions = tabType == TabContentType.tracks
+        ? SortBy.trackSortOptions
+        : SortBy.defaults;
+
     return PopupMenuButton<SortBy>(
       icon: const Icon(Icons.sort),
       tooltip: AppLocalizations.of(context)!.sortBy,
       itemBuilder: (context) => [
-        for (SortBy sortBy in SortBy.defaults)
+        for (SortBy sortBy in sortOptions)
           PopupMenuItem(
             value: sortBy,
             child: Text(

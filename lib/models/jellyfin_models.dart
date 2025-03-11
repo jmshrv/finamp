@@ -3471,6 +3471,12 @@ enum SortBy {
         SortBy.random,
       ];
 
+  /// default SortBy options shown to the user, such as in the sort by menu
+  static List<SortBy> get trackSortOptions => [
+        ...defaults,
+        SortBy.playCount,
+      ];
+
   /// Human-readable version of the [SortBy]. For example, toString() on
   /// [SortBy.album], toString() would return "SortBy.album". With this
   /// function, the same input would return "Album".
