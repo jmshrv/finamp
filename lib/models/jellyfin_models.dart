@@ -3459,6 +3459,11 @@ enum SortBy {
         SortBy.dateCreated,
         SortBy.premiereDate,
         SortBy.random,
+      ];
+
+  /// default SortBy options shown to the user, such as in the sort by menu
+  static List<SortBy> get trackSortOptions => [
+        ...defaults,
         SortBy.playCount,
       ];
 
