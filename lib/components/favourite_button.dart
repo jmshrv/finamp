@@ -37,7 +37,7 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
       return const SizedBox.shrink();
     }
 
-    bool isFav = ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+    bool isFav = ref.watch(isFavoriteProvider(widget.item));
     if (widget.onlyIfFav) {
       if (isFav && !FinampSettingsHelper.finampSettings.onlyShowFavourites) {
         return Icon(
@@ -64,7 +64,7 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
             ? null
             : () {
                 ref
-                    .read(isFavoriteProvider(FavoriteRequest(widget.item))
+                    .read(isFavoriteProvider(widget.item)
                         .notifier)
                     .updateFavorite(!isFav);
               },

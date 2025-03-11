@@ -24,8 +24,9 @@ import 'jellyfin_api_helper.dart';
 
 part 'downloads_service_backend.g.dart';
 
-const FINAMP_BASE_DOWNLOAD_DIRECTORY =
-    "songs"; //!!! don't ever change this without implementing a migration, it will break existing downloads
+// This is used during migration from the legacy hive download storage and cannot be changed without mitigations
+// Additionally, directory cleaning in downloads repair should cover all folders ever used.
+const FINAMP_BASE_DOWNLOAD_DIRECTORY = "songs";
 
 class IsarPersistentStorage implements PersistentStorage {
   final _isar = GetIt.instance<Isar>();
@@ -1326,8 +1327,8 @@ class DownloadsSyncService {
                     "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName") ??
             [];
         childItems.addAll(trackChildItems);
-        var trackChildStubs = trackChildItems.map((e) =>
-            DownloadStub.fromItem(type: DownloadItemType.song, item: e));
+        var trackChildStubs = trackChildItems.map(
+            (e) => DownloadStub.fromItem(type: DownloadItemType.song, item: e));
         childStubs.addAll(trackChildStubs);
       }
       itemFetch.complete(childItems.map((e) => e.id).toList());

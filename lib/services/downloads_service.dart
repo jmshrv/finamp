@@ -1085,7 +1085,7 @@ class DownloadsService {
                       DownloadLocationType.internalDocuments)
                   .first
                   .id)
-          ? path_helper.join("tracks", image.path)
+          ? path_helper.join(FINAMP_BASE_DOWNLOAD_DIRECTORY, image.path)
           : image.path;
       isarItem.state = DownloadItemState.complete;
       isarItem.fileTranscodingProfile =
@@ -1144,7 +1144,8 @@ class DownloadsService {
                     DownloadLocationType.internalDocuments)
                 .first
                 .id) {
-          newPath = path_helper.join("tracks", track.path);
+          newPath =
+              path_helper.join(FINAMP_BASE_DOWNLOAD_DIRECTORY, track.path);
         } else {
           newPath = track.path;
         }

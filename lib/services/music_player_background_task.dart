@@ -4,25 +4,25 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/queue_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:finamp/services/queue_service.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
 
+import 'android_auto_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'locale_helper.dart';
-import 'android_auto_helper.dart';
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
@@ -672,12 +672,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             isFavorite = ProviderScope.containerOf(
                     GlobalSnackbar.materialAppScaffoldKey.currentContext!,
                     listen: false)
-                .read(isFavoriteProvider(FavoriteRequest(currentItem)));
+                .read(isFavoriteProvider(currentItem));
             // update favorite status with the value returned by the provider
             isFavorite = ProviderScope.containerOf(
                     GlobalSnackbar.materialAppScaffoldKey.currentContext!,
                     listen: false)
-                .read(isFavoriteProvider(FavoriteRequest(currentItem)).notifier)
+                .read(isFavoriteProvider(currentItem).notifier)
                 .updateFavorite(!isFavorite);
           } else {
             // fallback if we can't find the context
@@ -812,7 +812,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         isFavorite = ProviderScope.containerOf(
                 GlobalSnackbar.materialAppScaffoldKey.currentContext!,
                 listen: false)
-            .read(isFavoriteProvider(FavoriteRequest(currentItem)));
+            .read(isFavoriteProvider(currentItem));
       } else {
         isFavorite = currentItem.userData?.isFavorite ?? false;
       }

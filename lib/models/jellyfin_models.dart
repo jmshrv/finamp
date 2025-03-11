@@ -2305,6 +2305,16 @@ class BaseItemDto with RunTimeTickDuration {
 
   DownloadItemType get downloadType =>
       BaseItemDtoType.fromItem(this).downloadType!;
+
+  // BaseItemDtos with the same id should be considered equal so that Providers
+  // taking the BaseItemDto as an argument will be shared across all instances
+  @override
+  bool operator ==(Object other) {
+    return other is BaseItemDto && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 @JsonSerializable(

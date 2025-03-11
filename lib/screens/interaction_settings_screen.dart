@@ -1,6 +1,5 @@
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
-import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -98,9 +97,6 @@ class ShowDeleteFromServerOptionToggle extends StatelessWidget {
             FinampSettings finampSettingsTemp = box.get("FinampSettings")!;
             finampSettingsTemp.allowDeleteFromServer = value;
             box.put("FinampSettings", finampSettingsTemp);
-
-            musicScreenRefreshStream
-                .add(null); // refresh current tab to show/hide delete button
           },
         );
       },

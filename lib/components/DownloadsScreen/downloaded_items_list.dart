@@ -16,11 +16,11 @@ class DownloadedItemsList extends StatefulWidget {
 }
 
 class _DownloadedItemsListState extends State<DownloadedItemsList> {
-  final DownloadsService downloadsService = GetIt.instance<DownloadsService>();
+  final DownloadsService _downloadsService = GetIt.instance<DownloadsService>();
 
   @override
   Widget build(BuildContext context) {
-    var items = downloadsService.getUserDownloaded();
+    var items = _downloadsService.getUserDownloaded();
     return ListTileTheme(
       // Manually handle padding in leading/trailing icons
       horizontalTitleGap: 0,
@@ -44,7 +44,7 @@ class _DownloadedItemsListState extends State<DownloadedItemsList> {
                     IconButton(
                       icon: const Icon(Icons.sync),
                       onPressed: () {
-                        downloadsService.resync(album, null);
+                        _downloadsService.resync(album, null);
                       },
                     ),
                   IconButton(

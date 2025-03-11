@@ -90,7 +90,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
               null)
           .isRequired;
       final bool isFav =
-          ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+          ref.watch(isFavoriteProvider(widget.item));
 
       final selection = await showMenu<AlbumListTileMenuItems>(
         context: context,
@@ -218,12 +218,12 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
       switch (selection) {
         case AlbumListTileMenuItems.addFavourite:
           ref
-              .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+              .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(true);
           break;
         case AlbumListTileMenuItems.removeFavourite:
           ref
-              .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+              .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(false);
           break;
         case AlbumListTileMenuItems.addToMixList:
