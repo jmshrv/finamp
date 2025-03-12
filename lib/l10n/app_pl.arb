@@ -801,7 +801,7 @@
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
   },
-  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} track} other{{trackCount} tracks}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} utwór} few{{trackCount} utwory} other{{trackCount} utworów}}, {imageCount,plural,=1{{imageCount} obraz} few{{imageCount} obrazy} other{{imageCount} obrazów}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
@@ -1430,7 +1430,7 @@
   "@resetSettingsPromptLocal": {
     "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
   },
-  "genericCancel": "Cofnij",
+  "genericCancel": "Anuluj",
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
   },
@@ -1712,5 +1712,27 @@
   "connectionInterrupted": "Połączenie przerwane, wstrzymano pobieranie.",
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
+  },
+  "deleteDownloadsConfirmButtonText": "Usuń",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsPrompt": "Czy na pewno chcesz usunąć {itemType, select, album{album} playlist{listę odtwarzania} artist{artystę} genre{gatunek} track{utwór} library{bibliotekę} other{element}} '{itemName}' z tego urządzenia?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Lista odtwarzania} artist{Artysta} genre{Gatunek} track{Utwór} library{Biblioteka} other{Element}} został usunięty z {deviceType, select, device{urządzenia} server{serwera} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   }
 }
