@@ -284,7 +284,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> play() async {
-    if (FinampSettingsHelper.finampSettings.audioFadeOutDuration > Duration()) {
+    if (FinampSettingsHelper.finampSettings.audioFadeInDuration >
+        Duration.zero) {
       return fadeInAnPlay();
     } else {
       return _player.play();
@@ -298,7 +299,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> pause() async {
-    if (FinampSettingsHelper.finampSettings.audioFadeOutDuration > Duration()) {
+    if (FinampSettingsHelper.finampSettings.audioFadeOutDuration >
+        Duration.zero) {
       return fadeOutAndPause();
     } else {
       return _player.pause();
