@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/services/downloads_service.dart';
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,7 +26,6 @@ final _musicScreenLogger = Logger("MusicScreen");
 
 void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
-  final queueService = GetIt.instance<QueueService>();
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
@@ -37,11 +35,6 @@ void postLaunchHook(WidgetRef ref) async {
     });
     FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
   }
-
-  // Restore queue
-  unawaited(queueService
-      .performInitialQueueLoad()
-      .catchError((x) => GlobalSnackbar.error(x)));
 }
 
 class MusicScreen extends ConsumerStatefulWidget {

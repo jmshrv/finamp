@@ -352,10 +352,16 @@ Future<void> _setupPlaybackServices() async {
   );
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
-  GetIt.instance.registerSingleton(QueueService());
+  var queueService = QueueService();
+  GetIt.instance.registerSingleton(queueService);
   await GetIt.instance<QueueService>().initializePlayer();
   GetIt.instance.registerSingleton(PlaybackHistoryService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
+
+  // Begin to restore queue
+  unawaited(queueService
+      .performInitialQueueLoad()
+      .catchError((x) => GlobalSnackbar.error(x)));
 }
 
 /// Migrates the old DownloadLocations list to a map
