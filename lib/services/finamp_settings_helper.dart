@@ -461,6 +461,8 @@ class FinampSettingsHelper {
     setPeriodicPlaybackSessionUpdateFrequencySeconds(DefaultSettings
         .periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
     setReportQueueToServer(DefaultSettings.reportQueueToServer);
+    setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
+    setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
   }
 
   static void resetNormalizationSettings() {
