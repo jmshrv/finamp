@@ -262,7 +262,7 @@ class IsarTaskQueue implements TaskQueue {
         .or()
         .stateEqualTo(DownloadItemState.downloading)
         .filter()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.track)
         .or()
         .typeEqualTo(DownloadItemType.image)
         .findAllSync()) {
@@ -346,7 +346,7 @@ class IsarTaskQueue implements TaskQueue {
             // Base URL shouldn't be null at this point (user has to be logged in
             // to get to the point where they can add downloads).
             var url = switch (task.type) {
-              DownloadItemType.song => _jellyfinApiData
+              DownloadItemType.track => _jellyfinApiData
                   .getTrackDownloadUrl(
                       item: task.baseItem!,
                       transcodingProfile: task.fileTranscodingProfile)
@@ -624,7 +624,7 @@ class DownloadsDeleteService {
           return;
         }
         if (infoForCount > 0) {
-          if (transactionItem.type == DownloadItemType.song) {
+          if (transactionItem.type == DownloadItemType.track) {
             // Non-required tracks cannot have info links to collections, but they
             // can still require their images.
             childIds.addAll(
@@ -698,7 +698,7 @@ class DownloadsDeleteService {
             transactionItem, DownloadItemState.notDownloaded);
       }
 
-      if (item.type == DownloadItemType.song) {
+      if (item.type == DownloadItemType.track) {
         // delete corresponding lyrics if they exist, using the same ID
         if (_isar.downloadedLyrics.deleteSync(item.isarId)) {
           _deleteLogger.finer("Deleted lyrics for ${item.name}");
@@ -980,7 +980,7 @@ class DownloadsSyncService {
           infoChildren.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
-      case DownloadItemType.song:
+      case DownloadItemType.track:
         var item = newBaseItem ?? parent.baseItem!;
         if ((item.blurHash ?? item.imageId) != null) {
           requiredChildren.add(
@@ -1091,7 +1091,7 @@ class DownloadsSyncService {
           requiredChanges =
               _updateChildren(canonParent!, true, requiredChildren);
           infoChanges = _updateChildren(canonParent!, false, infoChildren);
-        } else if (canonParent!.type == DownloadItemType.song) {
+        } else if (canonParent!.type == DownloadItemType.track) {
           // For info only tracks, we put image link into required so that we can delete
           // all info links in _syncDelete, so if not processing as required only
           // update that and ignore info links
@@ -1277,7 +1277,7 @@ class DownloadsSyncService {
     assert(parent.baseItemType.downloadType == DownloadItemType.collection);
     switch (parent.baseItemType) {
       case BaseItemDtoType.playlist || BaseItemDtoType.album:
-        childType = DownloadItemType.song;
+        childType = DownloadItemType.track;
         childFilter = BaseItemDtoType.track;
         fields =
             "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName";
@@ -1328,7 +1328,7 @@ class DownloadsSyncService {
             [];
         childItems.addAll(trackChildItems);
         var trackChildStubs = trackChildItems.map(
-            (e) => DownloadStub.fromItem(type: DownloadItemType.song, item: e));
+            (e) => DownloadStub.fromItem(type: DownloadItemType.track, item: e));
         childStubs.addAll(trackChildStubs);
       }
       itemFetch.complete(childItems.map((e) => e.id).toList());
@@ -1465,7 +1465,7 @@ class DownloadsSyncService {
     if (stub.baseItem?.sortName == null) {
       return true;
     }
-    if (stub.type == DownloadItemType.song &&
+    if (stub.type == DownloadItemType.track &&
         (stub.baseItem?.mediaSources == null ||
             stub.baseItem?.mediaStreams == null)) {
       return true;
@@ -1496,7 +1496,7 @@ class DownloadsSyncService {
     }
 
     switch (item.type) {
-      case DownloadItemType.song:
+      case DownloadItemType.track:
         return _downloadTrack(item);
       case DownloadItemType.image:
         return _downloadImage(item);
@@ -1513,7 +1513,7 @@ class DownloadsSyncService {
   /// Prepares for downloading of a given track by filling in the path information
   /// and media sources, and marking item as enqueued in isar.
   Future<void> _downloadTrack(DownloadItem downloadItem) async {
-    assert(downloadItem.type == DownloadItemType.song &&
+    assert(downloadItem.type == DownloadItemType.track &&
         downloadItem.syncDownloadLocation != null);
     var item = downloadItem.baseItem!;
     var downloadLocation = downloadItem.syncDownloadLocation!;
