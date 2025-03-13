@@ -33,7 +33,7 @@ class ItemFileSize extends ConsumerWidget {
         case DownloadItemState.failed:
         case DownloadItemState.complete:
         case DownloadItemState.needsRedownloadComplete:
-          if (item!.type == DownloadItemType.song) {
+          if (item!.type == DownloadItemType.track) {
             String codec = "";
             String bitrate = "null";
             if (item.fileTranscodingProfile == null ||
