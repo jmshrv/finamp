@@ -186,7 +186,7 @@
   "@portrait": {},
   "queueReplaced": "Se reemplazó la cola.",
   "@queueReplaced": {},
-  "playButtonLabel": "REPRODUCIR",
+  "playButtonLabel": "Reproducir",
   "@playButtonLabel": {},
   "removeFavourite": "Eliminar favorito",
   "@removeFavourite": {},
@@ -260,7 +260,7 @@
   "@failedToGetTrackFromDownloadId": {},
   "required": "Requerido",
   "@required": {},
-  "shuffleButtonLabel": "ALEATORIO",
+  "shuffleButtonLabel": "Aleatorio",
   "@shuffleButtonLabel": {},
   "updateButtonLabel": "ACTUALIZAR",
   "@updateButtonLabel": {},
@@ -637,5 +637,9 @@
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "noActiveDownloads": "No hay descargas activas.",
-  "@noActiveDownloads": {}
+  "@noActiveDownloads": {},
+  "deleteDownloadsConfirmButtonText": "Eliminar",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  }
 }
