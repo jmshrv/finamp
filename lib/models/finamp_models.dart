@@ -371,7 +371,7 @@ class FinampSettings {
 
   @HiveField(34,
       defaultValue:
-          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+          false) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedDownloadsServiceMigration;
 
   @HiveField(35, defaultValue: DefaultSettings.requireWifiForDownloads)
