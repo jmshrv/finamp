@@ -258,28 +258,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setHasCompletedBlurhashImageMigration(
-      bool hasCompletedBlurhashImageMigration) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hasCompletedBlurhashImageMigration =
-        hasCompletedBlurhashImageMigration;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  /// Set the playbackSpeed property
   static void setPlaybackSpeed(double speed) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.playbackSpeed = speed;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setHasCompletedBlurhashImageMigrationIdFix(
-      bool hasCompletedBlurhashImageMigrationIdFix) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hasCompletedBlurhashImageMigrationIdFix =
-        hasCompletedBlurhashImageMigrationIdFix;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

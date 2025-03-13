@@ -134,12 +134,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
           fields[28] == null ? true : fields[28] as bool,
-      hasCompletedBlurhashImageMigration:
-          fields[23] == null ? true : fields[23] as bool,
-      hasCompletedBlurhashImageMigrationIdFix:
-          fields[24] == null ? true : fields[24] as bool,
       hasCompletedDownloadsServiceMigration:
-          fields[34] == null ? true : fields[34] as bool,
+          fields[34] == null ? false : fields[34] as bool,
       requireWifiForDownloads: fields[35] == null ? true : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
       showDownloadsWithUnknownLibrary:
@@ -150,7 +146,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       resyncOnStartup: fields[40] == null ? true : fields[40] as bool,
       preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
-          fields[42] == null ? true : fields[42] as bool,
+          fields[42] == null ? false : fields[42] as bool,
       downloadTranscodeBitrate: (fields[45] as num?)?.toInt(),
       shouldTranscodeDownloads: fields[44] == null
           ? TranscodeDownloadsSetting.ask
@@ -222,7 +218,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(81)
+      ..writeByte(79)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -267,10 +263,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.tabSortOrder)
       ..writeByte(22)
       ..write(obj.tabOrder)
-      ..writeByte(23)
-      ..write(obj.hasCompletedBlurhashImageMigration)
-      ..writeByte(24)
-      ..write(obj.hasCompletedBlurhashImageMigrationIdFix)
       ..writeByte(25)
       ..write(obj.showFastScroller)
       ..writeByte(26)

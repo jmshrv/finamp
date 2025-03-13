@@ -192,10 +192,6 @@ class FinampSettings {
     this.tabOrder = DefaultSettings.tabOrder,
     this.autoloadLastQueueOnStartup =
         DefaultSettings.autoLoadLastQueueOnStartup,
-    this.hasCompletedBlurhashImageMigration =
-        true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-    this.hasCompletedBlurhashImageMigrationIdFix =
-        true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
     this.hasCompletedDownloadsServiceMigration =
         true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
     this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
@@ -338,16 +334,6 @@ class FinampSettings {
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)
   List<TabContentType> tabOrder;
 
-  @HiveField(23,
-      defaultValue:
-          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-  bool hasCompletedBlurhashImageMigration;
-
-  @HiveField(24,
-      defaultValue:
-          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-  bool hasCompletedBlurhashImageMigrationIdFix;
-
   @HiveField(25, defaultValue: DefaultSettings.showFastScroller)
   bool showFastScroller = DefaultSettings.showFastScroller;
 
@@ -395,7 +381,9 @@ class FinampSettings {
   @HiveField(41, defaultValue: DefaultSettings.preferQuickSyncs)
   bool preferQuickSyncs;
 
-  @HiveField(42, defaultValue: true)
+  @HiveField(42,
+      defaultValue:
+          false) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedIsarUserMigration;
   FinampTranscodingCodec? downloadTranscodingCodec;
 
