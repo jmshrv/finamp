@@ -525,5 +525,117 @@
   "connectingToServer": "Conectándose al servidor...",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
-  }
+  },
+  "loginFlowLocalNetworkServers": "Servidores en tu red local:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Buscando servidores...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "Selecciona tu cuenta",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "Usuario sin nombre",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowAuthenticationHeading": "Iniciar sesión en tu cuenta",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "orDivider": "o",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "usernameValidationMissingUsername": "Por favor, introduce un nombre de usuario",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "Introduce tu contraseña",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "title": "Título",
+  "@title": {},
+  "activeDownloads": "Activar Descargas",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Descargas Activas",
+  "@activeDownloadsTitle": {},
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} pista} other{{trackCount} pistas}}, {imageCount,plural,=1{{imageCount} imágen} other{{imageCount} imágenes}}\n{syncCount,plural,=1{{syncCount} nodo sincronizando} other{{syncCount} nodos sincronizando}}{repairing, plural, =0{} other{\nReparando}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "loginFlowCustomUser": "Usuario personalizado",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowQuickConnectInstructions": "Abre la aplicación o la página web de Jellyfin, haz clic en el icono de tu usuario, y selecciona Conexión Rápida.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "usernameHint": "Introduce tu nombre de usuario",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "loginFlowQuickConnectPrompt": "Usar el código de conexión rápida",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "backToServerSelection": "Volver a la selección del servidor",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "backToAccountSelection": "Volver a la selección de cuentas",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "deleteDownloadsPrompt": "¿Estás seguro de que quieres eliminar {itemType, select, album{el álbum} playlist{la lista de reproducción} artist{el artista} genre{el género} track{la pista} library{la biblioteca} other{ítem}} '{itemName}' de este dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "loginFlowQuickConnectDisabled": "La Conexión Rápida esta deshabilitada en este servidor.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "loginFlowSelectAUser": "Selecciona un usuario",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "login": "Iniciar sesión",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "startMixNoTracksGenre": "Mantén pulsado un género para añadirlo o eliminarlo del mezclador antes de empezar una mezcla",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "noActiveDownloads": "No hay descargas activas.",
+  "@noActiveDownloads": {}
 }
