@@ -1257,5 +1257,29 @@
   "syncComplete": "Sva preuzimanja su ponovo sinkronizirana.",
   "@syncComplete": {
     "description": "Message displayed after download sync completes."
+  },
+  "enableVibration": "Omogući vibraciju",
+  "@enableVibration": {},
+  "downloadBitrate": "Brzina prijenosa",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "loginFlowQuickConnectDisabled": "Brzo povezivanje je onemogućeno na ovom poslužitelju.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "hideQueueButton": "Sakrij gumb čekanja",
+  "@hideQueueButton": {},
+  "loopModeNoneButtonLabel": "Bez petlje",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "requireWifiForDownloads": "Zahtjevaj WiFi prilikom preuzimanja.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "releaseDateFormatYear": "Godina",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
   }
 }
