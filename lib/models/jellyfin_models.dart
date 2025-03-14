@@ -2305,6 +2305,16 @@ class BaseItemDto with RunTimeTickDuration {
 
   DownloadItemType get downloadType =>
       BaseItemDtoType.fromItem(this).downloadType!;
+
+  // BaseItemDtos with the same id should be considered equal so that Providers
+  // taking the BaseItemDto as an argument will be shared across all instances
+  @override
+  bool operator ==(Object other) {
+    return other is BaseItemDto && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 @JsonSerializable(
@@ -3459,6 +3469,12 @@ enum SortBy {
         SortBy.dateCreated,
         SortBy.premiereDate,
         SortBy.random,
+      ];
+
+  /// default SortBy options shown to the user, such as in the sort by menu
+  static List<SortBy> get trackSortOptions => [
+        ...defaults,
+        SortBy.playCount,
       ];
 
   /// Human-readable version of the [SortBy]. For example, toString() on

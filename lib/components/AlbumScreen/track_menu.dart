@@ -133,8 +133,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   // Makes sure that widget doesn't just disappear after press while menu is visible
   bool speedWidgetWasVisible = false;
   bool showSpeedMenu = false;
-  bool canDeleteFromServer = false;
-  bool deletableGotUpdated = false;
 
   double initialSheetExtent = 0.0;
   double inputStep = 0.9;
@@ -207,15 +205,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         56;
 
     return Consumer(builder: (context, ref, child) {
-      if (!deletableGotUpdated) {
-        deletableGotUpdated = true;
-        var deletable = GetIt.instance<JellyfinApiHelper>()
-            .canDeleteFromServer(widget.item);
-        canDeleteFromServer = deletable.initialValue;
-        deletable.realValue?.then((canDelete) => setState(() {
-              canDeleteFromServer = canDelete;
-            }));
-      }
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
       return widget.childBuilder(
           stackHeight, menu(context, menuEntries, metadata.value));
@@ -457,8 +446,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
       ),
       Consumer(
         builder: (context, ref, child) {
-          bool isFav =
-              ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+          bool isFav = ref.watch(isFavoriteProvider(widget.item));
           return ListTile(
             enabled: !widget.isOffline,
             leading: isFav
@@ -479,8 +467,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 : AppLocalizations.of(context)!.addFavourite),
             onTap: () async {
               ref
-                  .read(
-                      isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+                  .read(isFavoriteProvider(widget.item).notifier)
                   .updateFavorite(!isFav);
               if (context.mounted) Navigator.pop(context);
             },
@@ -586,36 +573,40 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
           },
         ),
       ),
-      Visibility(
-          visible: canDeleteFromServer,
-          child: ListTile(
-            leading: Icon(
-              Icons.delete_forever,
-              color: iconColor,
-            ),
-            title: Text(AppLocalizations.of(context)!
-                .deleteFromTargetConfirmButton("server")),
-            enabled: canDeleteFromServer,
-            onTap: () async {
-              var item = DownloadStub.fromItem(
-                  type: DownloadItemType.song, item: widget.item);
-              await askBeforeDeleteFromServerAndDevice(context, item);
-              final BaseItemDto newAlbumOrPlaylist =
-                  await _jellyfinApiHelper.getItemById(widget.parentItem!.id);
-              if (context.mounted) {
-                Navigator.pop(context); // close dialog
-                // pop current album screen and reload with new album data
-                Navigator.of(context).popUntil((route) {
-                  return route.settings.name != null // unnamed dialog
-                      &&
-                      route.settings.name !=
-                          AlbumScreen.routeName; // albums screen
-                });
-                await Navigator.of(context).pushNamed(AlbumScreen.routeName,
-                    arguments: newAlbumOrPlaylist);
-              }
-            },
-          )),
+      Consumer(builder: (context, ref, _) {
+        var canDelete = ref
+            .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
+        return Visibility(
+            visible: canDelete,
+            child: ListTile(
+              leading: Icon(
+                Icons.delete_forever,
+                color: iconColor,
+              ),
+              title: Text(AppLocalizations.of(context)!
+                  .deleteFromTargetConfirmButton("server")),
+              enabled: canDelete,
+              onTap: () async {
+                var item = DownloadStub.fromItem(
+                    type: DownloadItemType.song, item: widget.item);
+                await askBeforeDeleteFromServerAndDevice(context, item);
+                final BaseItemDto newAlbumOrPlaylist =
+                    await _jellyfinApiHelper.getItemById(widget.parentItem!.id);
+                if (context.mounted) {
+                  Navigator.pop(context); // close dialog
+                  // pop current album screen and reload with new album data
+                  Navigator.of(context).popUntil((route) {
+                    return route.settings.name != null // unnamed dialog
+                        &&
+                        route.settings.name !=
+                            AlbumScreen.routeName; // albums screen
+                  });
+                  await Navigator.of(context).pushNamed(AlbumScreen.routeName,
+                      arguments: newAlbumOrPlaylist);
+                }
+              },
+            ));
+      }),
     ];
   }
 

@@ -6,8 +6,8 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 
 Future<void> askBeforeDeleteDownloadFromDevice(
     BuildContext context, DownloadStub stub,
@@ -70,13 +70,15 @@ Future<void> askBeforeDeleteFromServerAndDevice(
           onConfirmed: () async {
             try {
               await jellyfinApiHelper.deleteItem(stub.id);
-              GlobalSnackbar.message((_) => AppLocalizations.of(context)!
-                  .itemDeletedSnackbar("server", type));
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!
+                      .itemDeletedSnackbar("server", type));
 
               if (status.isRequired) {
                 await downloadsService.deleteDownload(stub: stub);
-                GlobalSnackbar.message((_) => AppLocalizations.of(context)!
-                    .itemDeletedSnackbar("device", type));
+                GlobalSnackbar.message((scaffold) =>
+                    AppLocalizations.of(scaffold)!
+                        .itemDeletedSnackbar("device", type));
               }
 
               if (context.mounted) {

@@ -4,6 +4,7 @@ import 'package:finamp/services/theme_mode_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -14,10 +15,10 @@ import '../models/jellyfin_models.dart';
 part 'finamp_settings_helper.g.dart';
 
 @riverpod
-Stream<FinampSettings?> finampSettings(FinampSettingsRef ref) {
+Stream<FinampSettings> finampSettings(Ref ref) {
   return Hive.box<FinampSettings>("FinampSettings")
       .watch()
-      .map<FinampSettings?>((event) => event.value)
+      .map<FinampSettings>((event) => event.value!)
       .startWith(FinampSettingsHelper.finampSettings);
 }
 
@@ -257,28 +258,9 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setHasCompletedBlurhashImageMigration(
-      bool hasCompletedBlurhashImageMigration) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hasCompletedBlurhashImageMigration =
-        hasCompletedBlurhashImageMigration;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  /// Set the playbackSpeed property
   static void setPlaybackSpeed(double speed) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.playbackSpeed = speed;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setHasCompletedBlurhashImageMigrationIdFix(
-      bool hasCompletedBlurhashImageMigrationIdFix) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.hasCompletedBlurhashImageMigrationIdFix =
-        hasCompletedBlurhashImageMigrationIdFix;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

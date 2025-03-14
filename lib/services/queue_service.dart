@@ -13,10 +13,10 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
-import 'package:path/path.dart' as path_helper;
 
 import '../components/PlayerScreen/queue_source_helper.dart';
 import 'downloads_service.dart';
@@ -267,7 +267,7 @@ class QueueService {
     if (_savedQueueState == SavedQueueState.preInit) {
       try {
         _savedQueueState = SavedQueueState.init;
-        await archiveSavedQueue(inInit: true);
+        archiveSavedQueue(inInit: true);
         var info = _queuesBox.get("latest");
         if (info != null) {
           var keys = _queuesBox.values
@@ -280,7 +280,7 @@ class QueueService {
                 .getRange(0, keys.length - _maxSavedQueues)
                 .map((e) => e.millisecondsSinceEpoch.toString());
             _queueServiceLogger.finest("Deleting stored queues: $extra");
-            await _queuesBox.deleteAll(extra);
+            unawaited(_queuesBox.deleteAll(extra));
           }
 
           if (FinampSettingsHelper.finampSettings.autoloadLastQueueOnStartup) {
@@ -299,11 +299,11 @@ class QueueService {
   /// Push latest queue into history if it is not empty and not a duplicate.
   /// If the caller is setting the queue state to saving, that should generally
   /// occur after this is called.
-  Future<void> archiveSavedQueue({bool inInit = false}) async {
+  void archiveSavedQueue({bool inInit = false}) {
     if (_savedQueueState == SavedQueueState.saving || inInit) {
       var latest = _queuesBox.get("latest");
       if (latest != null && latest.trackCount != 0) {
-        await _queuesBox.put(latest.creation.toString(), latest);
+        _queuesBox.put(latest.creation.toString(), latest);
       }
     }
   }
@@ -376,12 +376,10 @@ class QueueService {
       }
 
       Map<String, List<jellyfin_models.BaseItemDto>> items = {
-        "previous":
-            info.previousTracks.map((e) => idMap[e]).whereNotNull().toList(),
-        "current":
-            [info.currentTrack].map((e) => idMap[e]).whereNotNull().toList(),
-        "next": info.nextUp.map((e) => idMap[e]).whereNotNull().toList(),
-        "queue": info.queue.map((e) => idMap[e]).whereNotNull().toList(),
+        "previous": info.previousTracks.map((e) => idMap[e]).nonNulls.toList(),
+        "current": [info.currentTrack].map((e) => idMap[e]).nonNulls.toList(),
+        "next": info.nextUp.map((e) => idMap[e]).nonNulls.toList(),
+        "queue": info.queue.map((e) => idMap[e]).nonNulls.toList(),
       };
       int sumLengths(int sum, Iterable val) => val.length + sum;
       int loadedTracks = items.values.fold(0, sumLengths);
@@ -449,7 +447,7 @@ class QueueService {
       }
     }
 
-    await archiveSavedQueue();
+    archiveSavedQueue();
     _savedQueueState = SavedQueueState.saving;
 
     await _replaceWholeQueue(
@@ -563,7 +561,7 @@ class QueueService {
   Future<void> stopPlayback() async {
     queueServiceLogger.info("Stopping playback");
 
-    await archiveSavedQueue();
+    archiveSavedQueue();
     if (_savedQueueState == SavedQueueState.pendingSave) {
       _savedQueueState = SavedQueueState.saving;
     }

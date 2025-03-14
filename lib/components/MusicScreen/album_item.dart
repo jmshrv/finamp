@@ -11,7 +11,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive_ce/hive.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
@@ -113,26 +112,13 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         };
   }
 
-  Box<FinampSettings> box = Hive.box<FinampSettings>("FinampSettings");
-  bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  bool deletableGotUpdated = false;
-  bool canDeleteFromServer = false;
 
   @override
   Widget build(BuildContext context) {
     local = AppLocalizations.of(context)!;
 
     final screenSize = MediaQuery.of(context).size;
-
-    if (!deletableGotUpdated) {
-      deletableGotUpdated = true;
-      var deletable = _jellyfinApiHelper.canDeleteFromServer(widget.album);
-      canDeleteFromServer = deletable.initialValue;
-      deletable.realValue?.then((canDelete) => setState(() {
-            canDeleteFromServer = canDelete;
-          }));
-    }
 
     void menuCallback({
       required Offset localPosition,
@@ -141,6 +127,10 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       unawaited(Feedback.forLongPress(context));
 
       final downloadsService = GetIt.instance<DownloadsService>();
+      final canDeleteFromServer = ref
+          .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.album));
+      final isOffline = ref.watch(finampSettingsProvider
+          .select((value) => value.requireValue.isOffline));
       final downloadStatus = downloadsService.getStatus(
           DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album),
@@ -175,7 +165,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           screenSize.height - globalPosition.dy,
         ),
         items: [
-          ref.watch(isFavoriteProvider(FavoriteRequest(mutableAlbum)))
+          ref.watch(isFavoriteProvider(mutableAlbum))
               ? PopupMenuItem<_AlbumListTileMenuItems>(
                   enabled: !isOffline,
                   value: _AlbumListTileMenuItems.removeFavourite,
@@ -309,17 +299,17 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             ),
         ],
       );
-      if (!mounted) return;
+      if (!context.mounted) return;
 
       switch (selection) {
         case _AlbumListTileMenuItems.addFavourite:
           ref
-              .read(isFavoriteProvider(FavoriteRequest(mutableAlbum)).notifier)
+              .read(isFavoriteProvider(mutableAlbum).notifier)
               .updateFavorite(true);
           break;
         case _AlbumListTileMenuItems.removeFavourite:
           ref
-              .read(isFavoriteProvider(FavoriteRequest(mutableAlbum)).notifier)
+              .read(isFavoriteProvider(mutableAlbum).notifier)
               .updateFavorite(false);
           break;
         case _AlbumListTileMenuItems.addToMixList:
@@ -655,8 +645,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.deleteFromDevice:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteDownloadFromDevice(context, item,
-              refresh: () => musicScreenRefreshStream.add(null));
+          await askBeforeDeleteDownloadFromDevice(context, item);
         case _AlbumListTileMenuItems.deleteFromServer:
           var item = DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album);
