@@ -19,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'finamp_settings_helper.dart';
 import 'locale_helper.dart';
@@ -64,6 +65,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Duration minBufferDuration = Duration(seconds: 90);
 
   final _audioFadeStepDuration = Duration(milliseconds: 50);
+  BehaviorSubject<bool> fading = BehaviorSubject.seeded(false);
 
   final outputSwitcherChannel =
       MethodChannel('com.unicornsonlsd.finamp/output_switcher');
@@ -329,6 +331,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     final volumeStep = getVolumeFadeOutStepSize(currentVolume);
 
+    fading.add(true);
     var volume = currentVolume;
     await Stream.periodic(_audioFadeStepDuration)
         .takeWhile((_) => volume > 0.0)
@@ -339,6 +342,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     final pauseFut = _player.pause();
     await _player.setVolume(currentVolume);
+    fading.add(false);
     return pauseFut;
   }
 
@@ -347,6 +351,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     final volumeStep = getVolumeFadeInStepSize(currentVolume);
 
+    fading.add(true);
     await _player.setVolume(0.0);
     final playFut = _player.play();
 
@@ -357,6 +362,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       volume = min(volume + volumeStep, currentVolume);
       await _player.setVolume(volume);
     });
+    fading.add(false);
 
     return playFut;
   }

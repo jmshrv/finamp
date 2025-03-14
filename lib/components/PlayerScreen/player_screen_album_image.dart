@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -63,7 +65,7 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
               onTap: () {
                 final audioService =
                     GetIt.instance<MusicPlayerBackgroundTask>();
-                audioService.togglePlayback();
+                unawaited(audioService.togglePlayback());
                 FeedbackHelper.feedback(FeedbackType.selection);
               },
               onDoubleTap: () {
