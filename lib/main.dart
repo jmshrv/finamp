@@ -243,6 +243,8 @@ Future<void> setupHive() async {
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
       : await getApplicationSupportDirectory();
+  //var dir = (await getApplicationDocumentsDirectory());
+  //dir = Directory(path_helper.join(dir.path, "finamptmp"));
 
   await Future.wait([
     Hive.openBox<FinampSettings>("FinampSettings", path: dir.path),
