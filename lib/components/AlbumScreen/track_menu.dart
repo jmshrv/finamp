@@ -835,8 +835,10 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
                 aspectRatio: 1.0,
                 child: AlbumImage(
                   // Only supply one of item or imageListenable
-                  item: ref.watch(isPlayerThemedProvider) ? null : widget.item,
-                  imageListenable: ref.watch(isPlayerThemedProvider)
+                  item: ref.watch(localIsPlayerThemedProvider)
+                      ? null
+                      : widget.item,
+                  imageListenable: ref.watch(localIsPlayerThemedProvider)
                       ? localImageProvider
                       : null,
                   borderRadius: BorderRadius.zero,

@@ -31,7 +31,7 @@ Future<void> showThemedBottomSheet({
 }) async {
   FeedbackHelper.feedback(FeedbackType.impact);
   var usePlayerTheme =
-      ProviderScope.containerOf(context).read(isPlayerThemedProvider);
+      ProviderScope.containerOf(context).read(localIsPlayerThemedProvider);
   await showModalBottomSheet(
       context: context,
       constraints: BoxConstraints(
@@ -113,7 +113,7 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
           if (widget.usePlayerTheme)
             localImageProvider.overrideWithValue(_playerImage),
           if (widget.usePlayerTheme)
-            isPlayerThemedProvider.overrideWithValue(true),
+            localIsPlayerThemedProvider.overrideWithValue(true),
           if (!widget.usePlayerTheme)
             localThemeRequestProvider
                 .overrideWithValue(ThemeRequest(widget.item, useIsolate: false))
