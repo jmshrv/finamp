@@ -26,7 +26,7 @@ final currentAlbumImageProvider = Provider<ListenableImage>((ref) {
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
       final request = AlbumImageRequest(item: base);
-      var image = ref.read(albumImageProvider(request));
+      var image = ref.watch(albumImageProvider(request));
       if (image != null) {
         // Cache the returned image
         stream = image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
@@ -41,7 +41,11 @@ final currentAlbumImageProvider = Provider<ListenableImage>((ref) {
     final request = AlbumImageRequest(
       item: currentTrack,
     );
-    return (ref.read(albumImageProvider(request)), currentTrack.blurHash, true);
+    return (
+      ref.watch(albumImageProvider(request)),
+      currentTrack.blurHash,
+      true
+    );
   }
   return (null, null, true);
 });

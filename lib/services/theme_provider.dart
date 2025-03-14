@@ -51,18 +51,21 @@ final Provider<ListenableImage> localImageProvider = Provider((ref) {
 final ProviderFamily<ColorScheme, ThemeRequest> finampThemeProvider =
     ProviderFamily((ref, request) {
   var image = ref.watch(themeImageProvider(request));
-  return ref.watch(
-      finampThemeFromImageProvider(image.$1, useIsolate: request.useIsolate));
+  return ref.watch(finampThemeFromImageProvider(
+      ThemeRequestFromImage(image.$1, request.useIsolate)));
 });
 
 final ProviderFamily<ListenableImage, ThemeRequest> themeImageProvider =
     ProviderFamily((ref, request) {
   var item = request.item;
   ImageProvider? image;
-  if (false) {
-    //image already exists somewhere
-    // set image to that here
-    // TODO cache stuff
+  String? cacheKey = request.item.blurHash ?? request.item.imageId;
+  // Re-use an existing request if possible to hit the image cache
+  if (albumRequestsCache.containsKey(cacheKey)) {
+    if (albumRequestsCache[cacheKey] == null) {
+      return (null, null, true);
+    }
+    image = ref.watch(albumImageProvider(albumRequestsCache[cacheKey]!));
   } else {
     // Use blurhash if possible, otherwise fetch 100x100
     if (item.blurHash != null) {
@@ -77,8 +80,8 @@ final ProviderFamily<ListenableImage, ThemeRequest> themeImageProvider =
 
 final Provider<ColorScheme> localThemeProvider = Provider((ref) {
   var image = ref.watch(localImageProvider);
-  return ref
-      .watch(finampThemeFromImageProvider(image.$1, useIsolate: image.$3));
+  return ref.watch(
+      finampThemeFromImageProvider(ThemeRequestFromImage(image.$1, image.$3)));
 }, dependencies: [localImageProvider]);
 
 class ThemeRequest {
@@ -99,18 +102,34 @@ class ThemeRequest {
   String? get _imageCode => item.blurHash ?? item.imageId;
 }
 
+class ThemeRequestFromImage {
+  ThemeRequestFromImage(this.image, this.useIsolate);
+
+  final ImageProvider? image;
+
+  final bool useIsolate;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ThemeRequestFromImage && other.image == image;
+  }
+
+  @override
+  int get hashCode => image.hashCode;
+}
+
 @riverpod
 class RawThemeAccent extends _$RawThemeAccent {
   @override
-  Future<Color?> build(ImageProvider? image, bool useIsolate) {
-    if (image == null) {
+  Future<Color?> build(ThemeRequestFromImage request) {
+    if (request.image == null) {
       return Future.value(null);
     }
-    return _calculate(ref, image, useIsolate: useIsolate);
+    return _calculate(ref, request.image!, request.useIsolate);
   }
 
-  static Future<Color?> _calculate(Ref ref, ImageProvider image,
-      {bool useIsolate = true}) {
+  static Future<Color?> _calculate(
+      Ref ref, ImageProvider image, bool useIsolate) {
     ImageStream stream =
         image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
     ImageStreamListener? listener;
@@ -151,11 +170,9 @@ class RawThemeAccent extends _$RawThemeAccent {
 @riverpod
 class FinampThemeFromImage extends _$FinampThemeFromImage {
   @override
-  // useIsolate should only be set false from finampThemeProvider, which shouldn't also create true requests for the same request, so this shouldn't cause dupes.
-  ColorScheme build(ImageProvider? image, {bool useIsolate = true}) {
+  ColorScheme build(ThemeRequestFromImage request) {
     var brightness = ref.watch(brightnessProvider);
-    var accent =
-        ref.watch(rawThemeAccentProvider(image, useIsolate)).valueOrNull;
+    var accent = ref.watch(rawThemeAccentProvider(request)).valueOrNull;
     if (accent == null) {
       return getDefaultTheme(brightness);
     }

@@ -6,7 +6,7 @@ part of 'theme_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$rawThemeAccentHash() => r'36bf7c9840031b741ee8ea1dd1c5032f5e4a3637';
+String _$rawThemeAccentHash() => r'37e9726b26abb76df207e08902e694363b6e1e9c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,12 +31,10 @@ class _SystemHash {
 
 abstract class _$RawThemeAccent
     extends BuildlessAutoDisposeAsyncNotifier<Color?> {
-  late final ImageProvider<Object>? image;
-  late final bool useIsolate;
+  late final ThemeRequestFromImage request;
 
   FutureOr<Color?> build(
-    ImageProvider<Object>? image,
-    bool useIsolate,
+    ThemeRequestFromImage request,
   );
 }
 
@@ -51,12 +49,10 @@ class RawThemeAccentFamily extends Family<AsyncValue<Color?>> {
 
   /// See also [RawThemeAccent].
   RawThemeAccentProvider call(
-    ImageProvider<Object>? image,
-    bool useIsolate,
+    ThemeRequestFromImage request,
   ) {
     return RawThemeAccentProvider(
-      image,
-      useIsolate,
+      request,
     );
   }
 
@@ -65,8 +61,7 @@ class RawThemeAccentFamily extends Family<AsyncValue<Color?>> {
     covariant RawThemeAccentProvider provider,
   ) {
     return call(
-      provider.image,
-      provider.useIsolate,
+      provider.request,
     );
   }
 
@@ -90,12 +85,9 @@ class RawThemeAccentProvider
     extends AutoDisposeAsyncNotifierProviderImpl<RawThemeAccent, Color?> {
   /// See also [RawThemeAccent].
   RawThemeAccentProvider(
-    ImageProvider<Object>? image,
-    bool useIsolate,
+    ThemeRequestFromImage request,
   ) : this._internal(
-          () => RawThemeAccent()
-            ..image = image
-            ..useIsolate = useIsolate,
+          () => RawThemeAccent()..request = request,
           from: rawThemeAccentProvider,
           name: r'rawThemeAccentProvider',
           debugGetCreateSourceHash:
@@ -105,8 +97,7 @@ class RawThemeAccentProvider
           dependencies: RawThemeAccentFamily._dependencies,
           allTransitiveDependencies:
               RawThemeAccentFamily._allTransitiveDependencies,
-          image: image,
-          useIsolate: useIsolate,
+          request: request,
         );
 
   RawThemeAccentProvider._internal(
@@ -116,20 +107,17 @@ class RawThemeAccentProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.image,
-    required this.useIsolate,
+    required this.request,
   }) : super.internal();
 
-  final ImageProvider<Object>? image;
-  final bool useIsolate;
+  final ThemeRequestFromImage request;
 
   @override
   FutureOr<Color?> runNotifierBuild(
     covariant RawThemeAccent notifier,
   ) {
     return notifier.build(
-      image,
-      useIsolate,
+      request,
     );
   }
 
@@ -138,16 +126,13 @@ class RawThemeAccentProvider
     return ProviderOverride(
       origin: this,
       override: RawThemeAccentProvider._internal(
-        () => create()
-          ..image = image
-          ..useIsolate = useIsolate,
+        () => create()..request = request,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        image: image,
-        useIsolate: useIsolate,
+        request: request,
       ),
     );
   }
@@ -160,16 +145,13 @@ class RawThemeAccentProvider
 
   @override
   bool operator ==(Object other) {
-    return other is RawThemeAccentProvider &&
-        other.image == image &&
-        other.useIsolate == useIsolate;
+    return other is RawThemeAccentProvider && other.request == request;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, image.hashCode);
-    hash = _SystemHash.combine(hash, useIsolate.hashCode);
+    hash = _SystemHash.combine(hash, request.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -178,11 +160,8 @@ class RawThemeAccentProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin RawThemeAccentRef on AutoDisposeAsyncNotifierProviderRef<Color?> {
-  /// The parameter `image` of this provider.
-  ImageProvider<Object>? get image;
-
-  /// The parameter `useIsolate` of this provider.
-  bool get useIsolate;
+  /// The parameter `request` of this provider.
+  ThemeRequestFromImage get request;
 }
 
 class _RawThemeAccentProviderElement
@@ -191,23 +170,20 @@ class _RawThemeAccentProviderElement
   _RawThemeAccentProviderElement(super.provider);
 
   @override
-  ImageProvider<Object>? get image => (origin as RawThemeAccentProvider).image;
-  @override
-  bool get useIsolate => (origin as RawThemeAccentProvider).useIsolate;
+  ThemeRequestFromImage get request =>
+      (origin as RawThemeAccentProvider).request;
 }
 
 String _$finampThemeFromImageHash() =>
-    r'340f80b1174ac199f9ccb2e5b2a8a9bb14c549ed';
+    r'c73e2c6add7681a3b527a7ea618ec0c22b7f4da9';
 
 abstract class _$FinampThemeFromImage
     extends BuildlessAutoDisposeNotifier<ColorScheme> {
-  late final ImageProvider<Object>? image;
-  late final bool useIsolate;
+  late final ThemeRequestFromImage request;
 
   ColorScheme build(
-    ImageProvider<Object>? image, {
-    bool useIsolate = true,
-  });
+    ThemeRequestFromImage request,
+  );
 }
 
 /// See also [FinampThemeFromImage].
@@ -221,12 +197,10 @@ class FinampThemeFromImageFamily extends Family<ColorScheme> {
 
   /// See also [FinampThemeFromImage].
   FinampThemeFromImageProvider call(
-    ImageProvider<Object>? image, {
-    bool useIsolate = true,
-  }) {
+    ThemeRequestFromImage request,
+  ) {
     return FinampThemeFromImageProvider(
-      image,
-      useIsolate: useIsolate,
+      request,
     );
   }
 
@@ -235,8 +209,7 @@ class FinampThemeFromImageFamily extends Family<ColorScheme> {
     covariant FinampThemeFromImageProvider provider,
   ) {
     return call(
-      provider.image,
-      useIsolate: provider.useIsolate,
+      provider.request,
     );
   }
 
@@ -260,12 +233,9 @@ class FinampThemeFromImageProvider
     extends AutoDisposeNotifierProviderImpl<FinampThemeFromImage, ColorScheme> {
   /// See also [FinampThemeFromImage].
   FinampThemeFromImageProvider(
-    ImageProvider<Object>? image, {
-    bool useIsolate = true,
-  }) : this._internal(
-          () => FinampThemeFromImage()
-            ..image = image
-            ..useIsolate = useIsolate,
+    ThemeRequestFromImage request,
+  ) : this._internal(
+          () => FinampThemeFromImage()..request = request,
           from: finampThemeFromImageProvider,
           name: r'finampThemeFromImageProvider',
           debugGetCreateSourceHash:
@@ -275,8 +245,7 @@ class FinampThemeFromImageProvider
           dependencies: FinampThemeFromImageFamily._dependencies,
           allTransitiveDependencies:
               FinampThemeFromImageFamily._allTransitiveDependencies,
-          image: image,
-          useIsolate: useIsolate,
+          request: request,
         );
 
   FinampThemeFromImageProvider._internal(
@@ -286,20 +255,17 @@ class FinampThemeFromImageProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.image,
-    required this.useIsolate,
+    required this.request,
   }) : super.internal();
 
-  final ImageProvider<Object>? image;
-  final bool useIsolate;
+  final ThemeRequestFromImage request;
 
   @override
   ColorScheme runNotifierBuild(
     covariant FinampThemeFromImage notifier,
   ) {
     return notifier.build(
-      image,
-      useIsolate: useIsolate,
+      request,
     );
   }
 
@@ -308,16 +274,13 @@ class FinampThemeFromImageProvider
     return ProviderOverride(
       origin: this,
       override: FinampThemeFromImageProvider._internal(
-        () => create()
-          ..image = image
-          ..useIsolate = useIsolate,
+        () => create()..request = request,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        image: image,
-        useIsolate: useIsolate,
+        request: request,
       ),
     );
   }
@@ -330,16 +293,13 @@ class FinampThemeFromImageProvider
 
   @override
   bool operator ==(Object other) {
-    return other is FinampThemeFromImageProvider &&
-        other.image == image &&
-        other.useIsolate == useIsolate;
+    return other is FinampThemeFromImageProvider && other.request == request;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, image.hashCode);
-    hash = _SystemHash.combine(hash, useIsolate.hashCode);
+    hash = _SystemHash.combine(hash, request.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -348,11 +308,8 @@ class FinampThemeFromImageProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin FinampThemeFromImageRef on AutoDisposeNotifierProviderRef<ColorScheme> {
-  /// The parameter `image` of this provider.
-  ImageProvider<Object>? get image;
-
-  /// The parameter `useIsolate` of this provider.
-  bool get useIsolate;
+  /// The parameter `request` of this provider.
+  ThemeRequestFromImage get request;
 }
 
 class _FinampThemeFromImageProviderElement
@@ -361,10 +318,8 @@ class _FinampThemeFromImageProviderElement
   _FinampThemeFromImageProviderElement(super.provider);
 
   @override
-  ImageProvider<Object>? get image =>
-      (origin as FinampThemeFromImageProvider).image;
-  @override
-  bool get useIsolate => (origin as FinampThemeFromImageProvider).useIsolate;
+  ThemeRequestFromImage get request =>
+      (origin as FinampThemeFromImageProvider).request;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
