@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
+import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
-import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -305,7 +306,6 @@ class QueueListTile extends StatelessWidget {
 
   final void Function(bool playable) onTap;
   final VoidCallback? onRemoveFromList;
-  final void Function(FinampTheme)? themeCallback;
 
   const QueueListTile({
     super.key,
@@ -321,7 +321,6 @@ class QueueListTile extends StatelessWidget {
     this.highlightCurrentTrack = false,
     this.parentItem,
     this.onRemoveFromList,
-    this.themeCallback,
   });
 
   @override
@@ -397,14 +396,6 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     with SingleTickerProviderStateMixin {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-  FinampTheme? _menuTheme;
-
-  @override
-  void dispose() {
-    _menuTheme?.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(
     BuildContext context,
@@ -430,7 +421,6 @@ class TrackListItemState extends ConsumerState<TrackListItem>
           isInPlaylist: widget.isInPlaylist,
           parentItem: widget.parentItem,
           onRemoveFromList: widget.onRemoveFromList,
-          themeProvider: _menuTheme,
           confirmPlaylistRemoval: false,
         );
       }
@@ -458,16 +448,14 @@ class TrackListItemState extends ConsumerState<TrackListItem>
               child: isCurrentlyPlaying && widget.highlightCurrentTrack
                   ? ProviderScope(
                       overrides: [
-                        themeDataProvider.overrideWith((ref) {
-                          return ref.watch(playerScreenThemeDataProvider) ??
-                              FinampTheme.defaultTheme();
+                        localImageProvider.overrideWith((ref) {
+                          return ref.watch(currentAlbumImageProvider);
                         })
                       ],
                       child: Consumer(
                         builder: (BuildContext context, WidgetRef ref,
                             Widget? child) {
-                          final imageTheme =
-                              ref.watch(playerScreenThemeProvider);
+                          final imageTheme = ref.watch(localThemeProvider);
                           return AnimatedTheme(
                             duration: const Duration(milliseconds: 500),
                             data: ThemeData(
@@ -475,7 +463,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                               // brightness: Theme.of(context).brightness,
                               colorScheme: imageTheme.copyWith(
                                   surfaceContainer: ref
-                                      .watch(colorThemeProvider)
+                                      .watch(localThemeProvider)
                                       .primary
                                       .withOpacity(
                                           Theme.of(context).brightness ==
@@ -489,7 +477,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                                         ?.copyWith(
                                             color: Color.alphaBlend(
                                                 (ref
-                                                    .watch(colorThemeProvider)
+                                                    .watch(localThemeProvider)
                                                     .secondary
                                                     .withOpacity(Theme.of(
                                                                     context)
@@ -520,7 +508,6 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                                 showArtists: widget.showArtists,
                                 showAlbum: showAlbum,
                                 showPlayCount: widget.showPlayCount,
-                                themeCallback: (x) => _menuTheme = x,
                                 isCurrentTrack: isCurrentlyPlaying,
                                 highlightCurrentTrack:
                                     widget.highlightCurrentTrack,
@@ -539,7 +526,6 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                       showArtists: widget.showArtists,
                       showAlbum: showAlbum,
                       showPlayCount: widget.showPlayCount,
-                      themeCallback: (x) => _menuTheme = x,
                       isCurrentTrack: isCurrentlyPlaying,
                       highlightCurrentTrack: widget.highlightCurrentTrack,
                       allowReorder: widget.allowReorder,
@@ -550,7 +536,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
 
     return GestureDetector(
       onTapDown: (_) {
-        _menuTheme?.calculate(Theme.of(context).brightness);
+        ref.listen(
+            finampThemeProvider(ThemeRequest(widget.baseItem)), (_, __) {});
       },
       onLongPressStart: (details) => menuCallback(),
       onSecondaryTapDown: (details) => menuCallback(),
@@ -579,7 +566,6 @@ class TrackListItemTile extends StatelessWidget {
   const TrackListItemTile({
     super.key,
     required this.baseItem,
-    required this.themeCallback,
     required this.isCurrentTrack,
     required this.allowReorder,
     required this.onTap,
@@ -594,7 +580,6 @@ class TrackListItemTile extends StatelessWidget {
   });
 
   final jellyfin_models.BaseItemDto baseItem;
-  final void Function(FinampTheme theme)? themeCallback;
   final bool isCurrentTrack;
   final bool allowReorder;
   final Future<int>? listIndex;
@@ -675,7 +660,6 @@ class TrackListItemTile extends StatelessWidget {
                 borderRadius: highlightTrack
                     ? BorderRadius.zero
                     : BorderRadius.circular(8.0),
-                themeCallback: themeCallback,
               ),
           ],
         ),

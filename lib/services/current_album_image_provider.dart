@@ -1,6 +1,7 @@
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -9,7 +10,8 @@ import 'album_image_provider.dart';
 
 /// Provider to handle syncing up the current playing item's image provider.
 /// Used on the player screen to sync up loading the blurred background.
-final currentAlbumImageProvider = Provider<(ImageProvider?, String?)>((ref) {
+/// Use ListenableImage as output to allow directly overriding localImageProvider
+final currentAlbumImageProvider = Provider<ListenableImage>((ref) {
   final List<FinampQueueItem> precacheItems =
       GetIt.instance<QueueService>().peekQueue(next: 3, previous: 1);
   ImageStream? stream;
@@ -39,9 +41,9 @@ final currentAlbumImageProvider = Provider<(ImageProvider?, String?)>((ref) {
     final request = AlbumImageRequest(
       item: currentTrack,
     );
-    return (ref.read(albumImageProvider(request)), currentTrack.blurHash);
+    return (ref.read(albumImageProvider(request)), currentTrack.blurHash, true);
   }
-  return (null, null);
+  return (null, null, true);
 });
 
 final currentTrackProvider = StreamProvider(

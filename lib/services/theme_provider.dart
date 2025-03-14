@@ -2,14 +2,23 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:finamp/at_contrast.dart';
+import 'package:finamp/services/album_image_provider.dart';
+import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart' hide Image;
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'current_album_image_provider.dart';
+import '../models/jellyfin_models.dart';
+
+part 'theme_provider.g.dart';
+
+// Image imageProvider, associated blurHash, useIsolate
+typedef ListenableImage = (ImageProvider?, String?, bool);
 
 final themeProviderLogger = Logger("ThemeProvider");
 
@@ -24,178 +33,155 @@ final defaultThemeLight = ColorScheme.fromSeed(
 ColorScheme getDefaultTheme(Brightness brightness) =>
     brightness == Brightness.dark ? defaultThemeDark : defaultThemeLight;
 
+// This provider gets updated to the latest brightness by a valuelistner in main.dart
 final brightnessProvider = StateProvider((ref) => Brightness.dark);
 
-final AutoDisposeProvider<ColorScheme> playerScreenThemeProvider =
-    Provider.autoDispose<ColorScheme>((ref) {
-  ColorScheme? scheme = ref.watch(playerScreenThemeNullableProvider).value;
-  if (scheme == null) {
-    return getGreyTheme(ref.watch(brightnessProvider));
-  } else {
-    return scheme;
-  }
-});
+final isPlayerThemedProvider = Provider((ref) => false);
 
-final Provider<FinampTheme?> playerScreenThemeDataProvider =
-    Provider<FinampTheme?>((ref) {
-  var (image, blurHash) = ref.watch(currentAlbumImageProvider);
-  if (image == null) {
-    return null;
-  }
-
-  themeProviderLogger.fine("Re-theming based on image $image");
-  var themer = FinampTheme.fromImageDeferred(image, blurHash);
-
-  ref.onDispose(() {
-    themer.dispose();
-  });
-
-  return themer;
-});
-
-final AutoDisposeFutureProvider<ColorScheme?>
-    playerScreenThemeNullableProvider =
-    FutureProvider.autoDispose<ColorScheme?>((ref) async {
-  var brightness = ref.watch(brightnessProvider);
-  return ref.watch(playerScreenThemeDataProvider)?.calculate(brightness);
-});
-
-final Provider<FinampTheme> themeDataProvider = Provider((ref) {
-  throw "No theme set";
+final Provider<ThemeRequest> localThemeRequestProvider = Provider((ref) {
+  throw "no item set for this scope";
 }, dependencies: const []);
 
-final Provider<(ImageProvider?, String?)> imageThemeProvider = Provider((ref) {
-  var theme = ref.watch(themeDataProvider);
-  return (theme.image, theme.blurHash);
-}, dependencies: [themeDataProvider]);
+// TODO override localImageProvider, remove playerScreenThemeProvider?
+final Provider<ListenableImage> localImageProvider = Provider((ref) {
+  var item = ref.watch(localThemeRequestProvider);
+  return ref.watch(themeImageProvider(item));
+}, dependencies: [localThemeRequestProvider]);
 
-final FutureProvider<ColorScheme> colorThemeNullableProvider =
-    FutureProvider((ref) {
-  var theme = ref.watch(themeDataProvider);
-  var brightness = ref.watch(brightnessProvider);
-  return theme.calculate(brightness);
-}, dependencies: [themeDataProvider]);
+final ProviderFamily<ColorScheme, ThemeRequest> finampThemeProvider =
+    ProviderFamily((ref, request) {
+  var image = ref.watch(themeImageProvider(request));
+  return ref.watch(
+      finampThemeFromImageProvider(image.$1, useIsolate: request.useIsolate));
+});
 
-final Provider<ColorScheme> colorThemeProvider = Provider((ref) {
-  var brightness = ref.watch(brightnessProvider);
-  var theme = ref.watch(themeDataProvider).colorScheme(brightness);
-  if (theme != null) return theme;
-  ref
-      .watch(themeDataProvider)
-      .calculate(brightness)
-      .then((value) => ref.invalidateSelf());
-  return getDefaultTheme(brightness);
-}, dependencies: [themeDataProvider]);
+final ProviderFamily<ListenableImage, ThemeRequest> themeImageProvider =
+    ProviderFamily((ref, request) {
+  var item = request.item;
+  ImageProvider? image;
+  if (false) {
+    //image already exists somewhere
+    // set image to that here
+    // TODO cache stuff
+  } else {
+    // Use blurhash if possible, otherwise fetch 100x100
+    if (item.blurHash != null) {
+      image = BlurHashImage(item.blurHash!);
+    } else if (item.imageId != null) {
+      image = ref.watch(albumImageProvider(
+          AlbumImageRequest(item: item, maxHeight: 100, maxWidth: 100)));
+    }
+  }
+  return (image, item.blurHash, request.useIsolate);
+});
 
-class FinampTheme {
-  FinampTheme.fromImageDeferred(ImageProvider this.image, this.blurHash);
+final Provider<ColorScheme> localThemeProvider = Provider((ref) {
+  var image = ref.watch(localImageProvider);
+  return ref
+      .watch(finampThemeFromImageProvider(image.$1, useIsolate: image.$3));
+}, dependencies: [localImageProvider]);
 
-  FinampTheme.fromImage(
-      ImageProvider this.image, this.blurHash, Brightness brightness,
-      {bool useIsolate = true}) {
-    calculate(brightness, useIsolate: useIsolate);
+class ThemeRequest {
+  ThemeRequest(this.item, {this.useIsolate = true});
+
+  final BaseItemDto item;
+
+  final bool useIsolate;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ThemeRequest && other._imageCode == _imageCode;
   }
 
-  Future<ColorScheme> calculate(Brightness brightness,
-      {bool useIsolate = true}) {
-    if (_results[brightness] != null) {
-      return _results[brightness]!.colorSchemeFuture;
-    }
-    _results[brightness] = _ThemeProviderResults();
+  @override
+  int get hashCode => _imageCode.hashCode;
+
+  String? get _imageCode => item.blurHash ?? item.imageId;
+}
+
+@riverpod
+class RawThemeAccent extends _$RawThemeAccent {
+  @override
+  Future<Color?> build(ImageProvider? image, bool useIsolate) {
     if (image == null) {
-      var scheme = getDefaultTheme(brightness);
-      _results[brightness]!._completer.complete(scheme);
-    } else {
-      ImageStream stream =
-          image!.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
-      ImageStreamListener? listener;
-
-      listener = ImageStreamListener((image, synchronousCall) {
-        stream.removeListener(listener!);
-        _results[brightness]!._completer.complete(
-            getColorSchemeForImage(image, brightness, useIsolate: useIsolate));
-      }, onError: (e, stack) {
-        stream.removeListener(listener!);
-        _results[brightness]!._completer.complete(getDefaultTheme(brightness));
-        themeProviderLogger.severe(e, e, stack);
-      });
-
-      _dispose = () {
-        stream.removeListener(listener!);
-      };
-
-      stream.addListener(listener);
+      return Future.value(null);
     }
-    _results[brightness]!.colorSchemeFuture.then((value) {
-      _results[brightness]!.colorScheme = value;
-    });
-    return _results[brightness]!.colorSchemeFuture;
+    return _calculate(ref, image, useIsolate: useIsolate);
   }
 
-  FinampTheme.defaultTheme()
-      : image = null,
-        blurHash = null;
+  static Future<Color?> _calculate(Ref ref, ImageProvider image,
+      {bool useIsolate = true}) {
+    ImageStream stream =
+        image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
+    ImageStreamListener? listener;
+    Completer<Color?> completer = Completer();
 
-  void Function()? _dispose;
-  final ImageProvider? image;
-  final String? blurHash;
-  final Map<Brightness, _ThemeProviderResults> _results = {};
-  ColorScheme? colorScheme(Brightness brightness) =>
-      _results[brightness]?.colorScheme;
+    listener = ImageStreamListener((listenerImage, synchronousCall) async {
+      stream.removeListener(listener!);
 
-  /// Disposes the imageStream, ending the attempt to load the theme.  This has no effect
-  /// if the image has already loaded, as the stream will already have been disposed.
-  void dispose() {
-    if (_dispose != null) {
-      _dispose!();
-    }
-    for (var result in _results.values) {
-      if (!result._completer.isCompleted) {
-        result._completer.completeError("disposed before completed");
+      // Use fromImage instead of fromImageProvider to better handle error case
+      final PaletteGenerator palette;
+      try {
+        palette = await PaletteGenerator.fromImage(listenerImage.image,
+            useIsolate: useIsolate);
+      } finally {
+        listenerImage.dispose();
       }
+
+      Color accent = palette.vibrantColor?.color ??
+          palette.dominantColor?.color ??
+          const Color.fromARGB(255, 0, 164, 220);
+
+      completer.complete(accent);
+    }, onError: (e, stack) {
+      stream.removeListener(listener!);
+      completer.complete(null);
+      themeProviderLogger.severe(e, e, stack);
+    });
+
+    ref.onDispose(() {
+      stream.removeListener(listener!);
+    });
+
+    stream.addListener(listener);
+    return completer.future;
+  }
+}
+
+@riverpod
+class FinampThemeFromImage extends _$FinampThemeFromImage {
+  @override
+  // useIsolate should only be set false from finampThemeProvider, which shouldn't also create true requests for the same request, so this shouldn't cause dupes.
+  ColorScheme build(ImageProvider? image, {bool useIsolate = true}) {
+    var brightness = ref.watch(brightnessProvider);
+    var accent =
+        ref.watch(rawThemeAccentProvider(image, useIsolate)).valueOrNull;
+    if (accent == null) {
+      return getDefaultTheme(brightness);
     }
-  }
-}
 
-class _ThemeProviderResults {
-  final Completer<ColorScheme> _completer = Completer();
-  Future<ColorScheme> get colorSchemeFuture => _completer.future;
-  ColorScheme? colorScheme;
-}
+    themeProviderLogger.finest("Accent color: $accent");
 
-Future<ColorScheme> getColorSchemeForImage(
-    ImageInfo image, Brightness brightness,
-    {bool useIsolate = true}) async {
-  // Use fromImage instead of fromImageProvider to better handle error case
-  final PaletteGenerator palette;
-  try {
-    palette =
-        await PaletteGenerator.fromImage(image.image, useIsolate: useIsolate);
-  } finally {
-    image.dispose();
+    return _calculate(accent, brightness);
   }
 
-  Color accent = palette.vibrantColor?.color ??
-      palette.dominantColor?.color ??
-      const Color.fromARGB(255, 0, 164, 220);
+  static ColorScheme _calculate(Color rawAccent, Brightness brightness) {
+    final lighter = brightness == Brightness.dark;
 
-  themeProviderLogger.finest("Accent color: $accent");
+    final background = Color.alphaBlend(
+        lighter
+            ? Colors.black.withOpacity(0.675)
+            : Colors.white.withOpacity(0.675),
+        rawAccent);
 
-  final lighter = brightness == Brightness.dark;
-
-  final background = Color.alphaBlend(
-      lighter
-          ? Colors.black.withOpacity(0.675)
-          : Colors.white.withOpacity(0.675),
-      accent);
-
-  accent = accent.atContrast(4.5, background, lighter);
-  return ColorScheme.fromSwatch(
-    primarySwatch: generateMaterialColor(accent),
-    accentColor: accent,
-    brightness: brightness,
-    backgroundColor: background,
-  );
+    var accent = rawAccent.atContrast(4.5, background, lighter);
+    return ColorScheme.fromSwatch(
+      primarySwatch: generateMaterialColor(accent),
+      accentColor: accent,
+      brightness: brightness,
+      backgroundColor: background,
+    );
+  }
 }
 
 ColorScheme getGreyTheme(Brightness brightness) {
@@ -269,8 +255,37 @@ class _ThemeTransitionCalculator {
     if (_skipAllTransitions) {
       return const Duration(milliseconds: 0);
     }
-    return ModalRoute.of(context)!.isCurrent
+    return ModalRoute.of(context)?.isCurrent ?? true
         ? const Duration(milliseconds: 1000)
         : const Duration(milliseconds: 0);
+  }
+}
+
+class PlayerScreenTheme extends ConsumerWidget {
+  final Widget child;
+  final Duration? duration;
+
+  const PlayerScreenTheme({super.key, required this.child, this.duration});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    return ProviderScope(
+        overrides: [
+          localImageProvider.overrideWith(
+              (provider) => provider.watch(currentAlbumImageProvider)),
+          isPlayerThemedProvider.overrideWithValue(true),
+        ],
+        child: Consumer(
+            builder: (context, ref, child) {
+              return AnimatedTheme(
+                  duration: duration ?? getThemeTransitionDuration(context),
+                  data: ThemeData(
+                      colorScheme: ref.watch(localThemeProvider),
+                      iconTheme: Theme.of(context).iconTheme.copyWith(
+                            color: ref.watch(localThemeProvider).primary,
+                          )),
+                  child: child!);
+            },
+            child: child));
   }
 }

@@ -45,12 +45,10 @@ Future<void> showModalTrackMenu({
   required BuildContext context,
   required BaseItemDto item,
   bool showPlaybackControls = false,
-  bool usePlayerTheme = false,
   bool isInPlaylist = false,
   BaseItemDto? parentItem,
   Function? onRemoveFromList,
   bool confirmPlaylistRemoval = true,
-  FinampTheme? themeProvider,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final canGoToAlbum = item.parentId != null;
@@ -66,7 +64,6 @@ Future<void> showModalTrackMenu({
           key: ValueKey(item.id),
           item: item,
           parentItem: parentItem,
-          usePlayerTheme: usePlayerTheme,
           isOffline: isOffline,
           showPlaybackControls: showPlaybackControls,
           isInPlaylist: isInPlaylist,
@@ -76,12 +73,9 @@ Future<void> showModalTrackMenu({
           onRemoveFromList: onRemoveFromList,
           confirmPlaylistRemoval: confirmPlaylistRemoval,
           childBuilder: childBuilder,
-          themeProvider: themeProvider,
           dragController: dragController,
         );
-      },
-      usePlayerTheme: usePlayerTheme,
-      themeProvider: themeProvider);
+      });
 }
 
 class TrackMenu extends ConsumerStatefulWidget {
@@ -92,7 +86,6 @@ class TrackMenu extends ConsumerStatefulWidget {
     required this.item,
     required this.isOffline,
     required this.showPlaybackControls,
-    required this.usePlayerTheme,
     required this.isInPlaylist,
     required this.canGoToAlbum,
     required this.canGoToArtist,
@@ -101,7 +94,6 @@ class TrackMenu extends ConsumerStatefulWidget {
     required this.confirmPlaylistRemoval,
     this.parentItem,
     required this.childBuilder,
-    required this.themeProvider,
     required this.dragController,
   });
 
@@ -109,7 +101,6 @@ class TrackMenu extends ConsumerStatefulWidget {
   final BaseItemDto? parentItem;
   final bool isOffline;
   final bool showPlaybackControls;
-  final bool usePlayerTheme;
   final bool isInPlaylist;
   final bool canGoToAlbum;
   final bool canGoToArtist;
@@ -117,7 +108,6 @@ class TrackMenu extends ConsumerStatefulWidget {
   final Function? onRemoveFromList;
   final bool confirmPlaylistRemoval;
   final ScrollBuilder childBuilder;
-  final FinampTheme? themeProvider;
   final DraggableScrollableController dragController;
 
   @override
@@ -259,8 +249,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               context: context,
               item: widget.item,
               parentPlaylist: inPlaylist ? queueItem!.source.item : null,
-              usePlayerTheme: widget.usePlayerTheme,
-              themeProvider: widget.themeProvider,
             );
           },
         ),
@@ -618,7 +606,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
       SliverPersistentHeader(
         delegate: TrackMenuSliverAppBar(
           item: widget.item,
-          useThemeImage: widget.usePlayerTheme,
         ),
         pinned: true,
       ),
@@ -780,11 +767,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
 
 class TrackMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
-  bool useThemeImage;
 
   TrackMenuSliverAppBar({
     required this.item,
-    this.useThemeImage = false,
   });
 
   @override
@@ -792,7 +777,6 @@ class TrackMenuSliverAppBar extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return TrackInfo(
       item: item,
-      useThemeImage: useThemeImage,
     );
   }
 
@@ -811,17 +795,14 @@ class TrackInfo extends ConsumerStatefulWidget {
   const TrackInfo({
     super.key,
     required this.item,
-    required this.useThemeImage,
   }) : condensed = false;
 
   const TrackInfo.condensed({
     super.key,
     required this.item,
-    required this.useThemeImage,
   }) : condensed = true;
 
   final BaseItemDto item;
-  final bool useThemeImage;
   final bool condensed;
 
   @override
@@ -854,9 +835,10 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
                 aspectRatio: 1.0,
                 child: AlbumImage(
                   // Only supply one of item or imageListenable
-                  item: widget.useThemeImage ? null : widget.item,
-                  imageListenable:
-                      widget.useThemeImage ? imageThemeProvider : null,
+                  item: ref.watch(isPlayerThemedProvider) ? null : widget.item,
+                  imageListenable: ref.watch(isPlayerThemedProvider)
+                      ? localImageProvider
+                      : null,
                   borderRadius: BorderRadius.zero,
                 ),
               ),
