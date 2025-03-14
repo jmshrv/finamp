@@ -59,7 +59,6 @@ class _LogoutListTileState extends State<LogoutListTile> {
                   try {
                     final audioHandler =
                         GetIt.instance<MusicPlayerBackgroundTask>();
-                    final queueService = GetIt.instance<QueueService>();
 
                     // We don't want audio to be playing after we log out.
                     // We check if the audio service is running on iOS because
@@ -67,7 +66,7 @@ class _LogoutListTileState extends State<LogoutListTile> {
                     if (!Platform.isIOS ||
                         (audioHandler.playbackState.valueOrNull?.playing ??
                             false)) {
-                      await queueService.stopPlayback();
+                      await audioHandler.stop();
                     }
 
                     final jellyfinApiHelper =

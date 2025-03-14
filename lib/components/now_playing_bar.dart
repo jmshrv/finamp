@@ -191,8 +191,8 @@ class NowPlayingBar extends ConsumerWidget {
                 : DismissDirection.vertical,
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.down) {
-                final queueService = GetIt.instance<QueueService>();
-                await queueService.stopPlayback();
+                final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+                await audioHandler.stop();
               } else {
                 await openPlayerScreen();
               }

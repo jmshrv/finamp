@@ -324,15 +324,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  Future<void> stopPlayback() async {
-    try {
-      await _player.stop();
-    } catch (e) {
-      _audioServiceBackgroundTaskLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-
   Future<void> handleEndOfQueue() async {
     try {
       _audioServiceBackgroundTaskLogger.info("Queue completed.");

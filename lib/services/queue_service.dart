@@ -506,7 +506,7 @@ class QueueService {
 
       //await stopPlayback(); //TODO is this really needed?
       // await _audioHandler.initializeAudioSource(_queueAudioSource);
-      await _audioHandler.stopPlayback();
+      await _audioHandler.stop();
       await _queueAudioSource.clear();
 
       List<AudioSource> audioSources = [];
@@ -571,8 +571,6 @@ class QueueService {
     await _queueAudioSource.clear();
 
     _queueFromConcatenatingAudioSource();
-
-    await _audioHandler.stopPlayback();
 
     // await _audioHandler.initializeAudioSource(_queueAudioSource,
     //     preload: false);
