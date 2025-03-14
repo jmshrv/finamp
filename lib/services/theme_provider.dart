@@ -304,7 +304,7 @@ class _ThemeTransitionCalculator {
     if (_skipAllTransitions) {
       return const Duration(milliseconds: 0);
     }
-    return ModalRoute.of(context)?.isCurrent ?? true
+    return context.mounted
         ? const Duration(milliseconds: 1000)
         : const Duration(milliseconds: 0);
   }

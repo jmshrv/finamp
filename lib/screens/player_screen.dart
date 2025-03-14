@@ -71,7 +71,6 @@ class PlayerScreen extends ConsumerWidget {
     });
 
     return PlayerScreenTheme(
-      duration: const Duration(milliseconds: 1000),
       child: StreamBuilder<FinampQueueInfo?>(
           stream: queueService.getQueueStream(),
           initialData: queueService.getQueue(),

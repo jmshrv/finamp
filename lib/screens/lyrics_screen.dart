@@ -38,7 +38,6 @@ class LyricsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlayerScreenTheme(
-      duration: const Duration(milliseconds: 1000),
       child: const _LyricsScreenContent(),
     );
   }

@@ -1,12 +1,10 @@
-import 'dart:async';
-
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/queue_service.dart';
 import 'metadata_provider.dart';
 
 /// Provider to handle pre-fetching metadata for upcoming tracks
@@ -25,7 +23,7 @@ final currentTrackMetadataProvider =
           checkIfSpeedControlNeeded:
               FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
                   PlaybackSpeedVisibility.automatic);
-      unawaited(ref.watch(metadataProvider(request).future));
+      ref.listen(metadataProvider(request), (_, __) {});
     }
   }
 
