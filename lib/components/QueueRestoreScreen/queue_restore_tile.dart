@@ -75,12 +75,11 @@ class QueueRestoreTile extends StatelessWidget {
                     ])),
         trailing: IconButton(
             icon: const Icon(Icons.arrow_circle_right_outlined),
-            onPressed: () async {
-              await queueService.archiveSavedQueue();
+            onPressed: () {
+              queueService.archiveSavedQueue();
               unawaited(queueService
                   .loadSavedQueue(info)
                   .catchError(GlobalSnackbar.error));
-              if (!context.mounted) return;
               Navigator.of(context).popUntil(
                   (route) => route.isFirst && !route.willHandlePopInternally);
             }),
