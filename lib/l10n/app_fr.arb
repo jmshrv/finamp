@@ -346,7 +346,7 @@
   "@addToPlaylistTitle": {},
   "removeFromPlaylistTooltip": "Retirer de cette liste de lecture",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Retirer de la playlist",
+  "removeFromPlaylistTitle": "Supprimer de cette liste de lecture",
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Nouvelle Playlist",
   "@newPlaylist": {},
