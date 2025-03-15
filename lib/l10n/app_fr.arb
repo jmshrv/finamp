@@ -1120,7 +1120,7 @@
       }
     }
   },
-  "shuffleToQueue": "Aléatoire dans la file d'attente",
+  "shuffleToQueue": "Jouer aléatoirement dans la file d'attente",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
