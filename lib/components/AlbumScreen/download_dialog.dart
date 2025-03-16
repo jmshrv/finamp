@@ -58,20 +58,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
           onPressed: selectedDownloadLocation == null
               ? null
               : () async {
-                  await checkedAddDownloads(
-                    context,
-                    downloadLocation: selectedDownloadLocation!,
-                    parents: widget.parents,
-                    items: widget.items,
-                    viewId: widget.viewId,
-                  );
-
-                  if (!mounted) return;
-
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(AppLocalizations.of(context)!.downloadsAdded),
-                  ));
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(selectedDownloadLocation);
                 },
           child: Text(AppLocalizations.of(context)!.addButtonLabel),
         )

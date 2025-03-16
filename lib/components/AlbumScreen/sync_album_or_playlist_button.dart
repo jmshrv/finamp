@@ -26,11 +26,11 @@ class _SyncAlbumOrPlaylistButtonState
   bool isAlbumDownloaded = false;
 
 
-  void syncAlbumOrPlaylist() async {
+  void syncAlbumOrPlaylist(BuildContext context) async {
     _syncLogger.info("Syncing playlist");
 
     var syncHelper = DownloadsSyncHelper(_syncLogger);
-    syncHelper.sync(widget.parent, widget.items);
+    syncHelper.sync(context, widget.parent, widget.items);
     setState(() {
       isAlbumDownloaded = _downloadHelper.isAlbumDownloaded(widget.parent.id);
     });
@@ -43,7 +43,8 @@ class _SyncAlbumOrPlaylistButtonState
         tooltip: isAlbumDownloaded
             ? AppLocalizations.of(context)!.sync
             : AppLocalizations.of(context)!.download,
-        onPressed: () => syncAlbumOrPlaylist(), icon:
+        onPressed: () => syncAlbumOrPlaylist(context),
+        icon:
         isAlbumDownloaded ?
         const Icon(Icons.sync) :
         const Icon(Icons.download));

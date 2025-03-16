@@ -16,7 +16,7 @@ class SyncDownloadedAlbumsOrPlaylistsButton extends StatelessWidget {
   final DownloadsHelper downloadsHelper = GetIt.instance<DownloadsHelper>();
   final _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
 
-  void syncPlaylists() async {
+  void syncPlaylists(BuildContext context) async {
     _syncLogger.info("Syncing downloaded playlists");
 
     var syncHelper = DownloadsSyncHelper(_syncLogger);
@@ -30,14 +30,14 @@ class SyncDownloadedAlbumsOrPlaylistsButton extends StatelessWidget {
         _syncLogger.warning("Could not find any items for album or playlist id ${parent.item.id}");
         continue;
       }
-      syncHelper.sync(parent.item, items);
+      syncHelper.sync(context, parent.item, items);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => syncPlaylists(),
+      onPressed: () => syncPlaylists(context),
       icon: const Icon(Icons.sync),
       tooltip: AppLocalizations.of(context)!.syncDownloadedPlaylists,
     );
