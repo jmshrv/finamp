@@ -33,51 +33,54 @@ class _ViewSelectorState extends State<ViewSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.selectMusicLibraries),
-      ),
-      floatingActionButton: isSubmitButtonEnabled
-          ? FloatingActionButton(
-              onPressed: _submitChoice,
-              child: const Icon(Icons.check),
-            )
-          : null,
-      body: FutureBuilder<List<BaseItemDto>>(
-        future: viewListFuture,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            // Finamp only supports music libraries. We used to allow people to
-            // select unsupported libraries, but some people selected "general"
-            // libraries and thought Finamp was broken.
-            if (snapshot.data!.isEmpty ||
-                !snapshot.data!
-                    .any((element) => element.collectionType == "music")) {
-              return NoMusicLibrariesMessage(
-                onRefresh: () {
-                  setState(() {
-                    _views.clear();
-                    viewListFuture = _jellyfinApiHelper.getViews();
-                  });
-                },
-              );
-            }
+    return FutureBuilder<List<BaseItemDto>>(
+      future: viewListFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          // Finamp only supports music libraries. We used to allow people to
+          // select unsupported libraries, but some people selected "general"
+          // libraries and thought Finamp was broken.
+          if (snapshot.data!.isEmpty ||
+              !snapshot.data!
+                  .any((element) => element.collectionType == "music")) {
+            return NoMusicLibrariesMessage(
+              onRefresh: () {
+                setState(() {
+                  _views.clear();
+                  viewListFuture = _jellyfinApiHelper.getViews();
+                });
+              },
+            );
+          }
 
-            if (_views.isEmpty) {
-              _views.addEntries(snapshot.data!
-                  .where((element) => element.collectionType != "playlists")
-                  .map((e) => MapEntry(e, e.collectionType == "music")));
+          if (_views.isEmpty) {
+            _views.addEntries(snapshot.data!
+                .where((element) => element.collectionType != "playlists")
+                .map((e) => MapEntry(e, e.collectionType == "music")));
 
-              // If only one music library is available and user doesn't have a
-              // view saved (assuming setup is in progress), skip the selector.
-              if (_views.values.where((element) => element == true).length ==
-                      1 &&
-                  _finampUserHelper.currentUser!.currentView == null) {
-                _submitChoice();
+            // If only one music library is available and user doesn't have a
+            // view saved (assuming setup is in progress), skip the selector.
+            if (_views.values.where((element) => element == true).length == 1 &&
+                _finampUserHelper.currentUser!.currentView == null) {
+              _submitChoice();
+            } else {
+              if (mounted) {
+                isSubmitButtonEnabled = _views.values.contains(true);
               }
             }
+          }
 
-            return Scrollbar(
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.selectMusicLibraries),
+            ),
+            floatingActionButton: isSubmitButtonEnabled
+                ? FloatingActionButton(
+                    onPressed: _submitChoice,
+                    child: const Icon(Icons.check),
+                  )
+                : null,
+            body: Scrollbar(
               child: ListView.builder(
                 itemCount: _views.length,
                 itemBuilder: (context, index) {
@@ -98,16 +101,23 @@ class _ViewSelectorState extends State<ViewSelector> {
                   );
                 },
               ),
-            );
-          } else if (snapshot.hasError) {
-            errorSnackbar(snapshot.error, context);
-            // TODO: Let the user refresh the page
-            return const Center(child: Icon(Icons.error));
-          } else {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
-        },
-      ),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          errorSnackbar(snapshot.error, context);
+          // TODO: Let the user refresh the page
+          return Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error),
+              Text(snapshot.error.toString()),
+            ],
+          ));
+        } else {
+          return const Center(child: CircularProgressIndicator.adaptive());
+        }
+      },
     );
   }
 
