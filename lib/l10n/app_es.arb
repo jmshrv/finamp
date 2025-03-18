@@ -9,7 +9,7 @@
   "@albumArtist": {},
   "artist": "Artista",
   "@artist": {},
-  "addButtonLabel": "AÑADIR",
+  "addButtonLabel": "Añadir",
   "@addButtonLabel": {},
   "areYouSure": "¿Estás seguro?",
   "@areYouSure": {},
@@ -132,9 +132,9 @@
   "@editPlaylistNameTooltip": {},
   "playlistNameUpdated": "Se actualizó el nombre de la lista.",
   "@playlistNameUpdated": {},
-  "downloadsQueued": "Se añadieron las descargas.",
+  "downloadsQueued": "Descarga preparada, descargando archivos",
   "@downloadsQueued": {},
-  "applicationLegalese": "Licenciado con la Mozilla Public License 2.0. El código fuente disponible en:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Licenciado con la Mozilla Public License 2.0.\nCódigo fuente disponible en {sourceCodeLink}.",
   "@applicationLegalese": {},
   "logsCopied": "Se copiaron los registros.",
   "@logsCopied": {},
@@ -324,7 +324,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin remotamente, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP (80/443), no tendrás que especificar el puerto. Este probablemente sea tu caso si tu servidor está detrás de un proxy inverso.",
+  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin remotamente, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto predeterminado (80 o 443) o en un puerto predeterminado de Jellyfin (8096), no tienes que especificar el puerto.\n\nSi la dirección es correcta, deberías poder ver algunso datos sobre tu servidor en las casillas de abajo.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -641,5 +641,9 @@
   "deleteDownloadsConfirmButtonText": "Eliminar",
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "confirmDownloadStarted": "Descarga comenzada",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
   }
 }
