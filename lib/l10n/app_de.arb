@@ -1938,5 +1938,9 @@
   "releaseDateFormatMonthYear": "Monat & Jahr",
   "@releaseDateFormatMonthYear": {
     "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "allowDeleteFromServerTitle": "Serverseitiges Löschen von Medien erlauben",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
   }
 }
