@@ -8,6 +8,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/album_image_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -1054,11 +1055,12 @@ class QueueService {
       if (artUri == null) {
         final applicationSupportDirectory =
             await getApplicationSupportDirectory();
-        artUri = Uri(
-            scheme: "content",
-            host: contentProviderPackageName,
-            path: path_helper.join(applicationSupportDirectory.absolute.path,
-                Assets.images.albumWhite.path));
+        // artUri = Uri(
+        //     scheme: "content",
+        //     host: contentProviderPackageName,
+        //     path: path_helper.join(applicationSupportDirectory.absolute.path,
+        //         Assets.images.albumWhite.path));
+        artUri = _jellyfinApiHelper.getImageUrl(item: item) ?? (await getFallbackImageFile()).uri;
       } else {
         // store the origin in fragment since it should be unused
         artUri = Uri(
@@ -1070,6 +1072,8 @@ class QueueService {
                 : null);
       }
     }
+
+    _queueServiceLogger.fine("imageUri: $imageUri\ndownloadedImage: ${downloadedImage?.file != null}\njellyfinUri: ${_jellyfinApiHelper.getImageUrl(item: item)}\nfallbackUri: ${(await getFallbackImageFile()).uri}\nitem.imageId: ${item.imageId}\nitem.imageTags: ${item.imageTags}");
 
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
