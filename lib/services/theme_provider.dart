@@ -25,26 +25,30 @@ final themeProviderLogger = Logger("ThemeProvider");
 class PlayerScreenTheme extends ConsumerWidget {
   final Widget child;
   final Duration? duration;
+  final ThemeData Function(ThemeData)? themeOverride;
 
-  const PlayerScreenTheme({super.key, required this.child, this.duration});
+  const PlayerScreenTheme(
+      {super.key, required this.child, this.duration, this.themeOverride});
 
   @override
   Widget build(BuildContext context, ref) {
     return ProviderScope(
         overrides: [
-          localImageProvider.overrideWith(
-              (provider) => provider.watch(currentAlbumImageProvider)),
           localIsPlayerThemedProvider.overrideWithValue(true),
         ],
         child: Consumer(
             builder: (context, ref, child) {
+              var theme = ThemeData(
+                  colorScheme: ref.watch(localThemeProvider),
+                  iconTheme: Theme.of(context).iconTheme.copyWith(
+                        color: ref.watch(localThemeProvider).primary,
+                      ));
+              if (themeOverride != null) {
+                theme = themeOverride!(theme);
+              }
               return AnimatedTheme(
                   duration: duration ?? getThemeTransitionDuration(context),
-                  data: ThemeData(
-                      colorScheme: ref.watch(localThemeProvider),
-                      iconTheme: Theme.of(context).iconTheme.copyWith(
-                            color: ref.watch(localThemeProvider).primary,
-                          )),
+                  data: theme,
                   child: child!);
             },
             child: child));
@@ -58,11 +62,13 @@ final Provider<ThemeRequest> localThemeRequestProvider = Provider((ref) {
   throw "no item set for this scope";
 }, dependencies: const []);
 
-// TODO override localImageProvider, remove playerScreenThemeProvider?
 final Provider<ListenableImage> localImageProvider = Provider((ref) {
+  if (ref.watch(localIsPlayerThemedProvider)) {
+    return ref.watch(currentAlbumImageProvider);
+  }
   var item = ref.watch(localThemeRequestProvider);
   return ref.watch(themeImageProvider(item));
-}, dependencies: [localThemeRequestProvider]);
+}, dependencies: [localThemeRequestProvider, localIsPlayerThemedProvider]);
 
 final Provider<ColorScheme> localThemeProvider = Provider((ref) {
   var image = ref.watch(localImageProvider);

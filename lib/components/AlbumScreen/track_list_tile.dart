@@ -8,7 +8,6 @@ import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -435,6 +434,20 @@ class TrackListItemState extends ConsumerState<TrackListItem>
           final isCurrentlyPlaying =
               snapshot.data?.extras?["itemJson"]["Id"] == widget.baseItem.id;
 
+          var tile = TrackListItemTile(
+              baseItem: widget.baseItem,
+              listIndex: widget.listIndex,
+              actualIndex: widget.actualIndex,
+              showIndex: widget.showIndex,
+              showCover: widget.showCover,
+              showArtists: widget.showArtists,
+              showAlbum: showAlbum,
+              showPlayCount: widget.showPlayCount,
+              isCurrentTrack: isCurrentlyPlaying,
+              highlightCurrentTrack: widget.highlightCurrentTrack,
+              allowReorder: widget.allowReorder,
+              onTap: () => widget.onTap(playable));
+
           return Opacity(
             opacity: playable ? 1.0 : 0.5,
             child: Card(
@@ -446,96 +459,45 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: isCurrentlyPlaying && widget.highlightCurrentTrack
-                  ? ProviderScope(
-                      overrides: [
-                        localImageProvider.overrideWith((ref) {
-                          return ref.watch(currentAlbumImageProvider);
-                        })
-                      ],
-                      child: Consumer(
-                        builder: (BuildContext context, WidgetRef ref,
-                            Widget? child) {
-                          final imageTheme = ref.watch(localThemeProvider);
-                          return AnimatedTheme(
-                            duration: const Duration(milliseconds: 500),
-                            data: ThemeData(
-                              // colorScheme: imageTheme,
-                              // brightness: Theme.of(context).brightness,
-                              colorScheme: imageTheme.copyWith(
-                                  surfaceContainer: ref
-                                      .watch(localThemeProvider)
-                                      .primary
-                                      .withOpacity(
-                                          Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? 0.35
-                                              : 0.3)),
-                              textTheme: Theme.of(context).textTheme.copyWith(
-                                    bodyLarge: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(
-                                            color: Color.alphaBlend(
-                                                (ref
-                                                    .watch(localThemeProvider)
-                                                    .secondary
-                                                    .withOpacity(Theme.of(
-                                                                    context)
-                                                                .brightness ==
-                                                            Brightness.light
-                                                        ? 0.5
-                                                        : 0.1)),
-                                                Theme.of(context)
-                                                        .textTheme
-                                                        .bodyLarge
-                                                        ?.color ??
-                                                    (Theme.of(context)
-                                                                .brightness ==
-                                                            Brightness.light
-                                                        ? Colors.black
-                                                        : Colors.white))),
-                                  ),
-                              iconTheme: Theme.of(context).iconTheme.copyWith(
-                                    color: imageTheme.primary,
-                                  ),
-                            ),
-                            child: TrackListItemTile(
-                                baseItem: widget.baseItem,
-                                listIndex: widget.listIndex,
-                                actualIndex: widget.actualIndex,
-                                showIndex: widget.showIndex,
-                                showCover: widget.showCover,
-                                showArtists: widget.showArtists,
-                                showAlbum: showAlbum,
-                                showPlayCount: widget.showPlayCount,
-                                isCurrentTrack: isCurrentlyPlaying,
-                                highlightCurrentTrack:
-                                    widget.highlightCurrentTrack,
-                                allowReorder: widget.allowReorder,
-                                onTap: () => widget.onTap(playable)),
-                          );
-                        },
-                      ),
-                    )
-                  : TrackListItemTile(
-                      baseItem: widget.baseItem,
-                      listIndex: widget.listIndex,
-                      actualIndex: widget.actualIndex,
-                      showIndex: widget.showIndex,
-                      showCover: widget.showCover,
-                      showArtists: widget.showArtists,
-                      showAlbum: showAlbum,
-                      showPlayCount: widget.showPlayCount,
-                      isCurrentTrack: isCurrentlyPlaying,
-                      highlightCurrentTrack: widget.highlightCurrentTrack,
-                      allowReorder: widget.allowReorder,
-                      onTap: () => widget.onTap(playable)),
+                  ? PlayerScreenTheme(
+                      duration: const Duration(milliseconds: 500),
+                      themeOverride: (imageTheme) {
+                        print(
+                            "TEST themed with ${imageTheme.colorScheme.primary}");
+                        return imageTheme.copyWith(
+                            colorScheme: imageTheme.colorScheme.copyWith(
+                                surfaceContainer: imageTheme.colorScheme.primary
+                                    .withOpacity(
+                                        imageTheme.brightness == Brightness.dark
+                                            ? 0.35
+                                            : 0.3)),
+                            textTheme: imageTheme.textTheme.copyWith(
+                              bodyLarge: imageTheme.textTheme.bodyLarge
+                                  ?.copyWith(
+                                      color: Color.alphaBlend(
+                                          (imageTheme.colorScheme.secondary
+                                              .withOpacity(
+                                                  imageTheme.brightness ==
+                                                          Brightness.light
+                                                      ? 0.5
+                                                      : 0.1)),
+                                          imageTheme
+                                                  .textTheme.bodyLarge?.color ??
+                                              (imageTheme.brightness ==
+                                                      Brightness.light
+                                                  ? Colors.black
+                                                  : Colors.white))),
+                            ));
+                      },
+                      child: tile)
+                  : tile,
             ),
           );
         });
 
     return GestureDetector(
       onTapDown: (_) {
+        // Begin precalculating theme for song menu
         ref.listen(
             finampThemeProvider(ThemeRequest(widget.baseItem)), (_, __) {});
       },
