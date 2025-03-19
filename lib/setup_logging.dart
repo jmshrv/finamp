@@ -37,29 +37,33 @@ Future<void> setupLogging() async {
   startupLogger.info(
       "This is ${packageInfo.appName} version ${packageInfo.version}+${packageInfo.buildNumber} (Signature '${packageInfo.buildSignature}'), installed via ${packageInfo.installerStore}.");
 
-  String deviceInfoString;
-  if (Platform.isAndroid) {
-    final androidInfo = await deviceInfo.androidInfo;
-    deviceInfoString =
-        "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})";
-  } else if (Platform.isIOS) {
-    final iosInfo = await deviceInfo.iosInfo;
-    deviceInfoString = "${iosInfo.systemVersion} on ${iosInfo.model}";
-  } else if (Platform.isMacOS) {
-    final macosInfo = await deviceInfo.macOsInfo;
-    deviceInfoString =
-        "macOS ${macosInfo.majorVersion}.${macosInfo.minorVersion}.${macosInfo.patchVersion} on ${macosInfo.model}";
-  } else if (Platform.isLinux) {
-    final linuxInfo = await deviceInfo.linuxInfo;
-    deviceInfoString = "${linuxInfo.version} on ${linuxInfo.id}";
-  } else if (Platform.isWindows) {
-    final windowsInfo = await deviceInfo.windowsInfo;
-    deviceInfoString =
-        "Windows ${windowsInfo.displayVersion} on ${windowsInfo.deviceId}";
-  } else {
-    final webInfo = await deviceInfo.webBrowserInfo;
-    deviceInfoString =
-        "Web browser ${webInfo.userAgent} on ${webInfo.platform}";
+  try {
+    String deviceInfoString;
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfo.androidInfo;
+      deviceInfoString =
+          "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})";
+    } else if (Platform.isIOS) {
+      final iosInfo = await deviceInfo.iosInfo;
+      deviceInfoString = "${iosInfo.systemVersion} on ${iosInfo.model}";
+    } else if (Platform.isMacOS) {
+      final macosInfo = await deviceInfo.macOsInfo;
+      deviceInfoString =
+          "macOS ${macosInfo.majorVersion}.${macosInfo.minorVersion}.${macosInfo.patchVersion} on ${macosInfo.model}";
+    } else if (Platform.isLinux) {
+      final linuxInfo = await deviceInfo.linuxInfo;
+      deviceInfoString = "${linuxInfo.version} on ${linuxInfo.id}";
+    } else if (Platform.isWindows) {
+      final windowsInfo = await deviceInfo.windowsInfo;
+      deviceInfoString =
+          "Windows ${windowsInfo.displayVersion} on ${windowsInfo.deviceId}";
+    } else {
+      final webInfo = await deviceInfo.webBrowserInfo;
+      deviceInfoString =
+          "Web browser ${webInfo.userAgent} on ${webInfo.platform}";
+    }
+    startupLogger.info("Running on $deviceInfoString.");
+  } catch (e) {
+    startupLogger.warning("Failed to get device info: $e");
   }
-  startupLogger.info("Running on $deviceInfoString.");
 }

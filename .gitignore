@@ -5,9 +5,12 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -100,8 +103,16 @@ unlinked_spec.ds
 # Coverage
 coverage/
 
-# Symbols
+# Symbolication related
 app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
