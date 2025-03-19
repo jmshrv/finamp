@@ -462,8 +462,6 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                   ? PlayerScreenTheme(
                       duration: const Duration(milliseconds: 500),
                       themeOverride: (imageTheme) {
-                        print(
-                            "TEST themed with ${imageTheme.colorScheme.primary}");
                         return imageTheme.copyWith(
                             colorScheme: imageTheme.colorScheme.copyWith(
                                 surfaceContainer: imageTheme.colorScheme.primary
