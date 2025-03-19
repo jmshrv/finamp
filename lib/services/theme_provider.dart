@@ -79,15 +79,15 @@ final Provider<ColorScheme> localThemeProvider = Provider((ref) {
 // This provider gets updated to the latest brightness by a valuelistner in main.dart
 final brightnessProvider = StateProvider((ref) => Brightness.dark);
 
-final ProviderFamily<ColorScheme, ThemeRequest> finampThemeProvider =
-    ProviderFamily((ref, request) {
+@riverpod
+ColorScheme finampTheme(Ref ref, ThemeRequest request) {
   var image = ref.watch(themeImageProvider(request));
   return ref.watch(finampThemeFromImageProvider(
       ThemeRequestFromImage(image.$1, request.useIsolate)));
-});
+}
 
-final ProviderFamily<ListenableImage, ThemeRequest> themeImageProvider =
-    ProviderFamily((ref, request) {
+@riverpod
+ListenableImage themeImage(Ref ref, ThemeRequest request) {
   var item = request.item;
   ImageProvider? image;
   String? cacheKey = request.item.blurHash ?? request.item.imageId;
@@ -107,7 +107,7 @@ final ProviderFamily<ListenableImage, ThemeRequest> themeImageProvider =
     }
   }
   return (image, item.blurHash, request.useIsolate);
-});
+}
 
 @riverpod
 class FinampThemeFromImage extends _$FinampThemeFromImage {
@@ -250,12 +250,6 @@ Color shadeColor(Color color, double factor) => Color.fromRGBO(
     shadeValue(color.blue, factor),
     1);
 
-_ThemeTransitionCalculator? _calculator;
-
-Duration getThemeTransitionDuration(BuildContext context) =>
-    (_calculator ??= _ThemeTransitionCalculator())
-        .getThemeTransitionDuration(context);
-
 class ThemeRequest {
   ThemeRequest(this.item, {this.useIsolate = true});
 
@@ -289,6 +283,12 @@ class ThemeRequestFromImage {
   @override
   int get hashCode => image.hashCode;
 }
+
+_ThemeTransitionCalculator? _calculator;
+
+Duration getThemeTransitionDuration(BuildContext context) =>
+    (_calculator ??= _ThemeTransitionCalculator())
+        .getThemeTransitionDuration(context);
 
 /// Skip track change transition animations if app or route is in background
 class _ThemeTransitionCalculator {
