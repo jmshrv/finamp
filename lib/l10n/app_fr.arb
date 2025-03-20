@@ -346,7 +346,7 @@
   "@addToPlaylistTitle": {},
   "removeFromPlaylistTooltip": "Retirer de cette liste de lecture",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Retirer de la playlist",
+  "removeFromPlaylistTitle": "Supprimer de cette liste de lecture",
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Nouvelle Playlist",
   "@newPlaylist": {},
@@ -506,7 +506,7 @@
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
-  "aboutContributionPrompt": "Réalisé par des gens géniaux pendant leur temps libre.\nVous pouvez être l’un d’entre eux!",
+  "aboutContributionPrompt": "Créé par des gens géniaux sur leur temps libre.\nVous pouvez les rejoindre !",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
@@ -1024,5 +1024,143 @@
   "missingDownloadSize": "Suppression...",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "deleteDownloadsConfirmButtonText": "Supprimer",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "autoloadLastQueueOnStartup": "Restaurer automatiquement la dernière file d'attente",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Au démarrage, essaie de restaurer la dernière file d'attente.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "reportQueueToServerSubtitle": "Lorsque cette option est activée, Finamp envoie la file d'attente actuelle au serveur. Il semble qu'il n'y ait actuellement que peu d'utilité à cela, à part augmenter la bande passante utilisée.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "topTracks": "Musiques les plus jouées",
+  "@topTracks": {},
+  "shuffleAlbumsNext": "Mélanger les albums au début de la file d'attente",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "confirmShuffleNext": "Aléatoire dans la file d'attente",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "playbackOrderShuffledButtonLabel": "Mélange des musiques",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedFeatureText": "Vitesse x{speed}",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "loopModeAllButtonLabel": "Répéter tout",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "Récupérer des files d'attente",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Fréquence de mise à jour de la session",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "deleteDownloadsPrompt": "Êtes vous sûr de vouloir supprimer {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' de votre appareil ?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "playbackSpeedButtonLabel": "Lecture à vitesse x{speed}",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "queueLoadingMessage": "Restauration de la file d'attente...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Fréquence d'envoi de l'état actuel de la session de lecture au serveur, en secondes. Cette fréquence doit être inférieure à 5 minutes (300 secondes), afin d'éviter que la session ne soit interrompue.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "tracksFormerNextUp": "Musiques ajoutées via À suivre",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "queueRestoreSubtitle1": "Lecture: {track}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "track": {
+        "type": "String"
+      }
+    }
+  },
+  "shuffleToQueue": "Jouer aléatoirement dans la file d'attente",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "shuffleAllQueueSource": "Tout mélanger",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonTooltip": "Lecture dans l'ordre. Cliquez pour mélanger.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Mélange des musiques. Cliquez pour lire dans l'ordre.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "loopModeOneButtonLabel": "Répétition de cette musique",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeNoneButtonLabel": "Ne pas répéter",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "queueRestoreTitle": "Enregistrée le {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRetryMessage": "Échec de restauration de la file d'attente. Réessayer ?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "shuffleAlbumsToNextUp": "Mélanger les albums en fin de file d'attente",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   }
 }

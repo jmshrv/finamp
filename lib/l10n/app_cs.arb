@@ -329,7 +329,7 @@
   "@updateButtonLabel": {},
   "playlistNameUpdated": "Název seznamu skladeb upraven.",
   "@playlistNameUpdated": {},
-  "downloadsDeleted": "Stahování odstraněna.",
+  "downloadsDeleted": "Stažené smazány.",
   "@downloadsDeleted": {},
   "addDownloads": "Přidat stahování",
   "@addDownloads": {},
@@ -1946,5 +1946,13 @@
   "releaseDateFormatMonthYear": "Měsíc a rok",
   "@releaseDateFormatMonthYear": {
     "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "allowDeleteFromServerTitle": "Povolit smazání ze serveru",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "allowDeleteFromServerSubtitle": "Zapnout nebo vypnout možnost trvalého smazání skladby ze souborového systému serveru, pokud je smazání možné.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
   }
 }

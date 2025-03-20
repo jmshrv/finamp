@@ -378,7 +378,7 @@
   "@notAvailableInOfflineMode": {},
   "customLocation": "مکان سفارشی",
   "@customLocation": {},
-  "customLocationsBuggy": "مکان‌های سفارشی به دلیل مسائل دسترسی‌ها بسیار مشکل آفرین هستند. من دارم راه‌کارهایی را پیدا می‌کنم، ولی برای الان استفاده از آن‌ها را پیشنهاد نمی‌کنم.",
+  "customLocationsBuggy": "مکان‌های سفارشی ممکن است بسیار مشکل آفرین باشند و در اکثر مواقع پیشنهاد نمی‌شوند. مکان‌های زیر پوشه‌ی \"موسیقی\" سیستم از ذخیره کردن نگاره‌های آلبوم به دلیل محدودیت‌های سیستم‌عامل جلوگیری می‌کند.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "ورود به حالت کم اهمیت به هنگام توقف",
   "@enterLowPriorityStateOnPause": {},
@@ -1853,5 +1853,11 @@
   "bufferDisableSizeConstraintsTitle": "اندازه‌ی بافر را محدود نکن",
   "@bufferDisableSizeConstraintsTitle": {},
   "bufferDisableSizeConstraintsSubtitle": "ثابت‌های اندازه‌ی بافر (\"‌اندازه‌ی بافر\") را غیرفعال می‌کند. بافر همیشه به اندازه‌ی بافر پیکربندی شده ('اندازه‌ی بافر') بارگذاری خواهد شد، حتی برای پرونده‌های بسیار بزرگ. می‌تواند موجب خرابی شود. نیازمند راه‌اندازی مجدد است.",
-  "@bufferDisableSizeConstraintsSubtitle": {}
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "deleteDownloadsConfirmButtonText": "حذف",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "hideQueueButton": "دکمه‌ی پنهان کردن صف",
+  "@hideQueueButton": {}
 }

@@ -1948,5 +1948,13 @@
   "releaseDateFormatSubtitle": "Керує форматом усіх дат випуску, які відображаються в програмі.",
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "allowDeleteFromServerTitle": "Дозволити видалення з сервера",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "allowDeleteFromServerSubtitle": "Увімкніть і вимкніть опцію остаточного видалення доріжки з файлової системи сервера, якщо видалення можливе.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
   }
 }

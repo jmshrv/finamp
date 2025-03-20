@@ -23,7 +23,7 @@
   "@queue": {},
   "replaceQueue": "Substitueix la cua",
   "@replaceQueue": {},
-  "internalExternalIpExplanation": "Si voleu poder accedir al vostre servidor Jellyfin de forma remota, heu d'utilitzar la vostra IP externa.\n\nSi el vostre servidor està en un port HTTP (80/443), no cal que especifiqueu cap port. És probable que aquest sigui el cas si el vostre servidor està darrere d'un servidor intermediari invers.",
+  "internalExternalIpExplanation": "Si voleu poder accedir al vostre servidor Jellyfin de forma remota, heu d'utilitzar la vostra IP externa.\n\nSi el vostre servidor està en un port HTTP per defecte (80 o 443) o al port per defecte de Jellyfin (8096), no cal que l'especifiqueu.\n\nSi la URL és correcta, hauríeu de veure aparèixer informació del vostre servidor sota el camp d'entrada.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -81,7 +81,7 @@
   "@logs": {},
   "next": "Següent",
   "@next": {},
-  "about": "Sonre Finamp",
+  "about": "Sobre Finamp",
   "@about": {
     "description": "Label for the about/info button on the settings screen"
   },
@@ -109,7 +109,7 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Bemvingut a",
+  "loginFlowWelcomeHeading": "Benvingut a",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -121,7 +121,7 @@
   "@loginFlowGetStarted": {
     "description": "Button label for the login/splash screen."
   },
-  "viewLogs": "Veure els registres",
+  "viewLogs": "Visualitza els registres",
   "@viewLogs": {
     "description": "Label for button shown during the login process that allows the user to view the app logs"
   },
@@ -145,7 +145,7 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "connectingToServer": "Connectant amb el servidor",
+  "connectingToServer": "Connectant amb el servidor...",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -189,7 +189,7 @@
   "@loginFlowQuickConnectDisabled": {
     "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
   },
-  "loginFlowQuickConnectInstructions": "Obre l'aplicació o el web de Jellyfin, clica sobre l'ico a del teu usuari i selecciona Quick Connect",
+  "loginFlowQuickConnectInstructions": "Obriu l'aplicació o el web de Jellyfin, feu clic sobre la icona del vostre usuari i seleccioni «Connexió ràpida».",
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
@@ -217,7 +217,7 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "selectMusicLibraries": "Selecciona la llibreria de música",
+  "selectMusicLibraries": "Selecciona les llibreries de música",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -242,5 +242,43 @@
   "genres": "Gèneres",
   "@genres": {},
   "tracks": "Pistes",
-  "@tracks": {}
+  "@tracks": {},
+  "favourites": "Preferits",
+  "@favourites": {},
+  "music": "Música",
+  "@music": {},
+  "offlineMode": "Mode sense connexió",
+  "@offlineMode": {},
+  "sortBy": "Ordena per",
+  "@sortBy": {},
+  "playButtonLabel": "Reprodueix",
+  "@playButtonLabel": {},
+  "downloads": "Descàrregues",
+  "@downloads": {},
+  "required": "Requerit",
+  "@required": {},
+  "finamp": "Finamp",
+  "@finamp": {
+    "description": "App name, possibly translated"
+  },
+  "sortOrder": "Ordena",
+  "@sortOrder": {},
+  "clear": "Neteja",
+  "@clear": {},
+  "shuffleAll": "Reprodueix aleatòriament totes les cançons",
+  "@shuffleAll": {},
+  "title": "Títol",
+  "@title": {},
+  "revenue": "Ingressos",
+  "@revenue": {},
+  "random": "Aleatori",
+  "@random": {},
+  "runtime": "Durada",
+  "@runtime": {},
+  "shuffleButtonLabel": "Aleatori",
+  "@shuffleButtonLabel": {},
+  "syncDownloadedPlaylists": "Sincronitza les llistes de reproducció descarregades",
+  "@syncDownloadedPlaylists": {},
+  "addButtonLabel": "Afegeix",
+  "@addButtonLabel": {}
 }

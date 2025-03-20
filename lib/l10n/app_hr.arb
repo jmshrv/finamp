@@ -154,7 +154,7 @@
   "@album": {},
   "communityRating": "Ocjena zajednice",
   "@communityRating": {},
-  "clear": "Izbriši",
+  "clear": "Očisti",
   "@clear": {},
   "finamp": "Finamp",
   "@finamp": {},
@@ -164,7 +164,7 @@
   "@downloads": {},
   "settings": "Postavke",
   "@settings": {},
-  "offlineMode": "Neumrežen modus",
+  "offlineMode": "Izvanmrežni način rada",
   "@offlineMode": {},
   "sortBy": "Razvrstaj po",
   "@sortBy": {},
@@ -442,7 +442,7 @@
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
-  "refresh": "Aktualiziraj",
+  "refresh": "Osvježi",
   "@refresh": {},
   "noMusicLibrariesBody": "Finamp nije mogao pronaći nijednu fonoteku. Provjeri sadrži li tvoj Jellyfin poslužitelj barem jednu biblioteku s vrstom sadržaja postavljenom na „Glazba”.",
   "@noMusicLibrariesBody": {},
@@ -647,7 +647,7 @@
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
-  "downloadSettings": "Postavke preuzimanja",
+  "downloadSettings": "Preuzimanja",
   "@downloadSettings": {},
   "maxConcurrentDownloads": "Maks. broj istovremenskih preuzimanja",
   "@maxConcurrentDownloads": {
@@ -678,7 +678,7 @@
   "@aboutTranslations": {
     "description": "Link to the translation project, shown in the about screen."
   },
-  "aboutThanks": "Hvala ti da koristiš Finamp!",
+  "aboutThanks": "Hvala ti što koristiš Finamp!",
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
@@ -1257,5 +1257,66 @@
   "syncComplete": "Sva preuzimanja su ponovo sinkronizirana.",
   "@syncComplete": {
     "description": "Message displayed after download sync completes."
+  },
+  "enableVibration": "Omogući vibraciju",
+  "@enableVibration": {},
+  "downloadBitrate": "Brzina preuzimanja",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "loginFlowQuickConnectDisabled": "Brzo povezivanje je onemogućeno na ovom serveru.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "hideQueueButton": "Sakrij gumb čekanja",
+  "@hideQueueButton": {},
+  "loopModeNoneButtonLabel": "Bez petlje",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "requireWifiForDownloads": "Zahtijevaj WiFi prilikom preuzimanja.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "releaseDateFormatYear": "Godina",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "deleteDownloadsConfirmButtonText": "Izbriši",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "loopModeAllButtonLabel": "Ponovi sve",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Miješanje pjesama",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "loginFlowQuickConnectPrompt": "Koristite kod za brzo povezivanje",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "shuffleNext": "Izmiješaj sljedeće",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "bufferSizeTitle": "Veličina međuspreminka",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "Maksimalna veličina međuspremnika u MB. Zahtijeva ponovno pokretanje",
+  "@bufferSizeSubtitle": {},
+  "playbackSpeedButtonLabel": "Reproduciraj na x{speed} brzini",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "shuffleAlbums": "Izmiješaj albume",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
   }
 }
