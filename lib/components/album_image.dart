@@ -11,6 +11,7 @@ import 'package:octo_image/octo_image.dart';
 
 import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';
+import '../services/theme_provider.dart';
 
 typedef ImageProviderCallback = void Function(ImageProvider theme);
 
@@ -107,15 +108,27 @@ class AlbumImage extends ConsumerWidget {
                 }
               }
 
+              var listenable = imageListenable;
+              if (listenable == null) {
+                // If the current themeing context has a usable image for this item,
+                // use that instead of generating a new request
+                if (ref.watch(localThemeInfoProvider.select((request) =>
+                    (request?.largeThemeImage ?? false) &&
+                    request?.item == item))) {
+                  listenable = localImageProvider;
+                } else {
+                  listenable = albumImageProvider(AlbumImageRequest(
+                    item: item!,
+                    maxWidth: physicalWidth,
+                    maxHeight: physicalHeight,
+                  )).select((value) => (value, item?.blurHash, true));
+                }
+              }
+
               var image = Container(
                 decoration: decoration,
                 child: BareAlbumImage(
-                    imageListenable: imageListenable ??
-                        albumImageProvider(AlbumImageRequest(
-                          item: item!,
-                          maxWidth: physicalWidth,
-                          maxHeight: physicalHeight,
-                        )).select((value) => (value, item?.blurHash, true)),
+                    imageListenable: listenable,
                     placeholderBuilder: placeholderBuilder),
               );
               return disabled

@@ -22,7 +22,7 @@ typedef ListenableImage = (ImageProvider?, String?, bool);
 
 final themeProviderLogger = Logger("ThemeProvider");
 
-class PlayerScreenTheme extends ConsumerWidget {
+class PlayerScreenTheme extends StatelessWidget {
   final Widget child;
   final Duration? duration;
   final ThemeData Function(ThemeData)? themeOverride;
@@ -31,10 +31,19 @@ class PlayerScreenTheme extends ConsumerWidget {
       {super.key, required this.child, this.duration, this.themeOverride});
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return ProviderScope(
         overrides: [
-          localIsPlayerThemedProvider.overrideWithValue(true),
+          localImageProvider
+              .overrideWith((ref) => ref.watch(currentAlbumImageProvider)),
+          localThemeInfoProvider.overrideWith((ref) {
+            var item = ref.watch(currentTrackProvider
+                .select((queueItem) => queueItem.valueOrNull?.baseItem));
+            if (item == null) {
+              return null;
+            }
+            return ThemeInfo(item, largeThemeImage: true);
+          })
         ],
         child: Consumer(
             builder: (context, ref, child) {
@@ -55,20 +64,16 @@ class PlayerScreenTheme extends ConsumerWidget {
   }
 }
 
-final localIsPlayerThemedProvider =
-    Provider((ref) => false, dependencies: const []);
-
-final Provider<ThemeRequest> localThemeRequestProvider = Provider((ref) {
-  throw "no item set for this scope";
-}, dependencies: const []);
+final Provider<ThemeInfo?> localThemeInfoProvider =
+    Provider((ref) => null, dependencies: const []);
 
 final Provider<ListenableImage> localImageProvider = Provider((ref) {
-  if (ref.watch(localIsPlayerThemedProvider)) {
-    return ref.watch(currentAlbumImageProvider);
+  var item = ref.watch(localThemeInfoProvider);
+  if (item == null) {
+    return (null, null, true);
   }
-  var item = ref.watch(localThemeRequestProvider);
   return ref.watch(themeImageProvider(item));
-}, dependencies: [localThemeRequestProvider, localIsPlayerThemedProvider]);
+}, dependencies: [localThemeInfoProvider]);
 
 final Provider<ColorScheme> localThemeProvider = Provider((ref) {
   var image = ref.watch(localImageProvider);
@@ -80,14 +85,14 @@ final Provider<ColorScheme> localThemeProvider = Provider((ref) {
 final brightnessProvider = StateProvider((ref) => Brightness.dark);
 
 @riverpod
-ColorScheme finampTheme(Ref ref, ThemeRequest request) {
+ColorScheme finampTheme(Ref ref, ThemeInfo request) {
   var image = ref.watch(themeImageProvider(request));
   return ref.watch(finampThemeFromImageProvider(
       ThemeRequestFromImage(image.$1, request.useIsolate)));
 }
 
 @riverpod
-ListenableImage themeImage(Ref ref, ThemeRequest request) {
+ListenableImage themeImage(Ref ref, ThemeInfo request) {
   var item = request.item;
   ImageProvider? image;
   String? cacheKey = request.item.blurHash ?? request.item.imageId;
@@ -250,16 +255,18 @@ Color shadeColor(Color color, double factor) => Color.fromRGBO(
     shadeValue(color.blue, factor),
     1);
 
-class ThemeRequest {
-  ThemeRequest(this.item, {this.useIsolate = true});
+class ThemeInfo {
+  ThemeInfo(this.item, {this.useIsolate = true, this.largeThemeImage = false});
 
   final BaseItemDto item;
 
   final bool useIsolate;
 
+  final bool largeThemeImage;
+
   @override
   bool operator ==(Object other) {
-    return other is ThemeRequest && other._imageCode == _imageCode;
+    return other is ThemeInfo && other._imageCode == _imageCode;
   }
 
   @override

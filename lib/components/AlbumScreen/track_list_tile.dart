@@ -1,13 +1,12 @@
 import 'dart:async';
 
-import 'package:audio_service/audio_service.dart';
-import 'package:collection/collection.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -21,7 +20,6 @@ import 'package:get_it/get_it.dart';
 import '../../services/audio_service_helper.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
-import '../../services/music_player_background_task.dart';
 import '../../services/theme_provider.dart';
 import '../album_image.dart';
 import '../print_duration.dart';
@@ -142,8 +140,7 @@ class TrackListTile extends StatelessWidget {
                 settings.onlyShowFavourites && settings.trackOfflineFavorites,
           );
 
-          var items =
-              offlineItems.map((e) => e.baseItem).whereNotNull().toList();
+          var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
 
           items = sortItems(items, settings.tabSortBy[TabContentType.tracks],
               settings.tabSortOrder[TabContentType.tracks]);
@@ -393,8 +390,6 @@ class TrackListItem extends ConsumerStatefulWidget {
 
 class TrackListItemState extends ConsumerState<TrackListItem>
     with SingleTickerProviderStateMixin {
-  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-
   @override
   Widget build(
     BuildContext context,
@@ -411,114 +406,105 @@ class TrackListItemState extends ConsumerState<TrackListItem>
 
     final bool showAlbum = widget.baseItem.albumId != widget.parentItem?.id;
 
-    void menuCallback() async {
-      if (playable) {
-        FeedbackHelper.feedback(FeedbackType.selection);
-        await showModalTrackMenu(
-          context: context,
-          item: widget.baseItem,
-          isInPlaylist: widget.isInPlaylist,
-          parentItem: widget.parentItem,
-          onRemoveFromList: widget.onRemoveFromList,
-          confirmPlaylistRemoval: false,
-        );
-      }
-    }
+    final isCurrentlyPlaying = ref.watch(currentTrackProvider.select(
+        (queueItem) =>
+            queueItem.valueOrNull?.baseItemId == widget.baseItem.id));
 
-    final listItem = StreamBuilder<MediaItem?>(
-        stream: _audioHandler.mediaItem,
-        builder: (context, snapshot) {
-          // I think past me did this check directly from the JSON for
-          // performance. It works for now, apologies if you're debugging it
-          // years in the future.
-          final isCurrentlyPlaying =
-              snapshot.data?.extras?["itemJson"]["Id"] == widget.baseItem.id;
-
-          var tile = TrackListItemTile(
-              baseItem: widget.baseItem,
-              listIndex: widget.listIndex,
-              actualIndex: widget.actualIndex,
-              showIndex: widget.showIndex,
-              showCover: widget.showCover,
-              showArtists: widget.showArtists,
-              showAlbum: showAlbum,
-              showPlayCount: widget.showPlayCount,
-              isCurrentTrack: isCurrentlyPlaying,
-              highlightCurrentTrack: widget.highlightCurrentTrack,
-              allowReorder: widget.allowReorder,
-              onTap: () => widget.onTap(playable));
-
-          return Opacity(
-            opacity: playable ? 1.0 : 0.5,
-            child: Card(
-              color: Colors.transparent,
-              elevation: 0,
-              margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: isCurrentlyPlaying && widget.highlightCurrentTrack
-                  ? PlayerScreenTheme(
-                      duration: const Duration(milliseconds: 500),
-                      themeOverride: (imageTheme) {
-                        return imageTheme.copyWith(
-                            colorScheme: imageTheme.colorScheme.copyWith(
-                                surfaceContainer: imageTheme.colorScheme.primary
-                                    .withOpacity(
-                                        imageTheme.brightness == Brightness.dark
-                                            ? 0.35
-                                            : 0.3)),
-                            textTheme: imageTheme.textTheme.copyWith(
-                              bodyLarge: imageTheme.textTheme.bodyLarge
-                                  ?.copyWith(
-                                      color: Color.alphaBlend(
-                                          (imageTheme.colorScheme.secondary
-                                              .withOpacity(
-                                                  imageTheme.brightness ==
-                                                          Brightness.light
-                                                      ? 0.5
-                                                      : 0.1)),
-                                          imageTheme
-                                                  .textTheme.bodyLarge?.color ??
-                                              (imageTheme.brightness ==
-                                                      Brightness.light
-                                                  ? Colors.black
-                                                  : Colors.white))),
-                            ));
-                      },
-                      child: tile)
-                  : tile,
-            ),
-          );
-        });
-
-    return GestureDetector(
-      onTapDown: (_) {
-        // Begin precalculating theme for song menu
-        ref.listen(
-            finampThemeProvider(ThemeRequest(widget.baseItem)), (_, __) {});
-      },
-      onLongPressStart: (details) => menuCallback(),
-      onSecondaryTapDown: (details) => menuCallback(),
-      child: !playable
-          ? listItem
-          : Dismissible(
-              key: Key(widget.listIndex.toString()),
-              direction: FinampSettingsHelper.finampSettings.disableGesture ||
-                      !widget.allowDismiss
-                  ? DismissDirection.none
-                  : DismissDirection.horizontal,
-              dismissThresholds: const {
-                DismissDirection.startToEnd: 0.65,
-                DismissDirection.endToStart: 0.65
-              },
-              // no background, dismissing really dismisses here
-              confirmDismiss: widget.confirmDismiss,
-              background: widget.dismissBackground,
-              child: listItem,
-            ),
+    var listItem = Opacity(
+      opacity: playable ? 1.0 : 0.5,
+      child: Card(
+        color: Colors.transparent,
+        elevation: 0,
+        margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: TrackListItemTile(
+            baseItem: widget.baseItem,
+            listIndex: widget.listIndex,
+            actualIndex: widget.actualIndex,
+            showIndex: widget.showIndex,
+            showCover: widget.showCover,
+            showArtists: widget.showArtists,
+            showAlbum: showAlbum,
+            showPlayCount: widget.showPlayCount,
+            isCurrentTrack: isCurrentlyPlaying,
+            highlightCurrentTrack: widget.highlightCurrentTrack,
+            allowReorder: widget.allowReorder,
+            onTap: () => widget.onTap(playable)),
+      ),
     );
+
+    var unthemedItem = Builder(builder: (context) {
+      // Use potentially themed context in menu callback
+      void menuCallback() async {
+        if (playable) {
+          FeedbackHelper.feedback(FeedbackType.selection);
+          await showModalTrackMenu(
+            context: context,
+            item: widget.baseItem,
+            isInPlaylist: widget.isInPlaylist,
+            parentItem: widget.parentItem,
+            onRemoveFromList: widget.onRemoveFromList,
+            confirmPlaylistRemoval: false,
+          );
+        }
+      }
+
+      return GestureDetector(
+        onTapDown: (_) {
+          // Begin precalculating theme for song menu
+          ref.listen(
+              finampThemeProvider(ThemeInfo(widget.baseItem)), (_, __) {});
+        },
+        onLongPressStart: (details) => menuCallback(),
+        onSecondaryTapDown: (details) => menuCallback(),
+        child: !playable
+            ? listItem
+            : Dismissible(
+                key: Key(widget.listIndex.toString()),
+                direction: FinampSettingsHelper.finampSettings.disableGesture ||
+                        !widget.allowDismiss
+                    ? DismissDirection.none
+                    : DismissDirection.horizontal,
+                dismissThresholds: const {
+                  DismissDirection.startToEnd: 0.65,
+                  DismissDirection.endToStart: 0.65
+                },
+                // no background, dismissing really dismisses here
+                confirmDismiss: widget.confirmDismiss,
+                background: widget.dismissBackground,
+                child: listItem,
+              ),
+      );
+    });
+
+    return isCurrentlyPlaying && widget.highlightCurrentTrack
+        ? PlayerScreenTheme(
+            duration: const Duration(milliseconds: 500),
+            themeOverride: (imageTheme) {
+              return imageTheme.copyWith(
+                  colorScheme: imageTheme.colorScheme.copyWith(
+                      surfaceContainer: imageTheme.colorScheme.primary
+                          .withOpacity(imageTheme.brightness == Brightness.dark
+                              ? 0.35
+                              : 0.3)),
+                  textTheme: imageTheme.textTheme.copyWith(
+                    bodyLarge: imageTheme.textTheme.bodyLarge?.copyWith(
+                        color: Color.alphaBlend(
+                            (imageTheme.colorScheme.secondary.withOpacity(
+                                imageTheme.brightness == Brightness.light
+                                    ? 0.5
+                                    : 0.1)),
+                            imageTheme.textTheme.bodyLarge?.color ??
+                                (imageTheme.brightness == Brightness.light
+                                    ? Colors.black
+                                    : Colors.white))),
+                  ));
+            },
+            child: unthemedItem)
+        : unthemedItem;
   }
 }
 

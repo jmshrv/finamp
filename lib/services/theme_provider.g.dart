@@ -6,7 +6,7 @@ part of 'theme_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$finampThemeHash() => r'c10deae9cad8aab8370049f2dd3ce0d0c3c232f9';
+String _$finampThemeHash() => r'72107904f68b9f5bf97e979891c6e74a5b143854';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,7 +40,7 @@ class FinampThemeFamily extends Family<ColorScheme> {
 
   /// See also [finampTheme].
   FinampThemeProvider call(
-    ThemeRequest request,
+    ThemeInfo request,
   ) {
     return FinampThemeProvider(
       request,
@@ -75,7 +75,7 @@ class FinampThemeFamily extends Family<ColorScheme> {
 class FinampThemeProvider extends AutoDisposeProvider<ColorScheme> {
   /// See also [finampTheme].
   FinampThemeProvider(
-    ThemeRequest request,
+    ThemeInfo request,
   ) : this._internal(
           (ref) => finampTheme(
             ref as FinampThemeRef,
@@ -103,7 +103,7 @@ class FinampThemeProvider extends AutoDisposeProvider<ColorScheme> {
     required this.request,
   }) : super.internal();
 
-  final ThemeRequest request;
+  final ThemeInfo request;
 
   @override
   Override overrideWith(
@@ -146,7 +146,7 @@ class FinampThemeProvider extends AutoDisposeProvider<ColorScheme> {
 // ignore: unused_element
 mixin FinampThemeRef on AutoDisposeProviderRef<ColorScheme> {
   /// The parameter `request` of this provider.
-  ThemeRequest get request;
+  ThemeInfo get request;
 }
 
 class _FinampThemeProviderElement
@@ -154,10 +154,10 @@ class _FinampThemeProviderElement
   _FinampThemeProviderElement(super.provider);
 
   @override
-  ThemeRequest get request => (origin as FinampThemeProvider).request;
+  ThemeInfo get request => (origin as FinampThemeProvider).request;
 }
 
-String _$themeImageHash() => r'90490337e4822fc16cc99ff22c57d4660cf34844';
+String _$themeImageHash() => r'e7ed2c3e8b97aaf79ab6140f85554f813b0107ed';
 
 /// See also [themeImage].
 @ProviderFor(themeImage)
@@ -170,7 +170,7 @@ class ThemeImageFamily extends Family<ListenableImage> {
 
   /// See also [themeImage].
   ThemeImageProvider call(
-    ThemeRequest request,
+    ThemeInfo request,
   ) {
     return ThemeImageProvider(
       request,
@@ -205,7 +205,7 @@ class ThemeImageFamily extends Family<ListenableImage> {
 class ThemeImageProvider extends AutoDisposeProvider<ListenableImage> {
   /// See also [themeImage].
   ThemeImageProvider(
-    ThemeRequest request,
+    ThemeInfo request,
   ) : this._internal(
           (ref) => themeImage(
             ref as ThemeImageRef,
@@ -233,7 +233,7 @@ class ThemeImageProvider extends AutoDisposeProvider<ListenableImage> {
     required this.request,
   }) : super.internal();
 
-  final ThemeRequest request;
+  final ThemeInfo request;
 
   @override
   Override overrideWith(
@@ -276,7 +276,7 @@ class ThemeImageProvider extends AutoDisposeProvider<ListenableImage> {
 // ignore: unused_element
 mixin ThemeImageRef on AutoDisposeProviderRef<ListenableImage> {
   /// The parameter `request` of this provider.
-  ThemeRequest get request;
+  ThemeInfo get request;
 }
 
 class _ThemeImageProviderElement
@@ -284,7 +284,7 @@ class _ThemeImageProviderElement
   _ThemeImageProviderElement(super.provider);
 
   @override
-  ThemeRequest get request => (origin as ThemeImageProvider).request;
+  ThemeInfo get request => (origin as ThemeImageProvider).request;
 }
 
 String _$finampThemeFromImageHash() =>

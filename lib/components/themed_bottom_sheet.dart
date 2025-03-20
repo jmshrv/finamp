@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:finamp/components/padded_custom_scrollview.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
-import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -30,8 +29,13 @@ Future<void> showThemedBottomSheet({
   bool showDragHandle = true,
 }) async {
   FeedbackHelper.feedback(FeedbackType.impact);
-  var usePlayerTheme =
-      ProviderScope.containerOf(context).read(localIsPlayerThemedProvider);
+  var ref = ProviderScope.containerOf(context);
+  var themeInfo = ref.read(localThemeInfoProvider);
+  ListenableImage? themeImage;
+  // If we have a usable theme image for our item, propagate this information
+  if ((themeInfo?.largeThemeImage ?? false) && themeInfo?.item == item) {
+    themeImage = ref.read(localImageProvider);
+  }
   await showModalBottomSheet(
       context: context,
       constraints: BoxConstraints(
@@ -55,14 +59,24 @@ Future<void> showThemedBottomSheet({
               : Colors.black)
           .withOpacity(0.9),
       builder: (BuildContext context) {
-        return ThemedBottomSheet(
-          key: ValueKey(item.id + routeName),
-          item: item,
-          usePlayerTheme: usePlayerTheme,
-          buildSlivers: buildSlivers,
-          buildWrapper: buildWrapper,
-          minDraggableHeight: minDraggableHeight,
-          showDragHandle: showDragHandle,
+        return ProviderScope(
+          overrides: [
+            if (themeImage != null)
+              localImageProvider.overrideWithValue(themeImage),
+            if (themeImage != null)
+              localThemeInfoProvider.overrideWithValue(themeInfo),
+            if (themeImage == null)
+              localThemeInfoProvider
+                  .overrideWithValue(ThemeInfo(item, useIsolate: false))
+          ],
+          child: ThemedBottomSheet(
+            key: ValueKey(item.id + routeName),
+            item: item,
+            buildSlivers: buildSlivers,
+            buildWrapper: buildWrapper,
+            minDraggableHeight: minDraggableHeight,
+            showDragHandle: showDragHandle,
+          ),
         );
       });
 }
@@ -71,7 +85,6 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
   const ThemedBottomSheet({
     super.key,
     required this.item,
-    required this.usePlayerTheme,
     this.buildSlivers,
     this.buildWrapper,
     required this.minDraggableHeight,
@@ -79,7 +92,6 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
   });
 
   final BaseItemDto item;
-  final bool usePlayerTheme;
   final SliverBuilder? buildSlivers;
   final WrapperBuilder? buildWrapper;
   final double minDraggableHeight;
@@ -92,47 +104,26 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
 class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
   final ScrollController _controller = ScrollController();
 
-  late (ImageProvider?, String?, bool) _playerImage;
   final dragController = DraggableScrollableController();
-
-  @override
-  void initState() {
-    if (widget.usePlayerTheme) {
-      _playerImage = ref.read(currentAlbumImageProvider);
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     // Exactly one builder must be supplied.
     assert(widget.buildSlivers == null || widget.buildWrapper == null);
     assert(widget.buildSlivers != null || widget.buildWrapper != null);
-    return ProviderScope(
-        overrides: [
-          if (widget.usePlayerTheme)
-            localImageProvider.overrideWithValue(_playerImage),
-          if (widget.usePlayerTheme)
-            localIsPlayerThemedProvider.overrideWithValue(true),
-          if (!widget.usePlayerTheme)
-            localThemeRequestProvider
-                .overrideWithValue(ThemeRequest(widget.item, useIsolate: false))
-        ],
-        child: Consumer(builder: (_, ref, __) {
-          return Theme(
-              data: ThemeData(colorScheme: ref.watch(localThemeProvider)),
-              child: Builder(
-                builder: (BuildContext context) {
-                  if (widget.buildWrapper != null) {
-                    return widget.buildWrapper!(context, dragController,
-                        (height, slivers) => buildInternal(height, slivers));
-                  } else {
-                    var (height, slivers) = widget.buildSlivers!(context);
-                    return buildInternal(height, slivers);
-                  }
-                },
-              ));
-        }));
+    return Theme(
+        data: ThemeData(colorScheme: ref.watch(localThemeProvider)),
+        child: Builder(
+          builder: (BuildContext context) {
+            if (widget.buildWrapper != null) {
+              return widget.buildWrapper!(context, dragController,
+                  (height, slivers) => buildInternal(height, slivers));
+            } else {
+              var (height, slivers) = widget.buildSlivers!(context);
+              return buildInternal(height, slivers);
+            }
+          },
+        ));
   }
 
   Widget buildInternal(double stackHeight, List<Widget> slivers) {

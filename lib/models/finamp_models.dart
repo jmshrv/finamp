@@ -1713,6 +1713,8 @@ class FinampQueueItem {
         ? BaseItemDto.fromJson(item.extras!["itemJson"] as Map<String, dynamic>)
         : null;
   }
+
+  String? get baseItemId => item.extras?["itemJson"]["Id"];
 }
 
 @HiveType(typeId: 58)

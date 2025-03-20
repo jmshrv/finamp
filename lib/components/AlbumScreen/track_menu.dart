@@ -13,7 +13,6 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -834,13 +833,7 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
               AspectRatio(
                 aspectRatio: 1.0,
                 child: AlbumImage(
-                  // Only supply one of item or imageListenable
-                  item: ref.watch(localIsPlayerThemedProvider)
-                      ? null
-                      : widget.item,
-                  imageListenable: ref.watch(localIsPlayerThemedProvider)
-                      ? localImageProvider
-                      : null,
+                  item: widget.item,
                   borderRadius: BorderRadius.zero,
                 ),
               ),
