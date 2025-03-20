@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/global_snackbar.dart';
@@ -12,6 +11,7 @@ import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,6 +24,40 @@ import 'package:rxdart/rxdart.dart';
 import 'android_auto_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'locale_helper.dart';
+
+enum FadeDirection { fadeIn, fadeOut, none }
+
+class FadeState {
+  // Volume value to recover after fading
+  final double recoverVolume;
+
+  // volume step sizes for fade-in and fade-out
+  final double volumeFadeOutStepSize;
+  final double volumeFadeInStepSize;
+
+  // current fade direction
+  final FadeDirection fadeDirection;
+
+  FadeState(
+      {required this.recoverVolume,
+      this.volumeFadeInStepSize = 0.0,
+      this.volumeFadeOutStepSize = 0.0,
+      this.fadeDirection = FadeDirection.none});
+
+  FadeState copyWith({
+    double? recoverVolume,
+    double? volumeFadeInStepSize,
+    double? volumeFadeOutStepSize,
+    FadeDirection? fadeDirection,
+  }) {
+    return FadeState(
+        recoverVolume: recoverVolume ?? this.recoverVolume,
+        volumeFadeInStepSize: volumeFadeInStepSize ?? this.volumeFadeInStepSize,
+        volumeFadeOutStepSize:
+            volumeFadeOutStepSize ?? this.volumeFadeOutStepSize,
+        fadeDirection: fadeDirection ?? this.fadeDirection);
+  }
+}
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
@@ -65,7 +99,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Duration minBufferDuration = Duration(seconds: 90);
 
   final _audioFadeStepDuration = Duration(milliseconds: 50);
-  BehaviorSubject<bool> fading = BehaviorSubject.seeded(false);
+  late final BehaviorSubject<FadeState> fadeState;
 
   final outputSwitcherChannel =
       MethodChannel('com.unicornsonlsd.finamp/output_switcher');
@@ -248,6 +282,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       final event = _transformEvent(_player.playbackEvent);
       playbackState.add(event);
     });
+
+    fadeState =
+        BehaviorSubject.seeded(FadeState(recoverVolume: _player.volume));
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
@@ -288,7 +325,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> play() async {
     if (FinampSettingsHelper.finampSettings.audioFadeInDuration >
         Duration.zero) {
-      return fadeInAnPlay();
+      return fadeInAndPlay();
     } else {
       return _player.play();
     }
@@ -314,61 +351,97 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         .toInt();
   }
 
-  double getVolumeFadeInStepSize(double currentVolume) {
-    final duration = FinampSettingsHelper.finampSettings.audioFadeInDuration;
-    final steps = getFadeSteps(duration);
-    return currentVolume / steps;
+  double _getVolumeFadeInStepSize() {
+    final steps =
+        getFadeSteps(FinampSettingsHelper.finampSettings.audioFadeInDuration);
+    return fadeState.value.recoverVolume / steps;
   }
 
-  double getVolumeFadeOutStepSize(double currentVolume) {
-    final duration = FinampSettingsHelper.finampSettings.audioFadeOutDuration;
-    final steps = getFadeSteps(duration);
-    return currentVolume / steps;
+  double _getVolumeFadeOutStepSize() {
+    final steps =
+        getFadeSteps(FinampSettingsHelper.finampSettings.audioFadeOutDuration);
+    return fadeState.value.recoverVolume / steps;
+  }
+
+  Future<void> _fadeAudio(FadeDirection direction) async {
+    fadeState.add(FadeState(
+        recoverVolume: _player.volume,
+        volumeFadeInStepSize: _getVolumeFadeInStepSize(),
+        volumeFadeOutStepSize: _getVolumeFadeOutStepSize(),
+        fadeDirection: direction));
+
+    // Prepare fade-in
+    late Future fut;
+    if (direction == FadeDirection.fadeIn) {
+      await _player.setVolume(0.0);
+      fut = _player.play();
+    }
+
+    await Stream.periodic(
+            _audioFadeStepDuration, (_) => fadeState.value.fadeDirection)
+        .takeWhile((_) => fadeState.value.fadeDirection != FadeDirection.none)
+        .forEach((fadeDirection) async {
+      var state = fadeState.value;
+      switch (fadeDirection) {
+        case FadeDirection.fadeIn:
+          await _player.setVolume(min(
+              _player.volume + state.volumeFadeInStepSize,
+              state.recoverVolume));
+          if (_player.volume >= state.recoverVolume) {
+            fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
+          }
+          break;
+        case FadeDirection.fadeOut:
+          await _player.setVolume(
+              max(_player.volume - state.volumeFadeOutStepSize, 0.0));
+          if (_player.volume <= 0.0) {
+            fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
+
+            fut = _player.pause();
+
+            // restore volume
+            await _player.setVolume(fadeState.value.recoverVolume);
+          }
+          break;
+        default:
+          break;
+      }
+    });
+
+    return fut;
   }
 
   Future<void> fadeOutAndPause() async {
-    final currentVolume = _player.volume;
-
-    final volumeStep = getVolumeFadeOutStepSize(currentVolume);
-
-    fading.add(true);
-    var volume = currentVolume;
-    await Stream.periodic(_audioFadeStepDuration)
-        .takeWhile((_) => volume > 0.0)
-        .forEach((_) async {
-      volume = max(volume - volumeStep, 0.0);
-      await _player.setVolume(volume);
-    });
-
-    final pauseFut = _player.pause();
-    await _player.setVolume(currentVolume);
-    fading.add(false);
-    return pauseFut;
+    switch (fadeState.value.fadeDirection) {
+      case FadeDirection.fadeOut:
+        return;
+      case FadeDirection.fadeIn:
+        // change fade direction
+        fadeState.add(
+            fadeState.value.copyWith(fadeDirection: FadeDirection.fadeOut));
+        return;
+      case FadeDirection.none:
+        return _fadeAudio(FadeDirection.fadeOut);
+    }
   }
 
-  Future<void> fadeInAnPlay() async {
-    final currentVolume = _player.volume;
-
-    final volumeStep = getVolumeFadeInStepSize(currentVolume);
-
-    fading.add(true);
-    await _player.setVolume(0.0);
-    final playFut = _player.play();
-
-    var volume = _player.volume;
-    await Stream.periodic(_audioFadeStepDuration)
-        .takeWhile((_) => volume < currentVolume)
-        .forEach((_) async {
-      volume = min(volume + volumeStep, currentVolume);
-      await _player.setVolume(volume);
-    });
-    fading.add(false);
-
-    return playFut;
+  Future<void> fadeInAndPlay() async {
+    switch (fadeState.value.fadeDirection) {
+      case FadeDirection.fadeIn:
+        return;
+      case FadeDirection.fadeOut:
+        // change fade direction
+        fadeState
+            .add(fadeState.value.copyWith(fadeDirection: FadeDirection.fadeIn));
+        return;
+      case FadeDirection.none:
+        return _fadeAudio(FadeDirection.fadeIn);
+    }
   }
 
   Future<void> togglePlayback() {
-    if (_player.playing) {
+    if (_player.playing &&
+        fadeState.value.fadeDirection != FadeDirection.fadeOut) {
       return pause();
     } else {
       return play();

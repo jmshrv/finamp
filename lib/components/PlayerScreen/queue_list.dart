@@ -769,17 +769,15 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                 FeedbackHelper.feedback(FeedbackType.success);
                                 _audioHandler.togglePlayback();
                               },
-                              icon: mediaState!.audioFading
-                                  ? const CircularProgressIndicator()
-                                  : mediaState!.playbackState.playing
-                                      ? const Icon(
-                                          TablerIcons.player_pause,
-                                          size: 32,
-                                        )
-                                      : const Icon(
-                                          TablerIcons.player_play,
-                                          size: 32,
-                                        ),
+                              icon: mediaState!.playbackState.playing
+                                  ? const Icon(
+                                      TablerIcons.player_pause,
+                                      size: 32,
+                                    )
+                                  : const Icon(
+                                      TablerIcons.player_play,
+                                      size: 32,
+                                    ),
                               color: Colors.white,
                             )),
                       ],

@@ -26,7 +26,7 @@ class PlayerButtons extends StatelessWidget {
     return StreamBuilder<MediaState>(
         stream: mediaStateStream,
         initialData: MediaState(audioHandler.mediaItem.valueOrNull,
-            audioHandler.playbackState.value, audioHandler.fading.value),
+            audioHandler.playbackState.value, audioHandler.fadeState.value),
         builder: (context, snapshot) {
           final mediaState = snapshot.data!;
           final playbackState = mediaState.playbackState;
@@ -73,17 +73,18 @@ class PlayerButtons extends StatelessWidget {
                       controller.shouldShow(PlayerHideable.bigPlayButton)
                           ? 16
                           : 12),
-                  onTap: () async {
+                  onTap: () {
                     FeedbackHelper.feedback(FeedbackType.light);
                     unawaited(audioHandler.togglePlayback());
                   },
-                  icon: mediaState.audioFading
-                      ? const Center(child: CircularProgressIndicator())
-                      : Icon(
-                          playbackState.playing
+                  icon: Icon(
+                      mediaState.playbackState.playing
+                          ? mediaState.fadeState.fadeDirection !=
+                                  FadeDirection.fadeOut
                               ? TablerIcons.player_pause
-                              : TablerIcons.player_play,
-                          size: 28),
+                              : TablerIcons.player_play
+                          : TablerIcons.player_play,
+                      size: 28),
                 ),
               ),
               Semantics.fromProperties(
