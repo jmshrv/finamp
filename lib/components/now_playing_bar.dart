@@ -239,7 +239,7 @@ class NowPlayingBar extends ConsumerWidget {
                     initialData: MediaState(
                         audioHandler.mediaItem.valueOrNull,
                         audioHandler.playbackState.value,
-                        audioHandler.fading.value),
+                        audioHandler.fadeState.value),
                     builder: (context, snapshot) {
                       final MediaState mediaState = snapshot.data!;
                       // If we have a media item and the player hasn't finished, show
@@ -281,8 +281,8 @@ class NowPlayingBar extends ConsumerWidget {
                                           color: Color.fromRGBO(0, 0, 0, 0.3),
                                         ),
                                         child: IconButton(
-                                            tooltip: AppLocalizations
-                                                    .of(context)!
+                                            tooltip: AppLocalizations.of(
+                                                    context)!
                                                 .togglePlaybackButtonTooltip,
                                             onPressed: () {
                                               FeedbackHelper.feedback(
@@ -290,17 +290,18 @@ class NowPlayingBar extends ConsumerWidget {
                                               audioHandler.togglePlayback();
                                             },
                                             color: Colors.white,
-                                            icon: mediaState
-                                                    .audioFading
-                                                ? const CircularProgressIndicator()
-                                                : Icon(
-                                                    mediaState.playbackState
-                                                            .playing
+                                            icon: Icon(
+                                                mediaState.playbackState.playing
+                                                    ? mediaState.fadeState
+                                                                .fadeDirection !=
+                                                            FadeDirection
+                                                                .fadeOut
                                                         ? TablerIcons
                                                             .player_pause
                                                         : TablerIcons
-                                                            .player_play,
-                                                    size: 32))),
+                                                            .player_play
+                                                    : TablerIcons.player_play,
+                                                size: 32))),
                                   ],
                                 ),
                                 Expanded(
