@@ -112,7 +112,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Se você deseja acessar seu servidor Jellyfin remotamente, você precisa usar seu IP externo.\n\nSe seu servidor está em uma porta HTTP padrão (80 ou 443), ou na porta padrão do Jellyfin (8096), você não precisa especificar a porta. Se a URL estiver correta, você deverá ver informações sobre o seu servidor aparecerem abaixo do campo de texto.",
+  "internalExternalIpExplanation": "Se você deseja acessar seu servidor Jellyfin remotamente, você precisa usar seu IP externo.\n\nSe seu servidor está em uma porta HTTP padrão (80 ou 443), ou na porta padrão do Jellyfin (8096), você não precisa especificar a porta.\n\nSe a URL estiver correta, você deverá ver informações sobre o seu servidor aparecerem abaixo do campo de texto.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -230,7 +230,7 @@
   "@theme": {},
   "directoryMustBeEmpty": "O diretório deve estar vazio",
   "@directoryMustBeEmpty": {},
-  "customLocationsBuggy": "Localizações customizadas são inconsistentes devido a problemas com permissões. Estou pensando em maneiras de solucionar isso, mas por enquanto eu não recomendaria que fossem utilizadas.",
+  "customLocationsBuggy": "Localizações customizadas podem ser inconsistentes e não são recomendadas na maioria dos casos. Localizações sob 'Musica' do sistema não aceitam capas de álbum devido a limites do sistema.",
   "@customLocationsBuggy": {},
   "shuffleAllTrackCount": "Contagem de faixas da função embaralhar todas",
   "@shuffleAllTrackCount": {},
@@ -695,7 +695,7 @@
       }
     }
   },
-  "downloadSettings": "Transferindo configurações",
+  "downloadSettings": "Transferências",
   "@downloadSettings": {},
   "showNullLibraryItemsTitle": "Mostar mídia com biblioteca desconhecida.",
   "@showNullLibraryItemsTitle": {
@@ -1622,5 +1622,29 @@
     "description": "Localized names of fixed size grid tile sizes."
   },
   "allowSplitScreenTitle": "Permitir modo de divisão de tela",
-  "@allowSplitScreenTitle": {}
+  "@allowSplitScreenTitle": {},
+  "deleteDownloadsConfirmButtonText": "Apagar",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "hideQueueButton": "Esconder botão da lista",
+  "@hideQueueButton": {},
+  "hideQueueButtonSubtitle": "Esconder botão da lista na tela de reprodução. Arraste pra cima para acessar a lista.",
+  "@hideQueueButtonSubtitle": {},
+  "oneLineMarqueeTextButton": "Rolar Títulos Longos Automaticamente",
+  "@oneLineMarqueeTextButton": {},
+  "deleteDownloadsPrompt": "Tem certeza que quer apagar {itemType, select, album{o album} playlist{a lista de reprodução} artist{o artista} genre{o gênero} track{a faixa} library{a biblioteca} other{o item}} '{itemName}' deste dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  }
 }
