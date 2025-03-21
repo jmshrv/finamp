@@ -68,7 +68,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
     metadataProvider = FutureProvider.autoDispose
         .family<MetadataProvider?, MetadataRequest>((ref, request) async {
   unawaited(ref.watch(finampSettingsProvider.selectAsync((settings) => settings
-      ?.isOffline))); // watch settings to trigger re-fetching metadata when offline mode changes
+      .isOffline))); // watch settings to trigger re-fetching metadata when offline mode changes
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();

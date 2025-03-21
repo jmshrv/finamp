@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -8,11 +9,11 @@ import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'jellyfin_api_helper.dart';
-import 'finamp_settings_helper.dart';
-import 'offline_listen_helper.dart';
 import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart' as jellyfin_models;
+import 'finamp_settings_helper.dart';
+import 'jellyfin_api_helper.dart';
+import 'offline_listen_helper.dart';
 
 /// A track queueing service for Finamp.
 class PlaybackHistoryService {
@@ -107,8 +108,8 @@ class PlaybackHistoryService {
             prevState != null &&
             // comparing the updateTime timestamps directly is unreliable, as they might just have different microsecond values
             // instead, compare the difference in milliseconds, with a small margin of error
-            (currentState.updateTime.millisecondsSinceEpoch -
-                        prevState.updateTime.millisecondsSinceEpoch)
+            (currentState.position.inMilliseconds -
+                        prevState.position.inMilliseconds)
                     .abs() >
                 1500) {
           bool isSeekEvent = true;
@@ -518,7 +519,7 @@ class PlaybackHistoryService {
   }) {
     try {
       return jellyfin_models.PlaybackProgressInfo(
-        itemId: item.baseItem?.id ?? "",
+        itemId: item.baseItem?.id ?? jellyfin_models.BaseItemId(""),
         playSessionId: _queueService.getQueue().id,
         isPaused: isPaused,
         isMuted: isMuted,
@@ -527,7 +528,7 @@ class PlaybackHistoryService {
             _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10,
         volumeLevel: (_audioService.volume * 100).round(),
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
-        playMethod: item.item.extras?["shouldTranscode"] ?? false
+        playMethod: item.item.extras?["shouldTranscode"] as bool? ?? false
             ? "Transcode"
             : "DirectPlay",
         playbackOrder:
@@ -555,17 +556,9 @@ class PlaybackHistoryService {
     }
 
     try {
-      final itemId = _currentTrack!.item.item.extras?["itemJson"]["Id"];
-
-      if (itemId == null) {
-        _playbackHistoryServiceLogger.warning(
-          "Current track item ID is null, cannot generate playback progress info.",
-        );
-        return null;
-      }
-
       return jellyfin_models.PlaybackProgressInfo(
-        itemId: _currentTrack!.item.baseItem?.id ?? "",
+        itemId:
+            _currentTrack!.item.baseItem?.id ?? jellyfin_models.BaseItemId(""),
         playSessionId: _queueService.getQueue().id,
         canSeek: true,
         isPaused: _audioService.paused,
@@ -574,9 +567,11 @@ class PlaybackHistoryService {
         playbackStartTimeTicks:
             _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10,
         volumeLevel: (_audioService.volume * 100).round(),
-        playMethod: _currentTrack!.item.item.extras!["shouldTranscode"]
-            ? "Transcode"
-            : "DirectPlay",
+        playMethod:
+            _currentTrack!.item.item.extras!["shouldTranscode"] as bool? ??
+                    false
+                ? "Transcode"
+                : "DirectPlay",
         playbackOrder:
             _queueService.playbackOrder == FinampPlaybackOrder.shuffled
                 ? "Shuffle"

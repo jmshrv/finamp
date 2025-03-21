@@ -2,18 +2,18 @@ import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/downloads_service.dart';
-import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/downloads_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+
+import 'audio_service_helper.dart';
+import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
-import 'finamp_settings_helper.dart';
 import 'queue_service.dart';
-import 'audio_service_helper.dart';
 
 class AndroidAutoSearchQuery {
   String rawQuery;
@@ -38,7 +38,7 @@ class AndroidAutoHelper {
 
   AndroidAutoSearchQuery? get lastSearchQuery => _lastSearchQuery;
 
-  Future<BaseItemDto?> getParentFromId(String parentId) async {
+  Future<BaseItemDto?> getParentFromId(BaseItemId parentId) async {
     final downloadedParent =
         await _downloadsService.getCollectionInfo(id: parentId);
     if (downloadedParent != null) {
@@ -311,18 +311,21 @@ class AndroidAutoHelper {
         searchQuery.extras?["android.intent.extra.title"] != null) {
       // if all metadata is provided, search for track
       itemType = TabContentType.tracks.itemType;
-      enhancedQuery = searchQuery.extras?["android.intent.extra.title"];
+      enhancedQuery =
+          searchQuery.extras?["android.intent.extra.title"] as String?;
     } else if (searchQuery.extras?["android.intent.extra.album"] != null &&
         searchQuery.extras?["android.intent.extra.artist"] != null &&
         searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only album is provided, search for album
       itemType = TabContentType.albums.itemType;
-      enhancedQuery = searchQuery.extras?["android.intent.extra.album"];
+      enhancedQuery =
+          searchQuery.extras?["android.intent.extra.album"] as String?;
     } else if (searchQuery.extras?["android.intent.extra.artist"] != null &&
         searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only artist is provided, search for artist
       itemType = TabContentType.artists.itemType;
-      enhancedQuery = searchQuery.extras?["android.intent.extra.artist"];
+      enhancedQuery =
+          searchQuery.extras?["android.intent.extra.artist"] as String?;
     } else {
       // if no metadata is provided, search for tracks *and* playlists, preferring playlists
       searchForPlaylists = true;
@@ -710,7 +713,9 @@ class AndroidAutoHelper {
     if (searchQuery.extras?["android.intent.extra.title"] != null) {
       try {
         searchResultAdjustedQuery = await _getResults(
-          searchTerm: searchQuery.extras!["android.intent.extra.title"].trim(),
+          searchTerm:
+              (searchQuery.extras!["android.intent.extra.title"] as String)
+                  .trim(),
           itemTypes: [TabContentType.tracks.itemType],
           limit: limit - (searchResultExactQuery?.length ?? 0),
         );
@@ -804,7 +809,9 @@ class AndroidAutoHelper {
     if (hasAlbumMetadata) {
       try {
         searchResultAdjustedQuery = await _getResults(
-          searchTerm: searchQuery.extras!["android.intent.extra.album"].trim(),
+          searchTerm:
+              (searchQuery.extras!["android.intent.extra.album"] as String)
+                  .trim(),
           itemTypes: [TabContentType.albums.itemType],
           limit: limit - (searchResultExactQuery?.length ?? 0),
         );
@@ -899,7 +906,8 @@ class AndroidAutoHelper {
       try {
         searchResultAdjustedQuery = await _getResults(
           searchTerm:
-              searchQuery.extras!["android.intent.extra.playlist"].trim(),
+              (searchQuery.extras!["android.intent.extra.playlist"] as String)
+                  .trim(),
           itemTypes: [TabContentType.playlists.itemType],
           limit: limit - (searchResultExactQuery?.length ?? 0),
         );
@@ -984,7 +992,9 @@ class AndroidAutoHelper {
     if (hasArtistMetadata) {
       try {
         searchResultAdjustedQuery = await _getResults(
-          searchTerm: searchQuery.extras!["android.intent.extra.artist"].trim(),
+          searchTerm:
+              (searchQuery.extras!["android.intent.extra.artist"] as String)
+                  .trim(),
           itemTypes: [TabContentType.artists.itemType],
           limit: limit - (searchResultExactQuery?.length ?? 0),
         );

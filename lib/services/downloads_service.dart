@@ -29,7 +29,7 @@ class DownloadsService {
   final _isar = GetIt.instance<Isar>();
 
   final _anchor = DownloadStub.fromId(
-      id: "Anchor", type: DownloadItemType.anchor, name: null);
+      id: BaseItemId("Anchor"), type: DownloadItemType.anchor, name: null);
   late final downloadTaskQueue = IsarTaskQueue(this);
   late final deleteBuffer = DownloadsDeleteService(this);
   late final syncBuffer = DownloadsSyncService(this);
@@ -435,7 +435,7 @@ class DownloadsService {
   Future<void> addDownload({
     required DownloadStub stub,
     required DownloadProfile transcodeProfile,
-    String? viewId,
+    BaseItemId? viewId,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure
@@ -510,7 +510,7 @@ class DownloadsService {
   /// it is required that [_syncDownload] strictly follows the node graph hierarchy
   /// and only syncs children appropriate for an info node if reaching a node along
   /// an info link, even if children appropriate for a required node are present.
-  Future<void> resync(DownloadStub stub, String? viewId,
+  Future<void> resync(DownloadStub stub, BaseItemId? viewId,
       {bool keepSlow = false}) async {
     _consecutiveConnectionErrors = 0;
     _fileSystemFull = false;
@@ -739,7 +739,7 @@ class DownloadsService {
         idsWithLyrics[item.isarId] = null;
         LyricDto? lyrics;
         try {
-          lyrics = await jellyfinApiData.getLyrics(itemId: item.id);
+          lyrics = await jellyfinApiData.getLyrics(itemId: BaseItemId(item.id));
           _downloadsLogger.finer("Fetched lyrics for ${item.name}");
           idsWithLyrics[item.isarId] = lyrics;
         } catch (e) {
@@ -1152,7 +1152,7 @@ class DownloadsService {
       }
       isarItem.path = newPath;
       isarItem.state = DownloadItemState.complete;
-      isarItem.viewId = track.viewId;
+      isarItem.viewId = BaseItemId(track.viewId);
       nodes.add(isarItem);
       downloadStatuses[DownloadItemState.complete] =
           downloadStatuses[DownloadItemState.complete]! + 1;
@@ -1216,7 +1216,7 @@ class DownloadsService {
 
       isarItem.state = DownloadItemState.complete;
       if (isarItem.baseItemType != BaseItemDtoType.playlist) {
-        isarItem.viewId = parent.viewId;
+        isarItem.viewId = BaseItemId(parent.viewId);
       }
 
       _isar.writeTxnSync(() {
@@ -1284,8 +1284,8 @@ class DownloadsService {
   /// if there is no metadata for the collection.
   bool? checkIfInCollection(BaseItemDto collection, BaseItemDto item) {
     var parent = _isar.downloadItems.getSync(
-        DownloadStub.getHash(collection.id, DownloadItemType.collection));
-    var childId = DownloadStub.getHash(item.id, item.downloadType);
+        DownloadStub.getHash(collection.id.raw, DownloadItemType.collection));
+    var childId = DownloadStub.getHash(item.id.raw, item.downloadType);
     return parent?.orderedChildren?.contains(childId);
   }
 
@@ -1298,7 +1298,7 @@ class DownloadsService {
     var stub =
         DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
 
-    var id = DownloadStub.getHash(item.id, DownloadItemType.collection);
+    var id = DownloadStub.getHash(item.id.raw, DownloadItemType.collection);
     var query = _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.track)
@@ -1322,7 +1322,7 @@ class DownloadsService {
     } else {
       List<DownloadItem> playlist = await query.findAll();
       Map<int, DownloadItem> childMap =
-          Map.fromIterable(playlist, key: (e) => e.isarId);
+          Map.fromIterable(playlist, key: (e) => (e as DownloadItem).isarId);
       return canonItem!.orderedChildren!
           .map((e) => childMap[e]?.baseItem)
           .whereNotNull()
@@ -1338,7 +1338,7 @@ class DownloadsService {
   Future<List<DownloadStub>> getAllTracks(
       {String? nameFilter,
       BaseItemDto? relatedTo,
-      String? viewFilter,
+      BaseItemId? viewFilter,
       bool nullableViewFilters = true,
       bool onlyFavorites = false}) {
     List<int> favoriteIds = [];
@@ -1360,11 +1360,11 @@ class DownloadsService {
         .optional(
             relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
-                relatedTo!.id, DownloadItemType.collection))))
+                relatedTo!.id.raw, DownloadItemType.collection))))
         .optional(
             viewFilter != null,
-            (q) => q.group((q) => q.viewIdEqualTo(viewFilter).optional(
-                nullableViewFilters, (q) => q.or().viewIdEqualTo(null))))
+            (q) => q.group((q) => q.isarViewIdEqualTo(viewFilter?.raw).optional(
+                nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
         .findAll();
   }
 
@@ -1385,8 +1385,8 @@ class DownloadsService {
       BaseItemDtoType? baseTypeFilter,
       BaseItemDto? relatedTo,
       bool fullyDownloaded = false,
-      String? viewFilter,
-      String? childViewFilter,
+      BaseItemId? viewFilter,
+      BaseItemId? childViewFilter,
       bool nullableViewFilters = true,
       bool onlyFavorites = false}) {
     List<int> favoriteIds = [];
@@ -1412,47 +1412,46 @@ class DownloadsService {
             relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
-                    relatedTo!.id, DownloadItemType.collection)))))
+                    relatedTo!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
         .optional(onlyFavorites,
             (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(
             viewFilter != null,
-            (q) => q.group((q) => q.viewIdEqualTo(viewFilter).optional(
-                nullableViewFilters, (q) => q.or().viewIdEqualTo(null))))
+            (q) => q.group((q) => q.isarViewIdEqualTo(viewFilter?.raw).optional(
+                nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
         .optional(
             childViewFilter != null,
             (q) => q.infoFor((q) => q.group((q) => q
-                .viewIdEqualTo(childViewFilter)
-                .optional(
-                    nullableViewFilters, (q) => q.or().viewIdEqualTo(null)))))
+                .isarViewIdEqualTo(childViewFilter?.raw)
+                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
         .findAll();
   }
 
   /// Get information about a downloaded track by BaseItemDto or id.
   /// Exactly one of the two arguments should be provided.
-  Future<DownloadStub?> getTrackInfo({BaseItemDto? item, String? id}) {
+  Future<DownloadStub?> getTrackInfo({BaseItemDto? item, BaseItemId? id}) {
     assert((item == null) != (id == null));
-    return _isar.downloadItems
-        .get(DownloadStub.getHash(id ?? item!.id, DownloadItemType.track));
+    return _isar.downloadItems.get(
+        DownloadStub.getHash(id?.raw ?? item!.id.raw, DownloadItemType.track));
   }
 
   /// Get information about a downloaded collection by BaseItemDto or id.
   /// Exactly one of the two arguments should be provided.
-  Future<DownloadStub?> getCollectionInfo({BaseItemDto? item, String? id}) {
+  Future<DownloadStub?> getCollectionInfo({BaseItemDto? item, BaseItemId? id}) {
     assert((item == null) != (id == null));
-    return _isar.downloadItems
-        .get(DownloadStub.getHash(id ?? item!.id, DownloadItemType.collection));
+    return _isar.downloadItems.get(DownloadStub.getHash(
+        id?.raw ?? item!.id.raw, DownloadItemType.collection));
   }
 
   /// Get a track's DownloadItem by BaseItemDto or id.  This method performs file
   /// verification and should only be used when the downloaded file is actually
   /// needed, such as when building MediaItems.  Otherwise, [getTrackInfo] should
   /// be used instead.  Exactly one of the two arguments should be provided.
-  DownloadItem? getTrackDownload({BaseItemDto? item, String? id}) {
+  DownloadItem? getTrackDownload({BaseItemDto? item, BaseItemId? id}) {
     assert((item == null) != (id == null));
-    return _getDownloadByID(id ?? item!.id, DownloadItemType.track);
+    return _getDownloadByID(id?.raw ?? item!.id.raw, DownloadItemType.track);
   }
 
   /// Get an image's DownloadItem by BaseItemDto or id.  This method performs file
@@ -1472,12 +1471,12 @@ class DownloadsService {
   Future<DownloadedLyrics?> getLyricsDownload(
       {required BaseItemDto baseItem}) async {
     var item = _isar.downloadedLyrics
-        .getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.track));
+        .getSync(DownloadStub.getHash(baseItem.id.raw, DownloadItemType.track));
     return item;
   }
 
   bool? isFavorite(BaseItemDto item) {
-    var stubId = DownloadStub.getHash(item.id, item.downloadType);
+    var stubId = DownloadStub.getHash(item.id.raw, item.downloadType);
     return _getFavoriteIds()?.contains(stubId);
   }
 

@@ -59,7 +59,7 @@ class AlbumListTile extends ConsumerStatefulWidget {
   final BaseItemDto item;
   final List<BaseItemDto>? children;
   final int? index;
-  final String? parentId;
+  final BaseItemId? parentId;
   final String? parentName;
 
   @override
@@ -89,8 +89,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
                   type: DownloadItemType.collection, item: widget.item),
               null)
           .isRequired;
-      final bool isFav =
-          ref.watch(isFavoriteProvider(widget.item));
+      final bool isFav = ref.watch(isFavoriteProvider(widget.item));
 
       final selection = await showMenu<AlbumListTileMenuItems>(
         context: context,

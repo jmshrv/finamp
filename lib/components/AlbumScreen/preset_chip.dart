@@ -66,7 +66,7 @@ class _PresetChipsState extends State<PresetChips> {
     }
   }
 
-  PresetChip generatePresetChip(value, BoxConstraints constraints) {
+  PresetChip generatePresetChip(double value, BoxConstraints constraints) {
     // Scroll to the active preset
     if (value == widget.activeValue) {
       scrollToActivePreset(value, constraints.maxWidth);

@@ -24,7 +24,7 @@ class DownloadDialog extends StatefulWidget {
   });
 
   final DownloadStub item;
-  final String viewId;
+  final BaseItemId viewId;
   final String? downloadLocationId;
   final bool needsTranscode;
   final List<BaseItemDto>? children;
@@ -38,7 +38,7 @@ class DownloadDialog extends StatefulWidget {
   /// if transcode downloads is set to ask.  If neither is needed, the
   /// download is initiated immediately with no dialog.
   static Future<void> show(
-      BuildContext context, DownloadStub item, String? viewId,
+      BuildContext context, DownloadStub item, BaseItemId? viewId,
       {int? trackCount}) async {
     if (viewId == null) {
       final finampUserHelper = GetIt.instance<FinampUserHelper>();

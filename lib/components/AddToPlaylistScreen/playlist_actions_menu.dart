@@ -12,7 +12,6 @@ import '../../services/favorite_provider.dart';
 import '../../services/feedback_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../../services/theme_provider.dart';
 import '../AlbumScreen/track_menu.dart';
 import '../global_snackbar.dart';
 import '../themed_bottom_sheet.dart';
@@ -24,8 +23,6 @@ Future<void> showPlaylistActionsMenu({
   required BuildContext context,
   required BaseItemDto item,
   required BaseItemDto? parentPlaylist,
-  bool usePlayerTheme = false,
-  FinampTheme? themeProvider,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -47,7 +44,6 @@ Future<void> showPlaylistActionsMenu({
         final menuEntries = [
           TrackInfo.condensed(
             item: item,
-            useThemeImage: usePlayerTheme,
           ),
           const SizedBox(height: 16),
           Consumer(
@@ -141,9 +137,7 @@ Future<void> showPlaylistActionsMenu({
         // TODO better estimate, how to deal with lag getting playlists?
         var stackHeight = MediaQuery.sizeOf(context).height * 0.9;
         return (stackHeight, menu);
-      },
-      usePlayerTheme: usePlayerTheme,
-      themeProvider: themeProvider);
+      });
 }
 
 class ToggleableListTile extends ConsumerStatefulWidget {

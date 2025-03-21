@@ -590,7 +590,6 @@ class NowPlayingBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    var imageTheme = ref.watch(playerScreenThemeProvider);
 
     ref.listen(currentTrackMetadataProvider,
         (metadataOrNull, metadata) {}); // keep provider alive
@@ -598,16 +597,7 @@ class NowPlayingBar extends ConsumerWidget {
     return Hero(
         tag: "nowplaying",
         createRectTween: (from, to) => RectTween(begin: from, end: from),
-        child: AnimatedTheme(
-          duration: getThemeTransitionDuration(context),
-          data: ThemeData(
-            colorScheme: imageTheme.copyWith(
-              brightness: Theme.of(context).brightness,
-            ),
-            iconTheme: Theme.of(context).iconTheme.copyWith(
-                  color: imageTheme.primary,
-                ),
-          ),
+        child: PlayerScreenTheme(
           // Scaffold ignores system elements padding if bottom bar is present, so we must
           // use SafeArea in all cases to include it in our height
           child: SafeArea(

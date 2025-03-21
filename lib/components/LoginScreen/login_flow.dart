@@ -294,7 +294,7 @@ class JellyfinServerClientDiscovery {
           _clientDiscoveryLogger
               .finest("Received datagram: ${utf8.decode(datagram.data)}");
           final response = ClientDiscoveryResponse.fromJson(
-              jsonDecode(utf8.decode(datagram.data)));
+              jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>);
           onServerFound(response);
         }
       }

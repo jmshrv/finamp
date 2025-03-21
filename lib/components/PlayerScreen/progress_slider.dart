@@ -4,9 +4,9 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/music_player_background_task.dart';
 

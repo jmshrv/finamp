@@ -84,8 +84,6 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
                 item: widget.item!,
                 parentPlaylist:
                     inPlaylist ? widget.queueItem!.source.item : null,
-                usePlayerTheme: widget.item?.blurHash != null &&
-                    widget.item?.blurHash == currentTrack?.blurHash,
               );
             }),
       ),

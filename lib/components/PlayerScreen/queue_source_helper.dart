@@ -107,7 +107,7 @@ Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
           null,
           keepSlow: true));
 
-      playlistRemovalsCache.add(parent.id + playlistItemId);
+      playlistRemovalsCache.add(parent.id.raw + playlistItemId);
 
       GlobalSnackbar.message(
           (context) => AppLocalizations.of(context)!.removedFromPlaylist,

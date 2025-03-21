@@ -1309,7 +1309,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       name: fields[0] as String?,
       originalTitle: fields[1] as String?,
       serverId: fields[2] as String?,
-      id: fields[3] as String,
+      id: fields[3] as BaseItemId,
       etag: fields[4] as String?,
       playlistItemId: fields[5] as String?,
       dateCreated: fields[6] as String?,
@@ -1353,7 +1353,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       remoteTrailers: (fields[44] as List?)?.cast<MediaUrl>(),
       providerIds: (fields[45] as Map?)?.cast<String, dynamic>(),
       isFolder: fields[46] as bool?,
-      parentId: fields[47] as String?,
+      parentId: fields[47] as BaseItemId?,
       type: fields[48] as String?,
       people: (fields[49] as List?)?.cast<BaseItemPerson>(),
       studios: (fields[50] as List?)?.cast<NameLongIdPair>(),
@@ -1380,7 +1380,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       album: fields[71] as String?,
       collectionType: fields[72] as String?,
       displayOrder: fields[73] as String?,
-      albumId: fields[74] as String?,
+      albumId: fields[74] as BaseItemId?,
       albumPrimaryImageTag: fields[75] as String?,
       seriesPrimaryImageTag: fields[76] as String?,
       albumArtist: fields[77] as String?,
@@ -1834,7 +1834,7 @@ class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
     };
     return MediaSourceInfo(
       protocol: fields[0] as String,
-      id: fields[1] as String?,
+      id: fields[1] as BaseItemId?,
       path: fields[2] as String?,
       encoderPath: fields[3] as String?,
       encoderProtocol: fields[4] as String?,
@@ -2221,7 +2221,7 @@ class NameLongIdPairAdapter extends TypeAdapter<NameLongIdPair> {
     };
     return NameLongIdPair(
       name: fields[0] as String?,
-      id: fields[1] as String,
+      id: fields[1] as BaseItemId,
     );
   }
 
@@ -2322,7 +2322,7 @@ class NameIdPairAdapter extends TypeAdapter<NameIdPair> {
     };
     return NameIdPair(
       name: fields[0] as String?,
-      id: fields[1] as String,
+      id: fields[1] as BaseItemId,
     );
   }
 
@@ -3785,7 +3785,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       name: json['Name'] as String?,
       originalTitle: json['OriginalTitle'] as String?,
       serverId: json['ServerId'] as String?,
-      id: json['Id'] as String,
+      id: const BaseItemIdConverter().fromJson(json['Id'] as String),
       etag: json['Etag'] as String?,
       playlistItemId: json['PlaylistItemId'] as String?,
       dateCreated: json['DateCreated'] as String?,
@@ -3846,7 +3846,8 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
         (k, e) => MapEntry(k as String, e),
       ),
       isFolder: json['IsFolder'] as bool?,
-      parentId: json['ParentId'] as String?,
+      parentId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['ParentId'], const BaseItemIdConverter().fromJson),
       type: json['Type'] as String?,
       people: (json['People'] as List<dynamic>?)
           ?.map((e) =>
@@ -3893,7 +3894,8 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       album: json['Album'] as String?,
       collectionType: json['CollectionType'] as String?,
       displayOrder: json['DisplayOrder'] as String?,
-      albumId: json['AlbumId'] as String?,
+      albumId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['AlbumId'], const BaseItemIdConverter().fromJson),
       albumPrimaryImageTag: json['AlbumPrimaryImageTag'] as String?,
       seriesPrimaryImageTag: json['SeriesPrimaryImageTag'] as String?,
       albumArtist: json['AlbumArtist'] as String?,
@@ -3998,7 +4000,7 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       if (instance.name case final value?) 'Name': value,
       if (instance.originalTitle case final value?) 'OriginalTitle': value,
       if (instance.serverId case final value?) 'ServerId': value,
-      'Id': instance.id,
+      'Id': const BaseItemIdConverter().toJson(instance.id),
       if (instance.etag case final value?) 'Etag': value,
       if (instance.playlistItemId case final value?) 'PlaylistItemId': value,
       if (instance.dateCreated case final value?) 'DateCreated': value,
@@ -4055,7 +4057,10 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
         'RemoteTrailers': value,
       if (instance.providerIds case final value?) 'ProviderIds': value,
       if (instance.isFolder case final value?) 'IsFolder': value,
-      if (instance.parentId case final value?) 'ParentId': value,
+      if (_$JsonConverterToJson<String, BaseItemId>(
+              instance.parentId, const BaseItemIdConverter().toJson)
+          case final value?)
+        'ParentId': value,
       if (instance.type case final value?) 'Type': value,
       if (instance.people?.map((e) => e.toJson()).toList() case final value?)
         'People': value,
@@ -4096,7 +4101,10 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       if (instance.album case final value?) 'Album': value,
       if (instance.collectionType case final value?) 'CollectionType': value,
       if (instance.displayOrder case final value?) 'DisplayOrder': value,
-      if (instance.albumId case final value?) 'AlbumId': value,
+      if (_$JsonConverterToJson<String, BaseItemId>(
+              instance.albumId, const BaseItemIdConverter().toJson)
+          case final value?)
+        'AlbumId': value,
       if (instance.albumPrimaryImageTag case final value?)
         'AlbumPrimaryImageTag': value,
       if (instance.seriesPrimaryImageTag case final value?)
@@ -4203,6 +4211,18 @@ Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
       if (instance.finampOffline case final value?) 'FinampOffline': value,
     };
 
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
+
 ExternalUrl _$ExternalUrlFromJson(Map json) => ExternalUrl(
       name: json['Name'] as String?,
       url: json['Url'] as String?,
@@ -4216,7 +4236,8 @@ Map<String, dynamic> _$ExternalUrlToJson(ExternalUrl instance) =>
 
 MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
       protocol: json['Protocol'] as String,
-      id: json['Id'] as String?,
+      id: _$JsonConverterFromJson<String, BaseItemId>(
+          json['Id'], const BaseItemIdConverter().fromJson),
       path: json['Path'] as String?,
       encoderPath: json['EncoderPath'] as String?,
       encoderProtocol: json['EncoderProtocol'] as String?,
@@ -4272,7 +4293,10 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
 Map<String, dynamic> _$MediaSourceInfoToJson(MediaSourceInfo instance) =>
     <String, dynamic>{
       'Protocol': instance.protocol,
-      if (instance.id case final value?) 'Id': value,
+      if (_$JsonConverterToJson<String, BaseItemId>(
+              instance.id, const BaseItemIdConverter().toJson)
+          case final value?)
+        'Id': value,
       if (instance.path case final value?) 'Path': value,
       if (instance.encoderPath case final value?) 'EncoderPath': value,
       if (instance.encoderProtocol case final value?) 'EncoderProtocol': value,
@@ -4460,13 +4484,13 @@ Map<String, dynamic> _$BaseItemPersonToJson(BaseItemPerson instance) =>
 
 NameLongIdPair _$NameLongIdPairFromJson(Map json) => NameLongIdPair(
       name: json['Name'] as String?,
-      id: json['Id'] as String,
+      id: const BaseItemIdConverter().fromJson(json['Id'] as String),
     );
 
 Map<String, dynamic> _$NameLongIdPairToJson(NameLongIdPair instance) =>
     <String, dynamic>{
       'Name': instance.name,
-      'Id': instance.id,
+      'Id': const BaseItemIdConverter().toJson(instance.id),
     };
 
 UserItemDataDto _$UserItemDataDtoFromJson(Map json) => UserItemDataDto(
@@ -4502,13 +4526,13 @@ Map<String, dynamic> _$UserItemDataDtoToJson(UserItemDataDto instance) =>
 
 NameIdPair _$NameIdPairFromJson(Map json) => NameIdPair(
       name: json['Name'] as String?,
-      id: json['Id'] as String,
+      id: const BaseItemIdConverter().fromJson(json['Id'] as String),
     );
 
 Map<String, dynamic> _$NameIdPairToJson(NameIdPair instance) =>
     <String, dynamic>{
       'Name': instance.name,
-      'Id': instance.id,
+      'Id': const BaseItemIdConverter().toJson(instance.id),
     };
 
 ChapterInfo _$ChapterInfoFromJson(Map json) => ChapterInfo(
@@ -4571,7 +4595,7 @@ PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map json) =>
           ? null
           : BaseItemDto.fromJson(
               Map<String, dynamic>.from(json['Item'] as Map)),
-      itemId: json['ItemId'] as String,
+      itemId: const BaseItemIdConverter().fromJson(json['ItemId'] as String),
       sessionId: json['SessionId'] as String?,
       mediaSourceId: json['MediaSourceId'] as String?,
       audioStreamIndex: (json['AudioStreamIndex'] as num?)?.toInt(),
@@ -4599,7 +4623,7 @@ Map<String, dynamic> _$PlaybackProgressInfoToJson(
     <String, dynamic>{
       'CanSeek': instance.canSeek,
       'Item': instance.item?.toJson(),
-      'ItemId': instance.itemId,
+      'ItemId': const BaseItemIdConverter().toJson(instance.itemId),
       'SessionId': instance.sessionId,
       'MediaSourceId': instance.mediaSourceId,
       'AudioStreamIndex': instance.audioStreamIndex,
@@ -4746,7 +4770,9 @@ Map<String, dynamic> _$QueueItemToJson(QueueItem instance) => <String, dynamic>{
 
 NewPlaylist _$NewPlaylistFromJson(Map json) => NewPlaylist(
       name: json['Name'] as String?,
-      ids: (json['Ids'] as List<dynamic>).map((e) => e as String).toList(),
+      ids: (json['Ids'] as List<dynamic>)
+          .map((e) => const BaseItemIdConverter().fromJson(e as String))
+          .toList(),
       userId: json['UserId'] as String?,
       mediaType: json['MediaType'] as String?,
       isPublic: json['IsPublic'] as bool?,
@@ -4755,7 +4781,7 @@ NewPlaylist _$NewPlaylistFromJson(Map json) => NewPlaylist(
 Map<String, dynamic> _$NewPlaylistToJson(NewPlaylist instance) =>
     <String, dynamic>{
       'Name': instance.name,
-      'Ids': instance.ids,
+      'Ids': instance.ids.map(const BaseItemIdConverter().toJson).toList(),
       'UserId': instance.userId,
       'MediaType': instance.mediaType,
       'IsPublic': instance.isPublic,
@@ -4763,13 +4789,15 @@ Map<String, dynamic> _$NewPlaylistToJson(NewPlaylist instance) =>
 
 NewPlaylistResponse _$NewPlaylistResponseFromJson(Map json) =>
     NewPlaylistResponse(
-      id: json['Id'] as String?,
+      id: _$JsonConverterFromJson<String, BaseItemId>(
+          json['Id'], const BaseItemIdConverter().fromJson),
     );
 
 Map<String, dynamic> _$NewPlaylistResponseToJson(
         NewPlaylistResponse instance) =>
     <String, dynamic>{
-      'Id': instance.id,
+      'Id': _$JsonConverterToJson<String, BaseItemId>(
+          instance.id, const BaseItemIdConverter().toJson),
     };
 
 PublicSystemInfoResult _$PublicSystemInfoResultFromJson(Map json) =>

@@ -579,7 +579,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           parentType: MediaItemParentType.rootCollection));
     } else {
       try {
-        final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId));
+        final itemId = MediaItemId.fromJson(
+            jsonDecode(parentMediaId) as Map<String, dynamic>);
 
         return await _androidAutoHelper.getMediaItems(itemId);
       } catch (e) {
@@ -595,7 +596,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> playFromMediaId(String mediaId,
       [Map<String, dynamic>? extras]) async {
     try {
-      final mediaItemId = MediaItemId.fromJson(jsonDecode(mediaId));
+      final mediaItemId =
+          MediaItemId.fromJson(jsonDecode(mediaId) as Map<String, dynamic>);
 
       return await _androidAutoHelper.playFromMediaId(mediaItemId);
     } catch (e) {
@@ -612,7 +614,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _audioServiceBackgroundTaskLogger.info("search: $query ; extras: $extras");
 
     final previousItemTitle = _androidAutoHelper
-        .lastSearchQuery?.extras?["android.intent.extra.title"];
+        .lastSearchQuery?.extras?["android.intent.extra.title"] as String?;
 
     final currentSearchQuery = AndroidAutoSearchQuery(query, extras);
 
@@ -733,7 +735,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     if (FinampSettingsHelper.finampSettings.volumeNormalizationActive &&
         currentTrack != null) {
       final baseItem = jellyfin_models.BaseItemDto.fromJson(
-          currentTrack.extras?["itemJson"]);
+          currentTrack.extras?["itemJson"] as Map<String, dynamic>);
 
       double? effectiveGainChange =
           getEffectiveGainChange(currentTrack, baseItem);
@@ -897,14 +899,16 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 double? getEffectiveGainChange(
     MediaItem currentTrack, jellyfin_models.BaseItemDto? item) {
   final baseItem = item ??
-      jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
+      jellyfin_models.BaseItemDto.fromJson(
+          currentTrack.extras?["itemJson"] as Map<String, dynamic>);
   double? effectiveGainChange;
   switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
     case VolumeNormalizationMode.hybrid:
       // case VolumeNormalizationMode.albumBased: // we use the context normalization gain for album-based because we don't have the album item here
       // use context normalization gain if available, otherwise use track normalization gain
-      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"] ??
-          baseItem.normalizationGain;
+      effectiveGainChange =
+          currentTrack.extras?["contextNormalizationGain"] as double? ??
+              baseItem.normalizationGain;
       break;
     case VolumeNormalizationMode.trackBased:
       // only ever use track normalization gain
@@ -912,7 +916,8 @@ double? getEffectiveGainChange(
       break;
     case VolumeNormalizationMode.albumOnly:
       // only ever use context normalization gain, don't normalize tracks out of special contexts
-      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"];
+      effectiveGainChange =
+          currentTrack.extras?["contextNormalizationGain"] as double?;
       break;
   }
   return effectiveGainChange;

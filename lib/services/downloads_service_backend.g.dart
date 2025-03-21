@@ -774,11 +774,25 @@ extension IsarTaskDataQueryProperty
 SyncNode _$SyncNodeFromJson(Map json) => SyncNode(
       stubIsarId: (json['stubIsarId'] as num).toInt(),
       required: json['required'] as bool,
-      viewId: json['viewId'] as String?,
+      viewId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['viewId'], const BaseItemIdConverter().fromJson),
     );
 
 Map<String, dynamic> _$SyncNodeToJson(SyncNode instance) => <String, dynamic>{
       'stubIsarId': instance.stubIsarId,
       'required': instance.required,
-      'viewId': instance.viewId,
+      'viewId': _$JsonConverterToJson<String, BaseItemId>(
+          instance.viewId, const BaseItemIdConverter().toJson),
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

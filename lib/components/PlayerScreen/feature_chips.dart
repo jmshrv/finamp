@@ -47,7 +47,8 @@ class FeatureState {
 
   bool get isDownloaded => metadata?.isDownloaded ?? false;
   bool get isTranscoding =>
-      !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] ?? false);
+      !isDownloaded &&
+      (currentTrack?.item.extras?["shouldTranscode"] as bool? ?? false);
   String get container =>
       isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;

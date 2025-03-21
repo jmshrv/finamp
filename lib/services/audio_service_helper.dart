@@ -53,7 +53,7 @@ class AudioServiceHelper {
     if (items != null) {
       await _queueService.startPlayback(
         items: items,
-        source: QueueItemSource(
+        source: QueueItemSource.rawId(
           type: onlyShowFavourites
               ? QueueItemSourceType.favorites
               : QueueItemSourceType.allTracks,

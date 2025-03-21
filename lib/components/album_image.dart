@@ -13,7 +13,6 @@ import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';
 import '../services/theme_provider.dart';
 
-typedef ThemeCallback = void Function(FinampTheme theme);
 typedef ImageProviderCallback = void Function(ImageProvider theme);
 
 /// This widget provides the default look for album images throughout Finamp -
@@ -25,7 +24,6 @@ class AlbumImage extends ConsumerWidget {
     super.key,
     this.item,
     this.imageListenable,
-    this.themeCallback,
     this.borderRadius,
     this.placeholderBuilder,
     this.disabled = false,
@@ -36,10 +34,7 @@ class AlbumImage extends ConsumerWidget {
   /// The item to get an image for.
   final BaseItemDto? item;
 
-  final ProviderListenable<(ImageProvider?, String?)>? imageListenable;
-
-  /// A callback to get the image provider once it has been fetched.
-  final ThemeCallback? themeCallback;
+  final ProviderListenable<ThemeImage>? imageListenable;
 
   final BorderRadius? borderRadius;
 
@@ -113,20 +108,27 @@ class AlbumImage extends ConsumerWidget {
                 }
               }
 
+              var listenable = imageListenable;
+              if (listenable == null) {
+                // If the current themeing context has a usable image for this item,
+                // use that instead of generating a new request
+                if (ref.watch(localThemeInfoProvider.select((request) =>
+                    (request?.largeThemeImage ?? false) &&
+                    request?.item == item))) {
+                  listenable = localImageProvider;
+                } else {
+                  listenable = albumImageProvider(AlbumImageRequest(
+                    item: item!,
+                    maxWidth: physicalWidth,
+                    maxHeight: physicalHeight,
+                  )).select((value) => ThemeImage(value, item?.blurHash));
+                }
+              }
+
               var image = Container(
                 decoration: decoration,
                 child: BareAlbumImage(
-                    imageListenable: imageListenable ??
-                        albumImageProvider(AlbumImageRequest(
-                          item: item!,
-                          maxWidth: physicalWidth,
-                          maxHeight: physicalHeight,
-                        )).select((value) => (value, item?.blurHash)),
-                    imageProviderCallback: themeCallback == null
-                        ? null
-                        : (image) => themeCallback!(
-                            FinampTheme.fromImageDeferred(
-                                image, item?.blurHash)),
+                    imageListenable: listenable,
                     placeholderBuilder: placeholderBuilder),
               );
               return disabled
@@ -155,7 +157,7 @@ class BareAlbumImage extends ConsumerWidget {
     this.placeholderBuilder,
   });
 
-  final ProviderListenable<(ImageProvider?, String?)> imageListenable;
+  final ProviderListenable<ThemeImage> imageListenable;
   final WidgetBuilder? placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
@@ -170,7 +172,8 @@ class BareAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var (image, blurHash) = ref.watch(imageListenable);
+    var ThemeImage(image: image, blurHash: blurHash) =
+        ref.watch(imageListenable);
     var localPlaceholder = placeholderBuilder;
     if (blurHash != null) {
       localPlaceholder ??= (_) => Image(

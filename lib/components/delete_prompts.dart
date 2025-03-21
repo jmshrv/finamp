@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../models/jellyfin_models.dart';
+
 Future<void> askBeforeDeleteDownloadFromDevice(
     BuildContext context, DownloadStub stub,
     {VoidCallback? refresh}) async {
@@ -69,7 +71,7 @@ Future<void> askBeforeDeleteFromServerAndDevice(
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
           onConfirmed: () async {
             try {
-              await jellyfinApiHelper.deleteItem(stub.id);
+              await jellyfinApiHelper.deleteItem(BaseItemId(stub.id));
               GlobalSnackbar.message((scaffold) =>
                   AppLocalizations.of(scaffold)!
                       .itemDeletedSnackbar("server", type));
