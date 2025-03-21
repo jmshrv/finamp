@@ -73,7 +73,7 @@ class PlayerButtons extends StatelessWidget {
                       controller.shouldShow(PlayerHideable.bigPlayButton)
                           ? 16
                           : 12),
-                  onTap: () async {
+                  onTap: () {
                     FeedbackHelper.feedback(FeedbackType.light);
                     unawaited(audioHandler.togglePlayback());
                   },
