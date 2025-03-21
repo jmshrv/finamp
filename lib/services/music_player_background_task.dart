@@ -29,17 +29,30 @@ enum FadeDirection { fadeIn, fadeOut, none }
 
 class FadeState {
   // Volume value to recover after fading
-  double recoverVolume;
+  final double recoverVolume;
 
   // volume step sizes for fade-in and fade-out
-  double volumeFadeOutStepSize;
-  double volumeFadeInStepSize;
+  final double volumeFadeOutStepSize;
+  final double volumeFadeInStepSize;
 
   // current fade direction
-  FadeDirection fadeDirection;
+  final FadeDirection fadeDirection;
 
   FadeState(this.recoverVolume, this.volumeFadeInStepSize,
       this.volumeFadeOutStepSize, this.fadeDirection);
+
+  FadeState copyWith({
+    double? recoverVolume,
+    double? volumeFadeInStepSize,
+    double? volumeFadeOutStepSize,
+    FadeDirection? fadeDirection,
+  }) {
+    return FadeState(
+        recoverVolume ?? this.recoverVolume,
+        volumeFadeInStepSize ?? this.volumeFadeInStepSize,
+        volumeFadeOutStepSize ?? this.volumeFadeOutStepSize,
+        fadeDirection ?? this.fadeDirection);
+  }
 }
 
 /// This provider handles the currently playing music so that multiple widgets
@@ -368,16 +381,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               _player.volume + state.volumeFadeInStepSize,
               state.recoverVolume));
           if (_player.volume >= state.recoverVolume) {
-            state.fadeDirection = FadeDirection.none;
-            fadeState.add(state);
+            fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
           }
           break;
         case FadeDirection.fadeOut:
           await _player.setVolume(
               max(_player.volume - state.volumeFadeOutStepSize, 0.0));
           if (_player.volume <= 0.0) {
-            state.fadeDirection = FadeDirection.none;
-            fadeState.add(state);
+            fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
 
             fut = _player.pause();
 
@@ -399,9 +410,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         return;
       case FadeDirection.fadeIn:
         // change fade direction
-        var state = fadeState.value;
-        state.fadeDirection = FadeDirection.fadeOut;
-        fadeState.add(state);
+        fadeState.add(
+            fadeState.value.copyWith(fadeDirection: FadeDirection.fadeOut));
         return;
       case FadeDirection.none:
         return _fadeAudio(FadeDirection.fadeOut);
@@ -414,9 +424,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         return;
       case FadeDirection.fadeOut:
         // change fade direction
-        var state = fadeState.value;
-        state.fadeDirection = FadeDirection.fadeIn;
-        fadeState.add(state);
+        fadeState
+            .add(fadeState.value.copyWith(fadeDirection: FadeDirection.fadeIn));
         return;
       case FadeDirection.none:
         return _fadeAudio(FadeDirection.fadeIn);
