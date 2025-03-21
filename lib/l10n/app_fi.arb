@@ -23,7 +23,7 @@
   "@confirm": {},
   "language": "Kieli",
   "@language": {},
-  "refresh": "VIRKISTÄ",
+  "refresh": "Virkistä",
   "@refresh": {},
   "serverUrl": "Palvelimen URL",
   "@serverUrl": {},
@@ -113,9 +113,9 @@
   },
   "error": "Virhe",
   "@error": {},
-  "playButtonLabel": "TOISTA",
+  "playButtonLabel": "Toista",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "SEKOITA",
+  "shuffleButtonLabel": "Sekoita",
   "@shuffleButtonLabel": {},
   "discNumber": "Levy {number}",
   "@discNumber": {
@@ -135,13 +135,13 @@
   "@favourite": {},
   "addDownloads": "Lisää lataukset",
   "@addDownloads": {},
-  "updateButtonLabel": "PÄIVITÄ",
+  "updateButtonLabel": "Päivitä",
   "@updateButtonLabel": {},
   "downloadsDeleted": "Lataukset poistettu.",
   "@downloadsDeleted": {},
   "location": "Sijainti",
   "@location": {},
-  "addButtonLabel": "LISÄÄ",
+  "addButtonLabel": "Lisää",
   "@addButtonLabel": {},
   "logsCopied": "Lokit kopioitu.",
   "@logsCopied": {},
@@ -183,7 +183,7 @@
   "@revenue": {},
   "runtime": "Kesto",
   "@runtime": {},
-  "dlEnqueued": "{count} Jonossa",
+  "dlEnqueued": "{count} jonossa",
   "@dlEnqueued": {
     "placeholders": {
       "count": {
@@ -217,19 +217,19 @@
   "@tabs": {},
   "cancelSleepTimer": "Peruuta uniajastin?",
   "@cancelSleepTimer": {},
-  "yesButtonLabel": "KYLLÄ",
+  "yesButtonLabel": "Kyllä",
   "@yesButtonLabel": {},
   "setSleepTimer": "Aseta uniajastin",
   "@setSleepTimer": {},
-  "minutes": "Minuutit",
+  "minutes": "Minuuttia",
   "@minutes": {},
   "sleepTimerTooltip": "Uniajastin",
   "@sleepTimerTooltip": {},
   "addToPlaylistTooltip": "Lisää soittolistalle",
   "@addToPlaylistTooltip": {},
-  "removeFromPlaylistTooltip": "Poista soittolistalta",
+  "removeFromPlaylistTooltip": "Poista tältä soittolistalta",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Poista soittolistalta",
+  "removeFromPlaylistTitle": "Poista tältä soittolistalta",
   "@removeFromPlaylistTitle": {},
   "queue": "Jono",
   "@queue": {},
@@ -243,11 +243,11 @@
   "@bufferDuration": {},
   "dark": "Tumma",
   "@dark": {},
-  "noButtonLabel": "EI",
+  "noButtonLabel": "Ei",
   "@noButtonLabel": {},
   "newPlaylist": "Uusi soittolista",
   "@newPlaylist": {},
-  "createButtonLabel": "LUO",
+  "createButtonLabel": "Luo",
   "@createButtonLabel": {},
   "noAlbum": "Ei albumia",
   "@noAlbum": {},
@@ -318,9 +318,9 @@
   "@interactions": {},
   "audioService": "Äänipalvelu",
   "@audioService": {},
-  "bitrate": "Bitrate",
+  "bitrate": "Bittinopeus",
   "@bitrate": {},
-  "bitrateSubtitle": "Suurempi bitrate antaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
+  "bitrateSubtitle": "Korkeampi bittinopeus antaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
   "@bitrateSubtitle": {},
   "customLocation": "Mukautettu sijainti",
   "@customLocation": {},
@@ -352,7 +352,7 @@
   "@addToMix": {},
   "removeFromMix": "Poista Sekoituksesta",
   "@removeFromMix": {},
-  "bufferDurationSubtitle": "Kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.",
+  "bufferDurationSubtitle": "Maksimiaika, kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.",
   "@bufferDurationSubtitle": {},
   "swipeInsertQueueNext": "Toista Pyyhkäisty Kappale Seuraavaksi",
   "@swipeInsertQueueNext": {},
@@ -362,9 +362,9 @@
   "@failedToGetTrackFromDownloadId": {},
   "stackTrace": "Pinon jäljitys",
   "@stackTrace": {},
-  "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä. Lähdekoodi saatavilla osoitteessa:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä. \nLähdekoodi saatavilla osoitteessa: {sourceCodeLink}",
   "@applicationLegalese": {},
-  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia käyttöoikeutrackelmien vuoksi. Mietin tapoja korjata tämä, mutta toistaiseksi en suosittele niiden käyttöä.",
+  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia ja niiden käyttöä ei suositella useimmissa tapauksissa. Sijainnit systeemin Musiikki-hakemiston alla estävät albumin kansikuvien tallentamisen käyttöjärjestelmän rajoitusten vuoksi.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
@@ -386,7 +386,7 @@
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "downloadedMissingImages": "{count,plural, =0{Puuttuvia kuvia ei löytynyt} =1{Ladattu {count} puuttuvaa kuvaa} other{ladattu {count} puuttuvia kuvia}}",
+  "downloadedMissingImages": "{count,plural, =0{Puuttuvia kuvia ei löytynyt} =1{Ladattu {count} puuttuvaa kuvaa} other{Ladattu {count} puuttuvia kuvia}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -442,7 +442,7 @@
       }
     }
   },
-  "redownloadedItems": "{count,plural, =0{Ei tarvitse ladata uudelleen.} =1{Uudelleenladattu {count} kohde} other{Uudelleenladatut {count} kohteet}}",
+  "redownloadedItems": "{count,plural, =0{Ei tarvitse ladata uudelleen.} =1{Uudelleenladattu {count} kohde} other{Uudelleenladattu {count} kohdetta}}",
   "@redownloadedItems": {
     "placeholders": {
       "count": {
@@ -581,5 +581,1326 @@
   "aboutTranslations": "Auta kääntämään Finampia omalle kielellesi:",
   "@aboutTranslations": {
     "description": "Link to the translation project, shown in the about screen."
+  },
+  "deleteDownloadsPrompt": "Haluatko varmasti poistaa kohteen {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' tältä laitteelta?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Poista",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Kappale} other{{count} Kappaletta}} Ladattu",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "customizationSettingsTitle": "Räätälöinti",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "Toistonopeuden näkyvyys",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "playbackSpeedControlSettingSubtitle": "Näytetäänkö toistonopeuden säätimet soittimen valikossa",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "hidden": "Piilossa",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Nopeus",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "Nollaa",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Albumin kansikuvan minimimarginaalit",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopTracks": "Näytä suosituimmat kappaleet artistinäkymässä",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Näytetäänkö artistin viisi kuunneltuinta kappaletta.",
+  "@showArtistsTopTracksSubtitle": {},
+  "playerScreen": "Musiikkisoitin",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "seconds": "Sekuntia",
+  "@seconds": {},
+  "timeFractionTooltip": "{currentTime} kokonaisajasta {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "trackCountTooltip": "{currentTrackIndex}. kappale {totalTrackCount} kappaleesta",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTooltip": "Poista soittolistalta {playlistName}",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "playlistActionsMenuButtonTooltip": "Napauta lisätäksesi soittolistalle. Vaihda suosikkia painamalla pitkään.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "playbackModeDirectPlaying": "Suoratoisto",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "playbackModeTranscoding": "Transkoodaus",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Toistaa paikallisesti",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToArtist": "Mene artistille",
+  "@goToArtist": {},
+  "goToGenre": "Mene tyylilajiin",
+  "@goToGenre": {},
+  "confirmFavoriteAdded": "Lisätty suosikiksi",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Poistettu suosikeista",
+  "@confirmFavoriteRemoved": {},
+  "confirmAddedToPlaylist": "Lisätty soittolistaan.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "bufferDisableSizeConstraintsTitle": "Älä rajoita puskurin kokoa",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "Poistaa käytöstä puskurin koon rajan. Puskuri ladataan aina määriteltyyn kokoonsa, myös erittäin suurilla tiedostoilla. Tämä voi aiheuttaa ohjelman epävakautta. Vaatii uudelleenkäynnistämisen.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bufferSizeTitle": "Puskurin koko",
+  "@bufferSizeTitle": {},
+  "previousTracks": "Edeltävät kappaleet",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "nextUp": "Seuraavaksi",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "addToNextUp": "Lisää Seuraavaksi-jonoon",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleNext": "Sekoita Seuraavaksi-jonoksi",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "shuffleToNextUp": "Sekoita Seuraavaksi-jonoon",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "confirmShuffleToQueue": "Sekoitettu jonoon",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "placeholderSource": "Jostain",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "yourLikes": "Tykkäyksesi",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "playingFromType": "Toistetaan lähteestä {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackOrderLinearButtonLabel": "Toistetaan järjestyksessä",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Sekoitetaan kappaleet. Napauta toistaaksesi järjestyksessä.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedButtonLabel": "Toistetaan nopeudella {speed}x",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedFeatureText": "{speed}x nopeus",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Toistoistunnon päivitystiheys",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "loopModeNoneButtonLabel": "Ei jatkuvaa toistoa",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeAllButtonLabel": "Jatkuva toisto",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "Palauta Nyt toistossa-jono",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Jos Jellyfin palvelin ei ole saanut yhtäkään päivitystä liitetyltä laitteelta viimeiseen 5 minuuttiin, palvelin olettaa toiston loppuneeksi. Tämä tarkoittaa, että kappaleille, jotka ovat yli 5 minuuttia pitkiä, toisto voidaan virheellisesti raportoida loppuneeksi, mikä vähentää toistoraporttien datan laatua.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topTracks": "Parhaat kappaleet",
+  "@topTracks": {},
+  "shuffleAlbumsNext": "Sekoita albumit Seuraavaksi-jonoksi",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} toisto} other{{playCount} toistoa}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "close": "Sulje",
+  "@close": {},
+  "resetToDefaults": "Nollaa oletukseen",
+  "@resetToDefaults": {},
+  "moreInfo": "Lisätietoja",
+  "@moreInfo": {},
+  "volumeNormalizationSwitchSubtitle": "Käyttää kappaleen vahvistustietoja (gain) normalisoidakseen kappaleiden äänekkyystason",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeAlbumBased": "Albumi-pohjainen",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumOnly": "Vain albumeille",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Perusvahvistus",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "startInstantMixForIndividualTracksSwitchTitle": "Aloita Välitön Sekoitus yksittäisille kappaleille",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Kun käytössä, kappaleen napautus kappaleiden välilehdessä aloittaa välittömän sekoituksen napautetusta kappaleesta yksittäisen kappaleen toiston sijaan.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "downloadItem": "Lataa",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "syncDownloads": "Synkronoi ja lataa puuttuvat kohteet.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "Korjaa ongelmat ladatuissa tiedostoissa tai liitännästiedoissa.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "requireWifiForDownloads": "Vaatii WiFi:n latauksiin.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "onlyShowFullyDownloaded": "Näytä vain kokonaan ladatut albumit",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "connectionInterrupted": "Yhteys katkesi, lataukset keskeytetty.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackgroundAndroid": "Yhteys katkesi, kun lataukset olivat taustalla. Tämä voi johtua käyttämällä asetusta \"Siirry matalan prioriteetin tilaan tauon aikana\" tai järjestelmän asetuksista.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "downloadsWorkersSettingLabel": "{count} lataushallinnoijaa",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "transcodingStreamingContainerTitle": "Valite transkoodauksen säiliö",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "transcodingStreamingContainerSubtitle": "Valitse lohkosäiliö käytettäväksi, kun suoratoistetaan transkoodattua ääntä. Ei vaikuta jo jonossa oleviin kappaleisiin.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "downloadTranscodeCodecTitle": "Valitse latausten koodekki",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "hideQueueButton": "Piilota jononäppäin",
+  "@hideQueueButton": {},
+  "hideQueueButtonSubtitle": "Piilota jononäppäin soittimen näytöltä. Pyyhkäise ylös päästäksesi jonoon.",
+  "@hideQueueButtonSubtitle": {},
+  "oneLineMarqueeTextButton": "Selaa pitkiä otsikoita automaattisesti",
+  "@oneLineMarqueeTextButton": {},
+  "oneLineMarqueeTextButtonSubtitle": "Selaa automaattisesti pitkiä kappaleotsikoita, jotka eivät mahdu näytettäväksi kerralla kahdelle riville",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "marqueeOrTruncateButton": "Käytä kolmea pistettä pitkille nimille",
+  "@marqueeOrTruncateButton": {},
+  "hidePlayerBottomActionsSubtitle": "Piilota jono- ja lyriikkanäppäimen soittimen näytöstä. Pyyhkäise ylös päästäksesi jonoon, vasemmalle (albumikannen alta) päästäksesi lyriikoihin, jos saatavilla.",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "suppressPlayerPadding": "Peitä soittimien ohjausten marginaali",
+  "@suppressPlayerPadding": {},
+  "suppressPlayerPaddingSubtitle": "Täysin minimoi marginaalit soittimen ohjauksen ja albumin kansikuvan välillä jos kansikuva ei ole täysikokoinen.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "scrollToCurrentTrack": "Vieritä nykyiseen kappaleeseen",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "removeFromPlaylistPrompt": "Poista '{itemName}' soittolistalta '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "quickActions": "Pikatoiminnot",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "trackOfflineFavorites": "Synkronoi kaikki Suosikki-tilat",
+  "@trackOfflineFavorites": {},
+  "downloadFavoritesSetting": "Lataa kaikki Suosikit",
+  "@downloadFavoritesSetting": {},
+  "fiveLatestAlbumsSetting": "Lataa viimeisimmät viisi albumia",
+  "@fiveLatestAlbumsSetting": {},
+  "fiveLatestAlbumsSettingSubtitle": "Lataukset poistetaan kun ne ikääntyvät. Lukitse lataukset estääksesi albumi poistolta.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "cacheLibraryImagesSettings": "Tallenna nykyisen kirjaston kuvat välimuistiin",
+  "@cacheLibraryImagesSettings": {},
+  "lyricsScreen": "Sanoitusnäkymä",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsSubtitle": "Ohjaa mikäli aikaleimat näytetään jokaiselle sanoituksen riville sanoitusnäkymässä, jos saatavilla.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationTitle": "Näytä pysäytyspainike mediailmoituksessa",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Ohjaa mikäli mediailmoituksessa on hakusäätimenä esityspalkki. Tämä mahdollistaa toiston sijainnin muutoksen ilman ohjelmiston avaamista.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "fontSizeOptionLarge": "Iso",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "additionalPeople": "Tekijät",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "normalizationGain": "Vahvistus",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "showFeatureChipsToggleSubtitle": "Näytä kappaleen lisätiedot kuten koodekki, bittinopeus jne. soitinnäkymässä.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Näytä albumin kansikuva jokaiselle kappaleelle erikseen albuminäkymässä.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "emptyTopTracksList": "Et ole kuunnellut vielä yhtäkään kappaletta tältä artistilta.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "emptyFilteredListSubtitle": "Yhtäkään suodatinta vastaavaa kohdetta ei löytynyt. Kokeile poistaa suodatin tai vaihtamalla hakutermiä.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetSettingsPromptGlobal": "Haluatko varmasti nollata KAIKKI asetukset niiden oletuksiinsa?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "genericCancel": "Peruuta",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{Albumi} playlist{Soittolista} artist{Artisti} genre{Tyylilaji} track{Kappale} library{Kirjasto} other{kohde}} poistettu kohteesta {deviceType, select, device{Laite} server{Palvelin} other{tuntematon}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "allowDeleteFromServerTitle": "Salli poisto palvelimelta",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "allowDeleteFromServerSubtitle": "Ota käyttöön tai poista käytöstä valinta poistaakseen lopullisesti kappale palvelimen tiedostojärjestelmältä jos mahdollista.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "largeDownloadWarning": "Varoitus: Olet aloittamassa latausta {count} kappaleelle.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadSizeWarningCutoff": "Latauksen koon varoituksen raja",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatYear": "Vuosi",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthYear": "Kuukausi ja vuosi",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatMonthDayYear": "Kuukausi, päivä ja vuosi",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Näytä albumin julkaisupäivä soitinnäkymässä",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Julkaisupäivän muoto",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "title": "Nimi",
+  "@title": {},
+  "automatic": "Automaattinen",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Esillä",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "apply": "Käytä",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "useCoverAsBackground": "Käytä sumennettua kansikuvaa taustana",
+  "@useCoverAsBackground": {},
+  "addToMorePlaylistsTooltip": "Lisää muille soittolistoille",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "Lisää muille soittolistoille",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistNamedTitle": "Poista soittolistalta {playlistName}",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "unknownAlbum": "Tuntematon albumi",
+  "@unknownAlbum": {},
+  "playingFrom": "Toistetaan",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "confirmShuffleNext": "Sekoitetaan seuraavaksi",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "playbackSpeedIncreaseLabel": "Lisää toistonopeutta",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "queueRestoreButtonLabel": "Palauta",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Kappale} other{{count} Kappaletta}}, {remaining} Toistamatta",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "autoloadLastQueueOnStartup": "Palauta edeltävä jono automaattisesti",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Yritä palauttaa edeltävä jono automaattisesti ohjelman käynnistyessä.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "filesystemFull": "Jäljellä olevia latauksia ei voida viimeistellä. Tiedostojärjestelmä on täysi.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "missingDownloadSize": "Poistetaan...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "enableVibration": "Käytä värinää",
+  "@enableVibration": {},
+  "allowSplitScreenTitle": "Salli jaetun näytön tila",
+  "@allowSplitScreenTitle": {},
+  "hidePlayerBottomActions": "Piilota alavalinnat",
+  "@hidePlayerBottomActions": {},
+  "keepScreenOnDisabled": "Pois käytöstä",
+  "@keepScreenOnDisabled": {},
+  "genericToggleButtonTooltip": "Napauta vaihtaaksesi.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "volumeNormalizationModeSelectorTitle": "Volyymitason normalisoinnin tila",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationSettingsTitle": "Volyymitason normalisointi",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "shuffleAllQueueSource": "Sekoita kaikki",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderShuffledButtonLabel": "Sekoitetaan kappaleita",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "queueLoadingMessage": "Palautetaan jonoa...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "shuffleAlbumsToQueue": "Sekoita albumit jonoon",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "removeFromPlaylistConfirm": "Poista",
+  "@removeFromPlaylistConfirm": {},
+  "alignmentOptionStart": "Alku",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Näytä hakusäätimet mediailmoituksessa",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "albumScreen": "Albuminäkymä",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showProgressOnNowPlayingBarSubtitle": "Ohjaa sovelluksen sisäisen minisoittimen / tällä hetkellä toistettavan kappaleen palkki musiikkinäytön alareunassa edistymispalkkina.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
+  },
+  "downloadSizeWarningCutoffSubtitle": "Varoitusviesti näytetään ladattaessa suurempaa määrää kappaleita kuin raja kerralla.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "sampleRate": "Näytetaajuus",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "keepScreenOnWhilePluggedInSubtitle": "Ohita Pidä Näyttö Päällä asetus jos laite on irroitettu latauksesta",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "resetSettingsPromptGlobalConfirm": "Nollaa KAIKKI asetukset",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "confirmAddAlbumToPlaylist": "Haluatko varmasti lisätä kaikki kappaleet kohteesta {itemType, select, album{albumi} playlist{soittolista} artist{artisti} genre{tyylilaji} other{kohde}} '{itemName}' tähän soittolistaan? Kappaleet voidaan poistaa vain yksitellen.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Näyttää albumin julkaisupäivän soitinnäkymässä, albuminimen takana.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "marqueeOrTruncateButtonSubtitle": "Näytä ... pitkän nimen lopussa nimen selaamisen sijaan",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "prioritizePlayerCover": "Priorisoi albumin kansikuva",
+  "@prioritizePlayerCover": {},
+  "prioritizePlayerCoverSubtitle": "Priorisoi näyttämään isompi albumin kansikuva soittimen näytöllä. Ei-kriittiset ohjaukset piilotetaan herkemmin pienillä näyttökooilla.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "showFeatureChipsToggleTitle": "Näytä kappaleen lisätiedot",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showArtistChipImageSubtitle": "Tämä vaikuttaa pienten artistin kuvien esikatseluun, kuten soittimen näytöllä.",
+  "@showArtistChipImageSubtitle": {},
+  "lockDownload": "Pidä aina laitteella",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "numberAsKiloHertz": "{kiloHertz} kilohertsiä",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "allPlaylistsInfoSettingSubtitle": "Synkronoi liitännäistiedot kaikilta soittolistoilta parantaakseen soittolistojen kokemustasi",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "addRemoveFromPlaylist": "Lisää tai poista soittolistoilta",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "Lisää kappale soittolistalle",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "allPlaylistsInfoSetting": "Lataa soittolistan liitännäistiedot",
+  "@allPlaylistsInfoSetting": {},
+  "cacheLibraryImagesSettingsSubtitle": "Kaikki albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa tulee ladatuksi.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "fontSizeOptionMedium": "Keskikokoinen",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "lyricsAlignmentTitle": "Sanoitusten tasaus",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "downloadAllPlaylistsSetting": "Lataa kaikki soittolistat",
+  "@downloadAllPlaylistsSetting": {},
+  "showProgressOnNowPlayingBarTitle": "Näytä kappaleen edistyminen sovelluksen minisoittimessa",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
+  },
+  "shuffleAlbums": "Sekoita albumit",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "confirmShuffleToNextUp": "Sekoitettu Seuraavaksi-jonoon",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "savedQueue": "Tallennettu jono",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "aboutContributionPrompt": "Vapaa-ajallaan upeiden ihmisten teettämä.\nVoit olla yksi heistä!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "playbackSpeedDecreaseLabel": "Vähennä toistonopeutta",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "activeDownloads": "Aktiiviset lataukset",
+  "@activeDownloads": {},
+  "noActiveDownloads": "Ei aktiivisia latauksia.",
+  "@noActiveDownloads": {},
+  "activeDownloadsTitle": "Aktiiviset lataukset",
+  "@activeDownloadsTitle": {},
+  "shareOfflineListens": "Jaa offline kuuntelut",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "confirmDownloadStarted": "Lataus aloitettu",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "albumCount": "{count,plural,=1{{count} Albumi} other{{count} Albumia}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "preferQuickSyncSwitch": "Suosi pikasynkronointia",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "incidentalDownloadTooltip": "Tämä kohde vaaditaan ladattavaksi kohteen {parentName} vuoksi.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "tracksFormerNextUp": "Kappaleet lisätty Seuraavaksi-jonosta",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "bufferSizeSubtitle": "Puskurin maksimikoko megatavuissa (Mt). Vaatii uudelleenkäynnistyksen",
+  "@bufferSizeSubtitle": {},
+  "playbackHistory": "Toistohistoria",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "cacheLibraryImagesName": "Kuvat välimuistissa kirjastolle '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "offlineTrackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaletta}}, {downloads} Ladattu",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "syncOnStartupSwitch": "Automaattisesti synkronoi lataukset käynnistyessä",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "skipToNextTrackButtonTooltip": "Siirry seuraavaan kappaleeseen",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "useCoverAsBackgroundSubtitle": "Käytetäänkö sumennettua albumin kansikuvaa sovelluksen eri osioiden taustakuvana.",
+  "@useCoverAsBackgroundSubtitle": {},
+  "hours": "Tuntia",
+  "@hours": {},
+  "shuffleToQueue": "Sekotia jonoon",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "playbackOrderLinearButtonTooltip": "Toistetaan järjestyksessä. Napauta sekoittaaksesi.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "showNullLibraryItemsTitle": "Näytä media tuntemattomista kirjastoista.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "playbackSpeedControlSettingDescription": "Automaattinen:\nFinamp yrittää tunnistaa, onko toistamasi kappale podcast tai äänikirja. Tämän katsotaan tapahtuvan, jos kappale on pidempi kuin {trackDuration} minuutti(a), tai jos kappaleen albumi on pidempi kuin {albumDuration} tunti(a), tai jos kappaleella on ainakin yksi näistä tyylilajeista: {genreList}\nToistonopeuden säätimet ovat tällöin esillä soittimen valikossa.\n\nEsillä:\nToistonopeuden säätimet ovat aina esillä soittimen valikossa.\n\nPiilotettu:\nToistonopeuden säätimet ovat aina piilossa soittimen valikossa.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Albumin kansikuvan minimimarginaalit soittimen reunoilla, prosenttiyksiköissä näytön leveydestä.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "sleepTimerRemainingTime": "Nukahtaa {time} minuutissa",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "skipToPreviousTrackButtonTooltip": "Siirry alkuun tai edelliseen kappaleeseen",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "confirmAddToNextUp": "Lisätty {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} Seuraavaksi-jonoon",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "mix": "{mixSource} - Sekoitus",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "trackMenuButtonTooltip": "Kappalevalikko",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "publiclyVisiblePlaylist": "Julkisesti esillä:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "syncComplete": "Kaikki latauksen uudelleen synkronoitu.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "reportQueueToServer": "Raportoi nykyinen jono palvelimelle?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "reportQueueToServerSubtitle": "Kun valittu, Finamp lähettää nykyisen jonon palvelimelle. Tällä hetkellä asetukselle on vähän käyttöä ja se nostaa verkon käyttöä.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Tällä hetkellä, volyymitason normalisointi iOS-laitteilla vaatii toistovolyymin muutoksen emuloidakseen vahvistuksen muutosta. Koska ohjelma ei voi lisätä volyymiä yli 100 prosentin, täytyy volyymiä alentaa oletuksena, jotta tarvittaessa normalisointi voi vahvistaa hiljaisia kappaleita tarpeeksi. Arvot ovat desibeleissä (dB), missä -10 dB on noin ~30% volyymistä, -4.5 dB on noin ~60% volyymistä ja -2dB on noin ~80% täydestä volyymistä.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "couldNotLoad": "Kohteen lataus epäonnistui: {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "alignmentOptionEnd": "Loppu",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "volumeNormalizationSwitchTitle": "Ota volyymitason normalisointi käyttöön",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "Miloin ja miten käytetään volyymitason normalisointia",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorDescription": "Hybridi (Kappale + Albumi):\nKappalevahvistusta käytetään normaalissa toistossa, mutta albumia toistaessa (jos jono on toison päälähde, tai albumi lisättiin jonoon jossain vaiheessa), albumivahvistusta käytetään.\n\nKappale-pohjainen:\nKappalevahvistusta käytetään aina, välittämättä soiko albumi vai ei.\n\nVain albumit:\nVolyymitason normalisointia käytetään vain, kun albumia toistetaan (käyttäen albumivahvistusta), mutta ei yksittäisten kappaleiden toistossa.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "connectionInterruptedBackground": "Yhteys katkesi, kun lataukset olivat taustalla. Tämä voi johtua järjestelmän asetuksista.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "downloadsWorkersSetting": "Lataushallinnoijien määrä",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "activeDownloadSize": "Ladataan...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "showNullLibraryItemsSubtitle": "Osaa media tuntemattomalla kirjastolla saatetaan ladata. Poista käytöstä piilottaaksen nämä niiden alkuperäisen kokoelman ulkopuolelle.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "downloadsWorkersSettingSubtitle": "Lataushallinnoijien määrä synkronoimaan liitännäistietoja ja poistamaan latauksia. Lisäämällä näiden määrää voi nopeuttaa latausten synkronointia, varsinkin jos palvelimen latenssi on suuri, mutta voi aiheuttaa viivettä laitteessa.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{Aina} never{Ei koskaan} ask{Kysy} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "showArtistChipImage": "Näytä artistin kuvat artistin nimen kanssa",
+  "@showArtistChipImage": {},
+  "transcodeHint": "Transkoodaa?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "lyricsFontSizeSubtitle": "Ohjaa sanoitusten kirjaisinkokoa sanoitusnäkymässä.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "dontTranscode": "Lataa alkuperäinen{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "numberAsBit": "{bit} bittiä",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "enableAutoScroll": "Ota käytöön automaattinen vieritys",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "lyricsFontSizeTitle": "Sanoitusten kirjaisinkoko",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "emptyFilteredListTitle": "Kohteita ei löytynyt",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Ohjaa mikäli mediailmoituksessa on pysätysnäppäin keskeytysnäppäimen lisäksi. Tämä mahdollistaa toiston lopettamisen ilman ohjelman avaamista.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "alignmentOptionCenter": "Keskitä",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "releaseDateFormatSubtitle": "Ohjaa kaikkien julkaisupäivän muotoja ohjelmassa.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "fontSizeOptionSmall": "Pieni",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "resetFiltersButton": "Nollaa suodatin",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "lyricsAlignmentSubtitle": "Ohjaa sanoitusten tasausta sanoitusnäkymässä.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "Ohjaa mikäli albumin kansikuva näytetään sanoitusten yläpuolella, ennen kuin se vierii pois.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "showCoversOnAlbumScreenTitle": "Näytä albumin kansikuva kappaleille",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "deleteFromTargetDialogText": "Olet poistamassa kohdetta {itemType, select, album{albumi} playlist{soittolista} artist{artisti} genre{tyylilaji} track{kappale} library{kirjasto} other{kohde}} kohteesta {device, select, device{tämä laite} server{palvelimen tiedostojärjestelmä ja kirjasto.{deleteType, select, canDelete{ Tämä myös poistaa kohteen tältä laitteelta.} cantDelete{ Tämä kohde pysyy laitteella seuraavaan synkronointiin saakka.} notDownloaded{} other{}}\nTätä ei voi peruuttaa} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} toistetaan seuraavaksi",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToQueue": "Lisätty {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} jonoon",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "loopModeOneButtonLabel": "Kappale jatkuvalla toistolla",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "queueRestoreError": "Varoitus: {count,plural, =1{{count} kappale} other{{count} kappaletta}} ei voitu palauttaa jonoon.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadLibraryPrompt": "Ladataanko varmasti kaikki kohteet kirjastosta \"{libraryName}\"?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadSettings": "Latauskset",
+  "@downloadSettings": {},
+  "syncingDownloadSize": "Synkronoidaan...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "runRepairWarning": "Palvelimeen ei saatu yhteyttä viimeistelläkseen latausten siirtoa. Suoritathan \"Korjaa lataukset\" valinnan latausnäytöstä heti, kun olet takaisin yhteydessä palvelimeen online-tilassa.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "maxConcurrentDownloads": "Maksimimäärä samanaikaisia latauksia",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsSubtitle": "Samanaikaisten latausten lisääminen voi mahdollistaa suuremman latausmäärän taustalla, mutta voi johtaa joidenkin latausten epäonnistumiseen, jos tiedostokoot ovat suuria, tai aiheuttaa aiheetonta viivästymistä ohjelmistossa.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsLabel": "{count} samanaikaista latausta",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "preferQuickSyncSwitchSubtitle": "Kun synkronointia suoritetaan, osaa vakiona pysyvistä kohteista (kuten kappaleista tai albumeista) ei päivitetä. Korjausten lataus aina toteuttaa täyden synkronoinnin.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "fixedGridSizeSwitchSubtitle": "Ruudukkotiilien koot eivät reagoi ikkunan tai näytön koon muutokseen.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "fixedGridSizeTitle": "Ruudukkotiilien koko",
+  "@fixedGridSizeTitle": {},
+  "fixedGridTileSizeEnum": "{size, select, small{Pieni} medium{Keskikokoinen} large{Iso} veryLarge{Todella iso} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "allowSplitScreenSubtitle": "Soitin näytetään muiden ohjelmien kanssa isommilla näytöillä.",
+  "@allowSplitScreenSubtitle": {},
+  "enableVibrationSubtitle": "Käytetäänkö värinää.",
+  "@enableVibrationSubtitle": {},
+  "downloadBitrate": "Latausten bittinopeus",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "downloadBitrateSubtitle": "Korkeampi bittinopeus tarjoaa paremman laadun ääntä suuremman tiedostokoon kustannuksella.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "doTranscode": "Lataa koodekkina {codec} @{bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transkoodattuna}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "redownloadcomplete": "Uudelleenlatausten transkoodaus jonossa.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "redownloadTitle": "Automaattisesti uudelleenlataa transkoodaukset",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "redownloadSubtitle": "Automaattisesti uudelleenlataa kappaleet, jotka oletetaan olevan eri laadulla niiden pääkokoelman muutosten takia.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "defaultDownloadLocationButton": "Aseta latausten oletussijainti. Poista käytöstä valitaksesi joka latauksella erikseen.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "fixedGridSizeSwitchTitle": "Käytä vakiokoon ruudukkotiiliä",
+  "@fixedGridSizeSwitchTitle": {},
+  "showLyricsTimestampsTitle": "Näytä aikaleimat synkronoiduissa sanoituksissa",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "keepScreenOn": "Pidä näyttö päällä",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnAlwaysOn": "Aina päällä",
+  "@keepScreenOnAlwaysOn": {},
+  "showLyricsScreenAlbumPreludeTitle": "Näytä albumi ennen sanoituksia",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnSubtitle": "Milloin näyttö pidetään päällä",
+  "@keepScreenOnSubtitle": {},
+  "nowPlayingBarTooltip": "Avaa soitinnäkymä",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "keepScreenOnWhilePlaying": "Kun toistetaan musiikkia",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhileLyrics": "Kun näytetään sanoituksia",
+  "@keepScreenOnWhileLyrics": {},
+  "keepScreenOnWhilePluggedIn": "Pidä näyttö päällä vain, kun laite on kytketty lataukseen",
+  "@keepScreenOnWhilePluggedIn": {},
+  "artwork": "Taideteos",
+  "@artwork": {},
+  "artworkTooltip": "Taideteos albumille/kappaleelle {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "playerAlbumArtworkTooltip": "Taideteos albumille/kappaleelle {title}. Napauta vaihtaaksesi toistoa. Pyyhkäise vasemmalle tai oikealla vaihtaaksesi kappaletta.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "resetSettingsPromptLocal": "Haluatko nollata kaikki näistä asetuksista niiden oletuksiin?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "clearNextUp": "Tyhjennä Seuraavaksi-jono",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "queueRestoreTitle": "Tallennettu {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "Toistetaan: {track}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "track": {
+        "type": "String"
+      }
+    }
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Kuinka tiheään palvelimelle lähetetään nykyisen toistoistunnon tila, sekunneissa. Tämän pitäisi olla vähemmän kuin 5 minuuttia (300 sekuntia), jotta sessiota ei aikakatkaista.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "shuffleAlbumsToNextUp": "Sekoita albumit Seuraavaksi-jonoon",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "queueRetryMessage": "Jonon palautus epäonnistui. Yritä uudelleen?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "volumeNormalizationModeHybrid": "Hybridi (Kappale + Albumi)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationModeTrackBased": "Kappale-pohjainen",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "repairComplete": "Latausten korjaus valmis.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "downloadTranscodeEnableTitle": "Käytä transkoodattuja latauksia",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "remainingDuration": "{duration} jäljellä",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "bitDepth": "Bittisyvyys",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "playbackMode": "Toistotila",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "codec": "Koodekki",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "bitRate": "Bittinopeus",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "size": "Koko",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "trackOfflineFavoritesSubtitle": "Tämä mahdollistaa ajantaisempien suosikkitilojen näyttämisen offline-tilassa. Ei lataa lisätiedostoja.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "deleteFromTargetConfirmButton": "Poista {target, select, device{laitteelta} server{palvelimelta} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
   }
 }

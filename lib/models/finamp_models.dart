@@ -981,8 +981,8 @@ class DownloadStub {
             BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
             baseItemType.downloadType == DownloadItemType.collection &&
             baseItemType != BaseItemDtoType.noItem;
-      case DownloadItemType.song:
-        return baseItemType.downloadType == DownloadItemType.song &&
+      case DownloadItemType.track:
+        return baseItemType.downloadType == DownloadItemType.track &&
             baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType;
       case DownloadItemType.image:
@@ -1122,7 +1122,7 @@ class DownloadStub {
 
   /// Calculate a DownloadStub's isarId
   static int getHash(String id, DownloadItemType type) {
-    return _fastHash(type.name + id);
+    return _fastHash(type.isarType + id);
   }
 
   @override
@@ -1314,17 +1314,21 @@ class DownloadItem extends DownloadStub {
 /// The primary type of a DownloadItem.
 ///
 /// Enumerated by Isar, do not modify order or delete existing entries.
-/// The enum name is used by `DownloadStub.getHash` to calculate the isarId for
-/// the downloads system, DO NOT RENAME ANY ENTRIES IN HERE.
 /// New entries must be appended at the end of this list.
 enum DownloadItemType {
-  collection(true, false),
-  song(true, true),
-  image(true, true),
-  anchor(false, false),
-  finampCollection(false, false);
+  collection("collection", true, false),
+  track("song", true, true),
+  image("image", true, true),
+  anchor("anchor", false, false),
+  finampCollection("finampCollection", false, false);
 
-  const DownloadItemType(this.requiresItem, this.hasFiles);
+  const DownloadItemType(this.isarType, this.requiresItem, this.hasFiles);
+
+  ///!!! Used by `DownloadStub.getHash` to calculate the isarId for
+  ///!!! the downloads system, DO NOT EDIT for any existing entries.
+  ///!!! Doing so would invalidate existing downloads
+  ///!!! and cause them to be deleted and re-downloaded.
+  final String isarType;
 
   final bool requiresItem;
   final bool hasFiles;
@@ -1436,16 +1440,16 @@ enum BaseItemDtoType {
   artist("MusicArtist", true, [album, track], DownloadItemType.collection),
   playlist("Playlist", true, [track], DownloadItemType.collection),
   genre("MusicGenre", true, [album, track], DownloadItemType.collection),
-  track("Audio", false, [], DownloadItemType.song),
+  track("Audio", false, [], DownloadItemType.track),
   library(
       "CollectionFolder", true, [album, track], DownloadItemType.collection),
   folder("Folder", true, null, DownloadItemType.collection),
-  musicVideo("MusicVideo", false, [], DownloadItemType.song),
-  audioBook("AudioBook", false, [], DownloadItemType.song),
-  tvEpisode("Episode", false, [], DownloadItemType.song),
-  video("Video", false, [], DownloadItemType.song),
-  movie("Movie", false, [], DownloadItemType.song),
-  trailer("Trailer", false, [], DownloadItemType.song),
+  musicVideo("MusicVideo", false, [], DownloadItemType.track),
+  audioBook("AudioBook", false, [], DownloadItemType.track),
+  tvEpisode("Episode", false, [], DownloadItemType.track),
+  video("Video", false, [], DownloadItemType.track),
+  movie("Movie", false, [], DownloadItemType.track),
+  trailer("Trailer", false, [], DownloadItemType.track),
   unknown(null, true, null, DownloadItemType.collection);
 
   // All possible types in Jellyfin as of 10.9:

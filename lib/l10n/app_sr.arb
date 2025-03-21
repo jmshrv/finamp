@@ -173,7 +173,7 @@
   },
   "music": "Muzika",
   "@music": {},
-  "clear": "Obriši",
+  "clear": "Očisti",
   "@clear": {},
   "favourites": "Omiljeni",
   "@favourites": {},
@@ -315,5 +315,15 @@
   "startMixNoTracksGenre": "Dugo pritisnite žanr da biste ga dodali ili uklonili iz kreatora miksa pre nego što započnete miks",
   "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
-  }
+  },
+  "deleteDownloadsConfirmButtonText": "Obriši",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "activeDownloadsTitle": "Aktivna preuzimanja",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Nema aktivnih preuzimanja.",
+  "@noActiveDownloads": {},
+  "error": "Greška",
+  "@error": {}
 }

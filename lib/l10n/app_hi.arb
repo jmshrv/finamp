@@ -236,7 +236,7 @@
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
-  "downloadSettings": "डाउनलोड सेटिंग",
+  "downloadSettings": "डाउनलोड",
   "@downloadSettings": {},
   "maxConcurrentDownloads": "अधिकतम इकट्ठे डाउनलोड",
   "@maxConcurrentDownloads": {
@@ -427,15 +427,15 @@
   "@showSeekControlsOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
   },
-  "alignmentOptionStart": "Start",
+  "alignmentOptionStart": "बाएं",
   "@alignmentOptionStart": {
     "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
   },
-  "alignmentOptionCenter": "Center",
+  "alignmentOptionCenter": "बीच में",
   "@alignmentOptionCenter": {
     "description": "Alignment option for things like the lyrics view. Center means centered."
   },
-  "alignmentOptionEnd": "End",
+  "alignmentOptionEnd": "दाएं",
   "@alignmentOptionEnd": {
     "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
   },
@@ -1214,7 +1214,7 @@
       }
     }
   },
-  "customLocationsBuggy": "अनुमतियों से जुड़ी समस्याओं के कारण कस्टम लोकेशन में बहुत ज़्यादा बग हैं। मैं इसे ठीक करने के तरीकों के बारे में सोच रहा हूँ, और अभी मैं इनका इस्तेमाल करने की सलाह नहीं दूँगा।",
+  "customLocationsBuggy": "कस्टम लोकेशन में बहुत अधिक खामियां हो सकती हैं और अधिकांश मामलों में इसको रिकमेंड नहीं किया जाता। सिस्टम 'Music' फ़ोल्डर के अंतर्गत स्थान, ऑपरेटिंग सिस्टम की सीमाओं के कारण एल्बम कवर को सहेजने से रोकते हैं।",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "यह नोटिफिकेशन को रोके जाने पर स्वाइप करके हटा देता है। साथ ही, यह एंड्रॉयड को रोके जाने पर सेवा को बंद करने की अनुमति भी देता है।",
   "@enterLowPriorityStateOnPauseSubtitle": {},
@@ -1744,7 +1744,7 @@
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
-  "showFeatureChipsToggleSubtitle": "प्लेयर स्क्रीन पर codec, bit rate, आदि जैसी एडवांस्ड ट्रैक जानकारी दिखाएं।",
+  "showFeatureChipsToggleSubtitle": "प्लेयर स्क्रीन पर codec, bitrate, आदि जैसी एडवांस्ड ट्रैक जानकारी दिखाएं।",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -1853,5 +1853,117 @@
   "bufferSizeSubtitle": "बफ़र करने की अधिकतम साइज MB में। रिस्टार्ट करने की आवश्यकता पड़ेगी",
   "@bufferSizeSubtitle": {},
   "bufferDisableSizeConstraintsSubtitle": "बफ़र साइज बाधाओं ('Buffer Size') को अक्षम करता है। बफ़र हमेशा कॉन्फ़िगर की गई अवधि ('Buffer Duration') तक लोड किया जाएगा, यहां तक कि बहुत बड़ी फ़ाइलों के लिए भी। क्रैश का कारण बन सकता है। रिस्टार्ट करने की आवश्यकता पड़ेगी।",
-  "@bufferDisableSizeConstraintsSubtitle": {}
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "deleteDownloadsConfirmButtonText": "मिटाएं",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "hideQueueButton": "कतार बटन छिपाएं",
+  "@hideQueueButton": {},
+  "oneLineMarqueeTextButton": "लंबे शीर्षकों को ऑटो-स्क्रॉल करें",
+  "@oneLineMarqueeTextButton": {},
+  "marqueeOrTruncateButton": "लंबे शीर्षकों के लिए एलिप्सिस का उपयोग करें",
+  "@marqueeOrTruncateButton": {},
+  "downloadSizeWarningCutoff": "डाउनलोड साइज़ चेतावनी कटऑफ",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "oneLineMarqueeTextButtonSubtitle": "उन ट्रैक शीर्षकों को स्वचालित रूप से स्क्रॉल करें जो दो पंक्तियों में प्रदर्शित करने के लिए बहुत लंबे हैं",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} other{Item}} got deleted from {deviceType, select, device{Device} server{Server} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "allowDeleteFromServerTitle": "सर्वर से मिटाने की अनुमति दें",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "largeDownloadWarning": "चेतावनी: आप {count} ट्रैक डाउनलोड करने वाले हैं।",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadSizeWarningCutoffSubtitle": "एक बार में इससे अधिक ट्रैक डाउनलोड करने पर एक चेतावनी संदेश प्रदर्शित होगा।",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatYear": "साल",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatMonthYear": "महीना और साल",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "प्लेयर स्क्रीन पर एल्बम रिलीज़ की तिथि दिखाएँ",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatSubtitle": "ऐप में दिखाए गए सभी रिलीज़ दिनांकों के फॉर्मेट को नियंत्रित करता है।",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "deleteDownloadsPrompt": "क्या आप वाकई इस डिवाइस से {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' को हटाना चाहते हैं?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteFromTargetConfirmButton": "मिटाएं {target, select, device{ from Device} server{ from Server} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "releaseDateFormatTitle": "रिलीज दिनांक फॉर्मेट",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "hideQueueButtonSubtitle": "प्लेयर स्क्रीन पर कतार बटन छिपाएँ। कतार तक पहुँचने के लिए ऊपर की ओर स्वाइप करें।",
+  "@hideQueueButtonSubtitle": {},
+  "allowDeleteFromServerSubtitle": "जब मिटाना संभव हो तो सर्वर फ़ाइल सिस्टम से ट्रैक को स्थायी रूप से मिटाने के विकल्प को सक्षम और अक्षम करें।",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "confirmAddAlbumToPlaylist": "क्या आप वाकई {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' से सभी ट्रैक इस प्लेलिस्ट में जोड़ना चाहते हैं? उन्हें केवल एक-एक करके ही हटाया जा सकता है।",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "marqueeOrTruncateButtonSubtitle": "स्क्रॉलिंग टेक्स्ट के बजाय लंबे शीर्षकों के अंत में ... दिखाएँ",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "releaseDateFormatMonthDayYear": "महीना, तिथि और साल",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "एल्बम के नाम के पीछे, प्लेयर स्क्रीन पर एल्बम की रिलीज़ तिथि दिखाएँ।",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "publiclyVisiblePlaylist": "सार्वजनिक रूप से दृश्यमान:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  }
 }

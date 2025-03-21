@@ -398,7 +398,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     if (FinampSettingsHelper.finampSettings.isOffline) {
       playable = ref.watch(GetIt.instance<DownloadsService>()
           .stateProvider(DownloadStub.fromItem(
-              type: DownloadItemType.song, item: widget.baseItem))
+              type: DownloadItemType.track, item: widget.baseItem))
           .select((value) => value.value?.isComplete ?? false));
     } else {
       playable = true;
@@ -647,7 +647,7 @@ class TrackListItemTile extends StatelessWidget {
                           offset: const Offset(-1.5, 2.5),
                           child: DownloadedIndicator(
                             item: DownloadStub.fromItem(
-                                item: baseItem, type: DownloadItemType.song),
+                                item: baseItem, type: DownloadItemType.track),
                             size: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
