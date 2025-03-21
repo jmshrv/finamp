@@ -79,6 +79,46 @@ class PlayerScreenTheme extends StatelessWidget {
   }
 }
 
+class ItemTheme extends StatelessWidget {
+  final Widget child;
+  final BaseItemDto item;
+  final Duration? themeTransitionDuration;
+  final ThemeData Function(ThemeData)? themeOverride;
+
+  const ItemTheme(
+      {super.key,
+      required this.item,
+      required this.child,
+      this.themeTransitionDuration,
+      this.themeOverride});
+
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+        overrides: [
+          localThemeInfoProvider
+              .overrideWithValue(ThemeInfo(item, useIsolate: false))
+        ],
+        child: Consumer(
+            builder: (context, ref, child) {
+              var theme = ThemeData(
+                  colorScheme: ref.watch(localThemeProvider),
+                  iconTheme: Theme.of(context).iconTheme.copyWith(
+                        color: ref.watch(localThemeProvider).primary,
+                      ));
+              if (themeOverride != null) {
+                theme = themeOverride!(theme);
+              }
+              return AnimatedTheme(
+                  duration: themeTransitionDuration ??
+                      getThemeTransitionDuration(context),
+                  data: theme,
+                  child: child!);
+            },
+            child: child));
+  }
+}
+
 final Provider<ThemeInfo?> localThemeInfoProvider =
     Provider((ref) => null, dependencies: const []);
 
