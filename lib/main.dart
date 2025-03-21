@@ -102,6 +102,7 @@ void main() async {
     await _setupPlaybackServices();
     Logger("Main()").info("Setup audio player");
     await _setupKeepScreenOnHelper();
+    Logger("Main()").info("Setup KeepScreenOnHelper");
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -566,6 +567,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                         systemOverlayStyle: SystemUiOverlayStyle(
                           statusBarBrightness: Brightness.light,
                           statusBarIconBrightness: Brightness.dark,
+                          systemNavigationBarIconBrightness: Brightness.dark,
                         ),
                       ),
                       snackBarTheme: const SnackBarThemeData(
