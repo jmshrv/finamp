@@ -17,7 +17,7 @@ class NewPlaylistDialog extends StatefulWidget {
     required this.itemToAdd,
   });
 
-  final String itemToAdd;
+  final BaseItemId itemToAdd;
 
   @override
   State<NewPlaylistDialog> createState() => _NewPlaylistDialogState();
@@ -75,7 +75,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       actions: [
         TextButton(
           onPressed: () =>
-              Navigator.of(context).pop<(Future<String>, String?)?>(null),
+              Navigator.of(context).pop<(Future<BaseItemId>, String?)?>(null),
           child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
@@ -92,7 +92,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       _isSubmitting = true;
       _formKey.currentState!.save();
 
-      Navigator.of(context).pop<(Future<String>, String?)?>((
+      Navigator.of(context).pop<(Future<BaseItemId>, String?)?>((
         Future.sync(() async {
           var newId = await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
             name: _name,

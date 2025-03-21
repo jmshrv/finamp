@@ -102,7 +102,7 @@ class TrackListTile extends StatelessWidget {
           items: await children!,
           startingIndex: await index,
           order: FinampPlaybackOrder.linear,
-          source: QueueItemSource(
+          source: QueueItemSource.rawId(
             type: isInPlaylist
                 ? QueueItemSourceType.playlist
                 : isOnArtistScreen
@@ -114,7 +114,7 @@ class TrackListTile extends StatelessWidget {
                         ? parentItem?.name
                         : item.album) ??
                     AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem?.id ?? "",
+            id: parentItem?.id.raw ?? "",
             item: parentItem,
             // we're playing from an album, so we should use the album's normalization gain.
             contextNormalizationGain: (isInPlaylist || isOnArtistScreen)
@@ -186,23 +186,23 @@ class TrackListTile extends StatelessWidget {
       if (FinampSettingsHelper.finampSettings.swipeInsertQueueNext) {
         unawaited(queueService.addToNextUp(
             items: [item],
-            source: QueueItemSource(
+            source: QueueItemSource.rawId(
               type: QueueItemSourceType.nextUp,
               name: QueueItemSourceName(
                   type: QueueItemSourceNameType.preTranslated,
                   pretranslatedName: AppLocalizations.of(context)!.queue),
-              id: parentItem?.id ?? "",
+              id: parentItem?.id.raw ?? "",
               item: parentItem,
             )));
       } else {
         unawaited(queueService.addToQueue(
             items: [item],
-            source: QueueItemSource(
+            source: QueueItemSource.rawId(
               type: QueueItemSourceType.queue,
               name: QueueItemSourceName(
                   type: QueueItemSourceNameType.preTranslated,
                   pretranslatedName: AppLocalizations.of(context)!.queue),
-              id: parentItem?.id ?? "",
+              id: parentItem?.id.raw ?? "",
               item: parentItem,
             )));
       }
@@ -482,7 +482,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
 
     return isCurrentlyPlaying && widget.highlightCurrentTrack
         ? PlayerScreenTheme(
-            duration: const Duration(milliseconds: 500),
+            themeTransitionDuration: const Duration(milliseconds: 500),
             themeOverride: (imageTheme) {
               return imageTheme.copyWith(
                   colorScheme: imageTheme.colorScheme.copyWith(

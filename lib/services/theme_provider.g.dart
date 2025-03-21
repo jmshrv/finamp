@@ -6,7 +6,7 @@ part of 'theme_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$finampThemeHash() => r'72107904f68b9f5bf97e979891c6e74a5b143854';
+String _$finampThemeHash() => r'7233b420a9c2a738d975c076d4870b16c1476018';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -157,14 +157,14 @@ class _FinampThemeProviderElement
   ThemeInfo get request => (origin as FinampThemeProvider).request;
 }
 
-String _$themeImageHash() => r'e7ed2c3e8b97aaf79ab6140f85554f813b0107ed';
+String _$themeImageHash() => r'a272002f5ed1a8b542f8c25651c6cf33101616df';
 
 /// See also [themeImage].
 @ProviderFor(themeImage)
 const themeImageProvider = ThemeImageFamily();
 
 /// See also [themeImage].
-class ThemeImageFamily extends Family<ListenableImage> {
+class ThemeImageFamily extends Family<ThemeImage> {
   /// See also [themeImage].
   const ThemeImageFamily();
 
@@ -202,7 +202,7 @@ class ThemeImageFamily extends Family<ListenableImage> {
 }
 
 /// See also [themeImage].
-class ThemeImageProvider extends AutoDisposeProvider<ListenableImage> {
+class ThemeImageProvider extends AutoDisposeProvider<ThemeImage> {
   /// See also [themeImage].
   ThemeImageProvider(
     ThemeInfo request,
@@ -237,7 +237,7 @@ class ThemeImageProvider extends AutoDisposeProvider<ListenableImage> {
 
   @override
   Override overrideWith(
-    ListenableImage Function(ThemeImageRef provider) create,
+    ThemeImage Function(ThemeImageRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -254,7 +254,7 @@ class ThemeImageProvider extends AutoDisposeProvider<ListenableImage> {
   }
 
   @override
-  AutoDisposeProviderElement<ListenableImage> createElement() {
+  AutoDisposeProviderElement<ThemeImage> createElement() {
     return _ThemeImageProviderElement(this);
   }
 
@@ -274,13 +274,13 @@ class ThemeImageProvider extends AutoDisposeProvider<ListenableImage> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ThemeImageRef on AutoDisposeProviderRef<ListenableImage> {
+mixin ThemeImageRef on AutoDisposeProviderRef<ThemeImage> {
   /// The parameter `request` of this provider.
   ThemeInfo get request;
 }
 
-class _ThemeImageProviderElement
-    extends AutoDisposeProviderElement<ListenableImage> with ThemeImageRef {
+class _ThemeImageProviderElement extends AutoDisposeProviderElement<ThemeImage>
+    with ThemeImageRef {
   _ThemeImageProviderElement(super.provider);
 
   @override

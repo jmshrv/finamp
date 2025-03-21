@@ -34,7 +34,7 @@ class AlbumImage extends ConsumerWidget {
   /// The item to get an image for.
   final BaseItemDto? item;
 
-  final ProviderListenable<(ImageProvider?, String?, bool)>? imageListenable;
+  final ProviderListenable<ThemeImage>? imageListenable;
 
   final BorderRadius? borderRadius;
 
@@ -121,7 +121,7 @@ class AlbumImage extends ConsumerWidget {
                     item: item!,
                     maxWidth: physicalWidth,
                     maxHeight: physicalHeight,
-                  )).select((value) => (value, item?.blurHash, true));
+                  )).select((value) => ThemeImage(value, item?.blurHash));
                 }
               }
 
@@ -157,7 +157,7 @@ class BareAlbumImage extends ConsumerWidget {
     this.placeholderBuilder,
   });
 
-  final ProviderListenable<(ImageProvider?, String?, bool)> imageListenable;
+  final ProviderListenable<ThemeImage> imageListenable;
   final WidgetBuilder? placeholderBuilder;
   final OctoErrorBuilder errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
@@ -172,7 +172,8 @@ class BareAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var (image, blurHash, _) = ref.watch(imageListenable);
+    var ThemeImage(image: image, blurHash: blurHash) =
+        ref.watch(imageListenable);
     var localPlaceholder = placeholderBuilder;
     if (blurHash != null) {
       localPlaceholder ??= (_) => Image(

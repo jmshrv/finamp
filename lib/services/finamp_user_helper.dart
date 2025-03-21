@@ -72,7 +72,7 @@ class FinampUserHelper {
   void setCurrentUserViews(List<BaseItemDto> newViews) {
     FinampUser currentUserTemp = currentUser!;
 
-    currentUserTemp.views = Map<String, BaseItemDto>.fromEntries(
+    currentUserTemp.views = Map<BaseItemId, BaseItemDto>.fromEntries(
         newViews.map((e) => MapEntry(e.id, e)));
     currentUserTemp.currentViewId = currentUserTemp.views.keys.first;
 
@@ -81,7 +81,7 @@ class FinampUserHelper {
     });
   }
 
-  void setCurrentUserCurrentViewId(String newViewId) {
+  void setCurrentUserCurrentViewId(BaseItemId newViewId) {
     FinampUser currentUserTemp = currentUser!;
 
     currentUserTemp.currentViewId = newViewId;

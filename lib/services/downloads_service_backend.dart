@@ -103,12 +103,17 @@ class IsarPersistentStorage implements PersistentStorage {
 
   Future<T?> _get<T>(IsarTaskDataType<T> type, String id) async {
     var item = _isar.isarTaskDatas.getSync(IsarTaskData.getHash(type, id));
-    return (item == null) ? null : type.fromJson(jsonDecode(item.jsonData));
+    return (item == null)
+        ? null
+        : type.fromJson(jsonDecode(item.jsonData) as Map<String, dynamic>);
   }
 
   Future<List<T>> _getAll<T>(IsarTaskDataType<T> type) async {
     var items = _isar.isarTaskDatas.where().typeEqualTo(type).findAllSync();
-    return items.map((e) => type.fromJson(jsonDecode(e.jsonData))).toList();
+    return items
+        .map((e) =>
+            type.fromJson(jsonDecode(e.jsonData) as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> _remove(IsarTaskDataType type, String? id) async {
@@ -150,7 +155,7 @@ class IsarTaskData<T> {
       _fastHash(type.name + id);
 
   @ignore
-  T get data => type.fromJson(jsonDecode(jsonData));
+  T get data => type.fromJson(jsonDecode(jsonData) as Map<String, dynamic>);
   set data(T item) => jsonData = _toJson(item);
 
   static String _toJson(dynamic item) {
@@ -202,7 +207,7 @@ enum IsarTaskDataType<T> {
   const IsarTaskDataType(this.fromJson);
 
   static int _deleteFromJson(Map<String, dynamic> map) {
-    return map["id"];
+    return map["id"] as int;
   }
 
   final T Function(Map<String, dynamic>) fromJson;
@@ -212,6 +217,7 @@ enum IsarTaskDataType<T> {
 @JsonSerializable(
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 class SyncNode {
   SyncNode({
@@ -222,7 +228,7 @@ class SyncNode {
 
   int stubIsarId;
   bool required;
-  String? viewId;
+  BaseItemId? viewId;
 
   factory SyncNode.fromJson(Map<String, dynamic> json) =>
       _$SyncNodeFromJson(json);
@@ -530,8 +536,8 @@ class DownloadsDeleteService {
           try {
             await SchedulerBinding.instance
                 // Set priority high to prevent stalling
-                .scheduleTask(
-                    () => syncDelete(delete.data), Priority.animation + 100);
+                .scheduleTask(() => syncDelete(delete.data as int),
+                    Priority.animation + 100);
           } catch (e, stack) {
             // we don't expect errors here, _syncDelete should already be catching everything
             // mark node as complete and continue
@@ -734,7 +740,7 @@ class DownloadsSyncService {
 
   /// Add nodes to be synced at a later time.
   /// Must be called inside an Isar write transaction.
-  void addAll(Iterable<int> required, Iterable<int> info, String? viewId) {
+  void addAll(Iterable<int> required, Iterable<int> info, BaseItemId? viewId) {
     var items = required
         .map((e) => IsarTaskData.build("required $e", type,
             SyncNode(stubIsarId: e, required: true, viewId: viewId),
@@ -807,7 +813,7 @@ class DownloadsSyncService {
         unawaited(_advanceQueue());
         List<IsarTaskData<dynamic>> failedSyncs = [];
         for (var wrappedSync in wrappedSyncs) {
-          SyncNode sync = wrappedSync.data;
+          SyncNode sync = wrappedSync.data as SyncNode;
           try {
             var item = _isar.downloadItems.getSync(sync.stubIsarId);
             if (item != null) {
@@ -873,8 +879,12 @@ class DownloadsSyncService {
   /// for required nodes should be left in place, and will be handled by [_syncDelete]
   /// if necessary.  See [repairAllDownloads] for more information on the structure
   /// of the node graph and which children are allowable for each node type.
-  Future<void> _syncDownload(DownloadStub parent, bool asRequired,
-      Set<int> requireCompleted, Set<int> infoCompleted, String? viewId) async {
+  Future<void> _syncDownload(
+      DownloadStub parent,
+      bool asRequired,
+      Set<int> requireCompleted,
+      Set<int> infoCompleted,
+      BaseItemId? viewId) async {
     if (parent.type == DownloadItemType.image ||
         parent.type == DownloadItemType.anchor) {
       asRequired = true; // Always download images, don't process twice.
@@ -885,7 +895,7 @@ class DownloadsSyncService {
         viewId = null;
       } else if (parent.baseItemType == BaseItemDtoType.library) {
         // Update view id for children of downloaded library
-        viewId = parent.id;
+        viewId = BaseItemId(parent.id);
       }
     } else if (parent.type == DownloadItemType.finampCollection) {
       viewId = null;
@@ -968,7 +978,7 @@ class DownloadsSyncService {
             isarParent ??= _isar.downloadItems.getSync(parent.isarId);
             if (isarParent?.viewId == null) {
               // If we are an album and have no viewId, attempt to fetch from server
-              viewId = await _getAlbumViewID(parent.id);
+              viewId = await _getAlbumViewID(BaseItemId(parent.id));
             }
           }
         } catch (e) {
@@ -994,7 +1004,7 @@ class DownloadsSyncService {
           }
         }
         if (asRequired) {
-          List<String> collectionIds = [];
+          List<BaseItemId> collectionIds = [];
           collectionIds.addAll(item.genreItems?.map((e) => e.id) ?? []);
           collectionIds.addAll(item.artistItems?.map((e) => e.id) ?? []);
           collectionIds.addAll(item.albumArtists?.map((e) => e.id) ?? []);
@@ -1230,7 +1240,7 @@ class DownloadsSyncService {
   /// Isar, then requests data from jellyfin in a batch with other calls
   /// to this method.  Used within [_syncDownload].
   Future<DownloadStub?> _getCollectionInfo(
-      String id, DownloadItemType type, bool forceServer) async {
+      BaseItemId id, DownloadItemType type, bool forceServer) async {
     if (_metadataCache.containsKey(id)) {
       return _metadataCache[id];
     }
@@ -1238,7 +1248,7 @@ class DownloadsSyncService {
     try {
       DownloadStub? item;
       if (!forceServer) {
-        item = _isar.downloadItems.getSync(DownloadStub.getHash(id, type));
+        item = _isar.downloadItems.getSync(DownloadStub.getHash(id.raw, type));
         if (item != null) {
           return item;
         }
@@ -1263,7 +1273,7 @@ class DownloadsSyncService {
   }
 
   // These cache downloaded metadata during _syncDownload
-  Map<String, Future<DownloadStub?>> _metadataCache = {};
+  Map<BaseItemId, Future<DownloadStub?>> _metadataCache = {};
   Map<String, Future<List<String>>> _childCache = {};
 
   /// Get ordered child items for the given collection DownloadStub.  Tries local
@@ -1295,9 +1305,10 @@ class DownloadsSyncService {
     }
     var item = parent.baseItem!;
 
-    if (_childCache.containsKey(item.id)) {
-      var childIds = await _childCache[item.id]!;
-      return Future.wait(childIds.map((e) => _metadataCache[e]).nonNulls)
+    if (_childCache.containsKey(item.id.raw)) {
+      var childIds = await _childCache[item.id.raw]!;
+      return Future.wait(
+              childIds.map((e) => _metadataCache[BaseItemId(e)]).nonNulls)
           .then((value) => value.nonNulls.toList());
     }
     Completer<List<String>> itemFetch = Completer();
@@ -1305,7 +1316,7 @@ class DownloadsSyncService {
     // They are handled by original caller in rethrow.
     unawaited(itemFetch.future.then((_) => null, onError: (_) => null));
     try {
-      _childCache[item.id] = itemFetch.future;
+      _childCache[item.id.raw] = itemFetch.future;
       var childItems = await _jellyfinApiData.getItems(
               parentItem: item,
               includeItemTypes: childFilter.idString,
@@ -1331,14 +1342,14 @@ class DownloadsSyncService {
             (e) => DownloadStub.fromItem(type: DownloadItemType.song, item: e));
         childStubs.addAll(trackChildStubs);
       }
-      itemFetch.complete(childItems.map((e) => e.id).toList());
+      itemFetch.complete(childItems.map((e) => e.id.raw).toList());
       for (var element in childStubs) {
-        _metadataCache[element.id] = Future.value(element);
+        _metadataCache[BaseItemId(element.id)] = Future.value(element);
       }
       return childStubs;
     } catch (e) {
       // Retries should try connecting again instead of re-using error
-      unawaited(_childCache.remove(item.id));
+      unawaited(_childCache.remove(item.id.raw));
       itemFetch.completeError(e);
       _downloadsService.incrementConnectionErrors();
       rethrow;
@@ -1421,7 +1432,7 @@ class DownloadsSyncService {
               item: e, type: typeOverride ?? e.downloadType))
           .toList();
       for (var element in stubList) {
-        _metadataCache[element.id] = Future.value(element);
+        _metadataCache[BaseItemId(element.id)] = Future.value(element);
       }
       return stubList;
     } catch (e) {
@@ -1433,13 +1444,17 @@ class DownloadsSyncService {
   /// Gets the View/Library ID for the given album ID by fetching album children
   /// of all know views.  Used by [_syncDownload] to assign libraries to items
   /// in playlists or finampCollections.
-  Future<String?> _getAlbumViewID(String albumId) async {
+  Future<BaseItemId?> _getAlbumViewID(BaseItemId albumId) async {
     final userHelper = GetIt.instance<FinampUserHelper>();
     for (var view
         in (userHelper.currentUser?.views.values ?? <BaseItemDto>[])) {
       var children = await _getCollectionChildren(
           DownloadStub.fromItem(type: DownloadItemType.collection, item: view));
-      var childIds = children.map((e) => e.baseItem?.id).nonNulls.toList();
+      // Iterable.nonNulls does not seem to work here, I don't know why.
+      var childIds = children
+          .map<BaseItemId?>((e) => e.baseItem?.id)
+          .where((id) => id != null)
+          .toList();
       if (childIds.contains(albumId)) {
         return view.id;
       }

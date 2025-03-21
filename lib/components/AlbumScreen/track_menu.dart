@@ -137,7 +137,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
 
   bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
     if (queueItem != null) {
-      final baseItem = BaseItemDto.fromJson(queueItem.item.extras!["itemJson"]);
+      final baseItem = BaseItemDto.fromJson(
+          queueItem.item.extras!["itemJson"] as Map<String, dynamic>);
       return baseItem.id == queueItem.id;
     }
     return false;

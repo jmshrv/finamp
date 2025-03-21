@@ -17,18 +17,32 @@ import '../models/jellyfin_models.dart';
 
 part 'theme_provider.g.dart';
 
-// Image imageProvider, associated blurHash, useIsolate
-typedef ListenableImage = (ImageProvider?, String?, bool);
+class ThemeImage {
+  ThemeImage(this.image, this.blurHash, {this.useIsolate = true});
+  const ThemeImage.empty()
+      : image = null,
+        blurHash = null,
+        useIsolate = true;
+  // The background image to use
+  final ImageProvider? image;
+  // The blurHash associated with the image
+  final String? blurHash;
+  // Whether to use an isolate for slower but less laggy theme calculations
+  final bool useIsolate;
+}
 
 final themeProviderLogger = Logger("ThemeProvider");
 
 class PlayerScreenTheme extends StatelessWidget {
   final Widget child;
-  final Duration? duration;
+  final Duration? themeTransitionDuration;
   final ThemeData Function(ThemeData)? themeOverride;
 
   const PlayerScreenTheme(
-      {super.key, required this.child, this.duration, this.themeOverride});
+      {super.key,
+      required this.child,
+      this.themeTransitionDuration,
+      this.themeOverride});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +70,8 @@ class PlayerScreenTheme extends StatelessWidget {
                 theme = themeOverride!(theme);
               }
               return AnimatedTheme(
-                  duration: duration ?? getThemeTransitionDuration(context),
+                  duration: themeTransitionDuration ??
+                      getThemeTransitionDuration(context),
                   data: theme,
                   child: child!);
             },
@@ -67,18 +82,18 @@ class PlayerScreenTheme extends StatelessWidget {
 final Provider<ThemeInfo?> localThemeInfoProvider =
     Provider((ref) => null, dependencies: const []);
 
-final Provider<ListenableImage> localImageProvider = Provider((ref) {
+final Provider<ThemeImage> localImageProvider = Provider((ref) {
   var item = ref.watch(localThemeInfoProvider);
   if (item == null) {
-    return (null, null, true);
+    return ThemeImage.empty();
   }
   return ref.watch(themeImageProvider(item));
 }, dependencies: [localThemeInfoProvider]);
 
 final Provider<ColorScheme> localThemeProvider = Provider((ref) {
   var image = ref.watch(localImageProvider);
-  return ref.watch(
-      finampThemeFromImageProvider(ThemeRequestFromImage(image.$1, image.$3)));
+  return ref.watch(finampThemeFromImageProvider(
+      ThemeRequestFromImage(image.image, image.useIsolate)));
 }, dependencies: [localImageProvider]);
 
 // This provider gets updated to the latest brightness by a valuelistner in main.dart
@@ -88,18 +103,18 @@ final brightnessProvider = StateProvider((ref) => Brightness.dark);
 ColorScheme finampTheme(Ref ref, ThemeInfo request) {
   var image = ref.watch(themeImageProvider(request));
   return ref.watch(finampThemeFromImageProvider(
-      ThemeRequestFromImage(image.$1, request.useIsolate)));
+      ThemeRequestFromImage(image.image, request.useIsolate)));
 }
 
 @riverpod
-ListenableImage themeImage(Ref ref, ThemeInfo request) {
+ThemeImage themeImage(Ref ref, ThemeInfo request) {
   var item = request.item;
   ImageProvider? image;
   String? cacheKey = request.item.blurHash ?? request.item.imageId;
   // Re-use an existing request if possible to hit the image cache
   if (albumRequestsCache.containsKey(cacheKey)) {
     if (albumRequestsCache[cacheKey] == null) {
-      return (null, null, true);
+      return ThemeImage.empty();
     }
     image = ref.watch(albumImageProvider(albumRequestsCache[cacheKey]!));
   } else {
@@ -111,7 +126,7 @@ ListenableImage themeImage(Ref ref, ThemeInfo request) {
           AlbumImageRequest(item: item, maxHeight: 100, maxWidth: 100)));
     }
   }
-  return (image, item.blurHash, request.useIsolate);
+  return ThemeImage(image, item.blurHash, useIsolate: request.useIsolate);
 }
 
 @riverpod

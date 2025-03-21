@@ -36,7 +36,7 @@ class _PlaybackHistoryListTileState
   @override
   Widget build(BuildContext context) {
     final baseItem = jellyfin_models.BaseItemDto.fromJson(
-        widget.item.item.item.extras?["itemJson"]);
+        widget.item.item.item.extras?["itemJson"] as Map<String, dynamic>);
 
     void menuCallback() async {
       unawaited(Feedback.forLongPress(context));

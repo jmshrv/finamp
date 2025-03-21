@@ -692,7 +692,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
           mediaState = snapshot.data!.mediaState;
 
           final currentTrackBaseItem = jellyfin_models.BaseItemDto.fromJson(
-              currentTrack!.item.extras?["itemJson"]);
+              currentTrack!.item.extras?["itemJson"] as Map<String, dynamic>);
 
           const horizontalPadding = 8.0;
           const albumImageSize = 70.0;

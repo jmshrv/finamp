@@ -6,6 +6,7 @@ import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -80,7 +81,7 @@ abstract class JellyfinApi extends ChopperService {
   )
   @Get(path: "/Items/{id}/Images/Primary")
   Future<dynamic> getAlbumPrimaryImage({
-    @Path() required String id,
+    @Path() required BaseItemId id,
     @Query() String format = "webp",
   });
 
@@ -96,7 +97,7 @@ abstract class JellyfinApi extends ChopperService {
     response: JsonConverter.responseFactory,
   )
   @Delete(path: "/Items/{id}")
-  Future<dynamic> deleteItem(@Path() String id);
+  Future<dynamic> deleteItem(@Path() BaseItemId id);
 
   @FactoryConverter(
     request: JsonConverter.requestFactory,
@@ -113,7 +114,7 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Specify this to localize the search to a specific item or folder. Omit
     /// to use the root.
-    @Query("ParentId") String? parentId,
+    @Query("ParentId") BaseItemId? parentId,
 
     /// Optional. If specified, results will be filtered to include only those
     /// containing the specified album artist id.
@@ -199,7 +200,7 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Specify this to localize the search to a specific item or folder. Omit
     /// to use the root.
-    @Query("ParentId") String? parentId,
+    @Query("ParentId") BaseItemId? parentId,
 
     /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
     /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"
@@ -231,7 +232,7 @@ abstract class JellyfinApi extends ChopperService {
   )
   @Get(path: "/Items/{id}/InstantMix")
   Future<dynamic> getInstantMix({
-    @Path() required String id,
+    @Path() required BaseItemId id,
     @Query() required String userId,
     @Query() required int limit,
   });
@@ -246,7 +247,7 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String userId,
 
     /// Item id.
-    @Path() required String itemId,
+    @Path() required BaseItemId itemId,
   });
 
   @FactoryConverter(
@@ -255,7 +256,7 @@ abstract class JellyfinApi extends ChopperService {
   )
   @Get(path: "/Items/{id}/PlaybackInfo")
   Future<dynamic> getPlaybackInfo({
-    @Path() required String id,
+    @Path() required BaseItemId id,
     @Query() required String userId,
   });
 
@@ -265,7 +266,7 @@ abstract class JellyfinApi extends ChopperService {
   @Post(path: "/Items/{itemId}")
   Future<dynamic> updateItem({
     /// The item id.
-    @Path() required String itemId,
+    @Path() required BaseItemId itemId,
     @Body() required BaseItemDto newItem,
   });
 
@@ -290,10 +291,10 @@ abstract class JellyfinApi extends ChopperService {
   )
   @Get(path: "/Playlists/{playlistId}/Items")
   Future<dynamic> getPlaylistItems({
-    @Path() required String playlistId,
+    @Path() required BaseItemId playlistId,
     @Query("UserId") required String userId,
     @Query("IncludeItemTypes") String? includeItemTypes,
-    @Query("ParentId") String? parentId,
+    @Query("ParentId") BaseItemId? parentId,
     @Query("Recursive") bool? recursive,
     @Query("Fields") String? fields = defaultFields,
   });
@@ -314,7 +315,7 @@ abstract class JellyfinApi extends ChopperService {
   @Post(path: "/Playlists/{playlistId}/Items", optionalBody: true)
   Future<Response> addItemsToPlaylist({
     /// The playlist id.
-    @Path() required String playlistId,
+    @Path() required BaseItemId playlistId,
 
     /// Item id, comma delimited.
     @Query() String? ids,
@@ -328,7 +329,7 @@ abstract class JellyfinApi extends ChopperService {
   @Delete(path: "/Playlists/{playlistId}/Items", optionalBody: true)
   Future<Response> removeItemsFromPlaylist({
     /// The playlist id.
-    @Path() required String playlistId,
+    @Path() required BaseItemId playlistId,
 
     /// Item id, comma delimited.
     @Query() String? entryIds,
@@ -342,7 +343,7 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> getArtists({
     /// Specify this to localize the search to a specific item or folder. Omit
     /// to use the root.
-    @Query("ParentId") String? parentId,
+    @Query("ParentId") BaseItemId? parentId,
 
     /// Optional. Specify one or more sort orders, comma delimited. Options:
     /// Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating,
@@ -399,7 +400,7 @@ abstract class JellyfinApi extends ChopperService {
   @Get(path: "/Artists/AlbumArtists")
   Future<dynamic> getAlbumArtists({
     @Query("IncludeItemTypes") String? includeItemTypes,
-    @Query("ParentId") String? parentId,
+    @Query("ParentId") BaseItemId? parentId,
     @Query("Recursive") bool? recursive,
 
     /// Optional. Specify one or more sort orders, comma delimited. Options:
@@ -445,7 +446,7 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Specify this to localize the search to a specific item or folder. Omit
     /// to use the root.
-    @Query("ParentId") String? parentId,
+    @Query("ParentId") BaseItemId? parentId,
 
     /// Items Enum: "AirTime" "CanDelete" "CanDownload" "ChannelInfo" "Chapters"
     /// "ChildCount" "CumulativeRunTimeTicks" "CustomRating" "DateCreated"
@@ -486,7 +487,7 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String userId,
 
     /// Item id.
-    @Path() required String itemId,
+    @Path() required BaseItemId itemId,
   });
 
   /// Unmarks item as a favorite.
@@ -500,7 +501,7 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required String userId,
 
     /// Item id.
-    @Path() required String itemId,
+    @Path() required BaseItemId itemId,
   });
 
   /// Requests lyrics for a track.
@@ -511,7 +512,7 @@ abstract class JellyfinApi extends ChopperService {
   @Get(path: "/Audio/{itemId}/Lyrics")
   Future<dynamic> getLyrics({
     /// The item id.
-    @Path() required String itemId,
+    @Path() required BaseItemId itemId,
   });
 
   /// Reports that a session has ended.
@@ -627,40 +628,45 @@ Future<String> getAuthHeader() async {
 Future<DeviceInfo> getDeviceInfo() async {
   DeviceInfo info;
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  String idExtension = kDebugMode
+      ? "debug"
+      : kProfileMode
+          ? "profile"
+          : "";
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
     final appSetId = await AppSetId().getIdentifier();
     info = DeviceInfo(
       name: androidDeviceInfo.model,
-      id: appSetId,
+      id: "$appSetId-$idExtension",
     );
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
     final appSetId = await AppSetId().getIdentifier();
     info = DeviceInfo(
       name: iosDeviceInfo.name,
-      id: appSetId,
+      id: "$appSetId-$idExtension",
     );
   } else if (Platform.isWindows) {
     WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
     final windowsId = windowsDeviceInfo.deviceId;
     info = DeviceInfo(
       name: windowsDeviceInfo.computerName,
-      id: windowsId,
+      id: "$windowsId-$idExtension",
     );
   } else if (Platform.isLinux) {
     LinuxDeviceInfo linuxDeviceInfo = await deviceInfo.linuxInfo;
     final linuxId = linuxDeviceInfo.machineId;
     info = DeviceInfo(
       name: linuxDeviceInfo.name,
-      id: linuxId,
+      id: "$linuxId-$idExtension",
     );
   } else if (Platform.isMacOS) {
     MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
     final macId = macOsDeviceInfo.systemGUID;
     info = DeviceInfo(
       name: macOsDeviceInfo.computerName,
-      id: macId,
+      id: "$macId-$idExtension",
     );
   } else {
     throw Exception("Unsupported platform");

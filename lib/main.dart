@@ -83,15 +83,24 @@ void main() async {
   try {
     await setupLogging();
     await _setupEdgeToEdgeOverlayStyle();
+    Logger("Main()").info("Setup edge-to-edge overlay");
     await setupHive();
+    Logger("Main()").info("Setup hive and isar");
     _migrateDownloadLocations();
     _migrateSortOptions();
+    Logger("Main()").info("Completed applicable migrations");
     await _setupFinampUserHelper();
+    Logger("Main()").info("Setup user helper");
     await _setupJellyfinApiData();
+    Logger("Main()").info("setup jellyfin api");
     _setupOfflineListenLogHelper();
+    Logger("Main()").info("Setup offline listen tracking");
     await _setupDownloadsHelper();
+    Logger("Main()").info("Setup downloads service");
     await _setupOSIntegration();
+    Logger("Main()").info("Setup os integrations");
     await _setupPlaybackServices();
+    Logger("Main()").info("Setup audio player");
     await _setupKeepScreenOnHelper();
   } catch (error, trace) {
     hasFailed = true;
@@ -115,6 +124,8 @@ void main() async {
 
     await findSystemLocale();
     await initializeDateFormatting();
+
+    Logger("Main()").info("Launching main app");
 
     runApp(const Finamp());
   }
@@ -425,14 +436,14 @@ Future<void> _setupFinampUserHelper() async {
   await GetIt.instance<FinampUserHelper>().setAuthHeader();
 }
 
-class Finamp extends ConsumerStatefulWidget {
+class Finamp extends StatefulWidget {
   const Finamp({super.key});
 
   @override
-  ConsumerState<Finamp> createState() => _FinampState();
+  State<Finamp> createState() => _FinampState();
 }
 
-class _FinampState extends ConsumerState<Finamp> with WindowListener {
+class _FinampState extends State<Finamp> with WindowListener {
   static final Logger windowManagerLogger = Logger("WindowManager");
 
   @override
@@ -484,6 +495,8 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                 };
                 return Consumer(
                   builder: (context, ref, child) {
+                    // Force settings provider to fully complete build before widgets start accessing
+                    ref.listen(finampSettingsProvider, (_, __) {});
                     Future(() {
                       ref.read(brightnessProvider.notifier).state = theme;
                     });

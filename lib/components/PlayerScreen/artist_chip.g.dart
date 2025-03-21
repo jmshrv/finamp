@@ -6,7 +6,7 @@ part of 'artist_chip.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$artistItemHash() => r'8e699c71ec503dbea29574069bd231e396ad3db2';
+String _$artistItemHash() => r'cbf23393e881d9da14560dc2a8128244cc5a6076';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,7 +40,7 @@ class ArtistItemFamily extends Family<AsyncValue<BaseItemDto>> {
 
   /// See also [artistItem].
   ArtistItemProvider call(
-    String id,
+    BaseItemId id,
   ) {
     return ArtistItemProvider(
       id,
@@ -75,7 +75,7 @@ class ArtistItemFamily extends Family<AsyncValue<BaseItemDto>> {
 class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
   /// See also [artistItem].
   ArtistItemProvider(
-    String id,
+    BaseItemId id,
   ) : this._internal(
           (ref) => artistItem(
             ref as ArtistItemRef,
@@ -103,7 +103,7 @@ class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
     required this.id,
   }) : super.internal();
 
-  final String id;
+  final BaseItemId id;
 
   @override
   Override overrideWith(
@@ -146,7 +146,7 @@ class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
 // ignore: unused_element
 mixin ArtistItemRef on AutoDisposeFutureProviderRef<BaseItemDto> {
   /// The parameter `id` of this provider.
-  String get id;
+  BaseItemId get id;
 }
 
 class _ArtistItemProviderElement
@@ -154,7 +154,7 @@ class _ArtistItemProviderElement
   _ArtistItemProviderElement(super.provider);
 
   @override
-  String get id => (origin as ArtistItemProvider).id;
+  BaseItemId get id => (origin as ArtistItemProvider).id;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

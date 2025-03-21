@@ -1923,5 +1923,9 @@
   "releaseDateFormatSubtitle": "Controls the format of all release dates shown in the app.",
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "librarySelectError": "Error loading available libraries for user",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
   }
 }

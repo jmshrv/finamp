@@ -6,7 +6,7 @@ part of 'finamp_settings_helper.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$finampSettingsHash() => r'da64f3dced318d770129a8e4c63e454786ef5050';
+String _$finampSettingsHash() => r'76b2dbf36f9b773f4318b70d6a356bea6ca4fe24';
 
 /// See also [finampSettings].
 @ProviderFor(finampSettings)

@@ -29,9 +29,9 @@ Future<void> showThemedBottomSheet({
   bool showDragHandle = true,
 }) async {
   FeedbackHelper.feedback(FeedbackType.impact);
-  var ref = ProviderScope.containerOf(context);
+  var ref = ProviderScope.containerOf(context, listen: false);
   var themeInfo = ref.read(localThemeInfoProvider);
-  ListenableImage? themeImage;
+  ThemeImage? themeImage;
   // If we have a usable theme image for our item, propagate this information
   if ((themeInfo?.largeThemeImage ?? false) && themeInfo?.item == item) {
     themeImage = ref.read(localImageProvider);
@@ -70,7 +70,7 @@ Future<void> showThemedBottomSheet({
                   .overrideWithValue(ThemeInfo(item, useIsolate: false))
           ],
           child: ThemedBottomSheet(
-            key: ValueKey(item.id + routeName),
+            key: ValueKey(item.id.raw + routeName),
             item: item,
             buildSlivers: buildSlivers,
             buildWrapper: buildWrapper,

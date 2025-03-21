@@ -140,7 +140,7 @@ final class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getAlbumPrimaryImage({
-    required String id,
+    required BaseItemId id,
     String format = "webp",
   }) async {
     final Uri $url = Uri.parse('/Items/${id}/Images/Primary');
@@ -176,7 +176,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> deleteItem(String id) async {
+  Future<dynamic> deleteItem(BaseItemId id) async {
     final Uri $url = Uri.parse('/Items/${id}');
     final Request $request = Request(
       'DELETE',
@@ -195,7 +195,7 @@ final class _$JellyfinApi extends JellyfinApi {
   Future<dynamic> getItems({
     required String userId,
     String? includeItemTypes,
-    String? parentId,
+    BaseItemId? parentId,
     String? albumArtistIds,
     String? artistIds,
     String? albumIds,
@@ -248,7 +248,7 @@ final class _$JellyfinApi extends JellyfinApi {
   Future<dynamic> getLatestItems({
     required String userId,
     String? includeItemTypes,
-    String? parentId,
+    BaseItemId? parentId,
     String? fields = defaultFields,
     int? limit,
     bool? groupItems,
@@ -277,7 +277,7 @@ final class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getInstantMix({
-    required String id,
+    required BaseItemId id,
     required String userId,
     required int limit,
   }) async {
@@ -303,7 +303,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getItemById({
     required String userId,
-    required String itemId,
+    required BaseItemId itemId,
   }) async {
     final Uri $url = Uri.parse('/Users/${userId}/Items/${itemId}');
     final Request $request = Request(
@@ -321,7 +321,7 @@ final class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getPlaybackInfo({
-    required String id,
+    required BaseItemId id,
     required String userId,
   }) async {
     final Uri $url = Uri.parse('/Items/${id}/PlaybackInfo');
@@ -342,7 +342,7 @@ final class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> updateItem({
-    required String itemId,
+    required BaseItemId itemId,
     required BaseItemDto newItem,
   }) async {
     final Uri $url = Uri.parse('/Items/${itemId}');
@@ -416,10 +416,10 @@ final class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getPlaylistItems({
-    required String playlistId,
+    required BaseItemId playlistId,
     required String userId,
     String? includeItemTypes,
-    String? parentId,
+    BaseItemId? parentId,
     bool? recursive,
     String? fields = defaultFields,
   }) async {
@@ -465,7 +465,7 @@ final class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<Response<dynamic>> addItemsToPlaylist({
-    required String playlistId,
+    required BaseItemId playlistId,
     String? ids,
     String? userId,
   }) {
@@ -488,7 +488,7 @@ final class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<Response<dynamic>> removeItemsFromPlaylist({
-    required String playlistId,
+    required BaseItemId playlistId,
     String? entryIds,
   }) {
     final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
@@ -509,7 +509,7 @@ final class _$JellyfinApi extends JellyfinApi {
 
   @override
   Future<dynamic> getArtists({
-    String? parentId,
+    BaseItemId? parentId,
     String? sortBy,
     String? sortOrder,
     String? fields = defaultFields,
@@ -548,7 +548,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getAlbumArtists({
     String? includeItemTypes,
-    String? parentId,
+    BaseItemId? parentId,
     bool? recursive,
     String? sortBy,
     String? sortOrder,
@@ -592,7 +592,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getGenres({
     String? includeItemTypes,
-    String? parentId,
+    BaseItemId? parentId,
     String? fields = defaultFields,
     String? searchTerm,
     int? startIndex,
@@ -624,7 +624,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> addFavourite({
     required String userId,
-    required String itemId,
+    required BaseItemId itemId,
   }) async {
     final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
     final Request $request = Request(
@@ -643,7 +643,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> removeFavourite({
     required String userId,
-    required String itemId,
+    required BaseItemId itemId,
   }) async {
     final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
     final Request $request = Request(
@@ -660,7 +660,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> getLyrics({required String itemId}) async {
+  Future<dynamic> getLyrics({required BaseItemId itemId}) async {
     final Uri $url = Uri.parse('/Audio/${itemId}/Lyrics');
     final Request $request = Request(
       'GET',

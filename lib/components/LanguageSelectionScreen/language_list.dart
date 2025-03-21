@@ -20,7 +20,7 @@ class _LanguageListState extends State<LanguageList> {
   final locales = SplayTreeMap<String?, Locale>.fromIterable(
     AppLocalizations.supportedLocales,
     key: (element) => (element as Locale).defaultDisplayLanguage,
-    value: (element) => element,
+    value: (element) => element as Locale,
   );
 
   @override

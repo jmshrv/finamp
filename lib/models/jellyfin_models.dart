@@ -17,6 +17,21 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'jellyfin_models.g.dart';
 
+class BaseItemIdConverter extends JsonConverter<BaseItemId, String> {
+  const BaseItemIdConverter();
+  @override
+  BaseItemId fromJson(String json) => BaseItemId(json);
+  @override
+  String toJson(BaseItemId object) => object.raw;
+}
+
+extension type BaseItemId._(String raw) {
+  /// Construct a BaseItemDto id from a raw string.  Please be sure you have a valid ID before using, and
+  /// if you might not, consider the invalid ID's scope and if you can use an alternative, such as null
+  BaseItemId(this.raw);
+  String operator +(BaseItemId other) => raw + other.raw;
+}
+
 /// An abstract class to implement converting runTimeTicks into a duration.
 /// Ideally, we'd hold runTimeTicks here, but that would break offline storage
 /// as everything is already set up to have runTimeTicks in its own class.
@@ -1444,11 +1459,11 @@ class SubtitleProfile {
 }
 
 @JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-  includeIfNull: false,
-)
+    fieldRename: FieldRename.pascal,
+    explicitToJson: true,
+    anyMap: true,
+    includeIfNull: false,
+    converters: [BaseItemIdConverter()])
 @HiveType(typeId: 0)
 class BaseItemDto with RunTimeTickDuration {
   BaseItemDto({
@@ -1620,7 +1635,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   /// Gets or sets the id.
   @HiveField(3)
-  String id;
+  BaseItemId id;
 
   /// Gets or sets the etag.
   @HiveField(4)
@@ -1786,7 +1801,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   /// Gets or sets the parent id.
   @HiveField(47)
-  String? parentId;
+  BaseItemId? parentId;
 
   /// Gets or sets the type.
   @HiveField(48)
@@ -1897,7 +1912,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   /// Gets or sets the album id.
   @HiveField(74)
-  String? albumId;
+  BaseItemId? albumId;
 
   /// Gets or sets the album image tag.
   @HiveField(75)
@@ -2223,11 +2238,11 @@ class BaseItemDto with RunTimeTickDuration {
   /// function will return null.
   String? get imageId {
     if (hasOwnImage) {
-      return id;
+      return id.raw;
     } else if (parentPrimaryImageItemId != null) {
       return parentPrimaryImageItemId;
     } else if (albumId != null && albumPrimaryImageTag != null) {
-      return albumId;
+      return albumId?.raw;
     }
     return null;
   }
@@ -2345,6 +2360,7 @@ class ExternalUrl {
   explicitToJson: true,
   anyMap: true,
   includeIfNull: false,
+  converters: [BaseItemIdConverter()],
 )
 @HiveType(typeId: 5)
 class MediaSourceInfo with RunTimeTickDuration {
@@ -2398,7 +2414,7 @@ class MediaSourceInfo with RunTimeTickDuration {
   String protocol;
 
   @HiveField(1)
-  String? id;
+  BaseItemId? id;
 
   @HiveField(2)
   String? path;
@@ -2822,6 +2838,7 @@ class MediaUrl {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 @HiveType(typeId: 48)
 class BaseItemPerson {
@@ -2860,6 +2877,7 @@ class BaseItemPerson {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 @HiveType(typeId: 30)
 class NameLongIdPair {
@@ -2872,7 +2890,7 @@ class NameLongIdPair {
   String? name;
 
   @HiveField(1)
-  String id;
+  BaseItemId id;
 
   factory NameLongIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameLongIdPairFromJson(json);
@@ -2953,10 +2971,10 @@ class UserItemDataDto {
 }
 
 @JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+    fieldRename: FieldRename.pascal,
+    explicitToJson: true,
+    anyMap: true,
+    converters: [BaseItemIdConverter()])
 @HiveType(typeId: 2)
 class NameIdPair {
   NameIdPair({
@@ -2968,7 +2986,7 @@ class NameIdPair {
   String? name;
 
   @HiveField(1)
-  String id;
+  BaseItemId id;
 
   factory NameIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameIdPairFromJson(json);
@@ -3067,6 +3085,7 @@ class PlaybackInfoResponse {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 class PlaybackProgressInfo {
   PlaybackProgressInfo({
@@ -3100,7 +3119,7 @@ class PlaybackProgressInfo {
   BaseItemDto? item;
 
   /// Gets or sets the item identifier.
-  String itemId;
+  BaseItemId itemId;
 
   /// Gets or sets the session id.
   String? sessionId;
@@ -3365,6 +3384,7 @@ class QueueItem {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 class NewPlaylist {
   NewPlaylist({
@@ -3379,7 +3399,7 @@ class NewPlaylist {
   String? name;
 
   /// Gets or sets item ids to add to the playlist.
-  List<String> ids;
+  List<BaseItemId> ids;
 
   /// Gets or sets the user id. Required when creating playlists, but not adding
   /// to them.
@@ -3401,11 +3421,12 @@ class NewPlaylist {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 class NewPlaylistResponse {
   NewPlaylistResponse({this.id});
 
-  String? id;
+  BaseItemId? id;
 
   factory NewPlaylistResponse.fromJson(Map<String, dynamic> json) =>
       _$NewPlaylistResponseFromJson(json);

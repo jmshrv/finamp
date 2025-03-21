@@ -18,7 +18,7 @@ part 'finamp_settings_helper.g.dart';
 Stream<FinampSettings> finampSettings(Ref ref) {
   return Hive.box<FinampSettings>("FinampSettings")
       .watch()
-      .map<FinampSettings>((event) => event.value!)
+      .map<FinampSettings>((event) => event.value! as FinampSettings)
       .startWith(FinampSettingsHelper.finampSettings);
 }
 
