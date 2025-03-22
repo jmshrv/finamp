@@ -152,6 +152,13 @@ class DownloadsService {
     return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true);
   });
 
+  /// Provider for downloaded items of a specific type.
+  /// Used to show various items grouped by type on the downloads screen.
+  late final downloadedItemsProvider = StreamProvider.family
+      .autoDispose<List<DownloadStub>, BaseItemDtoType>((ref, type) {
+    return queryUserDownloaded(type).watch(fireImmediately: true);
+  });
+
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
     // Initialize downloadStatuses dict with actual counts of items in isar with
@@ -1257,28 +1264,20 @@ class DownloadsService {
     );
   }
 
-  /// Query all downloaded collections with the given BaseItemDtoType.
-  /// Used to show various collections grouped by type on the downloads screen.
-  Query<DownloadStub> queryUserDownloadedCollection(BaseItemDtoType type) {
-    return _isar.downloadItems
-        .where()
-        .typeEqualTo(DownloadItemType.collection)
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .baseItemTypeEqualTo(type)
-        .sortByName()
-        .build();
-  }
+  /// Query all downloads by the given BaseItemDtoType.
+  /// Used to show various items grouped by type on the downloads screen.
+  Query<DownloadStub> queryUserDownloaded(BaseItemDtoType filterType) {
+    final where = _isar.downloadItems.where();
 
-  /// Query all separately downloaded tracks.
-  /// Used to show tracks on downloads screen.
-  Query<DownloadStub> queryUserDownloadedTracks() {
-    return _isar.downloadItems
-        .where()
-        .typeEqualTo(DownloadItemType.track)
+    final afterWhere = switch (filterType) {
+      BaseItemDtoType.track => where.typeEqualTo(DownloadItemType.track),
+      _ => where.typeEqualTo(DownloadItemType.collection),
+    };
+
+    return afterWhere
         .filter()
         .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .baseItemTypeEqualTo(BaseItemDtoType.track)
+        .baseItemTypeEqualTo(filterType)
         .sortByName()
         .build();
   }

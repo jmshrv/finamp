@@ -1,3 +1,4 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,9 +16,10 @@ class DownloadsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.downloads),
+        title: Text(localizations.downloads),
         actions: const [
           SyncDownloadsButton(),
           RepairDownloadsButton(),
@@ -36,16 +38,16 @@ class DownloadsScreen extends StatelessWidget {
               const Divider(),
             ]),
           ),
-          DownloadedItemsTitle(title: AppLocalizations.of(context)!.artists),
-          const DownloadedItemsList(type: DownloadsScreenItemType.artists),
-          DownloadedItemsTitle(title: AppLocalizations.of(context)!.albums),
-          const DownloadedItemsList(type: DownloadsScreenItemType.albums),
-          DownloadedItemsTitle(title: AppLocalizations.of(context)!.playlists),
-          const DownloadedItemsList(type: DownloadsScreenItemType.playlists),
-          DownloadedItemsTitle(title: AppLocalizations.of(context)!.genres),
-          const DownloadedItemsList(type: DownloadsScreenItemType.genres),
-          DownloadedItemsTitle(title: AppLocalizations.of(context)!.tracks),
-          const DownloadedItemsList(type: DownloadsScreenItemType.tracks),
+          DownloadedItemsTitle(title: localizations.artists),
+          const DownloadedItemsList(type: BaseItemDtoType.artist),
+          DownloadedItemsTitle(title: localizations.albums),
+          const DownloadedItemsList(type: BaseItemDtoType.album),
+          DownloadedItemsTitle(title: localizations.playlists),
+          const DownloadedItemsList(type: BaseItemDtoType.playlist),
+          DownloadedItemsTitle(title: localizations.genres),
+          const DownloadedItemsList(type: BaseItemDtoType.genre),
+          DownloadedItemsTitle(title: localizations.tracks),
+          const DownloadedItemsList(type: BaseItemDtoType.track),
         ],
       ),
     );
