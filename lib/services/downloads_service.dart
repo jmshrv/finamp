@@ -1257,18 +1257,30 @@ class DownloadsService {
     );
   }
 
-  /// Get all user-downloaded items.  Used to show items on downloads screen.
-  List<DownloadStub> getUserDownloaded() => getVisibleChildren(_anchor);
-
-  /// Get all non-image children of an item.  Used to show item children on
-  /// downloads screen.
-  List<DownloadStub> getVisibleChildren(DownloadStub stub) {
+  /// Query all downloaded collections with the given BaseItemDtoType.
+  /// Used to show various collections grouped by type on the downloads screen.
+  Query<DownloadStub> queryUserDownloadedCollection(BaseItemDtoType type) {
     return _isar.downloadItems
         .where()
-        .typeNotEqualTo(DownloadItemType.image)
+        .typeEqualTo(DownloadItemType.collection)
         .filter()
-        .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
-        .findAllSync();
+        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+        .baseItemTypeEqualTo(type)
+        .sortByName()
+        .build();
+  }
+
+  /// Query all separately downloaded tracks.
+  /// Used to show tracks on downloads screen.
+  Query<DownloadStub> queryUserDownloadedTracks() {
+    return _isar.downloadItems
+        .where()
+        .typeEqualTo(DownloadItemType.track)
+        .filter()
+        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+        .baseItemTypeEqualTo(BaseItemDtoType.track)
+        .sortByBaseIndexNumber()
+        .build();
   }
 
   /// Gets an item which requires the given stub to be downloaded.  Used in
@@ -1278,6 +1290,18 @@ class DownloadsService {
         .filter()
         .requires((q) => q.isarIdEqualTo(stub.isarId))
         .findFirstSync();
+  }
+
+  /// Get all non-image children of an item.
+  /// Used to show item children on the downloads screen.
+  List<DownloadStub> getVisibleChildren(DownloadStub stub) {
+    return _isar.downloadItems
+        .where()
+        .typeNotEqualTo(DownloadItemType.image)
+        .filter()
+        .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
+        .sortByBaseIndexNumber()
+        .findAllSync();
   }
 
   /// Check whether the given item is part of the given collection.  Returns null
