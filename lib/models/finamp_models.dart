@@ -15,6 +15,7 @@ import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../builders/annotations.dart';
 import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
 
@@ -319,6 +320,7 @@ class FinampSettings {
   int sleepTimerSeconds;
 
   @HiveField(15, defaultValue: {})
+  @FinampSetterIgnore()
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
@@ -332,9 +334,11 @@ class FinampSettings {
   bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: {})
+  @FinampSetterIgnore()
   Map<TabContentType, SortBy> tabSortBy;
 
   @HiveField(21, defaultValue: {})
+  @FinampSetterIgnore()
   Map<TabContentType, SortOrder> tabSortOrder;
 
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)

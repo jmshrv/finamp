@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive_ce/hive.dart';
 
-import '../../services/finamp_settings_helper.dart';
 import '../../models/finamp_models.dart';
+import '../../services/finamp_settings_helper.dart';
 
 class StopForegroundSelector extends StatelessWidget {
   const StopForegroundSelector({super.key});
@@ -21,7 +21,7 @@ class StopForegroundSelector extends StatelessWidget {
           value:
               FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
           onChanged: (value) =>
-              FinampSettingsHelper.setAndroidStopForegroundOnPause(value),
+              FinampSetters.setAndroidStopForegroundOnPause(value),
         );
       },
     );

@@ -878,13 +878,12 @@ class JellyfinApiHelper {
 
   late final ProviderFamily<bool, BaseItemDto> canDeleteFromServerProvider =
       ProviderFamily((ref, BaseItemDto item) {
-    bool offline = ref.watch(
-        finampSettingsProvider.select((value) => value.requireValue.isOffline));
+    bool offline = ref.watch(finampSettingsProvider.isOffline);
     if (offline) {
       return false;
     }
-    bool deleteEnabled = ref.watch(finampSettingsProvider
-        .select((value) => value.requireValue.allowDeleteFromServer));
+    bool deleteEnabled =
+        ref.watch(finampSettingsProvider.allowDeleteFromServer);
     if (!deleteEnabled) {
       return false;
     }

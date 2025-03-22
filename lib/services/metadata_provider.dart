@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -67,8 +65,8 @@ class MetadataProvider {
 final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
     metadataProvider = FutureProvider.autoDispose
         .family<MetadataProvider?, MetadataRequest>((ref, request) async {
-  unawaited(ref.watch(finampSettingsProvider.selectAsync((settings) => settings
-      .isOffline))); // watch settings to trigger re-fetching metadata when offline mode changes
+  // watch settings to trigger re-fetching metadata when offline mode changes
+  ref.watch(finampSettingsProvider.isOffline);
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();

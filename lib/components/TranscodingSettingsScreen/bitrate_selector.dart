@@ -34,8 +34,7 @@ class BitrateSelector extends StatelessWidget {
                   label: AppLocalizations.of(context)!.kiloBitsPerSecondLabel(
                       finampSettings.transcodeBitrate ~/ 1000),
                   onChanged: (value) {
-                    FinampSettingsHelper.setTranscodeBitrate(
-                        (value * 1000).toInt());
+                    FinampSetters.setTranscodeBitrate((value * 1000).toInt());
                   },
                 ),
                 Text(

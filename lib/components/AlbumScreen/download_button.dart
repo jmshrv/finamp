@@ -33,8 +33,7 @@ class DownloadButton extends ConsumerWidget {
     DownloadItemStatus? status = ref
         .watch(downloadsService.statusProvider((item, children?.length)))
         .value;
-    var isOffline = ref.watch(
-        finampSettingsProvider.select((value) => value.requireValue.isOffline));
+    var isOffline = ref.watch(finampSettingsProvider.isOffline);
     bool canDeleteFromServer = false;
     if (item.type.requiresItem) {
       canDeleteFromServer = ref.watch(GetIt.instance<JellyfinApiHelper>()

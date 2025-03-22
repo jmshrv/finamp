@@ -170,7 +170,7 @@ Future<void> _setupDownloadsHelper() async {
   if (!FinampSettingsHelper
       .finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
-    FinampSettingsHelper.setHasCompleteddownloadsServiceMigration(true);
+    FinampSetters.setHasCompletedDownloadsServiceMigration(true);
   }
 
   await FileDownloader()
@@ -432,7 +432,7 @@ Future<void> _setupFinampUserHelper() async {
   GetIt.instance.registerSingleton(FinampUserHelper());
   if (!FinampSettingsHelper.finampSettings.hasCompletedIsarUserMigration) {
     await GetIt.instance<FinampUserHelper>().migrateFromHive();
-    FinampSettingsHelper.setHasCompletedIsarUserMigration(true);
+    FinampSetters.setHasCompletedIsarUserMigration(true);
   }
   await GetIt.instance<FinampUserHelper>().setAuthHeader();
 }

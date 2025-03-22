@@ -51,7 +51,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
             final oldTab = currentTabOrder[oldIndex];
             currentTabOrder.removeAt(oldIndex);
             currentTabOrder.insert(newIndex, oldTab);
-            FinampSettingsHelper.setTabOrder(currentTabOrder);
+            FinampSetters.setTabOrder(currentTabOrder);
           });
         },
       ),

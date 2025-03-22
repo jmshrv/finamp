@@ -869,7 +869,7 @@ class QueueService {
     _playbackSpeed = speed;
     _playbackSpeedStream.add(speed);
     _audioHandler.setSpeed(speed);
-    FinampSettingsHelper.setPlaybackSpeed(playbackSpeed);
+    FinampSetters.setPlaybackSpeed(playbackSpeed);
     _queueServiceLogger.fine(
         "Playback speed set to ${FinampSettingsHelper.finampSettings.playbackSpeed}");
   }
@@ -889,7 +889,7 @@ class QueueService {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
     }
 
-    FinampSettingsHelper.setLoopMode(loopMode);
+    FinampSetters.setLoopMode(loopMode);
     _queueServiceLogger.fine(
         "Loop mode set to ${FinampSettingsHelper.finampSettings.loopMode}");
   }

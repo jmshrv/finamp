@@ -75,8 +75,8 @@ class _PeriodicPlaybackSessionUpdateFrequencyEditorState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null) {
-              FinampSettingsHelper
-                  .setPeriodicPlaybackSessionUpdateFrequencySeconds(valueInt);
+              FinampSetters.setPeriodicPlaybackSessionUpdateFrequencySeconds(
+                  valueInt);
             }
           },
         ),

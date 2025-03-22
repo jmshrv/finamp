@@ -129,8 +129,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       final downloadsService = GetIt.instance<DownloadsService>();
       final canDeleteFromServer = ref
           .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.album));
-      final isOffline = ref.watch(finampSettingsProvider
-          .select((value) => value.requireValue.isOffline));
+      final isOffline = ref.watch(finampSettingsProvider.isOffline);
       final downloadStatus = downloadsService.getStatus(
           DownloadStub.fromItem(
               type: DownloadItemType.collection, item: widget.album),

@@ -23,8 +23,7 @@ final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 Future<BaseItemDto> artistItem(Ref ref, BaseItemId id) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isarDownloader = GetIt.instance<DownloadsService>();
-  final bool isOffline = ref.watch(finampSettingsProvider
-      .select((value) => value.value?.isOffline ?? false));
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   return isOffline
       ? isarDownloader
           .getCollectionInfo(id: id)

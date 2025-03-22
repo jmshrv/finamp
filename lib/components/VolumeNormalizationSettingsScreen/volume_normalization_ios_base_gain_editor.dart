@@ -35,8 +35,7 @@ class _VolumeNormalizationIOSBaseGainEditorState
             final valueDouble = double.tryParse(value);
 
             if (valueDouble != null) {
-              FinampSettingsHelper.setVolumeNormalizationIOSBaseGain(
-                  valueDouble);
+              FinampSetters.setVolumeNormalizationIOSBaseGain(valueDouble);
             }
           },
         ),

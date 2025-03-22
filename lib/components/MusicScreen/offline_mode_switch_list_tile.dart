@@ -24,7 +24,7 @@ class OfflineModeSwitchListTile extends StatelessWidget {
           inactiveTrackColor: Colors.transparent,
           value: box.get("FinampSettings")?.isOffline ?? false,
           onChanged: (value) {
-            FinampSettingsHelper.setIsOffline(value);
+            FinampSetters.setIsOffline(value);
           },
         );
       },

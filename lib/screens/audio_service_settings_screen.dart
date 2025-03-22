@@ -4,14 +4,15 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce/hive.dart';
 
 import '../components/AudioServiceSettingsScreen/buffer_duration_list_tile.dart';
 import '../components/AudioServiceSettingsScreen/loadQueueOnStartup_selector.dart';
 import '../components/AudioServiceSettingsScreen/periodic_playback_session_update_frequency_editor.dart';
 import '../components/AudioServiceSettingsScreen/report_queue_to_server_toggle.dart';
-import '../components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 import '../components/AudioServiceSettingsScreen/stop_foreground_selector.dart';
+import '../components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 
 class AudioServiceSettingsScreen extends StatefulWidget {
   const AudioServiceSettingsScreen({super.key});
@@ -57,11 +58,11 @@ class _AudioServiceSettingsScreenState
   }
 }
 
-class BufferDisableSizeConstraintsSelector extends StatelessWidget {
+class BufferDisableSizeConstraintsSelector extends ConsumerWidget {
   const BufferDisableSizeConstraintsSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
@@ -70,15 +71,8 @@ class BufferDisableSizeConstraintsSelector extends StatelessWidget {
               AppLocalizations.of(context)!.bufferDisableSizeConstraintsTitle),
           subtitle: Text(AppLocalizations.of(context)!
               .bufferDisableSizeConstraintsSubtitle),
-          value:
-              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints,
-          onChanged: (value) {
-            FinampSettings finampSettingsTemp =
-                FinampSettingsHelper.finampSettings;
-            finampSettingsTemp.bufferDisableSizeConstraints = value;
-            Hive.box<FinampSettings>("FinampSettings")
-                .put("FinampSettings", finampSettingsTemp);
-          },
+          value: ref.watch(finampSettingsProvider.bufferDisableSizeConstraints),
+          onChanged: FinampSetters.setBufferDisableSizeConstraints,
         );
       },
     );
@@ -116,11 +110,7 @@ class _BufferSizeListTileState extends State<BufferSizeListTile> {
                 _controller.text = "60";
                 valueInt = 60;
               }
-              FinampSettings finampSettingsTemp =
-                  FinampSettingsHelper.finampSettings;
-              finampSettingsTemp.bufferSizeMegabytes = valueInt;
-              Hive.box<FinampSettings>("FinampSettings")
-                  .put("FinampSettings", finampSettingsTemp);
+              FinampSetters.setBufferSizeMegabytes(valueInt);
             }
           },
         ),

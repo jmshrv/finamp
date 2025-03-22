@@ -17,7 +17,7 @@ class DisableVibrationSelector extends StatelessWidget {
           title: Text(AppLocalizations.of(context)!.enableVibration),
           subtitle: Text(AppLocalizations.of(context)!.enableVibrationSubtitle),
           value: FinampSettingsHelper.finampSettings.enableVibration,
-          onChanged: (value) => FinampSettingsHelper.setEnableVibration(value),
+          onChanged: (value) => FinampSetters.setEnableVibration(value),
         );
       },
     );

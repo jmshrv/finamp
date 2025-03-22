@@ -95,12 +95,12 @@ class _ContentGridViewCrossAxisCountListTileState
             if (valueInt != null && valueInt > 0) {
               switch (widget.type) {
                 case ContentGridViewCrossAxisCountType.portrait:
-                  FinampSettingsHelper.setContentGridViewCrossAxisCountPortrait(
+                  FinampSetters.setContentGridViewCrossAxisCountPortrait(
                       valueInt);
                   break;
                 case ContentGridViewCrossAxisCountType.landscape:
-                  FinampSettingsHelper
-                      .setContentGridViewCrossAxisCountLandscape(valueInt);
+                  FinampSetters.setContentGridViewCrossAxisCountLandscape(
+                      valueInt);
                   break;
               }
             }
