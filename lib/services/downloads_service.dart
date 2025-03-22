@@ -1279,7 +1279,7 @@ class DownloadsService {
         .filter()
         .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
         .baseItemTypeEqualTo(BaseItemDtoType.track)
-        .sortByBaseIndexNumber()
+        .sortByName()
         .build();
   }
 
