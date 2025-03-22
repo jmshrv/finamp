@@ -19,6 +19,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:progress_border/progress_border.dart';
 
 import '../models/jellyfin_models.dart' as jellyfin_models;
 import '../screens/player_screen.dart';
@@ -246,6 +247,8 @@ class NowPlayingBar extends ConsumerWidget {
                         audioHandler.fadeState.value),
                     builder: (context, snapshot) {
                       final MediaState mediaState = snapshot.data!;
+                      final playbackState = mediaState.playbackState;
+                      final fadeState = mediaState.fadeState;
                       // If we have a media item and the player hasn't finished, show
                       // the now playing bar.
                       if (mediaState.mediaItem != null) {
@@ -280,33 +283,41 @@ class NowPlayingBar extends ConsumerWidget {
                                     Container(
                                         width: albumImageSize,
                                         height: albumImageSize,
-                                        decoration: const ShapeDecoration(
-                                          shape: Border(),
-                                          color: Color.fromRGBO(0, 0, 0, 0.3),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(12.0),
+                                              bottomLeft:
+                                                  Radius.circular(12.0)),
+                                          border: fadeState.fadeDirection !=
+                                                  FadeDirection.none
+                                              ? ProgressBorder.all(
+                                                  color: Colors.white
+                                                      .withAlpha(128),
+                                                  width: 4,
+                                                  progress: fadeState
+                                                      .fadeVolumePercent,
+                                                )
+                                              : null,
                                         ),
                                         child: IconButton(
-                                            tooltip: AppLocalizations.of(
-                                                    context)!
-                                                .togglePlaybackButtonTooltip,
-                                            onPressed: () {
-                                              FeedbackHelper.feedback(
-                                                  FeedbackType.light);
-                                              unawaited(audioHandler
-                                                  .togglePlayback());
-                                            },
-                                            color: Colors.white,
-                                            icon: Icon(
-                                                mediaState.playbackState.playing
-                                                    ? mediaState.fadeState
-                                                                .fadeDirection !=
-                                                            FadeDirection
-                                                                .fadeOut
-                                                        ? TablerIcons
-                                                            .player_pause
-                                                        : TablerIcons
-                                                            .player_play
-                                                    : TablerIcons.player_play,
-                                                size: 32))),
+                                          tooltip: AppLocalizations.of(context)!
+                                              .togglePlaybackButtonTooltip,
+                                          onPressed: () {
+                                            FeedbackHelper.feedback(
+                                                FeedbackType.light);
+                                            unawaited(
+                                                audioHandler.togglePlayback());
+                                          },
+                                          color: Colors.white,
+                                          icon: Icon(
+                                              playbackState.playing
+                                                  ? fadeState.fadeDirection !=
+                                                          FadeDirection.fadeOut
+                                                      ? TablerIcons.player_pause
+                                                      : TablerIcons.player_play
+                                                  : TablerIcons.player_play,
+                                              size: 32),
+                                        ))
                                   ],
                                 ),
                                 Expanded(

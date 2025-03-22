@@ -10,6 +10,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:progress_border/progress_border.dart';
 
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';
@@ -30,6 +31,7 @@ class PlayerButtons extends StatelessWidget {
         builder: (context, snapshot) {
           final mediaState = snapshot.data!;
           final playbackState = mediaState.playbackState;
+          final fadeState = mediaState.fadeState;
 
           return Row(
             mainAxisSize: MainAxisSize.max,
@@ -77,14 +79,28 @@ class PlayerButtons extends StatelessWidget {
                     FeedbackHelper.feedback(FeedbackType.light);
                     unawaited(audioHandler.togglePlayback());
                   },
-                  icon: Icon(
-                      mediaState.playbackState.playing
-                          ? mediaState.fadeState.fadeDirection !=
-                                  FadeDirection.fadeOut
-                              ? TablerIcons.player_pause
-                              : TablerIcons.player_play
-                          : TablerIcons.player_play,
-                      size: 28),
+                  icon: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(
+                            controller.shouldShow(PlayerHideable.bigPlayButton)
+                                ? 16
+                                : 12)),
+                        border: fadeState.fadeDirection != FadeDirection.none
+                            ? ProgressBorder.all(
+                                color:
+                                    IconTheme.of(context).color!.withAlpha(128),
+                                width: 4,
+                                progress: fadeState.fadeVolumePercent,
+                              )
+                            : null,
+                      ),
+                      child: Icon(
+                          playbackState.playing
+                              ? fadeState.fadeDirection != FadeDirection.fadeOut
+                                  ? TablerIcons.player_pause
+                                  : TablerIcons.player_play
+                              : TablerIcons.player_play,
+                          size: 32)),
                 ),
               ),
               Semantics.fromProperties(
