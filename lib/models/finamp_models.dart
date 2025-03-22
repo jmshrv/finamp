@@ -1459,6 +1459,8 @@ enum BaseItemDtoType {
   bool get expectChangesInChildren =>
       childTypes?.any((x) => x.expectChanges) ?? true;
 
+  bool get hasChildren => childTypes?.isNotEmpty ?? false;
+
   // BaseItemDto types that we handle like tracks have been handled by returning
   // the actual track type.  This may be a bad idea?
   static BaseItemDtoType fromItem(BaseItemDto item) {

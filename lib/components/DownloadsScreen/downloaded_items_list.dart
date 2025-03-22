@@ -88,37 +88,36 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
           data: (items) => SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                DownloadStub album = items.elementAt(index);
+                DownloadStub stub = items.elementAt(index);
                 return ExpansionTile(
-                  key: PageStorageKey(album.id),
-                  leading: AlbumImage(item: album.baseItem),
-                  title: Text(album.baseItem?.name ?? album.name),
+                  key: PageStorageKey(stub.id),
+                  leading: AlbumImage(item: stub.baseItem),
+                  title: Text(stub.baseItem?.name ?? stub.name),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if ((!(album.baseItemType == BaseItemDtoType.album ||
-                              album.baseItemType == BaseItemDtoType.track)) &&
+                      if ((!(stub.baseItemType == BaseItemDtoType.album ||
+                              stub.baseItemType == BaseItemDtoType.track)) &&
                           !FinampSettingsHelper.finampSettings.isOffline)
                         IconButton(
                           icon: const Icon(Icons.sync),
                           onPressed: () {
-                            _downloadsService.resync(album, null);
+                            _downloadsService.resync(stub, null);
                           },
                         ),
                       IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () => askBeforeDeleteDownloadFromDevice(
-                                  context, album, refresh: () {
+                                  context, stub, refresh: () {
                                 setState(() {});
                               })),
                     ],
                   ),
-                  subtitle: ItemFileSize(
-                    stub: album,
-                  ),
+                  subtitle: ItemFileSize(stub: stub),
                   tilePadding: const EdgeInsets.symmetric(horizontal: 16),
                   children: [
-                    DownloadedChildrenList(parent: album),
+                    if (stub.baseItemType.hasChildren)
+                      DownloadedChildrenList(parent: stub)
                   ],
                 );
               },
