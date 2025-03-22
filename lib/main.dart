@@ -80,29 +80,30 @@ import 'setup_logging.dart';
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
+  final mainLog = Logger("Main()");
   try {
     await setupLogging();
     await _setupEdgeToEdgeOverlayStyle();
-    Logger("Main()").info("Setup edge-to-edge overlay");
+    mainLog.info("Setup edge-to-edge overlay");
     await setupHive();
-    Logger("Main()").info("Setup hive and isar");
+    mainLog.info("Setup hive and isar");
     _migrateDownloadLocations();
     _migrateSortOptions();
-    Logger("Main()").info("Completed applicable migrations");
+    mainLog.info("Completed applicable migrations");
     await _setupFinampUserHelper();
-    Logger("Main()").info("Setup user helper");
+    mainLog.info("Setup user helper");
     await _setupJellyfinApiData();
-    Logger("Main()").info("setup jellyfin api");
+    mainLog.info("setup jellyfin api");
     _setupOfflineListenLogHelper();
-    Logger("Main()").info("Setup offline listen tracking");
+    mainLog.info("Setup offline listen tracking");
     await _setupDownloadsHelper();
-    Logger("Main()").info("Setup downloads service");
+    mainLog.info("Setup downloads service");
     await _setupOSIntegration();
-    Logger("Main()").info("Setup os integrations");
+    mainLog.info("Setup os integrations");
     await _setupPlaybackServices();
-    Logger("Main()").info("Setup audio player");
+    mainLog.info("Setup audio player");
     await _setupKeepScreenOnHelper();
-    Logger("Main()").info("Setup KeepScreenOnHelper");
+    mainLog.info("Setup KeepScreenOnHelper");
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -126,7 +127,7 @@ void main() async {
     await findSystemLocale();
     await initializeDateFormatting();
 
-    Logger("Main()").info("Launching main app");
+    mainLog.info("Launching main app");
 
     runApp(const Finamp());
   }
@@ -373,7 +374,7 @@ Future<void> _setupPlaybackServices() async {
   // Begin to restore queue
   unawaited(queueService
       .performInitialQueueLoad()
-      .catchError((x) => GlobalSnackbar.error(x)));
+      .catchError((dynamic x) => GlobalSnackbar.error(x)));
 }
 
 /// Migrates the old DownloadLocations list to a map
