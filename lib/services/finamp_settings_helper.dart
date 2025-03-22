@@ -443,6 +443,8 @@ class FinampSettingsHelper {
     setPeriodicPlaybackSessionUpdateFrequencySeconds(DefaultSettings
         .periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
     setReportQueueToServer(DefaultSettings.reportQueueToServer);
+    setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
+    setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
   }
 
   static void resetNormalizationSettings() {
@@ -532,6 +534,20 @@ class FinampSettingsHelper {
   static void setKeepScreenOnWhilePluggedIn(bool keepScreenOnWhilePluggedIn) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.keepScreenOnWhilePluggedIn = keepScreenOnWhilePluggedIn;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAudioFadeOutDuration(Duration audioFadeOutDuration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.audioFadeOutDuration = audioFadeOutDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAudioFadeInDuration(Duration audioFadeOutDuration) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.audioFadeInDuration = audioFadeOutDuration;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

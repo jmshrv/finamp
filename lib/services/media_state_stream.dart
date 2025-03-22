@@ -7,16 +7,19 @@ import 'music_player_background_task.dart';
 class MediaState {
   final MediaItem? mediaItem;
   final PlaybackState playbackState;
+  final FadeState fadeState;
 
-  MediaState(this.mediaItem, this.playbackState);
+  MediaState(this.mediaItem, this.playbackState, this.fadeState);
 }
 
 /// A stream reporting the combined state of the current media item and its
 /// current position.
 Stream<MediaState> get mediaStateStream {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-  return Rx.combineLatest2<MediaItem?, PlaybackState, MediaState>(
+  return Rx.combineLatest3<MediaItem?, PlaybackState, FadeState, MediaState>(
       audioHandler.mediaItem,
       audioHandler.playbackState,
-      (mediaItem, playbackState) => MediaState(mediaItem, playbackState));
+      audioHandler.fadeState,
+      (mediaItem, playbackState, fadeState) =>
+          MediaState(mediaItem, playbackState, fadeState));
 }

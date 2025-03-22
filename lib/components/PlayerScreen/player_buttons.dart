@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
 import 'package:finamp/screens/player_screen.dart';
@@ -23,9 +25,11 @@ class PlayerButtons extends StatelessWidget {
 
     return StreamBuilder<MediaState>(
         stream: mediaStateStream,
+        initialData: MediaState(audioHandler.mediaItem.valueOrNull,
+            audioHandler.playbackState.value, audioHandler.fadeState.value),
         builder: (context, snapshot) {
-          final mediaState = snapshot.data;
-          final playbackState = mediaState?.playbackState;
+          final mediaState = snapshot.data!;
+          final playbackState = mediaState.playbackState;
 
           return Row(
             mainAxisSize: MainAxisSize.max,
@@ -44,12 +48,10 @@ class PlayerButtons extends StatelessWidget {
                 excludeSemantics: true,
                 child: IconButton(
                   icon: const Icon(TablerIcons.player_skip_back),
-                  onPressed: playbackState != null
-                      ? () async {
-                          FeedbackHelper.feedback(FeedbackType.light);
-                          await audioHandler.skipToPrevious();
-                        }
-                      : null,
+                  onPressed: () async {
+                    FeedbackHelper.feedback(FeedbackType.light);
+                    await audioHandler.skipToPrevious();
+                  },
                 ),
               ),
               Semantics.fromProperties(
@@ -61,32 +63,37 @@ class PlayerButtons extends StatelessWidget {
                 container: true,
                 excludeSemantics: true,
                 child: _RoundedIconButton(
-                  width: controller.shouldShow(PlayerHideable.bigPlayButton)
-                      ? 62
-                      : 48,
-                  height: controller.shouldShow(PlayerHideable.bigPlayButton)
-                      ? 62
-                      : 48,
-                  borderRadius: BorderRadius.circular(
-                      controller.shouldShow(PlayerHideable.bigPlayButton)
-                          ? 16
-                          : 12),
-                  onTap: playbackState != null
-                      ? () async {
-                          FeedbackHelper.feedback(FeedbackType.light);
-                          if (playbackState.playing) {
-                            await audioHandler.pause();
-                          } else {
-                            await audioHandler.play();
-                          }
-                        }
-                      : null,
-                  icon: Icon(
-                      playbackState == null || playbackState.playing
-                          ? TablerIcons.player_pause
-                          : TablerIcons.player_play,
-                      size: 28),
-                ),
+                    width: controller.shouldShow(PlayerHideable.bigPlayButton)
+                        ? 62
+                        : 48,
+                    height: controller.shouldShow(PlayerHideable.bigPlayButton)
+                        ? 62
+                        : 48,
+                    borderRadius: BorderRadius.circular(
+                        controller.shouldShow(PlayerHideable.bigPlayButton)
+                            ? 16
+                            : 12),
+                    onTap: () {
+                      FeedbackHelper.feedback(FeedbackType.light);
+                      unawaited(audioHandler.togglePlayback());
+                    },
+                    icon: Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Icon(
+                            mediaState.playbackState.playing
+                                ? mediaState.fadeState.fadeDirection !=
+                                        FadeDirection.fadeOut
+                                    ? TablerIcons.player_pause
+                                    : TablerIcons.player_play
+                                : TablerIcons.player_play,
+                            size: 32),
+                        if (mediaState.fadeState.fadeDirection !=
+                            FadeDirection.none)
+                          CircularProgressIndicator(
+                              value: mediaState.fadeState.fadeVolumePercent)
+                      ],
+                    )),
               ),
               Semantics.fromProperties(
                 properties: SemanticsProperties(
@@ -98,12 +105,10 @@ class PlayerButtons extends StatelessWidget {
                 excludeSemantics: true,
                 child: IconButton(
                   icon: const Icon(TablerIcons.player_skip_forward),
-                  onPressed: playbackState != null
-                      ? () async {
-                          FeedbackHelper.feedback(FeedbackType.light);
-                          await audioHandler.skipToNext();
-                        }
-                      : null,
+                  onPressed: () async {
+                    FeedbackHelper.feedback(FeedbackType.light);
+                    await audioHandler.skipToNext();
+                  },
                 ),
               ),
               if (controller.shouldShow(PlayerHideable.loopShuffleButtons))
