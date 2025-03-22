@@ -314,6 +314,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                         .fadeDirection !=
                                                     FadeDirection.none)
                                                   CircularProgressIndicator(
+                                                      color: Colors.white,
                                                       value: mediaState
                                                           .fadeState
                                                           .fadeVolumePercent)
