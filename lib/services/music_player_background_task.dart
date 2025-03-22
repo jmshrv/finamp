@@ -28,8 +28,13 @@ import 'locale_helper.dart';
 enum FadeDirection { fadeIn, fadeOut, none }
 
 class FadeState {
-  // Volume value to recover after fading
+  // volume value to recover after fading
   final double recoverVolume;
+
+  // current fade volume
+  late final double fadeVolume;
+  // current fade volume in percent relative to recoverVolume
+  late final double fadeVolumePercent;
 
   // volume step sizes for fade-in and fade-out
   final double volumeFadeOutStepSize;
@@ -40,18 +45,23 @@ class FadeState {
 
   FadeState(
       {required this.recoverVolume,
+      required this.fadeVolume,
       this.volumeFadeInStepSize = 0.0,
       this.volumeFadeOutStepSize = 0.0,
-      this.fadeDirection = FadeDirection.none});
+      this.fadeDirection = FadeDirection.none}) {
+    fadeVolumePercent = fadeVolume / recoverVolume;
+  }
 
   FadeState copyWith({
     double? recoverVolume,
+    double? fadeVolume,
     double? volumeFadeInStepSize,
     double? volumeFadeOutStepSize,
     FadeDirection? fadeDirection,
   }) {
     return FadeState(
         recoverVolume: recoverVolume ?? this.recoverVolume,
+        fadeVolume: fadeVolume ?? this.fadeVolume,
         volumeFadeInStepSize: volumeFadeInStepSize ?? this.volumeFadeInStepSize,
         volumeFadeOutStepSize:
             volumeFadeOutStepSize ?? this.volumeFadeOutStepSize,
@@ -283,8 +293,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       playbackState.add(event);
     });
 
-    fadeState =
-        BehaviorSubject.seeded(FadeState(recoverVolume: _player.volume));
+    fadeState = BehaviorSubject.seeded(
+        FadeState(recoverVolume: _player.volume, fadeVolume: _player.volume));
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
@@ -366,6 +376,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> _fadeAudio(FadeDirection direction) async {
     fadeState.add(FadeState(
         recoverVolume: _player.volume,
+        fadeVolume: direction == FadeDirection.fadeIn ? 0.0 : _player.volume,
         volumeFadeInStepSize: _getVolumeFadeInStepSize(),
         volumeFadeOutStepSize: _getVolumeFadeOutStepSize(),
         fadeDirection: direction));
@@ -388,19 +399,25 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               _player.volume + state.volumeFadeInStepSize,
               state.recoverVolume));
           if (_player.volume >= state.recoverVolume) {
-            fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
+            fadeState.add(state.copyWith(
+                fadeDirection: FadeDirection.none, fadeVolume: _player.volume));
+          } else {
+            fadeState.add(state.copyWith(fadeVolume: _player.volume));
           }
           break;
         case FadeDirection.fadeOut:
           await _player.setVolume(
               max(_player.volume - state.volumeFadeOutStepSize, 0.0));
           if (_player.volume <= 0.0) {
-            fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
+            fadeState.add(state.copyWith(
+                fadeDirection: FadeDirection.none, fadeVolume: _player.volume));
 
             fut = _player.pause();
 
             // restore volume
             await _player.setVolume(fadeState.value.recoverVolume);
+          } else {
+            fadeState.add(state.copyWith(fadeVolume: _player.volume));
           }
           break;
         default:

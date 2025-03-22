@@ -292,18 +292,33 @@ class NowPlayingBar extends ConsumerWidget {
                                                   .togglePlayback());
                                             },
                                             color: Colors.white,
-                                            icon: Icon(
-                                                mediaState.playbackState.playing
-                                                    ? mediaState.fadeState
-                                                                .fadeDirection !=
-                                                            FadeDirection
-                                                                .fadeOut
-                                                        ? TablerIcons
-                                                            .player_pause
+                                            icon: Stack(
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              children: [
+                                                Icon(
+                                                    mediaState.playbackState
+                                                            .playing
+                                                        ? mediaState.fadeState
+                                                                    .fadeDirection !=
+                                                                FadeDirection
+                                                                    .fadeOut
+                                                            ? TablerIcons
+                                                                .player_pause
+                                                            : TablerIcons
+                                                                .player_play
                                                         : TablerIcons
-                                                            .player_play
-                                                    : TablerIcons.player_play,
-                                                size: 32))),
+                                                            .player_play,
+                                                    size: 32),
+                                                if (mediaState.fadeState
+                                                        .fadeDirection !=
+                                                    FadeDirection.none)
+                                                  CircularProgressIndicator(
+                                                      value: mediaState
+                                                          .fadeState
+                                                          .fadeVolumePercent)
+                                              ],
+                                            )))
                                   ],
                                 ),
                                 Expanded(

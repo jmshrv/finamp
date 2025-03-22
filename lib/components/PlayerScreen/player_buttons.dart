@@ -63,29 +63,37 @@ class PlayerButtons extends StatelessWidget {
                 container: true,
                 excludeSemantics: true,
                 child: _RoundedIconButton(
-                  width: controller.shouldShow(PlayerHideable.bigPlayButton)
-                      ? 62
-                      : 48,
-                  height: controller.shouldShow(PlayerHideable.bigPlayButton)
-                      ? 62
-                      : 48,
-                  borderRadius: BorderRadius.circular(
-                      controller.shouldShow(PlayerHideable.bigPlayButton)
-                          ? 16
-                          : 12),
-                  onTap: () {
-                    FeedbackHelper.feedback(FeedbackType.light);
-                    unawaited(audioHandler.togglePlayback());
-                  },
-                  icon: Icon(
-                      mediaState.playbackState.playing
-                          ? mediaState.fadeState.fadeDirection !=
-                                  FadeDirection.fadeOut
-                              ? TablerIcons.player_pause
-                              : TablerIcons.player_play
-                          : TablerIcons.player_play,
-                      size: 28),
-                ),
+                    width: controller.shouldShow(PlayerHideable.bigPlayButton)
+                        ? 62
+                        : 48,
+                    height: controller.shouldShow(PlayerHideable.bigPlayButton)
+                        ? 62
+                        : 48,
+                    borderRadius: BorderRadius.circular(
+                        controller.shouldShow(PlayerHideable.bigPlayButton)
+                            ? 16
+                            : 12),
+                    onTap: () {
+                      FeedbackHelper.feedback(FeedbackType.light);
+                      unawaited(audioHandler.togglePlayback());
+                    },
+                    icon: Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Icon(
+                            mediaState.playbackState.playing
+                                ? mediaState.fadeState.fadeDirection !=
+                                        FadeDirection.fadeOut
+                                    ? TablerIcons.player_pause
+                                    : TablerIcons.player_play
+                                : TablerIcons.player_play,
+                            size: 32),
+                        if (mediaState.fadeState.fadeDirection !=
+                            FadeDirection.none)
+                          CircularProgressIndicator(
+                              value: mediaState.fadeState.fadeVolumePercent)
+                      ],
+                    )),
               ),
               Semantics.fromProperties(
                 properties: SemanticsProperties(
