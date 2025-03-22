@@ -38,8 +38,11 @@ class FadeState {
   // current fade direction
   final FadeDirection fadeDirection;
 
-  FadeState(this.recoverVolume, this.volumeFadeInStepSize,
-      this.volumeFadeOutStepSize, this.fadeDirection);
+  FadeState(
+      {required this.recoverVolume,
+      this.volumeFadeInStepSize = 0.0,
+      this.volumeFadeOutStepSize = 0.0,
+      this.fadeDirection = FadeDirection.none});
 
   FadeState copyWith({
     double? recoverVolume,
@@ -48,10 +51,11 @@ class FadeState {
     FadeDirection? fadeDirection,
   }) {
     return FadeState(
-        recoverVolume ?? this.recoverVolume,
-        volumeFadeInStepSize ?? this.volumeFadeInStepSize,
-        volumeFadeOutStepSize ?? this.volumeFadeOutStepSize,
-        fadeDirection ?? this.fadeDirection);
+        recoverVolume: recoverVolume ?? this.recoverVolume,
+        volumeFadeInStepSize: volumeFadeInStepSize ?? this.volumeFadeInStepSize,
+        volumeFadeOutStepSize:
+            volumeFadeOutStepSize ?? this.volumeFadeOutStepSize,
+        fadeDirection: fadeDirection ?? this.fadeDirection);
   }
 }
 
@@ -279,8 +283,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       playbackState.add(event);
     });
 
-    fadeState = BehaviorSubject.seeded(
-        FadeState(_player.volume, 0.0, 0.0, FadeDirection.none));
+    fadeState =
+        BehaviorSubject.seeded(FadeState(recoverVolume: _player.volume));
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
@@ -360,8 +364,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> _fadeAudio(FadeDirection direction) async {
-    fadeState.add(FadeState(_player.volume, _getVolumeFadeInStepSize(),
-        _getVolumeFadeOutStepSize(), direction));
+    fadeState.add(FadeState(
+        recoverVolume: _player.volume,
+        volumeFadeInStepSize: _getVolumeFadeInStepSize(),
+        volumeFadeOutStepSize: _getVolumeFadeOutStepSize(),
+        fadeDirection: direction));
 
     // Prepare fade-in
     late Future fut;
