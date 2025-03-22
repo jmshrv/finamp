@@ -30,8 +30,7 @@ class _BufferDurationListTileState extends State<BufferDurationListTile> {
             final valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSettingsHelper.setBufferDuration(
-                  Duration(seconds: valueInt));
+              FinampSetters.setBufferDuration(Duration(seconds: valueInt));
             }
           },
         ),
