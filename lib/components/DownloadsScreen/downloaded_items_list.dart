@@ -143,29 +143,40 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
   }
 }
 
-class DownloadedChildrenList extends StatefulWidget {
+class DownloadedChildrenList extends ConsumerStatefulWidget {
   const DownloadedChildrenList({super.key, required this.parent});
 
   final DownloadStub parent;
 
   @override
-  State<DownloadedChildrenList> createState() => _DownloadedChildrenListState();
+  ConsumerState<DownloadedChildrenList> createState() =>
+      _DownloadedChildrenListState();
 }
 
-class _DownloadedChildrenListState extends State<DownloadedChildrenList> {
-  final downloadsService = GetIt.instance<DownloadsService>();
+class _DownloadedChildrenListState
+    extends ConsumerState<DownloadedChildrenList> {
+  final _downloadsService = GetIt.instance<DownloadsService>();
 
   @override
   Widget build(BuildContext context) {
-    var items = downloadsService.getVisibleChildren(widget.parent);
+    var items = _downloadsService.getVisibleChildren(widget.parent);
     return Column(children: [
       //TODO use a list builder here
-      for (final track in items)
+      for (final stub in items)
         ListTile(
-          title: Text(track.baseItem?.name ?? track.name),
-          leading: AlbumImage(item: track.baseItem),
-          subtitle: ItemFileSize(
-            stub: track,
+          title: Text(stub.baseItem?.name ?? stub.name),
+          leading: AlbumImage(item: stub.baseItem),
+          subtitle: ItemFileSize(stub: stub),
+          trailing: FutureBuilder(
+            future: ref
+                .watch(_downloadsService.statusProvider((stub, null)).future)
+                .then((item) => item.isRequired),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!) {
+                return const Icon(Icons.lock);
+              }
+              return const SizedBox.shrink();
+            },
           ),
         )
     ]);
