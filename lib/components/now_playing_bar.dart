@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
@@ -287,7 +288,8 @@ class NowPlayingBar extends ConsumerWidget {
                                             onPressed: () {
                                               FeedbackHelper.feedback(
                                                   FeedbackType.light);
-                                              audioHandler.togglePlayback();
+                                              unawaited(audioHandler
+                                                  .togglePlayback());
                                             },
                                             color: Colors.white,
                                             icon: Icon(

@@ -433,7 +433,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> togglePlayback() {
-    if (_player.playing) {
+    if (_player.playing &&
+        fadeState.value.fadeDirection != FadeDirection.fadeOut) {
       return pause();
     } else {
       return play();
