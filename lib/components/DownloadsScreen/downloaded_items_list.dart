@@ -108,7 +108,8 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
               : SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text(AppLocalizations.of(context)!.noItem),
+                    child:
+                        Text(AppLocalizations.of(context)!.noItemsDownloaded),
                   ),
                 ),
           loading: () => const SliverToBoxAdapter(

@@ -350,6 +350,10 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
+  "noItemsDownloaded": "No items downloaded.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",
