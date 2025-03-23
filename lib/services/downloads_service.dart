@@ -155,7 +155,7 @@ class DownloadsService {
   /// Provider for downloaded items of a specific type.
   /// Used to show various items grouped by type on the downloads screen.
   late final downloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, BaseItemDtoType>((ref, type) {
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, type) {
     return queryUserDownloaded(type).watch(fireImmediately: true);
   });
 
@@ -1266,20 +1266,18 @@ class DownloadsService {
 
   /// Query all downloads by the given BaseItemDtoType.
   /// Used to show various items grouped by type on the downloads screen.
-  Query<DownloadStub> queryUserDownloaded(BaseItemDtoType filterType) {
-    final where = _isar.downloadItems.where();
-
-    final afterWhere = switch (filterType) {
-      BaseItemDtoType.track => where.typeEqualTo(DownloadItemType.track),
-      _ => where.typeEqualTo(DownloadItemType.collection),
-    };
-
-    return afterWhere
+  Query<DownloadStub> queryUserDownloaded(DownloadsScreenCategory category) {
+    final prefiltered = _isar.downloadItems
+        .where()
+        .typeEqualTo(category.type)
         .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .baseItemTypeEqualTo(filterType)
-        .sortByName()
-        .build();
+        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId));
+
+    final afterFilter = category.baseItemType != null
+        ? prefiltered.baseItemTypeEqualTo(category.baseItemType!)
+        : prefiltered;
+
+    return afterFilter.sortByName().build();
   }
 
   /// Gets an item which requires the given stub to be downloaded.  Used in

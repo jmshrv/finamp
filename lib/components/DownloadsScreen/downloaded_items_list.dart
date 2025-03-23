@@ -32,7 +32,7 @@ class DownloadedItemsTitle extends StatelessWidget {
 class DownloadedItemsList extends ConsumerStatefulWidget {
   const DownloadedItemsList({super.key, required this.type});
 
-  final BaseItemDtoType type;
+  final DownloadsScreenCategory type;
 
   @override
   ConsumerState<DownloadedItemsList> createState() =>
@@ -42,25 +42,8 @@ class DownloadedItemsList extends ConsumerStatefulWidget {
 class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
   final _downloadsService = GetIt.instance<DownloadsService>();
 
-  final _supportedTypes = [
-    BaseItemDtoType.artist,
-    BaseItemDtoType.album,
-    BaseItemDtoType.playlist,
-    BaseItemDtoType.genre,
-    BaseItemDtoType.track,
-  ];
-
   @override
   Widget build(BuildContext context) {
-    if (!_supportedTypes.contains(widget.type)) {
-      return const SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text('Unsupported type'),
-        ),
-      );
-    }
-
     return ref
         .watch(_downloadsService.downloadedItemsProvider(widget.type))
         .when(
