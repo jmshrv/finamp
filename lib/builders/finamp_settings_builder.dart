@@ -19,6 +19,9 @@ Builder getFinampSettingsGenerator(BuilderOptions options) => SharedPartBuilder(
       'finamp_settings_builder',
     );
 
+/// Generate setters and providers for all fields in FinampSettings.  The generated
+/// code is part of finamp_settings_helper.dart.  Fields annotated with
+/// @FinampSetterIgnore() are ignored.
 class _FinampSettingsGenerator extends Generator {
   @override
   FutureOr<String> generate(LibraryReader library, BuildStep buildStep) async {
@@ -26,8 +29,9 @@ class _FinampSettingsGenerator extends Generator {
       return '';
     }
     ClassElement? settings;
-    for (var x in library.element.definingCompilationUnit.libraryImports) {
-      settings = LibraryReader(x.importedLibrary!).findType("FinampSettings");
+    for (var import in library.element.definingCompilationUnit.libraryImports) {
+      settings =
+          LibraryReader(import.importedLibrary!).findType("FinampSettings");
       if (settings != null) break;
     }
     if (settings == null) {
@@ -48,6 +52,7 @@ class _FinampSettingsGenerator extends Generator {
                 "Unexpected param count for ${property.displayName}: ${property.parameters.length}");
           }
           var typeArg = _typeName(property.parameters.first.type);
+          // setter name with first letter uppercase for adding prefixes to
           var paramName =
               "${property.displayName.substring(0, 1).toUpperCase()}${property.displayName.substring(1)}";
 
@@ -89,7 +94,7 @@ class _FinampSettingsGenerator extends Generator {
     var typeArg = type.element!.displayName;
     if (type is ParameterizedType && type.typeArguments.isNotEmpty) {
       typeArg =
-          "$typeArg<${type.typeArguments.map((x) => x.element!.displayName).join(",")}>";
+          "$typeArg<${type.typeArguments.map((x) => _typeName(x)).join(",")}>";
     }
     if (type.nullabilitySuffix == NullabilitySuffix.question) {
       typeArg = "$typeArg?";
