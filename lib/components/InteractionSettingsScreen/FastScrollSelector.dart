@@ -16,7 +16,7 @@ class FastScrollSelector extends StatelessWidget {
         return SwitchListTile.adaptive(
           title: Text(AppLocalizations.of(context)!.showFastScroller),
           value: FinampSettingsHelper.finampSettings.showFastScroller,
-          onChanged: (value) => FinampSettingsHelper.setShowFastScroller(value),
+          onChanged: (value) => FinampSetters.setShowFastScroller(value),
         );
       },
     );

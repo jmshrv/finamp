@@ -18,8 +18,7 @@ class ShowArtistsTopTracksSelector extends StatelessWidget {
           subtitle:
               Text(AppLocalizations.of(context)!.showArtistsTopTracksSubtitle),
           value: FinampSettingsHelper.finampSettings.showArtistsTopTracks,
-          onChanged: (value) =>
-              FinampSettingsHelper.setShowArtistsTopTracks(value),
+          onChanged: (value) => FinampSetters.setShowArtistsTopTracks(value),
         );
       },
     );

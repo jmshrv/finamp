@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../services/music_player_background_task.dart';
-
 import '../../services/finamp_settings_helper.dart';
+import '../../services/music_player_background_task.dart';
 
 class SleepTimerDialog extends StatefulWidget {
   const SleepTimerDialog({super.key});
@@ -54,7 +53,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
 
                   _audioHandler
                       .setSleepTimer(Duration(seconds: durationInSeconds));
-                  FinampSettingsHelper.setSleepTimerSeconds(durationInSeconds);
+                  FinampSetters.setSleepTimerSeconds(durationInSeconds);
                 },
               ),
             ),

@@ -26,7 +26,7 @@ class ContentViewTypeDropdownListTile extends StatelessWidget {
                 .toList(),
             onChanged: (value) {
               if (value != null) {
-                FinampSettingsHelper.setContentViewType(value);
+                FinampSetters.setContentViewType(value);
               }
             },
           ),

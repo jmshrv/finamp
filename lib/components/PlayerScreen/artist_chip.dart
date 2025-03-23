@@ -20,11 +20,10 @@ const _height = 24.0; // I'm sure this magic number will work on all devices
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
 @riverpod
-Future<BaseItemDto> artistItem(ArtistItemRef ref, String id) async {
+Future<BaseItemDto> artistItem(Ref ref, BaseItemId id) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isarDownloader = GetIt.instance<DownloadsService>();
-  final bool isOffline = ref.watch(finampSettingsProvider
-      .select((value) => value.value?.isOffline ?? false));
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   return isOffline
       ? isarDownloader
           .getCollectionInfo(id: id)

@@ -2,7 +2,6 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_ce/hive.dart';
 
 import '../../models/finamp_models.dart';
 import 'download_location_delete_dialog.dart';
@@ -33,12 +32,8 @@ class DownloadLocationListTile extends ConsumerWidget {
           IconButton(
             icon: Icon(isDefault ? Icons.star : Icons.star_outline),
             onPressed: () {
-              FinampSettings finampSettingsTemp =
-                  FinampSettingsHelper.finampSettings;
-              finampSettingsTemp.defaultDownloadLocation =
-                  isDefault ? null : downloadLocation.id;
-              Hive.box<FinampSettings>("FinampSettings")
-                  .put("FinampSettings", finampSettingsTemp);
+              FinampSetters.setDefaultDownloadLocation(
+                  isDefault ? null : downloadLocation.id);
             },
             tooltip:
                 AppLocalizations.of(context)!.defaultDownloadLocationButton,

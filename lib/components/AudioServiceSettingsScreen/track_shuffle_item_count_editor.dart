@@ -33,7 +33,7 @@ class _TrackShuffleItemCountEditorState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null) {
-              FinampSettingsHelper.setTrackShuffleItemCount(valueInt);
+              FinampSetters.setTrackShuffleItemCount(valueInt);
             }
           },
         ),

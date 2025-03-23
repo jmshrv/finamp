@@ -24,8 +24,7 @@ class IsFavorite extends _$IsFavorite {
     if (item == null) {
       return false;
     }
-    ref.listen(finampSettingsProvider.select((value) => value.value?.isOffline),
-        (_, value) {
+    ref.listen(finampSettingsProvider.isOffline, (_, value) {
       if (!_changed && value == false) {
         // If we have not had updateFavorite run and are moving from offline to
         // online, invalidate to fetch latest data from server.

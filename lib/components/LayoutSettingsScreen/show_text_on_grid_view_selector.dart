@@ -18,8 +18,7 @@ class ShowTextOnGridViewSelector extends StatelessWidget {
           subtitle:
               Text(AppLocalizations.of(context)!.showTextOnGridViewSubtitle),
           value: FinampSettingsHelper.finampSettings.showTextOnGridView,
-          onChanged: (value) =>
-              FinampSettingsHelper.setShowTextOnGridView(value),
+          onChanged: (value) => FinampSetters.setShowTextOnGridView(value),
         );
       },
     );

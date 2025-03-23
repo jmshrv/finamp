@@ -87,13 +87,7 @@ class VolumeNormalizationModeSelector extends StatelessWidget {
                       child: Text(e.toLocalizedString(context)),
                     ))
                 .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                FinampSettings finampSettingsTemp = box.get("FinampSettings")!;
-                finampSettingsTemp.volumeNormalizationMode = value;
-                box.put("FinampSettings", finampSettingsTemp);
-              }
-            },
+            onChanged: FinampSetters.setVolumeNormalizationMode.ifNonNull,
           ),
         );
       },

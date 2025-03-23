@@ -101,7 +101,8 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
             icon: TablerIcons.plus,
             //accentColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
-              var dialogResult = await showDialog<(Future<String>, String?)?>(
+              var dialogResult =
+                  await showDialog<(Future<BaseItemId>, String?)?>(
                 context: context,
                 builder: (context) =>
                     NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
@@ -111,7 +112,8 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                 setState(() {
                   var loadingItem = [
                     (
-                      BaseItemDto(id: "pending", name: dialogResult.$2),
+                      BaseItemDto(
+                          id: BaseItemId("pending"), name: dialogResult.$2),
                       true,
                       null as String?
                     )

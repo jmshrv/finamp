@@ -351,9 +351,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                   icon: TablerIcons.filter_x,
                   text: AppLocalizations.of(context)!.resetFiltersButton,
                   onPressed: () {
-                    FinampSettingsHelper.setonlyShowFavourites(
+                    FinampSetters.setOnlyShowFavourites(
                         DefaultSettings.onlyShowFavourites);
-                    FinampSettingsHelper.setOnlyShowFullyDownloaded(
+                    FinampSetters.setOnlyShowFullyDownloaded(
                         DefaultSettings.onlyShowFullyDownloaded);
                   },
                 )

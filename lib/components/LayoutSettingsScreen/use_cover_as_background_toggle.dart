@@ -18,8 +18,7 @@ class UseCoverAsBackgroundToggle extends StatelessWidget {
           subtitle:
               Text(AppLocalizations.of(context)!.useCoverAsBackgroundSubtitle),
           value: FinampSettingsHelper.finampSettings.useCoverAsBackground,
-          onChanged: (value) =>
-              FinampSettingsHelper.setUseCoverAsBackground(value),
+          onChanged: (value) => FinampSetters.setUseCoverAsBackground(value),
         );
       },
     );

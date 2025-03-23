@@ -19,7 +19,7 @@ class KeepScreenOnWhilePluggedInSelector extends StatelessWidget {
               AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
           value: FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn,
           onChanged: (value) {
-            FinampSettingsHelper.setKeepScreenOnWhilePluggedIn(value);
+            FinampSetters.setKeepScreenOnWhilePluggedIn(value);
           },
         );
       },

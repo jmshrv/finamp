@@ -33,7 +33,7 @@ void postLaunchHook(WidgetRef ref) async {
       // log error without snackbar, we don't want users to be greeted with errors on first launch
       _musicScreenLogger.severe("Failed to download playlist metadata: $e");
     });
-    FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
+    FinampSetters.setHasDownloadedPlaylistInfo(true);
   }
 }
 
@@ -315,9 +315,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                               ? const Icon(Icons.download)
                               : const Icon(Icons.download_outlined),
                           onPressed: finampSettings.isOffline
-                              ? () => FinampSettingsHelper
-                                  .setOnlyShowFullyDownloaded(
-                                      !finampSettings.onlyShowFullyDownloaded)
+                              ? () => FinampSetters.setOnlyShowFullyDownloaded(
+                                  !finampSettings.onlyShowFullyDownloaded)
                               : null,
                           tooltip: AppLocalizations.of(context)!
                               .onlyShowFullyDownloaded,
@@ -328,9 +327,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                           icon: finampSettings.onlyShowFavourites
                               ? const Icon(Icons.favorite)
                               : const Icon(Icons.favorite_outline),
-                          onPressed: () =>
-                              FinampSettingsHelper.setonlyShowFavourites(
-                                  !finampSettings.onlyShowFavourites),
+                          onPressed: () => FinampSetters.setOnlyShowFavourites(
+                              !finampSettings.onlyShowFavourites),
                           tooltip: AppLocalizations.of(context)!.favourites,
                         ),
                       IconButton(

@@ -78,7 +78,7 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends StatelessWidget {
                 .toList(),
             onChanged: (value) {
               if (value != null) {
-                FinampSettingsHelper.setPlaybackSpeedVisibility(value);
+                FinampSetters.setPlaybackSpeedVisibility(value);
               }
             },
           ),

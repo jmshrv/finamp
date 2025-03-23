@@ -30,8 +30,8 @@ class TrackName extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final MediaItem mediaItem = snapshot.data!;
-          BaseItemDto trackBaseItemDto =
-              BaseItemDto.fromJson(mediaItem.extras!["itemJson"]);
+          BaseItemDto trackBaseItemDto = BaseItemDto.fromJson(
+              mediaItem.extras!["itemJson"] as Map<String, dynamic>);
 
           List<TextSpan> separatedArtistTextSpans = [];
 
@@ -116,10 +116,10 @@ class TrackNameContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: trackBaseItemDto == null
+            onTap: trackBaseItemDto?.albumId == null
                 ? null
                 : () => jellyfinApiHelper
-                    .getItemById(trackBaseItemDto!.albumId as String)
+                    .getItemById(trackBaseItemDto!.albumId!)
                     .then((album) => Navigator.of(context).popAndPushNamed(
                         AlbumScreen.routeName,
                         arguments: album)),

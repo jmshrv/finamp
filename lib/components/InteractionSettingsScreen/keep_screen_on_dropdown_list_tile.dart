@@ -26,7 +26,7 @@ class KeepScreenOnDropdownListTile extends StatelessWidget {
                 .toList(),
             onChanged: (value) {
               if (value != null) {
-                FinampSettingsHelper.setKeepScreenOnOption(value);
+                FinampSetters.setKeepScreenOnOption(value);
               }
             },
           ),

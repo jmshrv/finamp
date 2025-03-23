@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -103,157 +102,87 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
   }
 }
 
-class RequireWifiSwitch extends StatelessWidget {
+class RequireWifiSwitch extends ConsumerWidget {
   const RequireWifiSwitch({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? requireWifi = box.get("FinampSettings")?.requireWifiForDownloads;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.requireWifiForDownloads),
-          value: requireWifi ?? false,
-          onChanged: requireWifi == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.requireWifiForDownloads = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.requireWifiForDownloads),
+      value: ref.watch(finampSettingsProvider.requireWifiForDownloads),
+      onChanged: FinampSetters.setRequireWifiForDownloads,
     );
   }
 }
 
-class SyncFavoritesSwitch extends StatelessWidget {
+class SyncFavoritesSwitch extends ConsumerWidget {
   const SyncFavoritesSwitch({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? syncFavorites = box.get("FinampSettings")?.trackOfflineFavorites;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.trackOfflineFavorites),
-          subtitle:
-              Text(AppLocalizations.of(context)!.trackOfflineFavoritesSubtitle),
-          value: syncFavorites ?? false,
-          onChanged: syncFavorites == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.trackOfflineFavorites = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                  if (value) {
-                    final isarDownloader = GetIt.instance<DownloadsService>();
-                    isarDownloader.resyncAll();
-                  }
-                },
-        );
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.trackOfflineFavorites),
+      subtitle:
+          Text(AppLocalizations.of(context)!.trackOfflineFavoritesSubtitle),
+      value: ref.watch(finampSettingsProvider.trackOfflineFavorites),
+      onChanged: (value) {
+        FinampSetters.setTrackOfflineFavorites(value);
+        if (value) {
+          final isarDownloader = GetIt.instance<DownloadsService>();
+          isarDownloader.resyncAll();
+        }
       },
     );
   }
 }
 
-class ShowPlaylistTracksSwitch extends StatelessWidget {
+class ShowPlaylistTracksSwitch extends ConsumerWidget {
   const ShowPlaylistTracksSwitch({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? showUnknownItems =
-            box.get("FinampSettings")?.showDownloadsWithUnknownLibrary;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showNullLibraryItemsTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.showNullLibraryItemsSubtitle),
-          value: showUnknownItems ?? true,
-          onChanged: showUnknownItems == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.showDownloadsWithUnknownLibrary = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.showNullLibraryItemsTitle),
+      subtitle:
+          Text(AppLocalizations.of(context)!.showNullLibraryItemsSubtitle),
+      value: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+      onChanged: FinampSetters.setShowDownloadsWithUnknownLibrary,
     );
   }
 }
 
-class SyncOnStartupSwitch extends StatelessWidget {
+class SyncOnStartupSwitch extends ConsumerWidget {
   const SyncOnStartupSwitch({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? syncOnStartup = box.get("FinampSettings")?.resyncOnStartup;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.syncOnStartupSwitch),
-          value: syncOnStartup ?? true,
-          onChanged: syncOnStartup == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.resyncOnStartup = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.syncOnStartupSwitch),
+      value: ref.watch(finampSettingsProvider.resyncOnStartup),
+      onChanged: FinampSetters.setResyncOnStartup,
     );
   }
 }
 
-class PreferQuickSyncsSwitch extends StatelessWidget {
+class PreferQuickSyncsSwitch extends ConsumerWidget {
   const PreferQuickSyncsSwitch({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? preferQuicksyncs = box.get("FinampSettings")?.preferQuickSyncs;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.preferQuickSyncSwitch),
-          subtitle:
-              Text(AppLocalizations.of(context)!.preferQuickSyncSwitchSubtitle),
-          value: preferQuicksyncs ?? true,
-          onChanged: preferQuicksyncs == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.preferQuickSyncs = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+        title: Text(AppLocalizations.of(context)!.preferQuickSyncSwitch),
+        subtitle:
+            Text(AppLocalizations.of(context)!.preferQuickSyncSwitchSubtitle),
+        value: ref.watch(finampSettingsProvider.preferQuickSyncs),
+        onChanged: FinampSetters.setPreferQuickSyncs);
   }
 }
 
-class ConcurentDownloadsSelector extends StatelessWidget {
+class ConcurentDownloadsSelector extends ConsumerWidget {
   const ConcurentDownloadsSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         ListTile(
@@ -261,38 +190,32 @@ class ConcurentDownloadsSelector extends StatelessWidget {
           subtitle: Text(
               AppLocalizations.of(context)!.maxConcurrentDownloadsSubtitle),
         ),
-        ValueListenableBuilder<Box<FinampSettings>>(
-          valueListenable: FinampSettingsHelper.finampSettingsListener,
-          builder: (context, box, child) {
-            final finampSettings = box.get("FinampSettings")!;
-
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Slider(
-                  min: 1,
-                  max: 100,
-                  value: finampSettings.maxConcurrentDownloads.toDouble(),
-                  label: AppLocalizations.of(context)!
-                      .maxConcurrentDownloadsLabel(
-                          finampSettings.maxConcurrentDownloads.toString()),
-                  onChanged: (value) {
-                    FinampSettings finampSettingsTemp =
-                        box.get("FinampSettings")!;
-                    finampSettingsTemp.maxConcurrentDownloads = value.toInt();
-                    box.put("FinampSettings", finampSettingsTemp);
-                  },
-                ),
-                Text(
-                  AppLocalizations.of(context)!.maxConcurrentDownloadsLabel(
-                      finampSettings.maxConcurrentDownloads.toString()),
-                  style: Theme.of(context).textTheme.titleLarge,
-                )
-              ],
-            );
-          },
-        ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Slider(
+              min: 1,
+              max: 100,
+              value: ref
+                  .watch(finampSettingsProvider.maxConcurrentDownloads)
+                  .clamp(1, 100)
+                  .toDouble(),
+              label: AppLocalizations.of(context)!.maxConcurrentDownloadsLabel(
+                  ref
+                      .watch(finampSettingsProvider.maxConcurrentDownloads)
+                      .toString()),
+              onChanged: (value) =>
+                  FinampSetters.setMaxConcurrentDownloads(value.toInt()),
+            ),
+            Text(
+              AppLocalizations.of(context)!.maxConcurrentDownloadsLabel(ref
+                  .watch(finampSettingsProvider.maxConcurrentDownloads)
+                  .toString()),
+              style: Theme.of(context).textTheme.titleLarge,
+            )
+          ],
+        )
       ],
     );
   }
@@ -322,16 +245,12 @@ class DownloadWorkersSelector extends StatelessWidget {
                 Slider(
                   min: 1,
                   max: 10,
-                  value: min(finampSettings.downloadWorkers.toDouble(), 10),
+                  value: finampSettings.downloadWorkers.clamp(1, 10).toDouble(),
                   label: AppLocalizations.of(context)!
                       .downloadsWorkersSettingLabel(
                           finampSettings.downloadWorkers.toString()),
-                  onChanged: (value) {
-                    FinampSettings finampSettingsTemp =
-                        box.get("FinampSettings")!;
-                    finampSettingsTemp.downloadWorkers = value.toInt();
-                    box.put("FinampSettings", finampSettingsTemp);
-                  },
+                  onChanged: (value) =>
+                      FinampSetters.setDownloadWorkers(value.toInt()),
                 ),
                 Text(
                   AppLocalizations.of(context)!.downloadsWorkersSettingLabel(
@@ -352,30 +271,20 @@ class RedownloadTranscodesSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool? redownloadTranscodes = ref.watch(finampSettingsProvider
-        .select((value) => value.valueOrNull?.shouldRedownloadTranscodes));
-
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.redownloadTitle),
       subtitle: Text(AppLocalizations.of(context)!.redownloadSubtitle),
-      value: redownloadTranscodes ?? true,
-      onChanged: redownloadTranscodes == null
-          ? null
-          : (value) async {
-              FinampSettings finampSettingsTemp =
-                  FinampSettingsHelper.finampSettings;
-              finampSettingsTemp.shouldRedownloadTranscodes = value;
-              await Hive.box<FinampSettings>("FinampSettings")
-                  .put("FinampSettings", finampSettingsTemp);
-
-              if (value) {
-                final isarDownloader = GetIt.instance<DownloadsService>();
-                isarDownloader.markOutdatedTranscodes();
-                await isarDownloader.resyncAll();
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.redownloadcomplete);
-              }
-            },
+      value: ref.watch(finampSettingsProvider.shouldRedownloadTranscodes),
+      onChanged: (value) async {
+        FinampSetters.setShouldRedownloadTranscodes(value);
+        if (value) {
+          final isarDownloader = GetIt.instance<DownloadsService>();
+          isarDownloader.markOutdatedTranscodes();
+          await isarDownloader.resyncAll();
+          GlobalSnackbar.message(
+              (scaffold) => AppLocalizations.of(scaffold)!.redownloadcomplete);
+        }
+      },
     );
   }
 }
@@ -409,11 +318,7 @@ class _BufferSizeListTileState extends State<DownloadSizeWarningCutoffTile> {
             var valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSettings finampSettingsTemp =
-                  FinampSettingsHelper.finampSettings;
-              finampSettingsTemp.downloadSizeWarningCutoff = valueInt;
-              Hive.box<FinampSettings>("FinampSettings")
-                  .put("FinampSettings", finampSettingsTemp);
+              FinampSetters.setDownloadSizeWarningCutoff(valueInt);
             }
           },
         ),

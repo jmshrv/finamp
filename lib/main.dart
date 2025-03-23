@@ -80,19 +80,30 @@ import 'setup_logging.dart';
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
+  final mainLog = Logger("Main()");
   try {
     await setupLogging();
     await _setupEdgeToEdgeOverlayStyle();
+    mainLog.info("Setup edge-to-edge overlay");
     await setupHive();
+    mainLog.info("Setup hive and isar");
     _migrateDownloadLocations();
     _migrateSortOptions();
+    mainLog.info("Completed applicable migrations");
     await _setupFinampUserHelper();
+    mainLog.info("Setup user helper");
     await _setupJellyfinApiData();
+    mainLog.info("setup jellyfin api");
     _setupOfflineListenLogHelper();
+    mainLog.info("Setup offline listen tracking");
     await _setupDownloadsHelper();
+    mainLog.info("Setup downloads service");
     await _setupOSIntegration();
+    mainLog.info("Setup os integrations");
     await _setupPlaybackServices();
+    mainLog.info("Setup audio player");
     await _setupKeepScreenOnHelper();
+    mainLog.info("Setup KeepScreenOnHelper");
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -115,6 +126,8 @@ void main() async {
 
     await findSystemLocale();
     await initializeDateFormatting();
+
+    mainLog.info("Launching main app");
 
     runApp(const Finamp());
   }
@@ -158,7 +171,7 @@ Future<void> _setupDownloadsHelper() async {
   if (!FinampSettingsHelper
       .finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
-    FinampSettingsHelper.setHasCompleteddownloadsServiceMigration(true);
+    FinampSetters.setHasCompletedDownloadsServiceMigration(true);
   }
 
   await FileDownloader()
@@ -361,7 +374,7 @@ Future<void> _setupPlaybackServices() async {
   // Begin to restore queue
   unawaited(queueService
       .performInitialQueueLoad()
-      .catchError((x) => GlobalSnackbar.error(x)));
+      .catchError((dynamic x) => GlobalSnackbar.error(x)));
 }
 
 /// Migrates the old DownloadLocations list to a map
@@ -420,19 +433,19 @@ Future<void> _setupFinampUserHelper() async {
   GetIt.instance.registerSingleton(FinampUserHelper());
   if (!FinampSettingsHelper.finampSettings.hasCompletedIsarUserMigration) {
     await GetIt.instance<FinampUserHelper>().migrateFromHive();
-    FinampSettingsHelper.setHasCompletedIsarUserMigration(true);
+    FinampSetters.setHasCompletedIsarUserMigration(true);
   }
   await GetIt.instance<FinampUserHelper>().setAuthHeader();
 }
 
-class Finamp extends ConsumerStatefulWidget {
+class Finamp extends StatefulWidget {
   const Finamp({super.key});
 
   @override
-  ConsumerState<Finamp> createState() => _FinampState();
+  State<Finamp> createState() => _FinampState();
 }
 
-class _FinampState extends ConsumerState<Finamp> with WindowListener {
+class _FinampState extends State<Finamp> with WindowListener {
   static final Logger windowManagerLogger = Logger("WindowManager");
 
   @override
@@ -484,6 +497,8 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                 };
                 return Consumer(
                   builder: (context, ref, child) {
+                    // Force settings provider to fully complete build before widgets start accessing
+                    ref.listen(finampSettingsProvider, (_, __) {});
                     Future(() {
                       ref.read(brightnessProvider.notifier).state = theme;
                     });
@@ -553,6 +568,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                         systemOverlayStyle: SystemUiOverlayStyle(
                           statusBarBrightness: Brightness.light,
                           statusBarIconBrightness: Brightness.dark,
+                          systemNavigationBarIconBrightness: Brightness.dark,
                         ),
                       ),
                       snackBarTheme: const SnackBarThemeData(

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../components/TranscodingSettingsScreen/bitrate_selector.dart';
 import '../components/TranscodingSettingsScreen/transcode_switch.dart';
@@ -50,166 +50,111 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
   }
 }
 
-class DownloadBitrateSelector extends StatelessWidget {
+class DownloadBitrateSelector extends ConsumerWidget {
   const DownloadBitrateSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final transcodeProfile =
+        ref.watch(finampSettingsProvider.downloadTranscodingProfile);
     return Column(
       children: [
         ListTile(
           title: Text(AppLocalizations.of(context)!.downloadBitrate),
           subtitle: Text(AppLocalizations.of(context)!.downloadBitrateSubtitle),
         ),
-        ValueListenableBuilder<Box<FinampSettings>>(
-          valueListenable: FinampSettingsHelper.finampSettingsListener,
-          builder: (context, box, child) {
-            final finampSettings = box.get("FinampSettings")!;
-
-            // We do all of this division/multiplication because Jellyfin wants us to specify bitrates in bits, not kilobits.
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Slider(
-                  min: 64,
-                  max: 320,
-                  value:
-                      finampSettings.downloadTranscodingProfile.stereoBitrate /
-                          1000,
-                  divisions: 8,
-                  label: finampSettings.downloadTranscodingProfile.bitrateKbps,
-                  onChanged: (value) {
-                    FinampSettings finampSettingsTemp = finampSettings;
-                    finampSettingsTemp.downloadTranscodeBitrate =
-                        (value * 1000).toInt();
-                    Hive.box<FinampSettings>("FinampSettings")
-                        .put("FinampSettings", finampSettingsTemp);
-                  },
-                ),
-                Text(
-                  finampSettings.downloadTranscodingProfile.bitrateKbps,
-                  style: Theme.of(context).textTheme.titleLarge,
-                )
-              ],
-            );
-          },
-        ),
+        // We do all of this division/multiplication because Jellyfin wants us to specify bitrates in bits, not kilobits.
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Slider(
+              min: 64,
+              max: 320,
+              value: (transcodeProfile.stereoBitrate / 1000).clamp(64, 320),
+              divisions: 8,
+              label: transcodeProfile.bitrateKbps,
+              onChanged: (value) => FinampSetters.setDownloadTranscodeBitrate(
+                  (value * 1000).toInt()),
+            ),
+            Text(
+              transcodeProfile.bitrateKbps,
+              style: Theme.of(context).textTheme.titleLarge,
+            )
+          ],
+        )
       ],
     );
   }
 }
 
-class DownloadTranscodeEnableDropdownListTile extends StatelessWidget {
+class DownloadTranscodeEnableDropdownListTile extends ConsumerWidget {
   const DownloadTranscodeEnableDropdownListTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        final finampSettings = box.get("FinampSettings")!;
-
-        return ListTile(
-          title:
-              Text(AppLocalizations.of(context)!.downloadTranscodeEnableTitle),
-          trailing: DropdownButton<TranscodeDownloadsSetting>(
-            value: finampSettings.shouldTranscodeDownloads,
-            items: TranscodeDownloadsSetting.values
-                .map((e) => DropdownMenuItem<TranscodeDownloadsSetting>(
-                      value: e,
-                      child: Text(AppLocalizations.of(context)!
-                          .downloadTranscodeEnableOption(e.name)),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                FinampSettings finampSettingsTemp = finampSettings;
-                finampSettingsTemp.shouldTranscodeDownloads = value;
-                Hive.box<FinampSettings>("FinampSettings")
-                    .put("FinampSettings", finampSettingsTemp);
-              }
-            },
-          ),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.downloadTranscodeEnableTitle),
+      trailing: DropdownButton<TranscodeDownloadsSetting>(
+        value: ref.watch(finampSettingsProvider.shouldTranscodeDownloads),
+        items: TranscodeDownloadsSetting.values
+            .map((e) => DropdownMenuItem<TranscodeDownloadsSetting>(
+                  value: e,
+                  child: Text(AppLocalizations.of(context)!
+                      .downloadTranscodeEnableOption(e.name)),
+                ))
+            .toList(),
+        onChanged: FinampSetters.setShouldTranscodeDownloads.ifNonNull,
+      ),
     );
   }
 }
 
-class DownloadTranscodeCodecDropdownListTile extends StatelessWidget {
+class DownloadTranscodeCodecDropdownListTile extends ConsumerWidget {
   const DownloadTranscodeCodecDropdownListTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        final finampSettings = box.get("FinampSettings")!;
-
-        return ListTile(
-          title:
-              Text(AppLocalizations.of(context)!.downloadTranscodeCodecTitle),
-          trailing: DropdownButton<FinampTranscodingCodec>(
-            value: finampSettings.downloadTranscodingProfile.codec,
-            items: FinampTranscodingCodec.values
-                .where((element) => !Platform.isIOS || element.iosCompatible)
-                .where((element) => element != FinampTranscodingCodec.original)
-                .map((e) => DropdownMenuItem<FinampTranscodingCodec>(
-                      value: e,
-                      child: Text(e.name.toUpperCase()),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                FinampSettings finampSettingsTemp = finampSettings;
-                finampSettingsTemp.downloadTranscodingCodec = value;
-                Hive.box<FinampSettings>("FinampSettings")
-                    .put("FinampSettings", finampSettingsTemp);
-              }
-            },
-          ),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.downloadTranscodeCodecTitle),
+      trailing: DropdownButton<FinampTranscodingCodec>(
+        value:
+            ref.watch(finampSettingsProvider.downloadTranscodingProfile).codec,
+        items: FinampTranscodingCodec.values
+            .where((element) => !Platform.isIOS || element.iosCompatible)
+            .where((element) => element != FinampTranscodingCodec.original)
+            .map((e) => DropdownMenuItem<FinampTranscodingCodec>(
+                  value: e,
+                  child: Text(e.name.toUpperCase()),
+                ))
+            .toList(),
+        onChanged: FinampSetters.setDownloadTranscodingCodec,
+      ),
     );
   }
 }
 
 class StreamingTranscodeSegmentContainerDropdownListTile
-    extends StatelessWidget {
+    extends ConsumerWidget {
   const StreamingTranscodeSegmentContainerDropdownListTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        final finampSettings = box.get("FinampSettings")!;
-
-        return ListTile(
-          title: Text(
-              AppLocalizations.of(context)!.transcodingStreamingContainerTitle),
-          subtitle: Text(AppLocalizations.of(context)!
-              .transcodingStreamingContainerSubtitle),
-          trailing: DropdownButton<FinampSegmentContainer>(
-            value: finampSettings.transcodingSegmentContainer,
-            items: FinampSegmentContainer.values
-                .map((e) => DropdownMenuItem<FinampSegmentContainer>(
-                      value: e,
-                      child: Text(e.container.toUpperCase()),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                FinampSettings finampSettingsTemp = finampSettings;
-                finampSettingsTemp.transcodingSegmentContainer = value;
-                Hive.box<FinampSettings>("FinampSettings")
-                    .put("FinampSettings", finampSettingsTemp);
-              }
-            },
-          ),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(
+          AppLocalizations.of(context)!.transcodingStreamingContainerTitle),
+      subtitle: Text(
+          AppLocalizations.of(context)!.transcodingStreamingContainerSubtitle),
+      trailing: DropdownButton<FinampSegmentContainer>(
+        value: ref.watch(finampSettingsProvider.transcodingSegmentContainer),
+        items: FinampSegmentContainer.values
+            .map((e) => DropdownMenuItem<FinampSegmentContainer>(
+                  value: e,
+                  child: Text(e.container.toUpperCase()),
+                ))
+            .toList(),
+        onChanged: FinampSetters.setTranscodingSegmentContainer.ifNonNull,
+      ),
     );
   }
 }

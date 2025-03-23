@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
@@ -14,6 +15,7 @@ import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../builders/annotations.dart';
 import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
 
@@ -40,17 +42,22 @@ class FinampUser {
   @HiveField(3)
   String serverId;
   @HiveField(4)
-  String? currentViewId;
+  @ignore
+  BaseItemId? currentViewId;
+  @Name("currentViewId")
+  String? get isarCurrentViewId => currentViewId?.raw;
+  set isarCurrentViewId(String? id) =>
+      currentViewId = id == null ? null : BaseItemId(id);
   @ignore
   @HiveField(5)
-  Map<String, BaseItemDto> views;
+  Map<BaseItemId, BaseItemDto> views;
 
   // We only need 1 user, the current user
   final Id isarId = 0;
   String get isarViews => jsonEncode(views);
   set isarViews(String json) =>
-      views = (jsonDecode(json) as Map<String, dynamic>)
-          .map((k, v) => MapEntry(k, BaseItemDto.fromJson(v)));
+      views = (jsonDecode(json) as Map<BaseItemId, dynamic>).map((k, v) =>
+          MapEntry(k, BaseItemDto.fromJson(v as Map<String, dynamic>)));
 
   @ignore
   BaseItemDto? get currentView => views[currentViewId];
@@ -313,6 +320,7 @@ class FinampSettings {
   int sleepTimerSeconds;
 
   @HiveField(15, defaultValue: {})
+  @FinampSetterIgnore()
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
@@ -326,9 +334,11 @@ class FinampSettings {
   bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: {})
+  @FinampSetterIgnore()
   Map<TabContentType, SortBy> tabSortBy;
 
   @HiveField(21, defaultValue: {})
+  @FinampSetterIgnore()
   Map<TabContentType, SortOrder> tabSortOrder;
 
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)
@@ -385,6 +395,8 @@ class FinampSettings {
       defaultValue:
           false) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedIsarUserMigration;
+
+  @HiveField(43)
   FinampTranscodingCodec? downloadTranscodingCodec;
 
   @HiveField(44, defaultValue: DefaultSettings.shouldTranscodeDownloads)
@@ -1001,7 +1013,7 @@ class DownloadStub {
         (item.blurHash != null || item.imageId != null));
     String id = (type == DownloadItemType.image)
         ? item.blurHash ?? item.imageId!
-        : item.id;
+        : item.id.raw;
     return DownloadStub._build(
         id: id,
         isarId: getHash(id, type),
@@ -1014,13 +1026,13 @@ class DownloadStub {
   }
 
   factory DownloadStub.fromId(
-      {required String id,
+      {required BaseItemId id,
       required DownloadItemType type,
       required String? name}) {
     assert(!type.requiresItem);
     return DownloadStub._build(
-        id: id,
-        isarId: getHash(id, type),
+        id: id.raw,
+        isarId: getHash(id.raw, type),
         jsonItem: null,
         type: type,
         name: name ?? "Unlocalized $id",
@@ -1066,10 +1078,10 @@ class DownloadStub {
   final String? jsonItem;
 
   @ignore
-  BaseItemDto? get baseItem =>
-      _baseItemCached ??= ((jsonItem == null || !type.requiresItem)
-          ? null
-          : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
+  BaseItemDto? get baseItem => _baseItemCached ??= ((jsonItem == null ||
+          !type.requiresItem)
+      ? null
+      : BaseItemDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
 
   @ignore
   BaseItemDto? _baseItemCached;
@@ -1090,7 +1102,8 @@ class DownloadStub {
                   _ =>
                     throw "Invalid FinampCollection DownloadItem: no attached collection"
                 }
-              : FinampCollection.fromJson(jsonDecode(jsonItem!)));
+              : FinampCollection.fromJson(
+                  jsonDecode(jsonItem!) as Map<String, dynamic>));
 
   @ignore
   FinampCollection? _finampCollectionCached;
@@ -1141,7 +1154,7 @@ class DownloadStub {
       parentIndexNumber: baseItem?.parentIndexNumber,
       orderedChildren: null,
       path: null,
-      viewId: null,
+      isarViewId: null,
       userTranscodingProfile: null,
       syncTranscodingProfile: transcodingProfile,
       fileTranscodingProfile: null,
@@ -1170,7 +1183,7 @@ class DownloadItem extends DownloadStub {
       required this.parentIndexNumber,
       required this.orderedChildren,
       required this.path,
-      required this.viewId,
+      required this.isarViewId,
       required this.userTranscodingProfile,
       required this.syncTranscodingProfile,
       required this.fileTranscodingProfile})
@@ -1208,7 +1221,12 @@ class DownloadItem extends DownloadStub {
 
   /// The id of the view/library containing this item.  Will be null for playlists
   /// and child elements with no non-playlist parents.
-  String? viewId;
+  @ignore
+  BaseItemId? get viewId => isarViewId == null ? null : BaseItemId(isarViewId!);
+  set viewId(BaseItemId? id) => isarViewId = id?.raw;
+  // Use viewId name to match older database entries
+  @Name("viewId")
+  String? isarViewId;
 
   DownloadProfile? userTranscodingProfile;
   DownloadProfile? syncTranscodingProfile;
@@ -1242,7 +1260,7 @@ class DownloadItem extends DownloadStub {
   DownloadItem? copyWith(
       {BaseItemDto? item,
       List<DownloadStub>? orderedChildItems,
-      String? viewId,
+      BaseItemId? viewId,
       required bool forceCopy}) {
     String? json;
     if (type == DownloadItemType.image) {
@@ -1291,7 +1309,7 @@ class DownloadItem extends DownloadStub {
       path: path,
       state: state,
       type: type,
-      viewId: viewId ?? this.viewId,
+      isarViewId: viewId?.raw ?? isarViewId,
       userTranscodingProfile: userTranscodingProfile,
       syncTranscodingProfile: syncTranscodingProfile,
       fileTranscodingProfile: fileTranscodingProfile,
@@ -1605,13 +1623,21 @@ enum QueueItemQueueType {
 
 @HiveType(typeId: 54)
 class QueueItemSource {
-  QueueItemSource({
+  QueueItemSource.rawId({
     required this.type,
     required this.name,
     required this.id,
     this.item,
     this.contextNormalizationGain,
   });
+
+  QueueItemSource({
+    required this.type,
+    required this.name,
+    required BaseItemId id,
+    this.item,
+    this.contextNormalizationGain,
+  }) : id = id.raw;
 
   @HiveField(0)
   QueueItemSourceType type;
@@ -1717,6 +1743,8 @@ class FinampQueueItem {
         ? BaseItemDto.fromJson(item.extras!["itemJson"] as Map<String, dynamic>)
         : null;
   }
+
+  BaseItemId get baseItemId => item.extras?["itemJson"]["Id"] as BaseItemId;
 }
 
 @HiveType(typeId: 58)
@@ -1843,33 +1871,31 @@ class FinampStorableQueueInfo {
 
   FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek)
       : previousTracks = info.previousTracks
-            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .map<BaseItemId>((track) => track.baseItemId)
             .toList(),
-        currentTrack = info.currentTrack?.item.extras?["itemJson"]["Id"],
+        currentTrack = info.currentTrack?.baseItemId,
         currentTrackSeek = seek,
-        nextUp = info.nextUp
-            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
-            .toList(),
-        queue = info.queue
-            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
-            .toList(),
+        nextUp =
+            info.nextUp.map<BaseItemId>((track) => track.baseItemId).toList(),
+        queue =
+            info.queue.map<BaseItemId>((track) => track.baseItemId).toList(),
         creation = DateTime.now().millisecondsSinceEpoch,
         source = info.source;
 
   @HiveField(0)
-  List<String> previousTracks;
+  List<BaseItemId> previousTracks;
 
   @HiveField(1)
-  String? currentTrack;
+  BaseItemId? currentTrack;
 
   @HiveField(2)
   int? currentTrackSeek;
 
   @HiveField(3)
-  List<String> nextUp;
+  List<BaseItemId> nextUp;
 
   @HiveField(4)
-  List<String> queue;
+  List<BaseItemId> queue;
 
   @HiveField(5)
   // timestamp, milliseconds since epoch
@@ -2083,8 +2109,9 @@ class DownloadedLyrics {
   final String? jsonItem;
 
   @ignore
-  LyricDto? get lyricDto => _lyricDtoCached ??=
-      ((jsonItem == null) ? null : LyricDto.fromJson(jsonDecode(jsonItem!)));
+  LyricDto? get lyricDto => _lyricDtoCached ??= ((jsonItem == null)
+      ? null
+      : LyricDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
   @ignore
   LyricDto? _lyricDtoCached;
 }
@@ -2197,7 +2224,7 @@ enum MediaItemParentType {
   instantMix,
 }
 
-@JsonSerializable()
+@JsonSerializable(converters: [BaseItemIdConverter()])
 @HiveType(typeId: 69)
 class MediaItemId {
   MediaItemId({
@@ -2214,10 +2241,10 @@ class MediaItemId {
   MediaItemParentType parentType;
 
   @HiveField(2)
-  String? itemId;
+  BaseItemId? itemId;
 
   @HiveField(3)
-  String? parentId;
+  BaseItemId? parentId;
 
   factory MediaItemId.fromJson(Map<String, dynamic> json) =>
       _$MediaItemIdFromJson(json);

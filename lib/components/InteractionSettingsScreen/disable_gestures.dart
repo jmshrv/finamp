@@ -17,7 +17,7 @@ class DisableGestureSelector extends StatelessWidget {
           title: Text(AppLocalizations.of(context)!.disableGesture),
           subtitle: Text(AppLocalizations.of(context)!.disableGestureSubtitle),
           value: FinampSettingsHelper.finampSettings.disableGesture,
-          onChanged: (value) => FinampSettingsHelper.setDisableGesture(value),
+          onChanged: (value) => FinampSetters.setDisableGesture(value),
         );
       },
     );

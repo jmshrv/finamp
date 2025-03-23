@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
-import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
+import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/main.dart';
@@ -15,7 +15,6 @@ import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -265,90 +264,64 @@ Future<dynamic> showQueueBottomSheet(BuildContext context) {
     clipBehavior: Clip.antiAlias,
     context: context,
     builder: (context) {
-      return ProviderScope(
-          overrides: [
-            themeDataProvider.overrideWith((ref) {
-              return ref.watch(playerScreenThemeDataProvider) ??
-                  FinampTheme.defaultTheme();
-            })
-          ],
-          child: Consumer(
-              builder: (BuildContext context, WidgetRef ref, Widget? child) {
-            final imageTheme = ref.watch(playerScreenThemeProvider);
-            return AnimatedTheme(
-              duration: const Duration(milliseconds: 500),
-              data: ThemeData(
-                colorScheme: imageTheme,
-                iconTheme: Theme.of(context).iconTheme.copyWith(
-                      color: imageTheme.primary,
+      return PlayerScreenTheme(
+          child: DraggableScrollableSheet(
+        snap: false,
+        snapAnimationDuration: const Duration(milliseconds: 200),
+        initialChildSize: 0.92,
+        // maxChildSize: 0.92,
+        expand: false,
+        builder: (context, scrollController) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+                  BlurredPlayerScreenBackground(
+                      opacityFactor:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? 1.0
+                              : 0.85),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 10),
+                    Container(
+                      width: 40,
+                      height: 3.5,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).textTheme.bodySmall!.color!,
+                        borderRadius: BorderRadius.circular(3.5),
+                      ),
                     ),
-              ),
-              child: DraggableScrollableSheet(
-                snap: false,
-                snapAnimationDuration: const Duration(milliseconds: 200),
-                initialChildSize: 0.92,
-                // maxChildSize: 0.92,
-                expand: false,
-                builder: (context, scrollController) {
-                  return Scaffold(
-                    body: Stack(
-                      children: [
-                        if (FinampSettingsHelper
-                            .finampSettings.useCoverAsBackground)
-                          BlurredPlayerScreenBackground(
-                              opacityFactor: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? 1.0
-                                  : 0.85),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 10),
-                            Container(
-                              width: 40,
-                              height: 3.5,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .color!,
-                                borderRadius: BorderRadius.circular(3.5),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(AppLocalizations.of(context)!.queue,
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color!,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                            const SizedBox(height: 20),
-                            Expanded(
-                              child: QueueList(
-                                scrollController: scrollController,
-                                previousTracksHeaderKey:
-                                    previousTracksHeaderKey,
-                                currentTrackKey: currentTrackKey,
-                                nextUpHeaderKey: nextUpHeaderKey,
-                                queueHeaderKey: queueHeaderKey,
-                                jumpToCurrentKey: jumpToCurrentKey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    const SizedBox(height: 10),
+                    Text(AppLocalizations.of(context)!.queue,
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyLarge!.color!,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400)),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: QueueList(
+                        scrollController: scrollController,
+                        previousTracksHeaderKey: previousTracksHeaderKey,
+                        currentTrackKey: currentTrackKey,
+                        nextUpHeaderKey: nextUpHeaderKey,
+                        queueHeaderKey: queueHeaderKey,
+                        jumpToCurrentKey: jumpToCurrentKey,
+                      ),
                     ),
-                    floatingActionButton: JumpToCurrentButton(
-                      key: jumpToCurrentKey,
-                      previousTracksHeaderKey: previousTracksHeaderKey,
-                    ),
-                  );
-                },
-              ),
-            );
-          }));
+                  ],
+                ),
+              ],
+            ),
+            floatingActionButton: JumpToCurrentButton(
+              key: jumpToCurrentKey,
+              previousTracksHeaderKey: previousTracksHeaderKey,
+            ),
+          );
+        },
+      ));
     },
   );
 }
@@ -719,7 +692,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
           mediaState = snapshot.data!.mediaState;
 
           final currentTrackBaseItem = jellyfin_models.BaseItemDto.fromJson(
-              currentTrack!.item.extras?["itemJson"]);
+              currentTrack!.item.extras?["itemJson"] as Map<String, dynamic>);
 
           const horizontalPadding = 8.0;
           const albumImageSize = 70.0;
@@ -985,7 +958,6 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                         Feedback.forLongPress(context);
                                         showModalTrackMenu(
                                           context: context,
-                                          usePlayerTheme: true,
                                           item: currentTrackBaseItem,
                                           isInPlaylist:
                                               queueItemInPlaylist(currentTrack),

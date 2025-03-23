@@ -34,8 +34,7 @@ class _PlayerScreenMinimumCoverPaddingEditorState
             final valueDouble = double.tryParse(value);
 
             if (valueDouble != null) {
-              FinampSettingsHelper.setPlayerScreenCoverMinimumPadding(
-                  valueDouble);
+              FinampSetters.setPlayerScreenCoverMinimumPadding(valueDouble);
             }
           },
         ),

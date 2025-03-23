@@ -21,10 +21,10 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       baseUrl: fields[1] as String,
       accessToken: fields[2] as String,
       serverId: fields[3] as String,
-      currentViewId: fields[4] as String?,
+      currentViewId: fields[4] as BaseItemId?,
       views: fields[5] == null
           ? const {}
-          : (fields[5] as Map).cast<String, BaseItemDto>(),
+          : (fields[5] as Map).cast<BaseItemId, BaseItemDto>(),
     );
   }
 
@@ -147,6 +147,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
           fields[42] == null ? false : fields[42] as bool,
+      downloadTranscodingCodec: fields[43] as FinampTranscodingCodec?,
       downloadTranscodeBitrate: (fields[45] as num?)?.toInt(),
       shouldTranscodeDownloads: fields[44] == null
           ? TranscodeDownloadsSetting.ask
@@ -218,7 +219,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(79)
+      ..writeByte(80)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -295,6 +296,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.preferQuickSyncs)
       ..writeByte(42)
       ..write(obj.hasCompletedIsarUserMigration)
+      ..writeByte(43)
+      ..write(obj.downloadTranscodingCodec)
       ..writeByte(44)
       ..write(obj.shouldTranscodeDownloads)
       ..writeByte(45)
@@ -653,7 +656,7 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
     return QueueItemSource(
       type: fields[0] as QueueItemSourceType,
       name: fields[1] as QueueItemSourceName,
-      id: fields[2] as String,
+      id: fields[2] as BaseItemId,
       item: fields[3] as BaseItemDto?,
       contextNormalizationGain: (fields[4] as num?)?.toDouble(),
     );
@@ -919,11 +922,11 @@ class FinampStorableQueueInfoAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampStorableQueueInfo(
-      previousTracks: (fields[0] as List).cast<String>(),
-      currentTrack: fields[1] as String?,
+      previousTracks: (fields[0] as List).cast<BaseItemId>(),
+      currentTrack: fields[1] as BaseItemId?,
       currentTrackSeek: (fields[2] as num?)?.toInt(),
-      nextUp: (fields[3] as List).cast<String>(),
-      queue: (fields[4] as List).cast<String>(),
+      nextUp: (fields[3] as List).cast<BaseItemId>(),
+      queue: (fields[4] as List).cast<BaseItemId>(),
       creation: (fields[5] as num).toInt(),
       source: fields[6] as QueueItemSource?,
     );
@@ -973,8 +976,8 @@ class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
     return MediaItemId(
       contentType: fields[0] as TabContentType,
       parentType: fields[1] as MediaItemParentType,
-      itemId: fields[2] as String?,
-      parentId: fields[3] as String?,
+      itemId: fields[2] as BaseItemId?,
+      parentId: fields[3] as BaseItemId?,
     );
   }
 
@@ -2129,7 +2132,7 @@ int _finampUserEstimateSize(
   bytesCount += 3 + object.accessToken.length * 3;
   bytesCount += 3 + object.baseUrl.length * 3;
   {
-    final value = object.currentViewId;
+    final value = object.isarCurrentViewId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -2148,7 +2151,7 @@ void _finampUserSerialize(
 ) {
   writer.writeString(offsets[0], object.accessToken);
   writer.writeString(offsets[1], object.baseUrl);
-  writer.writeString(offsets[2], object.currentViewId);
+  writer.writeString(offsets[2], object.isarCurrentViewId);
   writer.writeString(offsets[3], object.id);
   writer.writeString(offsets[4], object.isarViews);
   writer.writeString(offsets[5], object.serverId);
@@ -2163,10 +2166,10 @@ FinampUser _finampUserDeserialize(
   final object = FinampUser(
     accessToken: reader.readString(offsets[0]),
     baseUrl: reader.readString(offsets[1]),
-    currentViewId: reader.readStringOrNull(offsets[2]),
     id: reader.readString(offsets[3]),
     serverId: reader.readString(offsets[5]),
   );
+  object.isarCurrentViewId = reader.readStringOrNull(offsets[2]);
   object.isarViews = reader.readString(offsets[4]);
   return object;
 }
@@ -2557,7 +2560,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdIsNull() {
+      isarCurrentViewIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'currentViewId',
@@ -2566,7 +2569,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdIsNotNull() {
+      isarCurrentViewIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'currentViewId',
@@ -2575,7 +2578,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdEqualTo(
+      isarCurrentViewIdEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2589,7 +2592,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdGreaterThan(
+      isarCurrentViewIdGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2605,7 +2608,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdLessThan(
+      isarCurrentViewIdLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2621,7 +2624,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdBetween(
+      isarCurrentViewIdBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2641,7 +2644,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdStartsWith(
+      isarCurrentViewIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2655,7 +2658,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdEndsWith(
+      isarCurrentViewIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2669,7 +2672,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdContains(String value, {bool caseSensitive = true}) {
+      isarCurrentViewIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'currentViewId',
@@ -2680,7 +2683,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdMatches(String pattern, {bool caseSensitive = true}) {
+      isarCurrentViewIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'currentViewId',
@@ -2691,7 +2694,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdIsEmpty() {
+      isarCurrentViewIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'currentViewId',
@@ -2701,7 +2704,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdIsNotEmpty() {
+      isarCurrentViewIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'currentViewId',
@@ -3194,13 +3197,14 @@ extension FinampUserQuerySortBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByCurrentViewId() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByIsarCurrentViewId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentViewId', Sort.asc);
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByCurrentViewIdDesc() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy>
+      sortByIsarCurrentViewIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentViewId', Sort.desc);
     });
@@ -3269,13 +3273,14 @@ extension FinampUserQuerySortThenBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByCurrentViewId() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByIsarCurrentViewId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentViewId', Sort.asc);
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByCurrentViewIdDesc() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy>
+      thenByIsarCurrentViewIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentViewId', Sort.desc);
     });
@@ -3346,7 +3351,7 @@ extension FinampUserQueryWhereDistinct
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByCurrentViewId(
+  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByIsarCurrentViewId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'currentViewId',
@@ -3396,7 +3401,8 @@ extension FinampUserQueryProperty
     });
   }
 
-  QueryBuilder<FinampUser, String?, QQueryOperations> currentViewIdProperty() {
+  QueryBuilder<FinampUser, String?, QQueryOperations>
+      isarCurrentViewIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'currentViewId');
     });
@@ -3628,7 +3634,7 @@ int _downloadItemEstimateSize(
     }
   }
   {
-    final value = object.viewId;
+    final value = object.isarViewId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -3670,7 +3676,7 @@ void _downloadItemSerialize(
     DownloadProfileSchema.serialize,
     object.userTranscodingProfile,
   );
-  writer.writeString(offsets[13], object.viewId);
+  writer.writeString(offsets[13], object.isarViewId);
 }
 
 DownloadItem _downloadItemDeserialize(
@@ -3710,7 +3716,7 @@ DownloadItem _downloadItemDeserialize(
       DownloadProfileSchema.deserialize,
       allOffsets,
     ),
-    viewId: reader.readStringOrNull(offsets[13]),
+    isarViewId: reader.readStringOrNull(offsets[13]),
   );
   return object;
 }
@@ -5293,7 +5299,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdIsNull() {
+      isarViewIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'viewId',
@@ -5302,7 +5308,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdIsNotNull() {
+      isarViewIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'viewId',
@@ -5310,7 +5316,8 @@ extension DownloadItemQueryFilter
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdEqualTo(
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      isarViewIdEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -5324,7 +5331,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdGreaterThan(
+      isarViewIdGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -5340,7 +5347,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdLessThan(
+      isarViewIdLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -5355,7 +5362,8 @@ extension DownloadItemQueryFilter
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdBetween(
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      isarViewIdBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -5375,7 +5383,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdStartsWith(
+      isarViewIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -5389,7 +5397,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdEndsWith(
+      isarViewIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -5403,7 +5411,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdContains(String value, {bool caseSensitive = true}) {
+      isarViewIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'viewId',
@@ -5413,9 +5421,8 @@ extension DownloadItemQueryFilter
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      isarViewIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'viewId',
@@ -5426,7 +5433,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdIsEmpty() {
+      isarViewIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'viewId',
@@ -5436,7 +5443,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdIsNotEmpty() {
+      isarViewIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'viewId',
@@ -5832,13 +5839,14 @@ extension DownloadItemQuerySortBy
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByViewId() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByIsarViewId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'viewId', Sort.asc);
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByViewIdDesc() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      sortByIsarViewIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'viewId', Sort.desc);
     });
@@ -5972,13 +5980,14 @@ extension DownloadItemQuerySortThenBy
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByViewId() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByIsarViewId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'viewId', Sort.asc);
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByViewIdDesc() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      thenByIsarViewIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'viewId', Sort.desc);
     });
@@ -6054,7 +6063,7 @@ extension DownloadItemQueryWhereDistinct
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByViewId(
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByIsarViewId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'viewId', caseSensitive: caseSensitive);
@@ -6156,7 +6165,7 @@ extension DownloadItemQueryProperty
     });
   }
 
-  QueryBuilder<DownloadItem, String?, QQueryOperations> viewIdProperty() {
+  QueryBuilder<DownloadItem, String?, QQueryOperations> isarViewIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'viewId');
     });
@@ -7112,16 +7121,20 @@ const _$FinampCollectionTypeEnumMap = {
 MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(
       contentType: $enumDecode(_$TabContentTypeEnumMap, json['contentType']),
       parentType: $enumDecode(_$MediaItemParentTypeEnumMap, json['parentType']),
-      itemId: json['itemId'] as String?,
-      parentId: json['parentId'] as String?,
+      itemId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['itemId'], const BaseItemIdConverter().fromJson),
+      parentId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['parentId'], const BaseItemIdConverter().fromJson),
     );
 
 Map<String, dynamic> _$MediaItemIdToJson(MediaItemId instance) =>
     <String, dynamic>{
       'contentType': _$TabContentTypeEnumMap[instance.contentType]!,
       'parentType': _$MediaItemParentTypeEnumMap[instance.parentType]!,
-      'itemId': instance.itemId,
-      'parentId': instance.parentId,
+      'itemId': _$JsonConverterToJson<String, BaseItemId>(
+          instance.itemId, const BaseItemIdConverter().toJson),
+      'parentId': _$JsonConverterToJson<String, BaseItemId>(
+          instance.parentId, const BaseItemIdConverter().toJson),
     };
 
 const _$TabContentTypeEnumMap = {
@@ -7137,6 +7150,18 @@ const _$MediaItemParentTypeEnumMap = {
   MediaItemParentType.rootCollection: 'rootCollection',
   MediaItemParentType.instantMix: 'instantMix',
 };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 FinampFeatureChipsConfiguration _$FinampFeatureChipsConfigurationFromJson(
         Map<String, dynamic> json) =>
