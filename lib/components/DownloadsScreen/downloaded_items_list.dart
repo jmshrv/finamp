@@ -82,7 +82,8 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                         subtitle: ItemFileSize(stub: stub),
                         tilePadding: const EdgeInsets.symmetric(horizontal: 16),
                         children: [
-                          if (stub.baseItemType.hasChildren)
+                          if (stub.type == DownloadItemType.finampCollection ||
+                              stub.baseItemType.hasChildren)
                             DownloadedChildrenList(parent: stub)
                         ],
                       );
