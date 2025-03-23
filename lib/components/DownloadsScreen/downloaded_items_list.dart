@@ -19,10 +19,12 @@ class DownloadedItemsTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
+        padding: const EdgeInsets.only(left: 16, top: 12, right: 16, bottom: 8),
         child: Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );
