@@ -152,6 +152,24 @@ class DownloadsService {
     return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true);
   });
 
+  /// Provider for user-downloaded items of a specific category.
+  /// Used to show and group downloaded items on the downloads screen.
+  late final userDownloadedItemsProvider = StreamProvider.family
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>(
+    (ref, type) => _isar.downloadItems
+        .where()
+        .typeEqualTo(type.type)
+        .filter()
+        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+        .optional(
+          type.baseItemType != null,
+          (q) => q.baseItemTypeEqualTo(type.baseItemType!),
+        )
+        .sortByName()
+        .build()
+        .watch(fireImmediately: true),
+  );
+
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
     // Initialize downloadStatuses dict with actual counts of items in isar with
@@ -1257,20 +1275,6 @@ class DownloadsService {
     );
   }
 
-  /// Get all user-downloaded items.  Used to show items on downloads screen.
-  List<DownloadStub> getUserDownloaded() => getVisibleChildren(_anchor);
-
-  /// Get all non-image children of an item.  Used to show item children on
-  /// downloads screen.
-  List<DownloadStub> getVisibleChildren(DownloadStub stub) {
-    return _isar.downloadItems
-        .where()
-        .typeNotEqualTo(DownloadItemType.image)
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
-        .findAllSync();
-  }
-
   /// Gets an item which requires the given stub to be downloaded.  Used in
   /// DownloadButton tooltip for incidental downloads.
   DownloadStub? getFirstRequiringItem(DownloadStub stub) {
@@ -1278,6 +1282,18 @@ class DownloadsService {
         .filter()
         .requires((q) => q.isarIdEqualTo(stub.isarId))
         .findFirstSync();
+  }
+
+  /// Get all non-image children of an item.
+  /// Used to show item children on the downloads screen.
+  List<DownloadStub> getVisibleChildren(DownloadStub stub) {
+    return _isar.downloadItems
+        .where()
+        .typeNotEqualTo(DownloadItemType.image)
+        .filter()
+        .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
+        .sortByBaseIndexNumber()
+        .findAllSync();
   }
 
   /// Check whether the given item is part of the given collection.  Returns null

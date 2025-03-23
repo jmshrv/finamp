@@ -1,3 +1,4 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,9 +16,10 @@ class DownloadsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.downloads),
+        title: Text(localizations.downloads),
         actions: const [
           SyncDownloadsButton(),
           RepairDownloadsButton(),
@@ -36,8 +38,18 @@ class DownloadsScreen extends StatelessWidget {
               const Divider(),
             ]),
           ),
-          const DownloadedItemsList(),
-          // CurrentDownloadsList(),
+          DownloadedItemsTitle(title: localizations.specialDownloads),
+          const DownloadedItemsList(type: DownloadsScreenCategory.special),
+          DownloadedItemsTitle(title: localizations.playlists),
+          const DownloadedItemsList(type: DownloadsScreenCategory.playlists),
+          DownloadedItemsTitle(title: localizations.artists),
+          const DownloadedItemsList(type: DownloadsScreenCategory.artists),
+          DownloadedItemsTitle(title: localizations.albums),
+          const DownloadedItemsList(type: DownloadsScreenCategory.albums),
+          DownloadedItemsTitle(title: localizations.genres),
+          const DownloadedItemsList(type: DownloadsScreenCategory.genres),
+          DownloadedItemsTitle(title: localizations.tracks),
+          const DownloadedItemsList(type: DownloadsScreenCategory.tracks),
         ],
       ),
     );

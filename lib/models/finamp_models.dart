@@ -1477,6 +1477,8 @@ enum BaseItemDtoType {
   bool get expectChangesInChildren =>
       childTypes?.any((x) => x.expectChanges) ?? true;
 
+  bool get hasChildren => childTypes?.isNotEmpty ?? false;
+
   // BaseItemDto types that we handle like tracks have been handled by returning
   // the actual track type.  This may be a bad idea?
   static BaseItemDtoType fromItem(BaseItemDto item) {
@@ -1505,6 +1507,23 @@ enum BaseItemDtoType {
         return unknown;
     }
   }
+}
+
+/// The category of a section on the download screen.
+/// Used to efficiently query downloads in the downloads_service
+/// and displaying them to the user.
+enum DownloadsScreenCategory {
+  albums(DownloadItemType.collection, BaseItemDtoType.album),
+  artists(DownloadItemType.collection, BaseItemDtoType.artist),
+  playlists(DownloadItemType.collection, BaseItemDtoType.playlist),
+  genres(DownloadItemType.collection, BaseItemDtoType.genre),
+  tracks(DownloadItemType.track, BaseItemDtoType.track),
+  special(DownloadItemType.finampCollection, null);
+
+  const DownloadsScreenCategory(this.type, this.baseItemType);
+
+  final DownloadItemType type;
+  final BaseItemDtoType? baseItemType;
 }
 
 @HiveType(typeId: 43)
