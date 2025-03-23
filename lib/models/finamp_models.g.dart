@@ -147,6 +147,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
           fields[42] == null ? false : fields[42] as bool,
+      downloadTranscodingCodec: fields[43] as FinampTranscodingCodec?,
       downloadTranscodeBitrate: (fields[45] as num?)?.toInt(),
       shouldTranscodeDownloads: fields[44] == null
           ? TranscodeDownloadsSetting.ask
@@ -218,7 +219,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(79)
+      ..writeByte(80)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -295,6 +296,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.preferQuickSyncs)
       ..writeByte(42)
       ..write(obj.hasCompletedIsarUserMigration)
+      ..writeByte(43)
+      ..write(obj.downloadTranscodingCodec)
       ..writeByte(44)
       ..write(obj.shouldTranscodeDownloads)
       ..writeByte(45)

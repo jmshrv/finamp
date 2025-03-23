@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -200,6 +199,7 @@ class ConcurentDownloadsSelector extends ConsumerWidget {
               max: 100,
               value: ref
                   .watch(finampSettingsProvider.maxConcurrentDownloads)
+                  .clamp(1, 100)
                   .toDouble(),
               label: AppLocalizations.of(context)!.maxConcurrentDownloadsLabel(
                   ref
@@ -245,7 +245,7 @@ class DownloadWorkersSelector extends StatelessWidget {
                 Slider(
                   min: 1,
                   max: 10,
-                  value: min(finampSettings.downloadWorkers.toDouble(), 10),
+                  value: finampSettings.downloadWorkers.clamp(1, 10).toDouble(),
                   label: AppLocalizations.of(context)!
                       .downloadsWorkersSettingLabel(
                           finampSettings.downloadWorkers.toString()),

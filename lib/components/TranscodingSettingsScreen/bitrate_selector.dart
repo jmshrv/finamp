@@ -29,7 +29,8 @@ class BitrateSelector extends StatelessWidget {
                 Slider(
                   min: 64,
                   max: 320,
-                  value: finampSettings.transcodeBitrate / 1000,
+                  value:
+                      (finampSettings.transcodeBitrate / 1000).clamp(64, 320),
                   divisions: 8,
                   label: AppLocalizations.of(context)!.kiloBitsPerSecondLabel(
                       finampSettings.transcodeBitrate ~/ 1000),

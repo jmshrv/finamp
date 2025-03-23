@@ -275,9 +275,6 @@ class FinampSettingsHelper {
   static IconButton makeSettingsResetButtonWithDialog(
       BuildContext context, Function() resetFunction,
       {bool isGlobal = false}) {
-    FinampSetters.setDownloadTranscodeBitrate.ifNonNull(5);
-    FinampSetters.setHasCompletedIsarUserMigration.ifNonNull(true);
-    Never;
     // TODO: Replace the following Strings with localization
     return IconButton(
       onPressed: () async {

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_ce/hive.dart';
 
 import '../components/TranscodingSettingsScreen/bitrate_selector.dart';
 import '../components/TranscodingSettingsScreen/transcode_switch.dart';
@@ -64,34 +63,26 @@ class DownloadBitrateSelector extends ConsumerWidget {
           title: Text(AppLocalizations.of(context)!.downloadBitrate),
           subtitle: Text(AppLocalizations.of(context)!.downloadBitrateSubtitle),
         ),
-        ValueListenableBuilder<Box<FinampSettings>>(
-          valueListenable: FinampSettingsHelper.finampSettingsListener,
-          builder: (context, box, child) {
-            final finampSettings = box.get("FinampSettings")!;
-
-            // We do all of this division/multiplication because Jellyfin wants us to specify bitrates in bits, not kilobits.
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Slider(
-                  min: 64,
-                  max: 320,
-                  value: transcodeProfile.stereoBitrate / 1000,
-                  divisions: 8,
-                  label: transcodeProfile.bitrateKbps,
-                  onChanged: (value) =>
-                      FinampSetters.setDownloadTranscodeBitrate(
-                          (value * 1000).toInt()),
-                ),
-                Text(
-                  transcodeProfile.bitrateKbps,
-                  style: Theme.of(context).textTheme.titleLarge,
-                )
-              ],
-            );
-          },
-        ),
+        // We do all of this division/multiplication because Jellyfin wants us to specify bitrates in bits, not kilobits.
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Slider(
+              min: 64,
+              max: 320,
+              value: (transcodeProfile.stereoBitrate / 1000).clamp(64, 320),
+              divisions: 8,
+              label: transcodeProfile.bitrateKbps,
+              onChanged: (value) => FinampSetters.setDownloadTranscodeBitrate(
+                  (value * 1000).toInt()),
+            ),
+            Text(
+              transcodeProfile.bitrateKbps,
+              style: Theme.of(context).textTheme.titleLarge,
+            )
+          ],
+        )
       ],
     );
   }
@@ -127,7 +118,8 @@ class DownloadTranscodeCodecDropdownListTile extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.downloadTranscodeCodecTitle),
       trailing: DropdownButton<FinampTranscodingCodec>(
-        value: ref.watch(finampSettingsProvider.downloadTranscodingCodec),
+        value:
+            ref.watch(finampSettingsProvider.downloadTranscodingProfile).codec,
         items: FinampTranscodingCodec.values
             .where((element) => !Platform.isIOS || element.iosCompatible)
             .where((element) => element != FinampTranscodingCodec.original)

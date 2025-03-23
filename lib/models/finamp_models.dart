@@ -395,6 +395,8 @@ class FinampSettings {
       defaultValue:
           false) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedIsarUserMigration;
+
+  @HiveField(43)
   FinampTranscodingCodec? downloadTranscodingCodec;
 
   @HiveField(44, defaultValue: DefaultSettings.shouldTranscodeDownloads)
