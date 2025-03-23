@@ -152,12 +152,23 @@ class DownloadsService {
     return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true);
   });
 
-  /// Provider for downloaded items of a specific type.
-  /// Used to show various items grouped by type on the downloads screen.
-  late final downloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, type) {
-    return queryUserDownloaded(type).watch(fireImmediately: true);
-  });
+  /// Provider for user-downloaded items of a specific category.
+  /// Used to show and group downloaded items on the downloads screen.
+  late final userDownloadedItemsProvider = StreamProvider.family
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>(
+    (ref, type) => _isar.downloadItems
+        .where()
+        .typeEqualTo(type.type)
+        .filter()
+        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+        .optional(
+          type.baseItemType != null,
+          (q) => q.baseItemTypeEqualTo(type.baseItemType!),
+        )
+        .sortByName()
+        .build()
+        .watch(fireImmediately: true),
+  );
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
@@ -1262,22 +1273,6 @@ class DownloadsService {
         downloadLocationId: downloadLocation,
       ),
     );
-  }
-
-  /// Query all downloads by the given BaseItemDtoType.
-  /// Used to show various items grouped by type on the downloads screen.
-  Query<DownloadStub> queryUserDownloaded(DownloadsScreenCategory category) {
-    final prefiltered = _isar.downloadItems
-        .where()
-        .typeEqualTo(category.type)
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId));
-
-    final afterFilter = category.baseItemType != null
-        ? prefiltered.baseItemTypeEqualTo(category.baseItemType!)
-        : prefiltered;
-
-    return afterFilter.sortByName().build();
   }
 
   /// Gets an item which requires the given stub to be downloaded.  Used in

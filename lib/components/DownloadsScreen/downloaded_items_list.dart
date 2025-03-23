@@ -19,7 +19,7 @@ class DownloadedItemsTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.only(left: 16, top: 12, right: 16, bottom: 8),
+        padding: const EdgeInsets.only(left: 16, top: 12, right: 16, bottom: 4),
         child: Text(
           title,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -47,7 +47,7 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
   @override
   Widget build(BuildContext context) {
     return ref
-        .watch(_downloadsService.downloadedItemsProvider(widget.type))
+        .watch(_downloadsService.userDownloadedItemsProvider(widget.type))
         .when(
           data: (items) => items.isNotEmpty
               ? SliverList(
