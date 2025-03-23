@@ -24,8 +24,8 @@ import 'jellyfin_api_helper.dart';
 
 part 'downloads_service_backend.g.dart';
 
-// This is used during migration from the legacy hive download storage and cannot be changed without mitigations
-// Additionally, directory cleaning in downloads repair should cover all folders ever used.
+/// This determines the target directory for new downloads, during migrations from the old download system, and during repairs.
+/// Must not be changed without migrations. Additionally, directory cleaning in downloads repair should cover all folders ever used.
 const FINAMP_BASE_DOWNLOAD_DIRECTORY = "songs";
 
 class IsarPersistentStorage implements PersistentStorage {
@@ -140,6 +140,7 @@ class IsarTaskData<T> {
   @Enumerated(EnumType.ordinal)
   @Index()
   final IsarTaskDataType<T> type;
+
   // This allows prioritization and uniqueness checking by delete buffer
   // It is also used as a retry counter by sync buffer.
   final int age;
@@ -156,6 +157,7 @@ class IsarTaskData<T> {
 
   @ignore
   T get data => type.fromJson(jsonDecode(jsonData) as Map<String, dynamic>);
+
   set data(T item) => jsonData = _toJson(item);
 
   static String _toJson(dynamic item) {
@@ -211,6 +213,7 @@ enum IsarTaskDataType<T> {
   }
 
   final T Function(Map<String, dynamic>) fromJson;
+
   void check(T data) {}
 }
 
@@ -1338,8 +1341,8 @@ class DownloadsSyncService {
                     "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName") ??
             [];
         childItems.addAll(trackChildItems);
-        var trackChildStubs = trackChildItems.map(
-            (e) => DownloadStub.fromItem(type: DownloadItemType.track, item: e));
+        var trackChildStubs = trackChildItems.map((e) =>
+            DownloadStub.fromItem(type: DownloadItemType.track, item: e));
         childStubs.addAll(trackChildStubs);
       }
       itemFetch.complete(childItems.map((e) => e.id.raw).toList());
