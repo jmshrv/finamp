@@ -146,7 +146,11 @@ class _DownloadedChildrenListState
                 .then((item) => item.isRequired),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data!) {
-                return const Icon(Icons.lock);
+                return IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () =>
+                      askBeforeDeleteDownloadFromDevice(context, stub),
+                );
               }
               return const SizedBox.shrink();
             },
