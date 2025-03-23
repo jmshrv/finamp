@@ -22,9 +22,10 @@ class DownloadedItemsTitle extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, top: 12, right: 16, bottom: 4),
         child: Text(
           title,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
     );
