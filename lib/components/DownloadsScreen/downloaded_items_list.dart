@@ -59,6 +59,7 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                         key: PageStorageKey(stub.id),
                         leading: AlbumImage(item: stub.baseItem),
                         title: Text(stub.baseItem?.name ?? stub.name),
+                        subtitle: ItemFileSize(stub: stub),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -80,8 +81,9 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                             ),
                           ],
                         ),
-                        subtitle: ItemFileSize(stub: stub),
                         tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+                        shape: LinearBorder(),
+                        collapsedShape: LinearBorder(),
                         children: [
                           if (stub.type == DownloadItemType.finampCollection ||
                               stub.baseItemType.hasChildren)
@@ -134,29 +136,32 @@ class _DownloadedChildrenListState
   @override
   Widget build(BuildContext context) {
     var items = _downloadsService.getVisibleChildren(widget.parent);
-    return Column(children: [
-      // TODO use a list builder here
-      for (final stub in items)
-        ListTile(
-          title: Text(stub.baseItem?.name ?? stub.name),
-          leading: AlbumImage(item: stub.baseItem),
-          subtitle: ItemFileSize(stub: stub),
-          trailing: FutureBuilder(
-            future: ref
-                .watch(_downloadsService.statusProvider((stub, null)).future)
-                .then((item) => item.isRequired),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!) {
-                return IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () =>
-                      askBeforeDeleteDownloadFromDevice(context, stub),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        )
-    ]);
+    return Container(
+      color: Theme.of(context).colorScheme.surfaceVariant,
+      child: Column(children: [
+        // TODO use a list builder here
+        for (final stub in items)
+          ListTile(
+            title: Text(stub.baseItem?.name ?? stub.name),
+            leading: AlbumImage(item: stub.baseItem),
+            subtitle: ItemFileSize(stub: stub),
+            trailing: FutureBuilder(
+              future: ref
+                  .watch(_downloadsService.statusProvider((stub, null)).future)
+                  .then((item) => item.isRequired),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data!) {
+                  return IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () =>
+                        askBeforeDeleteDownloadFromDevice(context, stub),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          )
+      ]),
+    );
   }
 }
