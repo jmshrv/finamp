@@ -417,5 +417,61 @@
   "disableGestureSubtitle": "Kas keelata žestid.",
   "@disableGestureSubtitle": {},
   "bufferDurationSubtitle": "Kui palju mängija peaks puhverdama sekundites. Nõuab taaskäivitamist.",
-  "@bufferDurationSubtitle": {}
+  "@bufferDurationSubtitle": {},
+  "about": "Finampi kohta",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "finampTagline": "Avatud lähtekoodiga Jellyfini muusikapleier",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionPrompt": "Tehtud ägedate inimeste poolt nende vabast ajast\nSina võid olla üks neist!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "Panusta Finampi GitHubis:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "Loe uusimaid väljalaskemärkmeid:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "Aita Finampi oma keelde tõlkida:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "aboutThanks": "Täname, et kasutad Finampi!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowSlogan": "Sinu muusika just nii nagu sina soovid.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "Alusta!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "viewLogs": "Vaata logisid",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "changeLanguage": "Muuda keelt",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "Ühendu Jellyfiniga",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "back": "Tagasi",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "serverUrlHint": "nt. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  }
 }
