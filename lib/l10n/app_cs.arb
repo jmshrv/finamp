@@ -1954,5 +1954,17 @@
   "allowDeleteFromServerSubtitle": "Zapnout nebo vypnout možnost trvalého smazání skladby ze souborového systému serveru, pokud je smazání možné.",
   "@allowDeleteFromServerSubtitle": {
     "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "librarySelectError": "Chyba při načítání dostupných knihoven",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "specialDownloads": "Zvláštní stahování",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "Nebyly staženy žádné položky.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
   }
 }
