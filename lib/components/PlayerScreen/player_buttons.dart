@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finamp/components/PlayerScreen/player_buttons_repeating.dart';
 import 'package:finamp/components/PlayerScreen/player_buttons_shuffle.dart';
+import 'package:finamp/components/audio_fade_progress_visualizer_container.dart';
 import 'package:finamp/screens/player_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
@@ -65,43 +66,33 @@ class PlayerButtons extends StatelessWidget {
                 container: true,
                 excludeSemantics: true,
                 child: _RoundedIconButton(
-                  width: controller.shouldShow(PlayerHideable.bigPlayButton)
-                      ? 62
-                      : 48,
-                  height: controller.shouldShow(PlayerHideable.bigPlayButton)
-                      ? 62
-                      : 48,
-                  borderRadius: BorderRadius.circular(
-                      controller.shouldShow(PlayerHideable.bigPlayButton)
-                          ? 16
-                          : 12),
-                  onTap: () {
-                    FeedbackHelper.feedback(FeedbackType.light);
-                    unawaited(audioHandler.togglePlayback());
-                  },
-                  icon: Container(
-                      decoration: BoxDecoration(
+                    width: controller.shouldShow(PlayerHideable.bigPlayButton)
+                        ? 62
+                        : 48,
+                    height: controller.shouldShow(PlayerHideable.bigPlayButton)
+                        ? 62
+                        : 48,
+                    borderRadius: BorderRadius.circular(
+                        controller.shouldShow(PlayerHideable.bigPlayButton)
+                            ? 16
+                            : 12),
+                    onTap: () {
+                      FeedbackHelper.feedback(FeedbackType.light);
+                      unawaited(audioHandler.togglePlayback());
+                    },
+                    icon: FadeProgressContainer(
                         borderRadius: BorderRadius.all(Radius.circular(
                             controller.shouldShow(PlayerHideable.bigPlayButton)
                                 ? 16
                                 : 12)),
-                        border: fadeState.fadeDirection != FadeDirection.none
-                            ? ProgressBorder.all(
-                                color:
-                                    IconTheme.of(context).color!.withAlpha(128),
-                                width: 4,
-                                progress: fadeState.fadeVolumePercent,
-                              )
-                            : null,
-                      ),
-                      child: Icon(
-                          playbackState.playing
-                              ? fadeState.fadeDirection != FadeDirection.fadeOut
-                                  ? TablerIcons.player_pause
-                                  : TablerIcons.player_play
-                              : TablerIcons.player_play,
-                          size: 32)),
-                ),
+                        child: Icon(
+                            playbackState.playing
+                                ? fadeState.fadeDirection !=
+                                        FadeDirection.fadeOut
+                                    ? TablerIcons.player_pause
+                                    : TablerIcons.player_play
+                                : TablerIcons.player_play,
+                            size: 32))),
               ),
               Semantics.fromProperties(
                 properties: SemanticsProperties(

@@ -398,26 +398,22 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           await _player.setVolume(min(
               _player.volume + state.volumeFadeInStepSize,
               state.recoverVolume));
+          fadeState.add(state.copyWith(fadeVolume: _player.volume));
           if (_player.volume >= state.recoverVolume) {
-            fadeState.add(state.copyWith(
-                fadeDirection: FadeDirection.none, fadeVolume: _player.volume));
-          } else {
-            fadeState.add(state.copyWith(fadeVolume: _player.volume));
+            fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
           }
           break;
         case FadeDirection.fadeOut:
           await _player.setVolume(
               max(_player.volume - state.volumeFadeOutStepSize, 0.0));
+          fadeState.add(state.copyWith(fadeVolume: _player.volume));
           if (_player.volume <= 0.0) {
-            fadeState.add(state.copyWith(
-                fadeDirection: FadeDirection.none, fadeVolume: _player.volume));
+            fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
 
             fut = _player.pause();
 
             // restore volume
             await _player.setVolume(fadeState.value.recoverVolume);
-          } else {
-            fadeState.add(state.copyWith(fadeVolume: _player.volume));
           }
           break;
         default:

@@ -5,6 +5,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/components/audio_fade_progress_visualizer_container.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -19,7 +20,6 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-import 'package:progress_border/progress_border.dart';
 
 import '../models/jellyfin_models.dart' as jellyfin_models;
 import '../screens/player_screen.dart';
@@ -280,26 +280,14 @@ class NowPlayingBar extends ConsumerWidget {
                                           currentAlbumImageProvider,
                                       borderRadius: BorderRadius.zero,
                                     ),
-                                    Container(
-                                        width: albumImageSize,
-                                        height: albumImageSize,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(12.0),
-                                              bottomLeft:
-                                                  Radius.circular(12.0)),
-                                          border: fadeState.fadeDirection !=
-                                                  FadeDirection.none
-                                              ? ProgressBorder.all(
-                                                  color: Colors.white
-                                                      .withAlpha(128),
-                                                  width: 4,
-                                                  progress: fadeState
-                                                      .fadeVolumePercent,
-                                                )
-                                              : null,
-                                        ),
-                                        child: IconButton(
+                                    FadeProgressContainer(
+                                      width: albumImageSize,
+                                      height: albumImageSize,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12.0),
+                                        bottomLeft: Radius.circular(12.0),
+                                      ),
+                                      child: IconButton(
                                           tooltip: AppLocalizations.of(context)!
                                               .togglePlaybackButtonTooltip,
                                           onPressed: () {
@@ -316,8 +304,8 @@ class NowPlayingBar extends ConsumerWidget {
                                                       ? TablerIcons.player_pause
                                                       : TablerIcons.player_play
                                                   : TablerIcons.player_play,
-                                              size: 32),
-                                        ))
+                                              size: 32)),
+                                    ),
                                   ],
                                 ),
                                 Expanded(
