@@ -1956,5 +1956,17 @@
   "allowDeleteFromServerSubtitle": "Увімкніть і вимкніть опцію остаточного видалення доріжки з файлової системи сервера, якщо видалення можливе.",
   "@allowDeleteFromServerSubtitle": {
     "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "noItemsDownloaded": "Немає завантажених елементів.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "librarySelectError": "Помилка завантаження доступних бібліотек для користувача",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "specialDownloads": "Спеціальні завантаження",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
   }
 }
