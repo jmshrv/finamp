@@ -537,9 +537,7 @@ class FinampSettings {
     final downloadLocation = await DownloadLocation.create(
       name: "Internal Storage",
       // default download location moved to support dir based on existing comment
-      baseDirectory: (Platform.isIOS || Platform.isAndroid)
-          ? DownloadLocationType.internalSupport
-          : DownloadLocationType.cache,
+      baseDirectory: DownloadLocationType.platformDefaultDirectory,
     );
     return FinampSettings(
       downloadLocations: [],
@@ -565,9 +563,7 @@ class FinampSettings {
   DownloadLocation get internalTrackDir =>
       downloadLocationsMap.values.firstWhere((element) =>
           element.baseDirectory ==
-          ((Platform.isIOS || Platform.isAndroid)
-              ? DownloadLocationType.internalSupport
-              : DownloadLocationType.cache));
+          DownloadLocationType.platformDefaultDirectory);
 
   Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
 
@@ -1994,6 +1990,11 @@ enum DownloadLocationType {
   final bool needsPath;
   final bool useHumanReadableNames;
   final BaseDirectory baseDirectory;
+
+  static DownloadLocationType get platformDefaultDirectory =>
+      (Platform.isIOS || Platform.isAndroid)
+          ? DownloadLocationType.internalSupport
+          : DownloadLocationType.cache;
 }
 
 @HiveType(typeId: 65)

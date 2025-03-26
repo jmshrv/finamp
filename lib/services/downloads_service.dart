@@ -391,7 +391,7 @@ class DownloadsService {
     await downloadTaskQueue.initializeQueue();
 
     // Wait a few seconds to not slow initial library load
-    unawaited(Future.delayed(const Duration(seconds: 5), () async {
+    unawaited(Future.delayed(const Duration(seconds: 10), () async {
       try {
         await syncBuffer.executeSyncs();
         await deleteBuffer.executeDeletes();
@@ -1041,12 +1041,12 @@ class DownloadsService {
   Future<void> migrateFromHive() async {
     if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
         .where((element) =>
-            element.baseDirectory == DownloadLocationType.internalSupport)
+            element.baseDirectory ==
+            DownloadLocationType.platformDefaultDirectory)
         .isEmpty) {
       final downloadLocation = await DownloadLocation.create(
-        name: "Internal Storage",
-        baseDirectory: DownloadLocationType.internalSupport,
-      );
+          name: "Internal Storage",
+          baseDirectory: DownloadLocationType.platformDefaultDirectory);
       FinampSettingsHelper.addDownloadLocation(downloadLocation);
     }
     await Future.wait([
