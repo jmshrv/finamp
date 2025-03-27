@@ -367,7 +367,7 @@
   "@customLocationsBuggy": {},
   "shuffleAllTrackCount": "Cantidad de canciones al reproducir aleatoriamente",
   "@shuffleAllTrackCount": {},
-  "gridCrossAxisCountSubtitle": "Cantidad de columnas al usar por fila al estar el dispositivo en {value}.",
+  "gridCrossAxisCountSubtitle": "Cantidad de columnas usadas por fila cuando el dispositivo está en {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
