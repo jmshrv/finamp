@@ -319,7 +319,7 @@ class FinampSettings {
   @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds)
   int sleepTimerSeconds;
 
-  @HiveField(15, defaultValue: {})
+  @HiveField(15, defaultValue: <String, DownloadLocation>{})
   @FinampSetterIgnore()
   Map<String, DownloadLocation> downloadLocationsMap;
 
@@ -333,11 +333,11 @@ class FinampSettings {
   @HiveField(19, defaultValue: DefaultSettings.disableGesture)
   bool disableGesture = DefaultSettings.disableGesture;
 
-  @HiveField(20, defaultValue: {})
+  @HiveField(20, defaultValue: <TabContentType, SortBy>{})
   @FinampSetterIgnore()
   Map<TabContentType, SortBy> tabSortBy;
 
-  @HiveField(21, defaultValue: {})
+  @HiveField(21, defaultValue: <TabContentType, SortOrder>{})
   @FinampSetterIgnore()
   Map<TabContentType, SortOrder> tabSortOrder;
 
@@ -596,8 +596,10 @@ class DownloadLocation {
       required this.baseDirectory}) {
     assert(baseDirectory.needsPath == (relativePath != null));
     assert(baseDirectory == DownloadLocationType.migrated ||
+        // ignore: deprecated_member_use_from_same_package
         (legacyUseHumanReadableNames == null && legacyDeletable == null));
     assert(baseDirectory != DownloadLocationType.migrated ||
+        // ignore: deprecated_member_use_from_same_package
         (legacyUseHumanReadableNames != null && legacyDeletable != null));
   }
 
@@ -643,16 +645,20 @@ class DownloadLocation {
   /// every time the app starts up.
   Future<void> updateCurrentPath() async {
     if (baseDirectory == DownloadLocationType.migrated) {
+      // ignore: deprecated_member_use_from_same_package
       if (!legacyDeletable!) {
         baseDirectory = DownloadLocationType.internalDocuments;
         relativePath = null;
         name = "Legacy Internal Storage";
+        // ignore: deprecated_member_use_from_same_package
       } else if (!legacyUseHumanReadableNames!) {
         baseDirectory = DownloadLocationType.external;
       } else {
         baseDirectory = DownloadLocationType.custom;
       }
+      // ignore: deprecated_member_use_from_same_package
       legacyDeletable = null;
+      // ignore: deprecated_member_use_from_same_package
       legacyUseHumanReadableNames = null;
     }
     switch (baseDirectory) {

@@ -1050,8 +1050,11 @@ class DownloadsService {
       FinampSettingsHelper.addDownloadLocation(downloadLocation);
     }
     await Future.wait([
+      // ignore: deprecated_member_use_from_same_package
       Hive.openBox<DownloadedParent>("DownloadedParents"),
+      // ignore: deprecated_member_use_from_same_package
       Hive.openBox<DownloadedTrack>("DownloadedItems"),
+      // ignore: deprecated_member_use_from_same_package
       Hive.openBox<DownloadedImage>("DownloadedImages"),
     ]);
     _migrateImages();
@@ -1069,9 +1072,12 @@ class DownloadsService {
   /// Substep 1 of [migrateFromHive].
   void _migrateImages() {
     _downloadsLogger.info("Migrating images from Hive");
+    // ignore: deprecated_member_use_from_same_package
     final downloadedItemsBox = Hive.box<DownloadedTrack>("DownloadedItems");
     final downloadedParentsBox =
+        // ignore: deprecated_member_use_from_same_package
         Hive.box<DownloadedParent>("DownloadedParents");
+    // ignore: deprecated_member_use_from_same_package
     final downloadedImagesBox = Hive.box<DownloadedImage>("DownloadedImages");
 
     List<DownloadItem> nodes = [];
@@ -1121,6 +1127,7 @@ class DownloadsService {
   /// Substep 2 of [migrateFromHive].
   void _migrateTracks() {
     _downloadsLogger.info("Migrating tracks from Hive");
+    // ignore: deprecated_member_use_from_same_package
     final downloadedItemsBox = Hive.box<DownloadedTrack>("DownloadedItems");
 
     List<DownloadItem> nodes = [];
@@ -1194,7 +1201,9 @@ class DownloadsService {
   void _migrateParents() {
     _downloadsLogger.info("Migrating parents from Hive");
     final downloadedParentsBox =
+        // ignore: deprecated_member_use_from_same_package
         Hive.box<DownloadedParent>("DownloadedParents");
+    // ignore: deprecated_member_use_from_same_package
     final downloadedItemsBox = Hive.box<DownloadedTrack>("DownloadedItems");
 
     for (final parent in downloadedParentsBox.values) {
@@ -1334,14 +1343,14 @@ class DownloadsService {
           .thenByBaseIndexNumber()
           .thenByName()
           .findAll();
-      return items.map((e) => e.baseItem).whereNotNull().toList();
+      return items.map((e) => e.baseItem).nonNulls.toList();
     } else {
       List<DownloadItem> playlist = await query.findAll();
       Map<int, DownloadItem> childMap =
           Map.fromIterable(playlist, key: (e) => (e as DownloadItem).isarId);
       return canonItem!.orderedChildren!
           .map((e) => childMap[e]?.baseItem)
-          .whereNotNull()
+          .nonNulls
           .toList();
     }
   }
