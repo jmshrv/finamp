@@ -77,9 +77,9 @@ class _ViewSelectorState extends State<ViewSelector> {
                   _submitChoice();
                 } else {
                   if (mounted) {
-                    setState(() {
-                      isSubmitButtonEnabled = _views.values.contains(true);
-                    });
+                    Future.microtask(() => setState(() {
+                          isSubmitButtonEnabled = _views.values.contains(true);
+                        }));
                   }
                 }
               }
@@ -139,7 +139,6 @@ class _ViewSelectorState extends State<ViewSelector> {
                   )
                 ]),
               );
-              return const Center(child: Icon(Icons.error));
             } else {
               return const Center(child: CircularProgressIndicator.adaptive());
             }
@@ -158,7 +157,8 @@ class _ViewSelectorState extends State<ViewSelector> {
             .where((element) => element.value == true)
             .map((e) => e.key)
             .toList());
-        // allow navigation to music screen while selector is being built
+        // allow calling _submitChoice() while selector is being built by delaying
+        // navigation changes
         Future.microtask(() => Navigator.of(context)
             .pushNamedAndRemoveUntil(MusicScreen.routeName, (route) => false));
       } catch (e) {
