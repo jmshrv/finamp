@@ -535,7 +535,7 @@ class FinampSettings {
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
-      name: "Internal Storage",
+      name: DownloadLocation.internalStorageName,
       // default download location moved to support dir based on existing comment
       baseDirectory: DownloadLocationType.platformDefaultDirectory,
     );
@@ -687,6 +687,8 @@ class DownloadLocation {
     await downloadLocation.updateCurrentPath();
     return downloadLocation;
   }
+
+  static const String internalStorageName = "Internal Storage";
 }
 
 /// Class used in AddDownloadLocationScreen. Basically just a DownloadLocation

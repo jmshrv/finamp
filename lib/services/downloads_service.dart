@@ -1045,7 +1045,7 @@ class DownloadsService {
             DownloadLocationType.platformDefaultDirectory)
         .isEmpty) {
       final downloadLocation = await DownloadLocation.create(
-          name: "Internal Storage",
+          name: DownloadLocation.internalStorageName,
           baseDirectory: DownloadLocationType.platformDefaultDirectory);
       FinampSettingsHelper.addDownloadLocation(downloadLocation);
     }

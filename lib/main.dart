@@ -184,7 +184,7 @@ Future<void> _setupDownloadsHelper() async {
       _mainLog
           .info("Internal Storage download location is missing.  Recreating.");
       final downloadLocation = await DownloadLocation.create(
-          name: "Internal Storage",
+          name: DownloadLocation.internalStorageName,
           baseDirectory: DownloadLocationType.platformDefaultDirectory);
       FinampSettingsHelper.addDownloadLocation(downloadLocation);
       // There may be old downloads present due to skipping the migration
