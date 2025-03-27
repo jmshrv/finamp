@@ -1,5 +1,21 @@
 ![Banner](./GitHub_Banner.png)
 
+## Finamplify - Finamp's First Hackathon!
+
+From Saturday, March 29th (2025-03-29) until the end of Sunday, April 6th (2025-04-06), we are holding Finamp's first hackathon - called *Finamplify*.  
+This is 9 days of intensive work on Finamp, by new and existing contributors!
+
+Here are the most important infos:
+
+- The Hackathon is about making progress on Finamp's *redesign*, which is currently in beta.  
+  Therefore, please **make sure to base your changes on the `redesign` branch when working on new features or fixes!**. We won't accept new features targeting the `main` branch, as the branches have diverged quite a bit.
+- We would like to send out stickers to everyone who contributed to Finamp during this Hackathon! We'll mail the stickers to you for free, and this is entirely optional. Only significant contributions will be counted, so simply fixing a typo will not qualify you, sorry!  
+  To send you the stickers we'll need your physical address. Here's a survey where you can enter your details: TODO 
+  Please make sure to include your GitHub and/or Discord user name so we can ensure you actually contributed :)
+- The Discord is happening here on GitHub and on our [Finamp Beta Testers Discord server](https://discord.gg/xh9SZ73jWk). Ideally you should participate on both platforms, but either works. For any *code contributions* you'll have to contribute on GitHub though, via a regular Pull Request. Design contributions a fine via Discord.
+
+---
+
 #### Redesign Beta
 
 We're currently in the process of redesigning Finamp to transform it into a modern, beautiful, and feature-rich music player made specifically for Jellyfin.  
@@ -43,6 +59,13 @@ Some of its features include:
 
 <sup>Note: The F-Droid release may take a day or two to get updates because since [F-Droid only builds once a day](https://www.f-droid.org/en/docs/FAQ_-_App_Developers/#ive-published-a-new-release-why-is-it-not-in-the-repository).</sup>  
 The app is also available as an APK from the [releases page](https://github.com/jmshrv/finamp/releases).
+
+### Community & Discussions
+
+Have a simple question about Finamp, or struggling with setting up your Jellyfin correctly?  
+Just want someone to talk to and share your favorite music with?  
+Aside from using the [Issues](https://github.com/jmshrv/finamp/issues) and [Discussions](https://github.com/jmshrv/finamp/discussions) functionality here on GitHub, you could also **[join our Discord server](https://discord.gg/xh9SZ73jWk)!**  
+We post release notes and announcements there too, and you'll likely get a reply more quickly there compared to GitHub.
 
 ### Frequently Asked Questions
 
