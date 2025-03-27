@@ -280,5 +280,402 @@
   "syncDownloadedPlaylists": "Sincronitza les llistes de reproducció descarregades",
   "@syncDownloadedPlaylists": {},
   "addButtonLabel": "Afegeix",
-  "@addButtonLabel": {}
+  "@addButtonLabel": {},
+  "failedToGetTrackFromDownloadId": "Error a l'hora de trobar-lo pel seu ID de descàrrega",
+  "@failedToGetTrackFromDownloadId": {},
+  "deleteDownloadsPrompt": "Estàs segur que vols esborrar el {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' d'aquest dispositiu?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Esborrar",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "downloadedTracksWillNotBeDeleted": "Les pistes descarregades no s'esborraran",
+  "@downloadedTracksWillNotBeDeleted": {},
+  "playbackSpeedControlSettingSubtitle": "Si es mostren els controls de velocitat de reproducció al menú de la pantalla del reproductor",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "showTextOnGridView": "Veure text en mode graella",
+  "@showTextOnGridView": {},
+  "disableGestureSubtitle": "Deshabilitar o no les gesticulacions.",
+  "@disableGestureSubtitle": {},
+  "settings": "Configuració",
+  "@settings": {},
+  "album": "Àlbum",
+  "@album": {},
+  "albumArtist": "Artista de l'Àlbum",
+  "@albumArtist": {},
+  "artist": "Artista",
+  "@artist": {},
+  "budget": "Pressupost",
+  "@budget": {},
+  "dateAdded": "Data on s'afegí",
+  "@dateAdded": {},
+  "datePlayed": "Data on es reproduí",
+  "@datePlayed": {},
+  "playCount": "Recompte de reproduccions",
+  "@playCount": {},
+  "premiereDate": "Data d'estrena",
+  "@premiereDate": {},
+  "downloadedMissingImages": "{count,plural, =0{No s'han trobat imatges mancants} =1{Descarregades {count} imatges mancants} other{Descarregades {count} imatges mancants}}",
+  "@downloadedMissingImages": {
+    "description": "Message that shows when the user downloads missing images",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadCount": "{count,plural, =1{{count} descàrrega} other{{count} descàrregues}}",
+  "@downloadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlComplete": "{count} completat",
+  "@dlComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTooltip": "Edita el nom de la llista de reproducció",
+  "@editPlaylistNameTooltip": {},
+  "audioService": "Servei d'Àudio",
+  "@audioService": {},
+  "customLocation": "Ubicació Personalitzada",
+  "@customLocation": {},
+  "portrait": "Vertical",
+  "@portrait": {},
+  "showTextOnGridViewSubtitle": "Mostrar el text (títol, artista, etc.) a la pantalla de música en graella.",
+  "@showTextOnGridViewSubtitle": {},
+  "dark": "Fosc",
+  "@dark": {},
+  "specialDownloads": "Descàrregues especials",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "Cap ítem descarregat.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "trackCount": "{count,plural,=1{{count} Pista} other{{count} Pistes}}",
+  "@trackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineTrackCount": "{count,plural,=1{{count} Pista} other{{count} Pistes}}, {downloads} Descarregat/es",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadsQueued": "Descàrrega preparada, descarregant fitxers",
+  "@downloadsQueued": {},
+  "logsCopied": "Registres copiats.",
+  "@logsCopied": {},
+  "message": "Missatge",
+  "@message": {},
+  "stackTrace": "Traç de pila",
+  "@stackTrace": {},
+  "downloadLocations": "Ubicació de Descàrregues",
+  "@downloadLocations": {},
+  "notAvailableInOfflineMode": "No disponible en mode sense connexió",
+  "@notAvailableInOfflineMode": {},
+  "logOut": "Tancar sessió",
+  "@logOut": {},
+  "areYouSure": "Estàs segur?",
+  "@areYouSure": {},
+  "enableTranscoding": "Habilitar codificació",
+  "@enableTranscoding": {},
+  "bitrateSubtitle": "Una taxa de bits més alta dona una millor qualitat d'àudio a canvi d'una major amplada de banda.",
+  "@bitrateSubtitle": {},
+  "appDirectory": "Directori de l'aplicació",
+  "@appDirectory": {},
+  "addDownloadLocation": "Afegir una Ubicació de Descàrregues",
+  "@addDownloadLocation": {},
+  "shuffleAllTrackCount": "Recompte Total de Pistes Barrejades",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Quantitat de cançons que es carreguen quan s'utilitza el botó barrejador de cançons.",
+  "@shuffleAllTrackCountSubtitle": {},
+  "playbackSpeedControlSetting": "Visualització de la Velocitat de Reproducció",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "speed": "Velocitat",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "apply": "Aplicar",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "landscape": "Horitzontal",
+  "@landscape": {},
+  "gridCrossAxisCount": "Columnes en vista de quadrícula en {value}",
+  "@gridCrossAxisCount": {
+    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Portrait"
+      }
+    }
+  },
+  "hideTrackArtistsIfSameAsAlbumArtists": "Amaga els artistes de la cançó si són els mateixos que els de l'àlbum",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "showArtistsTopTracks": "Mostra les cançons que estan al top en la vista d'artistes",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Mostrar el top 5 més sentit en les cançons d'un artista.",
+  "@showArtistsTopTracksSubtitle": {},
+  "showFastScroller": "Mostrar el desplaçament ràpid",
+  "@showFastScroller": {},
+  "theme": "Tema",
+  "@theme": {},
+  "system": "Sistema",
+  "@system": {},
+  "light": "Clar",
+  "@light": {},
+  "playerScreen": "Pantalla de reproducció",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "communityRating": "Nota de la Comunitat",
+  "@communityRating": {},
+  "productionYear": "Any de Producció",
+  "@productionYear": {},
+  "name": "Nom",
+  "@name": {},
+  "downloadMissingImages": "Descarregar imatges mancants",
+  "@downloadMissingImages": {},
+  "activeDownloads": "Descàrregues Actives",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Descàrregues Actives",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Cap descàrrega activa.",
+  "@noActiveDownloads": {},
+  "errorScreenError": "Un error ha succeït mentre s'intentava obtenir la llista d'errors! En aquest punt, probablement hauries de crear una sol·licitud a GitHub i esborrar les dades de l'aplicació",
+  "@errorScreenError": {},
+  "addDownloads": "Afegir Descàrregues",
+  "@addDownloads": {},
+  "selectDirectory": "Selecciona un Directori",
+  "@selectDirectory": {},
+  "unknownError": "Error desconegut",
+  "@unknownError": {},
+  "transcoding": "Codificació",
+  "@transcoding": {},
+  "customizationSettingsTitle": "Personalització",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "directoryMustBeEmpty": "El directori ha d'estar buit",
+  "@directoryMustBeEmpty": {},
+  "enterLowPriorityStateOnPause": "Introdueix un Estat de Baixa Prioritat en la Pausa",
+  "@enterLowPriorityStateOnPause": {},
+  "dlFailed": "{count} fallat",
+  "@dlFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlEnqueued": "{count} en cua",
+  "@dlEnqueued": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dlRunning": "{count} funcionant",
+  "@dlRunning": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "updateButtonLabel": "Actualitzar",
+  "@updateButtonLabel": {},
+  "downloadsDeleted": "Descàrregues esborrades.",
+  "@downloadsDeleted": {},
+  "error": "Error",
+  "@error": {},
+  "discNumber": "Disc {number}",
+  "@discNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editPlaylistNameTitle": "Edita el nom de la llista de reproducció",
+  "@editPlaylistNameTitle": {},
+  "playlistNameUpdated": "Nom de la llista de reproducció actualitzat.",
+  "@playlistNameUpdated": {},
+  "favourite": "Preferit",
+  "@favourite": {},
+  "location": "Localització",
+  "@location": {},
+  "tabs": "Capçaleres",
+  "@tabs": {},
+  "confirmDownloadStarted": "Descàrrega començada",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "startMixNoTracksAlbum": "Manté pres un àlbum per afegir o esborrar-lo del creador de barreges abans de començar una barreja",
+  "@startMixNoTracksAlbum": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+  },
+  "startMixNoTracksGenre": "Manté pres un gènere per afegir o esborrar-lo del creador de barreges abans de començar una barreja",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "criticRating": "Nota de la Crítica",
+  "@criticRating": {},
+  "shareLogs": "Compartir registres",
+  "@shareLogs": {},
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} pista} other{{trackCount} pistes}}, {imageCount,plural,=1{{imageCount} imatge} other{{imageCount} imatges}}\n{syncCount,plural,=1{{syncCount} node sincronitzat} other{{syncCount} nodes sincronitzats}}{repairing, plural, =0{} other{\nReparant}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Pista} other{{count} Pistes}} Descarregat/es",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "interactions": "Interaccions",
+  "@interactions": {},
+  "applicationLegalese": "Llicenciat amb Mozilla Public License 2.0.\nCodi font disponible a {sourceCodeLink}.",
+  "@applicationLegalese": {
+    "placeholders": {
+      "sourceCodeLink": {
+        "type": "String",
+        "example": "https://github.com/jmshrv/finamp"
+      }
+    }
+  },
+  "bitrate": "Taxa de bits",
+  "@bitrate": {},
+  "jellyfinUsesAACForTranscoding": "Jellyfin utilitza ACC per la codificació",
+  "@jellyfinUsesAACForTranscoding": {},
+  "layoutAndTheme": "Disseny i Tema",
+  "@layoutAndTheme": {},
+  "enableTranscodingSubtitle": "Codifica la música en el costat del servidor.",
+  "@enableTranscodingSubtitle": {},
+  "pathReturnSlashErrorMessage": "Rutes que retornen \"/\" no poden ser utilitzades",
+  "@pathReturnSlashErrorMessage": {},
+  "list": "Llista",
+  "@list": {},
+  "customLocationsBuggy": "Ubicacions personalitzades poden ser extremadament inestables i no són recomanables en la majoria dels casos. Les ubicacions sota el sistema de carpeta 'Music' prevenen la portada de l'àlbum de poder guardar-se per limitacions del SO.",
+  "@customLocationsBuggy": {},
+  "shown": "Mostrat",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "enterLowPriorityStateOnPauseSubtitle": "Permet que la notificació sigui descartable quan estigui pausat. A més, permet a Android parar el servei quan està pausat.",
+  "@enterLowPriorityStateOnPauseSubtitle": {},
+  "viewType": "Tipus de Visualització",
+  "@viewType": {},
+  "grid": "Graella",
+  "@grid": {},
+  "viewTypeSubtitle": "Tipus de vista per a la pantalla de música",
+  "@viewTypeSubtitle": {},
+  "playbackSpeedControlSettingDescription": "Automàtic:  \nFinamp intenta identificar si la pista que estàs reproduint és un pòdcast o (part) d'un audiollibre. Es considera que aquest és el cas si la pista dura més de {trackDuration} minuts, si l'àlbum de la pista dura més de {albumDuration} hores o si la pista té assignat almenys un d’aquests gèneres: {genreList}.\nEls controls de velocitat de reproducció es mostraran aleshores al menú de la pantalla del reproductor.\n\nMostrat:\nEls controls de velocitat de reproducció sempre es mostraran al menú de la pantalla del reproductor.\n\nAmagat:\nEls controls de velocitat de reproducció al menú de la pantalla del reproductor sempre estaran ocults.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "automatic": "Automàtic",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Amagat",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "gridCrossAxisCountSubtitle": "Quantitat de columnes utilitzades per fila quan el dispositiu està en {value}.",
+  "@gridCrossAxisCountSubtitle": {
+    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "landscape"
+      }
+    }
+  },
+  "useCoverAsBackground": "Utilitza una cobertura difuminada pel fons de pantalla",
+  "@useCoverAsBackground": {},
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Marge interior mínim al voltant de la portada de l'àlbum en la pantalla del reproductor, en % en l'amplada de la pantalla.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "useCoverAsBackgroundSubtitle": "Utilitzar una portada d'àlbum difuminada com a fons de pantalla en diferents apartats de l'aplicació.",
+  "@useCoverAsBackgroundSubtitle": {},
+  "playerScreenMinimumCoverPaddingEditorTitle": "Marge interior mínim per l'àlbum",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Amaga als artistes de les cançons en la pantalla de l'àlbum si no difereixen dels de l'àlbum.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "disableGesture": "Deshabilitar gesticulacions",
+  "@disableGesture": {},
+  "reset": "Reiniciar",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  }
 }
