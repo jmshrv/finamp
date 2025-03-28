@@ -193,6 +193,7 @@ class NowPlayingBar extends ConsumerWidget {
               if (direction == DismissDirection.down) {
                 final queueService = GetIt.instance<QueueService>();
                 await queueService.stopPlayback();
+                FeedbackHelper.feedback(FeedbackType.success);
               } else {
                 await openPlayerScreen();
               }
@@ -214,8 +215,10 @@ class NowPlayingBar extends ConsumerWidget {
                 confirmDismiss: (direction) async {
                   if (direction == DismissDirection.endToStart) {
                     await audioHandler.skipToNext();
+                    FeedbackHelper.feedback(FeedbackType.light);
                   } else {
                     await audioHandler.skipToPrevious(forceSkip: true);
+                    FeedbackHelper.feedback(FeedbackType.light);
                   }
                   return false;
                 },
