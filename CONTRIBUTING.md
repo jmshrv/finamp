@@ -42,6 +42,17 @@ When creating new types, note that you'll also have to register an adapter in `m
 
 The biggest main piece of work being done on Finamp at the moment is the redesign. The relevant issue can be found [here](https://github.com/jmshrv/finamp/issues/220). The `redesign` branch has diverged a lot from `main`, but I try to keep it updated. If you're struggling to decide what to work on, the redesign is a good place to look :)
 
+## Designing
+
+As the name implies, we'll need many fresh design mockups for the redesign. Some are already done, some are still being interated on, and some mockups haven't been started yet.
+
+If you are a designer or have ideas on how the new user interface could/should look, then it would be amazing and really helpfull if you would create a mockup!  
+You can share your mockups in an issue here on GitHub (use a relevant one if possible, otherwise create a new one) or on Discord for further discussion.  
+Once the mockup is finalized, people can start implementing it.
+
+There's also a Figma file with some existing mockups that you can go off of: <https://www.figma.com/design/wVizekpm9YchvHFP6l508r/Finamp?node-id=101-425&t=27CRT9QAwFhlIMqm-1>  
+Some of the designs in there are already outdated or still a work in progress. When in doubt, you should look at the current design in the actual app, or ask us about it!
+
 ## Translating
 
 Finamp uses Weblate to manage translations: **https://hosted.weblate.org/engage/finamp/**
