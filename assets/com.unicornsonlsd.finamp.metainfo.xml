@@ -39,6 +39,33 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
+    <release version="0.9.15-beta" date="2025-03-29">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.15-beta</url>
+      <description>
+        <p>
+          <b>🚀 Join Finamp's first Hackathon, happening now until April 6th!<br/>More infos on GitHub, Discord, or the project page: https://github.com/users/jmshrv/projects/5/views/1?pane=info</b>
+        </p>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Improved grouping and sorting on the Downloads screen</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li><b>(Hopefully!) Fixed Finamp Flatpak not launching</b></li>
+          <li>Fixed invisible back and cast buttons on the player screen</li>
+          <li>Fixed duplicate download/delete buttons</li>
+          <li>Fixed migrating from the stable version to the beta version</li>
+          <li>Fixed not being able to download after upgrading to the beta version</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
     <release version="0.9.14-beta" date="2025-02-27">
       <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.14-beta</url>
       <description>
