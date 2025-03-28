@@ -12,7 +12,7 @@ Here are the most important infos:
 - We would like to send out stickers to everyone who contributed to Finamp during this Hackathon! We'll mail the stickers to you for free, and this is entirely optional. Only significant contributions will be counted, so simply fixing a typo will not qualify you, sorry!  
   To send you the stickers we'll need your physical address. Here's a survey where you can enter your details: TODO 
   Please make sure to include your GitHub and/or Discord user name so we can ensure you actually contributed :)
-- The Discord is happening here on GitHub and on our [Finamp Beta Testers Discord server](https://discord.gg/xh9SZ73jWk). Ideally you should participate on both platforms, but either works. For any *code contributions* you'll have to contribute on GitHub though, via a regular Pull Request. Design contributions a fine via Discord.
+- The Hackathon is happening here on GitHub and on our [Finamp Beta Testers Discord server](https://discord.gg/xh9SZ73jWk). Ideally you should participate on both platforms, but either works. For any *code contributions* you'll have to contribute on GitHub though, via a regular Pull Request. Design contributions a fine via Discord.
 
 ---
 
