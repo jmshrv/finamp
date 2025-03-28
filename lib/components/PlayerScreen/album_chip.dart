@@ -43,10 +43,11 @@ class AlbumChips extends StatelessWidget {
                 color: color,
                 item: baseItem,
               ),
-              if ((includeReleaseDate ?? false) ||
-                  (includeReleaseDate == null &&
-                      FinampSettingsHelper
-                          .finampSettings.showAlbumReleaseDateOnPlayerScreen))
+              if (((includeReleaseDate ?? false) ||
+                      (includeReleaseDate == null &&
+                          FinampSettingsHelper.finampSettings
+                              .showAlbumReleaseDateOnPlayerScreen)) &&
+                  ReleaseDateHelper.autoFormat(baseItem) != null)
                 _ReleaseDateChip(
                   baseItem: baseItem,
                   backgroundColor: backgroundColor,
@@ -127,7 +128,7 @@ class _ReleaseDateChip extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           child: Text(
-            releaseDate,
+            releaseDate ?? "Unknown",
             overflow: TextOverflow.ellipsis,
             softWrap: false,
             style: TextStyle(

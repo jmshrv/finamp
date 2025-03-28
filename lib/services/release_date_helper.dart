@@ -6,14 +6,14 @@ import '../models/jellyfin_models.dart';
 
 class ReleaseDateHelper {
   /// Formats the release date of a [BaseItemDto] based on the user's settings.
-  static String autoFormat(BaseItemDto? baseItem) {
+  static String? autoFormat(BaseItemDto? baseItem) {
     final format = FinampSettingsHelper.finampSettings.releaseDateFormat;
 
     final premiereDate = baseItem?.premiereDate != null
         ? DateTime.parse(baseItem!.premiereDate!)
         : null;
     if (premiereDate == null) {
-      return "Unknown";
+      return null;
     }
     switch (format) {
       case ReleaseDateFormat.year:
