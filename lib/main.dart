@@ -77,33 +77,34 @@ import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
 import 'setup_logging.dart';
 
+final _mainLog = Logger("Main()");
+
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
   bool hasFailed = false;
-  final mainLog = Logger("Main()");
   try {
     await setupLogging();
     await _setupEdgeToEdgeOverlayStyle();
-    mainLog.info("Setup edge-to-edge overlay");
+    _mainLog.info("Setup edge-to-edge overlay");
     await setupHive();
-    mainLog.info("Setup hive and isar");
+    _mainLog.info("Setup hive and isar");
     _migrateDownloadLocations();
     _migrateSortOptions();
-    mainLog.info("Completed applicable migrations");
+    _mainLog.info("Completed applicable migrations");
     await _setupFinampUserHelper();
-    mainLog.info("Setup user helper");
+    _mainLog.info("Setup user helper");
     await _setupJellyfinApiData();
-    mainLog.info("setup jellyfin api");
+    _mainLog.info("setup jellyfin api");
     _setupOfflineListenLogHelper();
-    mainLog.info("Setup offline listen tracking");
+    _mainLog.info("Setup offline listen tracking");
     await _setupDownloadsHelper();
-    mainLog.info("Setup downloads service");
+    _mainLog.info("Setup downloads service");
     await _setupOSIntegration();
-    mainLog.info("Setup os integrations");
+    _mainLog.info("Setup os integrations");
     await _setupPlaybackServices();
-    mainLog.info("Setup audio player");
+    _mainLog.info("Setup audio player");
     await _setupKeepScreenOnHelper();
-    mainLog.info("Setup KeepScreenOnHelper");
+    _mainLog.info("Setup KeepScreenOnHelper");
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -127,7 +128,7 @@ void main() async {
     await findSystemLocale();
     await initializeDateFormatting();
 
-    mainLog.info("Launching main app");
+    _mainLog.info("Launching main app");
 
     runApp(const Finamp());
   }
@@ -172,6 +173,26 @@ Future<void> _setupDownloadsHelper() async {
       .finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
     FinampSetters.setHasCompletedDownloadsServiceMigration(true);
+  } else {
+    // Some users may have missed migration due to a bug in the flag setting and
+    // are therefore missing an internal directory
+    if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+        .where((element) =>
+            element.baseDirectory ==
+            DownloadLocationType.platformDefaultDirectory)
+        .isEmpty) {
+      _mainLog
+          .info("Internal Storage download location is missing.  Recreating.");
+      final downloadLocation = await DownloadLocation.create(
+          name: DownloadLocation.internalStorageName,
+          baseDirectory: DownloadLocationType.platformDefaultDirectory);
+      FinampSettingsHelper.addDownloadLocation(downloadLocation);
+      // There may be old downloads present due to skipping the migration
+      // Run a repair to make sure they all get cleaned up.
+      unawaited(downloadsService
+          .repairAllDownloads()
+          .then((value) => null, onError: GlobalSnackbar.error));
+    }
   }
 
   await FileDownloader()
