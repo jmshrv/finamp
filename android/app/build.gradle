@@ -45,10 +45,19 @@ android {
     }
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
             storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
             storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+        def debugKeyStoreFile = keystoreProperties['debugKeystoreFile']
+        if (debugKeyStoreFile != null) {
+            debug {
+                storeFile file(debugKeyStoreFile)
+                storePassword keystoreProperties['debugKeystorePassword']
+                keyAlias keystoreProperties['debugKeyAlias']
+                keyPassword keystoreProperties['debugKeyPassword']
+            }
         }
     }
     buildTypes {
@@ -64,6 +73,9 @@ android {
             resValue "string", "app_name", "Finamp Profile"
         }
         debug {
+            if (signingConfigs.hasProperty('debug')) {
+                signingConfig signingConfigs.debug
+            }
             applicationIdSuffix '.debug'
             minifyEnabled true // avoid dexing issues
             resValue "string", "app_name", "Finamp Debug"
