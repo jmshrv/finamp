@@ -1187,5 +1187,141 @@
         "type": "String"
       }
     }
+  },
+  "volumeNormalizationModeAlbumBased": "앨범 기반",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "activeDownloadsListHeader": "{itemCount}{itemCount,plural,=1{개} other{개}} 다운로드 {typeName, select, downloading{중} failed{실패} syncFailed{동기화 실패} enqueued{대기 중} other{처리 중}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "volumeNormalizationModeAlbumOnly": "앨범만",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "현재 iOS에서의 볼륨 표준화는 재생 볼륨을 조절하여 음량 변화를 표현하는 방식으로 이루어집니다. 다만 볼륨을 100% 이상 키울 수는 없으니, 전체적으로 볼륨을 줄여 조용한 트랙에서 음량을 키울 수 있도록 합니다. 단위는 데시벨 (dB) 이며, -10 dB 은 볼륨 ~30%, -4.5 dB 은 볼륨 ~60%, -2 dB 은 볼륨 ~80%에 상응합니다.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "volumeNormalizationSwitchTitle": "볼륨 표준화 켜기",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeTrackBased": "트랙 기반",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "syncDownloads": "동기화하며 존재하지 않는 항목을 다운로드합니다.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "filesystemFull": "남은 다운로드에 실패하였습니다. 저장공간이 부족합니다.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "연결이 끊겼습니다. 다운로드를 일시정지합니다.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "백그라운드에서 다운로드 중 연결이 끊겼습니다. OS 설정의 문제일 가능성이 있습니다.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "onlyShowFullyDownloaded": "전체 다운로드한 앨범만 표시",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "downloadLibraryPrompt": "정말로 라이브러리 \"{libraryName}\"의 모든 항목을 다운로드하시겠습니까?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "moreInfo": "상세정보",
+  "@moreInfo": {},
+  "volumeNormalizationSettingsTitle": "볼륨 표준화",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "volumeNormalizationModeSelectorTitle": "볼륨 표준화 모드",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "볼륨 표준화가 적용되는 위치와 도출되는 방식",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationSwitchSubtitle": "음량 정보로 트랙 볼륨 표준화 (ReplayGain)",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeSelectorDescription": "하이브리드 (트랙 + 앨범)\n평상시에는 트랙의 음량 정보를 참조하지만, 앨범이 재생 중인 경우 앨범의 음량 정보를 참조합니다.\n\n트랙 기반\n항상 트랙의 음량 정보를 사용합니다.\n\n앨범만\n앨범을 재생할 때에만, 앨범의 음량 정보에 기반한 볼륨 표준화가 적용됩니다. 앨범 외의 개별적인 트랙에는 적용되지 않습니다.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "volumeNormalizationModeHybrid": "하이브리드 (트랙 + 앨범)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "음량 기준선",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "활성화되면 트랙을 탭할 때 해당 트랙에 이어 믹스를 재생합니다.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "downloadItem": "다운로드",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "startInstantMixForIndividualTracksSwitchTitle": "개별 트랙부터 믹스 재생",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "repairComplete": "다운로드 복구 완료.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "syncComplete": "다운로드 동기화 완료.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "repairDownloads": "다운로드한 리소스에 발생한 오류를 복구합니다.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "requireWifiForDownloads": "WiFi 환경에서만 다운로드합니다.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "queueRestoreError": "경고: 재생목록에서 트랙 {count,plural,=1{{count}개} other{{count}개}}를 복원에 실패했습니다.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
