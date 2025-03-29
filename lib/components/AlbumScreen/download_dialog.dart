@@ -103,7 +103,7 @@ class DownloadDialog extends ConsumerStatefulWidget {
           : DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
       profile.downloadLocationId = downloadLocation;
 
-      FinampSetters.setLastUsedDownloadLocation(profile.downloadLocationId);
+      FinampSetters.setLastUsedDownloadLocationId(profile.downloadLocationId);
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted,
           isConfirmation: true);
@@ -270,7 +270,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
                       selectedDownloadLocation?.id ?? widget.downloadLocationId;
 
                   // We've selected to download, so lets set this as the default for next time
-                  FinampSetters.setLastUsedDownloadLocation(
+                  FinampSetters.setLastUsedDownloadLocationId(
                       profile.downloadLocationId);
                   await downloadsService
                       .addDownload(
