@@ -1,8 +1,11 @@
 import 'package:finamp/components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 import 'package:finamp/components/Buttons/cta_small.dart';
+import 'package:finamp/components/HomeScreen/auto_grid_item.dart';
 import 'package:finamp/components/HomeScreen/finamp_home_screen_header.dart';
+import 'package:finamp/components/MusicScreen/album_item.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -41,7 +44,6 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-
     FinampSettings? finampSettings = ref.watch(finampSettingsProvider).value;
 
     return SafeArea(
@@ -136,11 +138,20 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
               ],
             ),
             const SizedBox(height: 24),
-            _buildSection('Listen Again', _buildHorizontalList()),
+            _buildSection(
+                'Listen Again',
+                _buildHorizontalList(
+                    loadHomeSectionItems(HomeScreenSectionType.listenAgain))),
             const SizedBox(height: 16),
-            _buildSection('Newly Added', _buildHorizontalList()),
+            _buildSection(
+                'Newly Added',
+                _buildHorizontalList(
+                    loadHomeSectionItems(HomeScreenSectionType.newlyAdded))),
             const SizedBox(height: 16),
-            _buildSection('Favorite Artists', _buildHorizontalList()),
+            _buildSection(
+                'Favorite Artists',
+                _buildHorizontalList(loadHomeSectionItems(
+                    HomeScreenSectionType.favoriteArtists))),
           ],
         ),
       ),
@@ -161,21 +172,103 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
     );
   }
 
-  Widget _buildHorizontalList() {
-    return SizedBox(
-      height: 120,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return CTAMedium(
-            text: 'Title $index',
-            icon: Icons.music_note,
-            onPressed: () {},
+  Widget _buildHorizontalList(Future<List<BaseItemDto>?> items) {
+    return FutureBuilder<List<BaseItemDto>?>(
+      future: items,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: 120,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: 5, // Show 5 skeleton items
+              itemBuilder: (context, index) {
+                return Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const SizedBox(width: 16),
+            ),
           );
-        },
-        separatorBuilder: (context, index) => const SizedBox(width: 16),
-      ),
+        } else if (snapshot.hasData) {
+          return SizedBox(
+            height: 120,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final BaseItemDto item = snapshot.data![index];
+                return AutoGridItem(baseItem: item);
+              },
+              separatorBuilder: (context, index) => const SizedBox(width: 16),
+            ),
+          );
+        } else {
+          return const Center(child: Text('No items available.'));
+        }
+      },
     );
   }
+}
+
+Future<List<BaseItemDto>?> loadHomeSectionItems(
+    HomeScreenSectionType sectionType) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final finampUserHelper = GetIt.instance<FinampUserHelper>();
+  final settings = FinampSettingsHelper.finampSettings;
+
+  final Future<List<BaseItemDto>?> newItemsFuture;
+
+  final int amountOfItems = 10;
+
+  switch (sectionType) {
+    case HomeScreenSectionType.listenAgain:
+      newItemsFuture = jellyfinApiHelper.getItems(
+        parentItem: finampUserHelper.currentUser?.currentView,
+        includeItemTypes: [
+          BaseItemDtoType.album.idString,
+          BaseItemDtoType.playlist.idString
+        ].join(","),
+        sortBy: SortBy.datePlayed.jellyfinName(null),
+        sortOrder: SortOrder.descending.toString(),
+        // filters: settings.onlyShowFavourites ? "IsFavorite" : null,
+        startIndex: 0,
+        limit: amountOfItems,
+      );
+      break;
+    case HomeScreenSectionType.newlyAdded:
+      newItemsFuture = jellyfinApiHelper.getItems(
+        parentItem: finampUserHelper.currentUser?.currentView,
+        includeItemTypes: [
+          BaseItemDtoType.album.idString,
+          BaseItemDtoType.playlist.idString
+        ].join(","),
+        sortBy: SortBy.dateCreated.jellyfinName(null),
+        sortOrder: SortOrder.descending.toString(),
+        // filters: settings.onlyShowFavourites ? "IsFavorite" : null,
+        startIndex: 0,
+        limit: amountOfItems,
+      );
+      break;
+    case HomeScreenSectionType.favoriteArtists:
+      newItemsFuture = jellyfinApiHelper.getItems(
+        parentItem: finampUserHelper.currentUser?.currentView,
+        includeItemTypes: [
+          BaseItemDtoType.artist.idString,
+        ].join(","),
+        sortBy: SortBy.datePlayed.jellyfinName(null),
+        sortOrder: SortOrder.descending.toString(),
+        filters: "IsFavorite",
+        startIndex: 0,
+        limit: amountOfItems,
+      );
+      break;
+  }
+
+  return newItemsFuture;
 }

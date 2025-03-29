@@ -16,13 +16,13 @@ class FinampHomeScreenHeader extends ConsumerWidget
 
   @override
   Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight * 1.5); // Standard height
+      const Size.fromHeight(kToolbarHeight * 1.25); // Standard height
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
