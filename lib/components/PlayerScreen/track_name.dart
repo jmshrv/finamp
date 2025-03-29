@@ -5,7 +5,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/album_screen.dart';

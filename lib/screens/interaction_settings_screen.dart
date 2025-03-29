@@ -2,7 +2,7 @@ import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropd
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../components/InteractionSettingsScreen/FastScrollSelector.dart';

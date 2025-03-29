@@ -4,7 +4,7 @@ import 'package:finamp/components/LayoutSettingsScreen/CustomizationSettingsScre
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomizationSettingsScreen extends StatefulWidget {
