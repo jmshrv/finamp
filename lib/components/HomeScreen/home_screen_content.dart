@@ -1,4 +1,5 @@
 import 'package:finamp/components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
+import 'package:finamp/components/Buttons/cta_small.dart';
 import 'package:finamp/components/HomeScreen/finamp_home_screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,10 +40,10 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Wrap(
-              spacing: 2,
+              spacing: 0,
               runSpacing: 8,
               direction: Axis.horizontal,
               alignment: WrapAlignment.spaceBetween,
@@ -52,40 +53,44 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
                   text: 'Song Mix',
                   icon: TablerIcons.arrows_shuffle,
                   vertical: true,
+                  minWidth: 110,
                   onPressed: () {},
                 ),
                 CTALarge(
                   text: 'Recents',
                   icon: TablerIcons.calendar,
                   vertical: true,
+                  minWidth: 110,
                   onPressed: () {},
                 ),
                 CTALarge(
                   text: 'Decade Mix',
                   icon: TablerIcons.chevrons_left,
                   vertical: true,
+                  minWidth: 110,
                   onPressed: () {},
                 ),
               ],
             ),
+            const SizedBox(height: 16),
             Wrap(
-              spacing: 2,
+              spacing: 0,
               runSpacing: 8,
               direction: Axis.horizontal,
               alignment: WrapAlignment.spaceBetween,
               runAlignment: WrapAlignment.center,
               children: [
-                CTALarge(
+                CTASmall(
                   text: 'Songs',
                   icon: TablerIcons.music,
                   onPressed: () {},
                 ),
-                CTALarge(
+                CTASmall(
                   text: 'Playlists',
                   icon: TablerIcons.playlist,
                   onPressed: () {},
                 ),
-                CTALarge(
+                CTASmall(
                   text: 'Albums',
                   icon: TablerIcons.disc,
                   onPressed: () {},
