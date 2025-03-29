@@ -1,12 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
 class PeriodicPlaybackSessionUpdateFrequencyEditor extends StatefulWidget {
-  const PeriodicPlaybackSessionUpdateFrequencyEditor({Key? key})
-      : super(key: key);
+  const PeriodicPlaybackSessionUpdateFrequencyEditor({super.key});
 
   @override
   State<PeriodicPlaybackSessionUpdateFrequencyEditor> createState() =>
@@ -76,8 +75,8 @@ class _PeriodicPlaybackSessionUpdateFrequencyEditorState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null) {
-              FinampSettingsHelper
-                  .setPeriodicPlaybackSessionUpdateFrequencySeconds(valueInt);
+              FinampSetters.setPeriodicPlaybackSessionUpdateFrequencySeconds(
+                  valueInt);
             }
           },
         ),

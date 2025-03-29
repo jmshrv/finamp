@@ -1,6 +1,6 @@
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -10,14 +10,14 @@ import '../icon_and_text.dart';
 
 class ArtistItemInfo extends StatelessWidget {
   const ArtistItemInfo({
-    Key? key,
+    super.key,
     required this.item,
-    required this.itemSongs,
+    required this.itemTracks,
     required this.itemAlbums,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
-  final int itemSongs;
+  final int itemTracks;
   final int itemAlbums;
 
 // TODO: see if there's a way to expand this column to the row that it's in
@@ -33,8 +33,8 @@ class ArtistItemInfo extends StatelessWidget {
             textSpan: TextSpan(
               text: isOffline
                   ? AppLocalizations.of(context)!
-                      .offlineSongCountArtist(itemSongs)
-                  : AppLocalizations.of(context)!.songCount(itemSongs),
+                      .offlineTrackCountArtist(itemTracks)
+                  : AppLocalizations.of(context)!.trackCount(itemTracks),
             )),
         IconAndText(
             iconData: Icons.book,
@@ -51,7 +51,7 @@ class ArtistItemInfo extends StatelessWidget {
 }
 
 class _GenreIconAndText extends StatelessWidget {
-  const _GenreIconAndText({Key? key, required this.genres}) : super(key: key);
+  const _GenreIconAndText({required this.genres});
 
   final List<NameLongIdPair> genres;
 

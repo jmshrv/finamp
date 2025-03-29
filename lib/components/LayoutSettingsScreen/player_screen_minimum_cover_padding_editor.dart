@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
 class PlayerScreenMinimumCoverPaddingEditor extends StatefulWidget {
-  const PlayerScreenMinimumCoverPaddingEditor({Key? key}) : super(key: key);
+  const PlayerScreenMinimumCoverPaddingEditor({super.key});
 
   @override
   State<PlayerScreenMinimumCoverPaddingEditor> createState() =>
@@ -34,8 +34,7 @@ class _PlayerScreenMinimumCoverPaddingEditorState
             final valueDouble = double.tryParse(value);
 
             if (valueDouble != null) {
-              FinampSettingsHelper.setPlayerScreenCoverMinimumPadding(
-                  valueDouble);
+              FinampSetters.setPlayerScreenCoverMinimumPadding(valueDouble);
             }
           },
         ),

@@ -25,8 +25,8 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "songs": "曲",
-  "@songs": {},
+  "tracks": "曲",
+  "@tracks": {},
   "albums": "アルバム",
   "@albums": {},
   "artists": "アーティスト",
@@ -51,12 +51,12 @@
   "@startMix": {},
   "favourites": "お気に入り",
   "@favourites": {},
-  "startMixNoSongsArtist": "アーティスト名を長押しすることでミックス対象に追加または削除できます",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "アーティスト名を長押しすることでミックス対象に追加または削除できます",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "アルバムを長押しすることでミックス対象に追加または削除できます",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "アルバムを長押しすることでミックス対象に追加または削除できます",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "settings": "設定",
@@ -137,8 +137,8 @@
   },
   "playButtonLabel": "再生",
   "@playButtonLabel": {},
-  "songCount": "{count,plural,=1{{count}曲} other{{count}曲}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count}曲} other{{count}曲}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -175,8 +175,8 @@
   "@audioService": {},
   "logOut": "ログアウト",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "ダウロード済みの曲は削除されません",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "ダウロード済みの曲は削除されません",
+  "@downloadedTracksWillNotBeDeleted": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin はトランスコードに AAC を利用します",
   "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "トランスコード有効",
@@ -255,8 +255,8 @@
   "@removeFromMix": {},
   "enableTranscodingSubtitle": "サーバー側の音楽ストリームをトランスコードします。",
   "@enableTranscodingSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "曲のアーティストがアルバム・アーティストと同じの場合、表示しない",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "曲のアーティストがアルバム・アーティストと同じの場合、表示しない",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "newPlaylist": "新規プレイリスト",
   "@newPlaylist": {},
   "removeFromPlaylistTooltip": "プレイリストから外す",
@@ -328,8 +328,8 @@
   "@logsCopied": {},
   "message": "メッセージ",
   "@message": {},
-  "failedToGetSongFromDownloadId": "ダウンロードIDから曲を取得できませんでした",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "ダウンロードIDから曲を取得できませんでした",
+  "@failedToGetTrackFromDownloadId": {},
   "downloadedMissingImages": "{count,plural, =0{欠けている画像が見つかりません} =1{欠けている画像を {count} 枚ダウンロード} other{欠けている画像を {count} 枚ダウンロード}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
@@ -353,8 +353,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "曲のアーティストがアルバムのアーティストと一致した場合、アルバム画面に表示させるか。",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "曲のアーティストがアルバムのアーティストと一致した場合、アルバム画面に表示させるか。",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "enterLowPriorityStateOnPauseSubtitle": "一時停止時に通知をスワイプで除去できます。また Android では一時停止時にサービスを停止できます。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "gridCrossAxisCountSubtitle": "{value}の場合一行当たりのグリッドタイル数。",
@@ -383,10 +383,10 @@
   "@areYouSure": {},
   "appDirectory": "Appのディレクトリ",
   "@appDirectory": {},
-  "shuffleAllSongCount": "曲がシャッフル化される回数",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "すべての曲をシャッフルする時、ここで指定した曲数をロードします。",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "曲がシャッフル化される回数",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "すべての曲をシャッフルする時、ここで指定した曲数をロードします。",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "ビューの形式",
   "@viewType": {},
   "gridCrossAxisCount": "{value} のアイテム数",
@@ -413,20 +413,6 @@
   "@resetTabs": {},
   "viewTypeSubtitle": "ミュージック画面の表示形式",
   "@viewTypeSubtitle": {},
-  "deleteDownloadsPrompt": "このデバイスから {itemType, select, album{アルバム} playlist{プレイリスト} artist{アーティスト} genre{ジャンル} song{曲} library{ライブラリ} other{アイテム}}「{itemName}」を削除してもよろしいですか？",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "insertedIntoQueue": "キューに挿入されました。",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
@@ -452,10 +438,6 @@
   "@showUncensoredLogMessage": {},
   "syncDownloadedPlaylists": "ダウンロードしたプレイリストの同期",
   "@syncDownloadedPlaylists": {},
-  "deleteDownloadsConfirmButtonText": "削除",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "applicationLegalese": "Mozilla Public License 2.0 のもとでライセンスされています。\nソースコードは {sourceCodeLink} で入手できます。",
   "@applicationLegalese": {},
   "customLocationsBuggy": "カスタムの場所は、権限の問題により、非常にバグが多くなります。これを修正する方法を考えていますが、今のところは使用しないことをお勧めします。",
@@ -476,15 +458,15 @@
   "@serverUrlHint": {
     "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
   },
-  "startMixNoSongsGenre": "ミックスを開始する前に、ジャンルを長押ししてミックスビルダーに追加または削除してください",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "ミックスを開始する前に、ジャンルを長押ししてミックスビルダーに追加または削除してください",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} 曲} other{{songCount} 曲}}, {imageCount,plural,=1{{imageCount} 画像} other{{imageCount} 画像}}\n{syncCount,plural,=1{{syncCount} ノードを同期中} other{{syncCount} ノードを同期中}}{repairing, plural, =0{} other{\n現在修復中}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} 曲} other{{trackCount} 曲}}, {imageCount,plural,=1{{imageCount} 画像} other{{imageCount} 画像}}\n{syncCount,plural,=1{{syncCount} ノードを同期中} other{{syncCount} ノードを同期中}}{repairing, plural, =0{} other{\n現在修復中}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -634,8 +616,8 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "アクティブなダウンロードはありません。",
   "@noActiveDownloads": {},
-  "offlineSongCount": "{count,plural,=1{{count} 曲} other{{count} 曲}}, {downloads} ダウンロード済み",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} 曲} other{{count} 曲}}, {downloads} ダウンロード済み",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -645,8 +627,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} 曲} other{{count} 曲}} ダウンロード済み",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} 曲} other{{count} 曲}} ダウンロード済み",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"

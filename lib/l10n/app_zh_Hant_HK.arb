@@ -11,8 +11,8 @@
   "@password": {},
   "unknownName": "未知的名稱",
   "@unknownName": {},
-  "songs": "歌曲",
-  "@songs": {},
+  "tracks": "歌曲",
+  "@tracks": {},
   "albums": "專輯",
   "@albums": {},
   "artists": "歌手",
@@ -23,8 +23,8 @@
   "@playlists": {},
   "startMix": "開始混音",
   "@startMix": {},
-  "startMixNoSongsArtist": "在開始混音之前，長按歌手以添加至混音器或從混音器移除",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "在開始混音之前，長按歌手以添加至混音器或從混音器移除",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "music": "音樂",
@@ -107,8 +107,8 @@
   },
   "errorScreenError": "讀取錯誤資訊時發生錯誤！建議在 GitHub 上回報此問題及重設應用程式。",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "無法從下載 ID 中取得歌曲",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "無法從下載 ID 中取得歌曲",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "錯誤",
   "@error": {},
   "discNumber": "CD {number}",
@@ -123,8 +123,8 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "隨機播放",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count}首歌曲} other{{count}首歌曲}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count}首歌曲} other{{count}首歌曲}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -189,10 +189,10 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "在停止播放時，允許本程式的「通知」能被掃走及關閉應用程式（適用於 Android 裝置）。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "隨機播放上限",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "使用「隨機播放全部」時，播放歌曲的數量上限。",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "隨機播放上限",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "使用「隨機播放全部」時，播放歌曲的數量上限。",
+  "@shuffleAllTrackCountSubtitle": {},
   "message": "訊息",
   "@message": {},
   "pathReturnSlashErrorMessage": "不能使用「／」路徑",
@@ -217,10 +217,10 @@
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "以模糊化的專輯封面作為應用程式內的播放頁面的背景。",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "隱藏與專輯歌手同名的歌手名稱",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "當專輯的歌手與歌曲的歌手相同時，隱藏歌曲的歌手名稱。",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "隱藏與專輯歌手同名的歌手名稱",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "當專輯的歌手與歌曲的歌手相同時，隱藏歌曲的歌手名稱。",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "禁用「手勢」功能",
   "@disableGesture": {},
   "disableGestureSubtitle": "是否禁用「手勢」功能。",
@@ -349,8 +349,8 @@
   "@logs": {},
   "next": "下一個",
   "@next": {},
-  "startMixNoSongsAlbum": "在開始混音之前，長按專輯以添加至混音器或從混音器移除",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "在開始混音之前，長按專輯以添加至混音器或從混音器移除",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "favourites": "我的最愛",
@@ -377,8 +377,8 @@
   "@addDownloads": {},
   "downloadsQueued": "已添加至下載。",
   "@downloadsQueued": {},
-  "downloadedSongsWillNotBeDeleted": "已下載的歌曲並不會被刪除",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "已下載的歌曲並不會被刪除",
+  "@downloadedTracksWillNotBeDeleted": {},
   "customLocation": "自訂位置",
   "@customLocation": {},
   "customLocationsBuggy": "現時，自訂位置功能因權限問題而未能完全正常運作。如非必要，建議不要使用。",
@@ -452,24 +452,6 @@
   },
   "interactions": "互動",
   "@interactions": {},
-  "deleteDownloadsConfirmButtonText": "刪除",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
-  "deleteDownloadsPrompt": "你是否確定從裝置中刪除 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}'？",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "syncDownloadedPlaylists": "同步已下載播放清單",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "顯示快速卷軸",

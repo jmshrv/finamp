@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../components/QueueRestoreScreen/queue_restore_tile.dart';
 import '../models/finamp_models.dart';
 
 class QueueRestoreScreen extends StatelessWidget {
-  const QueueRestoreScreen({Key? key}) : super(key: key);
+  const QueueRestoreScreen({super.key});
 
   static const routeName = "/queues";
 
   @override
   Widget build(BuildContext context) {
-    final _queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
-    var queueMap = _queuesBox.toMap();
+    final queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
+    var queueMap = queuesBox.toMap();
     queueMap.remove("latest");
     var queueList = queueMap.values.toList();
     queueList.sort((x, y) => y.creation - x.creation);

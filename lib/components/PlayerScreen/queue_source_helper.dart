@@ -8,7 +8,7 @@ import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
@@ -46,13 +46,13 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
       Navigator.of(context)
           .pushNamed(ArtistScreen.routeName, arguments: source.item);
       break;
-    case QueueItemSourceType.allSongs:
+    case QueueItemSourceType.allTracks:
       Navigator.of(context).pushNamed(MusicScreen.routeName,
           arguments: FinampSettingsHelper.finampSettings.showTabs.entries
               .where((element) => element.value == true)
               .map((e) => e.key)
               .toList()
-              .indexOf(TabContentType.songs));
+              .indexOf(TabContentType.tracks));
       break;
     case QueueItemSourceType.nextUp:
       break;
@@ -61,7 +61,7 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     case QueueItemSourceType.unknown:
       break;
     case QueueItemSourceType.favorites:
-    case QueueItemSourceType.songMix:
+    case QueueItemSourceType.trackMix:
     case QueueItemSourceType.filteredList:
     case QueueItemSourceType.downloads:
     default:
@@ -107,7 +107,7 @@ Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
           null,
           keepSlow: true));
 
-      playlistRemovalsCache.add(parent.id + playlistItemId);
+      playlistRemovalsCache.add(parent.id.raw + playlistItemId);
 
       GlobalSnackbar.message(
           (context) => AppLocalizations.of(context)!.removedFromPlaylist,

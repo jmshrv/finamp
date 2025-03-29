@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
 
 import '../../services/locale_helper.dart';
@@ -20,7 +20,7 @@ class _LanguageListState extends State<LanguageList> {
   final locales = SplayTreeMap<String?, Locale>.fromIterable(
     AppLocalizations.supportedLocales,
     key: (element) => (element as Locale).defaultDisplayLanguage,
-    value: (element) => element,
+    value: (element) => element as Locale,
   );
 
   @override

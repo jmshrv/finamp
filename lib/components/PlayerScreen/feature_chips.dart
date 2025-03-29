@@ -9,13 +9,15 @@ import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
+final featureLogger = Logger("Features");
 
 class FeatureState {
   const FeatureState({
@@ -30,12 +32,23 @@ class FeatureState {
   final FinampSettings settings;
   final MetadataProvider? metadata;
 
+  String get properties => "currentTrack: '${currentTrack?.item.title}', "
+      "isDownloaded: $isDownloaded, "
+      "isTranscoding: $isTranscoding, "
+      "container: $container, "
+      "size: $size, "
+      "audioStream: ${audioStream?.toJson().toString()}, "
+      "bitrate: $bitrate, "
+      "sampleRate: $sampleRate, "
+      "bitDepth: $bitDepth";
+
   FinampFeatureChipsConfiguration get configuration =>
       settings.featureChipsConfiguration;
 
   bool get isDownloaded => metadata?.isDownloaded ?? false;
   bool get isTranscoding =>
-      !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] ?? false);
+      !isDownloaded &&
+      (currentTrack?.item.extras?["shouldTranscode"] as bool? ?? false);
   String get container =>
       isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
@@ -103,7 +116,7 @@ class FeatureState {
       }
 
       if (feature == FinampFeatureChipType.playbackMode) {
-        if (currentTrack?.item.extras?["downloadedSongPath"] != null) {
+        if (currentTrack?.item.extras?["downloadedTrackPath"] != null) {
           features.add(
             FeatureProperties(
               type: feature,
@@ -234,6 +247,11 @@ class FeatureChips extends ConsumerWidget {
                   metadata: metadata.valueOrNull,
                 );
 
+                // log feature state for debugging
+                //TODO if feature chips are disabled, this won't be logged, but is super useful for debugging. Ideally, move the whole metadata stuff into the metadata provider and log it there, and then use the generated values to create the feature chips if needed
+                featureLogger.finer(
+                    "Current track features: ${featureState.properties}");
+
                 return Padding(
                   padding: const EdgeInsets.only(left: 32.0, right: 32.0),
                   child: ScrollConfiguration(
@@ -289,7 +307,6 @@ class Features extends StatelessWidget {
 
 class _FeatureContent extends StatelessWidget {
   const _FeatureContent({
-    super.key,
     required this.feature,
     required this.backgroundColor,
     this.color,

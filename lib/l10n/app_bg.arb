@@ -19,8 +19,8 @@
   },
   "unknownName": "Неизвестно Име",
   "@unknownName": {},
-  "songs": "Песни",
-  "@songs": {},
+  "tracks": "Песни",
+  "@tracks": {},
   "albums": "Албуми",
   "@albums": {},
   "artists": "Изпълнители",
@@ -111,8 +111,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Неуспех при получаване на песен, посредством ID на изтегляне",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Неуспех при получаване на песен, посредством ID на изтегляне",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Грешка",
   "@error": {},
   "discNumber": "Диск {number}",
@@ -189,10 +189,10 @@
   "@directoryMustBeEmpty": {},
   "enterLowPriorityStateOnPause": "При пауза, използвай режим на нисък приоритет",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Разбъркайте всички песни",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Брой песни за зареждане при използване на бутона за разбъркване на всички песни.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Разбъркайте всички песни",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Брой песни за зареждане при използване на бутона за разбъркване на всички песни.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Вид преглед",
   "@viewType": {},
   "viewTypeSubtitle": "Вид преглед на плейъра",
@@ -219,10 +219,10 @@
   "@showTextOnGridView": {},
   "useCoverAsBackground": "Показване на замъглена обложка като фон на плейъра",
   "@useCoverAsBackground": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Скриване изпълнителя на песента, ако е същият като изпълнителя на албума",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Дали да се покаже изпълнителят на песента на екрана, ако не се различава от изпълнителя на албума.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Скриване изпълнителя на песента, ако е същият като изпълнителя на албума",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Дали да се покаже изпълнителят на песента на екрана, ако не се различава от изпълнителя на албума.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "Тема",
   "@theme": {},
   "system": "Система",
@@ -316,12 +316,12 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "startMixNoSongsArtist": "Натиснете и задръжте върху изпълнител, за да го добавите или премахнете, от разбъркано възпроизвеждане",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Натиснете и задръжте върху изпълнител, за да го добавите или премахнете, от разбъркано възпроизвеждане",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Натиснете и задръжте върху албум, за да го добавите или премахнете от разбъркано възпроизвеждане",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Натиснете и задръжте върху албум, за да го добавите или премахнете от разбъркано възпроизвеждане",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "productionYear": "Година на издаване",
@@ -357,10 +357,10 @@
   "@addButtonLabel": {},
   "applicationLegalese": "Лиценз Mozilla Public License 2.0. Програмният код е достъпен на:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "downloadedSongsWillNotBeDeleted": "Изтеглените песни няма да бъдат изтрити",
-  "@downloadedSongsWillNotBeDeleted": {},
-  "songCount": "{count,plural,=1{{count} Песен} other{{count} Песни}}",
-  "@songCount": {
+  "downloadedTracksWillNotBeDeleted": "Изтеглените песни няма да бъдат изтрити",
+  "@downloadedTracksWillNotBeDeleted": {},
+  "trackCount": "{count,plural,=1{{count} Песен} other{{count} Песни}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -411,5 +411,37 @@
         "type": "int"
       }
     }
+  },
+  "additionalPeople": "",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "nowPlayingBarTooltip": "",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "codec": "",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "playbackMode": "",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "bitDepth": "",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "bitRate": "",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "sampleRate": "",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "size": "",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
   }
 }

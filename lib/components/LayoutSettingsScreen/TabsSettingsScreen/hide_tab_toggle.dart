@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../../services/finamp_settings_helper.dart';
 import '../../../models/finamp_models.dart';
 
 class HideTabToggle extends StatelessWidget {
   const HideTabToggle({
-    Key? key,
+    super.key,
     required this.index,
     required this.tabContentType,
-  }) : super(key: key);
+  });
 
   final TabContentType tabContentType;
   final int index;

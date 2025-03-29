@@ -6,9 +6,9 @@ import '../models/jellyfin_models.dart';
 
 class ArtistScreen extends StatelessWidget {
   const ArtistScreen({
-    Key? key,
+    super.key,
     this.widgetArtist,
-  }) : super(key: key);
+  });
 
   static const routeName = "/music/artist";
 
@@ -22,8 +22,10 @@ class ArtistScreen extends StatelessWidget {
 
     return Scaffold(
       extendBody: true,
-      body: ArtistScreenContent(
-        parent: artist,
+      body: SafeArea(
+        child: ArtistScreenContent(
+          parent: artist,
+        ),
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );

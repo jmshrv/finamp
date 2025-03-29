@@ -4,11 +4,11 @@ import 'package:finamp/components/LayoutSettingsScreen/CustomizationSettingsScre
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomizationSettingsScreen extends StatefulWidget {
-  const CustomizationSettingsScreen({Key? key}) : super(key: key);
+  const CustomizationSettingsScreen({super.key});
 
   static const routeName = "/settings/customization";
 
@@ -34,71 +34,99 @@ class _CustomizationSettingsScreenState
           const PlaybackSpeedControlVisibilityDropdownListTile(),
           if (!Platform.isIOS) const ShowStopButtonOnMediaNotificationToggle(),
           const ShowSeekControlsOnMediaNotificationToggle(),
+          const OneLineMarqueeTextSwitch(),
+          const ReleaseDateFormatDropdownListTile(),
+          const ShowAlbumReleaseDateOnPlayerScreenToggle(),
         ],
       ),
     );
   }
 }
 
-class ShowStopButtonOnMediaNotificationToggle extends StatelessWidget {
-  const ShowStopButtonOnMediaNotificationToggle({super.key});
+class OneLineMarqueeTextSwitch extends ConsumerWidget {
+  const OneLineMarqueeTextSwitch({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? showStopButtonOnMediaNotification =
-            box.get("FinampSettings")?.showStopButtonOnMediaNotification;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!
-              .showStopButtonOnMediaNotificationTitle),
-          subtitle: Text(AppLocalizations.of(context)!
-              .showStopButtonOnMediaNotificationSubtitle),
-          value: showStopButtonOnMediaNotification ?? false,
-          onChanged: showStopButtonOnMediaNotification == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.showStopButtonOnMediaNotification = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.oneLineMarqueeTextButton),
+      subtitle:
+          Text(AppLocalizations.of(context)!.oneLineMarqueeTextButtonSubtitle),
+      value: ref.watch(finampSettingsProvider.oneLineMarqueeTextButton),
+      onChanged: FinampSetters.setOneLineMarqueeTextButton,
     );
   }
 }
 
-class ShowSeekControlsOnMediaNotificationToggle extends StatelessWidget {
+class ShowStopButtonOnMediaNotificationToggle extends ConsumerWidget {
+  const ShowStopButtonOnMediaNotificationToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(
+          AppLocalizations.of(context)!.showStopButtonOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!
+          .showStopButtonOnMediaNotificationSubtitle),
+      value:
+          ref.watch(finampSettingsProvider.showStopButtonOnMediaNotification),
+      onChanged: FinampSetters.setShowStopButtonOnMediaNotification,
+    );
+  }
+}
+
+class ShowSeekControlsOnMediaNotificationToggle extends ConsumerWidget {
   const ShowSeekControlsOnMediaNotificationToggle({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? showSeekControlsOnMediaNotification =
-            box.get("FinampSettings")?.showSeekControlsOnMediaNotification;
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!
+          .showSeekControlsOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!
+          .showSeekControlsOnMediaNotificationSubtitle),
+      value:
+          ref.watch(finampSettingsProvider.showSeekControlsOnMediaNotification),
+      onChanged: FinampSetters.setShowSeekControlsOnMediaNotification,
+    );
+  }
+}
 
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!
-              .showSeekControlsOnMediaNotificationTitle),
-          subtitle: Text(AppLocalizations.of(context)!
-              .showSeekControlsOnMediaNotificationSubtitle),
-          value: showSeekControlsOnMediaNotification ?? false,
-          onChanged: showSeekControlsOnMediaNotification == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.showSeekControlsOnMediaNotification =
-                      value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
+class ShowAlbumReleaseDateOnPlayerScreenToggle extends ConsumerWidget {
+  const ShowAlbumReleaseDateOnPlayerScreenToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!
+          .showAlbumReleaseDateOnPlayerScreenTitle),
+      subtitle: Text(AppLocalizations.of(context)!
+          .showAlbumReleaseDateOnPlayerScreenSubtitle),
+      value:
+          ref.watch(finampSettingsProvider.showAlbumReleaseDateOnPlayerScreen),
+      onChanged: FinampSetters.setShowAlbumReleaseDateOnPlayerScreen,
+    );
+  }
+}
+
+class ReleaseDateFormatDropdownListTile extends ConsumerWidget {
+  const ReleaseDateFormatDropdownListTile({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.releaseDateFormatTitle),
+      subtitle: Text(AppLocalizations.of(context)!.releaseDateFormatSubtitle),
+      trailing: DropdownButton<ReleaseDateFormat>(
+        value: ref.watch(finampSettingsProvider.releaseDateFormat),
+        items: ReleaseDateFormat.values
+            .map((e) => DropdownMenuItem<ReleaseDateFormat>(
+                  value: e,
+                  child: Text(e.toLocalisedString(context)),
+                ))
+            .toList(),
+        onChanged: FinampSetters.setReleaseDateFormat.ifNonNull,
+      ),
     );
   }
 }

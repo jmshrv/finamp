@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
@@ -19,7 +19,7 @@ class KeepScreenOnWhilePluggedInSelector extends StatelessWidget {
               AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
           value: FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn,
           onChanged: (value) {
-            FinampSettingsHelper.setKeepScreenOnWhilePluggedIn(value);
+            FinampSetters.setKeepScreenOnWhilePluggedIn(value);
           },
         );
       },

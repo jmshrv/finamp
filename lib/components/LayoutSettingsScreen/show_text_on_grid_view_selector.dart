@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class ShowTextOnGridViewSelector extends StatelessWidget {
-  const ShowTextOnGridViewSelector({Key? key}) : super(key: key);
+  const ShowTextOnGridViewSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +18,7 @@ class ShowTextOnGridViewSelector extends StatelessWidget {
           subtitle:
               Text(AppLocalizations.of(context)!.showTextOnGridViewSubtitle),
           value: FinampSettingsHelper.finampSettings.showTextOnGridView,
-          onChanged: (value) =>
-              FinampSettingsHelper.setShowTextOnGridView(value),
+          onChanged: (value) => FinampSetters.setShowTextOnGridView(value),
         );
       },
     );

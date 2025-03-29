@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../components/AddDownloadLocationScreen/app_directory_location_form.dart';
@@ -10,7 +10,7 @@ import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
 class AddDownloadLocationScreen extends StatefulWidget {
-  const AddDownloadLocationScreen({Key? key}) : super(key: key);
+  const AddDownloadLocationScreen({super.key});
 
   static const routeName = "/settings/downloadlocations/add";
 

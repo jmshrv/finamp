@@ -4,6 +4,7 @@ import 'package:finamp/components/AlbumScreen/speed_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
+import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
@@ -12,9 +13,8 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -36,20 +36,18 @@ import '../album_image.dart';
 import '../global_snackbar.dart';
 import 'download_dialog.dart';
 
-const Duration songMenuDefaultAnimationDuration = Duration(milliseconds: 750);
-const Curve songMenuDefaultInCurve = Curves.easeOutCubic;
-const Curve songMenuDefaultOutCurve = Curves.easeInCubic;
+const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 750);
+const Curve trackMenuDefaultInCurve = Curves.easeOutCubic;
+const Curve trackMenuDefaultOutCurve = Curves.easeInCubic;
 
-Future<void> showModalSongMenu({
+Future<void> showModalTrackMenu({
   required BuildContext context,
   required BaseItemDto item,
   bool showPlaybackControls = false,
-  bool usePlayerTheme = false,
   bool isInPlaylist = false,
   BaseItemDto? parentItem,
   Function? onRemoveFromList,
   bool confirmPlaylistRemoval = true,
-  FinampTheme? themeProvider,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final canGoToAlbum = item.parentId != null;
@@ -59,13 +57,12 @@ Future<void> showModalSongMenu({
   await showThemedBottomSheet(
       context: context,
       item: item,
-      routeName: SongMenu.routeName,
+      routeName: TrackMenu.routeName,
       buildWrapper: (context, dragController, childBuilder) {
-        return SongMenu(
+        return TrackMenu(
           key: ValueKey(item.id),
           item: item,
           parentItem: parentItem,
-          usePlayerTheme: usePlayerTheme,
           isOffline: isOffline,
           showPlaybackControls: showPlaybackControls,
           isInPlaylist: isInPlaylist,
@@ -75,23 +72,19 @@ Future<void> showModalSongMenu({
           onRemoveFromList: onRemoveFromList,
           confirmPlaylistRemoval: confirmPlaylistRemoval,
           childBuilder: childBuilder,
-          themeProvider: themeProvider,
           dragController: dragController,
         );
-      },
-      usePlayerTheme: usePlayerTheme,
-      themeProvider: themeProvider);
+      });
 }
 
-class SongMenu extends ConsumerStatefulWidget {
-  static const routeName = "/song-menu";
+class TrackMenu extends ConsumerStatefulWidget {
+  static const routeName = "/track-menu";
 
-  const SongMenu({
+  const TrackMenu({
     super.key,
     required this.item,
     required this.isOffline,
     required this.showPlaybackControls,
-    required this.usePlayerTheme,
     required this.isInPlaylist,
     required this.canGoToAlbum,
     required this.canGoToArtist,
@@ -100,7 +93,6 @@ class SongMenu extends ConsumerStatefulWidget {
     required this.confirmPlaylistRemoval,
     this.parentItem,
     required this.childBuilder,
-    required this.themeProvider,
     required this.dragController,
   });
 
@@ -108,7 +100,6 @@ class SongMenu extends ConsumerStatefulWidget {
   final BaseItemDto? parentItem;
   final bool isOffline;
   final bool showPlaybackControls;
-  final bool usePlayerTheme;
   final bool isInPlaylist;
   final bool canGoToAlbum;
   final bool canGoToArtist;
@@ -116,14 +107,13 @@ class SongMenu extends ConsumerStatefulWidget {
   final Function? onRemoveFromList;
   final bool confirmPlaylistRemoval;
   final ScrollBuilder childBuilder;
-  final FinampTheme? themeProvider;
   final DraggableScrollableController dragController;
 
   @override
-  ConsumerState<SongMenu> createState() => _SongMenuState();
+  ConsumerState<TrackMenu> createState() => _TrackMenuState();
 }
 
-class _SongMenuState extends ConsumerState<SongMenu> {
+class _TrackMenuState extends ConsumerState<TrackMenu> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -132,6 +122,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   // Makes sure that widget doesn't just disappear after press while menu is visible
   bool speedWidgetWasVisible = false;
   bool showSpeedMenu = false;
+
   double initialSheetExtent = 0.0;
   double inputStep = 0.9;
   double oldExtent = 0.0;
@@ -139,13 +130,15 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   @override
   void initState() {
     super.initState();
+
     initialSheetExtent = widget.showPlaybackControls ? 0.6 : 0.45;
     oldExtent = initialSheetExtent;
   }
 
   bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
     if (queueItem != null) {
-      final baseItem = BaseItemDto.fromJson(queueItem.item.extras!["itemJson"]);
+      final baseItem = BaseItemDto.fromJson(
+          queueItem.item.extras!["itemJson"] as Map<String, dynamic>);
       return baseItem.id == queueItem.id;
     }
     return false;
@@ -184,8 +177,8 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         scrollController.size == inputStep) {
       scrollController.animateTo(
         percentage ?? oldExtent,
-        duration: songMenuDefaultAnimationDuration,
-        curve: songMenuDefaultInCurve,
+        duration: trackMenuDefaultAnimationDuration,
+        curve: trackMenuDefaultInCurve,
       );
     }
     oldExtent = currentSize;
@@ -200,6 +193,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                 switch (element) { Visibility e => e.visible, _ => true })
             .length *
         56;
+
     return Consumer(builder: (context, ref, child) {
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
       return widget.childBuilder(
@@ -207,11 +201,11 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     });
   }
 
-  // Normal song menu entries, excluding headers
+  // Normal track menu entries, excluding headers
   List<Widget> _menuEntries(BuildContext context) {
     final downloadsService = GetIt.instance<DownloadsService>();
     final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(type: DownloadItemType.song, item: widget.item),
+        DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item),
         null);
     var iconColor = Theme.of(context).colorScheme.primary;
 
@@ -227,7 +221,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
       var parent = downloadsService.getFirstRequiringItem(DownloadStub.fromItem(
-          type: DownloadItemType.song, item: widget.item));
+          type: DownloadItemType.track, item: widget.item));
       if (parent != null) {
         var parentName = AppLocalizations.of(context)!
             .itemTypeSubtitle(parent.baseItemType.name, parent.name);
@@ -255,8 +249,6 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               context: context,
               item: widget.item,
               parentPlaylist: inPlaylist ? queueItem!.source.item : null,
-              usePlayerTheme: widget.usePlayerTheme,
-              themeProvider: widget.themeProvider,
             );
           },
         ),
@@ -384,24 +376,20 @@ class _SongMenuState extends ConsumerState<SongMenu> {
         ),
       ),
       Visibility(
-        visible: downloadStatus.isRequired,
-        child: ListTile(
-          leading: Icon(
-            Icons.delete_outlined,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.deleteItem),
-          enabled: downloadStatus.isRequired,
-          onTap: () async {
-            var item = DownloadStub.fromItem(
-                type: DownloadItemType.song, item: widget.item);
-            unawaited(downloadsService.deleteDownload(stub: item));
-            if (mounted) {
-              Navigator.pop(context);
-            }
-          },
-        ),
-      ),
+          visible: downloadStatus.isRequired,
+          child: ListTile(
+              leading: Icon(
+                Icons.delete_outlined,
+                color: iconColor,
+              ),
+              title: Text(AppLocalizations.of(context)!
+                  .deleteFromTargetConfirmButton("")),
+              enabled: downloadStatus.isRequired,
+              onTap: () async {
+                var item = DownloadStub.fromItem(
+                    type: DownloadItemType.track, item: widget.item);
+                await askBeforeDeleteDownloadFromDevice(context, item);
+              })),
       Visibility(
         visible: downloadStatus == DownloadItemStatus.notNeeded,
         child: ListTile(
@@ -414,7 +402,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
               downloadStatus == DownloadItemStatus.notNeeded,
           onTap: () async {
             var item = DownloadStub.fromItem(
-                type: DownloadItemType.song, item: widget.item);
+                type: DownloadItemType.track, item: widget.item);
             await DownloadDialog.show(context, item, null);
             if (context.mounted) {
               Navigator.pop(context);
@@ -435,7 +423,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             enabled: !widget.isOffline && downloadStatus.isIncidental,
             onTap: () async {
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.song, item: widget.item);
+                  type: DownloadItemType.track, item: widget.item);
               await DownloadDialog.show(context, item, null);
               if (context.mounted) {
                 Navigator.pop(context);
@@ -446,8 +434,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
       ),
       Consumer(
         builder: (context, ref, child) {
-          bool isFav =
-              ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+          bool isFav = ref.watch(isFavoriteProvider(widget.item));
           return ListTile(
             enabled: !widget.isOffline,
             leading: isFav
@@ -468,8 +455,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                 : AppLocalizations.of(context)!.addFavourite),
             onTap: () async {
               ref
-                  .read(
-                      isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+                  .read(isFavoriteProvider(widget.item).notifier)
                   .updateFavorite(!isFav);
               if (context.mounted) Navigator.pop(context);
             },
@@ -575,18 +561,51 @@ class _SongMenuState extends ConsumerState<SongMenu> {
           },
         ),
       ),
+      Consumer(builder: (context, ref, _) {
+        var canDelete = ref
+            .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
+        return Visibility(
+            visible: canDelete,
+            child: ListTile(
+              leading: Icon(
+                Icons.delete_forever,
+                color: iconColor,
+              ),
+              title: Text(AppLocalizations.of(context)!
+                  .deleteFromTargetConfirmButton("server")),
+              enabled: canDelete,
+              onTap: () async {
+                var item = DownloadStub.fromItem(
+                    type: DownloadItemType.track, item: widget.item);
+                await askBeforeDeleteFromServerAndDevice(context, item);
+                final BaseItemDto newAlbumOrPlaylist =
+                    await _jellyfinApiHelper.getItemById(widget.parentItem!.id);
+                if (context.mounted) {
+                  Navigator.pop(context); // close dialog
+                  // pop current album screen and reload with new album data
+                  Navigator.of(context).popUntil((route) {
+                    return route.settings.name != null // unnamed dialog
+                        &&
+                        route.settings.name !=
+                            AlbumScreen.routeName; // albums screen
+                  });
+                  await Navigator.of(context).pushNamed(AlbumScreen.routeName,
+                      arguments: newAlbumOrPlaylist);
+                }
+              },
+            ));
+      }),
     ];
   }
 
-  // All song menu slivers, including headers
+  // All track menu slivers, including headers
   List<Widget> menu(BuildContext context, List<Widget> menuEntries,
       MetadataProvider? metadata) {
     var iconColor = Theme.of(context).colorScheme.primary;
     return [
       SliverPersistentHeader(
-        delegate: SongMenuSliverAppBar(
+        delegate: TrackMenuSliverAppBar(
           item: widget.item,
-          useThemeImage: widget.usePlayerTheme,
         ),
         pinned: true,
       ),
@@ -628,7 +647,7 @@ class _SongMenuState extends ConsumerState<SongMenu> {
                           "Not looping",
                   FinampLoopMode.one:
                       AppLocalizations.of(context)?.loopModeOneButtonLabel ??
-                          "Looping this song",
+                          "Looping this track",
                   FinampLoopMode.all:
                       AppLocalizations.of(context)?.loopModeAllButtonLabel ??
                           "Looping all",
@@ -724,9 +743,9 @@ class _SongMenuState extends ConsumerState<SongMenu> {
             )),
       SliverToBoxAdapter(
         child: AnimatedSwitcher(
-          duration: songMenuDefaultAnimationDuration,
-          switchInCurve: songMenuDefaultInCurve,
-          switchOutCurve: songMenuDefaultOutCurve,
+          duration: trackMenuDefaultAnimationDuration,
+          switchInCurve: trackMenuDefaultInCurve,
+          switchOutCurve: trackMenuDefaultOutCurve,
           transitionBuilder: (child, animation) {
             return SizeTransition(sizeFactor: animation, child: child);
           },
@@ -746,21 +765,18 @@ class _SongMenuState extends ConsumerState<SongMenu> {
   }
 }
 
-class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
+class TrackMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
-  bool useThemeImage;
 
-  SongMenuSliverAppBar({
+  TrackMenuSliverAppBar({
     required this.item,
-    this.useThemeImage = false,
   });
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SongInfo(
+    return TrackInfo(
       item: item,
-      useThemeImage: useThemeImage,
     );
   }
 
@@ -775,28 +791,25 @@ class SongMenuSliverAppBar extends SliverPersistentHeaderDelegate {
       true;
 }
 
-class SongInfo extends ConsumerStatefulWidget {
-  const SongInfo({
+class TrackInfo extends ConsumerStatefulWidget {
+  const TrackInfo({
     super.key,
     required this.item,
-    required this.useThemeImage,
   }) : condensed = false;
 
-  const SongInfo.condensed({
+  const TrackInfo.condensed({
     super.key,
     required this.item,
-    required this.useThemeImage,
   }) : condensed = true;
 
   final BaseItemDto item;
-  final bool useThemeImage;
   final bool condensed;
 
   @override
-  ConsumerState createState() => _SongInfoState();
+  ConsumerState createState() => _TrackInfoState();
 }
 
-class _SongInfoState extends ConsumerState<SongInfo> {
+class _TrackInfoState extends ConsumerState<TrackInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -821,10 +834,7 @@ class _SongInfoState extends ConsumerState<SongInfo> {
               AspectRatio(
                 aspectRatio: 1.0,
                 child: AlbumImage(
-                  // Only supply one of item or imageListenable
-                  item: widget.useThemeImage ? null : widget.item,
-                  imageListenable:
-                      widget.useThemeImage ? imageThemeProvider : null,
+                  item: widget.item,
                   borderRadius: BorderRadius.zero,
                 ),
               ),
@@ -868,11 +878,8 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                         ),
                       ),
                       if (!widget.condensed)
-                        AlbumChip(
-                          item: widget.item,
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
+                        AlbumChips(
+                          baseItem: widget.item,
                           backgroundColor: IconTheme.of(context)
                                   .color
                                   ?.withOpacity(0.1) ??
@@ -881,7 +888,7 @@ class _SongInfoState extends ConsumerState<SongInfo> {
                           key: widget.item.album == null
                               ? null
                               : ValueKey("${widget.item.album}-album"),
-                        ),
+                        )
                     ],
                   ),
                 ),

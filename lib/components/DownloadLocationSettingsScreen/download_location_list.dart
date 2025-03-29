@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 import 'download_location_list_tile.dart';
 
 class DownloadLocationList extends StatefulWidget {
-  const DownloadLocationList({Key? key}) : super(key: key);
+  const DownloadLocationList({super.key});
 
   @override
   State<DownloadLocationList> createState() => _DownloadLocationListState();

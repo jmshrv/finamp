@@ -18,16 +18,16 @@
   },
   "unknownName": "Niyznōme miano",
   "@unknownName": {},
-  "songs": "Śpiywki",
-  "@songs": {},
+  "tracks": "Śpiywki",
+  "@tracks": {},
   "albums": "Albumy",
   "@albums": {},
   "artists": "Artyścio",
   "@artists": {},
   "genres": "Gatōnki",
   "@genres": {},
-  "startMixNoSongsArtist": "Prziciś dugo na artysty, żeby go dodać abo wymazać ze budowanio miksu, podwiela go puścisz",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Prziciś dugo na artysty, żeby go dodać abo wymazać ze budowanio miksu, podwiela go puścisz",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "music": "Muzyka",
@@ -72,10 +72,10 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "Kej to je włōnczōne, to powiadōmiynie może być ôdpōnkniynte przi pauzie. Włōnczynie tego przizwolo tyż Androidowi zabic usuga przi pauzie.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Liczba śpiywek przi miyszaniu wszyskich",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Liczba śpiywek do zaladowanio po użyciu knefla miyszanio wszyskich śpiywek.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Liczba śpiywek przi miyszaniu wszyskich",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Liczba śpiywek do zaladowanio po użyciu knefla miyszanio wszyskich śpiywek.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Widok",
   "@viewType": {},
   "viewTypeSubtitle": "Widok panelu muzyki",
@@ -112,8 +112,8 @@
   "@startMix": {},
   "premiereDate": "Datōm prymiery",
   "@premiereDate": {},
-  "startMixNoSongsAlbum": "Prziciś dugo na album, żeby go dodać abo wymazać ze budowanio miksu, podwiela go puścisz",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Prziciś dugo na album, żeby go dodać abo wymazać ze budowanio miksu, podwiela go puścisz",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "clear": "Wysnoż",
@@ -166,8 +166,8 @@
       }
     }
   },
-  "songCount": "{count,plural,=1{{count} śpiywka} other{{count} śpiywek}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} śpiywka} other{{count} śpiywek}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -182,8 +182,8 @@
   "@name": {},
   "revenue": "Dochōd",
   "@revenue": {},
-  "failedToGetSongFromDownloadId": "Niy szło znojś śpiywki ze ID pobiyranio",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Niy szło znojś śpiywki ze ID pobiyranio",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Feler",
   "@error": {},
   "discNumber": "Dysk {number}",
@@ -229,8 +229,8 @@
   "@editPlaylistNameTooltip": {},
   "logsCopied": "Logi skopiowane.",
   "@logsCopied": {},
-  "downloadedSongsWillNotBeDeleted": "Pobrane śpiywki niy bydōm wymazane",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Pobrane śpiywki niy bydōm wymazane",
+  "@downloadedTracksWillNotBeDeleted": {},
   "customLocation": "Włosno lokacyjo",
   "@customLocation": {},
   "selectDirectory": "Wybier katalog",
@@ -307,8 +307,8 @@
   "@showTextOnGridView": {},
   "showTextOnGridViewSubtitle": "Sztaluje, jeźli pokazować tekst (tytuł, artysta itd.) we panelu krotki elymyntōw.",
   "@showTextOnGridViewSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Sztaluje, jeźli kryć artysty śpiywki, jeźli je taki sōm jak artysta albumu.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Sztaluje, jeźli kryć artysty śpiywki, jeźli je taki sōm jak artysta albumu.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "useCoverAsBackground": "Pokazuj rozmazano ôkładzina za tło ôd przegrowacza",
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "Sztaluje, jeźli pokazować rozmazano ôkładzina za tło ôd przegrowacza.",
@@ -321,8 +321,8 @@
   "@light": {},
   "tabs": "Zokłodki",
   "@tabs": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Skryj artysty śpiywki, jeźli je taki sōm jak artysta albumu",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Skryj artysty śpiywki, jeźli je taki sōm jak artysta albumu",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "dark": "Ciymny",
   "@dark": {},
   "queue": "Raja",

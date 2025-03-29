@@ -1,18 +1,19 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:flutter/material.dart' hide ReorderableList;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/process_artist.dart';
 import '../../services/theme_provider.dart';
 import '../album_image.dart';
 
-class PlaybackHistoryListTile extends StatefulWidget {
-  PlaybackHistoryListTile({
+class PlaybackHistoryListTile extends ConsumerStatefulWidget {
+  const PlaybackHistoryListTile({
     super.key,
     required this.actualIndex,
     required this.item,
@@ -26,33 +27,26 @@ class PlaybackHistoryListTile extends StatefulWidget {
   final void Function() onTap;
 
   @override
-  State<PlaybackHistoryListTile> createState() =>
+  ConsumerState<PlaybackHistoryListTile> createState() =>
       _PlaybackHistoryListTileState();
 }
 
-class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
-  FinampTheme? _menuTheme;
-
-  @override
-  void dispose() {
-    _menuTheme?.dispose();
-    super.dispose();
-  }
-
+class _PlaybackHistoryListTileState
+    extends ConsumerState<PlaybackHistoryListTile> {
   @override
   Widget build(BuildContext context) {
     final baseItem = jellyfin_models.BaseItemDto.fromJson(
-        widget.item.item.item.extras?["itemJson"]);
+        widget.item.item.item.extras?["itemJson"] as Map<String, dynamic>);
 
     void menuCallback() async {
       unawaited(Feedback.forLongPress(context));
-      await showModalSongMenu(
-          context: context, item: baseItem, themeProvider: _menuTheme);
+      await showModalTrackMenu(context: context, item: baseItem);
     }
 
     return GestureDetector(
         onTapDown: (_) {
-          _menuTheme?.calculate(Theme.of(context).brightness);
+          // Begin precalculating theme for song menu
+          ref.listen(finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
         },
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),
@@ -72,7 +66,6 @@ class _PlaybackHistoryListTileState extends State<PlaybackHistoryListTile> {
                 item: widget.item.item.item.extras?["itemJson"] == null
                     ? null
                     : baseItem,
-                themeCallback: (x) => _menuTheme ??= x,
               ),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

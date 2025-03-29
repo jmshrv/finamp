@@ -165,8 +165,9 @@ class ServerState {
   }) : clientDiscoveryHandler = JellyfinServerClientDiscovery();
 
   onBaseUrlChanged(String baseUrl) {
-    if (connectionTestDebounceTimer?.isActive ?? false)
+    if (connectionTestDebounceTimer?.isActive ?? false) {
       connectionTestDebounceTimer?.cancel();
+    }
     connectionTestDebounceTimer =
         Timer(const Duration(milliseconds: 500), () async {
       updateCallback?.call();
@@ -187,7 +188,7 @@ class ServerState {
       bool unspecifiedProtocol = false;
       bool unspecifiedPort = false;
 
-      String baseUrlToTest = baseUrl!;
+      String baseUrlToTest = baseUrl;
 
       // We trim the base url in case the user accidentally added some trailing whitespace
       baseUrlToTest = baseUrlToTest.trim();
@@ -302,7 +303,7 @@ class JellyfinServerClientDiscovery {
           _clientDiscoveryLogger
               .finest("Received datagram: ${utf8.decode(datagram.data)}");
           final response = ClientDiscoveryResponse.fromJson(
-              jsonDecode(utf8.decode(datagram.data)));
+              jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>);
           onServerFound(response);
         }
       }

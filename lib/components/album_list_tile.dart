@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
@@ -43,14 +44,14 @@ class AlbumListTile extends ConsumerStatefulWidget {
       {super.key,
       required this.item,
 
-      /// Children that are related to this list tile, such as the other songs in
-      /// the album. This is used to give the audio service all the songs for the
-      /// item. If null, only this song will be given to the audio service.
+      /// Children that are related to this list tile, such as the other tracks in
+      /// the album. This is used to give the audio service all the tracks for the
+      /// item. If null, only this track will be given to the audio service.
       this.children,
 
-      /// Index of the song in whatever parent this widget is in. Used to start
+      /// Index of the track in whatever parent this widget is in. Used to start
       /// the audio service at a certain index, such as when selecting the middle
-      /// song in an album.
+      /// track in an album.
       this.index,
       this.parentId,
       this.parentName});
@@ -58,7 +59,7 @@ class AlbumListTile extends ConsumerStatefulWidget {
   final BaseItemDto item;
   final List<BaseItemDto>? children;
   final int? index;
-  final String? parentId;
+  final BaseItemId? parentId;
   final String? parentName;
 
   @override
@@ -88,8 +89,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
                   type: DownloadItemType.collection, item: widget.item),
               null)
           .isRequired;
-      final bool isFav =
-          ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+      final bool isFav = ref.watch(isFavoriteProvider(widget.item));
 
       final selection = await showMenu<AlbumListTileMenuItems>(
         context: context,
@@ -187,7 +187,8 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
                   value: AlbumListTileMenuItems.delete,
                   child: ListTile(
                     leading: const Icon(Icons.delete),
-                    title: Text(AppLocalizations.of(context)!.deleteItem),
+                    title: Text(AppLocalizations.of(context)!
+                        .deleteFromTargetConfirmButton("")),
                   ),
                 )
               : PopupMenuItem<AlbumListTileMenuItems>(
@@ -216,12 +217,12 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
       switch (selection) {
         case AlbumListTileMenuItems.addFavourite:
           ref
-              .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+              .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(true);
           break;
         case AlbumListTileMenuItems.removeFavourite:
           ref
-              .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+              .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(false);
           break;
         case AlbumListTileMenuItems.addToMixList:
@@ -444,7 +445,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
               alignment: PlaceholderAlignment.top,
             ),
             TextSpan(
-              text: widget.item.productionYearString,
+              text: ReleaseDateHelper.autoFormat(widget.item),
               style: TextStyle(
                   color: Theme.of(context)
                       .textTheme

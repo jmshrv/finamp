@@ -11,14 +11,14 @@
   "@enableTranscodingSubtitle": {},
   "customLocation": "Власна папка",
   "@customLocation": {},
-  "pathReturnSlashErrorMessage": "Шляхи, які повертають \"/\", не можна використовувати",
+  "pathReturnSlashErrorMessage": "Шляхи, які повертають \"/\", не можуть бути використані",
   "@pathReturnSlashErrorMessage": {},
   "enterLowPriorityStateOnPause": "Перейти у стан низького пріоритету під час паузи",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "Перемішати всі пісні",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Кількість пісень для завантаження при використанні кнопки перемішування всіх пісень.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Перемішати всі композиції",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Кількість композицій для завантаження при використанні кнопки перемішування всіх пісень.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "Тип перегляду для музичного екрану",
   "@viewTypeSubtitle": {},
   "list": "Список",
@@ -37,7 +37,7 @@
   },
   "showTextOnGridView": "Показати текст при перегляді сіткою",
   "@showTextOnGridView": {},
-  "useCoverAsBackgroundSubtitle": "Використовувати або ні розмиту обкладинку як фон на екрані програвача.",
+  "useCoverAsBackgroundSubtitle": "Використовувати або ні розмиту обкладинку як фон на екрані відтворювача.",
   "@useCoverAsBackgroundSubtitle": {},
   "disableGestureSubtitle": "Чи вимикати жести.",
   "@disableGestureSubtitle": {},
@@ -49,17 +49,17 @@
   "@tabs": {},
   "cancelSleepTimer": "Скасувати таймер сну?",
   "@cancelSleepTimer": {},
-  "yesButtonLabel": "ТАК",
+  "yesButtonLabel": "Так",
   "@yesButtonLabel": {},
-  "noButtonLabel": "НІ",
+  "noButtonLabel": "Ні",
   "@noButtonLabel": {},
   "minutes": "Хвилини",
   "@minutes": {},
   "addToPlaylistTitle": "Додати до плейлисту",
   "@addToPlaylistTitle": {},
-  "removeFromPlaylistTooltip": "Видалити з плейлисту",
+  "removeFromPlaylistTooltip": "Видалити зі списку відтворення",
   "@removeFromPlaylistTooltip": {},
-  "createButtonLabel": "СТВОРИТИ",
+  "createButtonLabel": "Створити",
   "@createButtonLabel": {},
   "playlistCreated": "Плейлист створено.",
   "@playlistCreated": {},
@@ -79,13 +79,13 @@
   "@instantMix": {},
   "goToAlbum": "До альбому",
   "@goToAlbum": {},
-  "removeFavourite": "Видалити з вибраного",
+  "removeFavourite": "Видалити з Обраного",
   "@removeFavourite": {},
   "addedToQueue": "Додано в чергу.",
   "@addedToQueue": {},
   "queueReplaced": "Черга змінена.",
   "@queueReplaced": {},
-  "startingInstantMix": "Починається швидкий мікс.",
+  "startingInstantMix": "Початок миттєвого міксу.",
   "@startingInstantMix": {},
   "anErrorHasOccured": "Сталася помилка.",
   "@anErrorHasOccured": {},
@@ -106,7 +106,7 @@
   "@removeFromMix": {},
   "addToMix": "Додати до міксу",
   "@addToMix": {},
-  "bufferDurationSubtitle": "Скільки плеєр має буферизувати, у секундах. Вимагає перезавантаження.",
+  "bufferDurationSubtitle": "Максимальна тривалість, яка може бути буферизована, у секундах. Вимагає перезавантаження.",
   "@bufferDurationSubtitle": {},
   "language": "Мова",
   "@language": {},
@@ -122,7 +122,7 @@
   },
   "serverUrl": "URL серверу",
   "@serverUrl": {},
-  "couldNotFindLibraries": "Неможливо знайти будь-яку музичну бібліотеку.",
+  "couldNotFindLibraries": "Не вдається знайти жодної бібліотеки.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
@@ -130,8 +130,8 @@
   "@playlists": {},
   "album": "Альбомами",
   "@album": {},
-  "songCount": "{count,plural,=1{{count} Пісня} other{{count} Пісні}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Композиція} other{{count} Композиції}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -140,11 +140,11 @@
   },
   "dateAdded": "Датою додавання",
   "@dateAdded": {},
-  "startMixNoSongsArtist": "Затисніть виконавця, щоб додати або видалити його з конструктора міксів перед початком міксування",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Затисніть виконавця, щоб додати або видалити його з конструктора міксів перед початком міксування",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "internalExternalIpExplanation": "Якщо ви хочете мати віддалений доступ до свого сервера Jellyfin, вам потрібно використовувати зовнішню IP-адресу.\n\nЯкщо ваш сервер використовує порт HTTP (80/443), вам не потрібно вказувати порт. Ймовірно, це буде необхідно, якщо ваш сервер знаходиться за зворотним проксі.",
+  "internalExternalIpExplanation": "Якщо ви хочете мати віддалений доступ до свого сервера Jellyfin, вам потрібно використовувати зовнішню IP-адресу.\n\nЯкщо ваш сервер на типовому порті HTTP (80 чи 443), чи типовому порті Jellyfin (8096), вам не потрібно вказувати порт серверу.\n\nЯкщо посилання вказано правильно, під полем введення з'явиться доступна інформація про ваш сервер.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -152,8 +152,8 @@
   "@startMix": {},
   "artist": "Виконавцями",
   "@artist": {},
-  "startMixNoSongsAlbum": "Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком міксування",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком міксування",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "sortBy": "Сортування за",
@@ -217,8 +217,8 @@
       }
     }
   },
-  "failedToGetSongFromDownloadId": "Не вдалося отримати пісню з ідентифікатора завантаження",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Не вдалося отримати композицію із ідентифікатора завантаження",
+  "@failedToGetTrackFromDownloadId": {},
   "discNumber": "Платівка {number}",
   "@discNumber": {
     "placeholders": {
@@ -229,7 +229,7 @@
   },
   "editPlaylistNameTooltip": "Редагувати назву плейлисту",
   "@editPlaylistNameTooltip": {},
-  "updateButtonLabel": "ОНОВИТИ",
+  "updateButtonLabel": "Оновити",
   "@updateButtonLabel": {},
   "dlRunning": "{count} запущено",
   "@dlRunning": {
@@ -245,15 +245,15 @@
   "@transcoding": {},
   "logsCopied": "Логи скопійовано.",
   "@logsCopied": {},
-  "downloadedSongsWillNotBeDeleted": "Завантажені пісні не будуть видалені",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Завантажені композиції не будуть видалені",
+  "@downloadedTracksWillNotBeDeleted": {},
   "shareLogs": "Поділитися логами",
   "@shareLogs": {},
   "downloadLocations": "Місце завантаження",
   "@downloadLocations": {},
-  "addButtonLabel": "ДОДАТИ",
+  "addButtonLabel": "Додати",
   "@addButtonLabel": {},
-  "applicationLegalese": "Ліцензовано за Mozilla Public License 2.0. Вихідний код доступний за адресою:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "Ліцензовано на умовах Mozilla Public License 2.0.\nСирцевий код доступний за {sourceCodeLink}.",
   "@applicationLegalese": {},
   "bitrate": "Бітрейт",
   "@bitrate": {},
@@ -291,24 +291,24 @@
       }
     }
   },
-  "customLocationsBuggy": "Користувацька текс має багато проблем через проблеми з дозволами. Я думаю, як це виправити, але поки що я б не рекомендував ними користуватися.",
+  "customLocationsBuggy": "Користувацькі розташування можуть бути дуже помилковими, тому в більшості випадків не рекомендуються. Розташування в системній папці «Музика» не дозволяють зберігати обкладинки альбомів через обмеження ОС.",
   "@customLocationsBuggy": {},
   "grid": "Таблиця",
   "@grid": {},
   "portrait": "Портретний",
   "@portrait": {},
-  "showTextOnGridViewSubtitle": "Відображати чи ні текст (назву, виконавця тощо) на музичному екрані сітки.",
+  "showTextOnGridViewSubtitle": "Показувати чи ні текст (назву, виконавця тощо) на музичному екрані сітки.",
   "@showTextOnGridViewSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Чи показувати виконавців пісень на екрані альбому, якщо вони не відрізняються від виконавців альбому.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Чи показувати виконавців композицій на екрані альбому, якщо вони не відрізняються від виконавців альбому.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "Вимкнути жести",
   "@disableGesture": {},
   "useCoverAsBackground": "Показати розмиту обкладинку як фон гравця",
   "@useCoverAsBackground": {},
   "light": "Світла",
   "@light": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Приховати виконавців пісень, якщо вони збігаються з виконавцями альбомів",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Приховати виконавців композицій, якщо вони збігаються з виконавцями альбомів",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "setSleepTimer": "Встановити таймер сну",
   "@setSleepTimer": {},
   "sleepTimerTooltip": "Таймер сну",
@@ -317,13 +317,13 @@
   "@invalidNumber": {},
   "addToPlaylistTooltip": "Додати до плейлисту",
   "@addToPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Видалити з плейлисту",
+  "removeFromPlaylistTitle": "Видалити з цього списку відтворення",
   "@removeFromPlaylistTitle": {},
-  "newPlaylist": "Новий плейлист",
+  "newPlaylist": "Новий список відтворення",
   "@newPlaylist": {},
   "addToQueue": "Додати до черги",
   "@addToQueue": {},
-  "addFavourite": "Додати в вибране",
+  "addFavourite": "Додати в Обране",
   "@addFavourite": {},
   "responseError401": "{error} Код статусу {statusCode}. Можливо, це означає, що ви використали неправильне ім’я користувача/пароль або ваш клієнт не ввійшов в систему.",
   "@responseError401": {
@@ -338,7 +338,7 @@
       }
     }
   },
-  "removedFromPlaylist": "Видалено з плейлисту.",
+  "removedFromPlaylist": "Видалено зі списку відтворення.",
   "@removedFromPlaylist": {},
   "redownloadedItems": "{count,plural, =0{Повторне завантаження не потрібне.} =1{Повторно завантажено {count} елемент} other{Повторно завантажено {count} елементів}}",
   "@redownloadedItems": {
@@ -372,8 +372,8 @@
   },
   "unknownName": "Невідома назва",
   "@unknownName": {},
-  "songs": "Пісні",
-  "@songs": {},
+  "tracks": "Композиції",
+  "@tracks": {},
   "albums": "Альбоми",
   "@albums": {},
   "artists": "Виконавці",
@@ -408,9 +408,9 @@
   "@runtime": {},
   "downloadMissingImages": "Завантажити відсутні зображення",
   "@downloadMissingImages": {},
-  "playButtonLabel": "ГРАТИ",
+  "playButtonLabel": "Відтворити",
   "@playButtonLabel": {},
-  "shuffleButtonLabel": "ПЕРЕМІШАТИ",
+  "shuffleButtonLabel": "Перемішати",
   "@shuffleButtonLabel": {},
   "playlistNameUpdated": "Ім'я плейлисту змінено.",
   "@playlistNameUpdated": {},
@@ -422,7 +422,7 @@
   "@addDownloads": {},
   "location": "Збережено в",
   "@location": {},
-  "downloadsQueued": "Завантаження додано.",
+  "downloadsQueued": "Завантаження підготоване, завантажую файли",
   "@downloadsQueued": {},
   "message": "Повідомлення",
   "@message": {},
@@ -432,7 +432,1478 @@
   "@confirm": {},
   "showUncensoredLogMessage": "Цей журнал містить ваші дані для входу. Показати?",
   "@showUncensoredLogMessage": {},
-  "deleteDownloadsPrompt": "Ви дійсно хочете видалити {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' з цього пристрою?",
+  "insertedIntoQueue": "Вставлено в чергу.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "refresh": "Поновити",
+  "@refresh": {},
+  "noMusicLibrariesTitle": "Музичні бібліотеки відсутні",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "noMusicLibrariesBody": "Finamp не знайшов жодної музичної бібліотеки. Переконайтеся, що ваш сервер Jellyfin містить принаймні одну бібліотеку з типом вмісту \"Музика\".",
+  "@noMusicLibrariesBody": {},
+  "resetTabs": "Скинути вкладки",
+  "@resetTabs": {},
+  "syncDownloadedPlaylists": "Синхронізувати завантажені списки відтворення",
+  "@syncDownloadedPlaylists": {},
+  "showFastScroller": "Показувати швидку прокрутку",
+  "@showFastScroller": {},
+  "playNext": "Відтворити наступним",
+  "@playNext": {
+    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  },
+  "about": "Про Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "finampTagline": "Відкритий відтворювач музики Jellyfin",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionPrompt": "Створено чудовими людьми у вільний час.\nВи можете бути одним із них!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutReleaseNotes": "Читати примітки до випуску:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "Допомогти перекласти Finmap на вашу мову:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "loginFlowSlogan": "Ваша музика, така, яку ви бажаєте.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "Почнімо!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "changeLanguage": "Змінити мову",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "Під'єднати до Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "viewLogs": "Переглянути логи",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "back": "Назад",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "connectingToServer": "Під'єднання до серверу...",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "Сервери у вашій локальній мережі:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Сканування серверів...",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowNamelessUser": "Безіменний користувач",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowAuthenticationHeading": "Увійти у ваш обліковий запис",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "backToAccountSelection": "Повернутись до вибору облікового запису",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowSelectAUser": "Обрати користувача",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameHint": "Введіть ім'я користувача",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "usernameValidationMissingUsername": "Будь ласка, введіть ім'я користувача",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "Введіть пароль",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "Увійти",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "startMixNoTracksGenre": "Натисніть та утримуйте на жанрі для його додавання чи видалення із конструктора міксів перед початком міксування",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "title": "Заголовок",
+  "@title": {},
+  "activeDownloads": "Активні завантаження",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "Активні завантаження",
+  "@activeDownloadsTitle": {},
+  "noActiveDownloads": "Немає активних завантажень.",
+  "@noActiveDownloads": {},
+  "apply": "Застосувати",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "showArtistsTopTracksSubtitle": "Чи показувати 5 найбільш прослуховуваних композиції виконавця.",
+  "@showArtistsTopTracksSubtitle": {},
+  "trackCountTooltip": "Композиція {currentTrackIndex} з {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "timeFractionTooltip": "{currentTime} з {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "addToMorePlaylistsTooltip": "Додати до інших списків відтворення",
+  "@addToMorePlaylistsTooltip": {},
+  "removeFromPlaylistNamedTooltip": "Видалити зі списку відтворення '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "playbackModeLocal": "Відтворюється локально",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToArtist": "До Виконавця",
+  "@goToArtist": {},
+  "goToGenre": "До жанру",
+  "@goToGenre": {},
+  "confirmFavoriteAdded": "Додано Обране",
+  "@confirmFavoriteAdded": {},
+  "skipToNextTrackButtonTooltip": "Перемотати до наступної композиції",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "nextUp": "Наступне",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "confirmShuffleNext": "Буде перемішано наступним",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmShuffleToNextUp": "Перемішано до наступного",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "Перемішано до черги",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "shareOfflineListens": "Поділитись офлайн прослуховуваннями",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "yourLikes": "Ваші вподобання",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "playbackHistory": "Історія відтворення",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "shuffleAllQueueSource": "Перемішати усе",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "topTracks": "Найліпші композиції",
+  "@topTracks": {},
+  "shuffleAlbumsNext": "Перемішати альбоми наступними",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} відтворення} other{{playCount} відтворень}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "moreInfo": "Більше про",
+  "@moreInfo": {},
+  "close": "Закрити",
+  "@close": {},
+  "resetToDefaults": "Відновити за вмовчанням",
+  "@resetToDefaults": {},
+  "volumeNormalizationSettingsTitle": "Нормалізація гучності",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "volumeNormalizationModeSelectorTitle": "Режим нормалізації гучності",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "downloadLibraryPrompt": "ВИ впевнені що хочете завантажити увесь вміст бібліотеки \"{libraryName}\"?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "filesystemFull": "Решта завантажень не можуть бути завершені. Файлова система переповнена.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "З'єднання було обірвано, призупинення завантажень.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "syncingDownloadSize": "Синхронізація...",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "maxConcurrentDownloads": "Максимум конкурентних завантажень",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "showNullLibraryItemsTitle": "Показувати медіа з Невідомої Бібліотеки.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "downloadsWorkersSetting": "Кількість Завантажувачів",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "preferQuickSyncSwitch": "Віддати перевагу швидкій синхронізації",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{Альбом} playlist{Список відтворення} artist{Виконавець} genre{Жанр} track{Композиція} library{Бібліотека} unknown{Об'єкт} other{{itemType}}} {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "defaultDownloadLocationButton": "Встановити як типову локацію для завантажень.  Вимкнути для вибору на одне завантаження.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "enableAutoScroll": "Увімкнути автоматичне прокручування",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "removeFromPlaylistConfirm": "Вилучити",
+  "@removeFromPlaylistConfirm": {},
+  "sleepTimerRemainingTime": "Сон через {time} хвилин",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmFavoriteRemoved": "Вилучено Обране",
+  "@confirmFavoriteRemoved": {},
+  "confirmAddedToPlaylist": "Додано до списку відтворення.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "removeFromPlaylistNamedTitle": "Видалити зі Списку Відтворення '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "shuffleNext": "Перемішати наступне",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "previousTracks": "Попередня композиція",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "loginFlowQuickConnectPrompt": "Використати код для Швидкого Під'єднання",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "playbackSpeedControlSetting": "Видимість швидкості відтворення",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "backToServerSelection": "Повернутись до вибору серверу",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "serverUrlHint": "напр., demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "aboutContributionLink": "Зробити внесок через GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "Вітаємо у",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "aboutThanks": "Дякуємо за використання Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "serverUrlInfoButtonTooltip": "Допомога з посиланням на сервер",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "loginFlowAccountSelectionHeading": "Оберіть ваш обліковий запис",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectDisabled": "Швидке Під'єднання вимкнене на цьому сервері.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "loginFlowCustomUser": "Власний користувач",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "interactions": "Взаємодії",
+  "@interactions": {},
+  "loginFlowQuickConnectInstructions": "Відкрийте застосунок чи сайт Jellyfin, натисність на іконку користувача та оберіть \"Швидке Під'єднання\".",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "orDivider": "або",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} композиція} other{{trackCount} композиції}}, {imageCount,plural,=1{{imageCount} зображення} other{{imageCount} зображення}}\n{syncCount,plural,=1{{syncCount} синхронізація вузла} other{{syncCount} синхронізація вузлів}}{repairing, plural, =0{} other{\nНаразі виправляється}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackSpeedControlSettingSubtitle": "Чи відображаються елементи керування швидкістю відтворення в екранному меню відтворювача",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "unknownAlbum": "Невідомий альбом",
+  "@unknownAlbum": {},
+  "speed": "Швидкість",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "hours": "Години",
+  "@hours": {},
+  "kiloBitsPerSecondLabel": "{bitrate} кб/с",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Мінімальний відступ обкладинки альбому",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopTracks": "Показати найкращі композиції в поданні виконавнця",
+  "@showArtistsTopTracks": {},
+  "playbackModeDirectPlaying": "Пряме відтворення",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "addToNextUp": "Додати до наступного",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "clearNextUp": "Очистити наступне",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "queueRestoreError": "Увага: {count,plural, =1{{count} композиція} other{{count} композиції}} не можна відновити у чергу.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Триває} failed{Провалено} syncFailed{Повторно не синхронізовано} enqueued{У черзі} other{}} {itemCount, plural, =1{Завантаження} other{Завантаження}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "maxConcurrentDownloadsLabel": "{count} Конкурентних завантажень",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionInterruptedBackgroundAndroid": "Під час фонового завантаження було обірвано з'єднання. Це може бути спричинено увімкненням параметра \"Входити у стан низького пріоритету на паузі\" або налаштуваннями ОС.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "connectionInterruptedBackground": "Під час фонового завантаження було обірвано з'єднання. Це може бути спричинено налаштуваннями системи.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "missingDownloadSize": "Видалення...",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "downloadsWorkersSettingLabel": "{count} Завантажувачів",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "runRepairWarning": "Не можна встановити з'єднання з цим сервером задля завершення міграції завантаження. Будь ласка, запустіть \"Відновити Завантаження\" із екрану завантажень коли відновите з'єднання.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "syncOnStartupSwitch": "Автоматично синхронізувати завантаження при запуску",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "showNullLibraryItemsSubtitle": "Деякі медіа-файли можуть бути завантажені з невідомої бібліотеки. Вимкніть щоб приховувати їх поза межами оригінальної колекції.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloadsSubtitle": "Збільшення конкурентних завантажень можуть дозволити зменшити фонові завантаження але може спричинити провал деяких великих завантажень, або надмірні лаги у деяких випадках.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "preferQuickSyncSwitchSubtitle": "При виконанні синхронізації, деякі, зазвичай статичні об'єкти (штибу композицій чи альбомів), не будуть оновлені. Відновлення завантаження завжди виконує повну синхронізацію.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "confirmPlayNext": "{type, select, track{Композиція} album{Альбом} artist{Виконавець} playlist{Список відтворення} genre{Жанр} other{Об'єкт}} відтворюватиметься наступним",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Показувати лише повністю завантажені альбоми",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "syncDownloads": "Синхронізувати та завантажити відсутні елементи.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "downloadsWorkersSettingSubtitle": "Кількість завантажувачів для синхронізації метаданих та видалення завантажень. Збільшення кількості завантажувачів може прискорити синхронізацію завантажень і видалення, особливо за високої затримки сервера, але може спричинити затримки.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "requireWifiForDownloads": "Вимагає доступу до мережі під час завантаження.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "repairDownloads": "Виправити проблеми із завантаженням файлів чи метаданих.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "queueRestoreButtonLabel": "Відновити",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "confirmAddToNextUp": "{type, select, track{Композицію} album{Альбом} artist{Виконавця} playlist{Список відтворення} genre{Жанр} other{Об'єкт}} додано до наступного",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadBitrateSubtitle": "Вищий бітрейт дає кращу якість аудіо за рахунок більших вимог до сховища.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "volumeNormalizationModeSelectorDescription": "Гібридно (Композиція + Альбом):\nПосилення композицій застосовується для звичайного відтворення, але якщо відтворюється альбом (коли це головне джерело відтворення черги, чи його було додано до черги якимось чином), тоді буде застосовано посилення альбому.\n\nНа основі композицій:\nПосилення композицій застосовується завжди, незалежно від того чи відтворюється альбом, чи ні.\n\nНа основі альбому:\nНормалізація гучності застосовується лише при відтворені альбомів (застосування посилення альбомів), не для окремих композицій.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "volumeNormalizationModeHybrid": "Гібридно (Композиція + Альбом)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "downloadBitrate": "Бітрейт завантаження",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "quickActions": "Швидкі дії",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Наразі нормалізація гучності на iOS вимагає змінення гучності відтворення щоб емулювати змінення посилення. Оскільки ми не можемо збільшити гучність більш ніж на 100%, ми маємо знизити гучність до типової щоб ми могли підвищувати гучність для тихих композицій. Значення у децибелах (дБ), де -10 дБ це ~30% гучності, -4.5 дБ - ~60%, а -2.0 дБ - ~80%.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "cacheLibraryImagesName": "Зображення для '{libraryName}' було кешовано",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "transcodingStreamingContainerTitle": "Обрати контейнер для транскодування",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "finampCollectionNames": "{itemType, select, favorites{Обране} allPlaylists{Усі списки відтворення} fiveLatestAlbums{5 Останніх альбомів} allPlaylistsMetadata{Метадані списку відтворення} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "prioritizePlayerCoverSubtitle": "Пріоритезувати показ більшої обкладинки альбому на екрані відтворювача. Неважливі елементи керування будуть приховані більш агресивно при малих розмірах екрану.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "downloadTranscodeCodecTitle": "Обрати кодек для завантажень",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Транскодовано}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "redownloadcomplete": "Повторне завантаження транскодування у черзі.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "redownloadSubtitle": "Автоматично повторно завантажувати композиції, які мали б бути у іншій якості згідно змін батьківської колекції.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "numberAsBit": "{bit} біт",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackSpeedControlSettingDescription": "Автоматично:\nFinmap намагається ідентифікувати, чи є відтворювана композиція подкастом, чи аудіокнигою (її частиною). Це визначається у випадках коли композиція довша за {trackDuration} хв., альбом композиції довший за {albumDuration} год., чи композиція має хоча б один із перерахованих жанрів: {genreList}\nРегулятори швидкості відтворення з'являться в меню відтворювача.\n\nПоказувати:\nРегулятори швидкості відтворення завжди відображатимуться в меню відтворювача.\n\nПриховувати:\nРегулятори швидкості відтворення завжди приховані.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Мінімальний відступ навколо обкладинки альбому на екрані відтворювача, у % від довжини екрану.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "scrollToCurrentTrack": "Прокрутити до поточної композиції",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "removeFromPlaylistPrompt": "Вилучити '{itemName}' зі списку відтворення '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "trackMenuButtonTooltip": "Меню композицій",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "trackOfflineFavoritesSubtitle": "Це дозволить показувати більш актуальні обрані статуси в режимі офлайн. Не завантажує ніяких додаткових файлів.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "playbackSpeedButtonLabel": "Відтворення на швидкості x{speed}",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackOrderLinearButtonLabel": "Відтворення за порядком",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "dontTranscode": "Завантажити оригінал{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "playingFromType": "Відтворення з {source, select, album{Альбому} playlist{Списку відтворення} trackMix{Міксу композиції} artistMix{Міксу виконавця} albumMix{Міксу альбому} genreMix{Міксу жанру} favorites{Обраного} allTracks{Усіх композицій} filteredList{Композицій} genre{Жанру} artist{Виконавця} track{Композиції} nextUpAlbum{Альбому з Наступного} nextUpPlaylist{Списку відтворення з Наступного} nextUpArtist{Виконавця з наступного} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "queueLoadingMessage": "Відновлення черги...",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Після запуску застосунку намагається відновити відтворювану востаннє чергу.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "reportQueueToServerSubtitle": "Коли увімкнено, Finamp надсилатиме поточну чергу до серверу. Наразі здається, що від цього мало користі, і це збільшує мережевий трафік.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "shuffleAlbums": "Перемішати альбоми",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Якщо сервер Jellyfin не отримував ніяких оновлень статусу відтворення від клієнту останні 5 хвилин, сервер вирішить що відтворення було завершено. Тобто для композицій, які тривають довше 5 хвилин, можливе некоректне звітування про відтворення як про завершене, що зменшить якість даних звітів про відтворення.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Частота оновлення сесії відтворення",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "Коли і як застосовувати нормалізацію гучності",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "couldNotLoad": "Не вдалось завантажити {source, select, album{альбом} playlist{список відтворення} trackMix{мікс композицій} artistMix{мікс виконавців} albumMix{мікс альбомів} genreMix{мікс жанрів} favorites{обране} allTracks{усі композиції} filteredList{композиції} genre{жанр} artist{виконавця} track{композицію} nextUpAlbum{альбом у наступному} nextUpPlaylist{список відтворення у наступному} nextUpArtist{виконавця у наступному} other{}}",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "volumeNormalizationSwitchTitle": "Увімкнути нормалізацію гучності",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationSwitchSubtitle": "Використовуйте інформацію про посилення для нормалізації гучності композицій (\"Посилення при відтворенні\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "confirmDownloadStarted": "Завантаження розпочато",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "customizationSettingsTitle": "Персоналізація",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "automatic": "Автоматично",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Показувати",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Приховувати",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "reset": "Скинути",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "playerScreen": "Екран відтворювача",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "seconds": "Секунди",
+  "@seconds": {},
+  "addToMorePlaylistsTitle": "Додати до \"Інші Списки Відтворення\"",
+  "@addToMorePlaylistsTitle": {},
+  "playlistActionsMenuButtonTooltip": "Натиснути для додавання до списку відтворення. Утримувати для додавання до Обраного.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "playbackModeTranscoding": "Транскодування",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "skipToPreviousTrackButtonTooltip": "Перемотати на початок або до попередньої композиції",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "togglePlaybackButtonTooltip": "Перемкнути відтворення",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "playingFrom": "Відтворюється з",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "shuffleToNextUp": "Перемішати до наступного",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleToQueue": "Перемішати до черги",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "placeholderSource": "Десь",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "mix": "{mixSource} - Мікс",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "tracksFormerNextUp": "Композиції додано із наступного",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "savedQueue": "Чергу збережено",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "confirmAddToQueue": "{type, select, track{track} album{Альбом} artist{Виконавця} playlist{Список відтворення} genre{Жанр} other{Об'єкт}} додано до черги",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "transcodeHint": "Транскодувати?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "doTranscode": "Завантажити як {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "redownloadTitle": "Автоматично повторно завантажувати транскодування",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ як {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "fixedGridSizeSwitchTitle": "Використовувати плитки з фіксованим розміром сітки",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeSwitchSubtitle": "Розмір плиток сітки не будуть адаптовані до розміру вікна/екрану.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "fixedGridSizeTitle": "Розмір плитки сітки",
+  "@fixedGridSizeTitle": {},
+  "fixedGridTileSizeEnum": "{size, select, small{Маленький} medium{Середній} large{Великий} veryLarge{Дуже великий} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "allowSplitScreenTitle": "Дозволити режим SplitScreen",
+  "@allowSplitScreenTitle": {},
+  "allowSplitScreenSubtitle": "Відтворювач відображатиметься поряд з іншими поданнями на ширших дисплеях.",
+  "@allowSplitScreenSubtitle": {},
+  "enableVibration": "Увімкнути вібрацію",
+  "@enableVibration": {},
+  "enableVibrationSubtitle": "Чи вмикати вібрацію.",
+  "@enableVibrationSubtitle": {},
+  "hidePlayerBottomActions": "Приховати нижні дії",
+  "@hidePlayerBottomActions": {},
+  "hidePlayerBottomActionsSubtitle": "Приховати кнопки черги та тексту на екрані відтворювача. Проведіть вгору для доступу до черги, вліво (під обкладинкою альбому) для показу тексту пісні, якщо така доступна.",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "prioritizePlayerCover": "Пріоритезувати обкладинку альбому",
+  "@prioritizePlayerCover": {},
+  "suppressPlayerPadding": "Прибрати відступи елементів керування відтворювача",
+  "@suppressPlayerPadding": {},
+  "suppressPlayerPaddingSubtitle": "Повністю зменшує відступ між елементами керування екрану відтворювача коли обкладинка альбому не на весь розмір.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "lockDownload": "Завжди зберігати на девайсі",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "showArtistChipImage": "Показувати зображення виконавців разом із їх ім'ям",
+  "@showArtistChipImage": {},
+  "showArtistChipImageSubtitle": "Це впливає на невеликі попередні перегляди зображень виконавців, наприклад, на екрані відтворювача.",
+  "@showArtistChipImageSubtitle": {},
+  "numberAsKiloHertz": "{kiloHertz} кГц",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "remainingDuration": "{duration} залишилось",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "addRemoveFromPlaylist": "Додати / Вилучити зі списку відтворення",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "Додати композицію до списку відтворення",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "trackOfflineFavorites": "Синхронізувати усі обрані статуси",
+  "@trackOfflineFavorites": {},
+  "allPlaylistsInfoSetting": "Завантажити метадані списку відтворення",
+  "@allPlaylistsInfoSetting": {},
+  "allPlaylistsInfoSettingSubtitle": "Синхронізувати метадані для усіх списків відтворення щоб покращити ваш досвід",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "downloadFavoritesSetting": "Завантажити усі обрані",
+  "@downloadFavoritesSetting": {},
+  "downloadAllPlaylistsSetting": "Завантажити усі списки відтворення",
+  "@downloadAllPlaylistsSetting": {},
+  "fiveLatestAlbumsSetting": "Завантажити 5 останніх альбомів",
+  "@fiveLatestAlbumsSetting": {},
+  "fiveLatestAlbumsSettingSubtitle": "Завантаження будуть видалені по мірі застарівання. Замкніть завантаження для запобігання видалення альбому.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "cacheLibraryImagesSettings": "Кешувати зображення поточної бібліотеки",
+  "@cacheLibraryImagesSettings": {},
+  "offlineTrackCount": "{count,plural,=1{{count} Композицію} other{{count} Композиції}}, {downloads} завантажено",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Композиція} other{{count} Композиції}} завантажено",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackOrderLinearButtonTooltip": "Відтворення за порядком. Натисніть щоб перемішати.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Перемішування композицій",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Перемішування треків. Натисніть, щоб відтворювати за порядком.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedFeatureText": "швидкість x{speed}",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Зменшити швидкість відтворення",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Збільшити швидкість відтворення",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeNoneButtonLabel": "Не повторювати",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeOneButtonLabel": "Повторювати цю композицію",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeAllButtonLabel": "Повторювати усе",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "Відновити \"Відтворюється зараз\"",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreTitle": "Збережено {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "Відтворюється: {track}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "track": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Композиція} other{{count} Композицій}}, {remaining} не відтворено",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "queueRetryMessage": "Не вдалось відновити чергу. Спробувати ще раз?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartup": "Автоматично відновлювати останню чергу",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Звітувати про поточну чергу на сервер?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Як часто надсилати поточний статус відтворення до серверу, у секундах. Повинно бути менше 5 хвилин (300 секунд) щоб уникнути передчасного завершення сесії.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "albumCount": "{count,plural,=1{{count} Альбом} other{{count} Альбоми}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleAlbumsToNextUp": "Перемішати альбоми до Наступного",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsToQueue": "Перемішати альбоми до черги",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{Завжди} never{Ніколи} ask{Запитувати} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "activeDownloadSize": "Завантаження...",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "downloadSettings": "Завантаження",
+  "@downloadSettings": {},
+  "incidentalDownloadTooltip": "Цей об'єкт має бути завантаженим з {parentName}.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "volumeNormalizationModeTrackBased": "На основі композицій",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumBased": "На основі альбомів",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumOnly": "Лише для альбомів",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Базове посилення",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "numberAsDecibel": "{value} дБ",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "swipeInsertQueueNext": "Відтворити додану композицію наступною",
+  "@swipeInsertQueueNext": {},
+  "swipeInsertQueueNextSubtitle": "Увімкнути можливість вставляти композицію як наступний об'єкт у черзі, якщо вона була додана замість вставки у кінець черги.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "startInstantMixForIndividualTracksSwitchTitle": "Почати миттєвий мікс для окремих композицій",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Коли увімкнено, натискання на композицію у вкладці композицій почне миттєвий мікс цієї композиції замість відтворення власне композиції.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "downloadItem": "Завантажити",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "repairComplete": "Відновлення завантажень завершено.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "syncComplete": "Усі завантаження повторно синхронізовано.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "transcodingStreamingContainerSubtitle": "Обрати сегментований контейнер для використання при потоковому відтворення транскодованого аудіо. Не буде застосовано для попередньо доданих в чергу композицій.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "downloadTranscodeEnableTitle": "Увімкнути транскодовані завантаження",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "lyricsScreen": "Текст пісні",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "fontSizeOptionLarge": "Великий",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "lyricsAlignmentTitle": "Вирівнювання тексту пісень",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "cacheLibraryImagesSettingsSubtitle": "Обкладинки усіх альбомів, виконавців, жанрів, та списків відтворення у поточній активній бібліотеці будуть завантажені.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "showProgressOnNowPlayingBarTitle": "Показувати прогрес композиції у внутрішньому міні-відтворювачі",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "showLyricsTimestampsSubtitle": "Керує тим, чи показувати мітку часу для кожного рядка тексту у поданні тексту, якщо вона доступна.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationTitle": "Показувати кнопку зупинення у медіа сповіщеннях",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Показати індикатор керування прогресом в медіа сповіщенні",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionStart": "Початок",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "Центр",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "Кінець",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Керує тим чи медіа сповіщення має індикатор прогресу. Він дозволить змінювати позицію відтворення без потреби відкривати застосунок.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showLyricsTimestampsTitle": "Показувати часові мітки для синхронізованих текстів пісень",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Керує тим, чи показувати кнопку зупинки разом із кнопкою павзи. Це дозволить зупинити відтворення без потреби відкривати застосунок.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "fontSizeOptionMedium": "Середній",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "fontSizeOptionSmall": "Маленький",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "keepScreenOn": "Лишати екран увімененим",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "showLyricsScreenAlbumPreludeTitle": "Показувати альбом перед текстом пісень",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnWhileLyrics": "Коли показано текст пісні",
+  "@keepScreenOnWhileLyrics": {},
+  "artworkTooltip": "Ілюстрація для {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "genericToggleButtonTooltip": "Натисніть щоб перемкнути.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "artwork": "Ілюстрація",
+  "@artwork": {},
+  "keepScreenOnWhilePluggedInSubtitle": "Ігнорувати \"Лишати екран увімкненим\" якщо девайс від'єднано",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "playerAlbumArtworkTooltip": "Ілюстрація для {title}. Торкніться, щоб перемкнути відтворення. Проведіть пальцем вліво або вправо, щоб перемикати треки.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "codec": "Кодек",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "playbackMode": "Режим відтворення",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "sampleRate": "Частота дискретизації",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "normalizationGain": "Підсилення",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "lyricsAlignmentSubtitle": "Керує вирівнюванням текстів у поданні текстів пісень.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "bitDepth": "Бітова глибина",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "bitRate": "Швидкість передавання",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "additionalPeople": "Люди",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "nowPlayingBarTooltip": "Відкрити екран відтворювача",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "keepScreenOnWhilePluggedIn": "Лишати екран увімкненим лише якщо під'єднано до мережі",
+  "@keepScreenOnWhilePluggedIn": {},
+  "keepScreenOnWhilePlaying": "Коли відтворюється музика",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnAlwaysOn": "Завжди увімкнено",
+  "@keepScreenOnAlwaysOn": {},
+  "keepScreenOnDisabled": "Вимкнено",
+  "@keepScreenOnDisabled": {},
+  "lyricsFontSizeSubtitle": "Керує розміром шрифту тексту пісень у відповідному поданні.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "size": "Розмір",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "albumScreen": "Екран альбому",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Показувати обкладинки альбому для кожної композиції окремо на екрані альбому.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetSettingsPromptGlobal": "ВИ впевнені що хочете скинути УСІ налаштування до значень за вмовчанням?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptLocal": "Ви хочете скинути налаштування до значень за вмовчанням?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "resetFiltersButton": "Скинути фільтри",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "emptyFilteredListSubtitle": "Не знайдено жодного об'єкта за даними фільтрами. Спробуйте скинути їх чи змінити запит.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "genericCancel": "Скасувати",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "resetSettingsPromptGlobalConfirm": "Скинути УСІ налаштування",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "lyricsFontSizeTitle": "Розмір шрифту тексту пісень",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "emptyTopTracksList": "Ви ще не слухали жодної композиції від цього виконавця.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "keepScreenOnSubtitle": "Коли лишати екран увімкненим",
+  "@keepScreenOnSubtitle": {},
+  "emptyFilteredListTitle": "Не знайдено об'єктів",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "showFeatureChipsToggleSubtitle": "Показувати на екрані програвача розширену інформацію про композицію, як-от кодек, бітрейт тощо.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "Дозволяє контролювати, чи показувати обкладинку альбому над текстом пісень перед прокруткою.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "showCoversOnAlbumScreenTitle": "Показувати обкладинки альбомів для композицій",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "showFeatureChipsToggleTitle": "Показувати розширену інформацію про композицію",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showProgressOnNowPlayingBarSubtitle": "Контролює, чи міні-програвач у програмі/панель зараз відтворюється внизу екрана музики функціонує як панель прогресу.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "bufferDisableSizeConstraintsSubtitle": "Вимикає обмеження розміру буфера ('Розмір буферу'). Буфер завжди завантажуватиметься протягом заданої тривалості ('Тривалість буферу'), навіть для дуже великих файлів. Може спричиняти збої. Потребує перезапуску.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bufferDisableSizeConstraintsTitle": "Не обмежувати розмір буферу",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeTitle": "Розмір буферу",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "Максимальний розмір буферу в МБ. Вимагає перезапуску",
+  "@bufferSizeSubtitle": {},
+  "marqueeOrTruncateButton": "Використовуйте три крапки для довгих заголовків",
+  "@marqueeOrTruncateButton": {},
+  "oneLineMarqueeTextButton": "Довгі заголовки з автоматичним прокручуванням",
+  "@oneLineMarqueeTextButton": {},
+  "hideQueueButtonSubtitle": "Приховати кнопку черги на екрані плеєра. Проведіть пальцем угору, щоб отримати доступ до черги.",
+  "@hideQueueButtonSubtitle": {},
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} other{Item}} видалено з {deviceType, select, device{Device} server{сервера} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "deleteFromTargetDialogText": "Ви збираєтеся видалити цей {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} із {device, select, device{this device} server{файлової системи та бібліотеки сервера.{deleteType, select, canDelete{ Це також видалить цей елемент із цього пристрою.} cantDelete{ Цей елемент залишиться на цьому пристрої до наступної синхронізації.} notDownloaded{} other{}} \nЦю дію неможливо скасувати} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "downloadSizeWarningCutoff": "Завантажте обмеження попередження про розмір",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "publiclyVisiblePlaylist": "Загальнодоступні:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "downloadSizeWarningCutoffSubtitle": "У разі завантаження більшої кількості композицій одночасно з’явиться попередження.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "hideQueueButton": "Кнопка приховати чергу",
+  "@hideQueueButton": {},
+  "oneLineMarqueeTextButtonSubtitle": "Автоматично прокручуйте назви композицій, які занадто довгі для відображення в два рядки",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "marqueeOrTruncateButtonSubtitle": "Показувати ... в кінці довгих заголовків замість тексту, що прокручується",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "deleteFromTargetConfirmButton": "Видалити{target, select, device{ from Device} server{ from Server} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "largeDownloadWarning": "Попередження: ви збираєтеся завантажити {count} треків.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of songs are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmAddAlbumToPlaylist": "Ви впевнені, що хочете додати всі треки з {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' до цього списку відтворення?  Їх можна видалити лише окремо.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteDownloadsConfirmButtonText": "Видалити",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "deleteDownloadsPrompt": "Ви впевнені, що хочете видалити {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' з цього пристрою?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -446,30 +1917,44 @@
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
-  "deleteDownloadsConfirmButtonText": "Видалити",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  "releaseDateFormatMonthYear": "Місяць і рік",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
   },
-  "insertedIntoQueue": "Вставлено в чергу.",
-  "@insertedIntoQueue": {
-    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  "releaseDateFormatYear": "Рік",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
   },
-  "refresh": "ОНОВИТИ",
-  "@refresh": {},
-  "noMusicLibrariesTitle": "Музичні бібліотеки відсутні",
-  "@noMusicLibrariesTitle": {
-    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Показати дату випуску альбому на екрані плеєра за назвою альбому.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
   },
-  "noMusicLibrariesBody": "Finamp не знайшов жодної музичної бібліотеки. Переконайтеся, що ваш сервер Jellyfin містить принаймні одну бібліотеку з типом вмісту \"Музика\".",
-  "@noMusicLibrariesBody": {},
-  "resetTabs": "Скинути вкладки",
-  "@resetTabs": {},
-  "syncDownloadedPlaylists": "Синхронізувати завантажені плейлисти",
-  "@syncDownloadedPlaylists": {},
-  "showFastScroller": "Показувати швидку прокрутку",
-  "@showFastScroller": {},
-  "playNext": "Відтворити наступним",
-  "@playNext": {
-    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthDayYear": "Місяць, день і рік",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Показати дату випуску альбому на екрані програвача",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Формат дати випуску",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "Керує форматом усіх дат випуску, які відображаються в програмі.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "allowDeleteFromServerTitle": "Дозволити видалення з сервера",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "allowDeleteFromServerSubtitle": "Увімкніть і вимкніть опцію остаточного видалення доріжки з файлової системи сервера, якщо видалення можливе.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
   }
 }

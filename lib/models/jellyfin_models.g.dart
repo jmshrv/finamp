@@ -30,7 +30,7 @@ class UserDtoAdapter extends TypeAdapter<UserDto> {
       lastActivityDate: fields[10] as String?,
       configuration: fields[11] as UserConfiguration?,
       policy: fields[12] as UserPolicy?,
-      primaryImageAspectRatio: fields[13] as double?,
+      primaryImageAspectRatio: (fields[13] as num?)?.toDouble(),
     );
   }
 
@@ -169,7 +169,7 @@ class UserPolicyAdapter extends TypeAdapter<UserPolicy> {
       isAdministrator: fields[0] as bool,
       isHidden: fields[1] as bool,
       isDisabled: fields[2] as bool,
-      maxParentalRating: fields[3] as int?,
+      maxParentalRating: (fields[3] as num?)?.toInt(),
       blockedTags: (fields[4] as List?)?.cast<String>(),
       enableUserPreferenceAccess: fields[5] as bool,
       accessSchedules: (fields[6] as List?)?.cast<AccessSchedule>(),
@@ -195,13 +195,13 @@ class UserPolicyAdapter extends TypeAdapter<UserPolicy> {
       enableAllChannels: fields[25] as bool,
       enabledFolders: (fields[26] as List?)?.cast<String>(),
       enableAllFolders: fields[27] as bool,
-      invalidLoginAttemptCount: fields[28] as int,
-      loginAttemptsBeforeLockout: fields[35] as int?,
-      maxActiveSessions: fields[36] as int?,
+      invalidLoginAttemptCount: (fields[28] as num).toInt(),
+      loginAttemptsBeforeLockout: (fields[35] as num?)?.toInt(),
+      maxActiveSessions: (fields[36] as num?)?.toInt(),
       enablePublicSharing: fields[29] as bool,
       blockedMediaFolders: (fields[30] as List?)?.cast<String>(),
       blockedChannels: (fields[31] as List?)?.cast<String>(),
-      remoteClientBitrateLimit: fields[32] as int,
+      remoteClientBitrateLimit: (fields[32] as num).toInt(),
       authenticationProviderId: fields[33] as String?,
       passwordResetProviderId: fields[37] as String?,
       syncPlayAccess: fields[38] as String,
@@ -314,11 +314,11 @@ class AccessScheduleAdapter extends TypeAdapter<AccessSchedule> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AccessSchedule(
-      id: fields[3] as int,
+      id: (fields[3] as num).toInt(),
       userId: fields[4] as String,
       dayOfWeek: fields[0] as String,
-      startHour: fields[1] as double,
-      endHour: fields[2] as double,
+      startHour: (fields[1] as num).toDouble(),
+      endHour: (fields[2] as num).toDouble(),
     );
   }
 
@@ -518,13 +518,13 @@ class PlayerStateInfoAdapter extends TypeAdapter<PlayerStateInfo> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PlayerStateInfo(
-      positionTicks: fields[0] as int?,
+      positionTicks: (fields[0] as num?)?.toInt(),
       canSeek: fields[1] as bool,
       isPaused: fields[2] as bool,
       isMuted: fields[3] as bool,
-      volumeLevel: fields[4] as int?,
-      audioStreamIndex: fields[5] as int?,
-      subtitleStreamIndex: fields[6] as int?,
+      volumeLevel: (fields[4] as num?)?.toInt(),
+      audioStreamIndex: (fields[5] as num?)?.toInt(),
+      subtitleStreamIndex: (fields[6] as num?)?.toInt(),
       mediaSourceId: fields[7] as String?,
       playMethod: fields[8] as String?,
       repeatMode: fields[9] as String?,
@@ -685,17 +685,17 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
       supportedMediaTypes: fields[14] as String?,
       userId: fields[15] as String?,
       albumArtPn: fields[16] as String?,
-      maxAlbumArtWidth: fields[17] as int,
-      maxAlbumArtHeight: fields[18] as int,
-      maxIconWidth: fields[19] as int?,
-      maxIconHeight: fields[20] as int?,
-      maxStreamingBitrate: fields[21] as int?,
-      maxStaticBitrate: fields[22] as int?,
-      musicStreamingTranscodingBitrate: fields[23] as int?,
-      maxStaticMusicBitrate: fields[24] as int?,
+      maxAlbumArtWidth: (fields[17] as num).toInt(),
+      maxAlbumArtHeight: (fields[18] as num).toInt(),
+      maxIconWidth: (fields[19] as num?)?.toInt(),
+      maxIconHeight: (fields[20] as num?)?.toInt(),
+      maxStreamingBitrate: (fields[21] as num?)?.toInt(),
+      maxStaticBitrate: (fields[22] as num?)?.toInt(),
+      musicStreamingTranscodingBitrate: (fields[23] as num?)?.toInt(),
+      maxStaticMusicBitrate: (fields[24] as num?)?.toInt(),
       sonyAggregationFlags: fields[25] as String?,
       protocolInfo: fields[26] as String?,
-      timelineOffsetSeconds: fields[27] as int,
+      timelineOffsetSeconds: (fields[27] as num).toInt(),
       requiresPlainVideoItems: fields[28] as bool,
       requiresPlainFolders: fields[29] as bool,
       enableMSMediaReceiverRegistrar: fields[30] as bool,
@@ -1005,8 +1005,8 @@ class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
       copyTimestamps: fields[8] as bool,
       context: fields[9] as String,
       maxAudioChannels: fields[10] as String?,
-      minSegments: fields[11] as int,
-      segmentLength: fields[12] as int,
+      minSegments: (fields[11] as num).toInt(),
+      segmentLength: (fields[12] as num).toInt(),
       breakOnNonKeyFrames: fields[13] as bool,
       enableSubtitlesInManifest: fields[14] as bool,
     );
@@ -1300,14 +1300,14 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       name: fields[0] as String?,
       originalTitle: fields[1] as String?,
       serverId: fields[2] as String?,
-      id: fields[3] as String,
+      id: fields[3] as BaseItemId,
       etag: fields[4] as String?,
       playlistItemId: fields[5] as String?,
       dateCreated: fields[6] as String?,
       extraType: fields[7] as String?,
-      airsBeforeSeasonNumber: fields[8] as int?,
-      airsAfterSeasonNumber: fields[9] as int?,
-      airsBeforeEpisodeNumber: fields[10] as int?,
+      airsBeforeSeasonNumber: (fields[8] as num?)?.toInt(),
+      airsAfterSeasonNumber: (fields[9] as num?)?.toInt(),
+      airsBeforeEpisodeNumber: (fields[10] as num?)?.toInt(),
       canDelete: fields[11] as bool?,
       canDownload: fields[12] as bool?,
       hasSubtitles: fields[13] as bool?,
@@ -1321,7 +1321,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       premiereDate: fields[21] as String?,
       externalUrls: (fields[22] as List?)?.cast<ExternalUrl>(),
       mediaSources: (fields[23] as List?)?.cast<MediaSourceInfo>(),
-      criticRating: fields[24] as double?,
+      criticRating: (fields[24] as num?)?.toDouble(),
       productionLocations: (fields[25] as List?)?.cast<String>(),
       path: fields[26] as String?,
       officialRating: fields[27] as String?,
@@ -1331,20 +1331,20 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       overview: fields[31] as String?,
       taglines: (fields[32] as List?)?.cast<String>(),
       genres: (fields[33] as List?)?.cast<String>(),
-      communityRating: fields[34] as double?,
-      runTimeTicks: fields[35] as int?,
+      communityRating: (fields[34] as num?)?.toDouble(),
+      runTimeTicks: (fields[35] as num?)?.toInt(),
       playAccess: fields[36] as String?,
       aspectRatio: fields[37] as String?,
-      productionYear: fields[38] as int?,
+      productionYear: (fields[38] as num?)?.toInt(),
       number: fields[39] as String?,
       channelNumber: fields[40] as String?,
-      indexNumber: fields[41] as int?,
-      indexNumberEnd: fields[42] as int?,
-      parentIndexNumber: fields[43] as int?,
+      indexNumber: (fields[41] as num?)?.toInt(),
+      indexNumberEnd: (fields[42] as num?)?.toInt(),
+      parentIndexNumber: (fields[43] as num?)?.toInt(),
       remoteTrailers: (fields[44] as List?)?.cast<MediaUrl>(),
       providerIds: (fields[45] as Map?)?.cast<String, dynamic>(),
       isFolder: fields[46] as bool?,
-      parentId: fields[47] as String?,
+      parentId: fields[47] as BaseItemId?,
       type: fields[48] as String?,
       people: (fields[49] as List?)?.cast<BaseItemPerson>(),
       studios: (fields[50] as List?)?.cast<NameLongIdPair>(),
@@ -1352,33 +1352,33 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       parentLogoItemId: fields[52] as String?,
       parentBackdropItemId: fields[53] as String?,
       parentBackdropImageTags: (fields[54] as List?)?.cast<String>(),
-      localTrailerCount: fields[55] as int?,
+      localTrailerCount: (fields[55] as num?)?.toInt(),
       userData: fields[56] as UserItemDataDto?,
-      recursiveItemCount: fields[57] as int?,
-      childCount: fields[58] as int?,
+      recursiveItemCount: (fields[57] as num?)?.toInt(),
+      childCount: (fields[58] as num?)?.toInt(),
       seriesName: fields[59] as String?,
       seriesId: fields[60] as String?,
       seasonId: fields[61] as String?,
-      specialFeatureCount: fields[62] as int?,
+      specialFeatureCount: (fields[62] as num?)?.toInt(),
       displayPreferencesId: fields[63] as String?,
       status: fields[64] as String?,
       airTime: fields[65] as String?,
       airDays: (fields[66] as List?)?.cast<String>(),
       tags: (fields[67] as List?)?.cast<String>(),
-      primaryImageAspectRatio: fields[68] as double?,
+      primaryImageAspectRatio: (fields[68] as num?)?.toDouble(),
       artists: (fields[69] as List?)?.cast<String>(),
       artistItems: (fields[70] as List?)?.cast<NameIdPair>(),
       album: fields[71] as String?,
       collectionType: fields[72] as String?,
       displayOrder: fields[73] as String?,
-      albumId: fields[74] as String?,
+      albumId: fields[74] as BaseItemId?,
       albumPrimaryImageTag: fields[75] as String?,
       seriesPrimaryImageTag: fields[76] as String?,
       albumArtist: fields[77] as String?,
       albumArtists: (fields[78] as List?)?.cast<NameIdPair>(),
       seasonName: fields[79] as String?,
       mediaStreams: (fields[80] as List?)?.cast<MediaStream>(),
-      partCount: fields[81] as int?,
+      partCount: (fields[81] as num?)?.toInt(),
       imageTags: (fields[82] as Map?)?.cast<dynamic, String>(),
       backdropImageTags: (fields[83] as List?)?.cast<String>(),
       parentLogoImageTag: fields[84] as String?,
@@ -1396,24 +1396,24 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       endDate: fields[96] as String?,
       lockedFields: (fields[97] as List?)?.cast<String>(),
       lockData: fields[98] as bool?,
-      width: fields[99] as int?,
-      height: fields[100] as int?,
+      width: (fields[99] as num?)?.toInt(),
+      height: (fields[100] as num?)?.toInt(),
       cameraMake: fields[101] as String?,
       cameraModel: fields[102] as String?,
       software: fields[103] as String?,
-      exposureTime: fields[104] as double?,
-      focalLength: fields[105] as double?,
+      exposureTime: (fields[104] as num?)?.toDouble(),
+      focalLength: (fields[105] as num?)?.toDouble(),
       imageOrientation: fields[106] as String?,
-      aperture: fields[107] as double?,
-      shutterSpeed: fields[108] as double?,
-      latitude: fields[109] as double?,
-      longitude: fields[110] as double?,
-      altitude: fields[111] as double?,
-      isoSpeedRating: fields[112] as int?,
+      aperture: (fields[107] as num?)?.toDouble(),
+      shutterSpeed: (fields[108] as num?)?.toDouble(),
+      latitude: (fields[109] as num?)?.toDouble(),
+      longitude: (fields[110] as num?)?.toDouble(),
+      altitude: (fields[111] as num?)?.toDouble(),
+      isoSpeedRating: (fields[112] as num?)?.toInt(),
       seriesTimerId: fields[113] as String?,
       channelPrimaryImageTag: fields[114] as String?,
       startDate: fields[115] as String?,
-      completionPercentage: fields[116] as double?,
+      completionPercentage: (fields[116] as num?)?.toDouble(),
       isRepeat: fields[117] as bool?,
       episodeTitle: fields[118] as String?,
       isMovie: fields[119] as bool?,
@@ -1425,30 +1425,30 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       isPremiere: fields[125] as bool?,
       timerId: fields[126] as String?,
       currentProgram: fields[127] as dynamic,
-      movieCount: fields[128] as int?,
-      seriesCount: fields[129] as int?,
-      albumCount: fields[130] as int?,
-      songCount: fields[131] as int?,
-      musicVideoCount: fields[132] as int?,
+      movieCount: (fields[128] as num?)?.toInt(),
+      seriesCount: (fields[129] as num?)?.toInt(),
+      albumCount: (fields[130] as num?)?.toInt(),
+      songCount: (fields[131] as num?)?.toInt(),
+      musicVideoCount: (fields[132] as num?)?.toInt(),
       sourceType: fields[133] as String?,
       dateLastMediaAdded: fields[134] as String?,
       enableMediaSourceDisplay: fields[135] as bool?,
-      cumulativeRunTimeTicks: fields[136] as int?,
+      cumulativeRunTimeTicks: (fields[136] as num?)?.toInt(),
       isPlaceHolder: fields[137] as bool?,
       isHD: fields[138] as bool?,
       videoType: fields[139] as String?,
-      mediaSourceCount: fields[140] as int?,
+      mediaSourceCount: (fields[140] as num?)?.toInt(),
       screenshotImageTags: (fields[141] as List?)?.cast<String>(),
       imageBlurHashes: fields[142] as ImageBlurHashes?,
       isoType: fields[143] as String?,
-      trailerCount: fields[144] as int?,
-      programCount: fields[145] as int?,
-      episodeCount: fields[146] as int?,
-      artistCount: fields[147] as int?,
+      trailerCount: (fields[144] as num?)?.toInt(),
+      programCount: (fields[145] as num?)?.toInt(),
+      episodeCount: (fields[146] as num?)?.toInt(),
+      artistCount: (fields[147] as num?)?.toInt(),
       programId: fields[148] as String?,
       channelType: fields[149] as String?,
       audio: fields[150] as String?,
-      normalizationGain: fields[151] as double?,
+      normalizationGain: (fields[151] as num?)?.toDouble(),
       hasLyrics: fields[152] as bool?,
     );
   }
@@ -1825,16 +1825,16 @@ class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
     };
     return MediaSourceInfo(
       protocol: fields[0] as String,
-      id: fields[1] as String?,
+      id: fields[1] as BaseItemId?,
       path: fields[2] as String?,
       encoderPath: fields[3] as String?,
       encoderProtocol: fields[4] as String?,
       type: fields[5] as String,
       container: fields[6] as String?,
-      size: fields[7] as int?,
+      size: (fields[7] as num?)?.toInt(),
       name: fields[8] as String?,
       isRemote: fields[9] as bool,
-      runTimeTicks: fields[10] as int?,
+      runTimeTicks: (fields[10] as num?)?.toInt(),
       supportsTranscoding: fields[11] as bool,
       supportsDirectStream: fields[12] as bool,
       supportsDirectPlay: fields[13] as bool,
@@ -1843,22 +1843,22 @@ class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
       openToken: fields[16] as String?,
       requiresClosing: fields[17] as bool,
       liveStreamId: fields[18] as String?,
-      bufferMs: fields[19] as int?,
+      bufferMs: (fields[19] as num?)?.toInt(),
       requiresLooping: fields[20] as bool,
       supportsProbing: fields[21] as bool,
       video3DFormat: fields[22] as String?,
       mediaStreams: (fields[23] as List).cast<MediaStream>(),
       formats: (fields[24] as List?)?.cast<String>(),
-      bitrate: fields[25] as int?,
+      bitrate: (fields[25] as num?)?.toInt(),
       timestamp: fields[26] as String?,
       requiredHttpHeaders: (fields[27] as Map?)?.cast<dynamic, String>(),
       transcodingUrl: fields[28] as String?,
       transcodingSubProtocol: fields[29] as String?,
       transcodingContainer: fields[30] as String?,
-      analyzeDurationMs: fields[31] as int?,
+      analyzeDurationMs: (fields[31] as num?)?.toInt(),
       readAtNativeFramerate: fields[32] as bool,
-      defaultAudioStreamIndex: fields[33] as int?,
-      defaultSubtitleStreamIndex: fields[34] as int?,
+      defaultAudioStreamIndex: (fields[33] as num?)?.toInt(),
+      defaultSubtitleStreamIndex: (fields[34] as num?)?.toInt(),
       etag: fields[35] as String?,
       ignoreDts: fields[36] as bool,
       ignoreIndex: fields[37] as bool,
@@ -1997,23 +1997,23 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
       isInterlaced: fields[13] as bool,
       isAVC: fields[14] as bool?,
       channelLayout: fields[15] as String?,
-      bitRate: fields[16] as int?,
-      bitDepth: fields[17] as int?,
-      refFrames: fields[18] as int?,
-      packetLength: fields[19] as int?,
-      channels: fields[20] as int?,
-      sampleRate: fields[21] as int?,
+      bitRate: (fields[16] as num?)?.toInt(),
+      bitDepth: (fields[17] as num?)?.toInt(),
+      refFrames: (fields[18] as num?)?.toInt(),
+      packetLength: (fields[19] as num?)?.toInt(),
+      channels: (fields[20] as num?)?.toInt(),
+      sampleRate: (fields[21] as num?)?.toInt(),
       isDefault: fields[22] as bool,
       isForced: fields[23] as bool,
-      height: fields[24] as int?,
-      width: fields[25] as int?,
-      averageFrameRate: fields[26] as double?,
-      realFrameRate: fields[27] as double?,
+      height: (fields[24] as num?)?.toInt(),
+      width: (fields[25] as num?)?.toInt(),
+      averageFrameRate: (fields[26] as num?)?.toDouble(),
+      realFrameRate: (fields[27] as num?)?.toDouble(),
       profile: fields[28] as String?,
       type: fields[29] as String,
       aspectRatio: fields[30] as String?,
-      index: fields[31] as int,
-      score: fields[32] as int?,
+      index: (fields[31] as num).toInt(),
+      score: (fields[32] as num?)?.toInt(),
       isExternal: fields[33] as bool,
       deliveryMethod: fields[34] as String?,
       deliveryUrl: fields[35] as String?,
@@ -2022,7 +2022,7 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
       supportsExternalStream: fields[38] as bool,
       path: fields[39] as String?,
       pixelFormat: fields[40] as String?,
-      level: fields[41] as double?,
+      level: (fields[41] as num?)?.toDouble(),
       isAnamorphic: fields[42] as bool?,
     )
       ..colorRange = fields[43] as String?
@@ -2212,7 +2212,7 @@ class NameLongIdPairAdapter extends TypeAdapter<NameLongIdPair> {
     };
     return NameLongIdPair(
       name: fields[0] as String?,
-      id: fields[1] as String,
+      id: fields[1] as BaseItemId,
     );
   }
 
@@ -2248,11 +2248,11 @@ class UserItemDataDtoAdapter extends TypeAdapter<UserItemDataDto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserItemDataDto(
-      rating: fields[0] as double?,
-      playedPercentage: fields[1] as double?,
-      unplayedItemCount: fields[2] as int?,
-      playbackPositionTicks: fields[3] as int,
-      playCount: fields[4] as int,
+      rating: (fields[0] as num?)?.toDouble(),
+      playedPercentage: (fields[1] as num?)?.toDouble(),
+      unplayedItemCount: (fields[2] as num?)?.toInt(),
+      playbackPositionTicks: (fields[3] as num).toInt(),
+      playCount: (fields[4] as num).toInt(),
       isFavorite: fields[5] as bool,
       likes: fields[6] as bool?,
       lastPlayedDate: fields[7] as String?,
@@ -2313,7 +2313,7 @@ class NameIdPairAdapter extends TypeAdapter<NameIdPair> {
     };
     return NameIdPair(
       name: fields[0] as String?,
-      id: fields[1] as String,
+      id: fields[1] as BaseItemId,
     );
   }
 
@@ -2422,7 +2422,7 @@ class MediaAttachmentAdapter extends TypeAdapter<MediaAttachment> {
       codec: fields[0] as String?,
       codecTag: fields[1] as String?,
       comment: fields[2] as String?,
-      index: fields[3] as int,
+      index: (fields[3] as num).toInt(),
       fileName: fields[4] as String?,
       mimeType: fields[5] as String?,
       deliveryUrl: fields[6] as String?,
@@ -2471,15 +2471,15 @@ class BaseItemAdapter extends TypeAdapter<BaseItem> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BaseItem(
-      size: fields[0] as int?,
+      size: (fields[0] as num?)?.toInt(),
       container: fields[1] as String?,
       dateLastSaved: fields[2] as String?,
       remoteTrailers: (fields[3] as List?)?.cast<MediaUrl>(),
       isHD: fields[4] as bool,
       isShortcut: fields[5] as bool,
       shortcutPath: fields[6] as String?,
-      width: fields[7] as int?,
-      height: fields[8] as int?,
+      width: (fields[7] as num?)?.toInt(),
+      height: (fields[8] as num?)?.toInt(),
       extraIds: (fields[9] as List?)?.cast<String>(),
       supportsExternalTransfer: fields[10] as bool,
     );
@@ -2762,9 +2762,9 @@ class LyricMetadataAdapter extends TypeAdapter<LyricMetadata> {
       album: fields[1] as String?,
       title: fields[2] as String?,
       author: fields[3] as String?,
-      length: fields[4] as int?,
+      length: (fields[4] as num?)?.toInt(),
       by: fields[5] as String?,
-      offset: fields[6] as int?,
+      offset: (fields[6] as num?)?.toInt(),
       creator: fields[7] as String?,
       version: fields[8] as String?,
       isSynced: fields[9] as bool?,
@@ -2820,7 +2820,7 @@ class LyricLineAdapter extends TypeAdapter<LyricLine> {
     };
     return LyricLine(
       text: fields[0] as String?,
-      start: fields[1] as int?,
+      start: (fields[1] as num?)?.toInt(),
     );
   }
 
@@ -2929,49 +2929,34 @@ class SortByAdapter extends TypeAdapter<SortBy> {
     switch (obj) {
       case SortBy.album:
         writer.writeByte(0);
-        break;
       case SortBy.albumArtist:
         writer.writeByte(1);
-        break;
       case SortBy.artist:
         writer.writeByte(2);
-        break;
       case SortBy.budget:
         writer.writeByte(3);
-        break;
       case SortBy.communityRating:
         writer.writeByte(4);
-        break;
       case SortBy.criticRating:
         writer.writeByte(5);
-        break;
       case SortBy.dateCreated:
         writer.writeByte(6);
-        break;
       case SortBy.datePlayed:
         writer.writeByte(7);
-        break;
       case SortBy.playCount:
         writer.writeByte(8);
-        break;
       case SortBy.premiereDate:
         writer.writeByte(9);
-        break;
       case SortBy.productionYear:
         writer.writeByte(10);
-        break;
       case SortBy.sortName:
         writer.writeByte(11);
-        break;
       case SortBy.random:
         writer.writeByte(12);
-        break;
       case SortBy.revenue:
         writer.writeByte(13);
-        break;
       case SortBy.runtime:
         writer.writeByte(14);
-        break;
     }
   }
 
@@ -3007,10 +2992,8 @@ class SortOrderAdapter extends TypeAdapter<SortOrder> {
     switch (obj) {
       case SortOrder.ascending:
         writer.writeByte(0);
-        break;
       case SortOrder.descending:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -3787,7 +3770,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       name: json['Name'] as String?,
       originalTitle: json['OriginalTitle'] as String?,
       serverId: json['ServerId'] as String?,
-      id: json['Id'] as String,
+      id: const BaseItemIdConverter().fromJson(json['Id'] as String),
       etag: json['Etag'] as String?,
       playlistItemId: json['PlaylistItemId'] as String?,
       dateCreated: json['DateCreated'] as String?,
@@ -3848,7 +3831,8 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
         (k, e) => MapEntry(k as String, e),
       ),
       isFolder: json['IsFolder'] as bool?,
-      parentId: json['ParentId'] as String?,
+      parentId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['ParentId'], const BaseItemIdConverter().fromJson),
       type: json['Type'] as String?,
       people: (json['People'] as List<dynamic>?)
           ?.map((e) =>
@@ -3895,7 +3879,8 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       album: json['Album'] as String?,
       collectionType: json['CollectionType'] as String?,
       displayOrder: json['DisplayOrder'] as String?,
-      albumId: json['AlbumId'] as String?,
+      albumId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['AlbumId'], const BaseItemIdConverter().fromJson),
       albumPrimaryImageTag: json['AlbumPrimaryImageTag'] as String?,
       seriesPrimaryImageTag: json['SeriesPrimaryImageTag'] as String?,
       albumArtist: json['AlbumArtist'] as String?,
@@ -3995,179 +3980,233 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
       hasLyrics: json['HasLyrics'] as bool?,
     )..finampOffline = json['FinampOffline'] as bool?;
 
-Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) {
-  final val = <String, dynamic>{};
+Map<String, dynamic> _$BaseItemDtoToJson(BaseItemDto instance) =>
+    <String, dynamic>{
+      if (instance.name case final value?) 'Name': value,
+      if (instance.originalTitle case final value?) 'OriginalTitle': value,
+      if (instance.serverId case final value?) 'ServerId': value,
+      'Id': const BaseItemIdConverter().toJson(instance.id),
+      if (instance.etag case final value?) 'Etag': value,
+      if (instance.playlistItemId case final value?) 'PlaylistItemId': value,
+      if (instance.dateCreated case final value?) 'DateCreated': value,
+      if (instance.extraType case final value?) 'ExtraType': value,
+      if (instance.airsBeforeSeasonNumber case final value?)
+        'AirsBeforeSeasonNumber': value,
+      if (instance.airsAfterSeasonNumber case final value?)
+        'AirsAfterSeasonNumber': value,
+      if (instance.airsBeforeEpisodeNumber case final value?)
+        'AirsBeforeEpisodeNumber': value,
+      if (instance.canDelete case final value?) 'CanDelete': value,
+      if (instance.canDownload case final value?) 'CanDownload': value,
+      if (instance.hasSubtitles case final value?) 'HasSubtitles': value,
+      if (instance.preferredMetadataLanguage case final value?)
+        'PreferredMetadataLanguage': value,
+      if (instance.preferredMetadataCountryCode case final value?)
+        'PreferredMetadataCountryCode': value,
+      if (instance.supportsSync case final value?) 'SupportsSync': value,
+      if (instance.container case final value?) 'Container': value,
+      if (instance.sortName case final value?) 'SortName': value,
+      if (instance.forcedSortName case final value?) 'ForcedSortName': value,
+      if (instance.video3DFormat case final value?) 'Video3DFormat': value,
+      if (instance.premiereDate case final value?) 'PremiereDate': value,
+      if (instance.externalUrls?.map((e) => e.toJson()).toList()
+          case final value?)
+        'ExternalUrls': value,
+      if (instance.mediaSources?.map((e) => e.toJson()).toList()
+          case final value?)
+        'MediaSources': value,
+      if (instance.criticRating case final value?) 'CriticRating': value,
+      if (instance.productionLocations case final value?)
+        'ProductionLocations': value,
+      if (instance.path case final value?) 'Path': value,
+      if (instance.officialRating case final value?) 'OfficialRating': value,
+      if (instance.customRating case final value?) 'CustomRating': value,
+      if (instance.channelId case final value?) 'ChannelId': value,
+      if (instance.channelName case final value?) 'ChannelName': value,
+      if (instance.overview case final value?) 'Overview': value,
+      if (instance.taglines case final value?) 'Taglines': value,
+      if (instance.genres case final value?) 'Genres': value,
+      if (instance.communityRating case final value?) 'CommunityRating': value,
+      if (instance.runTimeTicks case final value?) 'RunTimeTicks': value,
+      if (instance.playAccess case final value?) 'PlayAccess': value,
+      if (instance.aspectRatio case final value?) 'AspectRatio': value,
+      if (instance.productionYear case final value?) 'ProductionYear': value,
+      if (instance.number case final value?) 'Number': value,
+      if (instance.channelNumber case final value?) 'ChannelNumber': value,
+      if (instance.indexNumber case final value?) 'IndexNumber': value,
+      if (instance.indexNumberEnd case final value?) 'IndexNumberEnd': value,
+      if (instance.parentIndexNumber case final value?)
+        'ParentIndexNumber': value,
+      if (instance.remoteTrailers?.map((e) => e.toJson()).toList()
+          case final value?)
+        'RemoteTrailers': value,
+      if (instance.providerIds case final value?) 'ProviderIds': value,
+      if (instance.isFolder case final value?) 'IsFolder': value,
+      if (_$JsonConverterToJson<String, BaseItemId>(
+              instance.parentId, const BaseItemIdConverter().toJson)
+          case final value?)
+        'ParentId': value,
+      if (instance.type case final value?) 'Type': value,
+      if (instance.people?.map((e) => e.toJson()).toList() case final value?)
+        'People': value,
+      if (instance.studios?.map((e) => e.toJson()).toList() case final value?)
+        'Studios': value,
+      if (instance.genreItems?.map((e) => e.toJson()).toList()
+          case final value?)
+        'GenreItems': value,
+      if (instance.parentLogoItemId case final value?)
+        'ParentLogoItemId': value,
+      if (instance.parentBackdropItemId case final value?)
+        'ParentBackdropItemId': value,
+      if (instance.parentBackdropImageTags case final value?)
+        'ParentBackdropImageTags': value,
+      if (instance.localTrailerCount case final value?)
+        'LocalTrailerCount': value,
+      if (instance.userData?.toJson() case final value?) 'UserData': value,
+      if (instance.recursiveItemCount case final value?)
+        'RecursiveItemCount': value,
+      if (instance.childCount case final value?) 'ChildCount': value,
+      if (instance.seriesName case final value?) 'SeriesName': value,
+      if (instance.seriesId case final value?) 'SeriesId': value,
+      if (instance.seasonId case final value?) 'SeasonId': value,
+      if (instance.specialFeatureCount case final value?)
+        'SpecialFeatureCount': value,
+      if (instance.displayPreferencesId case final value?)
+        'DisplayPreferencesId': value,
+      if (instance.status case final value?) 'Status': value,
+      if (instance.airTime case final value?) 'AirTime': value,
+      if (instance.airDays case final value?) 'AirDays': value,
+      if (instance.tags case final value?) 'Tags': value,
+      if (instance.primaryImageAspectRatio case final value?)
+        'PrimaryImageAspectRatio': value,
+      if (instance.artists case final value?) 'Artists': value,
+      if (instance.artistItems?.map((e) => e.toJson()).toList()
+          case final value?)
+        'ArtistItems': value,
+      if (instance.album case final value?) 'Album': value,
+      if (instance.collectionType case final value?) 'CollectionType': value,
+      if (instance.displayOrder case final value?) 'DisplayOrder': value,
+      if (_$JsonConverterToJson<String, BaseItemId>(
+              instance.albumId, const BaseItemIdConverter().toJson)
+          case final value?)
+        'AlbumId': value,
+      if (instance.albumPrimaryImageTag case final value?)
+        'AlbumPrimaryImageTag': value,
+      if (instance.seriesPrimaryImageTag case final value?)
+        'SeriesPrimaryImageTag': value,
+      if (instance.albumArtist case final value?) 'AlbumArtist': value,
+      if (instance.albumArtists?.map((e) => e.toJson()).toList()
+          case final value?)
+        'AlbumArtists': value,
+      if (instance.seasonName case final value?) 'SeasonName': value,
+      if (instance.mediaStreams?.map((e) => e.toJson()).toList()
+          case final value?)
+        'MediaStreams': value,
+      if (instance.partCount case final value?) 'PartCount': value,
+      if (instance.imageTags case final value?) 'ImageTags': value,
+      if (instance.backdropImageTags case final value?)
+        'BackdropImageTags': value,
+      if (instance.parentLogoImageTag case final value?)
+        'ParentLogoImageTag': value,
+      if (instance.parentArtItemId case final value?) 'ParentArtItemId': value,
+      if (instance.parentArtImageTag case final value?)
+        'ParentArtImageTag': value,
+      if (instance.seriesThumbImageTag case final value?)
+        'SeriesThumbImageTag': value,
+      if (instance.seriesStudio case final value?) 'SeriesStudio': value,
+      if (instance.parentThumbItemId case final value?)
+        'ParentThumbItemId': value,
+      if (instance.parentThumbImageTag case final value?)
+        'ParentThumbImageTag': value,
+      if (instance.parentPrimaryImageItemId case final value?)
+        'ParentPrimaryImageItemId': value,
+      if (instance.parentPrimaryImageTag case final value?)
+        'ParentPrimaryImageTag': value,
+      if (instance.chapters?.map((e) => e.toJson()).toList() case final value?)
+        'Chapters': value,
+      if (instance.locationType case final value?) 'LocationType': value,
+      if (instance.mediaType case final value?) 'MediaType': value,
+      if (instance.endDate case final value?) 'EndDate': value,
+      if (instance.lockedFields case final value?) 'LockedFields': value,
+      if (instance.lockData case final value?) 'LockData': value,
+      if (instance.width case final value?) 'Width': value,
+      if (instance.height case final value?) 'Height': value,
+      if (instance.cameraMake case final value?) 'CameraMake': value,
+      if (instance.cameraModel case final value?) 'CameraModel': value,
+      if (instance.software case final value?) 'Software': value,
+      if (instance.exposureTime case final value?) 'ExposureTime': value,
+      if (instance.focalLength case final value?) 'FocalLength': value,
+      if (instance.imageOrientation case final value?)
+        'ImageOrientation': value,
+      if (instance.aperture case final value?) 'Aperture': value,
+      if (instance.shutterSpeed case final value?) 'ShutterSpeed': value,
+      if (instance.latitude case final value?) 'Latitude': value,
+      if (instance.longitude case final value?) 'Longitude': value,
+      if (instance.altitude case final value?) 'Altitude': value,
+      if (instance.isoSpeedRating case final value?) 'IsoSpeedRating': value,
+      if (instance.seriesTimerId case final value?) 'SeriesTimerId': value,
+      if (instance.channelPrimaryImageTag case final value?)
+        'ChannelPrimaryImageTag': value,
+      if (instance.startDate case final value?) 'StartDate': value,
+      if (instance.completionPercentage case final value?)
+        'CompletionPercentage': value,
+      if (instance.isRepeat case final value?) 'IsRepeat': value,
+      if (instance.episodeTitle case final value?) 'EpisodeTitle': value,
+      if (instance.isMovie case final value?) 'IsMovie': value,
+      if (instance.isSports case final value?) 'IsSports': value,
+      if (instance.isSeries case final value?) 'IsSeries': value,
+      if (instance.isLive case final value?) 'IsLive': value,
+      if (instance.isNews case final value?) 'IsNews': value,
+      if (instance.isKids case final value?) 'IsKids': value,
+      if (instance.isPremiere case final value?) 'IsPremiere': value,
+      if (instance.timerId case final value?) 'TimerId': value,
+      if (instance.currentProgram case final value?) 'CurrentProgram': value,
+      if (instance.movieCount case final value?) 'MovieCount': value,
+      if (instance.seriesCount case final value?) 'SeriesCount': value,
+      if (instance.albumCount case final value?) 'AlbumCount': value,
+      if (instance.songCount case final value?) 'SongCount': value,
+      if (instance.musicVideoCount case final value?) 'MusicVideoCount': value,
+      if (instance.sourceType case final value?) 'SourceType': value,
+      if (instance.dateLastMediaAdded case final value?)
+        'DateLastMediaAdded': value,
+      if (instance.enableMediaSourceDisplay case final value?)
+        'EnableMediaSourceDisplay': value,
+      if (instance.cumulativeRunTimeTicks case final value?)
+        'CumulativeRunTimeTicks': value,
+      if (instance.isPlaceHolder case final value?) 'IsPlaceHolder': value,
+      if (instance.isHD case final value?) 'IsHD': value,
+      if (instance.videoType case final value?) 'VideoType': value,
+      if (instance.mediaSourceCount case final value?)
+        'MediaSourceCount': value,
+      if (instance.screenshotImageTags case final value?)
+        'ScreenshotImageTags': value,
+      if (instance.imageBlurHashes?.toJson() case final value?)
+        'ImageBlurHashes': value,
+      if (instance.isoType case final value?) 'IsoType': value,
+      if (instance.trailerCount case final value?) 'TrailerCount': value,
+      if (instance.programCount case final value?) 'ProgramCount': value,
+      if (instance.episodeCount case final value?) 'EpisodeCount': value,
+      if (instance.artistCount case final value?) 'ArtistCount': value,
+      if (instance.programId case final value?) 'ProgramId': value,
+      if (instance.channelType case final value?) 'ChannelType': value,
+      if (instance.audio case final value?) 'Audio': value,
+      if (instance.normalizationGain case final value?)
+        'NormalizationGain': value,
+      if (instance.hasLyrics case final value?) 'HasLyrics': value,
+      if (instance.finampOffline case final value?) 'FinampOffline': value,
+    };
 
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
 
-  writeNotNull('Name', instance.name);
-  writeNotNull('OriginalTitle', instance.originalTitle);
-  writeNotNull('ServerId', instance.serverId);
-  val['Id'] = instance.id;
-  writeNotNull('Etag', instance.etag);
-  writeNotNull('PlaylistItemId', instance.playlistItemId);
-  writeNotNull('DateCreated', instance.dateCreated);
-  writeNotNull('ExtraType', instance.extraType);
-  writeNotNull('AirsBeforeSeasonNumber', instance.airsBeforeSeasonNumber);
-  writeNotNull('AirsAfterSeasonNumber', instance.airsAfterSeasonNumber);
-  writeNotNull('AirsBeforeEpisodeNumber', instance.airsBeforeEpisodeNumber);
-  writeNotNull('CanDelete', instance.canDelete);
-  writeNotNull('CanDownload', instance.canDownload);
-  writeNotNull('HasSubtitles', instance.hasSubtitles);
-  writeNotNull('PreferredMetadataLanguage', instance.preferredMetadataLanguage);
-  writeNotNull(
-      'PreferredMetadataCountryCode', instance.preferredMetadataCountryCode);
-  writeNotNull('SupportsSync', instance.supportsSync);
-  writeNotNull('Container', instance.container);
-  writeNotNull('SortName', instance.sortName);
-  writeNotNull('ForcedSortName', instance.forcedSortName);
-  writeNotNull('Video3DFormat', instance.video3DFormat);
-  writeNotNull('PremiereDate', instance.premiereDate);
-  writeNotNull(
-      'ExternalUrls', instance.externalUrls?.map((e) => e.toJson()).toList());
-  writeNotNull(
-      'MediaSources', instance.mediaSources?.map((e) => e.toJson()).toList());
-  writeNotNull('CriticRating', instance.criticRating);
-  writeNotNull('ProductionLocations', instance.productionLocations);
-  writeNotNull('Path', instance.path);
-  writeNotNull('OfficialRating', instance.officialRating);
-  writeNotNull('CustomRating', instance.customRating);
-  writeNotNull('ChannelId', instance.channelId);
-  writeNotNull('ChannelName', instance.channelName);
-  writeNotNull('Overview', instance.overview);
-  writeNotNull('Taglines', instance.taglines);
-  writeNotNull('Genres', instance.genres);
-  writeNotNull('CommunityRating', instance.communityRating);
-  writeNotNull('RunTimeTicks', instance.runTimeTicks);
-  writeNotNull('PlayAccess', instance.playAccess);
-  writeNotNull('AspectRatio', instance.aspectRatio);
-  writeNotNull('ProductionYear', instance.productionYear);
-  writeNotNull('Number', instance.number);
-  writeNotNull('ChannelNumber', instance.channelNumber);
-  writeNotNull('IndexNumber', instance.indexNumber);
-  writeNotNull('IndexNumberEnd', instance.indexNumberEnd);
-  writeNotNull('ParentIndexNumber', instance.parentIndexNumber);
-  writeNotNull('RemoteTrailers',
-      instance.remoteTrailers?.map((e) => e.toJson()).toList());
-  writeNotNull('ProviderIds', instance.providerIds);
-  writeNotNull('IsFolder', instance.isFolder);
-  writeNotNull('ParentId', instance.parentId);
-  writeNotNull('Type', instance.type);
-  writeNotNull('People', instance.people?.map((e) => e.toJson()).toList());
-  writeNotNull('Studios', instance.studios?.map((e) => e.toJson()).toList());
-  writeNotNull(
-      'GenreItems', instance.genreItems?.map((e) => e.toJson()).toList());
-  writeNotNull('ParentLogoItemId', instance.parentLogoItemId);
-  writeNotNull('ParentBackdropItemId', instance.parentBackdropItemId);
-  writeNotNull('ParentBackdropImageTags', instance.parentBackdropImageTags);
-  writeNotNull('LocalTrailerCount', instance.localTrailerCount);
-  writeNotNull('UserData', instance.userData?.toJson());
-  writeNotNull('RecursiveItemCount', instance.recursiveItemCount);
-  writeNotNull('ChildCount', instance.childCount);
-  writeNotNull('SeriesName', instance.seriesName);
-  writeNotNull('SeriesId', instance.seriesId);
-  writeNotNull('SeasonId', instance.seasonId);
-  writeNotNull('SpecialFeatureCount', instance.specialFeatureCount);
-  writeNotNull('DisplayPreferencesId', instance.displayPreferencesId);
-  writeNotNull('Status', instance.status);
-  writeNotNull('AirTime', instance.airTime);
-  writeNotNull('AirDays', instance.airDays);
-  writeNotNull('Tags', instance.tags);
-  writeNotNull('PrimaryImageAspectRatio', instance.primaryImageAspectRatio);
-  writeNotNull('Artists', instance.artists);
-  writeNotNull(
-      'ArtistItems', instance.artistItems?.map((e) => e.toJson()).toList());
-  writeNotNull('Album', instance.album);
-  writeNotNull('CollectionType', instance.collectionType);
-  writeNotNull('DisplayOrder', instance.displayOrder);
-  writeNotNull('AlbumId', instance.albumId);
-  writeNotNull('AlbumPrimaryImageTag', instance.albumPrimaryImageTag);
-  writeNotNull('SeriesPrimaryImageTag', instance.seriesPrimaryImageTag);
-  writeNotNull('AlbumArtist', instance.albumArtist);
-  writeNotNull(
-      'AlbumArtists', instance.albumArtists?.map((e) => e.toJson()).toList());
-  writeNotNull('SeasonName', instance.seasonName);
-  writeNotNull(
-      'MediaStreams', instance.mediaStreams?.map((e) => e.toJson()).toList());
-  writeNotNull('PartCount', instance.partCount);
-  writeNotNull('ImageTags', instance.imageTags);
-  writeNotNull('BackdropImageTags', instance.backdropImageTags);
-  writeNotNull('ParentLogoImageTag', instance.parentLogoImageTag);
-  writeNotNull('ParentArtItemId', instance.parentArtItemId);
-  writeNotNull('ParentArtImageTag', instance.parentArtImageTag);
-  writeNotNull('SeriesThumbImageTag', instance.seriesThumbImageTag);
-  writeNotNull('SeriesStudio', instance.seriesStudio);
-  writeNotNull('ParentThumbItemId', instance.parentThumbItemId);
-  writeNotNull('ParentThumbImageTag', instance.parentThumbImageTag);
-  writeNotNull('ParentPrimaryImageItemId', instance.parentPrimaryImageItemId);
-  writeNotNull('ParentPrimaryImageTag', instance.parentPrimaryImageTag);
-  writeNotNull('Chapters', instance.chapters?.map((e) => e.toJson()).toList());
-  writeNotNull('LocationType', instance.locationType);
-  writeNotNull('MediaType', instance.mediaType);
-  writeNotNull('EndDate', instance.endDate);
-  writeNotNull('LockedFields', instance.lockedFields);
-  writeNotNull('LockData', instance.lockData);
-  writeNotNull('Width', instance.width);
-  writeNotNull('Height', instance.height);
-  writeNotNull('CameraMake', instance.cameraMake);
-  writeNotNull('CameraModel', instance.cameraModel);
-  writeNotNull('Software', instance.software);
-  writeNotNull('ExposureTime', instance.exposureTime);
-  writeNotNull('FocalLength', instance.focalLength);
-  writeNotNull('ImageOrientation', instance.imageOrientation);
-  writeNotNull('Aperture', instance.aperture);
-  writeNotNull('ShutterSpeed', instance.shutterSpeed);
-  writeNotNull('Latitude', instance.latitude);
-  writeNotNull('Longitude', instance.longitude);
-  writeNotNull('Altitude', instance.altitude);
-  writeNotNull('IsoSpeedRating', instance.isoSpeedRating);
-  writeNotNull('SeriesTimerId', instance.seriesTimerId);
-  writeNotNull('ChannelPrimaryImageTag', instance.channelPrimaryImageTag);
-  writeNotNull('StartDate', instance.startDate);
-  writeNotNull('CompletionPercentage', instance.completionPercentage);
-  writeNotNull('IsRepeat', instance.isRepeat);
-  writeNotNull('EpisodeTitle', instance.episodeTitle);
-  writeNotNull('IsMovie', instance.isMovie);
-  writeNotNull('IsSports', instance.isSports);
-  writeNotNull('IsSeries', instance.isSeries);
-  writeNotNull('IsLive', instance.isLive);
-  writeNotNull('IsNews', instance.isNews);
-  writeNotNull('IsKids', instance.isKids);
-  writeNotNull('IsPremiere', instance.isPremiere);
-  writeNotNull('TimerId', instance.timerId);
-  writeNotNull('CurrentProgram', instance.currentProgram);
-  writeNotNull('MovieCount', instance.movieCount);
-  writeNotNull('SeriesCount', instance.seriesCount);
-  writeNotNull('AlbumCount', instance.albumCount);
-  writeNotNull('SongCount', instance.songCount);
-  writeNotNull('MusicVideoCount', instance.musicVideoCount);
-  writeNotNull('SourceType', instance.sourceType);
-  writeNotNull('DateLastMediaAdded', instance.dateLastMediaAdded);
-  writeNotNull('EnableMediaSourceDisplay', instance.enableMediaSourceDisplay);
-  writeNotNull('CumulativeRunTimeTicks', instance.cumulativeRunTimeTicks);
-  writeNotNull('IsPlaceHolder', instance.isPlaceHolder);
-  writeNotNull('IsHD', instance.isHD);
-  writeNotNull('VideoType', instance.videoType);
-  writeNotNull('MediaSourceCount', instance.mediaSourceCount);
-  writeNotNull('ScreenshotImageTags', instance.screenshotImageTags);
-  writeNotNull('ImageBlurHashes', instance.imageBlurHashes?.toJson());
-  writeNotNull('IsoType', instance.isoType);
-  writeNotNull('TrailerCount', instance.trailerCount);
-  writeNotNull('ProgramCount', instance.programCount);
-  writeNotNull('EpisodeCount', instance.episodeCount);
-  writeNotNull('ArtistCount', instance.artistCount);
-  writeNotNull('ProgramId', instance.programId);
-  writeNotNull('ChannelType', instance.channelType);
-  writeNotNull('Audio', instance.audio);
-  writeNotNull('NormalizationGain', instance.normalizationGain);
-  writeNotNull('HasLyrics', instance.hasLyrics);
-  writeNotNull('FinampOffline', instance.finampOffline);
-  return val;
-}
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 ExternalUrl _$ExternalUrlFromJson(Map json) => ExternalUrl(
       name: json['Name'] as String?,
@@ -4182,7 +4221,8 @@ Map<String, dynamic> _$ExternalUrlToJson(ExternalUrl instance) =>
 
 MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
       protocol: json['Protocol'] as String,
-      id: json['Id'] as String?,
+      id: _$JsonConverterFromJson<String, BaseItemId>(
+          json['Id'], const BaseItemIdConverter().fromJson),
       path: json['Path'] as String?,
       encoderPath: json['EncoderPath'] as String?,
       encoderProtocol: json['EncoderProtocol'] as String?,
@@ -4235,62 +4275,62 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
           .toList(),
     );
 
-Map<String, dynamic> _$MediaSourceInfoToJson(MediaSourceInfo instance) {
-  final val = <String, dynamic>{
-    'Protocol': instance.protocol,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Id', instance.id);
-  writeNotNull('Path', instance.path);
-  writeNotNull('EncoderPath', instance.encoderPath);
-  writeNotNull('EncoderProtocol', instance.encoderProtocol);
-  val['Type'] = instance.type;
-  writeNotNull('Container', instance.container);
-  writeNotNull('Size', instance.size);
-  writeNotNull('Name', instance.name);
-  val['IsRemote'] = instance.isRemote;
-  writeNotNull('RunTimeTicks', instance.runTimeTicks);
-  val['SupportsTranscoding'] = instance.supportsTranscoding;
-  val['SupportsDirectStream'] = instance.supportsDirectStream;
-  val['SupportsDirectPlay'] = instance.supportsDirectPlay;
-  val['IsInfiniteStream'] = instance.isInfiniteStream;
-  val['RequiresOpening'] = instance.requiresOpening;
-  writeNotNull('OpenToken', instance.openToken);
-  val['RequiresClosing'] = instance.requiresClosing;
-  writeNotNull('LiveStreamId', instance.liveStreamId);
-  writeNotNull('BufferMs', instance.bufferMs);
-  val['RequiresLooping'] = instance.requiresLooping;
-  val['SupportsProbing'] = instance.supportsProbing;
-  writeNotNull('Video3DFormat', instance.video3DFormat);
-  val['MediaStreams'] = instance.mediaStreams.map((e) => e.toJson()).toList();
-  writeNotNull('Formats', instance.formats);
-  writeNotNull('Bitrate', instance.bitrate);
-  writeNotNull('Timestamp', instance.timestamp);
-  writeNotNull('RequiredHttpHeaders', instance.requiredHttpHeaders);
-  writeNotNull('TranscodingUrl', instance.transcodingUrl);
-  writeNotNull('TranscodingSubProtocol', instance.transcodingSubProtocol);
-  writeNotNull('TranscodingContainer', instance.transcodingContainer);
-  writeNotNull('AnalyzeDurationMs', instance.analyzeDurationMs);
-  val['ReadAtNativeFramerate'] = instance.readAtNativeFramerate;
-  writeNotNull('DefaultAudioStreamIndex', instance.defaultAudioStreamIndex);
-  writeNotNull(
-      'DefaultSubtitleStreamIndex', instance.defaultSubtitleStreamIndex);
-  writeNotNull('Etag', instance.etag);
-  val['IgnoreDts'] = instance.ignoreDts;
-  val['IgnoreIndex'] = instance.ignoreIndex;
-  val['GenPtsInput'] = instance.genPtsInput;
-  writeNotNull('VideoType', instance.videoType);
-  writeNotNull('IsoType', instance.isoType);
-  writeNotNull('MediaAttachments',
-      instance.mediaAttachments?.map((e) => e.toJson()).toList());
-  return val;
-}
+Map<String, dynamic> _$MediaSourceInfoToJson(MediaSourceInfo instance) =>
+    <String, dynamic>{
+      'Protocol': instance.protocol,
+      if (_$JsonConverterToJson<String, BaseItemId>(
+              instance.id, const BaseItemIdConverter().toJson)
+          case final value?)
+        'Id': value,
+      if (instance.path case final value?) 'Path': value,
+      if (instance.encoderPath case final value?) 'EncoderPath': value,
+      if (instance.encoderProtocol case final value?) 'EncoderProtocol': value,
+      'Type': instance.type,
+      if (instance.container case final value?) 'Container': value,
+      if (instance.size case final value?) 'Size': value,
+      if (instance.name case final value?) 'Name': value,
+      'IsRemote': instance.isRemote,
+      if (instance.runTimeTicks case final value?) 'RunTimeTicks': value,
+      'SupportsTranscoding': instance.supportsTranscoding,
+      'SupportsDirectStream': instance.supportsDirectStream,
+      'SupportsDirectPlay': instance.supportsDirectPlay,
+      'IsInfiniteStream': instance.isInfiniteStream,
+      'RequiresOpening': instance.requiresOpening,
+      if (instance.openToken case final value?) 'OpenToken': value,
+      'RequiresClosing': instance.requiresClosing,
+      if (instance.liveStreamId case final value?) 'LiveStreamId': value,
+      if (instance.bufferMs case final value?) 'BufferMs': value,
+      'RequiresLooping': instance.requiresLooping,
+      'SupportsProbing': instance.supportsProbing,
+      if (instance.video3DFormat case final value?) 'Video3DFormat': value,
+      'MediaStreams': instance.mediaStreams.map((e) => e.toJson()).toList(),
+      if (instance.formats case final value?) 'Formats': value,
+      if (instance.bitrate case final value?) 'Bitrate': value,
+      if (instance.timestamp case final value?) 'Timestamp': value,
+      if (instance.requiredHttpHeaders case final value?)
+        'RequiredHttpHeaders': value,
+      if (instance.transcodingUrl case final value?) 'TranscodingUrl': value,
+      if (instance.transcodingSubProtocol case final value?)
+        'TranscodingSubProtocol': value,
+      if (instance.transcodingContainer case final value?)
+        'TranscodingContainer': value,
+      if (instance.analyzeDurationMs case final value?)
+        'AnalyzeDurationMs': value,
+      'ReadAtNativeFramerate': instance.readAtNativeFramerate,
+      if (instance.defaultAudioStreamIndex case final value?)
+        'DefaultAudioStreamIndex': value,
+      if (instance.defaultSubtitleStreamIndex case final value?)
+        'DefaultSubtitleStreamIndex': value,
+      if (instance.etag case final value?) 'Etag': value,
+      'IgnoreDts': instance.ignoreDts,
+      'IgnoreIndex': instance.ignoreIndex,
+      'GenPtsInput': instance.genPtsInput,
+      if (instance.videoType case final value?) 'VideoType': value,
+      if (instance.isoType case final value?) 'IsoType': value,
+      if (instance.mediaAttachments?.map((e) => e.toJson()).toList()
+          case final value?)
+        'MediaAttachments': value,
+    };
 
 MediaStream _$MediaStreamFromJson(Map json) => MediaStream(
       codec: json['Codec'] as String?,
@@ -4342,64 +4382,59 @@ MediaStream _$MediaStreamFromJson(Map json) => MediaStream(
       ..localizedDefault = json['LocalizedDefault'] as String?
       ..localizedForced = json['LocalizedForced'] as String?;
 
-Map<String, dynamic> _$MediaStreamToJson(MediaStream instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Codec', instance.codec);
-  writeNotNull('CodecTag', instance.codecTag);
-  writeNotNull('Language', instance.language);
-  writeNotNull('ColorTransfer', instance.colorTransfer);
-  writeNotNull('ColorPrimaries', instance.colorPrimaries);
-  writeNotNull('ColorSpace', instance.colorSpace);
-  writeNotNull('Comment', instance.comment);
-  writeNotNull('TimeBase', instance.timeBase);
-  writeNotNull('CodecTimeBase', instance.codecTimeBase);
-  writeNotNull('Title', instance.title);
-  writeNotNull('VideoRange', instance.videoRange);
-  writeNotNull('DisplayTitle', instance.displayTitle);
-  writeNotNull('NalLengthSize', instance.nalLengthSize);
-  val['IsInterlaced'] = instance.isInterlaced;
-  writeNotNull('IsAVC', instance.isAVC);
-  writeNotNull('ChannelLayout', instance.channelLayout);
-  writeNotNull('BitRate', instance.bitRate);
-  writeNotNull('BitDepth', instance.bitDepth);
-  writeNotNull('RefFrames', instance.refFrames);
-  writeNotNull('PacketLength', instance.packetLength);
-  writeNotNull('Channels', instance.channels);
-  writeNotNull('SampleRate', instance.sampleRate);
-  val['IsDefault'] = instance.isDefault;
-  val['IsForced'] = instance.isForced;
-  writeNotNull('Height', instance.height);
-  writeNotNull('Width', instance.width);
-  writeNotNull('AverageFrameRate', instance.averageFrameRate);
-  writeNotNull('RealFrameRate', instance.realFrameRate);
-  writeNotNull('Profile', instance.profile);
-  val['Type'] = instance.type;
-  writeNotNull('AspectRatio', instance.aspectRatio);
-  val['Index'] = instance.index;
-  writeNotNull('Score', instance.score);
-  val['IsExternal'] = instance.isExternal;
-  writeNotNull('DeliveryMethod', instance.deliveryMethod);
-  writeNotNull('DeliveryUrl', instance.deliveryUrl);
-  writeNotNull('IsExternalUrl', instance.isExternalUrl);
-  val['IsTextSubtitleStream'] = instance.isTextSubtitleStream;
-  val['SupportsExternalStream'] = instance.supportsExternalStream;
-  writeNotNull('Path', instance.path);
-  writeNotNull('PixelFormat', instance.pixelFormat);
-  writeNotNull('Level', instance.level);
-  writeNotNull('IsAnamorphic', instance.isAnamorphic);
-  writeNotNull('ColorRange', instance.colorRange);
-  writeNotNull('LocalizedUndefined', instance.localizedUndefined);
-  writeNotNull('LocalizedDefault', instance.localizedDefault);
-  writeNotNull('LocalizedForced', instance.localizedForced);
-  return val;
-}
+Map<String, dynamic> _$MediaStreamToJson(MediaStream instance) =>
+    <String, dynamic>{
+      if (instance.codec case final value?) 'Codec': value,
+      if (instance.codecTag case final value?) 'CodecTag': value,
+      if (instance.language case final value?) 'Language': value,
+      if (instance.colorTransfer case final value?) 'ColorTransfer': value,
+      if (instance.colorPrimaries case final value?) 'ColorPrimaries': value,
+      if (instance.colorSpace case final value?) 'ColorSpace': value,
+      if (instance.comment case final value?) 'Comment': value,
+      if (instance.timeBase case final value?) 'TimeBase': value,
+      if (instance.codecTimeBase case final value?) 'CodecTimeBase': value,
+      if (instance.title case final value?) 'Title': value,
+      if (instance.videoRange case final value?) 'VideoRange': value,
+      if (instance.displayTitle case final value?) 'DisplayTitle': value,
+      if (instance.nalLengthSize case final value?) 'NalLengthSize': value,
+      'IsInterlaced': instance.isInterlaced,
+      if (instance.isAVC case final value?) 'IsAVC': value,
+      if (instance.channelLayout case final value?) 'ChannelLayout': value,
+      if (instance.bitRate case final value?) 'BitRate': value,
+      if (instance.bitDepth case final value?) 'BitDepth': value,
+      if (instance.refFrames case final value?) 'RefFrames': value,
+      if (instance.packetLength case final value?) 'PacketLength': value,
+      if (instance.channels case final value?) 'Channels': value,
+      if (instance.sampleRate case final value?) 'SampleRate': value,
+      'IsDefault': instance.isDefault,
+      'IsForced': instance.isForced,
+      if (instance.height case final value?) 'Height': value,
+      if (instance.width case final value?) 'Width': value,
+      if (instance.averageFrameRate case final value?)
+        'AverageFrameRate': value,
+      if (instance.realFrameRate case final value?) 'RealFrameRate': value,
+      if (instance.profile case final value?) 'Profile': value,
+      'Type': instance.type,
+      if (instance.aspectRatio case final value?) 'AspectRatio': value,
+      'Index': instance.index,
+      if (instance.score case final value?) 'Score': value,
+      'IsExternal': instance.isExternal,
+      if (instance.deliveryMethod case final value?) 'DeliveryMethod': value,
+      if (instance.deliveryUrl case final value?) 'DeliveryUrl': value,
+      if (instance.isExternalUrl case final value?) 'IsExternalUrl': value,
+      'IsTextSubtitleStream': instance.isTextSubtitleStream,
+      'SupportsExternalStream': instance.supportsExternalStream,
+      if (instance.path case final value?) 'Path': value,
+      if (instance.pixelFormat case final value?) 'PixelFormat': value,
+      if (instance.level case final value?) 'Level': value,
+      if (instance.isAnamorphic case final value?) 'IsAnamorphic': value,
+      if (instance.colorRange case final value?) 'ColorRange': value,
+      if (instance.localizedUndefined case final value?)
+        'LocalizedUndefined': value,
+      if (instance.localizedDefault case final value?)
+        'LocalizedDefault': value,
+      if (instance.localizedForced case final value?) 'LocalizedForced': value,
+    };
 
 MediaUrl _$MediaUrlFromJson(Map json) => MediaUrl(
       url: json['Url'] as String?,
@@ -4434,13 +4469,13 @@ Map<String, dynamic> _$BaseItemPersonToJson(BaseItemPerson instance) =>
 
 NameLongIdPair _$NameLongIdPairFromJson(Map json) => NameLongIdPair(
       name: json['Name'] as String?,
-      id: json['Id'] as String,
+      id: const BaseItemIdConverter().fromJson(json['Id'] as String),
     );
 
 Map<String, dynamic> _$NameLongIdPairToJson(NameLongIdPair instance) =>
     <String, dynamic>{
       'Name': instance.name,
-      'Id': instance.id,
+      'Id': const BaseItemIdConverter().toJson(instance.id),
     };
 
 UserItemDataDto _$UserItemDataDtoFromJson(Map json) => UserItemDataDto(
@@ -4457,38 +4492,32 @@ UserItemDataDto _$UserItemDataDtoFromJson(Map json) => UserItemDataDto(
       itemId: json['ItemId'] as String?,
     );
 
-Map<String, dynamic> _$UserItemDataDtoToJson(UserItemDataDto instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Rating', instance.rating);
-  writeNotNull('PlayedPercentage', instance.playedPercentage);
-  writeNotNull('UnplayedItemCount', instance.unplayedItemCount);
-  val['PlaybackPositionTicks'] = instance.playbackPositionTicks;
-  val['PlayCount'] = instance.playCount;
-  val['IsFavorite'] = instance.isFavorite;
-  writeNotNull('Likes', instance.likes);
-  writeNotNull('LastPlayedDate', instance.lastPlayedDate);
-  val['Played'] = instance.played;
-  writeNotNull('Key', instance.key);
-  writeNotNull('ItemId', instance.itemId);
-  return val;
-}
+Map<String, dynamic> _$UserItemDataDtoToJson(UserItemDataDto instance) =>
+    <String, dynamic>{
+      if (instance.rating case final value?) 'Rating': value,
+      if (instance.playedPercentage case final value?)
+        'PlayedPercentage': value,
+      if (instance.unplayedItemCount case final value?)
+        'UnplayedItemCount': value,
+      'PlaybackPositionTicks': instance.playbackPositionTicks,
+      'PlayCount': instance.playCount,
+      'IsFavorite': instance.isFavorite,
+      if (instance.likes case final value?) 'Likes': value,
+      if (instance.lastPlayedDate case final value?) 'LastPlayedDate': value,
+      'Played': instance.played,
+      if (instance.key case final value?) 'Key': value,
+      if (instance.itemId case final value?) 'ItemId': value,
+    };
 
 NameIdPair _$NameIdPairFromJson(Map json) => NameIdPair(
       name: json['Name'] as String?,
-      id: json['Id'] as String,
+      id: const BaseItemIdConverter().fromJson(json['Id'] as String),
     );
 
 Map<String, dynamic> _$NameIdPairToJson(NameIdPair instance) =>
     <String, dynamic>{
       'Name': instance.name,
-      'Id': instance.id,
+      'Id': const BaseItemIdConverter().toJson(instance.id),
     };
 
 ChapterInfo _$ChapterInfoFromJson(Map json) => ChapterInfo(
@@ -4551,7 +4580,7 @@ PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map json) =>
           ? null
           : BaseItemDto.fromJson(
               Map<String, dynamic>.from(json['Item'] as Map)),
-      itemId: json['ItemId'] as String,
+      itemId: const BaseItemIdConverter().fromJson(json['ItemId'] as String),
       sessionId: json['SessionId'] as String?,
       mediaSourceId: json['MediaSourceId'] as String?,
       audioStreamIndex: (json['AudioStreamIndex'] as num?)?.toInt(),
@@ -4567,6 +4596,7 @@ PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map json) =>
       liveStreamId: json['LiveStreamId'] as String?,
       playSessionId: json['PlaySessionId'] as String?,
       repeatMode: json['RepeatMode'] as String,
+      playbackOrder: json['PlaybackOrder'] as String? ?? "Default",
       nowPlayingQueue: (json['NowPlayingQueue'] as List<dynamic>?)
           ?.map((e) => QueueItem.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
@@ -4578,7 +4608,7 @@ Map<String, dynamic> _$PlaybackProgressInfoToJson(
     <String, dynamic>{
       'CanSeek': instance.canSeek,
       'Item': instance.item?.toJson(),
-      'ItemId': instance.itemId,
+      'ItemId': const BaseItemIdConverter().toJson(instance.itemId),
       'SessionId': instance.sessionId,
       'MediaSourceId': instance.mediaSourceId,
       'AudioStreamIndex': instance.audioStreamIndex,
@@ -4591,6 +4621,7 @@ Map<String, dynamic> _$PlaybackProgressInfoToJson(
       'Brightness': instance.brightness,
       'AspectRatio': instance.aspectRatio,
       'PlayMethod': instance.playMethod,
+      'PlaybackOrder': instance.playbackOrder,
       'LiveStreamId': instance.liveStreamId,
       'PlaySessionId': instance.playSessionId,
       'RepeatMode': instance.repeatMode,
@@ -4641,30 +4672,22 @@ ImageBlurHashes _$ImageBlurHashesFromJson(Map json) => ImageBlurHashes(
       ),
     );
 
-Map<String, dynamic> _$ImageBlurHashesToJson(ImageBlurHashes instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Primary', instance.primary);
-  writeNotNull('Art', instance.art);
-  writeNotNull('Backdrop', instance.backdrop);
-  writeNotNull('Banner', instance.banner);
-  writeNotNull('Logo', instance.logo);
-  writeNotNull('Thumb', instance.thumb);
-  writeNotNull('Disc', instance.disc);
-  writeNotNull('Box', instance.box);
-  writeNotNull('Screenshot', instance.screenshot);
-  writeNotNull('Menu', instance.menu);
-  writeNotNull('Chapter', instance.chapter);
-  writeNotNull('BoxRear', instance.boxRear);
-  writeNotNull('Profile', instance.profile);
-  return val;
-}
+Map<String, dynamic> _$ImageBlurHashesToJson(ImageBlurHashes instance) =>
+    <String, dynamic>{
+      if (instance.primary case final value?) 'Primary': value,
+      if (instance.art case final value?) 'Art': value,
+      if (instance.backdrop case final value?) 'Backdrop': value,
+      if (instance.banner case final value?) 'Banner': value,
+      if (instance.logo case final value?) 'Logo': value,
+      if (instance.thumb case final value?) 'Thumb': value,
+      if (instance.disc case final value?) 'Disc': value,
+      if (instance.box case final value?) 'Box': value,
+      if (instance.screenshot case final value?) 'Screenshot': value,
+      if (instance.menu case final value?) 'Menu': value,
+      if (instance.chapter case final value?) 'Chapter': value,
+      if (instance.boxRear case final value?) 'BoxRear': value,
+      if (instance.profile case final value?) 'Profile': value,
+    };
 
 MediaAttachment _$MediaAttachmentFromJson(Map json) => MediaAttachment(
       codec: json['Codec'] as String?,
@@ -4732,28 +4755,34 @@ Map<String, dynamic> _$QueueItemToJson(QueueItem instance) => <String, dynamic>{
 
 NewPlaylist _$NewPlaylistFromJson(Map json) => NewPlaylist(
       name: json['Name'] as String?,
-      ids: (json['Ids'] as List<dynamic>).map((e) => e as String).toList(),
+      ids: (json['Ids'] as List<dynamic>)
+          .map((e) => const BaseItemIdConverter().fromJson(e as String))
+          .toList(),
       userId: json['UserId'] as String?,
       mediaType: json['MediaType'] as String?,
+      isPublic: json['IsPublic'] as bool?,
     );
 
 Map<String, dynamic> _$NewPlaylistToJson(NewPlaylist instance) =>
     <String, dynamic>{
       'Name': instance.name,
-      'Ids': instance.ids,
+      'Ids': instance.ids.map(const BaseItemIdConverter().toJson).toList(),
       'UserId': instance.userId,
       'MediaType': instance.mediaType,
+      'IsPublic': instance.isPublic,
     };
 
 NewPlaylistResponse _$NewPlaylistResponseFromJson(Map json) =>
     NewPlaylistResponse(
-      id: json['Id'] as String?,
+      id: _$JsonConverterFromJson<String, BaseItemId>(
+          json['Id'], const BaseItemIdConverter().fromJson),
     );
 
 Map<String, dynamic> _$NewPlaylistResponseToJson(
         NewPlaylistResponse instance) =>
     <String, dynamic>{
-      'Id': instance.id,
+      'Id': _$JsonConverterToJson<String, BaseItemId>(
+          instance.id, const BaseItemIdConverter().toJson),
     };
 
 PublicSystemInfoResult _$PublicSystemInfoResultFromJson(Map json) =>

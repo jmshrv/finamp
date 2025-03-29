@@ -1,7 +1,7 @@
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/favorite_provider.dart';
@@ -37,7 +37,7 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
       return const SizedBox.shrink();
     }
 
-    bool isFav = ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+    bool isFav = ref.watch(isFavoriteProvider(widget.item));
     if (widget.onlyIfFav) {
       if (isFav && !FinampSettingsHelper.finampSettings.onlyShowFavourites) {
         return Icon(
@@ -64,7 +64,7 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
             ? null
             : () {
                 ref
-                    .read(isFavoriteProvider(FavoriteRequest(widget.item))
+                    .read(isFavoriteProvider(widget.item)
                         .notifier)
                     .updateFavorite(!isFav);
               },

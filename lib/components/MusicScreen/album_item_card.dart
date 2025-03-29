@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -11,12 +11,12 @@ import '../album_image.dart';
 /// use AlbumItem instead.
 class AlbumItemCard extends StatelessWidget {
   const AlbumItemCard({
-    Key? key,
+    super.key,
     required this.item,
     this.parentType,
     this.onTap,
     this.addSettingsListener = false,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final String? parentType;
@@ -73,10 +73,9 @@ class AlbumItemCard extends StatelessWidget {
 
 class _AlbumItemCardText extends StatelessWidget {
   const _AlbumItemCardText({
-    Key? key,
     required this.item,
     required this.parentType,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final String? parentType;

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -12,8 +12,7 @@ import '../../services/favorite_provider.dart';
 import '../../services/feedback_helper.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../../services/theme_provider.dart';
-import '../AlbumScreen/song_menu.dart';
+import '../AlbumScreen/track_menu.dart';
 import '../global_snackbar.dart';
 import '../themed_bottom_sheet.dart';
 import 'add_to_playlist_list.dart';
@@ -24,8 +23,6 @@ Future<void> showPlaylistActionsMenu({
   required BuildContext context,
   required BaseItemDto item,
   required BaseItemDto? parentPlaylist,
-  bool usePlayerTheme = false,
-  FinampTheme? themeProvider,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -45,15 +42,13 @@ Future<void> showPlaylistActionsMenu({
         );
 
         final menuEntries = [
-          SongInfo.condensed(
+          TrackInfo.condensed(
             item: item,
-            useThemeImage: usePlayerTheme,
           ),
           const SizedBox(height: 16),
           Consumer(
             builder: (context, ref, child) {
-              bool isFavorite =
-                  ref.watch(isFavoriteProvider(FavoriteRequest(item)));
+              bool isFavorite = ref.watch(isFavoriteProvider(item));
               return ToggleableListTile(
                 title: AppLocalizations.of(context)!.favourites,
                 leading: AspectRatio(
@@ -77,7 +72,7 @@ Future<void> showPlaylistActionsMenu({
                 tapFeedback: false,
                 onToggle: (bool currentState) async {
                   return ref
-                      .read(isFavoriteProvider(FavoriteRequest(item)).notifier)
+                      .read(isFavoriteProvider(item).notifier)
                       .updateFavorite(!isFavorite);
                 },
                 enabled: !isOffline,
@@ -92,7 +87,7 @@ Future<void> showPlaylistActionsMenu({
                 if (snapshot.data != null) {
                   return AddToPlaylistTile(
                     playlist: snapshot.data!,
-                    song: item,
+                    track: item,
                     playlistItemId: item.playlistItemId,
                   );
                 } else {
@@ -142,9 +137,7 @@ Future<void> showPlaylistActionsMenu({
         // TODO better estimate, how to deal with lag getting playlists?
         var stackHeight = MediaQuery.sizeOf(context).height * 0.9;
         return (stackHeight, menu);
-      },
-      usePlayerTheme: usePlayerTheme,
-      themeProvider: themeProvider);
+      });
 }
 
 class ToggleableListTile extends ConsumerStatefulWidget {

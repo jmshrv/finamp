@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
@@ -30,8 +30,7 @@ class _BufferDurationListTileState extends State<BufferDurationListTile> {
             final valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSettingsHelper.setBufferDuration(
-                  Duration(seconds: valueInt));
+              FinampSetters.setBufferDuration(Duration(seconds: valueInt));
             }
           },
         ),

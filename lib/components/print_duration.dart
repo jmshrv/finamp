@@ -10,18 +10,18 @@ String printDuration(
 
   String twoDigits(int n) => n.toString().padLeft(2, "0");
   final minutes = duration.inMinutes.remainder(60);
-  String twoDigitMinutes =
-      leadingZeroes ? twoDigits(minutes) : minutes.toString();
   String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
 
   String durationString;
   if (duration.inHours >= 1) {
-    String twoDigitHours = leadingZeroes
+    String paddedHours = leadingZeroes
         ? twoDigits(duration.inHours)
         : duration.inHours.toString();
-    durationString = "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
+    durationString = "$paddedHours:${twoDigits(minutes)}:$twoDigitSeconds";
   } else {
-    durationString = "$twoDigitMinutes:$twoDigitSeconds";
+    String paddedMinutes =
+        leadingZeroes ? twoDigits(minutes) : minutes.toString();
+    durationString = "$paddedMinutes:$twoDigitSeconds";
   }
 
   if (isRemaining) {

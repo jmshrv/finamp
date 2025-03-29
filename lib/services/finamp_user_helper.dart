@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:isar/isar.dart';
 
 import '../models/finamp_models.dart';
@@ -72,7 +72,7 @@ class FinampUserHelper {
   void setCurrentUserViews(List<BaseItemDto> newViews) {
     FinampUser currentUserTemp = currentUser!;
 
-    currentUserTemp.views = Map<String, BaseItemDto>.fromEntries(
+    currentUserTemp.views = Map<BaseItemId, BaseItemDto>.fromEntries(
         newViews.map((e) => MapEntry(e.id, e)));
     currentUserTemp.currentViewId = currentUserTemp.views.keys.first;
 
@@ -81,7 +81,7 @@ class FinampUserHelper {
     });
   }
 
-  void setCurrentUserCurrentViewId(String newViewId) {
+  void setCurrentUserCurrentViewId(BaseItemId newViewId) {
     FinampUser currentUserTemp = currentUser!;
 
     currentUserTemp.currentViewId = newViewId;

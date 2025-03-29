@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
@@ -6,14 +7,15 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../builders/annotations.dart';
 import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
 
@@ -40,17 +42,22 @@ class FinampUser {
   @HiveField(3)
   String serverId;
   @HiveField(4)
-  String? currentViewId;
+  @ignore
+  BaseItemId? currentViewId;
+  @Name("currentViewId")
+  String? get isarCurrentViewId => currentViewId?.raw;
+  set isarCurrentViewId(String? id) =>
+      currentViewId = id == null ? null : BaseItemId(id);
   @ignore
   @HiveField(5)
-  Map<String, BaseItemDto> views;
+  Map<BaseItemId, BaseItemDto> views;
 
   // We only need 1 user, the current user
   final Id isarId = 0;
   String get isarViews => jsonEncode(views);
   set isarViews(String json) =>
-      views = (jsonDecode(json) as Map<String, dynamic>)
-          .map((k, v) => MapEntry(k, BaseItemDto.fromJson(v)));
+      views = (jsonDecode(json) as Map<BaseItemId, dynamic>).map((k, v) =>
+          MapEntry(k, BaseItemDto.fromJson(v as Map<String, dynamic>)));
 
   @ignore
   BaseItemDto? get currentView => views[currentViewId];
@@ -65,7 +72,7 @@ class DefaultSettings {
   static const transcodeBitrate = 320000;
   static const androidStopForegroundOnPause = true;
   static const onlyShowFavourites = false;
-  static const songShuffleItemCount = 250;
+  static const trackShuffleItemCount = 250;
   static const volumeNormalizationActive = true;
   // 80% volume in dB. In my testing, most tracks were louder than the default target
   // of -18.0 LUFS, so the gain rarely needed to be increased. -2.0 gives us a bit of
@@ -82,7 +89,7 @@ class DefaultSettings {
   static const sleepTimerSeconds = 1800; // 30 Minutes
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
-  static const showArtistsTopSongs = true;
+  static const showArtistsTopTracks = true;
   static const disableGesture = false;
   static const showFastScroller = true;
   static const bufferDisableSizeConstraints = false;
@@ -134,120 +141,122 @@ class DefaultSettings {
   ]);
   static const showCoversOnAlbumScreen = false;
   static const allowSplitScreen = true;
-  static const requireWifiForDownloads = false;
+  static const requireWifiForDownloads = true;
   static const onlyShowFullyDownloaded = false;
   static const preferQuickSyncs = true;
   static const showDownloadsWithUnknownLibrary = true;
   static const downloadWorkers = 5;
   static const maxConcurrentDownloads = 10;
-  static const double currentVolume = 1.0;
+  static const downloadSizeWarningCutoff = 150;
+  static const allowDeleteFromServer = false;
+  static const oneLineMarqueeTextButton = false;
+  static const showAlbumReleaseDateOnPlayerScreen = false;
+  static const releaseDateFormat = ReleaseDateFormat.year;
 }
 
 @HiveType(typeId: 28)
 class FinampSettings {
-  FinampSettings(
-      {this.isOffline = DefaultSettings.isOffline,
-      this.shouldTranscode = DefaultSettings.shouldTranscode,
-      this.transcodeBitrate = DefaultSettings.transcodeBitrate,
-      // downloadLocations is required since the other values can be created with
-      // default values. create() is used to return a FinampSettings with
-      // downloadLocations.
-      required this.downloadLocations,
-      this.androidStopForegroundOnPause =
-          DefaultSettings.androidStopForegroundOnPause,
-      required this.showTabs,
-      this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
-      this.sortBy = SortBy.sortName,
-      this.sortOrder = SortOrder.ascending,
-      this.songShuffleItemCount = DefaultSettings.songShuffleItemCount,
-      this.volumeNormalizationActive =
-          DefaultSettings.volumeNormalizationActive,
-      this.volumeNormalizationIOSBaseGain =
-          DefaultSettings.volumeNormalizationIOSBaseGain,
-      this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
-      this.contentViewType = DefaultSettings.contentViewType,
-      this.playbackSpeedVisibility = DefaultSettings.playbackSpeedVisibility,
-      this.contentGridViewCrossAxisCountPortrait =
-          DefaultSettings.contentGridViewCrossAxisCountPortrait,
-      this.contentGridViewCrossAxisCountLandscape =
-          DefaultSettings.contentGridViewCrossAxisCountLandscape,
-      this.showTextOnGridView = DefaultSettings.showTextOnGridView,
-      this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
-      required this.downloadLocationsMap,
-      this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
-      this.playerScreenCoverMinimumPadding =
-          DefaultSettings.playerScreenCoverMinimumPadding,
-      this.showArtistsTopSongs = DefaultSettings.showArtistsTopSongs,
-      this.bufferDisableSizeConstraints =
-          DefaultSettings.bufferDisableSizeConstraints,
-      this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
-      this.bufferSizeMegabytes = DefaultSettings.bufferSizeMegabytes,
-      required this.tabSortBy,
-      required this.tabSortOrder,
-      this.loopMode = DefaultSettings.loopMode,
-      this.playbackSpeed = DefaultSettings.playbackSpeed,
-      this.tabOrder = DefaultSettings.tabOrder,
-      this.autoloadLastQueueOnStartup =
-          DefaultSettings.autoLoadLastQueueOnStartup,
-      this.hasCompletedBlurhashImageMigration =
-          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-      this.hasCompletedBlurhashImageMigrationIdFix =
-          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-      this.hasCompletedDownloadsServiceMigration =
-          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-      this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
-      this.onlyShowFullyDownloaded = DefaultSettings.onlyShowFullyDownloaded,
-      this.showDownloadsWithUnknownLibrary =
-          DefaultSettings.showDownloadsWithUnknownLibrary,
-      this.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads,
-      this.downloadWorkers = DefaultSettings.downloadWorkers,
-      this.resyncOnStartup = DefaultSettings.resyncOnStartup,
-      this.preferQuickSyncs = DefaultSettings.preferQuickSyncs,
-      this.hasCompletedIsarUserMigration =
-          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-      this.downloadTranscodingCodec,
-      this.downloadTranscodeBitrate,
-      this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
-      this.shouldRedownloadTranscodes =
-          DefaultSettings.shouldRedownloadTranscodes,
-      this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
-      this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
-      this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
-      this.allowSplitScreen = DefaultSettings.allowSplitScreen,
-      this.splitScreenPlayerWidth = DefaultSettings.splitScreenPlayerWidth,
-      this.enableVibration = DefaultSettings.enableVibration,
-      this.prioritizeCoverFactor = DefaultSettings.prioritizeCoverFactor,
-      this.suppressPlayerPadding = DefaultSettings.suppressPlayerPadding,
-      this.hidePlayerBottomActions = DefaultSettings.hidePlayerBottomActions,
-      this.reportQueueToServer = DefaultSettings.reportQueueToServer,
-      this.periodicPlaybackSessionUpdateFrequencySeconds =
-          DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
-      this.showArtistChipImage = DefaultSettings.showArtistChipImage,
-      this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
-      this.showProgressOnNowPlayingBar =
-          DefaultSettings.showProgressOnNowPlayingBar,
-      this.startInstantMixForIndividualTracks =
-          DefaultSettings.startInstantMixForIndividualTracks,
-      this.showLyricsTimestamps = DefaultSettings.showLyricsTimestamps,
-      this.lyricsAlignment = DefaultSettings.lyricsAlignment,
-      this.lyricsFontSize = DefaultSettings.lyricsFontSize,
-      this.showLyricsScreenAlbumPrelude =
-          DefaultSettings.showLyricsScreenAlbumPrelude,
-      this.showStopButtonOnMediaNotification =
-          DefaultSettings.showStopButtonOnMediaNotification,
-      this.showSeekControlsOnMediaNotification =
-          DefaultSettings.showSeekControlsOnMediaNotification,
-      this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
-      this.keepScreenOnWhilePluggedIn =
-          DefaultSettings.keepScreenOnWhilePluggedIn,
-      this.featureChipsConfiguration =
-          DefaultSettings.featureChipsConfiguration,
-      this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
-      this.hasDownloadedPlaylistInfo =
-          DefaultSettings.hasDownloadedPlaylistInfo,
-      this.transcodingSegmentContainer =
+  FinampSettings({
+    this.isOffline = DefaultSettings.isOffline,
+    this.shouldTranscode = DefaultSettings.shouldTranscode,
+    this.transcodeBitrate = DefaultSettings.transcodeBitrate,
+    // downloadLocations is required since the other values can be created with
+    // default values. create() is used to return a FinampSettings with
+    // downloadLocations.
+    required this.downloadLocations,
+    this.androidStopForegroundOnPause =
+        DefaultSettings.androidStopForegroundOnPause,
+    required this.showTabs,
+    this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
+    this.sortBy = SortBy.sortName,
+    this.sortOrder = SortOrder.ascending,
+    this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
+    this.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive,
+    this.volumeNormalizationIOSBaseGain =
+        DefaultSettings.volumeNormalizationIOSBaseGain,
+    this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
+    this.contentViewType = DefaultSettings.contentViewType,
+    this.playbackSpeedVisibility = DefaultSettings.playbackSpeedVisibility,
+    this.contentGridViewCrossAxisCountPortrait =
+        DefaultSettings.contentGridViewCrossAxisCountPortrait,
+    this.contentGridViewCrossAxisCountLandscape =
+        DefaultSettings.contentGridViewCrossAxisCountLandscape,
+    this.showTextOnGridView = DefaultSettings.showTextOnGridView,
+    this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
+    required this.downloadLocationsMap,
+    this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
+    this.playerScreenCoverMinimumPadding =
+        DefaultSettings.playerScreenCoverMinimumPadding,
+    this.showArtistsTopTracks = DefaultSettings.showArtistsTopTracks,
+    this.bufferDisableSizeConstraints =
+        DefaultSettings.bufferDisableSizeConstraints,
+    this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
+    this.bufferSizeMegabytes = DefaultSettings.bufferSizeMegabytes,
+    required this.tabSortBy,
+    required this.tabSortOrder,
+    this.loopMode = DefaultSettings.loopMode,
+    this.playbackSpeed = DefaultSettings.playbackSpeed,
+    this.tabOrder = DefaultSettings.tabOrder,
+    this.autoloadLastQueueOnStartup =
+        DefaultSettings.autoLoadLastQueueOnStartup,
+    this.hasCompletedDownloadsServiceMigration =
+        true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+    this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
+    this.onlyShowFullyDownloaded = DefaultSettings.onlyShowFullyDownloaded,
+    this.showDownloadsWithUnknownLibrary =
+        DefaultSettings.showDownloadsWithUnknownLibrary,
+    this.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads,
+    this.downloadWorkers = DefaultSettings.downloadWorkers,
+    this.resyncOnStartup = DefaultSettings.resyncOnStartup,
+    this.preferQuickSyncs = DefaultSettings.preferQuickSyncs,
+    this.hasCompletedIsarUserMigration =
+        true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+    this.downloadTranscodingCodec,
+    this.downloadTranscodeBitrate,
+    this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
+    this.shouldRedownloadTranscodes =
+        DefaultSettings.shouldRedownloadTranscodes,
+    this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
+    this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
+    this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
+    this.allowSplitScreen = DefaultSettings.allowSplitScreen,
+    this.splitScreenPlayerWidth = DefaultSettings.splitScreenPlayerWidth,
+    this.enableVibration = DefaultSettings.enableVibration,
+    this.prioritizeCoverFactor = DefaultSettings.prioritizeCoverFactor,
+    this.suppressPlayerPadding = DefaultSettings.suppressPlayerPadding,
+    this.hidePlayerBottomActions = DefaultSettings.hidePlayerBottomActions,
+    this.reportQueueToServer = DefaultSettings.reportQueueToServer,
+    this.periodicPlaybackSessionUpdateFrequencySeconds =
+        DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+    this.showArtistChipImage = DefaultSettings.showArtistChipImage,
+    this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
+    this.showProgressOnNowPlayingBar =
+        DefaultSettings.showProgressOnNowPlayingBar,
+    this.startInstantMixForIndividualTracks =
+        DefaultSettings.startInstantMixForIndividualTracks,
+    this.showLyricsTimestamps = DefaultSettings.showLyricsTimestamps,
+    this.lyricsAlignment = DefaultSettings.lyricsAlignment,
+    this.lyricsFontSize = DefaultSettings.lyricsFontSize,
+    this.showLyricsScreenAlbumPrelude =
+        DefaultSettings.showLyricsScreenAlbumPrelude,
+    this.showStopButtonOnMediaNotification =
+        DefaultSettings.showStopButtonOnMediaNotification,
+    this.showSeekControlsOnMediaNotification =
+        DefaultSettings.showSeekControlsOnMediaNotification,
+    this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
+    this.keepScreenOnWhilePluggedIn =
+        DefaultSettings.keepScreenOnWhilePluggedIn,
+    this.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration,
+    this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
+    this.hasDownloadedPlaylistInfo = DefaultSettings.hasDownloadedPlaylistInfo,
+    this.transcodingSegmentContainer =
         DefaultSettings.transcodingSegmentContainer,
-    this.currentVolume = DefaultSettings.currentVolume,
+    this.downloadSizeWarningCutoff = DefaultSettings.downloadSizeWarningCutoff,
+    this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
+    this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
+    this.showAlbumReleaseDateOnPlayerScreen =
+        DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
+    this.releaseDateFormat = DefaultSettings.releaseDateFormat,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -261,8 +270,7 @@ class FinampSettings {
   @HiveField(3)
   List<DownloadLocation> downloadLocations;
 
-  @HiveField(4,
-      defaultValue: DefaultSettings.androidStopForegroundOnPause)
+  @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
   @HiveField(5)
   Map<TabContentType, bool> showTabs;
@@ -282,9 +290,9 @@ class FinampSettings {
   @HiveField(8)
   SortOrder sortOrder;
 
-  /// Amount of songs to get when shuffling songs.
-  @HiveField(9, defaultValue: DefaultSettings.songShuffleItemCount)
-  int songShuffleItemCount;
+  /// Amount of tracks to get when shuffling tracks.
+  @HiveField(9, defaultValue: DefaultSettings.trackShuffleItemCount)
+  int trackShuffleItemCount;
 
   /// The content view type used by the music screen.
   @HiveField(10, defaultValue: DefaultSettings.contentViewType)
@@ -311,7 +319,8 @@ class FinampSettings {
   @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds)
   int sleepTimerSeconds;
 
-  @HiveField(15, defaultValue: {})
+  @HiveField(15, defaultValue: <String, DownloadLocation>{})
+  @FinampSetterIgnore()
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
@@ -324,24 +333,16 @@ class FinampSettings {
   @HiveField(19, defaultValue: DefaultSettings.disableGesture)
   bool disableGesture = DefaultSettings.disableGesture;
 
-  @HiveField(20, defaultValue: {})
+  @HiveField(20, defaultValue: <TabContentType, SortBy>{})
+  @FinampSetterIgnore()
   Map<TabContentType, SortBy> tabSortBy;
 
-  @HiveField(21, defaultValue: {})
+  @HiveField(21, defaultValue: <TabContentType, SortOrder>{})
+  @FinampSetterIgnore()
   Map<TabContentType, SortOrder> tabSortOrder;
 
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)
   List<TabContentType> tabOrder;
-
-  @HiveField(23,
-      defaultValue:
-          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-  bool hasCompletedBlurhashImageMigration;
-
-  @HiveField(24,
-      defaultValue:
-          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-  bool hasCompletedBlurhashImageMigrationIdFix;
 
   @HiveField(25, defaultValue: DefaultSettings.showFastScroller)
   bool showFastScroller = DefaultSettings.showFastScroller;
@@ -366,7 +367,7 @@ class FinampSettings {
 
   @HiveField(34,
       defaultValue:
-          true) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+          false) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedDownloadsServiceMigration;
 
   @HiveField(35, defaultValue: DefaultSettings.requireWifiForDownloads)
@@ -390,8 +391,12 @@ class FinampSettings {
   @HiveField(41, defaultValue: DefaultSettings.preferQuickSyncs)
   bool preferQuickSyncs;
 
-  @HiveField(42, defaultValue: true)
+  @HiveField(42,
+      defaultValue:
+          false) //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
   bool hasCompletedIsarUserMigration;
+
+  @HiveField(43)
   FinampTranscodingCodec? downloadTranscodingCodec;
 
   @HiveField(44, defaultValue: DefaultSettings.shouldTranscodeDownloads)
@@ -430,8 +435,8 @@ class FinampSettings {
           DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
-  @HiveField(54, defaultValue: DefaultSettings.showArtistsTopSongs)
-  bool showArtistsTopSongs = DefaultSettings.showArtistsTopSongs;
+  @HiveField(54, defaultValue: DefaultSettings.showArtistsTopTracks)
+  bool showArtistsTopTracks = DefaultSettings.showArtistsTopTracks;
 
   @HiveField(55, defaultValue: DefaultSettings.showArtistChipImage)
   bool showArtistChipImage;
@@ -439,7 +444,7 @@ class FinampSettings {
   @HiveField(56, defaultValue: DefaultSettings.playbackSpeed)
   double playbackSpeed;
 
-  /// The content playback speed type defining how and whether to display the playback speed controls in the song menu
+  /// The content playback speed type defining how and whether to display the playback speed controls in the track menu
   @HiveField(57, defaultValue: DefaultSettings.playbackSpeedVisibility)
   PlaybackSpeedVisibility playbackSpeedVisibility;
 
@@ -512,16 +517,30 @@ class FinampSettings {
   @HiveField(79, defaultValue: DefaultSettings.bufferSizeMegabytes)
   int bufferSizeMegabytes;
 
-  @HiveField(80, defaultValue: DefaultSettings.currentVolume)
-  double currentVolume;
+  @HiveField(80, defaultValue: DefaultSettings.downloadSizeWarningCutoff)
+  int downloadSizeWarningCutoff;
 
+  @HiveField(81, defaultValue: DefaultSettings.allowDeleteFromServer)
+  bool allowDeleteFromServer;
+
+  @HiveField(82, defaultValue: DefaultSettings.oneLineMarqueeTextButton)
+  bool oneLineMarqueeTextButton;
+
+  @HiveField(83,
+      defaultValue: DefaultSettings.showAlbumReleaseDateOnPlayerScreen)
+  bool showAlbumReleaseDateOnPlayerScreen;
+
+  @HiveField(84, defaultValue: DefaultSettings.releaseDateFormat)
+  ReleaseDateFormat releaseDateFormat;
+
+  @HiveField(85, defaultValue: null)
+  String? lastUsedDownloadLocationId;
+  
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
-      name: "Internal Storage",
+      name: DownloadLocation.internalStorageName,
       // default download location moved to support dir based on existing comment
-      baseDirectory: (Platform.isIOS || Platform.isAndroid)
-          ? DownloadLocationType.internalSupport
-          : DownloadLocationType.cache,
+      baseDirectory: DownloadLocationType.platformDefaultDirectory,
     );
     return FinampSettings(
       downloadLocations: [],
@@ -542,14 +561,12 @@ class FinampSettings {
       transcodeCodec: downloadTranscodingCodec,
       bitrate: downloadTranscodeBitrate);
 
-  /// Returns the DownloadLocation that is the internal song dir. This can
+  /// Returns the DownloadLocation that is the internal track dir. This can
   /// technically throw a StateError, but that should never happen™.
-  DownloadLocation get internalSongDir =>
+  DownloadLocation get internalTrackDir =>
       downloadLocationsMap.values.firstWhere((element) =>
           element.baseDirectory ==
-          ((Platform.isIOS || Platform.isAndroid)
-              ? DownloadLocationType.internalSupport
-              : DownloadLocationType.cache));
+          DownloadLocationType.platformDefaultDirectory);
 
   Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
 
@@ -582,8 +599,10 @@ class DownloadLocation {
       required this.baseDirectory}) {
     assert(baseDirectory.needsPath == (relativePath != null));
     assert(baseDirectory == DownloadLocationType.migrated ||
+        // ignore: deprecated_member_use_from_same_package
         (legacyUseHumanReadableNames == null && legacyDeletable == null));
     assert(baseDirectory != DownloadLocationType.migrated ||
+        // ignore: deprecated_member_use_from_same_package
         (legacyUseHumanReadableNames != null && legacyDeletable != null));
   }
 
@@ -595,7 +614,7 @@ class DownloadLocation {
   @HiveField(1)
   String? relativePath;
 
-  /// If true, store songs using their actual names instead of Jellyfin item IDs.
+  /// If true, store tracks using their actual names instead of Jellyfin item IDs.
   @Deprecated("This is here for migration.  Use useHumanReadableNames instead.")
   @HiveField(2)
   bool? legacyUseHumanReadableNames;
@@ -604,7 +623,7 @@ class DownloadLocation {
 
   /// If true, the user can delete this storage location. It's a bit of a hack,
   /// but the only undeletable location is the internal storage dir, so we can
-  /// use this value to get the internal song dir.
+  /// use this value to get the internal track dir.
   @HiveField(3)
   @Deprecated("This is here for migration.  Use baseDirectory instead.")
   bool? legacyDeletable;
@@ -629,16 +648,20 @@ class DownloadLocation {
   /// every time the app starts up.
   Future<void> updateCurrentPath() async {
     if (baseDirectory == DownloadLocationType.migrated) {
+      // ignore: deprecated_member_use_from_same_package
       if (!legacyDeletable!) {
         baseDirectory = DownloadLocationType.internalDocuments;
         relativePath = null;
         name = "Legacy Internal Storage";
+        // ignore: deprecated_member_use_from_same_package
       } else if (!legacyUseHumanReadableNames!) {
         baseDirectory = DownloadLocationType.external;
       } else {
         baseDirectory = DownloadLocationType.custom;
       }
+      // ignore: deprecated_member_use_from_same_package
       legacyDeletable = null;
+      // ignore: deprecated_member_use_from_same_package
       legacyUseHumanReadableNames = null;
     }
     switch (baseDirectory) {
@@ -673,6 +696,8 @@ class DownloadLocation {
     await downloadLocation.updateCurrentPath();
     return downloadLocation;
   }
+
+  static const String internalStorageName = "Internal Storage";
 }
 
 /// Class used in AddDownloadLocationScreen. Basically just a DownloadLocation
@@ -702,15 +727,15 @@ enum TabContentType {
   @HiveField(3)
   genres(BaseItemDtoType.genre),
   @HiveField(4)
-  songs(BaseItemDtoType.song);
+  tracks(BaseItemDtoType.track);
 
   const TabContentType(this.itemType);
 
   final BaseItemDtoType itemType;
 
   /// Human-readable version of the [TabContentType]. For example, toString() on
-  /// [TabContentType.songs], toString() would return "TabContentType.songs".
-  /// With this function, the same input would return "Songs".
+  /// [TabContentType.tracks], toString() would return "TabContentType.tracks".
+  /// With this function, the same input would return "Tracks".
   @override
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
@@ -720,8 +745,8 @@ enum TabContentType {
 
   String _humanReadableName(TabContentType tabContentType) {
     switch (tabContentType) {
-      case TabContentType.songs:
-        return "Songs";
+      case TabContentType.tracks:
+        return "Tracks";
       case TabContentType.albums:
         return "Albums";
       case TabContentType.artists:
@@ -736,8 +761,8 @@ enum TabContentType {
   String _humanReadableLocalisedName(
       TabContentType tabContentType, BuildContext context) {
     switch (tabContentType) {
-      case TabContentType.songs:
-        return AppLocalizations.of(context)!.songs;
+      case TabContentType.tracks:
+        return AppLocalizations.of(context)!.tracks;
       case TabContentType.albums:
         return AppLocalizations.of(context)!.albums;
       case TabContentType.artists:
@@ -752,7 +777,7 @@ enum TabContentType {
   static TabContentType fromItemType(String itemType) {
     switch (itemType) {
       case "Audio":
-        return TabContentType.songs;
+        return TabContentType.tracks;
       case "MusicAlbum":
         return TabContentType.albums;
       case "MusicArtist":
@@ -810,9 +835,9 @@ enum ContentViewType {
   anyMap: true,
 )
 @Deprecated("Hive download schemas are only present to enable migration.")
-class DownloadedSong {
-  DownloadedSong({
-    required this.song,
+class DownloadedTrack {
+  DownloadedTrack({
+    required this.track,
     required this.mediaSourceInfo,
     required this.downloadId,
     required this.requiredBy,
@@ -823,25 +848,25 @@ class DownloadedSong {
     required this.downloadLocationId,
   });
 
-  /// The Jellyfin item for the song
+  /// The Jellyfin item for the track
   @HiveField(0)
-  BaseItemDto song;
+  BaseItemDto track;
 
-  /// The media source info for the song (used to get file format)
+  /// The media source info for the track (used to get file format)
   @HiveField(1)
   MediaSourceInfo mediaSourceInfo;
 
-  /// The download ID of the song (for FlutterDownloader)
+  /// The download ID of the track (for FlutterDownloader)
   @HiveField(2)
   String downloadId;
 
   /// The list of parent item IDs the item is downloaded for. If this is 0, the
-  /// song should be deleted.
+  /// track should be deleted.
   @HiveField(3)
   List<String> requiredBy;
 
-  /// The path of the song file. if [isPathRelative] is true, this will be a
-  /// relative path from the song's DownloadLocation.
+  /// The path of the track file. if [isPathRelative] is true, this will be a
+  /// relative path from the track's DownloadLocation.
   @HiveField(4)
   String path;
 
@@ -864,10 +889,10 @@ class DownloadedSong {
   @HiveField(8)
   String? downloadLocationId;
 
-  factory DownloadedSong.fromJson(Map<String, dynamic> json) =>
-      _$DownloadedSongFromJson(json);
+  factory DownloadedTrack.fromJson(Map<String, dynamic> json) =>
+      _$DownloadedTrackFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DownloadedSongToJson(this);
+  Map<String, dynamic> toJson() => _$DownloadedTrackToJson(this);
 }
 
 @HiveType(typeId: 4)
@@ -904,7 +929,7 @@ class DownloadedImage {
   @HiveField(0)
   String id;
 
-  /// The download ID of the song (for FlutterDownloader)
+  /// The download ID of the track (for FlutterDownloader)
   @HiveField(1)
   String downloadId;
 
@@ -969,8 +994,8 @@ class DownloadStub {
             BaseItemDtoType.fromItem(baseItem!) == baseItemType &&
             baseItemType.downloadType == DownloadItemType.collection &&
             baseItemType != BaseItemDtoType.noItem;
-      case DownloadItemType.song:
-        return baseItemType.downloadType == DownloadItemType.song &&
+      case DownloadItemType.track:
+        return baseItemType.downloadType == DownloadItemType.track &&
             baseItem != null &&
             BaseItemDtoType.fromItem(baseItem!) == baseItemType;
       case DownloadItemType.image:
@@ -995,7 +1020,7 @@ class DownloadStub {
         (item.blurHash != null || item.imageId != null));
     String id = (type == DownloadItemType.image)
         ? item.blurHash ?? item.imageId!
-        : item.id;
+        : item.id.raw;
     return DownloadStub._build(
         id: id,
         isarId: getHash(id, type),
@@ -1008,13 +1033,13 @@ class DownloadStub {
   }
 
   factory DownloadStub.fromId(
-      {required String id,
+      {required BaseItemId id,
       required DownloadItemType type,
       required String? name}) {
     assert(!type.requiresItem);
     return DownloadStub._build(
-        id: id,
-        isarId: getHash(id, type),
+        id: id.raw,
+        isarId: getHash(id.raw, type),
         jsonItem: null,
         type: type,
         name: name ?? "Unlocalized $id",
@@ -1060,10 +1085,10 @@ class DownloadStub {
   final String? jsonItem;
 
   @ignore
-  BaseItemDto? get baseItem =>
-      _baseItemCached ??= ((jsonItem == null || !type.requiresItem)
-          ? null
-          : BaseItemDto.fromJson(jsonDecode(jsonItem!)));
+  BaseItemDto? get baseItem => _baseItemCached ??= ((jsonItem == null ||
+          !type.requiresItem)
+      ? null
+      : BaseItemDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
 
   @ignore
   BaseItemDto? _baseItemCached;
@@ -1084,7 +1109,8 @@ class DownloadStub {
                   _ =>
                     throw "Invalid FinampCollection DownloadItem: no attached collection"
                 }
-              : FinampCollection.fromJson(jsonDecode(jsonItem!)));
+              : FinampCollection.fromJson(
+                  jsonDecode(jsonItem!) as Map<String, dynamic>));
 
   @ignore
   FinampCollection? _finampCollectionCached;
@@ -1109,7 +1135,7 @@ class DownloadStub {
 
   /// Calculate a DownloadStub's isarId
   static int getHash(String id, DownloadItemType type) {
-    return _fastHash(type.name + id);
+    return _fastHash(type.isarType + id);
   }
 
   @override
@@ -1135,7 +1161,7 @@ class DownloadStub {
       parentIndexNumber: baseItem?.parentIndexNumber,
       orderedChildren: null,
       path: null,
-      viewId: null,
+      isarViewId: null,
       userTranscodingProfile: null,
       syncTranscodingProfile: transcodingProfile,
       fileTranscodingProfile: null,
@@ -1164,7 +1190,7 @@ class DownloadItem extends DownloadStub {
       required this.parentIndexNumber,
       required this.orderedChildren,
       required this.path,
-      required this.viewId,
+      required this.isarViewId,
       required this.userTranscodingProfile,
       required this.syncTranscodingProfile,
       required this.fileTranscodingProfile})
@@ -1189,12 +1215,12 @@ class DownloadItem extends DownloadStub {
   @Index()
   DownloadItemState state;
 
-  /// index numbers from backing BaseItemDto.  Used to order songs in albums.
+  /// index numbers from backing BaseItemDto.  Used to order tracks in albums.
   final int? baseIndexNumber;
   final int? parentIndexNumber;
 
   /// List of ordered isarIds of collection children.  This is used to order
-  /// songs in playlists.
+  /// tracks in playlists.
   List<int>? orderedChildren;
 
   /// The path to the downloads file, relative to the download location's currentPath.
@@ -1202,7 +1228,12 @@ class DownloadItem extends DownloadStub {
 
   /// The id of the view/library containing this item.  Will be null for playlists
   /// and child elements with no non-playlist parents.
-  String? viewId;
+  @ignore
+  BaseItemId? get viewId => isarViewId == null ? null : BaseItemId(isarViewId!);
+  set viewId(BaseItemId? id) => isarViewId = id?.raw;
+  // Use viewId name to match older database entries
+  @Name("viewId")
+  String? isarViewId;
 
   DownloadProfile? userTranscodingProfile;
   DownloadProfile? syncTranscodingProfile;
@@ -1236,7 +1267,7 @@ class DownloadItem extends DownloadStub {
   DownloadItem? copyWith(
       {BaseItemDto? item,
       List<DownloadStub>? orderedChildItems,
-      String? viewId,
+      BaseItemId? viewId,
       required bool forceCopy}) {
     String? json;
     if (type == DownloadItemType.image) {
@@ -1285,7 +1316,7 @@ class DownloadItem extends DownloadStub {
       path: path,
       state: state,
       type: type,
-      viewId: viewId ?? this.viewId,
+      isarViewId: viewId?.raw ?? isarViewId,
       userTranscodingProfile: userTranscodingProfile,
       syncTranscodingProfile: syncTranscodingProfile,
       fileTranscodingProfile: fileTranscodingProfile,
@@ -1294,15 +1325,23 @@ class DownloadItem extends DownloadStub {
 }
 
 /// The primary type of a DownloadItem.
+///
 /// Enumerated by Isar, do not modify order or delete existing entries.
+/// New entries must be appended at the end of this list.
 enum DownloadItemType {
-  collection(true, false),
-  song(true, true),
-  image(true, true),
-  anchor(false, false),
-  finampCollection(false, false);
+  collection("collection", true, false),
+  track("song", true, true),
+  image("image", true, true),
+  anchor("anchor", false, false),
+  finampCollection("finampCollection", false, false);
 
-  const DownloadItemType(this.requiresItem, this.hasFiles);
+  const DownloadItemType(this.isarType, this.requiresItem, this.hasFiles);
+
+  ///!!! Used by `DownloadStub.getHash` to calculate the isarId for
+  ///!!! the downloads system, DO NOT EDIT for any existing entries.
+  ///!!! Doing so would invalidate existing downloads
+  ///!!! and cause them to be deleted and re-downloaded.
+  final String isarType;
 
   final bool requiresItem;
   final bool hasFiles;
@@ -1369,16 +1408,37 @@ enum DownloadItemState {
   }
 }
 
+enum DeleteType {
+  canDelete("canDelete"),
+  cantDelete("cantDelete"),
+  notDownloaded("notDownloaded");
+
+  const DeleteType(this.textForm);
+  final String textForm;
+}
+
 /// The status of a download, as used to determine download button state.
 /// Obtain via downloadsService statusProvider.
 enum DownloadItemStatus {
+  /// not downloaded
   notNeeded(false, false, false),
+  // downloaded over a parent
   incidental(false, false, true),
   incidentalOutdated(false, true, true),
+
+  /// downloaded separately
   required(true, false, false),
   requiredOutdated(true, true, false);
 
   const DownloadItemStatus(this.isRequired, this.outdated, this.isIncidental);
+
+  DeleteType toDeleteType() {
+    return isRequired
+        ? DeleteType.canDelete
+        : (outdated || isIncidental
+            ? DeleteType.cantDelete
+            : DeleteType.notDownloaded);
+  }
 
   final bool isRequired;
   final bool outdated;
@@ -1389,19 +1449,20 @@ enum DownloadItemStatus {
 /// Enumerated by Isar, do not modify order or delete existing entries
 enum BaseItemDtoType {
   noItem(null, true, null, null),
-  album("MusicAlbum", false, [song], DownloadItemType.collection),
-  artist("MusicArtist", true, [album, song], DownloadItemType.collection),
-  playlist("Playlist", true, [song], DownloadItemType.collection),
-  genre("MusicGenre", true, [album, song], DownloadItemType.collection),
-  song("Audio", false, [], DownloadItemType.song),
-  library("CollectionFolder", true, [album, song], DownloadItemType.collection),
+  album("MusicAlbum", false, [track], DownloadItemType.collection),
+  artist("MusicArtist", true, [album, track], DownloadItemType.collection),
+  playlist("Playlist", true, [track], DownloadItemType.collection),
+  genre("MusicGenre", true, [album, track], DownloadItemType.collection),
+  track("Audio", false, [], DownloadItemType.track),
+  library(
+      "CollectionFolder", true, [album, track], DownloadItemType.collection),
   folder("Folder", true, null, DownloadItemType.collection),
-  musicVideo("MusicVideo", false, [], DownloadItemType.song),
-  audioBook("AudioBook", false, [], DownloadItemType.song),
-  tvEpisode("Episode", false, [], DownloadItemType.song),
-  video("Video", false, [], DownloadItemType.song),
-  movie("Movie", false, [], DownloadItemType.song),
-  trailer("Trailer", false, [], DownloadItemType.song),
+  musicVideo("MusicVideo", false, [], DownloadItemType.track),
+  audioBook("AudioBook", false, [], DownloadItemType.track),
+  tvEpisode("Episode", false, [], DownloadItemType.track),
+  video("Video", false, [], DownloadItemType.track),
+  movie("Movie", false, [], DownloadItemType.track),
+  trailer("Trailer", false, [], DownloadItemType.track),
   unknown(null, true, null, DownloadItemType.collection);
 
   // All possible types in Jellyfin as of 10.9:
@@ -1423,8 +1484,10 @@ enum BaseItemDtoType {
   bool get expectChangesInChildren =>
       childTypes?.any((x) => x.expectChanges) ?? true;
 
-  // BaseItemDto types that we handle like songs have been handled by returning
-  // the actual song type.  This may be a bad ides?
+  bool get hasChildren => childTypes?.isNotEmpty ?? false;
+
+  // BaseItemDto types that we handle like tracks have been handled by returning
+  // the actual track type.  This may be a bad idea?
   static BaseItemDtoType fromItem(BaseItemDto item) {
     switch (item.type) {
       case "Audio":
@@ -1434,7 +1497,7 @@ enum BaseItemDtoType {
       case "Video":
       case "Movie":
       case "Trailer":
-        return song;
+        return track;
       case "MusicAlbum":
         return album;
       case "MusicArtist":
@@ -1451,6 +1514,23 @@ enum BaseItemDtoType {
         return unknown;
     }
   }
+}
+
+/// The category of a section on the download screen.
+/// Used to efficiently query downloads in the downloads_service
+/// and displaying them to the user.
+enum DownloadsScreenCategory {
+  albums(DownloadItemType.collection, BaseItemDtoType.album),
+  artists(DownloadItemType.collection, BaseItemDtoType.artist),
+  playlists(DownloadItemType.collection, BaseItemDtoType.playlist),
+  genres(DownloadItemType.collection, BaseItemDtoType.genre),
+  tracks(DownloadItemType.track, BaseItemDtoType.track),
+  special(DownloadItemType.finampCollection, null);
+
+  const DownloadsScreenCategory(this.type, this.baseItemType);
+
+  final DownloadItemType type;
+  final BaseItemDtoType? baseItemType;
 }
 
 @HiveType(typeId: 43)
@@ -1518,7 +1598,7 @@ enum QueueItemSourceType {
   @HiveField(1)
   playlist,
   @HiveField(2)
-  songMix,
+  trackMix,
   @HiveField(3)
   artistMix,
   @HiveField(4)
@@ -1526,7 +1606,7 @@ enum QueueItemSourceType {
   @HiveField(5)
   favorites,
   @HiveField(6)
-  allSongs,
+  allTracks,
   @HiveField(7)
   filteredList,
   @HiveField(8)
@@ -1552,7 +1632,7 @@ enum QueueItemSourceType {
   @HiveField(18)
   genreMix,
   @HiveField(19)
-  song;
+  track;
 }
 
 @HiveType(typeId: 53)
@@ -1569,13 +1649,21 @@ enum QueueItemQueueType {
 
 @HiveType(typeId: 54)
 class QueueItemSource {
-  QueueItemSource({
+  QueueItemSource.rawId({
     required this.type,
     required this.name,
     required this.id,
     this.item,
     this.contextNormalizationGain,
   });
+
+  QueueItemSource({
+    required this.type,
+    required this.name,
+    required BaseItemId id,
+    this.item,
+    this.contextNormalizationGain,
+  }) : id = id.raw;
 
   @HiveField(0)
   QueueItemSourceType type;
@@ -1630,7 +1718,7 @@ class QueueItemSourceName {
   @HiveField(2)
   final String? localizationParameter;
 
-  getLocalized(BuildContext context) {
+  String getLocalized(BuildContext context) {
     switch (type) {
       case QueueItemSourceNameType.preTranslated:
         return pretranslatedName ?? "";
@@ -1681,6 +1769,8 @@ class FinampQueueItem {
         ? BaseItemDto.fromJson(item.extras!["itemJson"] as Map<String, dynamic>)
         : null;
   }
+
+  BaseItemId get baseItemId => item.extras?["itemJson"]["Id"] as BaseItemId;
 }
 
 @HiveType(typeId: 58)
@@ -1807,33 +1897,31 @@ class FinampStorableQueueInfo {
 
   FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek)
       : previousTracks = info.previousTracks
-            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
+            .map<BaseItemId>((track) => track.baseItemId)
             .toList(),
-        currentTrack = info.currentTrack?.item.extras?["itemJson"]["Id"],
+        currentTrack = info.currentTrack?.baseItemId,
         currentTrackSeek = seek,
-        nextUp = info.nextUp
-            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
-            .toList(),
-        queue = info.queue
-            .map<String>((track) => track.item.extras?["itemJson"]["Id"])
-            .toList(),
+        nextUp =
+            info.nextUp.map<BaseItemId>((track) => track.baseItemId).toList(),
+        queue =
+            info.queue.map<BaseItemId>((track) => track.baseItemId).toList(),
         creation = DateTime.now().millisecondsSinceEpoch,
         source = info.source;
 
   @HiveField(0)
-  List<String> previousTracks;
+  List<BaseItemId> previousTracks;
 
   @HiveField(1)
-  String? currentTrack;
+  BaseItemId? currentTrack;
 
   @HiveField(2)
   int? currentTrackSeek;
 
   @HiveField(3)
-  List<String> nextUp;
+  List<BaseItemId> nextUp;
 
   @HiveField(4)
-  List<String> queue;
+  List<BaseItemId> queue;
 
   @HiveField(5)
   // timestamp, milliseconds since epoch
@@ -1847,7 +1935,7 @@ class FinampStorableQueueInfo {
     return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
   }
 
-  int get songCount {
+  int get trackCount {
     return previousTracks.length +
         ((currentTrack == null) ? 0 : 1) +
         nextUp.length +
@@ -1913,6 +2001,11 @@ enum DownloadLocationType {
   final bool needsPath;
   final bool useHumanReadableNames;
   final BaseDirectory baseDirectory;
+
+  static DownloadLocationType get platformDefaultDirectory =>
+      (Platform.isIOS || Platform.isAndroid)
+          ? DownloadLocationType.internalSupport
+          : DownloadLocationType.cache;
 }
 
 @HiveType(typeId: 65)
@@ -1924,7 +2017,7 @@ enum FinampTranscodingCodec {
   @HiveField(2)
   opus("ogg", false, 2.0),
   @HiveField(3)
-  // Container is null to fall back to real original container per song
+  // Container is null to fall back to real original container per track
   original(null, true, 99999999);
 
   const FinampTranscodingCodec(
@@ -1969,7 +2062,7 @@ class DownloadProfile {
   /// implementation returns the unmodified bitrate if [channels] is 2 or below
   /// (stereo/mono), doubles it if under 6, and triples it otherwise. This
   /// *should* handle the 5.1/7.1 case, apologies if you're reading this after
-  /// wondering why your cinema-grade ∞-channel song sounds terrible when
+  /// wondering why your cinema-grade ∞-channel track sounds terrible when
   /// transcoded.
   int bitrateChannels(int channels) {
     // If stereo/mono, return the base bitrate
@@ -2047,8 +2140,9 @@ class DownloadedLyrics {
   final String? jsonItem;
 
   @ignore
-  LyricDto? get lyricDto => _lyricDtoCached ??=
-      ((jsonItem == null) ? null : LyricDto.fromJson(jsonDecode(jsonItem!)));
+  LyricDto? get lyricDto => _lyricDtoCached ??= ((jsonItem == null)
+      ? null
+      : LyricDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
   @ignore
   LyricDto? _lyricDtoCached;
 }
@@ -2097,11 +2191,15 @@ enum PlaybackSpeedVisibility {
 }
 
 enum FinampCollectionType {
-  favorites,
-  allPlaylists,
-  latest5Albums,
-  libraryImages,
-  allPlaylistsMetadata;
+  favorites(true),
+  allPlaylists(true),
+  latest5Albums(true),
+  libraryImages(false),
+  allPlaylistsMetadata(false);
+
+  const FinampCollectionType(this.hasAudio);
+
+  final bool hasAudio;
 }
 
 @JsonSerializable(
@@ -2157,7 +2255,7 @@ enum MediaItemParentType {
   instantMix,
 }
 
-@JsonSerializable()
+@JsonSerializable(converters: [BaseItemIdConverter()])
 @HiveType(typeId: 69)
 class MediaItemId {
   MediaItemId({
@@ -2174,10 +2272,10 @@ class MediaItemId {
   MediaItemParentType parentType;
 
   @HiveField(2)
-  String? itemId;
+  BaseItemId? itemId;
 
   @HiveField(3)
-  String? parentId;
+  BaseItemId? parentId;
 
   factory MediaItemId.fromJson(Map<String, dynamic> json) =>
       _$MediaItemIdFromJson(json);
@@ -2448,7 +2546,6 @@ class FinampFeatureChipsConfiguration {
   }
 }
 
-
 @HiveType(typeId: 76)
 class DeviceInfo {
   DeviceInfo({
@@ -2461,4 +2558,53 @@ class DeviceInfo {
 
   @HiveField(1)
   String? id;
+}
+
+@HiveType(typeId: 77)
+enum ReleaseDateFormat {
+  @HiveField(0)
+  year,
+  @HiveField(1)
+  iso,
+  @HiveField(2)
+  monthYear,
+  @HiveField(3)
+  monthDayYear;
+
+  /// Human-readable version of this enum. I've written longer descriptions on
+  /// enums like [TabContentType], and I can't be bothered to copy and paste it
+  /// again.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(ReleaseDateFormat releaseDateFormat) {
+    switch (releaseDateFormat) {
+      case ReleaseDateFormat.year:
+        return "Year";
+      case ReleaseDateFormat.iso:
+        return "ISO 8601";
+      case ReleaseDateFormat.monthYear:
+        return "Month & Year";
+      case ReleaseDateFormat.monthDayYear:
+        return "Month, Day & Year";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ReleaseDateFormat releaseDateFormat, BuildContext context) {
+    switch (releaseDateFormat) {
+      case ReleaseDateFormat.year:
+        return AppLocalizations.of(context)!.releaseDateFormatYear;
+      case ReleaseDateFormat.iso:
+        return AppLocalizations.of(context)!.releaseDateFormatISO;
+      case ReleaseDateFormat.monthYear:
+        return AppLocalizations.of(context)!.releaseDateFormatMonthYear;
+      case ReleaseDateFormat.monthDayYear:
+        return AppLocalizations.of(context)!.releaseDateFormatMonthDayYear;
+    }
+  }
 }

@@ -1,4 +1,6 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/services/music_player_background_task.dart';
+import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,34 +14,17 @@ import 'jellyfin_api_helper.dart';
 
 part 'favorite_provider.g.dart';
 
-/// All favoriteRequests with the same BaseItemDto id should be considered equal.
-class FavoriteRequest {
-  final BaseItemDto? item;
-
-  FavoriteRequest(this.item);
-
-  @override
-  bool operator ==(Object other) {
-    return other is FavoriteRequest && other.item?.id == item?.id;
-  }
-
-  @override
-  int get hashCode => item?.id.hashCode ?? 5436345667;
-}
-
 @riverpod
 class IsFavorite extends _$IsFavorite {
   bool _changed = false;
   Future<void>? _initializing;
 
   @override
-  bool build(FavoriteRequest value) {
-    if (value.item == null) {
+  bool build(BaseItemDto? item) {
+    if (item == null) {
       return false;
     }
-    var item = value.item!;
-    ref.listen(finampSettingsProvider.select((value) => value.value?.isOffline),
-        (_, value) {
+    ref.listen(finampSettingsProvider.isOffline, (_, value) {
       if (!_changed && value == false) {
         // If we have not had updateFavorite run and are moving from offline to
         // online, invalidate to fetch latest data from server.
@@ -74,9 +59,11 @@ class IsFavorite extends _$IsFavorite {
   }
 
   bool updateFavorite(bool isFavorite) {
-    assert(value.item != null);
+    assert(item != null);
     final isOffline = FinampSettingsHelper.finampSettings.isOffline;
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final queueService = GetIt.instance<QueueService>();
     if (isOffline) {
       FeedbackHelper.feedback(FeedbackType.error);
       GlobalSnackbar.message(
@@ -95,9 +82,9 @@ class IsFavorite extends _$IsFavorite {
       try {
         UserItemDataDto newUserData;
         if (isFavorite) {
-          newUserData = await jellyfinApiHelper.addFavourite(value.item!.id);
+          newUserData = await jellyfinApiHelper.addFavourite(item!.id);
         } else {
-          newUserData = await jellyfinApiHelper.removeFavourite(value.item!.id);
+          newUserData = await jellyfinApiHelper.removeFavourite(item!.id);
         }
         state = newUserData.isFavorite;
 
@@ -108,6 +95,10 @@ class IsFavorite extends _$IsFavorite {
       }
     });
     state = isFavorite;
+    // If the current track is the one being toggled, update the playback state (and media notification)
+    if (item!.id == queueService.getCurrentTrack()?.baseItem?.id) {
+      audioHandler.refreshPlaybackStateAndMediaNotification();
+    }
     return state;
   }
 

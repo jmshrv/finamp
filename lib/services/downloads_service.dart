@@ -5,13 +5,12 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
@@ -30,7 +29,7 @@ class DownloadsService {
   final _isar = GetIt.instance<Isar>();
 
   final _anchor = DownloadStub.fromId(
-      id: "Anchor", type: DownloadItemType.anchor, name: null);
+      id: BaseItemId("Anchor"), type: DownloadItemType.anchor, name: null);
   late final downloadTaskQueue = IsarTaskQueue(this);
   late final deleteBuffer = DownloadsDeleteService(this);
   late final syncBuffer = DownloadsSyncService(this);
@@ -68,7 +67,7 @@ class DownloadsService {
   bool fullSpeedSync = false;
 
   /// Sync every item completely to ensure everything is completly up-to-date.  Otherwise,
-  /// albums/songs/images with a state of complete will be assumed to remain unchanged
+  /// albums/tracks/images with a state of complete will be assumed to remain unchanged
   /// and the sync will skip them, assuming prefer quick sync setting is true.
   bool forceFullSync = false;
 
@@ -95,7 +94,7 @@ class DownloadsService {
   /// Provider for the download state of an item.  This is whether the items associated
   /// files, or its children's file in the case of a collection, are missing, downloading
   /// or completely downloaded.  Useful for showing download status indicators
-  /// on songs and albums.
+  /// on tracks and albums.
   final stateProvider = StreamProvider.family
       .autoDispose<DownloadItemState?, DownloadStub>((ref, stub) {
     assert(stub.type != DownloadItemType.image &&
@@ -153,6 +152,24 @@ class DownloadsService {
     return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true);
   });
 
+  /// Provider for user-downloaded items of a specific category.
+  /// Used to show and group downloaded items on the downloads screen.
+  late final userDownloadedItemsProvider = StreamProvider.family
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>(
+    (ref, type) => _isar.downloadItems
+        .where()
+        .typeEqualTo(type.type)
+        .filter()
+        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+        .optional(
+          type.baseItemType != null,
+          (q) => q.baseItemTypeEqualTo(type.baseItemType!),
+        )
+        .sortByName()
+        .build()
+        .watch(fireImmediately: true),
+  );
+
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
     // Initialize downloadStatuses dict with actual counts of items in isar with
@@ -164,7 +181,7 @@ class DownloadsService {
           .optional(
               state != DownloadItemState.syncFailed,
               (q) => q
-                  .typeEqualTo(DownloadItemType.song)
+                  .typeEqualTo(DownloadItemType.track)
                   .or()
                   .typeEqualTo(DownloadItemType.image))
           .filter()
@@ -195,7 +212,7 @@ class DownloadsService {
           if (listener != null) {
             var newState = DownloadItemState.fromTaskStatus(event.status);
             if (!listener.state.isFinal) {
-              // Completed images have their extension updated if possible.  Songs
+              // Completed images have their extension updated if possible.  Tracks
               // should already have extensions when enqueued.  Extensions only serve
               // to help the user with viewing files stored in custom download locations, so
               // it does not matter if this update does not take place.
@@ -374,7 +391,7 @@ class DownloadsService {
     await downloadTaskQueue.initializeQueue();
 
     // Wait a few seconds to not slow initial library load
-    unawaited(Future.delayed(const Duration(seconds: 5), () async {
+    unawaited(Future.delayed(const Duration(seconds: 10), () async {
       try {
         await syncBuffer.executeSyncs();
         await deleteBuffer.executeDeletes();
@@ -409,9 +426,9 @@ class DownloadsService {
   /// while on downloads screen to update overview.
   void updateDownloadCounts() {
     _isar.txnSync(() {
-      downloadCounts["song"] = _isar.downloadItems
+      downloadCounts["track"] = _isar.downloadItems
           .where()
-          .typeEqualTo(DownloadItemType.song)
+          .typeEqualTo(DownloadItemType.track)
           .filter()
           .not()
           .stateEqualTo(DownloadItemState.notDownloaded)
@@ -436,7 +453,7 @@ class DownloadsService {
   Future<void> addDownload({
     required DownloadStub stub,
     required DownloadProfile transcodeProfile,
-    String? viewId,
+    BaseItemId? viewId,
   }) async {
     // Comment https://github.com/jmshrv/finamp/issues/134#issuecomment-1563441355
     // suggests this does not make a request and always returns failure
@@ -511,7 +528,7 @@ class DownloadsService {
   /// it is required that [_syncDownload] strictly follows the node graph hierarchy
   /// and only syncs children appropriate for an info node if reaching a node along
   /// an info link, even if children appropriate for a required node are present.
-  Future<void> resync(DownloadStub stub, String? viewId,
+  Future<void> resync(DownloadStub stub, BaseItemId? viewId,
       {bool keepSlow = false}) async {
     _consecutiveConnectionErrors = 0;
     _fileSystemFull = false;
@@ -554,16 +571,16 @@ class DownloadsService {
     // The node hierarchy is a limitation on what types of nodes can link to what
     // sorts of children.  It enforces a dependency graph with no loops which will
     // be completely deleted if the anchor is removed.  The type hierarchy is anchor->
-    // non-album/playlist collection->album/playlist->song->image.  Items can only
+    // non-album/playlist collection->album/playlist->track->image.  Items can only
     // link to types lower in the hierarchy, not ones higher or equal to themselves.
-    // The only exception is songs, which can have info links to higher types but
-    // only if the song is required.  To prevent this from allowing loops which include
-    // require links, no type above songs in the hierarchy, namely collections, may have
+    // The only exception is tracks, which can have info links to higher types but
+    // only if the track is required.  To prevent this from allowing loops which include
+    // require links, no type above tracks in the hierarchy, namely collections, may have
     // any required children if they themselves are not required.  This exception
     // does allow for the formation of loops of info links, but the fact that participating
-    // songs must be required means that the loops can always be cleaned up as songs
+    // tracks must be required means that the loops can always be cleaned up as tracks
     // are deleted and prevents info dependency chains from propagating between
-    // info only collections and songs to eventually require metadata on every item
+    // info only collections and tracks to eventually require metadata on every item
     // the server has.
     _isar.writeTxnSync(() {
       List<
@@ -584,7 +601,7 @@ class DownloadsService {
           (q) => q.anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
               (q, element) => q.baseItemTypeEqualTo(element))
         ),
-        (DownloadItemType.song, null),
+        (DownloadItemType.track, null),
         (DownloadItemType.image, null),
       ];
       // Objects matching a require filter cannot require elements matching earlier filters or the current filter.
@@ -614,19 +631,19 @@ class DownloadsService {
           QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
               QueryBuilder<DownloadItem, DownloadItem,
                   QFilterCondition>)> infoFilters = [
-        // Select albums/playlists that only info link songs or images
+        // Select albums/playlists that only info link tracks or images
         (q) => q
             .typeEqualTo(DownloadItemType.collection)
             .anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
                 (q, element) => q.baseItemTypeEqualTo(element))
             .not()
             .info((q) => q.not().group((q) => q
-                .typeEqualTo(DownloadItemType.song)
+                .typeEqualTo(DownloadItemType.track)
                 .or()
                 .typeEqualTo(DownloadItemType.image))),
-        // Select required songs that only link collections or images
+        // Select required tracks that only link collections or images
         (q) => q
-            .typeEqualTo(DownloadItemType.song)
+            .typeEqualTo(DownloadItemType.track)
             .requiredByIsNotEmpty()
             .not()
             .info((q) => q.not().group((q) => q
@@ -637,7 +654,7 @@ class DownloadsService {
         (q) => q.not().info((q) => q.not().typeEqualTo(DownloadItemType.image)),
         (q) => q.typeEqualTo(DownloadItemType.anchor),
       ];
-      // albums/playlist can require info on songs.  required songs can require info on
+      // albums/playlist can require info on tracks.  required tracks can require info on
       // collections.  Anyone can require info on an image.  The anchor can info link
       // anyone.  All other info links are disallowed.
       var badInfoItems = _isar.downloadItems
@@ -661,14 +678,14 @@ class DownloadsService {
     downloadCounts[repairStepTrackingName] = 2;
     var itemsWithFiles = _isar.downloadItems
         .where()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.track)
         .or()
         .typeEqualTo(DownloadItemType.image)
         .findAllSync();
     for (var item in itemsWithFiles) {
       switch (item.state) {
         case DownloadItemState.complete:
-          await _verifyDownload(item);
+          _verifyDownload(item);
         case DownloadItemState.notDownloaded:
           break;
         case DownloadItemState.enqueued: // fall through
@@ -692,6 +709,17 @@ class DownloadsService {
         syncItemDownloadSettings(item);
       }
     });
+    _isar.writeTxnSync(() {
+      var itemsWithFiles = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.track)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
+          .findAllSync();
+      for (var item in itemsWithFiles) {
+        syncItemDownloadSettings(item);
+      }
+    });
     markOutdatedTranscodes();
 
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
@@ -710,9 +738,9 @@ class DownloadsService {
         .where()
         .stateNotEqualTo(DownloadItemState.notDownloaded)
         .filter()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.track)
         .findAllSync();
-    final JellyfinApiHelper _jellyfinApiData =
+    final JellyfinApiHelper jellyfinApiData =
         GetIt.instance<JellyfinApiHelper>();
     for (var item in allItems) {
       if (item.baseItem?.mediaStreams
@@ -729,7 +757,7 @@ class DownloadsService {
         idsWithLyrics[item.isarId] = null;
         LyricDto? lyrics;
         try {
-          lyrics = await _jellyfinApiData.getLyrics(itemId: item.id);
+          lyrics = await jellyfinApiData.getLyrics(itemId: BaseItemId(item.id));
           _downloadsLogger.finer("Fetched lyrics for ${item.name}");
           idsWithLyrics[item.isarId] = lyrics;
         } catch (e) {
@@ -757,12 +785,12 @@ class DownloadsService {
     }
     await deleteBuffer.executeDeletes();
 
-    // Step 6 - Make sure there are no orphan files in song directory.
+    // Step 6 - Make sure there are no orphan files in track directory.
     _downloadsLogger.info("Starting downloads repair step 6");
     downloadCounts[repairStepTrackingName] = 6;
     // This cleans internalSupport/images
     var imageFilePaths = Directory(path_helper.join(
-            FinampSettingsHelper.finampSettings.internalSongDir.currentPath,
+            FinampSettingsHelper.finampSettings.internalTrackDir.currentPath,
             "images"))
         .list()
         .handleError((e) =>
@@ -770,22 +798,24 @@ class DownloadsService {
         .where((event) => event is File)
         .map((event) => path_helper.canonicalize(event.path));
     var filePaths = await imageFilePaths.toSet();
-    // This cleans internalSupport/songs and internalDocuments/songs
-    for (var songBasePath in FinampSettingsHelper
+    // This cleans FINAMP_BASE_DOWNLOAD_DIRECTORY in internalSupport
+    // and internalDocuments
+    for (var trackBasePath in FinampSettingsHelper
         .finampSettings.downloadLocationsMap.values
         .where((element) => !element.baseDirectory.needsPath)
         .map((e) => e.currentPath)) {
-      var songFilePaths = Directory(path_helper.join(songBasePath, "songs"))
+      var trackFilePaths = Directory(
+              path_helper.join(trackBasePath, FINAMP_BASE_DOWNLOAD_DIRECTORY))
           .list()
           .handleError((e) => _downloadsLogger
-              .info("Error while cleaning song directories: $e"))
+              .info("Error while cleaning track directories: $e"))
           .where((event) => event is File)
           .map((event) => path_helper.canonicalize(event.path));
-      filePaths.addAll(await songFilePaths.toSet());
+      filePaths.addAll(await trackFilePaths.toSet());
     }
     for (var item in _isar.downloadItems
         .where()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.track)
         .or()
         .typeEqualTo(DownloadItemType.image)
         .filter()
@@ -809,7 +839,7 @@ class DownloadsService {
   }
 
   /// Verify a download is complete and the associated file exists.  Update
-  /// the item to be notDownloaded otherwise.  Used by [getSongDownload] and
+  /// the item to be notDownloaded otherwise.  Used by [gettrackDownload] and
   /// [getImageDownload].
   bool _verifyDownload(DownloadItem item) {
     assert(item.type.hasFiles);
@@ -870,7 +900,7 @@ class DownloadsService {
       _isar.downloadItems.putSync(item);
       List<DownloadItem> parents = _isar.downloadItems
           .where()
-          .typeNotEqualTo(DownloadItemType.song)
+          .typeNotEqualTo(DownloadItemType.track)
           .filter()
           .requires((q) => q.isarIdEqualTo(item.isarId))
           .or()
@@ -892,7 +922,7 @@ class DownloadsService {
     Set<DownloadItemState> childStates = {};
     if (item.baseItemType == BaseItemDtoType.album ||
         item.baseItemType == BaseItemDtoType.playlist) {
-      // Use full list of songs in info links for album/playlist
+      // Use full list of tracks in info links for album/playlist
       childStates.addAll(
           item.info.filter().distinctByState().stateProperty().findAllSync());
     } else {
@@ -933,9 +963,6 @@ class DownloadsService {
   /// location and transcode settings with the highest quality are selected.
   /// This should only be called inside an isar write transaction.
   void syncItemDownloadSettings(DownloadItem item) {
-    if (item.type == DownloadItemType.image) {
-      return;
-    }
     var transcodeProfiles =
         item.requiredBy.filter().syncTranscodingProfileProperty().findAllSync();
     if (transcodeProfiles.isEmpty) {
@@ -944,27 +971,25 @@ class DownloadsService {
       return;
     }
     transcodeProfiles.add(item.userTranscodingProfile);
-    if (transcodeProfiles.whereNotNull().isEmpty) {
+    if (transcodeProfiles.nonNulls.isEmpty) {
       _downloadsLogger
           .severe("No valid download profiles for required item ${item.name}");
       return;
     }
 
     // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    DownloadProfile bestProfile = transcodeProfiles
-        .whereNotNull()
+    DownloadProfile bestProfile = transcodeProfiles.nonNulls
         .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
         .first;
-    if (!transcodeProfiles
-            .whereNotNull()
-            .contains(item.syncTranscodingProfile) ||
-        bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000)) {
+    if (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
+        (bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000) &&
+            item.type != DownloadItemType.image)) {
       _downloadsLogger.finest("Updating download settings for ${item.name}");
       item.syncTranscodingProfile = bestProfile;
       if ((item.state == DownloadItemState.enqueued ||
               item.state == DownloadItemState.downloading ||
               item.state == DownloadItemState.complete) &&
-          item.type == DownloadItemType.song &&
+          item.type.hasFiles &&
           FinampSettingsHelper.finampSettings.shouldRedownloadTranscodes) {
         if (item.state == DownloadItemState.complete) {
           updateItemState(item, DownloadItemState.needsRedownloadComplete,
@@ -983,13 +1008,15 @@ class DownloadsService {
     }
   }
 
-  /// Find all downloaded songs with outdated download location ID or transcoding profile
+  /// Find all downloaded tracks with outdated download location ID or transcoding profile
   /// and mark them for deletion, then resync to delete and redownload them.
   void markOutdatedTranscodes() {
     _isar.writeTxnSync(() {
       var items = _isar.downloadItems
           .where()
-          .typeEqualTo(DownloadItemType.song)
+          .typeEqualTo(DownloadItemType.track)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
           .filter()
           .not()
           .stateEqualTo(DownloadItemState.notDownloaded)
@@ -1003,9 +1030,9 @@ class DownloadsService {
     });
   }
 
-  /// Migrates downloaded song metadata from Hive into Isar.  It first adds nodes
-  /// for all images, then adds nodes for all songs and links them to their appropriate
-  /// images.  Then nodes are added for all parents which link to their songs and
+  /// Migrates downloaded track metadata from Hive into Isar.  It first adds nodes
+  /// for all images, then adds nodes for all tracks and links them to their appropriate
+  /// images.  Then nodes are added for all parents which link to their tracks and
   /// images and are required by the anchor.  Finally, repairAllDownloads is run
   /// to fully download all metadata and clear up any issues.  This will fail if
   /// offline, but the node graph is still usable without this step and it can
@@ -1014,21 +1041,24 @@ class DownloadsService {
   Future<void> migrateFromHive() async {
     if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
         .where((element) =>
-            element.baseDirectory == DownloadLocationType.internalSupport)
+            element.baseDirectory ==
+            DownloadLocationType.platformDefaultDirectory)
         .isEmpty) {
       final downloadLocation = await DownloadLocation.create(
-        name: "Internal Storage",
-        baseDirectory: DownloadLocationType.internalSupport,
-      );
+          name: DownloadLocation.internalStorageName,
+          baseDirectory: DownloadLocationType.platformDefaultDirectory);
       FinampSettingsHelper.addDownloadLocation(downloadLocation);
     }
     await Future.wait([
+      // ignore: deprecated_member_use_from_same_package
       Hive.openBox<DownloadedParent>("DownloadedParents"),
-      Hive.openBox<DownloadedSong>("DownloadedItems"),
+      // ignore: deprecated_member_use_from_same_package
+      Hive.openBox<DownloadedTrack>("DownloadedItems"),
+      // ignore: deprecated_member_use_from_same_package
       Hive.openBox<DownloadedImage>("DownloadedImages"),
     ]);
     _migrateImages();
-    _migrateSongs();
+    _migrateTracks();
     _migrateParents();
     unawaited(repairAllDownloads().then((value) => null, onError: (error) {
       _downloadsLogger
@@ -1042,18 +1072,21 @@ class DownloadsService {
   /// Substep 1 of [migrateFromHive].
   void _migrateImages() {
     _downloadsLogger.info("Migrating images from Hive");
-    final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
+    // ignore: deprecated_member_use_from_same_package
+    final downloadedItemsBox = Hive.box<DownloadedTrack>("DownloadedItems");
     final downloadedParentsBox =
+        // ignore: deprecated_member_use_from_same_package
         Hive.box<DownloadedParent>("DownloadedParents");
+    // ignore: deprecated_member_use_from_same_package
     final downloadedImagesBox = Hive.box<DownloadedImage>("DownloadedImages");
 
     List<DownloadItem> nodes = [];
 
     for (final image in downloadedImagesBox.values) {
       BaseItemDto baseItem;
-      var hiveSong = downloadedItemsBox.get(image.requiredBy.first);
-      if (hiveSong != null) {
-        baseItem = hiveSong.song;
+      var hiveTrack = downloadedItemsBox.get(image.requiredBy.first);
+      if (hiveTrack != null) {
+        baseItem = hiveTrack.track;
       } else {
         var hiveParent = downloadedParentsBox.get(image.requiredBy.first);
         if (hiveParent != null) {
@@ -1076,7 +1109,7 @@ class DownloadsService {
                       DownloadLocationType.internalDocuments)
                   .first
                   .id)
-          ? path_helper.join("songs", image.path)
+          ? path_helper.join(FINAMP_BASE_DOWNLOAD_DIRECTORY, image.path)
           : image.path;
       isarItem.state = DownloadItemState.complete;
       isarItem.fileTranscodingProfile =
@@ -1092,57 +1125,59 @@ class DownloadsService {
   }
 
   /// Substep 2 of [migrateFromHive].
-  void _migrateSongs() {
-    _downloadsLogger.info("Migrating songs from Hive");
-    final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
+  void _migrateTracks() {
+    _downloadsLogger.info("Migrating tracks from Hive");
+    // ignore: deprecated_member_use_from_same_package
+    final downloadedItemsBox = Hive.box<DownloadedTrack>("DownloadedItems");
 
     List<DownloadItem> nodes = [];
 
-    for (final song in downloadedItemsBox.values) {
-      var baseItem = song.song;
-      baseItem.mediaSources = [song.mediaSourceInfo];
+    for (final track in downloadedItemsBox.values) {
+      var baseItem = track.track;
+      baseItem.mediaSources = [track.mediaSourceInfo];
       var isarItem =
-          DownloadStub.fromItem(type: DownloadItemType.song, item: baseItem)
+          DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem)
               .asItem(DownloadProfile(
                   transcodeCodec: FinampTranscodingCodec.original,
-                  downloadLocationId: song.downloadLocationId));
+                  downloadLocationId: track.downloadLocationId));
       String? newPath;
-      if (song.downloadLocationId == null) {
+      if (track.downloadLocationId == null) {
         for (MapEntry<String, DownloadLocation> entry in FinampSettingsHelper
             .finampSettings.downloadLocationsMap.entries) {
-          if (song.path.contains(entry.value.currentPath)) {
+          if (track.path.contains(entry.value.currentPath)) {
             isarItem.fileTranscodingProfile = DownloadProfile(
                 transcodeCodec: FinampTranscodingCodec.original,
                 downloadLocationId: entry.key);
             newPath =
-                path_helper.relative(song.path, from: entry.value.currentPath);
+                path_helper.relative(track.path, from: entry.value.currentPath);
             break;
           }
         }
         if (newPath == null) {
           _downloadsLogger
-              .severe("Could not find ${song.path} during migration to isar.");
+              .severe("Could not find ${track.path} during migration to isar.");
           continue;
         }
       } else {
         isarItem.fileTranscodingProfile = DownloadProfile(
             transcodeCodec: FinampTranscodingCodec.original,
-            downloadLocationId: song.downloadLocationId);
-        if (song.downloadLocationId ==
+            downloadLocationId: track.downloadLocationId);
+        if (track.downloadLocationId ==
             FinampSettingsHelper.finampSettings.downloadLocationsMap.values
                 .where((element) =>
                     element.baseDirectory ==
                     DownloadLocationType.internalDocuments)
                 .first
                 .id) {
-          newPath = path_helper.join("songs", song.path);
+          newPath =
+              path_helper.join(FINAMP_BASE_DOWNLOAD_DIRECTORY, track.path);
         } else {
-          newPath = song.path;
+          newPath = track.path;
         }
       }
       isarItem.path = newPath;
       isarItem.state = DownloadItemState.complete;
-      isarItem.viewId = song.viewId;
+      isarItem.viewId = BaseItemId(track.viewId);
       nodes.add(isarItem);
       downloadStatuses[DownloadItemState.complete] =
           downloadStatuses[DownloadItemState.complete]! + 1;
@@ -1166,18 +1201,20 @@ class DownloadsService {
   void _migrateParents() {
     _downloadsLogger.info("Migrating parents from Hive");
     final downloadedParentsBox =
+        // ignore: deprecated_member_use_from_same_package
         Hive.box<DownloadedParent>("DownloadedParents");
-    final downloadedItemsBox = Hive.box<DownloadedSong>("DownloadedItems");
+    // ignore: deprecated_member_use_from_same_package
+    final downloadedItemsBox = Hive.box<DownloadedTrack>("DownloadedItems");
 
     for (final parent in downloadedParentsBox.values) {
-      var songId = parent.downloadedChildren.values.firstOrNull?.id;
-      if (songId == null) {
+      var trackId = parent.downloadedChildren.values.firstOrNull?.id;
+      if (trackId == null) {
         _downloadsLogger.severe(
             "Could not find item associated with parent during migration to isar.");
         continue;
       }
-      var song = downloadedItemsBox.get(songId);
-      if (song == null) {
+      var track = downloadedItemsBox.get(trackId);
+      if (track == null) {
         _downloadsLogger.severe(
             "Could not find item associated with parent during migration to isar.");
         continue;
@@ -1186,14 +1223,14 @@ class DownloadsService {
               type: DownloadItemType.collection, item: parent.item)
           .asItem(DownloadProfile(
               transcodeCodec: FinampTranscodingCodec.original,
-              downloadLocationId: song.downloadLocationId));
+              downloadLocationId: track.downloadLocationId));
       isarItem.userTranscodingProfile = DownloadProfile(
           transcodeCodec: FinampTranscodingCodec.original,
-          downloadLocationId: song.downloadLocationId);
+          downloadLocationId: track.downloadLocationId);
       // This should only be used for IDs/links and does not need real download items.
       List<DownloadItem> required = parent.downloadedChildren.values
           .map((e) =>
-              DownloadStub.fromItem(type: DownloadItemType.song, item: e)
+              DownloadStub.fromItem(type: DownloadItemType.track, item: e)
                   .asItem(null))
           .toList();
       isarItem.orderedChildren = required.map((e) => e.isarId).toList();
@@ -1206,7 +1243,7 @@ class DownloadsService {
 
       isarItem.state = DownloadItemState.complete;
       if (isarItem.baseItemType != BaseItemDtoType.playlist) {
-        isarItem.viewId = parent.viewId;
+        isarItem.viewId = BaseItemId(parent.viewId);
       }
 
       _isar.writeTxnSync(() {
@@ -1233,7 +1270,8 @@ class DownloadsService {
         .containsKey(downloadLocation)) {
       downloadLocation = null;
     }
-    downloadLocation ??= FinampSettingsHelper.finampSettings.internalSongDir.id;
+    downloadLocation ??=
+        FinampSettingsHelper.finampSettings.internalTrackDir.id;
 
     // Automatically download playlist metadata (to enhance the playlist actions dialog and offline mode)
     await addDownload(
@@ -1246,20 +1284,6 @@ class DownloadsService {
     );
   }
 
-  /// Get all user-downloaded items.  Used to show items on downloads screen.
-  List<DownloadStub> getUserDownloaded() => getVisibleChildren(_anchor);
-
-  /// Get all non-image children of an item.  Used to show item children on
-  /// downloads screen.
-  List<DownloadStub> getVisibleChildren(DownloadStub stub) {
-    return _isar.downloadItems
-        .where()
-        .typeNotEqualTo(DownloadItemType.image)
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
-        .findAllSync();
-  }
-
   /// Gets an item which requires the given stub to be downloaded.  Used in
   /// DownloadButton tooltip for incidental downloads.
   DownloadStub? getFirstRequiringItem(DownloadStub stub) {
@@ -1269,28 +1293,40 @@ class DownloadsService {
         .findFirstSync();
   }
 
+  /// Get all non-image children of an item.
+  /// Used to show item children on the downloads screen.
+  List<DownloadStub> getVisibleChildren(DownloadStub stub) {
+    return _isar.downloadItems
+        .where()
+        .typeNotEqualTo(DownloadItemType.image)
+        .filter()
+        .requiredBy((q) => q.isarIdEqualTo(stub.isarId))
+        .sortByBaseIndexNumber()
+        .findAllSync();
+  }
+
   /// Check whether the given item is part of the given collection.  Returns null
   /// if there is no metadata for the collection.
   bool? checkIfInCollection(BaseItemDto collection, BaseItemDto item) {
     var parent = _isar.downloadItems.getSync(
-        DownloadStub.getHash(collection.id, DownloadItemType.collection));
-    var childId = DownloadStub.getHash(item.id, item.downloadType);
+        DownloadStub.getHash(collection.id.raw, DownloadItemType.collection));
+    var childId = DownloadStub.getHash(item.id.raw, item.downloadType);
     return parent?.orderedChildren?.contains(childId);
   }
 
   // This is for album/playlist screen
-  /// Get all songs in a collection, ordered correctly.  Used to show songs on
-  /// album/playlist screen.  Can return all songs in the album/playlist or
+  /// Get all tracks in a collection, ordered correctly.  Used to show tracks on
+  /// album/playlist screen.  Can return all tracks in the album/playlist or
   /// just fully downloaded ones.
-  Future<List<BaseItemDto>> getCollectionSongs(BaseItemDto item,
+  Future<List<BaseItemDto>> getCollectionTracks(BaseItemDto item,
       {bool playable = true}) async {
     var stub =
         DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
 
-    var id = DownloadStub.getHash(item.id, DownloadItemType.collection);
+    var id = DownloadStub.getHash(item.id.raw, DownloadItemType.collection);
     var query = _isar.downloadItems
         .where()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.track)
         .filter()
         .infoFor((q) => q.isarIdEqualTo(id))
         .optional(
@@ -1307,27 +1343,27 @@ class DownloadsService {
           .thenByBaseIndexNumber()
           .thenByName()
           .findAll();
-      return items.map((e) => e.baseItem).whereNotNull().toList();
+      return items.map((e) => e.baseItem).nonNulls.toList();
     } else {
       List<DownloadItem> playlist = await query.findAll();
       Map<int, DownloadItem> childMap =
-          Map.fromIterable(playlist, key: (e) => e.isarId);
+          Map.fromIterable(playlist, key: (e) => (e as DownloadItem).isarId);
       return canonItem!.orderedChildren!
           .map((e) => childMap[e]?.baseItem)
-          .whereNotNull()
+          .nonNulls
           .toList();
     }
   }
 
-  /// Get all downloaded songs.  Used for songs tab on music screen.  Can have one
+  /// Get all downloaded tracks.  Used for tracks tab on music screen.  Can have one
   /// or more filters applied:
-  /// + nameFilter - only return songs containing nameFilter in their name, case insensitive.
-  /// + relatedTo - only return songs which have relatedTo as their artist, album, or genre.
-  /// + viewFilter - only return songs in the given library.
-  Future<List<DownloadStub>> getAllSongs(
+  /// + nameFilter - only return tracks containing nameFilter in their name, case insensitive.
+  /// + relatedTo - only return tracks which have relatedTo as their artist, album, or genre.
+  /// + viewFilter - only return tracks in the given library.
+  Future<List<DownloadStub>> getAllTracks(
       {String? nameFilter,
       BaseItemDto? relatedTo,
-      String? viewFilter,
+      BaseItemId? viewFilter,
       bool nullableViewFilters = true,
       bool onlyFavorites = false}) {
     List<int> favoriteIds = [];
@@ -1336,7 +1372,7 @@ class DownloadsService {
     }
     return _isar.downloadItems
         .where()
-        .typeEqualTo(DownloadItemType.song)
+        .typeEqualTo(DownloadItemType.track)
         .filter()
         .group((q) => q
             .stateEqualTo(DownloadItemState.complete)
@@ -1349,19 +1385,19 @@ class DownloadsService {
         .optional(
             relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
-                relatedTo!.id, DownloadItemType.collection))))
+                relatedTo!.id.raw, DownloadItemType.collection))))
         .optional(
             viewFilter != null,
-            (q) => q.group((q) => q.viewIdEqualTo(viewFilter).optional(
-                nullableViewFilters, (q) => q.or().viewIdEqualTo(null))))
+            (q) => q.group((q) => q.isarViewIdEqualTo(viewFilter?.raw).optional(
+                nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
         .findAll();
   }
 
-  /// Get all downloaded collections.  Used for non-songs tabs on music screen and
+  /// Get all downloaded collections.  Used for non-tracks tabs on music screen and
   /// on artist/genre screens.  Can have one or more filters applied:
   /// + nameFilter - only return collections containing nameFilter in their name, case insensitive.
   /// + baseTypeFilter - only return collections of the given BaseItemDto type.
-  /// + relatedTo - only return collections containing songs which have relatedTo as
+  /// + relatedTo - only return collections containing tracks which have relatedTo as
   /// their artist, album, or genre.
   /// + fullyDownloaded - only return collections which are fully downloaded.  Artists/genres
   /// must be directly downloaded by the user for this to be true.
@@ -1374,8 +1410,8 @@ class DownloadsService {
       BaseItemDtoType? baseTypeFilter,
       BaseItemDto? relatedTo,
       bool fullyDownloaded = false,
-      String? viewFilter,
-      String? childViewFilter,
+      BaseItemId? viewFilter,
+      BaseItemId? childViewFilter,
       bool nullableViewFilters = true,
       bool onlyFavorites = false}) {
     List<int> favoriteIds = [];
@@ -1392,56 +1428,55 @@ class DownloadsService {
             (q) => q.baseItemTypeEqualTo(baseTypeFilter!))
         // If allPlaylists is info downloaded, we may have info for empty
         // playlists.  We should only return playlists with at least 1 required
-        // song in them.
+        // track in them.
         .optional(
             baseTypeFilter == BaseItemDtoType.playlist,
             (q) => q.info((q) =>
-                q.typeEqualTo(DownloadItemType.song).requiredByIsNotEmpty()))
+                q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
         .optional(
             relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
-                    relatedTo!.id, DownloadItemType.collection)))))
+                    relatedTo!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
         .optional(onlyFavorites,
             (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(
             viewFilter != null,
-            (q) => q.group((q) => q.viewIdEqualTo(viewFilter).optional(
-                nullableViewFilters, (q) => q.or().viewIdEqualTo(null))))
+            (q) => q.group((q) => q.isarViewIdEqualTo(viewFilter?.raw).optional(
+                nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
         .optional(
             childViewFilter != null,
             (q) => q.infoFor((q) => q.group((q) => q
-                .viewIdEqualTo(childViewFilter)
-                .optional(
-                    nullableViewFilters, (q) => q.or().viewIdEqualTo(null)))))
+                .isarViewIdEqualTo(childViewFilter?.raw)
+                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
         .findAll();
   }
 
-  /// Get information about a downloaded song by BaseItemDto or id.
+  /// Get information about a downloaded track by BaseItemDto or id.
   /// Exactly one of the two arguments should be provided.
-  Future<DownloadStub?> getSongInfo({BaseItemDto? item, String? id}) {
+  Future<DownloadStub?> getTrackInfo({BaseItemDto? item, BaseItemId? id}) {
     assert((item == null) != (id == null));
-    return _isar.downloadItems
-        .get(DownloadStub.getHash(id ?? item!.id, DownloadItemType.song));
+    return _isar.downloadItems.get(
+        DownloadStub.getHash(id?.raw ?? item!.id.raw, DownloadItemType.track));
   }
 
   /// Get information about a downloaded collection by BaseItemDto or id.
   /// Exactly one of the two arguments should be provided.
-  Future<DownloadStub?> getCollectionInfo({BaseItemDto? item, String? id}) {
+  Future<DownloadStub?> getCollectionInfo({BaseItemDto? item, BaseItemId? id}) {
     assert((item == null) != (id == null));
-    return _isar.downloadItems
-        .get(DownloadStub.getHash(id ?? item!.id, DownloadItemType.collection));
+    return _isar.downloadItems.get(DownloadStub.getHash(
+        id?.raw ?? item!.id.raw, DownloadItemType.collection));
   }
 
-  /// Get a song's DownloadItem by BaseItemDto or id.  This method performs file
+  /// Get a track's DownloadItem by BaseItemDto or id.  This method performs file
   /// verification and should only be used when the downloaded file is actually
-  /// needed, such as when building MediaItems.  Otherwise, [getSongInfo] should
+  /// needed, such as when building MediaItems.  Otherwise, [getTrackInfo] should
   /// be used instead.  Exactly one of the two arguments should be provided.
-  DownloadItem? getSongDownload({BaseItemDto? item, String? id}) {
+  DownloadItem? getTrackDownload({BaseItemDto? item, BaseItemId? id}) {
     assert((item == null) != (id == null));
-    return _getDownloadByID(id ?? item!.id, DownloadItemType.song);
+    return _getDownloadByID(id?.raw ?? item!.id.raw, DownloadItemType.track);
   }
 
   /// Get an image's DownloadItem by BaseItemDto or id.  This method performs file
@@ -1449,7 +1484,7 @@ class DownloadsService {
   /// needed, such as when building ImageProviders.  Exactly one of the two arguments
   /// should be provided.
   DownloadItem? getImageDownload({BaseItemDto? item, String? blurHash}) {
-    assert((item?.blurHash == null) != (blurHash == null));
+    assert((item == null) != (blurHash == null));
     String? imageId = blurHash ?? item!.blurHash ?? item!.imageId;
     if (imageId == null) {
       return null;
@@ -1461,12 +1496,12 @@ class DownloadsService {
   Future<DownloadedLyrics?> getLyricsDownload(
       {required BaseItemDto baseItem}) async {
     var item = _isar.downloadedLyrics
-        .getSync(DownloadStub.getHash(baseItem.id, DownloadItemType.song));
+        .getSync(DownloadStub.getHash(baseItem.id.raw, DownloadItemType.track));
     return item;
   }
 
   bool? isFavorite(BaseItemDto item) {
-    var stubId = DownloadStub.getHash(item.id, item.downloadType);
+    var stubId = DownloadStub.getHash(item.id.raw, item.downloadType);
     return _getFavoriteIds()?.contains(stubId);
   }
 
@@ -1494,7 +1529,7 @@ class DownloadsService {
         .optional(
             state != DownloadItemState.syncFailed,
             (q) => q
-                .typeEqualTo(DownloadItemType.song)
+                .typeEqualTo(DownloadItemType.track)
                 .or()
                 .typeEqualTo(DownloadItemType.image))
         .filter()
@@ -1533,13 +1568,13 @@ class DownloadsService {
         info.add(item);
       }
     }
-    if (isRequired || item.type == DownloadItemType.song) {
+    if (isRequired || item.type == DownloadItemType.track) {
       var children = item.requires.filter().findAllSync();
       for (var child in children) {
         _getFileChildren(child, required, info, isRequired);
       }
     }
-    if (isRequired || item.type != DownloadItemType.song) {
+    if (isRequired || item.type != DownloadItemType.track) {
       var children = item.info.filter().findAllSync();
       for (var child in children) {
         _getFileChildren(child, required, info, false);
@@ -1549,7 +1584,7 @@ class DownloadsService {
 
   /// Recursive subcomponent of [getFileSize].
   Future<int> _getFileSize(DownloadItem item, bool required) async {
-    if (item.type == DownloadItemType.song &&
+    if (item.type == DownloadItemType.track &&
         item.state.isComplete &&
         required) {
       if (item.fileTranscodingProfile == null ||
@@ -1560,8 +1595,8 @@ class DownloadsService {
                 ?.stat()
                 .then((value) => value.size)
                 .catchError((e) {
-              _downloadsLogger
-                  .fine("No file for song ${item.name} when calculating size.");
+              _downloadsLogger.fine(
+                  "No file for track ${item.name} when calculating size.");
               return 0;
             }) ??
             0;

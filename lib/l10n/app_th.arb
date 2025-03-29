@@ -5,8 +5,8 @@
   "@music": {},
   "clear": "เคลียร์",
   "@clear": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "ซ่อนศิลปินของเพลงหากเป็นชื่อเดียวกับศิลปินของอัลบั้ม",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "ซ่อนศิลปินของเพลงหากเป็นชื่อเดียวกับศิลปินของอัลบั้ม",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "favourites": "รายการโปรด",
   "@favourites": {},
   "setSleepTimer": "ตั้งเวลาปิด",
@@ -52,8 +52,8 @@
   "@artists": {},
   "genres": "แนวเพลง",
   "@genres": {},
-  "startMixNoSongsAlbum": "แตะค้างที่อัลบั้มเพื่อเพิ่มหรือนำออกจากตัวสร้างมิกซ์ก่อนที่จะเริ่มมิกซ์",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "แตะค้างที่อัลบั้มเพื่อเพิ่มหรือนำออกจากตัวสร้างมิกซ์ก่อนที่จะเริ่มมิกซ์",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "albumArtist": "ศิลปินของอัลบั้ม",
@@ -154,10 +154,10 @@
   "@directoryMustBeEmpty": {},
   "enterLowPriorityStateOnPause": "เมื่อหยุดพักจะเข้าสู่โหมดความสำคัญต่ำ",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCount": "จำนวนครั้งที่สุ่มเพลงทั้งหมด",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "จำนวนเพลงที่โหลดขึ้นมาเมื่อใช้ปุ่ม สุ่มทั้งหมด",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "จำนวนครั้งที่สุ่มเพลงทั้งหมด",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "จำนวนเพลงที่โหลดขึ้นมาเมื่อใช้ปุ่ม สุ่มทั้งหมด",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "ประเภทการแสดงผลของหน้าจอเพลง",
   "@viewTypeSubtitle": {},
   "list": "รายการ",
@@ -192,8 +192,8 @@
   "@showTextOnGridView": {},
   "useCoverAsBackground": "แสดงภาพเบลอของปกเพลงเป็นภาพพื้นหลังของตัวเล่นเพลง",
   "@useCoverAsBackground": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "แสดงหรือไม่แสดงชื่อศิลปินเพลงบนหน้าจออัลบั้มหากทั้งสองชื่อไม่ต่างกัน",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "แสดงหรือไม่แสดงชื่อศิลปินเพลงบนหน้าจออัลบั้มหากทั้งสองชื่อไม่ต่างกัน",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "ปิดการใช้งาน gestures",
   "@disableGesture": {},
   "disableGestureSubtitle": "ใช้หรือไม่ใช้งาน gestures",
@@ -307,8 +307,8 @@
   "@updateButtonLabel": {},
   "bitrateSubtitle": "บิตเรตที่สูงขึ้นจะช่วยให้เสียงดีขึ้นแต่ก็แลกมาด้วยการใช้งานเน็ตเวิร์กที่มากขึ้น",
   "@bitrateSubtitle": {},
-  "songCount": "{count,plural,=1{{count} เพลง} other{{count} เพลง}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} เพลง} other{{count} เพลง}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -343,8 +343,8 @@
   "@playButtonLabel": {},
   "required": "จำเป็น",
   "@required": {},
-  "failedToGetSongFromDownloadId": "ล้มเหลวในการเรียกข้อมูลเพลงจากไอดีสำหรับดาวน์โหลด",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "ล้มเหลวในการเรียกข้อมูลเพลงจากไอดีสำหรับดาวน์โหลด",
+  "@failedToGetTrackFromDownloadId": {},
   "shuffleButtonLabel": "สุ่ม",
   "@shuffleButtonLabel": {},
   "playlistNameUpdated": "อัปเดตชื่อเพลย์ลิสต์แล้ว",
@@ -372,8 +372,8 @@
   "@areYouSure": {},
   "addDownloadLocation": "เพิ่มตำแหน่งสำหรับดาวน์โหลด",
   "@addDownloadLocation": {},
-  "downloadedSongsWillNotBeDeleted": "เพลงที่ดาวน์โหลดแล้วจะไม่ถูกลบ",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "เพลงที่ดาวน์โหลดแล้วจะไม่ถูกลบ",
+  "@downloadedTracksWillNotBeDeleted": {},
   "bufferDurationSubtitle": "ตัวเล่นเพลงควรจะอ่านไฟล์ล่วงหน้าเท่าไร ระบุเป็นวินาที หากเปลี่ยนต้องรีสตาร์ท",
   "@bufferDurationSubtitle": {},
   "unknownError": "ข้อผิดพลาดที่ไม่รู้จัก",
@@ -400,8 +400,8 @@
   "@password": {},
   "playlists": "เพลย์ลิสต์",
   "@playlists": {},
-  "startMixNoSongsArtist": "แตะค้างที่ศิลปินเพื่อเพิ่มหรือนำออกจากตัวสร้างมิกซ์ก่อนที่จะเริ่มมิกซ์",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "แตะค้างที่ศิลปินเพื่อเพิ่มหรือนำออกจากตัวสร้างมิกซ์ก่อนที่จะเริ่มมิกซ์",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "couldNotFindLibraries": "ไม่พบคลังใดๆ",
@@ -420,8 +420,8 @@
   "@unknownName": {},
   "finamp": "ฟินแอมป์",
   "@finamp": {},
-  "songs": "เพลง",
-  "@songs": {},
+  "tracks": "เพลง",
+  "@tracks": {},
   "startMix": "เริ่มมิกซ์",
   "@startMix": {},
   "shuffleAll": "สุ่มทั้งหมด",
@@ -449,24 +449,6 @@
   "noMusicLibrariesTitle": "ไม่มีคลังเพลง",
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
-  },
-  "deleteDownloadsConfirmButtonText": "ลบ",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
-  "deleteDownloadsPrompt": "แน่ใจหรือไม่ว่าต้องการลบ {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{song} other{}} '{itemName}' จากเครื่องนี้?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "showFastScroller": "แสดงตัวเลื่อนแบบเร็ว",
   "@showFastScroller": {},

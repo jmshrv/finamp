@@ -8,15 +8,15 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
-import 'package:path/path.dart' as path_helper;
 
 import '../components/PlayerScreen/queue_source_helper.dart';
 import 'downloads_service.dart';
@@ -47,7 +47,7 @@ class QueueService {
   final List<FinampQueueItem> _queue = []; // contains all regular queue items
   FinampQueueOrder _order = FinampQueueOrder(
       items: [],
-      originalSource: QueueItemSource(
+      originalSource: QueueItemSource.rawId(
           id: "",
           name: const QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated),
@@ -79,7 +79,7 @@ class QueueService {
   int _saveUpdateCycleCount = 0;
   bool _saveUpdateImmediate = false;
   SavedQueueState _savedQueueState = SavedQueueState.preInit;
-  FinampStorableQueueInfo? _failedSavedQueue = null;
+  FinampStorableQueueInfo? _failedSavedQueue;
   static const int _maxSavedQueues = 60;
 
   QueueService() {
@@ -116,10 +116,11 @@ class QueueService {
     });
 
     Stream.periodic(const Duration(seconds: 10)).listen((event) {
-      // Update once per minute in background, and up to once every ten seconds if
+      // Update once per minute while playing in background, and up to once every ten seconds if
       // pausing/seeking is occurring
       // We also update on every track switch.
-      if (_saveUpdateCycleCount >= 5 || _saveUpdateImmediate) {
+      if ((_saveUpdateCycleCount >= 5 && !_audioHandler.paused) ||
+          _saveUpdateImmediate) {
         if (_savedQueueState == SavedQueueState.pendingSave &&
             !_audioHandler.paused) {
           _savedQueueState = SavedQueueState.saving;
@@ -149,7 +150,7 @@ class QueueService {
       _audioHandler.initializeAudioSource(_queueAudioSource, preload: true);
 
   void _queueFromConcatenatingAudioSource({
-    logUpdate = true,
+    bool logUpdate = true,
   }) {
     List<FinampQueueItem> allTracks = _audioHandler.effectiveSequence
             ?.map((e) => e.tag as FinampQueueItem)
@@ -177,7 +178,7 @@ class QueueService {
           QueueItemSourceType.nextUpPlaylist,
           QueueItemSourceType.nextUpArtist
         ].contains(_queuePreviousTracks.last.source.type)) {
-          _queuePreviousTracks.last.source = QueueItemSource(
+          _queuePreviousTracks.last.source = QueueItemSource.rawId(
               type: QueueItemSourceType.formerNextUp,
               name: const QueueItemSourceName(
                   type: QueueItemSourceNameType.tracksFormerNextUp),
@@ -197,7 +198,7 @@ class QueueService {
             ].contains(allTracks[i].source.type)) {
           _queue.add(allTracks[i]);
           _queue.last.type = QueueItemQueueType.queue;
-          _queue.last.source = QueueItemSource(
+          _queue.last.source = QueueItemSource.rawId(
               type: QueueItemSourceType.formerNextUp,
               name: const QueueItemSourceName(
                   type: QueueItemSourceNameType.tracksFormerNextUp),
@@ -210,7 +211,7 @@ class QueueService {
           } else {
             _queue.add(allTracks[i]);
             _queue.last.type = QueueItemQueueType.queue;
-            _queue.last.source = QueueItemSource(
+            _queue.last.source = QueueItemSource.rawId(
                 type: QueueItemSourceType.formerNextUp,
                 name: const QueueItemSourceName(
                     type: QueueItemSourceNameType.tracksFormerNextUp),
@@ -267,7 +268,7 @@ class QueueService {
     if (_savedQueueState == SavedQueueState.preInit) {
       try {
         _savedQueueState = SavedQueueState.init;
-        await archiveSavedQueue(inInit: true);
+        archiveSavedQueue(inInit: true);
         var info = _queuesBox.get("latest");
         if (info != null) {
           var keys = _queuesBox.values
@@ -280,7 +281,7 @@ class QueueService {
                 .getRange(0, keys.length - _maxSavedQueues)
                 .map((e) => e.millisecondsSinceEpoch.toString());
             _queueServiceLogger.finest("Deleting stored queues: $extra");
-            await _queuesBox.deleteAll(extra);
+            unawaited(_queuesBox.deleteAll(extra));
           }
 
           if (FinampSettingsHelper.finampSettings.autoloadLastQueueOnStartup) {
@@ -299,11 +300,11 @@ class QueueService {
   /// Push latest queue into history if it is not empty and not a duplicate.
   /// If the caller is setting the queue state to saving, that should generally
   /// occur after this is called.
-  Future<void> archiveSavedQueue({bool inInit = false}) async {
+  void archiveSavedQueue({bool inInit = false}) {
     if (_savedQueueState == SavedQueueState.saving || inInit) {
       var latest = _queuesBox.get("latest");
-      if (latest != null && latest.songCount != 0) {
-        await _queuesBox.put(latest.creation.toString(), latest);
+      if (latest != null && latest.trackCount != 0) {
+        _queuesBox.put(latest.creation.toString(), latest);
       }
     }
   }
@@ -325,17 +326,17 @@ class QueueService {
     SavedQueueState? finalState = SavedQueueState.pendingSave;
     try {
       _savedQueueState = SavedQueueState.loading;
-      if (info.songCount == 0) {
+      if (info.trackCount == 0) {
         return;
       }
       refreshQueueStream();
 
-      List<String> allIds = info.previousTracks +
+      List<jellyfin_models.BaseItemId> allIds = info.previousTracks +
           ((info.currentTrack == null) ? [] : [info.currentTrack!]) +
           info.nextUp +
           info.queue;
-      Map<String, jellyfin_models.BaseItemDto> idMap = {};
-      Set<String> playlistIds = {};
+      Map<jellyfin_models.BaseItemId, jellyfin_models.BaseItemDto> idMap = {};
+      Set<jellyfin_models.BaseItemId> playlistIds = {};
 
       // If queue source is playlist, fetch via parent to retrieve metadata needed
       // for removal from playlist via queueItem
@@ -355,12 +356,13 @@ class QueueService {
       }
 
       // Get list of unique ids that do not yet have an associated item.
-      List<String> missingIds = allIds.toSet().difference(playlistIds).toList();
+      List<jellyfin_models.BaseItemId> missingIds =
+          allIds.toSet().difference(playlistIds).toList();
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in missingIds) {
           jellyfin_models.BaseItemDto? item =
-              downloadsService.getSongDownload(id: id)?.baseItem;
+              downloadsService.getTrackDownload(id: id)?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -376,16 +378,14 @@ class QueueService {
       }
 
       Map<String, List<jellyfin_models.BaseItemDto>> items = {
-        "previous":
-            info.previousTracks.map((e) => idMap[e]).whereNotNull().toList(),
-        "current":
-            [info.currentTrack].map((e) => idMap[e]).whereNotNull().toList(),
-        "next": info.nextUp.map((e) => idMap[e]).whereNotNull().toList(),
-        "queue": info.queue.map((e) => idMap[e]).whereNotNull().toList(),
+        "previous": info.previousTracks.map((e) => idMap[e]).nonNulls.toList(),
+        "current": [info.currentTrack].map((e) => idMap[e]).nonNulls.toList(),
+        "next": info.nextUp.map((e) => idMap[e]).nonNulls.toList(),
+        "queue": info.queue.map((e) => idMap[e]).nonNulls.toList(),
       };
       int sumLengths(int sum, Iterable val) => val.length + sum;
-      int loadedSongs = items.values.fold(0, sumLengths);
-      int droppedSongs = info.songCount - loadedSongs;
+      int loadedTracks = items.values.fold(0, sumLengths);
+      int droppedTracks = info.trackCount - loadedTracks;
 
       if (_savedQueueState != SavedQueueState.loading) {
         finalState = null;
@@ -397,7 +397,7 @@ class QueueService {
           initialIndex: items["previous"]!.length,
           beginPlaying: false,
           source: info.source ??
-              QueueItemSource(
+              QueueItemSource.rawId(
                   type: QueueItemSourceType.unknown,
                   name: const QueueItemSourceName(
                       type: QueueItemSourceNameType.savedQueue),
@@ -412,12 +412,12 @@ class QueueService {
       await addToNextUp(items: items["next"]!);
       await seekFuture;
       _queueServiceLogger.info("Loaded saved queue.");
-      if (loadedSongs == 0 && info.songCount > 0) {
+      if (loadedTracks == 0 && info.trackCount > 0) {
         finalState = SavedQueueState.failed;
         _failedSavedQueue = info;
-      } else if (droppedSongs > 0) {
+      } else if (droppedTracks > 0) {
         GlobalSnackbar.message((scaffold) =>
-            AppLocalizations.of(scaffold)!.queueRestoreError(droppedSongs));
+            AppLocalizations.of(scaffold)!.queueRestoreError(droppedTracks));
       }
     } finally {
       if (finalState != null) {
@@ -449,7 +449,7 @@ class QueueService {
       }
     }
 
-    await archiveSavedQueue();
+    archiveSavedQueue();
     _savedQueueState = SavedQueueState.saving;
 
     await _replaceWholeQueue(
@@ -556,15 +556,14 @@ class QueueService {
 
       _audioHandler.nextInitialIndex = null;
     } catch (e) {
-      _queueServiceLogger.severe(e);
-      rethrow;
+      _queueServiceLogger.severe("Error while initializing queue: $e");
     }
   }
 
   Future<void> stopPlayback() async {
     queueServiceLogger.info("Stopping playback");
 
-    await archiveSavedQueue();
+    archiveSavedQueue();
     if (_savedQueueState == SavedQueueState.pendingSave) {
       _savedQueueState = SavedQueueState.saving;
     }
@@ -589,7 +588,7 @@ class QueueService {
       return _replaceWholeQueue(
         itemList: items,
         source: source ??
-            QueueItemSource(
+            QueueItemSource.rawId(
               type: QueueItemSourceType.queue,
               name: const QueueItemSourceName(
                   type: QueueItemSourceNameType.queue),
@@ -638,7 +637,7 @@ class QueueService {
       return _replaceWholeQueue(
         itemList: items,
         source: source ??
-            QueueItemSource(
+            QueueItemSource.rawId(
               type: QueueItemSourceType.queue,
               name: const QueueItemSourceName(
                   type: QueueItemSourceNameType.queue),
@@ -660,7 +659,7 @@ class QueueService {
           item: await generateMediaItem(item,
               contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
-              QueueItemSource(
+              QueueItemSource.rawId(
                   id: "next-up",
                   name: const QueueItemSourceName(
                       type: QueueItemSourceNameType.nextUp),
@@ -695,7 +694,7 @@ class QueueService {
       return _replaceWholeQueue(
         itemList: items,
         source: source ??
-            QueueItemSource(
+            QueueItemSource.rawId(
               type: QueueItemSourceType.queue,
               name: const QueueItemSourceName(
                   type: QueueItemSourceNameType.queue),
@@ -717,7 +716,7 @@ class QueueService {
           item: await generateMediaItem(item,
               contextNormalizationGain: source?.contextNormalizationGain),
           source: source ??
-              QueueItemSource(
+              QueueItemSource.rawId(
                   id: "next-up",
                   name: const QueueItemSourceName(
                       type: QueueItemSourceNameType.nextUp),
@@ -870,7 +869,7 @@ class QueueService {
     _playbackSpeed = speed;
     _playbackSpeedStream.add(speed);
     _audioHandler.setSpeed(speed);
-    FinampSettingsHelper.setPlaybackSpeed(playbackSpeed);
+    FinampSetters.setPlaybackSpeed(playbackSpeed);
     _queueServiceLogger.fine(
         "Playback speed set to ${FinampSettingsHelper.finampSettings.playbackSpeed}");
   }
@@ -890,7 +889,7 @@ class QueueService {
       _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
     }
 
-    FinampSettingsHelper.setLoopMode(loopMode);
+    FinampSetters.setLoopMode(loopMode);
     _queueServiceLogger.fine(
         "Loop mode set to ${FinampSettingsHelper.finampSettings.loopMode}");
   }
@@ -977,13 +976,13 @@ class QueueService {
     // )
   }
 
-  /// [contextNormalizationGain] is the normalization gain of the context that the song is being played in, e.g. the album
+  /// [contextNormalizationGain] is the normalization gain of the context that the track is being played in, e.g. the album
   /// Should only be used when the tracks within that context come from the same source, e.g. the same album (or maybe artist?). Usually makes no sense for playlists.
   Future<MediaItem> generateMediaItem(
     jellyfin_models.BaseItemDto item, {
     double? contextNormalizationGain,
     MediaItemParentType? parentType,
-    String? parentId,
+    jellyfin_models.BaseItemId? parentId,
     bool Function(
             {jellyfin_models.BaseItemDto? item, TabContentType? contentType})?
         isPlayable,
@@ -1004,13 +1003,13 @@ class QueueService {
 
     bool isDownloaded = false;
     bool isItemPlayable = isPlayable?.call(item: item) ?? true;
-    DownloadItem? downloadedSong;
+    DownloadItem? downloadedTrack;
     DownloadStub? downloadedCollection;
     DownloadItem? downloadedImage;
 
     if (item.type == "Audio") {
-      downloadedSong = downloadsService.getSongDownload(item: item);
-      isDownloaded = downloadedSong != null;
+      downloadedTrack = downloadsService.getTrackDownload(item: item);
+      isDownloaded = downloadedTrack != null;
     } else {
       downloadedCollection =
           await downloadsService.getCollectionInfo(item: item);
@@ -1039,7 +1038,7 @@ class QueueService {
       if (artUri != null) {
         try {
           final fileInfo =
-              await AudioService.cacheManager.getFileFromCache(item.id);
+              await AudioService.cacheManager.getFileFromCache(item.id.raw);
           if (fileInfo != null) {
             artUri = fileInfo.file.uri;
           }
@@ -1085,7 +1084,7 @@ class QueueService {
       extras: {
         "itemJson": item.toJson(setOffline: false),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
-        "downloadedSongPath": downloadedSong?.file?.path,
+        "downloadedTrackPath": downloadedTrack?.file?.path,
         "android.media.extra.DOWNLOAD_STATUS": isDownloaded ? 2 : 0,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         "contextNormalizationGain": contextNormalizationGain,
@@ -1098,41 +1097,43 @@ class QueueService {
   /// Syncs the list of MediaItems (_queue) with the internal queue of the player.
   /// Called by onAddQueueItem and onUpdateQueue.
   Future<AudioSource> _queueItemToAudioSource(FinampQueueItem queueItem) async {
-    if (queueItem.item.extras!["downloadedSongPath"] == null) {
-      // If DownloadedSong wasn't passed, we assume that the item is not
+    if (queueItem.item.extras!["downloadedTrackPath"] == null) {
+      // If downloadedTrack wasn't passed, we assume that the item is not
       // downloaded.
 
       // If offline, we throw an error so that we don't accidentally stream from
-      // the internet. See the big comment in _songUri() to see why this was
+      // the internet. See the big comment in _trackUri() to see why this was
       // passed in extras.
-      if (queueItem.item.extras!["isOffline"]) {
+      if (queueItem.item.extras!["isOffline"] as bool) {
         return Future.error(
-            "Offline mode enabled but downloaded song not found.");
+            "Offline mode enabled but downloaded track not found.");
       } else {
         if (queueItem.item.extras!["shouldTranscode"] == true) {
-          return HlsAudioSource(await _songUri(queueItem.item), tag: queueItem);
+          return HlsAudioSource(await _trackUri(queueItem.item),
+              tag: queueItem);
         } else {
-          return AudioSource.uri(await _songUri(queueItem.item),
+          return AudioSource.uri(await _trackUri(queueItem.item),
               tag: queueItem);
         }
       }
     } else {
       // We have to deserialise this because Dart is stupid and can't handle
       // sending classes through isolates.
-      final downloadedSongPath = queueItem.item.extras!["downloadedSongPath"];
+      final downloadedTrackPath =
+          queueItem.item.extras!["downloadedTrackPath"] as String;
 
       // Path verification and stuff is done in AudioServiceHelper, so this path
       // should be valid.
-      final downloadUri = Uri.file(downloadedSongPath);
+      final downloadUri = Uri.file(downloadedTrackPath);
       return AudioSource.uri(downloadUri, tag: queueItem);
     }
   }
 
-  Future<Uri> _songUri(MediaItem mediaItem) async {
+  Future<Uri> _trackUri(MediaItem mediaItem) async {
     // When creating the MediaItem (usually in AudioServiceHelper), we specify
     // whether or not to transcode. We used to pull from FinampSettings here,
     // but since audio_service runs in an isolate (or at least, it does until
-    // 0.18), the value would be wrong if changed while a song was playing since
+    // 0.18), the value would be wrong if changed while a track was playing since
     // Hive is bad at multi-isolate stuff.
 
     final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
@@ -1148,10 +1149,10 @@ class QueueService {
     // // indicate which play session this stream belongs to, this will be referenced when reporting playback progress
     // queryParameters["PlaySessionId"] = _order.id; //!!! this currently breaks transcoding for some reason
 
-    if (mediaItem.extras!["shouldTranscode"]) {
+    if (mediaItem.extras!["shouldTranscode"] as bool) {
       builtPath.addAll([
         "Audio",
-        mediaItem.extras!["itemJson"]["Id"],
+        mediaItem.extras!["itemJson"]["Id"] as String,
         "main.m3u8",
       ]);
 
@@ -1170,7 +1171,7 @@ class QueueService {
     } else {
       builtPath.addAll([
         "Items",
-        mediaItem.extras!["itemJson"]["Id"],
+        mediaItem.extras!["itemJson"]["Id"] as String,
         "File",
       ]);
     }

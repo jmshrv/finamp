@@ -6,15 +6,31 @@
 /// Jellyfin's API documentation (https://api.jellyfin.org)
 ///
 /// These classes should be correct with Jellyfin 10.7.5
+library;
 
 import 'package:collection/collection.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'jellyfin_models.g.dart';
+
+class BaseItemIdConverter extends JsonConverter<BaseItemId, String> {
+  const BaseItemIdConverter();
+  @override
+  BaseItemId fromJson(String json) => BaseItemId(json);
+  @override
+  String toJson(BaseItemId object) => object.raw;
+}
+
+extension type BaseItemId._(String raw) {
+  /// Construct a BaseItemDto id from a raw string.  Please be sure you have a valid ID before using, and
+  /// if you might not, consider the invalid ID's scope and if you can use an alternative, such as null
+  BaseItemId(this.raw);
+  String operator +(BaseItemId other) => raw + other.raw;
+}
 
 /// An abstract class to implement converting runTimeTicks into a duration.
 /// Ideally, we'd hold runTimeTicks here, but that would break offline storage
@@ -1423,11 +1439,11 @@ class SubtitleProfile {
 }
 
 @JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-  includeIfNull: false,
-)
+    fieldRename: FieldRename.pascal,
+    explicitToJson: true,
+    anyMap: true,
+    includeIfNull: false,
+    converters: [BaseItemIdConverter()])
 @HiveType(typeId: 0)
 class BaseItemDto with RunTimeTickDuration {
   BaseItemDto({
@@ -1599,7 +1615,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   /// Gets or sets the id.
   @HiveField(3)
-  String id;
+  BaseItemId id;
 
   /// Gets or sets the etag.
   @HiveField(4)
@@ -1715,6 +1731,7 @@ class BaseItemDto with RunTimeTickDuration {
   double? communityRating;
 
   /// Gets or sets the run time ticks.
+  @override
   @HiveField(35)
   int? runTimeTicks;
 
@@ -1764,7 +1781,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   /// Gets or sets the parent id.
   @HiveField(47)
-  String? parentId;
+  BaseItemId? parentId;
 
   /// Gets or sets the type.
   @HiveField(48)
@@ -1875,7 +1892,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   /// Gets or sets the album id.
   @HiveField(74)
-  String? albumId;
+  BaseItemId? albumId;
 
   /// Gets or sets the album image tag.
   @HiveField(75)
@@ -2093,7 +2110,7 @@ class BaseItemDto with RunTimeTickDuration {
   @HiveField(130)
   int? albumCount;
 
-  /// Gets or sets the song count.
+  /// Gets or sets the track count.
   @HiveField(131)
   int? songCount;
 
@@ -2201,11 +2218,11 @@ class BaseItemDto with RunTimeTickDuration {
   /// function will return null.
   String? get imageId {
     if (hasOwnImage) {
-      return id;
+      return id.raw;
     } else if (parentPrimaryImageItemId != null) {
       return parentPrimaryImageItemId;
     } else if (albumId != null && albumPrimaryImageTag != null) {
-      return albumId;
+      return albumId?.raw;
     }
     return null;
   }
@@ -2216,10 +2233,10 @@ class BaseItemDto with RunTimeTickDuration {
   /// The first primary blurhash of this item.
   String? get blurHash => imageBlurHashes?.primary?.values.first;
 
-  /// The name of the song to use when sorting. This getter strips words that
+  /// The name of the track to use when sorting. This getter strips words that
   /// are removed by Jellyfin (the, a, an).
   String? get nameForSorting {
-    // sortName seems to be of the form {4 digit track number} - {song Name} for songs
+    // sortName seems to be of the form {4 digit track number} - {track Name} for tracks
     // It seems the server uses the unstripped regular name to work around this in some
     // cases?
     if (sortName != null && type != "Audio") {
@@ -2283,6 +2300,16 @@ class BaseItemDto with RunTimeTickDuration {
 
   DownloadItemType get downloadType =>
       BaseItemDtoType.fromItem(this).downloadType!;
+
+  // BaseItemDtos with the same id should be considered equal so that Providers
+  // taking the BaseItemDto as an argument will be shared across all instances
+  @override
+  bool operator ==(Object other) {
+    return other is BaseItemDto && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 @JsonSerializable(
@@ -2313,6 +2340,7 @@ class ExternalUrl {
   explicitToJson: true,
   anyMap: true,
   includeIfNull: false,
+  converters: [BaseItemIdConverter()],
 )
 @HiveType(typeId: 5)
 class MediaSourceInfo with RunTimeTickDuration {
@@ -2366,7 +2394,7 @@ class MediaSourceInfo with RunTimeTickDuration {
   String protocol;
 
   @HiveField(1)
-  String? id;
+  BaseItemId? id;
 
   @HiveField(2)
   String? path;
@@ -2395,6 +2423,7 @@ class MediaSourceInfo with RunTimeTickDuration {
   @HiveField(9)
   bool isRemote;
 
+  @override
   @HiveField(10)
   int? runTimeTicks;
 
@@ -2789,6 +2818,7 @@ class MediaUrl {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 @HiveType(typeId: 48)
 class BaseItemPerson {
@@ -2827,6 +2857,7 @@ class BaseItemPerson {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 @HiveType(typeId: 30)
 class NameLongIdPair {
@@ -2839,7 +2870,7 @@ class NameLongIdPair {
   String? name;
 
   @HiveField(1)
-  String id;
+  BaseItemId id;
 
   factory NameLongIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameLongIdPairFromJson(json);
@@ -2920,10 +2951,10 @@ class UserItemDataDto {
 }
 
 @JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+    fieldRename: FieldRename.pascal,
+    explicitToJson: true,
+    anyMap: true,
+    converters: [BaseItemIdConverter()])
 @HiveType(typeId: 2)
 class NameIdPair {
   NameIdPair({
@@ -2935,7 +2966,7 @@ class NameIdPair {
   String? name;
 
   @HiveField(1)
-  String id;
+  BaseItemId id;
 
   factory NameIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameIdPairFromJson(json);
@@ -3034,6 +3065,7 @@ class PlaybackInfoResponse {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 class PlaybackProgressInfo {
   PlaybackProgressInfo({
@@ -3055,6 +3087,7 @@ class PlaybackProgressInfo {
     this.liveStreamId,
     this.playSessionId,
     required this.repeatMode,
+    this.playbackOrder = "Default",
     this.nowPlayingQueue,
     this.playlistItemId,
   });
@@ -3066,7 +3099,7 @@ class PlaybackProgressInfo {
   BaseItemDto? item;
 
   /// Gets or sets the item identifier.
-  String itemId;
+  BaseItemId itemId;
 
   /// Gets or sets the session id.
   String? sessionId;
@@ -3101,6 +3134,10 @@ class PlaybackProgressInfo {
   /// Enum: "Transcode" "DirectStream" "DirectPlay"
   /// Gets or sets the play method.
   String playMethod;
+
+  /// Enum: "Default" "Shuffle"
+  /// Gets or sets the playback order.
+  String playbackOrder;
 
   /// Gets or sets the live stream identifier.
   String? liveStreamId;
@@ -3327,6 +3364,7 @@ class QueueItem {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 class NewPlaylist {
   NewPlaylist({
@@ -3334,13 +3372,14 @@ class NewPlaylist {
     required this.ids,
     this.userId,
     this.mediaType,
+    this.isPublic,
   });
 
   /// Gets or sets the name of the new playlist.
   String? name;
 
   /// Gets or sets item ids to add to the playlist.
-  List<String> ids;
+  List<BaseItemId> ids;
 
   /// Gets or sets the user id. Required when creating playlists, but not adding
   /// to them.
@@ -3348,6 +3387,9 @@ class NewPlaylist {
 
   /// Gets or sets the media type.
   String? mediaType;
+
+  /// Whether the playlist should be publicly visible
+  bool? isPublic;
 
   factory NewPlaylist.fromJson(Map<String, dynamic> json) =>
       _$NewPlaylistFromJson(json);
@@ -3359,11 +3401,12 @@ class NewPlaylist {
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
   anyMap: true,
+  converters: [BaseItemIdConverter()],
 )
 class NewPlaylistResponse {
   NewPlaylistResponse({this.id});
 
-  String? id;
+  BaseItemId? id;
 
   factory NewPlaylistResponse.fromJson(Map<String, dynamic> json) =>
       _$NewPlaylistResponseFromJson(json);
@@ -3429,6 +3472,12 @@ enum SortBy {
         SortBy.random,
       ];
 
+  /// default SortBy options shown to the user, such as in the sort by menu
+  static List<SortBy> get trackSortOptions => [
+        ...defaults,
+        SortBy.playCount,
+      ];
+
   /// Human-readable version of the [SortBy]. For example, toString() on
   /// [SortBy.album], toString() would return "SortBy.album". With this
   /// function, the same input would return "Album".
@@ -3444,8 +3493,8 @@ enum SortBy {
     switch (contentType) {
       case TabContentType.albums:
         return _jellyfinNameMusicAlbums(this);
-      case TabContentType.songs:
-        return _jellyfinNameSongs(this);
+      case TabContentType.tracks:
+        return _jellyfinNameTracks(this);
       default:
         return _jellyfinName(this);
     }
@@ -3591,7 +3640,7 @@ enum SortBy {
     }
   }
 
-  String _jellyfinNameSongs(SortBy sortBy) {
+  String _jellyfinNameTracks(SortBy sortBy) {
     switch (sortBy) {
       case SortBy.album:
         return "Album,SortName";
@@ -3805,15 +3854,15 @@ class LyricMetadata {
     this.isSynced,
   });
 
-  /// Gets or sets the song artist.
+  /// Gets or sets the track artist.
   @HiveField(0)
   String? artist;
 
-  /// Gets or sets the album this song is on.
+  /// Gets or sets the album this track is on.
   @HiveField(1)
   String? album;
 
-  /// Gets or sets the title of the song.
+  /// Gets or sets the title of the track.
   @HiveField(2)
   String? title;
 
@@ -3821,7 +3870,7 @@ class LyricMetadata {
   @HiveField(3)
   String? author;
 
-  /// Gets or sets the length of the song in ticks.
+  /// Gets or sets the length of the track in ticks.
   @HiveField(4)
   int? length;
 

@@ -18,16 +18,16 @@ class AudioServiceHelper {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
-  /// Shuffles every song in the user's current view.
+  /// Shuffles every track in the user's current view.
   Future<void> shuffleAll(bool onlyShowFavourites) async {
     List<jellyfin_models.BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
-      // If offline, get a shuffled list of songs from _downloadsHelper.
-      // This is a bit inefficient since we have to get all of the songs and
+      // If offline, get a shuffled list of tracks from _downloadsHelper.
+      // This is a bit inefficient since we have to get all of the tracks and
       // shuffle them before making a sublist, but I couldn't think of a better
       // way.
-      items = (await _isarDownloader.getAllSongs(
+      items = (await _isarDownloader.getAllTracks(
               viewFilter: _finampUserHelper.currentUser?.currentView?.id,
               nullableViewFilters: FinampSettingsHelper
                   .finampSettings.showDownloadsWithUnknownLibrary))
@@ -35,9 +35,9 @@ class AudioServiceHelper {
           .toList();
       items.shuffle();
       if (items.length - 1 >
-          FinampSettingsHelper.finampSettings.songShuffleItemCount) {
+          FinampSettingsHelper.finampSettings.trackShuffleItemCount) {
         items = items.sublist(
-            0, FinampSettingsHelper.finampSettings.songShuffleItemCount);
+            0, FinampSettingsHelper.finampSettings.trackShuffleItemCount);
       }
     } else {
       // If online, get all audio items from the user's view
@@ -45,7 +45,7 @@ class AudioServiceHelper {
         parentItem: _finampUserHelper.currentUser!.currentView,
         includeItemTypes: "Audio",
         filters: onlyShowFavourites ? "IsFavorite" : null,
-        limit: FinampSettingsHelper.finampSettings.songShuffleItemCount,
+        limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
         sortBy: "Random",
       );
     }
@@ -53,10 +53,10 @@ class AudioServiceHelper {
     if (items != null) {
       await _queueService.startPlayback(
         items: items,
-        source: QueueItemSource(
+        source: QueueItemSource.rawId(
           type: onlyShowFavourites
               ? QueueItemSourceType.favorites
-              : QueueItemSourceType.allSongs,
+              : QueueItemSourceType.allTracks,
           name: QueueItemSourceName(
             type: onlyShowFavourites
                 ? QueueItemSourceNameType.yourLikes
@@ -79,7 +79,7 @@ class AudioServiceHelper {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-              type: QueueItemSourceType.songMix,
+              type: QueueItemSourceType.trackMix,
               name: QueueItemSourceName(
                 type: item.name != null
                     ? QueueItemSourceNameType.mix

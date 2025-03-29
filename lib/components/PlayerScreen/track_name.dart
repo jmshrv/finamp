@@ -2,9 +2,10 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/album_screen.dart';
@@ -12,9 +13,9 @@ import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
 import '../artists_text_spans.dart';
 
-/// Creates some text that shows the song's name, album and the artist.
-class SongName extends StatelessWidget {
-  const SongName({Key? key}) : super(key: key);
+/// Creates some text that shows the track's name, album and the artist.
+class TrackName extends StatelessWidget {
+  const TrackName({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +30,12 @@ class SongName extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final MediaItem mediaItem = snapshot.data!;
-          BaseItemDto songBaseItemDto =
-              BaseItemDto.fromJson(mediaItem.extras!["itemJson"]);
+          BaseItemDto trackBaseItemDto = BaseItemDto.fromJson(
+              mediaItem.extras!["itemJson"] as Map<String, dynamic>);
 
           List<TextSpan> separatedArtistTextSpans = [];
 
-          if (songBaseItemDto.artistItems?.isEmpty ?? true) {
+          if (trackBaseItemDto.artistItems?.isEmpty ?? true) {
             separatedArtistTextSpans = [
               TextSpan(
                 text: AppLocalizations.of(context)!.unknownArtist,
@@ -42,7 +43,7 @@ class SongName extends StatelessWidget {
               )
             ];
           } else {
-            songBaseItemDto.artistItems
+            trackBaseItemDto.artistItems
                 ?.map((e) => TextSpan(
                     text: e.name,
                     style: TextStyle(color: textColour),
@@ -69,19 +70,19 @@ class SongName extends StatelessWidget {
             separatedArtistTextSpans.removeLast();
           }
 
-          return SongNameContent(
-              songBaseItemDto: songBaseItemDto,
+          return TrackNameContent(
+              trackBaseItemDto: trackBaseItemDto,
               mediaItem: mediaItem,
               separatedArtistTextSpans: buildArtistsTextSpans(
-                songBaseItemDto,
+                trackBaseItemDto,
                 textColour,
                 context,
                 true,
               ));
         }
 
-        return const SongNameContent(
-          songBaseItemDto: null,
+        return const TrackNameContent(
+          trackBaseItemDto: null,
           mediaItem: null,
           separatedArtistTextSpans: [],
         );
@@ -90,14 +91,14 @@ class SongName extends StatelessWidget {
   }
 }
 
-class SongNameContent extends StatelessWidget {
-  const SongNameContent({
-    Key? key,
-    required this.songBaseItemDto,
+class TrackNameContent extends StatelessWidget {
+  const TrackNameContent({
+    super.key,
+    required this.trackBaseItemDto,
     required this.mediaItem,
     required this.separatedArtistTextSpans,
-  }) : super(key: key);
-  final BaseItemDto? songBaseItemDto;
+  });
+  final BaseItemDto? trackBaseItemDto;
   final MediaItem? mediaItem;
   final List<TextSpan> separatedArtistTextSpans;
 
@@ -115,10 +116,10 @@ class SongNameContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: songBaseItemDto == null
+            onTap: trackBaseItemDto?.albumId == null
                 ? null
                 : () => jellyfinApiHelper
-                    .getItemById(songBaseItemDto!.albumId as String)
+                    .getItemById(trackBaseItemDto!.albumId!)
                     .then((album) => Navigator.of(context).popAndPushNamed(
                         AlbumScreen.routeName,
                         arguments: album)),
@@ -130,14 +131,21 @@ class SongNameContent extends StatelessWidget {
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-          Text(
-            mediaItem == null
-                ? AppLocalizations.of(context)!.noItem
-                : mediaItem!.title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-            overflow: TextOverflow.fade,
-            softWrap: false,
-            maxLines: 1,
+          Center(
+            child: ScrollingTextHelper(
+              id: ValueKey(mediaItem!.id),
+              alignment: TextAlign.center,
+              text: mediaItem == null
+                  ? AppLocalizations.of(context)!.noItem
+                  : mediaItem!.title,
+              style: TextStyle(
+                fontSize: 24,
+                height: 26 / 20,
+                fontWeight: Theme.of(context).brightness == Brightness.light
+                    ? FontWeight.w500
+                    : FontWeight.w600,
+              ),
+            ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
           RichText(

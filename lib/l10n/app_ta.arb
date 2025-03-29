@@ -63,11 +63,11 @@
       }
     }
   },
-  "downloadedCountUnified": "{songCount, plural, one {{songCount} டிராக்} other {{songCount} டிராக்குகள்}}, {imageCount, plural, one {{imageCount} படம்} other {{imageCount} படங்கள்}}, {syncCount, plural, one {{syncCount} முனை ஒத்திசைவு} other {{syncCount} முனைகள் ஒத்திசைத்தல்}}, {repairing, plural, =0 {} other {நடப்பு பழுதுபார்ப்பு}}",
+  "downloadedCountUnified": "{trackCount, plural, one {{trackCount} டிராக்} other {{trackCount} டிராக்குகள்}}, {imageCount, plural, one {{imageCount} படம்} other {{imageCount} படங்கள்}}, {syncCount, plural, one {{syncCount} முனை ஒத்திசைவு} other {{syncCount} முனைகள் ஒத்திசைத்தல்}}, {repairing, plural, =0 {} other {நடப்பு பழுதுபார்ப்பு}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -93,8 +93,8 @@
   "@logsCopied": {},
   "message": "செய்தி",
   "@message": {},
-  "downloadedSongsWillNotBeDeleted": "பதிவிறக்கம் செய்யப்பட்ட தடங்கள் நீக்கப்படாது",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "பதிவிறக்கம் செய்யப்பட்ட தடங்கள் நீக்கப்படாது",
+  "@downloadedTracksWillNotBeDeleted": {},
   "customLocation": "தனிப்பயன் இடம்",
   "@customLocation": {},
   "grid": "வலைவாய்",
@@ -386,8 +386,8 @@
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
-  "songs": "தடங்கள்",
-  "@songs": {},
+  "tracks": "தடங்கள்",
+  "@tracks": {},
   "couldNotFindLibraries": "எந்த நூலகங்களையும் கண்டுபிடிக்க முடியவில்லை.",
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
@@ -402,16 +402,16 @@
   "@playlists": {},
   "startMix": "கலவையைத் தொடங்குங்கள்",
   "@startMix": {},
-  "startMixNoSongsArtist": "கலவையைத் தொடங்குவதற்கு முன் அதை மிக்ச் பில்டரிலிருந்து சேர்க்க அல்லது அகற்ற ஒரு கலைஞரை நீண்ட அழுத்தவும்",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "கலவையைத் தொடங்குவதற்கு முன் அதை மிக்ச் பில்டரிலிருந்து சேர்க்க அல்லது அகற்ற ஒரு கலைஞரை நீண்ட அழுத்தவும்",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "கலவையைத் தொடங்குவதற்கு முன் மிக்ச் பில்டரிடமிருந்து சேர்க்க அல்லது அகற்ற ஒரு ஆல்பத்தை நீண்ட அழுத்தவும்",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "கலவையைத் தொடங்குவதற்கு முன் மிக்ச் பில்டரிடமிருந்து சேர்க்க அல்லது அகற்ற ஒரு ஆல்பத்தை நீண்ட அழுத்தவும்",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "startMixNoSongsGenre": "கலவையைத் தொடங்குவதற்கு முன் அதை மிக்ச் பில்டரிலிருந்து சேர்க்க அல்லது அகற்ற ஒரு வகையை நீண்ட அழுத்தவும்",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "கலவையைத் தொடங்குவதற்கு முன் அதை மிக்ச் பில்டரிலிருந்து சேர்க்க அல்லது அகற்ற ஒரு வகையை நீண்ட அழுத்தவும்",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "clear": "தெளிவான",
@@ -503,26 +503,8 @@
   "@noActiveDownloads": {},
   "errorScreenError": "பிழைகளின் பட்டியலைப் பெறும்போது பிழை ஏற்பட்டது! இந்த கட்டத்தில், நீங்கள் கிதுபில் ஒரு சிக்கலை உருவாக்கி பயன்பாட்டு தரவை நீக்க வேண்டும்",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "பதிவிறக்க ஐடியிலிருந்து கண்காணிப்பதில் தோல்வி",
-  "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "இந்த சாதனத்திலிருந்து {itemType, select, album {ஆல்பம்} artist {கலைஞர்} playlist {பிளேலிச்ட்} other {}} '{itemName}' நீக்கவா?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
-  "deleteDownloadsConfirmButtonText": "நீக்கு",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
+  "failedToGetTrackFromDownloadId": "பதிவிறக்க ஐடியிலிருந்து கண்காணிப்பதில் தோல்வி",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "பிழை",
   "@error": {},
   "discNumber": "வட்டு {number}",
@@ -537,16 +519,16 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "கலக்கு",
   "@shuffleButtonLabel": {},
-  "songCount": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}}",
-  "@songCount": {
+  "trackCount": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "offlineSongCount": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}}, {downloads} பதிவிறக்கம் செய்யப்பட்டன",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}}, {downloads} பதிவிறக்கம் செய்யப்பட்டன",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -556,8 +538,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}} பதிவிறக்கம் செய்யப்பட்டன",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count, plural, one {{count} டிராக்} other {{count} தடங்கள்}} பதிவிறக்கம் செய்யப்பட்டன",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -639,10 +621,10 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "இடைநிறுத்தப்படும்போது அறிவிப்பை ச்வைப் செய்ய அனுமதிக்கிறது. இடைநிறுத்தப்படும்போது சேவையை கொல்ல ஆண்ட்ராய்டு ஐ அனுமதிக்கிறது.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "அனைத்து தட எண்ணிக்கையையும் மாற்றவும்",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "மாற்ற வேண்டிய தடங்களின் அளவு சஃபிள் அனைத்து தடங்களையும் பயன்படுத்தும் போது.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "அனைத்து தட எண்ணிக்கையையும் மாற்றவும்",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "மாற்ற வேண்டிய தடங்களின் அளவு சஃபிள் அனைத்து தடங்களையும் பயன்படுத்தும் போது.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "பார்வை வகை",
   "@viewType": {},
   "viewTypeSubtitle": "இசை திரைக்கான வகை",
@@ -733,14 +715,14 @@
   "@disableGestureSubtitle": {},
   "showFastScroller": "ஃபாச்ட் ச்க்ரோலரைக் காட்டு",
   "@showFastScroller": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "ஆல்பம் கலைஞர்களைப் போலவே டிராக் கலைஞர்களையும் மறைக்கவும்",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "ஆல்பம் கலைஞர்களிடமிருந்து வேறுபடாவிட்டால் ஆல்பம் திரையில் டிராக் கலைஞர்களைக் காண்பிக்கலாமா?",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopSongs": "கலைஞர் பார்வையில் சிறந்த தடங்களைக் காட்டு",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "ஒரு கலைஞரின் தடங்களை அதிகம் கேட்கும் முதல் 5 இடங்களைக் காட்ட வேண்டுமா.",
-  "@showArtistsTopSongsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "ஆல்பம் கலைஞர்களைப் போலவே டிராக் கலைஞர்களையும் மறைக்கவும்",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "ஆல்பம் கலைஞர்களிடமிருந்து வேறுபடாவிட்டால் ஆல்பம் திரையில் டிராக் கலைஞர்களைக் காண்பிக்கலாமா?",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "showArtistsTopTracks": "கலைஞர் பார்வையில் சிறந்த தடங்களைக் காட்டு",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "ஒரு கலைஞரின் தடங்களை அதிகம் கேட்கும் முதல் 5 இடங்களைக் காட்ட வேண்டுமா.",
+  "@showArtistsTopTracksSubtitle": {},
   "theme": "கருப்பொருள்",
   "@theme": {},
   "system": "மண்டலம்",
@@ -1124,11 +1106,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "வாசித்தல்: {song}",
+  "queueRestoreSubtitle1": "வாசித்தல்: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1177,8 +1159,8 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "மேல் தடங்கள்",
-  "@topSongs": {},
+  "topTracks": "மேல் தடங்கள்",
+  "@topTracks": {},
   "periodicPlaybackSessionUpdateFrequencyDetails": "கடந்த 5 நிமிடங்களில் ஒரு வாடிக்கையாளரிடமிருந்து செல்லிஃபின் சேவையகம் எந்த புதுப்பிப்புகளையும் பெறவில்லை என்றால், பிளேபேக் முடிந்தது என்று கருதுகிறது. இதன் பொருள் 5 நிமிடங்களுக்கும் மேலான தடங்களுக்கு, அந்த பின்னணி முடிவடைந்ததாக தவறாக அறிவிக்கப்படலாம், இது பிளேபேக் அறிக்கையிடல் தரவின் தரத்தை குறைத்தது.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
@@ -1288,10 +1270,6 @@
   "downloadItem": "பதிவிறக்கம்",
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
-  },
-  "deleteItem": "சாதனத்திலிருந்து நீக்கு",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
   },
   "syncComplete": "அனைத்து பதிவிறக்கங்களும் மீண்டும் ஒத்துப்போகின்றன.",
   "@syncComplete": {
@@ -1423,7 +1401,7 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{ஆல்பம்} playlist{பிளேலிச்ட்} artist{கலைஞர்} genre{வகை} song{நூலகம்} library{அறியப்படாத} unknown{Item} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{ஆல்பம்} playlist{பிளேலிச்ட்} artist{கலைஞர்} genre{வகை} track{நூலகம்} library{அறியப்படாத} unknown{Item} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1775,7 +1753,6 @@
   },
   "artwork": "ஒளிமறைப்பு",
   "@artwork": {},
-
   "artworkTooltip": "{title} க்கு க்கான கலைப்படைப்பு",
   "@artworkTooltip": {
     "placeholders": {

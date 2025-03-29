@@ -4,25 +4,25 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/queue_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:finamp/services/queue_service.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:logging/logging.dart';
 
+import 'android_auto_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'locale_helper.dart';
-import 'android_auto_helper.dart';
 
 /// This provider handles the currently playing music so that multiple widgets
 /// can control music.
@@ -61,6 +61,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   double iosBaseVolumeGainFactor = 1.0;
+  Duration minBufferDuration = Duration(seconds: 90);
 
   final outputSwitcherChannel =
       MethodChannel('com.unicornsonlsd.finamp/output_switcher');
@@ -149,12 +150,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                   : 1024 *
                       1024 *
                       FinampSettingsHelper.finampSettings.bufferSizeMegabytes,
-          // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration,
-          minBufferDuration: Duration(seconds: 60), // when to fetch more data
-          maxBufferDuration: FinampSettingsHelper.finampSettings
-              .bufferDuration, // allows the player to fetch a bit more data in exchange for reduced request frequency
+          // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration, //!!! there are issues with the bufferForPlaybackDuration setting, the min duration seemingly has to be smaller than that. so we're using the default
+          minBufferDuration: minBufferDuration,
+          maxBufferDuration: Duration(
+              seconds: max(
+                  minBufferDuration.inSeconds,
+                  FinampSettingsHelper.finampSettings.bufferDuration
+                      .inSeconds)), // allows the player to fetch a bit more data in exchange for reduced request frequency
           prioritizeTimeOverSizeThresholds: FinampSettingsHelper.finampSettings
               .bufferDisableSizeConstraints, // targetBufferBytes sets the absolute maximum, but if this false and maxBufferDuration is reached, buffering will end
+          bufferForPlaybackDuration: Duration(seconds: 5),
+          bufferForPlaybackAfterRebufferDuration: Duration(seconds: 10),
         ),
         darwinLoadControl: DarwinLoadControl(
           // preferredForwardBufferDuration:
@@ -236,8 +242,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     // This listener basically just kicks the playback state into updating
-    // whenever a song changes, since some stuff. Done to fix the favorite state
-    // not updating between songs (https://github.com/jmshrv/finamp/issues/844)
+    // whenever a track changes, since some stuff. Done to fix the favorite state
+    // not updating between tracks (https://github.com/jmshrv/finamp/issues/844)
     mediaItem.listen((_) {
       final event = _transformEvent(_player.playbackEvent);
       playbackState.add(event);
@@ -577,7 +583,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           parentType: MediaItemParentType.rootCollection));
     } else {
       try {
-        final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId));
+        final itemId = MediaItemId.fromJson(
+            jsonDecode(parentMediaId) as Map<String, dynamic>);
 
         return await _androidAutoHelper.getMediaItems(itemId);
       } catch (e) {
@@ -593,7 +600,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> playFromMediaId(String mediaId,
       [Map<String, dynamic>? extras]) async {
     try {
-      final mediaItemId = MediaItemId.fromJson(jsonDecode(mediaId));
+      final mediaItemId =
+          MediaItemId.fromJson(jsonDecode(mediaId) as Map<String, dynamic>);
 
       return await _androidAutoHelper.playFromMediaId(mediaItemId);
     } catch (e) {
@@ -610,12 +618,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _audioServiceBackgroundTaskLogger.info("search: $query ; extras: $extras");
 
     final previousItemTitle = _androidAutoHelper
-        .lastSearchQuery?.extras?["android.intent.extra.title"];
+        .lastSearchQuery?.extras?["android.intent.extra.title"] as String?;
 
     final currentSearchQuery = AndroidAutoSearchQuery(query, extras);
 
     if (previousItemTitle != null) {
-      // when voice searching for a song with title + artist, Android Auto / Google Assistant combines the title and artist into a single query, with no way to differentiate them
+      // when voice searching for a track with title + artist, Android Auto / Google Assistant combines the title and artist into a single query, with no way to differentiate them
       // so we try to instead use the title provided in the extras right after the voice search, and just search for that
       if (query.contains(previousItemTitle)) {
         // if the the title is fully contained in the query, we can assume that the user clicked on the "Search Results" button on the player screen
@@ -670,12 +678,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             isFavorite = ProviderScope.containerOf(
                     GlobalSnackbar.materialAppScaffoldKey.currentContext!,
                     listen: false)
-                .read(isFavoriteProvider(FavoriteRequest(currentItem)));
+                .read(isFavoriteProvider(currentItem));
             // update favorite status with the value returned by the provider
             isFavorite = ProviderScope.containerOf(
                     GlobalSnackbar.materialAppScaffoldKey.currentContext!,
                     listen: false)
-                .read(isFavoriteProvider(FavoriteRequest(currentItem)).notifier)
+                .read(isFavoriteProvider(currentItem).notifier)
                 .updateFavorite(!isFavorite);
           } else {
             // fallback if we can't find the context
@@ -698,9 +706,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               },
             ));
           }
-          // re-trigger the playbackState update to update the notification
-          final event = _transformEvent(_player.playbackEvent);
-          return playbackState.add(event);
+          return refreshPlaybackStateAndMediaNotification();
         default:
         // NOP, handled below
       }
@@ -711,6 +717,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     // only called if no custom action was found
     return await super.customAction(name, extras);
+  }
+
+  Future<void> refreshPlaybackStateAndMediaNotification() async {
+    // re-trigger the playbackState update to update the notification
+    final event = _transformEvent(_player.playbackEvent);
+    return playbackState.add(event);
   }
 
   // triggers when skipping to specific item in android auto queue
@@ -727,7 +739,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     if (FinampSettingsHelper.finampSettings.volumeNormalizationActive &&
         currentTrack != null) {
       final baseItem = jellyfin_models.BaseItemDto.fromJson(
-          currentTrack.extras?["itemJson"]);
+          currentTrack.extras?["itemJson"] as Map<String, dynamic>);
 
       double? effectiveGainChange =
           getEffectiveGainChange(currentTrack, baseItem);
@@ -812,7 +824,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         isFavorite = ProviderScope.containerOf(
                 GlobalSnackbar.materialAppScaffoldKey.currentContext!,
                 listen: false)
-            .read(isFavoriteProvider(FavoriteRequest(currentItem)));
+            .read(isFavoriteProvider(currentItem));
       } else {
         isFavorite = currentItem.userData?.isFavorite ?? false;
       }
@@ -897,14 +909,16 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 double? getEffectiveGainChange(
     MediaItem currentTrack, jellyfin_models.BaseItemDto? item) {
   final baseItem = item ??
-      jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"]);
+      jellyfin_models.BaseItemDto.fromJson(
+          currentTrack.extras?["itemJson"] as Map<String, dynamic>);
   double? effectiveGainChange;
   switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
     case VolumeNormalizationMode.hybrid:
       // case VolumeNormalizationMode.albumBased: // we use the context normalization gain for album-based because we don't have the album item here
       // use context normalization gain if available, otherwise use track normalization gain
-      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"] ??
-          baseItem.normalizationGain;
+      effectiveGainChange =
+          currentTrack.extras?["contextNormalizationGain"] as double? ??
+              baseItem.normalizationGain;
       break;
     case VolumeNormalizationMode.trackBased:
       // only ever use track normalization gain
@@ -912,7 +926,8 @@ double? getEffectiveGainChange(
       break;
     case VolumeNormalizationMode.albumOnly:
       // only ever use context normalization gain, don't normalize tracks out of special contexts
-      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"];
+      effectiveGainChange =
+          currentTrack.extras?["contextNormalizationGain"] as double?;
       break;
   }
   return effectiveGainChange;

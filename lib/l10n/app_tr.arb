@@ -29,24 +29,24 @@
   "@next": {},
   "unknownName": "Bilinmeyen ad",
   "@unknownName": {},
-  "songs": "Parçalar",
-  "@songs": {},
+  "tracks": "Parçalar",
+  "@tracks": {},
   "albums": "Albümler",
   "@albums": {},
   "artists": "Sanatçılar",
   "@artists": {},
   "genres": "Tarzlar",
   "@genres": {},
-  "playlists": "Çalma listeleri",
+  "playlists": "Oynatma listeleri",
   "@playlists": {},
   "startMix": "Mix'i başlat",
   "@startMix": {},
-  "startMixNoSongsArtist": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir sanatçıya uzun basın",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir sanatçıya uzun basın",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir albüme uzun basın",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir albüme uzun basın",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "music": "Müzik",
@@ -84,8 +84,8 @@
   },
   "errorScreenError": "Hata listesi oluşturulurken hata meydana geldi. Bu noktada, GitHub'da bir sorun oluşturmalı ve uygulama verilerini silmelisiniz",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "İndirme kimliğinden parça alınamadı",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "İndirme kimliğinden parça alınamadı",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Hata",
   "@error": {},
   "downloadCount": "{count,plural, =1{{count} tane indirme} other{{count} tane indirme{count}}}",
@@ -108,23 +108,23 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Karıştır",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "editPlaylistNameTooltip": "Çalma listesi adını düzenle",
+  "editPlaylistNameTooltip": "Oynatma listesi adını düzenle",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Çalma Listesi Adını Düzenle",
+  "editPlaylistNameTitle": "Oynatma Listesi Adını Düzenle",
   "@editPlaylistNameTitle": {},
   "required": "Gerekli",
   "@required": {},
   "updateButtonLabel": "Güncelle",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Çalma listesinin adı güncellendi.",
+  "playlistNameUpdated": "Oynatma listesinin adı güncellendi.",
   "@playlistNameUpdated": {},
   "favourite": "Favori",
   "@favourite": {},
@@ -132,7 +132,7 @@
   "@downloadsDeleted": {},
   "addDownloads": "İndirme Ekle",
   "@addDownloads": {},
-  "location": "Lokasyon",
+  "location": "Konum",
   "@location": {},
   "downloadsQueued": "Hazırlananları indirin, dosyalar indiriliyor",
   "@downloadsQueued": {},
@@ -162,7 +162,7 @@
   "@bitrate": {},
   "bitrateSubtitle": "Daha yüksek bir bit oranı, daha fazla bant genişliği kullanır ancak daha kaliteli ses verir.",
   "@bitrateSubtitle": {},
-  "customLocation": "Farklı Lokasyon",
+  "customLocation": "Özel Konum",
   "@customLocation": {},
   "appDirectory": "Uygulama Klasörü",
   "@appDirectory": {},
@@ -180,8 +180,8 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Şarkı duraklatıldığında bildirimin temizlenebilmesini sağlar. Ayrıca Android'in hizmeti kapatmasına izin verir.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Karıştırılacak Tüm Parçaların Sayısı",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Karıştırılacak Tüm Parçaların Sayısı",
+  "@shuffleAllTrackCount": {},
   "viewTypeSubtitle": "Müzik ekranı için görüntüleme tipi",
   "@viewTypeSubtitle": {},
   "list": "Liste",
@@ -206,10 +206,10 @@
   "@showTextOnGridView": {},
   "useCoverAsBackground": "Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını göster",
   "@useCoverAsBackground": {},
-  "hideSongArtistsIfSameAsAlbumArtists": "Albüm sanatçılarıyla aynıysa parça sanatçılarını gizle",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Albüm sanatçılarından farklı değilse parça sanatçılarının albüm ekranında gösterilip gösterilmeyeceği.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Albüm sanatçılarıyla aynıysa parça sanatçılarını gizle",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Albüm sanatçılarından farklı değilse parça sanatçılarının albüm ekranında gösterilip gösterilmeyeceği.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGesture": "Jestleri devre dışı bırak",
   "@disableGesture": {},
   "disableGestureSubtitle": "Jestleri devre dışı bırakır veya aktifleştirir.",
@@ -248,7 +248,7 @@
   "@invalidNumber": {},
   "sleepTimerTooltip": "Uyku zamanlayıcısı",
   "@sleepTimerTooltip": {},
-  "addToPlaylistTooltip": "Çalma listesine ekle",
+  "addToPlaylistTooltip": "Oynatma listesine ekle",
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Listeye Ekle",
   "@addToPlaylistTitle": {},
@@ -256,11 +256,11 @@
   "@removeFromPlaylistTooltip": {},
   "removeFromPlaylistTitle": "Bu Oynatma Listesinden Çıkart",
   "@removeFromPlaylistTitle": {},
-  "newPlaylist": "Yeni Çalma Listesi",
+  "newPlaylist": "Yeni Oynatma Listesi",
   "@newPlaylist": {},
   "createButtonLabel": "Oluştur",
   "@createButtonLabel": {},
-  "playlistCreated": "Çalma listesi oluşturuldu.",
+  "playlistCreated": "Oynatma listesi oluşturuldu.",
   "@playlistCreated": {},
   "noAlbum": "Albüm Yok",
   "@noAlbum": {},
@@ -311,7 +311,7 @@
   },
   "bufferDuration": "Önden Kaydetme Süresi",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "Oynatıcının kaç saniye önden kaydetmesi gerektiğini ayarlar. Yeniden başlatmayı gerektirir.",
+  "bufferDurationSubtitle": "Saniye cinsinden ara belleğe alınması gereken en fazla süre. Yeniden başlatmayı gerektirir.",
   "@bufferDurationSubtitle": {},
   "album": "Albüm",
   "@album": {},
@@ -341,7 +341,7 @@
   "@productionYear": {},
   "random": "Rastgele",
   "@random": {},
-  "runtime": "Çalma süresi",
+  "runtime": "Oynatma süresi",
   "@runtime": {},
   "dlFailed": "{count} tane başarısız",
   "@dlFailed": {
@@ -385,8 +385,8 @@
   "@message": {},
   "areYouSure": "Emin misiniz?",
   "@areYouSure": {},
-  "downloadedSongsWillNotBeDeleted": "İndirilen parçalar silinmeyecek",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "İndirilen parçalar silinmeyecek",
+  "@downloadedTracksWillNotBeDeleted": {},
   "applicationLegalese": "Mozilla Kamu Lisansı 2.0 ile lisanslanmıştır.\nKaynak kodu {sourceCodeLink} adresinde mevcuttur.",
   "@applicationLegalese": {},
   "audioService": "Ses Servisi",
@@ -395,8 +395,8 @@
   "@layoutAndTheme": {},
   "enterLowPriorityStateOnPause": "Bekletmede Düşük Öncelik Durumuna Geç",
   "@enterLowPriorityStateOnPause": {},
-  "shuffleAllSongCountSubtitle": "Tüm parçaları karıştır düğmesini kullanırken karıştırılacak parça sayısı.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Tüm parçaları karıştır düğmesini kullanırken karıştırılacak parça sayısı.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Görüntüleme Tipi",
   "@viewType": {},
   "useCoverAsBackgroundSubtitle": "Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını gösterilip gösterilmeyeceğini belirler.",
@@ -450,33 +450,15 @@
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
-  "deleteDownloadsConfirmButtonText": "Sil",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
-  "deleteDownloadsPrompt": "Bu cihazdan {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' silmek istediğinizden emin misiniz?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "syncDownloadedPlaylists": "İndirilen oynatma listelerini eş zamanla",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Hızlı kaydırıcıyı göster",
   "@showFastScroller": {},
   "interactions": "Etkileşimler",
   "@interactions": {},
-  "swipeInsertQueueNext": "Kaydırılan Şarkıyı Ardından Oynat",
+  "swipeInsertQueueNext": "Kaydırılan Parçayı Ardından Oynat",
   "@swipeInsertQueueNext": {},
-  "swipeInsertQueueNextSubtitle": "Şarkı listesinde kaydırıldığında bir şarkıyı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.",
+  "swipeInsertQueueNextSubtitle": "Parça listesinde kaydırılan parçayı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.",
   "@swipeInsertQueueNextSubtitle": {},
   "about": "Finamp Hakkında",
   "@about": {
@@ -690,10 +672,10 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopSongs": "En iyi parçaları sanatçı görünümünde göster",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Bir sanatçının en çok dinlenen ilk 5 parçasının gösterilip gösterilmeyeceği.",
-  "@showArtistsTopSongsSubtitle": {},
+  "showArtistsTopTracks": "En iyi parçaları sanatçı görünümünde göster",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Bir sanatçının en çok dinlenen ilk 5 parçasının gösterilip gösterilmeyeceği.",
+  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Oynatıcı Ekranı",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -807,11 +789,11 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "queueRestoreSubtitle1": "Oynatılan: {song}",
+  "queueRestoreSubtitle1": "Oynatılan: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -820,8 +802,8 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "En İyi Parçalar",
-  "@topSongs": {},
+  "topTracks": "En İyi Parçalar",
+  "@topTracks": {},
   "shuffleAlbums": "Albümleri Karıştır",
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
@@ -857,10 +839,6 @@
   "downloadItem": "İndir",
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
-  },
-  "deleteItem": "Cihazdan sil",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
   },
   "repairComplete": "İndirmeler onarımı tamamlandı.",
   "@repairComplete": {
@@ -911,7 +889,7 @@
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
-  "downloadSettings": "İndirme Ayarları",
+  "downloadSettings": "İndirilenler",
   "@downloadSettings": {},
   "showNullLibraryItemsSubtitle": "Bazı ortamlar bilinmeyen bir kitaplıkla indirilebilir. Bunları orijinal koleksiyonlarının dışında gizlemek için kapatın.",
   "@showNullLibraryItemsSubtitle": {
@@ -1035,7 +1013,7 @@
   },
   "removeFromPlaylistConfirm": "Kaldır",
   "@removeFromPlaylistConfirm": {},
-  "addPlaylistSubheader": "Parçayı çalma listesine ekle",
+  "addPlaylistSubheader": "Parçayı oynatma listesine ekle",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
@@ -1347,8 +1325,8 @@
   "@showCoversOnAlbumScreenTitle": {
     "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
   },
-  "offlineSongCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}, {downloads} İndirildi",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Parça} other{{count} Parça}}, {downloads} İndirildi",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1515,12 +1493,12 @@
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
   },
-  "startMixNoSongsGenre": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir türe uzun basın",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir türe uzun basın",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Parça} other{{count} Parça}} İndirildi",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Parça} other{{count} Parça}} İndirildi",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1548,5 +1526,93 @@
   "resetSettingsPromptGlobal": "TÜM ayarları varsayılan değerlerine sıfırlamak istediğinizden emin misiniz?",
   "@resetSettingsPromptGlobal": {
     "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
-  }
+  },
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} parça} other{{trackCount} parça}}, {imageCount,plural,=1{{imageCount} görsel} other{{imageCount} görsel}}\n{syncCount,plural,=1{{syncCount} düğüm eşitleniyor} other{{syncCount} düğüm eşitleniyor}}{repairing, plural, =0{} other{\nŞu anda onarılıyor}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "bufferDisableSizeConstraintsSubtitle": "Arabellek boyutu kısıtlamalarını ('arabellek boyutu') devre dışı bırakır. Bellek, çok büyük dosyalar için bile her zaman yapılandırılmış süreye ('arabellek süresi') yüklenecektir. Kazalara neden olabilir. Yeniden başlatma gerektirir.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "suppressPlayerPaddingSubtitle": "Albüm kapağı tam boyutta olmadığında oynatıcı ekran kontrolleri arasındaki dolguları en aza indir.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "confirmPlayNext": "{type, select, track {Parça} album{Albüm} artist{Artist} playlist{Oynatma listesi} genre{Tür} other{Öge}} sonraki sırada oynayacak",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Kayıttan yürütme oturumu güncelleme sıklığı",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "redownloadSubtitle": "Bulunduğu koleksiyondaki değişiklikler nedeniyle farklı kalitede olması beklenen parçaları otomatik olarak yeniden indir.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "trackCountTooltip": "{currentTrackIndex}'den {totalTrackCount} tane parça",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "playbackOrderLinearButtonTooltip": "Sırayla oynat. Karıştıra dokun.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "hidePlayerBottomActionsSubtitle": "Oynatıcı ekranında kuyruk ve şarkı sözleri düğmelerini gizleyin. Kuyruğa erişmek için yukarı kaydırın, eğer varsa şarkı sözlerini görüntülemek için sola (albüm kapağının altında) kaydırın.",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "lockDownload": "Daima Cihazda Tutun",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "bufferDisableSizeConstraintsTitle": "Arabellek boyutunu sınırlama",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferSizeTitle": "Arabellek Boyutu",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "MB cinsinden arabelleğin maksimum boyutu. Yeniden başlatma gerektirir",
+  "@bufferSizeSubtitle": {},
+  "savedQueue": "Kuyruk Kayıt Edildi",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "queueRestoreError": "Uyarı: {count,plural, =1{{count} parça} other{{count} parça}} kuyruğa geri yüklenemedi.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fixedGridSizeSwitchTitle": "Sabit boyutta ızgara karoları kullan",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeTitle": "Izgara Karo Boyutu",
+  "@fixedGridSizeTitle": {},
+  "enableVibrationSubtitle": "Titreşim etkinleştirilsin mi?",
+  "@enableVibrationSubtitle": {}
 }

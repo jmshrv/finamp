@@ -5,15 +5,15 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/current_album_image_provider.dart';
 import '../../services/favorite_provider.dart';
-import '../AlbumScreen/song_menu.dart';
+import '../AlbumScreen/track_menu.dart';
 import '../album_image.dart';
 
 class PlayerScreenAlbumImage extends ConsumerWidget {
@@ -47,10 +47,9 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
               var queueItem = snapshot.data!.currentTrack;
               if (queueItem?.baseItem != null) {
                 var inPlaylist = queueItemInPlaylist(queueItem);
-                await showModalSongMenu(
+                await showModalTrackMenu(
                   context: context,
                   item: queueItem!.baseItem!,
-                  usePlayerTheme: true,
                   showPlaybackControls: true,
                   // show controls on player screen
                   parentItem: inPlaylist ? queueItem.source.item : null,
@@ -71,9 +70,7 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
                 if (currentTrack?.baseItem != null &&
                     !FinampSettingsHelper.finampSettings.isOffline) {
                   ref
-                      .read(isFavoriteProvider(
-                              FavoriteRequest(currentTrack!.baseItem))
-                          .notifier)
+                      .read(isFavoriteProvider(currentTrack!.baseItem).notifier)
                       .toggleFavorite();
                 }
               },

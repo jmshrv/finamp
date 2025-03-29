@@ -7,7 +7,6 @@ import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:split_view/split_view.dart';
 
 import '../../models/finamp_models.dart';
@@ -43,9 +42,8 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
 
     return Consumer(
       builder: (context, ref, child) {
-        bool allowSplitScreen = ref.watch(finampSettingsProvider
-                .select((value) => value.value?.allowSplitScreen)) ??
-            FinampSettingsHelper.finampSettings.allowSplitScreen;
+        bool allowSplitScreen =
+            ref.watch(finampSettingsProvider.allowSplitScreen);
 
         return StreamBuilder<FinampQueueInfo?>(
             stream: queueService.getQueueStream(),
@@ -85,12 +83,7 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                       _timer?.cancel();
                       // Do not spam settings updates while resizing
                       _timer = Timer(const Duration(seconds: 1), () {
-                        var box = Hive.box<FinampSettings>("FinampSettings");
-                        FinampSettings finampSettingsTemp =
-                            box.get("FinampSettings")!;
-                        finampSettingsTemp.splitScreenPlayerWidth =
-                            _playerWidth!;
-                        box.put("FinampSettings", finampSettingsTemp);
+                        FinampSetters.setSplitScreenPlayerWidth(_playerWidth!);
                       });
                     },
                     children: [

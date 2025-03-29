@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class SortOrderButton extends StatelessWidget {
-  const SortOrderButton(this.tabType, {Key? key}) : super(key: key);
+  const SortOrderButton(this.tabType, {super.key});
 
   final TabContentType tabType;
 

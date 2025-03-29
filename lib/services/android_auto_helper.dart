@@ -2,18 +2,18 @@ import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/downloads_service.dart';
-import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/downloads_service.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+
+import 'audio_service_helper.dart';
+import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
-import 'finamp_settings_helper.dart';
 import 'queue_service.dart';
-import 'audio_service_helper.dart';
 
 class AndroidAutoSearchQuery {
   String rawQuery;
@@ -38,7 +38,7 @@ class AndroidAutoHelper {
 
   AndroidAutoSearchQuery? get lastSearchQuery => _lastSearchQuery;
 
-  Future<BaseItemDto?> getParentFromId(String parentId) async {
+  Future<BaseItemDto?> getParentFromId(BaseItemId parentId) async {
     final downloadedParent =
         await _downloadsService.getCollectionInfo(id: parentId);
     if (downloadedParent != null) {
@@ -76,8 +76,8 @@ class AndroidAutoHelper {
     }
 
     // use downloaded parent only in offline mode
-    // otherwise we only play downloaded songs from albums/collections, not all of them
-    // downloaded songs will be played from device when resolving them to media items
+    // otherwise we only play downloaded tracks from albums/collections, not all of them
+    // downloaded tracks will be played from device when resolving them to media items
     if (FinampSettingsHelper.finampSettings.isOffline &&
         itemId.parentType == MediaItemParentType.collection) {
       if (itemId.contentType == TabContentType.genres) {
@@ -108,18 +108,18 @@ class AndroidAutoHelper {
         artistAlbums.sort(
             (a, b) => (a.premiereDate ?? "").compareTo(b.premiereDate ?? ""));
 
-        final List<BaseItemDto> allSongs = [];
+        final List<BaseItemDto> allTracks = [];
         for (var album in artistAlbums) {
-          allSongs.addAll(await _downloadsService.getCollectionSongs(album,
+          allTracks.addAll(await _downloadsService.getCollectionTracks(album,
               playable: true));
         }
-        return allSongs;
+        return allTracks;
       } else {
         var downloadedParent =
             await _downloadsService.getCollectionInfo(id: itemId.itemId);
         if (downloadedParent != null && downloadedParent.baseItem != null) {
           final downloadedItems = await _downloadsService
-              .getCollectionSongs(downloadedParent.baseItem!);
+              .getCollectionTracks(downloadedParent.baseItem!);
           if (downloadedItems.length >= offlineModeLimit) {
             downloadedItems.removeRange(
                 offlineModeLimit, downloadedItems.length - 1);
@@ -141,24 +141,24 @@ class AndroidAutoHelper {
       // if we are browsing a root library. e.g. browsing the list of all albums or artists
       switch (itemId.contentType) {
         case TabContentType.albums:
-          // get an album's songs
-          includeItemTypes = TabContentType.songs.itemType.idString;
+          // get an album's tracks
+          includeItemTypes = TabContentType.tracks.itemType.idString;
           break;
         case TabContentType.artists:
           // get an artist's albums
           includeItemTypes = TabContentType.albums.itemType.idString;
           break;
         case TabContentType.playlists:
-          // get a playlist's songs
-          includeItemTypes = TabContentType.songs.itemType.idString;
+          // get a playlist's tracks
+          includeItemTypes = TabContentType.tracks.itemType.idString;
           break;
         case TabContentType.genres:
           // get a genre's albums
           includeItemTypes = TabContentType.albums.itemType.idString;
           break;
         default:
-          // if we don't have one of these categories, we are probably dealing with stray songs
-          includeItemTypes = TabContentType.songs.itemType.idString;
+          // if we don't have one of these categories, we are probably dealing with stray tracks
+          includeItemTypes = TabContentType.tracks.itemType.idString;
           break;
       }
     } else {
@@ -241,7 +241,7 @@ class AndroidAutoHelper {
                 GlobalSnackbar.materialAppScaffoldKey.currentContext != null
                     ? AppLocalizations.of(GlobalSnackbar
                             .materialAppScaffoldKey.currentContext!)!
-                        .songs
+                        .tracks
                     : "Tracks";
             break;
           case "MusicAlbum":
@@ -299,30 +299,33 @@ class AndroidAutoHelper {
     final queueService = GetIt.instance<QueueService>();
 
     if (searchQuery.rawQuery.isEmpty) {
-      return await shuffleAllSongs();
+      return await shuffleallTracks();
     }
 
-    BaseItemDtoType? itemType = TabContentType.songs.itemType;
+    BaseItemDtoType? itemType = TabContentType.tracks.itemType;
     String? enhancedQuery;
     bool searchForPlaylists = false;
 
     if (searchQuery.extras?["android.intent.extra.album"] != null &&
         searchQuery.extras?["android.intent.extra.artist"] != null &&
         searchQuery.extras?["android.intent.extra.title"] != null) {
-      // if all metadata is provided, search for song
-      itemType = TabContentType.songs.itemType;
-      enhancedQuery = searchQuery.extras?["android.intent.extra.title"];
+      // if all metadata is provided, search for track
+      itemType = TabContentType.tracks.itemType;
+      enhancedQuery =
+          searchQuery.extras?["android.intent.extra.title"] as String?;
     } else if (searchQuery.extras?["android.intent.extra.album"] != null &&
         searchQuery.extras?["android.intent.extra.artist"] != null &&
         searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only album is provided, search for album
       itemType = TabContentType.albums.itemType;
-      enhancedQuery = searchQuery.extras?["android.intent.extra.album"];
+      enhancedQuery =
+          searchQuery.extras?["android.intent.extra.album"] as String?;
     } else if (searchQuery.extras?["android.intent.extra.artist"] != null &&
         searchQuery.extras?["android.intent.extra.title"] == null) {
       // if only artist is provided, search for artist
       itemType = TabContentType.artists.itemType;
-      enhancedQuery = searchQuery.extras?["android.intent.extra.artist"];
+      enhancedQuery =
+          searchQuery.extras?["android.intent.extra.artist"] as String?;
     } else {
       // if no metadata is provided, search for tracks *and* playlists, preferring playlists
       searchForPlaylists = true;
@@ -370,19 +373,19 @@ class AndroidAutoHelper {
           List<BaseItemDto>? items;
 
           if (FinampSettingsHelper.finampSettings.isOffline) {
-            items = await _downloadsService.getCollectionSongs(playlist,
+            items = await _downloadsService.getCollectionTracks(playlist,
                 playable: true);
           } else {
             items = await _jellyfinApiHelper.getItems(
                 parentItem: playlist,
-                includeItemTypes: TabContentType.songs.itemType.idString,
+                includeItemTypes: TabContentType.tracks.itemType.idString,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 sortOrder: "Ascending",
                 limit: 200);
           }
 
           _androidAutoHelperLogger.info(
-              "Playing playlist: ${playlist.name} (${items?.length} songs)");
+              "Playing playlist: ${playlist.name} (${items?.length} tracks)");
 
           await queueService.startPlayback(
             items: items ?? [],
@@ -434,7 +437,7 @@ class AndroidAutoHelper {
       }
 
       final selectedResult = searchResult.firstWhere((element) {
-        if (itemType == TabContentType.songs.itemType &&
+        if (itemType == TabContentType.tracks.itemType &&
             searchQuery.extras?["android.intent.extra.artist"] != null) {
           return element.albumArtists?.any((artist) =>
                   (artist.name?.isNotEmpty ?? false) &&
@@ -444,7 +447,7 @@ class AndroidAutoHelper {
                           .contains(artist.name?.toLowerCase() ?? "") ??
                       false)) ??
               false;
-        } else if (itemType == TabContentType.songs.itemType &&
+        } else if (itemType == TabContentType.tracks.itemType &&
             searchQuery.extras?["android.intent.extra.artist"] != null) {
           return element.albumArtists?.any((artist) =>
                   (artist.name?.isNotEmpty ?? false) &&
@@ -467,18 +470,18 @@ class AndroidAutoHelper {
         List<BaseItemDto>? items;
 
         if (FinampSettingsHelper.finampSettings.isOffline) {
-          items =
-              await _downloadsService.getCollectionSongs(album, playable: true);
+          items = await _downloadsService.getCollectionTracks(album,
+              playable: true);
         } else {
           items = await _jellyfinApiHelper.getItems(
               parentItem: album,
-              includeItemTypes: TabContentType.songs.itemType.idString,
+              includeItemTypes: TabContentType.tracks.itemType.idString,
               sortBy: "ParentIndexNumber,IndexNumber,SortName",
               sortOrder: "Ascending",
               limit: 200);
         }
         _androidAutoHelperLogger
-            .info("Playing album: ${album.name} (${items?.length} songs)");
+            .info("Playing album: ${album.name} (${items?.length} tracks)");
 
         await queueService.startPlayback(
           items: items ?? [],
@@ -520,8 +523,8 @@ class AndroidAutoHelper {
       } else {
         if (FinampSettingsHelper.finampSettings.isOffline) {
           List<DownloadStub> offlineItems;
-          // If we're on the songs tab, just get all of the downloaded items
-          offlineItems = await _downloadsService.getAllSongs(
+          // If we're on the tracks tab, just get all of the downloaded items
+          offlineItems = await _downloadsService.getAllTracks(
               // nameFilter: widget.searchTerm,
               viewFilter: finampUserHelper.currentUser?.currentView?.id,
               nullableViewFilters: FinampSettingsHelper
@@ -533,9 +536,9 @@ class AndroidAutoHelper {
           items = sortItems(
               items,
               FinampSettingsHelper
-                  .finampSettings.tabSortBy[TabContentType.songs]!,
+                  .finampSettings.tabSortBy[TabContentType.tracks]!,
               FinampSettingsHelper
-                  .finampSettings.tabSortOrder[TabContentType.songs]!);
+                  .finampSettings.tabSortOrder[TabContentType.tracks]!);
 
           final indexOfSelected =
               items.indexWhere((element) => element.id == selectedResult.id);
@@ -546,7 +549,7 @@ class AndroidAutoHelper {
             source: QueueItemSource(
               name:
                   const QueueItemSourceName(type: QueueItemSourceNameType.mix),
-              type: QueueItemSourceType.allSongs,
+              type: QueueItemSourceType.allTracks,
               id: selectedResult.id,
             ),
           );
@@ -562,14 +565,14 @@ class AndroidAutoHelper {
     }
   }
 
-  Future<void> shuffleAllSongs() async {
+  Future<void> shuffleallTracks() async {
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
     try {
       await audioServiceHelper
           .shuffleAll(FinampSettingsHelper.finampSettings.onlyShowFavourites);
     } catch (err) {
-      _androidAutoHelperLogger.severe("Error while shuffling all songs", err);
+      _androidAutoHelperLogger.severe("Error while shuffling all tracks", err);
     }
   }
 
@@ -604,8 +607,8 @@ class AndroidAutoHelper {
     if (itemId.parentType == MediaItemParentType.instantMix) {
       if (FinampSettingsHelper.finampSettings.isOffline) {
         List<DownloadStub> offlineItems;
-        // If we're on the songs tab, just get all of the downloaded items
-        offlineItems = await _downloadsService.getAllSongs(
+        // If we're on the tracks tab, just get all of the downloaded items
+        offlineItems = await _downloadsService.getAllTracks(
             // nameFilter: widget.searchTerm,
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: FinampSettingsHelper
@@ -616,9 +619,9 @@ class AndroidAutoHelper {
         items = sortItems(
             items,
             FinampSettingsHelper
-                .finampSettings.tabSortBy[TabContentType.songs]!,
+                .finampSettings.tabSortBy[TabContentType.tracks]!,
             FinampSettingsHelper
-                .finampSettings.tabSortOrder[TabContentType.songs]!);
+                .finampSettings.tabSortOrder[TabContentType.tracks]!);
 
         final indexOfSelected =
             items.indexWhere((element) => element.id == itemId.itemId);
@@ -628,7 +631,7 @@ class AndroidAutoHelper {
           startingIndex: indexOfSelected,
           source: QueueItemSource(
             name: const QueueItemSourceName(type: QueueItemSourceNameType.mix),
-            type: QueueItemSourceType.allSongs,
+            type: QueueItemSourceType.allTracks,
             id: itemId.itemId!,
           ),
         );
@@ -644,7 +647,7 @@ class AndroidAutoHelper {
           "Tried to play from media id with invalid parent type '${itemId.parentType.name}' or null id");
       return;
     }
-    // get all songs of current parent
+    // get all tracks of current parent
     final parentItem = await getParentFromId(itemId.itemId!);
 
     // start instant mix for artists
@@ -698,7 +701,7 @@ class AndroidAutoHelper {
     try {
       searchResultExactQuery = await _getResults(
         searchTerm: searchQuery.rawQuery.trim(),
-        itemTypes: [TabContentType.songs.itemType],
+        itemTypes: [TabContentType.tracks.itemType],
         limit: searchQuery.extras?["android.intent.extra.title"] != null
             ? (limit / 2).round()
             : limit,
@@ -710,8 +713,10 @@ class AndroidAutoHelper {
     if (searchQuery.extras?["android.intent.extra.title"] != null) {
       try {
         searchResultAdjustedQuery = await _getResults(
-          searchTerm: searchQuery.extras!["android.intent.extra.title"].trim(),
-          itemTypes: [TabContentType.songs.itemType],
+          searchTerm:
+              (searchQuery.extras!["android.intent.extra.title"] as String)
+                  .trim(),
+          itemTypes: [TabContentType.tracks.itemType],
           limit: limit - (searchResultExactQuery?.length ?? 0),
         );
       } catch (e) {
@@ -752,7 +757,7 @@ class AndroidAutoHelper {
               (item.albumArtists?.any((artist) =>
                       (artist.name?.isNotEmpty ?? false) &&
                       (wantedArtist
-                              ?.toString()
+                              .toString()
                               .toLowerCase()
                               .contains(artist.name?.toLowerCase() ?? "") ??
                           false)) ??
@@ -804,7 +809,9 @@ class AndroidAutoHelper {
     if (hasAlbumMetadata) {
       try {
         searchResultAdjustedQuery = await _getResults(
-          searchTerm: searchQuery.extras!["android.intent.extra.album"].trim(),
+          searchTerm:
+              (searchQuery.extras!["android.intent.extra.album"] as String)
+                  .trim(),
           itemTypes: [TabContentType.albums.itemType],
           limit: limit - (searchResultExactQuery?.length ?? 0),
         );
@@ -846,7 +853,7 @@ class AndroidAutoHelper {
               (item.albumArtists?.any((artist) =>
                       (artist.name?.isNotEmpty ?? false) &&
                       (wantedArtist
-                              ?.toString()
+                              .toString()
                               .toLowerCase()
                               .contains(artist.name?.toLowerCase() ?? "") ??
                           false)) ??
@@ -899,7 +906,8 @@ class AndroidAutoHelper {
       try {
         searchResultAdjustedQuery = await _getResults(
           searchTerm:
-              searchQuery.extras!["android.intent.extra.playlist"].trim(),
+              (searchQuery.extras!["android.intent.extra.playlist"] as String)
+                  .trim(),
           itemTypes: [TabContentType.playlists.itemType],
           limit: limit - (searchResultExactQuery?.length ?? 0),
         );
@@ -984,7 +992,9 @@ class AndroidAutoHelper {
     if (hasArtistMetadata) {
       try {
         searchResultAdjustedQuery = await _getResults(
-          searchTerm: searchQuery.extras!["android.intent.extra.artist"].trim(),
+          searchTerm:
+              (searchQuery.extras!["android.intent.extra.artist"] as String)
+                  .trim(),
           itemTypes: [TabContentType.artists.itemType],
           limit: limit - (searchResultExactQuery?.length ?? 0),
         );
@@ -1053,10 +1063,10 @@ class AndroidAutoHelper {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       List<DownloadStub> offlineItems;
 
-      if (itemTypes.first == TabContentType.songs.itemType) {
-        // If we're on the songs tab, just get all of the downloaded items
+      if (itemTypes.first == TabContentType.tracks.itemType) {
+        // If we're on the tracks tab, just get all of the downloaded items
         // We should probably try to page this, at least if we are sorting by name
-        offlineItems = await _downloadsService.getAllSongs(
+        offlineItems = await _downloadsService.getAllTracks(
             nameFilter: searchTerm,
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: FinampSettingsHelper
@@ -1108,7 +1118,7 @@ class AndroidAutoHelper {
     return searchResult;
   }
 
-  // albums, playlists, and songs should play when clicked
+  // albums, playlists, and tracks should play when clicked
   // clicking artists starts an instant mix, so they are technically playable
   // genres has subcategories, so it should be browsable but not playable
   bool _isPlayable({
@@ -1120,6 +1130,6 @@ class AndroidAutoHelper {
     return tabContentType == TabContentType.albums ||
         tabContentType == TabContentType.playlists ||
         tabContentType == TabContentType.artists ||
-        tabContentType == TabContentType.songs;
+        tabContentType == TabContentType.tracks;
   }
 }

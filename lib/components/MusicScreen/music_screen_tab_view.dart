@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
-import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
@@ -25,6 +23,9 @@ import '../global_snackbar.dart';
 import '../new_page_progress_indicator.dart';
 import 'album_item.dart';
 import 'alphabet_item_list.dart';
+
+// this is used to allow refreshing the music screen from other parts of the app, e.g. after deleting items from the server
+final musicScreenRefreshStream = StreamController<void>.broadcast();
 
 class MusicScreenTabView extends StatefulWidget {
   const MusicScreenTabView({
@@ -61,7 +62,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _isarDownloader = GetIt.instance<DownloadsService>();
-  StreamSubscription<void>? _refreshStream;
+  StreamSubscription<void>? _musicScreenRefreshStreamSubscription;
+  StreamSubscription<void>? _downloadsRefreshStreamSubscription;
 
   late AutoScrollController controller;
   int _requestedPageKey = -1;
@@ -96,12 +98,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             : widget.view,
         includeItemTypes: widget.tabContentType.itemType.idString,
 
-        // If we're on the songs tab, sort by "Album,SortName". This is what the
+        // If we're on the tracks tab, sort by "Album,SortName". This is what the
         // Jellyfin web client does. If this isn't the case, sort by "SortName".
         // If widget.sortBy is set, it is used instead.
         sortBy: settings.tabSortBy[widget.tabContentType]
                 ?.jellyfinName(widget.tabContentType) ??
-            (widget.tabContentType == TabContentType.songs
+            (widget.tabContentType == TabContentType.tracks
                 ? "Album,SortName"
                 : "SortName"),
         sortOrder: sortOrder,
@@ -136,10 +138,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     int localRefreshCount = refreshCount;
 
     List<DownloadStub> offlineItems;
-    if (widget.tabContentType == TabContentType.songs) {
-      // If we're on the songs tab, just get all of the downloaded items
+    if (widget.tabContentType == TabContentType.tracks) {
+      // If we're on the tracks tab, just get all of the downloaded items
       // We should probably try to page this, at least if we are sorting by name
-      offlineItems = await _isarDownloader.getAllSongs(
+      offlineItems = await _isarDownloader.getAllTracks(
           nameFilter: widget.searchTerm,
           viewFilter: widget.view?.id,
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
@@ -163,7 +165,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               settings.onlyShowFavourites && settings.trackOfflineFavorites);
     }
 
-    var items = offlineItems.map((e) => e.baseItem).whereNotNull().toList();
+    var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
 
     items = sortItems(items, settings.tabSortBy[widget.tabContentType],
         settings.tabSortOrder[widget.tabContentType]);
@@ -188,7 +190,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         viewportBoundaryGetter: () =>
             Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
         axis: Axis.vertical);
-    _refreshStream = _isarDownloader.offlineDeletesStream.listen((event) {
+    _musicScreenRefreshStreamSubscription =
+        musicScreenRefreshStream.stream.listen((_) {
+      _refresh();
+    });
+    _downloadsRefreshStreamSubscription =
+        _isarDownloader.offlineDeletesStream.listen((event) {
       _refresh();
     });
     super.initState();
@@ -274,7 +281,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   @override
   void dispose() {
-    _refreshStream?.cancel();
+    _musicScreenRefreshStreamSubscription?.cancel();
+    _downloadsRefreshStreamSubscription?.cancel();
     _pagingController.dispose();
     timer?.cancel();
     super.dispose();
@@ -343,9 +351,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                   icon: TablerIcons.filter_x,
                   text: AppLocalizations.of(context)!.resetFiltersButton,
                   onPressed: () {
-                    FinampSettingsHelper.setonlyShowFavourites(
+                    FinampSetters.setOnlyShowFavourites(
                         DefaultSettings.onlyShowFavourites);
-                    FinampSettingsHelper.setOnlyShowFullyDownloaded(
+                    FinampSetters.setOnlyShowFullyDownloaded(
                         DefaultSettings.onlyShowFullyDownloaded);
                   },
                 )
@@ -355,7 +363,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
           var tabContent = box.get("FinampSettings")!.contentViewType ==
                       ContentViewType.list ||
-                  widget.tabContentType == TabContentType.songs
+                  widget.tabContentType == TabContentType.tracks
               ? PagedListView<int, BaseItemDto>.separated(
                   pagingController: _pagingController,
                   scrollController: controller,
@@ -375,11 +383,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           key: ValueKey(index),
                           controller: controller,
                           index: index,
-                          child: widget.tabContentType == TabContentType.songs
+                          child: widget.tabContentType == TabContentType.tracks
                               ? TrackListTile(
                                   key: ValueKey(item.id),
                                   item: item,
-                                  isSong: true,
+                                  isTrack: true,
                                   index: Future.value(index),
                                   isShownInSearch: widget.searchTerm != null,
                                   allowDismiss: false,
@@ -524,53 +532,61 @@ class _DeferredLoadingAlwaysScrollableScrollPhysics
 
 List<BaseItemDto> sortItems(
     List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
-  itemsToSort.sort((a, b) {
-    switch (sortBy ?? SortBy.sortName) {
-      case SortBy.sortName:
-        if (a.nameForSorting == null || b.nameForSorting == null) {
-          // Returning 0 is the same as both being the same
-          return 0;
-        } else {
-          return a.nameForSorting!.compareTo(b.nameForSorting!);
-        }
-      case SortBy.albumArtist:
-        if (a.albumArtist == null || b.albumArtist == null) {
-          return 0;
-        } else {
-          return a.albumArtist!.compareTo(b.albumArtist!);
-        }
-      case SortBy.communityRating:
-        if (a.communityRating == null || b.communityRating == null) {
-          return 0;
-        } else {
-          return a.communityRating!.compareTo(b.communityRating!);
-        }
-      case SortBy.criticRating:
-        if (a.criticRating == null || b.criticRating == null) {
-          return 0;
-        } else {
-          return a.criticRating!.compareTo(b.criticRating!);
-        }
-      case SortBy.dateCreated:
-        if (a.dateCreated == null || b.dateCreated == null) {
-          return 0;
-        } else {
-          return a.dateCreated!.compareTo(b.dateCreated!);
-        }
-      case SortBy.premiereDate:
-        if (a.premiereDate == null || b.premiereDate == null) {
-          return 0;
-        } else {
-          return a.premiereDate!.compareTo(b.premiereDate!);
-        }
-      case SortBy.random:
-        // We subtract the result by one so that we can get -1 values
-        // (see comareTo documentation)
-        return Random().nextInt(2) - 1;
-      default:
-        throw UnimplementedError("Unimplemented offline sort mode $sortBy");
-    }
-  });
+  if (sortBy == SortBy.random) {
+    itemsToSort.shuffle();
+  } else {
+    itemsToSort.sort((a, b) {
+      switch (sortBy ?? SortBy.sortName) {
+        case SortBy.sortName:
+          if (a.nameForSorting == null || b.nameForSorting == null) {
+            // Returning 0 is the same as both being the same
+            return 0;
+          } else {
+            return a.nameForSorting!.compareTo(b.nameForSorting!);
+          }
+        case SortBy.albumArtist:
+          if (a.albumArtist == null || b.albumArtist == null) {
+            return 0;
+          } else {
+            return a.albumArtist!.compareTo(b.albumArtist!);
+          }
+        case SortBy.communityRating:
+          if (a.communityRating == null || b.communityRating == null) {
+            return 0;
+          } else {
+            return a.communityRating!.compareTo(b.communityRating!);
+          }
+        case SortBy.criticRating:
+          if (a.criticRating == null || b.criticRating == null) {
+            return 0;
+          } else {
+            return a.criticRating!.compareTo(b.criticRating!);
+          }
+        case SortBy.dateCreated:
+          if (a.dateCreated == null || b.dateCreated == null) {
+            return 0;
+          } else {
+            return a.dateCreated!.compareTo(b.dateCreated!);
+          }
+        case SortBy.premiereDate:
+          if (a.premiereDate == null || b.premiereDate == null) {
+            return 0;
+          } else {
+            return a.premiereDate!.compareTo(b.premiereDate!);
+          }
+        case SortBy.playCount:
+          if (a.userData?.playCount == null || b.userData?.playCount == null) {
+            return 0;
+          } else {
+            return a.userData!.playCount.compareTo(b.userData!.playCount);
+          }
+        // SortBy.random is handled outside this switch as per-comparison logic does not produce a good shuffle
+        default:
+          throw UnimplementedError("Unimplemented offline sort mode $sortBy");
+      }
+    });
+  }
+
   return sortOrder == SortOrder.descending
       ? itemsToSort.reversed.toList()
       : itemsToSort;

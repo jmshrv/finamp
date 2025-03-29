@@ -1,6 +1,6 @@
 import 'package:file_sizes/file_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
@@ -33,7 +33,7 @@ class ItemFileSize extends ConsumerWidget {
         case DownloadItemState.failed:
         case DownloadItemState.complete:
         case DownloadItemState.needsRedownloadComplete:
-          if (item!.type == DownloadItemType.song) {
+          if (item!.type == DownloadItemType.track) {
             String codec = "";
             String bitrate = "null";
             if (item.fileTranscodingProfile == null ||
@@ -50,6 +50,10 @@ class ItemFileSize extends ConsumerWidget {
           } else {
             var profile =
                 item.userTranscodingProfile ?? item.syncTranscodingProfile;
+            //Suppress codec display on downloads without audio files
+            if (!(item.finampCollection?.type.hasAudio ?? true)) {
+              profile = null;
+            }
             var codec =
                 profile?.codec.name ?? FinampTranscodingCodec.original.name;
             return isarDownloader.getFileSize(item).then((value) =>

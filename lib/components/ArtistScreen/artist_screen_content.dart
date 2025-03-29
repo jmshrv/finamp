@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -49,7 +49,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
   @override
   Widget build(BuildContext context) {
     final Future<List<List<BaseItemDto>?>> futures;
-    final Future<List<BaseItemDto>?> allSongs;
+    final Future<List<BaseItemDto>?> allTracks;
     final bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
     if (isOffline) {
       futures = Future.wait([
@@ -62,27 +62,27 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                   relatedTo: widget.parent);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
-          return artistAlbums.map((e) => e.baseItem).whereNotNull().toList();
+          return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
         }),
       ]);
-      allSongs = Future.sync(() async {
+      allTracks = Future.sync(() async {
         final List<DownloadStub> artistAlbums =
             await _downloadsService.getAllCollections(
                 baseTypeFilter: BaseItemDtoType.album,
                 relatedTo: widget.parent);
         artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
 
-        final List<BaseItemDto> sortedSongs = [];
+        final List<BaseItemDto> sortedTracks = [];
         for (var album in artistAlbums) {
-          sortedSongs.addAll(await _downloadsService
-              .getCollectionSongs(album.baseItem!, playable: true));
+          sortedTracks.addAll(await _downloadsService
+              .getCollectionTracks(album.baseItem!, playable: true));
         }
-        return sortedSongs;
+        return sortedTracks;
       });
     } else {
       futures = Future.wait([
-        // Get Songs sorted by Play Count
-        if (FinampSettingsHelper.finampSettings.showArtistsTopSongs)
+        // Get Tracks sorted by Play Count
+        if (FinampSettingsHelper.finampSettings.showArtistsTopTracks)
           jellyfinApiHelper.getItems(
             parentItem: widget.parent,
             filters: "Artist=${widget.parent.name}",
@@ -100,7 +100,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           includeItemTypes: "MusicAlbum",
         ),
       ]);
-      allSongs = jellyfinApiHelper.getItems(
+      allTracks = jellyfinApiHelper.getItems(
         parentItem: widget.parent,
         filters: "Artist=${widget.parent.name}",
         sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
@@ -111,9 +111,9 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     return FutureBuilder(
         future: futures,
         builder: (context, snapshot) {
-          var songs = snapshot.data?.elementAtOrNull(0) ?? [];
+          var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
-          var topTracks = songs
+          var topTracks = tracks
               .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
               .take(5)
               .toList();
@@ -134,7 +134,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
                 isGenre: widget.parent.type == "MusicGenre",
-                allSongs: allSongs,
+                allTracks: allTracks,
                 albumCount: albums.length,
               ),
               actions: [
@@ -144,25 +144,25 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 DownloadButton(
                     item: DownloadStub.fromItem(
                         item: widget.parent, type: DownloadItemType.collection),
-                    children: albums.length)
+                    children: albums)
               ],
             ),
             if (!isOffline &&
-                FinampSettingsHelper.finampSettings.showArtistsTopSongs)
+                FinampSettingsHelper.finampSettings.showArtistsTopTracks)
               SliverPadding(
                   padding: EdgeInsets.fromLTRB(
                       6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
                   sliver: SliverToBoxAdapter(
                       child: Text(
-                    AppLocalizations.of(context)!.topSongs,
+                    AppLocalizations.of(context)!.topTracks,
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ))),
             if (!isOffline &&
-                FinampSettingsHelper.finampSettings.showArtistsTopSongs)
-              SongsSliverList(
+                FinampSettingsHelper.finampSettings.showArtistsTopTracks)
+              TracksSliverList(
                 childrenForList: topTracks,
-                childrenForQueue: Future.value(songs),
+                childrenForQueue: Future.value(tracks),
                 showPlayCount: true,
                 isOnArtistScreen: true,
                 parent: widget.parent,

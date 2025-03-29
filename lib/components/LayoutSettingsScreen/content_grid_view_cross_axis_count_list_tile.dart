@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
@@ -42,9 +42,9 @@ enum ContentGridViewCrossAxisCountType {
 
 class ContentGridViewCrossAxisCountListTile extends StatefulWidget {
   const ContentGridViewCrossAxisCountListTile({
-    Key? key,
+    super.key,
     required this.type,
-  }) : super(key: key);
+  });
 
   final ContentGridViewCrossAxisCountType type;
 
@@ -95,12 +95,12 @@ class _ContentGridViewCrossAxisCountListTileState
             if (valueInt != null && valueInt > 0) {
               switch (widget.type) {
                 case ContentGridViewCrossAxisCountType.portrait:
-                  FinampSettingsHelper.setContentGridViewCrossAxisCountPortrait(
+                  FinampSetters.setContentGridViewCrossAxisCountPortrait(
                       valueInt);
                   break;
                 case ContentGridViewCrossAxisCountType.landscape:
-                  FinampSettingsHelper
-                      .setContentGridViewCrossAxisCountLandscape(valueInt);
+                  FinampSetters.setContentGridViewCrossAxisCountLandscape(
+                      valueInt);
                   break;
               }
             }

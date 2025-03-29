@@ -36,6 +36,10 @@ extension CensoredMessage on LogRecord {
         workingLogString = workingLogString.replaceAll(
             CaseInsensitivePattern(tempUriMatcher.host.toString()),
             "TEMP_HOST");
+
+        // remove anything between the quotes in "Failed host lookup: ''"
+        workingLogString = workingLogString.replaceAll(
+            RegExp(r"host: [^,]+, port: \d+"), "HOST");
       }
     }
 
@@ -51,6 +55,8 @@ extension CensoredMessage on LogRecord {
             CaseInsensitivePattern(user.baseUrl), "BASEURL");
         workingLogString = workingLogString.replaceAll(
             CaseInsensitivePattern(user.accessToken), "TOKEN");
+        workingLogString = workingLogString.replaceAll(
+            CaseInsensitivePattern(user.id), "USER_ID");
       }
     }
 

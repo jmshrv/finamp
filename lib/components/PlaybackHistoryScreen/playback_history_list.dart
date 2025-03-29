@@ -62,8 +62,20 @@ class PlaybackHistoryList extends StatelessWidget {
                                         ? (group.key.hour == now.hour
                                             ? DateFormat.jm(localeString)
                                                 .format(group.key)
-                                            : DateFormat.j(localeString)
-                                                .format(group.key))
+                                            : ( // handle 24h clocks by appending ":00" if the time doesn't contain AM/PM
+                                                DateFormat(DateFormat.j(
+                                                                localeString)
+                                                            .format(group.key))
+                                                        .toString()
+                                                        .toLowerCase()
+                                                        .contains(RegExp(
+                                                            r'am|pm',
+                                                            caseSensitive:
+                                                                false))
+                                                    ? DateFormat.jm(
+                                                            localeString)
+                                                        .format(group.key)
+                                                    : "${DateFormat.jm(localeString).format(group.key)}:00"))
                                         : DateFormat.MMMMd(localeString)
                                             .format(group.key),
                                     style: const TextStyle(

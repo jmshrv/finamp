@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 
-import '../../services/finamp_settings_helper.dart';
 import '../../models/finamp_models.dart';
+import '../../services/finamp_settings_helper.dart';
 
 class LoadQueueOnStartupSelector extends StatelessWidget {
-  const LoadQueueOnStartupSelector({Key? key}) : super(key: key);
+  const LoadQueueOnStartupSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class LoadQueueOnStartupSelector extends StatelessWidget {
               AppLocalizations.of(context)!.autoloadLastQueueOnStartupSubtitle),
           value: FinampSettingsHelper.finampSettings.autoloadLastQueueOnStartup,
           onChanged: (value) =>
-              FinampSettingsHelper.setAutoloadLastQueueOnStartup(value),
+              FinampSetters.setAutoloadLastQueueOnStartup(value),
         );
       },
     );

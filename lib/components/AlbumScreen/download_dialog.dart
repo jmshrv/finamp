@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:file_sizes/file_sizes.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -13,31 +14,33 @@ import '../../services/finamp_user_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
-class DownloadDialog extends StatefulWidget {
+class DownloadDialog extends ConsumerStatefulWidget {
   const DownloadDialog._build({
-    super.key,
     required this.item,
     required this.viewId,
     required this.downloadLocationId,
     required this.needsTranscode,
     required this.children,
+    required this.trackCount,
   });
 
   final DownloadStub item;
-  final String viewId;
+  final BaseItemId viewId;
   final String? downloadLocationId;
   final bool needsTranscode;
   final List<BaseItemDto>? children;
+  final int? trackCount;
 
   @override
-  State<DownloadDialog> createState() => _DownloadDialogState();
+  ConsumerState<DownloadDialog> createState() => _DownloadDialogState();
 
   /// Shows a download dialog box to the user.  A download location dropdown will be shown
   /// if there is more than one location.  A transcode setting dropdown will be shown
   /// if transcode downloads is set to ask.  If neither is needed, the
   /// download is initiated immediately with no dialog.
   static Future<void> show(
-      BuildContext context, DownloadStub item, String? viewId) async {
+      BuildContext context, DownloadStub item, BaseItemId? viewId,
+      {int? trackCount}) async {
     if (viewId == null) {
       final finampUserHelper = GetIt.instance<FinampUserHelper>();
       viewId = finampUserHelper.currentUser!.currentViewId;
@@ -45,11 +48,7 @@ class DownloadDialog extends StatefulWidget {
     bool needTranscode =
         FinampSettingsHelper.finampSettings.shouldTranscodeDownloads ==
                 TranscodeDownloadsSetting.ask &&
-            // Skip asking for transcode for image only collection
-            item.finampCollection?.type != FinampCollectionType.libraryImages &&
-            // Skip asking for transcode for metadata +image collection
-            item.finampCollection?.type !=
-                FinampCollectionType.allPlaylistsMetadata;
+            (item.finampCollection?.type.hasAudio ?? true);
     String? downloadLocation =
         FinampSettingsHelper.finampSettings.defaultDownloadLocation;
     if (!FinampSettingsHelper.finampSettings.downloadLocationsMap
@@ -65,7 +64,37 @@ class DownloadDialog extends StatefulWidget {
         downloadLocation = locations.first.id;
       }
     }
-    if (!needTranscode && downloadLocation != null) {
+
+    // If transcoding an album or playlist, fetch children for size calculation.
+    // If trackCount was not supplied, fetch children to calculate for all types
+    // where this can be determined in one query.
+    JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    List<BaseItemDto>? children;
+    if ((item.baseItemType == BaseItemDtoType.album ||
+            item.baseItemType == BaseItemDtoType.playlist) &&
+        (needTranscode || trackCount == null)) {
+      children = await jellyfinApiHelper.getItems(
+          parentItem: item.baseItem!,
+          includeItemTypes: BaseItemDtoType.track.idString,
+          fields:
+              "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
+      trackCount = children?.length;
+    } else if ((item.baseItemType == BaseItemDtoType.artist ||
+            item.baseItemType == BaseItemDtoType.genre) &&
+        trackCount == null) {
+      // Only track children are expected by dialog, so do not save album children.
+      List<BaseItemDto>? artistChildren = await jellyfinApiHelper.getItems(
+        parentItem: item.baseItem!,
+        includeItemTypes: BaseItemDtoType.album.idString,
+      );
+      trackCount = artistChildren?.fold<int>(
+          0, (count, item) => count + (item.childCount ?? 0));
+    }
+
+    if (!needTranscode &&
+        downloadLocation != null &&
+        (trackCount ?? 0) <
+            FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff) {
       final downloadsService = GetIt.instance<DownloadsService>();
       var profile = FinampSettingsHelper
                   .finampSettings.shouldTranscodeDownloads ==
@@ -73,6 +102,8 @@ class DownloadDialog extends StatefulWidget {
           ? FinampSettingsHelper.finampSettings.downloadTranscodingProfile
           : DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
       profile.downloadLocationId = downloadLocation;
+
+      FinampSetters.setLastUsedDownloadLocationId(profile.downloadLocationId);
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted,
           isConfirmation: true);
@@ -82,16 +113,6 @@ class DownloadDialog extends StatefulWidget {
           .then((value) => GlobalSnackbar.message(
               (scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued)));
     } else {
-      JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-      List<BaseItemDto>? children;
-      if (item.baseItemType == BaseItemDtoType.album ||
-          item.baseItemType == BaseItemDtoType.playlist) {
-        children = await jellyfinApiHelper.getItems(
-            parentItem: item.baseItem!,
-            includeItemTypes: "Audio",
-            fields:
-                "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
-      }
       if (!context.mounted) return;
       await showDialog(
         context: context,
@@ -101,18 +122,24 @@ class DownloadDialog extends StatefulWidget {
           downloadLocationId: downloadLocation,
           needsTranscode: needTranscode,
           children: children,
+          trackCount: trackCount,
         ),
       );
     }
   }
 }
 
-class _DownloadDialogState extends State<DownloadDialog> {
+class _DownloadDialogState extends ConsumerState<DownloadDialog> {
   DownloadLocation? selectedDownloadLocation;
   bool? transcode;
 
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(finampSettingsProvider).value;
+
+    assert(widget.children?.every((child) =>
+            BaseItemDtoType.fromItem(child) == BaseItemDtoType.track) ??
+        true);
     String originalDescription = "null";
     String transcodeDescription = "null";
     var transcodeProfile =
@@ -146,32 +173,47 @@ class _DownloadDialogState extends State<DownloadDialog> {
           .map((e) => e.mediaSources?.first.mediaStreams.first.codec)
           .toSet();
 
-      if (formats.length == 1) {
+      if (formats.length == 1 && formats.first != null) {
         originalDescription += " ${formats.first!.toUpperCase()}";
       }
+    }
+
+    DownloadLocation? getFirstSelectedLocation() {
+      // If we haven't selected anything, first try and grab the lastUsedDownloadLocation, then try the default, otherwise just select the first available option
+      selectedDownloadLocation ??= settings
+              ?.downloadLocationsMap[settings.lastUsedDownloadLocationId] ??
+          settings?.downloadLocationsMap[settings.defaultDownloadLocation] ??
+          FinampSettingsHelper.finampSettings.internalTrackDir;
+
+      return selectedDownloadLocation;
     }
 
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.addDownloads),
       content: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.downloadLocationId == null)
+          // Only show if there are multiple download locations
+          if (FinampSettingsHelper
+                  .finampSettings.downloadLocationsMap.values.length >
+              1)
             DropdownButton<DownloadLocation>(
                 hint: Text(AppLocalizations.of(context)!.location),
                 isExpanded: true,
                 onChanged: (value) => setState(() {
                       selectedDownloadLocation = value;
                     }),
-                value: selectedDownloadLocation,
+                value: getFirstSelectedLocation(),
                 items: FinampSettingsHelper
                     .finampSettings.downloadLocationsMap.values
                     .where((element) =>
                         element.baseDirectory !=
                         DownloadLocationType.internalDocuments)
-                    .map((e) => DropdownMenuItem<DownloadLocation>(
-                          value: e,
-                          child: Text(e.name),
+                    .map((downloadLocation) =>
+                        DropdownMenuItem<DownloadLocation>(
+                          value: downloadLocation,
+                          child: Text(downloadLocation.name),
                         ))
                     .toList()),
           if (widget.needsTranscode)
@@ -196,6 +238,12 @@ class _DownloadDialogState extends State<DownloadDialog> {
                         .dontTranscode(originalDescription)),
                   )
                 ]),
+          if ((widget.trackCount ?? 0) >=
+              FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff)
+            Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                child: Text(AppLocalizations.of(context)!
+                    .largeDownloadWarning(widget.trackCount!)))
         ],
       ),
       actions: [
@@ -219,7 +267,11 @@ class _DownloadDialogState extends State<DownloadDialog> {
                       ? transcodeProfile
                       : originalProfile;
                   profile.downloadLocationId =
-                      widget.downloadLocationId ?? selectedDownloadLocation!.id;
+                      selectedDownloadLocation?.id ?? widget.downloadLocationId;
+
+                  // We've selected to download, so lets set this as the default for next time
+                  FinampSetters.setLastUsedDownloadLocationId(
+                      profile.downloadLocationId);
                   await downloadsService
                       .addDownload(
                           stub: widget.item,

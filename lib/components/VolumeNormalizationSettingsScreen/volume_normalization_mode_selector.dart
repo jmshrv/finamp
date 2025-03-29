@@ -2,8 +2,8 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 
 extension LocalizedName on VolumeNormalizationMode {
   String toLocalizedString(BuildContext context) =>
@@ -25,7 +25,7 @@ extension LocalizedName on VolumeNormalizationMode {
 }
 
 class VolumeNormalizationModeSelector extends StatelessWidget {
-  const VolumeNormalizationModeSelector({Key? key}) : super(key: key);
+  const VolumeNormalizationModeSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -87,13 +87,7 @@ class VolumeNormalizationModeSelector extends StatelessWidget {
                       child: Text(e.toLocalizedString(context)),
                     ))
                 .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                FinampSettings finampSettingsTemp = box.get("FinampSettings")!;
-                finampSettingsTemp.volumeNormalizationMode = value;
-                box.put("FinampSettings", finampSettingsTemp);
-              }
-            },
+            onChanged: FinampSetters.setVolumeNormalizationMode.ifNonNull,
           ),
         );
       },

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,9 +40,29 @@ class AlbumImageRequest {
   int get hashCode => Object.hash(item.id, maxHeight, maxWidth);
 }
 
+final Map<String?, AlbumImageRequest> albumRequestsCache = {};
+
 final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
     albumImageProvider = Provider.autoDispose
         .family<ImageProvider?, AlbumImageRequest>((ref, request) {
+  String? requestCacheKey = request.item.blurHash ?? request.item.imageId;
+
+  if (albumRequestsCache.containsKey(requestCacheKey)) {
+    if ((request.maxHeight ?? 999999) >
+        (albumRequestsCache[requestCacheKey]!.maxHeight ?? 999999)) {
+      albumRequestsCache[requestCacheKey] = request;
+    }
+  } else {
+    albumRequestsCache[requestCacheKey] = request;
+  }
+  ref.onDispose(() {
+    if (albumRequestsCache.containsKey(requestCacheKey)) {
+      if (albumRequestsCache[requestCacheKey] == request) {
+        albumRequestsCache.remove(requestCacheKey);
+      }
+    }
+  });
+
   if (request.item.imageId == null) {
     return null;
   }

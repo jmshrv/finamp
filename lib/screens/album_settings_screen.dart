@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
 class AlbumSettingsScreen extends StatefulWidget {
@@ -32,33 +31,17 @@ class _AlbumSettingsScreenState extends State<AlbumSettingsScreen> {
   }
 }
 
-class ShowCoversOnAlbumScreenToggle extends StatelessWidget {
+class ShowCoversOnAlbumScreenToggle extends ConsumerWidget {
   const ShowCoversOnAlbumScreenToggle({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? showCoversOnAlbumScreen =
-            box.get("FinampSettings")?.showCoversOnAlbumScreen;
-
-        return SwitchListTile.adaptive(
-          title:
-              Text(AppLocalizations.of(context)!.showCoversOnAlbumScreenTitle),
-          subtitle: Text(
-              AppLocalizations.of(context)!.showCoversOnAlbumScreenSubtitle),
-          value: showCoversOnAlbumScreen ?? false,
-          onChanged: showCoversOnAlbumScreen == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.showCoversOnAlbumScreen = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.showCoversOnAlbumScreenTitle),
+      subtitle:
+          Text(AppLocalizations.of(context)!.showCoversOnAlbumScreenSubtitle),
+      value: ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
+      onChanged: FinampSetters.setShowCoversOnAlbumScreen,
     );
   }
 }

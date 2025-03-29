@@ -1,0 +1,13 @@
+targets:
+  $default:
+    builders:
+      'finamp:finamp_settings_generator':
+        enabled: true
+
+builders:
+  finamp_settings_generator:
+    import: "package:finamp/builders/finamp_settings_builder.dart"
+    builder_factories: ["getFinampSettingsGenerator"]
+    build_extensions: { ".dart": ["finamp_settings_generator.g.part"] }
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]

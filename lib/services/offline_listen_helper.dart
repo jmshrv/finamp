@@ -6,7 +6,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -44,11 +44,11 @@ class OfflineListenLogHelper {
     final offlineListen = OfflineListen(
       timestamp: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       userId: _finampUserHelper.currentUserId!,
-      itemId: itemJson["Id"],
-      name: itemJson["Name"],
-      artist: itemJson["AlbumArtist"],
-      album: itemJson["Album"],
-      trackMbid: itemJson["ProviderIds"]?["MusicBrainzTrack"],
+      itemId: itemJson["Id"] as String,
+      name: itemJson["Name"] as String,
+      artist: itemJson["AlbumArtist"] as String?,
+      album: itemJson["Album"] as String?,
+      trackMbid: itemJson["ProviderIds"]?["MusicBrainzTrack"] as String?,
       deviceInfo: deviceInfo,
     );
 

@@ -27,8 +27,8 @@
   },
   "unknownName": "Tundmatu nimi",
   "@unknownName": {},
-  "songs": "Lood",
-  "@songs": {},
+  "tracks": "Lood",
+  "@tracks": {},
   "albums": "Albumid",
   "@albums": {},
   "artists": "Esitajad",
@@ -39,12 +39,12 @@
   "@playlists": {},
   "startMix": "Käivita miks",
   "@startMix": {},
-  "startMixNoSongsArtist": "Vajuta pikalt esitajale, et lisada või eemaldada ta enne miksi koostamise alustamist koostajast",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Vajuta pikalt esitajale, et lisada või eemaldada ta enne miksi koostamise alustamist koostajast",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Vajuta pikalt albumile, et lisada või eemaldada ta enne miksi koostamise alustamist koostajast",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Vajuta pikalt albumile, et lisada või eemaldada ta enne miksi koostamise alustamist koostajast",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "sortOrder": "Sortimisjärjestus",
@@ -146,8 +146,8 @@
   },
   "errorScreenError": "Vigade loendi saamisel tekkis viga! Siinkohal peaksid ilmselt lihtsalt looma probleemi GitHubis ja kustutama rakenduse andmed",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "Allalaadimise ID-st laulu hankimine nurjus",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Allalaadimise ID-st laulu hankimine nurjus",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Viga",
   "@error": {},
   "discNumber": "Plaat {number}",
@@ -162,8 +162,8 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "SEGA",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} lugu} other{{count} lugu}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} lugu} other{{count} lugu}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -212,8 +212,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Logi välja",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Allalaaditud lugusid ei kustutata",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Allalaaditud lugusid ei kustutata",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Kas oled kindel?",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin kasutab transkodeerimiseks AAC-d",
@@ -236,8 +236,8 @@
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "Laseb pausi ajal märguande ära pühkida. Võimaldab Androidil ka teenuse pausi ajal lõpetada.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCountSubtitle": "Laaditavate lugude hulk, kui kasutada nuppu 'Sega kõik lood'.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Laaditavate lugude hulk, kui kasutada nuppu 'Sega kõik lood'.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Vaate tüüp",
   "@viewType": {},
   "viewTypeSubtitle": "Muusikaekraani vaate tüüp",
@@ -254,8 +254,8 @@
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "Kas kasutada mängija ekraanil taustaks hägustatud kaanekujundust või mitte.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Kas näidata lugude esitajaid albumiekraanil, kui need ei erine albumi esitajatest.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Kas näidata lugude esitajaid albumiekraanil, kui need ei erine albumi esitajatest.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "Teema",
   "@theme": {},
   "system": "Süsteem",
@@ -370,8 +370,8 @@
   "@customLocationsBuggy": {},
   "list": "Loend",
   "@list": {},
-  "shuffleAllSongCount": "'Sega kõik lood' arv",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "'Sega kõik lood' arv",
+  "@shuffleAllTrackCount": {},
   "portrait": "Portree",
   "@portrait": {},
   "grid": "Ruudustik",
@@ -396,8 +396,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Peida laulu esitajad, kui need on samad kui albumi esitajad",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Peida laulu esitajad, kui need on samad kui albumi esitajad",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "light": "Hele",
   "@light": {},
   "startupError": "Rakenduse käivitamisel läks midagi valesti. Viga oli: {error}\n\nPalun loo probleem github.com/UnicornsOnLSD/finamp koos ekraanipildiga sellest leheküljest. Kui see probleem püsib, võiks rakenduse lähtestamiseks kustutada rakenduse andmed.",

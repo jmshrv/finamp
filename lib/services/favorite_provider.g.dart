@@ -6,7 +6,7 @@ part of 'favorite_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$isFavoriteHash() => r'e5a1dd454fa11a3223d631d9d1c8e302d6049701';
+String _$isFavoriteHash() => r'98cd0ff63476a2ef44871fe63750b1920f197b7a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$IsFavorite extends BuildlessAutoDisposeNotifier<bool> {
-  late final FavoriteRequest value;
+  late final BaseItemDto? item;
 
   bool build(
-    FavoriteRequest value,
+    BaseItemDto? item,
   );
 }
 
@@ -48,10 +48,10 @@ class IsFavoriteFamily extends Family<bool> {
 
   /// See also [IsFavorite].
   IsFavoriteProvider call(
-    FavoriteRequest value,
+    BaseItemDto? item,
   ) {
     return IsFavoriteProvider(
-      value,
+      item,
     );
   }
 
@@ -60,7 +60,7 @@ class IsFavoriteFamily extends Family<bool> {
     covariant IsFavoriteProvider provider,
   ) {
     return call(
-      provider.value,
+      provider.item,
     );
   }
 
@@ -84,9 +84,9 @@ class IsFavoriteProvider
     extends AutoDisposeNotifierProviderImpl<IsFavorite, bool> {
   /// See also [IsFavorite].
   IsFavoriteProvider(
-    FavoriteRequest value,
+    BaseItemDto? item,
   ) : this._internal(
-          () => IsFavorite()..value = value,
+          () => IsFavorite()..item = item,
           from: isFavoriteProvider,
           name: r'isFavoriteProvider',
           debugGetCreateSourceHash:
@@ -96,7 +96,7 @@ class IsFavoriteProvider
           dependencies: IsFavoriteFamily._dependencies,
           allTransitiveDependencies:
               IsFavoriteFamily._allTransitiveDependencies,
-          value: value,
+          item: item,
         );
 
   IsFavoriteProvider._internal(
@@ -106,17 +106,17 @@ class IsFavoriteProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.value,
+    required this.item,
   }) : super.internal();
 
-  final FavoriteRequest value;
+  final BaseItemDto? item;
 
   @override
   bool runNotifierBuild(
     covariant IsFavorite notifier,
   ) {
     return notifier.build(
-      value,
+      item,
     );
   }
 
@@ -125,13 +125,13 @@ class IsFavoriteProvider
     return ProviderOverride(
       origin: this,
       override: IsFavoriteProvider._internal(
-        () => create()..value = value,
+        () => create()..item = item,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        value: value,
+        item: item,
       ),
     );
   }
@@ -143,13 +143,13 @@ class IsFavoriteProvider
 
   @override
   bool operator ==(Object other) {
-    return other is IsFavoriteProvider && other.value == value;
+    return other is IsFavoriteProvider && other.item == item;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, value.hashCode);
+    hash = _SystemHash.combine(hash, item.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -158,8 +158,8 @@ class IsFavoriteProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin IsFavoriteRef on AutoDisposeNotifierProviderRef<bool> {
-  /// The parameter `value` of this provider.
-  FavoriteRequest get value;
+  /// The parameter `item` of this provider.
+  BaseItemDto? get item;
 }
 
 class _IsFavoriteProviderElement
@@ -168,7 +168,7 @@ class _IsFavoriteProviderElement
   _IsFavoriteProviderElement(super.provider);
 
   @override
-  FavoriteRequest get value => (origin as IsFavoriteProvider).value;
+  BaseItemDto? get item => (origin as IsFavoriteProvider).item;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

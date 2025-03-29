@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import '../../models/finamp_models.dart';
@@ -22,7 +22,7 @@ class DownloadErrorList extends StatelessWidget {
       DownloadItemState.failed => Theme.of(context).colorScheme.errorContainer,
       DownloadItemState.syncFailed =>
         Theme.of(context).colorScheme.errorContainer,
-      _ => Theme.of(context).colorScheme.surfaceVariant,
+      _ => Theme.of(context).colorScheme.surfaceContainerHighest,
     };
     return SliverStickyHeader(
         header: Container(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,11 +20,10 @@ const _height = 24.0; // I'm sure this magic number will work on all devices
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 
 @riverpod
-Future<BaseItemDto> artistItem(ArtistItemRef ref, String id) async {
+Future<BaseItemDto> artistItem(Ref ref, BaseItemId id) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isarDownloader = GetIt.instance<DownloadsService>();
-  final bool isOffline = ref.watch(finampSettingsProvider
-      .select((value) => value.value?.isOffline ?? false));
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   return isOffline
       ? isarDownloader
           .getCollectionInfo(id: id)
@@ -121,7 +120,6 @@ class ArtistChip extends ConsumerWidget {
 
 class _ArtistChipContent extends StatelessWidget {
   const _ArtistChipContent({
-    super.key,
     required this.item,
     required this.backgroundColor,
     required this.color,
@@ -133,7 +131,7 @@ class _ArtistChipContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // We do this so that we can pass the song item here to show an actual value
+    // We do this so that we can pass the track item here to show an actual value
     // instead of empty
     bool isArtist = item?.isArtist ?? false;
     final name = isArtist
@@ -170,17 +168,14 @@ class _ArtistChipContent extends StatelessWidget {
                     ),
                   ),
                 Center(
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 220),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: Text(
-                        name ?? AppLocalizations.of(context)!.unknownArtist,
-                        style: TextStyle(
-                            color: color, overflow: TextOverflow.ellipsis),
-                        softWrap: false,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Text(
+                      name ?? AppLocalizations.of(context)!.unknownArtist,
+                      style: TextStyle(
+                          color: color, overflow: TextOverflow.ellipsis),
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 )

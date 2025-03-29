@@ -39,13 +39,13 @@
   "@runtime": {},
   "downloadMissingImages": "Preuzmi nedostajuće slike",
   "@downloadMissingImages": {},
-  "failedToGetSongFromDownloadId": "Neuspjelo dohvaćanje pjesme s ID-a preuzimanja",
-  "@failedToGetSongFromDownloadId": {},
+  "failedToGetTrackFromDownloadId": "Neuspjelo dohvaćanje pjesme s ID-a preuzimanja",
+  "@failedToGetTrackFromDownloadId": {},
   "error": "Greška",
   "@error": {},
   "playButtonLabel": "Pokreni",
   "@playButtonLabel": {},
-  "favourite": "Omiljeno",
+  "favourite": "Favorit",
   "@favourite": {},
   "location": "Lokacija",
   "@location": {},
@@ -59,15 +59,15 @@
   "@unknownError": {},
   "pathReturnSlashErrorMessage": "Staze sa znakom „/” se ne mogu koristiti",
   "@pathReturnSlashErrorMessage": {},
-  "shuffleAllSongCount": "Broj svih izmiješanih pjesama",
-  "@shuffleAllSongCount": {},
+  "shuffleAllTrackCount": "Broj svih izmiješanih pjesama",
+  "@shuffleAllTrackCount": {},
   "list": "Popis",
   "@list": {},
   "portrait": "Uspravno",
   "@portrait": {},
-  "landscape": "Polegnuto",
+  "landscape": "Ležeće",
   "@landscape": {},
-  "gridCrossAxisCount": "{value} broj rešetkastih linija",
+  "gridCrossAxisCount": "{value} – broj rešetkastih linija",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -114,10 +114,10 @@
   "@language": {},
   "unknownName": "Nepoznato ime",
   "@unknownName": {},
-  "songs": "Pjesme",
-  "@songs": {},
-  "startMixNoSongsArtist": "Pritisni dugo na izvođača za dodavanje ili uklanjanje izvođača iz miksera prije pokretanja miksa",
-  "@startMixNoSongsArtist": {
+  "tracks": "Pjesme",
+  "@tracks": {},
+  "startMixNoTracksArtist": "Pritisni dugo na izvođača za dodavanje ili uklanjanje izvođača iz miksera prije pokretanja miksa",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
   "artists": "Izvođači",
@@ -144,8 +144,8 @@
   "@playCount": {},
   "datePlayed": "Datum reprodukcije",
   "@datePlayed": {},
-  "startMixNoSongsAlbum": "Pritisni dugo na album za dodavanje ili uklanjanje albuma iz miksera prije pokretanja miksa",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Pritisni dugo na album za dodavanje ili uklanjanje albuma iz miksera prije pokretanja miksa",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "shuffleAll": "Izmiješaj sve",
@@ -154,17 +154,17 @@
   "@album": {},
   "communityRating": "Ocjena zajednice",
   "@communityRating": {},
-  "clear": "Izbriši",
+  "clear": "Očisti",
   "@clear": {},
   "finamp": "Finamp",
   "@finamp": {},
-  "favourites": "Omiljeno",
+  "favourites": "Favoriti",
   "@favourites": {},
   "downloads": "Preuzimanja",
   "@downloads": {},
   "settings": "Postavke",
   "@settings": {},
-  "offlineMode": "Neumrežen modus",
+  "offlineMode": "Izvanmrežni način rada",
   "@offlineMode": {},
   "sortBy": "Razvrstaj po",
   "@sortBy": {},
@@ -255,8 +255,8 @@
   "@shuffleButtonLabel": {},
   "addDownloads": "Dodaj preuzimanja",
   "@addDownloads": {},
-  "songCount": "{count,plural,=1{{count} pjesma} few{{count} pjesme} other{{count} pjesama}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} pjesma} few{{count} pjesme} other{{count} pjesama}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -285,8 +285,8 @@
   "@layoutAndTheme": {},
   "customLocationsBuggy": "Prilagođene lokacije su izrazito pune grešaka zbog problema oko dozvola. Razmišljam o načinima da ovo ispravim, ali za sada ne bih preporučio korištenje.",
   "@customLocationsBuggy": {},
-  "shuffleAllSongCountSubtitle": "Broj pjesama koje se učitavaju kada se koristi gumb „Izmiješaj sve pjesme”.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCountSubtitle": "Broj pjesama koje se učitavaju kada se koristi gumb „Izmiješaj sve pjesme”.",
+  "@shuffleAllTrackCountSubtitle": {},
   "noArtist": "Nema izvođača",
   "@noArtist": {},
   "downloadLocations": "Lokacija preuzimanja",
@@ -315,8 +315,8 @@
   "@theme": {},
   "dark": "Tamna",
   "@dark": {},
-  "downloadedSongsWillNotBeDeleted": "Preuzete pjesme se neće izbrisati",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Preuzete pjesme se neće izbrisati",
+  "@downloadedTracksWillNotBeDeleted": {},
   "bitrate": "Brzina prijenosa",
   "@bitrate": {},
   "bitrateSubtitle": "Veća brzina prijenosa daje veću kvalitetu zvuka, ali troši veću količinu prometa.",
@@ -335,9 +335,9 @@
   "@goToAlbum": {},
   "appDirectory": "Direktorij aplikacije",
   "@appDirectory": {},
-  "enterLowPriorityStateOnPause": "Unesite stanje niskog prioriteta za vrijeme pauze",
+  "enterLowPriorityStateOnPause": "Prijeđi u stanje niskog prioriteta za vrijeme pauze",
   "@enterLowPriorityStateOnPause": {},
-  "gridCrossAxisCountSubtitle": "Količina rešetkastih polja po redu kada {value}.",
+  "gridCrossAxisCountSubtitle": "Količina rešetkastih polja po retku za {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -347,8 +347,8 @@
       }
     }
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Sakrij izvođače pjesama ako su isti kao izvođači albuma",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Sakrij izvođače pjesama ako su isti kao izvođači albuma",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "minutes": "Minute",
   "@minutes": {},
   "viewType": "Vrsta prikaza",
@@ -363,8 +363,8 @@
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Nova playlista",
   "@newPlaylist": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Da li prikazati izvođače pjesama na ekranu albuma ako se ne razlikuju od izvođača albuma.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Da li prikazati izvođače pjesama na ekranu albuma ako se ne razlikuju od izvođača albuma.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "disableGestureSubtitle": "Da li deaktivirati geste.",
   "@disableGestureSubtitle": {},
   "system": "Sustav",
@@ -412,9 +412,9 @@
   "@replaceQueue": {},
   "addedToQueue": "Dodano u red čekanja.",
   "@addedToQueue": {},
-  "removeFavourite": "Izbriši omiljene",
+  "removeFavourite": "Ukloni favorit",
   "@removeFavourite": {},
-  "addFavourite": "Dodaj omiljene",
+  "addFavourite": "Dodaj favorit",
   "@addFavourite": {},
   "queueReplaced": "Red čekanja je zamijenjen.",
   "@queueReplaced": {},
@@ -442,7 +442,7 @@
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
-  "refresh": "Aktualiziraj",
+  "refresh": "Osvježi",
   "@refresh": {},
   "noMusicLibrariesBody": "Finamp nije mogao pronaći nijednu fonoteku. Provjeri sadrži li tvoj Jellyfin poslužitelj barem jednu biblioteku s vrstom sadržaja postavljenom na „Glazba”.",
   "@noMusicLibrariesBody": {},
@@ -450,28 +450,10 @@
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
-  "deleteDownloadsConfirmButtonText": "Izbriši",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
   "syncDownloadedPlaylists": "Sinkroniziraj preuzete playliste",
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Prikaži traku za brzo listanje",
   "@showFastScroller": {},
-  "deleteDownloadsPrompt": "Stvarno želiš izbrisati {itemType, select, album{album} playlist{playlistu} artist{izvođača} genre{žanr} song{pjesmu} library{biblioteku} other{}} '{itemName}' s ovog uređaja?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
-    },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
   "swipeInsertQueueNextSubtitle": "Omogući umetanje pjesme kao sljedeću pjesmu u redu reprodukcije povlačenjem pjesme iz popisa pjesama umjesto dodavanja pjesme na kraj popisa.",
   "@swipeInsertQueueNextSubtitle": {},
   "interactions": "Interakcije",
@@ -583,10 +565,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "Izbriši s uređaja",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "syncDownloads": "Sinkroniziraj i preuzmi stavke koje nedostaju.",
   "@syncDownloads": {
     "description": "Tooltip for downloads sync button."
@@ -669,7 +647,7 @@
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
-  "downloadSettings": "Postavke preuzimanja",
+  "downloadSettings": "Preuzimanja",
   "@downloadSettings": {},
   "maxConcurrentDownloads": "Maks. broj istovremenskih preuzimanja",
   "@maxConcurrentDownloads": {
@@ -700,7 +678,7 @@
   "@aboutTranslations": {
     "description": "Link to the translation project, shown in the about screen."
   },
-  "aboutThanks": "Hvala ti da koristiš Finamp!",
+  "aboutThanks": "Hvala ti što koristiš Finamp!",
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
@@ -791,5 +769,554 @@
   "loginFlowAccountSelectionHeading": "Odaberi tvoj račun",
   "@loginFlowAccountSelectionHeading": {
     "description": "Heading for the account selection step during the login flow."
+  },
+  "suppressPlayerPaddingSubtitle": "Potpuno smanjuje razmake između kontrola ekrana playera kada omot albuma nije u punoj veličini.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "showProgressOnNowPlayingBarSubtitle": "Upravlja hoće li ugrađeni miniplayer / traka trenutačne reprodukcije na dnu ekrana glazbe funkcionirati kao traka napretka.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+  },
+  "fontSizeOptionLarge": "Velika",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "playbackSpeedDecreaseLabel": "Smanji brzinu reprodukcije",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "albumCount": "{count,plural,=1{{count} album} few{{count} albuma} other{{count} albuma}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playingFrom": "Reprodukcija iz",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "queueRestoreSubtitle1": "Reprodukcija: {track}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "track": {
+        "type": "String"
+      }
+    }
+  },
+  "topTracks": "Najslušanije pjesme",
+  "@topTracks": {},
+  "playCountValue": "{playCount,plural,=1{{playCount} reprodukcija} few{{playCount} reprodukcije} other{{playCount} reprodukcija}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "close": "Zatvori",
+  "@close": {},
+  "volumeNormalizationSettingsTitle": "Normalizacija glasnoće",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "volumeNormalizationSwitchTitle": "Aktiviraj normalizaciju glasnoće",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "onlyShowFullyDownloaded": "Prikaži samo potpuno preuzete albume",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "syncOnStartupSwitch": "Automatski sinkroniziraj preuzimanja pri pokretanju aplikacije",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "cacheLibraryImagesName": "Predmemorirane slike za '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "fixedGridSizeTitle": "Veličine rešetkastih polja",
+  "@fixedGridSizeTitle": {},
+  "showArtistChipImageSubtitle": "To utječe na preglede malih slika izvođača, npr. na ekranu playera.",
+  "@showArtistChipImageSubtitle": {},
+  "scrollToCurrentTrack": "Klizni na trenutačnu pjesmu",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "remainingDuration": "{duration} preostalo",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "removeFromPlaylistConfirm": "Ukloni",
+  "@removeFromPlaylistConfirm": {},
+  "trackOfflineFavorites": "Sinkroniziraj sva stanja favorita",
+  "@trackOfflineFavorites": {},
+  "trackOfflineFavoritesSubtitle": "Ovo omogućuje prikazivanje aktualnijih stanja favorita dok si offline. Ne preuzima dodatne datoteke.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "allPlaylistsInfoSetting": "Preuzmi metapodatke playliste",
+  "@allPlaylistsInfoSetting": {},
+  "downloadFavoritesSetting": "Preuzmi sve favorite",
+  "@downloadFavoritesSetting": {},
+  "downloadAllPlaylistsSetting": "Preuzmi sve playliste",
+  "@downloadAllPlaylistsSetting": {},
+  "fiveLatestAlbumsSetting": "Preuzmi 5 najnovijih albuma",
+  "@fiveLatestAlbumsSetting": {},
+  "fiveLatestAlbumsSettingSubtitle": "Preuzimanja će se ukloniti kada zastare. Zaključaj preuzimanje za sprečavanje uklanjanja albuma.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "cacheLibraryImagesSettings": "Spremi trenutačne slike biblioteke u predmemoriju",
+  "@cacheLibraryImagesSettings": {},
+  "cacheLibraryImagesSettingsSubtitle": "Svi omoti albuma, izvođača, žanra i playlista u trenutačno aktivnoj biblioteci će se preuzeti.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "showProgressOnNowPlayingBarTitle": "Prikaži napredak pjesme u ugrađenom miniplayeru",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+  },
+  "lyricsScreen": "Prikaz teksta pjesme",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsTitle": "Prikaži vremenske oznake za sinkronizirane tekstove pjesma",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "alignmentOptionStart": "Lijevo",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "lyricsAlignmentSubtitle": "Kontrolira poravnanje teksta pjesme u prikazu teksta pjesama.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsAlignmentTitle": "Poravnanje teksta pjesme",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeTitle": "Prikaži album prije teksta pjesme",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOn": "Ostavi ekran uključenim",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnWhilePlaying": "Tijekom reprodukcije glazbe",
+  "@keepScreenOnWhilePlaying": {},
+  "nowPlayingBarTooltip": "Otvori ekran playera",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "playbackMode": "Modus reprodukcije",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "codec": "Kodek",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "size": "Veličina",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Prikaži omote albuma za svaku pjesmu pjedinačno na ekranu albuma.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "fixedGridSizeSwitchTitle": "Koristi fiksnu veličinu rešetkastih polja",
+  "@fixedGridSizeSwitchTitle": {},
+  "finampTagline": "Jellyfin player glezbe otvorenog koda",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionPrompt": "Stvoren od sjajnih ljudi u njihovo slobodno vrijeme.\nI ti možeš biti jedan od njih!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "Doprinesi Finampu na GitHubu:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "Pročitaj najnovije napomene o izdanju:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "startMixNoTracksGenre": "Pritisni dugo na žanr za dodavanje ili uklanjanje žanra iz miksera prije pokretanja miksa",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "title": "Naslov",
+  "@title": {},
+  "offlineTrackCount": "{count,plural,=1{{count} pjesma} few{{count} pjesme} other{{count} pjesama}}, {downloads} preuzeto",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineTrackCountArtist": "{count,plural,=1{{count} pjesma preuzeta} few{{count} pjesme preuzete} other{{count} pjesama preuzeto}}",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackSpeedControlSetting": "Vidljivost kontrole za brzinu reprodukcije",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "customizationSettingsTitle": "Prilagođavanje",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSettingSubtitle": "Da li prikazati kontrole za brzinu reprodukcije u izborniku ekrana playera",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "automatic": "Automatski",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Prikazano",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Skriveno",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Brzina",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "Resetiraj",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Primijeni",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimalni prostor oko omota albuma na ekranu playera, u % širine ekrana.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopTracks": "Prikaži najslušanije pjesme u prikazu izvođača",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Da li prikazati 5 najslušanijih pjesama izvođača.",
+  "@showArtistsTopTracksSubtitle": {},
+  "hours": "Sati",
+  "@hours": {},
+  "timeFractionTooltip": "{currentTime} od {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "trackCountTooltip": "Pjesma {currentTrackIndex} od {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "addToMorePlaylistsTooltip": "Dodaj u još playlista",
+  "@addToMorePlaylistsTooltip": {},
+  "addToMorePlaylistsTitle": "Dodaj u još playlista",
+  "@addToMorePlaylistsTitle": {},
+  "playbackModeDirectPlaying": "Izravna reprodukcija",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "confirmFavoriteAdded": "Favorit dodan",
+  "@confirmFavoriteAdded": {},
+  "togglePlaybackButtonTooltip": "Uključi/Isključi reprodukciju",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "playbackHistory": "Povijest reprodukcija",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "fixedGridSizeSwitchSubtitle": "Veličine rešetkastih polja neće reagirati na veličinu prozora/ekrana.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "sleepTimerRemainingTime": "Gasi se za {time} min",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "showStopButtonOnMediaNotificationTitle": "Prikaži gumb za prekidanje na medijskoj obavijesti",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Kontrolira ima li medijska obavijest gumb za prekidanje dodatno uz gumb za pauzu. To omogućuje prekidanje reprodukcije bez otvaranja aplikacije.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "alignmentOptionCenter": "Centrirano",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "Desno",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Mala",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "fontSizeOptionMedium": "Srednja",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "lyricsFontSizeTitle": "Veličina fonta za tekstove pjesama",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeSubtitle": "Kontrolira veličinu fonta za tekst pjesme u prikazu teksta pjesme.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "Kontrolira hoće li se omot albuma prikazati iznad teksta pjesme prije nego što se ukloni.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnSubtitle": "Kada ostaviti ekran uključenim",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnDisabled": "Deaktivirano",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnAlwaysOn": "Uvijek uključen",
+  "@keepScreenOnAlwaysOn": {},
+  "keepScreenOnWhileLyrics": "Tijekom prikazivanja teksta pjesme",
+  "@keepScreenOnWhileLyrics": {},
+  "keepScreenOnWhilePluggedIn": "Ostavi ekran uključenim kada je uređaj priključen na struju",
+  "@keepScreenOnWhilePluggedIn": {},
+  "keepScreenOnWhilePluggedInSubtitle": "Zanemari postavku za ostavljanje ekrana uključenim kada uređaj nije priključen na struju",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "normalizationGain": "Pojačanje",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "albumScreen": "Ekran albuma",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenTitle": "Prikaži omote albuma za pjesme",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetSettingsPromptGlobalConfirm": "Resetiraj SVE postavke",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "resetSettingsPromptLocal": "Želiš li resetirati ove postavke na zadane vrijednosti?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "genericCancel": "Odustani",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Minimalni odmak omota albuma",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreen": "Ekran playera",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "seconds": "Sekunde",
+  "@seconds": {},
+  "playbackModeLocal": "Lokalna reprodukcija",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "confirmFavoriteRemoved": "Favorit uklonjen",
+  "@confirmFavoriteRemoved": {},
+  "shareOfflineListens": "Dijeli offline slušanja",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "preferQuickSyncSwitch": "Koristi brzu sinkronizaciju",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "suppressPlayerPadding": "Poništi odmake kontrola playera",
+  "@suppressPlayerPadding": {},
+  "fixedGridTileSizeEnum": "{size, select, small{Mala} medium{Srednja} large{Velika} veryLarge{Jako velika} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "lockDownload": "Uvijek zadrži na uređaju",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "showArtistChipImage": "Prikaži slike izvođača s imenom izvođača",
+  "@showArtistChipImage": {},
+  "enableAutoScroll": "Aktiviraj automatsko klizanje",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "removeFromPlaylistPrompt": "Ukloniti '{itemName}' iz playliste '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "trackMenuButtonTooltip": "Izbornik pjesama",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "quickActions": "Brze radnje",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "addRemoveFromPlaylist": "Dodaj u / Ukloni iz playlista",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "Dodaj pjesmu u playlistu",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "showLyricsTimestampsSubtitle": "Kontrolira hoće li se vremenska oznaka svakog retka teksta pjesme prikazati u prikazu teksta pjesme, ako je dostupna.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "playbackSpeedIncreaseLabel": "Povećaj brzinu reprodukcije",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "resetToDefaults": "Resetiraj na zadane vrijednosti",
+  "@resetToDefaults": {},
+  "moreInfo": "Više informacija",
+  "@moreInfo": {},
+  "volumeNormalizationModeSelectorTitle": "Modus normalizacija glasnoće",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeSelectorSubtitle": "Kada i kako primijeniti normalizaciju glasnoće",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "syncComplete": "Sva preuzimanja su ponovo sinkronizirana.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "enableVibration": "Omogući vibraciju",
+  "@enableVibration": {},
+  "downloadBitrate": "Brzina preuzimanja",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "loginFlowQuickConnectDisabled": "Brzo povezivanje je onemogućeno na ovom serveru.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "hideQueueButton": "Sakrij gumb čekanja",
+  "@hideQueueButton": {},
+  "loopModeNoneButtonLabel": "Bez petlje",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "requireWifiForDownloads": "Zahtijevaj WiFi prilikom preuzimanja.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "releaseDateFormatYear": "Godina",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "deleteDownloadsConfirmButtonText": "Izbriši",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "loopModeAllButtonLabel": "Ponovi sve",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Miješanje pjesama",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "loginFlowQuickConnectPrompt": "Koristite kod za brzo povezivanje",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "shuffleNext": "Izmiješaj sljedeće",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "bufferSizeTitle": "Veličina međuspreminka",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "Maksimalna veličina međuspremnika u MB. Zahtijeva ponovno pokretanje",
+  "@bufferSizeSubtitle": {},
+  "playbackSpeedButtonLabel": "Reproduciraj na x{speed} brzini",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "shuffleAlbums": "Izmiješaj albume",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
   }
 }

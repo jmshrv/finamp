@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
 class VolumeNormalizationIOSBaseGainEditor extends StatefulWidget {
-  const VolumeNormalizationIOSBaseGainEditor({Key? key}) : super(key: key);
+  const VolumeNormalizationIOSBaseGainEditor({super.key});
 
   @override
   State<VolumeNormalizationIOSBaseGainEditor> createState() =>
@@ -35,8 +35,7 @@ class _VolumeNormalizationIOSBaseGainEditorState
             final valueDouble = double.tryParse(value);
 
             if (valueDouble != null) {
-              FinampSettingsHelper.setVolumeNormalizationIOSBaseGain(
-                  valueDouble);
+              FinampSetters.setVolumeNormalizationIOSBaseGain(valueDouble);
             }
           },
         ),

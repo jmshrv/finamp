@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
@@ -35,133 +35,77 @@ class _LyricsSettingsScreenState extends State<LyricsSettingsScreen> {
   }
 }
 
-class ShowLyricsTimestampsToggle extends StatelessWidget {
+class ShowLyricsTimestampsToggle extends ConsumerWidget {
   const ShowLyricsTimestampsToggle({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? showLyricsTimestamps =
-            box.get("FinampSettings")?.showLyricsTimestamps;
-
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.showLyricsTimestampsTitle),
-          subtitle:
-              Text(AppLocalizations.of(context)!.showLyricsTimestampsSubtitle),
-          value: showLyricsTimestamps ?? false,
-          onChanged: showLyricsTimestamps == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.showLyricsTimestamps = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.showLyricsTimestampsTitle),
+      subtitle:
+          Text(AppLocalizations.of(context)!.showLyricsTimestampsSubtitle),
+      value: ref.watch(finampSettingsProvider.showLyricsTimestamps),
+      onChanged: FinampSetters.setShowLyricsTimestamps,
     );
   }
 }
 
-class LyricsAlignmentSelector extends StatelessWidget {
+class LyricsAlignmentSelector extends ConsumerWidget {
   const LyricsAlignmentSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        final finampSettings = box.get("FinampSettings")!;
-        return ListTile(
-          title: Text(AppLocalizations.of(context)!.lyricsAlignmentTitle),
-          subtitle: Text(AppLocalizations.of(context)!.lyricsAlignmentSubtitle),
-          trailing: DropdownButton<LyricsAlignment>(
-            value: finampSettings.lyricsAlignment,
-            items: LyricsAlignment.values
-                .map((e) => DropdownMenuItem<LyricsAlignment>(
-                      value: e,
-                      child: Text(e.toLocalisedString(context)),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                FinampSettings finampSettingsTemp = finampSettings;
-                finampSettingsTemp.lyricsAlignment = value;
-                Hive.box<FinampSettings>("FinampSettings")
-                    .put("FinampSettings", finampSettingsTemp);
-              }
-            },
-          ),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.lyricsAlignmentTitle),
+      subtitle: Text(AppLocalizations.of(context)!.lyricsAlignmentSubtitle),
+      trailing: DropdownButton<LyricsAlignment>(
+        value: ref.watch(finampSettingsProvider.lyricsAlignment),
+        items: LyricsAlignment.values
+            .map((e) => DropdownMenuItem<LyricsAlignment>(
+                  value: e,
+                  child: Text(e.toLocalisedString(context)),
+                ))
+            .toList(),
+        onChanged: FinampSetters.setLyricsAlignment.ifNonNull,
+      ),
     );
   }
 }
 
-class LyricsFontSizeSelector extends StatelessWidget {
+class LyricsFontSizeSelector extends ConsumerWidget {
   const LyricsFontSizeSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        final finampSettings = box.get("FinampSettings")!;
-        return ListTile(
-          title: Text(AppLocalizations.of(context)!.lyricsFontSizeTitle),
-          subtitle: Text(AppLocalizations.of(context)!.lyricsFontSizeSubtitle),
-          trailing: DropdownButton<LyricsFontSize>(
-            value: finampSettings.lyricsFontSize,
-            items: LyricsFontSize.values
-                .map((e) => DropdownMenuItem<LyricsFontSize>(
-                      value: e,
-                      child: Text(e.toLocalisedString(context)),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                FinampSettings finampSettingsTemp = finampSettings;
-                finampSettingsTemp.lyricsFontSize = value;
-                Hive.box<FinampSettings>("FinampSettings")
-                    .put("FinampSettings", finampSettingsTemp);
-              }
-            },
-          ),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.lyricsFontSizeTitle),
+      subtitle: Text(AppLocalizations.of(context)!.lyricsFontSizeSubtitle),
+      trailing: DropdownButton<LyricsFontSize>(
+        value: ref.watch(finampSettingsProvider.lyricsFontSize),
+        items: LyricsFontSize.values
+            .map((e) => DropdownMenuItem<LyricsFontSize>(
+                  value: e,
+                  child: Text(e.toLocalisedString(context)),
+                ))
+            .toList(),
+        onChanged: FinampSetters.setLyricsFontSize.ifNonNull,
+      ),
     );
   }
 }
 
-class ShowLyricsScreenAlbumPreludeToggle extends StatelessWidget {
+class ShowLyricsScreenAlbumPreludeToggle extends ConsumerWidget {
   const ShowLyricsScreenAlbumPreludeToggle({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        bool? showLyricsScreenAlbumPrelude =
-            box.get("FinampSettings")?.showLyricsScreenAlbumPrelude;
-
-        return SwitchListTile.adaptive(
-          title: Text(
-              AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle),
-          subtitle: Text(AppLocalizations.of(context)!
-              .showLyricsScreenAlbumPreludeSubtitle),
-          value: showLyricsScreenAlbumPrelude ?? false,
-          onChanged: showLyricsScreenAlbumPrelude == null
-              ? null
-              : (value) {
-                  FinampSettings finampSettingsTemp =
-                      box.get("FinampSettings")!;
-                  finampSettingsTemp.showLyricsScreenAlbumPrelude = value;
-                  box.put("FinampSettings", finampSettingsTemp);
-                },
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title:
+          Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle),
+      subtitle: Text(
+          AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeSubtitle),
+      value: ref.watch(finampSettingsProvider.showLyricsScreenAlbumPrelude),
+      onChanged: FinampSetters.setShowLyricsScreenAlbumPrelude,
     );
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:hive/hive.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:hive_ce/hive.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class BitrateSelector extends StatelessWidget {
-  const BitrateSelector({Key? key}) : super(key: key);
+  const BitrateSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +29,13 @@ class BitrateSelector extends StatelessWidget {
                 Slider(
                   min: 64,
                   max: 320,
-                  value: finampSettings.transcodeBitrate / 1000,
+                  value:
+                      (finampSettings.transcodeBitrate / 1000).clamp(64, 320),
                   divisions: 8,
                   label: AppLocalizations.of(context)!.kiloBitsPerSecondLabel(
                       finampSettings.transcodeBitrate ~/ 1000),
                   onChanged: (value) {
-                    FinampSettingsHelper.setTranscodeBitrate(
-                        (value * 1000).toInt());
+                    FinampSetters.setTranscodeBitrate((value * 1000).toInt());
                   },
                 ),
                 Text(

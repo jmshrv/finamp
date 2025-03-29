@@ -177,8 +177,8 @@
   },
   "unknownName": "Unknown Name",
   "@unknownName": {},
-  "songs": "Tracks",
-  "@songs": {},
+  "tracks": "Tracks",
+  "@tracks": {},
   "albums": "Albums",
   "@albums": {},
   "artists": "Artists",
@@ -189,16 +189,16 @@
   "@playlists": {},
   "startMix": "Start Mix",
   "@startMix": {},
-  "startMixNoSongsArtist": "Long-press an artist to add or remove it from the mix builder before starting a mix",
-  "@startMixNoSongsArtist": {
+  "startMixNoTracksArtist": "Long-press an artist to add or remove it from the mix builder before starting a mix",
+  "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "startMixNoSongsAlbum": "Long-press an album to add or remove it from the mix builder before starting a mix",
-  "@startMixNoSongsAlbum": {
+  "startMixNoTracksAlbum": "Long-press an album to add or remove it from the mix builder before starting a mix",
+  "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "startMixNoSongsGenre": "Long-press an genre to add or remove it from the mix builder before starting a mix",
-  "@startMixNoSongsGenre": {
+  "startMixNoTracksGenre": "Long-press an genre to add or remove it from the mix builder before starting a mix",
+  "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
   "music": "Music",
@@ -274,11 +274,11 @@
       }
     }
   },
-  "downloadedCountUnified": "{songCount,plural,=1{{songCount} track} other{{songCount} tracks}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} track} other{{trackCount} tracks}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
-      "songCount": {
+      "trackCount": {
         "type": "int"
       },
       "imageCount": {
@@ -330,9 +330,9 @@
   "@noActiveDownloads": {},
   "errorScreenError": "An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data",
   "@errorScreenError": {},
-  "failedToGetSongFromDownloadId": "Failed to get track from download ID",
-  "@failedToGetSongFromDownloadId": {},
-  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} song{track} library{library} other{item}} '{itemName}' from this device?",
+  "failedToGetTrackFromDownloadId": "Failed to get track from download ID",
+  "@failedToGetTrackFromDownloadId": {},
+  "deleteDownloadsPrompt": "Are you sure you want to delete the {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' from this device?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -350,6 +350,14 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
+  "specialDownloads": "Special downloads",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "No items downloaded.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
   "error": "Error",
   "@error": {},
   "discNumber": "Disc {number}",
@@ -364,16 +372,16 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
-  "songCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
-  "@songCount": {
+  "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
+  "@trackCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "offlineSongCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}, {downloads} Downloaded",
-  "@offlineSongCount": {
+  "offlineTrackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}, {downloads} Downloaded",
+  "@offlineTrackCount": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -383,8 +391,8 @@
       }
     }
   },
-  "offlineSongCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} Downloaded",
-  "@offlineSongCountArtist": {
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Track} other{{count} Tracks}} Downloaded",
+  "@offlineTrackCountArtist": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -448,8 +456,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Log Out",
   "@logOut": {},
-  "downloadedSongsWillNotBeDeleted": "Downloaded tracks will not be deleted",
-  "@downloadedSongsWillNotBeDeleted": {},
+  "downloadedTracksWillNotBeDeleted": "Downloaded tracks will not be deleted",
+  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Are you sure?",
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin uses AAC for transcoding",
@@ -476,16 +484,16 @@
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "Directory must be empty",
   "@directoryMustBeEmpty": {},
-  "customLocationsBuggy": "Custom locations are extremely buggy due to issues with permissions. I'm thinking of ways to fix this, but for now I wouldn't recommend using them.",
+  "customLocationsBuggy": "Custom locations can be extremely buggy and are not recommended in most cases. Locations under the system 'Music' folder prevent saving album covers due to OS limitations.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "Enter Low-Priority State on Pause",
   "@enterLowPriorityStateOnPause": {},
   "enterLowPriorityStateOnPauseSubtitle": "Lets the notification be swiped away when paused. Also allows Android to kill the service when paused.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllSongCount": "Shuffle All Track Count",
-  "@shuffleAllSongCount": {},
-  "shuffleAllSongCountSubtitle": "Amount of tracks to load when using the shuffle all tracks button.",
-  "@shuffleAllSongCountSubtitle": {},
+  "shuffleAllTrackCount": "Shuffle All Track Count",
+  "@shuffleAllTrackCount": {},
+  "shuffleAllTrackCountSubtitle": "Amount of tracks to load when using the shuffle all tracks button.",
+  "@shuffleAllTrackCountSubtitle": {},
   "viewType": "View Type",
   "@viewType": {},
   "viewTypeSubtitle": "View type for the music screen",
@@ -588,14 +596,14 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "hideSongArtistsIfSameAsAlbumArtists": "Hide track artists if same as album artists",
-  "@hideSongArtistsIfSameAsAlbumArtists": {},
-  "hideSongArtistsIfSameAsAlbumArtistsSubtitle": "Whether to show track artists on the album screen if not differing from album artists.",
-  "@hideSongArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopSongs": "Show top tracks in artist view",
-  "@showArtistsTopSongs": {},
-  "showArtistsTopSongsSubtitle": "Whether to show the top 5 most listened to tracks of an artist.",
-  "@showArtistsTopSongsSubtitle": {},
+  "hideTrackArtistsIfSameAsAlbumArtists": "Hide track artists if same as album artists",
+  "@hideTrackArtistsIfSameAsAlbumArtists": {},
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Whether to show track artists on the album screen if not differing from album artists.",
+  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
+  "showArtistsTopTracks": "Show top tracks in artist view",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Whether to show the top 5 most listened to tracks of an artist.",
+  "@showArtistsTopTracksSubtitle": {},
   "disableGesture": "Disable gestures",
   "@disableGesture": {},
   "disableGestureSubtitle": "Whether to disables gestures.",
@@ -952,7 +960,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} songMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allSongs{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} song{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1048,11 +1056,11 @@
       }
     }
   },
-  "queueRestoreSubtitle1": "Playing: {song}",
+  "queueRestoreSubtitle1": "Playing: {track}",
   "@queueRestoreSubtitle1": {
     "description": "Description of playing track in a saved queue",
     "placeholders": {
-      "song": {
+      "track": {
         "type": "String"
       }
     }
@@ -1105,8 +1113,8 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topSongs": "Top Tracks",
-  "@topSongs": {},
+  "topTracks": "Top Tracks",
+  "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {
@@ -1140,7 +1148,7 @@
       }
     }
   },
-  "couldNotLoad": "Couldn''t load {source, select, album{album} playlist{playlist} songMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allSongs{all tracks} filteredList{tracks} genre{genre} artist{artist} song{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "Couldn''t load {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1232,10 +1240,6 @@
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "deleteItem": "Delete from device",
-  "@deleteItem": {
-    "description": "Option to delete item in long-press menu."
-  },
   "repairComplete": "Downloads Repair complete.",
   "@repairComplete": {
     "description": "Message displayed after download repair completes."
@@ -1322,7 +1326,7 @@
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
-  "downloadSettings": "Download Settings",
+  "downloadSettings": "Downloads",
   "@downloadSettings": {},
   "showNullLibraryItemsTitle": "Show Media with Unknown Library.",
   "@showNullLibraryItemsTitle": {
@@ -1378,7 +1382,7 @@
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} song{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1550,6 +1554,12 @@
   "@enableVibration": {},
   "enableVibrationSubtitle": "Whether to enable vibration.",
   "@enableVibrationSubtitle": {},
+  "hideQueueButton":  "Hide queue button",
+  "hideQueueButtonSubtitle":  "Hide the queue button on the player screen. Swipe up to access the queue.",
+  "oneLineMarqueeTextButton": "Auto-scroll Long Titles",
+  "oneLineMarqueeTextButtonSubtitle": "Automatically scroll track titles that are too long to display in two lines",
+  "marqueeOrTruncateButton": "Use ellipsis for long titles",
+  "marqueeOrTruncateButtonSubtitle": "Show ... at the end of long titles instead of scrolling text",
   "hidePlayerBottomActions": "Hide bottom actions",
   "hidePlayerBottomActionsSubtitle":  "Hide the queue and lyrics buttons on the player screen. Swipe up to access the queue, swipe left (below the album cover) to view lyrics if available.",
   "prioritizePlayerCover":  "Prioritize album cover",
@@ -1639,11 +1649,11 @@
   "cacheLibraryImagesSettingsSubtitle": "All album, artist, genre, and playlist covers in the currently active library will be downloaded.",
   "showProgressOnNowPlayingBarTitle": "Show track progress on in-app miniplayer",
   "@showProgressOnNowPlayingBarTitle": {
-    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar.",
+  "showProgressOnNowPlayingBarSubtitle": "Controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar.",
   "@showProgressOnNowPlayingBarSubtitle": {
-    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the botton of the music screen functions as a progress bar"
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
   "lyricsScreen": "Lyrics View",
   "@lyricsScreen": {
@@ -1798,7 +1808,7 @@
   "@showFeatureChipsToggleTitle": {
     "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bit rate, and more on the player screen.",
+  "showFeatureChipsToggleSubtitle": "Show advanced track info like codec, bitrate, and more on the player screen.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -1846,16 +1856,94 @@
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
   },
-  "outputMenuTitle": "Change Output",
-  "@outputMenuTitle": {
-    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} other{Item}} got deleted from {deviceType, select, device{Device} server{Server} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
-  "outputMenuVolumeSectionTitle": "Volume",
-  "@outputMenuVolumeSectionTitle": {
-    "description": "Title for the volume section in the output menu"
+  "allowDeleteFromServerTitle": "Allow deletion from server",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
   },
-  "outputMenuDevicesSectionTitle": "Available Devices",
-  "@outputMenuDevicesSectionTitle": {
-    "description": "Title for the available devices section in the output menu"
+  "allowDeleteFromServerSubtitle": "Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "deleteFromTargetDialogText": "You are about to delete this {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} from {device, select, device{this device} server{the servers file system and library.{deleteType, select, canDelete{ This will also Delete this item from this Device.} cantDelete{ This item will stay on this device until the next sync.} notDownloaded{} other{}}\nThis action cannot be reverted} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "deleteFromTargetConfirmButton": "Delete{target, select, device{ from Device} server{ from Server} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "largeDownloadWarning": "Warning: You are about to download {count} tracks.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadSizeWarningCutoff": "Download Size Warning Cutoff",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "downloadSizeWarningCutoffSubtitle": "A warning message will be displayed when downloading more than this many tracks at once.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "confirmAddAlbumToPlaylist": "Are you sure you want add all tracks from {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' to this playlist?  They can only be removed individually.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "publiclyVisiblePlaylist": "Publicly Visible:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "releaseDateFormatYear": "Year",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthYear": "Month & Year",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatMonthDayYear": "Month, Day & Year",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Show Album Release Date on Player Screen",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Show the release date of the album on the player screen, behind the album name.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Release Date Format",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "Controls the format of all release dates shown in the app.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "librarySelectError": "Error loading available libraries for user",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
   }
 }

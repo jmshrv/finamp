@@ -11,7 +11,7 @@ import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -23,7 +23,7 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
 import '../components/PlayerScreen/queue_list.dart';
-import '../components/PlayerScreen/song_name_content.dart';
+import '../components/PlayerScreen/track_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/theme_provider.dart';
@@ -31,40 +31,20 @@ import 'blurred_player_screen_background.dart';
 import 'player_screen.dart';
 
 class LyricsScreen extends ConsumerWidget {
-  const LyricsScreen({Key? key}) : super(key: key);
+  const LyricsScreen({super.key});
 
   static const routeName = "/lyrics";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme = ref.watch(playerScreenThemeProvider);
-
-    return ProviderScope(
-        overrides: [
-          themeDataProvider.overrideWith((ref) {
-            return ref.watch(playerScreenThemeDataProvider) ??
-                FinampTheme.defaultTheme();
-          })
-        ],
-        child: AnimatedTheme(
-          duration: const Duration(milliseconds: 1000),
-          data: ThemeData(
-            colorScheme: imageTheme.copyWith(
-              brightness: Theme.of(context).brightness,
-            ),
-            iconTheme: Theme.of(context).iconTheme.copyWith(
-                  color: imageTheme.primary,
-                ),
-          ),
-          child: const _LyricsScreenContent(),
-        ));
+    return PlayerScreenTheme(
+      child: const _LyricsScreenContent(),
+    );
   }
 }
 
 class _LyricsScreenContent extends StatefulWidget {
-  const _LyricsScreenContent({
-    super.key,
-  });
+  const _LyricsScreenContent();
 
   @override
   State<_LyricsScreenContent> createState() => _LyricsScreenContentState();
@@ -78,100 +58,99 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
 
     var controller = PlayerHideableController();
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation:
-            0.0, // disable tint/shadow when content is scrolled under the app bar
-        centerTitle: true,
-        toolbarHeight: toolbarHeight,
-        title: PlayerScreenAppBarTitle(
-          maxLines: maxLines,
-        ),
-        leading: FinampAppBarButton(
-          dismissDirection: AxisDirection.right,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          if (Platform.isIOS)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: AirPlayRoutePickerView(
-                tintColor: IconTheme.of(context).color ?? Colors.white,
-                activeTintColor: jellyfinBlueColor,
-                onShowPickerView: () =>
-                    FeedbackHelper.feedback(FeedbackType.selection),
-              ),
+    return SimpleGestureDetector(
+        onVerticalSwipe: (direction) {
+          if (direction == SwipeDirection.up) {
+            // This should never actually be called until widget finishes build and controller is initialized
+            if (!FinampSettingsHelper.finampSettings.disableGesture ||
+                !controller.shouldShow(PlayerHideable.bottomActions)) {
+              showQueueBottomSheet(context);
+            }
+          }
+        },
+        onHorizontalSwipe: (direction) {
+          if (direction == SwipeDirection.right) {
+            if (!FinampSettingsHelper.finampSettings.disableGesture) {
+              Navigator.of(context).pop();
+            }
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation:
+                0.0, // disable tint/shadow when content is scrolled under the app bar
+            centerTitle: true,
+            toolbarHeight: toolbarHeight,
+            title: PlayerScreenAppBarTitle(
+              maxLines: maxLines,
             ),
-        ],
-      ),
-      // Required for sleep timer input
-      resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
-            const BlurredPlayerScreenBackground(),
-          SafeArea(
-            minimum: EdgeInsets.only(top: toolbarHeight),
-            child: LayoutBuilder(builder: (context, constraints) {
-              controller.setSize(
-                  Size(constraints.maxWidth, constraints.maxHeight),
-                  MediaQuery.orientationOf(context));
-              if (controller.useLandscape) {
-                return SimpleGestureDetector(
-                    onHorizontalSwipe: (direction) {
-                      if (direction == SwipeDirection.right) {
-                        if (!FinampSettingsHelper
-                            .finampSettings.disableGesture) {
-                          Navigator.of(context).pop();
-                        }
-                      }
-                    },
-                    child: const LyricsView());
-              } else {
-                return SimpleGestureDetector(
-                  onHorizontalSwipe: (direction) {
-                    if (direction == SwipeDirection.right) {
-                      if (!FinampSettingsHelper.finampSettings.disableGesture) {
-                        Navigator.of(context).pop();
-                      }
-                    }
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Expanded(
-                        child: LyricsView(),
-                      ),
-                      SimpleGestureDetector(
-                          onVerticalSwipe: (direction) {
-                            if (direction == SwipeDirection.up) {
-                              // This should never actually be called until widget finishes build and controller is initialized
-                              if (!FinampSettingsHelper
-                                  .finampSettings.disableGesture) {
-                                showQueueBottomSheet(context);
-                              }
-                            }
-                          },
-                          child: Column(
-                            children: [
-                              SongNameContent(controller),
-                              ControlArea(controller),
-                              const SizedBox(
-                                height: 12,
-                              )
-                            ],
-                          ))
-                    ],
+            leading: FinampAppBarButton(
+              dismissDirection: AxisDirection.right,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            actions: [
+              if (Platform.isIOS)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: AirPlayRoutePickerView(
+                    tintColor: IconTheme.of(context).color ?? Colors.white,
+                    activeTintColor: jellyfinBlueColor,
+                    onShowPickerView: () =>
+                        FeedbackHelper.feedback(FeedbackType.selection),
                   ),
-                );
-              }
-            }),
+                ),
+            ],
           ),
-        ],
-      ),
-    );
+          // Required for sleep timer input
+          resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
+          body: Stack(
+            children: [
+              if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+                const BlurredPlayerScreenBackground(),
+              SafeArea(
+                minimum: EdgeInsets.only(top: toolbarHeight),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  controller.setSize(
+                      Size(constraints.maxWidth, constraints.maxHeight),
+                      MediaQuery.orientationOf(context));
+                  if (controller.useLandscape) {
+                    return const LyricsView();
+                  } else {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Expanded(
+                          child: LyricsView(),
+                        ),
+                        SimpleGestureDetector(
+                            onVerticalSwipe: (direction) {
+                              if (direction == SwipeDirection.up) {
+                                // This should never actually be called until widget finishes build and controller is initialized
+                                if (!FinampSettingsHelper
+                                    .finampSettings.disableGesture) {
+                                  showQueueBottomSheet(context);
+                                }
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                TrackNameContent(controller),
+                                ControlArea(controller),
+                                const SizedBox(
+                                  height: 12,
+                                )
+                              ],
+                            ))
+                      ],
+                    );
+                  }
+                }),
+              ),
+            ],
+          ),
+        ));
   }
 }
 
@@ -239,7 +218,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
     final finampSettings = ref.watch(finampSettingsProvider).value;
 
-    //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current song yet, we want to show the loading state, and not the lyrics for the previous track
+    //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current track yet, we want to show the loading state, and not the lyrics for the previous track
     _isSynchronizedLyrics =
         metadata.valueOrNull?.lyrics?.lyrics?.first.start != null;
 

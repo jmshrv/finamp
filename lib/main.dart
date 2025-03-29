@@ -27,13 +27,14 @@ import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/playon_handler.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
+import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:isar/isar.dart';
@@ -75,8 +76,9 @@ import 'services/jellyfin_api_helper.dart';
 import 'services/locale_helper.dart';
 import 'services/music_player_background_task.dart';
 import 'services/theme_mode_helper.dart';
-import 'services/ui_overlay_setter_observer.dart';
 import 'setup_logging.dart';
+
+final _mainLog = Logger("Main()");
 
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
@@ -84,17 +86,26 @@ void main() async {
   try {
     await setupLogging();
     await _setupEdgeToEdgeOverlayStyle();
+    _mainLog.info("Setup edge-to-edge overlay");
     await setupHive();
+    _mainLog.info("Setup hive and isar");
     _migrateDownloadLocations();
     _migrateSortOptions();
+    _mainLog.info("Completed applicable migrations");
     await _setupFinampUserHelper();
+    _mainLog.info("Setup user helper");
     await _setupJellyfinApiData();
+    _mainLog.info("setup jellyfin api");
     _setupOfflineListenLogHelper();
+    _mainLog.info("Setup offline listen tracking");
     await _setupDownloadsHelper();
+    _mainLog.info("Setup downloads service");
     await _setupOSIntegration();
+    _mainLog.info("Setup os integrations");
     await _setupPlaybackServices();
-    await _setupPlayonHandler();
+    _mainLog.info("Setup audio player");
     await _setupKeepScreenOnHelper();
+    _mainLog.info("Setup KeepScreenOnHelper");
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -117,6 +128,8 @@ void main() async {
 
     await findSystemLocale();
     await initializeDateFormatting();
+
+    _mainLog.info("Launching main app");
 
     runApp(const Finamp());
   }
@@ -160,7 +173,27 @@ Future<void> _setupDownloadsHelper() async {
   if (!FinampSettingsHelper
       .finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
-    FinampSettingsHelper.setHasCompleteddownloadsServiceMigration(true);
+    FinampSetters.setHasCompletedDownloadsServiceMigration(true);
+  } else {
+    // Some users may have missed migration due to a bug in the flag setting and
+    // are therefore missing an internal directory
+    if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+        .where((element) =>
+            element.baseDirectory ==
+            DownloadLocationType.platformDefaultDirectory)
+        .isEmpty) {
+      _mainLog
+          .info("Internal Storage download location is missing.  Recreating.");
+      final downloadLocation = await DownloadLocation.create(
+          name: DownloadLocation.internalStorageName,
+          baseDirectory: DownloadLocationType.platformDefaultDirectory);
+      FinampSettingsHelper.addDownloadLocation(downloadLocation);
+      // There may be old downloads present due to skipping the migration
+      // Run a repair to make sure they all get cleaned up.
+      unawaited(downloadsService
+          .repairAllDownloads()
+          .then((value) => null, onError: GlobalSnackbar.error));
+    }
   }
 
   await FileDownloader()
@@ -182,7 +215,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(BaseItemDtoAdapter());
   Hive.registerAdapter(UserItemDataDtoAdapter());
   Hive.registerAdapter(NameIdPairAdapter());
-  Hive.registerAdapter(DownloadedSongAdapter());
+  Hive.registerAdapter(DownloadedTrackAdapter());
   Hive.registerAdapter(DownloadedParentAdapter());
   Hive.registerAdapter(MediaSourceInfoAdapter());
   Hive.registerAdapter(MediaStreamAdapter());
@@ -244,6 +277,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(FinampSegmentContainerAdapter());
   Hive.registerAdapter(FinampFeatureChipsConfigurationAdapter());
   Hive.registerAdapter(FinampFeatureChipTypeAdapter());
+  Hive.registerAdapter(ReleaseDateFormatAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
@@ -357,10 +391,16 @@ Future<void> _setupPlaybackServices() async {
   );
 
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
-  GetIt.instance.registerSingleton(QueueService());
+  var queueService = QueueService();
+  GetIt.instance.registerSingleton(queueService);
   await GetIt.instance<QueueService>().initializePlayer();
   GetIt.instance.registerSingleton(PlaybackHistoryService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
+
+  // Begin to restore queue
+  unawaited(queueService
+      .performInitialQueueLoad()
+      .catchError((dynamic x) => GlobalSnackbar.error(x)));
 }
 
 /// Migrates the old DownloadLocations list to a map
@@ -419,19 +459,19 @@ Future<void> _setupFinampUserHelper() async {
   GetIt.instance.registerSingleton(FinampUserHelper());
   if (!FinampSettingsHelper.finampSettings.hasCompletedIsarUserMigration) {
     await GetIt.instance<FinampUserHelper>().migrateFromHive();
-    FinampSettingsHelper.setHasCompletedIsarUserMigration(true);
+    FinampSetters.setHasCompletedIsarUserMigration(true);
   }
   await GetIt.instance<FinampUserHelper>().setAuthHeader();
 }
 
-class Finamp extends ConsumerStatefulWidget {
+class Finamp extends StatefulWidget {
   const Finamp({super.key});
 
   @override
-  ConsumerState<Finamp> createState() => _FinampState();
+  State<Finamp> createState() => _FinampState();
 }
 
-class _FinampState extends ConsumerState<Finamp> with WindowListener {
+class _FinampState extends State<Finamp> with WindowListener {
   static final Logger windowManagerLogger = Logger("WindowManager");
 
   @override
@@ -483,6 +523,8 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                 };
                 return Consumer(
                   builder: (context, ref, child) {
+                    // Force settings provider to fully complete build before widgets start accessing
+                    ref.listen(finampSettingsProvider, (_, __) {});
                     Future(() {
                       ref.read(brightnessProvider.notifier).state = theme;
                     });
@@ -552,6 +594,7 @@ class _FinampState extends ConsumerState<Finamp> with WindowListener {
                         systemOverlayStyle: SystemUiOverlayStyle(
                           statusBarBrightness: Brightness.light,
                           statusBarIconBrightness: Brightness.dark,
+                          systemNavigationBarIconBrightness: Brightness.dark,
                         ),
                       ),
                       snackBarTheme: const SnackBarThemeData(

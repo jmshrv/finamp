@@ -21,8 +21,10 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       baseUrl: fields[1] as String,
       accessToken: fields[2] as String,
       serverId: fields[3] as String,
-      currentViewId: fields[4] as String?,
-      views: (fields[5] as Map).cast<String, BaseItemDto>(),
+      currentViewId: fields[4] as BaseItemId?,
+      views: fields[5] == null
+          ? const {}
+          : (fields[5] as Map).cast<BaseItemId, BaseItemDto>(),
     );
   }
 
@@ -68,18 +70,20 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
     return FinampSettings(
       isOffline: fields[0] == null ? false : fields[0] as bool,
       shouldTranscode: fields[1] == null ? false : fields[1] as bool,
-      transcodeBitrate: fields[2] == null ? 320000 : fields[2] as int,
+      transcodeBitrate: fields[2] == null ? 320000 : (fields[2] as num).toInt(),
       downloadLocations: (fields[3] as List).cast<DownloadLocation>(),
       androidStopForegroundOnPause:
           fields[4] == null ? true : fields[4] as bool,
       showTabs: (fields[5] as Map).cast<TabContentType, bool>(),
       onlyShowFavourites: fields[6] == null ? false : fields[6] as bool,
-      sortBy: fields[7] as SortBy,
-      sortOrder: fields[8] as SortOrder,
-      songShuffleItemCount: fields[9] == null ? 250 : fields[9] as int,
+      sortBy: fields[7] == null ? SortBy.sortName : fields[7] as SortBy,
+      sortOrder:
+          fields[8] == null ? SortOrder.ascending : fields[8] as SortOrder,
+      trackShuffleItemCount:
+          fields[9] == null ? 250 : (fields[9] as num).toInt(),
       volumeNormalizationActive: fields[29] == null ? true : fields[29] as bool,
       volumeNormalizationIOSBaseGain:
-          fields[30] == null ? -2.0 : fields[30] as double,
+          fields[30] == null ? -2.0 : (fields[30] as num).toDouble(),
       volumeNormalizationMode: fields[33] == null
           ? VolumeNormalizationMode.hybrid
           : fields[33] as VolumeNormalizationMode,
@@ -90,22 +94,25 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           ? PlaybackSpeedVisibility.automatic
           : fields[57] as PlaybackSpeedVisibility,
       contentGridViewCrossAxisCountPortrait:
-          fields[11] == null ? 2 : fields[11] as int,
+          fields[11] == null ? 2 : (fields[11] as num).toInt(),
       contentGridViewCrossAxisCountLandscape:
-          fields[12] == null ? 3 : fields[12] as int,
+          fields[12] == null ? 3 : (fields[12] as num).toInt(),
       showTextOnGridView: fields[13] == null ? true : fields[13] as bool,
-      sleepTimerSeconds: fields[14] == null ? 1800 : fields[14] as int,
+      sleepTimerSeconds:
+          fields[14] == null ? 1800 : (fields[14] as num).toInt(),
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
       useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
-          fields[48] == null ? 1.5 : fields[48] as double,
-      showArtistsTopSongs: fields[54] == null ? true : fields[54] as bool,
+          fields[48] == null ? 1.5 : (fields[48] as num).toDouble(),
+      showArtistsTopTracks: fields[54] == null ? true : fields[54] as bool,
       bufferDisableSizeConstraints:
           fields[78] == null ? false : fields[78] as bool,
-      bufferDurationSeconds: fields[18] == null ? 600 : fields[18] as int,
-      bufferSizeMegabytes: fields[79] == null ? 50 : fields[79] as int,
+      bufferDurationSeconds:
+          fields[18] == null ? 600 : (fields[18] as num).toInt(),
+      bufferSizeMegabytes:
+          fields[79] == null ? 50 : (fields[79] as num).toInt(),
       tabSortBy: fields[20] == null
           ? {}
           : (fields[20] as Map).cast<TabContentType, SortBy>(),
@@ -115,35 +122,33 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       loopMode: fields[27] == null
           ? FinampLoopMode.none
           : fields[27] as FinampLoopMode,
-      playbackSpeed: fields[56] == null ? 1.0 : fields[56] as double,
+      playbackSpeed: fields[56] == null ? 1.0 : (fields[56] as num).toDouble(),
       tabOrder: fields[22] == null
           ? [
               TabContentType.albums,
               TabContentType.artists,
               TabContentType.playlists,
               TabContentType.genres,
-              TabContentType.songs
+              TabContentType.tracks
             ]
           : (fields[22] as List).cast<TabContentType>(),
       autoloadLastQueueOnStartup:
           fields[28] == null ? true : fields[28] as bool,
-      hasCompletedBlurhashImageMigration:
-          fields[23] == null ? true : fields[23] as bool,
-      hasCompletedBlurhashImageMigrationIdFix:
-          fields[24] == null ? true : fields[24] as bool,
       hasCompletedDownloadsServiceMigration:
-          fields[34] == null ? true : fields[34] as bool,
-      requireWifiForDownloads: fields[35] == null ? false : fields[35] as bool,
+          fields[34] == null ? false : fields[34] as bool,
+      requireWifiForDownloads: fields[35] == null ? true : fields[35] as bool,
       onlyShowFullyDownloaded: fields[36] == null ? false : fields[36] as bool,
       showDownloadsWithUnknownLibrary:
           fields[37] == null ? true : fields[37] as bool,
-      maxConcurrentDownloads: fields[38] == null ? 10 : fields[38] as int,
-      downloadWorkers: fields[39] == null ? 5 : fields[39] as int,
+      maxConcurrentDownloads:
+          fields[38] == null ? 10 : (fields[38] as num).toInt(),
+      downloadWorkers: fields[39] == null ? 5 : (fields[39] as num).toInt(),
       resyncOnStartup: fields[40] == null ? true : fields[40] as bool,
       preferQuickSyncs: fields[41] == null ? true : fields[41] as bool,
       hasCompletedIsarUserMigration:
-          fields[42] == null ? true : fields[42] as bool,
-      downloadTranscodeBitrate: fields[45] as int?,
+          fields[42] == null ? false : fields[42] as bool,
+      downloadTranscodingCodec: fields[43] as FinampTranscodingCodec?,
+      downloadTranscodeBitrate: (fields[45] as num?)?.toInt(),
       shouldTranscodeDownloads: fields[44] == null
           ? TranscodeDownloadsSetting.ask
           : fields[44] as TranscodeDownloadsSetting,
@@ -151,16 +156,18 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
       useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
-      fixedGridTileSize: fields[60] == null ? 150 : fields[60] as int,
+      fixedGridTileSize: fields[60] == null ? 150 : (fields[60] as num).toInt(),
       allowSplitScreen: fields[61] == null ? true : fields[61] as bool,
-      splitScreenPlayerWidth: fields[62] == null ? 400.0 : fields[62] as double,
+      splitScreenPlayerWidth:
+          fields[62] == null ? 400.0 : (fields[62] as num).toDouble(),
       enableVibration: fields[47] == null ? true : fields[47] as bool,
-      prioritizeCoverFactor: fields[49] == null ? 8.0 : fields[49] as double,
+      prioritizeCoverFactor:
+          fields[49] == null ? 8.0 : (fields[49] as num).toDouble(),
       suppressPlayerPadding: fields[50] == null ? false : fields[50] as bool,
       hidePlayerBottomActions: fields[51] == null ? false : fields[51] as bool,
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
-          fields[53] == null ? 150 : fields[53] as int,
+          fields[53] == null ? 150 : (fields[53] as num).toInt(),
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
@@ -194,17 +201,26 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       transcodingSegmentContainer: fields[75] == null
           ? FinampSegmentContainer.fragmentedMp4
           : fields[75] as FinampSegmentContainer,
-      currentVolume: fields[80] == null ? 1.0 : fields[80] as double,
+      downloadSizeWarningCutoff:
+          fields[80] == null ? 150 : (fields[80] as num).toInt(),
+      allowDeleteFromServer: fields[81] == null ? false : fields[81] as bool,
+      oneLineMarqueeTextButton: fields[82] == null ? false : fields[82] as bool,
+      showAlbumReleaseDateOnPlayerScreen:
+          fields[83] == null ? false : fields[83] as bool,
+      releaseDateFormat: fields[84] == null
+          ? ReleaseDateFormat.year
+          : fields[84] as ReleaseDateFormat,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
-      ..defaultDownloadLocation = fields[58] as String?;
+      ..defaultDownloadLocation = fields[58] as String?
+      ..lastUsedDownloadLocationId = fields[85] as String?;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(77)
+      ..writeByte(81)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -224,7 +240,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(8)
       ..write(obj.sortOrder)
       ..writeByte(9)
-      ..write(obj.songShuffleItemCount)
+      ..write(obj.trackShuffleItemCount)
       ..writeByte(10)
       ..write(obj.contentViewType)
       ..writeByte(11)
@@ -249,10 +265,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.tabSortOrder)
       ..writeByte(22)
       ..write(obj.tabOrder)
-      ..writeByte(23)
-      ..write(obj.hasCompletedBlurhashImageMigration)
-      ..writeByte(24)
-      ..write(obj.hasCompletedBlurhashImageMigrationIdFix)
       ..writeByte(25)
       ..write(obj.showFastScroller)
       ..writeByte(26)
@@ -285,6 +297,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.preferQuickSyncs)
       ..writeByte(42)
       ..write(obj.hasCompletedIsarUserMigration)
+      ..writeByte(43)
+      ..write(obj.downloadTranscodingCodec)
       ..writeByte(44)
       ..write(obj.shouldTranscodeDownloads)
       ..writeByte(45)
@@ -306,7 +320,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(53)
       ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds)
       ..writeByte(54)
-      ..write(obj.showArtistsTopSongs)
+      ..write(obj.showArtistsTopTracks)
       ..writeByte(55)
       ..write(obj.showArtistChipImage)
       ..writeByte(56)
@@ -358,7 +372,17 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(79)
       ..write(obj.bufferSizeMegabytes)
       ..writeByte(80)
-      ..write(obj.currentVolume);
+      ..write(obj.downloadSizeWarningCutoff)
+      ..writeByte(81)
+      ..write(obj.allowDeleteFromServer)
+      ..writeByte(82)
+      ..write(obj.oneLineMarqueeTextButton)
+      ..writeByte(83)
+      ..write(obj.showAlbumReleaseDateOnPlayerScreen)
+      ..writeByte(84)
+      ..write(obj.releaseDateFormat)
+      ..writeByte(85)
+      ..write(obj.lastUsedDownloadLocationId);
   }
 
   @override
@@ -423,18 +447,18 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
           typeId == other.typeId;
 }
 
-class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
+class DownloadedTrackAdapter extends TypeAdapter<DownloadedTrack> {
   @override
   final int typeId = 3;
 
   @override
-  DownloadedSong read(BinaryReader reader) {
+  DownloadedTrack read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return DownloadedSong(
-      song: fields[0] as BaseItemDto,
+    return DownloadedTrack(
+      track: fields[0] as BaseItemDto,
       mediaSourceInfo: fields[1] as MediaSourceInfo,
       downloadId: fields[2] as String,
       requiredBy: (fields[3] as List).cast<String>(),
@@ -447,11 +471,11 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
   }
 
   @override
-  void write(BinaryWriter writer, DownloadedSong obj) {
+  void write(BinaryWriter writer, DownloadedTrack obj) {
     writer
       ..writeByte(9)
       ..writeByte(0)
-      ..write(obj.song)
+      ..write(obj.track)
       ..writeByte(1)
       ..write(obj.mediaSourceInfo)
       ..writeByte(2)
@@ -476,7 +500,7 @@ class DownloadedSongAdapter extends TypeAdapter<DownloadedSong> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DownloadedSongAdapter &&
+      other is DownloadedTrackAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -578,7 +602,7 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return OfflineListen(
-      timestamp: fields[0] as int,
+      timestamp: (fields[0] as num).toInt(),
       userId: fields[1] as String,
       itemId: fields[2] as String,
       name: fields[3] as String,
@@ -635,9 +659,9 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
     return QueueItemSource(
       type: fields[0] as QueueItemSourceType,
       name: fields[1] as QueueItemSourceName,
-      id: fields[2] as String,
+      id: fields[2] as BaseItemId,
       item: fields[3] as BaseItemDto?,
-      contextNormalizationGain: fields[4] as double?,
+      contextNormalizationGain: (fields[4] as num?)?.toDouble(),
     );
   }
 
@@ -721,7 +745,9 @@ class FinampQueueItemAdapter extends TypeAdapter<FinampQueueItem> {
     return FinampQueueItem(
       item: fields[1] as MediaItem,
       source: fields[2] as QueueItemSource,
-      type: fields[3] as QueueItemQueueType,
+      type: fields[3] == null
+          ? QueueItemQueueType.queue
+          : fields[3] as QueueItemQueueType,
     )..id = fields[0] as String;
   }
 
@@ -899,12 +925,12 @@ class FinampStorableQueueInfoAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return FinampStorableQueueInfo(
-      previousTracks: (fields[0] as List).cast<String>(),
-      currentTrack: fields[1] as String?,
-      currentTrackSeek: fields[2] as int?,
-      nextUp: (fields[3] as List).cast<String>(),
-      queue: (fields[4] as List).cast<String>(),
-      creation: fields[5] as int,
+      previousTracks: (fields[0] as List).cast<BaseItemId>(),
+      currentTrack: fields[1] as BaseItemId?,
+      currentTrackSeek: (fields[2] as num?)?.toInt(),
+      nextUp: (fields[3] as List).cast<BaseItemId>(),
+      queue: (fields[4] as List).cast<BaseItemId>(),
+      creation: (fields[5] as num).toInt(),
       source: fields[6] as QueueItemSource?,
     );
   }
@@ -953,8 +979,8 @@ class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
     return MediaItemId(
       contentType: fields[0] as TabContentType,
       parentType: fields[1] as MediaItemParentType,
-      itemId: fields[2] as String?,
-      parentId: fields[3] as String?,
+      itemId: fields[2] as BaseItemId?,
+      parentId: fields[3] as BaseItemId?,
     );
   }
 
@@ -1074,7 +1100,7 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
       case 3:
         return TabContentType.genres;
       case 4:
-        return TabContentType.songs;
+        return TabContentType.tracks;
       default:
         return TabContentType.albums;
     }
@@ -1085,19 +1111,14 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
     switch (obj) {
       case TabContentType.albums:
         writer.writeByte(0);
-        break;
       case TabContentType.artists:
         writer.writeByte(1);
-        break;
       case TabContentType.playlists:
         writer.writeByte(2);
-        break;
       case TabContentType.genres:
         writer.writeByte(3);
-        break;
-      case TabContentType.songs:
+      case TabContentType.tracks:
         writer.writeByte(4);
-        break;
     }
   }
 
@@ -1133,10 +1154,8 @@ class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
     switch (obj) {
       case ContentViewType.list:
         writer.writeByte(0);
-        break;
       case ContentViewType.grid:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -1172,10 +1191,8 @@ class FinampPlaybackOrderAdapter extends TypeAdapter<FinampPlaybackOrder> {
     switch (obj) {
       case FinampPlaybackOrder.shuffled:
         writer.writeByte(0);
-        break;
       case FinampPlaybackOrder.linear:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -1213,13 +1230,10 @@ class FinampLoopModeAdapter extends TypeAdapter<FinampLoopMode> {
     switch (obj) {
       case FinampLoopMode.none:
         writer.writeByte(0);
-        break;
       case FinampLoopMode.one:
         writer.writeByte(1);
-        break;
       case FinampLoopMode.all:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1246,7 +1260,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 1:
         return QueueItemSourceType.playlist;
       case 2:
-        return QueueItemSourceType.songMix;
+        return QueueItemSourceType.trackMix;
       case 3:
         return QueueItemSourceType.artistMix;
       case 4:
@@ -1254,7 +1268,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 5:
         return QueueItemSourceType.favorites;
       case 6:
-        return QueueItemSourceType.allSongs;
+        return QueueItemSourceType.allTracks;
       case 7:
         return QueueItemSourceType.filteredList;
       case 8:
@@ -1280,7 +1294,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 18:
         return QueueItemSourceType.genreMix;
       case 19:
-        return QueueItemSourceType.song;
+        return QueueItemSourceType.track;
       default:
         return QueueItemSourceType.album;
     }
@@ -1291,64 +1305,44 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
     switch (obj) {
       case QueueItemSourceType.album:
         writer.writeByte(0);
-        break;
       case QueueItemSourceType.playlist:
         writer.writeByte(1);
-        break;
-      case QueueItemSourceType.songMix:
+      case QueueItemSourceType.trackMix:
         writer.writeByte(2);
-        break;
       case QueueItemSourceType.artistMix:
         writer.writeByte(3);
-        break;
       case QueueItemSourceType.albumMix:
         writer.writeByte(4);
-        break;
       case QueueItemSourceType.favorites:
         writer.writeByte(5);
-        break;
-      case QueueItemSourceType.allSongs:
+      case QueueItemSourceType.allTracks:
         writer.writeByte(6);
-        break;
       case QueueItemSourceType.filteredList:
         writer.writeByte(7);
-        break;
       case QueueItemSourceType.genre:
         writer.writeByte(8);
-        break;
       case QueueItemSourceType.artist:
         writer.writeByte(9);
-        break;
       case QueueItemSourceType.nextUp:
         writer.writeByte(10);
-        break;
       case QueueItemSourceType.nextUpAlbum:
         writer.writeByte(11);
-        break;
       case QueueItemSourceType.nextUpPlaylist:
         writer.writeByte(12);
-        break;
       case QueueItemSourceType.nextUpArtist:
         writer.writeByte(13);
-        break;
       case QueueItemSourceType.formerNextUp:
         writer.writeByte(14);
-        break;
       case QueueItemSourceType.downloads:
         writer.writeByte(15);
-        break;
       case QueueItemSourceType.queue:
         writer.writeByte(16);
-        break;
       case QueueItemSourceType.unknown:
         writer.writeByte(17);
-        break;
       case QueueItemSourceType.genreMix:
         writer.writeByte(18);
-        break;
-      case QueueItemSourceType.song:
+      case QueueItemSourceType.track:
         writer.writeByte(19);
-        break;
     }
   }
 
@@ -1388,16 +1382,12 @@ class QueueItemQueueTypeAdapter extends TypeAdapter<QueueItemQueueType> {
     switch (obj) {
       case QueueItemQueueType.previousTracks:
         writer.writeByte(0);
-        break;
       case QueueItemQueueType.currentTrack:
         writer.writeByte(1);
-        break;
       case QueueItemQueueType.nextUp:
         writer.writeByte(2);
-        break;
       case QueueItemQueueType.queue:
         writer.writeByte(3);
-        break;
     }
   }
 
@@ -1448,31 +1438,22 @@ class QueueItemSourceNameTypeAdapter
     switch (obj) {
       case QueueItemSourceNameType.preTranslated:
         writer.writeByte(0);
-        break;
       case QueueItemSourceNameType.yourLikes:
         writer.writeByte(1);
-        break;
       case QueueItemSourceNameType.shuffleAll:
         writer.writeByte(2);
-        break;
       case QueueItemSourceNameType.mix:
         writer.writeByte(3);
-        break;
       case QueueItemSourceNameType.instantMix:
         writer.writeByte(4);
-        break;
       case QueueItemSourceNameType.nextUp:
         writer.writeByte(5);
-        break;
       case QueueItemSourceNameType.tracksFormerNextUp:
         writer.writeByte(6);
-        break;
       case QueueItemSourceNameType.savedQueue:
         writer.writeByte(7);
-        break;
       case QueueItemSourceNameType.queue:
         writer.writeByte(8);
-        break;
     }
   }
 
@@ -1516,22 +1497,16 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
     switch (obj) {
       case SavedQueueState.preInit:
         writer.writeByte(0);
-        break;
       case SavedQueueState.init:
         writer.writeByte(1);
-        break;
       case SavedQueueState.loading:
         writer.writeByte(2);
-        break;
       case SavedQueueState.saving:
         writer.writeByte(3);
-        break;
       case SavedQueueState.failed:
         writer.writeByte(4);
-        break;
       case SavedQueueState.pendingSave:
         writer.writeByte(5);
-        break;
     }
   }
 
@@ -1570,13 +1545,10 @@ class VolumeNormalizationModeAdapter
     switch (obj) {
       case VolumeNormalizationMode.hybrid:
         writer.writeByte(0);
-        break;
       case VolumeNormalizationMode.trackBased:
         writer.writeByte(1);
-        break;
       case VolumeNormalizationMode.albumOnly:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1622,25 +1594,18 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
     switch (obj) {
       case DownloadLocationType.internalDocuments:
         writer.writeByte(0);
-        break;
       case DownloadLocationType.internalSupport:
         writer.writeByte(1);
-        break;
       case DownloadLocationType.external:
         writer.writeByte(2);
-        break;
       case DownloadLocationType.custom:
         writer.writeByte(3);
-        break;
       case DownloadLocationType.none:
         writer.writeByte(4);
-        break;
       case DownloadLocationType.migrated:
         writer.writeByte(5);
-        break;
       case DownloadLocationType.cache:
         writer.writeByte(6);
-        break;
     }
   }
 
@@ -1681,16 +1646,12 @@ class FinampTranscodingCodecAdapter
     switch (obj) {
       case FinampTranscodingCodec.aac:
         writer.writeByte(0);
-        break;
       case FinampTranscodingCodec.mp3:
         writer.writeByte(1);
-        break;
       case FinampTranscodingCodec.opus:
         writer.writeByte(2);
-        break;
       case FinampTranscodingCodec.original:
         writer.writeByte(3);
-        break;
     }
   }
 
@@ -1729,13 +1690,10 @@ class TranscodeDownloadsSettingAdapter
     switch (obj) {
       case TranscodeDownloadsSetting.always:
         writer.writeByte(0);
-        break;
       case TranscodeDownloadsSetting.never:
         writer.writeByte(1);
-        break;
       case TranscodeDownloadsSetting.ask:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1774,13 +1732,10 @@ class PlaybackSpeedVisibilityAdapter
     switch (obj) {
       case PlaybackSpeedVisibility.automatic:
         writer.writeByte(0);
-        break;
       case PlaybackSpeedVisibility.visible:
         writer.writeByte(1);
-        break;
       case PlaybackSpeedVisibility.hidden:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1818,13 +1773,10 @@ class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
     switch (obj) {
       case MediaItemParentType.collection:
         writer.writeByte(0);
-        break;
       case MediaItemParentType.rootCollection:
         writer.writeByte(1);
-        break;
       case MediaItemParentType.instantMix:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1862,13 +1814,10 @@ class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
     switch (obj) {
       case LyricsAlignment.start:
         writer.writeByte(0);
-        break;
       case LyricsAlignment.center:
         writer.writeByte(1);
-        break;
       case LyricsAlignment.end:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1906,13 +1855,10 @@ class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
     switch (obj) {
       case LyricsFontSize.small:
         writer.writeByte(0);
-        break;
       case LyricsFontSize.medium:
         writer.writeByte(1);
-        break;
       case LyricsFontSize.large:
         writer.writeByte(2);
-        break;
     }
   }
 
@@ -1952,16 +1898,12 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
     switch (obj) {
       case KeepScreenOnOption.disabled:
         writer.writeByte(0);
-        break;
       case KeepScreenOnOption.alwaysOn:
         writer.writeByte(1);
-        break;
       case KeepScreenOnOption.whilePlaying:
         writer.writeByte(2);
-        break;
       case KeepScreenOnOption.whileLyrics:
         writer.writeByte(3);
-        break;
     }
   }
 
@@ -1998,10 +1940,8 @@ class FinampSegmentContainerAdapter
     switch (obj) {
       case FinampSegmentContainer.mpegTS:
         writer.writeByte(0);
-        break;
       case FinampSegmentContainer.fragmentedMp4:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -2051,31 +1991,22 @@ class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
     switch (obj) {
       case FinampFeatureChipType.playCount:
         writer.writeByte(0);
-        break;
       case FinampFeatureChipType.additionalPeople:
         writer.writeByte(1);
-        break;
       case FinampFeatureChipType.playbackMode:
         writer.writeByte(2);
-        break;
       case FinampFeatureChipType.codec:
         writer.writeByte(3);
-        break;
       case FinampFeatureChipType.bitRate:
         writer.writeByte(4);
-        break;
       case FinampFeatureChipType.bitDepth:
         writer.writeByte(5);
-        break;
       case FinampFeatureChipType.size:
         writer.writeByte(6);
-        break;
       case FinampFeatureChipType.normalizationGain:
         writer.writeByte(7);
-        break;
       case FinampFeatureChipType.sampleRate:
         writer.writeByte(8);
-        break;
     }
   }
 
@@ -2086,6 +2017,51 @@ class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FinampFeatureChipTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
+  @override
+  final int typeId = 77;
+
+  @override
+  ReleaseDateFormat read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ReleaseDateFormat.year;
+      case 1:
+        return ReleaseDateFormat.iso;
+      case 2:
+        return ReleaseDateFormat.monthYear;
+      case 3:
+        return ReleaseDateFormat.monthDayYear;
+      default:
+        return ReleaseDateFormat.year;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ReleaseDateFormat obj) {
+    switch (obj) {
+      case ReleaseDateFormat.year:
+        writer.writeByte(0);
+      case ReleaseDateFormat.iso:
+        writer.writeByte(1);
+      case ReleaseDateFormat.monthYear:
+        writer.writeByte(2);
+      case ReleaseDateFormat.monthDayYear:
+        writer.writeByte(3);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ReleaseDateFormatAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -2159,7 +2135,7 @@ int _finampUserEstimateSize(
   bytesCount += 3 + object.accessToken.length * 3;
   bytesCount += 3 + object.baseUrl.length * 3;
   {
-    final value = object.currentViewId;
+    final value = object.isarCurrentViewId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -2178,7 +2154,7 @@ void _finampUserSerialize(
 ) {
   writer.writeString(offsets[0], object.accessToken);
   writer.writeString(offsets[1], object.baseUrl);
-  writer.writeString(offsets[2], object.currentViewId);
+  writer.writeString(offsets[2], object.isarCurrentViewId);
   writer.writeString(offsets[3], object.id);
   writer.writeString(offsets[4], object.isarViews);
   writer.writeString(offsets[5], object.serverId);
@@ -2193,10 +2169,10 @@ FinampUser _finampUserDeserialize(
   final object = FinampUser(
     accessToken: reader.readString(offsets[0]),
     baseUrl: reader.readString(offsets[1]),
-    currentViewId: reader.readStringOrNull(offsets[2]),
     id: reader.readString(offsets[3]),
     serverId: reader.readString(offsets[5]),
   );
+  object.isarCurrentViewId = reader.readStringOrNull(offsets[2]);
   object.isarViews = reader.readString(offsets[4]);
   return object;
 }
@@ -2587,7 +2563,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdIsNull() {
+      isarCurrentViewIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'currentViewId',
@@ -2596,7 +2572,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdIsNotNull() {
+      isarCurrentViewIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'currentViewId',
@@ -2605,7 +2581,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdEqualTo(
+      isarCurrentViewIdEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2619,7 +2595,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdGreaterThan(
+      isarCurrentViewIdGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2635,7 +2611,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdLessThan(
+      isarCurrentViewIdLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2651,7 +2627,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdBetween(
+      isarCurrentViewIdBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2671,7 +2647,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdStartsWith(
+      isarCurrentViewIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2685,7 +2661,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdEndsWith(
+      isarCurrentViewIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2699,7 +2675,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdContains(String value, {bool caseSensitive = true}) {
+      isarCurrentViewIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'currentViewId',
@@ -2710,7 +2686,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdMatches(String pattern, {bool caseSensitive = true}) {
+      isarCurrentViewIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'currentViewId',
@@ -2721,7 +2697,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdIsEmpty() {
+      isarCurrentViewIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'currentViewId',
@@ -2731,7 +2707,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      currentViewIdIsNotEmpty() {
+      isarCurrentViewIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'currentViewId',
@@ -3224,13 +3200,14 @@ extension FinampUserQuerySortBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByCurrentViewId() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByIsarCurrentViewId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentViewId', Sort.asc);
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByCurrentViewIdDesc() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy>
+      sortByIsarCurrentViewIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentViewId', Sort.desc);
     });
@@ -3299,13 +3276,14 @@ extension FinampUserQuerySortThenBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByCurrentViewId() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByIsarCurrentViewId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentViewId', Sort.asc);
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByCurrentViewIdDesc() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy>
+      thenByIsarCurrentViewIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentViewId', Sort.desc);
     });
@@ -3376,7 +3354,7 @@ extension FinampUserQueryWhereDistinct
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByCurrentViewId(
+  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByIsarCurrentViewId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'currentViewId',
@@ -3426,7 +3404,8 @@ extension FinampUserQueryProperty
     });
   }
 
-  QueryBuilder<FinampUser, String?, QQueryOperations> currentViewIdProperty() {
+  QueryBuilder<FinampUser, String?, QQueryOperations>
+      isarCurrentViewIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'currentViewId');
     });
@@ -3658,7 +3637,7 @@ int _downloadItemEstimateSize(
     }
   }
   {
-    final value = object.viewId;
+    final value = object.isarViewId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -3700,7 +3679,7 @@ void _downloadItemSerialize(
     DownloadProfileSchema.serialize,
     object.userTranscodingProfile,
   );
-  writer.writeString(offsets[13], object.viewId);
+  writer.writeString(offsets[13], object.isarViewId);
 }
 
 DownloadItem _downloadItemDeserialize(
@@ -3740,7 +3719,7 @@ DownloadItem _downloadItemDeserialize(
       DownloadProfileSchema.deserialize,
       allOffsets,
     ),
-    viewId: reader.readStringOrNull(offsets[13]),
+    isarViewId: reader.readStringOrNull(offsets[13]),
   );
   return object;
 }
@@ -3807,7 +3786,7 @@ const _DownloadItembaseItemTypeEnumValueMap = {
   'artist': 2,
   'playlist': 3,
   'genre': 4,
-  'song': 5,
+  'track': 5,
   'library': 6,
   'folder': 7,
   'musicVideo': 8,
@@ -3824,7 +3803,7 @@ const _DownloadItembaseItemTypeValueEnumMap = {
   2: BaseItemDtoType.artist,
   3: BaseItemDtoType.playlist,
   4: BaseItemDtoType.genre,
-  5: BaseItemDtoType.song,
+  5: BaseItemDtoType.track,
   6: BaseItemDtoType.library,
   7: BaseItemDtoType.folder,
   8: BaseItemDtoType.musicVideo,
@@ -3857,14 +3836,14 @@ const _DownloadItemstateValueEnumMap = {
 };
 const _DownloadItemtypeEnumValueMap = {
   'collection': 0,
-  'song': 1,
+  'track': 1,
   'image': 2,
   'anchor': 3,
   'finampCollection': 4,
 };
 const _DownloadItemtypeValueEnumMap = {
   0: DownloadItemType.collection,
-  1: DownloadItemType.song,
+  1: DownloadItemType.track,
   2: DownloadItemType.image,
   3: DownloadItemType.anchor,
   4: DownloadItemType.finampCollection,
@@ -5323,7 +5302,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdIsNull() {
+      isarViewIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'viewId',
@@ -5332,7 +5311,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdIsNotNull() {
+      isarViewIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'viewId',
@@ -5340,7 +5319,8 @@ extension DownloadItemQueryFilter
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdEqualTo(
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      isarViewIdEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -5354,7 +5334,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdGreaterThan(
+      isarViewIdGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -5370,7 +5350,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdLessThan(
+      isarViewIdLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -5385,7 +5365,8 @@ extension DownloadItemQueryFilter
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdBetween(
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      isarViewIdBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -5405,7 +5386,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdStartsWith(
+      isarViewIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -5419,7 +5400,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdEndsWith(
+      isarViewIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -5433,7 +5414,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdContains(String value, {bool caseSensitive = true}) {
+      isarViewIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'viewId',
@@ -5443,9 +5424,8 @@ extension DownloadItemQueryFilter
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> viewIdMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
+      isarViewIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'viewId',
@@ -5456,7 +5436,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdIsEmpty() {
+      isarViewIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'viewId',
@@ -5466,7 +5446,7 @@ extension DownloadItemQueryFilter
   }
 
   QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition>
-      viewIdIsNotEmpty() {
+      isarViewIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'viewId',
@@ -5862,13 +5842,14 @@ extension DownloadItemQuerySortBy
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByViewId() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByIsarViewId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'viewId', Sort.asc);
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> sortByViewIdDesc() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      sortByIsarViewIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'viewId', Sort.desc);
     });
@@ -6002,13 +5983,14 @@ extension DownloadItemQuerySortThenBy
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByViewId() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByIsarViewId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'viewId', Sort.asc);
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy> thenByViewIdDesc() {
+  QueryBuilder<DownloadItem, DownloadItem, QAfterSortBy>
+      thenByIsarViewIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'viewId', Sort.desc);
     });
@@ -6084,7 +6066,7 @@ extension DownloadItemQueryWhereDistinct
     });
   }
 
-  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByViewId(
+  QueryBuilder<DownloadItem, DownloadItem, QDistinct> distinctByIsarViewId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'viewId', caseSensitive: caseSensitive);
@@ -6186,7 +6168,7 @@ extension DownloadItemQueryProperty
     });
   }
 
-  QueryBuilder<DownloadItem, String?, QQueryOperations> viewIdProperty() {
+  QueryBuilder<DownloadItem, String?, QQueryOperations> isarViewIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'viewId');
     });
@@ -7043,9 +7025,9 @@ extension DownloadProfileQueryObject
 // JsonSerializableGenerator
 // **************************************************************************
 
-DownloadedSong _$DownloadedSongFromJson(Map json) => DownloadedSong(
-      song:
-          BaseItemDto.fromJson(Map<String, dynamic>.from(json['song'] as Map)),
+DownloadedTrack _$DownloadedTrackFromJson(Map json) => DownloadedTrack(
+      track:
+          BaseItemDto.fromJson(Map<String, dynamic>.from(json['track'] as Map)),
       mediaSourceInfo: MediaSourceInfo.fromJson(
           Map<String, dynamic>.from(json['mediaSourceInfo'] as Map)),
       downloadId: json['downloadId'] as String,
@@ -7059,9 +7041,9 @@ DownloadedSong _$DownloadedSongFromJson(Map json) => DownloadedSong(
       downloadLocationId: json['downloadLocationId'] as String?,
     );
 
-Map<String, dynamic> _$DownloadedSongToJson(DownloadedSong instance) =>
+Map<String, dynamic> _$DownloadedTrackToJson(DownloadedTrack instance) =>
     <String, dynamic>{
-      'song': instance.song.toJson(),
+      'track': instance.track.toJson(),
       'mediaSourceInfo': instance.mediaSourceInfo.toJson(),
       'downloadId': instance.downloadId,
       'requiredBy': instance.requiredBy,
@@ -7093,7 +7075,7 @@ Map<String, dynamic> _$DownloadStubToJson(DownloadStub instance) =>
 
 const _$DownloadItemTypeEnumMap = {
   DownloadItemType.collection: 'collection',
-  DownloadItemType.song: 'song',
+  DownloadItemType.track: 'track',
   DownloadItemType.image: 'image',
   DownloadItemType.anchor: 'anchor',
   DownloadItemType.finampCollection: 'finampCollection',
@@ -7105,7 +7087,7 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.artist: 'artist',
   BaseItemDtoType.playlist: 'playlist',
   BaseItemDtoType.genre: 'genre',
-  BaseItemDtoType.song: 'song',
+  BaseItemDtoType.track: 'track',
   BaseItemDtoType.library: 'library',
   BaseItemDtoType.folder: 'folder',
   BaseItemDtoType.musicVideo: 'musicVideo',
@@ -7125,20 +7107,11 @@ FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
               Map<String, dynamic>.from(json['Library'] as Map)),
     );
 
-Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) {
-  final val = <String, dynamic>{
-    'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('Library', instance.library?.toJson());
-  return val;
-}
+Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) =>
+    <String, dynamic>{
+      'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
+      if (instance.library?.toJson() case final value?) 'Library': value,
+    };
 
 const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.favorites: 'favorites',
@@ -7151,16 +7124,20 @@ const _$FinampCollectionTypeEnumMap = {
 MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(
       contentType: $enumDecode(_$TabContentTypeEnumMap, json['contentType']),
       parentType: $enumDecode(_$MediaItemParentTypeEnumMap, json['parentType']),
-      itemId: json['itemId'] as String?,
-      parentId: json['parentId'] as String?,
+      itemId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['itemId'], const BaseItemIdConverter().fromJson),
+      parentId: _$JsonConverterFromJson<String, BaseItemId>(
+          json['parentId'], const BaseItemIdConverter().fromJson),
     );
 
 Map<String, dynamic> _$MediaItemIdToJson(MediaItemId instance) =>
     <String, dynamic>{
       'contentType': _$TabContentTypeEnumMap[instance.contentType]!,
       'parentType': _$MediaItemParentTypeEnumMap[instance.parentType]!,
-      'itemId': instance.itemId,
-      'parentId': instance.parentId,
+      'itemId': _$JsonConverterToJson<String, BaseItemId>(
+          instance.itemId, const BaseItemIdConverter().toJson),
+      'parentId': _$JsonConverterToJson<String, BaseItemId>(
+          instance.parentId, const BaseItemIdConverter().toJson),
     };
 
 const _$TabContentTypeEnumMap = {
@@ -7168,7 +7145,7 @@ const _$TabContentTypeEnumMap = {
   TabContentType.artists: 'artists',
   TabContentType.playlists: 'playlists',
   TabContentType.genres: 'genres',
-  TabContentType.songs: 'songs',
+  TabContentType.tracks: 'tracks',
 };
 
 const _$MediaItemParentTypeEnumMap = {
@@ -7176,6 +7153,18 @@ const _$MediaItemParentTypeEnumMap = {
   MediaItemParentType.rootCollection: 'rootCollection',
   MediaItemParentType.instantMix: 'instantMix',
 };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 FinampFeatureChipsConfiguration _$FinampFeatureChipsConfigurationFromJson(
         Map<String, dynamic> json) =>

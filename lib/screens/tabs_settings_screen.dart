@@ -1,11 +1,11 @@
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 
 import '../components/LayoutSettingsScreen/TabsSettingsScreen/hide_tab_toggle.dart';
 
 class TabsSettingsScreen extends StatefulWidget {
-  const TabsSettingsScreen({Key? key}) : super(key: key);
+  const TabsSettingsScreen({super.key});
 
   static const routeName = "/settings/tabs";
 
@@ -51,7 +51,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
             final oldTab = currentTabOrder[oldIndex];
             currentTabOrder.removeAt(oldIndex);
             currentTabOrder.insert(newIndex, oldTab);
-            FinampSettingsHelper.setTabOrder(currentTabOrder);
+            FinampSetters.setTabOrder(currentTabOrder);
           });
         },
       ),

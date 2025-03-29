@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/splash_screen.dart';
@@ -12,7 +12,7 @@ import '../../services/music_player_background_task.dart';
 import '../global_snackbar.dart';
 
 class LogoutListTile extends StatefulWidget {
-  const LogoutListTile({Key? key}) : super(key: key);
+  const LogoutListTile({super.key});
 
   @override
   State<LogoutListTile> createState() => _LogoutListTileState();
@@ -38,7 +38,7 @@ class _LogoutListTileState extends State<LogoutListTile> {
       subtitle: FinampSettingsHelper.finampSettings.isOffline
           ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
           : Text(
-              AppLocalizations.of(context)!.downloadedSongsWillNotBeDeleted,
+              AppLocalizations.of(context)!.downloadedTracksWillNotBeDeleted,
               style: const TextStyle(color: Colors.red),
             ),
       enabled: !FinampSettingsHelper.finampSettings.isOffline,

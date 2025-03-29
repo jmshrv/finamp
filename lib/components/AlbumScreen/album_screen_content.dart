@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import '../../components/favourite_button.dart';
@@ -15,12 +15,11 @@ import 'track_list_tile.dart';
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
 class AlbumScreenContent extends StatefulWidget {
-  const AlbumScreenContent({
-    super.key,
-    required this.parent,
-    required this.displayChildren,
-    required this.queueChildren,
-  });
+  const AlbumScreenContent(
+      {super.key,
+      required this.parent,
+      required this.displayChildren,
+      required this.queueChildren});
 
   final BaseItemDto parent;
   final List<BaseItemDto> displayChildren;
@@ -33,9 +32,12 @@ class AlbumScreenContent extends StatefulWidget {
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
   @override
   Widget build(BuildContext context) {
+    final downloadStub = DownloadStub.fromItem(
+        type: DownloadItemType.collection, item: widget.parent);
+
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but
-      // SongsSliverList gets passed some weird split version of children to
+      // TracksSliverList gets passed some weird split version of children to
       // handle multi-disc albums and it's 00:35 so I can't be bothered to get
       // it to return an index
       setState(() {
@@ -84,9 +86,9 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               PlaylistNameEditButton(playlist: widget.parent),
             FavoriteButton(item: widget.parent),
             DownloadButton(
-                item: DownloadStub.fromItem(
-                    type: DownloadItemType.collection, item: widget.parent),
-                children: widget.displayChildren.length)
+              item: downloadStub,
+              children: widget.displayChildren,
+            ),
           ],
         ),
         if (widget.displayChildren.length > 1 &&
@@ -99,14 +101,14 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
                   horizontal: 16.0,
                   vertical: 16.0,
                 ),
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Text(
                   AppLocalizations.of(context)!
                       .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
                   style: const TextStyle(fontSize: 20.0),
                 ),
               ),
-              sliver: SongsSliverList(
+              sliver: TracksSliverList(
                 childrenForList: childrenOfThisDisc,
                 childrenForQueue: Future.value(widget.queueChildren),
                 parent: widget.parent,
@@ -114,7 +116,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
               ),
             )
         else if (widget.displayChildren.isNotEmpty)
-          SongsSliverList(
+          TracksSliverList(
             childrenForList: widget.displayChildren,
             childrenForQueue: Future.value(widget.queueChildren),
             parent: widget.parent,
@@ -125,16 +127,16 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
   }
 }
 
-class SongsSliverList extends StatefulWidget {
-  const SongsSliverList({
-    Key? key,
+class TracksSliverList extends StatefulWidget {
+  const TracksSliverList({
+    super.key,
     required this.childrenForList,
     required this.childrenForQueue,
     required this.parent,
     this.onRemoveFromList,
     this.showPlayCount = false,
     this.isOnArtistScreen = false,
-  }) : super(key: key);
+  });
 
   final List<BaseItemDto> childrenForList;
   final Future<List<BaseItemDto>> childrenForQueue;
@@ -144,10 +146,10 @@ class SongsSliverList extends StatefulWidget {
   final bool isOnArtistScreen;
 
   @override
-  State<SongsSliverList> createState() => _SongsSliverListState();
+  State<TracksSliverList> createState() => _TracksSliverListState();
 }
 
-class _SongsSliverListState extends State<SongsSliverList> {
+class _TracksSliverListState extends State<TracksSliverList> {
   final GlobalKey<SliverAnimatedListState> sliverListKey =
       GlobalKey<SliverAnimatedListState>();
 
@@ -176,9 +178,9 @@ class _SongsSliverListState extends State<SongsSliverList> {
       // return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          // When user selects song from disc other than first, index number is
-          // incorrect and song with the same index on first disc is played instead.
-          // Adding this offset ensures playback starts for nth song on correct disc.
+          // When user selects track from disc other than first, index number is
+          // incorrect and track with the same index on first disc is played instead.
+          // Adding this offset ensures playback starts for nth track on correct disc.
           final indexOffset = widget.childrenForQueue.then((childrenForQueue) =>
               childrenForQueue.indexWhere(
                   (element) => element.id == widget.childrenForList[index].id));

@@ -3,13 +3,12 @@ import 'dart:io';
 
 import 'package:finamp/services/playon_handler.dart';
 import 'package:finamp/services/downloads_service.dart';
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:logging/logging.dart';
 
 import '../components/MusicScreen/music_screen_drawer.dart';
@@ -28,8 +27,6 @@ final _musicScreenLogger = Logger("MusicScreen");
 
 void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
-  final queueService = GetIt.instance<QueueService>();
-  final playonHandler = GetIt.instance<PlayonHandler>();
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
@@ -37,17 +34,8 @@ void postLaunchHook(WidgetRef ref) async {
       // log error without snackbar, we don't want users to be greeted with errors on first launch
       _musicScreenLogger.severe("Failed to download playlist metadata: $e");
     });
-    FinampSettingsHelper.setHasDownloadedPlaylistInfo(true);
+    FinampSetters.setHasDownloadedPlaylistInfo(true);
   }
-
-  // Initialize playon handler
-  unawaited(playonHandler.initialize());
-  playonHandler.ref = ref;
-
-  // Restore queue
-  unawaited(queueService
-      .performInitialQueueLoad()
-      .catchError((x) => GlobalSnackbar.error(x)));
 }
 
 class MusicScreen extends ConsumerStatefulWidget {
@@ -87,7 +75,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         .elementAt(_tabController!.index)
         .key;
     if (_tabController != null &&
-        (tabKey == TabContentType.songs ||
+        (tabKey == TabContentType.tracks ||
             tabKey == TabContentType.artists ||
             tabKey == TabContentType.albums)) {
       setState(() {
@@ -130,8 +118,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
 
   FloatingActionButton? getFloatingActionButton(
       List<TabContentType> sortedTabs) {
-    // Show the floating action button only on the albums, artists, generes and songs tab.
-    if (_tabController!.index == sortedTabs.indexOf(TabContentType.songs)) {
+    // Show the floating action button only on the albums, artists, generes and tracks tab.
+    if (_tabController!.index == sortedTabs.indexOf(TabContentType.tracks)) {
       return FloatingActionButton(
         tooltip: AppLocalizations.of(context)!.shuffleAll,
         onPressed: () async {
@@ -152,7 +140,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             try {
               if (_jellyfinApiHelper.selectedMixArtists.isEmpty) {
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoSongsArtist);
+                    AppLocalizations.of(context)!.startMixNoTracksArtist);
               } else {
                 await _audioServiceHelper.startInstantMixForArtists(
                     _jellyfinApiHelper.selectedMixArtists);
@@ -171,7 +159,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             try {
               if (_jellyfinApiHelper.selectedMixAlbums.isEmpty) {
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoSongsAlbum);
+                    AppLocalizations.of(context)!.startMixNoTracksAlbum);
               } else {
                 await _audioServiceHelper.startInstantMixForAlbums(
                     _jellyfinApiHelper.selectedMixAlbums);
@@ -189,7 +177,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             try {
               if (_jellyfinApiHelper.selectedMixGenres.isEmpty) {
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoSongsGenre);
+                    AppLocalizations.of(context)!.startMixNoTracksGenre);
               } else {
                 await _audioServiceHelper.startInstantMixForGenres(
                     _jellyfinApiHelper.selectedMixGenres);
@@ -228,7 +216,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           _buildTabController();
         }
 
-        Timer? _debounce;
+        Timer? debounce;
 
         return PopScope(
           canPop: !isSearching,
@@ -252,9 +240,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.search,
                       onChanged: (value) {
-                        if (_debounce?.isActive ?? false) _debounce!.cancel();
-                        _debounce =
-                            Timer(const Duration(milliseconds: 400), () {
+                        if (debounce?.isActive ?? false) debounce!.cancel();
+                        debounce = Timer(const Duration(milliseconds: 400), () {
                           setState(() {
                             searchQuery = value;
                           });
@@ -275,9 +262,17 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                 controller: _tabController,
                 tabs: sortedTabs
                     .map((tabType) => Tab(
-                          text:
-                              tabType.toLocalisedString(context).toUpperCase(),
-                        ))
+                            child: Container(
+                          constraints: const BoxConstraints(minWidth: 50),
+                          alignment: Alignment.center,
+                          child: Text(
+                            tabType.toLocalisedString(context).toUpperCase(),
+                            // style: TextStyle(
+                            //   fontSize: 12,
+                            //   fontWeight: FontWeight.bold,
+                            // ),
+                          ),
+                        )))
                     .toList(),
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,
@@ -321,9 +316,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                               ? const Icon(Icons.download)
                               : const Icon(Icons.download_outlined),
                           onPressed: finampSettings.isOffline
-                              ? () => FinampSettingsHelper
-                                  .setOnlyShowFullyDownloaded(
-                                      !finampSettings.onlyShowFullyDownloaded)
+                              ? () => FinampSetters.setOnlyShowFullyDownloaded(
+                                  !finampSettings.onlyShowFullyDownloaded)
                               : null,
                           tooltip: AppLocalizations.of(context)!
                               .onlyShowFullyDownloaded,
@@ -334,9 +328,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                           icon: finampSettings.onlyShowFavourites
                               ? const Icon(Icons.favorite)
                               : const Icon(Icons.favorite_outline),
-                          onPressed: () =>
-                              FinampSettingsHelper.setonlyShowFavourites(
-                                  !finampSettings.onlyShowFavourites),
+                          onPressed: () => FinampSetters.setOnlyShowFavourites(
+                              !finampSettings.onlyShowFavourites),
                           tooltip: AppLocalizations.of(context)!.favourites,
                         ),
                       IconButton(

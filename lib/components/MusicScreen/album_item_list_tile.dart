@@ -1,6 +1,6 @@
 import 'package:finamp/components/favourite_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -14,11 +14,11 @@ import '../album_image.dart';
 /// directly, use AlbumItem instead.
 class AlbumItemListTile extends StatelessWidget {
   const AlbumItemListTile({
-    Key? key,
+    super.key,
     required this.item,
     this.parentType,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final BaseItemDto item;
   final String? parentType;

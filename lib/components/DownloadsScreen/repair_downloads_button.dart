@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/downloads_service.dart';
@@ -7,7 +7,7 @@ import '../../services/finamp_settings_helper.dart';
 import '../global_snackbar.dart';
 
 class RepairDownloadsButton extends StatefulWidget {
-  const RepairDownloadsButton({Key? key}) : super(key: key);
+  const RepairDownloadsButton({super.key});
 
   @override
   State<RepairDownloadsButton> createState() =>

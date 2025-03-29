@@ -4,10 +4,9 @@ import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/music_player_background_task.dart';
 
@@ -15,12 +14,12 @@ typedef DragCallback = void Function(double? value);
 
 class ProgressSlider extends StatefulWidget {
   const ProgressSlider({
-    Key? key,
+    super.key,
     this.allowSeeking = true,
     this.showBuffer = true,
     this.showDuration = true,
     this.showPlaceholder = true,
-  }) : super(key: key);
+  });
 
   final bool allowSeeking;
   final bool showBuffer;
@@ -125,10 +124,9 @@ class _ProgressSliderState extends State<ProgressSlider> {
 
 class _ProgressSliderDuration extends StatelessWidget {
   const _ProgressSliderDuration({
-    Key? key,
     required this.position,
     this.itemDuration,
-  }) : super(key: key);
+  });
 
   final Duration position;
   final Duration? itemDuration;
@@ -169,13 +167,12 @@ class _ProgressSliderDuration extends StatelessWidget {
 
 class _PlaybackProgressSlider extends ConsumerStatefulWidget {
   const _PlaybackProgressSlider({
-    Key? key,
     required this.allowSeeking,
     this.mediaItem,
     required this.playbackState,
     required this.position,
     required this.onDrag,
-  }) : super(key: key);
+  });
 
   final bool allowSeeking;
   final MediaItem? mediaItem;
@@ -251,7 +248,7 @@ class __PlaybackProgressSliderState
               .timeFractionTooltip(positionString, durationString);
         },
         secondaryTrackValue:
-            widget.mediaItem?.extras?["downloadedSongPath"] == null
+            widget.mediaItem?.extras?["downloadedTrackPath"] == null
                 ? widget.playbackState.bufferedPosition.inMicroseconds
                     .clamp(
                       0.0,

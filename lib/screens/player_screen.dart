@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/AlbumScreen/song_menu.dart';
+import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/PlayerScreen/output_panel.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
@@ -18,7 +18,7 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -32,7 +32,7 @@ import '../components/PlayerScreen/player_screen_album_image.dart';
 import '../components/PlayerScreen/player_split_screen_scaffold.dart';
 import '../components/PlayerScreen/queue_button.dart';
 import '../components/PlayerScreen/queue_list.dart';
-import '../components/PlayerScreen/song_name_content.dart';
+import '../components/PlayerScreen/track_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
 import 'blurred_player_screen_background.dart';
 
@@ -46,7 +46,6 @@ class PlayerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageTheme = ref.watch(playerScreenThemeProvider);
     // Rebuild player screen if settings change
     ref.watch(finampSettingsProvider);
     final queueService = GetIt.instance<QueueService>();
@@ -64,7 +63,7 @@ class PlayerScreen extends ConsumerWidget {
           return ![
             PlayerScreen.routeName,
             QueueList.routeName,
-            SongMenu.routeName,
+            TrackMenu.routeName,
             playlistActionsMenuRouteName,
             LyricsScreen.routeName,
           ].contains(route.settings.name);
@@ -72,42 +71,24 @@ class PlayerScreen extends ConsumerWidget {
       }
     });
 
-    return ProviderScope(
-      overrides: [
-        themeDataProvider.overrideWith((ref) {
-          return ref.watch(playerScreenThemeDataProvider) ??
-              FinampTheme.defaultTheme();
-        })
-      ],
-      child: AnimatedTheme(
-        duration: getThemeTransitionDuration(context),
-        data: ThemeData(
-          colorScheme: imageTheme.copyWith(
-            brightness: Theme.of(context).brightness,
-          ),
-          iconTheme: Theme.of(context).iconTheme.copyWith(
-                color: imageTheme.primary,
-              ),
-        ),
-        child: StreamBuilder<FinampQueueInfo?>(
-            stream: queueService.getQueueStream(),
-            initialData: queueService.getQueue(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.data!.saveState == SavedQueueState.loading) {
-                return buildLoadingScreen(context, null);
-              } else if (snapshot.hasData &&
-                  snapshot.data!.saveState == SavedQueueState.failed) {
-                return buildLoadingScreen(context, queueService.retryQueueLoad);
-              } else if (snapshot.hasData &&
-                  snapshot.data!.currentTrack != null) {
-                return _PlayerScreenContent(
-                    airplayTheme: imageTheme.primary, playerScreen: this);
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
-      ),
+    return PlayerScreenTheme(
+      child: StreamBuilder<FinampQueueInfo?>(
+          stream: queueService.getQueueStream(),
+          initialData: queueService.getQueue(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData &&
+                snapshot.data!.saveState == SavedQueueState.loading) {
+              return buildLoadingScreen(context, null);
+            } else if (snapshot.hasData &&
+                snapshot.data!.saveState == SavedQueueState.failed) {
+              return buildLoadingScreen(context, queueService.retryQueueLoad);
+            } else if (snapshot.hasData &&
+                snapshot.data!.currentTrack != null) {
+              return _PlayerScreenContent(playerScreen: this);
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
     );
   }
 
@@ -165,10 +146,8 @@ class PlayerScreen extends ConsumerWidget {
 }
 
 class _PlayerScreenContent extends ConsumerWidget {
-  const _PlayerScreenContent(
-      {super.key, required this.airplayTheme, required this.playerScreen});
+  const _PlayerScreenContent({required this.playerScreen});
 
-  final Color airplayTheme;
   final Widget playerScreen;
 
   @override
@@ -220,9 +199,14 @@ class _PlayerScreenContent extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          systemOverlayStyle: Theme.of(context).brightness == Brightness.dark
-              ? SystemUiOverlayStyle.light
-              : SystemUiOverlayStyle.dark,
+          systemOverlayStyle: SystemUiOverlayStyle(
+              // this is needed to ensure the player screen stays in full screen mode WITHOUT having contrast issues in the status bar
+              systemNavigationBarColor: Colors.transparent,
+              systemStatusBarContrastEnforced: false,
+              statusBarIconBrightness:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Brightness.light
+                      : Brightness.dark),
           elevation: 0,
           scrolledUnderElevation:
               0.0, // disable tint/shadow when content is scrolled under the app bar
@@ -244,8 +228,8 @@ class _PlayerScreenContent extends ConsumerWidget {
                   duration: const Duration(milliseconds: 1000),
                   switchOutCurve: const Threshold(0.0),
                   child: AirPlayRoutePickerView(
-                    key: ValueKey(airplayTheme),
-                    tintColor: airplayTheme,
+                    key: ValueKey(ref.watch(localThemeProvider).primary),
+                    tintColor: ref.watch(localThemeProvider).primary,
                     activeTintColor: jellyfinBlueColor,
                     onShowPickerView: () =>
                         FeedbackHelper.feedback(FeedbackType.selection),
@@ -302,7 +286,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                         child: Column(
                           children: [
                             const Spacer(flex: 4),
-                            SongNameContent(controller),
+                            TrackNameContent(controller),
                             const Spacer(flex: 4),
                             ControlArea(controller),
                             if (controller
@@ -341,7 +325,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SongNameContent(controller),
+                            TrackNameContent(controller),
                             ControlArea(controller),
                             if (controller
                                 .shouldShow(PlayerHideable.bottomActions))

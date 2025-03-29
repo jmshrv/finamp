@@ -8,7 +8,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
@@ -45,7 +45,7 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
       return const SizedBox.shrink();
     }
 
-    bool isFav = ref.watch(isFavoriteProvider(FavoriteRequest(widget.item)));
+    bool isFav = ref.watch(isFavoriteProvider(widget.item));
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: AppLocalizations.of(context)!.addToPlaylistTooltip,
@@ -58,7 +58,7 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
         onLongPress: () async {
           FeedbackHelper.feedback(FeedbackType.selection);
           ref
-              .read(isFavoriteProvider(FavoriteRequest(widget.item)).notifier)
+              .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(!isFav);
         },
         child: IconButton(
@@ -84,8 +84,6 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
                 item: widget.item!,
                 parentPlaylist:
                     inPlaylist ? widget.queueItem!.source.item : null,
-                usePlayerTheme: widget.item?.blurHash != null &&
-                    widget.item?.blurHash == currentTrack?.blurHash,
               );
             }),
       ),

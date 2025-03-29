@@ -7,11 +7,12 @@ import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -43,8 +44,8 @@ class NowPlayingBar extends ConsumerWidget {
                 blurRadius: 12.0,
                 spreadRadius: 8.0,
                 color: Theme.of(context).brightness == Brightness.light
-                    ? darkColorScheme.background.withOpacity(0.15)
-                    : darkColorScheme.background.withOpacity(0.7))
+                    ? darkColorScheme.surface.withOpacity(0.15)
+                    : darkColorScheme.surface.withOpacity(0.7))
           ]);
 
   Color getProgressBackgroundColor(BuildContext context) {
@@ -146,7 +147,35 @@ class NowPlayingBar extends ConsumerWidget {
 
     final progressBackgroundColor = getProgressBackgroundColor(context);
 
-    return Padding(
+    Future openPlayerScreen() => Navigator.of(context).push(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const PlayerScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = Offset(0.0, 1.0);
+              const end = Offset.zero;
+
+              var tween = Tween(begin: begin, end: end)
+                  .chain(CurveTween(curve: Curves.easeInOutQuad));
+              var offsetAnimation = animation.drive(tween);
+
+              if (animation.status == AnimationStatus.reverse) {
+                // dismiss animation
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              } else {
+                return SlideTransition(position: offsetAnimation, child: child);
+              }
+            },
+            settings: const RouteSettings(name: PlayerScreen.routeName),
+          ),
+        );
+
+    return SafeArea(
+        child: Padding(
       padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
       child: Semantics.fromProperties(
         properties: SemanticsProperties(
@@ -154,20 +183,26 @@ class NowPlayingBar extends ConsumerWidget {
           button: true,
         ),
         child: SimpleGestureDetector(
-          onTap: () => Navigator.of(context).pushNamed(PlayerScreen.routeName),
+          onTap: openPlayerScreen,
           child: Dismissible(
             key: const Key("NowPlayingBarDismiss"),
             direction: FinampSettingsHelper.finampSettings.disableGesture
                 ? DismissDirection.none
-                : DismissDirection.down,
+                : DismissDirection.vertical,
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.down) {
                 final queueService = GetIt.instance<QueueService>();
+                FeedbackHelper.feedback(FeedbackType.success);
                 await queueService.stopPlayback();
+              } else {
+                await openPlayerScreen();
               }
               return false;
             },
-            dismissThresholds: const {DismissDirection.down: 0.7},
+            dismissThresholds: const {
+              DismissDirection.up: 0.15,
+              DismissDirection.down: 0.7
+            },
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: getShadow(context),
@@ -179,8 +214,10 @@ class NowPlayingBar extends ConsumerWidget {
                     : DismissDirection.horizontal,
                 confirmDismiss: (direction) async {
                   if (direction == DismissDirection.endToStart) {
+                    FeedbackHelper.feedback(FeedbackType.light);
                     await audioHandler.skipToNext();
                   } else {
+                    FeedbackHelper.feedback(FeedbackType.light);
                     await audioHandler.skipToPrevious(forceSkip: true);
                   }
                   return false;
@@ -342,15 +379,25 @@ class NowPlayingBar extends ConsumerWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    currentTrack.item.title,
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
+                                                  SizedBox(
+                                                    height: 20,
+                                                    child: OneLineMarqueeHelper(
+                                                      key: ValueKey(
+                                                          currentTrack.item.id),
+                                                      text: currentTrack
+                                                          .item.title,
+                                                      style: TextStyle(
                                                         fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
+                                                        height: 26 / 20,
+                                                        color: Colors.white,
+                                                        fontWeight: Theme.of(
+                                                                        context)
+                                                                    .brightness ==
+                                                                Brightness.light
+                                                            ? FontWeight.w500
+                                                            : FontWeight.w600,
+                                                      ),
+                                                    ),
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Row(
@@ -540,13 +587,12 @@ class NowPlayingBar extends ConsumerWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    var imageTheme = ref.watch(playerScreenThemeProvider);
 
     ref.listen(currentTrackMetadataProvider,
         (metadataOrNull, metadata) {}); // keep provider alive
@@ -554,16 +600,7 @@ class NowPlayingBar extends ConsumerWidget {
     return Hero(
         tag: "nowplaying",
         createRectTween: (from, to) => RectTween(begin: from, end: from),
-        child: AnimatedTheme(
-          duration: getThemeTransitionDuration(context),
-          data: ThemeData(
-            colorScheme: imageTheme.copyWith(
-              brightness: Theme.of(context).brightness,
-            ),
-            iconTheme: Theme.of(context).iconTheme.copyWith(
-                  color: imageTheme.primary,
-                ),
-          ),
+        child: PlayerScreenTheme(
           // Scaffold ignores system elements padding if bottom bar is present, so we must
           // use SafeArea in all cases to include it in our height
           child: SafeArea(

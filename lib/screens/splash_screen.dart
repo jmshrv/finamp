@@ -7,7 +7,7 @@ import 'music_screen.dart';
 import 'view_selector.dart';
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   static const routeName = "/";
 
