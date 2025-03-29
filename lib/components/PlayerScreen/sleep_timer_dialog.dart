@@ -1,22 +1,24 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_settings_helper.dart';
 import '../../services/music_player_background_task.dart';
 
-class SleepTimerDialog extends StatefulWidget {
+class SleepTimerDialog extends ConsumerStatefulWidget {
   const SleepTimerDialog({super.key});
 
   @override
-  State<SleepTimerDialog> createState() => _SleepTimerDialogState();
+  ConsumerState<SleepTimerDialog> createState() => _SleepTimerDialogState();
 }
 
-class _SleepTimerDialogState extends State<SleepTimerDialog> {
+class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
   final _textController = TextEditingController(
-      text: (FinampSettingsHelper.finampSettings.sleepTimerSeconds ~/ 60)
+      text: (FinampSettingsHelper.finampSettings.sleepTimer.length ~/ 60)
           .toString());
 
   final _formKey = GlobalKey<FormState>();
@@ -52,8 +54,9 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
                   final durationInSeconds = (valueDouble * 60).round();
 
                   _audioHandler
-                      .setSleepTimer(Duration(seconds: durationInSeconds));
-                  FinampSetters.setSleepTimerSeconds(durationInSeconds);
+                      .setSleepTimer(SleepTimer(SleepTimerType.duration, durationInSeconds));
+                  // FinampSetters.setSleepTimerSeconds(durationInSeconds);
+                  FinampSetters.setSleepTimer(SleepTimer(SleepTimerType.duration, durationInSeconds));
                 },
               ),
             ),

@@ -263,6 +263,8 @@ Future<void> setupHive() async {
   Hive.registerAdapter(DownloadLocationTypeAdapter());
   Hive.registerAdapter(FinampTranscodingCodecAdapter());
   Hive.registerAdapter(TranscodeDownloadsSettingAdapter());
+  Hive.registerAdapter(SleepTimerAdapter());
+  Hive.registerAdapter(SleepTimerTypeAdapter());
   Hive.registerAdapter(LyricMetadataAdapter());
   Hive.registerAdapter(LyricLineAdapter());
   Hive.registerAdapter(LyricDtoAdapter());

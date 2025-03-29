@@ -86,7 +86,7 @@ class DefaultSettings {
   static const contentGridViewCrossAxisCountPortrait = 2;
   static const contentGridViewCrossAxisCountLandscape = 3;
   static const showTextOnGridView = true;
-  static const sleepTimerSeconds = 1800; // 30 Minutes
+  static const sleepTimer = SleepTimer(SleepTimerType.duration, 1800);
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
   static const showArtistsTopTracks = true;
@@ -182,7 +182,7 @@ class FinampSettings {
     this.contentGridViewCrossAxisCountLandscape =
         DefaultSettings.contentGridViewCrossAxisCountLandscape,
     this.showTextOnGridView = DefaultSettings.showTextOnGridView,
-    this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
+    this.sleepTimer = DefaultSettings.sleepTimer,
     required this.downloadLocationsMap,
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
     this.playerScreenCoverMinimumPadding =
@@ -316,8 +316,9 @@ class FinampSettings {
   /// The number of seconds to wait in a sleep timer. This is so that the app
   /// can remember the last duration. I'd use a Duration type here but Hive
   /// doesn't come with an adapter for it by default.
-  @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds)
-  int sleepTimerSeconds;
+  // @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds)
+  @HiveField(14, defaultValue: DefaultSettings.sleepTimer)
+  SleepTimer sleepTimer;
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
   @FinampSetterIgnore()
@@ -2607,4 +2608,24 @@ enum ReleaseDateFormat {
         return AppLocalizations.of(context)!.releaseDateFormatMonthDayYear;
     }
   }
+}
+
+@HiveType(typeId: 78)
+enum SleepTimerType
+{
+  @HiveField(0)
+  duration,
+  @HiveField(1)
+  tracks;
+}
+
+@HiveType(typeId: 79)
+class SleepTimer {
+  @HiveField(0, defaultValue: SleepTimerType.duration)
+  final SleepTimerType type;
+  @HiveField(1, defaultValue: 1800)
+  final int length;
+
+  // Length is in seconds for a duration, length is in tracks count for tracks
+  const SleepTimer (this.type, this.length);
 }
