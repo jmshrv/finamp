@@ -4,6 +4,7 @@ import 'package:file_sizes/file_sizes.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -13,7 +14,7 @@ import '../../services/finamp_user_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
-class DownloadDialog extends StatefulWidget {
+class DownloadDialog extends ConsumerStatefulWidget {
   const DownloadDialog._build({
     required this.item,
     required this.viewId,
@@ -31,7 +32,7 @@ class DownloadDialog extends StatefulWidget {
   final int? trackCount;
 
   @override
-  State<DownloadDialog> createState() => _DownloadDialogState();
+  ConsumerState<DownloadDialog> createState() => _DownloadDialogState();
 
   /// Shows a download dialog box to the user.  A download location dropdown will be shown
   /// if there is more than one location.  A transcode setting dropdown will be shown
@@ -126,12 +127,14 @@ class DownloadDialog extends StatefulWidget {
   }
 }
 
-class _DownloadDialogState extends State<DownloadDialog> {
+class _DownloadDialogState extends ConsumerState<DownloadDialog> {
   DownloadLocation? selectedDownloadLocation;
   bool? transcode;
 
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(finampSettingsProvider).value;
+
     assert(widget.children?.every((child) =>
             BaseItemDtoType.fromItem(child) == BaseItemDtoType.track) ??
         true);
@@ -173,28 +176,40 @@ class _DownloadDialogState extends State<DownloadDialog> {
       }
     }
 
+    DownloadLocation? getFirstSelectedLocation ()
+    {
+      String? bestDownloadLocation = settings!.lastUsedDownloadLocation ?? settings.defaultDownloadLocation;
+
+      selectedDownloadLocation ??= settings.downloadLocationsMap[bestDownloadLocation];
+
+      return selectedDownloadLocation;
+
+    }
+
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.addDownloads),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.downloadLocationId == null)
+          // Only show if there are multiple download locations
+          if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values.length > 1)
             DropdownButton<DownloadLocation>(
                 hint: Text(AppLocalizations.of(context)!.location),
                 isExpanded: true,
                 onChanged: (value) => setState(() {
                       selectedDownloadLocation = value;
                     }),
-                value: selectedDownloadLocation,
+                  value: getFirstSelectedLocation(),
                 items: FinampSettingsHelper
                     .finampSettings.downloadLocationsMap.values
                     .where((element) =>
                         element.baseDirectory !=
                         DownloadLocationType.internalDocuments)
-                    .map((e) => DropdownMenuItem<DownloadLocation>(
-                          value: e,
-                          child: Text(e.name),
+                    .map((downloadLocation) =>
+                        DropdownMenuItem<DownloadLocation>(
+                          value: downloadLocation,
+                          child: Text(downloadLocation.name),
                         ))
                     .toList()),
           if (widget.needsTranscode)
@@ -247,8 +262,10 @@ class _DownloadDialogState extends State<DownloadDialog> {
                               TranscodeDownloadsSetting.always)!
                       ? transcodeProfile
                       : originalProfile;
-                  profile.downloadLocationId =
-                      widget.downloadLocationId ?? selectedDownloadLocation!.id;
+                  profile.downloadLocationId = selectedDownloadLocation?.id ?? widget.downloadLocationId;
+
+                  // We've selected to download, so lets set this as the default for next time
+                  FinampSetters.setLastUsedDownloadLocation(profile.downloadLocationId);
                   await downloadsService
                       .addDownload(
                           stub: widget.item,
