@@ -1069,5 +1069,123 @@
   "tracksFormerNextUp": "넥스트 업으로 추가된 곡들",
   "@tracksFormerNextUp": {
     "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "deleteDownloadsConfirmButtonText": "삭제",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "playbackOrderShuffledButtonLabel": "셔플 재생 중",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderLinearButtonTooltip": "순차 재생 중입니다. 탭하여 셔플 재생하세요.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "specialDownloads": "특수 다운로드",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "shuffleAllQueueSource": "전부 셔플",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "순차 재생 중",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "셔플 재생 중입니다. 탭하여 순차 재생하세요.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedButtonLabel": "x{speed}배속 재생 중",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "재생속도 줄이기",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "resetToDefaults": "초기화",
+  "@resetToDefaults": {},
+  "savedQueue": "저장된 재생목록",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "shuffleAlbumsToNextUp": "앨범 셔플하여 우선재생에 추가",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsNext": "앨범 셔플하여 다음 재생",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "shuffleAlbumsToQueue": "앨범 셔플하여 재생목록에 추가",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount}회 재생} other{{playCount}회 재생}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "close": "닫기",
+  "@close": {},
+  "couldNotLoad": "{source, select, album{앨범 } playlist{플레이리스트 } trackMix{트랙 믹스 } artistMix{아티스트 믹스 } albumMix{앨범 믹스 } genreMix{장르 믹스 } favorites{즐겨찾기 } allTracks{전체 트랙 } filteredList{트랙 목록 } genre{장르 } artist{아티스트 } track{트랙 } nextUpAlbum{우선재생 앨범 } nextUpPlaylist{우선재생 플레이리스트 } nextUpArtist{우선재생 아티스트 } other{}}로딩에 실패하였습니다",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "noItemsDownloaded": "다운로드한 항목이 없습니다.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "shuffleAlbums": "앨범 셔플",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "deleteDownloadsPrompt": "기기에서 {itemType, select, album{앨범 } playlist{플레이리스트 } artist{아티스트 } genre{장르 } track{트랙 } library{라이브러리 } other{}}'{itemName}'을/를 삭제하시겠습니까?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "playbackSpeedFeatureText": "x{speed}배속",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playingFromType": "{source, select, album{앨범 } playlist{플레이리스트 } trackMix{트랙 믹스 } artistMix{아티스트 믹스 } albumMix{앨범 믹스 } genreMix{장르 믹스 } favorites{즐겨찾기 } allTracks{전체 트랙 } filteredList{트랙 목록 } genre{장르 } artist{아티스트 } track{트랙 } nextUpAlbum{앨범 우선} nextUpPlaylist{플레이리스트 우선} nextUpArtist{아티스트 우선} other{}}재생 중",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
   }
 }
