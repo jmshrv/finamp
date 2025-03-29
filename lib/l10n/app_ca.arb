@@ -691,5 +691,81 @@
   "noButtonLabel": "No",
   "@noButtonLabel": {},
   "minutes": "Minuts",
-  "@minutes": {}
+  "@minutes": {},
+  "addToMorePlaylistsTitle": "Afegeix a més llistes de reproducció",
+  "@addToMorePlaylistsTitle": {},
+  "removeFromPlaylistNamedTooltip": "Elimina de la llista de reproducció '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "newPlaylist": "Nova llista de reproducció",
+  "@newPlaylist": {},
+  "playlistCreated": "Llista de reproducció creada.",
+  "@playlistCreated": {},
+  "noAlbum": "Sense Àlbum",
+  "@noAlbum": {},
+  "goToArtist": "Ves a l'artista",
+  "@goToArtist": {},
+  "playbackModeLocal": "Reproduccint localment",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "goToGenre": "Ves a Gènere",
+  "@goToGenre": {},
+  "confirmFavoriteRemoved": "Favorit eliminat",
+  "@confirmFavoriteRemoved": {},
+  "removeFromPlaylistTooltip": "Elimina d'aquesta llista de reproducció",
+  "@removeFromPlaylistTooltip": {},
+  "removeFromPlaylistTitle": "Eliminar d'aquesta llista de reproducció",
+  "@removeFromPlaylistTitle": {},
+  "noItem": "Sense Objecte",
+  "@noItem": {},
+  "noArtist": "Sense Artista",
+  "@noArtist": {},
+  "unknownArtist": "Artista desconegut",
+  "@unknownArtist": {},
+  "unknownAlbum": "Àlbum desconegut",
+  "@unknownAlbum": {},
+  "playbackModeTranscoding": "Transcodificació",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "confirmFavoriteAdded": "Favorit afegit",
+  "@confirmFavoriteAdded": {},
+  "confirmAddedToPlaylist": "Afegit a la llista de reproducció.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "createButtonLabel": "Crea",
+  "@createButtonLabel": {},
+  "insertedIntoQueue": "Insertat a la cua.",
+  "@insertedIntoQueue": {
+    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+  },
+  "playbackModeDirectPlaying": "Reproducció directa",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "playlistActionsMenuButtonTooltip": "Toca per afegir a la llista de reproducció. Premer sostingut per afegir un favorit.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "addToMorePlaylistsTooltip": "Afageix a més llistes de reproducció",
+  "@addToMorePlaylistsTooltip": {}
 }
