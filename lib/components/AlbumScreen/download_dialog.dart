@@ -102,6 +102,8 @@ class DownloadDialog extends ConsumerStatefulWidget {
           ? FinampSettingsHelper.finampSettings.downloadTranscodingProfile
           : DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
       profile.downloadLocationId = downloadLocation;
+
+      FinampSetters.setLastUsedDownloadLocation(profile.downloadLocationId);
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted,
           isConfirmation: true);
