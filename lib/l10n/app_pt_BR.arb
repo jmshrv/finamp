@@ -160,7 +160,7 @@
   "@addDownloadLocation": {},
   "location": "Localização",
   "@location": {},
-  "enableTranscodingSubtitle": "A transmissão de músicas será transcodificada pelo servidor.",
+  "enableTranscodingSubtitle": "Transcodifica as transmissões no servidor.",
   "@enableTranscodingSubtitle": {},
   "trackCount": "{count,plural,=1{{count} Faixa} other{{count} Faixas}}",
   "@trackCount": {
@@ -308,7 +308,7 @@
   "@replaceQueue": {},
   "yesButtonLabel": "Sim",
   "@yesButtonLabel": {},
-  "instantMix": "Mistura Instantânea",
+  "instantMix": "Mix instantâneo",
   "@instantMix": {},
   "goToAlbum": "Ir para álbum",
   "@goToAlbum": {},
@@ -368,7 +368,7 @@
   "@addedToQueue": {},
   "queueReplaced": "Fila substituída.",
   "@queueReplaced": {},
-  "startingInstantMix": "Iniciando mistura instantânea.",
+  "startingInstantMix": "Iniciando mix instantâneo.",
   "@startingInstantMix": {},
   "anErrorHasOccured": "Ocorreu um erro.",
   "@anErrorHasOccured": {},
@@ -713,7 +713,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "shuffleToNextUp": "Adicionar aleatório ao final das próximas",
+  "shuffleToNextUp": "Adicionar lista como última da fila",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
@@ -735,7 +735,7 @@
   "@playbackHistory": {
     "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
   },
-  "shuffleNext": "Adicionar aleatório ao topo das próximas",
+  "shuffleNext": "Adicionar aleatório às próximas",
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
