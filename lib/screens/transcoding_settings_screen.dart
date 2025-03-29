@@ -43,10 +43,25 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
           ),
           const DownloadTranscodeEnableDropdownListTile(),
           const DownloadTranscodeCodecDropdownListTile(),
-          const DownloadBitrateSelector(),
+          const DownloadBitrateSelectorWrapper(),
         ],
       ),
     );
+  }
+}
+
+/// A widget to only show `DownloadBitrateSelector` when the codec is not FLAC
+class DownloadBitrateSelectorWrapper extends ConsumerWidget {
+  const DownloadBitrateSelectorWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final codec =
+        ref.watch(finampSettingsProvider.downloadTranscodingProfile).codec;
+    if (codec != FinampTranscodingCodec.flac) {
+      return const DownloadBitrateSelector();
+    }
+    return const SizedBox.shrink();
   }
 }
 

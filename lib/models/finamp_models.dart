@@ -2015,7 +2015,9 @@ enum FinampTranscodingCodec {
   opus("ogg", false, 2.0),
   @HiveField(3)
   // Container is null to fall back to real original container per track
-  original(null, true, 99999999);
+  original(null, true, 99999999),
+  @HiveField(4)
+  flac("flac", true, 0.5);
 
   const FinampTranscodingCodec(
       this.container, this.iosCompatible, this.quality);
