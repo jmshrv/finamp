@@ -9,7 +9,7 @@
   "@username": {},
   "password": "Senha",
   "@password": {},
-  "logs": "Registros",
+  "logs": "Registros/Logs",
   "@logs": {},
   "next": "Próximo",
   "@next": {},
@@ -23,7 +23,7 @@
   "@clear": {},
   "favourites": "Favoritos",
   "@favourites": {},
-  "shuffleAll": "Embaralhar todas",
+  "shuffleAll": "Aleatório",
   "@shuffleAll": {},
   "finamp": "Finamp",
   "@finamp": {},
@@ -102,7 +102,7 @@
   },
   "tracks": "Faixas",
   "@tracks": {},
-  "startupError": "Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, crie um problema/issue em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro persistir, limpe os dados para restaurar o aplicativo.",
+  "startupError": "Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, crie um chamado em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro persistir, limpe os dados para restaurar o aplicativo.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -204,7 +204,7 @@
   "@addButtonLabel": {},
   "downloadLocations": "Locais de transferências",
   "@downloadLocations": {},
-  "layoutAndTheme": "Composição & Tema",
+  "layoutAndTheme": "Layout & Tema",
   "@layoutAndTheme": {},
   "enableTranscoding": "Ativar transcodificação",
   "@enableTranscoding": {},
@@ -1958,5 +1958,9 @@
       }
     },
     "description": "Tooltip for the album artwork on the player screen"
+  },
+  "trackMenuButtonTooltip": "Menu de faixas",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
   }
 }
