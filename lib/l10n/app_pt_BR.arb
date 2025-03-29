@@ -59,7 +59,7 @@
   "@runtime": {},
   "downloadMissingImages": "Baixar imagens ausentes",
   "@downloadMissingImages": {},
-  "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente baixada} =1{Baixada {count} imagem ausente} other{Baixadas {count} imagens ausentes}}",
+  "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente} =1{{count} imagem ausente baixada} other{{count} imagens ausentes baixadas}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -460,7 +460,7 @@
   "@syncDownloadedPlaylists": {},
   "showFastScroller": "Mostrar rolagem rápida",
   "@showFastScroller": {},
-  "about": "Sobre Finamp",
+  "about": "Sobre o Finamp",
   "@about": {},
   "finampTagline": "Um reprodutor de música de código aberto para Jellyfin",
   "@finampTagline": {
@@ -482,7 +482,7 @@
   "@aboutTranslations": {
     "description": "Link to the translation project, shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Bem-vindo a",
+  "loginFlowWelcomeHeading": "Bem-vindo ao",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -1646,5 +1646,317 @@
       }
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "marqueeOrTruncateButton": "Usar reticências para títulos longos",
+  "@marqueeOrTruncateButton": {},
+  "marqueeOrTruncateButtonSubtitle": "Mostra reticências (…) no final de títulos longos ao inves de rolar o texto",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "showLyricsTimestampsSubtitle": "Controla se a marca de tempo de cada linha das letras será mostrada em tela, se disponível.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationTitle": "Mostrar botão \"Parar\" na notificação",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Mostrar controle de procura na notificação",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "fontSizeOptionMedium": "Média",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "alignmentOptionCenter": "Centro",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Controla se a notificação do reprodutor terá uma barra de progresso da faixa com procura habilitada. Isso permite procurar um ponto específico da faixa sem precisar abrir o app.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "lyricsAlignmentSubtitle": "Controla o alinhamento do texto das letras.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeTitle": "Tamanho de fonte das letras",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "keepScreenOnDisabled": "Desligada",
+  "@keepScreenOnDisabled": {},
+  "showLyricsScreenAlbumPreludeTitle": "Mostrar capa do álbum antes das letras",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnWhilePlaying": "Faixa sendo tocada",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhileLyrics": "Letras sendo exibidas",
+  "@keepScreenOnWhileLyrics": {},
+  "keepScreenOnWhilePluggedIn": "Somente manter a tela ligada quando carregando",
+  "@keepScreenOnWhilePluggedIn": {},
+  "keepScreenOnWhilePluggedInSubtitle": "Ignorar a configuração \"Manter tela ligada\" se o dispositivo não estiver carregando",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "additionalPeople": "Pessoas",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "playbackMode": "Modo de reprodução",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "size": "Tamanho",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "normalizationGain": "Ganho",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "sampleRate": "Taxa de amostragem",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "showFeatureChipsToggleTitle": "Mostrar informações avançadas da faixa",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showFeatureChipsToggleSubtitle": "Mostrar informações avançadas em tela, como codec, taxa de bits, entre outras.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "albumScreen": "Álbuns",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenTitle": "Mostrar capas de álbuns para as faixas",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "resetFiltersButton": "Redefinir filtros",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "resetSettingsPromptGlobalConfirm": "Apagar TODAS as configurações",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "resetSettingsPromptGlobal": "Tem certeza que quer reiniciar TODAS as configurações para o padrão de fábrica?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "genericCancel": "Cancelar",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "emptyTopTracksList": "Você ainda não ouviu uma faixa deste artista.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artista} genre{Gênero} track{Faixa} library{Biblioteca} other{Item}} foi excluído do {deviceType, select, device{dispositivo} server{servidor} other{}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "confirmAddAlbumToPlaylist": "Tem certeza que deseja adicionar todas as faixas {itemType, select, album{do álbum} playlist{da lista} artist{do artista} genre{do gênero} other{do item}} '{itemName}' para esta lista de reprodução?  Eles só poderão ser removidos um-a-um.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Controla se a notificação do reprodutor terá um botâo \"Parar\" além do botão de pausa. Isso permite que você pare completamente a reprodução sem abrir o app.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "artwork": "Arte",
+  "@artwork": {},
+  "showProgressOnNowPlayingBarSubtitle": "Controle se o miniplayer no final da tela funciona também como uma barra de progresso da faixa.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
+  },
+  "oneLineMarqueeTextButtonSubtitle": "Rolar automaticamente títulos grandes demais (mais de duas linhas)",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "deleteFromTargetDialogText": "Você irá excluir {itemType, select, album{este álbum} playlist{esta lista} artist{este artista} genre{este gênero} track{esta faixa} library{esta biblioteca} other{este item}} do {device, select, device{seu dispositivo} server{sistema de arquivos do servidor.{deleteType, select, canDelete{ Isso também vai excluir este item do seu dispositivo.} cantDelete{ Este item será excluído na próxima sincronização.} notDownloaded{} other{}}\nEssa ação não pode ser desfeita} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "noItemsDownloaded": "Nenhum item baixado.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "bitDepth": "Profundidade de bits",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "resetSettingsPromptLocal": "Deseja reiniciar essas configurações para o padrão de fábrica?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "allowDeleteFromServerTitle": "Permitir exclusão de itens do servidor",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "allowDeleteFromServerSubtitle": "Permite ou proíbe a exclusão permanente de faixas do sistema de arquivos do servidor.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "downloadSizeWarningCutoffSubtitle": "Um aviso será mostrado quando um download com uma quantidade de faixas maior do que este número for iniciado.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatMonthYear": "Mês e Ano",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatMonthDayYear": "Mês, Dia, e Ano",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Mostra a data de lançamento do álbum na tela do reprodutor, antes do nome do álbum.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatSubtitle": "Controla o formato das datas de lançamento mostradas no app.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "librarySelectError": "Erro ao carregar bibliotecas disponíveis ao usuário",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "largeDownloadWarning": "Aviso: Você ira baixar {count} faixas.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteFromTargetConfirmButton": "Excluir{target, select, device{ do dispositivo} server{ do servidor} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "publiclyVisiblePlaylist": "Público:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "releaseDateFormatYear": "Ano",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Mostrar data de lançamento do álbum na tela do reprodutor",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Formato da data de lançamento",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "lyricsScreen": "Letras",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "alignmentOptionEnd": "Fim",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "keepScreenOn": "Manter tela ligada",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnAlwaysOn": "Sempre ligada",
+  "@keepScreenOnAlwaysOn": {},
+  "genericToggleButtonTooltip": "Toque para alternar.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "nowPlayingBarTooltip": "Abrir tela do reprodutor",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Mostra capas de álbuns para cada faixa na tela do álbum.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "emptyFilteredListSubtitle": "Nenhum item corresponde ao filtro. Desligue a filtragem ou mude o termo de pesquisa.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "showLyricsTimestampsTitle": "Mostrar marcações de tempo para letras sincronizadas",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "codec": "Codec",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "bitRate": "Taxa de bits",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "emptyFilteredListTitle": "Nenhum item encontrado",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "downloadSizeWarningCutoff": "Aviso de download grande",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "alignmentOptionStart": "Início",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Pequena",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "fontSizeOptionLarge": "Grande",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "lyricsAlignmentTitle": "Alinhamento das letras",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeSubtitle": "Controla o tamanho da fonte das letras.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "Controla se a capa do álbum será mostrada antes das letras rolarem para cima.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOnSubtitle": "Quando manter a tela ligada",
+  "@keepScreenOnSubtitle": {},
+  "artworkTooltip": "Arte de {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "playerAlbumArtworkTooltip": "Arte de {title}. Toque para reproduzir ou pausar a faixa. Deslize para a direita ou esquerda para trocar de faixa.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
   }
 }
