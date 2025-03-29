@@ -498,7 +498,7 @@
   "@back": {
     "description": "Label for the back button."
   },
-  "connectingToServer": "Під'єднання до серверу...",
+  "connectingToServer": "Підключення до сервера…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -506,7 +506,7 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Сканування серверів...",
+  "loginFlowLocalNetworkServersScanningForServers": "Сканування серверів…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -682,7 +682,7 @@
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
   },
-  "syncingDownloadSize": "Синхронізація...",
+  "syncingDownloadSize": "Синхронізація…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -908,7 +908,7 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "missingDownloadSize": "Видалення...",
+  "missingDownloadSize": "Видалення…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1146,7 +1146,7 @@
       }
     }
   },
-  "queueLoadingMessage": "Відновлення черги...",
+  "queueLoadingMessage": "Відновлення черги…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1546,7 +1546,7 @@
     },
     "description": "Options in Select Download Codec dropdown"
   },
-  "activeDownloadSize": "Завантаження...",
+  "activeDownloadSize": "Завантаження…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
@@ -1871,7 +1871,7 @@
   "@hideQueueButton": {},
   "oneLineMarqueeTextButtonSubtitle": "Автоматично прокручуйте назви композицій, які занадто довгі для відображення в два рядки",
   "@oneLineMarqueeTextButtonSubtitle": {},
-  "marqueeOrTruncateButtonSubtitle": "Показувати ... в кінці довгих заголовків замість тексту, що прокручується",
+  "marqueeOrTruncateButtonSubtitle": "Показувати … у кінці довгих заголовків замість тексту, що прокручується",
   "@marqueeOrTruncateButtonSubtitle": {},
   "deleteFromTargetConfirmButton": "Видалити{target, select, device{ from Device} server{ from Server} other{}}",
   "@deleteFromTargetConfirmButton": {
