@@ -213,13 +213,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
-      ..defaultDownloadLocation = fields[58] as String?;
+      ..defaultDownloadLocation = fields[58] as String?
+      ..lastUsedDownloadLocationId = fields[85] as String?;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(80)
+      ..writeByte(81)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -379,7 +380,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(83)
       ..write(obj.showAlbumReleaseDateOnPlayerScreen)
       ..writeByte(84)
-      ..write(obj.releaseDateFormat);
+      ..write(obj.releaseDateFormat)
+      ..writeByte(85)
+      ..write(obj.lastUsedDownloadLocationId);
   }
 
   @override
