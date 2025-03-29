@@ -214,7 +214,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
       ..defaultDownloadLocation = fields[58] as String?
-      ..lastUsedDownloadLocation = fields[85] as String?;
+      ..lastUsedDownloadLocationId = fields[85] as String?;
   }
 
   @override
@@ -382,7 +382,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(84)
       ..write(obj.releaseDateFormat)
       ..writeByte(85)
-      ..write(obj.lastUsedDownloadLocation);
+      ..write(obj.lastUsedDownloadLocationId);
   }
 
   @override

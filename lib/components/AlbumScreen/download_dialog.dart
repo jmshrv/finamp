@@ -181,7 +181,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
     DownloadLocation? getFirstSelectedLocation() {
       // If we haven't selected anything, first try and grab the lastUsedDownloadLocation, then try the default, otherwise just select the first available option
       selectedDownloadLocation ??= settings
-              ?.downloadLocationsMap[settings.lastUsedDownloadLocation] ??
+              ?.downloadLocationsMap[settings.lastUsedDownloadLocationId] ??
           settings?.downloadLocationsMap[settings.defaultDownloadLocation] ??
           FinampSettingsHelper.finampSettings.internalTrackDir;
 

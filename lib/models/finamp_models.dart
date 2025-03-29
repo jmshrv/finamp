@@ -534,7 +534,7 @@ class FinampSettings {
   ReleaseDateFormat releaseDateFormat;
 
   @HiveField(85, defaultValue: null)
-  String? lastUsedDownloadLocation;
+  String? lastUsedDownloadLocationId;
   
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
