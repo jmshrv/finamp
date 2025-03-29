@@ -2,7 +2,7 @@ import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';

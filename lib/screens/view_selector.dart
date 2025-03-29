@@ -1,6 +1,6 @@
 import 'package:finamp/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../components/ViewSelector/no_music_libraries_message.dart';

@@ -2,7 +2,7 @@ import 'package:finamp/components/PlayerScreen/artist_chip.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../icon_and_text.dart';

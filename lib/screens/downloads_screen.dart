@@ -1,6 +1,6 @@
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 
 import '../components/DownloadsScreen/download_error_screen_button.dart';
 import '../components/DownloadsScreen/downloaded_items_list.dart';
