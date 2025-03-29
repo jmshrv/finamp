@@ -369,7 +369,9 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                                         child: const PlayerScreenAlbumImage(),
                                       )),
                                     )
-                                  : Text("\n")),                           
+                                  : SizedBox(
+                                    height: MediaQuery.of(context).size.height * 0.05,
+                                  )),                           
                         AutoScrollTag(
                           key: ValueKey(index),
                           controller: autoScrollController,
