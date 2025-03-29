@@ -677,5 +677,17 @@
   "reset": "Reiniciar",
   "@reset": {
     "description": "Used for buttons in the playback speed menu and the settings"
-  }
+  },
+  "seconds": "Segons",
+  "@seconds": {},
+  "setSleepTimer": "Estableix un temportitzador",
+  "@setSleepTimer": {},
+  "hours": "Hores",
+  "@hours": {},
+  "cancelSleepTimer": "Cancel·lo el temporitzador per dormir?",
+  "@cancelSleepTimer": {},
+  "yesButtonLabel": "Sí",
+  "@yesButtonLabel": {},
+  "noButtonLabel": "No",
+  "@noButtonLabel": {}
 }
