@@ -130,11 +130,13 @@ class DownloadTranscodeCodecDropdownListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var codec =
+        ref.watch(finampSettingsProvider.downloadTranscodingProfile).codec;
+
     return ListTile(
       title: Text(AppLocalizations.of(context)!.downloadTranscodeCodecTitle),
       trailing: DropdownButton<FinampTranscodingCodec>(
-        value:
-            ref.watch(finampSettingsProvider.downloadTranscodingProfile).codec,
+        value: codec,
         items: FinampTranscodingCodec.values
             .where((element) => !Platform.isIOS || element.iosCompatible)
             .where((element) => element != FinampTranscodingCodec.original)
@@ -145,6 +147,9 @@ class DownloadTranscodeCodecDropdownListTile extends ConsumerWidget {
             .toList(),
         onChanged: FinampSetters.setDownloadTranscodingCodec,
       ),
+      subtitle: codec == FinampTranscodingCodec.flac
+          ? Text(AppLocalizations.of(context)!.flacTranscodeDownloadWarning)
+          : null,
     );
   }
 }

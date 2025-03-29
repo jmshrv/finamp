@@ -1974,6 +1974,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get flacTranscodeDownloadWarning => 'Warning: all downloads will be transcoded to FLAC, even songs with lossy encoding!';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

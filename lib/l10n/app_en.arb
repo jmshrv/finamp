@@ -1544,16 +1544,16 @@
   "@enableVibration": {},
   "enableVibrationSubtitle": "Whether to enable vibration.",
   "@enableVibrationSubtitle": {},
-  "hideQueueButton":  "Hide queue button",
-  "hideQueueButtonSubtitle":  "Hide the queue button on the player screen. Swipe up to access the queue.",
+  "hideQueueButton": "Hide queue button",
+  "hideQueueButtonSubtitle": "Hide the queue button on the player screen. Swipe up to access the queue.",
   "oneLineMarqueeTextButton": "Auto-scroll Long Titles",
   "oneLineMarqueeTextButtonSubtitle": "Automatically scroll track titles that are too long to display in two lines",
   "marqueeOrTruncateButton": "Use ellipsis for long titles",
   "marqueeOrTruncateButtonSubtitle": "Show ... at the end of long titles instead of scrolling text",
   "hidePlayerBottomActions": "Hide bottom actions",
-  "hidePlayerBottomActionsSubtitle":  "Hide the queue and lyrics buttons on the player screen. Swipe up to access the queue, swipe left (below the album cover) to view lyrics if available.",
-  "prioritizePlayerCover":  "Prioritize album cover",
-  "prioritizePlayerCoverSubtitle":  "Prioritize showing a larger album cover on player screen. Non-critical controls will be hidden more aggressively at small screen sizes.",
+  "hidePlayerBottomActionsSubtitle": "Hide the queue and lyrics buttons on the player screen. Swipe up to access the queue, swipe left (below the album cover) to view lyrics if available.",
+  "prioritizePlayerCover": "Prioritize album cover",
+  "prioritizePlayerCoverSubtitle": "Prioritize showing a larger album cover on player screen. Non-critical controls will be hidden more aggressively at small screen sizes.",
   "suppressPlayerPadding": "Suppress player controls padding",
   "suppressPlayerPaddingSubtitle": "Fully minimizes padding between player screen controls when album cover is not at full size.",
   "lockDownload": "Always Keep on Device",
@@ -1935,5 +1935,7 @@
   "librarySelectError": "Error loading available libraries for user",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
-  }
+  },
+  "flacTranscodeDownloadWarning": "Warning: all downloads will be transcoded to FLAC, even songs with lossy encoding!",
+  "@flacTranscodeDownloadWarning": {}
 }

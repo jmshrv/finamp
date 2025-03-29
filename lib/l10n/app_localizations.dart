@@ -3175,6 +3175,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading available libraries for user'**
   String get librarySelectError;
+
+  /// No description provided for @flacTranscodeDownloadWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: all downloads will be transcoded to FLAC, even songs with lossy encoding!'**
+  String get flacTranscodeDownloadWarning;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
