@@ -14,6 +14,12 @@ Here are the most important infos:
   Please make sure to include your GitHub and/or Discord user name so we can ensure you actually contributed :)
 - The Hackathon is happening here on GitHub and on our [Finamp Beta Testers Discord server](https://discord.gg/xh9SZ73jWk). Ideally you should participate on both platforms, but either works. For any *code contributions* you'll have to contribute on GitHub though, via a regular Pull Request. Design contributions a fine via Discord.
 
+**All other details can be found on [our Hackathon project page](https://github.com/users/jmshrv/projects/5/views/2?pane=info)!**  
+There you can also find an overview of issues: <https://github.com/users/jmshrv/projects/5/views/2>  
+This also includes a category and difficulty for each issue to help you find one that works well for your skillset!
+
+And be sure to take a look at [`CONTRIBUTING.md`](https://github.com/jmshrv/finamp/blob/redesign/CONTRIBUTING.md) to learn everything you need to start working on Finamp!
+
 ---
 
 #### Redesign Beta
