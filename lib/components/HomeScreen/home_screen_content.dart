@@ -1,6 +1,11 @@
 import 'package:finamp/components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 import 'package:finamp/components/Buttons/cta_small.dart';
 import 'package:finamp/components/HomeScreen/finamp_home_screen_header.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/screens/music_screen.dart';
+import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -36,6 +41,9 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+
+    FinampSettings? finampSettings = ref.watch(finampSettingsProvider).value;
+
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -54,21 +62,33 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
                   icon: TablerIcons.arrows_shuffle,
                   vertical: true,
                   minWidth: 110,
-                  onPressed: () {},
+                  onPressed: () {
+                    _audioServiceHelper.shuffleAll(
+                        finampSettings?.onlyShowFavourites ?? false);
+                  },
                 ),
                 CTALarge(
                   text: 'Recents',
                   icon: TablerIcons.calendar,
                   vertical: true,
                   minWidth: 110,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      QueueRestoreScreen.routeName,
+                    );
+                  },
                 ),
                 CTALarge(
                   text: 'Decade Mix',
                   icon: TablerIcons.chevrons_left,
                   vertical: true,
                   minWidth: 110,
-                  onPressed: () {},
+                  onPressed: () {
+                    GlobalSnackbar.message((buildContext) {
+                      return "Decade Mix is not available yet.";
+                    });
+                  },
                 ),
               ],
             ),
@@ -81,19 +101,37 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
               runAlignment: WrapAlignment.center,
               children: [
                 CTASmall(
-                  text: 'Songs',
+                  text: 'Tracks',
                   icon: TablerIcons.music,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      MusicScreen.routeName,
+                      arguments: TabContentType.tracks,
+                    );
+                  },
                 ),
                 CTASmall(
                   text: 'Playlists',
                   icon: TablerIcons.playlist,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      MusicScreen.routeName,
+                      arguments: TabContentType.playlists,
+                    );
+                  },
                 ),
                 CTASmall(
                   text: 'Albums',
                   icon: TablerIcons.disc,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      MusicScreen.routeName,
+                      arguments: TabContentType.albums,
+                    );
+                  },
                 ),
               ],
             ),

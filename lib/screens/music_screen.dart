@@ -32,7 +32,11 @@ class MusicScreen extends ConsumerStatefulWidget {
     this.sortByOverrideInit,
     this.sortOrderOverrideInit,
     this.isFavoriteOverrideInit,
+    this.initialTab,
   });
+
+  /// The initial tab type to show. Can also be provided as an argument in a named route
+  final TabContentType? initialTab;
 
   static const routeName = "/music";
 
@@ -85,7 +89,15 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
               .watch(finampSettingsProvider.tabOrder)
               .where((e) => ref.watch(finampSettingsProvider.select((value) => value.value?.showTabs[e])) ?? false);
 
-    _tabController = TabController(length: tabs.length, vsync: this, initialIndex: 0);
+    _tabController = TabController(
+      length: tabs.length,
+      vsync: this,
+      initialIndex: tabs.toList().indexOf(
+        widget.initialTab ??
+            ModalRoute.of(context)!.settings.arguments as TabContentType? ??
+            FinampSettingsHelper.finampSettings.tabOrder[0],
+      ),
+    );
 
     _tabController!.addListener(_tabIndexCallback);
   }
