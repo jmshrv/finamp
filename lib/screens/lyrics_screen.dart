@@ -235,7 +235,9 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                   constraints: BoxConstraints(
                     maxHeight: constraints.maxHeight - 180,
                   ),
-                  child: const PlayerScreenAlbumImage()),
+                  child: (finampSettings?.showLyricsScreenAlbumPrelude ?? true)
+                      ? const PlayerScreenAlbumImage()
+                      : SizedBox()),
               const SizedBox(height: 24),
               Icon(
                 icon,
@@ -354,20 +356,20 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                         if (index == 0)
                           AutoScrollTag(
                             key: const ValueKey(-1),
-                            controller: autoScrollController,
-                            index: -1,
-                            child: SizedBox(
-                              height: constraints.maxHeight * 0.65,
-                              child: Center(
-                                  child: SizedBox(
-                                      height: constraints.maxHeight * 0.55,
-                                      child: (finampSettings
-                                                  ?.showLyricsScreenAlbumPrelude ??
-                                              true)
-                                          ? const PlayerScreenAlbumImage()
-                                          : null)),
-                            ),
-                          ),
+                              controller: autoScrollController,
+                              index: -1,
+                              child: (finampSettings
+                                          ?.showLyricsScreenAlbumPrelude ??
+                                      true)
+                                  ? SizedBox(
+                                      height: constraints.maxHeight * 0.65,
+                                      child: Center(
+                                          child: SizedBox(
+                                        height: constraints.maxHeight * 0.55,
+                                        child: const PlayerScreenAlbumImage(),
+                                      )),
+                                    )
+                                  : Text("\n")),                           
                         AutoScrollTag(
                           key: ValueKey(index),
                           controller: autoScrollController,
