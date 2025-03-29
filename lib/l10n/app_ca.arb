@@ -689,5 +689,7 @@
   "yesButtonLabel": "Sí",
   "@yesButtonLabel": {},
   "noButtonLabel": "No",
-  "@noButtonLabel": {}
+  "@noButtonLabel": {},
+  "minutes": "Minuts",
+  "@minutes": {}
 }
