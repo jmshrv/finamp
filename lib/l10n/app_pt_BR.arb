@@ -506,11 +506,11 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "connectingToServer": "Conectando-se ao servidor...",
+  "connectingToServer": "Conectando-se ao servidor…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Procurando por servidores...",
+  "loginFlowLocalNetworkServersScanningForServers": "Procurando por servidores…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -631,7 +631,7 @@
   "@syncDownloads": {
     "description": "Tooltip for downloads sync button."
   },
-  "missingDownloadSize": "Apagando...",
+  "missingDownloadSize": "Apagando…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -679,7 +679,7 @@
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
-  "syncingDownloadSize": "Sincronizando...",
+  "syncingDownloadSize": "Sincronizando…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -858,7 +858,7 @@
       }
     }
   },
-  "queueLoadingMessage": "Restaurando fila...",
+  "queueLoadingMessage": "Restaurando fila…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -952,7 +952,7 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "activeDownloadSize": "Transferindo...",
+  "activeDownloadSize": "Transferindo…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
