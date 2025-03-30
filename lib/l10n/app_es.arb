@@ -78,7 +78,7 @@
   "@customLocation": {},
   "dark": "Oscuro",
   "@dark": {},
-  "createButtonLabel": "CREAR",
+  "createButtonLabel": "Crear",
   "@createButtonLabel": {},
   "cancelSleepTimer": "¿Cancelar el temporizador de sueño?",
   "@cancelSleepTimer": {},
@@ -180,7 +180,7 @@
   "@newPlaylist": {},
   "noArtist": "Sin artista",
   "@noArtist": {},
-  "noButtonLabel": "NO",
+  "noButtonLabel": "No",
   "@noButtonLabel": {},
   "portrait": "Vertical",
   "@portrait": {},
@@ -190,7 +190,7 @@
   "@playButtonLabel": {},
   "removeFavourite": "Eliminar favorito",
   "@removeFavourite": {},
-  "yesButtonLabel": "SÍ",
+  "yesButtonLabel": "Sí",
   "@yesButtonLabel": {},
   "offlineMode": "Modo sin conexión",
   "@offlineMode": {},
@@ -262,7 +262,7 @@
   "@required": {},
   "shuffleButtonLabel": "Aleatorio",
   "@shuffleButtonLabel": {},
-  "updateButtonLabel": "ACTUALIZAR",
+  "updateButtonLabel": "Actualizar",
   "@updateButtonLabel": {},
   "stackTrace": "Trazado de pila",
   "@stackTrace": {},
@@ -282,7 +282,7 @@
   "@unknownError": {},
   "enterLowPriorityStateOnPause": "Entrar en estado de baja prioridad al pausar",
   "@enterLowPriorityStateOnPause": {},
-  "pathReturnSlashErrorMessage": "No se pueden utilizar ubicaciones que contengan \"/\"",
+  "pathReturnSlashErrorMessage": "No se pueden utilizar ubicaciones que devuelvan \"/\"",
   "@pathReturnSlashErrorMessage": {},
   "grid": "Cuadrícula",
   "@grid": {},
@@ -324,7 +324,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin remotamente, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto predeterminado (80 o 443) o en un puerto predeterminado de Jellyfin (8096), no tienes que especificar el puerto.\n\nSi la dirección es correcta, deberías poder ver algunso datos sobre tu servidor en las casillas de abajo.",
+  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin de forma remota, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP predeterminado (80/443) o el predefinido de Jellyfin (8096), no tendrás que especificar el puerto. Este probablemente sea tu caso si tu servidor está detrás de un proxy inverso.\n\nSi la dirección es correcta, deberías ver la información sobre el servidor resaltado debajo.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -363,7 +363,7 @@
   },
   "errorScreenError": "¡Se ha producido un error al obtener la lista de errores! Llegados a este punto, probablemente deberías crear una incidencia en GitHub y eliminar los datos de la aplicación",
   "@errorScreenError": {},
-  "customLocationsBuggy": "Las ubicaciones personalizadas son extremadamente problemáticas por problemas con los permisos. Estoy pensando en maneras de arreglarlo, pero por ahora no recomiendo usarlas.",
+  "customLocationsBuggy": "Las ubicaciones personalizadas pueden ser extremadamente problemáticas, y no son recomendadas para la mayoría de usos. Ubicaciones dentro de la carpeta del sistema \"Música\" podría impedir que las imágenes de los álbumes se guarden debido a limitaciones del sistema operativo.",
   "@customLocationsBuggy": {},
   "shuffleAllTrackCount": "Cantidad de canciones al reproducir aleatoriamente",
   "@shuffleAllTrackCount": {},
@@ -414,7 +414,7 @@
   },
   "bufferDuration": "Duración del búfer",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "Cuánto debe almacenar en el búfer el reproductor, en segundos. Requiere un reinicio.",
+  "bufferDurationSubtitle": "Máximo tiempo, en segundos, que el búfer puede almacenar. Requiere de un reinicio.",
   "@bufferDurationSubtitle": {},
   "disableGesture": "Deshabilitar los gestos",
   "@disableGesture": {},
@@ -438,7 +438,7 @@
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
-  "playNext": "Reproducir la siguiente",
+  "playNext": "Reproducir siguiente",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
@@ -446,7 +446,7 @@
   "@noMusicLibrariesTitle": {
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
-  "refresh": "REFRESCAR",
+  "refresh": "Refrescar",
   "@refresh": {},
   "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de \"Música\".",
   "@noMusicLibrariesBody": {},
@@ -454,7 +454,7 @@
   "@showFastScroller": {},
   "syncDownloadedPlaylists": "Sincroniza las listas de reproducción descargadas",
   "@syncDownloadedPlaylists": {},
-  "swipeInsertQueueNextSubtitle": "Permite insertar una canción como siguiente elemento en la cola cuando se desliza en la lista de reproducción en lugar de añadirla al final.",
+  "swipeInsertQueueNextSubtitle": "Permite insertar una canción como próxima en ser reproducida de la cola cuando se desliza a un lado en la lista de reproducción, en lugar de añadirla al final.",
   "@swipeInsertQueueNextSubtitle": {},
   "interactions": "Interacciones",
   "@interactions": {},
@@ -462,15 +462,15 @@
   "@swipeInsertQueueNext": {},
   "about": "Acerca de Finamp",
   "@about": {},
-  "finampTagline": "Un reproductor de música para Jellyfin de código abierto",
+  "finampTagline": "Un reproductor de música de código abierto para Jellyfin",
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "aboutContributionPrompt": "Hecho por gente increíble en su tiempo libre.\n¡Podrías ser uno de ellos!",
+  "aboutContributionPrompt": "Creado por gente increíble en su tiempo libre.\nTu podrías ser uno de ellos!",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
-  "aboutContributionLink": "Contribuye a Finamp en GitHub:",
+  "aboutContributionLink": "Contribuye al repositorio de Finamp en GitHub:",
   "@aboutContributionLink": {
     "description": "Link to the Finamp GitHub repository, shown in the about screen."
   },
@@ -478,11 +478,11 @@
   "@aboutReleaseNotes": {
     "description": "Link to the release notes, shown in the about screen."
   },
-  "aboutThanks": "¡Muchas gracias por usar Finamp!",
+  "aboutThanks": "Muchas gracias por usar Finamp!",
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowGetStarted": "¡Empieza!",
+  "loginFlowGetStarted": "Empieza!",
   "@loginFlowGetStarted": {
     "description": "Button label for the login/splash screen."
   },
@@ -522,7 +522,7 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "connectingToServer": "Conectándose al servidor...",
+  "connectingToServer": "Conectándose al servidor…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -530,7 +530,7 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Buscando servidores...",
+  "loginFlowLocalNetworkServersScanningForServers": "Buscando servidores…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -542,7 +542,7 @@
   "@loginFlowNamelessUser": {
     "description": "Name for a user that doesn't have a name set on the server."
   },
-  "loginFlowAuthenticationHeading": "Iniciar sesión en tu cuenta",
+  "loginFlowAuthenticationHeading": "Inicia sesión en tu cuenta",
   "@loginFlowAuthenticationHeading": {
     "description": "Heading for the authentication step during the login flow."
   },
@@ -594,11 +594,11 @@
   "@usernameHint": {
     "description": "Hint text for the username input field."
   },
-  "loginFlowQuickConnectPrompt": "Usar el código de conexión rápida",
+  "loginFlowQuickConnectPrompt": "Usar código de Inicio de Sesión Rápido",
   "@loginFlowQuickConnectPrompt": {
     "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
-  "backToServerSelection": "Volver a la selección del servidor",
+  "backToServerSelection": "Volver a la selección de servidores",
   "@backToServerSelection": {
     "description": "Label for the button that takes the user back to the server selection step during the login flow."
   },
@@ -645,5 +645,69 @@
   "confirmDownloadStarted": "Descarga comenzada",
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "automatic": "Automático",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "shown": "Visible",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Oculto",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "Velocidad",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "apply": "Aplicar",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "activeDownloadSize": "Descargando…",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "connectionInterruptedBackground": "La conexión ha sido interrumpida mientras se continuaban de fondo las descargas. Esto puede haber sido causado por configuraciones del sistema.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "filesystemFull": "El resto de descargas pendientes no han podido ser completadas. El almacenamiento está completo.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "specialDownloads": "Descargas especiales",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "Sin elementos descargados.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "customizationSettingsTitle": "Personalización",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "connectionInterrupted": "Conexión interrumpida, pausando las descargas.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackgroundAndroid": "La conexión ha sido interrumpida mientras se continuaban de fondo las descargas. Esto puede haber sido causado por tener activado 'Comenzar Modo-de-Baja Prioridad mientras está Pausado' en la configuración del sistema.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "syncingDownloadSize": "Sincronizando…",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "onlyShowFullyDownloaded": "Mostrar solo álbumes completamente descargados",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "missingDownloadSize": "Borrando…",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
   }
 }
