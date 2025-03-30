@@ -60,7 +60,7 @@ class FinampHomeScreenHeader extends ConsumerWidget
                             ),
                             Text.rich(
                               TextSpan(
-                                text: 'Connected to ',
+                                text: 'Connected to* ',
                                 children: [
                                   TextSpan(
                                     text:

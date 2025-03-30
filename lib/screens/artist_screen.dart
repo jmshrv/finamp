@@ -1,4 +1,5 @@
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/components/HomeScreen/finamp_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -41,7 +42,8 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
         library: _finampUserHelper.currentUser?.currentView,
         genreFilter: widget.genreFilter,
       ),
-      bottomSheet: const NowPlayingBar(),
+      bottomNavigationBar: const FinampNavigationBar(),
+      bottomSheet: const SafeArea(child: NowPlayingBar()),
     );
   }
 }

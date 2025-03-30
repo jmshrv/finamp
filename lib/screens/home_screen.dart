@@ -77,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset:
             false, //TODO set this to true for the search screen
-        bottomSheet: const NowPlayingBar(),
+        bottomSheet: const SafeArea(child: NowPlayingBar()),
         appBar: FinampHomeScreenHeader(),
         bottomNavigationBar: const FinampNavigationBar(),
         drawer: const MusicScreenDrawer(),

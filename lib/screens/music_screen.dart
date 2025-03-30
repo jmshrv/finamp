@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/components/HomeScreen/finamp_navigation_bar.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -371,6 +373,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
                   ),
                 ],
         ),
+        bottomNavigationBar: const FinampNavigationBar(),
         bottomSheet: const SafeArea(child: NowPlayingBar()),
         drawerEnableOpenDragGesture: widget.genreFilter == null,
         drawer: widget.genreFilter == null ? const MusicScreenDrawer() : null,

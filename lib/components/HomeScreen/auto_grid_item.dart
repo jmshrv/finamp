@@ -18,24 +18,13 @@ class AutoGridItem extends ConsumerWidget {
     final BaseItemDtoType itemType = BaseItemDtoType.fromItem(baseItem);
     switch (itemType) {
       case BaseItemDtoType.album:
-        gridItem = ItemCollectionCard(
-          key: ValueKey(baseItem.id),
-          item: baseItem,
-        );
+        gridItem = ItemCollectionCard(key: ValueKey(baseItem.id), item: baseItem);
         break;
       case BaseItemDtoType.playlist:
-        gridItem = ItemCollectionCard(
-          key: ValueKey(baseItem.id),
-          item: baseItem,
-        );
+        gridItem = ItemCollectionCard(key: ValueKey(baseItem.id), item: baseItem);
         break;
       case BaseItemDtoType.artist:
-        gridItem = ArtistItem(
-          key: ValueKey(baseItem.id),
-          artist: baseItem,
-          isGrid: true,
-          gridAddSettingsListener: true,
-        );
+        gridItem = ArtistItem(key: ValueKey(baseItem.id), artist: baseItem, isGrid: true);
         break;
       case BaseItemDtoType.track:
         gridItem = TrackListTile(
@@ -48,19 +37,12 @@ class AutoGridItem extends ConsumerWidget {
         );
         break;
       case BaseItemDtoType.genre:
-        gridItem = ItemCollectionCard(
-          key: ValueKey(baseItem.id),
-          item: baseItem,
-        );
+        gridItem = ItemCollectionCard(key: ValueKey(baseItem.id), item: baseItem);
         break;
       default:
         gridItem = SizedBox.shrink();
     }
 
-    return SizedBox(
-      width: 120,
-      height: 175,
-      child: gridItem,
-    );
+    return SizedBox(width: 120, height: 175, child: gridItem);
   }
 }

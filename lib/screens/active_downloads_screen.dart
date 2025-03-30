@@ -1,3 +1,4 @@
+import 'package:finamp/components/HomeScreen/finamp_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -34,6 +35,7 @@ class ActiveDownloadsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.activeDownloadsTitle)),
+      bottomNavigationBar: const FinampNavigationBar(),
       body: StreamBuilder(
         stream: stream,
         builder: (context, snapshot) {

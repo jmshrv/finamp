@@ -1,3 +1,4 @@
+import 'package:finamp/components/HomeScreen/finamp_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -35,7 +36,8 @@ class _AlbumScreenState extends ConsumerState<AlbumScreen> {
     return Scaffold(
       extendBody: true,
       body: AlbumScreenContent(parent: parent, genreFilter: widget.genreFilter),
-      bottomSheet: const NowPlayingBar(),
+      bottomNavigationBar: const FinampNavigationBar(),
+      bottomSheet: const SafeArea(child: NowPlayingBar()),
     );
   }
 }

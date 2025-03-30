@@ -1,7 +1,6 @@
 import 'package:finamp/screens/home_screen.dart';
 import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/navigation_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -106,13 +105,13 @@ class FinampNavigationBar extends ConsumerWidget {
           // Navigate to the corresponding screen based on the index
           switch (index) {
             case 0:
-              Navigator.pushNamed(context, HomeScreen.routeName);
+              Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               break;
             case 1:
-              Navigator.pushNamed(context, MusicScreen.routeName);
+              Navigator.pushReplacementNamed(context, MusicScreen.routeName);
               break;
             case 2:
-              Navigator.pushNamed(context, MusicScreen.routeName);
+              Navigator.pushReplacementNamed(context, MusicScreen.routeName);
               break;
           }
         },
