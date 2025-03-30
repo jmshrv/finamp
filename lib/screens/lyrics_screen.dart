@@ -370,7 +370,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                                       )),
                                     )
                                   : SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.05,
+                                    height: constraints.maxHeight * 0.2,
                                   )),                           
                         AutoScrollTag(
                           key: ValueKey(index),
