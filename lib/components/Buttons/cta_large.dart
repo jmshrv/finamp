@@ -22,7 +22,7 @@ class CTALarge extends StatelessWidget {
     final accentColor = Theme.of(context).colorScheme.primary;
     return ConstrainedBox(
       constraints: BoxConstraints(minWidth: minWidth ?? 0),
-      child: ElevatedButton(
+      child: FilledButton(
         onPressed: () {
           FeedbackHelper.feedback(FeedbackType.selection);
           onPressed();
@@ -37,7 +37,7 @@ class CTALarge extends StatelessWidget {
           backgroundColor: WidgetStateProperty.all<Color>(
             Theme.of(context).brightness == Brightness.dark
                 ? accentColor.withOpacity(0.15)
-                : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white),
+                : Color.alphaBlend(accentColor.withOpacity(0.2), Colors.white),
           ),
         ),
         child: Wrap(
@@ -45,16 +45,11 @@ class CTALarge extends StatelessWidget {
           direction: vertical ? Axis.vertical : Axis.horizontal,
           alignment: vertical ? WrapAlignment.center : WrapAlignment.start,
           children: [
-            Icon(
-              icon,
-              size: 24,
-              color: Theme.of(context).brightness == Brightness.dark ? accentColor : Colors.white,
-              weight: 1.0,
-            ),
+            Icon(icon, size: 24, color: accentColor, weight: 1.0),
             const SizedBox(width: 16, height: 8),
             Text(
               text,
-              style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+              style: TextStyle(color: accentColor, fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ],
         ),

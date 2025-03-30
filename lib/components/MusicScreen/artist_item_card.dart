@@ -23,51 +23,47 @@ class ArtistItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      // In AlbumItem, the OpenContainer handles padding.
-      margin: EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              AlbumImage(item: item, borderRadius: BorderRadius.circular(9999)),
-              Positioned.fill(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: onTap,
-                  ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            AlbumImage(item: item, borderRadius: BorderRadius.circular(9999)),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onTap,
                 ),
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        addSettingsListener
+            ? // We need this ValueListenableBuilder to react to changes to
+            // showTextOnGridView. When shown in a MusicScreen, this widget
+            // would refresh anyway since MusicScreen also listens to
+            // FinampSettings, but there may be cases where this widget is used
+            // elsewhere.
+            ValueListenableBuilder<Box<FinampSettings>>(
+                valueListenable: FinampSettingsHelper.finampSettingsListener,
+                builder: (_, box, __) {
+                  if (box.get("FinampSettings")!.showTextOnGridView) {
+                    return _ArtistItemCardText(item: item);
+                  } else {
+                    // ValueListenableBuilder doesn't let us return null, so we
+                    // return a 0-sized SizedBox.
+                    return const SizedBox.shrink();
+                  }
+                },
               )
-            ],
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          addSettingsListener
-              ? // We need this ValueListenableBuilder to react to changes to
-              // showTextOnGridView. When shown in a MusicScreen, this widget
-              // would refresh anyway since MusicScreen also listens to
-              // FinampSettings, but there may be cases where this widget is used
-              // elsewhere.
-              ValueListenableBuilder<Box<FinampSettings>>(
-                  valueListenable: FinampSettingsHelper.finampSettingsListener,
-                  builder: (_, box, __) {
-                    if (box.get("FinampSettings")!.showTextOnGridView) {
-                      return _ArtistItemCardText(item: item);
-                    } else {
-                      // ValueListenableBuilder doesn't let us return null, so we
-                      // return a 0-sized SizedBox.
-                      return const SizedBox.shrink();
-                    }
-                  },
-                )
-              : FinampSettingsHelper.finampSettings.showTextOnGridView
-                  ? _ArtistItemCardText(item: item)
-                  : const SizedBox.shrink(),
-        ],
-      ),
+            : FinampSettingsHelper.finampSettings.showTextOnGridView
+                ? _ArtistItemCardText(item: item)
+                : const SizedBox.shrink(),
+      ],
     );
   }
 }
@@ -89,8 +85,8 @@ class _ArtistItemCardText extends StatelessWidget {
         maxLines: 3,
         style: Theme.of(context)
             .textTheme
-            .bodyMedium!
-            .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+            .bodySmall!
+            .copyWith(fontWeight: FontWeight.w500),
       ),
     );
   }

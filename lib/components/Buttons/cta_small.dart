@@ -17,7 +17,7 @@ class CTASmall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).colorScheme.primary;
-    return ElevatedButton(
+    return FilledButton(
       onPressed: () {
         FeedbackHelper.feedback(FeedbackType.selection);
         onPressed();
@@ -34,7 +34,7 @@ class CTASmall extends StatelessWidget {
         backgroundColor: WidgetStateProperty.all<Color>(
             Theme.of(context).brightness == Brightness.dark
                 ? accentColor.withOpacity(0.15)
-                : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white)),
+                : Color.alphaBlend(accentColor.withOpacity(0.2), Colors.white)),
       ),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -44,9 +44,7 @@ class CTASmall extends StatelessWidget {
           Icon(
             icon,
             size: 20,
-            color: Theme.of(context).brightness == Brightness.dark
-                ? accentColor
-                : Colors.white,
+            color: accentColor,
             weight: 1.0,
           ),
           const SizedBox(
@@ -55,8 +53,8 @@ class CTASmall extends StatelessWidget {
           ),
           Text(
             text,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: accentColor,
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),

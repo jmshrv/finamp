@@ -17,7 +17,7 @@ class CTAHuge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).colorScheme.primary;
-    return ElevatedButton(
+    return FilledButton(
       onPressed: () {
         FeedbackHelper.feedback(FeedbackType.selection);
         onPressed();
@@ -34,7 +34,7 @@ class CTAHuge extends StatelessWidget {
         backgroundColor: WidgetStateProperty.all<Color>(
             Theme.of(context).brightness == Brightness.dark
                 ? accentColor.withOpacity(0.15)
-                : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white)),
+                : Color.alphaBlend(accentColor.withOpacity(0.2), Colors.white)),
       ),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -44,9 +44,7 @@ class CTAHuge extends StatelessWidget {
           Icon(
             icon,
             size: 28,
-            color: Theme.of(context).brightness == Brightness.dark
-                ? accentColor
-                : Colors.white,
+            color: accentColor,
             weight: 1.5,
           ),
           const SizedBox(
@@ -54,10 +52,10 @@ class CTAHuge extends StatelessWidget {
           ),
           Text(
             text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+            style: TextStyle(
+              color: accentColor,
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
