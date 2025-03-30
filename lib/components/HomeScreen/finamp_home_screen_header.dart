@@ -22,7 +22,7 @@ class FinampHomeScreenHeader extends ConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.only(left: 12.0, right: 6.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,7 +35,7 @@ class FinampHomeScreenHeader extends ConsumerWidget
               },
               child: SvgPicture.asset(
                 'images/finamp_cropped.svg',
-                height: 48,
+                height: 40,
               ),
             ),
             const SizedBox(width: 8),

@@ -36,7 +36,7 @@ class CTALarge extends StatelessWidget {
           ),
           backgroundColor: WidgetStateProperty.all<Color>(
             Theme.of(context).brightness == Brightness.dark
-                ? accentColor.withOpacity(0.3)
+                ? accentColor.withOpacity(0.15)
                 : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white),
           ),
         ),
@@ -54,7 +54,7 @@ class CTALarge extends StatelessWidget {
             const SizedBox(width: 16, height: 8),
             Text(
               text,
-              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+              style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ],
         ),

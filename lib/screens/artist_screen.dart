@@ -41,7 +41,7 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
         library: _finampUserHelper.currentUser?.currentView,
         genreFilter: widget.genreFilter,
       ),
-      bottomNavigationBar: const NowPlayingBar(),
+      bottomSheet: const NowPlayingBar(),
     );
   }
 }

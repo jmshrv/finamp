@@ -19,7 +19,7 @@ class PlaybackHistoryScreen extends StatelessWidget {
         actions: const [ShareOfflineListensButton()],
       ),
       body: PlaybackHistoryList(),
-      bottomNavigationBar: const NowPlayingBar(),
+      bottomSheet: const SafeArea(child: NowPlayingBar()),
     );
   }
 }

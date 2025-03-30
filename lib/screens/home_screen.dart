@@ -4,7 +4,14 @@ import 'dart:io';
 import 'package:finamp/components/HomeScreen/finamp_home_screen_header.dart';
 import 'package:finamp/components/HomeScreen/finamp_navigation_bar.dart';
 import 'package:finamp/components/HomeScreen/home_screen_content.dart';
+import 'package:finamp/components/now_playing_bar.dart';
+import 'package:finamp/menus/music_screen_drawer.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/downloads_service.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -13,17 +20,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:logging/logging.dart';
 
-import '../components/MusicScreen/music_screen_drawer.dart';
-import '../components/MusicScreen/music_screen_tab_view.dart';
-import '../components/MusicScreen/sort_by_menu_button.dart';
-import '../components/MusicScreen/sort_order_button.dart';
-import '../components/global_snackbar.dart';
-import '../components/now_playing_bar.dart';
-import '../models/finamp_models.dart';
-import '../services/audio_service_helper.dart';
-import '../services/finamp_settings_helper.dart';
-import '../services/finamp_user_helper.dart';
-import '../services/jellyfin_api_helper.dart';
 
 final _homeScreenLogger = Logger("HomeScreen");
 
@@ -78,6 +74,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       onPopInvokedWithResult: (popped, _) {},
       child: Scaffold(
         extendBody: true,
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset:
+            false, //TODO set this to true for the search screen
+        bottomSheet: const NowPlayingBar(),
         appBar: FinampHomeScreenHeader(),
         bottomNavigationBar: const FinampNavigationBar(),
         drawer: const MusicScreenDrawer(),

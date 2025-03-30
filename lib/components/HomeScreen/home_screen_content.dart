@@ -1,8 +1,5 @@
-import 'package:finamp/components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 import 'package:finamp/components/Buttons/cta_small.dart';
 import 'package:finamp/components/HomeScreen/auto_grid_item.dart';
-import 'package:finamp/components/HomeScreen/finamp_home_screen_header.dart';
-import 'package:finamp/components/MusicScreen/album_item.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -16,9 +13,8 @@ import 'package:get_it/get_it.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/Buttons/cta_large.dart';
-import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class HomeScreenContent extends ConsumerStatefulWidget {
   const HomeScreenContent({super.key});
@@ -47,8 +43,10 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
     FinampSettings? finampSettings = ref.watch(finampSettingsProvider).value;
 
     return SafeArea(
+      bottom: false,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(
+            left: 16.0, right: 16.0, top: 16.0, bottom: 120.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -66,7 +64,9 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
                   minWidth: 110,
                   onPressed: () {
                     _audioServiceHelper.shuffleAll(
-                        finampSettings?.onlyShowFavourites ?? false);
+                      onlyShowFavorites: finampSettings?.onlyShowFavorites ?? false,
+                      genreFilter: null,
+                    );
                   },
                 ),
                 CTALarge(
@@ -142,12 +142,12 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
                 'Listen Again',
                 _buildHorizontalList(
                     loadHomeSectionItems(HomeScreenSectionType.listenAgain))),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             _buildSection(
                 'Newly Added',
                 _buildHorizontalList(
                     loadHomeSectionItems(HomeScreenSectionType.newlyAdded))),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             _buildSection(
                 'Favorite Artists',
                 _buildHorizontalList(loadHomeSectionItems(
@@ -162,9 +162,33 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        SimpleGestureDetector(
+          onTap: () {
+            // Handle the tap event
+            GlobalSnackbar.message((buildContext) {
+              return "This feature is not available yet.";
+            });
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: TextTheme.of(context).titleSmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+              ),
+              Icon(TablerIcons.chevron_right,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.black
+                      : Colors.white),
+            ],
+          ),
         ),
         const SizedBox(height: 8),
         content,
@@ -178,26 +202,49 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
-            height: 120,
+            height: 200,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: 5, // Show 5 skeleton items
               itemBuilder: (context, index) {
-                return Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    SizedBox(height: 4 + 5),
+                    Container(
+                      width: 120,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    SizedBox(height: 4 + 5),
+                    Container(
+                      width: 50,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ],
                 );
               },
-              separatorBuilder: (context, index) => const SizedBox(width: 16),
+              separatorBuilder: (context, index) => const SizedBox(width: 8),
             ),
           );
         } else if (snapshot.hasData) {
           return SizedBox(
-            height: 120,
+            height: 175,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: snapshot.data!.length,
@@ -205,7 +252,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
                 final BaseItemDto item = snapshot.data![index];
                 return AutoGridItem(baseItem: item);
               },
-              separatorBuilder: (context, index) => const SizedBox(width: 16),
+              separatorBuilder: (context, index) => const SizedBox(width: 2),
             ),
           );
         } else {

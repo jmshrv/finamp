@@ -20,22 +20,24 @@ class ItemCollectionCard extends ConsumerWidget {
     return Card(
       // In CollectionItem, the OpenContainer handles padding.
       margin: EdgeInsets.zero,
-      child: ClipRRect(
-        borderRadius: AlbumImage.defaultBorderRadius,
-        child: Stack(
-          children: [
-            AlbumImage(item: item),
-            ref.watch(finampSettingsProvider.showTextOnGridView)
-                ? _ItemCollectionCardText(item: item, parentType: parentType)
-                : const SizedBox.shrink(),
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(onTap: onTap),
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              AlbumImage(item: item),
+              Positioned.fill(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(onTap: onTap),
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          SizedBox(height: 4),
+          ref.watch(finampSettingsProvider.showTextOnGridView)
+              ? _ItemCollectionCardText(item: item, parentType: parentType)
+              : const SizedBox.shrink(),
+        ],
       ),
     );
   }

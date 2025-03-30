@@ -29,7 +29,7 @@ import '../services/process_artist.dart';
 import 'PlayerScreen/player_split_screen_scaffold.dart';
 import 'album_image.dart';
 
-class NowPlayingBar extends StatelessWidget {
+class NowPlayingBar extends ConsumerWidget {
   const NowPlayingBar({super.key});
 
   static const horizontalPadding = 8.0;
@@ -59,7 +59,7 @@ class NowPlayingBar extends StatelessWidget {
         : IconTheme.of(ref.context).color!.withOpacity(0.85);
   }
 
-  Widget buildLoadingQueueBar(WidgetRef ref, Function()? retryCallback) {
+  Widget buildLoadingQueueBar(WidgetRef ref, void Function()? retryCallback) {
     final progressBackgroundColor = getProgressBackgroundColor(ref).withOpacity(0.5);
     var context = ref.context;
 
@@ -166,82 +166,89 @@ class NowPlayingBar extends StatelessWidget {
 
     final progressBackgroundColor = getProgressBackgroundColor(ref);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
-        child: Semantics.fromProperties(
-          properties: SemanticsProperties(label: AppLocalizations.of(context)!.nowPlayingBarTooltip, button: true),
-          child: SimpleGestureDetector(
-            onTap: () async => await openPlayerScreen(context),
-            child: Dismissible(
-              key: const Key("NowPlayingBarDismiss"),
-              direction: ref.watch(finampSettingsProvider.disableGesture)
-                  ? DismissDirection.none
-                  : DismissDirection.vertical,
-              confirmDismiss: (direction) async {
-                if (direction == DismissDirection.down) {
-                  FeedbackHelper.feedback(FeedbackType.success);
-                  await queueService.stopAndClearQueue();
-                } else {
-                  await openPlayerScreen(context);
-                }
-                return false;
-              },
-              dismissThresholds: const {DismissDirection.up: 0.15, DismissDirection.down: 0.7},
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: getShadow(context),
-                //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
-                child: Dismissible(
-                  key: const Key("NowPlayingBar"),
-                  direction: ref.watch(finampSettingsProvider.disableGesture)
-                      ? DismissDirection.none
-                      : DismissDirection.horizontal,
-                  confirmDismiss: (direction) async {
-                    if (direction == DismissDirection.endToStart) {
-                      FeedbackHelper.feedback(FeedbackType.light);
-                      await audioHandler.skipToNext();
-                    } else {
-                      FeedbackHelper.feedback(FeedbackType.light);
-                      await audioHandler.skipToPrevious(forceSkip: true);
-                    }
-                    return false;
-                  },
-                  child: Material(
-                    shadowColor: Theme.of(
-                      context,
-                    ).colorScheme.primary.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
-                    borderRadius: BorderRadius.circular(12.0),
-                    clipBehavior: Clip.antiAlias,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? IconTheme.of(context).color!.withOpacity(0.1)
-                        : Theme.of(context).cardColor,
-                    elevation: 8.0,
-                    child: StreamBuilder<MediaState>(
-                      stream: mediaStateStream.where((event) => event.mediaItem != null),
-                      initialData: MediaState(
-                        audioHandler.mediaItem.valueOrNull,
-                        audioHandler.playbackState.value,
-                        audioHandler.fadeState.value,
-                      ),
-                      builder: (context, snapshot) {
-                        final MediaState mediaState = snapshot.data!;
-                        final playbackState = mediaState.playbackState;
-                        final fadeState = mediaState.fadeState;
-                        // If we have a media item and the player hasn't finished, show
-                        // the now playing bar.
-                        if (mediaState.mediaItem != null) {
-                          //TODO move into separate component and share with queue list
-                          return Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: albumImageSize,
-                            padding: EdgeInsets.zero,
-                            child: Container(
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: progressBackgroundColor,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+    return Padding(
+      padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+      child: Semantics.fromProperties(
+        properties: SemanticsProperties(
+          label: AppLocalizations.of(context)!.nowPlayingBarTooltip,
+          button: true,
+        ),
+        child: SimpleGestureDetector(
+          onTap: () => openPlayerScreen(context),
+          child: Dismissible(
+            key: const Key("NowPlayingBarDismiss"),
+            direction: FinampSettingsHelper.finampSettings.disableGesture
+                ? DismissDirection.none
+                : DismissDirection.vertical,
+            confirmDismiss: (direction) async {
+              if (direction == DismissDirection.down) {
+                final queueService = GetIt.instance<QueueService>();
+                await queueService.stopAndClearQueue();
+              } else {
+                await openPlayerScreen(context);
+              }
+              return false;
+            },
+            dismissThresholds: const {
+              DismissDirection.up: 0.15,
+              DismissDirection.down: 0.7
+            },
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: getShadow(context),
+              //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
+              child: Dismissible(
+                key: const Key("NowPlayingBar"),
+                direction: FinampSettingsHelper.finampSettings.disableGesture
+                    ? DismissDirection.none
+                    : DismissDirection.horizontal,
+                confirmDismiss: (direction) async {
+                  if (direction == DismissDirection.endToStart) {
+                    await audioHandler.skipToNext();
+                  } else {
+                    await audioHandler.skipToPrevious(forceSkip: true);
+                  }
+                  return false;
+                },
+                child: Material(
+                  shadowColor: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withOpacity(
+                          Theme.of(context).brightness == Brightness.light
+                              ? 0.75
+                              : 0.3),
+                  borderRadius: BorderRadius.circular(12.0),
+                  clipBehavior: Clip.antiAlias,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? IconTheme.of(context).color!.withOpacity(0.1)
+                      : Theme.of(context).cardColor,
+                  elevation: 8.0,
+                  child: StreamBuilder<MediaState>(
+                    stream: mediaStateStream
+                        .where((event) => event.mediaItem != null),
+                    initialData: MediaState(audioHandler.mediaItem.valueOrNull,
+                      audioHandler.playbackState.value,
+                      audioHandler.fadeState.value,
+                    ),
+                    builder: (context, snapshot) {
+                      final MediaState mediaState = snapshot.data!;
+                      // If we have a media item and the player hasn't finished, show
+                      // the now playing bar.
+                      if (mediaState.mediaItem != null) {
+                        //TODO move into separate component and share with queue list
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: albumImageSize,
+                          padding: EdgeInsets.zero,
+                          child: Container(
+                            clipBehavior: Clip.antiAlias,
+                            decoration: ShapeDecoration(
+                              color: progressBackgroundColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
+                            ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -275,8 +282,8 @@ class NowPlayingBar extends StatelessWidget {
                                           },
                                           color: Colors.white,
                                           icon: Icon(
-                                            playbackState.playing
-                                                ? fadeState.fadeDirection != FadeDirection.fadeOut
+                                          mediaState.playbackState.playing
+                                              ? mediaState.fadeState.fadeDirection != FadeDirection.fadeOut
                                                       ? TablerIcons.player_pause
                                                       : TablerIcons.player_play
                                                 : TablerIcons.player_play,
@@ -468,7 +475,6 @@ class NowPlayingBar extends StatelessWidget {
                         }
                       },
                     ),
-                  ),
                 ),
               ),
             ),
@@ -479,44 +485,35 @@ class NowPlayingBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
 
     return Hero(
-      tag: "nowplaying",
-      createRectTween: (from, to) => RectTween(begin: from, end: from),
-      child: PlayerScreenTheme(
-        // Scaffold ignores system elements padding if bottom bar is present, so we must
-        // use SafeArea in all cases to include it in our height
-        child: SafeArea(
-          // Use consumer inside PlayerScreenTheme to generate ref
-          child: Consumer(
-            builder: (context, ref, child) {
-              ref.listen(currentTrackMetadataProvider, (metadataOrNull, metadata) {}); // keep provider alive
-
-              return StreamBuilder<FinampQueueInfo?>(
-                stream: queueService.getQueueStream(),
-                initialData: queueService.getQueue(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData &&
-                      snapshot.data!.saveState == SavedQueueState.loading &&
-                      !usingPlayerSplitScreen) {
-                    return buildLoadingQueueBar(ref, null);
-                  } else if (snapshot.hasData &&
-                      snapshot.data!.saveState == SavedQueueState.failed &&
-                      !usingPlayerSplitScreen) {
-                    return buildLoadingQueueBar(ref, queueService.retryQueueLoad);
-                  } else if (snapshot.hasData && snapshot.data!.currentTrack != null && !usingPlayerSplitScreen) {
-                    return buildNowPlayingBar(ref, snapshot.data!.currentTrack!);
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              );
-            },
-          ),
-        ),
-      ),
-    );
+        tag: "nowplaying",
+        createRectTween: (from, to) => RectTween(begin: from, end: from),
+        child: PlayerScreenTheme(
+          child: StreamBuilder<FinampQueueInfo?>(
+              stream: queueService.getQueueStream(),
+              initialData: queueService.getQueue(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.data!.saveState == SavedQueueState.loading &&
+                    !usingPlayerSplitScreen) {
+              return buildLoadingQueueBar(ref, null);
+                } else if (snapshot.hasData &&
+                    snapshot.data!.saveState == SavedQueueState.failed &&
+                    !usingPlayerSplitScreen) {
+                  return buildLoadingQueueBar(
+                      ref, queueService.retryQueueLoad);
+                } else if (snapshot.hasData &&
+                    snapshot.data!.currentTrack != null &&
+                    !usingPlayerSplitScreen) {
+                  return buildNowPlayingBar(
+                      ref, snapshot.data!.currentTrack!);
+                } else {
+                  return const SizedBox.shrink();
+                }
+              }),
+        ));
   }
 }

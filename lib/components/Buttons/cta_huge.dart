@@ -1,6 +1,5 @@
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class CTAHuge extends StatelessWidget {
   final String text;
@@ -34,7 +33,7 @@ class CTAHuge extends StatelessWidget {
         ),
         backgroundColor: WidgetStateProperty.all<Color>(
             Theme.of(context).brightness == Brightness.dark
-                ? accentColor.withOpacity(0.3)
+                ? accentColor.withOpacity(0.15)
                 : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white)),
       ),
       child: Wrap(
