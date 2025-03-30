@@ -1232,7 +1232,7 @@
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
   },
-  "connectionInterruptedBackground": "백그라운드에서 다운로드 중 연결이 끊겼습니다. OS 설정의 문제일 가능성이 있습니다.",
+  "connectionInterruptedBackground": "백그라운드에서 다운로드 중 연결이 끊겼습니다. OS의 설정이 원인일 수 있습니다.",
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
@@ -1323,5 +1323,9 @@
         "type": "int"
       }
     }
+  },
+  "connectionInterruptedBackgroundAndroid": "백그라운드에서 다운로드 중 연결이 끊겼습니다. 'Enter Low-Priority State on Pause'가 활성화되었거나 OS의 설정이 원인일 수 있습니다.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   }
 }
