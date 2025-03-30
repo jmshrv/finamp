@@ -1664,7 +1664,7 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "showLyricsScreenAlbumPreludeTitle": "在歌词前显示专辑封面",
+  "showLyricsScreenAlbumPreludeTitle": "在歌词之前显示专辑封面",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
