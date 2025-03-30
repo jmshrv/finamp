@@ -175,10 +175,10 @@ class PlayonHandler {
     reconnectionSubscription = null;
   }
 
-  Future<void> handleMessage(value) async {
+  Future<void> handleMessage(dynamic value) async {
     _playOnHandlerLogger.finest("Received message: $value");
 
-    var request = jsonDecode(value);
+    var request = jsonDecode(value as String);
 
     if (request['MessageType'] != 'ForceKeepAlive' &&
         request['MessageType'] != 'KeepAlive') {
@@ -196,19 +196,21 @@ class PlayonHandler {
               break;
             case "SetVolume":
               _playOnHandlerLogger.info("Server requested a volume adjustment");
-              final desiredVolume = request['Data']['Arguments']['Volume'];
-              FinampSettingsHelper.setCurrentVolume(
-                  double.parse(desiredVolume) / 100.0);
+              // Currently very broken
+
+              // final desiredVolume = request['Data']['Arguments']['Volume'] as String;
+              // FinampSettingsHelper.setCurrentVolume(
+              //     double.parse(desiredVolume) / 100.0);
           }
           break;
         case "UserDataChanged":
           var item = await jellyfinApiHelper
-              .getItemById(request['Data']['UserDataList'][0]['ItemId']);
+              .getItemById(BaseItemId(request['Data']['UserDataList'][0]['ItemId'] as String));
 
           // Handle favoritig from remote client
           _playOnHandlerLogger.info("Updating favorite ui state");
           ref
-              .read(isFavoriteProvider(FavoriteRequest(item)).notifier)
+              .read(isFavoriteProvider(item).notifier)
               .updateState(item.userData!.isFavorite);
           break;
         default:
@@ -217,10 +219,10 @@ class PlayonHandler {
               await audioHandler.stop();
               break;
             case "Pause":
-              audioHandler.pause();
+              unawaited(audioHandler.pause());
               break;
             case "Unpause":
-              audioHandler.play();
+              unawaited(audioHandler.play());
               break;
             case "NextTrack":
               await audioHandler.skipToNext();
@@ -258,14 +260,14 @@ class PlayonHandler {
             default:
               switch (request['Data']['PlayCommand']) {
                 case 'PlayNow':
-                  if (!request['Data'].containsKey('StartIndex')) {
+                  if (!(request['Data'].containsKey('StartIndex') as bool)) {
                     request['Data']['StartIndex'] = 0;
                   }
                   var items = await jellyfinApiHelper.getItems(
                     // sortBy: "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                     includeItemTypes: "Audio",
                     itemIds:
-                        List<String>.from(request['Data']['ItemIds'] as List),
+                        List<BaseItemId>.from(request['Data']['ItemIds'] as List<dynamic>),
                   );
                   if (items!.isNotEmpty) {
                     //TODO check if all tracks in the request are in the upcoming queue (peekQueue). If they are, we should try to only reorder the upcoming queue instead of treating it as a new queue, and then skip to the correct index.
@@ -275,11 +277,11 @@ class PlayonHandler {
                         name: QueueItemSourceName(
                             type: QueueItemSourceNameType.preTranslated,
                             pretranslatedName: items[0].name),
-                        type: QueueItemSourceType.song,
+                        type: QueueItemSourceType.track,
                         id: items[0].id,
                       ),
-                      startingIndex: request['Data'][
-                          'StartIndex'], // seems like Jellyfin isn't always sending the correct index
+                       // seems like Jellyfin isn't always sending the correct index
+                      startingIndex: request['Data']['StartIndex'] as int,
                     ));
                   } else {
                     _playOnHandlerLogger
@@ -291,7 +293,7 @@ class PlayonHandler {
                     sortBy: "IndexNumber",
                     includeItemTypes: "Audio",
                     itemIds:
-                        List<String>.from(request['Data']['ItemIds'] as List),
+                        List<BaseItemId>.from(request['Data']['ItemIds'] as List<dynamic>),
                   );
                   unawaited(queueService.addToNextUp(
                     items: items!,
@@ -302,7 +304,7 @@ class PlayonHandler {
                     sortBy: "IndexNumber",
                     includeItemTypes: "Audio",
                     itemIds:
-                        List<String>.from(request['Data']['ItemIds'] as List),
+                        List<BaseItemId>.from(request['Data']['ItemIds'] as List<dynamic>),
                   );
                   unawaited(queueService.addToQueue(
                     items: items!,

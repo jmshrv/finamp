@@ -152,6 +152,7 @@ class DefaultSettings {
   static const oneLineMarqueeTextButton = false;
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
+  static const double currentVolume = 1.0;
 }
 
 @HiveType(typeId: 28)
@@ -257,6 +258,7 @@ class FinampSettings {
     this.showAlbumReleaseDateOnPlayerScreen =
         DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
+    this.currentVolume = DefaultSettings.currentVolume,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -535,6 +537,9 @@ class FinampSettings {
 
   @HiveField(85, defaultValue: null)
   String? lastUsedDownloadLocationId;
+
+  @HiveField(80, defaultValue: DefaultSettings.currentVolume)
+  double currentVolume;
   
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

@@ -1054,6 +1054,11 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String currentVolumeFeatureText(int volume) {
+    return '$volume% volume';
+  }
+
+  @override
   String get playbackSpeedDecreaseLabel => 'Snížit rychlost přehrávání';
 
   @override

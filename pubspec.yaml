@@ -109,6 +109,7 @@ dependencies:
   analyzer: ^6.0.0
   build: ^2.4.2
   source_gen: ^2.0.0
+  web_socket_channel: ^3.0.2
 
 dev_dependencies:
   flutter_test:

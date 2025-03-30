@@ -593,7 +593,7 @@ class PlaybackHistoryService {
       final queue = _queueService
           .peekQueue(next: _maxQueueLengthToReport)
           .map((e) => jellyfin_models.QueueItem(
-                id: e.baseItem?.id ?? "",
+                id: e.baseItem?.id.raw ?? "",
                 playlistItemId: e.type.name,
               ))
           .toList();

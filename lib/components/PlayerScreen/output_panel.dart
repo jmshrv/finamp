@@ -7,7 +7,7 @@ import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -30,7 +30,6 @@ const outputMenuRouteName = "/output-menu";
 Future<void> showOutputMenu({
   required BuildContext context,
   bool usePlayerTheme = true,
-  FinampTheme? themeProvider,
 }) async {
   final outputPanelLogger = Logger("OutputPanel");
 
@@ -92,7 +91,8 @@ Future<void> showOutputMenu({
                 padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
                 child: Center(
                   child: Text(
-                      AppLocalizations.of(context)!.outputMenuTitle,
+                      "TODO",
+                      // AppLocalizations.of(context)!.outputMenuTitle,
                       style: TextStyle(
                           color: Theme.of(context).textTheme.bodyLarge!.color!,
                           fontSize: 18,
@@ -107,7 +107,8 @@ Future<void> showOutputMenu({
               padding: const EdgeInsets.only(
                   top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
               child: Text(
-                  AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
+                  "TODO",
+                  // AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
             sliver: MenuMask(
@@ -122,7 +123,8 @@ Future<void> showOutputMenu({
               padding: const EdgeInsets.only(
                   top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
               child: Text(
-                  AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
+                  "TODO",
+                  // AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
             sliver: MenuMask(
@@ -139,9 +141,7 @@ Future<void> showOutputMenu({
         // TODO better estimate, how to deal with lag getting playlists?
         var stackHeight = MediaQuery.sizeOf(context).height * 0.9;
         return (stackHeight, menu);
-      },
-      usePlayerTheme: usePlayerTheme,
-      themeProvider: themeProvider);
+      });
 }
 
 class OutputTargetList extends StatefulWidget {
@@ -233,7 +233,7 @@ class _OutputTargetListState extends State<OutputTargetList> {
                 setState(() {
                   var loadingItem = [
                     (
-                      BaseItemDto(id: "pending", name: dialogResult.$2),
+                      BaseItemDto(id: BaseItemId("pending"), name: dialogResult.$2),
                       true,
                       null as String?
                     )
@@ -246,7 +246,7 @@ class _OutputTargetListState extends State<OutputTargetList> {
                   // Give the server time to calculate an initial playlist image
                   await Future.delayed(const Duration(seconds: 1));
                   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-                  var playlist = await jellyfinApiHelper.getItemById(newId);
+                  var playlist = await jellyfinApiHelper.getItemById(BaseItemId(newId));
                   var playlistItems = await jellyfinApiHelper.getItems(
                       parentItem: playlist, fields: "");
                   // var song = playlistItems?.firstWhere(
@@ -316,7 +316,8 @@ class OutputSelectorTileState extends State<OutputSelectorTile> {
     return ToggleableListTile(
       forceLoading: widget.isLoading,
       title: widget.playlist.name ?? AppLocalizations.of(context)!.unknownName,
-      subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
+      subtitle: "TODO",
+      // subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
       leading: AlbumImage(item: widget.playlist),
       positiveIcon: TablerIcons.circle_check_filled,
       negativeIcon: itemIsIncluded == null

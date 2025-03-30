@@ -106,6 +106,8 @@ void main() async {
     _mainLog.info("Setup audio player");
     await _setupKeepScreenOnHelper();
     _mainLog.info("Setup KeepScreenOnHelper");
+    await _setupPlayonHandler();
+    _mainLog.info("Setup PlayonHandler");
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);

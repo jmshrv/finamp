@@ -1046,6 +1046,11 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String currentVolumeFeatureText(int volume) {
+    return '$volume% volume';
+  }
+
+  @override
   String get playbackSpeedDecreaseLabel => 'Vähennä toistonopeutta';
 
   @override
