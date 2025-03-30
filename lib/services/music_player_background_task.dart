@@ -332,9 +332,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> dispose() => _player.dispose();
 
   @override
-  Future<void> play() async {
-    if (FinampSettingsHelper.finampSettings.audioFadeInDuration >
-        Duration.zero) {
+  Future<void> play({disableFade = false}) async {
+    if (!disableFade &&
+        FinampSettingsHelper.finampSettings.audioFadeInDuration >
+            Duration.zero) {
       return fadeInAndPlay();
     } else {
       return _player.play();
@@ -347,9 +348,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
-  Future<void> pause() async {
-    if (FinampSettingsHelper.finampSettings.audioFadeOutDuration >
-        Duration.zero) {
+  Future<void> pause({disableFade = false}) async {
+    if (!disableFade &&
+        FinampSettingsHelper.finampSettings.audioFadeOutDuration >
+            Duration.zero) {
       return fadeOutAndPause();
     } else {
       return _player.pause();
@@ -498,7 +500,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.info("Queue completed.");
       // A full stop will trigger a re-shuffle with an unshuffled first
       // item, so only pause.
-      await pause();
+      await pause(disableFade: true);
       // Skipping to zero with empty queue re-triggers queue complete event
       if (_player.effectiveIndices?.isNotEmpty ?? false) {
         await skipToIndex(0);
@@ -935,7 +937,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     _sleepTimer.value = Timer(duration, () async {
       _sleepTimer.value = null;
-      return await pause();
+      return await pause(disableFade: true);
     });
     return _sleepTimer.value!;
   }
