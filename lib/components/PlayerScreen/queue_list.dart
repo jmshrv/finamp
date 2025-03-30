@@ -266,8 +266,10 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
     useSafeArea: true,
     routeSettings: const RouteSettings(name: QueueList.routeName),
     clipBehavior: Clip.antiAlias,
-    // Anchor to bottom center, required for foldables
-    anchorPoint: MediaQuery.sizeOf(context).bottomCenter(Offset.zero),
+    // Anchor to bottom right sub screen, required for foldables
+    // On book-style foldables, this will anchor to the right half of the screen.
+    // On flip-style foldables, this will anchor to the bottom half of the screen.
+    anchorPoint: Offset(double.maxFinite, double.maxFinite),
     builder: (context) {
       return PlayerScreenTheme(
         child: Consumer(

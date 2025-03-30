@@ -56,8 +56,10 @@ Future<void> showThemedBottomSheet({
     enableDrag: true,
     useSafeArea: true,
     routeSettings: RouteSettings(name: routeName),
-    // Anchor to bottom center, required for foldables
-    anchorPoint: MediaQuery.sizeOf(context).bottomCenter(Offset.zero),
+    // Anchor to bottom right sub screen, required for foldables
+    // On book-style foldables, this will anchor to the right half of the screen.
+    // On flip-style foldables, this will anchor to the bottom half of the screen.
+    anchorPoint: Offset(double.maxFinite, double.maxFinite),
     builder: (BuildContext context) {
       return ProviderScope(
         overrides: [
