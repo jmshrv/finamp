@@ -139,6 +139,7 @@ class NowPlayingBar extends ConsumerWidget {
   Widget buildNowPlayingBar(
       BuildContext context, FinampQueueItem currentTrack) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final queueService = GetIt.instance<QueueService>();
 
     Duration? playbackPosition;
 
@@ -193,7 +194,6 @@ class NowPlayingBar extends ConsumerWidget {
                 : DismissDirection.vertical,
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.down) {
-                final queueService = GetIt.instance<QueueService>();
                 FeedbackHelper.feedback(FeedbackType.success);
                 await queueService.stopPlayback();
               } else {
@@ -280,7 +280,9 @@ class NowPlayingBar extends ConsumerWidget {
                                           currentAlbumImageProvider,
                                       borderRadius: BorderRadius.zero,
                                     ),
-                                    FadeProgressContainer(
+                                    AudioFadeProgressVisualizerContainer(
+                                      key: const Key(
+                                          "AlbumArtAudioFadeProgressVisualizer"),
                                       width: albumImageSize,
                                       height: albumImageSize,
                                       borderRadius: BorderRadius.only(

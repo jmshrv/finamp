@@ -80,7 +80,9 @@ class PlayerButtons extends StatelessWidget {
                       FeedbackHelper.feedback(FeedbackType.light);
                       unawaited(audioHandler.togglePlayback());
                     },
-                    icon: FadeProgressContainer(
+                    icon: AudioFadeProgressVisualizerContainer(
+                        key: const Key(
+                            "PlayerButtonAudioFadeProgressVisualizer"),
                         borderRadius: BorderRadius.all(Radius.circular(
                             controller.shouldShow(PlayerHideable.bigPlayButton)
                                 ? 16

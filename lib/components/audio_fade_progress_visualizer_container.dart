@@ -5,9 +5,10 @@ import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:progress_border/progress_border.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-class FadeProgressContainer extends StatefulWidget {
-  const FadeProgressContainer({
+class AudioFadeProgressVisualizerContainer extends StatefulWidget {
+  const AudioFadeProgressVisualizerContainer({
     super.key,
     required this.child,
     this.border,
@@ -23,40 +24,36 @@ class FadeProgressContainer extends StatefulWidget {
   final double? height;
 
   @override
-  State<FadeProgressContainer> createState() => _FadeProgressContainerState();
+  State<AudioFadeProgressVisualizerContainer> createState() =>
+      _AudioFadeProgressVisualizerContainerState();
 }
 
-class _FadeProgressContainerState extends State<FadeProgressContainer>
+class _AudioFadeProgressVisualizerContainerState
+    extends State<AudioFadeProgressVisualizerContainer>
     with SingleTickerProviderStateMixin {
-  final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
   late FadeState _state;
   late Animation<double> _animation;
-  late StreamSubscription<FadeState> _stateSubscription;
-  late AnimationController _controller;
+  late final StreamSubscription<FadeState> _stateSubscription;
+  late final AnimationController _controller;
+  bool _isVisible = false;
 
   @override
   void initState() {
     super.initState();
-    _state = audioHandler.fadeState.value;
 
     _controller = AnimationController(
         duration: FinampSettingsHelper.finampSettings.audioFadeInDuration,
         vsync: this);
 
-    if (_state.fadeDirection != FadeDirection.none) {
-      if (_state.fadeDirection == FadeDirection.fadeOut) {
-        startFadeOut(from: _state.fadeVolumePercent);
-      } else if (_state.fadeDirection == FadeDirection.fadeIn) {
-        startFadeIn(from: _state.fadeVolumePercent);
-      }
-    }
-
     _animation = Tween<double>(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    _stateSubscription = audioHandler.fadeState.listen((state) {
-      if (state.fadeDirection != _state.fadeDirection) {
+    resetFade();
+
+    _stateSubscription = _audioHandler.fadeState.listen((state) async {
+      if (_isVisible && state.fadeDirection != _state.fadeDirection) {
         if (state.fadeDirection == FadeDirection.fadeOut) {
           if (_state.fadeDirection == FadeDirection.fadeIn) {
             startFadeOut(from: state.fadeVolumePercent);
@@ -75,6 +72,20 @@ class _FadeProgressContainerState extends State<FadeProgressContainer>
         _state = state;
       });
     });
+  }
+
+  void resetFade() {
+    setState(() {
+      _state = _audioHandler.fadeState.value;
+    });
+
+    if (_state.fadeDirection != FadeDirection.none) {
+      if (_state.fadeDirection == FadeDirection.fadeOut) {
+        startFadeOut(from: _state.fadeVolumePercent);
+      } else if (_state.fadeDirection == FadeDirection.fadeIn) {
+        startFadeIn(from: _state.fadeVolumePercent);
+      }
+    }
   }
 
   void startFadeIn({double? from}) {
@@ -98,25 +109,41 @@ class _FadeProgressContainerState extends State<FadeProgressContainer>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Container(
-            width: widget.width,
-            height: widget.height,
-            decoration: BoxDecoration(
-              borderRadius: widget.borderRadius,
-              border: _controller.status != AnimationStatus.dismissed &&
-                      _controller.status != AnimationStatus.completed
-                  ? ProgressBorder.all(
-                      color: IconTheme.of(context).color!.withAlpha(128),
-                      width: 4,
-                      progress: _animation.value,
-                    )
-                  : null,
-            ),
-            child: widget.child);
-      },
-    );
+    return VisibilityDetector(
+        key: widget.key!,
+        onVisibilityChanged: (visibleState) {
+          final bool visible = visibleState.visibleFraction > 0.0;
+
+          if (!context.mounted) return;
+
+          // If visible state changed to visible
+          if (visible != _isVisible && visible) {
+            resetFade();
+          }
+
+          setState(() {
+            _isVisible = visible;
+          });
+        },
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return Container(
+                width: widget.width,
+                height: widget.height,
+                decoration: BoxDecoration(
+                  borderRadius: widget.borderRadius,
+                  border: _controller.status == AnimationStatus.forward ||
+                          _controller.status == AnimationStatus.reverse
+                      ? ProgressBorder.all(
+                          color: IconTheme.of(context).color!.withAlpha(128),
+                          width: 4,
+                          progress: _animation.value,
+                        )
+                      : null,
+                ),
+                child: widget.child);
+          },
+        ));
   }
 }
