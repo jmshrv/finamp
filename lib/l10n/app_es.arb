@@ -847,5 +847,13 @@
   "playbackHistory": "Historial de Reproducción",
   "@playbackHistory": {
     "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "downloadAllPlaylistsSetting": "Descargar todas las listas de reproducción",
+  "@downloadAllPlaylistsSetting": {},
+  "downloadFavoritesSetting": "Descargar todos los favoritos",
+  "@downloadFavoritesSetting": {},
+  "requireWifiForDownloads": "Descargar solo con WiFi.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
   }
 }
