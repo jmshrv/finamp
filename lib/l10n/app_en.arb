@@ -1713,7 +1713,7 @@
   "@lyricsFontSizeSubtitle": {
     "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
   },
-  "showLyricsScreenAlbumPreludeTitle": "Show album before lyrics",
+  "showLyricsScreenAlbumPreludeTitle": "Show album cover before lyrics",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
