@@ -709,5 +709,139 @@
   "missingDownloadSize": "Borrando…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
-  }
+  },
+  "topTracks": "Canciones más reproducidas",
+  "@topTracks": {},
+  "shuffleAlbumsToNextUp": "",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "volumeNormalizationSettingsTitle": "Normalización de volumen",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "volumeNormalizationSwitchTitle": "Activar normalización de volumen",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationSwitchSubtitle": "Usar la información de la ganancia para normalizar el volumen de las canciones (\"Ganancia de Reproducción\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeTrackBased": "Basado en la canción",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeHybrid": "Híbrido (Canción + Álbum)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationModeAlbumBased": "Solo álbumes",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Ganancia base",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "nowPlayingBarTooltip": "Abrir Ventana del Reproductor",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "additionalPeople": "Personas",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "codec": "Códec",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "showCoversOnAlbumScreenTitle": "Mostrar Arte de Álbumes en las Canciones",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "moreInfo": "Más información",
+  "@moreInfo": {},
+  "volumeNormalizationModeAlbumOnly": "Solo para álbumes",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "sampleRate": "Tasa de Muestreo",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "albumScreen": "Ventana del Álbum",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Cada cuantos segundo enviar el estado de la reproducción al servidor. Este tiene que ser menor que 5 minutos (300 segundos) para evitar que la sesión se acabe.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "volumeNormalizationModeSelectorDescription": "Híbrido (Canción + Álbum):\nGanancia de la canción usada para la reproducción normal, pero si un álbum esta siendo reproducido (ya este siendo la principal fuente de reproducción, o porque se ha añadido en algún momento a la cola de reproducción), la ganancia del álbum va a ser usada.\n\nBasado en la canción:\nGanancia de las canciones usada, independientemente de si se está reproduciendo de un álbum o no.\n\nSolo álbumes:\nNormalización del volumen aplicada solo cuando se están reproduciendo álbumes (usando la ganancia de dicho álbum), pero no para canciones individuales.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "playbackMode": "Modo de Reproducción",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "reportQueueToServerSubtitle": "Mientras esté activo, Finamp enviará la cola del dispositivo al servidor. De momento esta funcionalidad no tiene mucho uso y aumenta el tráfico al servidor.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Si el servidor de Jellyfin no ha recibido no ha recibido ninguna actualización de estado del cliente en los últimos 5 minutos, este asume que la reproducción ha acabado. Esto significa que para canciones más largas de 5 minutos, la reproducción se puede dar como acabada, lo cual empeoraría la información sobra la calidad de reproducción.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "volumeNormalizationModeSelectorTitle": "Modo de normalización de volumen",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "bitDepth": "Profundidad de Bits",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "Tamaño",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "showFeatureChipsToggleTitle": "Mostrar Información Avanzada",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "bitRate": "Tasa de Bits",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "normalizationGain": "Ganancia",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "shuffleAlbums": "Mezclar álbumes",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "shuffleAlbumsNext": "",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "resetToDefaults": "Restaurar a lo predeterminado",
+  "@resetToDefaults": {},
+  "volumeNormalizationModeSelectorSubtitle": "Cuando y como aplicar la Normalización de Volumen",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "close": "Cerrar",
+  "@close": {}
 }
