@@ -897,6 +897,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get clearNextUp => 'Verwijder Volgende';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Afspelen van';
 
   @override

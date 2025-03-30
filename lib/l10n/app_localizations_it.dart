@@ -897,6 +897,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get clearNextUp => 'Svuota la Coda';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'In riproduzione da';
 
   @override

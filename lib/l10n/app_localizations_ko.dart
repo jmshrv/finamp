@@ -897,6 +897,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get clearNextUp => '넥스트 업 지우기';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => '다음에서 재생중';
 
   @override

@@ -896,6 +896,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get clearNextUp => 'அடுத்து அழிக்கவும்';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'இருந்து விளையாடுகிறது';
 
   @override

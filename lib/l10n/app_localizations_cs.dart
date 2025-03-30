@@ -905,6 +905,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get clearNextUp => 'Vymazat další na řadě';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Přehrávání z';
 
   @override

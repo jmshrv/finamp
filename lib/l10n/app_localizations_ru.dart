@@ -906,6 +906,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clearNextUp => 'Очистить следующие';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Играем с';
 
   @override

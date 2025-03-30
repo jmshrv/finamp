@@ -897,6 +897,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get clearNextUp => 'Tyhjennä Seuraavaksi-jono';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Toistetaan';
 
   @override

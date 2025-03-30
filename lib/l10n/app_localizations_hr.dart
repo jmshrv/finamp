@@ -903,6 +903,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get clearNextUp => 'Izbriši sljedeće na redu';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Reprodukcija iz';
 
   @override

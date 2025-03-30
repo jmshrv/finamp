@@ -897,6 +897,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get clearNextUp => 'Next Up मिटाएं';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'चलाया जा रहा';
 
   @override

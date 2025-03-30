@@ -897,6 +897,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get clearNextUp => 'پاک کردن مورد بعدی';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'در حال پخش از';
 
   @override

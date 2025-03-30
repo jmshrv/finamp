@@ -897,6 +897,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get clearNextUp => 'Limpar A Seguir';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'A Reproduzir de';
 
   @override

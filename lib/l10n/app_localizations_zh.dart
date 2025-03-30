@@ -897,6 +897,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clearNextUp => '清空接下来';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => '播放自';
 
   @override

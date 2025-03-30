@@ -900,6 +900,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get clearNextUp => 'Wyczyść Następne';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Odtwarzam z';
 
   @override

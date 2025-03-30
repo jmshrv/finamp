@@ -1688,6 +1688,12 @@ abstract class AppLocalizations {
   /// **'Clear Next Up'**
   String get clearNextUp;
 
+  /// Label for a button that stops playback and removes all tracks from the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Queue'**
+  String get clearQueue;
+
   /// Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: "Playing from {My Nice Playlist}"
   ///
   /// In en, this message translates to:

@@ -909,6 +909,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearNextUp => 'Effacer les titres suivants';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Lecture de';
 
   @override

@@ -863,6 +863,10 @@
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
+  "clearQueue": "Clear Queue",
+  "@clearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
   "playingFrom": "Playing from",
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""

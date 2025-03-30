@@ -897,6 +897,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get clearNextUp => 'Clear Next Up';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Playing from';
 
   @override

@@ -897,6 +897,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get clearNextUp => 'Очистити наступне';
 
   @override
+  String get clearQueue => 'Clear Queue';
+
+  @override
   String get playingFrom => 'Відтворюється з';
 
   @override
