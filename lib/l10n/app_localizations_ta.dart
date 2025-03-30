@@ -1028,6 +1028,11 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
+  String currentVolumeFeatureText(int volume) {
+    return '$volume% volume';
+  }
+
+  @override
   String get playbackSpeedDecreaseLabel => 'பிளேபேக் வேகத்தைக் குறைக்கவும்';
 
   @override

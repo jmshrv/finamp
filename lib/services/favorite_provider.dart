@@ -102,6 +102,10 @@ class IsFavorite extends _$IsFavorite {
     return state;
   }
 
+  void updateState(bool isFavorite) {
+    state = isFavorite;
+  }
+
   void toggleFavorite() async {
     if (_initializing != null) {
       await _initializing;

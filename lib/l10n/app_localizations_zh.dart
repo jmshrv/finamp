@@ -1046,6 +1046,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String currentVolumeFeatureText(int volume) {
+    return '$volume% volume';
+  }
+
+  @override
   String get playbackSpeedDecreaseLabel => '降低播放速度';
 
   @override

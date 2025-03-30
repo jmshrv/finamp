@@ -1046,6 +1046,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String currentVolumeFeatureText(int volume) {
+    return '$volume% volume';
+  }
+
+  @override
   String get playbackSpeedDecreaseLabel => 'Oynatma hızını azalt';
 
   @override

@@ -24,6 +24,7 @@ import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
+import 'package:finamp/services/playon_handler.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:finamp/services/ui_overlay_setter_observer.dart';
@@ -105,6 +106,8 @@ void main() async {
     _mainLog.info("Setup audio player");
     await _setupKeepScreenOnHelper();
     _mainLog.info("Setup KeepScreenOnHelper");
+    await _setupPlayonHandler();
+    _mainLog.info("Setup PlayonHandler");
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -199,6 +202,10 @@ Future<void> _setupDownloadsHelper() async {
       .configure(globalConfig: (Config.checkAvailableSpace, 1024));
   await FileDownloader().resumeFromBackground();
   await downloadsService.startQueues();
+}
+
+Future<void> _setupPlayonHandler() async {
+  GetIt.instance.registerSingleton(PlayonHandler());
 }
 
 Future<void> _setupKeepScreenOnHelper() async {

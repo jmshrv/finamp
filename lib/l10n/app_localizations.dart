@@ -1850,6 +1850,12 @@ abstract class AppLocalizations {
   /// **'x{speed} speed'**
   String playbackSpeedFeatureText(double speed);
 
+  /// Label for the feature chip that is shown if the volume is not 100%
+  ///
+  /// In en, this message translates to:
+  /// **'{volume}% volume'**
+  String currentVolumeFeatureText(int volume);
+
   /// Label for the button in the speed menu that decreases the playback speed.
   ///
   /// In en, this message translates to:
