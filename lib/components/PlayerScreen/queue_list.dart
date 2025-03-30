@@ -6,15 +6,17 @@ import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/main.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
+import 'package:finamp/services/display_features_helper.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -243,85 +245,100 @@ class _QueueListState extends State<QueueList> {
   }
 }
 
-Future<dynamic> showQueueBottomSheet(BuildContext context) {
+Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
   GlobalKey previousTracksHeaderKey = GlobalKey();
   Key currentTrackKey = UniqueKey();
   GlobalKey nextUpHeaderKey = GlobalKey();
   GlobalKey queueHeaderKey = GlobalKey();
   GlobalKey<JumpToCurrentButtonState> jumpToCurrentKey = GlobalKey();
 
+  ref.read(displayFeaturesProvider).attach(context);
+
   FeedbackHelper.feedback(FeedbackType.impact);
 
   return showModalBottomSheet(
-    // showDragHandle: true,
-    useSafeArea: true,
-    enableDrag: true,
-    isScrollControlled: true,
-    routeSettings: const RouteSettings(name: QueueList.routeName),
+    context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
     ),
+    isScrollControlled: true,
+    enableDrag: true,
+    useSafeArea: true,
+    routeSettings: const RouteSettings(name: QueueList.routeName),
     clipBehavior: Clip.antiAlias,
-    context: context,
+    // Anchor to bottom center, required for foldables
+    anchorPoint: MediaQuery.sizeOf(context).bottomCenter(Offset.zero),
     builder: (context) {
       return PlayerScreenTheme(
-          child: DraggableScrollableSheet(
-        snap: false,
-        snapAnimationDuration: const Duration(milliseconds: 200),
-        initialChildSize: 0.92,
-        // maxChildSize: 0.92,
-        expand: false,
-        builder: (context, scrollController) {
-          return Scaffold(
-            body: Stack(
-              children: [
-                if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
-                  BlurredPlayerScreenBackground(
-                      opacityFactor:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? 1.0
-                              : 0.85),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 10),
-                    Container(
-                      width: 40,
-                      height: 3.5,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).textTheme.bodySmall!.color!,
-                        borderRadius: BorderRadius.circular(3.5),
+        child: Consumer(
+          builder: (context, ref, child) {
+            final displayFeatures = ref.watch(displayFeaturesProvider);
+
+            return DraggableScrollableSheet(
+              snap: false,
+              snapAnimationDuration: const Duration(milliseconds: 200),
+              // Cover the whole sub screen when in half opened mode
+              initialChildSize: displayFeatures.halfOpened ? 1.0 : 0.92,
+              minChildSize: displayFeatures.halfOpened ? 1.0 : 0.25,
+              expand: false,
+              builder: (context, scrollController) {
+                return Scaffold(
+                  body: Stack(
+                    children: [
+                      if (FinampSettingsHelper
+                          .finampSettings.useCoverAsBackground)
+                        BlurredPlayerScreenBackground(
+                            opacityFactor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? 1.0
+                                    : 0.85),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 10),
+                          Container(
+                            width: 40,
+                            height: 3.5,
+                            decoration: BoxDecoration(
+                              color:
+                                  Theme.of(context).textTheme.bodySmall!.color!,
+                              borderRadius: BorderRadius.circular(3.5),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(AppLocalizations.of(context)!.queue,
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color!,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400)),
+                          const SizedBox(height: 20),
+                          Expanded(
+                            child: QueueList(
+                              scrollController: scrollController,
+                              previousTracksHeaderKey: previousTracksHeaderKey,
+                              currentTrackKey: currentTrackKey,
+                              nextUpHeaderKey: nextUpHeaderKey,
+                              queueHeaderKey: queueHeaderKey,
+                              jumpToCurrentKey: jumpToCurrentKey,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(AppLocalizations.of(context)!.queue,
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.bodyLarge!.color!,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400)),
-                    const SizedBox(height: 20),
-                    Expanded(
-                      child: QueueList(
-                        scrollController: scrollController,
-                        previousTracksHeaderKey: previousTracksHeaderKey,
-                        currentTrackKey: currentTrackKey,
-                        nextUpHeaderKey: nextUpHeaderKey,
-                        queueHeaderKey: queueHeaderKey,
-                        jumpToCurrentKey: jumpToCurrentKey,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            floatingActionButton: JumpToCurrentButton(
-              key: jumpToCurrentKey,
-              previousTracksHeaderKey: previousTracksHeaderKey,
-            ),
-          );
-        },
-      ));
+                    ],
+                  ),
+                  floatingActionButton: JumpToCurrentButton(
+                    key: jumpToCurrentKey,
+                    previousTracksHeaderKey: previousTracksHeaderKey,
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      );
     },
   );
 }
@@ -337,6 +354,7 @@ class JumpToCurrentButton extends StatefulWidget {
 
 class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
   int _jumpToCurrentTrackDirection = 0;
+
   set showJumpToTop(int direction) {
     if (direction != _jumpToCurrentTrackDirection) {
       setState(() {

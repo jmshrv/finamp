@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
@@ -11,7 +12,6 @@ import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -30,27 +30,25 @@ import '../services/theme_provider.dart';
 import 'blurred_player_screen_background.dart';
 import 'player_screen.dart';
 
-class LyricsScreen extends ConsumerWidget {
+class LyricsScreen extends StatelessWidget {
   const LyricsScreen({super.key});
 
   static const routeName = "/lyrics";
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return PlayerScreenTheme(
-      child: const _LyricsScreenContent(),
-    );
+  Widget build(BuildContext context) {
+    return PlayerScreenTheme(child: const _LyricsScreenContent());
   }
 }
 
-class _LyricsScreenContent extends StatefulWidget {
+class _LyricsScreenContent extends ConsumerStatefulWidget {
   const _LyricsScreenContent();
 
   @override
-  State<_LyricsScreenContent> createState() => _LyricsScreenContentState();
+  ConsumerState<_LyricsScreenContent> createState() => _LyricsScreenContentState();
 }
 
-class _LyricsScreenContentState extends State<_LyricsScreenContent> {
+class _LyricsScreenContentState extends ConsumerState<_LyricsScreenContent> {
   @override
   Widget build(BuildContext context) {
     double toolbarHeight = 53;
@@ -64,7 +62,7 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
             // This should never actually be called until widget finishes build and controller is initialized
             if (!FinampSettingsHelper.finampSettings.disableGesture ||
                 !controller.shouldShow(PlayerHideable.bottomActions)) {
-              showQueueBottomSheet(context);
+              showQueueBottomSheet(context, ref);
             }
           }
         },
@@ -79,8 +77,8 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            scrolledUnderElevation:
-                0.0, // disable tint/shadow when content is scrolled under the app bar
+            // Disable tint/shadow when content is scrolled under the app bar
+            scrolledUnderElevation: 0.0,
             centerTitle: true,
             toolbarHeight: toolbarHeight,
             title: PlayerScreenAppBarTitle(
@@ -130,7 +128,7 @@ class _LyricsScreenContentState extends State<_LyricsScreenContent> {
                                 // This should never actually be called until widget finishes build and controller is initialized
                                 if (!FinampSettingsHelper
                                     .finampSettings.disableGesture) {
-                                  showQueueBottomSheet(context);
+                                  showQueueBottomSheet(context, ref);
                                 }
                               }
                             },
@@ -485,9 +483,8 @@ class _LyricLine extends ConsumerWidget {
                 fontWeight: lowlightLine || !isSynchronized
                     ? FontWeight.normal
                     : FontWeight.w500,
-                letterSpacing: lowlightLine || !isSynchronized
-                    ? 0.05
-                    : -0.045, // keep text width consistent across the different weights
+                // Keep text width consistent across the different weights
+                letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
                 fontSize: lyricsFontSizeToSize(finampSettings?.lyricsFontSize ??
                         LyricsFontSize.medium) *
                     (isSynchronized ? 1.0 : 0.75),

@@ -10,6 +10,7 @@ import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
+import 'package:finamp/services/display_features_helper.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
@@ -180,7 +181,7 @@ class _PlayerScreenContent extends ConsumerWidget {
           // This should never actually be called until widget finishes build and controller is initialized
           if (!FinampSettingsHelper.finampSettings.disableGesture ||
               !controller.shouldShow(PlayerHideable.bottomActions)) {
-            showQueueBottomSheet(context);
+            showQueueBottomSheet(context, ref);
           }
         }
       },

@@ -15,6 +15,7 @@ import '../services/feedback_helper.dart';
 import '../services/finamp_settings_helper.dart';
 
 typedef SliverBuilder = (double, List<Widget>) Function(BuildContext);
+
 typedef WrapperBuilder = Widget Function(
     BuildContext, DraggableScrollableController, ScrollBuilder);
 typedef ScrollBuilder = Widget Function(double, List<Widget>);
@@ -37,48 +38,48 @@ Future<void> showThemedBottomSheet({
     themeImage = ref.read(localImageProvider);
   }
   await showModalBottomSheet(
-      context: context,
-      constraints: BoxConstraints(
-          maxWidth: (Platform.isIOS || Platform.isAndroid)
-              ? 500
-              : min(500, MediaQuery.sizeOf(context).width * 0.9)),
-      isDismissible: true,
-      enableDrag: true,
-      useSafeArea: true,
-      isScrollControlled: true,
-      routeSettings: RouteSettings(name: routeName),
-      clipBehavior: Clip.hardEdge,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    context: context,
+    backgroundColor: (Theme.of(context).brightness == Brightness.light
+            ? Colors.white
+            : Colors.black)
+        .withOpacity(0.9),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+    ),
+    isScrollControlled: true,
+    clipBehavior: Clip.hardEdge,
+    constraints: BoxConstraints(
+        maxWidth: (Platform.isIOS || Platform.isAndroid)
+            ? 500
+            : min(500, MediaQuery.sizeOf(context).width * 0.9)),
+    isDismissible: true,
+    enableDrag: true,
+    useSafeArea: true,
+    routeSettings: RouteSettings(name: routeName),
+    // Anchor to bottom center, required for foldables
+    anchorPoint: MediaQuery.sizeOf(context).bottomCenter(Offset.zero),
+    builder: (BuildContext context) {
+      return ProviderScope(
+        overrides: [
+          if (themeImage != null)
+            localImageProvider.overrideWithValue(themeImage),
+          if (themeImage != null)
+            localThemeInfoProvider.overrideWithValue(themeInfo),
+          if (themeImage == null)
+            localThemeInfoProvider
+                .overrideWithValue(ThemeInfo(item, useIsolate: false))
+        ],
+        child: ThemedBottomSheet(
+          key: ValueKey(item.id.raw + routeName),
+          item: item,
+          buildSlivers: buildSlivers,
+          buildWrapper: buildWrapper,
+          minDraggableHeight: minDraggableHeight,
+          showDragHandle: showDragHandle,
         ),
-      ),
-      backgroundColor: (Theme.of(context).brightness == Brightness.light
-              ? Colors.white
-              : Colors.black)
-          .withOpacity(0.9),
-      builder: (BuildContext context) {
-        return ProviderScope(
-          overrides: [
-            if (themeImage != null)
-              localImageProvider.overrideWithValue(themeImage),
-            if (themeImage != null)
-              localThemeInfoProvider.overrideWithValue(themeInfo),
-            if (themeImage == null)
-              localThemeInfoProvider
-                  .overrideWithValue(ThemeInfo(item, useIsolate: false))
-          ],
-          child: ThemedBottomSheet(
-            key: ValueKey(item.id.raw + routeName),
-            item: item,
-            buildSlivers: buildSlivers,
-            buildWrapper: buildWrapper,
-            minDraggableHeight: minDraggableHeight,
-            showDragHandle: showDragHandle,
-          ),
-        );
-      });
+      );
+    },
+  );
 }
 
 class ThemedBottomSheet extends ConsumerStatefulWidget {
