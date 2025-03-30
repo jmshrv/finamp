@@ -1681,7 +1681,7 @@
   "@keepScreenOn": {
     "description": "Option to keep the screen on while using the app"
   },
-  "showLyricsScreenAlbumPreludeTitle": "Показувати альбом перед текстом пісень",
+  "showLyricsScreenAlbumPreludeTitle": "Показати обкладинку альбому перед текстом",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
