@@ -1327,5 +1327,21 @@
   "connectionInterruptedBackgroundAndroid": "백그라운드에서 다운로드 중 연결이 끊겼습니다. 'Enter Low-Priority State on Pause'가 활성화되었거나 OS의 설정이 원인일 수 있습니다.",
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "showNullLibraryItemsSubtitle": "특정 미디어는 알 수 없는 라이브러리로 다운로드 됩니다. 설정을 끄면 원래 컬렉션 외부에 있는 이러한 미디어들을 숨깁니다.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "activeDownloadSize": "다운로드중…",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "syncingDownloadSize": "동기화중…",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "missingDownloadSize": "삭제중…",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
   }
 }
