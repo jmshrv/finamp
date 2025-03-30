@@ -843,5 +843,9 @@
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
   "close": "Cerrar",
-  "@close": {}
+  "@close": {},
+  "playbackHistory": "Historial de Reproducción",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  }
 }
