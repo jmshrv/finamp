@@ -31,15 +31,16 @@ var reconnectionSubscription = null;
 
 class PlayonHandler {
   late WidgetRef ref;
+  bool isConnected = false;
 
   Future<void> initialize() async {
     // Turn on/off when offline mode is toggled
     var settingsListener = FinampSettingsHelper.finampSettingsListener;
     settingsListener.addListener(() async {
-      _playOnHandlerLogger.info("Settings changed, restarting listener");
-      if (FinampSettingsHelper.finampSettings.isOffline) {
+      if (isConnected && FinampSettingsHelper.finampSettings.isOffline) {
+        _playOnHandlerLogger.info("Offline mode enabled, closing playon listener now");
         await closeListener();
-      } else {
+      } else if (!isConnected) {
         await startListener();
       }
     });
@@ -132,6 +133,7 @@ class PlayonHandler {
 
     await channel.ready;
     _playOnHandlerLogger.info("WebSocket connection to server established");
+    isConnected = true;
 
     channel.sink.add('{"MessageType":"KeepAlive"}');
 
@@ -141,17 +143,16 @@ class PlayonHandler {
       },
       onDone: () {
         keepaliveSubscription?.cancel();
-        if (FinampSettingsHelper.finampSettings.isOffline) {
-          _playOnHandlerLogger
-              .info("WebSocket connection closed, offline mode is on");
-        } else {
-          _playOnHandlerLogger
-              .warning("WebSocket connection closed, attempting to reconnect");
+        isConnected = false;
+        if (!FinampSettingsHelper.finampSettings.isOffline) {
+          _playOnHandlerLogger.warning("WebSocket connection closed, attempting to reconnect");
+          isConnected = false;
           startReconnectionLoop();
         }
       },
       onError: (error) {
         _playOnHandlerLogger.severe("WebSocket Error: $error");
+        isConnected = false;
       },
     );
 
@@ -169,6 +170,7 @@ class PlayonHandler {
     channel.sink.add('{"MessageType":"SessionsStop"}');
     channel.sink.close();
     keepaliveSubscription?.cancel();
+    isConnected = false;
 
     // In case offline mod is turned on while attempting to reconnect
     reconnectionSubscription?.cancel();
@@ -196,11 +198,10 @@ class PlayonHandler {
               break;
             case "SetVolume":
               _playOnHandlerLogger.info("Server requested a volume adjustment");
-              // Currently very broken
-
-              // final desiredVolume = request['Data']['Arguments']['Volume'] as String;
-              // FinampSettingsHelper.setCurrentVolume(
-              //     double.parse(desiredVolume) / 100.0);
+              
+              // Currently broken in the UI
+              final desiredVolume = request['Data']['Arguments']['Volume'] as String;
+              FinampSettingsHelper.setCurrentVolume(double.parse(desiredVolume) / 100.0);
           }
           break;
         case "UserDataChanged":
@@ -219,10 +220,10 @@ class PlayonHandler {
               await audioHandler.stop();
               break;
             case "Pause":
-              unawaited(audioHandler.pause());
+              await audioHandler.pause();
               break;
             case "Unpause":
-              unawaited(audioHandler.play());
+              await audioHandler.play();
               break;
             case "NextTrack":
               await audioHandler.skipToNext();
@@ -253,7 +254,7 @@ class PlayonHandler {
               await audioHandler.fastForward();
               break;
             case "PlayPause":
-              audioHandler.togglePlayback();
+              await audioHandler.togglePlayback();
               break;
 
             // Do nothing
