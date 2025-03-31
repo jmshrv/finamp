@@ -1842,5 +1842,94 @@
   "redownloadcomplete": "Cola de Transcodificaciones a Volver a Descargar.",
   "@redownloadcomplete": {
     "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "trackMenuButtonTooltip": "Menú de la Pista",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "trackOfflineFavoritesSubtitle": "Esto permite mostrar estados de favoritos mas actualizados cuando se este sin conexión.  No se descarga ningún archivo adicional.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "showProgressOnNowPlayingBarSubtitle": "Controla que el mini reproductor de la aplicación / la barra de reproduciendo ahora en la parte inferior de la pantalla de musica funcionen como una barra de progreso.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
+  },
+  "shareOfflineListens": "Compartir escuchas sin conexión",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "sleepTimerRemainingTime": "Durmiendo en {time} minutos",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmShuffleToNextUp": "Mezclado en \"A Continuación\"",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "Mezclado en cola",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "hideQueueButton": "Ocultar botón de cola",
+  "@hideQueueButton": {},
+  "hideQueueButtonSubtitle": "Oculte el botón de cola en la pantalla del reproductor. Deslice hacia arriba para acceder a la cola.",
+  "@hideQueueButtonSubtitle": {},
+  "marqueeOrTruncateButton": "Utilizar puntos suspensivos para títulos largos",
+  "@marqueeOrTruncateButton": {},
+  "hidePlayerBottomActionsSubtitle": "Oculte los botones de cola y letras en la pantalla del reproductor. Deslice hacia arriba para acceder a la cola, deslice hacia la izquierda (debajo de la cáratula del álbum) para ver la letra si esta disponible.",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "suppressPlayerPaddingSubtitle": "Completamente minimiza los margenes entre los controles de la pantalla del reproductor cuando la cáratula del álbum no esta en tamaño completo.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "lockDownload": "Siempre Mantener en el Dispositivo",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Muestra controles de posición en la notificación multimedia",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showLyricsTimestampsTitle": "Muestra las marcas de tiempo para las letras sincronizadas",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showLyricsTimestampsSubtitle": "Controla que las marcas de tiempo sean mostradas en cada linea de las letras en la pantalla de letras, si están disponibles.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "shuffleToQueue": "Mezclar a cola",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "defaultDownloadLocationButton": "Seleccionar como ubicación de descarga por defecto  Desactive para elegirla al descargar.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "emptyFilteredListSubtitle": "Ningún elemento coincide con el filtro. Intente desactivar los filtros o cambiar el termino de búsqueda.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "lyricsAlignmentSubtitle": "Controla la alineación de las letras en la pantalla de letras.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga una barra de progreso interactiva. Esto permitirá cambiar la posición de la reproducción sin abrir la aplicación.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "lyricsFontSizeSubtitle": "Controla el tamaño de la fuente para las letras en la pantalla de letras.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "prioritizePlayerCoverSubtitle": "Priorizar mostrar una cáratula de álbum más grande en la pantalla del reproductor. Los controles que no sean esenciales serán ocultados de manera mas agresiva en pantallas pequeñas.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "suppressPlayerPadding": "Ignorar el margen de los controles del reproductor",
+  "@suppressPlayerPadding": {},
+  "showStopButtonOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga un botón de detener además del botón de pausa. Esto detendrá la reproducción sin abrir la aplicación.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   }
 }
