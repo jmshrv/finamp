@@ -10,8 +10,11 @@ class AutoOffline {
   final StreamSubscription<List<ConnectivityResult>> listener =
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
       bool hasWifi = result.contains(ConnectivityResult.wifi);
-      FinampSetters.setIsOffline(!hasWifi);
-      Logger("AutoOffline").info(hasWifi ? "Auto turned off offline mode" : "Auto turned on offline mode");
+      bool hasEth = result.contains(ConnectivityResult.ethernet);
+      bool isConnected = hasWifi | hasEth;
+      
+      FinampSetters.setIsOffline(!isConnected);
+      Logger("AutoOffline").info(isConnected ? "Auto turned off offline mode" : "Auto turned on offline mode");
     });
 
   AutoOffline(WidgetRef ref) {
