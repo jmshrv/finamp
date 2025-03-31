@@ -1952,5 +1952,21 @@
   "allowDeleteFromServerTitle": "允許從伺服器刪除",
   "@allowDeleteFromServerTitle": {
     "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "specialDownloads": "特別下載",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "沒有任何已經下載的項目。",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "allowDeleteFromServerSubtitle": "當使用者有權限時，啟用或停用從伺服器上永久刪除音軌的選項。",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "librarySelectError": "載入可用媒體庫時發生錯誤",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
   }
 }
