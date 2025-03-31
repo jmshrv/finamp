@@ -547,7 +547,7 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "connectingToServer": "서버 접속중…",
+  "connectingToServer": "서버에 접속중…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -1156,7 +1156,7 @@
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
   },
-  "deleteDownloadsPrompt": "기기에서 {",
+  "deleteDownloadsPrompt": "이 기기에서 {itemType, select, album{앨범 } playlist{플레이리스트 } artist{아티스트 } genre{장르 } track{트랙 } library{라이브러리 } other{item}} '{itemName}'을/를 삭제하시겠습니까?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -1324,7 +1324,7 @@
       }
     }
   },
-  "connectionInterruptedBackgroundAndroid": "백그라운드에서 다운로드 중 연결이 끊겼습니다. 'Enter Low-Priority State on Pause'가 활성화되었거나 OS의 설정이 원인일 수 있습니다.",
+  "connectionInterruptedBackgroundAndroid": "백그라운드에서 다운로드 중 연결이 끊겼습니다. '일시 정지시 우선순위가 낮은 상태로 전환'기능이 활성화되었거나 OS의 설정이 원인일 수 있습니다.",
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   },
