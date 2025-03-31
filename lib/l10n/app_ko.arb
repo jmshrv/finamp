@@ -1414,7 +1414,7 @@
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
-  "cacheLibraryImagesName": "'{libraryName]'의 캐시된 이미지",
+  "cacheLibraryImagesName": "'{libraryName}'의 캐시된 이미지",
   "@cacheLibraryImagesName": {
     "placeholders": {
       "libraryName": {
