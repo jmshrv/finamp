@@ -902,5 +902,99 @@
   "playerScreenMinimumCoverPaddingEditorSubtitle": "El margen mínimo alrededor de la portada del álbum en la pantalla del reproductor, en % del ancho de la pantalla.",
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "bufferSizeTitle": "Tamaño del Búfer",
+  "@bufferSizeTitle": {},
+  "playbackModeDirectPlaying": "Reproducción Directa",
+  "@playbackModeDirectPlaying": {
+    "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+  },
+  "kiloBitsPerSecondLabel": "{bitrate} kbps",
+  "@kiloBitsPerSecondLabel": {
+    "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+    "placeholders": {
+      "bitrate": {
+        "type": "int",
+        "example": "320"
+      }
+    }
+  },
+  "playbackModeLocal": "Reproducción Local",
+  "@playbackModeLocal": {
+    "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+  },
+  "playlistActionsMenuButtonTooltip": "Toque para añadir a lista de reproducción. Toque largo para alternar favorito.",
+  "@playlistActionsMenuButtonTooltip": {
+    "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "confirmFavoriteAdded": "Favorito Añadido",
+  "@confirmFavoriteAdded": {},
+  "confirmFavoriteRemoved": "Favorito Eliminado",
+  "@confirmFavoriteRemoved": {},
+  "confirmAddedToPlaylist": "Añadida a la lista de reproducción.",
+  "@confirmAddedToPlaylist": {
+    "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+  },
+  "bufferSizeSubtitle": "El tamaño máximo para el búfer en MB. Requiere reinicio",
+  "@bufferSizeSubtitle": {},
+  "playbackModeTranscoding": "Transcodificación",
+  "@playbackModeTranscoding": {
+    "description": "Feature chip that is shown when tracks are being transcoded by the server"
+  },
+  "hours": "Horas",
+  "@hours": {},
+  "seconds": "Segundos",
+  "@seconds": {},
+  "trackCountTooltip": "Pista {currentTrackIndex} de {totalTrackCount}",
+  "@trackCountTooltip": {
+    "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+    "placeholders": {
+      "currentTrackIndex": {
+        "type": "int",
+        "example": "10"
+      },
+      "totalTrackCount": {
+        "type": "int",
+        "example": "13"
+      }
+    }
+  },
+  "addToMorePlaylistsTitle": "Añadir a Más Listas de Reproducción",
+  "@addToMorePlaylistsTitle": {},
+  "addToMorePlaylistsTooltip": "Añadir a más listas de reproducción",
+  "@addToMorePlaylistsTooltip": {},
+  "removeFromPlaylistNamedTooltip": "Eliminar de la lista de reproducción '{playlistName}'",
+  "@removeFromPlaylistNamedTooltip": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "removeFromPlaylistNamedTitle": "Eliminar de la Lista de Reproducción '{playlistName}'",
+  "@removeFromPlaylistNamedTitle": {
+    "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+    "placeholders": {
+      "playlistName": {
+        "type": "String",
+        "example": "My Favorite Tracks"
+      }
+    }
+  },
+  "unknownAlbum": "Álbum Desconocido",
+  "@unknownAlbum": {},
+  "bufferDisableSizeConstraintsTitle": "No limitar el tamaño del búfer",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "Deshabilita las limitantes del tamaño del búfer ('Tamaño del Búfer'). El búfer siempre sera cargado con la duración configurada ('Duración del Búfer'), incluso para archivos grandes. Puede causar fallos. Requiere reinicio.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "playerScreen": "Pantalla del Reproductor",
+  "@playerScreen": {
+    "description": "Name for the expanded player"
+  },
+  "timeFractionTooltip": "{currentTime} de {totalTime}",
+  "@timeFractionTooltip": {
+    "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   }
 }
