@@ -1343,5 +1343,26 @@
   "missingDownloadSize": "삭제중…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "downloadsWorkersSettingSubtitle": "메타데이터를 동기화하고 다운로드를 지우는 스레드의 개수. 스레드를 늘리면 특히 서버 지연이 심할 경우 다운로드와 삭제가 빨라질 수 있지만, 렉이 발생할 수 있습니다.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "preferQuickSyncSwitch": "빠른 동기화 선호",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "downloadsWorkersSettingLabel": "다운로드 스레드 {count}개",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOnStartupSwitch": "시작할 때 자동으로 다운로드 동기화",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
   }
 }
