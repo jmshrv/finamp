@@ -560,7 +560,7 @@
   },
   "title": "Título",
   "@title": {},
-  "activeDownloads": "Activar Descargas",
+  "activeDownloads": "Descargas Activas",
   "@activeDownloads": {},
   "activeDownloadsTitle": "Descargas Activas",
   "@activeDownloadsTitle": {},
@@ -1830,5 +1830,17 @@
         "example": "Podcast, Audiobook"
       }
     }
+  },
+  "redownloadSubtitle": "Automáticamente vuelve a descargar pistas que se esperan en una calidad diferente debido a cambios en su colección de origen.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "redownloadTitle": "Automáticamente Volver a Descargar Transcodificaciones",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "redownloadcomplete": "Cola de Transcodificaciones a Volver a Descargar.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
   }
 }
