@@ -210,6 +210,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
+      autoOffline: fields[85] == null ? false : fields[85] as bool,
+      autoOfflineListenerActive:
+          fields[86] == null ? false : fields[86] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -219,7 +222,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(80)
+      ..writeByte(82)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -379,7 +382,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(83)
       ..write(obj.showAlbumReleaseDateOnPlayerScreen)
       ..writeByte(84)
-      ..write(obj.releaseDateFormat);
+      ..write(obj.releaseDateFormat)
+      ..writeByte(85)
+      ..write(obj.autoOffline)
+      ..writeByte(86)
+      ..write(obj.autoOfflineListenerActive);
   }
 
   @override

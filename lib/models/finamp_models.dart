@@ -152,6 +152,8 @@ class DefaultSettings {
   static const oneLineMarqueeTextButton = false;
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
+  static const autoOffline = false;
+  static const autoOfflineListenerActive = false;
 }
 
 @HiveType(typeId: 28)
@@ -257,6 +259,8 @@ class FinampSettings {
     this.showAlbumReleaseDateOnPlayerScreen =
         DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
+    this.autoOffline = DefaultSettings.autoOffline,
+    this.autoOfflineListenerActive = DefaultSettings.autoOfflineListenerActive
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -532,6 +536,17 @@ class FinampSettings {
 
   @HiveField(84, defaultValue: DefaultSettings.releaseDateFormat)
   ReleaseDateFormat releaseDateFormat;
+
+  @HiveField(85, defaultValue: DefaultSettings.autoOffline)
+  bool autoOffline;
+
+  // this will get set to false when the user
+  // manually enables offline mode and set to
+  // true when the user disables offline mode
+  // again. This prevents offline mode from beeing
+  // automatically disabled when connecting to wifi
+  @HiveField(86, defaultValue: DefaultSettings.autoOfflineListenerActive)
+  bool autoOfflineListenerActive;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

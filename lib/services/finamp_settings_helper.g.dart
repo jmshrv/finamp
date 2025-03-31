@@ -597,6 +597,20 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAutoOffline(bool newAutoOffline) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoOffline = newAutoOffline;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAutoOfflineListenerActive(bool newAutoOfflineListenerActive) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoOfflineListenerActive = newAutoOfflineListenerActive;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -799,6 +813,11 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<ReleaseDateFormat> get releaseDateFormat =>
       finampSettingsProvider
           .select((value) => value.requireValue.releaseDateFormat);
+  ProviderListenable<bool> get autoOffline =>
+      finampSettingsProvider.select((value) => value.requireValue.autoOffline);
+  ProviderListenable<bool> get autoOfflineListenerActive =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.autoOfflineListenerActive);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);
