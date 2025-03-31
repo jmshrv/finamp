@@ -324,7 +324,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin de forma remota, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP predeterminado (80/443) o el predefinido de Jellyfin (8096), no tendrás que especificar el puerto. Este probablemente sea tu caso si tu servidor está detrás de un proxy inverso.\n\nSi la dirección es correcta, deberías ver la información sobre el servidor resaltado debajo.",
+  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin de forma remota, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP predeterminado (80/443) o el predefinido de Jellyfin (8096), no tendrás que especificar el puerto.\n\nSi la dirección es correcta, deberías ver la información sobre el servidor resaltado debajo.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -1947,5 +1947,24 @@
   "shuffleAlbumsToQueue": "Mezclar Álbumes al final de la Cola",
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
-  }
+  },
+  "playingFromType": "Reproduciendo Desde {source, select, album{Álbum} playlist{Lista de Reproducción} trackMix{Mix de Pista} artistMix{Mix de Artista} albumMix{Mix de Álbum} genreMix{Mix de Género} favorites{Favoritos} allTracks{Todas las Pistas} filteredList{Pistas} genre{Género} artist{Artista} track{Pista} nextUpAlbum{Álbum en \"A Continuación\"} nextUpPlaylist{Lista de Reproducción en \"A Continuación\"} nextUpArtist{Artista en \"A Continuación\"} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "couldNotLoad": "No fue posible cargar {source, select, album{álbum} playlist{lista de reproducción} trackMix{mix de pista} artistMix{mix de artista} albumMix{mix de álbum} genreMix{mix de género} favorites{favoritos} allTracks{todas las pistas} filteredList{pistas} genre{género} artist{artista} track{pista} nextUpAlbum{álbum en \"a continuación\"} nextUpPlaylist{lista de reproducción en \"a continuación\"} nextUpArtist{artista en \"a continuación\"} other{}}",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "fiveLatestAlbumsSettingSubtitle": "Las descargas serán eliminadas conforme envejezcan.  Bloquee la descarga para prevenir que el álbum sea eliminado.",
+  "@fiveLatestAlbumsSettingSubtitle": {}
 }
