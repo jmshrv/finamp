@@ -1234,7 +1234,7 @@
   "@alignmentOptionCenter": {
     "description": "Alignment option for things like the lyrics view. Center means centered."
   },
-  "showLyricsScreenAlbumPreludeTitle": "Zobrazit album před texty",
+  "showLyricsScreenAlbumPreludeTitle": "Zobrazit obal alba před texty",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
