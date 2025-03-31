@@ -1445,5 +1445,132 @@
   "resetSettingsPromptGlobalConfirm": "Restaurar TODOS los ajustes",
   "@resetSettingsPromptGlobalConfirm": {
     "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
-  }
+  },
+  "addRemoveFromPlaylist": "Añadir / Quitar de Lista de Reproducción",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "doTranscode": "Descargar como {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "queueRestoreButtonLabel": "Restaurar",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "transcodingStreamingContainerTitle": "Seleccionar Contenedor de Transcodificación",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "downloadBitrateSubtitle": "Una mayor tasa de bits da una mejor calidad de audio a costa de mayor requerimientos de almacenamiento.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcodificado}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "allowSplitScreenSubtitle": "El reproductor sera mostrado junto a otras ventanas en pantallas más grandes.",
+  "@allowSplitScreenSubtitle": {},
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ como {codec} @ {bitrate}}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "dontTranscode": "Descargar original{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "nextUp": "A Continuación",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Limpiar \"A Continuación\"",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "addToNextUp": "Añadir a \"A Continuación\"",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "addPlaylistSubheader": "Añadir pista a lista de reproducción",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "playerAlbumArtworkTooltip": "Carátula de {title}. Toque para alternar reproducción. Deslice hacia la izquierda o derecha para cambiar pistas.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "artwork": "Carátula",
+  "@artwork": {},
+  "resetSettingsPromptGlobal": "¿Esta seguro que quiere restaurar TODOS los ajustes a sus valores predeterminados?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{Siempre} never{Nunca} ask{Preguntar} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "cacheLibraryImagesSettingsSubtitle": "Todas las carátulas de álbumes, artistas, géneros, y listas de reproducción de la biblioteca activa serán descargadas.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "allPlaylistsInfoSetting": "Descargar Metadatos de la Lista de Reproducción",
+  "@allPlaylistsInfoSetting": {}
 }
