@@ -884,7 +884,7 @@
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
   },
-  "offlineTrackCount": "{count,plural,=1{{count} Pista} other{{count} PIstas}}, {downloads} {count,plural,=1{Descargada} other{Descargadas}}",
+  "offlineTrackCount": "{count,plural,=1{{count} Pista} other{{count} Pistas}}, {downloads} {count,plural,=1{Descargada} other{Descargadas}}",
   "@offlineTrackCount": {
     "placeholders": {
       "count": {
@@ -996,5 +996,168 @@
   "timeFractionTooltip": "{currentTime} de {totalTime}",
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+  },
+  "offlineTrackCountArtist": "{count,plural,=1{{count} Pista} other{{count} Pistas}} {count,plural,=1{Descargada} other{Descargadas}}",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "savedQueue": "Cola Guardada",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "shuffleAllQueueSource": "Mezclar Todo",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonTooltip": "Reproduciendo en orden. Toque para mezclar.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Mezclando pistas",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "reset": "Restaurar",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "showArtistsTopTracks": "Mostrar las pistas más populares en la vista del artista",
+  "@showArtistsTopTracks": {},
+  "showArtistsTopTracksSubtitle": "Muestra las 5 pistas más escuchadas de un artista.",
+  "@showArtistsTopTracksSubtitle": {},
+  "playingFrom": "Reproduciendo desde",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "playbackSpeedFeatureText": "velocidad x{speed}",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Disminuir la velocidad de reproducción",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Aumentar la velocidad de reproducción",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeOneButtonLabel": "Repitiendo esta pista",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeAllButtonLabel": "Repitiendo todo",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queueRestoreSubtitle1": "Reproduciendo: {track}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "track": {
+        "type": "String"
+      }
+    }
+  },
+  "autoloadLastQueueOnStartup": "Restaurar Automáticamente Ultima Cola",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "confirmPlayNext": "{type, select, track{Pista} album{Álbum} artist{Artista} playlist{Lista de Reproducción} genre{Género} other{Elemento}} se reproducirá a continuación",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreTitle": "Guardada {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "skipToNextTrackButtonTooltip": "Saltar a la siguiente pista",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "previousTracks": "Pistas Anteriores",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "togglePlaybackButtonTooltip": "Alternar reproducción",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "skipToPreviousTrackButtonTooltip": "Saltar al inicio o a la pista anterior",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "playbackOrderLinearButtonLabel": "Reproduciendo en orden",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Mezclando pistas, toque para reproducir en orden.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedButtonLabel": "Reproduciendo a velocidad x{speed}",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "loopModeNoneButtonLabel": "Sin repetir",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Pista} other{{count} Pistas}}, {remaining} Sin Reproducir",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "queueLoadingMessage": "Restaurando cola…",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "queueRetryMessage": "Hubo un fallo al restaurar cola. ¿Reintentar?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Al iniciar la aplicación, intentar restaurar la ultima cola reproducida.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "albumCount": "{count,plural,=1{{count} Álbum} other{{count} Álbumes}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
