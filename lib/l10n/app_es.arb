@@ -1770,5 +1770,65 @@
   "queuesScreen": "Restaurar Reproduciendo Ahora",
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "tracksFormerNextUp": "Pistas añadidas a través de \"A Continuación\"",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Frecuencia para actualizar la sesión de reproducción",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "maxConcurrentDownloadsSubtitle": "Aumentar las descargas concurrentes puede ocasionar que una mayor cantidad de descargas fallen si son demasiado grandes, o puede ocasionar retraso en algunas ocasiones.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "downloadsWorkersSettingSubtitle": "La cantidad de gestores para sincronizar los metadatos y eliminar descargas. Aumentar los gestores de sincronización y eliminación de descargas puede mejorar la velocidad, especialmente cuando la latencia del servidor es alta, pero también puede producir retraso.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "preferQuickSyncSwitchSubtitle": "Al realizar sincronizaciones, algunos elementos usualmente estáticos (como pistas y álbumes) no serán actualizados. La reparación de descargas siempre realizara una sincronización completa.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "confirmAddToNextUp": "Añadida {type, select, track{Pista} album{álbum} artist{artista} playlist{lista de reproducción} genre{género} other{elemento}} a \"A Continuación\"",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "reportQueueToServer": "¿Reportar la cola actual al servidor?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "incidentalDownloadTooltip": "{parentName} requiere que este elemento sea descargado.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "playbackSpeedControlSettingDescription": "Automático:\nFinamp intentara identificar si la pista que se esta reproduciendo es un podcast o (parte de) un audiolibro. Se considera que lo son si la duración de la pista es mayor a {trackDuration} minutes, si la longitud del álbum de la pista es mayor a {albumDuration} horas, o si la pista tiene al menor uno de estos géneros asignados: {genreList}\nLos controles de velocidad de reproducción se mostraran en el menú del reproductor.\n\nMostrar:\nLos controles de velocidad de reproducción siempre se mostraran en el menú del reproductor.\n\nOcultos:\nLos controles de velocidad de reproducción siempre se ocultaran en el menú del reproductor.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
   }
 }
