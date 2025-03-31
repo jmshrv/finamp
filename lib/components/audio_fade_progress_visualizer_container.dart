@@ -9,7 +9,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class AudioFadeProgressVisualizerContainer extends StatefulWidget {
   const AudioFadeProgressVisualizerContainer({
-    super.key,
+    required super.key,
     required this.child,
     this.border,
     this.borderRadius,
@@ -89,14 +89,14 @@ class _AudioFadeProgressVisualizerContainerState
   }
 
   void startFadeIn({double? from}) {
-    final duration = FinampSettingsHelper.finampSettings.audioFadeInDuration;
-    _controller.duration = from != null ? duration * (1.0 - from) : duration;
+    _controller.duration =
+        FinampSettingsHelper.finampSettings.audioFadeInDuration;
     _controller.forward(from: from ?? 0.0);
   }
 
   void startFadeOut({double? from}) {
-    final duration = FinampSettingsHelper.finampSettings.audioFadeOutDuration;
-    _controller.duration = from != null ? duration * (1.0 - from) : duration;
+    _controller.duration =
+        FinampSettingsHelper.finampSettings.audioFadeOutDuration;
     _controller.reverse(from: from ?? 1.0);
   }
 
