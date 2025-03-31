@@ -1287,5 +1287,163 @@
   "maxConcurrentDownloads": "Descargas Concurrentes Máximas",
   "@maxConcurrentDownloads": {
     "description": "Title of setting controlling max concurrent downloads."
+  },
+  "allowSplitScreenTitle": "Permitir el Modo de Pantalla Dividida",
+  "@allowSplitScreenTitle": {},
+  "remainingDuration": "{duration} restante",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "enableAutoScroll": "Activar desplazamiento automático",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "downloadTranscodeCodecTitle": "Selecciona el Códec de Descarga",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "fontSizeOptionLarge": "Grande",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "quickActions": "Acciones Rápidas",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "maxConcurrentDownloadsLabel": "{count} Descargas Concurrentes",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "cacheLibraryImagesName": "Imágenes almacenadas en cache para '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "downloadTranscodeEnableTitle": "Habilitar Descargas Transcodificadas",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "transcodeHint": "¿Transcodificar?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "oneLineMarqueeTextButton": "Auto Desplazar Títulos Largos",
+  "@oneLineMarqueeTextButton": {},
+  "alignmentOptionEnd": "Al final",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Pequeña",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "fontSizeOptionMedium": "Mediana",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "lyricsAlignmentTitle": "Alineación de las Letras",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "keepScreenOnDisabled": "Desactivado",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOn": "Mantener la Pantalla Encendida",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnWhileLyrics": "Mientras se Muestran Letras",
+  "@keepScreenOnWhileLyrics": {},
+  "genericToggleButtonTooltip": "Toque para alternar.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "resetFiltersButton": "Restaurar filtros",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "lyricsScreen": "Ventana de Letras",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "lyricsFontSizeTitle": "Tamaño de la fuente para las letras",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "keepScreenOnWhilePlaying": "Mientras se Reproduce Música",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnAlwaysOn": "Siempre Encendida",
+  "@keepScreenOnAlwaysOn": {},
+  "alignmentOptionCenter": "En medio",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionStart": "Al inicio",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "artworkTooltip": "Arte de {title}",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "emptyFilteredListTitle": "Ningún elemento encontrado",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "downloadBitrate": "Tasa de bits al Descargar",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "removeFromPlaylistConfirm": "Eliminar",
+  "@removeFromPlaylistConfirm": {},
+  "genericCancel": "Cancelar",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "resetSettingsPromptGlobalConfirm": "Restaurar TODOS los ajustes",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
   }
 }
