@@ -1221,5 +1221,71 @@
         "example": "12"
       }
     }
+  },
+  "repairComplete": "Reparación de Descargas completada.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Actualmente, La normalización de volumen en iOS requiere cambiar el volumen de reproducción para emular el cambio de ganancia. Ya que no podemos aumentar el volumen por encima del 100%, necesitamos disminuirlo por defecto para poder potenciar el volumen en pistas con bajo volumen. El valor es en decibelios (dB), donde -10 dB es el ~30% del volumen, -4.5 dB es el ~60% del volumen y -2 dB es el ~80% del volumen.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "syncComplete": "Todas las descargas se han resincronizado.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "queueRestoreError": "Advertencia: {count,plural, =1{{count} pista} other{{count} pistas}} no pudieron ser restauradas a la cola.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "startInstantMixForIndividualTracksSwitchTitle": "Iniciar Mixes Instantáneos para Pistas Individuales",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "downloadLibraryPrompt": "¿Esta seguro que quiere descargar todo el contenido de la biblioteca ''{libraryName}''?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "runRepairWarning": "El servidor no pudo ser contactado para finalizar la migración de descargas. Por favor ejecute 'Reparar Descargas' desde la pantalla de descargas tan pronto como este en linea.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "downloadSettings": "Descargas",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "Mostrar multimedia de una Biblioteca Desconocida.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "showNullLibraryItemsSubtitle": "Alguna multimedia se puede descargar desde una biblioteca desconocida. Desactive para ocultarla fuera de su colección original.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "downloadItem": "Descargar",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Al habilitarlo, tocar en una pista en la pestaña de canciones comenzara un mix instantáneo de esa pista en lugar de reproducir una sola pista.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "syncDownloads": "Sincronizar y descargar elementos faltantes.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "repairDownloads": "Reparar problemas con los archivos descargados o metadatos.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "maxConcurrentDownloads": "Descargas Concurrentes Máximas",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
   }
 }
