@@ -1364,5 +1364,40 @@
   "syncOnStartupSwitch": "시작할 때 자동으로 다운로드 동기화",
   "@syncOnStartupSwitch": {
     "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "incidentalDownloadTooltip": "{parentName}이/가 이 항목의 다운로드를 요구합니다.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "preferQuickSyncSwitchSubtitle": "자주 변하지 않는 트랙이나 앨범 등 항목은 동기화 시 업데이트되지 않습니다. 다운로드 복원은 언제나 모든 항목을 재동기화합니다.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{앨범} playlist{플레이리스트} artist{아티스트} genre{장르} track{트랙} library{라이브러리} unknown{항목} other{{itemType}}} {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "finampCollectionNames": "{itemType, select, favorites{즐겨찾기} allPlaylists{모든 플레이리스트} fiveLatestAlbums{최신 앨범 다섯} allPlaylistsMetadata{플레이리스트 정보} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
   }
 }
