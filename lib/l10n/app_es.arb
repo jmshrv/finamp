@@ -1172,7 +1172,7 @@
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
-  "largeDownloadWarning": "Advertencia: Esta a punto de descargar {count} {count,plural,=1{Pista} other{Pistas}.",
+  "largeDownloadWarning": "Advertencia: Esta a punto de descargar {count} {count,plural,=1{Pista} other{Pistas}}.",
   "@largeDownloadWarning": {
     "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
     "placeholders": {
