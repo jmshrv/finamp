@@ -712,7 +712,7 @@
   },
   "topTracks": "Canciones más reproducidas",
   "@topTracks": {},
-  "shuffleAlbumsToNextUp": "",
+  "shuffleAlbumsToNextUp": "Mezclar Álbumes al final de \"A Continuación\"",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
@@ -832,7 +832,7 @@
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
   },
-  "shuffleAlbumsNext": "",
+  "shuffleAlbumsNext": "Mezclar Álbumes en \"A Continuación\"",
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
@@ -1931,5 +1931,21 @@
   "showStopButtonOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga un botón de detener además del botón de pausa. Esto detendrá la reproducción sin abrir la aplicación.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "shuffleNext": "Mezclar en \"A Continuación\"",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "confirmShuffleNext": "Mezclara en \"A Continuación\"",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "shuffleToNextUp": "Mezclar al final de \"A Continuación\"",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleAlbumsToQueue": "Mezclar Álbumes al final de la Cola",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   }
 }
