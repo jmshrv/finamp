@@ -1159,5 +1159,54 @@
         "type": "int"
       }
     }
+  },
+  "releaseDateFormatYear": "Año",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "downloadSizeWarningCutoffSubtitle": "Un mensaje de advertencia sera mostrado al descargar más pistas de las especificadas a la vez.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatSubtitle": "Controla el formato en el que todas las fechas de lanzamiento son mostradas en la aplicación.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "largeDownloadWarning": "Advertencia: Esta a punto de descargar {count} {count,plural,=1{Pista} other{Pistas}.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadSizeWarningCutoff": "Umbral de Advertencia para Descargas",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatMonthYear": "Mes y Año",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatMonthDayYear": "Mes, Día y Año",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "librarySelectError": "Error al cargar las librerías disponibles para el usuario",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "releaseDateFormatTitle": "Formato de Fecha de Lanzamiento",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Muestra la fecha de lanzamiento de un álbum en la pantalla del reproductor, después del nombre del álbum.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Mostrar Fecha de Lanzamiento de un Álbum en la Pantalla del Reproductor",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
   }
 }
