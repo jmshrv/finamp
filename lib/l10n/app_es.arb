@@ -1737,5 +1737,38 @@
   "deleteFromTargetDialogText": "Esta por eliminar este {itemType, select, album{álbum} playlist{lista de reproducción} artist{artista} genre{género} track{pista} library{biblioteca} other{elemento}} de {device, select, device{este dispositivo} server{el sistema de archivos del servidor y la biblioteca.{deleteType, select, canDelete{ Esto también eliminara este elemento de este Dispositivo.} cantDelete{ Este elemento se mantendrá en este dispositivo hasta la siguiente sincronización.} notDownloaded{} other{}}\nEsta acción no se puede revertir} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "confirmAddToQueue": "Añadida {type, select, track{pista} album{álbum} artist{artista} playlist{lista de reproducción} genre{género} other{elemento}} a la cola",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Ejecutando} failed{Fallida} syncFailed{Repetidamente De-sincronizada} enqueued{Añadida a la Cola} other{}} {itemCount, plural, =1{Descarga} other{Descargas}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadsWorkersSetting": "Cantidad de Gestores de Descargas",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "syncOnStartupSwitch": "Automáticamente Sincronizar Descargas al Inicio",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "queuesScreen": "Restaurar Reproduciendo Ahora",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
   }
 }
