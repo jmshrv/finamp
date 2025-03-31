@@ -78,13 +78,23 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  Future<void> getRoutes() async {
+  Future<List<FinampOutputRoute>> getRoutes() async {
     try {
-      await outputSwitcherChannel.invokeMethod('getRoutes');
+      final List<Object?>? rawObjects =
+          await outputSwitcherChannel.invokeMethod<List<Object?>>('getRoutes');
+
+      final routes = rawObjects
+              ?.map((obj) => Map<String, dynamic>.from(obj as Map))
+              .map((route) => FinampOutputRoute.fromJson(route))
+              .toList() ??
+          [];
+      return routes;
     } on PlatformException catch (e) {
       print("Failed to get routes: ${e.message}");
+      return [];
     } catch (e) {
       print("Failed to get routes: $e");
+      return [];
     }
   }
 
@@ -101,6 +111,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> setOutputToBluetoothDevice() async {
     try {
       await outputSwitcherChannel.invokeMethod('setOutputToBluetoothDevice');
+    } on PlatformException catch (e) {
+      print("Failed to switch output: ${e.message}");
+    } catch (e) {
+      print("Failed to switch output: $e");
+    }
+  }
+
+  Future<void> setOutputToRoute(FinampOutputRoute route) async {
+    try {
+      await outputSwitcherChannel
+          .invokeMethod('setOutputToRouteByName', {'name': route.name});
     } on PlatformException catch (e) {
       print("Failed to switch output: ${e.message}");
     } catch (e) {
@@ -759,8 +780,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                   effectiveGainChange /
                       20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
           final newVolumeClamped = newVolume.clamp(0.0, 1.0);
-          _volumeNormalizationLogger
-              .finer(
+          _volumeNormalizationLogger.finer(
               "current volume: ${FinampSettingsHelper.finampSettings.currentVolume}");
           _volumeNormalizationLogger.finer(
               "new normalization volume: $newVolume ($newVolumeClamped clipped)");
@@ -771,8 +791,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         // reset gain offset
         _loudnessEnhancerEffect?.setTargetGain(0 /
             10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856ua630329c4e6 is merged)
-        _player.setVolume(
-           FinampSettingsHelper.finampSettings.currentVolume *
+        _player.setVolume(FinampSettingsHelper.finampSettings.currentVolume *
             iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without normalization gain information don't fall back to full volume, but to the base volume for iOS
       }
     }

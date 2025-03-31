@@ -5,6 +5,8 @@ import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart'
 import 'package:finamp/components/AddToPlaylistScreen/playlist_actions_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/album_image.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -46,10 +48,6 @@ Future<void> showOutputMenu({
       minDraggableHeight: 0.2,
       buildSlivers: (context) {
         var themeColor = Theme.of(context).colorScheme.primary;
-        var playlistsFuture = jellyfinApiHelper.getItems(
-          includeItemTypes: "Playlist",
-          sortBy: "SortName",
-        );
 
         final menuEntries = [
           // SongInfo.condensed(
@@ -68,21 +66,6 @@ Future<void> showOutputMenu({
               );
             },
           ),
-          // FutureBuilder(
-          //     future: playlistsFuture.then((value) =>
-          //         value?.firstWhereOrNull((x) => x.id == parentPlaylist?.id)),
-          //     initialData: parentPlaylist,
-          //     builder: (context, snapshot) {
-          //       if (snapshot.data != null) {
-          //         return OutputSelectorTile(
-          //           playlist: snapshot.data!,
-          //           song: item,
-          //           playlistItemId: item.playlistItemId,
-          //         );
-          //       } else {
-          //         return const SizedBox.shrink();
-          //       }
-          //     })
         ];
 
         var menu = [
@@ -90,8 +73,7 @@ Future<void> showOutputMenu({
               header: Padding(
                 padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
                 child: Center(
-                  child: Text(
-                      "TODO",
+                  child: Text("TODO",
                       // AppLocalizations.of(context)!.outputMenuTitle,
                       style: TextStyle(
                           color: Theme.of(context).textTheme.bodyLarge!.color!,
@@ -106,8 +88,7 @@ Future<void> showOutputMenu({
             header: Padding(
               padding: const EdgeInsets.only(
                   top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text(
-                  "TODO",
+              child: Text("TODO",
                   // AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
@@ -122,18 +103,13 @@ Future<void> showOutputMenu({
             header: Padding(
               padding: const EdgeInsets.only(
                   top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text(
-                  "TODO",
+              child: Text("TODO",
                   // AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
             sliver: MenuMask(
               height: 35.0,
-              child:
-                  // SizedBox.shrink(),
-                  OutputTargetList(
-                      playlistsFuture: playlistsFuture
-                          .then((value) => value?.toList() ?? [])),
+              child: OutputTargetList(), // Pass the outputRoutes
             ),
           ),
           const SliverPadding(padding: EdgeInsets.only(bottom: 100.0))
@@ -147,30 +123,20 @@ Future<void> showOutputMenu({
 class OutputTargetList extends StatefulWidget {
   const OutputTargetList({
     super.key,
-    required this.playlistsFuture,
   });
-
-  final Future<List<BaseItemDto>> playlistsFuture;
 
   @override
   State<OutputTargetList> createState() => _OutputTargetListState();
 }
 
 class _OutputTargetListState extends State<OutputTargetList> {
-  @override
-  void initState() {
-    super.initState();
-    playlistsFuture = widget.playlistsFuture.then(
-        (value) => value.map((e) => (e, false, null as String?)).toList());
-  }
-
-  // playlist, isLoading, playlistItemId
-  late Future<List<(BaseItemDto, bool, String?)>> playlistsFuture;
+  final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
   @override
   Widget build(BuildContext context) {
+    Future<List<FinampOutputRoute>> outputRoutes = audioHandler.getRoutes();
     return FutureBuilder(
-      future: playlistsFuture,
+      future: outputRoutes,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return SliverList(
@@ -179,12 +145,13 @@ class _OutputTargetListState extends State<OutputTargetList> {
               if (index == snapshot.data!.length) {
                 return openOsOutputOptionsButton(context);
               }
-              final (playlist, isLoading, playListItemId) =
-                  snapshot.data![index];
+              final route = snapshot.data![index];
               return OutputSelectorTile(
-                  playlist: playlist,
-                  playlistItemId: playListItemId,
-                  isLoading: isLoading);
+                  routeInfo: route,
+                  onSelect: () {
+                    print("refreshing2");
+                    setState(() {});
+                  });
             },
             childCount: snapshot.data!.length + 1,
           ));
@@ -228,38 +195,7 @@ class _OutputTargetListState extends State<OutputTargetList> {
                 builder: (context) => SizedBox.shrink(),
                 // NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
               );
-              if (dialogResult != null) {
-                var oldFuture = playlistsFuture;
-                setState(() {
-                  var loadingItem = [
-                    (
-                      BaseItemDto(id: BaseItemId("pending"), name: dialogResult.$2),
-                      true,
-                      null as String?
-                    )
-                  ];
-                  playlistsFuture =
-                      oldFuture.then((value) => value + loadingItem);
-                });
-                try {
-                  var newId = await dialogResult.$1;
-                  // Give the server time to calculate an initial playlist image
-                  await Future.delayed(const Duration(seconds: 1));
-                  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-                  var playlist = await jellyfinApiHelper.getItemById(BaseItemId(newId));
-                  var playlistItems = await jellyfinApiHelper.getItems(
-                      parentItem: playlist, fields: "");
-                  // var song = playlistItems?.firstWhere(
-                  //     (element) => element.id == widget.itemToAdd.id);
-                  setState(() {
-                    // var newItem = [(playlist, false, song?.playlistItemId)];
-                    // playlistsFuture =
-                    //     oldFuture.then((value) => value + newItem);
-                  });
-                } catch (e) {
-                  GlobalSnackbar.error(e);
-                }
-              }
+              if (dialogResult != null) {}
             },
           ),
         ],
@@ -268,110 +204,38 @@ class _OutputTargetListState extends State<OutputTargetList> {
   }
 }
 
-class OutputSelectorTile extends StatefulWidget {
+class OutputSelectorTile extends StatelessWidget {
   const OutputSelectorTile(
       {super.key,
-      required this.playlist,
-      this.playlistItemId,
-      this.isLoading = false});
+      required this.routeInfo,
+      this.isLoading = false,
+      this.onSelect});
 
-  final BaseItemDto playlist;
-  final String? playlistItemId;
+  final FinampOutputRoute routeInfo;
   final bool isLoading;
-
-  @override
-  State<OutputSelectorTile> createState() => OutputSelectorTileState();
-}
-
-class OutputSelectorTileState extends State<OutputSelectorTile> {
-  String? playlistItemId;
-  int? childCount;
-  bool? itemIsIncluded;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateState();
-  }
-
-  @override
-  void didUpdateWidget(OutputSelectorTile oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _updateState();
-  }
-
-  void _updateState() {
-    if (!widget.isLoading) {
-      playlistItemId = widget.playlistItemId;
-      childCount = widget.playlist.childCount;
-      if (widget.playlistItemId != null) {
-        itemIsIncluded = true;
-      }
-    }
-  }
+  final VoidCallback? onSelect;
 
   @override
   Widget build(BuildContext context) {
-    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
     return ToggleableListTile(
-      forceLoading: widget.isLoading,
-      title: widget.playlist.name ?? AppLocalizations.of(context)!.unknownName,
+      forceLoading: isLoading,
+      title: routeInfo.name ?? AppLocalizations.of(context)!.unknownName,
       subtitle: "TODO",
       // subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
-      leading: AlbumImage(item: widget.playlist),
+      leading: Icon(TablerIcons.device_speaker),
       positiveIcon: TablerIcons.circle_check_filled,
-      negativeIcon: itemIsIncluded == null
-          // we don't actually know if the track is part of the playlist
-          ? TablerIcons.circle_dashed_plus
-          : TablerIcons.circle_plus,
-      initialState: itemIsIncluded ?? false,
+      negativeIcon: TablerIcons.circle_plus,
+      initialState: routeInfo.isSelected,
       onToggle: (bool currentState) async {
-        if (currentState) {
-          // If playlistItemId is null, we need to fetch from the server before we can remove
-          if (playlistItemId == null) {
-            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-            var newItems = await jellyfinApiHelper.getItems(
-                parentItem: widget.playlist, fields: "");
-
-            playlistItemId = null;
-            if (playlistItemId == null) {
-              // We were already not part of the playlist,. so removal is complete
-              setState(() {
-                childCount = newItems?.length ?? 0;
-                itemIsIncluded = false;
-              });
-              return false;
-            }
-            if (!context.mounted) {
-              return true;
-            }
-          }
-          // part of playlist, remove
-          bool removed = true;
-          if (removed) {
-            setState(() {
-              childCount = childCount == null ? null : childCount! - 1;
-              itemIsIncluded = false;
-            });
-          }
-          return !removed;
-        } else {
-          // add to playlist
-          bool added = true;
-          if (added) {
-            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-            var newItems = await jellyfinApiHelper.getItems(
-                parentItem: widget.playlist, fields: "");
-            setState(() {
-              childCount = newItems?.length ?? 0;
-              itemIsIncluded = true;
-            });
-            return true; // this is called before the state is updated
-          }
-          return false;
-        }
+        final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+        await audioHandler.setOutputToRoute(routeInfo);
+        unawaited(Future.delayed(const Duration(milliseconds: 1250)).then((_) {
+          print("refreshing");
+          onSelect?.call();
+        }));
+        return true;
       },
-      enabled: !isOffline,
+      enabled: true,
     );
   }
 }

@@ -210,6 +210,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
+      currentVolume: fields[86] == null ? 1.0 : (fields[86] as num).toDouble(),
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -220,7 +221,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(81)
+      ..writeByte(82)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -382,7 +383,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(84)
       ..write(obj.releaseDateFormat)
       ..writeByte(85)
-      ..write(obj.lastUsedDownloadLocationId);
+      ..write(obj.lastUsedDownloadLocationId)
+      ..writeByte(86)
+      ..write(obj.currentVolume);
   }
 
   @override
@@ -7195,3 +7198,37 @@ const _$FinampFeatureChipTypeEnumMap = {
   FinampFeatureChipType.normalizationGain: 'normalizationGain',
   FinampFeatureChipType.sampleRate: 'sampleRate',
 };
+
+FinampOutputRoute _$FinampOutputRouteFromJson(Map<String, dynamic> json) =>
+    FinampOutputRoute(
+      name: json['name'] as String,
+      connectionState: (json['connectionState'] as num).toInt(),
+      isSystemRoute: json['isSystemRoute'] as bool,
+      isDefault: json['isDefault'] as bool,
+      isDeviceSpeaker: json['isDeviceSpeaker'] as bool,
+      isBluetooth: json['isBluetooth'] as bool,
+      volume: (json['volume'] as num).toDouble(),
+      providerPackageName: json['providerPackageName'] as String,
+      isSelected: json['isSelected'] as bool,
+      deviceType: (json['deviceType'] as num).toInt(),
+      description: json['description'] as String?,
+      extras: json['extras'],
+      iconUri: json['iconUri'] as String?,
+    );
+
+Map<String, dynamic> _$FinampOutputRouteToJson(FinampOutputRoute instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'connectionState': instance.connectionState,
+      'isSystemRoute': instance.isSystemRoute,
+      'isDefault': instance.isDefault,
+      'isDeviceSpeaker': instance.isDeviceSpeaker,
+      'isBluetooth': instance.isBluetooth,
+      'volume': instance.volume,
+      'providerPackageName': instance.providerPackageName,
+      'isSelected': instance.isSelected,
+      'deviceType': instance.deviceType,
+      'description': instance.description,
+      'extras': instance.extras,
+      'iconUri': instance.iconUri,
+    };

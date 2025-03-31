@@ -538,7 +538,7 @@ class FinampSettings {
   @HiveField(85, defaultValue: null)
   String? lastUsedDownloadLocationId;
 
-  @HiveField(80, defaultValue: DefaultSettings.currentVolume)
+  @HiveField(86, defaultValue: DefaultSettings.currentVolume)
   double currentVolume;
   
   static Future<FinampSettings> create() async {
@@ -2611,5 +2611,73 @@ enum ReleaseDateFormat {
       case ReleaseDateFormat.monthDayYear:
         return AppLocalizations.of(context)!.releaseDateFormatMonthDayYear;
     }
+  }
+}
+
+@JsonSerializable()
+class FinampOutputRoute {
+  // mapOf(
+  //   "name" to route.name,
+  //   "connectionState" to route.connectionState,
+  //   "isSystemRoute" to route.isSystemRoute,
+  //   "isDefault" to route.isDefault,
+  //   "isDeviceSpeaker" to route.isDeviceSpeaker,
+  //   "isBluetooth" to route.isBluetooth,
+  //   "volume" to route.volume,
+  //   "providerPackageName" to route.provider.packageName
+  // )
+
+  @HiveField(0)
+  final String name;
+  @HiveField(1)
+  final int connectionState;
+  @HiveField(2)
+  final bool isSystemRoute;
+  @HiveField(3)
+  final bool isDefault;
+  @HiveField(4)
+  final bool isDeviceSpeaker;
+  @HiveField(5)
+  final bool isBluetooth;
+  @HiveField(6)
+  final double volume;
+  @HiveField(7)
+  final String providerPackageName;
+  @HiveField(8)
+  final bool isSelected;
+  @HiveField(9)
+  final int deviceType;
+  @HiveField(10)
+  final String? description;
+  @HiveField(11)
+  final Object? extras;
+  @HiveField(12)
+  final String? iconUri;
+  // @HiveField(13)
+  // final List<Object>? controlFilters;
+
+  FinampOutputRoute({
+    required this.name,
+    required this.connectionState,
+    required this.isSystemRoute,
+    required this.isDefault,
+    required this.isDeviceSpeaker,
+    required this.isBluetooth,
+    required this.volume,
+    required this.providerPackageName,
+    required this.isSelected,
+    required this.deviceType,
+    required this.description,
+    required this.extras,
+    required this.iconUri,
+    // required this.controlFilters,
+  });
+
+  factory FinampOutputRoute.fromJson(Map<String, dynamic> json) {
+    return _$FinampOutputRouteFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return _$FinampOutputRouteToJson(this);
   }
 }
