@@ -46,19 +46,19 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// new queue.
   int? nextInitialIndex;
 
-  Duration _sleepTimerDuration = Duration.zero;
-  DateTime _sleepTimerStartTime = DateTime.now();
+  // Duration _sleepTimerDuration = Duration.zero;
+  // DateTime _sleepTimerStartTime = DateTime.now();
+  SleepTimer sleepTimer = SleepTimer(SleepTimerType.duration, 0, DateTime.now());
 
   /// Holds the current sleep timer, if any. This is a ValueNotifier so that
   /// widgets like SleepTimerButton can update when the sleep timer is/isn't
   /// null.
-  final ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
+  final ValueNotifier<Timer?> _timer = ValueNotifier<Timer?>(null);
+  ValueListenable<Timer?> get timer => _timer;
 
   Future<bool> Function()? _queueCallbackPreviousTrack;
 
   List<int>? get shuffleIndices => _player.shuffleIndices;
-
-  ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   double iosBaseVolumeGainFactor = 1.0;
   Duration minBufferDuration = Duration(seconds: 90);
@@ -312,10 +312,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // await handleEndOfQueue();
 
-      _sleepTimerDuration = Duration.zero;
-
-      _sleepTimer.value?.cancel();
-      _sleepTimer.value = null;
+      _timer.value?.cancel();
+      _timer.value = null;
 
       await super.stop();
     } catch (e) {
@@ -768,41 +766,34 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  void sleepTimerActions()
+  {
+    pause();
+    clearSleepTimer();
+  }
+
   /// Sets the sleep timer with the given [duration].
   Timer setSleepTimer(SleepTimer newSleepTimer) {
+    sleepTimer = newSleepTimer;
 
     if (newSleepTimer.type == SleepTimerType.duration)
     {
-      Duration duration = Duration(seconds: newSleepTimer.length);
-
-      _sleepTimerDuration = duration;
-      _sleepTimerStartTime = DateTime.now();
-
-      _sleepTimer.value = Timer(duration, () async {
-        _sleepTimer.value = null;
-        return await pause();
-      });
+      _timer.value = newSleepTimer.startTimer(() => sleepTimerActions());
     }
 
-    return _sleepTimer.value!;
+    return _timer.value!;
   }
 
   /// Cancels the sleep timer and clears it.
   void clearSleepTimer() {
-    _sleepTimerDuration = Duration.zero;
+    // _sleepTimerDuration = Duration.zero;
 
-    _sleepTimer.value?.cancel();
-    _sleepTimer.value = null;
+    _timer.value?.cancel();
+    _timer.value = null;
   }
 
   Duration get sleepTimerRemaining {
-    if (_sleepTimer.value == null) {
-      return Duration.zero;
-    } else {
-      return _sleepTimerStartTime
-          .add(_sleepTimerDuration)
-          .difference(DateTime.now());
-    }
+    return sleepTimer.getRemaining();
   }
 
   /// Transform a just_audio event into an audio_service state.

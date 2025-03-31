@@ -667,10 +667,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                                 Colors.white,
                   ),
                   ValueListenableBuilder<Timer?>(
-                    valueListenable: _audioHandler.sleepTimer,
+                    valueListenable: _audioHandler.timer,
                     builder: (context, timerValue, child) {
                       final remainingMinutes =
-                          (_audioHandler.sleepTimerRemaining.inSeconds / 60.0)
+                          (_audioHandler.sleepTimerRemaining.inSeconds / 60)
                               .ceil();
                       return PlaybackAction(
                         icon: timerValue != null
@@ -690,11 +690,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                             );
                           }
                         },
-                        tooltip: timerValue != null
-                            ? AppLocalizations.of(context)
-                                    ?.sleepTimerRemainingTime(
-                                        remainingMinutes) ??
-                                "Sleeping in $remainingMinutes minutes"
+                        tooltip: timerValue != null ? 
+                                _audioHandler.sleepTimer.asString(context)
                             : AppLocalizations.of(context)!.sleepTimerTooltip,
                         iconColor: timerValue != null
                             ? iconColor

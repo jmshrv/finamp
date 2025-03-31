@@ -702,8 +702,8 @@ class AppLocalizationsHu extends AppLocalizations {
   String get sleepTimerTooltip => 'Elalvás időzítő';
 
   @override
-  String sleepTimerRemainingTime(int time) {
-    return 'Sleeping in $time minutes';
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
+    return 'Sleeping in $prefix$time $suffix';
   }
 
   @override

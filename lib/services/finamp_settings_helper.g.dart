@@ -117,7 +117,7 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSleepTimer(SleepTimer newSleepTimer) {
+  static void setSleepTimer(SleepTimer? newSleepTimer) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.sleepTimer = newSleepTimer;
     Hive.box<FinampSettings>("FinampSettings")
@@ -649,7 +649,7 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
           (value) => value.requireValue.contentGridViewCrossAxisCountLandscape);
   ProviderListenable<bool> get showTextOnGridView => finampSettingsProvider
       .select((value) => value.requireValue.showTextOnGridView);
-  ProviderListenable<SleepTimer> get sleepTimer =>
+  ProviderListenable<SleepTimer?> get sleepTimer =>
       finampSettingsProvider.select((value) => value.requireValue.sleepTimer);
   ProviderListenable<bool> get useCoverAsBackground => finampSettingsProvider
       .select((value) => value.requireValue.useCoverAsBackground);

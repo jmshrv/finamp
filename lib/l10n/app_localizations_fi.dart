@@ -702,7 +702,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get sleepTimerTooltip => 'Uniajastin';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Nukahtaa $time minuutissa';
   }
 

@@ -18,7 +18,7 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
   final _textController = TextEditingController(
-      text: (FinampSettingsHelper.finampSettings.sleepTimer.length ~/ 60)
+      text: (DefaultSettings.sleepTimerDuration ~/ 60)
           .toString());
 
   final _formKey = GlobalKey<FormState>();
@@ -52,11 +52,11 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                 onSaved: (value) {
                   final valueDouble = double.parse(value!);
                   final durationInSeconds = (valueDouble * 60).round();
-
-                  _audioHandler
-                      .setSleepTimer(SleepTimer(SleepTimerType.duration, durationInSeconds));
+                  SleepTimer newSleepTimer = SleepTimer(SleepTimerType.duration, durationInSeconds, DateTime.now());
+                   // why need in two locations?
+                  _audioHandler.setSleepTimer(newSleepTimer);
                   // FinampSetters.setSleepTimerSeconds(durationInSeconds);
-                  FinampSetters.setSleepTimer(SleepTimer(SleepTimerType.duration, durationInSeconds));
+                  FinampSetters.setSleepTimer(newSleepTimer);
                 },
               ),
             ),

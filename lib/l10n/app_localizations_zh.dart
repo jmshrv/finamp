@@ -702,7 +702,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sleepTimerTooltip => '睡眠定时器';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return '$time 分钟后睡眠';
   }
 
@@ -2668,7 +2668,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get sleepTimerTooltip => '睡眠定時器';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return '$time 分鐘後進入睡眠';
   }
 

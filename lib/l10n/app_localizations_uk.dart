@@ -702,7 +702,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sleepTimerTooltip => 'Таймер сну';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Сон через $time хвилин';
   }
 

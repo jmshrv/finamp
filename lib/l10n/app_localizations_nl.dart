@@ -702,7 +702,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get sleepTimerTooltip => 'Slaaptimer';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Slapen over $time minuten';
   }
 

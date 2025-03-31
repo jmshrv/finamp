@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
@@ -86,7 +87,8 @@ class DefaultSettings {
   static const contentGridViewCrossAxisCountPortrait = 2;
   static const contentGridViewCrossAxisCountLandscape = 3;
   static const showTextOnGridView = true;
-  static const sleepTimer = SleepTimer(SleepTimerType.duration, 1800);
+  static const sleepTimerDuration = 1800; // 30 Minutes default
+  static const sleepTimerType = SleepTimerType.duration;
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
   static const showArtistsTopTracks = true;
@@ -182,7 +184,6 @@ class FinampSettings {
     this.contentGridViewCrossAxisCountLandscape =
         DefaultSettings.contentGridViewCrossAxisCountLandscape,
     this.showTextOnGridView = DefaultSettings.showTextOnGridView,
-    this.sleepTimer = DefaultSettings.sleepTimer,
     required this.downloadLocationsMap,
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
     this.playerScreenCoverMinimumPadding =
@@ -317,8 +318,8 @@ class FinampSettings {
   /// can remember the last duration. I'd use a Duration type here but Hive
   /// doesn't come with an adapter for it by default.
   // @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds)
-  @HiveField(14, defaultValue: DefaultSettings.sleepTimer)
-  SleepTimer sleepTimer;
+  @HiveField(14)
+  SleepTimer? sleepTimer;
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
   @FinampSetterIgnore()
@@ -2611,10 +2612,10 @@ enum ReleaseDateFormat {
 }
 
 @HiveType(typeId: 78)
-enum SleepTimerType
-{
+enum SleepTimerType {
   @HiveField(0)
   duration,
+
   @HiveField(1)
   tracks;
 }
@@ -2623,9 +2624,49 @@ enum SleepTimerType
 class SleepTimer {
   @HiveField(0, defaultValue: SleepTimerType.duration)
   final SleepTimerType type;
+
   @HiveField(1, defaultValue: 1800)
   final int length;
 
-  // Length is in seconds for a duration, length is in tracks count for tracks
-  const SleepTimer (this.type, this.length);
+  @HiveField(2)
+  final DateTime? startTime;
+
+  // Standard constructor (non-const) with optional `startTime`
+  SleepTimer(this.type, this.length, [this.startTime]);
+
+  // Creates a timer for the given duration
+  Timer startTimer (Function callback) {
+    return Timer(getDuration(), () async {
+      return await callback();
+    });
+  }
+
+  Duration getDuration()
+  {
+    return Duration(seconds: length);
+  }
+
+  Duration getRemaining()
+  {
+    return startTime != null ? startTime!.add(getDuration()).difference(DateTime.now()) : Duration.zero;
+  }
+
+  // TODO: use localizations
+  String asString(BuildContext context)
+  {
+    // TODO: If < 1 min, string should be Sleeping in < x minutes
+    String durationPrefix = "";
+    int durationMinutes = (getDuration().inSeconds / 60).ceil();
+
+    if (durationMinutes == 1)
+    {
+      durationPrefix = "<";
+    }
+
+    // TODO: use localizations
+    String durationSuffix = type == SleepTimerType.duration ? "minutes"  : "tracks";
+
+    return AppLocalizations.of(context)!.
+          sleepTimerRemainingTime(durationMinutes, durationPrefix, durationSuffix);
+  }
 }

@@ -702,7 +702,7 @@ class AppLocalizationsTa extends AppLocalizations {
   String get sleepTimerTooltip => 'தூக்க நேரங்குறிகருவி';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return '$time நிமிடங்களில் தூங்குகிறது';
   }
 

@@ -705,7 +705,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get sleepTimerTooltip => 'Wyłącznik czasowy';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Usypiam za $time minut';
   }
 

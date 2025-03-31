@@ -98,9 +98,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       contentGridViewCrossAxisCountLandscape:
           fields[12] == null ? 3 : (fields[12] as num).toInt(),
       showTextOnGridView: fields[13] == null ? true : fields[13] as bool,
-      sleepTimer: fields[14] == null
-          ? DefaultSettings.sleepTimer
-          : fields[14] as SleepTimer,
       downloadLocationsMap: fields[15] == null
           ? {}
           : (fields[15] as Map).cast<String, DownloadLocation>(),
@@ -212,6 +209,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
     )
+      ..sleepTimer = fields[14] as SleepTimer?
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
       ..defaultDownloadLocation = fields[58] as String?
@@ -1098,17 +1096,20 @@ class SleepTimerAdapter extends TypeAdapter<SleepTimer> {
     return SleepTimer(
       fields[0] == null ? SleepTimerType.duration : fields[0] as SleepTimerType,
       fields[1] == null ? 1800 : (fields[1] as num).toInt(),
+      fields[2] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SleepTimer obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.type)
       ..writeByte(1)
-      ..write(obj.length);
+      ..write(obj.length)
+      ..writeByte(2)
+      ..write(obj.startTime);
   }
 
   @override

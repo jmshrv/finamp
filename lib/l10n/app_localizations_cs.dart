@@ -709,7 +709,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get sleepTimerTooltip => 'Časovač spánku';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Uspání za $time minut';
   }
 

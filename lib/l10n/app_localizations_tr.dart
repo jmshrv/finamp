@@ -702,7 +702,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sleepTimerTooltip => 'Uyku zamanlayıcısı';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return '$time dakika içinde uyuyor';
   }
 

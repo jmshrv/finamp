@@ -702,7 +702,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get sleepTimerTooltip => '취침 타이머';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return '취침 타이머 $time분 남음';
   }
 

@@ -714,7 +714,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sleepTimerTooltip => 'Minuteur de sommeil';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Arrêt de la lecture dans $time minutes';
   }
 

@@ -702,7 +702,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get sleepTimerTooltip => 'Cronômetro de Sono';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Dormindo em $time minutos';
   }
 
@@ -2648,7 +2648,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get sleepTimerTooltip => 'Temporizador de sono';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Suspendendo em $time minutos';
   }
 

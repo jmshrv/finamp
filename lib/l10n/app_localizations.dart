@@ -1343,8 +1343,8 @@ abstract class AppLocalizations {
   /// Button label for sleep timer. {time} is the amount of minutes left.
   ///
   /// In en, this message translates to:
-  /// **'Sleeping in {time} minutes'**
-  String sleepTimerRemainingTime(int time);
+  /// **'Sleeping in {prefix}{time} {suffix}'**
+  String sleepTimerRemainingTime(int time, String prefix, String suffix);
 
   /// No description provided for @addToPlaylistTooltip.
   ///

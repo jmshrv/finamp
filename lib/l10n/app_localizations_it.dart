@@ -702,7 +702,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get sleepTimerTooltip => 'Timer di spegnimento';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Spegnimento in $time minuti';
   }
 

@@ -707,7 +707,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get sleepTimerTooltip => 'Odbrojavanje';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Gasi se za $time min';
   }
 

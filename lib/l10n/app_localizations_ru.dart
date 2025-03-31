@@ -710,7 +710,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sleepTimerTooltip => 'Таймер сна';
 
   @override
-  String sleepTimerRemainingTime(int time) {
+  String sleepTimerRemainingTime(int time, String prefix, String suffix) {
     return 'Заснёт через $time минут';
   }
 
