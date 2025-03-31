@@ -1156,7 +1156,7 @@
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
   },
-  "deleteDownloadsPrompt": "이 기기에서 {itemType, select, album{앨범 } playlist{플레이리스트 } artist{아티스트 } genre{장르 } track{트랙 } library{라이브러리 } other{item}} '{itemName}'을/를 삭제하시겠습니까?",
+  "deleteDownloadsPrompt": "기기에서 {",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
