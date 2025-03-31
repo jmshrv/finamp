@@ -883,5 +883,24 @@
   "deleteFromTargetConfirmButton": "Eliminar{target, select, device{ del Dispositivo} server{ del Servidor} other{}}",
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "offlineTrackCount": "{count,plural,=1{{count} Pista} other{{count} PIstas}}, {downloads} {count,plural,=1{Descargada} other{Descargadas}}",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Margen mínimo en la portada del álbum",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "El margen mínimo alrededor de la portada del álbum en la pantalla del reproductor, en % del ancho de la pantalla.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   }
 }
