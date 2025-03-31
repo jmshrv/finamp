@@ -1572,5 +1572,56 @@
   "cacheLibraryImagesSettingsSubtitle": "Todas las carátulas de álbumes, artistas, géneros, y listas de reproducción de la biblioteca activa serán descargadas.",
   "@cacheLibraryImagesSettingsSubtitle": {},
   "allPlaylistsInfoSetting": "Descargar Metadatos de la Lista de Reproducción",
-  "@allPlaylistsInfoSetting": {}
+  "@allPlaylistsInfoSetting": {},
+  "preferQuickSyncSwitch": "Preferir Sincronizaciones Rápidas",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "fixedGridSizeSwitchTitle": "Utilizar un tamaño fijo para las cuadriculas",
+  "@fixedGridSizeSwitchTitle": {},
+  "removeFromPlaylistPrompt": "¿Quitar '{itemName}' de la lista de reproducción '{playlistName}'?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "fixedGridTileSizeEnum": "{size, select, small{Pequeña} medium{Mediana} large{Grande} veryLarge{Muy Grande} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "oneLineMarqueeTextButtonSubtitle": "Automáticamente desplaza los títulos de las pistas que sean demasiado largos para mostrar en dos lineas",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "marqueeOrTruncateButtonSubtitle": "Mostrar ... al final de los títulos largos en lugar de desplazar el texto",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "hidePlayerBottomActions": "Ocultar acciones de la parte inferior",
+  "@hidePlayerBottomActions": {},
+  "showArtistChipImage": "Mostrar imágenes del artista junto al nombre del artista",
+  "@showArtistChipImage": {},
+  "showArtistChipImageSubtitle": "Esto afecta las pequeñas vistas previas de los artistas, como en la pantalla del reproductor.",
+  "@showArtistChipImageSubtitle": {},
+  "fixedGridSizeSwitchSubtitle": "El tamaño de las cuadriculas no reaccionara al tamaño de la ventana/pantalla.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "prioritizePlayerCover": "Darle prioridad a la carátula del álbum",
+  "@prioritizePlayerCover": {},
+  "scrollToCurrentTrack": "Desplazar a la pista actual",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "fiveLatestAlbumsSetting": "Descargar los últimos 5 álbumes",
+  "@fiveLatestAlbumsSetting": {},
+  "fixedGridSizeTitle": "Tamaño de las Cuadriculas",
+  "@fixedGridSizeTitle": {},
+  "cacheLibraryImagesSettings": "Guardar las imágenes de la biblioteca actual en el caché",
+  "@cacheLibraryImagesSettings": {}
 }
