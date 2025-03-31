@@ -526,7 +526,7 @@ class PlaybackHistoryService {
         positionTicks: playerPosition.inMicroseconds * 10,
         playbackStartTimeTicks:
             _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10,
-        volumeLevel: (_audioService.volume * 100).round(),
+        volumeLevel: (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
         playMethod: item.item.extras?["shouldTranscode"] as bool? ?? false
             ? "Transcode"
