@@ -273,6 +273,7 @@ Future<void> setupHive() async {
   Hive.registerAdapter(FinampFeatureChipsConfigurationAdapter());
   Hive.registerAdapter(FinampFeatureChipTypeAdapter());
   Hive.registerAdapter(ReleaseDateFormatAdapter());
+  Hive.registerAdapter(AutoOfflineOptionAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
