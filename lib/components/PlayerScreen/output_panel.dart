@@ -186,16 +186,13 @@ class _OutputTargetListState extends State<OutputTargetList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CTAMedium(
-            text: AppLocalizations.of(context)!.newPlaylist,
+            text: "Connect to a device*",
             icon: TablerIcons.plus,
             //accentColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
-              var dialogResult = await showDialog<(Future<String>, String?)?>(
-                context: context,
-                builder: (context) => SizedBox.shrink(),
-                // NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
-              );
-              if (dialogResult != null) {}
+              final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+              // await audioHandler.showOutputSwitcherDialog();
+              await audioHandler.openBluetoothSettings();
             },
           ),
         ],

@@ -1,5 +1,6 @@
 package com.unicornsonlsd.finamp
 
+import android.content.Intent
 import androidx.annotation.NonNull
 import androidx.mediarouter.app.SystemOutputSwitcherDialogController
 import androidx.mediarouter.media.MediaRouter
@@ -69,8 +70,10 @@ class MainActivity: AudioServiceActivity() {
         val targetRoute = routes.first { route -> route.name == call.argument<String>("name") }
         router.selectRoute(targetRoute)
         result.success(null)
-      }
-      else {
+      } else if (call.method == "openBluetoothSettings") {
+        startActivity(Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS))
+        result.success(null)
+      } else {
         println("Method not found: '${call.method}'")
         result.notImplemented()
       }

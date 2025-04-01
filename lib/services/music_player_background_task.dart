@@ -67,6 +67,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       MethodChannel('com.unicornsonlsd.finamp/output_switcher');
 
   Future<void> showOutputSwitcherDialog() async {
+    if (!Platform.isAndroid) {
+      return;
+    }
     try {
       print("Showing output switcher dialog");
       await outputSwitcherChannel.invokeMethod('showOutputSwitcherDialog');
@@ -78,7 +81,24 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
+  Future<void> openBluetoothSettings() async {
+    if (!Platform.isAndroid) {
+      return;
+    }
+    try {
+      print("Opening Bluetooth settings");
+      await outputSwitcherChannel.invokeMethod('openBluetoothSettings');
+    } on PlatformException catch (e) {
+      print("Failed to open Bluetooth settings: ${e.message}");
+    } catch (e) {
+      print("Failed to open Bluetooth settings: $e");
+    }
+  }
+
   Future<List<FinampOutputRoute>> getRoutes() async {
+    if (!Platform.isAndroid) {
+      return [];
+    }
     try {
       final List<Object?>? rawObjects =
           await outputSwitcherChannel.invokeMethod<List<Object?>>('getRoutes');
@@ -99,6 +119,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> setOutputToDeviceSpeaker() async {
+    if (!Platform.isAndroid) {
+      return;
+    }
     try {
       await outputSwitcherChannel.invokeMethod('setOutputToDeviceSpeaker');
     } on PlatformException catch (e) {
@@ -109,6 +132,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> setOutputToBluetoothDevice() async {
+    if (!Platform.isAndroid) {
+      return;
+    }
     try {
       await outputSwitcherChannel.invokeMethod('setOutputToBluetoothDevice');
     } on PlatformException catch (e) {
@@ -119,6 +145,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> setOutputToRoute(FinampOutputRoute route) async {
+    if (!Platform.isAndroid) {
+      return;
+    }
     try {
       await outputSwitcherChannel
           .invokeMethod('setOutputToRouteByName', {'name': route.name});
