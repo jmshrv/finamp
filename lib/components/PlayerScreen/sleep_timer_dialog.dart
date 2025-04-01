@@ -16,12 +16,10 @@ class SleepTimerDialog extends ConsumerStatefulWidget {
 
 class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-
   final _textController = TextEditingController(
-      text: (DefaultSettings.sleepTimerDuration ~/ 60)
-          .toString());
-
+      text: (DefaultSettings.sleepTimerDuration ~/ 60).toString());
   final _formKey = GlobalKey<FormState>();
+  SleepTimerType _selectedMode = SleepTimerType.duration; // Default selection
 
   @override
   Widget build(BuildContext context) {
@@ -29,36 +27,56 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
       title: Text(AppLocalizations.of(context)!.setSleepTimer),
       content: Form(
         key: _formKey,
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: TextFormField(
-                controller: _textController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.minutes),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.required;
-                  }
+            DropdownButton<SleepTimerType>(
+              isExpanded: true,
+              value: _selectedMode,
+              onChanged: (SleepTimerType? newValue) {
+                setState(() {
+                  _selectedMode = newValue!;
+                });
+              },
+              items: SleepTimerType.values.map((SleepTimerType mode) {
+                return DropdownMenuItem<SleepTimerType>(
+                  value: mode,
+                  child: Text(mode.toString().split('.').last),
+                );
+              }).toList(),
+            ),
+            TextFormField(
+              controller: _textController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              textAlign: TextAlign.center,
+              decoration: 
+                  InputDecoration(labelText: _selectedMode.toString()),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.of(context)!.required;
+                }
 
-                  if (double.tryParse(value) == null) {
-                    return AppLocalizations.of(context)!.invalidNumber;
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  final valueDouble = double.parse(value!);
-                  final durationInSeconds = (valueDouble * 60).round();
-                  SleepTimer newSleepTimer = SleepTimer(SleepTimerType.duration, durationInSeconds, DateTime.now());
-                   // TODO: why need in two locations?
-                  _audioHandler.setSleepTimer(newSleepTimer);
-                  // FinampSetters.setSleepTimerSeconds(durationInSeconds);
-                  FinampSetters.setSleepTimer(newSleepTimer);
-                },
-              ),
+                if (double.tryParse(value) == null) {
+                  return AppLocalizations.of(context)!.invalidNumber;
+                }
+                return null;
+              },
+              onSaved: (value) {
+                final valueDouble = double.parse(value!);
+                int duration = 0;
+
+                if (_selectedMode == SleepTimerType.duration) {
+                  duration = (valueDouble * 60).round();
+                } else if (_selectedMode == SleepTimerType.tracks) {
+                  duration = valueDouble.round();
+                }
+
+                SleepTimer newSleepTimer = SleepTimer(_selectedMode, duration, DateTime.now());
+                _audioHandler.setSleepTimer(newSleepTimer);
+                FinampSetters.setSleepTimer(newSleepTimer);
+              },
             ),
           ],
         ),

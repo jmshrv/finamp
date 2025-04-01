@@ -674,7 +674,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                             ? TablerIcons.hourglass_high
                             : TablerIcons.hourglass_empty,
                         onPressed: () async {
-                          if (timerValue != null) {
+                          if (timerValue != null || _audioHandler.sleepTimer.remainingLength > 0) {
                             await showDialog(
                               context: context,
                               builder: (context) =>
@@ -687,10 +687,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                             );
                           }
                         },
-                        tooltip: timerValue != null ? 
+                        tooltip: timerValue != null || _audioHandler.sleepTimer.remainingLength > 0 ? 
                                 _audioHandler.sleepTimer.asString(context)
                             : AppLocalizations.of(context)!.sleepTimerTooltip,
-                        iconColor: timerValue != null
+                        iconColor: timerValue != null || _audioHandler.sleepTimer.remainingLength > 0
                             ? iconColor
                             : Theme.of(context).textTheme.bodyMedium?.color ??
                                 Colors.white,

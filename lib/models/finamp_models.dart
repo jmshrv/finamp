@@ -2614,25 +2614,38 @@ enum ReleaseDateFormat {
 @HiveType(typeId: 78)
 enum SleepTimerType {
   @HiveField(0)
-  duration,
+  duration("Duration"), // TODO: Use localizations?
 
   @HiveField(1)
-  tracks;
+  tracks("Tracks");
+
+  final String _display;
+
+  const SleepTimerType(this._display);
+
+  @override
+  String toString() => _display;
 }
 
 @HiveType(typeId: 79)
 class SleepTimer {
-  @HiveField(0, defaultValue: SleepTimerType.duration)
+  @HiveField(0, defaultValue: DefaultSettings.sleepTimerType)
   final SleepTimerType type;
 
-  @HiveField(1, defaultValue: 1800)
+  @HiveField(1, defaultValue: DefaultSettings.sleepTimerDuration)
   final int length;
 
   @HiveField(2)
   final DateTime? startTime;
 
+  @HiveField(3, defaultValue: DefaultSettings.sleepTimerDuration)
+  int remainingLength = DefaultSettings.sleepTimerDuration;
+
   // Standard constructor (non-const) with optional `startTime`
-  SleepTimer(this.type, this.length, [this.startTime]);
+  SleepTimer(this.type, this.length, [this.startTime])
+  {
+    remainingLength = length;
+  }
 
   // Creates a timer for the given duration
   Timer startTimer (Function callback) {
@@ -2656,17 +2669,21 @@ class SleepTimer {
   {
     // TODO: If < 1 min, string should be Sleeping in < x minutes
     String durationPrefix = "";
-    int durationMinutes = (getRemaining().inSeconds / 60).ceil();
 
-    if (durationMinutes == 1)
+  if (type == SleepTimerType.duration)
+  {
+    remainingLength = (getRemaining().inSeconds / 60).ceil();
+
+    if (remainingLength == 1)
     {
       durationPrefix = "<";
     }
-
+  }
+  
     // TODO: use localizations
     String durationSuffix = type == SleepTimerType.duration ? AppLocalizations.of(context)!.minutes.toLowerCase()  : AppLocalizations.of(context)!.tracks.toLowerCase();
 
     return AppLocalizations.of(context)!.
-          sleepTimerRemainingTime(durationMinutes, durationPrefix, durationSuffix);
+          sleepTimerRemainingTime(remainingLength, durationPrefix, durationSuffix);
   }
 }

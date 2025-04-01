@@ -242,6 +242,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // not updating between tracks (https://github.com/jmshrv/finamp/issues/844)
     mediaItem.listen((_) {
       final event = _transformEvent(_player.playbackEvent);
+
+      if (event.bufferedPosition == Duration.zero
+        && sleepTimer.type == SleepTimerType.tracks
+        && sleepTimer.startTime != null
+        )
+      {
+        // Listen for events if it's the next track, and it's a tracks timer, reduce the length
+        sleepTimer.remainingLength--;
+
+        if (sleepTimer.remainingLength <= 0)
+        {
+          sleepTimerActions();
+        }
+      }
+
       playbackState.add(event);
     });
   }
@@ -774,28 +789,29 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   /// Sets the sleep timer with the given [duration].
-  Timer setSleepTimer(SleepTimer newSleepTimer) {
+  Timer? setSleepTimer(SleepTimer newSleepTimer) {
      sleepTimer = newSleepTimer;
 
     if (newSleepTimer.type == SleepTimerType.duration)
     {
       _timer.value = newSleepTimer.startTimer(() => sleepTimerActions());
+      return _timer.value!;
     }
 
-    return _timer.value!;
+    return null;
   }
 
   /// Cancels the sleep timer and clears it.
   void clearSleepTimer() {
     // _sleepTimerDuration = Duration.zero;
-
+    sleepTimer.remainingLength = 0;
     _timer.value?.cancel();
     _timer.value = null;
   }
 
-  Duration get sleepTimerRemaining {
-    return sleepTimer.getRemaining();
-  }
+  // Duration get sleepTimerRemaining {
+  //   return sleepTimer.getRemaining();
+  // }
 
   /// Transform a just_audio event into an audio_service state.
   ///
