@@ -170,7 +170,7 @@
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "Lägg till i Spellista",
   "@addToPlaylistTitle": {},
-  "createButtonLabel": "SKAPA",
+  "createButtonLabel": "Skapa",
   "@createButtonLabel": {},
   "setSleepTimer": "Ställ In Sovtimer",
   "@setSleepTimer": {},
@@ -231,7 +231,7 @@
   "@password": {},
   "pathReturnSlashErrorMessage": "Sökvägar som returnerar ett \"/\" kan inte användas",
   "@pathReturnSlashErrorMessage": {},
-  "internalExternalIpExplanation": "Om du vill kunna komma åt din Jellyfin-server på distans måste du använda din externa IP.\n\nOm din server är på en HTTP-standardport (80 eller 443) eller Jellyfins standardport (8096), behöver du inte ange porten.\n\nOm webbadressen är korrekt bör du se viss information om din server dyka upp under inmatningsfältet.",
+  "internalExternalIpExplanation": "Om du vill kunna komma åt din Jellyfin-server utanför hemmet så måste du använda din externa IP-adress.\n\nOm din server är på en HTTP-standardport (80 eller 443) eller Jellyfins standardport (8096) så behöver du inte ange porten.\n\nOm webbadressen är korrekt bör du se viss information om din server dyka upp under inmatningsfältet.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -276,7 +276,7 @@
   },
   "downloadsQueued": "Nedladdning förberedd, laddar ner filer",
   "@downloadsQueued": {},
-  "startupError": "Någonting gick fel under uppstart. Felet var: {error}\n\nSkapa gärna ett ärende på github.com/UnicornsOnLSD/finamp med en skärmdump av denna sida. Om problemet fortsätter kan du rensa appdatan för att återställa appen.",
+  "startupError": "Någonting gick fel under uppstarten. Felet var: {error}\n\nSkapa gärna ett ärende på github.com/UnicornsOnLSD/finamp med en skärmdump av denna sida. Om problemet fortsätter kan du rensa appdatan för att återställa appen.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -350,7 +350,7 @@
   "@downloadLocations": {},
   "customLocation": "Anpassad Plats",
   "@customLocation": {},
-  "customLocationsBuggy": "Det finns en hel del buggar relaterade till anpassade platser just nu på grund av krångel med användarbehörigheter. Jag försöker lista ut hur det bäst ska lösas, men i nuläget rekommenderar jag att inte använda dem.",
+  "customLocationsBuggy": "Anpassade platser kan vara extremt buggade och rekommenderas inte i de flesta fall. Platser under systemets 'Musik'-mapp förhindrar sparandet av albumomslag på grund av begränsningar i operativsystemet.",
   "@customLocationsBuggy": {},
   "startMix": "Starta Mix",
   "@startMix": {},
@@ -396,7 +396,7 @@
   "@removedFromPlaylist": {},
   "viewType": "Visningstyp",
   "@viewType": {},
-  "removeFromPlaylistTooltip": "Ta bort från spellista",
+  "removeFromPlaylistTooltip": "Ta bort från den här spellistan",
   "@removeFromPlaylistTooltip": {},
   "bufferDuration": "Buffertlängd",
   "@bufferDuration": {},
@@ -412,7 +412,7 @@
       }
     }
   },
-  "removeFromPlaylistTitle": "Ta bort från spellista",
+  "removeFromPlaylistTitle": "Ta bort från den här spellistan",
   "@removeFromPlaylistTitle": {},
   "bufferDurationSubtitle": "Den maximala tiden som ska buffras, i sekunder. Kräver omstart.",
   "@bufferDurationSubtitle": {},
@@ -420,7 +420,7 @@
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
   },
-  "refresh": "UPPDATERA",
+  "refresh": "Uppdatera",
   "@refresh": {},
   "confirm": "Bekräfta",
   "@confirm": {},
@@ -506,7 +506,7 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "connectingToServer": "Ansluter till server...",
+  "connectingToServer": "Ansluter till server…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -526,7 +526,7 @@
   "@serverUrlHint": {
     "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Letar efter servrar...",
+  "loginFlowLocalNetworkServersScanningForServers": "Söker efter servrar…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -538,7 +538,7 @@
   "@orDivider": {
     "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
   },
-  "loginFlowSelectAUser": "Välj en änvändare",
+  "loginFlowSelectAUser": "Välj en användare",
   "@loginFlowSelectAUser": {
     "description": "Heading for the list of users that the user can select from during the login flow."
   },
@@ -609,5 +609,162 @@
   "loginFlowCustomUser": "Anpassad Användare",
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "deleteDownloadsConfirmButtonText": "Radera",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "offlineTrackCountArtist": "{count,plural,=1{{count} spår} other{{count} spår}} nedladdade",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "speed": "Hastighet",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "showArtistsTopTracks": "Visa mest lyssnade spåren i artistvy",
+  "@showArtistsTopTracks": {},
+  "backToAccountSelection": "Tillbaka till Kontoval",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "specialDownloads": "Särskilda nedladdningar",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "Inga föremål har laddats ned.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "offlineTrackCount": "{count,plural,=1{{count} spår} other{{count} spår}}, {downloads} nedladdade",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "customizationSettingsTitle": "Anpassa",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "playbackSpeedControlSetting": "Visa uppspelningshastighet",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "automatic": "Automatisk",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "reset": "Återställ",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "apply": "Verkställ",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minsta vaddering runt albumomslaget på spelarskärmen, i % av skärmbredden.",
+  "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+    "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "playerScreenMinimumCoverPaddingEditorTitle": "Minsta vaddering av albumomslag",
+  "@playerScreenMinimumCoverPaddingEditorTitle": {
+    "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "showArtistsTopTracksSubtitle": "Huruvida de 5 mest lyssnade spåren av en artist skall visas.",
+  "@showArtistsTopTracksSubtitle": {},
+  "loginFlowQuickConnectDisabled": "Snabbanslutning är avstängd på den här servern.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "genericCancel": "Avbryt",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "shown": "Visas",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "hidden": "Dold",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} spår} other{{trackCount} spår}}, {imageCount,plural,=1{{imageCount} bild} other{{imageCount} bilder}}\n{syncCount,plural,=1{{syncCount} nod synkroniseras} other{{syncCount} noder synkroniseras}}{repairing, plural, =0{} other{\nRepareras för närvarande}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "backToServerSelection": "Tillbaka till Serverval",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "Använd Snabbanslutningskod",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectInstructions": "Öppna Jellyfin-appen eller webbsidan, klicka på din användarikon, och välj Snabbanslutning.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "startMixNoTracksGenre": "Tryck länge på en genre för att lägga till eller ta bort den från mix-byggaren innan du startar en mix",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "playbackSpeedControlSettingSubtitle": "Huruvida reglage för uppspelningshastighet visas på uppspelningsskärmen",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "playbackSpeedControlSettingDescription": "Automatisk:\nFinamp försöker att avgöra huruvida spået du spelar är en podcast eller (del av) en ljudbok. Detta anses vara fallet ifall spåret är längre än {trackDuration} minuter, ifall spårets album är längre än {albumDuration} timmar, eller ifal spåret har tilldelats minst en av dessa genrer: {genreList}\nReglage för uppspelningshastighet visas i så fall på uppspelningsskärmen.\n\nSynlig:\nReglage för uppspelningshastighet visas alltid på uppspelningsskärmen.\n\nDold:\nReglage för uppspelningshastighet är alltid dold på uppspelningsskärmen.",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
+      }
+    }
+  },
+  "deleteDownloadsPrompt": "Är du säker på att du vill radera {itemType, select, album{albumet} playlist{spellistan} artist{artisten} genre{genren} track{spåret} library{biblioteket} other{föremålet}} '{itemName}' från denna enhet?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   }
 }
