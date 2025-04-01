@@ -53,7 +53,7 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                   final valueDouble = double.parse(value!);
                   final durationInSeconds = (valueDouble * 60).round();
                   SleepTimer newSleepTimer = SleepTimer(SleepTimerType.duration, durationInSeconds, DateTime.now());
-                   // why need in two locations?
+                   // TODO: why need in two locations?
                   _audioHandler.setSleepTimer(newSleepTimer);
                   // FinampSetters.setSleepTimerSeconds(durationInSeconds);
                   FinampSetters.setSleepTimer(newSleepTimer);

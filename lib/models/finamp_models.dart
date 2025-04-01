@@ -2656,7 +2656,7 @@ class SleepTimer {
   {
     // TODO: If < 1 min, string should be Sleeping in < x minutes
     String durationPrefix = "";
-    int durationMinutes = (getDuration().inSeconds / 60).ceil();
+    int durationMinutes = (getRemaining().inSeconds / 60).ceil();
 
     if (durationMinutes == 1)
     {
@@ -2664,7 +2664,7 @@ class SleepTimer {
     }
 
     // TODO: use localizations
-    String durationSuffix = type == SleepTimerType.duration ? "minutes"  : "tracks";
+    String durationSuffix = type == SleepTimerType.duration ? AppLocalizations.of(context)!.minutes.toLowerCase()  : AppLocalizations.of(context)!.tracks.toLowerCase();
 
     return AppLocalizations.of(context)!.
           sleepTimerRemainingTime(durationMinutes, durationPrefix, durationSuffix);

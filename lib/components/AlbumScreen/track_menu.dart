@@ -669,9 +669,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                   ValueListenableBuilder<Timer?>(
                     valueListenable: _audioHandler.timer,
                     builder: (context, timerValue, child) {
-                      final remainingMinutes =
-                          (_audioHandler.sleepTimerRemaining.inSeconds / 60)
-                              .ceil();
                       return PlaybackAction(
                         icon: timerValue != null
                             ? TablerIcons.hourglass_high

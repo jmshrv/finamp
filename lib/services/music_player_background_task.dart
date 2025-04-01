@@ -50,7 +50,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   // DateTime _sleepTimerStartTime = DateTime.now();
   SleepTimer sleepTimer = SleepTimer(SleepTimerType.duration, 0, DateTime.now());
 
-  /// Holds the current sleep timer, if any. This is a ValueNotifier so that
+    /// Holds the current sleep timer, if any. This is a ValueNotifier so that
   /// widgets like SleepTimerButton can update when the sleep timer is/isn't
   /// null.
   final ValueNotifier<Timer?> _timer = ValueNotifier<Timer?>(null);
@@ -312,6 +312,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // await handleEndOfQueue();
 
+      // TODO: Do we want to actually cancel the sleep timer if we stop the music?
       _timer.value?.cancel();
       _timer.value = null;
 
@@ -774,7 +775,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   /// Sets the sleep timer with the given [duration].
   Timer setSleepTimer(SleepTimer newSleepTimer) {
-    sleepTimer = newSleepTimer;
+     sleepTimer = newSleepTimer;
 
     if (newSleepTimer.type == SleepTimerType.duration)
     {
