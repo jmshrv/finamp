@@ -3181,6 +3181,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading available libraries for user'**
   String get librarySelectError;
+
+  /// Title for the output menu that allows the user to change the audio output device and volume
+  ///
+  /// In en, this message translates to:
+  /// **'Change Output'**
+  String get outputMenuTitle;
+
+  /// Title for the volume section in the output menu
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get outputMenuVolumeSectionTitle;
+
+  /// Title for the available devices section in the output menu
+  ///
+  /// In en, this message translates to:
+  /// **'Available Devices'**
+  String get outputMenuDevicesSectionTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
 import 'package:finamp/components/AddToPlaylistScreen/playlist_actions_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
@@ -13,6 +15,7 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -54,7 +57,6 @@ Future<void> showOutputMenu({
           //   item: item,
           //   useThemeImage: usePlayerTheme,
           // ),
-          const SizedBox(height: 16),
           Consumer(
             builder: (context, ref, child) {
               return VolumeSlider(
@@ -66,19 +68,60 @@ Future<void> showOutputMenu({
               );
             },
           ),
+          const SizedBox(height: 10),
         ];
 
         var menu = [
           SliverStickyHeader(
               header: Padding(
                 padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
-                child: Center(
-                  child: Text("TODO",
-                      // AppLocalizations.of(context)!.outputMenuTitle,
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color!,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      // just for justifying the remaining contents of the row
+                      width: 38,
+                    ),
+                    Center(
+                      child: Text(AppLocalizations.of(context)!.outputMenuTitle,
+                          // AppLocalizations.of(context)!.outputMenuTitle,
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color!,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400)),
+                    ),
+                    if (Platform.isIOS)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 1000),
+                          switchOutCurve: const Threshold(0.0),
+                          child: Consumer(builder: (context, ref, child) {
+                            return AirPlayRoutePickerView(
+                              key: ValueKey(
+                                  ref.watch(localThemeProvider).primary),
+                              tintColor: ref.watch(localThemeProvider).primary,
+                              activeTintColor: jellyfinBlueColor,
+                              onShowPickerView: () => FeedbackHelper.feedback(
+                                  FeedbackType.selection),
+                            );
+                          }),
+                        ),
+                      ),
+                    if (Platform.isAndroid)
+                      IconButton(
+                        icon: Icon(TablerIcons.cast),
+                        onPressed: () {
+                          final audioHandler =
+                              GetIt.instance<MusicPlayerBackgroundTask>();
+                          audioHandler.getRoutes();
+                          // audioHandler.setOutputToDeviceSpeaker();
+                          // audioHandler.setOutputToBluetoothDevice();
+                          audioHandler.showOutputSwitcherDialog();
+                        },
+                      ),
+                  ],
                 ),
               ),
               sliver: SliverToBoxAdapter(
@@ -88,7 +131,8 @@ Future<void> showOutputMenu({
             header: Padding(
               padding: const EdgeInsets.only(
                   top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text("TODO",
+              child: Text(
+                  AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
                   // AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
@@ -103,7 +147,8 @@ Future<void> showOutputMenu({
             header: Padding(
               padding: const EdgeInsets.only(
                   top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text("TODO",
+              child: Text(
+                  AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
                   // AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
@@ -187,7 +232,7 @@ class _OutputTargetListState extends State<OutputTargetList> {
         children: [
           CTAMedium(
             text: "Connect to a device*",
-            icon: TablerIcons.plus,
+            icon: TablerIcons.cast,
             //accentColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
               final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -217,11 +262,25 @@ class OutputSelectorTile extends StatelessWidget {
     return ToggleableListTile(
       forceLoading: isLoading,
       title: routeInfo.name ?? AppLocalizations.of(context)!.unknownName,
-      subtitle: "TODO",
+      subtitle: (routeInfo.isDeviceSpeaker
+          ? "Device Speaker*"
+          : switch (routeInfo.deviceType) {
+              1 => "TV*",
+              3 => "Bluetooth*",
+              _ => "Unknown*",
+            }),
       // subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
-      leading: Icon(TablerIcons.device_speaker),
-      positiveIcon: TablerIcons.circle_check_filled,
-      negativeIcon: TablerIcons.circle_plus,
+      leading: Container(
+        padding: const EdgeInsets.all(16.0),
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+        child: Icon(switch (routeInfo.deviceType) {
+          1 => TablerIcons.device_tv,
+          3 => TablerIcons.bluetooth,
+          _ => TablerIcons.volume,
+        }),
+      ),
+      positiveIcon: TablerIcons.device_speaker_filled,
+      negativeIcon: TablerIcons.device_speaker,
       initialState: routeInfo.isSelected,
       onToggle: (bool currentState) async {
         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -275,6 +334,7 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
   @override
   Widget build(BuildContext context) {
     var themeColor = Theme.of(context).colorScheme.primary;
+    double sliderHeight = 56.0;
     return Padding(
       padding:
           const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
@@ -288,22 +348,26 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
           clipBehavior: Clip.antiAlias,
           padding: EdgeInsets.zero,
           child: Stack(children: [
-            SliderTheme(
-              data: SliderTheme.of(context).copyWith(
-                activeTrackColor: themeColor,
-                inactiveTrackColor: themeColor.withOpacity(0.3),
-                trackHeight: 40.0,
-                trackShape: RoundedRectSliderTrackShape(),
-                thumbColor: Colors.white,
-                thumbShape: VerticalSliderThumbShape(
-                  thumbWidth: 2.0,
-                  thumbHeight: 24.0,
-                  borderRadius: 8.0,
-                  offsetLeft: -8.0,
-                ),
-                overlayColor: themeColor.withOpacity(0.2),
-                overlayShape: RoundSliderOverlayShape(overlayRadius: 12.0),
-              ),
+            SizedBox(
+                height: sliderHeight,
+                width: double.infinity,
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackHeight: sliderHeight, // Same as container height
+                    padding: EdgeInsets.zero,
+
+                    trackShape: RoundedRectangleTrackShape(),
+                    thumbShape: VerticalSliderThumbShape(
+                      thumbWidth: 2.0,
+                      thumbHeight: 24.0,
+                      borderRadius: 8.0,
+                      offsetLeft: -8.0,
+                    ),
+                    thumbColor: Colors.white,
+                    activeTrackColor: themeColor,
+                    inactiveTrackColor: themeColor.withOpacity(0.3),
+                    overlayShape: SliderComponentShape.noOverlay,
+                  ),
               child: Slider(
                 value: currentValue,
                 onChanged: (value) {
@@ -321,7 +385,7 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
                   });
                 },
               ),
-            ),
+                )),
             Positioned(
               top: 0,
               bottom: 0,
@@ -342,6 +406,87 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
   }
 }
 
+class RoundedRectangleTrackShape extends RoundedRectSliderTrackShape {
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight ?? 0;
+    final double trackLeft = offset.dx;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required TextDirection textDirection,
+    required Offset thumbCenter,
+    Offset? secondaryOffset,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    double additionalActiveTrackHeight = 0,
+  }) {
+    final Canvas canvas = context.canvas;
+    final Rect trackRect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+    );
+
+    // Active track
+    final activeRect = Rect.fromLTRB(
+      trackRect.left,
+      trackRect.top,
+      thumbCenter.dx +
+          sliderTheme.thumbShape!.getPreferredSize(isEnabled, isDiscrete).width,
+      trackRect.bottom,
+    );
+
+    // Inactive track
+    final inactiveRect = Rect.fromLTRB(
+      thumbCenter.dx,
+      trackRect.top,
+      trackRect.right,
+      trackRect.bottom,
+    );
+
+    final Paint activePaint = Paint()..color = sliderTheme.activeTrackColor!;
+    final Paint inactivePaint = Paint()
+      ..color = sliderTheme.inactiveTrackColor!;
+
+    final radius = Radius.circular(12.0);
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        trackRect,
+        radius,
+      ),
+      inactivePaint,
+    );
+
+    final activeRRect = RRect.fromRectAndRadius(activeRect, radius);
+
+    canvas.drawRRect(
+      activeRRect,
+      activePaint,
+    );
+  }
+}
+
 class VerticalSliderThumbShape extends SliderComponentShape {
   final double thumbWidth;
   final double thumbHeight;
@@ -357,7 +502,7 @@ class VerticalSliderThumbShape extends SliderComponentShape {
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size(thumbWidth, thumbHeight);
+    return Size(thumbWidth - offsetLeft * 3, thumbHeight);
   }
 
   @override
@@ -380,8 +525,8 @@ class VerticalSliderThumbShape extends SliderComponentShape {
       ..style = PaintingStyle.fill;
 
     final Rect thumbRect = Rect.fromCenter(
-      center: center.translate(offsetLeft, 0),
-      width: getPreferredSize(true, true).width,
+      center: center.translate(-offsetLeft * 2, 0),
+      width: getPreferredSize(true, true).width + offsetLeft * 3,
       height: getPreferredSize(true, true).height,
     );
 

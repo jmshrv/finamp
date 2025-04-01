@@ -1945,5 +1945,17 @@
   "librarySelectError": "Error loading available libraries for user",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
+  },
+  "outputMenuTitle": "Change Output",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuVolumeSectionTitle": "Volume",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "Available Devices",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
   }
 }

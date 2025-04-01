@@ -1979,4 +1979,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get outputMenuTitle => 'Change Output';
+
+  @override
+  String get outputMenuVolumeSectionTitle => 'Volume';
+
+  @override
+  String get outputMenuDevicesSectionTitle => 'Available Devices';
 }
