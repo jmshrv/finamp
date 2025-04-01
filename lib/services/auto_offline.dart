@@ -8,32 +8,42 @@ import 'package:logging/logging.dart';
 class AutoOffline {
   final _autoOfflineLogger = Logger("AutoOffline");
   final StreamSubscription<List<ConnectivityResult>> listener =
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      bool hasWifi = result.contains(ConnectivityResult.wifi);
-      bool hasEth = result.contains(ConnectivityResult.ethernet);
-      bool isConnected = hasWifi | hasEth;
-      
-      FinampSetters.setIsOffline(!isConnected);
-      Logger("AutoOffline").info(isConnected ? "Auto turned off offline mode" : "Auto turned on offline mode");
-    });
+      Connectivity()
+          .onConnectivityChanged
+          .listen((List<ConnectivityResult> result) {
+    bool hasWifi = result.contains(ConnectivityResult.wifi);
+    bool hasEth = result.contains(ConnectivityResult.ethernet);
+    bool isConnected = hasWifi | hasEth;
+    Logger("AutoOffline").info(isConnected);
+    AutoOffline.setOfflineMode(!isConnected);
+  });
 
   AutoOffline(WidgetRef ref) {
     bool featureEnabled = ref.watch(finampSettingsProvider.autoOffline);
-    if (!featureEnabled) {
-      listener.pause();
-      _autoOfflineLogger.info("Disabled feature. Listener Stopped");
-      return;
-    }
+    // false = user overwrote offline mode
+    bool featureActive =
+        ref.watch(finampSettingsProvider.autoOfflineListenerActive);
 
-    // false if user manually enabled offline mode
-    bool featureActive = ref.watch(finampSettingsProvider.autoOfflineListenerActive);
-    if (featureActive) {
-        listener.resume();
-        _autoOfflineLogger.info("Temporarily enabled feature because user disabled offline mode");
-        return;
+    if (featureEnabled && featureActive) {
+      _autoOfflineLogger.info("Resumed Automation");
+      listener.resume();
+    } else {
+      _autoOfflineLogger.info("Paused Automation");
+      listener.pause();
     }
-    // feature not active
-    listener.pause();
-    _autoOfflineLogger.info("Temporarily disabled feature until user disabled offline mode");
+  }
+  static void setOfflineMode(bool state) {
+    // 
+
+    // skip when feature not enabled
+    if (!FinampSettingsHelper.finampSettings.autoOffline) return;
+    // skip when user overwrote offline mode
+    if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
+
+    Logger("AutoOffline").info(state
+        ? "Automatically Enabled Offline Mode"
+        : "Automatically Disabled Offline Mode");
+
+    FinampSetters.setIsOffline(state);
   }
 }
