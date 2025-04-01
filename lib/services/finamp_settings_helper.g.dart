@@ -597,7 +597,7 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setAutoOffline(bool newAutoOffline) {
+  static void setAutoOffline(AutoOfflineOption newAutoOffline) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.autoOffline = newAutoOffline;
     Hive.box<FinampSettings>("FinampSettings")
@@ -813,7 +813,7 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<ReleaseDateFormat> get releaseDateFormat =>
       finampSettingsProvider
           .select((value) => value.requireValue.releaseDateFormat);
-  ProviderListenable<bool> get autoOffline =>
+  ProviderListenable<AutoOfflineOption> get autoOffline =>
       finampSettingsProvider.select((value) => value.requireValue.autoOffline);
   ProviderListenable<bool> get autoOfflineListenerActive =>
       finampSettingsProvider

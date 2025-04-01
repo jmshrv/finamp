@@ -152,7 +152,7 @@ class DefaultSettings {
   static const oneLineMarqueeTextButton = false;
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
-  static const autoOffline = false;
+  static const autoOffline = AutoOfflineOption.disconnected;
   static const autoOfflineListenerActive = false;
 }
 
@@ -538,7 +538,7 @@ class FinampSettings {
   ReleaseDateFormat releaseDateFormat;
 
   @HiveField(85, defaultValue: DefaultSettings.autoOffline)
-  bool autoOffline;
+  AutoOfflineOption autoOffline;
 
   // this will get set to false when the user
   // manually enables offline mode and set to
@@ -2617,6 +2617,35 @@ enum ReleaseDateFormat {
         return AppLocalizations.of(context)!.releaseDateFormatMonthYear;
       case ReleaseDateFormat.monthDayYear:
         return AppLocalizations.of(context)!.releaseDateFormatMonthDayYear;
+    }
+  }
+}
+
+
+@HiveType(typeId: 78)
+enum AutoOfflineOption {
+  @HiveField(0)
+  disabled,
+  @HiveField(1)
+  network,
+  @HiveField(2)
+  disconnected;
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableLocalisedName(
+      AutoOfflineOption offlineOption, BuildContext context) {
+    switch (offlineOption) {
+      case AutoOfflineOption.disabled:
+        // return AppLocalizations.of(context)!.keepScreenOnDisabled;
+        return "Disabled";
+      case AutoOfflineOption.network:
+        // return AppLocalizations.of(context)!.keepScreenOnAlwaysOn;
+        return "Network";
+      case AutoOfflineOption.disconnected:
+        // return AppLocalizations.of(context)!.keepScreenOnWhilePlaying;
+        return "Disconnected";
     }
   }
 }

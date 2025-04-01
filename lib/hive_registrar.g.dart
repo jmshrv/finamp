@@ -10,6 +10,7 @@ extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AccessScheduleAdapter());
     registerAdapter(AuthenticationResultAdapter());
+    registerAdapter(AutoOfflineOptionAdapter());
     registerAdapter(BaseItemAdapter());
     registerAdapter(BaseItemDtoAdapter());
     registerAdapter(BaseItemPersonAdapter());

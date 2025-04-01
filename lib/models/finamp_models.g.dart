@@ -210,7 +210,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
-      autoOffline: fields[85] == null ? false : fields[85] as bool,
+      autoOffline: fields[85] == null
+          ? AutoOfflineOption.disconnected
+          : fields[85] as AutoOfflineOption,
       autoOfflineListenerActive:
           fields[86] == null ? false : fields[86] as bool,
     )
@@ -2066,6 +2068,47 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ReleaseDateFormatAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
+  @override
+  final int typeId = 78;
+
+  @override
+  AutoOfflineOption read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return AutoOfflineOption.disabled;
+      case 1:
+        return AutoOfflineOption.network;
+      case 2:
+        return AutoOfflineOption.disconnected;
+      default:
+        return AutoOfflineOption.disabled;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, AutoOfflineOption obj) {
+    switch (obj) {
+      case AutoOfflineOption.disabled:
+        writer.writeByte(0);
+      case AutoOfflineOption.network:
+        writer.writeByte(1);
+      case AutoOfflineOption.disconnected:
+        writer.writeByte(2);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AutoOfflineOptionAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
