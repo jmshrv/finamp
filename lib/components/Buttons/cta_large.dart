@@ -49,7 +49,13 @@ class CTALarge extends StatelessWidget {
             const SizedBox(width: 16, height: 8),
             Text(
               text,
-              style: TextStyle(color: accentColor, fontSize: 14, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Color.alphaBlend(accentColor.withOpacity(0.33), Colors.black)
+                    : Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),

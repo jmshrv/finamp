@@ -373,8 +373,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
                   ),
                 ],
         ),
+        bottomSheet: NowPlayingBar(),
         bottomNavigationBar: const FinampNavigationBar(),
-        bottomSheet: const SafeArea(child: NowPlayingBar()),
         drawerEnableOpenDragGesture: widget.genreFilter == null,
         drawer: widget.genreFilter == null ? const MusicScreenDrawer() : null,
         floatingActionButton: Padding(

@@ -131,7 +131,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const FinampNavigationBar(),
       body: ListView(
         children: [
           ListTile(

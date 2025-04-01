@@ -54,7 +54,10 @@ class CTASmall extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              color: accentColor,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Color.alphaBlend(
+                      accentColor.withOpacity(0.33), Colors.black)
+                  : Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),

@@ -11,11 +11,11 @@ class FinampNavigationBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      margin: EdgeInsets.only(left: 12, right: 12, bottom: 12, top: 0),
       clipBehavior: Clip.antiAlias,
       // height: 60,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).brightness == Brightness.dark
@@ -29,8 +29,9 @@ class FinampNavigationBar extends ConsumerWidget {
       //!!! there is a great example for complex navigation with a navigation bar: https://api.flutter.dev/flutter/material/NavigationBar-class.html#material.NavigationBar.3
       child: NavigationBar(
         surfaceTintColor: Theme.of(context).colorScheme.primary,
-        height: 50,
+        height: 40,
         indicatorColor: Colors.transparent,
+
         elevation: 0,
         labelPadding: EdgeInsets.only(top: 4),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
@@ -52,7 +53,7 @@ class FinampNavigationBar extends ConsumerWidget {
         }),
         destinations: [
           Padding(
-            padding: EdgeInsets.only(top: 16.0),
+            padding: EdgeInsets.only(top: 18.0),
             child: NavigationDestination(
               icon: Icon(TablerIcons.home,
                   weight: 1.0,
@@ -67,7 +68,7 @@ class FinampNavigationBar extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 16.0),
+            padding: EdgeInsets.only(top: 18.0),
             child: NavigationDestination(
               icon: Icon(TablerIcons.search,
                   weight: 1.0,
@@ -82,7 +83,7 @@ class FinampNavigationBar extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 16.0),
+            padding: EdgeInsets.only(top: 18.0),
             child: NavigationDestination(
               icon: Icon(TablerIcons.books,
                   weight: 1.0,

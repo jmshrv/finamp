@@ -36,8 +36,8 @@ class _AlbumScreenState extends ConsumerState<AlbumScreen> {
     return Scaffold(
       extendBody: true,
       body: AlbumScreenContent(parent: parent, genreFilter: widget.genreFilter),
+      bottomSheet: NowPlayingBar(),
       bottomNavigationBar: const FinampNavigationBar(),
-      bottomSheet: const SafeArea(child: NowPlayingBar()),
     );
   }
 }
