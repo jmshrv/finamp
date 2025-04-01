@@ -27,7 +27,7 @@ final _musicScreenLogger = Logger("MusicScreen");
 var _autoOffline;
 void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
-  _autoOffline = AutoOffline(ref);
+  _autoOffline = AutoOffline();
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
