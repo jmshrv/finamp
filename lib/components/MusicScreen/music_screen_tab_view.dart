@@ -111,6 +111,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         filters: settings.onlyShowFavourites ? "IsFavorite" : null,
         startIndex: pageKey,
         limit: _pageSize,
+        artistListType: settings.artistListType,
       );
 
       // Skip appending page if a refresh triggered while processing
@@ -136,6 +137,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
     int localRefreshCount = refreshCount;
+    var baseTypeFilter = widget.tabContentType.itemType;
 
     List<DownloadStub> offlineItems;
     if (widget.tabContentType == TabContentType.tracks) {
@@ -150,7 +152,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
           nameFilter: widget.searchTerm,
-          baseTypeFilter: widget.tabContentType.itemType,
+          baseTypeFilter: baseTypeFilter,
           fullyDownloaded: settings.onlyShowFullyDownloaded,
           viewFilter: widget.tabContentType == TabContentType.albums
               ? widget.view?.id

@@ -109,6 +109,7 @@ class JellyfinApiHelper {
     String? filters,
     String? fields,
     bool? recursive,
+    ArtistListType? artistListType,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -157,19 +158,34 @@ class JellyfinApiHelper {
           fields: fields,
         );
       } else if (includeItemTypes == "MusicArtist") {
-        // For artists, we need to use a different endpoint
-        response = await api.getAlbumArtists(
-          parentId: parentItem?.id,
-          recursive: recursive,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-          searchTerm: searchTerm,
-          filters: filters,
-          startIndex: startIndex,
-          limit: limit,
-          userId: currentUserId,
-          fields: fields,
-        );
+        // For artists, we need to use different endpoints
+        if (artistListType == ArtistListType.albumartist) {
+          // Album Artists
+          response = await api.getAlbumArtists(
+            parentId: parentItem?.id,
+            recursive: recursive,
+            sortBy: sortBy,
+            sortOrder: sortOrder,
+            searchTerm: searchTerm,
+            filters: filters,
+            startIndex: startIndex,
+            limit: limit,
+            userId: currentUserId,
+            fields: fields,
+          );
+        } else { //artistListType == ArtistListType.artist
+          // Performing Artists
+          response = await api.getArtists(
+            parentId: parentItem?.id,
+            sortBy: sortBy,
+            sortOrder: sortOrder,
+            searchTerm: searchTerm,
+            filters: filters,
+            startIndex: startIndex,
+            limit: limit,
+            fields: fields,
+          );
+        }
       } else if (parentItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use albumArtistIds
         // instead of parentId
