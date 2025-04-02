@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/services/music_player_background_task.dart';
+import 'package:finamp/services/playon_handler.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -22,6 +23,7 @@ class PlaybackHistoryService {
   final _queueService = GetIt.instance<QueueService>();
   final _offlineListenLogHelper = GetIt.instance<OfflineListenLogHelper>();
   final _playbackHistoryServiceLogger = Logger("PlaybackHistoryService");
+  final _playonHandler = GetIt.instance<PlayonHandler>();
 
   // internal state
 
@@ -64,7 +66,7 @@ class PlaybackHistoryService {
 
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-      if (!isOffline && _wasOfflineBefore) {
+      if (!isOffline) {
         _updatePlaybackInfo();
       }
       _wasOfflineBefore = FinampSettingsHelper.finampSettings.isOffline;
@@ -140,18 +142,25 @@ class PlaybackHistoryService {
           }
 
           if (isSeekEvent) {
-            // rate limit updates (only send update after no changes for 3 seconds) and if the track is still the same
-            Future.delayed(const Duration(seconds: 3, milliseconds: 500), () {
-              if (_lastPositionUpdate
-                      .add(const Duration(seconds: 3))
-                      .isBefore(DateTime.now()) &&
-                  currentItem.id == _queueService.getCurrentTrack()?.id) {
-                _playbackHistoryServiceLogger
-                    .fine("Handling seek event for ${currentItem.item.title}");
-                onPlaybackStateChanged(currentItem, currentState, prevState);
-              }
-              _lastPositionUpdate = DateTime.now();
-            });
+            if (_playonHandler.isControlled) {
+              _playbackHistoryServiceLogger
+              .fine("Handling seek event as controlled by a remote session");
+              // If the session is being remote controlled, report playback agressively
+              _updatePlaybackInfo();
+            } else {
+              // rate limit updates (only send update after no changes for 3 seconds) and if the track is still the same
+              Future.delayed(const Duration(seconds: 3, milliseconds: 500), () {
+                if (_lastPositionUpdate
+                        .add(const Duration(seconds: 3))
+                        .isBefore(DateTime.now()) &&
+                    currentItem.id == _queueService.getCurrentTrack()?.id) {
+                  _playbackHistoryServiceLogger
+                      .fine("Handling seek event for ${currentItem.item.title}");
+                  onPlaybackStateChanged(currentItem, currentState, prevState);
+                }
+                _lastPositionUpdate = DateTime.now();
+              });
+            }
           }
         }
         // maybe handle toggling shuffle when sending the queue? would result in duplicate entries in the activity log, so maybe it's not desirable

@@ -31,7 +31,10 @@ var reconnectionSubscription = null;
 
 class PlayonHandler {
   late WidgetRef ref;
+  // If the websocket connection to the server is established
   bool isConnected = false;
+  // If a remote client is controlling the session
+  bool isControlled = false;
 
   Future<void> initialize() async {
     // Turn on/off when offline mode is toggled
@@ -184,6 +187,7 @@ class PlayonHandler {
 
     if (request['MessageType'] != 'ForceKeepAlive' &&
         request['MessageType'] != 'KeepAlive') {
+      isControlled = true;
       switch (request['MessageType']) {
         case "GeneralCommand":
           switch (request['Data']['Name']) {
@@ -202,6 +206,7 @@ class PlayonHandler {
               // Currently broken in the UI
               final desiredVolume = request['Data']['Arguments']['Volume'] as String;
               FinampSettingsHelper.setCurrentVolume(double.parse(desiredVolume) / 100.0);
+              // unawaited(playbackHistoryService.updatePlaybackInfo());
           }
           break;
         case "UserDataChanged":
@@ -242,10 +247,6 @@ class PlayonHandler {
                   : Duration.zero;
               await audioHandler.seek(seekPosition);
               final currentItem = queueService.getCurrentTrack();
-              if (currentItem != null) {
-                unawaited(playbackHistoryService.onPlaybackStateChanged(
-                    currentItem, audioHandler.playbackState.value, null));
-              }
               break;
             case "Rewind":
               await audioHandler.rewind();
