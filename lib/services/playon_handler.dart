@@ -281,9 +281,9 @@ class PlayonHandler {
                       items: items,
                       source: QueueItemSource(
                         name: QueueItemSourceName(
-                            type: QueueItemSourceNameType.preTranslated,
-                            pretranslatedName: items[0].name),
-                        type: QueueItemSourceType.track,
+                            type: QueueItemSourceNameType.playon,
+                        ),
+                        type: QueueItemSourceType.playon,
                         id: items[0].id,
                       ),
                       // seems like Jellyfin isn't always sending the correct index

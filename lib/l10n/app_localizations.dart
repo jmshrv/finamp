@@ -1778,11 +1778,17 @@ abstract class AppLocalizations {
   /// **'Share offline listens'**
   String get shareOfflineListens;
 
-  /// Title for the queue source when the user is playing their liked tracks
+  /// Title for the queue source when the user is playing from a remote client
   ///
   /// In en, this message translates to:
   /// **'Your Likes'**
   String get yourLikes;
+
+  /// No description provided for @playon.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote client'**
+  String get playon;
 
   /// Suffix added to a queue source when playing a mix. Example: "Never Gonna Give You Up - Mix"
   ///

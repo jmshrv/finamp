@@ -972,6 +972,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get yourLikes => 'உங்கள் விருப்பங்கள்';
 
   @override
+  String get playon => 'Remote client';
+
+  @override
   String mix(String mixSource) {
     return '$mixSource - கலவை';
   }

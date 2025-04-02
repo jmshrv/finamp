@@ -984,6 +984,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get yourLikes => 'Tykkäyksesi';
 
   @override
+  String get playon => 'Remote client';
+
+  @override
   String mix(String mixSource) {
     return '$mixSource - Sekoitus';
   }

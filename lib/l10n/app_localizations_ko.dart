@@ -984,6 +984,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get yourLikes => '내가 좋아하는 노래들';
 
   @override
+  String get playon => 'Remote client';
+
+  @override
   String mix(String mixSource) {
     return '$mixSource - 믹스';
   }

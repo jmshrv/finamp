@@ -1346,6 +1346,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         writer.writeByte(18);
       case QueueItemSourceType.track:
         writer.writeByte(19);
+      case QueueItemSourceType.playon:
+        writer.writeByte(20);
     }
   }
 
@@ -1457,6 +1459,8 @@ class QueueItemSourceNameTypeAdapter
         writer.writeByte(7);
       case QueueItemSourceNameType.queue:
         writer.writeByte(8);
+      case QueueItemSourceNameType.playon:
+        writer.writeByte(9);
     }
   }
 

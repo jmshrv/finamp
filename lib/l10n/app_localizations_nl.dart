@@ -984,6 +984,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get yourLikes => 'Mijn Favorieten';
 
   @override
+  String get playon => 'Remote client';
+
+  @override
   String mix(String mixSource) {
     return '$mixSource - Mix';
   }

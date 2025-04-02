@@ -984,6 +984,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get yourLikes => 'Your Likes';
 
   @override
+  String get playon => 'Remote client';
+
+  @override
   String mix(String mixSource) {
     return '$mixSource - Mix';
   }

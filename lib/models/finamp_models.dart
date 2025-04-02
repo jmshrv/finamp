@@ -1637,7 +1637,9 @@ enum QueueItemSourceType {
   @HiveField(18)
   genreMix,
   @HiveField(19)
-  track;
+  track,
+  @HiveField(20)
+  playon;
 }
 
 @HiveType(typeId: 53)
@@ -1706,6 +1708,8 @@ enum QueueItemSourceNameType {
   savedQueue,
   @HiveField(8)
   queue,
+  @HiveField(9)
+  playon
 }
 
 @HiveType(typeId: 56)
@@ -1743,6 +1747,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.savedQueue;
       case QueueItemSourceNameType.queue:
         return AppLocalizations.of(context)!.queue;
+      case QueueItemSourceNameType.playon:
+        return AppLocalizations.of(context)!.playon;
     }
   }
 }

@@ -984,6 +984,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get yourLikes => 'Ваші вподобання';
 
   @override
+  String get playon => 'Remote client';
+
+  @override
   String mix(String mixSource) {
     return '$mixSource - Мікс';
   }

@@ -984,6 +984,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get yourLikes => '你的喜欢';
 
   @override
+  String get playon => 'Remote client';
+
+  @override
   String mix(String mixSource) {
     return '$mixSource - 合辑';
   }

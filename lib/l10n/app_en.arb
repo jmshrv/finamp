@@ -942,6 +942,10 @@
   "@yourLikes": {
     "description": "Title for the queue source when the user is playing their liked tracks"
   },
+  "playon": "Remote client",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing from a remote client"
+  },
   "mix": "{mixSource} - Mix",
   "@mix": {
     "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
