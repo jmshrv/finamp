@@ -137,7 +137,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
     int localRefreshCount = refreshCount;
-    var baseTypeFilter = widget.tabContentType.itemType;
+    var artistInfoForType = (settings.artistListType == ArtistListType.albumartist) ? BaseItemDtoType.album : BaseItemDtoType.track;
 
     List<DownloadStub> offlineItems;
     if (widget.tabContentType == TabContentType.tracks) {
@@ -152,7 +152,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
           nameFilter: widget.searchTerm,
-          baseTypeFilter: baseTypeFilter,
+          baseTypeFilter: widget.tabContentType.itemType,
           fullyDownloaded: settings.onlyShowFullyDownloaded,
           viewFilter: widget.tabContentType == TabContentType.albums
               ? widget.view?.id
@@ -164,7 +164,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           nullableViewFilters: widget.tabContentType == TabContentType.albums &&
               settings.showDownloadsWithUnknownLibrary,
           onlyFavorites:
-              settings.onlyShowFavourites && settings.trackOfflineFavorites);
+              settings.onlyShowFavourites && settings.trackOfflineFavorites,
+          infoForType: (widget.tabContentType == TabContentType.artists)
+              ? artistInfoForType
+              : null,
+      );
     }
 
     var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
