@@ -65,7 +65,7 @@
   "@clear": {},
   "favourites": "Suosikit",
   "@favourites": {},
-  "offlineMode": "Offline tila",
+  "offlineMode": "Offline-tila",
   "@offlineMode": {},
   "finamp": "Finamp",
   "@finamp": {},
@@ -171,9 +171,9 @@
   "@budget": {},
   "communityRating": "Yhteisön arvostelu",
   "@communityRating": {},
-  "dateAdded": "Lisäämisen päivämäärä",
+  "dateAdded": "Lisätty päivänä",
   "@dateAdded": {},
-  "datePlayed": "Toiston päivämäärä",
+  "datePlayed": "Toistettu viimeksi",
   "@datePlayed": {},
   "playCount": "Toistolaskuri",
   "@playCount": {},
@@ -368,7 +368,7 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "startupError": "Jokin meni pieleen sovelluksen käynnistyksen aikana. Virhe oli: {error}\n\nOle hyvä ja luo virheilmoitus osoitteessa github.com/UnicornsOnLSD/finamp, jossa on kuvakaappaus tästä sivusta. Jos ongelma jatkuu, voit tyhjentää sovelluksen tiedot nollataksesi sovelluksen.",
+  "startupError": "Jokin meni pieleen sovelluksen käynnistyksen aikana. Virhe oli: {error}\n\nOle hyvä ja luo virheilmoitus osoitteessa github.com/UnicornsOnLSD/finamp. Liitä oheen kuvakaappaus tästä sivusta. Mikäli ongelma jatkuu, voit tyhjentää sovelluksen datan nollataksesi sovelluksen.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -378,11 +378,11 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Jos haluat päästä etäkäyttöön Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on oikea, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.",
+  "internalExternalIpExplanation": "Jos haluat saada etäyhteyden Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on oikea, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "startMixNoTracksAlbum": "Paina albumia pitkään lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista",
+  "startMixNoTracksAlbum": "Paina albumia pitkään lisätäksesi tai poistaaksesi sen mixistä ennen sen aloittamista",
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -452,7 +452,7 @@
   },
   "swipeInsertQueueNextSubtitle": "Mahdollistaa kappaleen lisäämisen jonon seuraavaksi kohteeksi, kun sitä pyyhkäistään kappaleiden luettelossa sen sijaan, että se liitettäisiin loppuun.",
   "@swipeInsertQueueNextSubtitle": {},
-  "startMixNoTracksArtist": "Paina pitkään artistia lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista",
+  "startMixNoTracksArtist": "Paina artistin nimeä pitkään lisätäksesi tai poistaaksesi sen mixistä ennen sen aloittamista",
   "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
@@ -482,7 +482,7 @@
   "@usernameValidationMissingUsername": {
     "description": "Error message that shows when the user submits a login without a username"
   },
-  "loginFlowQuickConnectInstructions": "Avaa Jellyfin-sovellus tai sivu, klikkaa käyttäjäkuvaketta, ja valitse Pikayhdistys.",
+  "loginFlowQuickConnectInstructions": "Avaa Jellyfin-sovellus tai osoite, klikkaa käyttäjäkuvaketta, ja valitse Pikayhdistys.",
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
@@ -1219,7 +1219,7 @@
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
-  "numberAsKiloHertz": "{kiloHertz} kilohertsiä",
+  "numberAsKiloHertz": "{kiloHertz} kHz",
   "@numberAsKiloHertz": {
     "description": "Value for the sample rate of a track, in kilohertz",
     "placeholders": {
@@ -1268,7 +1268,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "aboutContributionPrompt": "Vapaa-ajallaan upeiden ihmisten teettämä.\nVoit olla yksi heistä!",
+  "aboutContributionPrompt": "Upeiden ihmisten vapaa-ajallaan teettämä.\nVoit olla yksi heistä!",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
@@ -1526,7 +1526,7 @@
     },
     "description": "Dropdown option to download original version of tracks"
   },
-  "numberAsBit": "{bit} bittiä",
+  "numberAsBit": "{bit} bit",
   "@numberAsBit": {
     "description": "Value for the bit depth of a track, as amount of bit used",
     "placeholders": {
@@ -1902,5 +1902,27 @@
   "deleteFromTargetConfirmButton": "Poista {target, select, device{laitteelta} server{palvelimelta} other{}}",
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
-  }
+  },
+  "loginFlowCustomUser": "Muokattu käyttäjä",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "startMixNoTracksGenre": "Paina tyylilajia pitkään lisätäksesi tai poistaaksesi sen miksaustyökalusta ennen mixin aloittamista.",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "specialDownloads": "Erityiset lataukset",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "Ei ladattuja kohteita.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "finampTagline": "Avoimen lähdekoodin Jellyfin-musiikkisoitin",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "downloadsQueued": "Lataus valmisteltu, ladataan tiedostoja",
+  "@downloadsQueued": {}
 }
