@@ -1933,7 +1933,7 @@
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
   },
-  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} kappale} other{{trackCount} kappaletta}}, {imageCount,plural,=1{{imageCount} kuva} other{{imageCount} kuvaa}}\n{syncCount,plural,=1{{syncCount} solmu synkronoituu} other{{syncCount} solmua synkronoituu}}{repairing, plural, =0{} other{\n\nKorjataan parhaillaan}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} kappale} other{{trackCount} kappaletta}}, {imageCount,plural,=1{{imageCount} kuva} other{{imageCount} kuvaa}}\n{syncCount,plural,=1{{syncCount} yksikkö synkronoi} other{{syncCount} yksikköä synkronoivat}}{repairing, plural, =0{} other{\nParhaillaan korjauksessa}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
