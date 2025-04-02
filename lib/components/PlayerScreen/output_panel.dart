@@ -60,7 +60,10 @@ Future<void> showOutputMenu({
           Consumer(
             builder: (context, ref, child) {
               return VolumeSlider(
-                initialValue: FinampSettingsHelper.finampSettings.currentVolume,
+                initialValue:
+                    (FinampSettingsHelper.finampSettings.currentVolume * 100)
+                            .floor() /
+                        100.0,
                 onChange: (double currentValue) async {
                   FinampSettingsHelper.setCurrentVolume(currentValue);
                   outputPanelLogger.fine("Volume set to $currentValue");
@@ -157,10 +160,9 @@ Future<void> showOutputMenu({
               child: OutputTargetList(), // Pass the outputRoutes
             ),
           ),
-          const SliverPadding(padding: EdgeInsets.only(bottom: 100.0))
         ];
         // TODO better estimate, how to deal with lag getting playlists?
-        var stackHeight = MediaQuery.sizeOf(context).height * 0.9;
+        var stackHeight = MediaQuery.sizeOf(context).height * 0.65;
         return (stackHeight, menu);
       });
 }
@@ -316,6 +318,7 @@ class VolumeSlider extends ConsumerStatefulWidget {
 
 class _VolumeSliderState extends ConsumerState<VolumeSlider> {
   double currentValue = 0;
+  Timer? debounce;
 
   @override
   void initState() {
@@ -372,8 +375,12 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
                 value: currentValue,
                 onChanged: (value) {
                   setState(() {
-                    currentValue = value;
+                        currentValue = value;
                   });
+                      if (debounce?.isActive ?? false) debounce!.cancel();
+                      debounce = Timer(const Duration(milliseconds: 100), () {
+                        widget.onChange(value);
+                      });
                 },
                 onChangeEnd: (value) async {
                   unawaited(widget.onChange(value));
@@ -393,7 +400,7 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
               right: 0,
               child: Center(
                 child: Text(
-                  "${(currentValue * 100).round()}%",
+                  "${(currentValue * 100).floor()}%",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: Colors.white,

@@ -85,7 +85,7 @@ class FeatureState {
         FeatureProperties(
           text: AppLocalizations.of(context)!.currentVolumeFeatureText(
               (FinampSettingsHelper.finampSettings.currentVolume * 100)
-                  .round()),
+                  .floor()),
         ),
       );
     }
