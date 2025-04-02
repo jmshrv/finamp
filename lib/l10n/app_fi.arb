@@ -1907,7 +1907,7 @@
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
   },
-  "startMixNoTracksGenre": "Paina tyylilajia pitkään lisätäksesi tai poistaaksesi sen miksaustyökalusta ennen mixin aloittamista",
+  "startMixNoTracksGenre": "Paina pitkään tyylilajia lisätäksesi tai poistaaksesi se miksaustyökalusta ennen miksauksen aloittamista.",
   "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
