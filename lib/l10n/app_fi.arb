@@ -314,13 +314,13 @@
   "@sortBy": {},
   "premiereDate": "Ensiesityspäivä",
   "@premiereDate": {},
-  "interactions": "Vuorovaikutukset",
+  "interactions": "Vuorovaikutusasetukset",
   "@interactions": {},
-  "audioService": "Äänipalvelu",
+  "audioService": "Äänipalvelinasetukset",
   "@audioService": {},
   "bitrate": "Bittinopeus",
   "@bitrate": {},
-  "bitrateSubtitle": "Korkeampi bittinopeus antaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
+  "bitrateSubtitle": "Korkeampi bittinopeus takaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
   "@bitrateSubtitle": {},
   "customLocation": "Mukautettu sijainti",
   "@customLocation": {},
@@ -352,7 +352,7 @@
   "@addToMix": {},
   "removeFromMix": "Poista Sekoituksesta",
   "@removeFromMix": {},
-  "bufferDurationSubtitle": "Maksimiaika, kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.",
+  "bufferDurationSubtitle": "Maksimiaika, joka soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.",
   "@bufferDurationSubtitle": {},
   "swipeInsertQueueNext": "Toista pyyhkäisty kappale seuraavaksi",
   "@swipeInsertQueueNext": {},
@@ -362,7 +362,7 @@
   "@failedToGetTrackFromDownloadId": {},
   "stackTrace": "Pinon jäljitys",
   "@stackTrace": {},
-  "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä. \nLähdekoodi saatavilla osoitteessa: {sourceCodeLink}",
+  "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä.\nLähdekoodi saatavilla osoitteessa: {sourceCodeLink}.",
   "@applicationLegalese": {},
   "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia ja niiden käyttöä ei suositella useimmissa tapauksissa. Sijainnit systeemin Musiikki-hakemiston alla estävät albumin kansikuvien tallentamisen käyttöjärjestelmän rajoitusten vuoksi.",
   "@customLocationsBuggy": {},
@@ -378,7 +378,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Jos haluat saada etäyhteyden Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on oikea, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.",
+  "internalExternalIpExplanation": "Jos haluat saada etäyhteyden Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on syötetty oikein, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -401,7 +401,7 @@
   "@enterLowPriorityStateOnPause": {},
   "shuffleAllTrackCount": "Kaikkien sekoitettujen kappaleiden määrä",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Ladattavien kappaleiden määrä, kun käytät sekoita kaikki kappaleet painiketta.",
+  "shuffleAllTrackCountSubtitle": "Ladattavien kappaleiden määrä, kun käytät sekoita kaikki kappaleet-painiketta.",
   "@shuffleAllTrackCountSubtitle": {},
   "gridCrossAxisCount": "{value} Ruudukon poikittaisakselien lukumäärä",
   "@gridCrossAxisCount": {
@@ -490,7 +490,7 @@
   "@backToAccountSelection": {
     "description": "Label for the button that takes the user back to the account selection step during the login flow."
   },
-  "loginFlowSlogan": "Oma musiikkikirjastosi, juuri niin kuin sen haluat.",
+  "loginFlowSlogan": "Oma musiikkisi, juuri haluamallasi tavalla.",
   "@loginFlowSlogan": {
     "description": "Slogan shown on the login screen."
   },
@@ -664,7 +664,7 @@
       }
     }
   },
-  "removeFromPlaylistNamedTooltip": "Poista soittolistalta {playlistName}",
+  "removeFromPlaylistNamedTooltip": "Poista soittolistalta '{playlistName}'",
   "@removeFromPlaylistNamedTooltip": {
     "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
     "placeholders": {
@@ -714,7 +714,7 @@
   },
   "bufferDisableSizeConstraintsTitle": "Älä rajoita puskurin kokoa",
   "@bufferDisableSizeConstraintsTitle": {},
-  "bufferDisableSizeConstraintsSubtitle": "Poistaa käytöstä puskurin koon rajan. Puskuri ladataan aina määriteltyyn kokoonsa, myös erittäin suurilla tiedostoilla. Tämä voi aiheuttaa ohjelman epävakautta. Vaatii uudelleenkäynnistämisen.",
+  "bufferDisableSizeConstraintsSubtitle": "Poistaa käytöstä puskurin koon rajan. Puskuri ladataan aina määriteltyyn kokoonsa, myös erittäin suurilla tiedostoilla. Tämä voi aiheuttaa ohjelman epävakautta. Vaatii uudelleenkäynnistyksen.",
   "@bufferDisableSizeConstraintsSubtitle": {},
   "bufferSizeTitle": "Puskurin koko",
   "@bufferSizeTitle": {},
@@ -797,7 +797,7 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "queuesScreen": "Palauta Nyt toistossa-jono",
+  "queuesScreen": "Palauta toistojono",
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
@@ -885,7 +885,7 @@
       }
     }
   },
-  "transcodingStreamingContainerTitle": "Valite transkoodauksen säiliö",
+  "transcodingStreamingContainerTitle": "Valitse transkoodauksen säiliö",
   "@transcodingStreamingContainerTitle": {
     "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
@@ -899,13 +899,13 @@
   "@hideQueueButton": {},
   "hideQueueButtonSubtitle": "Piilota jononäppäin soittimen näytöltä. Pyyhkäise ylös päästäksesi jonoon.",
   "@hideQueueButtonSubtitle": {},
-  "oneLineMarqueeTextButton": "Selaa pitkiä otsikoita automaattisesti",
+  "oneLineMarqueeTextButton": "Vieritä pitkät otsikot automaattisesti",
   "@oneLineMarqueeTextButton": {},
-  "oneLineMarqueeTextButtonSubtitle": "Selaa automaattisesti pitkiä kappaleotsikoita, jotka eivät mahdu näytettäväksi kerralla kahdelle riville",
+  "oneLineMarqueeTextButtonSubtitle": "Vieritä automaattisesti pitkät kappalenimet, jotka eivät mahdu näytettäväksi kahdella rivillä",
   "@oneLineMarqueeTextButtonSubtitle": {},
   "marqueeOrTruncateButton": "Käytä kolmea pistettä pitkille nimille",
   "@marqueeOrTruncateButton": {},
-  "hidePlayerBottomActionsSubtitle": "Piilota jono- ja lyriikkanäppäimen soittimen näytöstä. Pyyhkäise ylös päästäksesi jonoon, vasemmalle (albumikannen alta) päästäksesi lyriikoihin, jos saatavilla.",
+  "hidePlayerBottomActionsSubtitle": "Piilota jono- ja lyriikkanäppäimet soittimen näytöstä. Pyyhkäise ylös päästäksesi jonoon, ja vasemmalle (albumikannen alta) päästäksesi lyriikoihin, jos saatavilla.",
   "@hidePlayerBottomActionsSubtitle": {},
   "suppressPlayerPadding": "Peitä soittimien ohjausten marginaali",
   "@suppressPlayerPadding": {},
@@ -931,7 +931,7 @@
   "@quickActions": {
     "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
   },
-  "trackOfflineFavorites": "Synkronoi kaikki Suosikki-tilat",
+  "trackOfflineFavorites": "Synkronoi kaikki suosikit",
   "@trackOfflineFavorites": {},
   "downloadFavoritesSetting": "Lataa kaikki Suosikit",
   "@downloadFavoritesSetting": {},
@@ -1062,7 +1062,7 @@
   "@addToMorePlaylistsTooltip": {},
   "addToMorePlaylistsTitle": "Lisää muille soittolistoille",
   "@addToMorePlaylistsTitle": {},
-  "removeFromPlaylistNamedTitle": "Poista soittolistalta {playlistName}",
+  "removeFromPlaylistNamedTitle": "Poista Soittolistalta '{playlistName}'",
   "@removeFromPlaylistNamedTitle": {
     "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
     "placeholders": {
@@ -1102,11 +1102,11 @@
       }
     }
   },
-  "autoloadLastQueueOnStartup": "Palauta edeltävä jono automaattisesti",
+  "autoloadLastQueueOnStartup": "Palauta viimeisin jono automaattisesti",
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
-  "autoloadLastQueueOnStartupSubtitle": "Yritä palauttaa edeltävä jono automaattisesti ohjelman käynnistyessä.",
+  "autoloadLastQueueOnStartupSubtitle": "Yritä palauttaa viimeisin jono automaattisesti ohjelman käynnistyessä.",
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
@@ -1134,11 +1134,11 @@
   "@volumeNormalizationModeSelectorTitle": {
     "description": "Title for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationSettingsTitle": "Volyymitason normalisointi",
+  "volumeNormalizationSettingsTitle": "Äänenvoimakkuuden normalisointi",
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
   },
-  "shuffleAllQueueSource": "Sekoita kaikki",
+  "shuffleAllQueueSource": "Sekoita Kaikki",
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
@@ -1215,7 +1215,7 @@
   },
   "showArtistChipImageSubtitle": "Tämä vaikuttaa pienten artistin kuvien esikatseluun, kuten soittimen näytöllä.",
   "@showArtistChipImageSubtitle": {},
-  "lockDownload": "Pidä aina laitteella",
+  "lockDownload": "Säilytä aina laitteella",
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
@@ -1228,7 +1228,7 @@
       }
     }
   },
-  "allPlaylistsInfoSettingSubtitle": "Synkronoi liitännäistiedot kaikilta soittolistoilta parantaakseen soittolistojen kokemustasi",
+  "allPlaylistsInfoSettingSubtitle": "Synkronoi metadata kaikilta soittolistoilta parantaaksesi soittolistojen kokemusta",
   "@allPlaylistsInfoSettingSubtitle": {},
   "addRemoveFromPlaylist": "Lisää tai poista soittolistoilta",
   "@addRemoveFromPlaylist": {
@@ -1238,7 +1238,7 @@
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
-  "allPlaylistsInfoSetting": "Lataa soittolistan liitännäistiedot",
+  "allPlaylistsInfoSetting": "Lataa soittolistan liitännäistiedot (metadata)",
   "@allPlaylistsInfoSetting": {},
   "cacheLibraryImagesSettingsSubtitle": "Kaikki albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa tulee ladatuksi.",
   "@cacheLibraryImagesSettingsSubtitle": {},
@@ -1268,7 +1268,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "aboutContributionPrompt": "Upeiden ihmisten vapaa-ajallaan teettämä.\nVoit olla yksi heistä!",
+  "aboutContributionPrompt": "Pyyteettömien ihmisten vapaa-ajallaan tekemä sovellus.\nVoit olla yksi heistä!",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
@@ -1614,7 +1614,7 @@
       }
     }
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Suoritetaan} failed{Epäonnistui} syncFailed{Toistuvasti synkronoimaton} enqueued{Jonossa} other{}} {itemCount, plural, =1{Lataus} other{Latauksia}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1635,7 +1635,7 @@
       }
     }
   },
-  "downloadSettings": "Latauskset",
+  "downloadSettings": "Lataukset",
   "@downloadSettings": {},
   "syncingDownloadSize": "Synkronoidaan…",
   "@syncingDownloadSize": {
@@ -1839,7 +1839,7 @@
       }
     }
   },
-  "periodicPlaybackSessionUpdateFrequencySubtitle": "Kuinka tiheään palvelimelle lähetetään nykyisen toistoistunnon tila, sekunneissa. Tämän pitäisi olla vähemmän kuin 5 minuuttia (300 sekuntia), jotta sessiota ei aikakatkaista.",
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Kuinka usein palvelimelle lähetetään nykyisen toistoistunnon tila, sekunneissa. Tämän pitäisi olla vähemmän kuin 5 minuuttia (300 sekuntia), jotta sessiota ei aikakatkaista.",
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1923,7 +1923,7 @@
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "downloadsQueued": "Lataus valmisteltu, ladataan tiedostoja",
+  "downloadsQueued": "Valmistauduttu poimuajoon, ladataan tiedostoja",
   "@downloadsQueued": {},
   "togglePlaybackButtonTooltip": "Toista / pysäytä",
   "@togglePlaybackButtonTooltip": {
@@ -1950,5 +1950,27 @@
         "type": "int"
       }
     }
+  },
+  "finampCollectionNames": "{itemType, select, favorites{Suosikit} allPlaylists{Kaikki soittolistat} fiveLatestAlbums{5 uusinta albumia} allPlaylistsMetadata{Soittolistojen metatiedot} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{Albumi} playlist{Soittolista} artist{Artisti} genre{Genre} track{Kappale} library{Kirjasto} unknown{Kohde} other{{itemType}}}{itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   }
 }
