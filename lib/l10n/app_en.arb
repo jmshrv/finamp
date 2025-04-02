@@ -460,8 +460,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Are you sure?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin uses AAC for transcoding",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Enable Transcoding",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transcodes music streams on the server side.",
