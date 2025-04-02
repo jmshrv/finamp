@@ -153,7 +153,7 @@ class _AudioFadeInDurationListTileState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSettingsHelper.setAudioFadeInDuration(
+              FinampSetters.setAudioFadeInDuration(
                   Duration(milliseconds: valueInt));
             }
           },
@@ -195,7 +195,7 @@ class _AudioFadeOutDurationListTileState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSettingsHelper.setAudioFadeOutDuration(
+              FinampSetters.setAudioFadeOutDuration(
                   Duration(milliseconds: valueInt));
             }
           },
