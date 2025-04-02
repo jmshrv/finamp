@@ -1,26 +1,28 @@
 import 'dart:async';
-
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'dart:core';
+import 'dart:io';
 import 'package:logging/logging.dart';
+import '../models/finamp_models.dart';
+import 'finamp_settings_helper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'auto_offline.g.dart';
 
-abstract class _$AutoOffline extends BuildlessAutoDisposeNotifier<bool> {
-  void build();
-}
 final _autoOfflineLogger = Logger("AutoOffline");
-StreamSubscription<List<ConnectivityResult>>? listener; 
+StreamSubscription<List<ConnectivityResult>> listener = Connectivity()
+    .onConnectivityChanged
+    .listen((List<ConnectivityResult> result) {
+        _setOfflineMode(result);
+    });
 
-@Riverpod(keepAlive: true)
+@riverpod
 class AutoOffline extends _$AutoOffline {
   @override
   void build() {
-    ref.onDispose(listener!.cancel);
     listener = Connectivity()
         .onConnectivityChanged
         .listen((List<ConnectivityResult> result) {
-            setOfflineMode(!shouldBeOffline(result));
+            _setOfflineMode(result);
         });
 
     bool featureEnabled = ref.watch(finampSettingsProvider.autoOffline) != AutoOfflineOption.disabled;
@@ -30,15 +32,26 @@ class AutoOffline extends _$AutoOffline {
 
     if (featureEnabled && featureActive) {
       _autoOfflineLogger.info("Resumed Automation");
-      listener!.resume();
+      listener.resume();
+      // directly check if offline mode should be on to avoid desync
+      _setOfflineMode(null);
     } else {
       _autoOfflineLogger.info("Paused Automation");
-      listener!.pause();
+      listener.pause();
     }
+    ref.onDispose(listener.cancel);
   }
 }
 
-void setOfflineMode(bool state) {
+Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
+    bool state = await _shouldBeOffline(connections);
+
+    // Attempt to combat IOS reliability problems
+    if (Platform.isIOS) {
+        await Future.delayed(Duration(seconds: 7));
+        state = await _shouldBeOffline(null);
+    }
+
     // skip when feature not enabled
     if (FinampSettingsHelper.finampSettings.autoOffline == AutoOfflineOption.disabled) return;
     // skip when user overwrote offline mode
@@ -51,16 +64,17 @@ void setOfflineMode(bool state) {
     FinampSetters.setIsOffline(state);
 }
 
-bool shouldBeOffline(List<ConnectivityResult> connections) {
+Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
+    connections ??= await Connectivity().checkConnectivity();
     switch (FinampSettingsHelper.finampSettings.autoOffline) {
         case AutoOfflineOption.disconnected:
-        return !connections.contains(ConnectivityResult.mobile) && 
-                !connections.contains(ConnectivityResult.ethernet) &&
-                !connections.contains(ConnectivityResult.wifi);
+            return !connections.contains(ConnectivityResult.mobile) &&
+                   !connections.contains(ConnectivityResult.ethernet) &&
+                   !connections.contains(ConnectivityResult.wifi);
         case AutoOfflineOption.network:
-        return !connections.contains(ConnectivityResult.ethernet) &&
-                !connections.contains(ConnectivityResult.wifi);
+            return !connections.contains(ConnectivityResult.ethernet) &&
+                   !connections.contains(ConnectivityResult.wifi);
         default:
-        return false;
+            return false;
     }
 }

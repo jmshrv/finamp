@@ -24,10 +24,10 @@ import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
 
 final _musicScreenLogger = Logger("MusicScreen");
-var _autoOffline;
+
 void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
-  _autoOffline = AutoOffline();
+  ref.listenManual(autoOfflineProvider, (_,__){});
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
