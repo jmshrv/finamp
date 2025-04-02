@@ -1945,8 +1945,12 @@ class FinampSegmentContainerAdapter
         return FinampSegmentContainer.aacMpegTS;
       case 1:
         return FinampSegmentContainer.aacFragmentedMp4;
+      case 2:
+        return FinampSegmentContainer.opusFragmentedMp4;
+      case 3:
+        return FinampSegmentContainer.flacFragmentedMp4;
       default:
-        return FinampSegmentContainer.aacMpegTS;
+        return FinampSegmentContainer.aacFragmentedMp4;
     }
   }
 
