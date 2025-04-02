@@ -1,45 +1,50 @@
 ![Banner](./GitHub_Banner.png)
 
-## TL;DR
-Finamp is a free Jellyfin music player for Android, iOS and Desktop. It allows you to Stream and Download the music you own. The design is mimicking popular music streaming services but still with a unique twist and a few customizations and of course privacy!
-> [!IMPORTANT]
-> You do **need** access to a [jellyfin](https://jellyfin.org) server else you **wont be able to use Finamp at all**.
-
-## Download now
 <div align="center">
+
 [<img src="assets/app-store-badges/app-store.svg"
     alt="Download on the App Store"
-    height="60">](https://apps.apple.com/us/app/finamp/id1574922594)
+    height="60">](https://apps.apple.com/us/app/finamp/id1574922594) 
 [<img src="assets/app-store-badges/fdroid.png"
     alt="Get it on F-Droid"
-    height="80">](https://f-droid.org/packages/com.unicornsonlsd.finamp/)
+    height="80">](https://f-droid.org/packages/com.unicornsonlsd.finamp/) 
 [<img src="assets/app-store-badges/play-store.png"
     alt="Get it on Google Play"
     height="80">](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp)
 </div>
 
+## TL;DR
+Finamp is a **free** Jellyfin music player for Android, iOS and Desktop. It allows you to Stream and Download the music you own. It has a **modern design** which may remind you of other popular music streaming apps but with a unique twist and a few **customizations** and of course **privacy**!
+
+
+> [!IMPORTANT]
+> You do **need** access to a [jellyfin](https://jellyfin.org) server else you **wont be able to use Finamp at all**.
 
 ## Features
-Finamp comes with a bunch of features, we have hand picked a few features we believe you'll be the most interested in:
+Finamp comes with a bunch of features, we have hand picked a few **features** we believe you'll be the **most interested** in:
 - Download music to listen offline
 - Transcoded streaming for reduced mobile data usage
 - Dynamic colors based on the current song applied to an unique and modern look&feel
 - Lyrics Support
 - Audio volume normalization
-- Support for the "Playback Reporting" Plugin, even when you are offline!
+- [Desktop App](#desktop-downloads)
+- Support for the [Playback Reporting](https://jellyfin.org/docs/general/server/plugins/#playback-reporting) Plugin, even when you are offline!
 - Android Auto
 
-And more!
+*And more for you to explore!*
 
-## FAQ
+## FAQ - Frequently Asked Questions
 
-#### Free
+#### Is Finamp **Free**?
 Yes. Contributions and donations of any kind are of course welcome!
-#### Supported Formats
+
+#### What are **Supported Formats**?
 Mostly All. Generally speaking if Jellyfin and your Device support an format, Finamp will too! In case an format doesn't work you can always enable transcoding.
-#### Android Auto / Apple Carplay
+
+#### Does finamp support **Android Auto / Apple Carplay**?
 No, but yes. Native support is in development but you can still connect your phone to your car and start listening.
-#### Legality
+
+#### Is Finamp **Legal**?
 Finamp is Legal. Because Finamp requires a Jellyfin server for streaming Music the Admin is responsible for buying music from Artists.
 
 ## Bugs, Problems and Feature Requests 
@@ -63,6 +68,7 @@ You can also help out by translating Finamp using our [weblate page](https://hos
 ## Screenshots
 #### Highlights
 <img src=".">
+TODO
 
 #### Other mentionable pages
 <details>
@@ -71,6 +77,7 @@ You can also help out by translating Finamp using our [weblate page](https://hos
 #### Login
 </summary>
 
+TODO :)
 <img src=".">
 </details>
 
@@ -80,6 +87,7 @@ You can also help out by translating Finamp using our [weblate page](https://hos
 #### Home
 </summary>
 
+TODO :)
 <img src=".">
 </details>
 
@@ -89,6 +97,7 @@ You can also help out by translating Finamp using our [weblate page](https://hos
 #### Player
 </summary>
 
+TODO :)
 <img src=".">
 </details>
 
@@ -98,6 +107,7 @@ You can also help out by translating Finamp using our [weblate page](https://hos
 #### Album / Playlist
 </summary>
 
+TODO :)
 <img src=".">
 </details>
 
@@ -107,6 +117,7 @@ You can also help out by translating Finamp using our [weblate page](https://hos
 #### Settings
 </summary>
 
+TODO :)
 <img src=".">
 </details>
 
@@ -117,10 +128,25 @@ You can also help out by translating Finamp using our [weblate page](https://hos
 #### Downloads
 </summary>
 
+TODO :)
 <img src=".">
 </details>
 
 
+## Other install methods
+#### Android
+TODO
+
+#### Windows
+TODO
+
+#### Mac
+TODO
+
+#### Linux
+| Distro | Install command |
+|-------:|:----------------|
+| Arch   | `yay -S finamp` |
 
 
 ## Shoutout
@@ -129,16 +155,3 @@ You can also help out by translating Finamp using our [weblate page](https://hos
 - Thanks to all the Developers who created and maintain packages Finamp uses!
 - And **you** for using Finamp!
 
-______
-
-<div align="center">
-[<img src="assets/app-store-badges/app-store.svg"
-    alt="Download on the App Store"
-    height="60">](https://apps.apple.com/us/app/finamp/id1574922594)
-[<img src="assets/app-store-badges/fdroid.png"
-    alt="Get it on F-Droid"
-    height="80">](https://f-droid.org/packages/com.unicornsonlsd.finamp/)
-[<img src="assets/app-store-badges/play-store.png"
-    alt="Get it on Google Play"
-    height="80">](https://play.google.com/store/apps/details?id=com.unicornsonlsd.finamp)
-</div>
