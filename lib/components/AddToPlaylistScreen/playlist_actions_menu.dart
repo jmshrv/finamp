@@ -22,7 +22,7 @@ const playlistActionsMenuRouteName = "/playlist-actions-menu";
 Future<void> showPlaylistActionsMenu({
   required BuildContext context,
   required BaseItemDto item,
-  required BaseItemDto? parentPlaylist,
+  BaseItemDto? parentPlaylist,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();

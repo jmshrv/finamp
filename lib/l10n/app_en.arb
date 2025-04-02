@@ -1935,5 +1935,18 @@
   "librarySelectError": "Error loading available libraries for user",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
+  },
+  "itemCount": "{childType, select, track{{amount} tracks} other{{amount} items}}",
+  "@itemCount": {
+    "description": "Error shown when the library select screen fails to load.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album"
+      },
+      "amount": {
+        "type": "int"
+      }
+    }
   }
 }
