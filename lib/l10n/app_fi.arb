@@ -15,7 +15,7 @@
   "@shareLogs": {},
   "removeFavourite": "Poista suosikki",
   "@removeFavourite": {},
-  "playNext": "Toista seuraava",
+  "playNext": "Toista seuraavaksi",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
@@ -354,7 +354,7 @@
   "@removeFromMix": {},
   "bufferDurationSubtitle": "Maksimiaika, kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.",
   "@bufferDurationSubtitle": {},
-  "swipeInsertQueueNext": "Toista Pyyhkäisty Kappale Seuraavaksi",
+  "swipeInsertQueueNext": "Toista pyyhkäisty kappale seuraavaksi",
   "@swipeInsertQueueNext": {},
   "startMix": "Aloita sekoitus",
   "@startMix": {},
@@ -450,7 +450,7 @@
       }
     }
   },
-  "swipeInsertQueueNextSubtitle": "Mahdollistaa kappaleen lisäämisen jonon seuraavaksi kohteeksi, kun sitä pyyhkäistään kappaleiden luettelossa sen sijaan, että se liitettäisiin loppuun.",
+  "swipeInsertQueueNextSubtitle": "Mahdollistaa kappaleluettelossa kappaleen lisäämisen pyyhkäisemällä jonon seuraavaksi kohteeksi sen sijaan, että se lisättäisiin johon hännille.",
   "@swipeInsertQueueNextSubtitle": {},
   "startMixNoTracksArtist": "Paina artistin nimeä pitkään lisätäksesi tai poistaaksesi sen mixistä ennen sen aloittamista",
   "@startMixNoTracksArtist": {
@@ -538,7 +538,7 @@
   "@serverUrlHint": {
     "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
   },
-  "connectingToServer": "Yhdistetään palvelimeen..",
+  "connectingToServer": "Yhdistetään palvelimeen…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -546,7 +546,7 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Etsitään palvelimia..",
+  "loginFlowLocalNetworkServersScanningForServers": "Etsitään palvelimia…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -1114,7 +1114,7 @@
   "@filesystemFull": {
     "description": "Message shown when a download cannot complete due to the filesystem being full."
   },
-  "missingDownloadSize": "Poistetaan...",
+  "missingDownloadSize": "Poistetaan…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1146,7 +1146,7 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "queueLoadingMessage": "Palautetaan jonoa...",
+  "queueLoadingMessage": "Palautetaan jonoa…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1168,7 +1168,7 @@
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Ohjaa sovelluksen sisäisen minisoittimen / tällä hetkellä toistettavan kappaleen palkki musiikkinäytön alareunassa edistymispalkkina.",
+  "showProgressOnNowPlayingBarSubtitle": "Näytä sovelluksen sisäisen minisoittimen / musiikkinäytön alareunassa sijaitsevan 'tällä hetkellä toistettavan kappaleen' palkki kappaleen toiston mukaan etenevänä väripalkkina.",
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
@@ -1203,7 +1203,7 @@
   "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
   },
-  "marqueeOrTruncateButtonSubtitle": "Näytä ... pitkän nimen lopussa nimen selaamisen sijaan",
+  "marqueeOrTruncateButtonSubtitle": "Näytä ... pitkän nimen lopussa vierivän tekstin sijaan",
   "@marqueeOrTruncateButtonSubtitle": {},
   "prioritizePlayerCover": "Priorisoi albumin kansikuva",
   "@prioritizePlayerCover": {},
@@ -1485,7 +1485,7 @@
   "@downloadsWorkersSetting": {
     "description": "Title of setting controlling download worker count."
   },
-  "activeDownloadSize": "Ladataan...",
+  "activeDownloadSize": "Ladataan…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
@@ -1637,7 +1637,7 @@
   },
   "downloadSettings": "Latauskset",
   "@downloadSettings": {},
-  "syncingDownloadSize": "Synkronoidaan...",
+  "syncingDownloadSize": "Synkronoidaan…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1773,7 +1773,7 @@
   },
   "keepScreenOnAlwaysOn": "Aina päällä",
   "@keepScreenOnAlwaysOn": {},
-  "showLyricsScreenAlbumPreludeTitle": "Näytä albumi ennen sanoituksia",
+  "showLyricsScreenAlbumPreludeTitle": "Näytä albumikuvitus ennen sanoituksia",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1789,9 +1789,9 @@
   "@keepScreenOnWhileLyrics": {},
   "keepScreenOnWhilePluggedIn": "Pidä näyttö päällä vain, kun laite on kytketty lataukseen",
   "@keepScreenOnWhilePluggedIn": {},
-  "artwork": "Taideteos",
+  "artwork": "Kansikuva",
   "@artwork": {},
-  "artworkTooltip": "Taideteos albumille/kappaleelle {title}",
+  "artworkTooltip": "Kansikuva albumille/kappaleelle {title}",
   "@artworkTooltip": {
     "placeholders": {
       "title": {
@@ -1907,7 +1907,7 @@
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
   },
-  "startMixNoTracksGenre": "Paina tyylilajia pitkään lisätäksesi tai poistaaksesi sen miksaustyökalusta ennen mixin aloittamista.",
+  "startMixNoTracksGenre": "Paina tyylilajia pitkään lisätäksesi tai poistaaksesi sen miksaustyökalusta ennen mixin aloittamista",
   "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
@@ -1924,5 +1924,13 @@
     "description": "Tagline / short description for the app"
   },
   "downloadsQueued": "Lataus valmisteltu, ladataan tiedostoja",
-  "@downloadsQueued": {}
+  "@downloadsQueued": {},
+  "togglePlaybackButtonTooltip": "Toista / pysäytä",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "librarySelectError": "Virhe ladattaessa saatavilla olevia kirjastoja käyttäjälle",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  }
 }
