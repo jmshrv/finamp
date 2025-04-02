@@ -9,6 +9,7 @@ import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/playback_history_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -317,6 +318,8 @@ class QueueService {
   }
 
   Future<void> loadSavedQueue(FinampStorableQueueInfo info) async {
+
+    final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
     if (_savedQueueState == SavedQueueState.loading) {
       return Future.error("A saved queue is currently loading");
     }
@@ -424,6 +427,9 @@ class QueueService {
         _savedQueueState = finalState;
       }
       refreshQueueStream();
+      await Future<void>.delayed(const Duration(seconds: 1)).then((_) {
+        unawaited(playbackHistoryService.reportRestoredSessionStatus());
+      });
     }
   }
 

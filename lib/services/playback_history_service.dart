@@ -511,9 +511,27 @@ class PlaybackHistoryService {
       }
     }
   }
+  Future<void> _updateQueueInfo() async {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return;
+    }
+    final playbackInfo = generateGenericPlaybackProgressInfo(
+        includeNowPlayingQueue: true, force: true);
+    if (playbackInfo != null) {
+      try {
+        await _jellyfinApiHelper.updatePlaybackProgress(playbackInfo);
+      } catch (e) {
+        _playbackHistoryServiceLogger.warning(e);
+      }
+    }
+  }
 
   Future<void> _reportPeriodicSessionStatus() async {
     await _updatePlaybackInfo();
+  }
+
+  Future<void> reportRestoredSessionStatus() async {
+    await _updateQueueInfo();
   }
 
   /// Generates PlaybackProgressInfo for the supplied item and player info.
@@ -556,26 +574,31 @@ class PlaybackHistoryService {
   /// Generates PlaybackProgressInfo from current player info.
   jellyfin_models.PlaybackProgressInfo? generateGenericPlaybackProgressInfo({
     bool includeNowPlayingQueue = false,
+    bool force = false,
   }) {
-    if (_history.isEmpty || _currentTrack == null) {
+    final currentTrack = _currentTrack?.item ?? _queueService.getCurrentTrack();
+    if (currentTrack == null) {
+      return null;
+    }
+    if (!force && (_history.isEmpty || _currentTrack == null)) {
       // This function relies on _history having items
       return null;
     }
 
     try {
       return jellyfin_models.PlaybackProgressInfo(
-        itemId:
-            _currentTrack!.item.baseItem?.id ?? jellyfin_models.BaseItemId(""),
+        itemId: currentTrack.baseItem?.id ?? jellyfin_models.BaseItemId(""),
         playSessionId: _queueService.getQueue().id,
         canSeek: true,
         isPaused: _audioService.paused,
         isMuted: _audioService.volume == 0.0,
         positionTicks: _audioService.playbackPosition.inMicroseconds * 10,
-        playbackStartTimeTicks:
-            _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10,
+        playbackStartTimeTicks: _currentTrack != null
+            ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10
+            : null,
         volumeLevel: (_audioService.volume * 100).round(),
         playMethod:
-            _currentTrack!.item.item.extras!["shouldTranscode"] as bool? ??
+            currentTrack.item.extras!["shouldTranscode"] as bool? ??
                     false
                 ? "Transcode"
                 : "DirectPlay",
@@ -584,7 +607,8 @@ class PlaybackHistoryService {
                 ? "Shuffle"
                 : "Default",
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
-        nowPlayingQueue: getQueueToReport(),
+        nowPlayingQueue:
+            getQueueToReport(includeNowPlayingQueue: includeNowPlayingQueue),
         playlistItemId: _queueService.getQueue().source.id,
       );
     } catch (e) {
