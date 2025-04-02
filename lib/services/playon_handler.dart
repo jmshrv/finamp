@@ -19,15 +19,15 @@ import 'finamp_user_helper.dart';
 import 'package:get_it/get_it.dart';
 
 final _playOnHandlerLogger = Logger("PlayOnHandler");
-final finampUserHelper = GetIt.instance<FinampUserHelper>();
-final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-final queueService = GetIt.instance<QueueService>();
-final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
-final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-var channel;
-var keepaliveSubscription;
-var reconnectionSubscription = null;
+final _finampUserHelper = GetIt.instance<FinampUserHelper>();
+final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+final _queueService = GetIt.instance<QueueService>();
+final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
+final _playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
+final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+late WebSocketChannel _channel;
+StreamSubscription<int>? _keepaliveSubscription;
+StreamSubscription<int>? _reconnectionSubscription;
 
 class PlayonHandler {
   late WidgetRef ref;
@@ -41,7 +41,8 @@ class PlayonHandler {
     var settingsListener = FinampSettingsHelper.finampSettingsListener;
     settingsListener.addListener(() async {
       if (isConnected && FinampSettingsHelper.finampSettings.isOffline) {
-        _playOnHandlerLogger.info("Offline mode enabled, closing playon listener now");
+        _playOnHandlerLogger
+            .info("Offline mode enabled, closing playon listener now");
         await closeListener();
       } else if (!isConnected) {
         await startListener();
@@ -54,7 +55,7 @@ class PlayonHandler {
   Future<void> startListener() async {
     try {
       if (!FinampSettingsHelper.finampSettings.isOffline) {
-        await jellyfinApiHelper.updateCapabilitiesFull(ClientCapabilities(
+        await _jellyfinApiHelper.updateCapabilitiesFull(ClientCapabilities(
           supportsMediaControl: true,
           supportsPersistentIdentifier: true,
           playableMediaTypes: ["Audio"],
@@ -106,10 +107,10 @@ class PlayonHandler {
         ));
         await connectWebsocket();
       }
-      reconnectionSubscription?.cancel();
-      reconnectionSubscription = null;
+      _reconnectionSubscription?.cancel();
+      _reconnectionSubscription = null;
     } catch (e) {
-      if (reconnectionSubscription == null) {
+      if (_reconnectionSubscription == null) {
         unawaited(startReconnectionLoop());
         _playOnHandlerLogger.severe("Error starting PlayOn listener: $e");
       }
@@ -117,7 +118,7 @@ class PlayonHandler {
   }
 
   Future<void> startReconnectionLoop() async {
-    reconnectionSubscription =
+    _reconnectionSubscription =
         Stream.periodic(const Duration(seconds: 5), (count) {
       return count;
     }).listen((count) {
@@ -128,27 +129,28 @@ class PlayonHandler {
 
   Future<void> connectWebsocket() async {
     final url =
-        "${finampUserHelper.currentUser!.baseUrl}/socket?api_key=${finampUserHelper.currentUser!.accessToken}";
+        "${_finampUserHelper.currentUser!.baseUrl}/socket?api_key=${_finampUserHelper.currentUser!.accessToken}";
     final parsedUrl = Uri.parse(url);
     final wsUrl =
         parsedUrl.replace(scheme: parsedUrl.scheme == "https" ? "wss" : "ws");
-    channel = WebSocketChannel.connect(wsUrl);
+    _channel = WebSocketChannel.connect(wsUrl);
 
-    await channel.ready;
+    await _channel.ready;
     _playOnHandlerLogger.info("WebSocket connection to server established");
     isConnected = true;
 
-    channel.sink.add('{"MessageType":"KeepAlive"}');
+    _channel.sink.add('{"MessageType":"KeepAlive"}');
 
-    channel.stream.listen(
+    _channel.stream.listen(
       (dynamic message) {
         unawaited(handleMessage(message));
       },
       onDone: () {
-        keepaliveSubscription?.cancel();
+        _keepaliveSubscription?.cancel();
         isConnected = false;
         if (!FinampSettingsHelper.finampSettings.isOffline) {
-          _playOnHandlerLogger.warning("WebSocket connection closed, attempting to reconnect");
+          _playOnHandlerLogger
+              .warning("WebSocket connection closed, attempting to reconnect");
           isConnected = false;
           startReconnectionLoop();
         }
@@ -159,25 +161,25 @@ class PlayonHandler {
       },
     );
 
-    keepaliveSubscription =
+    _keepaliveSubscription =
         Stream.periodic(const Duration(seconds: 30), (count) {
       return count;
     }).listen((event) {
       _playOnHandlerLogger.info("Sent KeepAlive message through websocket");
-      channel.sink.add('{"MessageType":"KeepAlive"}');
+      _channel.sink.add('{"MessageType":"KeepAlive"}');
     });
   }
 
   Future<void> closeListener() async {
     _playOnHandlerLogger.info("Closing playon session");
-    channel.sink.add('{"MessageType":"SessionsStop"}');
-    channel.sink.close();
-    keepaliveSubscription?.cancel();
+    _channel.sink.add('{"MessageType":"SessionsStop"}');
+    _channel.sink.close();
+    _keepaliveSubscription?.cancel();
     isConnected = false;
 
     // In case offline mod is turned on while attempting to reconnect
-    reconnectionSubscription?.cancel();
-    reconnectionSubscription = null;
+    _reconnectionSubscription?.cancel();
+    _reconnectionSubscription = null;
   }
 
   Future<void> handleMessage(dynamic value) async {
@@ -202,16 +204,18 @@ class PlayonHandler {
               break;
             case "SetVolume":
               _playOnHandlerLogger.info("Server requested a volume adjustment");
-              
+
               // Currently broken in the UI
-              final desiredVolume = request['Data']['Arguments']['Volume'] as String;
-              FinampSettingsHelper.setCurrentVolume(double.parse(desiredVolume) / 100.0);
-              // unawaited(playbackHistoryService.updatePlaybackInfo());
+              final desiredVolume =
+                  request['Data']['Arguments']['Volume'] as String;
+              FinampSettingsHelper.setCurrentVolume(
+                  double.parse(desiredVolume) / 100.0);
+            // unawaited(playbackHistoryService.updatePlaybackInfo());
           }
           break;
         case "UserDataChanged":
-          var item = await jellyfinApiHelper
-              .getItemById(BaseItemId(request['Data']['UserDataList'][0]['ItemId'] as String));
+          var item = await _jellyfinApiHelper.getItemById(BaseItemId(
+              request['Data']['UserDataList'][0]['ItemId'] as String));
 
           // Handle favoritig from remote client
           _playOnHandlerLogger.info("Updating favorite ui state");
@@ -222,19 +226,19 @@ class PlayonHandler {
         default:
           switch (request['Data']['Command']) {
             case "Stop":
-              await audioHandler.stop();
+              await _audioHandler.stop();
               break;
             case "Pause":
-              await audioHandler.pause();
+              await _audioHandler.pause();
               break;
             case "Unpause":
-              await audioHandler.play();
+              await _audioHandler.play();
               break;
             case "NextTrack":
-              await audioHandler.skipToNext();
+              await _audioHandler.skipToNext();
               break;
             case "PreviousTrack":
-              await audioHandler.skipToPrevious();
+              await _audioHandler.skipToPrevious();
               break;
             case "Seek":
               // val to = message.data?.seekPositionTicks?.ticks ?: Duration.ZERO
@@ -245,17 +249,17 @@ class PlayonHandler {
                                   10000)
                               .round())
                   : Duration.zero;
-              await audioHandler.seek(seekPosition);
-              final currentItem = queueService.getCurrentTrack();
+              await _audioHandler.seek(seekPosition);
+              final currentItem = _queueService.getCurrentTrack();
               break;
             case "Rewind":
-              await audioHandler.rewind();
+              await _audioHandler.rewind();
               break;
             case "FastForward":
-              await audioHandler.fastForward();
+              await _audioHandler.fastForward();
               break;
             case "PlayPause":
-              await audioHandler.togglePlayback();
+              await _audioHandler.togglePlayback();
               break;
 
             // Do nothing
@@ -265,15 +269,15 @@ class PlayonHandler {
                   if (!(request['Data'].containsKey('StartIndex') as bool)) {
                     request['Data']['StartIndex'] = 0;
                   }
-                  var items = await jellyfinApiHelper.getItems(
+                  var items = await _jellyfinApiHelper.getItems(
                     // sortBy: "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                     includeItemTypes: "Audio",
-                    itemIds:
-                        List<BaseItemId>.from(request['Data']['ItemIds'] as List<dynamic>),
+                    itemIds: List<BaseItemId>.from(
+                        request['Data']['ItemIds'] as List<dynamic>),
                   );
                   if (items!.isNotEmpty) {
                     //TODO check if all tracks in the request are in the upcoming queue (peekQueue). If they are, we should try to only reorder the upcoming queue instead of treating it as a new queue, and then skip to the correct index.
-                    unawaited(queueService.startPlayback(
+                    unawaited(_queueService.startPlayback(
                       items: items,
                       source: QueueItemSource(
                         name: QueueItemSourceName(
@@ -282,7 +286,7 @@ class PlayonHandler {
                         type: QueueItemSourceType.track,
                         id: items[0].id,
                       ),
-                       // seems like Jellyfin isn't always sending the correct index
+                      // seems like Jellyfin isn't always sending the correct index
                       startingIndex: request['Data']['StartIndex'] as int,
                     ));
                   } else {
@@ -291,24 +295,24 @@ class PlayonHandler {
                   }
                   break;
                 case 'PlayNext':
-                  var items = await jellyfinApiHelper.getItems(
+                  var items = await _jellyfinApiHelper.getItems(
                     sortBy: "IndexNumber",
                     includeItemTypes: "Audio",
-                    itemIds:
-                        List<BaseItemId>.from(request['Data']['ItemIds'] as List<dynamic>),
+                    itemIds: List<BaseItemId>.from(
+                        request['Data']['ItemIds'] as List<dynamic>),
                   );
-                  unawaited(queueService.addToNextUp(
+                  unawaited(_queueService.addToNextUp(
                     items: items!,
                   ));
                   break;
                 case 'PlayLast':
-                  var items = await jellyfinApiHelper.getItems(
+                  var items = await _jellyfinApiHelper.getItems(
                     sortBy: "IndexNumber",
                     includeItemTypes: "Audio",
-                    itemIds:
-                        List<BaseItemId>.from(request['Data']['ItemIds'] as List<dynamic>),
+                    itemIds: List<BaseItemId>.from(
+                        request['Data']['ItemIds'] as List<dynamic>),
                   );
-                  unawaited(queueService.addToQueue(
+                  unawaited(_queueService.addToQueue(
                     items: items!,
                   ));
                   break;
