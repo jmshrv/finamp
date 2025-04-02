@@ -235,7 +235,7 @@
       }
     }
   },
-  "startupError": "Noe gikk galt under oppstart av programmet. Feilen var: {error}\n\nOpprett en feilrapport på github.com/UnicornsOnLSD/finamp med en skjermavbildning av denne siden. Hvis problemet vedvarer kan du tømme programdata for å tilbakestille programmet.",
+  "startupError": "Noe gikk galt under oppstart av programmet. Feilen var:\n {error}\n\nOpprett en feilrapport på github.com/UnicornsOnLSD/finamp med en skjermavbildning av denne siden. Hvis problemet vedvarer kan du tømme programdata for å tilbakestille programmet.",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -449,5 +449,125 @@
     "description": "Title for message that shows on the views screen when no music libraries could be found."
   },
   "disableGestureSubtitle": "Hvorvidt håndvendinger skal skrus av.",
-  "@disableGestureSubtitle": {}
+  "@disableGestureSubtitle": {},
+  "viewLogs": "Vis logger",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "back": "Tilbake",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "loginFlowWelcomeHeading": "Velkommen til",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "about": "Om Finamp",
+  "@about": {
+    "description": "Label for the about/info button on the settings screen"
+  },
+  "aboutContributionPrompt": "Laget av fantastiske mennesker på fritiden.\nDu kan være en av dem!",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "Bidra til Finamp på GitHub:",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "Les de siste utgivelsesnotatene:",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "Hjelp med å oversette Finamp til ditt språk:",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "aboutThanks": "Takk for at du bruker Finamp!",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowSlogan": "Din musikk, slik du vil ha det.",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "Sett i gang!",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "changeLanguage": "Endre Språk",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "Koble til Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "serverUrlHint": "f.eks. demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "serverUrlInfoButtonTooltip": "Server URL-hjelp",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "connectingToServer": "Kobler til server…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "loginFlowLocalNetworkServers": "Servere på ditt lokale nettverk:",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "Leter etter servere…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowAccountSelectionHeading": "Velg kontoen din",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "backToServerSelection": "Tilbake til servervalg",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowNamelessUser": "Bruker uten navn",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "loginFlowCustomUser": "Egendefinert bruker",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAuthenticationHeading": "Logg på din bruker",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "backToAccountSelection": "Tilbake til brukervalg",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "loginFlowQuickConnectInstructions": "Åpne Jellyfin-app eller nettside, trykk på ditt brukerikon, og velg Quick Connect.",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectDisabled": "Quick Connect er deaktivert på denne serveren.",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "orDivider": "eller",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "loginFlowSelectAUser": "Velg en bruker",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "usernameHint": "Skriv inn brukernavnet ditt",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "login": "Logg in",
+  "@login": {
+    "description": "Label for the login button."
+  }
 }
