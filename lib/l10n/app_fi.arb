@@ -298,7 +298,7 @@
   },
   "showUncensoredLogMessage": "Tämä loki sisältää kirjautumistietosi. Näytä?",
   "@showUncensoredLogMessage": {},
-  "directoryMustBeEmpty": "Hakemiston pitää olla tyhjä",
+  "directoryMustBeEmpty": "Hakemiston täytyy olla tyhjä",
   "@directoryMustBeEmpty": {},
   "selectDirectory": "Valitse hakemisto",
   "@selectDirectory": {},
@@ -326,7 +326,7 @@
   "@customLocation": {},
   "appDirectory": "Sovelluksen hakemisto",
   "@appDirectory": {},
-  "addDownloadLocation": "Lisää latauksen hakemisto",
+  "addDownloadLocation": "Lisää latausten hakemisto",
   "@addDownloadLocation": {},
   "pathReturnSlashErrorMessage": "Polkuja jotka palauttavat \"/\" ei voi käyttää",
   "@pathReturnSlashErrorMessage": {},
@@ -1375,7 +1375,7 @@
   "@showNullLibraryItemsTitle": {
     "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
-  "playbackSpeedControlSettingDescription": "Automaattinen:\nFinamp yrittää tunnistaa, onko toistamasi kappale podcast tai äänikirja. Tämän katsotaan tapahtuvan, jos kappale on pidempi kuin {trackDuration} minuutti(a), tai jos kappaleen albumi on pidempi kuin {albumDuration} tunti(a), tai jos kappaleella on ainakin yksi näistä tyylilajeista: {genreList}\nToistonopeuden säätimet ovat tällöin esillä soittimen valikossa.\n\nEsillä:\nToistonopeuden säätimet ovat aina esillä soittimen valikossa.\n\nPiilotettu:\nToistonopeuden säätimet ovat aina piilossa soittimen valikossa.",
+  "playbackSpeedControlSettingDescription": "Automaattinen:\nFinamp yrittää tunnistaa, onko toistamasi kappale podcast tai äänikirja(n osa). Tämän katsotaan tapahtuvan, jos kappale on pidempi kuin {trackDuration} minuutti(a), tai jos kappaleen albumi on pidempi kuin {albumDuration} tunti(a), tai jos kappaleella on ainakin yksi näistä tyylilajeista: {genreList}\nToistonopeuden säätimet ovat tällöin esillä soittimen valikossa.\n\nEsillä:\nToistonopeuden säätimet ovat aina esillä soittimen valikossa.\n\nPiilotettu:\nToistonopeuden säätimet ovat aina piilossa soittimen valikossa.",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -1907,7 +1907,7 @@
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
   },
-  "startMixNoTracksGenre": "Paina pitkään tyylilajia lisätäksesi tai poistaaksesi se miksaustyökalusta ennen miksauksen aloittamista.",
+  "startMixNoTracksGenre": "Paina tyylilajia pitkään lisätäksesi tai poistaaksesi sen mixistä ennen sen aloittamista",
   "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
@@ -1932,5 +1932,23 @@
   "librarySelectError": "Virhe ladattaessa saatavilla olevia kirjastoja käyttäjälle",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
+  },
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} kappale} other{{trackCount} kappaletta}}, {imageCount,plural,=1{{imageCount} kuva} other{{imageCount} kuvaa}}\n{syncCount,plural,=1{{syncCount} solmu synkronoituu} other{{syncCount} solmua synkronoituu}}{repairing, plural, =0{} other{\n\nKorjataan parhaillaan}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
   }
 }
