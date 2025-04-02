@@ -204,7 +204,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       hasDownloadedPlaylistInfo:
           fields[74] == null ? false : fields[74] as bool,
       transcodingSegmentContainer: fields[75] == null
-          ? FinampSegmentContainer.fragmentedMp4
+          ? FinampSegmentContainer.aacFragmentedMp4
           : fields[75] as FinampSegmentContainer,
       downloadSizeWarningCutoff:
           fields[80] == null ? 150 : (fields[80] as num).toInt(),
@@ -1942,21 +1942,25 @@ class FinampSegmentContainerAdapter
   FinampSegmentContainer read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return FinampSegmentContainer.mpegTS;
+        return FinampSegmentContainer.aacMpegTS;
       case 1:
-        return FinampSegmentContainer.fragmentedMp4;
+        return FinampSegmentContainer.aacFragmentedMp4;
       default:
-        return FinampSegmentContainer.mpegTS;
+        return FinampSegmentContainer.aacMpegTS;
     }
   }
 
   @override
   void write(BinaryWriter writer, FinampSegmentContainer obj) {
     switch (obj) {
-      case FinampSegmentContainer.mpegTS:
+      case FinampSegmentContainer.aacMpegTS:
         writer.writeByte(0);
-      case FinampSegmentContainer.fragmentedMp4:
+      case FinampSegmentContainer.aacFragmentedMp4:
         writer.writeByte(1);
+      case FinampSegmentContainer.opusFragmentedMp4:
+        writer.writeByte(2);
+      case FinampSegmentContainer.flacFragmentedMp4:
+        writer.writeByte(3);
     }
   }
 

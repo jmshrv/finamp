@@ -127,7 +127,7 @@ class DefaultSettings {
   static const keepScreenOnWhilePluggedIn = true;
   static const hasDownloadedPlaylistInfo = false;
   static const transcodingSegmentContainer =
-      FinampSegmentContainer.fragmentedMp4;
+      FinampSegmentContainer.aacFragmentedMp4;
   static const featureChipsConfiguration =
       FinampFeatureChipsConfiguration(enabled: true, features: [
     FinampFeatureChipType.playCount,
@@ -2437,9 +2437,13 @@ enum KeepScreenOnOption {
 @HiveType(typeId: 73)
 enum FinampSegmentContainer {
   @HiveField(0)
-  mpegTS("ts"),
+  aacMpegTS("aac+ts"),
   @HiveField(1)
-  fragmentedMp4("mp4");
+  aacFragmentedMp4("aac+mp4"),
+  @HiveField(2)
+  opusFragmentedMp4("opus+mp4"),
+  @HiveField(3)
+  flacFragmentedMp4("flac+mp4");
 
   const FinampSegmentContainer(this.container);
 
