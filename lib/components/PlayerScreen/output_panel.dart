@@ -42,6 +42,14 @@ Future<void> showOutputMenu({
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final queueService = GetIt.instance<QueueService>();
 
+  final volumeNotifier = ValueNotifier<double>(FinampSettingsHelper.finampSettings.currentVolume);
+
+  var settingsListener = FinampSettingsHelper.finampSettingsListener;
+  settingsListener.addListener(() async {
+    outputPanelLogger.fine(FinampSettingsHelper.finampSettings.currentVolume);
+    volumeNotifier.value = FinampSettingsHelper.finampSettings.currentVolume;
+  });
+
   FeedbackHelper.feedback(FeedbackType.selection);
 
   await showThemedBottomSheet(
@@ -59,17 +67,23 @@ Future<void> showOutputMenu({
           // ),
           Consumer(
             builder: (context, ref, child) {
-              return VolumeSlider(
-                initialValue:
-                    (FinampSettingsHelper.finampSettings.currentVolume * 100)
-                            .floor() /
-                        100.0,
-                onChange: (double currentValue) async {
-                  FinampSettingsHelper.setCurrentVolume(currentValue);
-                  outputPanelLogger.fine("Volume set to $currentValue");
+              return ValueListenableBuilder<double>(
+                valueListenable: volumeNotifier,
+                builder: (context, volume, child) {
+                  return VolumeSlider(
+                    initialValue:
+                        (volume * 100)
+                                .floor() /
+                            100.0,
+                    onChange: (double currentValue) async {
+                      FinampSettingsHelper.setCurrentVolume(currentValue);
+                      outputPanelLogger.fine("Volume set to $currentValue");
+                    },
+                    forceLoading: true,
+                  );
                 },
               );
-            },
+            }
           ),
           const SizedBox(height: 10),
         ];
