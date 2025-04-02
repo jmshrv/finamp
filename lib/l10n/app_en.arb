@@ -480,7 +480,7 @@
   "@selectDirectory": {},
   "unknownError": "Unknown Error",
   "@unknownError": {},
-  "pathReturnSlashErrorMessage": "Paths that return \"/\" can''t be used",
+  "pathReturnSlashErrorMessage": "Paths that return \"/\" can't be used",
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "Directory must be empty",
   "@directoryMustBeEmpty": {},
