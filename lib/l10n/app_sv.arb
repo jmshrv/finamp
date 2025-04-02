@@ -775,7 +775,7 @@
   "@skipToNextTrackButtonTooltip": {
     "description": "Tooltip for the button that skips to the next track"
   },
-  "confirmAddToNextUp": "Lade till {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} i Härnäst",
+  "confirmAddToNextUp": "Lade till {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} i Nästa",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -847,11 +847,11 @@
   "@togglePlaybackButtonTooltip": {
     "description": "Tooltip for the button that toggles playback"
   },
-  "clearNextUp": "Rensa Härnäst",
+  "clearNextUp": "Rensa Nästa",
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
-  "nextUp": "Härnäst",
+  "nextUp": "Nästa",
   "@nextUp": {
     "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
@@ -859,11 +859,11 @@
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
   },
-  "shuffleToNextUp": "Blanda efter Härnäst",
+  "shuffleToNextUp": "Blanda efter Nästa",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
-  "addToNextUp": "Lägg till i Härnäst",
+  "addToNextUp": "Lägg till i Nästa",
   "@addToNextUp": {
     "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
   },
@@ -953,12 +953,20 @@
   "@confirmShuffleNext": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
   },
-  "confirmShuffleToNextUp": "Blandade efter Härnäst",
+  "confirmShuffleToNextUp": "Blandade efter Nästa",
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
   },
   "placeholderSource": "Någonstans",
   "@placeholderSource": {
     "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "tracksFormerNextUp": "Ljudspår tillagda via Nästa",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "savedQueue": "Sparad uppspelningskö",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   }
 }
