@@ -60,7 +60,7 @@
   "@revenue": {},
   "runtime": "Speltid",
   "@runtime": {},
-  "dlComplete": "{count} färdiga",
+  "dlComplete": "{count} slutförda",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -1087,5 +1087,238 @@
   "loopModeNoneButtonLabel": "Loopar inte",
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "syncingDownloadSize": "Synkroniserar…",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "resetToDefaults": "Återställ till standard",
+  "@resetToDefaults": {},
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Om Jellyfin-servern inte har mottagit några uppdateringar från en klient inom de senaste 5 minuterna, antar den att uppspelningen har avslutats. Det innebär att för ljudspår som är längre än 5 minuter, så kan uppspelningen felaktigt rapporteras att ha avslutats, vilket försämrar kvaliteten på uppspelningsrapport-datan.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "volumeNormalizationModeTrackBased": "Enstaka spår",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{körs} failed{misslyckades} syncFailed{ständigt avsynkade} enqueued{i kö} other{}} {itemCount, plural, =1{Nedladdning} other{Nedladdningar}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "requireWifiForDownloads": "Kräv Wi-Fi vid nedladdning.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "swipeInsertQueueNext": "Spela svept ljudspår härnäst",
+  "@swipeInsertQueueNext": {},
+  "topTracks": "Mest populära",
+  "@topTracks": {},
+  "repairDownloads": "Reparera problem med nedladdade filer eller metadata.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "reportQueueToServerSubtitle": "När funktionen är aktiverad skickar Finamp den aktuella uppspelningskön till servern. Det verkar för närvarande inte finnas mycket nytta för detta, och det ökar nätverkstrafiken.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "autoloadLastQueueOnStartup": "Återställ automatiskt senaste uppspelningskö",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "connectionInterruptedBackgroundAndroid": "Anslutningen avbröts medan nedladdning gjordes i bakgrunden. Detta kan orsakas av att aktivera 'Gå in i lågprioritetsläge vid paus' eller inställningar i operativsystemet.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "runRepairWarning": "Servern kunde inte kontaktas för att fullborda migrationen av nedladdningar. Vänligen kör 'Reparera nedladdningar' från nedladdningsskärmen så fort du är uppkopplad igen.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "queueRetryMessage": "Misslyckades med att återställa uppspelningskö. Försök igen?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Försök att återställa den senast spelade uppspelningskön när appen startas.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Rapportera nuvarande uppspelningskö till servern?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Uppdateringsfrekvens på uppspelningssession",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Hur ofta aktuell uppspelningsstatus skall skickas till servern, i sekunder. Detta borde vara lägre än 5 minuter (300 sekunder), för att motverka att sessionen löper ut.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "shuffleAlbumsNext": "Blanda album innan Nästa",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "playCountValue": "{playCount,plural,=1{{playCount} uppspelning} other{{playCount} uppspelningar}}",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+  "volumeNormalizationSettingsTitle": "Volymnormalisering",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "volumeNormalizationSwitchTitle": "Aktivera volymnormalisering",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationSwitchSubtitle": "Använd förstärkningsinformation till att normalisera ljudstyrkan på ljudspår (\"Replay Gain\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeSelectorDescription": "Hybrid (Ljudspår + Album):\nLjudspårets ljudstyrka används för vanlig uppspelning, men ifall ett album spelas upp (antingen för att det är källan till den huvudsakliga uppspelningskön, eller för att det lades till i kön vid något tillfälle), så används albumets ljudstyrka istället.\n\nEnstaka spår:\nLjudspårets ljudstyrka används alltid, oavsett ifall ett album spelas eller inte.\n\nEndast album:\nVolymnormalisering tillämpas endast vid uppspelning av album (utifrån albumets ljudstyrka), men inte för individuella ljudspår.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "swipeInsertQueueNextSubtitle": "Aktivera för att lägga in ett ljudspår som nästa objekt i uppspelningskön när det sveps i låtlistan i stället för att lägga till det på slutet.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "startInstantMixForIndividualTracksSwitchTitle": "Starta snabbmixar för enstaka ljudspår",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Om du trycker på ett ljudspår i ljudspårsfliken när funktionen är aktiv så startas en snabbmix för ljudspåret i stället för att bara spela upp ett enstaka ljudspår.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "downloadItem": "Ladda ned",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "syncComplete": "Alla nedladdningar har synkats om.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "repairComplete": "Reparation av nedladdningar slutförd.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "downloadLibraryPrompt": "Vill du verkligen ladda ned allt innehåll i biblioteket ''{libraryName}''?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Visa endast helt nedladdade album",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "connectionInterrupted": "Anslutningen avbröts, pausar nedladdningar.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "Anslutningen avbröts medan nedladdning gjordes i bakgrunden. Detta kan orsakas av inställningar i operativsystemet.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "volumeNormalizationModeAlbumBased": "Endast album",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "shuffleAlbumsToQueue": "Blanda album efter uppspelningskö",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "moreInfo": "Mer info",
+  "@moreInfo": {},
+  "volumeNormalizationModeSelectorSubtitle": "När och hur volymnormalisering skall tillämpas",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeHybrid": "Hybrid (Ljudspår + Album)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Grundläggande ljudstyrka",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "queueRestoreError": "Varning: {count,plural, =1{{count} ljudspår} other{{count} ljudspår}} kunde inte återställas till uppspelningskön.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filesystemFull": "Återstående nedladdningar kan inte slutföras. Filsystemet är fullt.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "activeDownloadSize": "Laddar ned…",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "Raderar…",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "downloadSettings": "Nedladdningar",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "Visa media med okänt bibliotek.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "albumCount": "{count,plural,=1{{count} album} other{{count} album}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleAlbums": "Blanda album",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "close": "Stäng",
+  "@close": {},
+  "volumeNormalizationModeSelectorTitle": "Volymnormaliseringsläge",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationModeAlbumOnly": "Endast för album",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "För närvarande kräver volymnormalisering på iOS att uppspelningsvolymen ändras för att imitera förändringen i ljudstyrkan. Eftersom vi inte kan höja volymen över 100% behöver vi som standard sänka volymen, så att vi kan höja volymen på lågmälda ljudspår. Värdet är i decibel (dB), varav -10 dB är ~30% volym, -4.5 dB är ~60% volym och -2 dB är ~80% volym.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "syncDownloads": "Synka och ladda ned saknade föremål.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
   }
 }
