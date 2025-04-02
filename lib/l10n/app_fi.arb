@@ -163,7 +163,7 @@
   "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Ota transkoodaus käyttöön",
   "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "Transkoodaa musiikin suoratoiston palvelimen päässä.",
+  "enableTranscodingSubtitle": "Transkoodaa musiikin suoratoistoa varten palvelimen päässä.",
   "@enableTranscodingSubtitle": {},
   "shuffleAll": "Sekoita kaikki",
   "@shuffleAll": {},
@@ -171,7 +171,7 @@
   "@budget": {},
   "communityRating": "Yhteisön arvostelu",
   "@communityRating": {},
-  "dateAdded": "Lisätty päivänä",
+  "dateAdded": "Lisäämisen päivämäärä",
   "@dateAdded": {},
   "datePlayed": "Toistettu viimeksi",
   "@datePlayed": {},
@@ -320,7 +320,7 @@
   "@audioService": {},
   "bitrate": "Bittinopeus",
   "@bitrate": {},
-  "bitrateSubtitle": "Korkeampi bittinopeus takaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
+  "bitrateSubtitle": "Korkeampi bittinopeus tuottaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
   "@bitrateSubtitle": {},
   "customLocation": "Mukautettu sijainti",
   "@customLocation": {},
@@ -889,7 +889,7 @@
   "@transcodingStreamingContainerTitle": {
     "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
-  "transcodingStreamingContainerSubtitle": "Valitse lohkosäiliö käytettäväksi, kun suoratoistetaan transkoodattua ääntä. Ei vaikuta jo jonossa oleviin kappaleisiin.",
+  "transcodingStreamingContainerSubtitle": "Valitse säiliömuoto, jota käytetään suoratoistettaessa transkoodattua ääntä. Ei vaikuta jonossa jo oleviin kappaleisiin.",
   "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeCodecTitle": "Valitse latausten koodekki",
   "@downloadTranscodeCodecTitle": {
@@ -1571,7 +1571,7 @@
   "@lyricsAlignmentSubtitle": {
     "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
   },
-  "showLyricsScreenAlbumPreludeSubtitle": "Ohjaa mikäli albumin kansikuva näytetään sanoitusten yläpuolella, ennen kuin se vierii pois.",
+  "showLyricsScreenAlbumPreludeSubtitle": "Näytä albumin kansikuva sanoitusten yläpuolella, ennen kuin se vierii pois.",
   "@showLyricsScreenAlbumPreludeSubtitle": {
     "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
