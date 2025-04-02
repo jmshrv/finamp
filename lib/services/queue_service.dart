@@ -1157,15 +1157,16 @@ class QueueService {
       ]);
 
       queryParameters.addAll({
-        "audioCodec": "aac",
+        "audioCodec": FinampSettingsHelper
+            .finampSettings.transcodingSegmentContainer.container.split('+')[0],
         // Ideally we'd use 48kHz when the source is, realistically it doesn't
         // matter too much
-        "audioSampleRate": "44100",
+        "audioSampleRate": "48000",
         "maxAudioBitDepth": "16",
         "audioBitRate":
             FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
         "segmentContainer": FinampSettingsHelper
-            .finampSettings.transcodingSegmentContainer.container,
+            .finampSettings.transcodingSegmentContainer.container.split('+')[1],
         "transcodeReasons": "ContainerBitrateExceedsLimit",
       });
     } else {
