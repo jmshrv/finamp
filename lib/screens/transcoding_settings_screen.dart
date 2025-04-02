@@ -33,14 +33,7 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
           const TranscodeSwitch(),
           const BitrateSelector(),
           const StreamingTranscodeSegmentContainerDropdownListTile(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              AppLocalizations.of(context)!.jellyfinUsesAACForTranscoding,
-              style: Theme.of(context).textTheme.bodySmall,
-              textAlign: TextAlign.center,
-            ),
-          ),
+          Padding(padding: const EdgeInsets.all(8.0)),
           const DownloadTranscodeEnableDropdownListTile(),
           const DownloadTranscodeCodecDropdownListTile(),
           const DownloadBitrateSelector(),
