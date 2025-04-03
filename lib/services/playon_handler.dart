@@ -24,6 +24,7 @@ final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 late WebSocketChannel _channel;
 StreamSubscription<int>? _keepaliveSubscription;
 StreamSubscription<int>? _reconnectionSubscription;
+StreamSubscription<int>? _isControlledSubscription;
 
 class PlayonHandler {
   late WidgetRef ref;
@@ -190,7 +191,22 @@ class PlayonHandler {
 
     if (request['MessageType'] != 'ForceKeepAlive' &&
         request['MessageType'] != 'KeepAlive') {
+
+      // Because the Jellyfin server doesn't notify remote client connection/disconnection,
+      // we mark the remote controlling as stale after 5 minutes without input as a workaround.
+      // This is particularly useful to stop agressively reporting playback when it's not needed
+      await _isControlledSubscription?.cancel();
       isControlled = true;
+      _isControlledSubscription =
+        Stream.periodic(const Duration(minutes: 5), (count) {
+            return count;
+      }).listen((event) {
+        _playOnHandlerLogger.info("Mark remote controlling as stale");
+        isControlled = false;
+        _isControlledSubscription?.cancel();
+      });
+
+
       switch (request['MessageType']) {
         case "GeneralCommand":
           switch (request['Data']['Name']) {
