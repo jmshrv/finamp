@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/audio_service_helper.dart';
-import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finamp/services/favorite_provider.dart';
@@ -22,8 +20,6 @@ final _playOnHandlerLogger = Logger("PlayOnHandler");
 final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 final _queueService = GetIt.instance<QueueService>();
-final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
-final _playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
 final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 late WebSocketChannel _channel;
 StreamSubscription<int>? _keepaliveSubscription;
@@ -210,12 +206,10 @@ class PlayonHandler {
             case "SetVolume":
               _playOnHandlerLogger.info("Server requested a volume adjustment");
 
-              // Currently broken in the UI
               final desiredVolume =
                   request['Data']['Arguments']['Volume'] as String;
               FinampSettingsHelper.setCurrentVolume(
                   double.parse(desiredVolume) / 100.0);
-            // unawaited(playbackHistoryService.updatePlaybackInfo());
           }
           break;
         case "UserDataChanged":
