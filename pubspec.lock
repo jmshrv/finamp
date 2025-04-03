@@ -1181,6 +1181,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.1"
+  progress_border:
+    dependency: "direct main"
+    description:
+      name: progress_border
+      sha256: f47c2b951c29f04d7a2232d9f72210874df893ea45c7bd313076291d8c4d8a57
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.5"
   provider:
     dependency: "direct main"
     description:
@@ -1700,7 +1708,7 @@ packages:
     source: hosted
     version: "2.1.4"
   visibility_detector:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: visibility_detector
       sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
