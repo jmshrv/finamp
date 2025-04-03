@@ -14,7 +14,7 @@ import 'jellyfin_api_helper.dart';
 part 'jellyfin_api.chopper.dart';
 
 const String defaultFields =
-    "ChildCount,DateCreated,DateLastMediaAdded,Etag,Genres,IndexNumber,ParentId,ProviderIds,Tags,albumPrimaryImageTag,parentPrimaryImageItemId,songCount";
+    "ChildCount,DateCreated,DateLastMediaAdded,Etag,Genres,ParentId,ProviderIds,Tags";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
