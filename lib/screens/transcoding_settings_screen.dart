@@ -143,7 +143,7 @@ class StreamingTranscodeSegmentContainerDropdownListTile
         items: FinampSegmentContainer.values
             .map((e) => DropdownMenuItem<FinampSegmentContainer>(
                   value: e,
-                  child: Text(e.container.toUpperCase()),
+                  child: Text("${e.codec}+${e.container}".toUpperCase()),
                 ))
             .toList(),
         onChanged: FinampSetters.setTranscodingSegmentContainer.ifNonNull,

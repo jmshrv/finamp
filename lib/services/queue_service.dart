@@ -1158,17 +1158,18 @@ class QueueService {
 
       queryParameters.addAll({
         "audioCodec": FinampSettingsHelper
-            .finampSettings.transcodingSegmentContainer.container.split('+')[0],
-        // Ideally we'd use 48kHz when the source is, realistically it doesn't
-        // matter too much
+            .finampSettings.transcodingSegmentContainer.codec,
+        // Ideally we'd switch between 44.1/48kHz depending on the source is,
+        // realistically it doesn't matter too much
         "audioSampleRate": "48000",
         "maxAudioBitDepth": "16",
         "audioBitRate":
             FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
         "segmentContainer": FinampSettingsHelper
-            .finampSettings.transcodingSegmentContainer.container.split('+')[1],
+            .finampSettings.transcodingSegmentContainer.container,
         "transcodeReasons": "ContainerBitrateExceedsLimit",
       });
+
     } else {
       builtPath.addAll([
         "Items",
