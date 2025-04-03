@@ -2437,16 +2437,17 @@ enum KeepScreenOnOption {
 @HiveType(typeId: 73)
 enum FinampSegmentContainer {
   @HiveField(0)
-  aacMpegTS("aac+ts"),
+  aacMpegTS("aac", "ts"),
   @HiveField(1)
-  aacFragmentedMp4("aac+mp4"),
+  aacFragmentedMp4("aac", "mp4"),
   @HiveField(2)
-  opusFragmentedMp4("opus+mp4"),
+  opusFragmentedMp4("opus", "mp4"),
   @HiveField(3)
-  flacFragmentedMp4("flac+mp4");
+  flacFragmentedMp4("flac", "mp4");
 
-  const FinampSegmentContainer(this.container);
+  const FinampSegmentContainer(this.codec, this.container);
 
+  final String codec;
   /// The container to use to transport the segments
   final String container;
 }
