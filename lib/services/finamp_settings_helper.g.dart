@@ -606,6 +606,13 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setArtistListType(ArtistListType newArtistListType) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.artistListType = newArtistListType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -811,6 +818,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<String?> get lastUsedDownloadLocationId =>
       finampSettingsProvider
           .select((value) => value.requireValue.lastUsedDownloadLocationId);
+  ProviderListenable<ArtistListType> get artistListType =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.artistListType);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

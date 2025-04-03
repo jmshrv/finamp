@@ -210,6 +210,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
+      artistListType: fields[86] == null
+          ? ArtistListType.albumartist
+          : fields[86] as ArtistListType,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -220,7 +223,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(81)
+      ..writeByte(82)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -382,7 +385,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(84)
       ..write(obj.releaseDateFormat)
       ..writeByte(85)
-      ..write(obj.lastUsedDownloadLocationId);
+      ..write(obj.lastUsedDownloadLocationId)
+      ..writeByte(86)
+      ..write(obj.artistListType);
   }
 
   @override
@@ -2062,6 +2067,43 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ReleaseDateFormatAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ArtistListTypeAdapter extends TypeAdapter<ArtistListType> {
+  @override
+  final int typeId = 89;
+
+  @override
+  ArtistListType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ArtistListType.albumartist;
+      case 1:
+        return ArtistListType.artist;
+      default:
+        return ArtistListType.albumartist;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ArtistListType obj) {
+    switch (obj) {
+      case ArtistListType.albumartist:
+        writer.writeByte(0);
+      case ArtistListType.artist:
+        writer.writeByte(1);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ArtistListTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

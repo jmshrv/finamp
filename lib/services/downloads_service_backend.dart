@@ -993,6 +993,20 @@ class DownloadsSyncService {
           infoChildren.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
+        if (parent.baseItemType == BaseItemDtoType.album) {
+          // If we are an album, add the album artists as info children
+          try {
+            var collectionChildren = await Future.wait(
+              (item.albumArtists?.map((e) => e.id) ?? [])
+                  .map((e) => _getCollectionInfo(e, DownloadItemType.collection, false))
+            );
+            infoChildren.addAll(collectionChildren.nonNulls);
+          } catch (e) {
+            _syncLogger.info("Failed to download metadata for ${item.name}: $e");
+            rethrow;
+          }
+        }
+
       case DownloadItemType.track:
         var item = newBaseItem ?? parent.baseItem!;
         if ((item.blurHash ?? item.imageId) != null) {
@@ -1010,7 +1024,6 @@ class DownloadsSyncService {
           List<BaseItemId> collectionIds = [];
           collectionIds.addAll(item.genreItems?.map((e) => e.id) ?? []);
           collectionIds.addAll(item.artistItems?.map((e) => e.id) ?? []);
-          collectionIds.addAll(item.albumArtists?.map((e) => e.id) ?? []);
           if (item.albumId != null) {
             collectionIds.add(item.albumId!);
           }

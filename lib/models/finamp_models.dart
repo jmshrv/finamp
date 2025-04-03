@@ -152,6 +152,7 @@ class DefaultSettings {
   static const oneLineMarqueeTextButton = false;
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
+  static const artistListType = ArtistListType.albumartist;
 }
 
 @HiveType(typeId: 28)
@@ -257,6 +258,7 @@ class FinampSettings {
     this.showAlbumReleaseDateOnPlayerScreen =
         DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
+    this.artistListType = DefaultSettings.artistListType,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -535,6 +537,9 @@ class FinampSettings {
 
   @HiveField(85, defaultValue: null)
   String? lastUsedDownloadLocationId;
+
+  @HiveField(86, defaultValue: DefaultSettings.artistListType)
+  ArtistListType artistListType;
   
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2607,4 +2612,14 @@ enum ReleaseDateFormat {
         return AppLocalizations.of(context)!.releaseDateFormatMonthDayYear;
     }
   }
+}
+
+/// Enum for artist list types
+@HiveType(typeId: 89)
+enum ArtistListType {
+  @HiveField(0)
+  albumartist,
+
+  @HiveField(1)
+  artist;
 }

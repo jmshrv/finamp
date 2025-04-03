@@ -1405,6 +1405,7 @@ class DownloadsService {
   /// + childViewFilter - only return collections with children in the given library.
   /// Useful for artists/genres, which may need to be shown in several libraries.
   /// + onlyFavorites - return only favorite items
+  /// + infoForType - only return collections that are info childs for the provided type
   Future<List<DownloadStub>> getAllCollections(
       {String? nameFilter,
       BaseItemDtoType? baseTypeFilter,
@@ -1413,11 +1414,14 @@ class DownloadsService {
       BaseItemId? viewFilter,
       BaseItemId? childViewFilter,
       bool nullableViewFilters = true,
-      bool onlyFavorites = false}) {
+      bool onlyFavorites = false,
+      BaseItemDtoType? infoForType,
+      }) {
     List<int> favoriteIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
       favoriteIds = _getFavoriteIds() ?? [];
     }
+    
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1451,6 +1455,9 @@ class DownloadsService {
             (q) => q.infoFor((q) => q.group((q) => q
                 .isarViewIdEqualTo(childViewFilter?.raw)
                 .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
+        .optional(
+          infoForType != null,
+          (q) => q.infoFor((q) => q.baseItemTypeEqualTo(infoForType!)))
         .findAll();
   }
 
