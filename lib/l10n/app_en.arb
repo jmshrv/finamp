@@ -1936,13 +1936,14 @@
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
   },
-  "itemCount": "{childType, select, track{{amount} tracks} other{{amount} items}}",
+  "itemCount": "{childType, select, track{{amount} tracks} albums{{amount} albums} other{{amount} items}}",
   "@itemCount": {
     "description": "Error shown when the library select screen fails to load.",
     "placeholders": {
       "childType": {
         "type": "String",
-        "example": "album"
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
       },
       "amount": {
         "type": "int"
