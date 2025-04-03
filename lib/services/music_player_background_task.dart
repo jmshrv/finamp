@@ -332,7 +332,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<void> dispose() => _player.dispose();
 
   @override
-  Future<void> play({disableFade = false}) async {
+  Future<void> play({bool disableFade = false}) async {
     if (!disableFade &&
         FinampSettingsHelper.finampSettings.audioFadeInDuration >
             Duration.zero) {
@@ -348,7 +348,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
-  Future<void> pause({disableFade = false}) async {
+  Future<void> pause({bool disableFade = false}) async {
     if (!disableFade &&
         FinampSettingsHelper.finampSettings.audioFadeOutDuration >
             Duration.zero) {
@@ -937,7 +937,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     _sleepTimer.value = Timer(duration, () async {
       _sleepTimer.value = null;
-      return await pause(disableFade: true);
+      return await pause(disableFade: false);
     });
     return _sleepTimer.value!;
   }
