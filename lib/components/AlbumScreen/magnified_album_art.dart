@@ -8,11 +8,7 @@ class MagnifiedAlbumArt extends StatelessWidget {
   final BaseItemDto album;
   final VoidCallback onDismiss;
 
-  const MagnifiedAlbumArt({
-    Key? key,
-    required this.album,
-    required this.onDismiss
-  }) : super(key: key);
+  const MagnifiedAlbumArt({Key? key, required this.album, required this.onDismiss}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -229,6 +229,62 @@ class _AlbumScreenContentFlexibleSpaceBarState extends State<AlbumScreenContentF
           isConfirmation: true);
     }
 
+    void _showFullAlbumArt(BuildContext context, BaseItemDto album) {
+      _isAlbumArtMagnified = true;
+
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          opaque: false,
+          barrierDismissible: true,
+          transitionDuration: const Duration(milliseconds: 300),
+          pageBuilder: (BuildContext context, Animation<double> animation1, Animation<double> animation2) {
+            return InteractiveViewer(
+              transformationController: TransformationController(),
+              onInteractionEnd: (details) {
+                // Check if the image has been "thrown" far enough away
+                if (details.velocity.pixelsPerSecond.dx.abs() > 200 || details.velocity.pixelsPerSecond.dy.abs() > 200) { // Adjust threshold as needed
+                  //onDismiss();
+                  print('flick to throw away');
+                }
+              },
+              child: Hero(
+                tag: album.hashCode,
+                flightShuttleBuilder: (
+                  BuildContext flightContext,
+                  Animation<double> animation,
+                  HeroFlightDirection flightDirection,
+                  BuildContext fromHeroContext,
+                  BuildContext toHeroContext,
+                ) {
+                  return toHeroContext.widget;
+                },
+                child: AlbumImage(item: album),
+              ),
+            );
+          }
+        )
+      );
+      // return MagnifiedAlbumArt(album: album);
+      // display the album art at full device width in an InteractiveViewer
+      // return showDialog(
+      //   context: context,
+      //   barrierDismissible: true,
+      //   builder: (context) {
+      //     var size = MediaQuery.of(context).size;
+      //     return AlertDialog(
+      //       content: Hero(
+      //         tag: album.hashCode,
+      //         child: SizedBox(
+      //           width: size.width,
+      //           child: AlbumImage(item: album),
+      //         ),
+      //       )
+      //     );
+      //   }
+      // );
+
+    }
+
     return FlexibleSpaceBar(
       background: SafeArea(
         child: Align(
@@ -243,28 +299,18 @@ class _AlbumScreenContentFlexibleSpaceBarState extends State<AlbumScreenContentF
                     Stack(
                       children: [
                         SizedBox(
-                            height: 125,
-                            child: GestureDetector(
-                              onTap: () {
-                                _isAlbumArtMagnified = true;
-                                print('Album art tapped');
-                              },
+                          height: 125,
+                          child: GestureDetector(
+                            onTap: () {
+                              _showFullAlbumArt(context, widget.parentItem);
+                              print('Album art tapped');
+                            },
+                            child: Hero(
+                              tag: widget.parentItem.hashCode,
                               child: AlbumImage(item: widget.parentItem),
                             )
+                          ),
                         ),
-                        if (_isAlbumArtMagnified)
-                          Positioned(
-                            child: (
-                              MagnifiedAlbumArt(
-                                album: widget.parentItem,
-                                onDismiss: () {
-                                  setState(() {
-                                    _isAlbumArtMagnified = false;
-                                    print('Album art dismissed');
-                                  });
-                                })
-                            )
-                          )
                       ],
                     ),
                     const Padding(
