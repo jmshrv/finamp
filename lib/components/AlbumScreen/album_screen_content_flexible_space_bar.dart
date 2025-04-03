@@ -13,6 +13,7 @@ import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
 import '../album_image.dart';
 import 'item_info.dart';
+import 'magnified_album_art.dart';
 
 enum AlbumMenuItems {
   addFavourite,
@@ -27,7 +28,7 @@ enum AlbumMenuItems {
   shuffleToQueue,
 }
 
-class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
+class AlbumScreenContentFlexibleSpaceBar extends StatefulWidget {
   const AlbumScreenContentFlexibleSpaceBar({
     super.key,
     required this.parentItem,
@@ -40,25 +41,33 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
   final List<BaseItemDto> items;
 
   @override
+  _AlbumScreenContentFlexibleSpaceBarState createState() => _AlbumScreenContentFlexibleSpaceBarState();
+}
+
+class _AlbumScreenContentFlexibleSpaceBarState extends State<AlbumScreenContentFlexibleSpaceBar> {
+  late QueueService queueService;
+  bool _isAlbumArtMagnified = false;
+
+  @override
   Widget build(BuildContext context) {
     GetIt.instance<AudioServiceHelper>();
     QueueService queueService = GetIt.instance<QueueService>();
 
     void playAlbum() {
       queueService.startPlayback(
-        items: items,
+        items: widget.items,
         source: QueueItemSource(
-          type: isPlaylist
+          type: widget.isPlaylist
               ? QueueItemSourceType.playlist
               : QueueItemSourceType.album,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
+              pretranslatedName: widget.parentItem.name ??
                   AppLocalizations.of(context)!.placeholderSource),
-          id: parentItem.id,
-          item: parentItem,
+          id: widget.parentItem.id,
+          item: widget.parentItem,
           contextNormalizationGain:
-              isPlaylist ? null : parentItem.normalizationGain,
+              widget.isPlaylist ? null : widget.parentItem.normalizationGain,
         ),
         order: FinampPlaybackOrder.linear,
       );
@@ -66,19 +75,19 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
 
     void shuffleAlbum() {
       queueService.startPlayback(
-        items: items,
+        items: widget.items,
         source: QueueItemSource(
-          type: isPlaylist
+          type: widget.isPlaylist
               ? QueueItemSourceType.playlist
               : QueueItemSourceType.album,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
+              pretranslatedName: widget.parentItem.name ??
                   AppLocalizations.of(context)!.placeholderSource),
-          id: parentItem.id,
-          item: parentItem,
+          id: widget.parentItem.id,
+          item: widget.parentItem,
           contextNormalizationGain:
-              isPlaylist ? null : parentItem.normalizationGain,
+            widget.isPlaylist ? null : widget.parentItem.normalizationGain,
         ),
         order: FinampPlaybackOrder.shuffled,
       );
@@ -86,67 +95,67 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
 
     void addAlbumToNextUp() {
       queueService.addToNextUp(
-        items: items,
+        items: widget.items,
         source: QueueItemSource(
-          type: isPlaylist
+          type: widget.isPlaylist
               ? QueueItemSourceType.nextUpPlaylist
               : QueueItemSourceType.nextUpAlbum,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
+              pretranslatedName: widget.parentItem.name ??
                   AppLocalizations.of(context)!.placeholderSource),
-          id: parentItem.id,
-          item: parentItem,
+          id: widget.parentItem.id,
+          item: widget.parentItem,
           contextNormalizationGain:
-              isPlaylist ? null : parentItem.normalizationGain,
+            widget.isPlaylist ? null : widget.parentItem.normalizationGain,
         ),
       );
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmAddToNextUp(isPlaylist ? "playlist" : "album"),
+              .confirmAddToNextUp(widget.isPlaylist ? "playlist" : "album"),
           isConfirmation: true);
     }
 
     void addAlbumNext() {
       queueService.addNext(
-          items: items,
+          items: widget.items,
           source: QueueItemSource(
-            type: isPlaylist
+            type: widget.isPlaylist
                 ? QueueItemSourceType.nextUpPlaylist
                 : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
+                pretranslatedName: widget.parentItem.name ??
                     AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
+            id: widget.parentItem.id,
+            item: widget.parentItem,
             contextNormalizationGain:
-                isPlaylist ? null : parentItem.normalizationGain,
+              widget.isPlaylist ? null : widget.parentItem.normalizationGain,
           ));
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmPlayNext(isPlaylist ? "playlist" : "album"),
+              .confirmPlayNext(widget.isPlaylist ? "playlist" : "album"),
           isConfirmation: true);
     }
 
     void shuffleAlbumToNextUp() {
       // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
+      List<BaseItemDto> clonedItems = List.from(widget.items);
       clonedItems.shuffle();
       queueService.addToNextUp(
           items: clonedItems,
           source: QueueItemSource(
-            type: isPlaylist
+            type: widget.isPlaylist
                 ? QueueItemSourceType.nextUpPlaylist
                 : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
+                pretranslatedName: widget.parentItem.name ??
                     AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
+            id: widget.parentItem.id,
+            item: widget.parentItem,
             contextNormalizationGain:
-                isPlaylist ? null : parentItem.normalizationGain,
+                widget.isPlaylist ? null : widget.parentItem.normalizationGain,
           ));
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
@@ -155,22 +164,22 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
 
     void shuffleAlbumNext() {
       // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
+      List<BaseItemDto> clonedItems = List.from(widget.items);
       clonedItems.shuffle();
       queueService.addNext(
           items: clonedItems,
           source: QueueItemSource(
-            type: isPlaylist
+            type: widget.isPlaylist
                 ? QueueItemSourceType.nextUpPlaylist
                 : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
+                pretranslatedName: widget.parentItem.name ??
                     AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
+            id: widget.parentItem.id,
+            item: widget.parentItem,
             contextNormalizationGain:
-                isPlaylist ? null : parentItem.normalizationGain,
+              widget.isPlaylist ? null : widget.parentItem.normalizationGain,
           ));
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
@@ -179,41 +188,41 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
 
     void addAlbumToQueue() {
       queueService.addToQueue(
-        items: items,
+        items: widget.items,
         source: QueueItemSource(
-          type: isPlaylist
+          type: widget.isPlaylist
               ? QueueItemSourceType.playlist
               : QueueItemSourceType.album,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
+              pretranslatedName: widget.parentItem.name ??
                   AppLocalizations.of(context)!.placeholderSource),
-          id: parentItem.id,
-          item: parentItem,
+          id: widget.parentItem.id,
+          item: widget.parentItem,
         ),
       );
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmAddToQueue(isPlaylist ? "playlist" : "album"),
+              .confirmAddToQueue(widget.isPlaylist ? "playlist" : "album"),
           isConfirmation: true);
     }
 
     void shuffleAlbumToQueue() {
       // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
+      List<BaseItemDto> clonedItems = List.from(widget.items);
       clonedItems.shuffle();
       queueService.addToQueue(
           items: clonedItems,
           source: QueueItemSource(
-            type: isPlaylist
+            type: widget.isPlaylist
                 ? QueueItemSourceType.playlist
                 : QueueItemSourceType.album,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
+                pretranslatedName: widget.parentItem.name ??
                     AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
+            id: widget.parentItem.id,
+            item: widget.parentItem,
           ));
       GlobalSnackbar.message(
           (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
@@ -231,9 +240,32 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SizedBox(
-                      height: 125,
-                      child: AlbumImage(item: parentItem),
+                    Stack(
+                      children: [
+                        SizedBox(
+                            height: 125,
+                            child: GestureDetector(
+                              onTap: () {
+                                _isAlbumArtMagnified = true;
+                                print('Album art tapped');
+                              },
+                              child: AlbumImage(item: widget.parentItem),
+                            )
+                        ),
+                        if (_isAlbumArtMagnified)
+                          Positioned(
+                            child: (
+                              MagnifiedAlbumArt(
+                                album: widget.parentItem,
+                                onDismiss: () {
+                                  setState(() {
+                                    _isAlbumArtMagnified = false;
+                                    print('Album art dismissed');
+                                  });
+                                })
+                            )
+                          )
+                      ],
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4),
@@ -241,8 +273,8 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: ItemInfo(
-                        item: parentItem,
-                        itemTracks: items.length,
+                        item: widget.parentItem,
+                        itemTracks: widget.items.length,
                       ),
                     )
                   ],
