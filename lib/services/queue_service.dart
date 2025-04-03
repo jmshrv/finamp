@@ -146,9 +146,6 @@ class QueueService {
     // );
   }
 
-  Future initializePlayer() =>
-      _audioHandler.initializeAudioSource(_queueAudioSource, preload: true);
-
   void _queueFromConcatenatingAudioSource({
     bool logUpdate = true,
   }) {
