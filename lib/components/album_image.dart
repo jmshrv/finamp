@@ -1,191 +1,215 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:finamp/components/PlayerScreen/player_split_screen_scaffold.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:octo_image/octo_image.dart';
 
 import '../models/jellyfin_models.dart';
 import '../services/album_image_provider.dart';
+import '../services/theme_provider.dart';
 
-typedef ImageProviderCallback = void Function(ImageProvider? imageProvider);
+typedef ImageProviderCallback = void Function(ImageProvider theme);
 
 /// This widget provides the default look for album images throughout Finamp -
 /// Aspect ratio 1 with a circular border radius of 4. If you don't want these
 /// customisations, use [BareAlbumImage] or get an [ImageProvider] directly
 /// through [AlbumImageProvider.init].
-class AlbumImage extends StatelessWidget {
+class AlbumImage extends ConsumerWidget {
   const AlbumImage({
-    Key? key,
+    super.key,
     this.item,
-    this.imageProviderCallback,
-    this.itemsToPrecache,
-  }) : super(key: key);
+    this.imageListenable,
+    this.borderRadius,
+    this.placeholderBuilder,
+    this.disabled = false,
+    this.autoScale = true,
+    this.decoration,
+  });
 
   /// The item to get an image for.
   final BaseItemDto? item;
 
-  /// A callback to get the image provider once it has been fetched.
-  final ImageProviderCallback? imageProviderCallback;
+  final ProviderListenable<ThemeImage>? imageListenable;
 
-  /// A list of items to precache
-  final List<BaseItemDto>? itemsToPrecache;
+  final BorderRadius? borderRadius;
 
-  static final BorderRadius borderRadius = BorderRadius.circular(4);
+  final WidgetBuilder? placeholderBuilder;
+
+  final bool disabled;
+
+  /// Whether to automatically scale the image to the size of the widget.
+  final bool autoScale;
+
+  /// The decoration to use for the album image. This is defined in AlbumImage
+  /// instead of being used as a separate widget so that non-square images don't
+  /// look incorrect due to AlbumImage having an aspect ratio of 1:1
+  final Decoration? decoration;
+
+  static final defaultBorderRadius = BorderRadius.circular(4);
 
   @override
-  Widget build(BuildContext context) {
-    if (item == null || item!.imageId == null) {
-      if (imageProviderCallback != null) {
-        imageProviderCallback!(null);
-      }
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final borderRadius = this.borderRadius ?? defaultBorderRadius;
+    assert(item == null || imageListenable == null);
+    if ((item == null || item!.imageId == null) && imageListenable == null) {
       return ClipRRect(
         borderRadius: borderRadius,
-        child: const AspectRatio(
+        child: AspectRatio(
           aspectRatio: 1,
-          child: _AlbumImageErrorPlaceholder(),
+          child: Container(
+            decoration: decoration,
+            child: const _AlbumImageErrorPlaceholder(),
+          ),
         ),
       );
     }
 
-    return ClipRRect(
-      borderRadius: borderRadius,
+    return Semantics(
+      // label: item?.name != null ? AppLocalizations.of(context)!.artworkTooltip(item!.name!) : AppLocalizations.of(context)!.artwork, // removed to reduce screen reader verbosity
+      excludeSemantics: true,
       child: AspectRatio(
-        aspectRatio: 1,
-        child: LayoutBuilder(builder: (context, constraints) {
-          // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
-          // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
-          // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
-          // If we use logical pixels for the image request, we'll get a smaller image than we want.
-          // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
-          final MediaQueryData mediaQuery = MediaQuery.of(context);
-          final int physicalWidth =
-              (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
-          final int physicalHeight =
-              (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+        aspectRatio: 1.0,
+        child: Align(
+          child: ClipRRect(
+            borderRadius: borderRadius,
+            child: LayoutBuilder(builder: (context, constraints) {
+              int? physicalWidth;
+              int? physicalHeight;
+              if (autoScale) {
+                // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
+                // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
+                // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
+                // If we use logical pixels for the image request, we'll get a smaller image than we want.
+                // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
+                final MediaQueryData mediaQuery = MediaQuery.of(context);
+                physicalWidth =
+                    (constraints.maxWidth * mediaQuery.devicePixelRatio)
+                        .toInt();
+                physicalHeight =
+                    (constraints.maxHeight * mediaQuery.devicePixelRatio)
+                        .toInt();
+                // If using grid music screen view without fixed size tiles, and if the view is resizable due
+                // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
+                if ((!(Platform.isIOS || Platform.isAndroid) ||
+                        usingPlayerSplitScreen) &&
+                    !FinampSettingsHelper
+                        .finampSettings.useFixedSizeGridTiles &&
+                    FinampSettingsHelper.finampSettings.contentViewType ==
+                        ContentViewType.grid) {
+                  physicalWidth =
+                      exp((log(physicalWidth) * 3).ceil() / 3).toInt();
+                  physicalHeight =
+                      exp((log(physicalHeight) * 3).ceil() / 3).toInt();
+                }
+              }
 
-          return BareAlbumImage(
-            item: item!,
-            maxWidth: physicalWidth,
-            maxHeight: physicalHeight,
-            imageProviderCallback: imageProviderCallback,
-            itemsToPrecache: itemsToPrecache,
-          );
-        }),
+              var listenable = imageListenable;
+              if (listenable == null) {
+                // If the current themeing context has a usable image for this item,
+                // use that instead of generating a new request
+                if (ref.watch(localThemeInfoProvider.select((request) =>
+                    (request?.largeThemeImage ?? false) &&
+                    request?.item == item))) {
+                  listenable = localImageProvider;
+                } else {
+                  listenable = albumImageProvider(AlbumImageRequest(
+                    item: item!,
+                    maxWidth: physicalWidth,
+                    maxHeight: physicalHeight,
+                  )).select((value) => ThemeImage(value, item?.blurHash));
+                }
+              }
+
+              var image = Container(
+                decoration: decoration,
+                child: BareAlbumImage(
+                    imageListenable: listenable,
+                    placeholderBuilder: placeholderBuilder),
+              );
+              return disabled
+                  ? Opacity(
+                      opacity: 0.75,
+                      child: ColorFiltered(
+                          colorFilter: const ColorFilter.mode(
+                              Colors.black, BlendMode.color),
+                          child: image))
+                  : image;
+            }),
+          ),
+        ),
       ),
     );
   }
 }
 
 /// An [AlbumImage] without any of the padding or media size detection.
-class BareAlbumImage extends StatefulWidget {
+class BareAlbumImage extends ConsumerWidget {
   const BareAlbumImage({
-    Key? key,
-    required this.item,
-    this.maxWidth,
-    this.maxHeight,
-    this.errorBuilder,
-    this.placeholderBuilder,
+    super.key,
+    required this.imageListenable,
     this.imageProviderCallback,
-    this.itemsToPrecache,
-  }) : super(key: key);
+    this.errorBuilder = defaultErrorBuilder,
+    this.placeholderBuilder,
+  });
 
-  final BaseItemDto item;
-  final int? maxWidth;
-  final int? maxHeight;
+  final ProviderListenable<ThemeImage> imageListenable;
   final WidgetBuilder? placeholderBuilder;
-  final OctoErrorBuilder? errorBuilder;
+  final OctoErrorBuilder errorBuilder;
   final ImageProviderCallback? imageProviderCallback;
 
-  /// A list of items to precache
-  final List<BaseItemDto>? itemsToPrecache;
-
-  @override
-  State<BareAlbumImage> createState() => _BareAlbumImageState();
-}
-
-class _BareAlbumImageState extends State<BareAlbumImage> {
-  late Future<ImageProvider?> _albumImageContentFuture;
-  late WidgetBuilder _placeholderBuilder;
-  late OctoErrorBuilder _errorBuilder;
-
-  @override
-  void initState() {
-    super.initState();
-    _albumImageContentFuture = AlbumImageProvider.init(
-      widget.item,
-      maxWidth: widget.maxWidth,
-      maxHeight: widget.maxHeight,
-      itemsToPrecache: widget.itemsToPrecache,
-      context: context,
-    );
-    _placeholderBuilder = widget.placeholderBuilder ??
-        (context) => Container(
-              color: Theme.of(context).cardColor,
-            );
-    _errorBuilder = widget.errorBuilder ??
-        (context, _, __) => const _AlbumImageErrorPlaceholder();
+  static Widget defaultPlaceholderBuilder(BuildContext context) {
+    return Container(color: Theme.of(context).cardColor);
   }
 
-  // We need to do this so that the image changes when dependencies change, such
-  // as when used in the player screen.
-  @override
-  void didUpdateWidget(BareAlbumImage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.item.imageId != oldWidget.item.imageId ||
-        widget.maxWidth != oldWidget.maxWidth ||
-        widget.maxHeight != oldWidget.maxHeight ||
-        widget.itemsToPrecache != oldWidget.itemsToPrecache) {
-      _albumImageContentFuture = AlbumImageProvider.init(
-        widget.item,
-        maxWidth: widget.maxWidth,
-        maxHeight: widget.maxHeight,
-        itemsToPrecache: widget.itemsToPrecache,
-        context: context,
-      );
-    }
-    _placeholderBuilder = widget.placeholderBuilder ??
-        (context) => Container(
-              color: Theme.of(context).cardColor,
-            );
-    _errorBuilder = widget.errorBuilder ??
-        (context, _, __) => const _AlbumImageErrorPlaceholder();
+  static Widget defaultErrorBuilder(BuildContext context, _, __) {
+    return const _AlbumImageErrorPlaceholder();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<ImageProvider?>(
-      future: _albumImageContentFuture,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (widget.imageProviderCallback != null) {
-            widget.imageProviderCallback!(snapshot.data!);
-          }
-
-          return OctoImage(
-            image: snapshot.data!,
-            fit: BoxFit.cover,
-            placeholderBuilder: _placeholderBuilder,
-            errorBuilder: _errorBuilder,
+  Widget build(BuildContext context, WidgetRef ref) {
+    var ThemeImage(image: image, blurHash: blurHash) =
+        ref.watch(imageListenable);
+    var localPlaceholder = placeholderBuilder;
+    if (blurHash != null) {
+      localPlaceholder ??= (_) => Image(
+            fit: BoxFit.contain,
+            image: BlurHashImage(
+              blurHash,
+              // Allow scaling blurhashes up to 3200 pixels wide by setting scale
+              scale: 0.01,
+            ),
           );
-        }
+    }
+    localPlaceholder ??= defaultPlaceholderBuilder;
 
-        if (snapshot.hasError) {
-          if (widget.imageProviderCallback != null) {
-            widget.imageProviderCallback!(null);
-          }
-          return const _AlbumImageErrorPlaceholder();
-        }
+    if (image != null) {
+      if (imageProviderCallback != null) {
+        imageProviderCallback!(image);
+      }
+      return LayoutBuilder(builder: (context, constraints) {
+        return OctoImage(
+          image: image,
+          filterQuality: FilterQuality.medium,
+          fadeOutDuration: const Duration(milliseconds: 300),
+          fadeInDuration: const Duration(milliseconds: 300),
+          fit: BoxFit.contain,
+          placeholderBuilder: localPlaceholder,
+          errorBuilder: errorBuilder,
+        );
+      });
+    }
 
-        if (widget.imageProviderCallback != null) {
-          widget.imageProviderCallback!(null);
-        }
-
-        return Builder(builder: _placeholderBuilder);
-      },
-    );
+    return Builder(builder: localPlaceholder);
   }
 }
 
 class _AlbumImageErrorPlaceholder extends StatelessWidget {
-  const _AlbumImageErrorPlaceholder({Key? key}) : super(key: key);
+  const _AlbumImageErrorPlaceholder();
 
   @override
   Widget build(BuildContext context) {
