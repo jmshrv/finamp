@@ -3175,6 +3175,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading available libraries for user'**
   String get librarySelectError;
+
+  /// This is shown when the autoOffline feature is turned off and has no effects
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get autoOfflineOptionOff;
+
+  /// This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get autoOfflineOptionNetwork;
+
+  /// This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get autoOfflineOptionDisconnected;
+
+  /// No description provided for @autoOfflineSettingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again'**
+  String get autoOfflineSettingDescription;
+
+  /// No description provided for @autoOfflineSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automated Offline Mode'**
+  String get autoOfflineSettingTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

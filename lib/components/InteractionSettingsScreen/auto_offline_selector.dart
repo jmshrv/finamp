@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/finamp_models.dart';
@@ -13,13 +14,8 @@ class AutoOfflineSelector extends ConsumerWidget {
       .watch(finampSettingsProvider.autoOffline);
 
     return ListTile(
-      title: Text("Auto Offline Mode"),
-      subtitle: Text(
-        "Automatically enable Offline Mode.\n" +
-        "Disabled: Wont Automatically turn on Offline Mode. May save battery.\n" +
-        "Network: Turn Offline Mode on when not being connected to wifi or ethernet.\n" +
-        "Disconnected: Turn Offline Mode on when not being connected to anything.\n\n" +
-        "You can always manually turn on offline mode and it will stay on until turned off."),
+      title: Text(AppLocalizations.of(context)!.autoOfflineSettingTitle),
+      subtitle: Text(AppLocalizations.of(context)!.autoOfflineSettingDescription),
       trailing: DropdownButton<AutoOfflineOption>(
         value: option,
         items: AutoOfflineOption.values

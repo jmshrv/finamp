@@ -2639,13 +2639,13 @@ enum AutoOfflineOption {
     switch (offlineOption) {
       case AutoOfflineOption.disabled:
         // return AppLocalizations.of(context)!.keepScreenOnDisabled;
-        return "Disabled";
+        return AppLocalizations.of(context)!.autoOfflineOptionOff;
       case AutoOfflineOption.network:
         // return AppLocalizations.of(context)!.keepScreenOnAlwaysOn;
-        return "Network";
+        return AppLocalizations.of(context)!.autoOfflineOptionNetwork;
       case AutoOfflineOption.disconnected:
         // return AppLocalizations.of(context)!.keepScreenOnWhilePlaying;
-        return "Disconnected";
+        return AppLocalizations.of(context)!.autoOfflineOptionDisconnected;
     }
   }
 }
