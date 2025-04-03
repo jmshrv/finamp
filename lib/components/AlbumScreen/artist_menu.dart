@@ -36,12 +36,11 @@ import '../album_image.dart';
 import '../global_snackbar.dart';
 import 'download_dialog.dart';
 
-const Duration playlistMenuDefaultAnimationDuration =
-    Duration(milliseconds: 750);
-const Curve playlistMenuDefaultInCurve = Curves.easeOutCubic;
-const Curve playlistMenuDefaultOutCurve = Curves.easeInCubic;
+const Duration ArtistMenuDefaultAnimationDuration = Duration(milliseconds: 750);
+const Curve ArtistMenuDefaultInCurve = Curves.easeOutCubic;
+const Curve ArtistMenuDefaultOutCurve = Curves.easeInCubic;
 
-Future<void> showModalPlaylistMenu({
+Future<void> showModalArtistMenu({
   required BuildContext context,
   required BaseItemDto item,
   BaseItemDto? parentItem,
@@ -55,14 +54,13 @@ Future<void> showModalPlaylistMenu({
   await showThemedBottomSheet(
       context: context,
       item: item,
-      routeName: PlaylistMenu.routeName,
+      routeName: ArtistMenu.routeName,
       buildWrapper: (context, dragController, childBuilder) {
-        return PlaylistMenu(
+        return ArtistMenu(
           key: ValueKey(item.id),
           item: item,
           parentItem: parentItem,
           isOffline: isOffline,
-          canGoToArtist: canGoToArtist,
           canGoToGenre: canGoToGenre,
           onRemoveFromList: onRemoveFromList,
           confirmPlaylistRemoval: confirmPlaylistRemoval,
@@ -72,14 +70,13 @@ Future<void> showModalPlaylistMenu({
       });
 }
 
-class PlaylistMenu extends ConsumerStatefulWidget {
-  static const routeName = "/playlist-menu";
+class ArtistMenu extends ConsumerStatefulWidget {
+  static const routeName = "/artist-menu";
 
-  const PlaylistMenu({
+  const ArtistMenu({
     super.key,
     required this.item,
     required this.isOffline,
-    required this.canGoToArtist,
     required this.canGoToGenre,
     required this.onRemoveFromList,
     required this.confirmPlaylistRemoval,
@@ -91,7 +88,6 @@ class PlaylistMenu extends ConsumerStatefulWidget {
   final BaseItemDto item;
   final BaseItemDto? parentItem;
   final bool isOffline;
-  final bool canGoToArtist;
   final bool canGoToGenre;
   final Function? onRemoveFromList;
   final bool confirmPlaylistRemoval;
@@ -99,10 +95,10 @@ class PlaylistMenu extends ConsumerStatefulWidget {
   final DraggableScrollableController dragController;
 
   @override
-  ConsumerState<PlaylistMenu> createState() => _PlaylistMenuState();
+  ConsumerState<ArtistMenu> createState() => _ArtistMenuState();
 }
 
-class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
+class _ArtistMenuState extends ConsumerState<ArtistMenu> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -136,8 +132,8 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
         scrollController.size == inputStep) {
       scrollController.animateTo(
         percentage ?? oldExtent,
-        duration: playlistMenuDefaultAnimationDuration,
-        curve: playlistMenuDefaultInCurve,
+        duration: ArtistMenuDefaultAnimationDuration,
+        curve: ArtistMenuDefaultInCurve,
       );
     }
     oldExtent = currentSize;
@@ -164,12 +160,6 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
             type: DownloadItemType.collection, item: widget.item),
         null);
     var iconColor = Theme.of(context).colorScheme.primary;
-
-    final currentTrack = _queueService.getCurrentTrack();
-    FinampQueueItem? queueItem;
-    if (isBaseItemInQueueItem(widget.item, currentTrack)) {
-      queueItem = currentTrack;
-    }
 
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
@@ -211,22 +201,21 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
           ),
           title: Text(AppLocalizations.of(context)!.playNext),
           onTap: () async {
-            List<BaseItemDto>? playlistTracks;
+            List<BaseItemDto>? artistTracks;
             try {
               FeedbackHelper.feedback(FeedbackType.selection);
               if (widget.isOffline) {
-                playlistTracks = await downloadsService
+                artistTracks = await downloadsService
                     .getCollectionTracks(widget.item, playable: true);
               } else {
-                playlistTracks = await _jellyfinApiHelper.getItems(
+                artistTracks = await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
-                  sortBy:
-                      "ParentIndexNumber,IndexNumber,SortName", //FIXME make sure this yields the correct order
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
               }
 
-              if (playlistTracks == null) {
+              if (artistTracks == null) {
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.couldNotLoad(
                         BaseItemDtoType.fromItem(widget.item).name));
@@ -234,23 +223,16 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
               }
 
               await _queueService.addNext(
-                  items: playlistTracks,
+                  items: artistTracks,
                   source: QueueItemSource(
-                    type: BaseItemDtoType.fromItem(widget.item) ==
-                            BaseItemDtoType.playlist
-                        ? QueueItemSourceType.nextUpPlaylist
-                        : QueueItemSourceType.nextUpAlbum,
+                    type: QueueItemSourceType.nextUpArtist,
                     name: QueueItemSourceName(
                         type: QueueItemSourceNameType.preTranslated,
                         pretranslatedName: widget.item.name ??
                             AppLocalizations.of(context)!.placeholderSource),
                     id: widget.item.id,
                     item: widget.item,
-                    contextNormalizationGain:
-                        BaseItemDtoType.fromItem(widget.item) ==
-                                BaseItemDtoType.playlist
-                            ? null
-                            : widget.item.normalizationGain,
+                    contextNormalizationGain: widget.item.normalizationGain,
                   ));
 
               GlobalSnackbar.message(
@@ -271,21 +253,21 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.addToNextUp),
         onTap: () async {
-          List<BaseItemDto>? playlistTracks;
+          List<BaseItemDto>? artistTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
             if (widget.isOffline) {
-              playlistTracks = await downloadsService
+              artistTracks = await downloadsService
                   .getCollectionTracks(widget.item, playable: true);
             } else {
-              playlistTracks = await _jellyfinApiHelper.getItems(
+              artistTracks = await _jellyfinApiHelper.getItems(
                 parentItem: widget.item,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (playlistTracks == null) {
+            if (artistTracks == null) {
               GlobalSnackbar.message((scaffold) =>
                   AppLocalizations.of(scaffold)!.couldNotLoad(
                       BaseItemDtoType.fromItem(widget.item).name));
@@ -293,20 +275,20 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
             }
 
             await _queueService.addToNextUp(
-                items: playlistTracks,
+                items: artistTracks,
                 source: QueueItemSource(
-                  type: QueueItemSourceType.nextUpPlaylist,
+                  type: QueueItemSourceType.nextUpArtist,
                   name: QueueItemSourceName(
                       type: QueueItemSourceNameType.preTranslated,
                       pretranslatedName: widget.item.name ??
                           AppLocalizations.of(context)!.placeholderSource),
                   id: widget.item.id,
                   item: widget.item,
-                  contextNormalizationGain: null,
+                  contextNormalizationGain: widget.item.normalizationGain,
                 ));
 
             GlobalSnackbar.message(
-                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
+                (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp(
                     BaseItemDtoType.fromItem(widget.item).name),
                 isConfirmation: true);
             Navigator.pop(context);
@@ -322,21 +304,21 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.addToQueue),
         onTap: () async {
-          List<BaseItemDto>? playlistTracks;
+          List<BaseItemDto>? artistTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
             if (widget.isOffline) {
-              playlistTracks = await downloadsService
+              artistTracks = await downloadsService
                   .getCollectionTracks(widget.item, playable: true);
             } else {
-              playlistTracks = await _jellyfinApiHelper.getItems(
+              artistTracks = await _jellyfinApiHelper.getItems(
                 parentItem: widget.item,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (playlistTracks == null) {
+            if (artistTracks == null) {
               GlobalSnackbar.message((scaffold) =>
                   AppLocalizations.of(scaffold)!.couldNotLoad(
                       BaseItemDtoType.fromItem(widget.item).name));
@@ -344,24 +326,20 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
             }
 
             await _queueService.addToQueue(
-                items: playlistTracks,
+                items: artistTracks,
                 source: QueueItemSource(
-                  type: QueueItemSourceType.playlist,
+                  type: QueueItemSourceType.artist,
                   name: QueueItemSourceName(
                       type: QueueItemSourceNameType.preTranslated,
                       pretranslatedName: widget.item.name ??
                           AppLocalizations.of(context)!.placeholderSource),
                   id: widget.item.id,
                   item: widget.item,
-                  contextNormalizationGain:
-                      BaseItemDtoType.fromItem(widget.item) ==
-                              BaseItemDtoType.playlist
-                          ? null
-                          : widget.item.normalizationGain,
+                  contextNormalizationGain: widget.item.normalizationGain,
                 ));
 
             GlobalSnackbar.message(
-                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
+                (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue(
                     BaseItemDtoType.fromItem(widget.item).name),
                 isConfirmation: true);
             Navigator.pop(context);
@@ -480,39 +458,6 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
         },
       ),
       Visibility(
-        visible: widget.canGoToArtist,
-        child: ListTile(
-          leading: Icon(
-            Icons.person,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.goToArtist),
-          enabled: widget.canGoToArtist,
-          onTap: () async {
-            late BaseItemDto artist;
-            try {
-              if (FinampSettingsHelper.finampSettings.isOffline) {
-                final downloadsService = GetIt.instance<DownloadsService>();
-                artist = (await downloadsService.getCollectionInfo(
-                        id: widget.item.artistItems!.first.id))!
-                    .baseItem!;
-              } else {
-                artist = await _jellyfinApiHelper
-                    .getItemById(widget.item.artistItems!.first.id);
-              }
-            } catch (e) {
-              GlobalSnackbar.error(e);
-              return;
-            }
-            if (context.mounted) {
-              Navigator.pop(context);
-              await Navigator.of(context)
-                  .pushNamed(ArtistScreen.routeName, arguments: artist);
-            }
-          },
-        ),
-      ),
-      Visibility(
         visible: widget.canGoToGenre,
         child: ListTile(
           leading: Icon(
@@ -587,7 +532,7 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
     var iconColor = Theme.of(context).colorScheme.primary;
     return [
       SliverPersistentHeader(
-        delegate: PlaylistMenuSliverAppBar(
+        delegate: ArtistMenuSliverAppBar(
           item: widget.item,
         ),
         pinned: true,
@@ -605,10 +550,10 @@ class _PlaylistMenuState extends ConsumerState<PlaylistMenu> {
   }
 }
 
-class PlaylistMenuSliverAppBar extends SliverPersistentHeaderDelegate {
+class ArtistMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
 
-  PlaylistMenuSliverAppBar({
+  ArtistMenuSliverAppBar({
     required this.item,
   });
 
@@ -665,7 +610,12 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                 ? Colors.black.withOpacity(0.25)
                 : Colors.white.withOpacity(0.15),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(9999),
+                  bottomLeft: Radius.circular(9999),
+                  // circular radii influence each other. this should look roughly the same as BorderRadius.circular(12)
+                  topRight: Radius.circular(2000),
+                  bottomRight: Radius.circular(2000)),
             ),
           ),
           child: Row(
@@ -675,7 +625,7 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                 aspectRatio: 1.0,
                 child: AlbumImage(
                   item: widget.item,
-                  borderRadius: BorderRadius.zero,
+                  borderRadius: BorderRadius.circular(9999),
                 ),
               ),
               Expanded(
@@ -703,13 +653,14 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                       ),
                       if (!widget.condensed)
                         ItemAmountChip(
-                          baseItem: widget.item,
+                          baseItem: widget
+                              .item, //FIXME fetch extended item when menu is opened to include BaseItemDto.albumCount
                           backgroundColor: IconTheme.of(context)
                                   .color
                                   ?.withOpacity(0.1) ??
                               Theme.of(context).textTheme.bodyMedium?.color ??
                               Colors.white,
-                        ),
+                        )
                     ],
                   ),
                 ),

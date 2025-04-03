@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/AlbumScreen/album_menu.dart';
+import 'package:finamp/components/AlbumScreen/artist_menu.dart';
 import 'package:finamp/components/AlbumScreen/playlist_menu.dart';
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
@@ -118,10 +119,16 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
 
     void menuCallback() async {
       unawaited(Feedback.forLongPress(context));
-      if (BaseItemDtoType.fromItem(mutableAlbum) == BaseItemDtoType.playlist) {
-        await showModalPlaylistMenu(context: context, item: mutableAlbum);
-      } else {
-        await showModalAlbumMenu(context: context, item: mutableAlbum);
+
+      switch (BaseItemDtoType.fromItem(mutableAlbum)) {
+        case BaseItemDtoType.artist:
+          await showModalArtistMenu(context: context, item: mutableAlbum);
+          break;
+        case BaseItemDtoType.playlist:
+          await showModalPlaylistMenu(context: context, item: mutableAlbum);
+          break;
+        default:
+          await showModalAlbumMenu(context: context, item: mutableAlbum);
       }
     }
 

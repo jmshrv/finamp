@@ -1,4 +1,5 @@
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -19,9 +20,24 @@ class ItemAmountChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final itemCount = switch (BaseItemDtoType.fromItem(baseItem!)) {
+      BaseItemDtoType.album => baseItem?.childCount ?? 0,
+      BaseItemDtoType.artist => baseItem?.albumCount ?? 0,
+      BaseItemDtoType.playlist => baseItem?.childCount ?? 0,
+      _ => baseItem?.childCount ?? 0,
+    };
+
+    final childItemType = switch (BaseItemDtoType.fromItem(baseItem!)) {
+      BaseItemDtoType.album => BaseItemDtoType.track,
+      BaseItemDtoType.artist => BaseItemDtoType.album,
+      BaseItemDtoType.playlist => BaseItemDtoType.track,
+      _ => BaseItemDtoType.unknown,
+    };
+    
     return Semantics.fromProperties(
       properties: SemanticsProperties(
-        label: "Item count: ${baseItem?.childCount}",
+        label: "Item count: ${itemCount}",
         button: true,
       ),
       excludeSemantics: true,
@@ -33,7 +49,7 @@ class ItemAmountChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           child: Text(
             AppLocalizations.of(context)!
-                .itemCount("track", baseItem?.childCount ?? 0),
+                .itemCount(childItemType.name, baseItem?.childCount ?? 0),
             overflow: TextOverflow.ellipsis,
             softWrap: false,
             style: TextStyle(
