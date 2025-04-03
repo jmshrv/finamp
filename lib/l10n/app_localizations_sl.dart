@@ -984,9 +984,6 @@ class AppLocalizationsSl extends AppLocalizations {
   String get yourLikes => 'Your Likes';
 
   @override
-  String get playon => 'Remote client';
-
-  @override
   String mix(String mixSource) {
     return '$mixSource - Mix';
   }
@@ -1018,6 +1015,7 @@ class AppLocalizationsSl extends AppLocalizations {
         'nextUpPlaylist': 'Playlist in Next Up',
         'nextUpArtist': 'Artist in Next Up',
         'other': '',
+        'remoteClient': 'a Remote Client',
       },
     );
     return 'Playing From $_temp0';

@@ -64,6 +64,7 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     case QueueItemSourceType.trackMix:
     case QueueItemSourceType.filteredList:
     case QueueItemSourceType.downloads:
+    case QueueItemSourceType.remoteClient:
     default:
       FeedbackHelper.feedback(FeedbackType.warning);
       GlobalSnackbar.message(

@@ -984,9 +984,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get yourLikes => 'مورد علاقه‌های شما';
 
   @override
-  String get playon => 'Remote client';
-
-  @override
   String mix(String mixSource) {
     return '$mixSource - میکس';
   }

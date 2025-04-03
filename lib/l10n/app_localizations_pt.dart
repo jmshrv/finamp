@@ -984,9 +984,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get yourLikes => 'As Tuas Favoritas';
 
   @override
-  String get playon => 'Remote client';
-
-  @override
   String mix(String mixSource) {
     return 'Mistura - $mixSource';
   }

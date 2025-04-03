@@ -996,9 +996,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get yourLikes => 'Vos Favoris';
 
   @override
-  String get playon => 'Remote client';
-
-  @override
   String mix(String mixSource) {
     return '$mixSource - Mix';
   }
@@ -1014,25 +1011,26 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       source,
       {
-        'album': 'Album',
-        'playlist': 'Playlist',
-        'trackMix': 'Track Mix',
-        'artistMix': 'Artist Mix',
-        'albumMix': 'Album Mix',
-        'genreMix': 'Genre Mix',
-        'favorites': 'Favorites',
-        'allTracks': 'All Tracks',
-        'filteredList': 'Tracks',
+        'album': 'd\'un Album',
+        'playlist': 'd\'une Playlist',
+        'trackMix': 'd\'une Track Mix',
+        'artistMix': 'd\'un Artist Mix',
+        'albumMix': 'd\'un Album Mix',
+        'genreMix': 'd\'un Genre Mix',
+        'favorites': 'vos favorites',
+        'allTracks': 'toutes vos musiques',
+        'filteredList': 'vos musiques',
         'genre': 'Genre',
         'artist': 'Artist',
         'track': 'Track',
         'nextUpAlbum': 'Album in Next Up',
         'nextUpPlaylist': 'Playlist in Next Up',
         'nextUpArtist': 'Artist in Next Up',
+        'remoteClient': 'd\'un autre appareil',
         'other': '',
       },
     );
-    return 'Joué à partir de $_temp0';
+    return 'Joué à partir $_temp0';
   }
 
   @override

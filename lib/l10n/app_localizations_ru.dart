@@ -993,9 +993,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get yourLikes => 'Ваши избранные';
 
   @override
-  String get playon => 'Remote client';
-
-  @override
   String mix(String mixSource) {
     return '$mixSource - Микс';
   }

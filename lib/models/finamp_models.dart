@@ -1639,7 +1639,7 @@ enum QueueItemSourceType {
   @HiveField(19)
   track,
   @HiveField(20)
-  playon;
+  remoteClient;
 }
 
 @HiveType(typeId: 53)
@@ -1709,7 +1709,7 @@ enum QueueItemSourceNameType {
   @HiveField(8)
   queue,
   @HiveField(9)
-  playon
+  remoteClient
 }
 
 @HiveType(typeId: 56)
@@ -1747,8 +1747,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.savedQueue;
       case QueueItemSourceNameType.queue:
         return AppLocalizations.of(context)!.queue;
-      case QueueItemSourceNameType.playon:
-        return AppLocalizations.of(context)!.playon;
+      case QueueItemSourceNameType.remoteClient:
+        return "";
     }
   }
 }

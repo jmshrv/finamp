@@ -992,9 +992,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get yourLikes => 'Vaše oblíbené';
 
   @override
-  String get playon => 'Remote client';
-
-  @override
   String mix(String mixSource) {
     return '$mixSource - Mix';
   }

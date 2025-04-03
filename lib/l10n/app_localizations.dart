@@ -1778,17 +1778,11 @@ abstract class AppLocalizations {
   /// **'Share offline listens'**
   String get shareOfflineListens;
 
-  /// Title for the queue source when the user is playing from a remote client
+  /// Title for the queue source when the user is playing their liked tracks
   ///
   /// In en, this message translates to:
   /// **'Your Likes'**
   String get yourLikes;
-
-  /// No description provided for @playon.
-  ///
-  /// In en, this message translates to:
-  /// **'Remote client'**
-  String get playon;
 
   /// Suffix added to a queue source when playing a mix. Example: "Never Gonna Give You Up - Mix"
   ///
@@ -1811,7 +1805,7 @@ abstract class AppLocalizations {
   /// Prefix shown before the type of the main queue source at the top of the player screen. Example: "Playing From Album"
   ///
   /// In en, this message translates to:
-  /// **'Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}'**
+  /// **'Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{} remoteClient{a Remote Client}}'**
   String playingFromType(String source);
 
   /// Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI
