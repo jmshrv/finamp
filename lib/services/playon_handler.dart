@@ -107,7 +107,7 @@ class PlayonHandler {
         ));
         await connectWebsocket();
       }
-      _reconnectionSubscription?.cancel();
+      await _reconnectionSubscription?.cancel();
       _reconnectionSubscription = null;
     } catch (e) {
       if (_reconnectionSubscription == null) {
@@ -122,8 +122,13 @@ class PlayonHandler {
         Stream.periodic(const Duration(seconds: 5), (count) {
       return count;
     }).listen((count) {
-      startListener();
-      _playOnHandlerLogger.info("Attempted to restart listener");
+      if (count < 24) { // We try to connect for two minutes before giving up
+        _playOnHandlerLogger.warning("Attempt $count to restart playon listener");
+        startListener();
+      } else {
+        _playOnHandlerLogger.warning("Stopped attempting to connect playon");
+        _reconnectionSubscription?.cancel();
+      }
     });
   }
 
