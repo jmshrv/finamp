@@ -11,7 +11,7 @@
   "@enableTranscodingSubtitle": {},
   "customLocation": "Власна папка",
   "@customLocation": {},
-  "pathReturnSlashErrorMessage": "Шляхи, які повертають \"/\", не можуть бути використані",
+  "pathReturnSlashErrorMessage": "Шляхи, які повертають \"/\", не можна використовувати",
   "@pathReturnSlashErrorMessage": {},
   "enterLowPriorityStateOnPause": "Перейти у стан низького пріоритету під час паузи",
   "@enterLowPriorityStateOnPause": {},
