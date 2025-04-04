@@ -20,64 +20,118 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
       text: (DefaultSettings.sleepTimerDuration ~/ 60).toString());
   final _formKey = GlobalKey<FormState>();
   SleepTimerType _selectedMode = SleepTimerType.duration; // Default selection
+  int selectedValue = 5; // Default to 5 minutes
+  final ScrollController _scrollController = ScrollController();
+  late double viewPortWidth;
+  final markerTotalWidth = 6.0; // 2px line + 4px margin
+
+  void _updateSelectedValue() {
+    final offset = _scrollController.offset;
+    final centerPosition = offset + (viewPortWidth / 2);
+    final nearestItem = ((centerPosition - (viewPortWidth / 2)) / markerTotalWidth).round();
+    final nearestValue = nearestItem + 1; // 1-based index
+    
+    if (nearestValue != selectedValue && nearestValue > 0 && nearestValue <= 120) {
+      setState(() {
+        selectedValue = nearestValue;
+      });
+    }
+  }
+
+  void _snapToNearestMarker() {
+    final offset = _scrollController.offset;
+    final centerPosition = offset + (viewPortWidth / 2);
+    final nearestItem = ((centerPosition - (viewPortWidth / 2)) / markerTotalWidth).round();
+    print("NearestItem: $nearestItem, ViewPortWidth: $viewPortWidth, Offset: $offset, CentrePosition: $centerPosition" );
+    // Animate to exact position (centered)
+    _scrollController.animateTo(
+      (nearestItem * markerTotalWidth) - (viewPortWidth / 2) + (markerTotalWidth * 5), // Center offset
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+    );
+  }
+    @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_updateSelectedValue);
+  }
+  
 
   @override
   Widget build(BuildContext context) {
+      
+      {viewPortWidth = MediaQuery.of(context).size.width;}
+
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.setSleepTimer),
-      content: Form(
+      content: SizedBox(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            DropdownButton<SleepTimerType>(
-              isExpanded: true,
-              value: _selectedMode,
-              onChanged: (SleepTimerType? newValue) {
-                setState(() {
-                  _selectedMode = newValue!;
-                });
-              },
-              items: SleepTimerType.values.map((SleepTimerType mode) {
-                return DropdownMenuItem<SleepTimerType>(
-                  value: mode,
-                  child: Text(mode.toString().split('.').last),
-                );
-              }).toList(),
-            ),
-            TextFormField(
-              controller: _textController,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+            Text(
+              '$selectedValue ${AppLocalizations.of(context)?.minutes ?? "minute(s)"}',
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
-              decoration: 
-                  InputDecoration(labelText: _selectedMode.toString()),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!.required;
-                }
-
-                if (double.tryParse(value) == null) {
-                  return AppLocalizations.of(context)!.invalidNumber;
-                }
-                return null;
-              },
-              onSaved: (value) {
-                final valueDouble = double.parse(value!);
-                int duration = 0;
-
-                if (_selectedMode == SleepTimerType.duration) {
-                  duration = (valueDouble * 60).round();
-                } else if (_selectedMode == SleepTimerType.tracks) {
-                  duration = valueDouble.round();
-                }
-
-                SleepTimer newSleepTimer = SleepTimer(_selectedMode, duration, DateTime.now());
-                _audioHandler.setSleepTimer(newSleepTimer);
-                FinampSetters.setSleepTimer(newSleepTimer);
-              },
             ),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                // Center indicator line
+                Container(
+                  width: 2,
+                  height: 40,
+                  color: Theme.of(context).colorScheme.primary.withValues(),
+                ),
+                // Scrollable list with lines
+                NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    if (notification is ScrollEndNotification) {
+                      _snapToNearestMarker();
+                    }
+                    return false;
+                  },
+                  child: SizedBox(
+                    height: 60,
+                    width: viewPortWidth,
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(
+                        children: [
+                          // TODO: Need a better way to centre/pad the markers
+                          SizedBox(width: viewPortWidth / 3),
+
+                          ...List.generate(120, (index) {
+                            final isMultipleOf5 = (index + 1) % 5 == 0;
+                            final isSelected = index + 1 == selectedValue;
+
+                            return Column(
+                              children: [
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                  width: 2,
+                                  height: isMultipleOf5 ? 30 : 20,
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : const Color.fromARGB(76, 255, 255, 255),
+                                ),
+                              ],
+                            );
+                          }),
+
+
+                          SizedBox(width: (viewPortWidth / 3) + markerTotalWidth),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
