@@ -513,11 +513,11 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setTranscodingSegmentContainer(
-      FinampSegmentContainer newTranscodingSegmentContainer) {
+  static void setTranscodingStreamingFormat(
+      FinampTranscodingStreamingFormat newTranscodingStreamingFormat) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.transcodingSegmentContainer =
-        newTranscodingSegmentContainer;
+    finampSettingsTemp.transcodingStreamingFormat =
+        newTranscodingStreamingFormat;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -804,9 +804,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get hasDownloadedPlaylistInfo =>
       finampSettingsProvider
           .select((value) => value.requireValue.hasDownloadedPlaylistInfo);
-  ProviderListenable<FinampSegmentContainer> get transcodingSegmentContainer =>
+  ProviderListenable<FinampTranscodingStreamingFormat> get transcodingStreamingFormat =>
       finampSettingsProvider
-          .select((value) => value.requireValue.transcodingSegmentContainer);
+          .select((value) => value.requireValue.transcodingStreamingFormat);
   ProviderListenable<FinampFeatureChipsConfiguration>
       get featureChipsConfiguration => finampSettingsProvider
           .select((value) => value.requireValue.featureChipsConfiguration);

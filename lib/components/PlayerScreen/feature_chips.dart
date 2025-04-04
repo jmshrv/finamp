@@ -50,7 +50,7 @@ class FeatureState {
       !isDownloaded &&
       (currentTrack?.item.extras?["shouldTranscode"] as bool? ?? false);
   String get container =>
-      isTranscoding ? settings.transcodingSegmentContainer.codec
+      isTranscoding ? settings.transcodingStreamingFormat.codec
           : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
   MediaStream? get audioStream => isTranscoding
@@ -62,7 +62,7 @@ class FeatureState {
   // should have a valid mediaStream, so use that audio-only bitrate instead of the
   // whole-file bitrate.
   int? get bitrate => isTranscoding
-      ? (settings.transcodingSegmentContainer.codec == 'flac' ? null : settings.transcodeBitrate)
+      ? (settings.transcodingStreamingFormat.codec == 'flac' ? null : settings.transcodeBitrate)
       : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;

@@ -36,7 +36,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(FinampQueueInfoAdapter());
     registerAdapter(FinampQueueItemAdapter());
     registerAdapter(FinampQueueOrderAdapter());
-    registerAdapter(FinampSegmentContainerAdapter());
+    registerAdapter(FinampTranscodingStreamingFormatAdapter());
     registerAdapter(FinampSettingsAdapter());
     registerAdapter(FinampStorableQueueInfoAdapter());
     registerAdapter(FinampTranscodingCodecAdapter());

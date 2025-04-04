@@ -32,7 +32,7 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
         children: [
           const TranscodeSwitch(),
           const BitrateSelector(),
-          const StreamingTranscodeSegmentContainerDropdownListTile(),
+          const StreamingTranscodingFormatDropdownListTile(),
           Padding(padding: const EdgeInsets.all(8.0)),
           const DownloadTranscodeEnableDropdownListTile(),
           const DownloadTranscodeCodecDropdownListTile(),
@@ -127,26 +127,26 @@ class DownloadTranscodeCodecDropdownListTile extends ConsumerWidget {
   }
 }
 
-class StreamingTranscodeSegmentContainerDropdownListTile
+class StreamingTranscodingFormatDropdownListTile
     extends ConsumerWidget {
-  const StreamingTranscodeSegmentContainerDropdownListTile({super.key});
+  const StreamingTranscodingFormatDropdownListTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       title: Text(
-          AppLocalizations.of(context)!.transcodingStreamingContainerTitle),
+          AppLocalizations.of(context)!.transcodingStreamingFormatTitle),
       subtitle: Text(
-          AppLocalizations.of(context)!.transcodingStreamingContainerSubtitle),
-      trailing: DropdownButton<FinampSegmentContainer>(
-        value: ref.watch(finampSettingsProvider.transcodingSegmentContainer),
-        items: FinampSegmentContainer.values
-            .map((e) => DropdownMenuItem<FinampSegmentContainer>(
+          AppLocalizations.of(context)!.transcodingStreamingFormatSubtitle),
+      trailing: DropdownButton<FinampTranscodingStreamingFormat>(
+        value: ref.watch(finampSettingsProvider.transcodingStreamingFormat),
+        items: FinampTranscodingStreamingFormat.values
+            .map((e) => DropdownMenuItem<FinampTranscodingStreamingFormat>(
                   value: e,
                   child: Text("${e.codec}+${e.container}".toUpperCase()),
                 ))
             .toList(),
-        onChanged: FinampSetters.setTranscodingSegmentContainer.ifNonNull,
+        onChanged: FinampSetters.setTranscodingStreamingFormat.ifNonNull,
       ),
     );
   }

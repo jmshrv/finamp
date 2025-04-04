@@ -126,8 +126,8 @@ class DefaultSettings {
   static const keepScreenOnOption = KeepScreenOnOption.whileLyrics;
   static const keepScreenOnWhilePluggedIn = true;
   static const hasDownloadedPlaylistInfo = false;
-  static const transcodingSegmentContainer =
-      FinampSegmentContainer.aacFragmentedMp4;
+  static const transcodingStreamingFormat =
+      FinampTranscodingStreamingFormat.aacFragmentedMp4;
   static const featureChipsConfiguration =
       FinampFeatureChipsConfiguration(enabled: true, features: [
     FinampFeatureChipType.playCount,
@@ -253,8 +253,8 @@ class FinampSettings {
     this.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration,
     this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
     this.hasDownloadedPlaylistInfo = DefaultSettings.hasDownloadedPlaylistInfo,
-    this.transcodingSegmentContainer =
-        DefaultSettings.transcodingSegmentContainer,
+    this.transcodingStreamingFormat =
+        DefaultSettings.transcodingStreamingFormat,
     this.downloadSizeWarningCutoff = DefaultSettings.downloadSizeWarningCutoff,
     this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
     this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
@@ -505,8 +505,8 @@ class FinampSettings {
   @HiveField(74, defaultValue: DefaultSettings.hasDownloadedPlaylistInfo)
   bool hasDownloadedPlaylistInfo;
 
-  @HiveField(75, defaultValue: DefaultSettings.transcodingSegmentContainer)
-  FinampSegmentContainer transcodingSegmentContainer;
+  @HiveField(75, defaultValue: DefaultSettings.transcodingStreamingFormat)
+  FinampTranscodingStreamingFormat transcodingStreamingFormat;
 
   @HiveField(76, defaultValue: DefaultSettings.featureChipsConfiguration)
   FinampFeatureChipsConfiguration featureChipsConfiguration;
@@ -544,7 +544,7 @@ class FinampSettings {
 
   @HiveField(89, defaultValue: DefaultSettings.itemSwipeActionRightToLeft)
   ItemSwipeActions itemSwipeActionRightToLeft;
-  
+
   @HiveField(86, defaultValue: DefaultSettings.audioFadeOutDuration)
   Duration audioFadeOutDuration;
 
