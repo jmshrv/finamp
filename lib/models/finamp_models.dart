@@ -97,8 +97,8 @@ class DefaultSettings {
   static const bufferSizeMegabytes = 50;
   static const tabOrder = TabContentType.values;
   static const swipeInsertQueueNext = true;
-  static const itemSwipeActionLeft = ItemSwipeActions.nothing;
-  static const itemSwipeActionRight = ItemSwipeActions.addToNextUp;
+  static const itemSwipeActionLeftToRight = ItemSwipeActions.nothing;
+  static const itemSwipeActionRightToLeft = ItemSwipeActions.addToNextUp;
   static const loopMode = FinampLoopMode.none;
   static const playbackSpeed = 1.0;
   static const autoLoadLastQueueOnStartup = true;
@@ -219,8 +219,8 @@ class FinampSettings {
     this.shouldRedownloadTranscodes =
         DefaultSettings.shouldRedownloadTranscodes,
     this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
-    this.itemSwipeActionLeft = DefaultSettings.itemSwipeActionLeft,
-    this.itemSwipeActionRight = DefaultSettings.itemSwipeActionRight,
+    this.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight,
+    this.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft,
     this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
     this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
     this.allowSplitScreen = DefaultSettings.allowSplitScreen,
@@ -540,11 +540,11 @@ class FinampSettings {
   @HiveField(85, defaultValue: null)
   String? lastUsedDownloadLocationId;
 
-  @HiveField(87, defaultValue: DefaultSettings.itemSwipeActionLeft)
-  ItemSwipeActions itemSwipeActionLeft;
+  @HiveField(87, defaultValue: DefaultSettings.itemSwipeActionLeftToRight)
+  ItemSwipeActions itemSwipeActionLeftToRight;
 
-  @HiveField(88, defaultValue: DefaultSettings.itemSwipeActionRight)
-  ItemSwipeActions itemSwipeActionRight;
+  @HiveField(88, defaultValue: DefaultSettings.itemSwipeActionRightToLeft)
+  ItemSwipeActions itemSwipeActionRightToLeft;
   
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

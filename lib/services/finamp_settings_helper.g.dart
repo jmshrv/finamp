@@ -606,17 +606,20 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setItemSwipeActionLeft(ItemSwipeActions newItemSwipeActionLeft) {
+  static void setItemSwipeActionLeftToRight(
+      ItemSwipeActions newItemSwipeActionLeftToRight) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.itemSwipeActionLeft = newItemSwipeActionLeft;
+    finampSettingsTemp.itemSwipeActionLeftToRight =
+        newItemSwipeActionLeftToRight;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setItemSwipeActionRight(
-      ItemSwipeActions newItemSwipeActionRight) {
+  static void setItemSwipeActionRightToLeft(
+      ItemSwipeActions newItemSwipeActionRightToLeft) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.itemSwipeActionRight = newItemSwipeActionRight;
+    finampSettingsTemp.itemSwipeActionRightToLeft =
+        newItemSwipeActionRightToLeft;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -826,12 +829,12 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<String?> get lastUsedDownloadLocationId =>
       finampSettingsProvider
           .select((value) => value.requireValue.lastUsedDownloadLocationId);
-  ProviderListenable<ItemSwipeActions> get itemSwipeActionLeft =>
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionLeftToRight =>
       finampSettingsProvider
-          .select((value) => value.requireValue.itemSwipeActionLeft);
-  ProviderListenable<ItemSwipeActions> get itemSwipeActionRight =>
+          .select((value) => value.requireValue.itemSwipeActionLeftToRight);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
       finampSettingsProvider
-          .select((value) => value.requireValue.itemSwipeActionRight);
+          .select((value) => value.requireValue.itemSwipeActionRightToLeft);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

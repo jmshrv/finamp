@@ -17,14 +17,14 @@ class ItemSwipeActionDropdownListTile extends StatelessWidget {
       builder: (_, box, __) {
         final currentSettings = FinampSettingsHelper.finampSettings;
         final text_title = (direction == DismissDirection.startToEnd)
-            ? Text(AppLocalizations.of(context)!.swipeFromLeftAction)
-            : Text(AppLocalizations.of(context)!.swipeFromRightAction);
+            ? Text(AppLocalizations.of(context)!.swipeLeftToRightAction)
+            : Text(AppLocalizations.of(context)!.swipeRightToLeftAction);
         final text_subtitle = (direction == DismissDirection.startToEnd)
-            ? Text(AppLocalizations.of(context)!.swipeFromLeftActionSubtitle)
-            : Text(AppLocalizations.of(context)!.swipeFromRightActionSubtitle);
+            ? Text(AppLocalizations.of(context)!.swipeLeftToRightActionSubtitle)
+            : Text(AppLocalizations.of(context)!.swipeRightToLeftActionSubtitle);
         final dropdownValue = (direction == DismissDirection.startToEnd) 
-            ? currentSettings.itemSwipeActionLeft
-            : currentSettings.itemSwipeActionRight;
+            ? currentSettings.itemSwipeActionLeftToRight
+            : currentSettings.itemSwipeActionRightToLeft;
          
         return ListTile(
           title: text_title,

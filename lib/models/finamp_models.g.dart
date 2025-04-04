@@ -155,10 +155,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
-      itemSwipeActionLeft: fields[87] == null
+      itemSwipeActionLeftToRight: fields[87] == null
           ? ItemSwipeActions.nothing
           : fields[87] as ItemSwipeActions,
-      itemSwipeActionRight: fields[88] == null
+      itemSwipeActionRightToLeft: fields[88] == null
           ? ItemSwipeActions.addToNextUp
           : fields[88] as ItemSwipeActions,
       useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
@@ -390,9 +390,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(85)
       ..write(obj.lastUsedDownloadLocationId)
       ..writeByte(87)
-      ..write(obj.itemSwipeActionLeft)
+      ..write(obj.itemSwipeActionLeftToRight)
       ..writeByte(88)
-      ..write(obj.itemSwipeActionRight);
+      ..write(obj.itemSwipeActionRightToLeft);
   }
 
   @override

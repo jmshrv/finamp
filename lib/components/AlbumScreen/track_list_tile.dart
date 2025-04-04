@@ -185,8 +185,8 @@ class TrackListTile extends StatelessWidget {
 
     Future<bool> trackListTileConfirmDismiss(DismissDirection direction) async {
       var followUpAction = (direction == DismissDirection.startToEnd)
-          ? currentSettings.itemSwipeActionLeft
-          : currentSettings.itemSwipeActionRight;
+          ? currentSettings.itemSwipeActionLeftToRight
+          : currentSettings.itemSwipeActionRightToLeft;
 
       final queueService = GetIt.instance<QueueService>();
       
@@ -270,16 +270,16 @@ class TrackListTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                (currentSettings.itemSwipeActionLeft == ItemSwipeActions.addToQueue) 
+                (currentSettings.itemSwipeActionLeftToRight == ItemSwipeActions.addToQueue) 
                     ? TablerIcons.playlist
-                    : (currentSettings.itemSwipeActionLeft == ItemSwipeActions.addToNextUp)
+                    : (currentSettings.itemSwipeActionLeftToRight == ItemSwipeActions.addToNextUp)
                         ? TablerIcons.corner_right_down_double
                         : TablerIcons.corner_right_down,
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
               const SizedBox(width: 4.0),
-              Text(getSwipeActionText(context, currentSettings.itemSwipeActionLeft),
+              Text(getSwipeActionText(context, currentSettings.itemSwipeActionLeftToRight),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -289,16 +289,16 @@ class TrackListTile extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(getSwipeActionText(context, currentSettings.itemSwipeActionRight),
+              Text(getSwipeActionText(context, currentSettings.itemSwipeActionRightToLeft),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
               const SizedBox(width: 4.0),
               Icon(
-                (currentSettings.itemSwipeActionRight == ItemSwipeActions.addToQueue) 
+                (currentSettings.itemSwipeActionRightToLeft == ItemSwipeActions.addToQueue) 
                     ? TablerIcons.playlist
-                    : (currentSettings.itemSwipeActionRight == ItemSwipeActions.addToNextUp)
+                    : (currentSettings.itemSwipeActionRightToLeft == ItemSwipeActions.addToNextUp)
                         ? TablerIcons.corner_right_down_double
                         : TablerIcons.corner_right_down,
                 color: Theme.of(context).colorScheme.secondary,
@@ -496,8 +496,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
       }
 
       final currentSettings = FinampSettingsHelper.finampSettings;
-      final swipeLeftEnabled = (currentSettings.itemSwipeActionLeft != ItemSwipeActions.nothing);
-      final swipeRightEnabled = (currentSettings.itemSwipeActionRight != ItemSwipeActions.nothing);
+      final swipeLeftEnabled = (currentSettings.itemSwipeActionLeftToRight != ItemSwipeActions.nothing);
+      final swipeRightEnabled = (currentSettings.itemSwipeActionRightToLeft != ItemSwipeActions.nothing);
       final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
           ? DismissDirection.horizontal
           : swipeLeftEnabled

@@ -73,9 +73,9 @@ class FinampSettingsHelper {
   static void setItemSwipeAction(DismissDirection direction, ItemSwipeActions newItemSwipeAction){
     FinampSettings finampSettingsTemp = finampSettings;
     if (direction == DismissDirection.startToEnd) {
-      finampSettingsTemp.itemSwipeActionLeft = newItemSwipeAction;
+      finampSettingsTemp.itemSwipeActionLeftToRight = newItemSwipeAction;
     } else if (direction == DismissDirection.endToStart) {
-      finampSettingsTemp.itemSwipeActionRight = newItemSwipeAction;
+      finampSettingsTemp.itemSwipeActionRightToLeft = newItemSwipeAction;
     }
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
