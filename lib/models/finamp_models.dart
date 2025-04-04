@@ -173,7 +173,8 @@ class FinampSettings {
       this.sortBy = SortBy.sortName,
       this.sortOrder = SortOrder.ascending,
       this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
-      this.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive,
+      this.volumeNormalizationActive =
+          DefaultSettings.volumeNormalizationActive,
       this.volumeNormalizationIOSBaseGain =
           DefaultSettings.volumeNormalizationIOSBaseGain,
       this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
@@ -248,12 +249,15 @@ class FinampSettings {
       this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
       this.keepScreenOnWhilePluggedIn =
           DefaultSettings.keepScreenOnWhilePluggedIn,
-      this.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration,
+      this.featureChipsConfiguration =
+          DefaultSettings.featureChipsConfiguration,
       this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
-      this.hasDownloadedPlaylistInfo = DefaultSettings.hasDownloadedPlaylistInfo,
+      this.hasDownloadedPlaylistInfo =
+          DefaultSettings.hasDownloadedPlaylistInfo,
       this.transcodingStreamingFormat =
           DefaultSettings.transcodingStreamingFormat,
-      this.downloadSizeWarningCutoff = DefaultSettings.downloadSizeWarningCutoff,
+      this.downloadSizeWarningCutoff =
+          DefaultSettings.downloadSizeWarningCutoff,
       this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
       this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
       this.showAlbumReleaseDateOnPlayerScreen =
