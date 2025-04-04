@@ -1968,5 +1968,17 @@
   "specialDownloads": "Спеціальні завантаження",
   "@specialDownloads": {
     "description": "Title for the special downloads section on the downloads screen."
+  },
+  "audioFadeOutDurationSettingTitle": "Тривалість затухання звуку",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
+  },
+  "audioFadeInDurationSettingSubtitle": "Тривалість затухання звуку в мілісекундах. Встановіть значення 0, щоб вимкнути плавне збільшення.",
+  "@audioFadeInDurationSettingSubtitle": {},
+  "audioFadeInDurationSettingTitle": "Тривалість затухання звуку",
+  "@audioFadeInDurationSettingTitle": {},
+  "audioFadeOutDurationSettingSubtitle": "Тривалість затухання звуку в мілісекундах.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
   }
 }
