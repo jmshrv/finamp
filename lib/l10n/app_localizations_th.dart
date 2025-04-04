@@ -1014,8 +1014,8 @@ class AppLocalizationsTh extends AppLocalizations {
         'nextUpAlbum': 'Album in Next Up',
         'nextUpPlaylist': 'Playlist in Next Up',
         'nextUpArtist': 'Artist in Next Up',
-        'other': '',
         'remoteClient': 'a Remote Client',
+        'other': '',
       },
     );
     return 'Playing From $_temp0';

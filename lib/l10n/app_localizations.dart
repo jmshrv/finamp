@@ -1805,7 +1805,7 @@ abstract class AppLocalizations {
   /// Prefix shown before the type of the main queue source at the top of the player screen. Example: "Playing From Album"
   ///
   /// In en, this message translates to:
-  /// **'Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{} remoteClient{a Remote Client}}'**
+  /// **'Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{a Remote Client} other{}}'**
   String playingFromType(String source);
 
   /// Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI
