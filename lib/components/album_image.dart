@@ -219,3 +219,74 @@ class _AlbumImageErrorPlaceholder extends StatelessWidget {
     );
   }
 }
+
+class TapToZoomThumbnail extends StatefulWidget {
+  final AlbumImage albumImg;
+  final bool isDisabled;
+
+  const TapToZoomThumbnail({
+    Key? key,
+    required this.albumImg,
+    this.isDisabled = false,
+  }) : super(key: key);
+
+  @override
+  _TapToZoomThumbnailState createState() => _TapToZoomThumbnailState();
+}
+
+class _TapToZoomThumbnailState extends State<TapToZoomThumbnail> {
+  OverlayEntry? overlayEntry;
+
+  void insertOverlay() {
+    overlayEntry = OverlayEntry(
+      builder: (context) => Material(
+        color: Colors.transparent,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () => removeOverlay(),
+                child: Container(
+                  color: Colors.black.withAlpha(30),
+                ),
+              ),
+            ),
+            Center(
+              child: Hero(
+                tag: widget.albumImg.hashCode,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: InteractiveViewer(child: widget.albumImg),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(overlayEntry!);
+  }
+
+  void removeOverlay() {
+    overlayEntry?.remove();
+    setState(() {
+      overlayEntry = null;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isDisabled) {
+      return widget.albumImg;
+    }
+
+    return GestureDetector(
+      onTap: insertOverlay,
+      child: Hero(
+        tag: widget.albumImg.hashCode,
+        child: widget.albumImg,
+      ),
+    );
+  }
+}
