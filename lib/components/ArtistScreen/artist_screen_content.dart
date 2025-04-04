@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:finamp/components/music_video_sliver_list.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -64,6 +65,8 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               .compareTo(b.baseItem!.premiereDate ?? ""));
           return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
         }),
+        //TODO: Add music videos offline support
+        Future.value(null),
       ]);
       allTracks = Future.sync(() async {
         final List<DownloadStub> artistAlbums =
@@ -99,6 +102,12 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           sortBy: "PremiereDate,SortName",
           includeItemTypes: "MusicAlbum",
         ),
+        jellyfinApiHelper.getItems(
+          parentItem: widget.parent,
+          filters: "Artist=${widget.parent.name}",
+          sortBy: "PremiereDate,SortName",
+          includeItemTypes: "MusicVideo",
+        ),
       ]);
       allTracks = jellyfinApiHelper.getItems(
         parentItem: widget.parent,
@@ -113,6 +122,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         builder: (context, snapshot) {
           var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
+          var musicVideos = snapshot.data?.elementAtOrNull(2) ?? [];
           var topTracks = tracks
               .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
               .take(5)
@@ -178,7 +188,23 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             AlbumsSliverList(
               childrenForList: albums,
               parent: widget.parent,
-            )
+            ),
+            if (musicVideos.isNotEmpty)
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    'Music Videos', // TODO: Add localization
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            if (!isOffline)
+              MusicVideosSliverList(
+                childrenForList: musicVideos,
+                parent: widget.parent,
+              ),
           ]);
         });
   }

@@ -740,7 +740,9 @@ enum TabContentType {
   @HiveField(3)
   genres(BaseItemDtoType.genre),
   @HiveField(4)
-  tracks(BaseItemDtoType.track);
+  tracks(BaseItemDtoType.track),
+  @HiveField(5)
+  musicvideos(BaseItemDtoType.musicVideo);
 
   const TabContentType(this.itemType);
 
@@ -768,6 +770,8 @@ enum TabContentType {
         return "Genres";
       case TabContentType.playlists:
         return "Playlists";
+      case TabContentType.musicvideos:
+        return "Music Videos";
     }
   }
 
@@ -784,6 +788,8 @@ enum TabContentType {
         return AppLocalizations.of(context)!.genres;
       case TabContentType.playlists:
         return AppLocalizations.of(context)!.playlists;
+      case TabContentType.musicvideos:
+        return "Music Videos"; // TODO: Localize
     }
   }
 
@@ -799,6 +805,8 @@ enum TabContentType {
         return TabContentType.genres;
       case "Playlist":
         return TabContentType.playlists;
+      case "MusicVideo":
+        return TabContentType.musicvideos;
       default:
         throw const FormatException("Unsupported itemType");
     }
