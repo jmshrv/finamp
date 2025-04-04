@@ -448,6 +448,8 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
+  "playbackReporting": "Playback reporting & Play On",
+  "@playbackReporting": {},
   "interactions": "Interactions",
   "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
@@ -1113,6 +1115,14 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
+  "playOnStaleDelay": "PlayOn session as active delay",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
   "topTracks": "Top Tracks",
   "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
@@ -1171,6 +1181,10 @@
   "volumeNormalizationSettingsTitle": "Volume Normalization",
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
+  },
+  "playbackReportingSettingsTitle": "Playback reporting & Play On",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
   },
   "volumeNormalizationSwitchTitle": "Enable Volume Normalization",
   "@volumeNormalizationSwitchTitle": {

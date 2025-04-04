@@ -168,6 +168,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : (fields[53] as num).toInt(),
+      playOnStaleDelay: fields[87] == null ? 90 : (fields[87] as num).toInt(),
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
@@ -221,7 +222,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(82)
+      ..writeByte(83)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -385,7 +386,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(85)
       ..write(obj.lastUsedDownloadLocationId)
       ..writeByte(86)
-      ..write(obj.currentVolume);
+      ..write(obj.currentVolume)
+      ..writeByte(87)
+      ..write(obj.playOnStaleDelay);
   }
 
   @override
@@ -1298,6 +1301,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         return QueueItemSourceType.genreMix;
       case 19:
         return QueueItemSourceType.track;
+      case 20:
+        return QueueItemSourceType.remoteClient;
       default:
         return QueueItemSourceType.album;
     }
@@ -1433,6 +1438,8 @@ class QueueItemSourceNameTypeAdapter
         return QueueItemSourceNameType.savedQueue;
       case 8:
         return QueueItemSourceNameType.queue;
+      case 9:
+        return QueueItemSourceNameType.remoteClient;
       default:
         return QueueItemSourceNameType.preTranslated;
     }

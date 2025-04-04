@@ -13,6 +13,7 @@ import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/playback_reporting_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/android_auto_helper.dart';
@@ -564,6 +565,8 @@ class _FinampState extends State<Finamp> with WindowListener {
                           const AddDownloadLocationScreen(),
                       AudioServiceSettingsScreen.routeName: (context) =>
                           const AudioServiceSettingsScreen(),
+                      PlaybackReportingSettingsScreen.routeName: (context) =>
+                          const PlaybackReportingSettingsScreen(),
                       VolumeNormalizationSettingsScreen.routeName: (context) =>
                           const VolumeNormalizationSettingsScreen(),
                       InteractionSettingsScreen.routeName: (context) =>

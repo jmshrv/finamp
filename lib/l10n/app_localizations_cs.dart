@@ -486,6 +486,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get audioService => 'Služba zvuku';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => 'Interakce';
 
   @override
@@ -1132,6 +1135,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => 'Pokud server Jellyfin neobdrží od klienta za posledních 5 minut žádnou aktualizaci, předpokládá, že přehrávání skončilo. To znamená, že u skladeb delších než 5 minut by mohlo být toto přehrávání nesprávně hlášeno jako ukončené, což by snižovalo kvalitu dat hlášení přehrávání.';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => 'Nejlepší skladby';
 
   @override
@@ -1224,6 +1233,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => 'Normalizace hlasitosti';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => 'Povolit normalizaci hlasitosti';

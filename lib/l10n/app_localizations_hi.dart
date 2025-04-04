@@ -479,6 +479,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get audioService => 'ऑडियो सेवा';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => 'इंटरैक्शन';
 
   @override
@@ -1123,6 +1126,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => 'यदि जेलिफ़िन सर्वर को पिछले 5 मिनट में क्लाइंट से कोई अपडेट नहीं मिलता है, तो वह मान लेता है कि प्लेबैक समाप्त हो गया है। इसका मतलब है कि 5 मिनट से ज़्यादा लंबे ट्रैक के लिए, गलत प्लेबैक रिपोर्ट की जा सकती है, जिससे प्लेबैक रिपोर्टिंग डाटा की गुणवत्ता कम हो जाती है।';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => 'शीर्ष ट्रैक';
 
   @override
@@ -1214,6 +1223,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => 'वॉल्यूम सामान्यीकरण';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => 'वॉल्यूम सामान्यीकरण सक्षम करें';

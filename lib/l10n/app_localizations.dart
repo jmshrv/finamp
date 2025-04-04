@@ -914,6 +914,12 @@ abstract class AppLocalizations {
   /// **'Audio Service'**
   String get audioService;
 
+  /// No description provided for @playbackReporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Playback reporting & Play On'**
+  String get playbackReporting;
+
   /// No description provided for @interactions.
   ///
   /// In en, this message translates to:
@@ -1970,6 +1976,18 @@ abstract class AppLocalizations {
   /// **'If the Jellyfin server hasn\'\'t received any updates from a client in the last 5 minutes, it assumes that playback has ended. This means that for tracks longer than 5 minutes, that playback could be incorrectly reported as having ended, which reduced the quality of the playback reporting data.'**
   String get periodicPlaybackSessionUpdateFrequencyDetails;
 
+  /// Label for the setting that controls how long a PlayOn remote session is considered active
+  ///
+  /// In en, this message translates to:
+  /// **'PlayOn session as active delay'**
+  String get playOnStaleDelay;
+
+  /// Description of the setting that controls how long a PlayOn remote session is considered active
+  ///
+  /// In en, this message translates to:
+  /// **'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.'**
+  String get playOnStaleDelaySubtitle;
+
   /// No description provided for @topTracks.
   ///
   /// In en, this message translates to:
@@ -2077,6 +2095,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Volume Normalization'**
   String get volumeNormalizationSettingsTitle;
+
+  /// Title for the playback reporting settings screen
+  ///
+  /// In en, this message translates to:
+  /// **'Playback reporting & Play On'**
+  String get playbackReportingSettingsTitle;
 
   /// Title for the switch that toggles replay gain
   ///

@@ -479,6 +479,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get audioService => 'Audio-Dienst';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => 'Interaktionen';
 
   @override
@@ -1123,6 +1126,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => 'Nach 5 Minuten ohne Komunikation zwischen Client und Server wird der Server davon ausgehen, dass die Wiedergabe gestoppt wurde. Das heißt: für Tracks, die länger als 5 Minuten sind, könnte es zu fehlerhaften Wiedergabe-Meldungen führen, was die Qualität dieser Daten reduziert.';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => 'Top Tracks';
 
   @override
@@ -1212,6 +1221,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => 'Lautstärke-Normalisierung';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => 'Lautstärke-Normalisierung aktivieren';

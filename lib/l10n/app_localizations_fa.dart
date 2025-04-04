@@ -479,6 +479,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get audioService => 'سرویس صدا';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => 'برهم کنش';
 
   @override
@@ -1123,6 +1126,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => 'اگر سرور جلی‌فین (Jellyfin) بروزرسانی‌ای از سرویس گیرنده در ۵ دقیقه دریافت نکند، می‌پندارد که پخش پایان یافته‌است. این بدان معناست که برای قطعه‌های بلندتر از ۵ دقیقه، پخش آن می‌تواند اشتباهاً به عنوان پایان یافته گزارش شود، که منجر به کاهش کیفیت داده‌ی گزارش پخش (Playback Reporting Data) می‌شود.';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => 'قطعه‌های برتر';
 
   @override
@@ -1214,6 +1223,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => 'عادی‌سازی حجم صدا';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => 'فعال کردن عادی‌سازی حجم صدا';

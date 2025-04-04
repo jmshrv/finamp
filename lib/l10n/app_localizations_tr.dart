@@ -479,6 +479,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get audioService => 'Ses Servisi';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => 'Etkileşimler';
 
   @override
@@ -1124,6 +1127,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => 'Jellyfin sunucusu son 5 dakika içinde istemciden herhangi bir güncelleme almamışsa oynatmanın sona erdiğini varsayar. Bu, 5 dakikadan uzun parçalar için oynatmanın hatalı bir şekilde sona ermiş olarak rapor edilebileceği ve bunun da oynatma raporlama verilerinin kalitesinin düşebileceği anlamına gelir.';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => 'En İyi Parçalar';
 
   @override
@@ -1215,6 +1224,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => 'Ses Ölçülü';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => 'Ses Ölçülü Etkinleştir';

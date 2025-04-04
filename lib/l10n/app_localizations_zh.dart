@@ -479,6 +479,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get audioService => '音频服务';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => '交互';
 
   @override
@@ -1123,6 +1126,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => '如果 Jellyfin 服务器在过去 5 分钟内没有收到来自客户端的任何更新，它会假定播放已结束。这意味着对于超过 5 分钟的歌曲，播放可能会被错误地报告为已结束，从而降低播放报告数据的质量。';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => '最热门歌曲';
 
   @override
@@ -1214,6 +1223,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => '音量标准化';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => '启用音量标准化';

@@ -479,6 +479,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get audioService => 'Äänipalvelu';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => 'Vuorovaikutukset';
 
   @override
@@ -1123,6 +1126,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => 'Jos Jellyfin palvelin ei ole saanut yhtäkään päivitystä liitetyltä laitteelta viimeiseen 5 minuuttiin, palvelin olettaa toiston loppuneeksi. Tämä tarkoittaa, että kappaleille, jotka ovat yli 5 minuuttia pitkiä, toisto voidaan virheellisesti raportoida loppuneeksi, mikä vähentää toistoraporttien datan laatua.';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => 'Parhaat kappaleet';
 
   @override
@@ -1214,6 +1223,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => 'Volyymitason normalisointi';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => 'Ota volyymitason normalisointi käyttöön';

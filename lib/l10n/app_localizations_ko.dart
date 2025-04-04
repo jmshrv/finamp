@@ -479,6 +479,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get audioService => '오디오 서비스';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => '상호작용';
 
   @override
@@ -1124,6 +1127,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => '젤리핀 Jellyfin서버가 최근 5분 동안 클라이언트로부터 어떠한 업데이트도 받지 못하면, 서버는 재생이 종료된 것으로 간주합니다. 이는 5분 이상의 곡의 경우 재생이 종료된 것으로 잘못 보고되어 재생 보고 데이터의 품질이 저하될 수 있음을 의미합니다.';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => '주요 곡들';
 
   @override
@@ -1215,6 +1224,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => 'Volume Normalization';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => 'Enable Volume Normalization';

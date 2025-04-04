@@ -112,6 +112,7 @@ class DefaultSettings {
   static const hidePlayerBottomActions = false;
   static const reportQueueToServer = false;
   static const periodicPlaybackSessionUpdateFrequencySeconds = 150;
+  static const playOnStaleDelay = 90;
   static const showArtistChipImage = true;
   static const trackOfflineFavorites = true;
   static const showProgressOnNowPlayingBar = true;
@@ -229,6 +230,7 @@ class FinampSettings {
     this.reportQueueToServer = DefaultSettings.reportQueueToServer,
     this.periodicPlaybackSessionUpdateFrequencySeconds =
         DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+    this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
     this.showArtistChipImage = DefaultSettings.showArtistChipImage,
     this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
     this.showProgressOnNowPlayingBar =
@@ -540,6 +542,9 @@ class FinampSettings {
 
   @HiveField(86, defaultValue: DefaultSettings.currentVolume)
   double currentVolume;
+
+  @HiveField(87, defaultValue: DefaultSettings.playOnStaleDelay)
+  int playOnStaleDelay;
   
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

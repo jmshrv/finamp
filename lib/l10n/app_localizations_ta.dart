@@ -479,6 +479,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get audioService => 'ஆடியோ பணி';
 
   @override
+  String get playbackReporting => 'Playback reporting & Play On';
+
+  @override
   String get interactions => 'இடைவினைகள்';
 
   @override
@@ -1105,6 +1108,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => 'கடந்த 5 நிமிடங்களில் ஒரு வாடிக்கையாளரிடமிருந்து செல்லிஃபின் சேவையகம் எந்த புதுப்பிப்புகளையும் பெறவில்லை என்றால், பிளேபேக் முடிந்தது என்று கருதுகிறது. இதன் பொருள் 5 நிமிடங்களுக்கும் மேலான தடங்களுக்கு, அந்த பின்னணி முடிவடைந்ததாக தவறாக அறிவிக்கப்படலாம், இது பிளேபேக் அறிக்கையிடல் தரவின் தரத்தை குறைத்தது.';
 
   @override
+  String get playOnStaleDelay => 'PlayOn session as active delay';
+
+  @override
+  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+
+  @override
   String get topTracks => 'மேல் தடங்கள்';
 
   @override
@@ -1175,6 +1184,9 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get volumeNormalizationSettingsTitle => 'தொகுதி இயல்பாக்கம்';
+
+  @override
+  String get playbackReportingSettingsTitle => 'Playback reporting & Play On';
 
   @override
   String get volumeNormalizationSwitchTitle => 'தொகுதி இயல்பாக்கத்தை இயக்கவும்';

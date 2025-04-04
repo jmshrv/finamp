@@ -198,7 +198,7 @@ class PlayonHandler {
       await _isControlledSubscription?.cancel();
       isControlled = true;
       _isControlledSubscription =
-        Stream.periodic(const Duration(minutes: 5), (count) {
+        Stream.periodic(Duration(seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay), (count) {
             return count;
       }).listen((event) {
         _playOnHandlerLogger.info("Mark remote controlling as stale");
