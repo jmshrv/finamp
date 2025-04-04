@@ -97,6 +97,8 @@ class DefaultSettings {
   static const bufferSizeMegabytes = 50;
   static const tabOrder = TabContentType.values;
   static const swipeInsertQueueNext = true;
+  static const itemSwipeActionLeft = ItemSwipeActions.nothing;
+  static const itemSwipeActionRight = ItemSwipeActions.addToNextUp;
   static const loopMode = FinampLoopMode.none;
   static const playbackSpeed = 1.0;
   static const autoLoadLastQueueOnStartup = true;
@@ -217,6 +219,8 @@ class FinampSettings {
     this.shouldRedownloadTranscodes =
         DefaultSettings.shouldRedownloadTranscodes,
     this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
+    this.itemSwipeActionLeft = DefaultSettings.itemSwipeActionLeft,
+    this.itemSwipeActionRight = DefaultSettings.itemSwipeActionRight,
     this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
     this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
     this.allowSplitScreen = DefaultSettings.allowSplitScreen,
@@ -535,6 +539,12 @@ class FinampSettings {
 
   @HiveField(85, defaultValue: null)
   String? lastUsedDownloadLocationId;
+
+  @HiveField(87, defaultValue: DefaultSettings.itemSwipeActionLeft)
+  ItemSwipeActions itemSwipeActionLeft;
+
+  @HiveField(88, defaultValue: DefaultSettings.itemSwipeActionRight)
+  ItemSwipeActions itemSwipeActionRight;
   
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2607,4 +2617,52 @@ enum ReleaseDateFormat {
         return AppLocalizations.of(context)!.releaseDateFormatMonthDayYear;
     }
   }
+}
+
+@HiveType(typeId: 92)
+enum ItemSwipeActions {
+  @HiveField(0)
+  nothing,
+  @HiveField(1)
+  addToQueue,
+  @HiveField(2)
+  addToNextUp,
+  @HiveField(3)
+  playNext;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(ItemSwipeActions itemSwipeAction) {
+    switch (itemSwipeAction) {
+      case ItemSwipeActions.nothing:
+        return "Disabled";
+      case ItemSwipeActions.addToQueue:
+        return "Add To Queue";
+      case ItemSwipeActions.addToNextUp:
+        return "Add To Next Up";
+      case ItemSwipeActions.playNext:
+        return "Play next";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ItemSwipeActions itemSwipeAction, BuildContext context) {
+    switch (itemSwipeAction) {
+      case ItemSwipeActions.nothing:
+        return AppLocalizations.of(context)!.keepScreenOnDisabled; // reused here
+      case ItemSwipeActions.addToQueue:
+        return AppLocalizations.of(context)!.addToQueue;
+      case ItemSwipeActions.addToNextUp:
+        return AppLocalizations.of(context)!.addToNextUp;
+      case ItemSwipeActions.playNext:
+        return AppLocalizations.of(context)!.playNext;
+    }
+  }
+
 }

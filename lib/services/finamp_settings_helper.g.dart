@@ -606,6 +606,21 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setItemSwipeActionLeft(ItemSwipeActions newItemSwipeActionLeft) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.itemSwipeActionLeft = newItemSwipeActionLeft;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setItemSwipeActionRight(
+      ItemSwipeActions newItemSwipeActionRight) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.itemSwipeActionRight = newItemSwipeActionRight;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -811,6 +826,12 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<String?> get lastUsedDownloadLocationId =>
       finampSettingsProvider
           .select((value) => value.requireValue.lastUsedDownloadLocationId);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionLeft =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.itemSwipeActionLeft);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionRight =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.itemSwipeActionRight);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

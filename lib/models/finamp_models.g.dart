@@ -155,6 +155,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
       swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
+      itemSwipeActionLeft: fields[87] == null
+          ? ItemSwipeActions.nothing
+          : fields[87] as ItemSwipeActions,
+      itemSwipeActionRight: fields[88] == null
+          ? ItemSwipeActions.addToNextUp
+          : fields[88] as ItemSwipeActions,
       useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
       fixedGridTileSize: fields[60] == null ? 150 : (fields[60] as num).toInt(),
       allowSplitScreen: fields[61] == null ? true : fields[61] as bool,
@@ -220,7 +226,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(81)
+      ..writeByte(83)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -382,7 +388,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(84)
       ..write(obj.releaseDateFormat)
       ..writeByte(85)
-      ..write(obj.lastUsedDownloadLocationId);
+      ..write(obj.lastUsedDownloadLocationId)
+      ..writeByte(87)
+      ..write(obj.itemSwipeActionLeft)
+      ..writeByte(88)
+      ..write(obj.itemSwipeActionRight);
   }
 
   @override
@@ -2062,6 +2072,51 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ReleaseDateFormatAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
+  @override
+  final int typeId = 92;
+
+  @override
+  ItemSwipeActions read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ItemSwipeActions.nothing;
+      case 1:
+        return ItemSwipeActions.addToQueue;
+      case 2:
+        return ItemSwipeActions.addToNextUp;
+      case 3:
+        return ItemSwipeActions.playNext;
+      default:
+        return ItemSwipeActions.nothing;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ItemSwipeActions obj) {
+    switch (obj) {
+      case ItemSwipeActions.nothing:
+        writer.writeByte(0);
+      case ItemSwipeActions.addToQueue:
+        writer.writeByte(1);
+      case ItemSwipeActions.addToNextUp:
+        writer.writeByte(2);
+      case ItemSwipeActions.playNext:
+        writer.writeByte(3);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ItemSwipeActionsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

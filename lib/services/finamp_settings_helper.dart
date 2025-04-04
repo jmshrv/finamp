@@ -70,6 +70,17 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setItemSwipeAction(DismissDirection direction, ItemSwipeActions newItemSwipeAction){
+    FinampSettings finampSettingsTemp = finampSettings;
+    if (direction == DismissDirection.startToEnd) {
+      finampSettingsTemp.itemSwipeActionLeft = newItemSwipeAction;
+    } else if (direction == DismissDirection.endToStart) {
+      finampSettingsTemp.itemSwipeActionRight = newItemSwipeAction;
+    }
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void overwriteFinampSettings(FinampSettings newFinampSettings) {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", newFinampSettings);
