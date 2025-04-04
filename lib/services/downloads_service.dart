@@ -920,8 +920,16 @@ class DownloadsService {
     if (item.type.hasFiles) return;
     if (item.state == DownloadItemState.syncFailed && !removeSyncFailed) return;
     Set<DownloadItemState> childStates = {};
-    if (item.baseItemType == BaseItemDtoType.album ||
-        item.baseItemType == BaseItemDtoType.playlist) {
+    if (item.baseItemType == BaseItemDtoType.album){
+      childStates.addAll(item.info
+          .filter()
+          .typeEqualTo(DownloadItemType.track)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
+          .distinctByState()
+          .stateProperty()
+          .findAllSync());
+    } else if (item.baseItemType == BaseItemDtoType.playlist) {
       // Use full list of tracks in info links for album/playlist
       childStates.addAll(
           item.info.filter().distinctByState().stateProperty().findAllSync());
@@ -1644,8 +1652,10 @@ class DownloadsService {
       return DownloadItemStatus.notNeeded;
     }
     int childCount;
-    if (stub.baseItemType == BaseItemDtoType.album ||
-        stub.baseItemType == BaseItemDtoType.playlist) {
+    if (stub.baseItemType == BaseItemDtoType.album) {
+      childCount =
+          item.info.filter().typeEqualTo(DownloadItemType.track).countSync();
+    } else if (stub.baseItemType == BaseItemDtoType.playlist) {
       // albums/playlists get marked as incidentally required if all info children
       // are required.  Use info links to calculate child count for this case
       childCount = item.info
