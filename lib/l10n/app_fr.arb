@@ -1162,5 +1162,353 @@
   "shuffleAlbumsToNextUp": "Mélanger les albums en fin de file d'attente",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
-  }
+  },
+  "downloadsWorkersSettingSubtitle": "Nombre de threads qui synchronisent les métadonnées et suppriment les téléchargements. Augmenter ce nombre peut augmenter la vitesse de synchronisation, surtout lorsque la latence avec le serveur est élevée, mais risque de causer des ralentissements du client.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{count} Threads pour le téléchargement",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "resetToDefaults": "Restaurer les paramètres par défaut",
+  "@resetToDefaults": {},
+  "volumeNormalizationModeHybrid": "Hybride (Musique & Album)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationModeTrackBased": "En fonction de la musique",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumBased": "En fonction de l'album",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "volumeNormalizationModeAlbumOnly": "Seulement pour les albums",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "syncDownloads": "Synchroniser et télécharger les items manquants.",
+  "@syncDownloads": {
+    "description": "Tooltip for downloads sync button."
+  },
+  "onlyShowFullyDownloaded": "Afficher seulement les albums téléchargés en intégralité",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "maxConcurrentDownloadsLabel": "{count} Téléchargements simultanés",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadBitrate": "Débit binaire de téléchargement",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "dontTranscode": "Télécharger la version originale {description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "redownloadTitle": "Re-télécharger automatiquement les items transcodés",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "specialDownloads": "Téléchargements spéciaux",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "Pas de téléchargements.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "startInstantMixForIndividualTracksSwitchTitle": "Commencer le Mix instantané pour des musiques individuelles",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "downloadLibraryPrompt": "Êtes vous sûr de vouloir supprimer tous les téléchargements de la bibliothèque ''{libraryName}'' ?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "preferQuickSyncSwitchSubtitle": "Lors des synchronisations, certains items spécifiques (comme les musiques ou albums) ne seront pas mis à jour. La réparation des téléchargement lance toujours une synchronisation complète.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "cacheLibraryImagesName": "Images en cache pour '{libraryName}'",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "transcodingStreamingContainerTitle": "Sélection du format de transcodage",
+  "@transcodingStreamingContainerTitle": {
+    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  },
+  "downloadTranscodeEnableTitle": "Activer le transcodage pour le téléchargement",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadTranscodeCodecTitle": "Sélectionnez le format pour le téléchargement",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadBitrateSubtitle": "Un plus grand débit binaire résulte en audio de meilleur qualité, au prix d'un fichier plus volumineux.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "doTranscode": "Téléchargement en {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "syncOnStartupSwitch": "Synchroniser automatiquement les téléchargements au démarrage",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "preferQuickSyncSwitch": "Privilégier les synchronisations rapides",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "incidentalDownloadTooltip": "Cet item doit être téléchargé par {parentName}.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "transcodeHint": "Transcoder ?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "reportQueueToServer": "Envoyer la file d'attente au serveur ?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Lorsque activé, cliquer sur une musique dans l'onglet musiques lance un mix instantané de cette musique au lieu de la jouer seule.",
+  "@startInstantMixForIndividualTracksSwitchSubtitle": {},
+  "repairDownloads": "Réparation des problèmes avec les fichiers téléchargés ou leurs métadonnées.",
+  "@repairDownloads": {
+    "description": "Tooltip for downloads repair button."
+  },
+  "showNullLibraryItemsSubtitle": "Certains médias peuvent ếtre téléchargés depuis une bibliothèque inconnue. Désactivez cette option pour les cacher.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "showNullLibraryItemsTitle": "Afficher les médias dans les bibliothèques inconnues.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloadsSubtitle": "L'augmentation des téléchargements simultanés permet d'accroître le téléchargement en arrière-plan, mais peut entraîner l'échec de certains téléchargements s'ils sont très volumineux, ou provoquer un décalage excessif dans certains cas.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "downloadsWorkersSetting": "Nombre de threads pour le téléchargement",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "runRepairWarning": "Le serveur n'était pas atteignable pour finaliser la migration de vos téléchargements. Veuillez lancer 'Réparation des Téléchargements' depuis l'écran des téléchargements dès que vous serez à nouveau en ligne.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "connectionInterruptedBackgroundAndroid": "La connexion a été interrompue pendant le téléchargement en arrière plan. Cela est peut-être du à la configuration de votre système ou l'option 'Basse priorité en pause' est activée.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "confirmShuffleToNextUp": "Aléatoire ensuite",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "Aléatoire en file d'attente",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "shuffleAlbumsToQueue": "Mélanger les albums en de file d'attente",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "volumeNormalizationModeSelectorDescription": "Hybride (musique + album) :\nLe gain de piste est utilisé pour la lecture normale, mais si un album est en cours de lecture (soit parce qu''il s''agit de la source principale de la file d''attente de lecture, soit parce qu''il a été ajouté à la file d''attente à un moment donné), le gain de l''album est utilisé à la place.\n\nBasé sur la piste :\nLe gain de piste est toujours utilisé, qu'un album soit en cours de lecture ou non.\n\nAlbums uniquement :\nLa normalisation du volume n'est appliquée que lors de la lecture d'albums (en utilisant le gain de l'album), mais pas pour les pistes individuelles.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Actuellement, la normalisation du volume sur iOS nécessite de modifier le volume de lecture pour émuler le changement de gain. Comme nous ne pouvons pas augmenter le volume au-delà de 100 %, nous devons diminuer le volume par défaut afin de pouvoir augmenter le volume des pistes calmes. La valeur est exprimée en décibels (dB), où -10 dB correspond à un volume de ~30%, -4,5 dB à un volume de ~60% et -2 dB à un volume de ~80%.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "repairComplete": "Réparation des téléchargements effectuée.",
+  "@repairComplete": {
+    "description": "Message displayed after download repair completes."
+  },
+  "downloadItem": "Télécharger",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "syncComplete": "Tous les téléchargements ont été synchronisés.",
+  "@syncComplete": {
+    "description": "Message displayed after download sync completes."
+  },
+  "redownloadcomplete": "Ré téléchargement en transcodé planifié.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "queueRestoreError": "Avertissement: {count,plural, =1{{count} track} other{{count} tracks}} n'a pas pu être ajouté à la queue.",
+  "@queueRestoreError": {
+    "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectionInterruptedBackground": "La connexion a été interrompue pendant le téléchargement en arrière plan. Cela est peut-être du à la configuration de votre système.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "downloadSettings": "Téléchargements",
+  "@downloadSettings": {},
+  "volumeNormalizationSwitchSubtitle": "Normaliser le gain des musiques",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "couldNotLoad": "Impossible de charger {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "volumeNormalizationModeSelectorTitle": "Mode de normalisation du volume",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Gain de base",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "requireWifiForDownloads": "Téléchargement en Wi-Fi uniquement.",
+  "@requireWifiForDownloads": {
+    "description": "Description of setting for only performing downloads while on wifi"
+  },
+  "maxConcurrentDownloads": "Nombre maximum de téléchargements simultanés",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "filesystemFull": "Les téléchargements restant n'ont pas pu être achevés. Manque d'espace de stockage.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "Connexion interrompue, téléchargements mis en pause.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "transcodingStreamingContainerSubtitle": "Sélectionner le segment du format à utiliser lors du stream d'audio transcodé. Les titres déjà dans la queue ne seront pas affectés.",
+  "@transcodingStreamingContainerSubtitle": {},
+  "prioritizePlayerCover": "Prioriser la pochette de l'album",
+  "@prioritizePlayerCover": {},
+  "prioritizePlayerCoverSubtitle": "Favorise la taille de la pochette d'album sur le lecteur. Les boutons moins importants seront cachés sur les écrans de petite taille.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "suppressPlayerPadding": "Désactive l'espacement des contrôles du lecteur",
+  "@suppressPlayerPadding": {},
+  "lockDownload": "Toujours garder le téléchargement",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "oneLineMarqueeTextButtonSubtitle": "Défiler automatiquement les titres des musiques trop longs pour être afficher sur deux lignes",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "fixedGridSizeTitle": "Taille de la grille",
+  "@fixedGridSizeTitle": {},
+  "hideQueueButtonSubtitle": "Cacher le bouton de la file d'attente dans le lecteur. Balayez vers le haut pour accéder à la file d'attente.",
+  "@hideQueueButtonSubtitle": {},
+  "redownloadSubtitle": "Relance automatiquement le téléchargements des titres qui sont censés être de qualité différente à cause d'un changement de leur collection.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "enableVibrationSubtitle": "Activer ou non le mode vibreur.",
+  "@enableVibrationSubtitle": {},
+  "defaultDownloadLocationButton": "Choisir cet emplacement pour le téléchargement. Désactiver pour choisir à chaque téléchargement.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "fixedGridSizeSwitchSubtitle": "La taille de la grille ne changera pas en fonction de la taille de l'écran/fenêtre.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "allowSplitScreenSubtitle": "Le lecteur sera affiché à côté des autres pages sur les écrans larges.",
+  "@allowSplitScreenSubtitle": {},
+  "enableVibration": "Activer le vibreur",
+  "@enableVibration": {},
+  "oneLineMarqueeTextButton": "Défilement automatique des longs titres",
+  "@oneLineMarqueeTextButton": {},
+  "marqueeOrTruncateButtonSubtitle": "Afficher ... à la fin des longs titres au lieu d'un défilement",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "hidePlayerBottomActions": "Cacher les boutons de la partie inférieure",
+  "@hidePlayerBottomActions": {},
+  "hidePlayerBottomActionsSubtitle": "Cacher le bouton de file d'attente et des paroles sur le lecteur. Balayez vers le haut pour accéder à la file d'attente, balayez à gauche (en dessous de la pochette) pour afficher les paroles.",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "allowSplitScreenTitle": "Autoriser le mode écran scindé",
+  "@allowSplitScreenTitle": {},
+  "fixedGridSizeSwitchTitle": "Utiliser une taille de grille fixe",
+  "@fixedGridSizeSwitchTitle": {},
+  "suppressPlayerPaddingSubtitle": "Rapproche les boutons de contrôle du lecteur quand la taille de la pochette n'est pas maximale.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "showArtistChipImage": "Afficher l'image de l'artiste à côté de son nom",
+  "@showArtistChipImage": {},
+  "hideQueueButton": "Cacher le bouton de la file d'attente",
+  "@hideQueueButton": {},
+  "marqueeOrTruncateButton": "Utiliser des ellipses pour les longs titres",
+  "@marqueeOrTruncateButton": {}
 }

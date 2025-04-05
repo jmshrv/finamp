@@ -3,7 +3,7 @@
   "@serverUrl": {},
   "showTextOnGridViewSubtitle": "是否在網格音樂螢幕上顯示文字（標題、歌手等）。",
   "@showTextOnGridViewSubtitle": {},
-  "startupError": "應用程式啓動時出現問題！ 錯誤訊息：{error}\n\n請在 github.com/UnicornsOnLSD/finamp 上提出一個 Github 問題，並附上此頁面的螢幕截圖。 如果此頁面一直顯示，請清除您的應用程式資料以重置應用程式。",
+  "startupError": "應用程式啓動時出現問題！ 錯誤訊息：{error}\n\n請在 github.com/UnicornsOnLSD/finamp 上提出一個 Github Issue，並附上此頁面的螢幕截圖。 如果此頁面一直顯示，請清除您的應用程式資料以重置應用程式。",
   "@startupError": {
     "description": "The error message that shows when startup fails.",
     "placeholders": {
@@ -236,9 +236,9 @@
   "@areYouSure": {},
   "jellyfinUsesAACForTranscoding": "Jellyfin 使用 AAC 進行轉碼",
   "@jellyfinUsesAACForTranscoding": {},
-  "enableTranscoding": "啓用轉碼",
+  "enableTranscoding": "啟用轉碼",
   "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "如果啓用，音樂串流將由伺服器轉碼。",
+  "enableTranscodingSubtitle": "如果啟用，音訊將由伺服器轉碼。",
   "@enableTranscodingSubtitle": {},
   "bitrate": "位元速率",
   "@bitrate": {},
@@ -254,7 +254,7 @@
   "@selectDirectory": {},
   "unknownError": "未知錯誤",
   "@unknownError": {},
-  "pathReturnSlashErrorMessage": "不能使用返回“/”的路徑",
+  "pathReturnSlashErrorMessage": "不能使用「/」作為下載路徑",
   "@pathReturnSlashErrorMessage": {},
   "directoryMustBeEmpty": "目錄必須為空",
   "@directoryMustBeEmpty": {},
@@ -464,7 +464,7 @@
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "正在掃描伺服器...",
+  "loginFlowLocalNetworkServersScanningForServers": "正在掃描伺服器…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -552,7 +552,7 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "connectingToServer": "正在連線至伺服器中...",
+  "connectingToServer": "正在連線至伺服器…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -1151,7 +1151,7 @@
       }
     }
   },
-  "queueLoadingMessage": "正在恢復播放佇列...",
+  "queueLoadingMessage": "正在恢復播放佇列…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1280,7 +1280,7 @@
   "@onlyShowFullyDownloaded": {
     "description": "Tooltip for button that hides all partially downloaded albums"
   },
-  "showLyricsScreenAlbumPreludeTitle": "顯示專輯封面於歌詞前",
+  "showLyricsScreenAlbumPreludeTitle": "在歌詞之前顯示專輯封面",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1370,13 +1370,13 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "missingDownloadSize": "正在刪除···",
+  "missingDownloadSize": "正在刪除…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
   "downloadSettings": "下載",
   "@downloadSettings": {},
-  "syncingDownloadSize": "正在同步···",
+  "syncingDownloadSize": "正在同步…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1442,7 +1442,7 @@
   "@filesystemFull": {
     "description": "Message shown when a download cannot complete due to the filesystem being full."
   },
-  "activeDownloadSize": "正在下載···",
+  "activeDownloadSize": "正在下載…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
@@ -1555,13 +1555,13 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "選擇轉碼器格式",
+  "transcodingStreamingContainerTitle": "選擇轉碼容器格式",
   "@transcodingStreamingContainerTitle": {
     "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
   "transcodingStreamingContainerSubtitle": "選擇串流轉碼音訊時要使用的區段容器。已排入佇列的歌曲將不受影響。",
   "@transcodingStreamingContainerSubtitle": {},
-  "downloadTranscodeCodecTitle": "選擇下載用的轉碼器",
+  "downloadTranscodeCodecTitle": "選擇下載用的編碼",
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
@@ -1659,7 +1659,7 @@
   "@hideQueueButton": {},
   "hidePlayerBottomActions": "隱藏底部按鈕",
   "@hidePlayerBottomActions": {},
-  "marqueeOrTruncateButtonSubtitle": "在較長的標題盡頭顯示 ... 代替捲動文字",
+  "marqueeOrTruncateButtonSubtitle": "在較長的標題盡頭顯示 … 代替捲動文字",
   "@marqueeOrTruncateButtonSubtitle": {},
   "showArtistChipImageSubtitle": "這會影響小尺寸的藝術家圖片預覽，例如在播放介面上。",
   "@showArtistChipImageSubtitle": {},
@@ -1952,5 +1952,21 @@
   "allowDeleteFromServerTitle": "允許從伺服器刪除",
   "@allowDeleteFromServerTitle": {
     "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "specialDownloads": "特別下載",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "沒有任何已經下載的項目。",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "allowDeleteFromServerSubtitle": "當使用者有權限時，啟用或停用從伺服器上永久刪除音軌的選項。",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "librarySelectError": "載入可用媒體庫時發生錯誤",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
   }
 }

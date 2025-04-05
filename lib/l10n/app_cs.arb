@@ -1234,7 +1234,7 @@
   "@alignmentOptionCenter": {
     "description": "Alignment option for things like the lyrics view. Center means centered."
   },
-  "showLyricsScreenAlbumPreludeTitle": "Zobrazit album před texty",
+  "showLyricsScreenAlbumPreludeTitle": "Zobrazit obal alba před texty",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1954,5 +1954,29 @@
   "allowDeleteFromServerSubtitle": "Zapnout nebo vypnout možnost trvalého smazání skladby ze souborového systému serveru, pokud je smazání možné.",
   "@allowDeleteFromServerSubtitle": {
     "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "librarySelectError": "Chyba při načítání dostupných knihoven",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "specialDownloads": "Zvláštní stahování",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "Nebyly staženy žádné položky.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "audioFadeInDurationSettingTitle": "Délka zesilování zvuku",
+  "@audioFadeInDurationSettingTitle": {},
+  "audioFadeInDurationSettingSubtitle": "Délka, po kterou se bude postupně zvyšovat hlasitost zvuku, v milisekundách. Nastavte na 0 pro zakázání.",
+  "@audioFadeInDurationSettingSubtitle": {},
+  "audioFadeOutDurationSettingSubtitle": "Délka, po kterou se bude postupně snižovat hlasitost zvuku, v milisekundách.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "audioFadeOutDurationSettingTitle": "Délka ztlumování zvuku",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
   }
 }
