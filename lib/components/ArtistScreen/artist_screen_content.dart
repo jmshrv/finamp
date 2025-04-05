@@ -17,6 +17,14 @@ import '../favourite_button.dart';
 import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 
+
+/// ToDo for proper Albums and Appears On Section + reasonable playback queue: 
+/// - Offline: Call getAllCollections with artistType: BaseItemDtoType.track, store artistPerformsOn
+/// - Offline: Include both albumartist and performingartist tracks in allTracks but DISTINCT (see downloads_service.dart)
+/// - Online: Get Albums where artist is performing artist -> store artistPerformsOn
+/// - Online: Modify allTracks to include both albumartist and performingartist tracks DISTINCT
+/// - artistAppearsOn = artistPerformsOn - artistAlbums
+/// - if (artistAppearsOn.length > 0) Display artistAppearsOn in Appears On section
 class ArtistScreenContent extends StatefulWidget {
   const ArtistScreenContent({super.key, required this.parent});
 
@@ -59,17 +67,19 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           final List<DownloadStub> artistAlbums =
               await _downloadsService.getAllCollections(
                   baseTypeFilter: BaseItemDtoType.album,
-                  relatedTo: widget.parent);
+                  relatedTo: widget.parent,
+                  artistType: (widget.parent.type == "MusicGenre") ? null : BaseItemDtoType.album);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
           return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
-        }),
+        })
       ]);
       allTracks = Future.sync(() async {
         final List<DownloadStub> artistAlbums =
             await _downloadsService.getAllCollections(
                 baseTypeFilter: BaseItemDtoType.album,
-                relatedTo: widget.parent);
+                relatedTo: widget.parent,
+                artistType: (widget.parent.type == "MusicGenre") ? null : BaseItemDtoType.album);
         artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
 
         final List<BaseItemDto> sortedTracks = [];

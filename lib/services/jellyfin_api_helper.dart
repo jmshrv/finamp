@@ -189,19 +189,25 @@ class JellyfinApiHelper {
       } else if (parentItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use albumArtistIds
         // instead of parentId
-        response = await api.getItems(
-          userId: currentUserId,
-          albumArtistIds: parentItem?.id.raw,
-          includeItemTypes: includeItemTypes,
-          recursive: recursive,
-          sortBy: sortBy,
-          sortOrder: sortOrder,
-          searchTerm: searchTerm,
-          filters: filters,
-          startIndex: startIndex,
-          limit: limit,
-          fields: fields,
-        );
+        //if (artistListType == ArtistListType.albumartist) {
+          // Albums of Album Artists
+          response = await api.getItems(
+            userId: currentUserId,
+            albumArtistIds: parentItem?.id.raw,
+            includeItemTypes: includeItemTypes,
+            recursive: recursive,
+            sortBy: sortBy,
+            sortOrder: sortOrder,
+            searchTerm: searchTerm,
+            filters: filters,
+            startIndex: startIndex,
+            limit: limit,
+            fields: fields,
+          );
+        //} else { //artistListType == ArtistListType.artist || artistListType == null
+          // Performing Artists
+
+        //}
       } else if (includeItemTypes == "MusicGenre") {
         response = await api.getGenres(
           parentId: parentItem?.id,

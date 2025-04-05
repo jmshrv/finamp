@@ -1424,6 +1424,7 @@ class DownloadsService {
       bool nullableViewFilters = true,
       bool onlyFavorites = false,
       BaseItemDtoType? infoForType,
+      BaseItemDtoType? artistType
       }) {
     List<int> favoriteIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
@@ -1445,11 +1446,24 @@ class DownloadsService {
             baseTypeFilter == BaseItemDtoType.playlist,
             (q) => q.info((q) =>
                 q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
+        // Returns albums where the artist (relatedTo) is an Album Artist
         .optional(
-            relatedTo != null,
+                artistType == BaseItemDtoType.album &&
+                relatedTo != null,
+            (q) => q.info((q) => q.isarIdEqualTo(
+                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))))
+        // Returns albums where the artist (relatedTo) is a Performing Artist
+        .optional(
+                artistType == BaseItemDtoType.track &&
+                relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
-                DownloadStub.getHash(
-                    relatedTo!.id.raw, DownloadItemType.collection)))))
+                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection)))))
+        // Returns Albums for a genre (relatedTo)
+        .optional(
+                artistType == null &&
+                relatedTo != null,
+            (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
+                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
         .optional(onlyFavorites,
