@@ -154,7 +154,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
-      swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
       itemSwipeActionLeftToRight: fields[87] == null
           ? ItemSwipeActions.nothing
           : fields[87] as ItemSwipeActions,
@@ -226,7 +225,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(83)
+      ..writeByte(82)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -273,8 +272,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.tabOrder)
       ..writeByte(25)
       ..write(obj.showFastScroller)
-      ..writeByte(26)
-      ..write(obj.swipeInsertQueueNext)
       ..writeByte(27)
       ..write(obj.loopMode)
       ..writeByte(28)

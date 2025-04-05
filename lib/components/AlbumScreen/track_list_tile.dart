@@ -193,27 +193,35 @@ class TrackListTile extends StatelessWidget {
       switch (followUpAction) {
         case ItemSwipeActions.addToNextUp:
           unawaited(queueService.addToNextUp(
-              items: [item],
-              source: QueueItemSource.rawId(
-                type: QueueItemSourceType.nextUp,
-                name: QueueItemSourceName(
-                    type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName: AppLocalizations.of(context)!.queue),
+            items: [item],
+            source: QueueItemSource.rawId(
+              type: QueueItemSourceType.nextUp,
+              name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                   pretranslatedName: AppLocalizations.of(context)!.queue),
                 id: parentItem?.id.raw ?? "",
                 item: parentItem,
               )));
+          GlobalSnackbar.message(
+              (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
+              isConfirmation: true,
+          );
           break;
         case ItemSwipeActions.playNext:
           unawaited(queueService.addNext(
-              items: [item],
-              source: QueueItemSource.rawId(
-                type: QueueItemSourceType.nextUp,
-                name: QueueItemSourceName(
-                    type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName: AppLocalizations.of(context)!.queue),
-                id: parentItem?.id.raw ?? "",
-                item: parentItem,
-              )));
+            items: [item],
+            source: QueueItemSource.rawId(
+              type: QueueItemSourceType.nextUp,
+              name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: AppLocalizations.of(context)!.queue),
+              id: parentItem?.id.raw ?? "",
+              item: parentItem,
+          )));
+          GlobalSnackbar.message(
+              (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
+              isConfirmation: true,
+          );
           break;
         case ItemSwipeActions.addToQueue:
           unawaited(queueService.addToQueue(
@@ -225,36 +233,28 @@ class TrackListTile extends StatelessWidget {
                   pretranslatedName: AppLocalizations.of(context)!.queue),
               id: parentItem?.id.raw ?? "",
               item: parentItem,
-            )));
+          )));
+          GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
+            isConfirmation: true,
+          );
           break;
         case ItemSwipeActions.nothing:
           break;
       }
 
-      if (followUpAction != ItemSwipeActions.nothing) {
-        GlobalSnackbar.message(
-          (scaffold) => (followUpAction == ItemSwipeActions.addToNextUp)
-              ? AppLocalizations.of(scaffold)!.confirmAddToNextUp("track")
-              : (followUpAction == ItemSwipeActions.playNext)
-                  ? AppLocalizations.of(scaffold)!.confirmPlayNext("track")
-                  : AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
-          isConfirmation: true,
-        );
-      }
-
       return false;
     }
 
-    String getSwipeActionText(BuildContext context, ItemSwipeActions action) {
+    IconData getSwipeActionIcon(ItemSwipeActions action) {
       switch (action) {
         case ItemSwipeActions.addToQueue:
-          return AppLocalizations.of(context)!.addToQueue;
-        case ItemSwipeActions.addToNextUp:
-          return AppLocalizations.of(context)!.addToNextUp;
+          return TablerIcons.playlist;
         case ItemSwipeActions.playNext:
-          return AppLocalizations.of(context)!.playNext;
-        default:
-          return "";
+          return TablerIcons.corner_right_down;
+        case ItemSwipeActions.addToNextUp:
+        case ItemSwipeActions.nothing:
+          return TablerIcons.corner_right_down_double;
       }
     }
 
@@ -269,17 +269,12 @@ class TrackListTile extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                (currentSettings.itemSwipeActionLeftToRight == ItemSwipeActions.addToQueue) 
-                    ? TablerIcons.playlist
-                    : (currentSettings.itemSwipeActionLeftToRight == ItemSwipeActions.addToNextUp)
-                        ? TablerIcons.corner_right_down_double
-                        : TablerIcons.corner_right_down,
+              Icon(getSwipeActionIcon(currentSettings.itemSwipeActionLeftToRight),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
               const SizedBox(width: 4.0),
-              Text(getSwipeActionText(context, currentSettings.itemSwipeActionLeftToRight),
+              Text(currentSettings.itemSwipeActionLeftToRight.toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -289,18 +284,13 @@ class TrackListTile extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(getSwipeActionText(context, currentSettings.itemSwipeActionRightToLeft),
+              Text(currentSettings.itemSwipeActionRightToLeft.toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
               const SizedBox(width: 4.0),
-              Icon(
-                (currentSettings.itemSwipeActionRightToLeft == ItemSwipeActions.addToQueue) 
-                    ? TablerIcons.playlist
-                    : (currentSettings.itemSwipeActionRightToLeft == ItemSwipeActions.addToNextUp)
-                        ? TablerIcons.corner_right_down_double
-                        : TablerIcons.corner_right_down,
+              Icon(getSwipeActionIcon(currentSettings.itemSwipeActionRightToLeft),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),

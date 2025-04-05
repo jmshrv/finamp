@@ -252,7 +252,8 @@ class FinampSettingsHelper {
   static void resetInteractionsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    FinampSetters.setSwipeInsertQueueNext(DefaultSettings.swipeInsertQueueNext);
+    finampSettingsTemp.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight;
+    finampSettingsTemp.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft;
     finampSettingsTemp.startInstantMixForIndividualTracks =
         DefaultSettings.startInstantMixForIndividualTracks;
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);

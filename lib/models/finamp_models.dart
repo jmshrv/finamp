@@ -96,7 +96,6 @@ class DefaultSettings {
   static const bufferDurationSeconds = 600;
   static const bufferSizeMegabytes = 50;
   static const tabOrder = TabContentType.values;
-  static const swipeInsertQueueNext = true;
   static const itemSwipeActionLeftToRight = ItemSwipeActions.nothing;
   static const itemSwipeActionRightToLeft = ItemSwipeActions.addToNextUp;
   static const loopMode = FinampLoopMode.none;
@@ -218,7 +217,6 @@ class FinampSettings {
     this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
     this.shouldRedownloadTranscodes =
         DefaultSettings.shouldRedownloadTranscodes,
-    this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
     this.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight,
     this.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft,
     this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
@@ -350,9 +348,6 @@ class FinampSettings {
 
   @HiveField(25, defaultValue: DefaultSettings.showFastScroller)
   bool showFastScroller = DefaultSettings.showFastScroller;
-
-  @HiveField(26, defaultValue: DefaultSettings.swipeInsertQueueNext)
-  bool swipeInsertQueueNext;
 
   @HiveField(27, defaultValue: DefaultSettings.loopMode)
   FinampLoopMode loopMode;
@@ -2664,5 +2659,4 @@ enum ItemSwipeActions {
         return AppLocalizations.of(context)!.playNext;
     }
   }
-
 }

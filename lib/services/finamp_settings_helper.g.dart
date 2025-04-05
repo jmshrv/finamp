@@ -159,13 +159,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSwipeInsertQueueNext(bool newSwipeInsertQueueNext) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.swipeInsertQueueNext = newSwipeInsertQueueNext;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setLoopMode(FinampLoopMode newLoopMode) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.loopMode = newLoopMode;
@@ -679,8 +672,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.tabOrder);
   ProviderListenable<bool> get showFastScroller => finampSettingsProvider
       .select((value) => value.requireValue.showFastScroller);
-  ProviderListenable<bool> get swipeInsertQueueNext => finampSettingsProvider
-      .select((value) => value.requireValue.swipeInsertQueueNext);
   ProviderListenable<FinampLoopMode> get loopMode =>
       finampSettingsProvider.select((value) => value.requireValue.loopMode);
   ProviderListenable<bool> get autoloadLastQueueOnStartup =>

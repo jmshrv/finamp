@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../components/InteractionSettingsScreen/FastScrollSelector.dart';
 import '../components/InteractionSettingsScreen/disable_gestures.dart';
 import '../components/InteractionSettingsScreen/disable_vibration.dart';
-//import '../components/InteractionSettingsScreen/swipe_insert_queue_next_selector.dart';
+
 
 class InteractionSettingsScreen extends StatefulWidget {
   const InteractionSettingsScreen({super.key});
@@ -32,7 +32,6 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
       ),
       body: ListView(
         children: const [
-          //SwipeInsertQueueNextSelector(),
           ItemSwipeActionDropdownListTile(DismissDirection.startToEnd),
           ItemSwipeActionDropdownListTile(DismissDirection.endToStart),
           StartInstantMixForIndividualTracksSwitch(),
