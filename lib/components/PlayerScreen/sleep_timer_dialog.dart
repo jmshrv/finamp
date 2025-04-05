@@ -19,10 +19,13 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
   final _textController = TextEditingController(
       text: (DefaultSettings.sleepTimerDuration ~/ 60).toString());
   final _formKey = GlobalKey<FormState>();
-  SleepTimerType _selectedMode = SleepTimerType.duration; // Default selection
+  // SleepTimerType _selectedMode = SleepTimerType.duration; // Default selection
   int selectedValue = 5; // Default to 5 minutes
+  bool trackMode = false;
+  final _trackCountController = TextEditingController(text: "1");
   final ScrollController _scrollController = ScrollController();
   late double viewPortWidth;
+  bool endOnCurrent = false;
   final markerTotalWidth = 6.0; // 2px line + 4px margin
 
   void _updateSelectedValue() {
@@ -30,7 +33,7 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
     final centerPosition = offset + (viewPortWidth / 2);
     final nearestItem = ((centerPosition - (viewPortWidth / 2)) / markerTotalWidth).round();
     final nearestValue = nearestItem + 1; // 1-based index
-    
+
     if (nearestValue != selectedValue && nearestValue > 0 && nearestValue <= 120) {
       setState(() {
         selectedValue = nearestValue;
@@ -42,7 +45,6 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
     final offset = _scrollController.offset;
     final centerPosition = offset + (viewPortWidth / 2);
     final nearestItem = ((centerPosition - (viewPortWidth / 2)) / markerTotalWidth).round();
-    print("NearestItem: $nearestItem, ViewPortWidth: $viewPortWidth, Offset: $offset, CentrePosition: $centerPosition" );
     // Animate to exact position (centered)
     _scrollController.animateTo(
       (nearestItem * markerTotalWidth) - (viewPortWidth / 2) + (markerTotalWidth * 5), // Center offset
@@ -50,17 +52,16 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
       curve: Curves.easeOut,
     );
   }
-    @override
+
+  @override
   void initState() {
     super.initState();
     _scrollController.addListener(_updateSelectedValue);
   }
-  
 
   @override
   Widget build(BuildContext context) {
-      
-      {viewPortWidth = MediaQuery.of(context).size.width;}
+    viewPortWidth = MediaQuery.of(context).size.width;
 
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.setSleepTimer),
@@ -108,21 +109,57 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                             final isMultipleOf5 = (index + 1) % 5 == 0;
                             final isSelected = index + 1 == selectedValue;
 
-                            return Column(
-                              children: [
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  width: 2,
-                                  height: isMultipleOf5 ? 30 : 20,
-                                  color: isSelected
-                                      ? Theme.of(context).colorScheme.primary
-                                      : const Color.fromARGB(76, 255, 255, 255),
-                                ),
-                              ],
+                            return SizedBox(
+                              width: markerTotalWidth,
+                              height: 50,
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                alignment: Alignment.topCenter,
+                                children: [
+                                  // Marker line
+                                  Positioned(
+                                    top: 0,
+                                    child: Container(
+                                      width: 2,
+                                      height: isMultipleOf5 ? 30 : 20,
+                                      color: isSelected
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : const Color.fromARGB(
+                                              76, 255, 255, 255),
+                                    ),
+                                  ),
+
+                                  // Label (for multiples of 5)
+                                  if (isMultipleOf5)
+                                    Positioned(
+                                      top: 32,
+                                      left:
+                                          -12, // shift left so it's centered visually
+                                      child: SizedBox(
+                                        width: 30,
+                                        child: Text(
+                                          '${index + 1}',
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall
+                                              ?.copyWith(
+                                                fontSize: 10,
+                                                color: isSelected
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
+                                                    : Colors.grey[400],
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
                             );
                           }),
-
 
                           SizedBox(width: (viewPortWidth / 3) + markerTotalWidth),
                         ],
@@ -131,7 +168,47 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                   ),
                 ),
               ],
-            )
+            ),
+            const Divider(),
+            Builder(builder: (context) {
+              return SwitchListTile.adaptive(
+                  title: Text("Number of Tracks"),
+                  value: trackMode,
+                  onChanged: (value) {
+                    setState(() {
+                      trackMode = value;
+                    });
+                  });
+            }),
+if (trackMode)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TextFormField(
+                  controller: _trackCountController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return AppLocalizations.of(context)!.required;
+                    }
+                    if (int.tryParse(value) == null || int.parse(value) <= 0) {
+                      return AppLocalizations.of(context)!.invalidNumber;
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
+
+            Builder(builder: (context) {
+              return SwitchListTile.adaptive(
+                  title: Text("Finish track"),
+                  value: endOnCurrent,
+                  onChanged: (value) {
+                    setState(() {
+                      endOnCurrent = value;
+                    });
+                  });
+            })
           ],
         ),
       ),
