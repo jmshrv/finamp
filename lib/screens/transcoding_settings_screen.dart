@@ -31,8 +31,8 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
       body: ListView(
         children: [
           const TranscodeSwitch(),
-          const BitrateSelector(),
           const StreamingTranscodingFormatDropdownListTile(),
+          const BitrateSelector(),
           Divider(),
           const DownloadTranscodeEnableDropdownListTile(),
           const DownloadTranscodeCodecDropdownListTile(),
