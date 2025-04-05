@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/components/audio_fade_progress_visualizer_container.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -137,6 +139,7 @@ class NowPlayingBar extends ConsumerWidget {
   Widget buildNowPlayingBar(
       BuildContext context, FinampQueueItem currentTrack) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+    final queueService = GetIt.instance<QueueService>();
 
     Duration? playbackPosition;
 
@@ -191,7 +194,6 @@ class NowPlayingBar extends ConsumerWidget {
                 : DismissDirection.vertical,
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.down) {
-                final queueService = GetIt.instance<QueueService>();
                 FeedbackHelper.feedback(FeedbackType.success);
                 await queueService.stopPlayback();
               } else {
@@ -239,10 +241,14 @@ class NowPlayingBar extends ConsumerWidget {
                   child: StreamBuilder<MediaState>(
                     stream: mediaStateStream
                         .where((event) => event.mediaItem != null),
-                    initialData: MediaState(audioHandler.mediaItem.valueOrNull,
-                        audioHandler.playbackState.value),
+                    initialData: MediaState(
+                        audioHandler.mediaItem.valueOrNull,
+                        audioHandler.playbackState.value,
+                        audioHandler.fadeState.value),
                     builder: (context, snapshot) {
                       final MediaState mediaState = snapshot.data!;
+                      final playbackState = mediaState.playbackState;
+                      final fadeState = mediaState.fadeState;
                       // If we have a media item and the player hasn't finished, show
                       // the now playing bar.
                       if (mediaState.mediaItem != null) {
@@ -274,32 +280,34 @@ class NowPlayingBar extends ConsumerWidget {
                                           currentAlbumImageProvider,
                                       borderRadius: BorderRadius.zero,
                                     ),
-                                    Container(
-                                        width: albumImageSize,
-                                        height: albumImageSize,
-                                        decoration: const ShapeDecoration(
-                                          shape: Border(),
-                                          color: Color.fromRGBO(0, 0, 0, 0.3),
-                                        ),
-                                        child: IconButton(
+                                    AudioFadeProgressVisualizerContainer(
+                                      key: const Key(
+                                          "AlbumArtAudioFadeProgressVisualizer"),
+                                      width: albumImageSize,
+                                      height: albumImageSize,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12.0),
+                                        bottomLeft: Radius.circular(12.0),
+                                      ),
+                                      child: IconButton(
                                           tooltip: AppLocalizations.of(context)!
                                               .togglePlaybackButtonTooltip,
                                           onPressed: () {
                                             FeedbackHelper.feedback(
                                                 FeedbackType.light);
-                                            audioHandler.togglePlayback();
+                                            unawaited(
+                                                audioHandler.togglePlayback());
                                           },
-                                          icon: mediaState.playbackState.playing
-                                              ? const Icon(
-                                                  TablerIcons.player_pause,
-                                                  size: 32,
-                                                )
-                                              : const Icon(
-                                                  TablerIcons.player_play,
-                                                  size: 32,
-                                                ),
                                           color: Colors.white,
-                                        )),
+                                          icon: Icon(
+                                              playbackState.playing
+                                                  ? fadeState.fadeDirection !=
+                                                          FadeDirection.fadeOut
+                                                      ? TablerIcons.player_pause
+                                                      : TablerIcons.player_play
+                                                  : TablerIcons.player_play,
+                                              size: 32)),
+                                    ),
                                   ],
                                 ),
                                 Expanded(

@@ -154,12 +154,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
-      itemSwipeActionLeftToRight: fields[87] == null
+      itemSwipeActionLeftToRight: fields[88] == null
           ? ItemSwipeActions.nothing
-          : fields[87] as ItemSwipeActions,
-      itemSwipeActionRightToLeft: fields[88] == null
-          ? ItemSwipeActions.addToNextUp
           : fields[88] as ItemSwipeActions,
+      itemSwipeActionRightToLeft: fields[89] == null
+          ? ItemSwipeActions.addToNextUp
+          : fields[89] as ItemSwipeActions,
       useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
       fixedGridTileSize: fields[60] == null ? 150 : (fields[60] as num).toInt(),
       allowSplitScreen: fields[61] == null ? true : fields[61] as bool,
@@ -215,6 +215,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
+      audioFadeOutDuration:
+          fields[86] == null ? Duration.zero : fields[86] as Duration,
+      audioFadeInDuration:
+          fields[87] == null ? Duration.zero : fields[87] as Duration,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -225,7 +229,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(82)
+      ..writeByte(84)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -386,9 +390,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.releaseDateFormat)
       ..writeByte(85)
       ..write(obj.lastUsedDownloadLocationId)
+      ..writeByte(86)
+      ..write(obj.audioFadeOutDuration)
       ..writeByte(87)
-      ..write(obj.itemSwipeActionLeftToRight)
+      ..write(obj.audioFadeInDuration)
       ..writeByte(88)
+      ..write(obj.itemSwipeActionLeftToRight)
+      ..writeByte(89)
       ..write(obj.itemSwipeActionRightToLeft);
   }
 

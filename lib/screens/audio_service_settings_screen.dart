@@ -46,6 +46,8 @@ class _AudioServiceSettingsScreenState
         children: [
           if (Platform.isAndroid) StopForegroundSelector(key: _updateChildren),
           TrackShuffleItemCountEditor(key: _updateChildren),
+          AudioFadeInDurationListTile(key: _updateChildren),
+          AudioFadeOutDurationListTile(key: _updateChildren),
           if (Platform.isAndroid) BufferSizeListTile(key: _updateChildren),
           BufferDurationListTile(key: _updateChildren),
           BufferDisableSizeConstraintsSelector(key: _updateChildren),
@@ -111,6 +113,90 @@ class _BufferSizeListTileState extends State<BufferSizeListTile> {
                 valueInt = 60;
               }
               FinampSetters.setBufferSizeMegabytes(valueInt);
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class AudioFadeInDurationListTile extends StatefulWidget {
+  const AudioFadeInDurationListTile({super.key});
+
+  @override
+  State<AudioFadeInDurationListTile> createState() =>
+      _AudioFadeInDurationListTileState();
+}
+
+class _AudioFadeInDurationListTileState
+    extends State<AudioFadeInDurationListTile> {
+  final _controller = TextEditingController(
+      text: FinampSettingsHelper
+          .finampSettings.audioFadeInDuration.inMilliseconds
+          .toString());
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title:
+          Text(AppLocalizations.of(context)!.audioFadeInDurationSettingTitle),
+      subtitle: Text(
+          AppLocalizations.of(context)!.audioFadeInDurationSettingSubtitle),
+      trailing: SizedBox(
+        width: 50 * MediaQuery.of(context).textScaleFactor,
+        child: TextField(
+          controller: _controller,
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.number,
+          onChanged: (value) {
+            final valueInt = int.tryParse(value);
+
+            if (valueInt != null && !valueInt.isNegative) {
+              FinampSetters.setAudioFadeInDuration(
+                  Duration(milliseconds: valueInt));
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class AudioFadeOutDurationListTile extends StatefulWidget {
+  const AudioFadeOutDurationListTile({super.key});
+
+  @override
+  State<AudioFadeOutDurationListTile> createState() =>
+      _AudioFadeOutDurationListTileState();
+}
+
+class _AudioFadeOutDurationListTileState
+    extends State<AudioFadeOutDurationListTile> {
+  final _controller = TextEditingController(
+      text: FinampSettingsHelper
+          .finampSettings.audioFadeOutDuration.inMilliseconds
+          .toString());
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title:
+          Text(AppLocalizations.of(context)!.audioFadeOutDurationSettingTitle),
+      subtitle: Text(
+          AppLocalizations.of(context)!.audioFadeOutDurationSettingSubtitle),
+      trailing: SizedBox(
+        width: 50 * MediaQuery.of(context).textScaleFactor,
+        child: TextField(
+          controller: _controller,
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.number,
+          onChanged: (value) {
+            final valueInt = int.tryParse(value);
+
+            if (valueInt != null && !valueInt.isNegative) {
+              FinampSetters.setAudioFadeOutDuration(
+                  Duration(milliseconds: valueInt));
             }
           },
         ),

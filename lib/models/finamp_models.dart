@@ -153,6 +153,8 @@ class DefaultSettings {
   static const oneLineMarqueeTextButton = false;
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
+  static const audioFadeOutDuration = Duration(milliseconds: 0);
+  static const audioFadeInDuration = Duration(milliseconds: 0);
 }
 
 @HiveType(typeId: 28)
@@ -259,6 +261,8 @@ class FinampSettings {
     this.showAlbumReleaseDateOnPlayerScreen =
         DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
+    this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
+    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -535,12 +539,18 @@ class FinampSettings {
   @HiveField(85, defaultValue: null)
   String? lastUsedDownloadLocationId;
 
-  @HiveField(87, defaultValue: DefaultSettings.itemSwipeActionLeftToRight)
+  @HiveField(88, defaultValue: DefaultSettings.itemSwipeActionLeftToRight)
   ItemSwipeActions itemSwipeActionLeftToRight;
 
-  @HiveField(88, defaultValue: DefaultSettings.itemSwipeActionRightToLeft)
+  @HiveField(89, defaultValue: DefaultSettings.itemSwipeActionRightToLeft)
   ItemSwipeActions itemSwipeActionRightToLeft;
   
+  @HiveField(86, defaultValue: DefaultSettings.audioFadeOutDuration)
+  Duration audioFadeOutDuration;
+
+  @HiveField(87, defaultValue: DefaultSettings.audioFadeInDuration)
+  Duration audioFadeInDuration;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: DownloadLocation.internalStorageName,

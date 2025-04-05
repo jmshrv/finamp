@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId "com.unicornsonlsd.finamp"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

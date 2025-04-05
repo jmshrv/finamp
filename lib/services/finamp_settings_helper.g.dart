@@ -617,6 +617,20 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAudioFadeOutDuration(Duration newAudioFadeOutDuration) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.audioFadeOutDuration = newAudioFadeOutDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAudioFadeInDuration(Duration newAudioFadeInDuration) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.audioFadeInDuration = newAudioFadeInDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -826,6 +840,11 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
       finampSettingsProvider
           .select((value) => value.requireValue.itemSwipeActionRightToLeft);
+  ProviderListenable<Duration> get audioFadeOutDuration =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.audioFadeOutDuration);
+  ProviderListenable<Duration> get audioFadeInDuration => finampSettingsProvider
+      .select((value) => value.requireValue.audioFadeInDuration);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);
