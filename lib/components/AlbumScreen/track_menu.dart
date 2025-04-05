@@ -20,7 +20,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -580,7 +579,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 var item = DownloadStub.fromItem(
                     type: DownloadItemType.track, item: widget.item);
                 await askBeforeDeleteFromServerAndDevice(context, item);
-                
+                Navigator.pop(context); // close popup
                 musicScreenRefreshStream.add(null);
               },
             ));
