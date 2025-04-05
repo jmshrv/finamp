@@ -466,7 +466,7 @@
   "@enableTranscodingSubtitle": {},
   "bitrate": "Bitrate",
   "@bitrate": {},
-  "bitrateSubtitle": "A higher bitrate gives higher quality audio at the cost of higher bandwidth. This setting is ignored when the format is set to FLAC+MP4",
+  "bitrateSubtitle": "A higher bitrate gives higher quality audio at the cost of higher bandwidth. Does not apply to lossless codecs, e.g. FLAC",
   "@bitrateSubtitle": {},
   "customLocation": "Custom Location",
   "@customLocation": {},
