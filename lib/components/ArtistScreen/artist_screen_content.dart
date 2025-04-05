@@ -68,7 +68,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               await _downloadsService.getAllCollections(
                   baseTypeFilter: BaseItemDtoType.album,
                   relatedTo: widget.parent,
-                  artistType: (widget.parent.type == "MusicGenre") ? null : BaseItemDtoType.album);
+                  artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.albumartist);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
           return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
@@ -79,7 +79,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             await _downloadsService.getAllCollections(
                 baseTypeFilter: BaseItemDtoType.album,
                 relatedTo: widget.parent,
-                artistType: (widget.parent.type == "MusicGenre") ? null : BaseItemDtoType.album);
+                artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.albumartist);
         artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
 
         final List<BaseItemDto> sortedTracks = [];

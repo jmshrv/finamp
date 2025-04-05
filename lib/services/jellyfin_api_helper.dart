@@ -109,7 +109,7 @@ class JellyfinApiHelper {
     String? filters,
     String? fields,
     bool? recursive,
-    ArtistListType? artistListType,
+    ArtistType? artistListType,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -159,7 +159,7 @@ class JellyfinApiHelper {
         );
       } else if (includeItemTypes == "MusicArtist") {
         // For artists, we need to use different endpoints
-        if (artistListType == ArtistListType.albumartist) {
+        if (artistListType == ArtistType.albumartist) {
           // Album Artists
           response = await api.getAlbumArtists(
             parentId: parentItem?.id,
@@ -173,7 +173,7 @@ class JellyfinApiHelper {
             userId: currentUserId,
             fields: fields,
           );
-        } else { //artistListType == ArtistListType.artist
+        } else { //artistListType == ArtistType.artist
           // Performing Artists
           response = await api.getArtists(
             parentId: parentItem?.id,
@@ -189,7 +189,7 @@ class JellyfinApiHelper {
       } else if (parentItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use albumArtistIds
         // instead of parentId
-        //if (artistListType == ArtistListType.albumartist) {
+        //if (artistListType == ArtistType.albumartist) {
           // Albums of Album Artists
           response = await api.getItems(
             userId: currentUserId,
@@ -204,7 +204,7 @@ class JellyfinApiHelper {
             limit: limit,
             fields: fields,
           );
-        //} else { //artistListType == ArtistListType.artist || artistListType == null
+        //} else { //artistListType == ArtistType.artist || artistListType == null
           // Performing Artists
 
         //}

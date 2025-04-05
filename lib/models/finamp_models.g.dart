@@ -211,8 +211,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
       artistListType: fields[86] == null
-          ? ArtistListType.albumartist
-          : fields[86] as ArtistListType,
+          ? ArtistType.albumartist
+          : fields[86] as ArtistType,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -2071,28 +2071,28 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
           typeId == other.typeId;
 }
 
-class ArtistListTypeAdapter extends TypeAdapter<ArtistListType> {
+class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
   @override
   final int typeId = 89;
 
   @override
-  ArtistListType read(BinaryReader reader) {
+  ArtistType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ArtistListType.albumartist;
+        return ArtistType.albumartist;
       case 1:
-        return ArtistListType.artist;
+        return ArtistType.artist;
       default:
-        return ArtistListType.albumartist;
+        return ArtistType.albumartist;
     }
   }
 
   @override
-  void write(BinaryWriter writer, ArtistListType obj) {
+  void write(BinaryWriter writer, ArtistType obj) {
     switch (obj) {
-      case ArtistListType.albumartist:
+      case ArtistType.albumartist:
         writer.writeByte(0);
-      case ArtistListType.artist:
+      case ArtistType.artist:
         writer.writeByte(1);
     }
   }
@@ -2103,7 +2103,7 @@ class ArtistListTypeAdapter extends TypeAdapter<ArtistListType> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ArtistListTypeAdapter &&
+      other is ArtistTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

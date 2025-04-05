@@ -70,7 +70,7 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setArtistListType(ArtistListType artistListType){
+  static void setArtistListType(ArtistType artistListType){
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.artistListType = artistListType;
     Hive.box<FinampSettings>("FinampSettings")

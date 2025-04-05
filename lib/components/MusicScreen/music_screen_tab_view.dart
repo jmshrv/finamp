@@ -137,7 +137,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
     int localRefreshCount = refreshCount;
-    var artistInfoForType = (settings.artistListType == ArtistListType.albumartist) ? BaseItemDtoType.album : BaseItemDtoType.track;
+    var artistInfoForType = (settings.artistListType == ArtistType.albumartist) ? BaseItemDtoType.album : BaseItemDtoType.track;
 
     List<DownloadStub> offlineItems;
     if (widget.tabContentType == TabContentType.tracks) {

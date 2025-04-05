@@ -152,7 +152,7 @@ class DefaultSettings {
   static const oneLineMarqueeTextButton = false;
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
-  static const artistListType = ArtistListType.albumartist;
+  static const artistListType = ArtistType.albumartist;
 }
 
 @HiveType(typeId: 28)
@@ -539,7 +539,7 @@ class FinampSettings {
   String? lastUsedDownloadLocationId;
 
   @HiveField(86, defaultValue: DefaultSettings.artistListType)
-  ArtistListType artistListType;
+  ArtistType artistListType;
   
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2616,7 +2616,7 @@ enum ReleaseDateFormat {
 
 /// Enum for artist list types
 @HiveType(typeId: 89)
-enum ArtistListType {
+enum ArtistType {
   @HiveField(0)
   albumartist,
 

@@ -1424,7 +1424,7 @@ class DownloadsService {
       bool nullableViewFilters = true,
       bool onlyFavorites = false,
       BaseItemDtoType? infoForType,
-      BaseItemDtoType? artistType
+      ArtistType? artistType,
       }) {
     List<int> favoriteIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {

@@ -7,7 +7,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 
-Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType, ArtistListType artistListType, Function(TabContentType) refreshTab) {
+Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType, ArtistType artistListType, Function(TabContentType) refreshTab) {
   if (tabType == TabContentType.artists) {
     var currentSettings = FinampSettingsHelper.finampSettings;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -29,15 +29,15 @@ Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
               FilterChip(
                 label: Text(AppLocalizations.of(context)!.albumArtists),
                 onSelected: (_) {
-                  FinampSettingsHelper.setArtistListType(ArtistListType.albumartist);
+                  FinampSettingsHelper.setArtistListType(ArtistType.albumartist);
                   refreshTab(tabType);
                 },
-                selected: artistListType == ArtistListType.albumartist,
+                selected: artistListType == ArtistType.albumartist,
                 showCheckmark: false,
                 selectedColor: Theme.of(context).colorScheme.primary,
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 labelStyle: TextStyle(
-                  color: artistListType == ArtistListType.albumartist
+                  color: artistListType == ArtistType.albumartist
                       ? Theme.of(context).colorScheme.onPrimary
                       : Theme.of(context).colorScheme.onSurface,
                 ),
@@ -47,15 +47,15 @@ Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
               FilterChip(
                 label: Text(AppLocalizations.of(context)!.performingArtists),
                 onSelected: (_) {
-                  FinampSettingsHelper.setArtistListType(ArtistListType.artist);
+                  FinampSettingsHelper.setArtistListType(ArtistType.artist);
                   refreshTab(tabType);
                 }, 
-                selected: artistListType == ArtistListType.artist,
+                selected: artistListType == ArtistType.artist,
                 showCheckmark: false,
                 selectedColor: Theme.of(context).colorScheme.primary,
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 labelStyle: TextStyle(
-                  color: artistListType == ArtistListType.artist
+                  color: artistListType == ArtistType.artist
                       ? Theme.of(context).colorScheme.onPrimary
                       : Theme.of(context).colorScheme.onSurface
                 ),
