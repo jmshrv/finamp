@@ -1966,5 +1966,17 @@
   "noItemsDownloaded": "Nebyly staženy žádné položky.",
   "@noItemsDownloaded": {
     "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "audioFadeInDurationSettingTitle": "Délka zesilování zvuku",
+  "@audioFadeInDurationSettingTitle": {},
+  "audioFadeInDurationSettingSubtitle": "Délka, po kterou se bude postupně zvyšovat hlasitost zvuku, v milisekundách. Nastavte na 0 pro zakázání.",
+  "@audioFadeInDurationSettingSubtitle": {},
+  "audioFadeOutDurationSettingSubtitle": "Délka, po kterou se bude postupně snižovat hlasitost zvuku, v milisekundách.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "audioFadeOutDurationSettingTitle": "Délka ztlumování zvuku",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
   }
 }
