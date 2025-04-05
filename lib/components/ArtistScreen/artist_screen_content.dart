@@ -19,12 +19,8 @@ import 'artist_screen_content_flexible_space_bar.dart';
 
 
 /// ToDo for proper Albums and Appears On Section + reasonable playback queue: 
-/// - Offline: Call getAllCollections with artistType: BaseItemDtoType.track, store artistPerformsOn
 /// - Offline: Include both albumartist and performingartist tracks in allTracks but DISTINCT (see downloads_service.dart)
-/// - Online: Get Albums where artist is performing artist -> store artistPerformsOn
 /// - Online: Modify allTracks to include both albumartist and performingartist tracks DISTINCT
-/// - artistAppearsOn = artistPerformsOn - artistAlbums
-/// - if (artistAppearsOn.length > 0) Display artistAppearsOn in Appears On section
 class ArtistScreenContent extends StatefulWidget {
   const ArtistScreenContent({super.key, required this.parent});
 
@@ -63,12 +59,24 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
       futures = Future.wait([
         Future.value(
             <BaseItemDto>[]), // Play count tracking is not implemented offline
+        // Get Albums where artist is Album Artist sorted by Premiere Date
         Future.sync(() async {
           final List<DownloadStub> artistAlbums =
               await _downloadsService.getAllCollections(
                   baseTypeFilter: BaseItemDtoType.album,
                   relatedTo: widget.parent,
                   artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.albumartist);
+          artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
+              .compareTo(b.baseItem!.premiereDate ?? ""));
+          return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
+        }),
+        // Get Albums where artist is Performing Artist sorted by Premiere Date
+        Future.sync(() async {
+          final List<DownloadStub> artistAlbums =
+              await _downloadsService.getAllCollections(
+                  baseTypeFilter: BaseItemDtoType.album,
+                  relatedTo: widget.parent,
+                  artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
           return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
@@ -102,12 +110,21 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           )
         else
           Future.value(null),
-        // Get Albums sorted by Premiere Date
+        // Get Albums where artist is Album Artist sorted by Premiere Date
         jellyfinApiHelper.getItems(
           parentItem: widget.parent,
           filters: "Artist=${widget.parent.name}",
           sortBy: "PremiereDate,SortName",
           includeItemTypes: "MusicAlbum",
+          artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.albumartist
+        ),
+        // Get Albums where artist is Performing Artist sorted by Premiere Date
+        jellyfinApiHelper.getItems(
+          parentItem: widget.parent,
+          filters: "Artist=${widget.parent.name}",
+          sortBy: "PremiereDate,SortName",
+          includeItemTypes: "MusicAlbum",
+          artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist
         ),
       ]);
       allTracks = jellyfinApiHelper.getItems(
@@ -123,6 +140,9 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         builder: (context, snapshot) {
           var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
+          var albumsAsPerformingArtist = snapshot.data?.elementAtOrNull(2) ?? [];
+          var appearsOnAlbums = albumsAsPerformingArtist.where((a) =>
+              !albums.any((b) => b.id == a.id)).toList();
           var topTracks = tracks
               .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
               .take(5)
@@ -177,18 +197,43 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 isOnArtistScreen: true,
                 parent: widget.parent,
               ),
-            SliverPadding(
-                padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
-                sliver: SliverToBoxAdapter(
-                    child: Text(
-                  AppLocalizations.of(context)!.albums,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ))),
-            AlbumsSliverList(
-              childrenForList: albums,
-              parent: widget.parent,
-            )
+            if (!albums.isEmpty)
+              SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+                  sliver: SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.albums,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ))),
+            if (!albums.isEmpty)
+              AlbumsSliverList(
+                childrenForList: albums,
+                parent: widget.parent,
+              ),
+            if (!appearsOnAlbums.isEmpty)
+              SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+                  sliver: SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.appearsOnAlbums,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ))),
+            if (!appearsOnAlbums.isEmpty)
+              AlbumsSliverList(
+                childrenForList: appearsOnAlbums,
+                parent: widget.parent,
+              ),
+            if (albums.isEmpty && appearsOnAlbums.isEmpty)
+              SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+                  sliver: SliverToBoxAdapter(
+                      child: Text(
+                    AppLocalizations.of(context)!.emptyFilteredListTitle,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ))),
           ]);
         });
   }

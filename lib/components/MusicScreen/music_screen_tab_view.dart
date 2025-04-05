@@ -111,7 +111,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         filters: settings.onlyShowFavourites ? "IsFavorite" : null,
         startIndex: pageKey,
         limit: _pageSize,
-        artistListType: settings.artistListType,
+        artistType: settings.artistListType,
       );
 
       // Skip appending page if a refresh triggered while processing

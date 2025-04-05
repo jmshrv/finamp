@@ -109,7 +109,7 @@ class JellyfinApiHelper {
     String? filters,
     String? fields,
     bool? recursive,
-    ArtistType? artistListType,
+    ArtistType? artistType,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -159,7 +159,7 @@ class JellyfinApiHelper {
         );
       } else if (includeItemTypes == "MusicArtist") {
         // For artists, we need to use different endpoints
-        if (artistListType == ArtistType.albumartist) {
+        if (artistType == ArtistType.albumartist) {
           // Album Artists
           response = await api.getAlbumArtists(
             parentId: parentItem?.id,
@@ -173,7 +173,7 @@ class JellyfinApiHelper {
             userId: currentUserId,
             fields: fields,
           );
-        } else { //artistListType == ArtistType.artist
+        } else { //artistType == ArtistType.artist
           // Performing Artists
           response = await api.getArtists(
             parentId: parentItem?.id,
@@ -189,7 +189,7 @@ class JellyfinApiHelper {
       } else if (parentItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use albumArtistIds
         // instead of parentId
-        //if (artistListType == ArtistType.albumartist) {
+        if (artistType == ArtistType.albumartist || artistType == null) {
           // Albums of Album Artists
           response = await api.getItems(
             userId: currentUserId,
@@ -204,10 +204,22 @@ class JellyfinApiHelper {
             limit: limit,
             fields: fields,
           );
-        //} else { //artistListType == ArtistType.artist || artistListType == null
+        } else { //artistType == ArtistType.artist
           // Performing Artists
-
-        //}
+          response = await api.getItems(
+            userId: currentUserId,
+            artistIds: parentItem?.id.raw,
+            includeItemTypes: includeItemTypes,
+            recursive: recursive,
+            sortBy: sortBy,
+            sortOrder: sortOrder,
+            searchTerm: searchTerm,
+            filters: filters,
+            startIndex: startIndex,
+            limit: limit,
+            fields: fields,
+          );
+        }
       } else if (includeItemTypes == "MusicGenre") {
         response = await api.getGenres(
           parentId: parentItem?.id,

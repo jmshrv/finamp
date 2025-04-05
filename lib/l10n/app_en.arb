@@ -181,6 +181,8 @@
   "@tracks": {},
   "albums": "Albums",
   "@albums": {},
+  "appearsOnAlbums": "Appears On",
+  "@appearsOnAlbums": {},
   "artists": "Artists",
   "@artists": {},
   "genres": "Genres",
