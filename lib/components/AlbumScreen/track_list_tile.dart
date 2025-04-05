@@ -198,10 +198,10 @@ class TrackListTile extends StatelessWidget {
               type: QueueItemSourceType.nextUp,
               name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                   pretranslatedName: AppLocalizations.of(context)!.queue),
-                id: parentItem?.id.raw ?? "",
-                item: parentItem,
-              )));
+                pretranslatedName: AppLocalizations.of(context)!.queue),
+              id: parentItem?.id.raw ?? "",
+              item: parentItem,
+          )));
           GlobalSnackbar.message(
               (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
               isConfirmation: true,
