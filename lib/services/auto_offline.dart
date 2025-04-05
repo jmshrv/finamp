@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:io';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
@@ -56,6 +58,12 @@ Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
     if (FinampSettingsHelper.finampSettings.autoOffline == AutoOfflineOption.disabled) return;
     // skip when user overwrote offline mode
     if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
+    // skip if nothing changed
+    if (FinampSettingsHelper.finampSettings.isOffline == state) return;
+
+    GlobalSnackbar.message((context) =>
+      AppLocalizations.of(context)!.autoOfflineNotification(state ? "enabled" : "disabled"));
+
 
     Logger("AutoOffline").info(state
         ? "Automatically Enabled Offline Mode"

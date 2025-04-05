@@ -1952,5 +1952,9 @@
   "@autoOfflineDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
-  "autoOfflineSettingTitle": "Automated Offline Mode"
+  "autoOfflineSettingTitle": "Automated Offline Mode",
+  "autoOfflineNotification": "Automatically {state, select, enabled{enabled} disabled{disabled} other{set quantum position for}} Offline Mode",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  }
 }

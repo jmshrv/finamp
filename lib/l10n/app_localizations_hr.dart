@@ -1998,4 +1998,17 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 }

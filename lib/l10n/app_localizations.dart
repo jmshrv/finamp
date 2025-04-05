@@ -3205,6 +3205,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Automated Offline Mode'**
   String get autoOfflineSettingTitle;
+
+  /// The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically {state, select, enabled{enabled} disabled{disabled} other{set quantum position for}} Offline Mode'**
+  String autoOfflineNotification(String state);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

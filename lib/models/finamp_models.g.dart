@@ -213,8 +213,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       autoOffline: fields[85] == null
           ? AutoOfflineOption.disconnected
           : fields[85] as AutoOfflineOption,
-      autoOfflineListenerActive:
-          fields[86] == null ? false : fields[86] as bool,
+      autoOfflineListenerActive: fields[86] == null ? true : fields[86] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
