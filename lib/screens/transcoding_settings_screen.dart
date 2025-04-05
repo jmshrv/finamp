@@ -33,7 +33,7 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
           const TranscodeSwitch(),
           const BitrateSelector(),
           const StreamingTranscodingFormatDropdownListTile(),
-          Padding(padding: const EdgeInsets.all(8.0)),
+          Divider(),
           const DownloadTranscodeEnableDropdownListTile(),
           const DownloadTranscodeCodecDropdownListTile(),
           const DownloadBitrateSelector(),
