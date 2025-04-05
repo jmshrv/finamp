@@ -106,13 +106,16 @@ class FinampNavigationBar extends ConsumerWidget {
           // Navigate to the corresponding screen based on the index
           switch (index) {
             case 0:
-              Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+              Navigator.restorablePushNamedAndRemoveUntil(
+                  context, HomeScreen.routeName, (route) => false);
               break;
             case 1:
-              Navigator.pushReplacementNamed(context, MusicScreen.routeName);
+              Navigator.restorablePushNamedAndRemoveUntil(
+                  context, MusicScreen.routeName, (route) => false);
               break;
             case 2:
-              Navigator.pushReplacementNamed(context, MusicScreen.routeName);
+              Navigator.restorablePushNamedAndRemoveUntil(
+                  context, MusicScreen.routeName, (route) => false);
               break;
           }
         },

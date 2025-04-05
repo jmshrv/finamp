@@ -1,5 +1,9 @@
 import 'package:finamp/components/Buttons/cta_small.dart';
 import 'package:finamp/components/HomeScreen/auto_grid_item.dart';
+import 'package:finamp/components/HomeScreen/finamp_home_screen_header.dart';
+import 'package:finamp/components/HomeScreen/show_all_button.dart';
+import 'package:finamp/components/HomeScreen/show_all_screen.dart';
+import 'package:finamp/components/MusicScreen/album_item.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -45,8 +49,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
     return SafeArea(
       bottom: false,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.only(
-            left: 16.0, right: 16.0, top: 16.0, bottom: 120.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 120.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -75,10 +78,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
                   vertical: true,
                   minWidth: 110,
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      QueueRestoreScreen.routeName,
-                    );
+                    Navigator.pushNamed(context, QueueRestoreScreen.routeName);
                   },
                 ),
                 CTALarge(
@@ -106,66 +106,39 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
                   text: 'Tracks*',
                   icon: TablerIcons.music,
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      MusicScreen.routeName,
-                      arguments: TabContentType.tracks,
-                    );
+                    Navigator.pushNamed(context, MusicScreen.routeName, arguments: TabContentType.tracks);
                   },
                 ),
                 SimpleButton(
                   text: 'Playlists*',
                   icon: TablerIcons.playlist,
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      MusicScreen.routeName,
-                      arguments: TabContentType.playlists,
-                    );
+                    Navigator.pushNamed(context, MusicScreen.routeName, arguments: TabContentType.playlists);
                   },
                 ),
                 SimpleButton(
                   text: 'Albums*',
                   icon: TablerIcons.disc,
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      MusicScreen.routeName,
-                      arguments: TabContentType.albums,
-                    );
+                    Navigator.pushNamed(context, MusicScreen.routeName, arguments: TabContentType.albums);
                   },
                 ),
               ],
             ),
             const SizedBox(height: 24),
-            _buildSection(
-                'Pins*',
-                _buildHorizontalList(loadHomeSectionItems(HomeScreenSectionInfo(
-                    type: HomeScreenSectionType.collection,
-                    itemId: BaseItemId(""))))),
-            _buildSection(
-                'Listen Again*',
-                _buildHorizontalList(loadHomeSectionItems(HomeScreenSectionInfo(
-                    type: HomeScreenSectionType.listenAgain)))),
+            _buildSection(HomeScreenSectionInfo(type: HomeScreenSectionType.collection, itemId: BaseItemId(""))),
+            _buildSection(HomeScreenSectionInfo(type: HomeScreenSectionType.listenAgain)),
             const SizedBox(height: 8),
-            _buildSection(
-                'Newly Added*',
-                _buildHorizontalList(
-                    loadHomeSectionItems(HomeScreenSectionInfo(
-                    type: HomeScreenSectionType.newlyAdded)))),
+            _buildSection(HomeScreenSectionInfo(type: HomeScreenSectionType.newlyAdded)),
             const SizedBox(height: 8),
-            _buildSection(
-                'Favorite Artists*',
-                _buildHorizontalList(loadHomeSectionItems(
-                    HomeScreenSectionInfo(
-                    type: HomeScreenSectionType.favoriteArtists)))),
+            _buildSection(HomeScreenSectionInfo(type: HomeScreenSectionType.favoriteArtists)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSection(String title, Widget content) {
+  Widget _buildSection(HomeScreenSectionInfo sectionInfo) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -181,24 +154,23 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                title,
+                sectionInfo.type.toLocalisedString(context),
                 style: TextTheme.of(context).titleSmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black
-                          : Colors.white,
-                    ),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+                ),
               ),
-              Icon(TablerIcons.chevron_right,
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white),
+              ShowAllButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, ShowAllScreen.routeName, arguments: sectionInfo);
+                },
+              ),
             ],
           ),
         ),
         const SizedBox(height: 8),
-        content,
+        _buildHorizontalList(loadHomeSectionItems(sectionInfo: sectionInfo)),
       ],
     );
   }
@@ -220,28 +192,19 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
                     Container(
                       width: 120,
                       height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(8)),
                     ),
                     SizedBox(height: 4 + 5),
                     Container(
                       width: 120,
                       height: 10,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                      decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(4)),
                     ),
                     SizedBox(height: 4 + 5),
                     Container(
                       width: 50,
                       height: 10,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                      decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(4)),
                     ),
                   ],
                 );
@@ -270,61 +233,55 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
   }
 }
 
-Future<List<BaseItemDto>?> loadHomeSectionItems(
-    HomeScreenSectionInfo sectionInfo) async {
+Future<List<BaseItemDto>?> loadHomeSectionItems({
+  required HomeScreenSectionInfo sectionInfo,
+  int startIndex = 0,
+  int limit = 10,
+}) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final finampUserHelper = GetIt.instance<FinampUserHelper>();
   final settings = FinampSettingsHelper.finampSettings;
 
   final Future<List<BaseItemDto>?> newItemsFuture;
 
-  final int amountOfItems = 10;
-
   switch (sectionInfo.type) {
     case HomeScreenSectionType.listenAgain:
       newItemsFuture = jellyfinApiHelper.getItems(
         parentItem: finampUserHelper.currentUser?.currentView,
-        includeItemTypes: [
-          BaseItemDtoType.album.idString,
-          BaseItemDtoType.playlist.idString
-        ].join(","),
+        includeItemTypes: [BaseItemDtoType.album.idString, BaseItemDtoType.playlist.idString].join(","),
         sortBy: SortBy.datePlayed.jellyfinName(null),
         sortOrder: SortOrder.descending.toString(),
         // filters: settings.onlyShowFavourites ? "IsFavorite" : null,
-        startIndex: 0,
-        limit: amountOfItems,
+        startIndex: startIndex,
+        limit: limit,
       );
       break;
     case HomeScreenSectionType.newlyAdded:
       newItemsFuture = jellyfinApiHelper.getItems(
         parentItem: finampUserHelper.currentUser?.currentView,
-        includeItemTypes: [
-          BaseItemDtoType.album.idString,
-          BaseItemDtoType.playlist.idString
-        ].join(","),
+        includeItemTypes: [BaseItemDtoType.album.idString, BaseItemDtoType.playlist.idString].join(","),
         sortBy: SortBy.dateCreated.jellyfinName(null),
         sortOrder: SortOrder.descending.toString(),
         // filters: settings.onlyShowFavourites ? "IsFavorite" : null,
-        startIndex: 0,
-        limit: amountOfItems,
+        startIndex: startIndex,
+        limit: limit,
       );
       break;
     case HomeScreenSectionType.favoriteArtists:
       newItemsFuture = jellyfinApiHelper.getItems(
         parentItem: finampUserHelper.currentUser?.currentView,
-        includeItemTypes: [
-          BaseItemDtoType.artist.idString,
-        ].join(","),
+        includeItemTypes: [BaseItemDtoType.artist.idString].join(","),
         sortBy: SortBy.datePlayed.jellyfinName(null),
         sortOrder: SortOrder.descending.toString(),
         filters: "IsFavorite",
-        startIndex: 0,
-        limit: amountOfItems,
+        startIndex: startIndex,
+        limit: limit,
       );
       break;
     case HomeScreenSectionType.collection:
-      final baseItem = await jellyfinApiHelper.getItemById(sectionInfo
-          .itemId!); //TODO I don't like this null check. Enforcing IDs for collection types would be much nice, but how to do that while allowing dynamic IDs? Enums don't seem to work
+      final baseItem = await jellyfinApiHelper.getItemById(
+        sectionInfo.itemId!,
+      ); //TODO I don't like this null check. Enforcing IDs for collection types would be much nice, but how to do that while allowing dynamic IDs? Enums don't seem to work
       newItemsFuture = jellyfinApiHelper.getItems(
         parentItem: baseItem,
         // includeItemTypes: [
@@ -334,11 +291,10 @@ Future<List<BaseItemDto>?> loadHomeSectionItems(
         //   BaseItemDtoType.genre.idString,
         //   BaseItemDtoType.audioBook.idString,
         // ].join(","),
-        recursive:
-            false, //!!! prevent loading tracks and albums from inside the collection items
+        recursive: false, //!!! prevent loading tracks and albums from inside the collection items
         // filters: "IsFavorite",
-        startIndex: 0,
-        limit: amountOfItems,
+        startIndex: startIndex,
+        limit: limit,
       );
       break;
   }
