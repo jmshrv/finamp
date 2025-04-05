@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/AlbumScreen/speed_menu.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -578,20 +580,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 var item = DownloadStub.fromItem(
                     type: DownloadItemType.track, item: widget.item);
                 await askBeforeDeleteFromServerAndDevice(context, item);
-                final BaseItemDto newAlbumOrPlaylist =
-                    await _jellyfinApiHelper.getItemById(widget.parentItem!.id);
-                if (context.mounted) {
-                  Navigator.pop(context); // close dialog
-                  // pop current album screen and reload with new album data
-                  Navigator.of(context).popUntil((route) {
-                    return route.settings.name != null // unnamed dialog
-                        &&
-                        route.settings.name !=
-                            AlbumScreen.routeName; // albums screen
-                  });
-                  await Navigator.of(context).pushNamed(AlbumScreen.routeName,
-                      arguments: newAlbumOrPlaylist);
-                }
+                
+                musicScreenRefreshStream.add(null);
               },
             ));
       }),
