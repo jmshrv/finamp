@@ -159,13 +159,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSwipeInsertQueueNext(bool newSwipeInsertQueueNext) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.swipeInsertQueueNext = newSwipeInsertQueueNext;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setLoopMode(FinampLoopMode newLoopMode) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.loopMode = newLoopMode;
@@ -606,6 +599,24 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setItemSwipeActionLeftToRight(
+      ItemSwipeActions newItemSwipeActionLeftToRight) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.itemSwipeActionLeftToRight =
+        newItemSwipeActionLeftToRight;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setItemSwipeActionRightToLeft(
+      ItemSwipeActions newItemSwipeActionRightToLeft) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.itemSwipeActionRightToLeft =
+        newItemSwipeActionRightToLeft;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setAudioFadeOutDuration(Duration newAudioFadeOutDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.audioFadeOutDuration = newAudioFadeOutDuration;
@@ -675,8 +686,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.tabOrder);
   ProviderListenable<bool> get showFastScroller => finampSettingsProvider
       .select((value) => value.requireValue.showFastScroller);
-  ProviderListenable<bool> get swipeInsertQueueNext => finampSettingsProvider
-      .select((value) => value.requireValue.swipeInsertQueueNext);
   ProviderListenable<FinampLoopMode> get loopMode =>
       finampSettingsProvider.select((value) => value.requireValue.loopMode);
   ProviderListenable<bool> get autoloadLastQueueOnStartup =>
@@ -825,6 +834,12 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<String?> get lastUsedDownloadLocationId =>
       finampSettingsProvider
           .select((value) => value.requireValue.lastUsedDownloadLocationId);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionLeftToRight =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.itemSwipeActionLeftToRight);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.itemSwipeActionRightToLeft);
   ProviderListenable<Duration> get audioFadeOutDuration =>
       finampSettingsProvider
           .select((value) => value.requireValue.audioFadeOutDuration);

@@ -1220,6 +1220,15 @@
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Enable to insert a track as next item in queue when swiped in track list instead of appending it to the end.",
   "@swipeInsertQueueNextSubtitle": {},
+  "swipeLeftToRightAction": "Swipe to Right Action",
+  "@swipeLeftToRightAction": {},
+  "swipeLeftToRightActionSubtitle": "Action triggered when swiping a track in the list from left to right.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeRightToLeftAction": "Swipe to Left Action",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Action triggered when swiping a track in the list from right to left.",
+  "@swipeRightToLeftActionSubtitle": {},
+  
   "startInstantMixForIndividualTracksSwitchTitle": "Start Instant Mixes for Individual Tracks",
   "@startInstantMixForIndividualTracksSwitchTitle": {
     "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."

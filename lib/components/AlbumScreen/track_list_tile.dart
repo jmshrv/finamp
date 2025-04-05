@@ -91,6 +91,8 @@ class TrackListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentSettings = FinampSettingsHelper.finampSettings;
+
     Future<void> trackListTileOnTap(bool playable) async {
       final queueService = GetIt.instance<QueueService>();
       final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
@@ -182,20 +184,47 @@ class TrackListTile extends StatelessWidget {
     }
 
     Future<bool> trackListTileConfirmDismiss(DismissDirection direction) async {
+      var followUpAction = (direction == DismissDirection.startToEnd)
+          ? currentSettings.itemSwipeActionLeftToRight
+          : currentSettings.itemSwipeActionRightToLeft;
+
       final queueService = GetIt.instance<QueueService>();
-      if (FinampSettingsHelper.finampSettings.swipeInsertQueueNext) {
-        unawaited(queueService.addToNextUp(
+      
+      switch (followUpAction) {
+        case ItemSwipeActions.addToNextUp:
+          unawaited(queueService.addToNextUp(
             items: [item],
             source: QueueItemSource.rawId(
               type: QueueItemSourceType.nextUp,
               name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: AppLocalizations.of(context)!.queue),
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: AppLocalizations.of(context)!.queue),
               id: parentItem?.id.raw ?? "",
               item: parentItem,
-            )));
-      } else {
-        unawaited(queueService.addToQueue(
+          )));
+          GlobalSnackbar.message(
+              (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
+              isConfirmation: true,
+          );
+          break;
+        case ItemSwipeActions.playNext:
+          unawaited(queueService.addNext(
+            items: [item],
+            source: QueueItemSource.rawId(
+              type: QueueItemSourceType.nextUp,
+              name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: AppLocalizations.of(context)!.queue),
+              id: parentItem?.id.raw ?? "",
+              item: parentItem,
+          )));
+          GlobalSnackbar.message(
+              (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
+              isConfirmation: true,
+          );
+          break;
+        case ItemSwipeActions.addToQueue:
+          unawaited(queueService.addToQueue(
             items: [item],
             source: QueueItemSource.rawId(
               type: QueueItemSourceType.queue,
@@ -204,17 +233,29 @@ class TrackListTile extends StatelessWidget {
                   pretranslatedName: AppLocalizations.of(context)!.queue),
               id: parentItem?.id.raw ?? "",
               item: parentItem,
-            )));
+          )));
+          GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
+            isConfirmation: true,
+          );
+          break;
+        case ItemSwipeActions.nothing:
+          break;
       }
 
-      GlobalSnackbar.message(
-        (scaffold) => FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-            ? AppLocalizations.of(scaffold)!.confirmAddToNextUp("track")
-            : AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
-        isConfirmation: true,
-      );
-
       return false;
+    }
+
+    IconData getSwipeActionIcon(ItemSwipeActions action) {
+      switch (action) {
+        case ItemSwipeActions.addToQueue:
+          return TablerIcons.playlist;
+        case ItemSwipeActions.playNext:
+          return TablerIcons.corner_right_down;
+        case ItemSwipeActions.addToNextUp:
+        case ItemSwipeActions.nothing:
+          return TablerIcons.corner_right_down_double;
+      }
     }
 
     final dismissBackground = Container(
@@ -228,16 +269,12 @@ class TrackListTile extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                TablerIcons.playlist,
+              Icon(getSwipeActionIcon(currentSettings.itemSwipeActionLeftToRight),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
               const SizedBox(width: 4.0),
-              Text(
-                FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-                    ? AppLocalizations.of(context)!.addToNextUp
-                    : AppLocalizations.of(context)!.addToQueue,
+              Text(currentSettings.itemSwipeActionLeftToRight.toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -247,17 +284,13 @@ class TrackListTile extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                FinampSettingsHelper.finampSettings.swipeInsertQueueNext
-                    ? AppLocalizations.of(context)!.addToNextUp
-                    : AppLocalizations.of(context)!.addToQueue,
+              Text(currentSettings.itemSwipeActionRightToLeft.toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
               const SizedBox(width: 4.0),
-              Icon(
-                TablerIcons.playlist,
+              Icon(getSwipeActionIcon(currentSettings.itemSwipeActionRightToLeft),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
@@ -452,6 +485,17 @@ class TrackListItemState extends ConsumerState<TrackListItem>
         }
       }
 
+      final currentSettings = FinampSettingsHelper.finampSettings;
+      final swipeLeftEnabled = (currentSettings.itemSwipeActionLeftToRight != ItemSwipeActions.nothing);
+      final swipeRightEnabled = (currentSettings.itemSwipeActionRightToLeft != ItemSwipeActions.nothing);
+      final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
+          ? DismissDirection.horizontal
+          : swipeLeftEnabled
+              ? DismissDirection.startToEnd
+              : swipeRightEnabled
+                  ? DismissDirection.endToStart
+                  : DismissDirection.none;
+
       return GestureDetector(
         onTapDown: (_) {
           // Begin precalculating theme for song menu
@@ -467,7 +511,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                 direction: FinampSettingsHelper.finampSettings.disableGesture ||
                         !widget.allowDismiss
                     ? DismissDirection.none
-                    : DismissDirection.horizontal,
+                    : allowedDismissDirection,
                 dismissThresholds: const {
                   DismissDirection.startToEnd: 0.65,
                   DismissDirection.endToStart: 0.65
