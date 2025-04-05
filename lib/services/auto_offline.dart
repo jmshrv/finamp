@@ -14,8 +14,8 @@ final _autoOfflineLogger = Logger("AutoOffline");
 StreamSubscription<List<ConnectivityResult>> listener = Connectivity()
     .onConnectivityChanged
     .listen((List<ConnectivityResult> result) {
-        _setOfflineMode(result);
-    });
+  _setOfflineMode(result);
+});
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
@@ -24,10 +24,11 @@ class AutoOffline extends _$AutoOffline {
     listener = Connectivity()
         .onConnectivityChanged
         .listen((List<ConnectivityResult> result) {
-            _setOfflineMode(result);
-        });
+      _setOfflineMode(result);
+    });
 
-    bool featureEnabled = ref.watch(finampSettingsProvider.autoOffline) != AutoOfflineOption.disabled;
+    bool featureEnabled = ref.watch(finampSettingsProvider.autoOffline) !=
+        AutoOfflineOption.disabled;
     // false = user overwrote offline mode
     bool featureActive =
         ref.watch(finampSettingsProvider.autoOfflineListenerActive);
@@ -46,43 +47,43 @@ class AutoOffline extends _$AutoOffline {
 }
 
 Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
-    bool state = await _shouldBeOffline(connections);
+  bool state = await _shouldBeOffline(connections);
 
-    // Attempt to combat IOS reliability problems
-    if (Platform.isIOS) {
-        await Future.delayed(Duration(seconds: 7));
-        state = await _shouldBeOffline(null);
-    }
+  // Attempt to combat IOS reliability problems
+  if (Platform.isIOS) {
+    await Future.delayed(Duration(seconds: 7));
+    state = await _shouldBeOffline(null);
+  }
 
-    // skip when feature not enabled
-    if (FinampSettingsHelper.finampSettings.autoOffline == AutoOfflineOption.disabled) return;
-    // skip when user overwrote offline mode
-    if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
-    // skip if nothing changed
-    if (FinampSettingsHelper.finampSettings.isOffline == state) return;
+  // skip when feature not enabled
+  if (FinampSettingsHelper.finampSettings.autoOffline ==
+      AutoOfflineOption.disabled) return;
+  // skip when user overwrote offline mode
+  if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
+  // skip if nothing changed
+  if (FinampSettingsHelper.finampSettings.isOffline == state) return;
 
-    GlobalSnackbar.message((context) =>
-      AppLocalizations.of(context)!.autoOfflineNotification(state ? "enabled" : "disabled"));
+  GlobalSnackbar.message((context) => AppLocalizations.of(context)!
+      .autoOfflineNotification(state ? "enabled" : "disabled"));
 
+  Logger("AutoOffline").info(state
+      ? "Automatically Enabled Offline Mode"
+      : "Automatically Disabled Offline Mode");
 
-    Logger("AutoOffline").info(state
-        ? "Automatically Enabled Offline Mode"
-        : "Automatically Disabled Offline Mode");
-
-    FinampSetters.setIsOffline(state);
+  FinampSetters.setIsOffline(state);
 }
 
 Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
-    connections ??= await Connectivity().checkConnectivity();
-    switch (FinampSettingsHelper.finampSettings.autoOffline) {
-        case AutoOfflineOption.disconnected:
-            return !connections.contains(ConnectivityResult.mobile) &&
-                   !connections.contains(ConnectivityResult.ethernet) &&
-                   !connections.contains(ConnectivityResult.wifi);
-        case AutoOfflineOption.network:
-            return !connections.contains(ConnectivityResult.ethernet) &&
-                   !connections.contains(ConnectivityResult.wifi);
-        default:
-            return false;
-    }
+  connections ??= await Connectivity().checkConnectivity();
+  switch (FinampSettingsHelper.finampSettings.autoOffline) {
+    case AutoOfflineOption.disconnected:
+      return !connections.contains(ConnectivityResult.mobile) &&
+          !connections.contains(ConnectivityResult.ethernet) &&
+          !connections.contains(ConnectivityResult.wifi);
+    case AutoOfflineOption.network:
+      return !connections.contains(ConnectivityResult.ethernet) &&
+          !connections.contains(ConnectivityResult.wifi);
+    default:
+      return false;
+  }
 }

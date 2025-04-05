@@ -23,7 +23,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get about => 'Про Finamp';
 
   @override
-  String get aboutContributionPrompt => 'Створено чудовими людьми у вільний час.\nВи можете бути одним із них!';
+  String get aboutContributionPrompt =>
+      'Створено чудовими людьми у вільний час.\nВи можете бути одним із них!';
 
   @override
   String get aboutContributionLink => 'Зробити внесок через GitHub:';
@@ -62,7 +63,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get serverUrl => 'URL серверу';
 
   @override
-  String get internalExternalIpExplanation => 'Якщо ви хочете мати віддалений доступ до свого сервера Jellyfin, вам потрібно використовувати зовнішню IP-адресу.\n\nЯкщо ваш сервер на типовому порті HTTP (80 чи 443), чи типовому порті Jellyfin (8096), вам не потрібно вказувати порт серверу.\n\nЯкщо посилання вказано правильно, під полем введення з\'явиться доступна інформація про ваш сервер.';
+  String get internalExternalIpExplanation =>
+      'Якщо ви хочете мати віддалений доступ до свого сервера Jellyfin, вам потрібно використовувати зовнішню IP-адресу.\n\nЯкщо ваш сервер на типовому порті HTTP (80 чи 443), чи типовому порті Jellyfin (8096), вам не потрібно вказувати порт серверу.\n\nЯкщо посилання вказано правильно, під полем введення з\'явиться доступна інформація про ваш сервер.';
 
   @override
   String get serverUrlHint => 'напр., demo.jellyfin.org/stable';
@@ -77,10 +79,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get connectingToServer => 'Під\'єднання до серверу...';
 
   @override
-  String get loginFlowLocalNetworkServers => 'Сервери у вашій локальній мережі:';
+  String get loginFlowLocalNetworkServers =>
+      'Сервери у вашій локальній мережі:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'Сканування серверів...';
+  String get loginFlowLocalNetworkServersScanningForServers =>
+      'Сканування серверів...';
 
   @override
   String get loginFlowAccountSelectionHeading => 'Оберіть ваш обліковий запис';
@@ -98,16 +102,20 @@ class AppLocalizationsUk extends AppLocalizations {
   String get loginFlowAuthenticationHeading => 'Увійти у ваш обліковий запис';
 
   @override
-  String get backToAccountSelection => 'Повернутись до вибору облікового запису';
+  String get backToAccountSelection =>
+      'Повернутись до вибору облікового запису';
 
   @override
-  String get loginFlowQuickConnectPrompt => 'Використати код для Швидкого Під\'єднання';
+  String get loginFlowQuickConnectPrompt =>
+      'Використати код для Швидкого Під\'єднання';
 
   @override
-  String get loginFlowQuickConnectInstructions => 'Відкрийте застосунок чи сайт Jellyfin, натисність на іконку користувача та оберіть \"Швидке Під\'єднання\".';
+  String get loginFlowQuickConnectInstructions =>
+      'Відкрийте застосунок чи сайт Jellyfin, натисність на іконку користувача та оберіть \"Швидке Під\'єднання\".';
 
   @override
-  String get loginFlowQuickConnectDisabled => 'Швидке Під\'єднання вимкнене на цьому сервері.';
+  String get loginFlowQuickConnectDisabled =>
+      'Швидке Під\'єднання вимкнене на цьому сервері.';
 
   @override
   String get orDivider => 'або';
@@ -122,7 +130,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get usernameHint => 'Введіть ім\'я користувача';
 
   @override
-  String get usernameValidationMissingUsername => 'Будь ласка, введіть ім\'я користувача';
+  String get usernameValidationMissingUsername =>
+      'Будь ласка, введіть ім\'я користувача';
 
   @override
   String get password => 'Пароль';
@@ -167,13 +176,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get startMix => 'Почати перемішування';
 
   @override
-  String get startMixNoTracksArtist => 'Затисніть виконавця, щоб додати або видалити його з конструктора міксів перед початком міксування';
+  String get startMixNoTracksArtist =>
+      'Затисніть виконавця, щоб додати або видалити його з конструктора міксів перед початком міксування';
 
   @override
-  String get startMixNoTracksAlbum => 'Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком міксування';
+  String get startMixNoTracksAlbum =>
+      'Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком міксування';
 
   @override
-  String get startMixNoTracksGenre => 'Натисніть та утримуйте на жанрі для його додавання чи видалення із конструктора міксів перед початком міксування';
+  String get startMixNoTracksGenre =>
+      'Натисніть та утримуйте на жанрі для його додавання чи видалення із конструктора міксів перед початком міксування';
 
   @override
   String get music => 'Музика';
@@ -251,7 +263,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get runtime => 'Тривалістю';
 
   @override
-  String get syncDownloadedPlaylists => 'Синхронізувати завантажені списки відтворення';
+  String get syncDownloadedPlaylists =>
+      'Синхронізувати завантажені списки відтворення';
 
   @override
   String get downloadMissingImages => 'Завантажити відсутні зображення';
@@ -283,7 +296,8 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing) {
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing) {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
@@ -338,10 +352,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get noActiveDownloads => 'Немає активних завантажень.';
 
   @override
-  String get errorScreenError => 'Під час отримання списку помилок сталася помилка! На цьому етапі вам, ймовірно, слід просто створити проблему на GitHub і видалити дані програми';
+  String get errorScreenError =>
+      'Під час отримання списку помилок сталася помилка! На цьому етапі вам, ймовірно, слід просто створити проблему на GitHub і видалити дані програми';
 
   @override
-  String get failedToGetTrackFromDownloadId => 'Не вдалося отримати композицію із ідентифікатора завантаження';
+  String get failedToGetTrackFromDownloadId =>
+      'Не вдалося отримати композицію із ідентифікатора завантаження';
 
   @override
   String deleteDownloadsPrompt(String itemName, String itemType) {
@@ -491,25 +507,29 @@ class AppLocalizationsUk extends AppLocalizations {
   String get logOut => 'Вийти';
 
   @override
-  String get downloadedTracksWillNotBeDeleted => 'Завантажені композиції не будуть видалені';
+  String get downloadedTracksWillNotBeDeleted =>
+      'Завантажені композиції не будуть видалені';
 
   @override
   String get areYouSure => 'Ви впевнені ?';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin використовує ААС для транскодування';
+  String get jellyfinUsesAACForTranscoding =>
+      'Jellyfin використовує ААС для транскодування';
 
   @override
   String get enableTranscoding => 'Ввімкнути транскодування';
 
   @override
-  String get enableTranscodingSubtitle => 'Перекодування музичного потоку відбувається зі сторони сервера.';
+  String get enableTranscodingSubtitle =>
+      'Перекодування музичного потоку відбувається зі сторони сервера.';
 
   @override
   String get bitrate => 'Бітрейт';
 
   @override
-  String get bitrateSubtitle => 'Вищий бітрейт забезпечує вищу якість звуку за рахунок вищої пропускної здатності.';
+  String get bitrateSubtitle =>
+      'Вищий бітрейт забезпечує вищу якість звуку за рахунок вищої пропускної здатності.';
 
   @override
   String get customLocation => 'Власна папка';
@@ -527,25 +547,30 @@ class AppLocalizationsUk extends AppLocalizations {
   String get unknownError => 'Невідома помилка';
 
   @override
-  String get pathReturnSlashErrorMessage => 'Шляхи, які повертають \"/\", не можуть бути використані';
+  String get pathReturnSlashErrorMessage =>
+      'Шляхи, які повертають \"/\", не можуть бути використані';
 
   @override
   String get directoryMustBeEmpty => 'Тека повинна бути порожньою';
 
   @override
-  String get customLocationsBuggy => 'Користувацькі розташування можуть бути дуже помилковими, тому в більшості випадків не рекомендуються. Розташування в системній папці «Музика» не дозволяють зберігати обкладинки альбомів через обмеження ОС.';
+  String get customLocationsBuggy =>
+      'Користувацькі розташування можуть бути дуже помилковими, тому в більшості випадків не рекомендуються. Розташування в системній папці «Музика» не дозволяють зберігати обкладинки альбомів через обмеження ОС.';
 
   @override
-  String get enterLowPriorityStateOnPause => 'Перейти у стан низького пріоритету під час паузи';
+  String get enterLowPriorityStateOnPause =>
+      'Перейти у стан низького пріоритету під час паузи';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => 'Дозволяє змахнути сповіщення під час паузи. Також дозволяє Android вимикати службу під час паузи.';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      'Дозволяє змахнути сповіщення під час паузи. Також дозволяє Android вимикати службу під час паузи.';
 
   @override
   String get shuffleAllTrackCount => 'Перемішати всі композиції';
 
   @override
-  String get shuffleAllTrackCountSubtitle => 'Кількість композицій для завантаження при використанні кнопки перемішування всіх пісень.';
+  String get shuffleAllTrackCountSubtitle =>
+      'Кількість композицій для завантаження при використанні кнопки перемішування всіх пісень.';
 
   @override
   String get viewType => 'Тип перегляду';
@@ -566,10 +591,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get playbackSpeedControlSetting => 'Видимість швидкості відтворення';
 
   @override
-  String get playbackSpeedControlSettingSubtitle => 'Чи відображаються елементи керування швидкістю відтворення в екранному меню відтворювача';
+  String get playbackSpeedControlSettingSubtitle =>
+      'Чи відображаються елементи керування швидкістю відтворення в екранному меню відтворювача';
 
   @override
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList) {
     return 'Автоматично:\nFinmap намагається ідентифікувати, чи є відтворювана композиція подкастом, чи аудіокнигою (її частиною). Це визначається у випадках коли композиція довша за $trackDuration хв., альбом композиції довший за $albumDuration год., чи композиція має хоча б один із перерахованих жанрів: $genreList\nРегулятори швидкості відтворення з\'являться в меню відтворювача.\n\nПоказувати:\nРегулятори швидкості відтворення завжди відображатимуться в меню відтворювача.\n\nПриховувати:\nРегулятори швидкості відтворення завжди приховані.';
   }
 
@@ -611,31 +638,40 @@ class AppLocalizationsUk extends AppLocalizations {
   String get showTextOnGridView => 'Показати текст при перегляді сіткою';
 
   @override
-  String get showTextOnGridViewSubtitle => 'Показувати чи ні текст (назву, виконавця тощо) на музичному екрані сітки.';
+  String get showTextOnGridViewSubtitle =>
+      'Показувати чи ні текст (назву, виконавця тощо) на музичному екрані сітки.';
 
   @override
-  String get useCoverAsBackground => 'Показати розмиту обкладинку як фон гравця';
+  String get useCoverAsBackground =>
+      'Показати розмиту обкладинку як фон гравця';
 
   @override
-  String get useCoverAsBackgroundSubtitle => 'Використовувати або ні розмиту обкладинку як фон на екрані відтворювача.';
+  String get useCoverAsBackgroundSubtitle =>
+      'Використовувати або ні розмиту обкладинку як фон на екрані відтворювача.';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorTitle => 'Мінімальний відступ обкладинки альбому';
+  String get playerScreenMinimumCoverPaddingEditorTitle =>
+      'Мінімальний відступ обкладинки альбому';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => 'Мінімальний відступ навколо обкладинки альбому на екрані відтворювача, у % від довжини екрану.';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle =>
+      'Мінімальний відступ навколо обкладинки альбому на екрані відтворювача, у % від довжини екрану.';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtists => 'Приховати виконавців композицій, якщо вони збігаються з виконавцями альбомів';
+  String get hideTrackArtistsIfSameAsAlbumArtists =>
+      'Приховати виконавців композицій, якщо вони збігаються з виконавцями альбомів';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => 'Чи показувати виконавців композицій на екрані альбому, якщо вони не відрізняються від виконавців альбому.';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      'Чи показувати виконавців композицій на екрані альбому, якщо вони не відрізняються від виконавців альбому.';
 
   @override
-  String get showArtistsTopTracks => 'Показати найкращі композиції в поданні виконавнця';
+  String get showArtistsTopTracks =>
+      'Показати найкращі композиції в поданні виконавнця';
 
   @override
-  String get showArtistsTopTracksSubtitle => 'Чи показувати 5 найбільш прослуховуваних композиції виконавця.';
+  String get showArtistsTopTracksSubtitle =>
+      'Чи показувати 5 найбільш прослуховуваних композиції виконавця.';
 
   @override
   String get disableGesture => 'Вимкнути жести';
@@ -744,7 +780,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get playlistCreated => 'Плейлист створено.';
 
   @override
-  String get playlistActionsMenuButtonTooltip => 'Натиснути для додавання до списку відтворення. Утримувати для додавання до Обраного.';
+  String get playlistActionsMenuButtonTooltip =>
+      'Натиснути для додавання до списку відтворення. Утримувати для додавання до Обраного.';
 
   @override
   String get noAlbum => 'Альбом невідомий';
@@ -861,28 +898,33 @@ class AppLocalizationsUk extends AppLocalizations {
   String get bufferDuration => 'Тривалість буферу';
 
   @override
-  String get bufferDurationSubtitle => 'Максимальна тривалість, яка може бути буферизована, у секундах. Вимагає перезавантаження.';
+  String get bufferDurationSubtitle =>
+      'Максимальна тривалість, яка може бути буферизована, у секундах. Вимагає перезавантаження.';
 
   @override
   String get bufferDisableSizeConstraintsTitle => 'Не обмежувати розмір буферу';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => 'Вимикає обмеження розміру буфера (\'Розмір буферу\'). Буфер завжди завантажуватиметься протягом заданої тривалості (\'Тривалість буферу\'), навіть для дуже великих файлів. Може спричиняти збої. Потребує перезапуску.';
+  String get bufferDisableSizeConstraintsSubtitle =>
+      'Вимикає обмеження розміру буфера (\'Розмір буферу\'). Буфер завжди завантажуватиметься протягом заданої тривалості (\'Тривалість буферу\'), навіть для дуже великих файлів. Може спричиняти збої. Потребує перезапуску.';
 
   @override
   String get bufferSizeTitle => 'Розмір буферу';
 
   @override
-  String get bufferSizeSubtitle => 'Максимальний розмір буферу в МБ. Вимагає перезапуску';
+  String get bufferSizeSubtitle =>
+      'Максимальний розмір буферу в МБ. Вимагає перезапуску';
 
   @override
   String get language => 'Мова';
 
   @override
-  String get skipToPreviousTrackButtonTooltip => 'Перемотати на початок або до попередньої композиції';
+  String get skipToPreviousTrackButtonTooltip =>
+      'Перемотати на початок або до попередньої композиції';
 
   @override
-  String get skipToNextTrackButtonTooltip => 'Перемотати до наступної композиції';
+  String get skipToNextTrackButtonTooltip =>
+      'Перемотати до наступної композиції';
 
   @override
   String get togglePlaybackButtonTooltip => 'Перемкнути відтворення';
@@ -1027,13 +1069,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get playbackOrderLinearButtonLabel => 'Відтворення за порядком';
 
   @override
-  String get playbackOrderLinearButtonTooltip => 'Відтворення за порядком. Натисніть щоб перемішати.';
+  String get playbackOrderLinearButtonTooltip =>
+      'Відтворення за порядком. Натисніть щоб перемішати.';
 
   @override
   String get playbackOrderShuffledButtonLabel => 'Перемішування композицій';
 
   @override
-  String get playbackOrderShuffledButtonTooltip => 'Перемішування треків. Натисніть, щоб відтворювати за порядком.';
+  String get playbackOrderShuffledButtonTooltip =>
+      'Перемішування треків. Натисніть, щоб відтворювати за порядком.';
 
   @override
   String playbackSpeedButtonLabel(double speed) {
@@ -1068,7 +1112,8 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String queueRestoreTitle(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
+    final intl.DateFormat dateDateFormat =
+        intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
     return 'Збережено $dateString';
@@ -1094,28 +1139,35 @@ class AppLocalizationsUk extends AppLocalizations {
   String get queueLoadingMessage => 'Відновлення черги...';
 
   @override
-  String get queueRetryMessage => 'Не вдалось відновити чергу. Спробувати ще раз?';
+  String get queueRetryMessage =>
+      'Не вдалось відновити чергу. Спробувати ще раз?';
 
   @override
-  String get autoloadLastQueueOnStartup => 'Автоматично відновлювати останню чергу';
+  String get autoloadLastQueueOnStartup =>
+      'Автоматично відновлювати останню чергу';
 
   @override
-  String get autoloadLastQueueOnStartupSubtitle => 'Після запуску застосунку намагається відновити відтворювану востаннє чергу.';
+  String get autoloadLastQueueOnStartupSubtitle =>
+      'Після запуску застосунку намагається відновити відтворювану востаннє чергу.';
 
   @override
   String get reportQueueToServer => 'Звітувати про поточну чергу на сервер?';
 
   @override
-  String get reportQueueToServerSubtitle => 'Коли увімкнено, Finamp надсилатиме поточну чергу до серверу. Наразі здається, що від цього мало користі, і це збільшує мережевий трафік.';
+  String get reportQueueToServerSubtitle =>
+      'Коли увімкнено, Finamp надсилатиме поточну чергу до серверу. Наразі здається, що від цього мало користі, і це збільшує мережевий трафік.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequency => 'Частота оновлення сесії відтворення';
+  String get periodicPlaybackSessionUpdateFrequency =>
+      'Частота оновлення сесії відтворення';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencySubtitle => 'Як часто надсилати поточний статус відтворення до серверу, у секундах. Повинно бути менше 5 хвилин (300 секунд) щоб уникнути передчасного завершення сесії.';
+  String get periodicPlaybackSessionUpdateFrequencySubtitle =>
+      'Як часто надсилати поточний статус відтворення до серверу, у секундах. Повинно бути менше 5 хвилин (300 секунд) щоб уникнути передчасного завершення сесії.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencyDetails => 'Якщо сервер Jellyfin не отримував ніяких оновлень статусу відтворення від клієнту останні 5 хвилин, сервер вирішить що відтворення було завершено. Тобто для композицій, які тривають довше 5 хвилин, можливе некоректне звітування про відтворення як про завершене, що зменшить якість даних звітів про відтворення.';
+  String get periodicPlaybackSessionUpdateFrequencyDetails =>
+      'Якщо сервер Jellyfin не отримував ніяких оновлень статусу відтворення від клієнту останні 5 хвилин, сервер вирішить що відтворення було завершено. Тобто для композицій, які тривають довше 5 хвилин, можливе некоректне звітування про відтворення як про завершене, що зменшить якість даних звітів про відтворення.';
 
   @override
   String get topTracks => 'Найліпші композиції';
@@ -1187,7 +1239,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get close => 'Закрити';
 
   @override
-  String get showUncensoredLogMessage => 'Цей журнал містить ваші дані для входу. Показати?';
+  String get showUncensoredLogMessage =>
+      'Цей журнал містить ваші дані для входу. Показати?';
 
   @override
   String get resetTabs => 'Скинути вкладки';
@@ -1199,7 +1252,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get noMusicLibrariesTitle => 'Музичні бібліотеки відсутні';
 
   @override
-  String get noMusicLibrariesBody => 'Finamp не знайшов жодної музичної бібліотеки. Переконайтеся, що ваш сервер Jellyfin містить принаймні одну бібліотеку з типом вмісту \"Музика\".';
+  String get noMusicLibrariesBody =>
+      'Finamp не знайшов жодної музичної бібліотеки. Переконайтеся, що ваш сервер Jellyfin містить принаймні одну бібліотеку з типом вмісту \"Музика\".';
 
   @override
   String get refresh => 'Поновити';
@@ -1211,19 +1265,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get volumeNormalizationSettingsTitle => 'Нормалізація гучності';
 
   @override
-  String get volumeNormalizationSwitchTitle => 'Увімкнути нормалізацію гучності';
+  String get volumeNormalizationSwitchTitle =>
+      'Увімкнути нормалізацію гучності';
 
   @override
-  String get volumeNormalizationSwitchSubtitle => 'Використовуйте інформацію про посилення для нормалізації гучності композицій (\"Посилення при відтворенні\")';
+  String get volumeNormalizationSwitchSubtitle =>
+      'Використовуйте інформацію про посилення для нормалізації гучності композицій (\"Посилення при відтворенні\")';
 
   @override
-  String get volumeNormalizationModeSelectorTitle => 'Режим нормалізації гучності';
+  String get volumeNormalizationModeSelectorTitle =>
+      'Режим нормалізації гучності';
 
   @override
-  String get volumeNormalizationModeSelectorSubtitle => 'Коли і як застосовувати нормалізацію гучності';
+  String get volumeNormalizationModeSelectorSubtitle =>
+      'Коли і як застосовувати нормалізацію гучності';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => 'Гібридно (Композиція + Альбом):\nПосилення композицій застосовується для звичайного відтворення, але якщо відтворюється альбом (коли це головне джерело відтворення черги, чи його було додано до черги якимось чином), тоді буде застосовано посилення альбому.\n\nНа основі композицій:\nПосилення композицій застосовується завжди, незалежно від того чи відтворюється альбом, чи ні.\n\nНа основі альбому:\nНормалізація гучності застосовується лише при відтворені альбомів (застосування посилення альбомів), не для окремих композицій.';
+  String get volumeNormalizationModeSelectorDescription =>
+      'Гібридно (Композиція + Альбом):\nПосилення композицій застосовується для звичайного відтворення, але якщо відтворюється альбом (коли це головне джерело відтворення черги, чи його було додано до черги якимось чином), тоді буде застосовано посилення альбому.\n\nНа основі композицій:\nПосилення композицій застосовується завжди, незалежно від того чи відтворюється альбом, чи ні.\n\nНа основі альбому:\nНормалізація гучності застосовується лише при відтворені альбомів (застосування посилення альбомів), не для окремих композицій.';
 
   @override
   String get volumeNormalizationModeHybrid => 'Гібридно (Композиція + Альбом)';
@@ -1241,7 +1300,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get volumeNormalizationIOSBaseGainEditorTitle => 'Базове посилення';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => 'Наразі нормалізація гучності на iOS вимагає змінення гучності відтворення щоб емулювати змінення посилення. Оскільки ми не можемо збільшити гучність більш ніж на 100%, ми маємо знизити гучність до типової щоб ми могли підвищувати гучність для тихих композицій. Значення у децибелах (дБ), де -10 дБ це ~30% гучності, -4.5 дБ - ~60%, а -2.0 дБ - ~80%.';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle =>
+      'Наразі нормалізація гучності на iOS вимагає змінення гучності відтворення щоб емулювати змінення посилення. Оскільки ми не можемо збільшити гучність більш ніж на 100%, ми маємо знизити гучність до типової щоб ми могли підвищувати гучність для тихих композицій. Значення у децибелах (дБ), де -10 дБ це ~30% гучності, -4.5 дБ - ~60%, а -2.0 дБ - ~80%.';
 
   @override
   String numberAsDecibel(double value) {
@@ -1252,13 +1312,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get swipeInsertQueueNext => 'Відтворити додану композицію наступною';
 
   @override
-  String get swipeInsertQueueNextSubtitle => 'Увімкнути можливість вставляти композицію як наступний об\'єкт у черзі, якщо вона була додана замість вставки у кінець черги.';
+  String get swipeInsertQueueNextSubtitle =>
+      'Увімкнути можливість вставляти композицію як наступний об\'єкт у черзі, якщо вона була додана замість вставки у кінець черги.';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchTitle => 'Почати миттєвий мікс для окремих композицій';
+  String get startInstantMixForIndividualTracksSwitchTitle =>
+      'Почати миттєвий мікс для окремих композицій';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => 'Коли увімкнено, натискання на композицію у вкладці композицій почне миттєвий мікс цієї композиції замість відтворення власне композиції.';
+  String get startInstantMixForIndividualTracksSwitchSubtitle =>
+      'Коли увімкнено, натискання на композицію у вкладці композицій почне миттєвий мікс цієї композиції замість відтворення власне композиції.';
 
   @override
   String get downloadItem => 'Завантажити';
@@ -1270,13 +1333,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get syncComplete => 'Усі завантаження повторно синхронізовано.';
 
   @override
-  String get syncDownloads => 'Синхронізувати та завантажити відсутні елементи.';
+  String get syncDownloads =>
+      'Синхронізувати та завантажити відсутні елементи.';
 
   @override
-  String get repairDownloads => 'Виправити проблеми із завантаженням файлів чи метаданих.';
+  String get repairDownloads =>
+      'Виправити проблеми із завантаженням файлів чи метаданих.';
 
   @override
-  String get requireWifiForDownloads => 'Вимагає доступу до мережі під час завантаження.';
+  String get requireWifiForDownloads =>
+      'Вимагає доступу до мережі під час завантаження.';
 
   @override
   String queueRestoreError(int count) {
@@ -1316,19 +1382,24 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get onlyShowFullyDownloaded => 'Показувати лише повністю завантажені альбоми';
+  String get onlyShowFullyDownloaded =>
+      'Показувати лише повністю завантажені альбоми';
 
   @override
-  String get filesystemFull => 'Решта завантажень не можуть бути завершені. Файлова система переповнена.';
+  String get filesystemFull =>
+      'Решта завантажень не можуть бути завершені. Файлова система переповнена.';
 
   @override
-  String get connectionInterrupted => 'З\'єднання було обірвано, призупинення завантажень.';
+  String get connectionInterrupted =>
+      'З\'єднання було обірвано, призупинення завантажень.';
 
   @override
-  String get connectionInterruptedBackground => 'Під час фонового завантаження було обірвано з\'єднання. Це може бути спричинено налаштуваннями системи.';
+  String get connectionInterruptedBackground =>
+      'Під час фонового завантаження було обірвано з\'єднання. Це може бути спричинено налаштуваннями системи.';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => 'Під час фонового завантаження було обірвано з\'єднання. Це може бути спричинено увімкненням параметра \"Входити у стан низького пріоритету на паузі\" або налаштуваннями ОС.';
+  String get connectionInterruptedBackgroundAndroid =>
+      'Під час фонового завантаження було обірвано з\'єднання. Це може бути спричинено увімкненням параметра \"Входити у стан низького пріоритету на паузі\" або налаштуваннями ОС.';
 
   @override
   String get activeDownloadSize => 'Завантаження...';
@@ -1340,22 +1411,26 @@ class AppLocalizationsUk extends AppLocalizations {
   String get syncingDownloadSize => 'Синхронізація...';
 
   @override
-  String get runRepairWarning => 'Не можна встановити з\'єднання з цим сервером задля завершення міграції завантаження. Будь ласка, запустіть \"Відновити Завантаження\" із екрану завантажень коли відновите з\'єднання.';
+  String get runRepairWarning =>
+      'Не можна встановити з\'єднання з цим сервером задля завершення міграції завантаження. Будь ласка, запустіть \"Відновити Завантаження\" із екрану завантажень коли відновите з\'єднання.';
 
   @override
   String get downloadSettings => 'Завантаження';
 
   @override
-  String get showNullLibraryItemsTitle => 'Показувати медіа з Невідомої Бібліотеки.';
+  String get showNullLibraryItemsTitle =>
+      'Показувати медіа з Невідомої Бібліотеки.';
 
   @override
-  String get showNullLibraryItemsSubtitle => 'Деякі медіа-файли можуть бути завантажені з невідомої бібліотеки. Вимкніть щоб приховувати їх поза межами оригінальної колекції.';
+  String get showNullLibraryItemsSubtitle =>
+      'Деякі медіа-файли можуть бути завантажені з невідомої бібліотеки. Вимкніть щоб приховувати їх поза межами оригінальної колекції.';
 
   @override
   String get maxConcurrentDownloads => 'Максимум конкурентних завантажень';
 
   @override
-  String get maxConcurrentDownloadsSubtitle => 'Збільшення конкурентних завантажень можуть дозволити зменшити фонові завантаження але може спричинити провал деяких великих завантажень, або надмірні лаги у деяких випадках.';
+  String get maxConcurrentDownloadsSubtitle =>
+      'Збільшення конкурентних завантажень можуть дозволити зменшити фонові завантаження але може спричинити провал деяких великих завантажень, або надмірні лаги у деяких випадках.';
 
   @override
   String maxConcurrentDownloadsLabel(String count) {
@@ -1366,7 +1441,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get downloadsWorkersSetting => 'Кількість Завантажувачів';
 
   @override
-  String get downloadsWorkersSettingSubtitle => 'Кількість завантажувачів для синхронізації метаданих та видалення завантажень. Збільшення кількості завантажувачів може прискорити синхронізацію завантажень і видалення, особливо за високої затримки сервера, але може спричинити затримки.';
+  String get downloadsWorkersSettingSubtitle =>
+      'Кількість завантажувачів для синхронізації метаданих та видалення завантажень. Збільшення кількості завантажувачів може прискорити синхронізацію завантажень і видалення, особливо за високої затримки сервера, але може спричинити затримки.';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
@@ -1374,13 +1450,15 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get syncOnStartupSwitch => 'Автоматично синхронізувати завантаження при запуску';
+  String get syncOnStartupSwitch =>
+      'Автоматично синхронізувати завантаження при запуску';
 
   @override
   String get preferQuickSyncSwitch => 'Віддати перевагу швидкій синхронізації';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => 'При виконанні синхронізації, деякі, зазвичай статичні об\'єкти (штибу композицій чи альбомів), не будуть оновлені. Відновлення завантаження завжди виконує повну синхронізацію.';
+  String get preferQuickSyncSwitchSubtitle =>
+      'При виконанні синхронізації, деякі, зазвичай статичні об\'єкти (штибу композицій чи альбомів), не будуть оновлені. Відновлення завантаження завжди виконує повну синхронізацію.';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
@@ -1426,13 +1504,16 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Обрати контейнер для транскодування';
+  String get transcodingStreamingContainerTitle =>
+      'Обрати контейнер для транскодування';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Обрати сегментований контейнер для використання при потоковому відтворення транскодованого аудіо. Не буде застосовано для попередньо доданих в чергу композицій.';
+  String get transcodingStreamingContainerSubtitle =>
+      'Обрати сегментований контейнер для використання при потоковому відтворення транскодованого аудіо. Не буде застосовано для попередньо доданих в чергу композицій.';
 
   @override
-  String get downloadTranscodeEnableTitle => 'Увімкнути транскодовані завантаження';
+  String get downloadTranscodeEnableTitle =>
+      'Увімкнути транскодовані завантаження';
 
   @override
   String get downloadTranscodeCodecTitle => 'Обрати кодек для завантажень';
@@ -1455,7 +1536,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get downloadBitrate => 'Бітрейт завантаження';
 
   @override
-  String get downloadBitrateSubtitle => 'Вищий бітрейт дає кращу якість аудіо за рахунок більших вимог до сховища.';
+  String get downloadBitrateSubtitle =>
+      'Вищий бітрейт дає кращу якість аудіо за рахунок більших вимог до сховища.';
 
   @override
   String get transcodeHint => 'Транскодувати?';
@@ -1509,22 +1591,28 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get redownloadcomplete => 'Повторне завантаження транскодування у черзі.';
+  String get redownloadcomplete =>
+      'Повторне завантаження транскодування у черзі.';
 
   @override
-  String get redownloadTitle => 'Автоматично повторно завантажувати транскодування';
+  String get redownloadTitle =>
+      'Автоматично повторно завантажувати транскодування';
 
   @override
-  String get redownloadSubtitle => 'Автоматично повторно завантажувати композиції, які мали б бути у іншій якості згідно змін батьківської колекції.';
+  String get redownloadSubtitle =>
+      'Автоматично повторно завантажувати композиції, які мали б бути у іншій якості згідно змін батьківської колекції.';
 
   @override
-  String get defaultDownloadLocationButton => 'Встановити як типову локацію для завантажень.  Вимкнути для вибору на одне завантаження.';
+  String get defaultDownloadLocationButton =>
+      'Встановити як типову локацію для завантажень.  Вимкнути для вибору на одне завантаження.';
 
   @override
-  String get fixedGridSizeSwitchTitle => 'Використовувати плитки з фіксованим розміром сітки';
+  String get fixedGridSizeSwitchTitle =>
+      'Використовувати плитки з фіксованим розміром сітки';
 
   @override
-  String get fixedGridSizeSwitchSubtitle => 'Розмір плиток сітки не будуть адаптовані до розміру вікна/екрану.';
+  String get fixedGridSizeSwitchSubtitle =>
+      'Розмір плиток сітки не будуть адаптовані до розміру вікна/екрану.';
 
   @override
   String get fixedGridSizeTitle => 'Розмір плитки сітки';
@@ -1548,7 +1636,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get allowSplitScreenTitle => 'Дозволити режим SplitScreen';
 
   @override
-  String get allowSplitScreenSubtitle => 'Відтворювач відображатиметься поряд з іншими поданнями на ширших дисплеях.';
+  String get allowSplitScreenSubtitle =>
+      'Відтворювач відображатиметься поряд з іншими поданнями на ширших дисплеях.';
 
   @override
   String get enableVibration => 'Увімкнути вібрацію';
@@ -1560,46 +1649,57 @@ class AppLocalizationsUk extends AppLocalizations {
   String get hideQueueButton => 'Кнопка приховати чергу';
 
   @override
-  String get hideQueueButtonSubtitle => 'Приховати кнопку черги на екрані плеєра. Проведіть пальцем угору, щоб отримати доступ до черги.';
+  String get hideQueueButtonSubtitle =>
+      'Приховати кнопку черги на екрані плеєра. Проведіть пальцем угору, щоб отримати доступ до черги.';
 
   @override
-  String get oneLineMarqueeTextButton => 'Довгі заголовки з автоматичним прокручуванням';
+  String get oneLineMarqueeTextButton =>
+      'Довгі заголовки з автоматичним прокручуванням';
 
   @override
-  String get oneLineMarqueeTextButtonSubtitle => 'Автоматично прокручуйте назви композицій, які занадто довгі для відображення в два рядки';
+  String get oneLineMarqueeTextButtonSubtitle =>
+      'Автоматично прокручуйте назви композицій, які занадто довгі для відображення в два рядки';
 
   @override
-  String get marqueeOrTruncateButton => 'Використовуйте три крапки для довгих заголовків';
+  String get marqueeOrTruncateButton =>
+      'Використовуйте три крапки для довгих заголовків';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Показувати ... в кінці довгих заголовків замість тексту, що прокручується';
+  String get marqueeOrTruncateButtonSubtitle =>
+      'Показувати ... в кінці довгих заголовків замість тексту, що прокручується';
 
   @override
   String get hidePlayerBottomActions => 'Приховати нижні дії';
 
   @override
-  String get hidePlayerBottomActionsSubtitle => 'Приховати кнопки черги та тексту на екрані відтворювача. Проведіть вгору для доступу до черги, вліво (під обкладинкою альбому) для показу тексту пісні, якщо така доступна.';
+  String get hidePlayerBottomActionsSubtitle =>
+      'Приховати кнопки черги та тексту на екрані відтворювача. Проведіть вгору для доступу до черги, вліво (під обкладинкою альбому) для показу тексту пісні, якщо така доступна.';
 
   @override
   String get prioritizePlayerCover => 'Пріоритезувати обкладинку альбому';
 
   @override
-  String get prioritizePlayerCoverSubtitle => 'Пріоритезувати показ більшої обкладинки альбому на екрані відтворювача. Неважливі елементи керування будуть приховані більш агресивно при малих розмірах екрану.';
+  String get prioritizePlayerCoverSubtitle =>
+      'Пріоритезувати показ більшої обкладинки альбому на екрані відтворювача. Неважливі елементи керування будуть приховані більш агресивно при малих розмірах екрану.';
 
   @override
-  String get suppressPlayerPadding => 'Прибрати відступи елементів керування відтворювача';
+  String get suppressPlayerPadding =>
+      'Прибрати відступи елементів керування відтворювача';
 
   @override
-  String get suppressPlayerPaddingSubtitle => 'Повністю зменшує відступ між елементами керування екрану відтворювача коли обкладинка альбому не на весь розмір.';
+  String get suppressPlayerPaddingSubtitle =>
+      'Повністю зменшує відступ між елементами керування екрану відтворювача коли обкладинка альбому не на весь розмір.';
 
   @override
   String get lockDownload => 'Завжди зберігати на девайсі';
 
   @override
-  String get showArtistChipImage => 'Показувати зображення виконавців разом із їх ім\'ям';
+  String get showArtistChipImage =>
+      'Показувати зображення виконавців разом із їх ім\'ям';
 
   @override
-  String get showArtistChipImageSubtitle => 'Це впливає на невеликі попередні перегляди зображень виконавців, наприклад, на екрані відтворювача.';
+  String get showArtistChipImageSubtitle =>
+      'Це впливає на невеликі попередні перегляди зображень виконавців, наприклад, на екрані відтворювача.';
 
   @override
   String get scrollToCurrentTrack => 'Прокрутити до поточної композиції';
@@ -1646,58 +1746,73 @@ class AppLocalizationsUk extends AppLocalizations {
   String get trackOfflineFavorites => 'Синхронізувати усі обрані статуси';
 
   @override
-  String get trackOfflineFavoritesSubtitle => 'Це дозволить показувати більш актуальні обрані статуси в режимі офлайн. Не завантажує ніяких додаткових файлів.';
+  String get trackOfflineFavoritesSubtitle =>
+      'Це дозволить показувати більш актуальні обрані статуси в режимі офлайн. Не завантажує ніяких додаткових файлів.';
 
   @override
-  String get allPlaylistsInfoSetting => 'Завантажити метадані списку відтворення';
+  String get allPlaylistsInfoSetting =>
+      'Завантажити метадані списку відтворення';
 
   @override
-  String get allPlaylistsInfoSettingSubtitle => 'Синхронізувати метадані для усіх списків відтворення щоб покращити ваш досвід';
+  String get allPlaylistsInfoSettingSubtitle =>
+      'Синхронізувати метадані для усіх списків відтворення щоб покращити ваш досвід';
 
   @override
   String get downloadFavoritesSetting => 'Завантажити усі обрані';
 
   @override
-  String get downloadAllPlaylistsSetting => 'Завантажити усі списки відтворення';
+  String get downloadAllPlaylistsSetting =>
+      'Завантажити усі списки відтворення';
 
   @override
   String get fiveLatestAlbumsSetting => 'Завантажити 5 останніх альбомів';
 
   @override
-  String get fiveLatestAlbumsSettingSubtitle => 'Завантаження будуть видалені по мірі застарівання. Замкніть завантаження для запобігання видалення альбому.';
+  String get fiveLatestAlbumsSettingSubtitle =>
+      'Завантаження будуть видалені по мірі застарівання. Замкніть завантаження для запобігання видалення альбому.';
 
   @override
-  String get cacheLibraryImagesSettings => 'Кешувати зображення поточної бібліотеки';
+  String get cacheLibraryImagesSettings =>
+      'Кешувати зображення поточної бібліотеки';
 
   @override
-  String get cacheLibraryImagesSettingsSubtitle => 'Обкладинки усіх альбомів, виконавців, жанрів, та списків відтворення у поточній активній бібліотеці будуть завантажені.';
+  String get cacheLibraryImagesSettingsSubtitle =>
+      'Обкладинки усіх альбомів, виконавців, жанрів, та списків відтворення у поточній активній бібліотеці будуть завантажені.';
 
   @override
-  String get showProgressOnNowPlayingBarTitle => 'Показувати прогрес композиції у внутрішньому міні-відтворювачі';
+  String get showProgressOnNowPlayingBarTitle =>
+      'Показувати прогрес композиції у внутрішньому міні-відтворювачі';
 
   @override
-  String get showProgressOnNowPlayingBarSubtitle => 'Контролює, чи міні-програвач у програмі/панель зараз відтворюється внизу екрана музики функціонує як панель прогресу.';
+  String get showProgressOnNowPlayingBarSubtitle =>
+      'Контролює, чи міні-програвач у програмі/панель зараз відтворюється внизу екрана музики функціонує як панель прогресу.';
 
   @override
   String get lyricsScreen => 'Текст пісні';
 
   @override
-  String get showLyricsTimestampsTitle => 'Показувати часові мітки для синхронізованих текстів пісень';
+  String get showLyricsTimestampsTitle =>
+      'Показувати часові мітки для синхронізованих текстів пісень';
 
   @override
-  String get showLyricsTimestampsSubtitle => 'Керує тим, чи показувати мітку часу для кожного рядка тексту у поданні тексту, якщо вона доступна.';
+  String get showLyricsTimestampsSubtitle =>
+      'Керує тим, чи показувати мітку часу для кожного рядка тексту у поданні тексту, якщо вона доступна.';
 
   @override
-  String get showStopButtonOnMediaNotificationTitle => 'Показувати кнопку зупинення у медіа сповіщеннях';
+  String get showStopButtonOnMediaNotificationTitle =>
+      'Показувати кнопку зупинення у медіа сповіщеннях';
 
   @override
-  String get showStopButtonOnMediaNotificationSubtitle => 'Керує тим, чи показувати кнопку зупинки разом із кнопкою павзи. Це дозволить зупинити відтворення без потреби відкривати застосунок.';
+  String get showStopButtonOnMediaNotificationSubtitle =>
+      'Керує тим, чи показувати кнопку зупинки разом із кнопкою павзи. Це дозволить зупинити відтворення без потреби відкривати застосунок.';
 
   @override
-  String get showSeekControlsOnMediaNotificationTitle => 'Показати індикатор керування прогресом в медіа сповіщенні';
+  String get showSeekControlsOnMediaNotificationTitle =>
+      'Показати індикатор керування прогресом в медіа сповіщенні';
 
   @override
-  String get showSeekControlsOnMediaNotificationSubtitle => 'Керує тим чи медіа сповіщення має індикатор прогресу. Він дозволить змінювати позицію відтворення без потреби відкривати застосунок.';
+  String get showSeekControlsOnMediaNotificationSubtitle =>
+      'Керує тим чи медіа сповіщення має індикатор прогресу. Він дозволить змінювати позицію відтворення без потреби відкривати застосунок.';
 
   @override
   String get alignmentOptionStart => 'Початок';
@@ -1721,19 +1836,23 @@ class AppLocalizationsUk extends AppLocalizations {
   String get lyricsAlignmentTitle => 'Вирівнювання тексту пісень';
 
   @override
-  String get lyricsAlignmentSubtitle => 'Керує вирівнюванням текстів у поданні текстів пісень.';
+  String get lyricsAlignmentSubtitle =>
+      'Керує вирівнюванням текстів у поданні текстів пісень.';
 
   @override
   String get lyricsFontSizeTitle => 'Розмір шрифту тексту пісень';
 
   @override
-  String get lyricsFontSizeSubtitle => 'Керує розміром шрифту тексту пісень у відповідному поданні.';
+  String get lyricsFontSizeSubtitle =>
+      'Керує розміром шрифту тексту пісень у відповідному поданні.';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => 'Показувати альбом перед текстом пісень';
+  String get showLyricsScreenAlbumPreludeTitle =>
+      'Показувати альбом перед текстом пісень';
 
   @override
-  String get showLyricsScreenAlbumPreludeSubtitle => 'Дозволяє контролювати, чи показувати обкладинку альбому над текстом пісень перед прокруткою.';
+  String get showLyricsScreenAlbumPreludeSubtitle =>
+      'Дозволяє контролювати, чи показувати обкладинку альбому над текстом пісень перед прокруткою.';
 
   @override
   String get keepScreenOn => 'Лишати екран увімененим';
@@ -1754,10 +1873,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get keepScreenOnWhileLyrics => 'Коли показано текст пісні';
 
   @override
-  String get keepScreenOnWhilePluggedIn => 'Лишати екран увімкненим лише якщо під\'єднано до мережі';
+  String get keepScreenOnWhilePluggedIn =>
+      'Лишати екран увімкненим лише якщо під\'єднано до мережі';
 
   @override
-  String get keepScreenOnWhilePluggedInSubtitle => 'Ігнорувати \"Лишати екран увімкненим\" якщо девайс від\'єднано';
+  String get keepScreenOnWhilePluggedInSubtitle =>
+      'Ігнорувати \"Лишати екран увімкненим\" якщо девайс від\'єднано';
 
   @override
   String get genericToggleButtonTooltip => 'Натисніть щоб перемкнути.';
@@ -1803,40 +1924,48 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sampleRate => 'Частота дискретизації';
 
   @override
-  String get showFeatureChipsToggleTitle => 'Показувати розширену інформацію про композицію';
+  String get showFeatureChipsToggleTitle =>
+      'Показувати розширену інформацію про композицію';
 
   @override
-  String get showFeatureChipsToggleSubtitle => 'Показувати на екрані програвача розширену інформацію про композицію, як-от кодек, бітрейт тощо.';
+  String get showFeatureChipsToggleSubtitle =>
+      'Показувати на екрані програвача розширену інформацію про композицію, як-от кодек, бітрейт тощо.';
 
   @override
   String get albumScreen => 'Екран альбому';
 
   @override
-  String get showCoversOnAlbumScreenTitle => 'Показувати обкладинки альбомів для композицій';
+  String get showCoversOnAlbumScreenTitle =>
+      'Показувати обкладинки альбомів для композицій';
 
   @override
-  String get showCoversOnAlbumScreenSubtitle => 'Показувати обкладинки альбому для кожної композиції окремо на екрані альбому.';
+  String get showCoversOnAlbumScreenSubtitle =>
+      'Показувати обкладинки альбому для кожної композиції окремо на екрані альбому.';
 
   @override
-  String get emptyTopTracksList => 'Ви ще не слухали жодної композиції від цього виконавця.';
+  String get emptyTopTracksList =>
+      'Ви ще не слухали жодної композиції від цього виконавця.';
 
   @override
   String get emptyFilteredListTitle => 'Не знайдено об\'єктів';
 
   @override
-  String get emptyFilteredListSubtitle => 'Не знайдено жодного об\'єкта за даними фільтрами. Спробуйте скинути їх чи змінити запит.';
+  String get emptyFilteredListSubtitle =>
+      'Не знайдено жодного об\'єкта за даними фільтрами. Спробуйте скинути їх чи змінити запит.';
 
   @override
   String get resetFiltersButton => 'Скинути фільтри';
 
   @override
-  String get resetSettingsPromptGlobal => 'ВИ впевнені що хочете скинути УСІ налаштування до значень за вмовчанням?';
+  String get resetSettingsPromptGlobal =>
+      'ВИ впевнені що хочете скинути УСІ налаштування до значень за вмовчанням?';
 
   @override
   String get resetSettingsPromptGlobalConfirm => 'Скинути УСІ налаштування';
 
   @override
-  String get resetSettingsPromptLocal => 'Ви хочете скинути налаштування до значень за вмовчанням?';
+  String get resetSettingsPromptLocal =>
+      'Ви хочете скинути налаштування до значень за вмовчанням?';
 
   @override
   String get genericCancel => 'Скасувати';
@@ -1870,10 +1999,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get allowDeleteFromServerTitle => 'Дозволити видалення з сервера';
 
   @override
-  String get allowDeleteFromServerSubtitle => 'Увімкніть і вимкніть опцію остаточного видалення доріжки з файлової системи сервера, якщо видалення можливе.';
+  String get allowDeleteFromServerSubtitle =>
+      'Увімкніть і вимкніть опцію остаточного видалення доріжки з файлової системи сервера, якщо видалення можливе.';
 
   @override
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
@@ -1890,7 +2021,8 @@ class AppLocalizationsUk extends AppLocalizations {
       deleteType,
       {
         'canDelete': ' Це також видалить цей елемент із цього пристрою.',
-        'cantDelete': ' Цей елемент залишиться на цьому пристрої до наступної синхронізації.',
+        'cantDelete':
+            ' Цей елемент залишиться на цьому пристрої до наступної синхронізації.',
         'notDownloaded': '',
         'other': '',
       },
@@ -1899,7 +2031,8 @@ class AppLocalizationsUk extends AppLocalizations {
       device,
       {
         'device': 'this device',
-        'server': 'файлової системи та бібліотеки сервера.$_temp1 \nЦю дію неможливо скасувати',
+        'server':
+            'файлової системи та бібліотеки сервера.$_temp1 \nЦю дію неможливо скасувати',
         'other': '',
       },
     );
@@ -1925,10 +2058,12 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get downloadSizeWarningCutoff => 'Завантажте обмеження попередження про розмір';
+  String get downloadSizeWarningCutoff =>
+      'Завантажте обмеження попередження про розмір';
 
   @override
-  String get downloadSizeWarningCutoffSubtitle => 'У разі завантаження більшої кількості композицій одночасно з’явиться попередження.';
+  String get downloadSizeWarningCutoffSubtitle =>
+      'У разі завантаження більшої кількості композицій одночасно з’явиться попередження.';
 
   @override
   String confirmAddAlbumToPlaylist(String itemType, String itemName) {
@@ -1961,16 +2096,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get releaseDateFormatMonthDayYear => 'Місяць, день і рік';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenTitle => 'Показати дату випуску альбому на екрані програвача';
+  String get showAlbumReleaseDateOnPlayerScreenTitle =>
+      'Показати дату випуску альбому на екрані програвача';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => 'Показати дату випуску альбому на екрані плеєра за назвою альбому.';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle =>
+      'Показати дату випуску альбому на екрані плеєра за назвою альбому.';
 
   @override
   String get releaseDateFormatTitle => 'Формат дати випуску';
 
   @override
-  String get releaseDateFormatSubtitle => 'Керує форматом усіх дат випуску, які відображаються в програмі.';
+  String get releaseDateFormatSubtitle =>
+      'Керує форматом усіх дат випуску, які відображаються в програмі.';
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
@@ -1985,7 +2123,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+  String get autoOfflineSettingDescription =>
+      'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
 
   @override
   String get autoOfflineSettingTitle => 'Automated Offline Mode';

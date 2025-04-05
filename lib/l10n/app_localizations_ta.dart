@@ -23,16 +23,20 @@ class AppLocalizationsTa extends AppLocalizations {
   String get about => 'பொருள் பற்றி';
 
   @override
-  String get aboutContributionPrompt => 'அற்புதமான நபர்களால் அவர்களின் ஓய்வு நேரத்தில் தயாரிக்கப்பட்டது.\n நீங்கள் அவர்களில் ஒருவராக இருக்கலாம்!';
+  String get aboutContributionPrompt =>
+      'அற்புதமான நபர்களால் அவர்களின் ஓய்வு நேரத்தில் தயாரிக்கப்பட்டது.\n நீங்கள் அவர்களில் ஒருவராக இருக்கலாம்!';
 
   @override
-  String get aboutContributionLink => 'கிட்அப்பில் ஃபினாம்பிற்கு பங்களிக்கவும்:';
+  String get aboutContributionLink =>
+      'கிட்அப்பில் ஃபினாம்பிற்கு பங்களிக்கவும்:';
 
   @override
-  String get aboutReleaseNotes => 'அண்மைக் கால வெளியீட்டுக் குறிப்புகளைப் படியுங்கள்:';
+  String get aboutReleaseNotes =>
+      'அண்மைக் கால வெளியீட்டுக் குறிப்புகளைப் படியுங்கள்:';
 
   @override
-  String get aboutTranslations => 'உங்கள் மொழியில் பொருள் மொழிபெயர்க்க உதவுங்கள்:';
+  String get aboutTranslations =>
+      'உங்கள் மொழியில் பொருள் மொழிபெயர்க்க உதவுங்கள்:';
 
   @override
   String get aboutThanks => 'ஃபினாம்பைப் பயன்படுத்தியதற்கு நன்றி!';
@@ -62,7 +66,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get serverUrl => 'சேவையக முகவரி';
 
   @override
-  String get internalExternalIpExplanation => 'உங்கள் செல்லிஃபின் சேவையகத்தை தொலைவிலிருந்து அணுக விரும்பினால், உங்கள் வெளிப்புற ஐபி பயன்படுத்த வேண்டும்.\n\n உங்கள் சேவையகம் HTTP இயல்புநிலை துறைமுகம் (80 அல்லது 443) அல்லது செல்லிஃபின் இயல்புநிலை துறைமுகம் (8096) இல் இருந்தால், நீங்கள் துறைமுகத்தை குறிப்பிட வேண்டியதில்லை.\n\n முகவரி சரியாக இருந்தால், உங்கள் சேவையகத்தைப் பற்றிய சில தகவல்களை உள்ளீட்டு புலத்திற்கு கீழே பாப் அப் பார்க்க வேண்டும்.';
+  String get internalExternalIpExplanation =>
+      'உங்கள் செல்லிஃபின் சேவையகத்தை தொலைவிலிருந்து அணுக விரும்பினால், உங்கள் வெளிப்புற ஐபி பயன்படுத்த வேண்டும்.\n\n உங்கள் சேவையகம் HTTP இயல்புநிலை துறைமுகம் (80 அல்லது 443) அல்லது செல்லிஃபின் இயல்புநிலை துறைமுகம் (8096) இல் இருந்தால், நீங்கள் துறைமுகத்தை குறிப்பிட வேண்டியதில்லை.\n\n முகவரி சரியாக இருந்தால், உங்கள் சேவையகத்தைப் பற்றிய சில தகவல்களை உள்ளீட்டு புலத்திற்கு கீழே பாப் அப் பார்க்க வேண்டும்.';
 
   @override
   String get serverUrlHint => 'எ.கா. Dem.yelifi';
@@ -77,13 +82,16 @@ class AppLocalizationsTa extends AppLocalizations {
   String get connectingToServer => 'சேவையகத்துடன் இணைக்கிறது ...';
 
   @override
-  String get loginFlowLocalNetworkServers => 'உங்கள் உள்ளக நெட்வொர்க்கில் சேவையகங்கள்:';
+  String get loginFlowLocalNetworkServers =>
+      'உங்கள் உள்ளக நெட்வொர்க்கில் சேவையகங்கள்:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'சேவையகங்களுக்கு ச்கேன் செய்வது ...';
+  String get loginFlowLocalNetworkServersScanningForServers =>
+      'சேவையகங்களுக்கு ச்கேன் செய்வது ...';
 
   @override
-  String get loginFlowAccountSelectionHeading => 'உங்கள் கணக்கைத் தேர்ந்தெடுக்கவும்';
+  String get loginFlowAccountSelectionHeading =>
+      'உங்கள் கணக்கைத் தேர்ந்தெடுக்கவும்';
 
   @override
   String get backToServerSelection => 'சேவையக தேர்வுக்குத் திரும்பு';
@@ -101,13 +109,16 @@ class AppLocalizationsTa extends AppLocalizations {
   String get backToAccountSelection => 'கணக்கு தேர்வுக்குத் திரும்பு';
 
   @override
-  String get loginFlowQuickConnectPrompt => 'விரைவான இணைப்பு குறியீட்டைப் பயன்படுத்தவும்';
+  String get loginFlowQuickConnectPrompt =>
+      'விரைவான இணைப்பு குறியீட்டைப் பயன்படுத்தவும்';
 
   @override
-  String get loginFlowQuickConnectInstructions => 'செல்லிஃபின் பயன்பாடு அல்லது வலைத்தளத்தைத் திறந்து, உங்கள் பயனர் ஐகானைக் சொடுக்கு செய்து, விரைவான இணைப்பைத் தேர்ந்தெடுக்கவும்.';
+  String get loginFlowQuickConnectInstructions =>
+      'செல்லிஃபின் பயன்பாடு அல்லது வலைத்தளத்தைத் திறந்து, உங்கள் பயனர் ஐகானைக் சொடுக்கு செய்து, விரைவான இணைப்பைத் தேர்ந்தெடுக்கவும்.';
 
   @override
-  String get loginFlowQuickConnectDisabled => 'இந்த சேவையகத்தில் விரைவான இணைப்பு முடக்கப்பட்டுள்ளது.';
+  String get loginFlowQuickConnectDisabled =>
+      'இந்த சேவையகத்தில் விரைவான இணைப்பு முடக்கப்பட்டுள்ளது.';
 
   @override
   String get orDivider => 'அல்லது';
@@ -143,7 +154,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get selectMusicLibraries => 'இசை நூலகங்களைத் தேர்ந்தெடுக்கவும்';
 
   @override
-  String get couldNotFindLibraries => 'எந்த நூலகங்களையும் கண்டுபிடிக்க முடியவில்லை.';
+  String get couldNotFindLibraries =>
+      'எந்த நூலகங்களையும் கண்டுபிடிக்க முடியவில்லை.';
 
   @override
   String get unknownName => 'தெரியாத பெயர்';
@@ -167,13 +179,16 @@ class AppLocalizationsTa extends AppLocalizations {
   String get startMix => 'கலவையைத் தொடங்குங்கள்';
 
   @override
-  String get startMixNoTracksArtist => 'கலவையைத் தொடங்குவதற்கு முன் அதை மிக்ச் பில்டரிலிருந்து சேர்க்க அல்லது அகற்ற ஒரு கலைஞரை நீண்ட அழுத்தவும்';
+  String get startMixNoTracksArtist =>
+      'கலவையைத் தொடங்குவதற்கு முன் அதை மிக்ச் பில்டரிலிருந்து சேர்க்க அல்லது அகற்ற ஒரு கலைஞரை நீண்ட அழுத்தவும்';
 
   @override
-  String get startMixNoTracksAlbum => 'கலவையைத் தொடங்குவதற்கு முன் மிக்ச் பில்டரிடமிருந்து சேர்க்க அல்லது அகற்ற ஒரு ஆல்பத்தை நீண்ட அழுத்தவும்';
+  String get startMixNoTracksAlbum =>
+      'கலவையைத் தொடங்குவதற்கு முன் மிக்ச் பில்டரிடமிருந்து சேர்க்க அல்லது அகற்ற ஒரு ஆல்பத்தை நீண்ட அழுத்தவும்';
 
   @override
-  String get startMixNoTracksGenre => 'கலவையைத் தொடங்குவதற்கு முன் அதை மிக்ச் பில்டரிலிருந்து சேர்க்க அல்லது அகற்ற ஒரு வகையை நீண்ட அழுத்தவும்';
+  String get startMixNoTracksGenre =>
+      'கலவையைத் தொடங்குவதற்கு முன் அதை மிக்ச் பில்டரிலிருந்து சேர்க்க அல்லது அகற்ற ஒரு வகையை நீண்ட அழுத்தவும்';
 
   @override
   String get music => 'இசை';
@@ -251,7 +266,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get runtime => 'இயக்க நேரம்';
 
   @override
-  String get syncDownloadedPlaylists => 'பதிவிறக்கம் செய்யப்பட்ட பிளேலிச்ட்கள் ஒத்திசைவு';
+  String get syncDownloadedPlaylists =>
+      'பதிவிறக்கம் செய்யப்பட்ட பிளேலிச்ட்கள் ஒத்திசைவு';
 
   @override
   String get downloadMissingImages => 'காணாமல் போன படங்களை பதிவிறக்கவும்';
@@ -283,7 +299,8 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing) {
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing) {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
@@ -338,10 +355,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String get noActiveDownloads => 'செயலில் பதிவிறக்கங்கள் இல்லை.';
 
   @override
-  String get errorScreenError => 'பிழைகளின் பட்டியலைப் பெறும்போது பிழை ஏற்பட்டது! இந்த கட்டத்தில், நீங்கள் கிதுபில் ஒரு சிக்கலை உருவாக்கி பயன்பாட்டு தரவை நீக்க வேண்டும்';
+  String get errorScreenError =>
+      'பிழைகளின் பட்டியலைப் பெறும்போது பிழை ஏற்பட்டது! இந்த கட்டத்தில், நீங்கள் கிதுபில் ஒரு சிக்கலை உருவாக்கி பயன்பாட்டு தரவை நீக்க வேண்டும்';
 
   @override
-  String get failedToGetTrackFromDownloadId => 'பதிவிறக்க ஐடியிலிருந்து கண்காணிப்பதில் தோல்வி';
+  String get failedToGetTrackFromDownloadId =>
+      'பதிவிறக்க ஐடியிலிருந்து கண்காணிப்பதில் தோல்வி';
 
   @override
   String deleteDownloadsPrompt(String itemName, String itemType) {
@@ -485,31 +504,36 @@ class AppLocalizationsTa extends AppLocalizations {
   String get layoutAndTheme => 'தளவமைப்பு மற்றும் கருப்பொருள்';
 
   @override
-  String get notAvailableInOfflineMode => 'இணைப்பில்லாத பயன்முறையில் கிடைக்கவில்லை';
+  String get notAvailableInOfflineMode =>
+      'இணைப்பில்லாத பயன்முறையில் கிடைக்கவில்லை';
 
   @override
   String get logOut => 'விடுபதிகை';
 
   @override
-  String get downloadedTracksWillNotBeDeleted => 'பதிவிறக்கம் செய்யப்பட்ட தடங்கள் நீக்கப்படாது';
+  String get downloadedTracksWillNotBeDeleted =>
+      'பதிவிறக்கம் செய்யப்பட்ட தடங்கள் நீக்கப்படாது';
 
   @override
   String get areYouSure => 'நீங்கள் உறுதியாக இருக்கிறீர்களா?';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'செல்லிஃபின் டிரான்ச்கோடிங்கிற்கு AAC ஐப் பயன்படுத்துகிறது';
+  String get jellyfinUsesAACForTranscoding =>
+      'செல்லிஃபின் டிரான்ச்கோடிங்கிற்கு AAC ஐப் பயன்படுத்துகிறது';
 
   @override
   String get enableTranscoding => 'டிரான்ச்கோடிங்கை இயக்கவும்';
 
   @override
-  String get enableTranscodingSubtitle => 'சேவையக பக்கத்தில் இசை ச்ட்ரீம்களை டிரான்ச்கோட்ச்.';
+  String get enableTranscodingSubtitle =>
+      'சேவையக பக்கத்தில் இசை ச்ட்ரீம்களை டிரான்ச்கோட்ச்.';
 
   @override
   String get bitrate => 'பிட்ரேட்';
 
   @override
-  String get bitrateSubtitle => 'அதிக பிட்ரேட் அதிக அலைவரிசை செலவில் உயர் தரமான ஆடியோவை வழங்குகிறது.';
+  String get bitrateSubtitle =>
+      'அதிக பிட்ரேட் அதிக அலைவரிசை செலவில் உயர் தரமான ஆடியோவை வழங்குகிறது.';
 
   @override
   String get customLocation => 'தனிப்பயன் இடம்';
@@ -527,25 +551,30 @@ class AppLocalizationsTa extends AppLocalizations {
   String get unknownError => 'தெரியாத பிழை';
 
   @override
-  String get pathReturnSlashErrorMessage => '\"/\" திரும்பும் பாதைகள் பயன்படுத்தப்படாது';
+  String get pathReturnSlashErrorMessage =>
+      '\"/\" திரும்பும் பாதைகள் பயன்படுத்தப்படாது';
 
   @override
   String get directoryMustBeEmpty => 'அடைவு காலியாக இருக்க வேண்டும்';
 
   @override
-  String get customLocationsBuggy => 'அனுமதிகளுடன் சிக்கல்கள் காரணமாக தனிப்பயன் இருப்பிடங்கள் மிகவும் தரமற்றவை. இதை சரிசெய்வதற்கான வழிகளைப் பற்றி நான் யோசித்து வருகிறேன், ஆனால் இப்போது அவற்றைப் பயன்படுத்த பரிந்துரைக்க மாட்டேன்.';
+  String get customLocationsBuggy =>
+      'அனுமதிகளுடன் சிக்கல்கள் காரணமாக தனிப்பயன் இருப்பிடங்கள் மிகவும் தரமற்றவை. இதை சரிசெய்வதற்கான வழிகளைப் பற்றி நான் யோசித்து வருகிறேன், ஆனால் இப்போது அவற்றைப் பயன்படுத்த பரிந்துரைக்க மாட்டேன்.';
 
   @override
-  String get enterLowPriorityStateOnPause => 'இடைநிறுத்தத்தில் குறைந்த முன்னுரிமை நிலையை உள்ளிடவும்';
+  String get enterLowPriorityStateOnPause =>
+      'இடைநிறுத்தத்தில் குறைந்த முன்னுரிமை நிலையை உள்ளிடவும்';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => 'இடைநிறுத்தப்படும்போது அறிவிப்பை ச்வைப் செய்ய அனுமதிக்கிறது. இடைநிறுத்தப்படும்போது சேவையை கொல்ல ஆண்ட்ராய்டு ஐ அனுமதிக்கிறது.';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      'இடைநிறுத்தப்படும்போது அறிவிப்பை ச்வைப் செய்ய அனுமதிக்கிறது. இடைநிறுத்தப்படும்போது சேவையை கொல்ல ஆண்ட்ராய்டு ஐ அனுமதிக்கிறது.';
 
   @override
   String get shuffleAllTrackCount => 'அனைத்து தட எண்ணிக்கையையும் மாற்றவும்';
 
   @override
-  String get shuffleAllTrackCountSubtitle => 'மாற்ற வேண்டிய தடங்களின் அளவு சஃபிள் அனைத்து தடங்களையும் பயன்படுத்தும் போது.';
+  String get shuffleAllTrackCountSubtitle =>
+      'மாற்ற வேண்டிய தடங்களின் அளவு சஃபிள் அனைத்து தடங்களையும் பயன்படுத்தும் போது.';
 
   @override
   String get viewType => 'பார்வை வகை';
@@ -566,10 +595,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String get playbackSpeedControlSetting => 'பிளேபேக் வேகத் தெரிவுநிலை';
 
   @override
-  String get playbackSpeedControlSettingSubtitle => 'பிளேயர் திரை பட்டியலில் பிளேபேக் வேகக் கட்டுப்பாடுகள் காட்டப்பட்டுள்ளனவா';
+  String get playbackSpeedControlSettingSubtitle =>
+      'பிளேயர் திரை பட்டியலில் பிளேபேக் வேகக் கட்டுப்பாடுகள் காட்டப்பட்டுள்ளனவா';
 
   @override
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList) {
     return 'தானியங்கி:\n நீங்கள் விளையாடும் பாடல் போட்காச்ட் அல்லது (ஒரு பகுதி) ஆடியோபுக்கா என்பதை அடையாளம் காண ஃபினாம்ப் முயற்சிக்கிறார். டிராக் $trackDuration நிமிடங்களை விட நீளமாக இருந்தால், டிராக்கின் ஆல்பம் $albumDuration மணிநேரங்களை விட நீளமாக இருந்தால், அல்லது பாதையில் இந்த வகைகளில் ஏதேனும் ஒன்று ஒதுக்கப்பட்டிருந்தால்: $genreList\n பிளேபேக் வேகக் கட்டுப்பாடுகள் பின்னர் பிளேயர் திரை பட்டியலில் காண்பிக்கப்படும்.\n\n காட்டப்பட்டுள்ளது:\n பிளேபேக் வேகக் கட்டுப்பாடுகள் எப்போதும் பிளேயர் திரை பட்டியலில் காண்பிக்கப்படும்.\n\n மறைக்கப்பட்ட:\n பிளேயர் திரை பட்டியலில் உள்ள பிளேபேக் வேகக் கட்டுப்பாடுகள் எப்போதும் மறைக்கப்படுகின்றன.';
   }
 
@@ -611,31 +642,40 @@ class AppLocalizationsTa extends AppLocalizations {
   String get showTextOnGridView => 'கட்டம் பார்வையில் உரையைக் காட்டு';
 
   @override
-  String get showTextOnGridViewSubtitle => 'கட்டம் இசைத் திரையில் உரையை (தலைப்பு, கலைஞர் போன்றவை) காண்பிக்கலாமா வேண்டாமா.';
+  String get showTextOnGridViewSubtitle =>
+      'கட்டம் இசைத் திரையில் உரையை (தலைப்பு, கலைஞர் போன்றவை) காண்பிக்கலாமா வேண்டாமா.';
 
   @override
-  String get useCoverAsBackground => 'மங்கலான அட்டையை பின்னணியாகப் பயன்படுத்தவும்';
+  String get useCoverAsBackground =>
+      'மங்கலான அட்டையை பின்னணியாகப் பயன்படுத்தவும்';
 
   @override
-  String get useCoverAsBackgroundSubtitle => 'பயன்பாட்டின் பல்வேறு பகுதிகளில் மங்கலான ஆல்பம் அட்டையை பின்னணியாகப் பயன்படுத்தலாமா இல்லையா.';
+  String get useCoverAsBackgroundSubtitle =>
+      'பயன்பாட்டின் பல்வேறு பகுதிகளில் மங்கலான ஆல்பம் அட்டையை பின்னணியாகப் பயன்படுத்தலாமா இல்லையா.';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorTitle => 'குறைந்தபட்ச ஆல்பம் கவர் திணிப்பு';
+  String get playerScreenMinimumCoverPaddingEditorTitle =>
+      'குறைந்தபட்ச ஆல்பம் கவர் திணிப்பு';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => 'திரை அகலத்தின் % இல், பிளேயர் திரையில் ஆல்பத்தை சுற்றி குறைந்தபட்ச திணிப்பு.';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle =>
+      'திரை அகலத்தின் % இல், பிளேயர் திரையில் ஆல்பத்தை சுற்றி குறைந்தபட்ச திணிப்பு.';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtists => 'ஆல்பம் கலைஞர்களைப் போலவே டிராக் கலைஞர்களையும் மறைக்கவும்';
+  String get hideTrackArtistsIfSameAsAlbumArtists =>
+      'ஆல்பம் கலைஞர்களைப் போலவே டிராக் கலைஞர்களையும் மறைக்கவும்';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => 'ஆல்பம் கலைஞர்களிடமிருந்து வேறுபடாவிட்டால் ஆல்பம் திரையில் டிராக் கலைஞர்களைக் காண்பிக்கலாமா?';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      'ஆல்பம் கலைஞர்களிடமிருந்து வேறுபடாவிட்டால் ஆல்பம் திரையில் டிராக் கலைஞர்களைக் காண்பிக்கலாமா?';
 
   @override
-  String get showArtistsTopTracks => 'கலைஞர் பார்வையில் சிறந்த தடங்களைக் காட்டு';
+  String get showArtistsTopTracks =>
+      'கலைஞர் பார்வையில் சிறந்த தடங்களைக் காட்டு';
 
   @override
-  String get showArtistsTopTracksSubtitle => 'ஒரு கலைஞரின் தடங்களை அதிகம் கேட்கும் முதல் 5 இடங்களைக் காட்ட வேண்டுமா.';
+  String get showArtistsTopTracksSubtitle =>
+      'ஒரு கலைஞரின் தடங்களை அதிகம் கேட்கும் முதல் 5 இடங்களைக் காட்ட வேண்டுமா.';
 
   @override
   String get disableGesture => 'சைகைகளை முடக்கு';
@@ -744,7 +784,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get playlistCreated => 'பிளேலிச்ட் உருவாக்கப்பட்டது.';
 
   @override
-  String get playlistActionsMenuButtonTooltip => 'பிளேலிச்ட்டில் சேர்க்க தட்டவும். பிடித்ததை மாற்றுவதற்கு நீண்ட அழுத்தவும்.';
+  String get playlistActionsMenuButtonTooltip =>
+      'பிளேலிச்ட்டில் சேர்க்க தட்டவும். பிடித்ததை மாற்றுவதற்கு நீண்ட அழுத்தவும்.';
 
   @override
   String get noAlbum => 'ஆல்பம் இல்லை';
@@ -860,25 +901,29 @@ class AppLocalizationsTa extends AppLocalizations {
   String get bufferDuration => 'இடையக காலம்';
 
   @override
-  String get bufferDurationSubtitle => 'நொடிகளில் வீரர் எவ்வளவு இடையக வேண்டும். மறுதொடக்கம் தேவை.';
+  String get bufferDurationSubtitle =>
+      'நொடிகளில் வீரர் எவ்வளவு இடையக வேண்டும். மறுதொடக்கம் தேவை.';
 
   @override
   String get bufferDisableSizeConstraintsTitle => 'Don\'t limit buffer size';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => 'Disables the buffer size constraints (\'Buffer Size\'). The buffer will always be loaded to the configured duration (\'Buffer Duration\'), even for very large files. Can cause crashes. Requires a restart.';
+  String get bufferDisableSizeConstraintsSubtitle =>
+      'Disables the buffer size constraints (\'Buffer Size\'). The buffer will always be loaded to the configured duration (\'Buffer Duration\'), even for very large files. Can cause crashes. Requires a restart.';
 
   @override
   String get bufferSizeTitle => 'Buffer Size';
 
   @override
-  String get bufferSizeSubtitle => 'The maximum size of the buffer in MB. Requires a restart';
+  String get bufferSizeSubtitle =>
+      'The maximum size of the buffer in MB. Requires a restart';
 
   @override
   String get language => 'மொழி';
 
   @override
-  String get skipToPreviousTrackButtonTooltip => 'தொடக்கத்திற்கு அல்லது முந்தைய பாதையில் செல்லவும்';
+  String get skipToPreviousTrackButtonTooltip =>
+      'தொடக்கத்திற்கு அல்லது முந்தைய பாதையில் செல்லவும்';
 
   @override
   String get skipToNextTrackButtonTooltip => 'அடுத்த பாதையில் செல்லவும்';
@@ -1009,13 +1054,15 @@ class AppLocalizationsTa extends AppLocalizations {
   String get playbackOrderLinearButtonLabel => 'வரிசையில் விளையாடுவது';
 
   @override
-  String get playbackOrderLinearButtonTooltip => 'வரிசையில் விளையாடுவது. கலக்கத் தட்டவும்.';
+  String get playbackOrderLinearButtonTooltip =>
+      'வரிசையில் விளையாடுவது. கலக்கத் தட்டவும்.';
 
   @override
   String get playbackOrderShuffledButtonLabel => 'மாற்றும் தடங்கள்';
 
   @override
-  String get playbackOrderShuffledButtonTooltip => 'மாற்றும் தடங்கள். வரிசையில் விளையாட தட்டவும்.';
+  String get playbackOrderShuffledButtonTooltip =>
+      'மாற்றும் தடங்கள். வரிசையில் விளையாட தட்டவும்.';
 
   @override
   String playbackSpeedButtonLabel(double speed) {
@@ -1050,7 +1097,8 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String queueRestoreTitle(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
+    final intl.DateFormat dateDateFormat =
+        intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
     return 'சேமிக்கப்பட்டது $dateString';
@@ -1076,28 +1124,35 @@ class AppLocalizationsTa extends AppLocalizations {
   String get queueLoadingMessage => 'வரிசையை மீட்டமைத்தல் ...';
 
   @override
-  String get queueRetryMessage => 'வரிசையை மீட்டெடுப்பதில் தோல்வி. மீண்டும் முயற்சிக்கிறீர்களா?';
+  String get queueRetryMessage =>
+      'வரிசையை மீட்டெடுப்பதில் தோல்வி. மீண்டும் முயற்சிக்கிறீர்களா?';
 
   @override
   String get autoloadLastQueueOnStartup => 'ஆட்டோ-ரெச்டோர் கடைசி வரிசை';
 
   @override
-  String get autoloadLastQueueOnStartupSubtitle => 'பயன்பாட்டு தொடக்கத்தில், கடைசியாக விளையாடிய வரிசையை மீட்டெடுக்க முயற்சிக்கவும்.';
+  String get autoloadLastQueueOnStartupSubtitle =>
+      'பயன்பாட்டு தொடக்கத்தில், கடைசியாக விளையாடிய வரிசையை மீட்டெடுக்க முயற்சிக்கவும்.';
 
   @override
-  String get reportQueueToServer => 'சேவையகத்திற்கு தற்போதைய வரிசையைப் புகாரளிக்கவா?';
+  String get reportQueueToServer =>
+      'சேவையகத்திற்கு தற்போதைய வரிசையைப் புகாரளிக்கவா?';
 
   @override
-  String get reportQueueToServerSubtitle => 'இயக்கப்பட்டால், ஃபினாம்ப் தற்போதைய வரிசையை சேவையகத்திற்கு அனுப்பும். தற்போது இதற்கு சிறிதளவு பயன்பாடு இருப்பதாகத் தெரிகிறது, மேலும் இது பிணைய போக்குவரத்தை அதிகரிக்கிறது.';
+  String get reportQueueToServerSubtitle =>
+      'இயக்கப்பட்டால், ஃபினாம்ப் தற்போதைய வரிசையை சேவையகத்திற்கு அனுப்பும். தற்போது இதற்கு சிறிதளவு பயன்பாடு இருப்பதாகத் தெரிகிறது, மேலும் இது பிணைய போக்குவரத்தை அதிகரிக்கிறது.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequency => 'பிளேபேக் அமர்வு புதுப்பிப்பு அதிர்வெண்';
+  String get periodicPlaybackSessionUpdateFrequency =>
+      'பிளேபேக் அமர்வு புதுப்பிப்பு அதிர்வெண்';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencySubtitle => 'தற்போதைய பிளேபேக் நிலையை சேவையகத்திற்கு நொடிகளில் எவ்வளவு அடிக்கடி அனுப்ப வேண்டும். அமர்வு நேரம் வெளியேறுவதைத் தடுக்க, இது 5 நிமிடங்களுக்கும் குறைவாக (300 வினாடிகள்) இருக்க வேண்டும்.';
+  String get periodicPlaybackSessionUpdateFrequencySubtitle =>
+      'தற்போதைய பிளேபேக் நிலையை சேவையகத்திற்கு நொடிகளில் எவ்வளவு அடிக்கடி அனுப்ப வேண்டும். அமர்வு நேரம் வெளியேறுவதைத் தடுக்க, இது 5 நிமிடங்களுக்கும் குறைவாக (300 வினாடிகள்) இருக்க வேண்டும்.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencyDetails => 'கடந்த 5 நிமிடங்களில் ஒரு வாடிக்கையாளரிடமிருந்து செல்லிஃபின் சேவையகம் எந்த புதுப்பிப்புகளையும் பெறவில்லை என்றால், பிளேபேக் முடிந்தது என்று கருதுகிறது. இதன் பொருள் 5 நிமிடங்களுக்கும் மேலான தடங்களுக்கு, அந்த பின்னணி முடிவடைந்ததாக தவறாக அறிவிக்கப்படலாம், இது பிளேபேக் அறிக்கையிடல் தரவின் தரத்தை குறைத்தது.';
+  String get periodicPlaybackSessionUpdateFrequencyDetails =>
+      'கடந்த 5 நிமிடங்களில் ஒரு வாடிக்கையாளரிடமிருந்து செல்லிஃபின் சேவையகம் எந்த புதுப்பிப்புகளையும் பெறவில்லை என்றால், பிளேபேக் முடிந்தது என்று கருதுகிறது. இதன் பொருள் 5 நிமிடங்களுக்கும் மேலான தடங்களுக்கு, அந்த பின்னணி முடிவடைந்ததாக தவறாக அறிவிக்கப்படலாம், இது பிளேபேக் அறிக்கையிடல் தரவின் தரத்தை குறைத்தது.';
 
   @override
   String get topTracks => 'மேல் தடங்கள்';
@@ -1148,7 +1203,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get close => 'மூடு';
 
   @override
-  String get showUncensoredLogMessage => 'இந்த பதிவில் உங்கள் உள்நுழைவு செய்தி உள்ளது. காட்டு?';
+  String get showUncensoredLogMessage =>
+      'இந்த பதிவில் உங்கள் உள்நுழைவு செய்தி உள்ளது. காட்டு?';
 
   @override
   String get resetTabs => 'தாவல்களை மீட்டமைக்கவும்';
@@ -1160,7 +1216,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get noMusicLibrariesTitle => 'இசை நூலகங்கள் இல்லை';
 
   @override
-  String get noMusicLibrariesBody => 'ஃபினாம்பால் எந்த இசை நூலகங்களையும் கண்டுபிடிக்க முடியவில்லை. உங்கள் செல்லிஃபின் சேவையகத்தில் \"இசை\" என அமைக்கப்பட்ட உள்ளடக்க வகையுடன் குறைந்தது ஒரு நூலகத்தையாவது இருப்பதை உறுதிப்படுத்தவும்.';
+  String get noMusicLibrariesBody =>
+      'ஃபினாம்பால் எந்த இசை நூலகங்களையும் கண்டுபிடிக்க முடியவில்லை. உங்கள் செல்லிஃபின் சேவையகத்தில் \"இசை\" என அமைக்கப்பட்ட உள்ளடக்க வகையுடன் குறைந்தது ஒரு நூலகத்தையாவது இருப்பதை உறுதிப்படுத்தவும்.';
 
   @override
   String get refresh => 'புதுப்பிப்பு';
@@ -1175,16 +1232,20 @@ class AppLocalizationsTa extends AppLocalizations {
   String get volumeNormalizationSwitchTitle => 'தொகுதி இயல்பாக்கத்தை இயக்கவும்';
 
   @override
-  String get volumeNormalizationSwitchSubtitle => 'தடங்களின் சத்தத்தை இயல்பாக்க ஆதாய தகவலைப் பயன்படுத்தவும் (\"மறுபதிப்பு ஆதாயம்\")';
+  String get volumeNormalizationSwitchSubtitle =>
+      'தடங்களின் சத்தத்தை இயல்பாக்க ஆதாய தகவலைப் பயன்படுத்தவும் (\"மறுபதிப்பு ஆதாயம்\")';
 
   @override
-  String get volumeNormalizationModeSelectorTitle => 'தொகுதி இயல்பாக்குதல் பயன்முறை';
+  String get volumeNormalizationModeSelectorTitle =>
+      'தொகுதி இயல்பாக்குதல் பயன்முறை';
 
   @override
-  String get volumeNormalizationModeSelectorSubtitle => 'தொகுதி இயல்பாக்கத்தை எப்போது, எப்படி பயன்படுத்துவது';
+  String get volumeNormalizationModeSelectorSubtitle =>
+      'தொகுதி இயல்பாக்கத்தை எப்போது, எப்படி பயன்படுத்துவது';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => 'கலப்பின (டிராக் + ஆல்பம்):\n ட்ராக் ஆதாயம் வழக்கமான பிளேபேக்கிற்குப் பயன்படுத்தப்படுகிறது, ஆனால் ஒரு ஆல்பம் இயங்குகிறது என்றால் (இது முக்கிய பின்னணி வரிசை மூலமாக இருப்பதால், அல்லது ஒரு கட்டத்தில் வரிசையில் சேர்க்கப்பட்டதால்), அதற்கு பதிலாக ஆல்பம் பயன்படுத்தப்படுகிறது.\n\n டிராக் அடிப்படையிலான:\n ஒரு ஆல்பம் விளையாடுகிறதா இல்லையா என்பதைப் பொருட்படுத்தாமல், ட்ராக் ஆதாயம் எப்போதும் பயன்படுத்தப்படுகிறது.\n\n ஆல்பங்கள் மட்டுமே:\n ஆல்பங்களை இயக்கும் போது மட்டுமே தொகுதி இயல்பாக்கம் பயன்படுத்தப்படுகிறது (ஆல்பத்தை ஆதாயத்தைப் பயன்படுத்தி), ஆனால் தனிப்பட்ட தடங்களுக்கு அல்ல.';
+  String get volumeNormalizationModeSelectorDescription =>
+      'கலப்பின (டிராக் + ஆல்பம்):\n ட்ராக் ஆதாயம் வழக்கமான பிளேபேக்கிற்குப் பயன்படுத்தப்படுகிறது, ஆனால் ஒரு ஆல்பம் இயங்குகிறது என்றால் (இது முக்கிய பின்னணி வரிசை மூலமாக இருப்பதால், அல்லது ஒரு கட்டத்தில் வரிசையில் சேர்க்கப்பட்டதால்), அதற்கு பதிலாக ஆல்பம் பயன்படுத்தப்படுகிறது.\n\n டிராக் அடிப்படையிலான:\n ஒரு ஆல்பம் விளையாடுகிறதா இல்லையா என்பதைப் பொருட்படுத்தாமல், ட்ராக் ஆதாயம் எப்போதும் பயன்படுத்தப்படுகிறது.\n\n ஆல்பங்கள் மட்டுமே:\n ஆல்பங்களை இயக்கும் போது மட்டுமே தொகுதி இயல்பாக்கம் பயன்படுத்தப்படுகிறது (ஆல்பத்தை ஆதாயத்தைப் பயன்படுத்தி), ஆனால் தனிப்பட்ட தடங்களுக்கு அல்ல.';
 
   @override
   String get volumeNormalizationModeHybrid => 'கலப்பின (டிராக் + ஆல்பம்)';
@@ -1202,7 +1263,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get volumeNormalizationIOSBaseGainEditorTitle => 'அடிப்படை ஆதாயம்';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => 'தற்போது, IOS இல் தொகுதி இயல்பாக்கத்திற்கு ஆதாய மாற்றத்தைப் பின்பற்ற பிளேபேக் அளவை மாற்ற வேண்டும். 100%க்கு மேல் அளவை நாம் அதிகரிக்க முடியாது என்பதால், இயல்புநிலையாக அளவைக் குறைக்க வேண்டும், இதனால் அமைதியான தடங்களின் அளவை அதிகரிக்க முடியும். மதிப்பு டெசிபல்களில் (டி.பி.) உள்ளது, அங்கு -10 டிபி ~ 30% தொகுதி, -4.5 டி.பி. ~ 60% தொகுதி மற்றும் -2 டி.பி.';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle =>
+      'தற்போது, IOS இல் தொகுதி இயல்பாக்கத்திற்கு ஆதாய மாற்றத்தைப் பின்பற்ற பிளேபேக் அளவை மாற்ற வேண்டும். 100%க்கு மேல் அளவை நாம் அதிகரிக்க முடியாது என்பதால், இயல்புநிலையாக அளவைக் குறைக்க வேண்டும், இதனால் அமைதியான தடங்களின் அளவை அதிகரிக்க முடியும். மதிப்பு டெசிபல்களில் (டி.பி.) உள்ளது, அங்கு -10 டிபி ~ 30% தொகுதி, -4.5 டி.பி. ~ 60% தொகுதி மற்றும் -2 டி.பி.';
 
   @override
   String numberAsDecibel(double value) {
@@ -1213,13 +1275,16 @@ class AppLocalizationsTa extends AppLocalizations {
   String get swipeInsertQueueNext => 'அடுத்து ச்வைப் பாதையில் விளையாடுங்கள்';
 
   @override
-  String get swipeInsertQueueNextSubtitle => 'ட்ராக் பட்டியலில் ச்வைப் செய்யும்போது அடுத்த உருப்படியாக வரிசையில் ஒரு பாதையைச் செருகவும்.';
+  String get swipeInsertQueueNextSubtitle =>
+      'ட்ராக் பட்டியலில் ச்வைப் செய்யும்போது அடுத்த உருப்படியாக வரிசையில் ஒரு பாதையைச் செருகவும்.';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchTitle => 'தனிப்பட்ட தடங்களுக்கான உடனடி கலவைகளைத் தொடங்கவும்';
+  String get startInstantMixForIndividualTracksSwitchTitle =>
+      'தனிப்பட்ட தடங்களுக்கான உடனடி கலவைகளைத் தொடங்கவும்';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => 'இயக்கப்பட்டால், டிராக்குகள் தாவலில் ஒரு பாதையைத் தட்டுவது ஒரு தடத்தை விளையாடுவதற்குப் பதிலாக அந்த பாதையின் உடனடி கலவையைத் தொடங்கும்.';
+  String get startInstantMixForIndividualTracksSwitchSubtitle =>
+      'இயக்கப்பட்டால், டிராக்குகள் தாவலில் ஒரு பாதையைத் தட்டுவது ஒரு தடத்தை விளையாடுவதற்குப் பதிலாக அந்த பாதையின் உடனடி கலவையைத் தொடங்கும்.';
 
   @override
   String get downloadItem => 'பதிவிறக்கம்';
@@ -1228,13 +1293,16 @@ class AppLocalizationsTa extends AppLocalizations {
   String get repairComplete => 'பதிவிறக்கம் பழுது முடிந்தது.';
 
   @override
-  String get syncComplete => 'அனைத்து பதிவிறக்கங்களும் மீண்டும் ஒத்துப்போகின்றன.';
+  String get syncComplete =>
+      'அனைத்து பதிவிறக்கங்களும் மீண்டும் ஒத்துப்போகின்றன.';
 
   @override
-  String get syncDownloads => 'காணாமல் போன உருப்படிகளை ஒத்திசைத்து பதிவிறக்கவும்.';
+  String get syncDownloads =>
+      'காணாமல் போன உருப்படிகளை ஒத்திசைத்து பதிவிறக்கவும்.';
 
   @override
-  String get repairDownloads => 'பதிவிறக்கம் செய்யப்பட்ட கோப்புகள் அல்லது மெட்டாடேட்டாவுடன் சிக்கல்களை சரிசெய்யவும்.';
+  String get repairDownloads =>
+      'பதிவிறக்கம் செய்யப்பட்ட கோப்புகள் அல்லது மெட்டாடேட்டாவுடன் சிக்கல்களை சரிசெய்யவும்.';
 
   @override
   String get requireWifiForDownloads => 'பதிவிறக்கும் போது வைஃபை தேவை.';
@@ -1277,19 +1345,24 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String get onlyShowFullyDownloaded => 'முழுமையாக பதிவிறக்கம் செய்யப்பட்ட ஆல்பங்களை மட்டுமே காட்டு';
+  String get onlyShowFullyDownloaded =>
+      'முழுமையாக பதிவிறக்கம் செய்யப்பட்ட ஆல்பங்களை மட்டுமே காட்டு';
 
   @override
-  String get filesystemFull => 'மீதமுள்ள பதிவிறக்கங்களை முடிக்க முடியாது. கோப்பு முறைமை நிரம்பியுள்ளது.';
+  String get filesystemFull =>
+      'மீதமுள்ள பதிவிறக்கங்களை முடிக்க முடியாது. கோப்பு முறைமை நிரம்பியுள்ளது.';
 
   @override
-  String get connectionInterrupted => 'இணைப்பு குறுக்கிட்டது, பதிவிறக்கங்களை இடைநிறுத்துகிறது.';
+  String get connectionInterrupted =>
+      'இணைப்பு குறுக்கிட்டது, பதிவிறக்கங்களை இடைநிறுத்துகிறது.';
 
   @override
-  String get connectionInterruptedBackground => 'பின்னணியில் பதிவிறக்கும் போது இணைப்பு குறுக்கிடப்பட்டது. இது OS அமைப்புகளால் ஏற்படலாம்.';
+  String get connectionInterruptedBackground =>
+      'பின்னணியில் பதிவிறக்கும் போது இணைப்பு குறுக்கிடப்பட்டது. இது OS அமைப்புகளால் ஏற்படலாம்.';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => 'பின்னணியில் பதிவிறக்கும் போது இணைப்பு குறுக்கிடப்பட்டது. \'இடைநிறுத்தத்தில் குறைந்த முன்னுரிமை நிலையை உள்ளிட\' அல்லது OS அமைப்புகளை இயக்குவதன் மூலம் இது ஏற்படலாம்.';
+  String get connectionInterruptedBackgroundAndroid =>
+      'பின்னணியில் பதிவிறக்கும் போது இணைப்பு குறுக்கிடப்பட்டது. \'இடைநிறுத்தத்தில் குறைந்த முன்னுரிமை நிலையை உள்ளிட\' அல்லது OS அமைப்புகளை இயக்குவதன் மூலம் இது ஏற்படலாம்.';
 
   @override
   String get activeDownloadSize => 'பதிவிறக்கம் ...';
@@ -1301,22 +1374,27 @@ class AppLocalizationsTa extends AppLocalizations {
   String get syncingDownloadSize => 'ஒத்திசைவு ...';
 
   @override
-  String get runRepairWarning => 'பதிவிறக்கங்கள் இடம்பெயர்வுகளை இறுதி செய்ய சேவையகத்தைத் தொடர்பு கொள்ள முடியவில்லை. நீங்கள் ஆன்லைனில் திரும்பி வந்தவுடன் பதிவிறக்கத் திரையில் இருந்து \'பழுதுபார்க்கும் பதிவிறக்கங்களை\' இயக்கவும்.';
+  String get runRepairWarning =>
+      'பதிவிறக்கங்கள் இடம்பெயர்வுகளை இறுதி செய்ய சேவையகத்தைத் தொடர்பு கொள்ள முடியவில்லை. நீங்கள் ஆன்லைனில் திரும்பி வந்தவுடன் பதிவிறக்கத் திரையில் இருந்து \'பழுதுபார்க்கும் பதிவிறக்கங்களை\' இயக்கவும்.';
 
   @override
   String get downloadSettings => 'அமைப்புகளை பதிவிறக்கவும்';
 
   @override
-  String get showNullLibraryItemsTitle => 'அறியப்படாத நூலகத்துடன் ஊடகத்தைக் காட்டு.';
+  String get showNullLibraryItemsTitle =>
+      'அறியப்படாத நூலகத்துடன் ஊடகத்தைக் காட்டு.';
 
   @override
-  String get showNullLibraryItemsSubtitle => 'சில ஊடகங்கள் அறியப்படாத நூலகத்துடன் பதிவிறக்கம் செய்யப்படலாம். அவற்றின் அசல் சேகரிப்புக்கு வெளியே இவற்றை மறைக்க அணைக்கவும்.';
+  String get showNullLibraryItemsSubtitle =>
+      'சில ஊடகங்கள் அறியப்படாத நூலகத்துடன் பதிவிறக்கம் செய்யப்படலாம். அவற்றின் அசல் சேகரிப்புக்கு வெளியே இவற்றை மறைக்க அணைக்கவும்.';
 
   @override
-  String get maxConcurrentDownloads => 'அதிகபட்சம் ஒரே நேரத்தில் பதிவிறக்கங்கள்';
+  String get maxConcurrentDownloads =>
+      'அதிகபட்சம் ஒரே நேரத்தில் பதிவிறக்கங்கள்';
 
   @override
-  String get maxConcurrentDownloadsSubtitle => 'ஒரே நேரத்தில் பதிவிறக்கங்களை அதிகரிப்பது பின்னணியில் பதிவிறக்குவதை அனுமதிக்கலாம், ஆனால் மிகப் பெரியதாக இருந்தால் சில பதிவிறக்கங்கள் தோல்வியடையக்கூடும், அல்லது சில சந்தர்ப்பங்களில் அதிகப்படியான பின்னடைவை ஏற்படுத்தக்கூடும்.';
+  String get maxConcurrentDownloadsSubtitle =>
+      'ஒரே நேரத்தில் பதிவிறக்கங்களை அதிகரிப்பது பின்னணியில் பதிவிறக்குவதை அனுமதிக்கலாம், ஆனால் மிகப் பெரியதாக இருந்தால் சில பதிவிறக்கங்கள் தோல்வியடையக்கூடும், அல்லது சில சந்தர்ப்பங்களில் அதிகப்படியான பின்னடைவை ஏற்படுத்தக்கூடும்.';
 
   @override
   String maxConcurrentDownloadsLabel(String count) {
@@ -1327,7 +1405,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get downloadsWorkersSetting => 'பணியாளர் எண்ணிக்கையைப் பதிவிறக்கவும்';
 
   @override
-  String get downloadsWorkersSettingSubtitle => 'மெட்டாடேட்டாவை ஒத்திசைப்பதற்கும் பதிவிறக்கங்களை நீக்குவதற்கும் தொழிலாளர்களின் அளவு. பதிவிறக்கத் தொழிலாளர்கள் அதிகரிப்பது பதிவிறக்க ஒத்திசைவு மற்றும் நீக்குதல் ஆகியவற்றை விரைவுபடுத்தலாம், குறிப்பாக சேவையக நேரந்தவறுகை அதிகமாக இருக்கும்போது, ஆனால் பின்னடைவை அறிமுகப்படுத்தலாம்.';
+  String get downloadsWorkersSettingSubtitle =>
+      'மெட்டாடேட்டாவை ஒத்திசைப்பதற்கும் பதிவிறக்கங்களை நீக்குவதற்கும் தொழிலாளர்களின் அளவு. பதிவிறக்கத் தொழிலாளர்கள் அதிகரிப்பது பதிவிறக்க ஒத்திசைவு மற்றும் நீக்குதல் ஆகியவற்றை விரைவுபடுத்தலாம், குறிப்பாக சேவையக நேரந்தவறுகை அதிகமாக இருக்கும்போது, ஆனால் பின்னடைவை அறிமுகப்படுத்தலாம்.';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
@@ -1335,13 +1414,15 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String get syncOnStartupSwitch => 'தொடக்கத்தில் பதிவிறக்கங்களை தானாக ஒத்திசைக்கவும்';
+  String get syncOnStartupSwitch =>
+      'தொடக்கத்தில் பதிவிறக்கங்களை தானாக ஒத்திசைக்கவும்';
 
   @override
   String get preferQuickSyncSwitch => 'விரைவான ஒத்திசைவை விரும்புங்கள்';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => 'ஒத்திசைவுகளைச் செய்யும்போது, பொதுவாக சில நிலையான உருப்படிகள் (தடங்கள் மற்றும் ஆல்பங்கள் போன்றவை) புதுப்பிக்கப்படாது. பதிவிறக்கம் பழுதுபார்ப்பு எப்போதும் முழு ஒத்திசைவைச் செய்யும்.';
+  String get preferQuickSyncSwitchSubtitle =>
+      'ஒத்திசைவுகளைச் செய்யும்போது, பொதுவாக சில நிலையான உருப்படிகள் (தடங்கள் மற்றும் ஆல்பங்கள் போன்றவை) புதுப்பிக்கப்படாது. பதிவிறக்கம் பழுதுபார்ப்பு எப்போதும் முழு ஒத்திசைவைச் செய்யும்.';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
@@ -1387,16 +1468,20 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'டிரான்ச்கோடிங் கொள்கலனைத் தேர்ந்தெடுக்கவும்';
+  String get transcodingStreamingContainerTitle =>
+      'டிரான்ச்கோடிங் கொள்கலனைத் தேர்ந்தெடுக்கவும்';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'டிரான்ச்கோடட் ஆடியோவை ச்ட்ரீமிங் செய்யும் போது பயன்படுத்த பிரிவு கொள்கலனைத் தேர்ந்தெடுக்கவும். ஏற்கனவே வரிசைப்படுத்தப்பட்ட தடங்கள் பாதிக்கப்படாது.';
+  String get transcodingStreamingContainerSubtitle =>
+      'டிரான்ச்கோடட் ஆடியோவை ச்ட்ரீமிங் செய்யும் போது பயன்படுத்த பிரிவு கொள்கலனைத் தேர்ந்தெடுக்கவும். ஏற்கனவே வரிசைப்படுத்தப்பட்ட தடங்கள் பாதிக்கப்படாது.';
 
   @override
-  String get downloadTranscodeEnableTitle => 'டிரான்ச்கோடட் பதிவிறக்கங்களை இயக்கவும்';
+  String get downloadTranscodeEnableTitle =>
+      'டிரான்ச்கோடட் பதிவிறக்கங்களை இயக்கவும்';
 
   @override
-  String get downloadTranscodeCodecTitle => 'கோடெக் பதிவிறக்க என்பதைத் தேர்ந்தெடுக்கவும்';
+  String get downloadTranscodeCodecTitle =>
+      'கோடெக் பதிவிறக்க என்பதைத் தேர்ந்தெடுக்கவும்';
 
   @override
   String downloadTranscodeEnableOption(String option) {
@@ -1416,7 +1501,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get downloadBitrate => 'பிட்ரேட்டைப் பதிவிறக்கவும்';
 
   @override
-  String get downloadBitrateSubtitle => 'அதிக பிட்ரேட் பெரிய சேமிப்பக தேவைகளின் செலவில் உயர் தரமான ஆடியோவை வழங்குகிறது.';
+  String get downloadBitrateSubtitle =>
+      'அதிக பிட்ரேட் பெரிய சேமிப்பக தேவைகளின் செலவில் உயர் தரமான ஆடியோவை வழங்குகிறது.';
 
   @override
   String get transcodeHint => 'டிரான்ச்கோட்?';
@@ -1470,22 +1556,27 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String get redownloadcomplete => 'டிரான்ச்கோட் ரிடவுன் லோட் வரிசையில் உள்ளது.';
+  String get redownloadcomplete =>
+      'டிரான்ச்கோட் ரிடவுன் லோட் வரிசையில் உள்ளது.';
 
   @override
   String get redownloadTitle => 'டிரான்ச்கோட்களை தானாகவே ரத்துசெய்கிறது';
 
   @override
-  String get redownloadSubtitle => 'பெற்றோர் சேகரிப்பு மாற்றங்கள் காரணமாக வேறுபட்ட தரத்தில் இருக்கும் என்று எதிர்பார்க்கப்படும் தடங்களை தானாகவே மாற்றியமைத்தல்.';
+  String get redownloadSubtitle =>
+      'பெற்றோர் சேகரிப்பு மாற்றங்கள் காரணமாக வேறுபட்ட தரத்தில் இருக்கும் என்று எதிர்பார்க்கப்படும் தடங்களை தானாகவே மாற்றியமைத்தல்.';
 
   @override
-  String get defaultDownloadLocationButton => 'இயல்புநிலை பதிவிறக்க இருப்பிடமாக அமைக்கவும். பதிவிறக்கத்திற்கு தேர்ந்தெடுக்க முடக்கு.';
+  String get defaultDownloadLocationButton =>
+      'இயல்புநிலை பதிவிறக்க இருப்பிடமாக அமைக்கவும். பதிவிறக்கத்திற்கு தேர்ந்தெடுக்க முடக்கு.';
 
   @override
-  String get fixedGridSizeSwitchTitle => 'நிலையான அளவு கட்டம் ஓடுகளைப் பயன்படுத்தவும்';
+  String get fixedGridSizeSwitchTitle =>
+      'நிலையான அளவு கட்டம் ஓடுகளைப் பயன்படுத்தவும்';
 
   @override
-  String get fixedGridSizeSwitchSubtitle => 'கட்டம் ஓடு அளவுகள் சாளரம்/திரை அளவிற்கு பதிலளிக்காது.';
+  String get fixedGridSizeSwitchSubtitle =>
+      'கட்டம் ஓடு அளவுகள் சாளரம்/திரை அளவிற்கு பதிலளிக்காது.';
 
   @override
   String get fixedGridSizeTitle => 'கட்டம் ஓடு அளவு';
@@ -1506,10 +1597,12 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String get allowSplitScreenTitle => 'ச்ப்ளிட்ச்கிரீன் பயன்முறையை அனுமதிக்கவும்';
+  String get allowSplitScreenTitle =>
+      'ச்ப்ளிட்ச்கிரீன் பயன்முறையை அனுமதிக்கவும்';
 
   @override
-  String get allowSplitScreenSubtitle => 'பரந்த காட்சிகளில் மற்ற காட்சிகளுடன் பிளேயர் காண்பிக்கப்படும்.';
+  String get allowSplitScreenSubtitle =>
+      'பரந்த காட்சிகளில் மற்ற காட்சிகளுடன் பிளேயர் காண்பிக்கப்படும்.';
 
   @override
   String get enableVibration => 'அதிர்வுகளை இயக்கவும்';
@@ -1521,37 +1614,43 @@ class AppLocalizationsTa extends AppLocalizations {
   String get hideQueueButton => 'Hide queue button';
 
   @override
-  String get hideQueueButtonSubtitle => 'Hide the queue button on the player screen. Swipe up to access the queue.';
+  String get hideQueueButtonSubtitle =>
+      'Hide the queue button on the player screen. Swipe up to access the queue.';
 
   @override
   String get oneLineMarqueeTextButton => 'Auto-scroll Long Titles';
 
   @override
-  String get oneLineMarqueeTextButtonSubtitle => 'Automatically scroll track titles that are too long to display in two lines';
+  String get oneLineMarqueeTextButtonSubtitle =>
+      'Automatically scroll track titles that are too long to display in two lines';
 
   @override
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle =>
+      'Show ... at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'கீழே செயல்களை மறைக்கவும்';
 
   @override
-  String get hidePlayerBottomActionsSubtitle => 'பிளேயர் திரையில் வரிசை மற்றும் பாடல் பொத்தான்களை மறைக்கவும். வரிசையை அணுக ச்வைப் செய்யுங்கள், கிடைத்தால் பாடல் வரிகளைக் காண இடதுபுறத்தை (ஆல்பம் அட்டைக்கு கீழே) ச்வைப் செய்யவும்.';
+  String get hidePlayerBottomActionsSubtitle =>
+      'பிளேயர் திரையில் வரிசை மற்றும் பாடல் பொத்தான்களை மறைக்கவும். வரிசையை அணுக ச்வைப் செய்யுங்கள், கிடைத்தால் பாடல் வரிகளைக் காண இடதுபுறத்தை (ஆல்பம் அட்டைக்கு கீழே) ச்வைப் செய்யவும்.';
 
   @override
   String get prioritizePlayerCover => 'ஆல்பம் அட்டைக்கு முன்னுரிமை கொடுங்கள்';
 
   @override
-  String get prioritizePlayerCoverSubtitle => 'பிளேயர் திரையில் ஒரு பெரிய ஆல்பம் அட்டையைக் காண்பிப்பதற்கு முன்னுரிமை அளிக்கவும். சிறிய திரை அளவுகளில் விமர்சனமற்ற கட்டுப்பாடுகள் மிகவும் ஆக்ரோசமாக மறைக்கப்படும்.';
+  String get prioritizePlayerCoverSubtitle =>
+      'பிளேயர் திரையில் ஒரு பெரிய ஆல்பம் அட்டையைக் காண்பிப்பதற்கு முன்னுரிமை அளிக்கவும். சிறிய திரை அளவுகளில் விமர்சனமற்ற கட்டுப்பாடுகள் மிகவும் ஆக்ரோசமாக மறைக்கப்படும்.';
 
   @override
   String get suppressPlayerPadding => 'பிளேயர் திணிப்பைக் கட்டுப்படுத்துகிறது';
 
   @override
-  String get suppressPlayerPaddingSubtitle => 'ஆல்பம் கவர் முழு அளவில் இல்லாதபோது பிளேயர் திரை கட்டுப்பாடுகளுக்கு இடையில் திணிப்பை முழுமையாகக் குறைக்கிறது.';
+  String get suppressPlayerPaddingSubtitle =>
+      'ஆல்பம் கவர் முழு அளவில் இல்லாதபோது பிளேயர் திரை கட்டுப்பாடுகளுக்கு இடையில் திணிப்பை முழுமையாகக் குறைக்கிறது.';
 
   @override
   String get lockDownload => 'எப்போதும் சாதனத்தில் வைத்திருங்கள்';
@@ -1560,7 +1659,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get showArtistChipImage => 'கலைஞரின் பெயருடன் கலைஞர் படங்களைக் காட்டு';
 
   @override
-  String get showArtistChipImageSubtitle => 'இது பிளேயர் திரை போன்ற சிறிய கலைஞர் பட மாதிரிக்காட்சிகளை பாதிக்கிறது.';
+  String get showArtistChipImageSubtitle =>
+      'இது பிளேயர் திரை போன்ற சிறிய கலைஞர் பட மாதிரிக்காட்சிகளை பாதிக்கிறது.';
 
   @override
   String get scrollToCurrentTrack => 'தற்போதைய பாதையில் உருட்டவும்';
@@ -1598,67 +1698,85 @@ class AppLocalizationsTa extends AppLocalizations {
   String get quickActions => 'விரைவான செயல்கள்';
 
   @override
-  String get addRemoveFromPlaylist => 'பிளேலிச்ட்களிலிருந்து சேர்க்கவும் / அகற்று';
+  String get addRemoveFromPlaylist =>
+      'பிளேலிச்ட்களிலிருந்து சேர்க்கவும் / அகற்று';
 
   @override
   String get addPlaylistSubheader => 'பிளேலிச்ட்டில் தடத்தைச் சேர்க்கவும்';
 
   @override
-  String get trackOfflineFavorites => 'அனைத்து பிடித்த நிலைகளையும் ஒத்திசைக்கவும்';
+  String get trackOfflineFavorites =>
+      'அனைத்து பிடித்த நிலைகளையும் ஒத்திசைக்கவும்';
 
   @override
-  String get trackOfflineFavoritesSubtitle => 'இது ஆஃப்லைனில் இருக்கும்போது மிகவும் புதுப்பித்த பிடித்த நிலைகளைக் காட்ட அனுமதிக்கிறது. கூடுதல் கோப்புகளை பதிவிறக்கம் செய்யாது.';
+  String get trackOfflineFavoritesSubtitle =>
+      'இது ஆஃப்லைனில் இருக்கும்போது மிகவும் புதுப்பித்த பிடித்த நிலைகளைக் காட்ட அனுமதிக்கிறது. கூடுதல் கோப்புகளை பதிவிறக்கம் செய்யாது.';
 
   @override
-  String get allPlaylistsInfoSetting => 'பிளேலிச்ட் மெட்டாடேட்டாவைப் பதிவிறக்கவும்';
+  String get allPlaylistsInfoSetting =>
+      'பிளேலிச்ட் மெட்டாடேட்டாவைப் பதிவிறக்கவும்';
 
   @override
-  String get allPlaylistsInfoSettingSubtitle => 'உங்கள் பிளேலிச்ட் அனுபவத்தை மேம்படுத்த அனைத்து பிளேலிச்ட்களுக்கும் மெட்டாடேட்டாவை ஒத்திசைக்கவும்';
+  String get allPlaylistsInfoSettingSubtitle =>
+      'உங்கள் பிளேலிச்ட் அனுபவத்தை மேம்படுத்த அனைத்து பிளேலிச்ட்களுக்கும் மெட்டாடேட்டாவை ஒத்திசைக்கவும்';
 
   @override
-  String get downloadFavoritesSetting => 'அனைத்து பிடித்தவைகளையும் பதிவிறக்கவும்';
+  String get downloadFavoritesSetting =>
+      'அனைத்து பிடித்தவைகளையும் பதிவிறக்கவும்';
 
   @override
-  String get downloadAllPlaylistsSetting => 'அனைத்து பிளேலிச்ட்களையும் பதிவிறக்கவும்';
+  String get downloadAllPlaylistsSetting =>
+      'அனைத்து பிளேலிச்ட்களையும் பதிவிறக்கவும்';
 
   @override
-  String get fiveLatestAlbumsSetting => '5 அண்மைக் கால ஆல்பங்களைப் பதிவிறக்கவும்';
+  String get fiveLatestAlbumsSetting =>
+      '5 அண்மைக் கால ஆல்பங்களைப் பதிவிறக்கவும்';
 
   @override
-  String get fiveLatestAlbumsSettingSubtitle => 'பதிவிறக்கங்கள் வயதாகும்போது அகற்றப்படும். ஒரு ஆல்பம் அகற்றப்படுவதைத் தடுக்க பதிவிறக்கத்தை பூட்டுங்கள்.';
+  String get fiveLatestAlbumsSettingSubtitle =>
+      'பதிவிறக்கங்கள் வயதாகும்போது அகற்றப்படும். ஒரு ஆல்பம் அகற்றப்படுவதைத் தடுக்க பதிவிறக்கத்தை பூட்டுங்கள்.';
 
   @override
   String get cacheLibraryImagesSettings => 'தற்போதைய நூலக படங்களை கேச்';
 
   @override
-  String get cacheLibraryImagesSettingsSubtitle => 'தற்போது செயலில் உள்ள நூலகத்தில் உள்ள அனைத்து ஆல்பம், கலைஞர், வகை மற்றும் பிளேலிச்ட் கவர்கள் பதிவிறக்கம் செய்யப்படும்.';
+  String get cacheLibraryImagesSettingsSubtitle =>
+      'தற்போது செயலில் உள்ள நூலகத்தில் உள்ள அனைத்து ஆல்பம், கலைஞர், வகை மற்றும் பிளேலிச்ட் கவர்கள் பதிவிறக்கம் செய்யப்படும்.';
 
   @override
-  String get showProgressOnNowPlayingBarTitle => 'பயன்பாட்டில் உள்ள மினிப்ளேயரில் தட முன்னேற்றத்தைக் காட்டு';
+  String get showProgressOnNowPlayingBarTitle =>
+      'பயன்பாட்டில் உள்ள மினிப்ளேயரில் தட முன்னேற்றத்தைக் காட்டு';
 
   @override
-  String get showProgressOnNowPlayingBarSubtitle => 'பயன்பாட்டு மினி பிளேயர் / இப்போது இசைத் திரையின் அடிப்பகுதியில் விளையாடும் பட்டியை முன்னேற்றப் பட்டியாக செயல்பட்டால் கட்டுப்படுத்துகிறது.';
+  String get showProgressOnNowPlayingBarSubtitle =>
+      'பயன்பாட்டு மினி பிளேயர் / இப்போது இசைத் திரையின் அடிப்பகுதியில் விளையாடும் பட்டியை முன்னேற்றப் பட்டியாக செயல்பட்டால் கட்டுப்படுத்துகிறது.';
 
   @override
   String get lyricsScreen => 'பாடல் பார்வை';
 
   @override
-  String get showLyricsTimestampsTitle => 'ஒத்திசைக்கப்பட்ட பாடல்களுக்கான நேர முத்திரைகளைக் காட்டு';
+  String get showLyricsTimestampsTitle =>
+      'ஒத்திசைக்கப்பட்ட பாடல்களுக்கான நேர முத்திரைகளைக் காட்டு';
 
   @override
-  String get showLyricsTimestampsSubtitle => 'ஒவ்வொரு பாடல் வரியின் நேர முத்திரையும் கிடைத்தால், பாடல் பார்வையில் காட்டப்பட்டால் கட்டுப்படுத்துகிறது.';
+  String get showLyricsTimestampsSubtitle =>
+      'ஒவ்வொரு பாடல் வரியின் நேர முத்திரையும் கிடைத்தால், பாடல் பார்வையில் காட்டப்பட்டால் கட்டுப்படுத்துகிறது.';
 
   @override
-  String get showStopButtonOnMediaNotificationTitle => 'ஊடக அறிவிப்பில் நிறுத்த பொத்தானைக் காட்டு';
+  String get showStopButtonOnMediaNotificationTitle =>
+      'ஊடக அறிவிப்பில் நிறுத்த பொத்தானைக் காட்டு';
 
   @override
-  String get showStopButtonOnMediaNotificationSubtitle => 'இடைநிறுத்த பொத்தானை கூடுதலாக ஊடக அறிவிப்பில் நிறுத்த பொத்தானை வைத்திருந்தால் கட்டுப்படுத்துகிறது. பயன்பாட்டைத் திறக்காமல் பிளேபேக்கை நிறுத்த இது உங்களை அனுமதிக்கிறது.';
+  String get showStopButtonOnMediaNotificationSubtitle =>
+      'இடைநிறுத்த பொத்தானை கூடுதலாக ஊடக அறிவிப்பில் நிறுத்த பொத்தானை வைத்திருந்தால் கட்டுப்படுத்துகிறது. பயன்பாட்டைத் திறக்காமல் பிளேபேக்கை நிறுத்த இது உங்களை அனுமதிக்கிறது.';
 
   @override
-  String get showSeekControlsOnMediaNotificationTitle => 'ஊடக அறிவிப்பில் கட்டுப்பாடுகளைத் தேடுங்கள்';
+  String get showSeekControlsOnMediaNotificationTitle =>
+      'ஊடக அறிவிப்பில் கட்டுப்பாடுகளைத் தேடுங்கள்';
 
   @override
-  String get showSeekControlsOnMediaNotificationSubtitle => 'ஊடக அறிவிப்புக்கு தேடக்கூடிய முன்னேற்றப் பட்டி இருந்தால் கட்டுப்படுத்துகிறது. பயன்பாட்டைத் திறக்காமல் பிளேபேக் நிலையை மாற்ற இது உங்களை அனுமதிக்கிறது.';
+  String get showSeekControlsOnMediaNotificationSubtitle =>
+      'ஊடக அறிவிப்புக்கு தேடக்கூடிய முன்னேற்றப் பட்டி இருந்தால் கட்டுப்படுத்துகிறது. பயன்பாட்டைத் திறக்காமல் பிளேபேக் நிலையை மாற்ற இது உங்களை அனுமதிக்கிறது.';
 
   @override
   String get alignmentOptionStart => 'தொடங்கு';
@@ -1682,19 +1800,23 @@ class AppLocalizationsTa extends AppLocalizations {
   String get lyricsAlignmentTitle => 'பாடல் சீரமைப்பு';
 
   @override
-  String get lyricsAlignmentSubtitle => 'பாடல் பார்வையில் பாடல் வரிகளின் சீரமைப்பைக் கட்டுப்படுத்துகிறது.';
+  String get lyricsAlignmentSubtitle =>
+      'பாடல் பார்வையில் பாடல் வரிகளின் சீரமைப்பைக் கட்டுப்படுத்துகிறது.';
 
   @override
   String get lyricsFontSizeTitle => 'பாடல் எழுத்துரு அளவு';
 
   @override
-  String get lyricsFontSizeSubtitle => 'பாடல் பார்வையில் பாடல் எழுத்து அளவைக் கட்டுப்படுத்துகிறது.';
+  String get lyricsFontSizeSubtitle =>
+      'பாடல் பார்வையில் பாடல் எழுத்து அளவைக் கட்டுப்படுத்துகிறது.';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => 'பாடல் வரிக்கு முன் ஆல்பத்தைக் காட்டு';
+  String get showLyricsScreenAlbumPreludeTitle =>
+      'பாடல் வரிக்கு முன் ஆல்பத்தைக் காட்டு';
 
   @override
-  String get showLyricsScreenAlbumPreludeSubtitle => 'கட்டுப்பாடுகள் ஆல்பம் அட்டை உருட்டப்படுவதற்கு முன்பு பாடல் வரிகளுக்கு மேலே காட்டப்பட்டால்.';
+  String get showLyricsScreenAlbumPreludeSubtitle =>
+      'கட்டுப்பாடுகள் ஆல்பம் அட்டை உருட்டப்படுவதற்கு முன்பு பாடல் வரிகளுக்கு மேலே காட்டப்பட்டால்.';
 
   @override
   String get keepScreenOn => 'திரையை தொடர்ந்து வைத்திருங்கள்';
@@ -1715,10 +1837,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String get keepScreenOnWhileLyrics => 'பாடல் காண்பிக்கும் போது';
 
   @override
-  String get keepScreenOnWhilePluggedIn => 'செருகும்போது மட்டுமே திரையை வைக்கவும்';
+  String get keepScreenOnWhilePluggedIn =>
+      'செருகும்போது மட்டுமே திரையை வைக்கவும்';
 
   @override
-  String get keepScreenOnWhilePluggedInSubtitle => 'சாதனம் அவிழ்க்கப்படுகிறதா என்று அமைப்பதில் வைத்திருக்கும் திரையை புறக்கணிக்கவும்';
+  String get keepScreenOnWhilePluggedInSubtitle =>
+      'சாதனம் அவிழ்க்கப்படுகிறதா என்று அமைப்பதில் வைத்திருக்கும் திரையை புறக்கணிக்கவும்';
 
   @override
   String get genericToggleButtonTooltip => 'மாற்றுவதைத் தட்டவும்.';
@@ -1767,37 +1891,44 @@ class AppLocalizationsTa extends AppLocalizations {
   String get showFeatureChipsToggleTitle => 'மேம்பட்ட தட தகவலைக் காட்டு';
 
   @override
-  String get showFeatureChipsToggleSubtitle => 'பிளேயர் திரையில் கோடெக், பிட் வீதம் மற்றும் பலவற்றைப் போன்ற மேம்பட்ட தட தகவல்களைக் காட்டு.';
+  String get showFeatureChipsToggleSubtitle =>
+      'பிளேயர் திரையில் கோடெக், பிட் வீதம் மற்றும் பலவற்றைப் போன்ற மேம்பட்ட தட தகவல்களைக் காட்டு.';
 
   @override
   String get albumScreen => 'ஆல்பம் திரை';
 
   @override
-  String get showCoversOnAlbumScreenTitle => 'தடங்களுக்கான ஆல்பம் அட்டைகளைக் காட்டு';
+  String get showCoversOnAlbumScreenTitle =>
+      'தடங்களுக்கான ஆல்பம் அட்டைகளைக் காட்டு';
 
   @override
-  String get showCoversOnAlbumScreenSubtitle => 'ஆல்பம் திரையில் ஒவ்வொரு தடத்திற்கும் ஆல்பம் அட்டைகளைக் காட்டு.';
+  String get showCoversOnAlbumScreenSubtitle =>
+      'ஆல்பம் திரையில் ஒவ்வொரு தடத்திற்கும் ஆல்பம் அட்டைகளைக் காட்டு.';
 
   @override
-  String get emptyTopTracksList => 'இந்த கலைஞரால் நீங்கள் இதுவரை எந்த தடத்தையும் கேட்கவில்லை.';
+  String get emptyTopTracksList =>
+      'இந்த கலைஞரால் நீங்கள் இதுவரை எந்த தடத்தையும் கேட்கவில்லை.';
 
   @override
   String get emptyFilteredListTitle => 'உருப்படிகள் எதுவும் கிடைக்கவில்லை';
 
   @override
-  String get emptyFilteredListSubtitle => 'எந்த உருப்படிகளும் வடிகட்டியுடன் பொருந்தவில்லை. வடிகட்டியை அணைக்க அல்லது தேடல் காலத்தை மாற்ற முயற்சிக்கவும்.';
+  String get emptyFilteredListSubtitle =>
+      'எந்த உருப்படிகளும் வடிகட்டியுடன் பொருந்தவில்லை. வடிகட்டியை அணைக்க அல்லது தேடல் காலத்தை மாற்ற முயற்சிக்கவும்.';
 
   @override
   String get resetFiltersButton => 'வடிப்பான்களை மீட்டமை';
 
   @override
-  String get resetSettingsPromptGlobal => 'Are you sure you want to reset ALL settings to their defaults?';
+  String get resetSettingsPromptGlobal =>
+      'Are you sure you want to reset ALL settings to their defaults?';
 
   @override
   String get resetSettingsPromptGlobalConfirm => 'Reset ALL settings';
 
   @override
-  String get resetSettingsPromptLocal => 'Do you want to reset these settings back to their defaults?';
+  String get resetSettingsPromptLocal =>
+      'Do you want to reset these settings back to their defaults?';
 
   @override
   String get genericCancel => 'Cancel';
@@ -1831,10 +1962,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String get allowDeleteFromServerTitle => 'Allow deletion from server';
 
   @override
-  String get allowDeleteFromServerSubtitle => 'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
+  String get allowDeleteFromServerSubtitle =>
+      'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
 
   @override
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
@@ -1851,7 +1984,8 @@ class AppLocalizationsTa extends AppLocalizations {
       deleteType,
       {
         'canDelete': ' This will also Delete this item from this Device.',
-        'cantDelete': ' This item will stay on this device until the next sync.',
+        'cantDelete':
+            ' This item will stay on this device until the next sync.',
         'notDownloaded': '',
         'other': '',
       },
@@ -1860,7 +1994,8 @@ class AppLocalizationsTa extends AppLocalizations {
       device,
       {
         'device': 'this device',
-        'server': 'the servers file system and library.$_temp1\nThis action cannot be reverted',
+        'server':
+            'the servers file system and library.$_temp1\nThis action cannot be reverted',
         'other': '',
       },
     );
@@ -1889,7 +2024,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get downloadSizeWarningCutoff => 'Download Size Warning Cutoff';
 
   @override
-  String get downloadSizeWarningCutoffSubtitle => 'A warning message will be displayed when downloading more than this many tracks at once.';
+  String get downloadSizeWarningCutoffSubtitle =>
+      'A warning message will be displayed when downloading more than this many tracks at once.';
 
   @override
   String confirmAddAlbumToPlaylist(String itemType, String itemName) {
@@ -1922,16 +2058,19 @@ class AppLocalizationsTa extends AppLocalizations {
   String get releaseDateFormatMonthDayYear => 'Month, Day & Year';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenTitle => 'Show Album Release Date on Player Screen';
+  String get showAlbumReleaseDateOnPlayerScreenTitle =>
+      'Show Album Release Date on Player Screen';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => 'Show the release date of the album on the player screen, behind the album name.';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle =>
+      'Show the release date of the album on the player screen, behind the album name.';
 
   @override
   String get releaseDateFormatTitle => 'Release Date Format';
 
   @override
-  String get releaseDateFormatSubtitle => 'Controls the format of all release dates shown in the app.';
+  String get releaseDateFormatSubtitle =>
+      'Controls the format of all release dates shown in the app.';
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
@@ -1946,7 +2085,8 @@ class AppLocalizationsTa extends AppLocalizations {
   String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+  String get autoOfflineSettingDescription =>
+      'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
 
   @override
   String get autoOfflineSettingTitle => 'Automated Offline Mode';

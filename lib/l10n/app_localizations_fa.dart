@@ -23,7 +23,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get about => 'درباره‌ی فین‌امپ';
 
   @override
-  String get aboutContributionPrompt => 'ساخته‌ی افراد خفن و باحال در اوقات فراغتشان.\nشما هم می‌توانید یکی از آن‌ها باشید!';
+  String get aboutContributionPrompt =>
+      'ساخته‌ی افراد خفن و باحال در اوقات فراغتشان.\nشما هم می‌توانید یکی از آن‌ها باشید!';
 
   @override
   String get aboutContributionLink => 'در فین‌امپ روی گیت‌هاب مشارکت کنید:';
@@ -62,7 +63,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get serverUrl => 'آدرس سرور';
 
   @override
-  String get internalExternalIpExplanation => 'اگر می‌خواهید که از دور به سرور Jellyfin دسترسی داشته باشید، باید از IP خارجی خود استفاده کنید.\n\nاگر سرورتان روی درگاه پیش‌فرض HTTP (درگاه 80 یا 443) یا درگاه پیش‌فرض Jellyfin (درگاه 8096) روشن است، می‌توانید درگاه را مشخص نکنید.\n\nاگر آدرس درست است، باید اطلاعاتی از سرورتان زیر فیلد آشکار شود.';
+  String get internalExternalIpExplanation =>
+      'اگر می‌خواهید که از دور به سرور Jellyfin دسترسی داشته باشید، باید از IP خارجی خود استفاده کنید.\n\nاگر سرورتان روی درگاه پیش‌فرض HTTP (درگاه 80 یا 443) یا درگاه پیش‌فرض Jellyfin (درگاه 8096) روشن است، می‌توانید درگاه را مشخص نکنید.\n\nاگر آدرس درست است، باید اطلاعاتی از سرورتان زیر فیلد آشکار شود.';
 
   @override
   String get serverUrlHint => 'برای نمونه demo.jellyfin.org/stable';
@@ -80,10 +82,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get loginFlowLocalNetworkServers => 'سرورهای شبکه محلی شما:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'پیمایش برای سرورها...';
+  String get loginFlowLocalNetworkServersScanningForServers =>
+      'پیمایش برای سرورها...';
 
   @override
-  String get loginFlowAccountSelectionHeading => 'حساب کاربری خود را انتخاب کنید';
+  String get loginFlowAccountSelectionHeading =>
+      'حساب کاربری خود را انتخاب کنید';
 
   @override
   String get backToServerSelection => 'برگشت به گزینش سرور';
@@ -104,10 +108,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get loginFlowQuickConnectPrompt => 'استفاده کردن از کد اتصال سریع';
 
   @override
-  String get loginFlowQuickConnectInstructions => 'نرم‌افزار یا وبگاه Jellyfin را باز کنید، روی تصویر کاربرتان کلیک کنید و اتصال سریع را انتخاب کنید.';
+  String get loginFlowQuickConnectInstructions =>
+      'نرم‌افزار یا وبگاه Jellyfin را باز کنید، روی تصویر کاربرتان کلیک کنید و اتصال سریع را انتخاب کنید.';
 
   @override
-  String get loginFlowQuickConnectDisabled => 'اتصال سریع روی این سرور غیرفعال است.';
+  String get loginFlowQuickConnectDisabled =>
+      'اتصال سریع روی این سرور غیرفعال است.';
 
   @override
   String get orDivider => 'یا';
@@ -122,7 +128,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get usernameHint => 'نام کاربری خود را وارد کنید';
 
   @override
-  String get usernameValidationMissingUsername => 'لطفاً یک نام کاربری انتخاب کنید';
+  String get usernameValidationMissingUsername =>
+      'لطفاً یک نام کاربری انتخاب کنید';
 
   @override
   String get password => 'رمزعبور';
@@ -167,13 +174,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get startMix => 'آغاز میکس';
 
   @override
-  String get startMixNoTracksArtist => 'روی یک هنرمند لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود';
+  String get startMixNoTracksArtist =>
+      'روی یک هنرمند لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود';
 
   @override
-  String get startMixNoTracksAlbum => 'روی یک آلبوم لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود';
+  String get startMixNoTracksAlbum =>
+      'روی یک آلبوم لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود';
 
   @override
-  String get startMixNoTracksGenre => 'روی یک ژانر لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود';
+  String get startMixNoTracksGenre =>
+      'روی یک ژانر لمس خود را نگه دارید تا از میکس‌ساز قبل از آغاز کردن میکس اضافه یا حذف شود';
 
   @override
   String get music => 'آهنگ';
@@ -283,7 +293,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing) {
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing) {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
@@ -338,10 +349,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get noActiveDownloads => 'هیچ بارگیری‌ای فعال نیست.';
 
   @override
-  String get errorScreenError => 'یک مشکل به هنگام دریافت فهرست مشکلات رخ داد! در این وضعیت، شاید که ساخت مسأله‌ای در گیت‌هاب و پاک کردن داده‌ی نرم‌افزار به صلاح باشد';
+  String get errorScreenError =>
+      'یک مشکل به هنگام دریافت فهرست مشکلات رخ داد! در این وضعیت، شاید که ساخت مسأله‌ای در گیت‌هاب و پاک کردن داده‌ی نرم‌افزار به صلاح باشد';
 
   @override
-  String get failedToGetTrackFromDownloadId => 'در گرفتن قطعه از ID بارگیری ناکام ماندیم';
+  String get failedToGetTrackFromDownloadId =>
+      'در گرفتن قطعه از ID بارگیری ناکام ماندیم';
 
   @override
   String deleteDownloadsPrompt(String itemName, String itemType) {
@@ -491,13 +504,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get logOut => 'خروج';
 
   @override
-  String get downloadedTracksWillNotBeDeleted => 'قطعه‌های بارگیری شده پاک نخواهند شد';
+  String get downloadedTracksWillNotBeDeleted =>
+      'قطعه‌های بارگیری شده پاک نخواهند شد';
 
   @override
   String get areYouSure => 'آیا مطمئن هستید؟';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'جلی‌فین از AAC برای رمزگردانی (transcoding) استفاده می‌کند';
+  String get jellyfinUsesAACForTranscoding =>
+      'جلی‌فین از AAC برای رمزگردانی (transcoding) استفاده می‌کند';
 
   @override
   String get enableTranscoding => 'فعال‌سازی رمزگردانی (transcoding)';
@@ -509,7 +524,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get bitrate => 'نرخ انتقال';
 
   @override
-  String get bitrateSubtitle => 'نرخ انتقال بالاتر کیفیت صدای بهتری در قبال پهنای باند بیشتر می‌دهد.';
+  String get bitrateSubtitle =>
+      'نرخ انتقال بالاتر کیفیت صدای بهتری در قبال پهنای باند بیشتر می‌دهد.';
 
   @override
   String get customLocation => 'مکان سفارشی';
@@ -527,25 +543,30 @@ class AppLocalizationsFa extends AppLocalizations {
   String get unknownError => 'مشکل ناشناخته';
 
   @override
-  String get pathReturnSlashErrorMessage => 'آدرس‌هایی که \"/\" را برمی‌گردانند قابل استفاده نیستند';
+  String get pathReturnSlashErrorMessage =>
+      'آدرس‌هایی که \"/\" را برمی‌گردانند قابل استفاده نیستند';
 
   @override
   String get directoryMustBeEmpty => 'پوشه باید خالی باشد';
 
   @override
-  String get customLocationsBuggy => 'مکان‌های سفارشی ممکن است بسیار مشکل آفرین باشند و در اکثر مواقع پیشنهاد نمی‌شوند. مکان‌های زیر پوشه‌ی \"موسیقی\" سیستم از ذخیره کردن نگاره‌های آلبوم به دلیل محدودیت‌های سیستم‌عامل جلوگیری می‌کند.';
+  String get customLocationsBuggy =>
+      'مکان‌های سفارشی ممکن است بسیار مشکل آفرین باشند و در اکثر مواقع پیشنهاد نمی‌شوند. مکان‌های زیر پوشه‌ی \"موسیقی\" سیستم از ذخیره کردن نگاره‌های آلبوم به دلیل محدودیت‌های سیستم‌عامل جلوگیری می‌کند.';
 
   @override
-  String get enterLowPriorityStateOnPause => 'ورود به حالت کم اهمیت به هنگام توقف';
+  String get enterLowPriorityStateOnPause =>
+      'ورود به حالت کم اهمیت به هنگام توقف';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => 'در توقف پخش به اعلان اجازه‌ی رد شدن می‌دهد. همچنین به اندروید اجازه می‌دهد تا در توقف پخش به سرویس پایان دهد.';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      'در توقف پخش به اعلان اجازه‌ی رد شدن می‌دهد. همچنین به اندروید اجازه می‌دهد تا در توقف پخش به سرویس پایان دهد.';
 
   @override
   String get shuffleAllTrackCount => 'بُر زدن همه‌ی تعداد قطعه';
 
   @override
-  String get shuffleAllTrackCountSubtitle => 'تعداد قطعه‌ها برای بارگذاری زمانی که دکمه‌ی بُر زدن همه‌ی قطعه‌ها استفاده می‌شود.';
+  String get shuffleAllTrackCountSubtitle =>
+      'تعداد قطعه‌ها برای بارگذاری زمانی که دکمه‌ی بُر زدن همه‌ی قطعه‌ها استفاده می‌شود.';
 
   @override
   String get viewType => 'نوع نما';
@@ -566,10 +587,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playbackSpeedControlSetting => 'نمایش تندی پخش';
 
   @override
-  String get playbackSpeedControlSettingSubtitle => 'اینکه واپایش تندی پخش در منوی صفحه‌ی پخش نمایش داده شود یا نه';
+  String get playbackSpeedControlSettingSubtitle =>
+      'اینکه واپایش تندی پخش در منوی صفحه‌ی پخش نمایش داده شود یا نه';
 
   @override
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList) {
     return 'خودکار:\nفین‌امپ تلاش می‌کند تا مشخص کند قطعه‌ای که شما در حال پخش کردن هستید پادپخش (پادکست) است یا کتاب صوتی. این مورد زمانی در نظر گرفته می‌شود که قطعه از $trackDuration دقیقه بیشتر باشد، یا قطعه از $albumDuration ساعت بیشتر باشد، یا به قطعه دست کم یکی از این ژانرها اختصاص داده شده باشد:‌$genreList\nسپس واپایش‌های تندی پخش در منوی صفحه‌ی پخش نشان داده می‌شوند.\n\nنشان داده شده:\nواپایش‌های تندی پخش همیشه در منوی صفحه‌ی پخش نشان داده می‌شوند\n\nپنهان:\nواپایش‌های تندی پخش در منوی صفحه‌ی پخش همیشه پنهان باشند.';
   }
 
@@ -611,31 +634,39 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showTextOnGridView => 'نشان دادن متن در نمایش جدولی';
 
   @override
-  String get showTextOnGridViewSubtitle => 'اینکه متن (عنوان، هنرمند و ...) روی صفحه‌ی جدولی آهنگ نمایش داده شود یا نه.';
+  String get showTextOnGridViewSubtitle =>
+      'اینکه متن (عنوان، هنرمند و ...) روی صفحه‌ی جدولی آهنگ نمایش داده شود یا نه.';
 
   @override
-  String get useCoverAsBackground => 'از جلد مبهم شده به عنوان پس‌زمینه استفاده شود';
+  String get useCoverAsBackground =>
+      'از جلد مبهم شده به عنوان پس‌زمینه استفاده شود';
 
   @override
-  String get useCoverAsBackgroundSubtitle => 'اینکه از جلد آلبوم مبهم شده به عنوان پس‌زمینه در بخش های مختلف نرم‌افزار استفاده شود یا نه.';
+  String get useCoverAsBackgroundSubtitle =>
+      'اینکه از جلد آلبوم مبهم شده به عنوان پس‌زمینه در بخش های مختلف نرم‌افزار استفاده شود یا نه.';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorTitle => 'حداقل فاصله‌ی درونی جلد آلبوم';
+  String get playerScreenMinimumCoverPaddingEditorTitle =>
+      'حداقل فاصله‌ی درونی جلد آلبوم';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => 'حداقل فاصله‌ی درونی دور جلد آلبوم روی صفحه‌ی پخش، درصد عرض صفحه.';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle =>
+      'حداقل فاصله‌ی درونی دور جلد آلبوم روی صفحه‌ی پخش، درصد عرض صفحه.';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtists => 'پنهان کردن هنرمندان قطعه اگر با هنرمندان آلبوم یکی بودند';
+  String get hideTrackArtistsIfSameAsAlbumArtists =>
+      'پنهان کردن هنرمندان قطعه اگر با هنرمندان آلبوم یکی بودند';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => 'اینکه هنرمندان قطعه روی صفحه‌ی آلبوم اگر با هنرمندان آلبوم تفاوتی نداشتند نمایش داده شوند یا نه.';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      'اینکه هنرمندان قطعه روی صفحه‌ی آلبوم اگر با هنرمندان آلبوم تفاوتی نداشتند نمایش داده شوند یا نه.';
 
   @override
   String get showArtistsTopTracks => 'نشان دادن قطعه‌های برتر در نمایش هنرمند';
 
   @override
-  String get showArtistsTopTracksSubtitle => 'اینکه ۵ قطعه‌ی برتر هنرمند نمایش داده شود یا نه.';
+  String get showArtistsTopTracksSubtitle =>
+      'اینکه ۵ قطعه‌ی برتر هنرمند نمایش داده شود یا نه.';
 
   @override
   String get disableGesture => 'غیرفعال کردن حرکات لمسی';
@@ -744,7 +775,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playlistCreated => 'فهرست پخش ساخته شد.';
 
   @override
-  String get playlistActionsMenuButtonTooltip => 'برای افزودن به فهرست پخش لمس کنید. برای تغییر وضعیت علاقه نگه دارید.';
+  String get playlistActionsMenuButtonTooltip =>
+      'برای افزودن به فهرست پخش لمس کنید. برای تغییر وضعیت علاقه نگه دارید.';
 
   @override
   String get noAlbum => 'هیچ آلبومی نیست';
@@ -861,25 +893,29 @@ class AppLocalizationsFa extends AppLocalizations {
   String get bufferDuration => 'مدت زمان بافر';
 
   @override
-  String get bufferDurationSubtitle => 'بیشینه‌ی زمانی که باید بافر شود، به ثانیه. راه‌اندازی مجدد نیاز دارد.';
+  String get bufferDurationSubtitle =>
+      'بیشینه‌ی زمانی که باید بافر شود، به ثانیه. راه‌اندازی مجدد نیاز دارد.';
 
   @override
   String get bufferDisableSizeConstraintsTitle => 'اندازه‌ی بافر را محدود نکن';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => 'ثابت‌های اندازه‌ی بافر (\"‌اندازه‌ی بافر\") را غیرفعال می‌کند. بافر همیشه به اندازه‌ی بافر پیکربندی شده (\'اندازه‌ی بافر\') بارگذاری خواهد شد، حتی برای پرونده‌های بسیار بزرگ. می‌تواند موجب خرابی شود. نیازمند راه‌اندازی مجدد است.';
+  String get bufferDisableSizeConstraintsSubtitle =>
+      'ثابت‌های اندازه‌ی بافر (\"‌اندازه‌ی بافر\") را غیرفعال می‌کند. بافر همیشه به اندازه‌ی بافر پیکربندی شده (\'اندازه‌ی بافر\') بارگذاری خواهد شد، حتی برای پرونده‌های بسیار بزرگ. می‌تواند موجب خرابی شود. نیازمند راه‌اندازی مجدد است.';
 
   @override
   String get bufferSizeTitle => 'اندازه‌ی بافر';
 
   @override
-  String get bufferSizeSubtitle => 'بیشینه‌ی اندازه‌ی بافر به مگابایت. نیازمند راه‌اندازی مجدد است';
+  String get bufferSizeSubtitle =>
+      'بیشینه‌ی اندازه‌ی بافر به مگابایت. نیازمند راه‌اندازی مجدد است';
 
   @override
   String get language => 'زبان';
 
   @override
-  String get skipToPreviousTrackButtonTooltip => 'پرش به آغاز یا به قطعه‌ی قبلی';
+  String get skipToPreviousTrackButtonTooltip =>
+      'پرش به آغاز یا به قطعه‌ی قبلی';
 
   @override
   String get skipToNextTrackButtonTooltip => 'پرش به قطعه‌ی بعدی';
@@ -1027,13 +1063,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playbackOrderLinearButtonLabel => 'پخش به ترتیب';
 
   @override
-  String get playbackOrderLinearButtonTooltip => 'در حال پخش به ترتیب. برای بُر زدن لمس کنید.';
+  String get playbackOrderLinearButtonTooltip =>
+      'در حال پخش به ترتیب. برای بُر زدن لمس کنید.';
 
   @override
   String get playbackOrderShuffledButtonLabel => 'در حال بُر زدن قطعه‌ها';
 
   @override
-  String get playbackOrderShuffledButtonTooltip => 'در حال بُر زدن قطعه‌ها. برای پخش به ترتیب لمس کنید.';
+  String get playbackOrderShuffledButtonTooltip =>
+      'در حال بُر زدن قطعه‌ها. برای پخش به ترتیب لمس کنید.';
 
   @override
   String playbackSpeedButtonLabel(double speed) {
@@ -1068,7 +1106,8 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String queueRestoreTitle(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
+    final intl.DateFormat dateDateFormat =
+        intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
     return '$dateString ذخیره شد';
@@ -1094,28 +1133,34 @@ class AppLocalizationsFa extends AppLocalizations {
   String get queueLoadingMessage => 'در حال بازگردانی صف...';
 
   @override
-  String get queueRetryMessage => 'در بازگردانی صف ناکام ماندیم. دوباره تلاش کنیم؟';
+  String get queueRetryMessage =>
+      'در بازگردانی صف ناکام ماندیم. دوباره تلاش کنیم؟';
 
   @override
   String get autoloadLastQueueOnStartup => 'بازگردانی خودکار واپسین صف';
 
   @override
-  String get autoloadLastQueueOnStartupSubtitle => 'تلاش برای بازگردانی واپسین صف پخش شده پس از شروع برنامه.';
+  String get autoloadLastQueueOnStartupSubtitle =>
+      'تلاش برای بازگردانی واپسین صف پخش شده پس از شروع برنامه.';
 
   @override
   String get reportQueueToServer => 'صف فعلی به سرور گزارش شود؟';
 
   @override
-  String get reportQueueToServerSubtitle => 'اگر فعال شود، فین‌امپ صف کنونی را به سرور می‌فرستد. اکنون کاربرد خاصی برای این وجود ندارد و فقط شدآمد (traffic) شبکه را افزایش می‌دهد.';
+  String get reportQueueToServerSubtitle =>
+      'اگر فعال شود، فین‌امپ صف کنونی را به سرور می‌فرستد. اکنون کاربرد خاصی برای این وجود ندارد و فقط شدآمد (traffic) شبکه را افزایش می‌دهد.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequency => 'فرکانس بروزرسانی نشست پخش';
+  String get periodicPlaybackSessionUpdateFrequency =>
+      'فرکانس بروزرسانی نشست پخش';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencySubtitle => 'هر چند وقت وضعیت پخش کنونی به سرور فرستاده شود، به ثانیه. به خاطر اینکه از خروج نشست جلوگیری شود، این باید کمتر از ۵ دقیقه (۳۰۰ ثانیه) باشد.';
+  String get periodicPlaybackSessionUpdateFrequencySubtitle =>
+      'هر چند وقت وضعیت پخش کنونی به سرور فرستاده شود، به ثانیه. به خاطر اینکه از خروج نشست جلوگیری شود، این باید کمتر از ۵ دقیقه (۳۰۰ ثانیه) باشد.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencyDetails => 'اگر سرور جلی‌فین (Jellyfin) بروزرسانی‌ای از سرویس گیرنده در ۵ دقیقه دریافت نکند، می‌پندارد که پخش پایان یافته‌است. این بدان معناست که برای قطعه‌های بلندتر از ۵ دقیقه، پخش آن می‌تواند اشتباهاً به عنوان پایان یافته گزارش شود، که منجر به کاهش کیفیت داده‌ی گزارش پخش (Playback Reporting Data) می‌شود.';
+  String get periodicPlaybackSessionUpdateFrequencyDetails =>
+      'اگر سرور جلی‌فین (Jellyfin) بروزرسانی‌ای از سرویس گیرنده در ۵ دقیقه دریافت نکند، می‌پندارد که پخش پایان یافته‌است. این بدان معناست که برای قطعه‌های بلندتر از ۵ دقیقه، پخش آن می‌تواند اشتباهاً به عنوان پایان یافته گزارش شود، که منجر به کاهش کیفیت داده‌ی گزارش پخش (Playback Reporting Data) می‌شود.';
 
   @override
   String get topTracks => 'قطعه‌های برتر';
@@ -1138,7 +1183,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get shuffleAlbumsNext => 'بُر زدن آلبوم‌ها و افزودن آن به آغاز بعدی';
 
   @override
-  String get shuffleAlbumsToNextUp => 'بُر زدن آلبوم‌ها و افزودن آن‌ها به پایان بعدی';
+  String get shuffleAlbumsToNextUp =>
+      'بُر زدن آلبوم‌ها و افزودن آن‌ها به پایان بعدی';
 
   @override
   String get shuffleAlbumsToQueue => 'بُر زدن آلبوم‌ها و افزودن آن‌ها به صف';
@@ -1187,7 +1233,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get close => 'بستن';
 
   @override
-  String get showUncensoredLogMessage => 'این رخداد شامل اطلاعات ورود شماست. نمایش داده شود؟';
+  String get showUncensoredLogMessage =>
+      'این رخداد شامل اطلاعات ورود شماست. نمایش داده شود؟';
 
   @override
   String get resetTabs => 'بازنشانی سربرگ‌ها';
@@ -1199,7 +1246,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get noMusicLibrariesTitle => 'هیچ کتاب‌خانه‌ی آهنگی نیست';
 
   @override
-  String get noMusicLibrariesBody => 'فین‌امپ هیچ کتاب‌خانه‌ی آهنگی پیدا نکرد. لطفاً مطمئن شوید که سرور Jellyfin شما دست کم یک کتاب‌خانه با نوع محتوای \"Music\" دارا باشد.';
+  String get noMusicLibrariesBody =>
+      'فین‌امپ هیچ کتاب‌خانه‌ی آهنگی پیدا نکرد. لطفاً مطمئن شوید که سرور Jellyfin شما دست کم یک کتاب‌خانه با نوع محتوای \"Music\" دارا باشد.';
 
   @override
   String get refresh => 'دوباره سازی';
@@ -1214,16 +1262,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get volumeNormalizationSwitchTitle => 'فعال کردن عادی‌سازی حجم صدا';
 
   @override
-  String get volumeNormalizationSwitchSubtitle => 'استفاده از اطلاعات گین (gain) برای عادی‌سازی بلندی صدای قطعه‌ها';
+  String get volumeNormalizationSwitchSubtitle =>
+      'استفاده از اطلاعات گین (gain) برای عادی‌سازی بلندی صدای قطعه‌ها';
 
   @override
   String get volumeNormalizationModeSelectorTitle => 'حالت عادی‌سازی حجم صدا';
 
   @override
-  String get volumeNormalizationModeSelectorSubtitle => 'چه زمان و چگونه عادی‌سازی حجم صدا به کار بسته شود';
+  String get volumeNormalizationModeSelectorSubtitle =>
+      'چه زمان و چگونه عادی‌سازی حجم صدا به کار بسته شود';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => 'آمیخته (قطعه + آلبوم):\nگین قطعه برای بپخش معمولی به کار گرفته می‌شود. اما اگر آلبومی در حال پخش شدن باشد (شاید چون که خاستگاه صف آغازین است یا زمانی به صف افزوده شده)، از گین آلبوم استفاده می‌شود.\n\nبر پایه‌ی قطعه:\nگین قطعه همیشه به کار برده می‌شود، بدون توجه به این‌که آلبومی در حال پخش است یا نه.\n\nتنها برای آلبوم‌ها:\nعادی‌سازی بلندی صدا فقط برای پخش آلبوم‌ها به کار بسته می‌شود (با استفاده از گین آلبوم) و برای قطعه‌های منفرد نمی‌شود.';
+  String get volumeNormalizationModeSelectorDescription =>
+      'آمیخته (قطعه + آلبوم):\nگین قطعه برای بپخش معمولی به کار گرفته می‌شود. اما اگر آلبومی در حال پخش شدن باشد (شاید چون که خاستگاه صف آغازین است یا زمانی به صف افزوده شده)، از گین آلبوم استفاده می‌شود.\n\nبر پایه‌ی قطعه:\nگین قطعه همیشه به کار برده می‌شود، بدون توجه به این‌که آلبومی در حال پخش است یا نه.\n\nتنها برای آلبوم‌ها:\nعادی‌سازی بلندی صدا فقط برای پخش آلبوم‌ها به کار بسته می‌شود (با استفاده از گین آلبوم) و برای قطعه‌های منفرد نمی‌شود.';
 
   @override
   String get volumeNormalizationModeHybrid => 'آمیخته (قطعه + آلبوم)';
@@ -1241,7 +1292,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get volumeNormalizationIOSBaseGainEditorTitle => 'گین (gain) پایه';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => 'در حال حاضر، عادی‌سازی بلندی صدا روی iOS نیاز دارد که بلندی پخش را تغییر دهد تا تغییر گین (gain) را شبیه‌سازی کند. از آن‌جا که نمی‌توانیم صدا را بلندتر از ۱۰۰٪ کنیم، باید بلندی را به صورت پیش‌فرض کم کنیم تا بتوانیم صدای قطعه‌های ساکت را بلندتر کنیم. مقدار به دسی‌بل (dB) است که منفی ۱۰ دسی‌بل تقریباً ۳۰٪، منفی ۴.۵ دسی‌بل تقریباً ۶۰٪ و منفی ۲ دسی‌بل تقریباً ۸۰٪ است.';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle =>
+      'در حال حاضر، عادی‌سازی بلندی صدا روی iOS نیاز دارد که بلندی پخش را تغییر دهد تا تغییر گین (gain) را شبیه‌سازی کند. از آن‌جا که نمی‌توانیم صدا را بلندتر از ۱۰۰٪ کنیم، باید بلندی را به صورت پیش‌فرض کم کنیم تا بتوانیم صدای قطعه‌های ساکت را بلندتر کنیم. مقدار به دسی‌بل (dB) است که منفی ۱۰ دسی‌بل تقریباً ۳۰٪، منفی ۴.۵ دسی‌بل تقریباً ۶۰٪ و منفی ۲ دسی‌بل تقریباً ۸۰٪ است.';
 
   @override
   String numberAsDecibel(double value) {
@@ -1249,16 +1301,20 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get swipeInsertQueueNext => 'پخش کردن قطعه‌ی کشیده شده (سوآیپ) به عنوان بعدی';
+  String get swipeInsertQueueNext =>
+      'پخش کردن قطعه‌ی کشیده شده (سوآیپ) به عنوان بعدی';
 
   @override
-  String get swipeInsertQueueNextSubtitle => 'برای نشاندن یک قطعه به عنوان آیتم بعدی در صف زمانی که در لیست قطعه‌ها کشیده می‌شود به جای این‌که به آخر افزوده شود.';
+  String get swipeInsertQueueNextSubtitle =>
+      'برای نشاندن یک قطعه به عنوان آیتم بعدی در صف زمانی که در لیست قطعه‌ها کشیده می‌شود به جای این‌که به آخر افزوده شود.';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchTitle => 'آغاز میکس آنی برای قطعه‌های منفرد';
+  String get startInstantMixForIndividualTracksSwitchTitle =>
+      'آغاز میکس آنی برای قطعه‌های منفرد';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => 'زمانی که فعال است، میکس آنی آن قطعه به هنگام لمس پخش می‌شود به جای این‌که تنها یک قطعه تکی پخش شود.';
+  String get startInstantMixForIndividualTracksSwitchSubtitle =>
+      'زمانی که فعال است، میکس آنی آن قطعه به هنگام لمس پخش می‌شود به جای این‌که تنها یک قطعه تکی پخش شود.';
 
   @override
   String get downloadItem => 'بارگیری';
@@ -1273,7 +1329,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get syncDownloads => 'همگام‌سازی و بارگیری آیتم‌های از قلم افتاده.';
 
   @override
-  String get repairDownloads => 'تعمیر مشکلات مربوط به فایل‌ها یا فراداده‌های بارگیری شده.';
+  String get repairDownloads =>
+      'تعمیر مشکلات مربوط به فایل‌ها یا فراداده‌های بارگیری شده.';
 
   @override
   String get requireWifiForDownloads => 'الزام اتصال به WiFi هنگام بارگیری.';
@@ -1316,19 +1373,24 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get onlyShowFullyDownloaded => 'تنها آلبوم‌های کامل بارگیری‌شده را نمایش بده';
+  String get onlyShowFullyDownloaded =>
+      'تنها آلبوم‌های کامل بارگیری‌شده را نمایش بده';
 
   @override
-  String get filesystemFull => 'بارگیری‌های جامانده را نمی‌توان کامل کرد. سیستم پر است و جا ندارد.';
+  String get filesystemFull =>
+      'بارگیری‌های جامانده را نمی‌توان کامل کرد. سیستم پر است و جا ندارد.';
 
   @override
-  String get connectionInterrupted => 'اتصال بریده شد، درحال متوقف کردن بارگیری‌ها.';
+  String get connectionInterrupted =>
+      'اتصال بریده شد، درحال متوقف کردن بارگیری‌ها.';
 
   @override
-  String get connectionInterruptedBackground => 'به هنگام بارگیری در پس‌زمینه، اتصال بریده شد. می‌تواند توسط تنظیمات سیستم‌عامل اتفاق افتاده باشد.';
+  String get connectionInterruptedBackground =>
+      'به هنگام بارگیری در پس‌زمینه، اتصال بریده شد. می‌تواند توسط تنظیمات سیستم‌عامل اتفاق افتاده باشد.';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => 'به هنگام بارگیری در پس‌زمینه، اتصال بریده شد. این مشکل می‌تواند از فعال بودن تنظیم «ورود به حالت کم اهمیت به هنگام توقف» یا تنظیمات سیستم‌عامل باشد.';
+  String get connectionInterruptedBackgroundAndroid =>
+      'به هنگام بارگیری در پس‌زمینه، اتصال بریده شد. این مشکل می‌تواند از فعال بودن تنظیم «ورود به حالت کم اهمیت به هنگام توقف» یا تنظیمات سیستم‌عامل باشد.';
 
   @override
   String get activeDownloadSize => 'در حال بارگیری...';
@@ -1340,22 +1402,26 @@ class AppLocalizationsFa extends AppLocalizations {
   String get syncingDownloadSize => 'در حال همگام‌سازی...';
 
   @override
-  String get runRepairWarning => 'ارتباط با سرور صورت نمی‌پذیرد تا انتقال داده‌ها پایان یابد. لطفاً «تعمیر بارگیری‌ها» از صفحه‌ی بارگیری‌ها را هر زمان که برخط شدید اجرا کنید.';
+  String get runRepairWarning =>
+      'ارتباط با سرور صورت نمی‌پذیرد تا انتقال داده‌ها پایان یابد. لطفاً «تعمیر بارگیری‌ها» از صفحه‌ی بارگیری‌ها را هر زمان که برخط شدید اجرا کنید.';
 
   @override
   String get downloadSettings => 'بارگیری‌ها';
 
   @override
-  String get showNullLibraryItemsTitle => 'نمایش رسانه‌های دارای کتاب‌خانه‌ی ناشناخته.';
+  String get showNullLibraryItemsTitle =>
+      'نمایش رسانه‌های دارای کتاب‌خانه‌ی ناشناخته.';
 
   @override
-  String get showNullLibraryItemsSubtitle => 'برخی رسانه‌ها ممکن است با کتاب‌خانه‌ای ناشناخته بارگیری شوند. برای پنهان کردن این‌ها خارج از مجموعه اصلی این گزینه را غیرفعال کنید.';
+  String get showNullLibraryItemsSubtitle =>
+      'برخی رسانه‌ها ممکن است با کتاب‌خانه‌ای ناشناخته بارگیری شوند. برای پنهان کردن این‌ها خارج از مجموعه اصلی این گزینه را غیرفعال کنید.';
 
   @override
   String get maxConcurrentDownloads => 'بیشینه بارگیری همزمان';
 
   @override
-  String get maxConcurrentDownloadsSubtitle => 'افزایش بارگیری‌های همزمان ممکن است افزایش بارگیری در پس‌زمینه را اجازه دهد اما شاید برخی بارگیری‌ها را اگر بسیار سنگین باشند، ناکام بگذارد یا در برخی از موارد سبب کندی گزاف شود.';
+  String get maxConcurrentDownloadsSubtitle =>
+      'افزایش بارگیری‌های همزمان ممکن است افزایش بارگیری در پس‌زمینه را اجازه دهد اما شاید برخی بارگیری‌ها را اگر بسیار سنگین باشند، ناکام بگذارد یا در برخی از موارد سبب کندی گزاف شود.';
 
   @override
   String maxConcurrentDownloadsLabel(String count) {
@@ -1366,7 +1432,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get downloadsWorkersSetting => 'شمار کارکن‌های بارگیری';
 
   @override
-  String get downloadsWorkersSettingSubtitle => 'شمار کارکن‌ها برای همگام‌سازی فراداده و پاک‌سازی بارگیری‌ها. افزایش کارکن‌های بارگیری ممکن است سرعت بارگیری همگام‌سازی یا پاک‌سازی را بالا ببرد، به ویژه زمانی که تأخیر سرور بالاست، اما می‌تواند کندی ایجاد کند.';
+  String get downloadsWorkersSettingSubtitle =>
+      'شمار کارکن‌ها برای همگام‌سازی فراداده و پاک‌سازی بارگیری‌ها. افزایش کارکن‌های بارگیری ممکن است سرعت بارگیری همگام‌سازی یا پاک‌سازی را بالا ببرد، به ویژه زمانی که تأخیر سرور بالاست، اما می‌تواند کندی ایجاد کند.';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
@@ -1374,13 +1441,15 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get syncOnStartupSwitch => 'همگام‌سازی بارگیری‌ها هنگام راه‌اندازی به طور خودکار';
+  String get syncOnStartupSwitch =>
+      'همگام‌سازی بارگیری‌ها هنگام راه‌اندازی به طور خودکار';
 
   @override
   String get preferQuickSyncSwitch => 'همگام‌سازی‌های سریع را ترجیح دادن';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => 'زمانی که همگام‌سازی صورت می‌گیرد، بیشتر برخی آیتم‌های راکد (مانند قطعه‌ها و آلبوم‌ها) بروزرسانی نخواند شد. تعمیر بارگیری همواره همگام‌سازی کامل را اجرا می‌کند.';
+  String get preferQuickSyncSwitchSubtitle =>
+      'زمانی که همگام‌سازی صورت می‌گیرد، بیشتر برخی آیتم‌های راکد (مانند قطعه‌ها و آلبوم‌ها) بروزرسانی نخواند شد. تعمیر بارگیری همواره همگام‌سازی کامل را اجرا می‌کند.';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
@@ -1426,13 +1495,16 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'گزینش ظرف رمزگردانی (Transcoding Container)';
+  String get transcodingStreamingContainerTitle =>
+      'گزینش ظرف رمزگردانی (Transcoding Container)';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'ظرف سگمنت را انتخاب کنید تا به هنگام پخش لحظه‌ای صدای رمزگردانی شده به کار بسته شود. قطعه‌های به صف شده کنونی تحت تأثیر قرار نمی‌گیرند.';
+  String get transcodingStreamingContainerSubtitle =>
+      'ظرف سگمنت را انتخاب کنید تا به هنگام پخش لحظه‌ای صدای رمزگردانی شده به کار بسته شود. قطعه‌های به صف شده کنونی تحت تأثیر قرار نمی‌گیرند.';
 
   @override
-  String get downloadTranscodeEnableTitle => 'فعال کردن بارگیری‌های رمزگردانی شده';
+  String get downloadTranscodeEnableTitle =>
+      'فعال کردن بارگیری‌های رمزگردانی شده';
 
   @override
   String get downloadTranscodeCodecTitle => 'گزینش کدک بارگیری';
@@ -1455,7 +1527,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get downloadBitrate => 'نرخ انتقال بارگیری';
 
   @override
-  String get downloadBitrateSubtitle => 'نرخ انتقال بالاتر کیفیت صدای بالاتری در قبال فضای ذخیره‌سازی بزرگت‌تر ارائه می‌کند.';
+  String get downloadBitrateSubtitle =>
+      'نرخ انتقال بالاتر کیفیت صدای بالاتری در قبال فضای ذخیره‌سازی بزرگت‌تر ارائه می‌کند.';
 
   @override
   String get transcodeHint => 'رمزگردانی؟';
@@ -1515,16 +1588,20 @@ class AppLocalizationsFa extends AppLocalizations {
   String get redownloadTitle => 'بارگیری کردن دوباره خودکار رمزگردانی‌ها';
 
   @override
-  String get redownloadSubtitle => 'به صورت خودکار قطعه‌هایی که انتظار می‌رود در کیفیت متفاوت به دلیل تغییرات مجموعه والد باشند، دوباره بارگیری می‌شوند.';
+  String get redownloadSubtitle =>
+      'به صورت خودکار قطعه‌هایی که انتظار می‌رود در کیفیت متفاوت به دلیل تغییرات مجموعه والد باشند، دوباره بارگیری می‌شوند.';
 
   @override
-  String get defaultDownloadLocationButton => 'به عنوان مکان پیش‌فرض بارگیری قرار می‌گیرد.  غیرفعال کنید تا برای هر بارگیری انتخاب کنید.';
+  String get defaultDownloadLocationButton =>
+      'به عنوان مکان پیش‌فرض بارگیری قرار می‌گیرد.  غیرفعال کنید تا برای هر بارگیری انتخاب کنید.';
 
   @override
-  String get fixedGridSizeSwitchTitle => 'استفاده از کاشی‌های جدول با اندازه‌های ثابت';
+  String get fixedGridSizeSwitchTitle =>
+      'استفاده از کاشی‌های جدول با اندازه‌های ثابت';
 
   @override
-  String get fixedGridSizeSwitchSubtitle => 'اندازه‌ی کاشی‌های جدول تحت تاثیر اندازه‌ی پنجره/صفحه قرار نمی‌گیرند.';
+  String get fixedGridSizeSwitchSubtitle =>
+      'اندازه‌ی کاشی‌های جدول تحت تاثیر اندازه‌ی پنجره/صفحه قرار نمی‌گیرند.';
 
   @override
   String get fixedGridSizeTitle => 'اندازه‌ی کاشی‌های جدول';
@@ -1545,10 +1622,12 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get allowSplitScreenTitle => 'مجاز بودن حالت صفحه نمایش دو بخشی (SplitScreen)';
+  String get allowSplitScreenTitle =>
+      'مجاز بودن حالت صفحه نمایش دو بخشی (SplitScreen)';
 
   @override
-  String get allowSplitScreenSubtitle => 'پخش‌کننده کنار نماهای دیگر روی نمایشگرهای عریض نمایش داده می‌شود.';
+  String get allowSplitScreenSubtitle =>
+      'پخش‌کننده کنار نماهای دیگر روی نمایشگرهای عریض نمایش داده می‌شود.';
 
   @override
   String get enableVibration => 'فعال کردن لرزش';
@@ -1560,37 +1639,43 @@ class AppLocalizationsFa extends AppLocalizations {
   String get hideQueueButton => 'دکمه‌ی پنهان کردن صف';
 
   @override
-  String get hideQueueButtonSubtitle => 'Hide the queue button on the player screen. Swipe up to access the queue.';
+  String get hideQueueButtonSubtitle =>
+      'Hide the queue button on the player screen. Swipe up to access the queue.';
 
   @override
   String get oneLineMarqueeTextButton => 'Auto-scroll Long Titles';
 
   @override
-  String get oneLineMarqueeTextButtonSubtitle => 'Automatically scroll track titles that are too long to display in two lines';
+  String get oneLineMarqueeTextButtonSubtitle =>
+      'Automatically scroll track titles that are too long to display in two lines';
 
   @override
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle =>
+      'Show ... at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'پنهان کردن عملیات‌های پایین';
 
   @override
-  String get hidePlayerBottomActionsSubtitle => 'دکمه‌های صف و متن شعر روی صفحه‌ی پخش‌کننده را پنهان می‌کند. برای دسترسی به صف به بالا بکشید، برای دیدن متن شعر اگر در دسترس باشد به چپ بکشید (زیر نگاره‌ی آلبوم).';
+  String get hidePlayerBottomActionsSubtitle =>
+      'دکمه‌های صف و متن شعر روی صفحه‌ی پخش‌کننده را پنهان می‌کند. برای دسترسی به صف به بالا بکشید، برای دیدن متن شعر اگر در دسترس باشد به چپ بکشید (زیر نگاره‌ی آلبوم).';
 
   @override
   String get prioritizePlayerCover => 'در اولویت قرار دادن نگاره‌ی آلبوم';
 
   @override
-  String get prioritizePlayerCoverSubtitle => 'نمایش نگاره‌ی آلبوم بزرگ‌تر روی صفحه‌ی پخش را در اولویت قرار می‌دهد. واپایش‌های غیر ضروری در صفحه‌های کوجک سهمگین‌تر پنهان می‌شوند.';
+  String get prioritizePlayerCoverSubtitle =>
+      'نمایش نگاره‌ی آلبوم بزرگ‌تر روی صفحه‌ی پخش را در اولویت قرار می‌دهد. واپایش‌های غیر ضروری در صفحه‌های کوجک سهمگین‌تر پنهان می‌شوند.';
 
   @override
   String get suppressPlayerPadding => 'سرکوب کردن فاصله‌ی واپایش‌های پخش‌کننده';
 
   @override
-  String get suppressPlayerPaddingSubtitle => 'زمانی که نگاره‌ی آلبوم در اندازه‌ی کامل نباشد، فاصله‌ی بین واپایش‌های صفحه پخش را به حداقل می‌رساند.';
+  String get suppressPlayerPaddingSubtitle =>
+      'زمانی که نگاره‌ی آلبوم در اندازه‌ی کامل نباشد، فاصله‌ی بین واپایش‌های صفحه پخش را به حداقل می‌رساند.';
 
   @override
   String get lockDownload => 'همیشه روی دستگاه نگهش دار';
@@ -1599,7 +1684,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showArtistChipImage => 'نمایش نگاره‌ی هنرمند به همراه نام هنرمند';
 
   @override
-  String get showArtistChipImageSubtitle => 'این پیش‌نمایش کوچک نگاره‌ی هنرمند را تحت تاثیر قرار می‌دهد،‌ مانند روی صفحه‌ی پخش.';
+  String get showArtistChipImageSubtitle =>
+      'این پیش‌نمایش کوچک نگاره‌ی هنرمند را تحت تاثیر قرار می‌دهد،‌ مانند روی صفحه‌ی پخش.';
 
   @override
   String get scrollToCurrentTrack => 'اسکرول کردن به قطعه کنونی';
@@ -1646,13 +1732,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get trackOfflineFavorites => 'همگام‌سازی وضعیت علایق';
 
   @override
-  String get trackOfflineFavoritesSubtitle => 'اجازه می‌دهد وضعیت علایق بروزتری در حالت آفلاین نشان داده شود.  هیچ فایل اضافه‌ای بارگیری نمی‌کند.';
+  String get trackOfflineFavoritesSubtitle =>
+      'اجازه می‌دهد وضعیت علایق بروزتری در حالت آفلاین نشان داده شود.  هیچ فایل اضافه‌ای بارگیری نمی‌کند.';
 
   @override
   String get allPlaylistsInfoSetting => 'بارگیری فراداده‌ی فهرست پخش';
 
   @override
-  String get allPlaylistsInfoSettingSubtitle => 'همگام‌سازی فراداده برای همه‌ی فهرست‌های پخش تا تجربه‌ی فهرست پخش شما بهبود یابد';
+  String get allPlaylistsInfoSettingSubtitle =>
+      'همگام‌سازی فراداده برای همه‌ی فهرست‌های پخش تا تجربه‌ی فهرست پخش شما بهبود یابد';
 
   @override
   String get downloadFavoritesSetting => 'بارگیری همه‌ی مورد علاقه‌ها';
@@ -1664,40 +1752,51 @@ class AppLocalizationsFa extends AppLocalizations {
   String get fiveLatestAlbumsSetting => 'بارگیری ۵ آلبوم واپسین';
 
   @override
-  String get fiveLatestAlbumsSettingSubtitle => 'بارگیری‌ها زمانی که کهنه شوند پاک خواهند شد.  برای اینکه از پاک شدن یک آلبوم جلوگیری کنید، آن را قفل کنید.';
+  String get fiveLatestAlbumsSettingSubtitle =>
+      'بارگیری‌ها زمانی که کهنه شوند پاک خواهند شد.  برای اینکه از پاک شدن یک آلبوم جلوگیری کنید، آن را قفل کنید.';
 
   @override
-  String get cacheLibraryImagesSettings => 'کَش کردن نگاره‌های کتاب‌خانه‌ی کنونی';
+  String get cacheLibraryImagesSettings =>
+      'کَش کردن نگاره‌های کتاب‌خانه‌ی کنونی';
 
   @override
-  String get cacheLibraryImagesSettingsSubtitle => 'همه‌ی نگاره‌های آلبوم، هنرمند، ژانر و فهرست پخش که در کتاب‌خانه‌ی فعال کنونی هستند، بارگیری خواهد شد.';
+  String get cacheLibraryImagesSettingsSubtitle =>
+      'همه‌ی نگاره‌های آلبوم، هنرمند، ژانر و فهرست پخش که در کتاب‌خانه‌ی فعال کنونی هستند، بارگیری خواهد شد.';
 
   @override
-  String get showProgressOnNowPlayingBarTitle => 'نمایش پیشروی قطعه روی پخش‌کننده‌ی کوچک درون برنامه';
+  String get showProgressOnNowPlayingBarTitle =>
+      'نمایش پیشروی قطعه روی پخش‌کننده‌ی کوچک درون برنامه';
 
   @override
-  String get showProgressOnNowPlayingBarSubtitle => 'این‌که پخش‌کننده‌ی کوچک/میله‌ی پخش کنونی در پایین صفحه‌ی آهنگ مانند یک میله‌ی پیشروری رفتار کند را واپایش می‌کند.';
+  String get showProgressOnNowPlayingBarSubtitle =>
+      'این‌که پخش‌کننده‌ی کوچک/میله‌ی پخش کنونی در پایین صفحه‌ی آهنگ مانند یک میله‌ی پیشروری رفتار کند را واپایش می‌کند.';
 
   @override
   String get lyricsScreen => 'نمای متن شعر';
 
   @override
-  String get showLyricsTimestampsTitle => 'نمایش برچسب‌های زمانی برای متن شعرهای همگام شده';
+  String get showLyricsTimestampsTitle =>
+      'نمایش برچسب‌های زمانی برای متن شعرهای همگام شده';
 
   @override
-  String get showLyricsTimestampsSubtitle => 'این‌که برچسب زمانی هر خطِ متن شعر در نمای متن شعرها نمایش داده شود را واپایش می‌کند، اگر در دسترس باشد.';
+  String get showLyricsTimestampsSubtitle =>
+      'این‌که برچسب زمانی هر خطِ متن شعر در نمای متن شعرها نمایش داده شود را واپایش می‌کند، اگر در دسترس باشد.';
 
   @override
-  String get showStopButtonOnMediaNotificationTitle => 'نمایش دکمه‌ی ایست روی اعلان رسانه';
+  String get showStopButtonOnMediaNotificationTitle =>
+      'نمایش دکمه‌ی ایست روی اعلان رسانه';
 
   @override
-  String get showStopButtonOnMediaNotificationSubtitle => 'این‌که اعلان رسانه، یک دکمه‌ی ایست افزون بر دکمه‌ی وقفه داشته باشد را واپایش می‌کند. این به شما اجازه می‌دهد که پخش را بدون باز کردن نرم‌افزار قطع کنید.';
+  String get showStopButtonOnMediaNotificationSubtitle =>
+      'این‌که اعلان رسانه، یک دکمه‌ی ایست افزون بر دکمه‌ی وقفه داشته باشد را واپایش می‌کند. این به شما اجازه می‌دهد که پخش را بدون باز کردن نرم‌افزار قطع کنید.';
 
   @override
-  String get showSeekControlsOnMediaNotificationTitle => 'نمایش واپایش‌های پرش روی اعلان رسانه';
+  String get showSeekControlsOnMediaNotificationTitle =>
+      'نمایش واپایش‌های پرش روی اعلان رسانه';
 
   @override
-  String get showSeekControlsOnMediaNotificationSubtitle => 'این‌که اعلان رسانه یک میله‌ی پیشروی پرش‌پذیر داشته‌باشد را واپایش می‌کند. این به شما اجازه می‌دهد که مکان پخش را بدون باز کردن نرم‌افزار تغییر دهید.';
+  String get showSeekControlsOnMediaNotificationSubtitle =>
+      'این‌که اعلان رسانه یک میله‌ی پیشروی پرش‌پذیر داشته‌باشد را واپایش می‌کند. این به شما اجازه می‌دهد که مکان پخش را بدون باز کردن نرم‌افزار تغییر دهید.';
 
   @override
   String get alignmentOptionStart => 'آغاز';
@@ -1721,19 +1820,23 @@ class AppLocalizationsFa extends AppLocalizations {
   String get lyricsAlignmentTitle => 'هم‌ترازی متن شعرها';
 
   @override
-  String get lyricsAlignmentSubtitle => 'هم‌ترازی متن شعرها را در نمای متن شعر واپایش می‌کند.';
+  String get lyricsAlignmentSubtitle =>
+      'هم‌ترازی متن شعرها را در نمای متن شعر واپایش می‌کند.';
 
   @override
   String get lyricsFontSizeTitle => 'اندازه‌ی فونت متن شعرها';
 
   @override
-  String get lyricsFontSizeSubtitle => 'اندازه‌ی فونت متن شعرها را در نمای متن شعر واپایش می‌کند.';
+  String get lyricsFontSizeSubtitle =>
+      'اندازه‌ی فونت متن شعرها را در نمای متن شعر واپایش می‌کند.';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => 'نمایش نگاره‌ی آلبوم پیش از متن شعر';
+  String get showLyricsScreenAlbumPreludeTitle =>
+      'نمایش نگاره‌ی آلبوم پیش از متن شعر';
 
   @override
-  String get showLyricsScreenAlbumPreludeSubtitle => 'این‌که نگاره‌ی آلبوم بالای متن شعر پیش از این‌که رد شود، نمایش داده شود را واپایش می‌کند.';
+  String get showLyricsScreenAlbumPreludeSubtitle =>
+      'این‌که نگاره‌ی آلبوم بالای متن شعر پیش از این‌که رد شود، نمایش داده شود را واپایش می‌کند.';
 
   @override
   String get keepScreenOn => 'صفحه را روشن نگهدار';
@@ -1754,10 +1857,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get keepScreenOnWhileLyrics => 'زمانی که متن شعر نمایش داده می‌شود';
 
   @override
-  String get keepScreenOnWhilePluggedIn => 'فقط در حال شارژ صفحه را روشن نگه‌داشته شود';
+  String get keepScreenOnWhilePluggedIn =>
+      'فقط در حال شارژ صفحه را روشن نگه‌داشته شود';
 
   @override
-  String get keepScreenOnWhilePluggedInSubtitle => 'از روشن نگهداشتن صفحه چشم پوشی شود اگر دستگاه در حال شارژ نیست';
+  String get keepScreenOnWhilePluggedInSubtitle =>
+      'از روشن نگهداشتن صفحه چشم پوشی شود اگر دستگاه در حال شارژ نیست';
 
   @override
   String get genericToggleButtonTooltip => 'برای تغییر وضعیت بزنید.';
@@ -1806,7 +1911,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showFeatureChipsToggleTitle => 'نمایش داده‌های پیشرفته قطعه';
 
   @override
-  String get showFeatureChipsToggleSubtitle => 'داده‌های پیشرفته قطعه مانند کدک، نرخ انتقال و ... را روی صفحه‌ی پخش نمایش می‌دهد.';
+  String get showFeatureChipsToggleSubtitle =>
+      'داده‌های پیشرفته قطعه مانند کدک، نرخ انتقال و ... را روی صفحه‌ی پخش نمایش می‌دهد.';
 
   @override
   String get albumScreen => 'صفحه‌ی آلبوم';
@@ -1815,28 +1921,34 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showCoversOnAlbumScreenTitle => 'نمایش نگاره‌ی آلبوم برای قطعه‌ها';
 
   @override
-  String get showCoversOnAlbumScreenSubtitle => 'نگاره‌ی آلبوم را برای هر قطعه به صورت جداگانه روی صفحه‌ی آلبوم نمایش می‌دهد.';
+  String get showCoversOnAlbumScreenSubtitle =>
+      'نگاره‌ی آلبوم را برای هر قطعه به صورت جداگانه روی صفحه‌ی آلبوم نمایش می‌دهد.';
 
   @override
-  String get emptyTopTracksList => 'شما به هیچ‌کدام از قطعه‌های این هنرمند گوش نداده‌اید.';
+  String get emptyTopTracksList =>
+      'شما به هیچ‌کدام از قطعه‌های این هنرمند گوش نداده‌اید.';
 
   @override
   String get emptyFilteredListTitle => 'هیچ آیتمی پیدا نشد';
 
   @override
-  String get emptyFilteredListSubtitle => 'هیج آیتمی که با پالایش شما همخوانی داشته باشد یافت نشد. پالایش‌گر را خاموش کنید یا شرایط جست‌وجو را تغییر دهید.';
+  String get emptyFilteredListSubtitle =>
+      'هیج آیتمی که با پالایش شما همخوانی داشته باشد یافت نشد. پالایش‌گر را خاموش کنید یا شرایط جست‌وجو را تغییر دهید.';
 
   @override
   String get resetFiltersButton => 'بازنشانی پالایش';
 
   @override
-  String get resetSettingsPromptGlobal => 'آیا مطمئنید که می‌خواهید همه‌ی پیکربندی‌ها را به حالت پیش‌فرض بازگردانید؟';
+  String get resetSettingsPromptGlobal =>
+      'آیا مطمئنید که می‌خواهید همه‌ی پیکربندی‌ها را به حالت پیش‌فرض بازگردانید؟';
 
   @override
-  String get resetSettingsPromptGlobalConfirm => 'همه‌ی پیکربندی‌ها را به حالت پیش‌فرض بازگردان';
+  String get resetSettingsPromptGlobalConfirm =>
+      'همه‌ی پیکربندی‌ها را به حالت پیش‌فرض بازگردان';
 
   @override
-  String get resetSettingsPromptLocal => 'آیا می‌خواهید که این پیکربندی‌ها را به حالت پیشٰ‌فرض بازگردانید؟';
+  String get resetSettingsPromptLocal =>
+      'آیا می‌خواهید که این پیکربندی‌ها را به حالت پیشٰ‌فرض بازگردانید؟';
 
   @override
   String get genericCancel => 'لغو';
@@ -1870,10 +1982,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get allowDeleteFromServerTitle => 'Allow deletion from server';
 
   @override
-  String get allowDeleteFromServerSubtitle => 'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
+  String get allowDeleteFromServerSubtitle =>
+      'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
 
   @override
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
@@ -1890,7 +2004,8 @@ class AppLocalizationsFa extends AppLocalizations {
       deleteType,
       {
         'canDelete': ' This will also Delete this item from this Device.',
-        'cantDelete': ' This item will stay on this device until the next sync.',
+        'cantDelete':
+            ' This item will stay on this device until the next sync.',
         'notDownloaded': '',
         'other': '',
       },
@@ -1899,7 +2014,8 @@ class AppLocalizationsFa extends AppLocalizations {
       device,
       {
         'device': 'this device',
-        'server': 'the servers file system and library.$_temp1\nThis action cannot be reverted',
+        'server':
+            'the servers file system and library.$_temp1\nThis action cannot be reverted',
         'other': '',
       },
     );
@@ -1928,7 +2044,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get downloadSizeWarningCutoff => 'Download Size Warning Cutoff';
 
   @override
-  String get downloadSizeWarningCutoffSubtitle => 'A warning message will be displayed when downloading more than this many tracks at once.';
+  String get downloadSizeWarningCutoffSubtitle =>
+      'A warning message will be displayed when downloading more than this many tracks at once.';
 
   @override
   String confirmAddAlbumToPlaylist(String itemType, String itemName) {
@@ -1961,16 +2078,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get releaseDateFormatMonthDayYear => 'Month, Day & Year';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenTitle => 'Show Album Release Date on Player Screen';
+  String get showAlbumReleaseDateOnPlayerScreenTitle =>
+      'Show Album Release Date on Player Screen';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => 'Show the release date of the album on the player screen, behind the album name.';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle =>
+      'Show the release date of the album on the player screen, behind the album name.';
 
   @override
   String get releaseDateFormatTitle => 'Release Date Format';
 
   @override
-  String get releaseDateFormatSubtitle => 'Controls the format of all release dates shown in the app.';
+  String get releaseDateFormatSubtitle =>
+      'Controls the format of all release dates shown in the app.';
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
@@ -1985,7 +2105,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+  String get autoOfflineSettingDescription =>
+      'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
 
   @override
   String get autoOfflineSettingTitle => 'Automated Offline Mode';

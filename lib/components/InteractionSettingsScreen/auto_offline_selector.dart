@@ -10,12 +10,12 @@ class AutoOfflineSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AutoOfflineOption option = ref
-      .watch(finampSettingsProvider.autoOffline);
+    AutoOfflineOption option = ref.watch(finampSettingsProvider.autoOffline);
 
     return ListTile(
       title: Text(AppLocalizations.of(context)!.autoOfflineSettingTitle),
-      subtitle: Text(AppLocalizations.of(context)!.autoOfflineSettingDescription),
+      subtitle:
+          Text(AppLocalizations.of(context)!.autoOfflineSettingDescription),
       trailing: DropdownButton<AutoOfflineOption>(
         value: option,
         items: AutoOfflineOption.values

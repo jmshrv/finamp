@@ -23,7 +23,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get about => 'Finamp Hakkında';
 
   @override
-  String get aboutContributionPrompt => 'Harika insanlar tarafından boş zamanlarında yapıldı.\nSen de onlardan biri olabilirsin!';
+  String get aboutContributionPrompt =>
+      'Harika insanlar tarafından boş zamanlarında yapıldı.\nSen de onlardan biri olabilirsin!';
 
   @override
   String get aboutContributionLink => 'GitHub\'da Finamp\'a katkıda bulunun:';
@@ -32,7 +33,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get aboutReleaseNotes => 'En son sürüm notlarını okuyun:';
 
   @override
-  String get aboutTranslations => 'Finamp\'ın dilinize çevrilmesine yardımcı olun:';
+  String get aboutTranslations =>
+      'Finamp\'ın dilinize çevrilmesine yardımcı olun:';
 
   @override
   String get aboutThanks => 'Finamp\'ı kullandığınız için teşekkürler!';
@@ -62,7 +64,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get serverUrl => 'Sunucu URL\'si';
 
   @override
-  String get internalExternalIpExplanation => 'Jellyfin sunucunuza uzaktan erişmek istiyorsanız dış IP adresinizi kullanmalısınız.\n\nSunucunuz bir HTTP varsayılan bağlantı noktasında (80 veya 443) veya Jellyfin\'in varsayılan bağlantı noktasında (8096) bulunuyorsa, bağlantı noktasını belirtmeniz gerekmez.\n\nURL doğruysa, giriş alanının altında sunucunuzla ilgili bazı bilgilerin açıldığını görmelisiniz.';
+  String get internalExternalIpExplanation =>
+      'Jellyfin sunucunuza uzaktan erişmek istiyorsanız dış IP adresinizi kullanmalısınız.\n\nSunucunuz bir HTTP varsayılan bağlantı noktasında (80 veya 443) veya Jellyfin\'in varsayılan bağlantı noktasında (8096) bulunuyorsa, bağlantı noktasını belirtmeniz gerekmez.\n\nURL doğruysa, giriş alanının altında sunucunuzla ilgili bazı bilgilerin açıldığını görmelisiniz.';
 
   @override
   String get serverUrlHint => 'örneğin demo.jellyfin.org/stable';
@@ -80,7 +83,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get loginFlowLocalNetworkServers => 'Yerel ağınızdaki sunucular:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'Sunucular taranıyor...';
+  String get loginFlowLocalNetworkServersScanningForServers =>
+      'Sunucular taranıyor...';
 
   @override
   String get loginFlowAccountSelectionHeading => 'Hesabınızı seçin';
@@ -104,10 +108,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get loginFlowQuickConnectPrompt => 'Hızlı bağlantı kodunu kullan';
 
   @override
-  String get loginFlowQuickConnectInstructions => 'Jellyfin uygulamasını veya internet sitesini açın, kullanıcı simgenize tıklayın ve \"Hızlı Bağlan\"ı seçin.';
+  String get loginFlowQuickConnectInstructions =>
+      'Jellyfin uygulamasını veya internet sitesini açın, kullanıcı simgenize tıklayın ve \"Hızlı Bağlan\"ı seçin.';
 
   @override
-  String get loginFlowQuickConnectDisabled => '\"Hızlı Bağlan\" bu sunucuda devre dışı bırakıldı.';
+  String get loginFlowQuickConnectDisabled =>
+      '\"Hızlı Bağlan\" bu sunucuda devre dışı bırakıldı.';
 
   @override
   String get orDivider => 'veya';
@@ -122,7 +128,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get usernameHint => 'Kullanıcı adınızı girin';
 
   @override
-  String get usernameValidationMissingUsername => 'Lütfen bir kullanıcı adı girin';
+  String get usernameValidationMissingUsername =>
+      'Lütfen bir kullanıcı adı girin';
 
   @override
   String get password => 'Şifre';
@@ -167,13 +174,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get startMix => 'Mix\'i başlat';
 
   @override
-  String get startMixNoTracksArtist => 'Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir sanatçıya uzun basın';
+  String get startMixNoTracksArtist =>
+      'Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir sanatçıya uzun basın';
 
   @override
-  String get startMixNoTracksAlbum => 'Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir albüme uzun basın';
+  String get startMixNoTracksAlbum =>
+      'Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir albüme uzun basın';
 
   @override
-  String get startMixNoTracksGenre => 'Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir türe uzun basın';
+  String get startMixNoTracksGenre =>
+      'Karışımı başlatmadan önce karışım oluşturucuya eklemek veya kaldırmak için bir türe uzun basın';
 
   @override
   String get music => 'Müzik';
@@ -251,7 +261,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get runtime => 'Oynatma süresi';
 
   @override
-  String get syncDownloadedPlaylists => 'İndirilen oynatma listelerini eş zamanla';
+  String get syncDownloadedPlaylists =>
+      'İndirilen oynatma listelerini eş zamanla';
 
   @override
   String get downloadMissingImages => 'Eksik görselleri indir';
@@ -283,7 +294,8 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing) {
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing) {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
@@ -338,10 +350,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noActiveDownloads => 'Etkin indirme yok.';
 
   @override
-  String get errorScreenError => 'Hata listesi oluşturulurken hata meydana geldi. Bu noktada, GitHub\'da bir sorun oluşturmalı ve uygulama verilerini silmelisiniz';
+  String get errorScreenError =>
+      'Hata listesi oluşturulurken hata meydana geldi. Bu noktada, GitHub\'da bir sorun oluşturmalı ve uygulama verilerini silmelisiniz';
 
   @override
-  String get failedToGetTrackFromDownloadId => 'İndirme kimliğinden parça alınamadı';
+  String get failedToGetTrackFromDownloadId =>
+      'İndirme kimliğinden parça alınamadı';
 
   @override
   String deleteDownloadsPrompt(String itemName, String itemType) {
@@ -491,25 +505,29 @@ class AppLocalizationsTr extends AppLocalizations {
   String get logOut => 'Çıkış Yap';
 
   @override
-  String get downloadedTracksWillNotBeDeleted => 'İndirilen parçalar silinmeyecek';
+  String get downloadedTracksWillNotBeDeleted =>
+      'İndirilen parçalar silinmeyecek';
 
   @override
   String get areYouSure => 'Emin misiniz?';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin kod dönüştürme için AAC kullanıyor';
+  String get jellyfinUsesAACForTranscoding =>
+      'Jellyfin kod dönüştürme için AAC kullanıyor';
 
   @override
   String get enableTranscoding => 'Kod dönüştürmeyi etkinleştir';
 
   @override
-  String get enableTranscodingSubtitle => 'Sunucu tarafındaki ses akışlarının kodunu dönüştürür.';
+  String get enableTranscodingSubtitle =>
+      'Sunucu tarafındaki ses akışlarının kodunu dönüştürür.';
 
   @override
   String get bitrate => 'Bit oranı';
 
   @override
-  String get bitrateSubtitle => 'Daha yüksek bir bit oranı, daha fazla bant genişliği kullanır ancak daha kaliteli ses verir.';
+  String get bitrateSubtitle =>
+      'Daha yüksek bir bit oranı, daha fazla bant genişliği kullanır ancak daha kaliteli ses verir.';
 
   @override
   String get customLocation => 'Özel Konum';
@@ -527,25 +545,30 @@ class AppLocalizationsTr extends AppLocalizations {
   String get unknownError => 'Bilinmeyen Hata';
 
   @override
-  String get pathReturnSlashErrorMessage => '\"/\" döndüren yollar kullanılamaz';
+  String get pathReturnSlashErrorMessage =>
+      '\"/\" döndüren yollar kullanılamaz';
 
   @override
   String get directoryMustBeEmpty => 'Klasör boş olmalı';
 
   @override
-  String get customLocationsBuggy => 'İzinlerden kaynaklanan sorunlar dolayısıyla özel konum seçmek fazlasıyla bug\'a yol açmakta. Şimdilik kullanmanızı önermiyorum, çözmenin bir yolunu düşünüyorum.';
+  String get customLocationsBuggy =>
+      'İzinlerden kaynaklanan sorunlar dolayısıyla özel konum seçmek fazlasıyla bug\'a yol açmakta. Şimdilik kullanmanızı önermiyorum, çözmenin bir yolunu düşünüyorum.';
 
   @override
-  String get enterLowPriorityStateOnPause => 'Bekletmede Düşük Öncelik Durumuna Geç';
+  String get enterLowPriorityStateOnPause =>
+      'Bekletmede Düşük Öncelik Durumuna Geç';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => 'Şarkı duraklatıldığında bildirimin temizlenebilmesini sağlar. Ayrıca Android\'in hizmeti kapatmasına izin verir.';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      'Şarkı duraklatıldığında bildirimin temizlenebilmesini sağlar. Ayrıca Android\'in hizmeti kapatmasına izin verir.';
 
   @override
   String get shuffleAllTrackCount => 'Karıştırılacak Tüm Parçaların Sayısı';
 
   @override
-  String get shuffleAllTrackCountSubtitle => 'Tüm parçaları karıştır düğmesini kullanırken karıştırılacak parça sayısı.';
+  String get shuffleAllTrackCountSubtitle =>
+      'Tüm parçaları karıştır düğmesini kullanırken karıştırılacak parça sayısı.';
 
   @override
   String get viewType => 'Görüntüleme Tipi';
@@ -566,10 +589,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get playbackSpeedControlSetting => 'Oynatma Hızı Görünürlüğü';
 
   @override
-  String get playbackSpeedControlSettingSubtitle => 'Oynatıcı ekranı menüsünde oynatma hızı kontrollerinin gösterilip gösterilmeyeceği';
+  String get playbackSpeedControlSettingSubtitle =>
+      'Oynatıcı ekranı menüsünde oynatma hızı kontrollerinin gösterilip gösterilmeyeceği';
 
   @override
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList) {
     return 'Otomatik:\nFinamp, oynattığınız parçanın bir podcast mi yoksa sesli kitabın (bir parçası) mı olduğunu belirlemeye çalışır. Parçanın $trackDuration dakikadan uzun olması, parçanın albümünün $albumDuration saatten uzun olması veya parçaya şu türlerden en az birinin atanmış olması durumunda bu durum geçerli kabul edilir: $genreList\nOynatma hızı kontrolleri oynatıcı ekranı menüsünde gösterilecektir.\n\nGöster:\nOynatma hızı kontrolleri her zaman oynatıcı ekranı menüsünde gösterilecektir.\n\nGizle:\nOynatıcı ekranı menüsündeki oynatma hızı kontrolleri her zaman gizlidir.';
   }
 
@@ -611,37 +636,47 @@ class AppLocalizationsTr extends AppLocalizations {
   String get showTextOnGridView => 'Izgara görünümünde metin göster';
 
   @override
-  String get showTextOnGridViewSubtitle => 'Izgara müzik ekranında metin (başlık, sanatçı, vs.) gösterilip gösterilmeyeceğini belirler.';
+  String get showTextOnGridViewSubtitle =>
+      'Izgara müzik ekranında metin (başlık, sanatçı, vs.) gösterilip gösterilmeyeceğini belirler.';
 
   @override
-  String get useCoverAsBackground => 'Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını göster';
+  String get useCoverAsBackground =>
+      'Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını göster';
 
   @override
-  String get useCoverAsBackgroundSubtitle => 'Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını gösterilip gösterilmeyeceğini belirler.';
+  String get useCoverAsBackgroundSubtitle =>
+      'Oynatıcı arkaplanı olarak bulanık kapak fotoğrafını gösterilip gösterilmeyeceğini belirler.';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorTitle => 'En az albüm kapağı dolgusu';
+  String get playerScreenMinimumCoverPaddingEditorTitle =>
+      'En az albüm kapağı dolgusu';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => 'Oynatıcı ekranında albüm kapağı çevresinde, ekran genişliğinin %\'si cinsinden en az dolgu.';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle =>
+      'Oynatıcı ekranında albüm kapağı çevresinde, ekran genişliğinin %\'si cinsinden en az dolgu.';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtists => 'Albüm sanatçılarıyla aynıysa parça sanatçılarını gizle';
+  String get hideTrackArtistsIfSameAsAlbumArtists =>
+      'Albüm sanatçılarıyla aynıysa parça sanatçılarını gizle';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => 'Albüm sanatçılarından farklı değilse parça sanatçılarının albüm ekranında gösterilip gösterilmeyeceği.';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      'Albüm sanatçılarından farklı değilse parça sanatçılarının albüm ekranında gösterilip gösterilmeyeceği.';
 
   @override
-  String get showArtistsTopTracks => 'En iyi parçaları sanatçı görünümünde göster';
+  String get showArtistsTopTracks =>
+      'En iyi parçaları sanatçı görünümünde göster';
 
   @override
-  String get showArtistsTopTracksSubtitle => 'Bir sanatçının en çok dinlenen ilk 5 parçasının gösterilip gösterilmeyeceği.';
+  String get showArtistsTopTracksSubtitle =>
+      'Bir sanatçının en çok dinlenen ilk 5 parçasının gösterilip gösterilmeyeceği.';
 
   @override
   String get disableGesture => 'Jestleri devre dışı bırak';
 
   @override
-  String get disableGestureSubtitle => 'Jestleri devre dışı bırakır veya aktifleştirir.';
+  String get disableGestureSubtitle =>
+      'Jestleri devre dışı bırakır veya aktifleştirir.';
 
   @override
   String get showFastScroller => 'Hızlı kaydırıcıyı göster';
@@ -744,7 +779,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get playlistCreated => 'Oynatma listesi oluşturuldu.';
 
   @override
-  String get playlistActionsMenuButtonTooltip => 'Oynatma listesine eklemek için dokunun. Favoriyi değiştirmek için uzun basın.';
+  String get playlistActionsMenuButtonTooltip =>
+      'Oynatma listesine eklemek için dokunun. Favoriyi değiştirmek için uzun basın.';
 
   @override
   String get noAlbum => 'Albüm Yok';
@@ -861,25 +897,30 @@ class AppLocalizationsTr extends AppLocalizations {
   String get bufferDuration => 'Önden Kaydetme Süresi';
 
   @override
-  String get bufferDurationSubtitle => 'Saniye cinsinden ara belleğe alınması gereken en fazla süre. Yeniden başlatmayı gerektirir.';
+  String get bufferDurationSubtitle =>
+      'Saniye cinsinden ara belleğe alınması gereken en fazla süre. Yeniden başlatmayı gerektirir.';
 
   @override
-  String get bufferDisableSizeConstraintsTitle => 'Arabellek boyutunu sınırlama';
+  String get bufferDisableSizeConstraintsTitle =>
+      'Arabellek boyutunu sınırlama';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => 'Arabellek boyutu kısıtlamalarını (\'arabellek boyutu\') devre dışı bırakır. Bellek, çok büyük dosyalar için bile her zaman yapılandırılmış süreye (\'arabellek süresi\') yüklenecektir. Kazalara neden olabilir. Yeniden başlatma gerektirir.';
+  String get bufferDisableSizeConstraintsSubtitle =>
+      'Arabellek boyutu kısıtlamalarını (\'arabellek boyutu\') devre dışı bırakır. Bellek, çok büyük dosyalar için bile her zaman yapılandırılmış süreye (\'arabellek süresi\') yüklenecektir. Kazalara neden olabilir. Yeniden başlatma gerektirir.';
 
   @override
   String get bufferSizeTitle => 'Arabellek Boyutu';
 
   @override
-  String get bufferSizeSubtitle => 'MB cinsinden arabelleğin maksimum boyutu. Yeniden başlatma gerektirir';
+  String get bufferSizeSubtitle =>
+      'MB cinsinden arabelleğin maksimum boyutu. Yeniden başlatma gerektirir';
 
   @override
   String get language => 'Dil';
 
   @override
-  String get skipToPreviousTrackButtonTooltip => 'Başlangıca veya önceki parçaya atla';
+  String get skipToPreviousTrackButtonTooltip =>
+      'Başlangıca veya önceki parçaya atla';
 
   @override
   String get skipToNextTrackButtonTooltip => 'Sonraki parçaya atla';
@@ -1027,13 +1068,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get playbackOrderLinearButtonLabel => 'Playing in order';
 
   @override
-  String get playbackOrderLinearButtonTooltip => 'Sırayla oynat. Karıştıra dokun.';
+  String get playbackOrderLinearButtonTooltip =>
+      'Sırayla oynat. Karıştıra dokun.';
 
   @override
   String get playbackOrderShuffledButtonLabel => 'Parçaları karıştır';
 
   @override
-  String get playbackOrderShuffledButtonTooltip => 'Parçalar karıştırılıyor. Sırayla oynatmak için dokun.';
+  String get playbackOrderShuffledButtonTooltip =>
+      'Parçalar karıştırılıyor. Sırayla oynatmak için dokun.';
 
   @override
   String playbackSpeedButtonLabel(double speed) {
@@ -1068,7 +1111,8 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String queueRestoreTitle(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
+    final intl.DateFormat dateDateFormat =
+        intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
     return '$dateString kaydedildi';
@@ -1094,28 +1138,34 @@ class AppLocalizationsTr extends AppLocalizations {
   String get queueLoadingMessage => 'Sıra geri yükleniyor...';
 
   @override
-  String get queueRetryMessage => 'Sıra geri yüklenemedi. Yeniden denemek ister misiniz?';
+  String get queueRetryMessage =>
+      'Sıra geri yüklenemedi. Yeniden denemek ister misiniz?';
 
   @override
   String get autoloadLastQueueOnStartup => 'Son Sırayı Otomatik Geri Yükle';
 
   @override
-  String get autoloadLastQueueOnStartupSubtitle => 'Uygulama başlatıldığında son oynatılan sırayı geri yüklemeyi dene.';
+  String get autoloadLastQueueOnStartupSubtitle =>
+      'Uygulama başlatıldığında son oynatılan sırayı geri yüklemeyi dene.';
 
   @override
   String get reportQueueToServer => 'Mevcut sıra sunucuya raporlansın mı?';
 
   @override
-  String get reportQueueToServerSubtitle => 'Etkinleştirildiğinde Finamp mevcut kuyruğu sunucuya gönderecektir. Şu anda bunun pek bir faydası yok gibi görünüyor ve ağ trafiğini artırıyor.';
+  String get reportQueueToServerSubtitle =>
+      'Etkinleştirildiğinde Finamp mevcut kuyruğu sunucuya gönderecektir. Şu anda bunun pek bir faydası yok gibi görünüyor ve ağ trafiğini artırıyor.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequency => 'Kayıttan yürütme oturumu güncelleme sıklığı';
+  String get periodicPlaybackSessionUpdateFrequency =>
+      'Kayıttan yürütme oturumu güncelleme sıklığı';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencySubtitle => 'Geçerli oynatma durumunun sunucuya saniye cinsinden ne sıklıkta gönderileceği. Oturumun zaman aşımına uğramasını önlemek için bu süre 5 dakikadan (300 saniye) kısa olmalıdır.';
+  String get periodicPlaybackSessionUpdateFrequencySubtitle =>
+      'Geçerli oynatma durumunun sunucuya saniye cinsinden ne sıklıkta gönderileceği. Oturumun zaman aşımına uğramasını önlemek için bu süre 5 dakikadan (300 saniye) kısa olmalıdır.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencyDetails => 'Jellyfin sunucusu son 5 dakika içinde istemciden herhangi bir güncelleme almamışsa oynatmanın sona erdiğini varsayar. Bu, 5 dakikadan uzun parçalar için oynatmanın hatalı bir şekilde sona ermiş olarak rapor edilebileceği ve bunun da oynatma raporlama verilerinin kalitesinin düşebileceği anlamına gelir.';
+  String get periodicPlaybackSessionUpdateFrequencyDetails =>
+      'Jellyfin sunucusu son 5 dakika içinde istemciden herhangi bir güncelleme almamışsa oynatmanın sona erdiğini varsayar. Bu, 5 dakikadan uzun parçalar için oynatmanın hatalı bir şekilde sona ermiş olarak rapor edilebileceği ve bunun da oynatma raporlama verilerinin kalitesinin düşebileceği anlamına gelir.';
 
   @override
   String get topTracks => 'En İyi Parçalar';
@@ -1187,7 +1237,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get close => 'Kapat';
 
   @override
-  String get showUncensoredLogMessage => 'Bu günlük oturum açma bilgilerinizi içerir. Gösterilsin mi?';
+  String get showUncensoredLogMessage =>
+      'Bu günlük oturum açma bilgilerinizi içerir. Gösterilsin mi?';
 
   @override
   String get resetTabs => 'Sekmeleri sıfırla';
@@ -1199,7 +1250,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noMusicLibrariesTitle => 'Müzik Kütüphanesi Bulunamadı';
 
   @override
-  String get noMusicLibrariesBody => 'Finamp herhangi bir müzik kütüphanesi bulamadı. Lütfen Jellyfin sunucunun içerik türü \"Müzik\" olarak ayarlanmış en az bir kütüphaneye sahip olduğundan emin ol.';
+  String get noMusicLibrariesBody =>
+      'Finamp herhangi bir müzik kütüphanesi bulamadı. Lütfen Jellyfin sunucunun içerik türü \"Müzik\" olarak ayarlanmış en az bir kütüphaneye sahip olduğundan emin ol.';
 
   @override
   String get refresh => 'Yenile';
@@ -1214,16 +1266,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get volumeNormalizationSwitchTitle => 'Ses Ölçülü Etkinleştir';
 
   @override
-  String get volumeNormalizationSwitchSubtitle => 'Parçaların ses yüksekliğini normalleştirmek için kazanç bilgilerini kullan (\"Replay Gain\")';
+  String get volumeNormalizationSwitchSubtitle =>
+      'Parçaların ses yüksekliğini normalleştirmek için kazanç bilgilerini kullan (\"Replay Gain\")';
 
   @override
   String get volumeNormalizationModeSelectorTitle => 'Ses Ölçülü Kipi';
 
   @override
-  String get volumeNormalizationModeSelectorSubtitle => 'Ses Ölçülü ne zaman ve nasıl uygulansın';
+  String get volumeNormalizationModeSelectorSubtitle =>
+      'Ses Ölçülü ne zaman ve nasıl uygulansın';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => 'Hibrit (Parça + Albüm):\nParça kazancı normal çalma için kullanılır, ancak bir albüm çalıyorsa (ana çalma kuyruğu kaynağı olduğu için veya bir noktada kuyruğa eklendiği için), bunun yerine albüm kazancı kullanılır.\n\nParça tabanlı:\nParça kazancı, albümün çalınıp çalınmadığına bakılmaksızın her zaman kullanılır.\n\nYalnızca albümler:\nSes Düzeyi Normalleştirmesi yalnızca albümler oynatılırken uygulanır (albüm kazanımı kullanılarak), ancak tek tek parçalar için uygulanmaz.';
+  String get volumeNormalizationModeSelectorDescription =>
+      'Hibrit (Parça + Albüm):\nParça kazancı normal çalma için kullanılır, ancak bir albüm çalıyorsa (ana çalma kuyruğu kaynağı olduğu için veya bir noktada kuyruğa eklendiği için), bunun yerine albüm kazancı kullanılır.\n\nParça tabanlı:\nParça kazancı, albümün çalınıp çalınmadığına bakılmaksızın her zaman kullanılır.\n\nYalnızca albümler:\nSes Düzeyi Normalleştirmesi yalnızca albümler oynatılırken uygulanır (albüm kazanımı kullanılarak), ancak tek tek parçalar için uygulanmaz.';
 
   @override
   String get volumeNormalizationModeHybrid => 'Hibrit (Parça + Albüm)';
@@ -1241,7 +1296,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get volumeNormalizationIOSBaseGainEditorTitle => 'Temel Kazanç';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => 'Şu anda iOS\'ta Ses Düzeyi Normalleştirmesi, kazanç değişikliğini taklit etmek için oynatma ses düzeyinin değiştirilmesini gerektiriyor. Sesi %100\'ün üzerine çıkaramadığımız için, sessiz parçaların sesini artırabilmek için sesi varsayılan olarak azaltmamız gerekiyor. Değer desibel (dB) cinsindendir; burada -10 dB ~%30 ses, -4,5 dB ~%60 ses ve -2 dB ~%80 ses seviyesidir.';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle =>
+      'Şu anda iOS\'ta Ses Düzeyi Normalleştirmesi, kazanç değişikliğini taklit etmek için oynatma ses düzeyinin değiştirilmesini gerektiriyor. Sesi %100\'ün üzerine çıkaramadığımız için, sessiz parçaların sesini artırabilmek için sesi varsayılan olarak azaltmamız gerekiyor. Değer desibel (dB) cinsindendir; burada -10 dB ~%30 ses, -4,5 dB ~%60 ses ve -2 dB ~%80 ses seviyesidir.';
 
   @override
   String numberAsDecibel(double value) {
@@ -1252,13 +1308,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get swipeInsertQueueNext => 'Kaydırılan Parçayı Ardından Oynat';
 
   @override
-  String get swipeInsertQueueNextSubtitle => 'Parça listesinde kaydırılan parçayı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.';
+  String get swipeInsertQueueNextSubtitle =>
+      'Parça listesinde kaydırılan parçayı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchTitle => 'Start Instant Mixes for Individual Tracks';
+  String get startInstantMixForIndividualTracksSwitchTitle =>
+      'Start Instant Mixes for Individual Tracks';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => 'Etkinleştirildiğinde, parçalar sekmesinde bir parçaya dokunulduğunda, yalnızca tek bir parçayı çalmak yerine o parçadan hızlı karışım başlatılır.';
+  String get startInstantMixForIndividualTracksSwitchSubtitle =>
+      'Etkinleştirildiğinde, parçalar sekmesinde bir parçaya dokunulduğunda, yalnızca tek bir parçayı çalmak yerine o parçadan hızlı karışım başlatılır.';
 
   @override
   String get downloadItem => 'İndir';
@@ -1273,7 +1332,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get syncDownloads => 'Eksik ögeleri indirin ve eş zamanlayın.';
 
   @override
-  String get repairDownloads => 'İndirilen dosyalar veya meta verilerle ilgili sorunları onarın.';
+  String get repairDownloads =>
+      'İndirilen dosyalar veya meta verilerle ilgili sorunları onarın.';
 
   @override
   String get requireWifiForDownloads => 'Sadece kablosuz ağ üzerinden indir.';
@@ -1316,19 +1376,24 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get onlyShowFullyDownloaded => 'Yalnızca tamamen indirilen albümleri göster';
+  String get onlyShowFullyDownloaded =>
+      'Yalnızca tamamen indirilen albümleri göster';
 
   @override
-  String get filesystemFull => 'Kalan indirmeler tamamlanamıyor. Dosya sistemi dolu.';
+  String get filesystemFull =>
+      'Kalan indirmeler tamamlanamıyor. Dosya sistemi dolu.';
 
   @override
-  String get connectionInterrupted => 'Bağlantı kesildi, indirmeler duraklatılıyor.';
+  String get connectionInterrupted =>
+      'Bağlantı kesildi, indirmeler duraklatılıyor.';
 
   @override
-  String get connectionInterruptedBackground => 'Arka planda indirirken bağlantı kesildi. Bunun nedeni işletim sistemi ayarlarından kaynaklanabilir.';
+  String get connectionInterruptedBackground =>
+      'Arka planda indirirken bağlantı kesildi. Bunun nedeni işletim sistemi ayarlarından kaynaklanabilir.';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => 'Arka planda indirirken bağlantı kesildi. Bunun nedeni \'Duraklatıldığında Düşük Öncelikli Duruma Girin\' seçeneğinin etkinleştirilmesi veya işletim sistemi ayarları olabilir.';
+  String get connectionInterruptedBackgroundAndroid =>
+      'Arka planda indirirken bağlantı kesildi. Bunun nedeni \'Duraklatıldığında Düşük Öncelikli Duruma Girin\' seçeneğinin etkinleştirilmesi veya işletim sistemi ayarları olabilir.';
 
   @override
   String get activeDownloadSize => 'İndiriliyor...';
@@ -1340,22 +1405,26 @@ class AppLocalizationsTr extends AppLocalizations {
   String get syncingDownloadSize => 'Eşitleniyor...';
 
   @override
-  String get runRepairWarning => 'İndirilenlerin geçişini tamamlamak için sunucuyla bağlantı kurulamadı. Lütfen tekrar çevrim içi olduğunuzda indirme ekranından \'İndirilenleri Onar\' seçeneğini çalıştırın.';
+  String get runRepairWarning =>
+      'İndirilenlerin geçişini tamamlamak için sunucuyla bağlantı kurulamadı. Lütfen tekrar çevrim içi olduğunuzda indirme ekranından \'İndirilenleri Onar\' seçeneğini çalıştırın.';
 
   @override
   String get downloadSettings => 'İndirilenler';
 
   @override
-  String get showNullLibraryItemsTitle => 'Bilinmeyen Kitaplığa Sahip Ortamı Göster.';
+  String get showNullLibraryItemsTitle =>
+      'Bilinmeyen Kitaplığa Sahip Ortamı Göster.';
 
   @override
-  String get showNullLibraryItemsSubtitle => 'Bazı ortamlar bilinmeyen bir kitaplıkla indirilebilir. Bunları orijinal koleksiyonlarının dışında gizlemek için kapatın.';
+  String get showNullLibraryItemsSubtitle =>
+      'Bazı ortamlar bilinmeyen bir kitaplıkla indirilebilir. Bunları orijinal koleksiyonlarının dışında gizlemek için kapatın.';
 
   @override
   String get maxConcurrentDownloads => 'En Fazla Eş Anlı İndirme Sayısı';
 
   @override
-  String get maxConcurrentDownloadsSubtitle => 'Eş anlı indirmelerin artırılması, arka planda indirme işlemlerinin artmasına izin verebilir ancak bazı indirmelerin çok büyük olması durumunda başarısız olmasına veya bazı durumlarda aşırı gecikmeye neden olabilir.';
+  String get maxConcurrentDownloadsSubtitle =>
+      'Eş anlı indirmelerin artırılması, arka planda indirme işlemlerinin artmasına izin verebilir ancak bazı indirmelerin çok büyük olması durumunda başarısız olmasına veya bazı durumlarda aşırı gecikmeye neden olabilir.';
 
   @override
   String maxConcurrentDownloadsLabel(String count) {
@@ -1366,7 +1435,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get downloadsWorkersSetting => 'İndirme Çalışanlarının Sayısı';
 
   @override
-  String get downloadsWorkersSettingSubtitle => 'Meta verileri eşleme ve indirilenleri silmek için indirme çalışanı sayısı. İndirme çalışanlarının arttırılması, özellikle sunucu gecikmesi yüksek olduğunda indirme eşlemeyi ve silmeyi hızlandırabilir, ancak gecikmeye neden olabilir.';
+  String get downloadsWorkersSettingSubtitle =>
+      'Meta verileri eşleme ve indirilenleri silmek için indirme çalışanı sayısı. İndirme çalışanlarının arttırılması, özellikle sunucu gecikmesi yüksek olduğunda indirme eşlemeyi ve silmeyi hızlandırabilir, ancak gecikmeye neden olabilir.';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
@@ -1374,13 +1444,15 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get syncOnStartupSwitch => 'İndirmeleri Başlangıçta Otomatik Olarak Eşitle';
+  String get syncOnStartupSwitch =>
+      'İndirmeleri Başlangıçta Otomatik Olarak Eşitle';
 
   @override
   String get preferQuickSyncSwitch => 'Hızlı Eşitlemeleri Tercih Edin';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => 'Eşleme gerçekleştirilirken, bazı sabit ögeler (parçalar ve albümler gibi) güncellenmez. İndirme onarımında her zaman tam eşleme gerçekleştirilir.';
+  String get preferQuickSyncSwitchSubtitle =>
+      'Eşleme gerçekleştirilirken, bazı sabit ögeler (parçalar ve albümler gibi) güncellenmez. İndirme onarımında her zaman tam eşleme gerçekleştirilir.';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
@@ -1426,13 +1498,16 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Kod dönüştürme kalıbını seçin';
+  String get transcodingStreamingContainerTitle =>
+      'Kod dönüştürme kalıbını seçin';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Kodu dönüştürülmüş ses akışı sırasında kullanılacak bölüm kapsayıcısını seçin. Zaten sıraya alınmış parçalar etkilenmeyecektir.';
+  String get transcodingStreamingContainerSubtitle =>
+      'Kodu dönüştürülmüş ses akışı sırasında kullanılacak bölüm kapsayıcısını seçin. Zaten sıraya alınmış parçalar etkilenmeyecektir.';
 
   @override
-  String get downloadTranscodeEnableTitle => 'Kodu dönüştürülmüş indirmeleri etkinleştir';
+  String get downloadTranscodeEnableTitle =>
+      'Kodu dönüştürülmüş indirmeleri etkinleştir';
 
   @override
   String get downloadTranscodeCodecTitle => 'İndirme Kodek\'ini Seçin';
@@ -1455,7 +1530,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get downloadBitrate => 'İndirme Bit Hızı';
 
   @override
-  String get downloadBitrateSubtitle => 'Daha yüksek bit hızı, daha fazla depolama gereksinimleri pahasına daha yüksek kalitede ses sağlar.';
+  String get downloadBitrateSubtitle =>
+      'Daha yüksek bit hızı, daha fazla depolama gereksinimleri pahasına daha yüksek kalitede ses sağlar.';
 
   @override
   String get transcodeHint => 'Kod dönüştürme?';
@@ -1509,22 +1585,27 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get redownloadcomplete => 'Kod dönüştürme sonrası yeniden İndirme işlemi sıraya alındı.';
+  String get redownloadcomplete =>
+      'Kod dönüştürme sonrası yeniden İndirme işlemi sıraya alındı.';
 
   @override
-  String get redownloadTitle => 'Kodu dönüştürülenleri otomatik olarak yeniden indirin';
+  String get redownloadTitle =>
+      'Kodu dönüştürülenleri otomatik olarak yeniden indirin';
 
   @override
-  String get redownloadSubtitle => 'Bulunduğu koleksiyondaki değişiklikler nedeniyle farklı kalitede olması beklenen parçaları otomatik olarak yeniden indir.';
+  String get redownloadSubtitle =>
+      'Bulunduğu koleksiyondaki değişiklikler nedeniyle farklı kalitede olması beklenen parçaları otomatik olarak yeniden indir.';
 
   @override
-  String get defaultDownloadLocationButton => 'Varsayılan indirme konumu olarak ayarlayın.  İndirme başına seçim yapmayı devre dışı bırak.';
+  String get defaultDownloadLocationButton =>
+      'Varsayılan indirme konumu olarak ayarlayın.  İndirme başına seçim yapmayı devre dışı bırak.';
 
   @override
   String get fixedGridSizeSwitchTitle => 'Sabit boyutta ızgara karoları kullan';
 
   @override
-  String get fixedGridSizeSwitchSubtitle => 'Grid tile sizes will not respond to window/screen size.';
+  String get fixedGridSizeSwitchSubtitle =>
+      'Grid tile sizes will not respond to window/screen size.';
 
   @override
   String get fixedGridSizeTitle => 'Izgara Karo Boyutu';
@@ -1548,7 +1629,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get allowSplitScreenTitle => 'Bölünmüş Ekran Moduna İzin Ver';
 
   @override
-  String get allowSplitScreenSubtitle => 'Oynatıcı daha geniş ekranlarda diğer görünümlerin yanında görüntülenecektir.';
+  String get allowSplitScreenSubtitle =>
+      'Oynatıcı daha geniş ekranlarda diğer görünümlerin yanında görüntülenecektir.';
 
   @override
   String get enableVibration => 'Titreşimi etkinleştir';
@@ -1560,46 +1642,54 @@ class AppLocalizationsTr extends AppLocalizations {
   String get hideQueueButton => 'Hide queue button';
 
   @override
-  String get hideQueueButtonSubtitle => 'Hide the queue button on the player screen. Swipe up to access the queue.';
+  String get hideQueueButtonSubtitle =>
+      'Hide the queue button on the player screen. Swipe up to access the queue.';
 
   @override
   String get oneLineMarqueeTextButton => 'Auto-scroll Long Titles';
 
   @override
-  String get oneLineMarqueeTextButtonSubtitle => 'Automatically scroll track titles that are too long to display in two lines';
+  String get oneLineMarqueeTextButtonSubtitle =>
+      'Automatically scroll track titles that are too long to display in two lines';
 
   @override
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle =>
+      'Show ... at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'Hide bottom actions';
 
   @override
-  String get hidePlayerBottomActionsSubtitle => 'Oynatıcı ekranında kuyruk ve şarkı sözleri düğmelerini gizleyin. Kuyruğa erişmek için yukarı kaydırın, eğer varsa şarkı sözlerini görüntülemek için sola (albüm kapağının altında) kaydırın.';
+  String get hidePlayerBottomActionsSubtitle =>
+      'Oynatıcı ekranında kuyruk ve şarkı sözleri düğmelerini gizleyin. Kuyruğa erişmek için yukarı kaydırın, eğer varsa şarkı sözlerini görüntülemek için sola (albüm kapağının altında) kaydırın.';
 
   @override
   String get prioritizePlayerCover => 'Albüm kapağı öncelikli';
 
   @override
-  String get prioritizePlayerCoverSubtitle => 'Oynatıcı ekranında daha büyük bir albüm kapağı göstermeye öncelik verin. Kritik olmayan kontroller küçük ekran boyutlarında daha agresif bir şekilde gizlenecektir.';
+  String get prioritizePlayerCoverSubtitle =>
+      'Oynatıcı ekranında daha büyük bir albüm kapağı göstermeye öncelik verin. Kritik olmayan kontroller küçük ekran boyutlarında daha agresif bir şekilde gizlenecektir.';
 
   @override
   String get suppressPlayerPadding => 'Suppress player controls padding';
 
   @override
-  String get suppressPlayerPaddingSubtitle => 'Albüm kapağı tam boyutta olmadığında oynatıcı ekran kontrolleri arasındaki dolguları en aza indir.';
+  String get suppressPlayerPaddingSubtitle =>
+      'Albüm kapağı tam boyutta olmadığında oynatıcı ekran kontrolleri arasındaki dolguları en aza indir.';
 
   @override
   String get lockDownload => 'Daima Cihazda Tutun';
 
   @override
-  String get showArtistChipImage => 'Sanatçı görsellerinde sanatçı adını göster';
+  String get showArtistChipImage =>
+      'Sanatçı görsellerinde sanatçı adını göster';
 
   @override
-  String get showArtistChipImageSubtitle => 'Bu, oynatıcı ekranı gibi küçük sanatçı görseli ön izlemelerini etkiler.';
+  String get showArtistChipImageSubtitle =>
+      'Bu, oynatıcı ekranı gibi küçük sanatçı görseli ön izlemelerini etkiler.';
 
   @override
   String get scrollToCurrentTrack => 'Geçerli parçaya kaydır';
@@ -1646,13 +1736,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get trackOfflineFavorites => 'Tüm favori durumları eşle';
 
   @override
-  String get trackOfflineFavoritesSubtitle => 'Bu, çevrim dışıyken sık kullanılanların daha güncel gösterilmesine olanak tanır.  Herhangi bir ek dosya indirmez.';
+  String get trackOfflineFavoritesSubtitle =>
+      'Bu, çevrim dışıyken sık kullanılanların daha güncel gösterilmesine olanak tanır.  Herhangi bir ek dosya indirmez.';
 
   @override
   String get allPlaylistsInfoSetting => 'Oynatma Listesi Meta Verilerini İndir';
 
   @override
-  String get allPlaylistsInfoSettingSubtitle => 'Oynatma listesi deneyiminizi geliştirmek için tüm oynatma listelerinin meta verilerini eşleyin';
+  String get allPlaylistsInfoSettingSubtitle =>
+      'Oynatma listesi deneyiminizi geliştirmek için tüm oynatma listelerinin meta verilerini eşleyin';
 
   @override
   String get downloadFavoritesSetting => 'Tüm favorileri indir';
@@ -1664,40 +1756,51 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fiveLatestAlbumsSetting => 'En yeni 5 albümü indir';
 
   @override
-  String get fiveLatestAlbumsSettingSubtitle => 'İndirilenler eskidikçe kaldırılacaktır.  Bir albümün kaldırılmasını önlemek için indirmeyi kilitleyin.';
+  String get fiveLatestAlbumsSettingSubtitle =>
+      'İndirilenler eskidikçe kaldırılacaktır.  Bir albümün kaldırılmasını önlemek için indirmeyi kilitleyin.';
 
   @override
-  String get cacheLibraryImagesSettings => 'Geçerli kütüphane görsellerini ön belleğe al';
+  String get cacheLibraryImagesSettings =>
+      'Geçerli kütüphane görsellerini ön belleğe al';
 
   @override
-  String get cacheLibraryImagesSettingsSubtitle => 'Şu anda etkin olan kütüphanedeki tüm albüm, sanatçı, tür ve oynatma listesi kapakları indirilecektir.';
+  String get cacheLibraryImagesSettingsSubtitle =>
+      'Şu anda etkin olan kütüphanedeki tüm albüm, sanatçı, tür ve oynatma listesi kapakları indirilecektir.';
 
   @override
-  String get showProgressOnNowPlayingBarTitle => 'Uygulama içi mini oynatıcıda ilerlemeyi göster';
+  String get showProgressOnNowPlayingBarTitle =>
+      'Uygulama içi mini oynatıcıda ilerlemeyi göster';
 
   @override
-  String get showProgressOnNowPlayingBarSubtitle => 'Oynatma ekranının alt kısmındaki uygulama içi mini oynatıcının / şimdi oynatılıyor çubuğunun bir ilerleme çubuğu olarak çalışıp çalışmadığını kontrol eder.';
+  String get showProgressOnNowPlayingBarSubtitle =>
+      'Oynatma ekranının alt kısmındaki uygulama içi mini oynatıcının / şimdi oynatılıyor çubuğunun bir ilerleme çubuğu olarak çalışıp çalışmadığını kontrol eder.';
 
   @override
   String get lyricsScreen => 'Şarkı Sözleri Görünümü';
 
   @override
-  String get showLyricsTimestampsTitle => 'Eş zamanlı şarkı sözleri için zaman damgalarını göster';
+  String get showLyricsTimestampsTitle =>
+      'Eş zamanlı şarkı sözleri için zaman damgalarını göster';
 
   @override
-  String get showLyricsTimestampsSubtitle => 'Varsa, her şarkı sözü satırının zaman damgasının şarkı sözü görünümünde gösterilip gösterilmeyeceğini kontrol eder.';
+  String get showLyricsTimestampsSubtitle =>
+      'Varsa, her şarkı sözü satırının zaman damgasının şarkı sözü görünümünde gösterilip gösterilmeyeceğini kontrol eder.';
 
   @override
-  String get showStopButtonOnMediaNotificationTitle => 'Ortam bildiriminde durdur düğmesini göster';
+  String get showStopButtonOnMediaNotificationTitle =>
+      'Ortam bildiriminde durdur düğmesini göster';
 
   @override
-  String get showStopButtonOnMediaNotificationSubtitle => 'Ortam bildiriminde duraklatma düğmesine ek olarak bir durdurma düğmesinin bulunup bulunmadığını kontrol eder. Bu, uygulamayı açmadan oynatmayı durdurmanıza olanak tanır.';
+  String get showStopButtonOnMediaNotificationSubtitle =>
+      'Ortam bildiriminde duraklatma düğmesine ek olarak bir durdurma düğmesinin bulunup bulunmadığını kontrol eder. Bu, uygulamayı açmadan oynatmayı durdurmanıza olanak tanır.';
 
   @override
-  String get showSeekControlsOnMediaNotificationTitle => 'Ortam bildiriminde arama kontrollerini göster';
+  String get showSeekControlsOnMediaNotificationTitle =>
+      'Ortam bildiriminde arama kontrollerini göster';
 
   @override
-  String get showSeekControlsOnMediaNotificationSubtitle => 'Ortam bildiriminin ayarlanabilir bir ilerleme çubuğuna sahip olup olmadığını kontrol eder. Bu, uygulamayı açmadan oynatma konumunu değiştirmenizi sağlar.';
+  String get showSeekControlsOnMediaNotificationSubtitle =>
+      'Ortam bildiriminin ayarlanabilir bir ilerleme çubuğuna sahip olup olmadığını kontrol eder. Bu, uygulamayı açmadan oynatma konumunu değiştirmenizi sağlar.';
 
   @override
   String get alignmentOptionStart => 'Başla';
@@ -1721,19 +1824,23 @@ class AppLocalizationsTr extends AppLocalizations {
   String get lyricsAlignmentTitle => 'Şarkı sözü hizalaması';
 
   @override
-  String get lyricsAlignmentSubtitle => 'Şarkı sözü görünümünde şarkı sözlerinin hizalamasını kontrol eder.';
+  String get lyricsAlignmentSubtitle =>
+      'Şarkı sözü görünümünde şarkı sözlerinin hizalamasını kontrol eder.';
 
   @override
   String get lyricsFontSizeTitle => 'Şarkı sözleri yazı tipi boyutu';
 
   @override
-  String get lyricsFontSizeSubtitle => 'Şarkı sözü görünümünde şarkı sözlerinin yazı tipi boyutunu kontrol eder.';
+  String get lyricsFontSizeSubtitle =>
+      'Şarkı sözü görünümünde şarkı sözlerinin yazı tipi boyutunu kontrol eder.';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => 'Albümü şarkı sözlerinden önce göster';
+  String get showLyricsScreenAlbumPreludeTitle =>
+      'Albümü şarkı sözlerinden önce göster';
 
   @override
-  String get showLyricsScreenAlbumPreludeSubtitle => 'Kaydırılmadan önce albüm kapağının şarkı sözlerinin üzerinde gösterilip gösterilmeyeceğini kontrol eder.';
+  String get showLyricsScreenAlbumPreludeSubtitle =>
+      'Kaydırılmadan önce albüm kapağının şarkı sözlerinin üzerinde gösterilip gösterilmeyeceğini kontrol eder.';
 
   @override
   String get keepScreenOn => 'Ekranı Açık Tut';
@@ -1754,10 +1861,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get keepScreenOnWhileLyrics => 'Şarkı sözlerini gösterirken';
 
   @override
-  String get keepScreenOnWhilePluggedIn => 'Ekranı yalnızca fişe takılıyken açık tut';
+  String get keepScreenOnWhilePluggedIn =>
+      'Ekranı yalnızca fişe takılıyken açık tut';
 
   @override
-  String get keepScreenOnWhilePluggedInSubtitle => 'Cihazın fişi çekilirse ekranı açık tut ayarını göz ardı eder';
+  String get keepScreenOnWhilePluggedInSubtitle =>
+      'Cihazın fişi çekilirse ekranı açık tut ayarını göz ardı eder';
 
   @override
   String get genericToggleButtonTooltip => 'Tap to toggle.';
@@ -1806,37 +1915,44 @@ class AppLocalizationsTr extends AppLocalizations {
   String get showFeatureChipsToggleTitle => 'Gelişmiş Parça Bilgilerini Göster';
 
   @override
-  String get showFeatureChipsToggleSubtitle => 'Oynatıcı ekranında kodlayıcı, bit hızı ve daha fazla gelişmiş parça bilgilerini göster.';
+  String get showFeatureChipsToggleSubtitle =>
+      'Oynatıcı ekranında kodlayıcı, bit hızı ve daha fazla gelişmiş parça bilgilerini göster.';
 
   @override
   String get albumScreen => 'Albüm Ekranı';
 
   @override
-  String get showCoversOnAlbumScreenTitle => 'Parçalar için Albüm Kapaklarını Göster';
+  String get showCoversOnAlbumScreenTitle =>
+      'Parçalar için Albüm Kapaklarını Göster';
 
   @override
-  String get showCoversOnAlbumScreenSubtitle => 'Albüm ekranında her parçanın albüm kapaklarını ayrı göster.';
+  String get showCoversOnAlbumScreenSubtitle =>
+      'Albüm ekranında her parçanın albüm kapaklarını ayrı göster.';
 
   @override
-  String get emptyTopTracksList => 'Bu sanatçının henüz hiçbir parçasını dinlemediniz.';
+  String get emptyTopTracksList =>
+      'Bu sanatçının henüz hiçbir parçasını dinlemediniz.';
 
   @override
   String get emptyFilteredListTitle => 'Hiçbir öge bulunamadı';
 
   @override
-  String get emptyFilteredListSubtitle => 'Süzgeçle eşleşen öge yok. Süzgeci kapatmayı veya arama terimini değiştirmeyi deneyin.';
+  String get emptyFilteredListSubtitle =>
+      'Süzgeçle eşleşen öge yok. Süzgeci kapatmayı veya arama terimini değiştirmeyi deneyin.';
 
   @override
   String get resetFiltersButton => 'Süzgeci sıfırla';
 
   @override
-  String get resetSettingsPromptGlobal => 'TÜM ayarları varsayılan değerlerine sıfırlamak istediğinizden emin misiniz?';
+  String get resetSettingsPromptGlobal =>
+      'TÜM ayarları varsayılan değerlerine sıfırlamak istediğinizden emin misiniz?';
 
   @override
   String get resetSettingsPromptGlobalConfirm => 'TÜM ayarları sıfırla';
 
   @override
-  String get resetSettingsPromptLocal => 'Bu ayarları varsayılan değerlerine sıfırlamak istiyor musunuz?';
+  String get resetSettingsPromptLocal =>
+      'Bu ayarları varsayılan değerlerine sıfırlamak istiyor musunuz?';
 
   @override
   String get genericCancel => 'İptal';
@@ -1870,10 +1986,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get allowDeleteFromServerTitle => 'Allow deletion from server';
 
   @override
-  String get allowDeleteFromServerSubtitle => 'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
+  String get allowDeleteFromServerSubtitle =>
+      'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
 
   @override
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
@@ -1890,7 +2008,8 @@ class AppLocalizationsTr extends AppLocalizations {
       deleteType,
       {
         'canDelete': ' This will also Delete this item from this Device.',
-        'cantDelete': ' This item will stay on this device until the next sync.',
+        'cantDelete':
+            ' This item will stay on this device until the next sync.',
         'notDownloaded': '',
         'other': '',
       },
@@ -1899,7 +2018,8 @@ class AppLocalizationsTr extends AppLocalizations {
       device,
       {
         'device': 'this device',
-        'server': 'the servers file system and library.$_temp1\nThis action cannot be reverted',
+        'server':
+            'the servers file system and library.$_temp1\nThis action cannot be reverted',
         'other': '',
       },
     );
@@ -1928,7 +2048,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get downloadSizeWarningCutoff => 'Download Size Warning Cutoff';
 
   @override
-  String get downloadSizeWarningCutoffSubtitle => 'A warning message will be displayed when downloading more than this many tracks at once.';
+  String get downloadSizeWarningCutoffSubtitle =>
+      'A warning message will be displayed when downloading more than this many tracks at once.';
 
   @override
   String confirmAddAlbumToPlaylist(String itemType, String itemName) {
@@ -1961,16 +2082,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get releaseDateFormatMonthDayYear => 'Month, Day & Year';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenTitle => 'Show Album Release Date on Player Screen';
+  String get showAlbumReleaseDateOnPlayerScreenTitle =>
+      'Show Album Release Date on Player Screen';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => 'Show the release date of the album on the player screen, behind the album name.';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle =>
+      'Show the release date of the album on the player screen, behind the album name.';
 
   @override
   String get releaseDateFormatTitle => 'Release Date Format';
 
   @override
-  String get releaseDateFormatSubtitle => 'Controls the format of all release dates shown in the app.';
+  String get releaseDateFormatSubtitle =>
+      'Controls the format of all release dates shown in the app.';
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
@@ -1985,7 +2109,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+  String get autoOfflineSettingDescription =>
+      'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
 
   @override
   String get autoOfflineSettingTitle => 'Automated Offline Mode';

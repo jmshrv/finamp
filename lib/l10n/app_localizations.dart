@@ -95,7 +95,8 @@ import 'app_localizations_zh.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -103,7 +104,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -115,7 +117,8 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -161,7 +164,8 @@ abstract class AppLocalizations {
     Locale('vi'),
     Locale('zh'),
     Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
-    Locale.fromSubtags(languageCode: 'zh', countryCode: 'HK', scriptCode: 'Hant')
+    Locale.fromSubtags(
+        languageCode: 'zh', countryCode: 'HK', scriptCode: 'Hant')
   ];
 
   /// App name, possibly translated
@@ -678,7 +682,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{trackCount,plural,=1{{trackCount} track} other{{trackCount} tracks}}, {imageCount,plural,=1{{imageCount} image} other{{imageCount} images}}\n{syncCount,plural,=1{{syncCount} node syncing} other{{syncCount} nodes syncing}}{repairing, plural, =0{} other{\nCurrently repairing}}'**
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing);
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing);
 
   /// No description provided for @dlComplete.
   ///
@@ -1098,7 +1103,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Automatic:\nFinamp tries to identify whether the track you are playing is a podcast or (part of) an audiobook. This is considered to be the case if the track is longer than {trackDuration} minutes, if the track\'\'s album is longer than {albumDuration} hours, or if the track has at least one of these genres assigned: {genreList}\nPlayback speed controls will then be shown in the player screen menu.\n\nShown:\nThe playback speed controls will always be shown in the player screen menu.\n\nHidden:\nThe playback speed controls in the player screen menu are always hidden.'**
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList);
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList);
 
   /// Used as an option in the playback speed visibility settings
   ///
@@ -3084,7 +3090,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'You are about to delete this {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} from {device, select, device{this device} server{the servers file system and library.{deleteType, select, canDelete{ This will also Delete this item from this Device.} cantDelete{ This item will stay on this device until the next sync.} notDownloaded{} other{}}\nThis action cannot be reverted} other{}}.'**
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType);
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType);
 
   /// (Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt.
   ///
@@ -3213,7 +3220,8 @@ abstract class AppLocalizations {
   String autoOfflineNotification(String state);
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -3222,81 +3230,156 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fa', 'fi', 'fr', 'hi', 'hr', 'hu', 'it', 'ja', 'ko', 'nb', 'nl', 'pl', 'pt', 'ru', 'sl', 'sr', 'sv', 'sw', 'szl', 'ta', 'th', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+        'ar',
+        'bg',
+        'ca',
+        'cs',
+        'da',
+        'de',
+        'el',
+        'en',
+        'es',
+        'et',
+        'fa',
+        'fi',
+        'fr',
+        'hi',
+        'hr',
+        'hu',
+        'it',
+        'ja',
+        'ko',
+        'nb',
+        'nl',
+        'pl',
+        'pt',
+        'ru',
+        'sl',
+        'sr',
+        'sv',
+        'sw',
+        'szl',
+        'ta',
+        'th',
+        'tr',
+        'uk',
+        'vi',
+        'zh'
+      ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-    // Lookup logic when language+script+country codes are specified.
+  // Lookup logic when language+script+country codes are specified.
   switch (locale.toString()) {
-    case 'zh_Hant_HK': return AppLocalizationsZhHantHk();
+    case 'zh_Hant_HK':
+      return AppLocalizationsZhHantHk();
   }
 
   // Lookup logic when language+script codes are specified.
   switch (locale.languageCode) {
-    case 'zh': {
-  switch (locale.scriptCode) {
-    case 'Hant': return AppLocalizationsZhHant();
-   }
-  break;
-   }
+    case 'zh':
+      {
+        switch (locale.scriptCode) {
+          case 'Hant':
+            return AppLocalizationsZhHant();
+        }
+        break;
+      }
   }
 
   // Lookup logic when language+country codes are specified.
   switch (locale.languageCode) {
-    case 'pt': {
-  switch (locale.countryCode) {
-    case 'BR': return AppLocalizationsPtBr();
-   }
-  break;
-   }
+    case 'pt':
+      {
+        switch (locale.countryCode) {
+          case 'BR':
+            return AppLocalizationsPtBr();
+        }
+        break;
+      }
   }
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ar': return AppLocalizationsAr();
-    case 'bg': return AppLocalizationsBg();
-    case 'ca': return AppLocalizationsCa();
-    case 'cs': return AppLocalizationsCs();
-    case 'da': return AppLocalizationsDa();
-    case 'de': return AppLocalizationsDe();
-    case 'el': return AppLocalizationsEl();
-    case 'en': return AppLocalizationsEn();
-    case 'es': return AppLocalizationsEs();
-    case 'et': return AppLocalizationsEt();
-    case 'fa': return AppLocalizationsFa();
-    case 'fi': return AppLocalizationsFi();
-    case 'fr': return AppLocalizationsFr();
-    case 'hi': return AppLocalizationsHi();
-    case 'hr': return AppLocalizationsHr();
-    case 'hu': return AppLocalizationsHu();
-    case 'it': return AppLocalizationsIt();
-    case 'ja': return AppLocalizationsJa();
-    case 'ko': return AppLocalizationsKo();
-    case 'nb': return AppLocalizationsNb();
-    case 'nl': return AppLocalizationsNl();
-    case 'pl': return AppLocalizationsPl();
-    case 'pt': return AppLocalizationsPt();
-    case 'ru': return AppLocalizationsRu();
-    case 'sl': return AppLocalizationsSl();
-    case 'sr': return AppLocalizationsSr();
-    case 'sv': return AppLocalizationsSv();
-    case 'sw': return AppLocalizationsSw();
-    case 'szl': return AppLocalizationsSzl();
-    case 'ta': return AppLocalizationsTa();
-    case 'th': return AppLocalizationsTh();
-    case 'tr': return AppLocalizationsTr();
-    case 'uk': return AppLocalizationsUk();
-    case 'vi': return AppLocalizationsVi();
-    case 'zh': return AppLocalizationsZh();
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'bg':
+      return AppLocalizationsBg();
+    case 'ca':
+      return AppLocalizationsCa();
+    case 'cs':
+      return AppLocalizationsCs();
+    case 'da':
+      return AppLocalizationsDa();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'el':
+      return AppLocalizationsEl();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'et':
+      return AppLocalizationsEt();
+    case 'fa':
+      return AppLocalizationsFa();
+    case 'fi':
+      return AppLocalizationsFi();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'hi':
+      return AppLocalizationsHi();
+    case 'hr':
+      return AppLocalizationsHr();
+    case 'hu':
+      return AppLocalizationsHu();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'nb':
+      return AppLocalizationsNb();
+    case 'nl':
+      return AppLocalizationsNl();
+    case 'pl':
+      return AppLocalizationsPl();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'sl':
+      return AppLocalizationsSl();
+    case 'sr':
+      return AppLocalizationsSr();
+    case 'sv':
+      return AppLocalizationsSv();
+    case 'sw':
+      return AppLocalizationsSw();
+    case 'szl':
+      return AppLocalizationsSzl();
+    case 'ta':
+      return AppLocalizationsTa();
+    case 'th':
+      return AppLocalizationsTh();
+    case 'tr':
+      return AppLocalizationsTr();
+    case 'uk':
+      return AppLocalizationsUk();
+    case 'vi':
+      return AppLocalizationsVi();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

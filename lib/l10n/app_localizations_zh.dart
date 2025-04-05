@@ -62,7 +62,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get serverUrl => '服务器 URL';
 
   @override
-  String get internalExternalIpExplanation => '如果您希望能够远程访问您的 Jellyfin 服务器，则需要使用您的外部 IP。\n\n如果您的服务器位于 HTTP 端口 (80/443) 上，则不必指定端口。 \n\n如果URL正确，你应该能在输入框下方看到弹出的服务器信息。';
+  String get internalExternalIpExplanation =>
+      '如果您希望能够远程访问您的 Jellyfin 服务器，则需要使用您的外部 IP。\n\n如果您的服务器位于 HTTP 端口 (80/443) 上，则不必指定端口。 \n\n如果URL正确，你应该能在输入框下方看到弹出的服务器信息。';
 
   @override
   String get serverUrlHint => '示例 demo.jellyfin.org/stable';
@@ -104,7 +105,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loginFlowQuickConnectPrompt => '使用快速连接模式';
 
   @override
-  String get loginFlowQuickConnectInstructions => '打开Jellyfin应用或网站，点击你的账户图标，选择快速连接。';
+  String get loginFlowQuickConnectInstructions =>
+      '打开Jellyfin应用或网站，点击你的账户图标，选择快速连接。';
 
   @override
   String get loginFlowQuickConnectDisabled => '此服务器已禁用快速连接。';
@@ -283,7 +285,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing) {
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing) {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
@@ -533,13 +536,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get directoryMustBeEmpty => '目录必须为空';
 
   @override
-  String get customLocationsBuggy => '自定义位置可能会有很多错误，在大多数情况下不建议使用。由于操作系统的限制，系统“Music”文件夹下无法保存专辑封面。';
+  String get customLocationsBuggy =>
+      '自定义位置可能会有很多错误，在大多数情况下不建议使用。由于操作系统的限制，系统“Music”文件夹下无法保存专辑封面。';
 
   @override
   String get enterLowPriorityStateOnPause => '暂停时进入低优先级状态';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => '通知可以在暂停时滑动。 启用此功能还允许 Android 在暂停时终止服务。';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      '通知可以在暂停时滑动。 启用此功能还允许 Android 在暂停时终止服务。';
 
   @override
   String get shuffleAllTrackCount => '随机播放歌曲数量';
@@ -569,7 +574,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get playbackSpeedControlSettingSubtitle => '播放速度控制是否显示在播放界面中';
 
   @override
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList) {
     return '自动：\nFinamp 会尝试识别您正在播放的歌曲是播客还是有声读物（部分）。如果歌曲长度超过 $trackDuration 分钟，歌曲的专辑长度超过 $albumDuration 小时，或者歌曲至少分配了以下一种类型：$genreList\n则播放速度控件将显示在播放界面菜单中。\n\n显示：\n播放速度控件将始终显示在播放界面菜单中。\n\n隐藏：\n播放速度控件将始终隐藏在播放界面菜单中。';
   }
 
@@ -623,13 +629,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get playerScreenMinimumCoverPaddingEditorTitle => '最小专辑封面内边距';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => '播放界面上专辑封面周围的最小内边距，以屏幕宽度的百分比表示。';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle =>
+      '播放界面上专辑封面周围的最小内边距，以屏幕宽度的百分比表示。';
 
   @override
   String get hideTrackArtistsIfSameAsAlbumArtists => '如果歌曲艺术家与专辑艺术家相同，则隐藏歌曲艺术家';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => '是否在专辑界面隐藏歌曲艺术家（如果他们与专辑艺术家没有区别）。';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      '是否在专辑界面隐藏歌曲艺术家（如果他们与专辑艺术家没有区别）。';
 
   @override
   String get showArtistsTopTracks => '在艺术家视图中显示最热门歌曲';
@@ -867,7 +875,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bufferDisableSizeConstraintsTitle => '不限制缓冲区大小';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => '禁用缓冲区大小限制（“缓冲区大小”）。缓冲区将始终按配置的持续时间（“缓冲区持续时间”）加载，即使是非常大的文件。可能会导致崩溃。重启生效。';
+  String get bufferDisableSizeConstraintsSubtitle =>
+      '禁用缓冲区大小限制（“缓冲区大小”）。缓冲区将始终按配置的持续时间（“缓冲区持续时间”）加载，即使是非常大的文件。可能会导致崩溃。重启生效。';
 
   @override
   String get bufferSizeTitle => '缓冲区大小';
@@ -1068,7 +1077,8 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String queueRestoreTitle(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
+    final intl.DateFormat dateDateFormat =
+        intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
     return '保存自 $dateString';
@@ -1106,16 +1116,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reportQueueToServer => '向服务器报告当前队列';
 
   @override
-  String get reportQueueToServerSubtitle => '启用后，Finamp 会将当前队列发送到服务器。目前看来这个功能用处不大，而且会增加网络流量。';
+  String get reportQueueToServerSubtitle =>
+      '启用后，Finamp 会将当前队列发送到服务器。目前看来这个功能用处不大，而且会增加网络流量。';
 
   @override
   String get periodicPlaybackSessionUpdateFrequency => '播放会话更新频率';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencySubtitle => '向服务器发送当前播放状态的频率，以秒为单位。应少于 5 分钟（300 秒），以防止会话超时。';
+  String get periodicPlaybackSessionUpdateFrequencySubtitle =>
+      '向服务器发送当前播放状态的频率，以秒为单位。应少于 5 分钟（300 秒），以防止会话超时。';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencyDetails => '如果 Jellyfin 服务器在过去 5 分钟内没有收到来自客户端的任何更新，它会假定播放已结束。这意味着对于超过 5 分钟的歌曲，播放可能会被错误地报告为已结束，从而降低播放报告数据的质量。';
+  String get periodicPlaybackSessionUpdateFrequencyDetails =>
+      '如果 Jellyfin 服务器在过去 5 分钟内没有收到来自客户端的任何更新，它会假定播放已结束。这意味着对于超过 5 分钟的歌曲，播放可能会被错误地报告为已结束，从而降低播放报告数据的质量。';
 
   @override
   String get topTracks => '最热门歌曲';
@@ -1199,7 +1212,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noMusicLibrariesTitle => '没有音乐库';
 
   @override
-  String get noMusicLibrariesBody => 'Finamp 找不到任何音乐库。请确保您的 Jellyfin 服务器至少包含一个内容类型设置为“音乐”的媒体库。';
+  String get noMusicLibrariesBody =>
+      'Finamp 找不到任何音乐库。请确保您的 Jellyfin 服务器至少包含一个内容类型设置为“音乐”的媒体库。';
 
   @override
   String get refresh => '刷新';
@@ -1223,7 +1237,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get volumeNormalizationModeSelectorSubtitle => '何时以及如何应用音量标准化';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => '混合（音轨 + 专辑）：\n音轨增益用于常规播放，但如果正在播放专辑（因为它是主要播放队列源，或者因为它在某个时刻被添加到队列中），则将使用专辑增益。\n\n基于音轨：\n无论专辑是否正在播放，始终使用音轨增益。\n\n仅限专辑：\n音量标准化仅在播放专辑时应用（使用专辑增益），但不适用于单个歌曲。';
+  String get volumeNormalizationModeSelectorDescription =>
+      '混合（音轨 + 专辑）：\n音轨增益用于常规播放，但如果正在播放专辑（因为它是主要播放队列源，或者因为它在某个时刻被添加到队列中），则将使用专辑增益。\n\n基于音轨：\n无论专辑是否正在播放，始终使用音轨增益。\n\n仅限专辑：\n音量标准化仅在播放专辑时应用（使用专辑增益），但不适用于单个歌曲。';
 
   @override
   String get volumeNormalizationModeHybrid => '混合（音轨 + 专辑）';
@@ -1241,7 +1256,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get volumeNormalizationIOSBaseGainEditorTitle => '基础增益';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => '目前，iOS 上的音量标准化需要改变播放音量来模拟增益变化。由于我们无法将音量提高到 100% 以上，因此我们需要降低默认音量，以便提高安静歌曲的音量。该值以分贝 (dB) 为单位，-10 dB 相当于 30% 的音量，-4.5 dB 相当于 60% 的音量，-2 dB 相当于 80% 的音量。';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle =>
+      '目前，iOS 上的音量标准化需要改变播放音量来模拟增益变化。由于我们无法将音量提高到 100% 以上，因此我们需要降低默认音量，以便提高安静歌曲的音量。该值以分贝 (dB) 为单位，-10 dB 相当于 30% 的音量，-4.5 dB 相当于 60% 的音量，-2 dB 相当于 80% 的音量。';
 
   @override
   String numberAsDecibel(double value) {
@@ -1252,13 +1268,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get swipeInsertQueueNext => '播放滑动的下一首歌曲';
 
   @override
-  String get swipeInsertQueueNextSubtitle => '在歌曲列表中滑动时，可以将歌曲作为队列中的下一个项目插入，而不是将其附加到末尾。';
+  String get swipeInsertQueueNextSubtitle =>
+      '在歌曲列表中滑动时，可以将歌曲作为队列中的下一个项目插入，而不是将其附加到末尾。';
 
   @override
   String get startInstantMixForIndividualTracksSwitchTitle => '为单个歌曲生成速成合辑';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => '启用后，点击歌曲选项卡上的歌曲将生成速成合辑，而不仅仅是播放单个歌曲。';
+  String get startInstantMixForIndividualTracksSwitchSubtitle =>
+      '启用后，点击歌曲选项卡上的歌曲将生成速成合辑，而不仅仅是播放单个歌曲。';
 
   @override
   String get downloadItem => '下载';
@@ -1328,7 +1346,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get connectionInterruptedBackground => '后台下载时连接中断。这可能是操作系统设置导致的。';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => '后台下载时连接中断。这可能是由于启用“暂停时进入低优先级状态”或操作系统设置导致的。';
+  String get connectionInterruptedBackgroundAndroid =>
+      '后台下载时连接中断。这可能是由于启用“暂停时进入低优先级状态”或操作系统设置导致的。';
 
   @override
   String get activeDownloadSize => '下载中…';
@@ -1355,7 +1374,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get maxConcurrentDownloads => '最大并发下载量';
 
   @override
-  String get maxConcurrentDownloadsSubtitle => '增加并发下载可能会增加后台下载量，但如果下载量很大，可能会导致某些下载失败，或在某些情况下造成过度延迟。';
+  String get maxConcurrentDownloadsSubtitle =>
+      '增加并发下载可能会增加后台下载量，但如果下载量很大，可能会导致某些下载失败，或在某些情况下造成过度延迟。';
 
   @override
   String maxConcurrentDownloadsLabel(String count) {
@@ -1366,7 +1386,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get downloadsWorkersSetting => '下载工作进程数量';
 
   @override
-  String get downloadsWorkersSettingSubtitle => '用于同步元数据和删除下载的工作进程数量。增加下载工作进程可能会加快下载同步和删除速度，尤其是在服务器延迟较高的情况下，但也可能会带来延迟。';
+  String get downloadsWorkersSettingSubtitle =>
+      '用于同步元数据和删除下载的工作进程数量。增加下载工作进程可能会加快下载同步和删除速度，尤其是在服务器延迟较高的情况下，但也可能会带来延迟。';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
@@ -1380,7 +1401,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferQuickSyncSwitch => '首选快速同步';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => '执行同步时，一些通常为静态的项目（如歌曲和专辑）将不会更新。下载修复将始终执行完全同步。';
+  String get preferQuickSyncSwitchSubtitle =>
+      '执行同步时，一些通常为静态的项目（如歌曲和专辑）将不会更新。下载修复将始终执行完全同步。';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
@@ -1429,7 +1451,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get transcodingStreamingContainerTitle => '选择转码容器';
 
   @override
-  String get transcodingStreamingContainerSubtitle => '选择流式传输转码音频时要使用的分段容器。已排队的歌曲不会受到影响。';
+  String get transcodingStreamingContainerSubtitle =>
+      '选择流式传输转码音频时要使用的分段容器。已排队的歌曲不会受到影响。';
 
   @override
   String get downloadTranscodeEnableTitle => '启用转码下载';
@@ -1560,31 +1583,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hideQueueButton => 'Hide queue button';
 
   @override
-  String get hideQueueButtonSubtitle => 'Hide the queue button on the player screen. Swipe up to access the queue.';
+  String get hideQueueButtonSubtitle =>
+      'Hide the queue button on the player screen. Swipe up to access the queue.';
 
   @override
   String get oneLineMarqueeTextButton => 'Auto-scroll Long Titles';
 
   @override
-  String get oneLineMarqueeTextButtonSubtitle => 'Automatically scroll track titles that are too long to display in two lines';
+  String get oneLineMarqueeTextButtonSubtitle =>
+      'Automatically scroll track titles that are too long to display in two lines';
 
   @override
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle =>
+      'Show ... at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => '隐藏底部按钮';
 
   @override
-  String get hidePlayerBottomActionsSubtitle => '隐藏播放界面上的队列和歌词按钮。向上滑动可访问队列，向左滑动（专辑封面下方）可查看歌词（如果有）。';
+  String get hidePlayerBottomActionsSubtitle =>
+      '隐藏播放界面上的队列和歌词按钮。向上滑动可访问队列，向左滑动（专辑封面下方）可查看歌词（如果有）。';
 
   @override
   String get prioritizePlayerCover => '优先显示专辑封面';
 
   @override
-  String get prioritizePlayerCoverSubtitle => '在播放界面上优先显示更大的专辑封面。在小尺寸屏幕下，非关键控件将被更积极地隐藏。';
+  String get prioritizePlayerCoverSubtitle =>
+      '在播放界面上优先显示更大的专辑封面。在小尺寸屏幕下，非关键控件将被更积极地隐藏。';
 
   @override
   String get suppressPlayerPadding => '抑制播放控件内边距';
@@ -1670,13 +1698,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cacheLibraryImagesSettings => '缓存当前库图片';
 
   @override
-  String get cacheLibraryImagesSettingsSubtitle => '将下载当前活动音乐库中的所有专辑、艺术家、流派和播放列表封面。';
+  String get cacheLibraryImagesSettingsSubtitle =>
+      '将下载当前活动音乐库中的所有专辑、艺术家、流派和播放列表封面。';
 
   @override
   String get showProgressOnNowPlayingBarTitle => '在应用内迷你播放器上显示歌曲播放进度';
 
   @override
-  String get showProgressOnNowPlayingBarSubtitle => '控制音乐播放界面底部的应用内迷你播放器 / 正在播放栏是否用作进度条。';
+  String get showProgressOnNowPlayingBarSubtitle =>
+      '控制音乐播放界面底部的应用内迷你播放器 / 正在播放栏是否用作进度条。';
 
   @override
   String get lyricsScreen => '歌词界面';
@@ -1691,13 +1721,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showStopButtonOnMediaNotificationTitle => '在媒体通知上显示停止按钮';
 
   @override
-  String get showStopButtonOnMediaNotificationSubtitle => '控制媒体通知除了暂停按钮外是否还有停止按钮。这可以让你在不打开应用的情况下停止播放。';
+  String get showStopButtonOnMediaNotificationSubtitle =>
+      '控制媒体通知除了暂停按钮外是否还有停止按钮。这可以让你在不打开应用的情况下停止播放。';
 
   @override
   String get showSeekControlsOnMediaNotificationTitle => '在媒体通知上显示拖动控件';
 
   @override
-  String get showSeekControlsOnMediaNotificationSubtitle => '控制媒体通知是否有拖动进度条。这样你就可以在不打开应用的情况下更改播放位置。';
+  String get showSeekControlsOnMediaNotificationSubtitle =>
+      '控制媒体通知是否有拖动进度条。这样你就可以在不打开应用的情况下更改播放位置。';
 
   @override
   String get alignmentOptionStart => '左对齐';
@@ -1870,10 +1902,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get allowDeleteFromServerTitle => 'Allow deletion from server';
 
   @override
-  String get allowDeleteFromServerSubtitle => 'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
+  String get allowDeleteFromServerSubtitle =>
+      'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
 
   @override
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
@@ -1961,16 +1995,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get releaseDateFormatMonthDayYear => 'Month, Day & Year';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenTitle => 'Show Album Release Date on Player Screen';
+  String get showAlbumReleaseDateOnPlayerScreenTitle =>
+      'Show Album Release Date on Player Screen';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => 'Show the release date of the album on the player screen, behind the album name.';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle =>
+      'Show the release date of the album on the player screen, behind the album name.';
 
   @override
   String get releaseDateFormatTitle => 'Release Date Format';
 
   @override
-  String get releaseDateFormatSubtitle => 'Controls the format of all release dates shown in the app.';
+  String get releaseDateFormatSubtitle =>
+      'Controls the format of all release dates shown in the app.';
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
@@ -1985,7 +2022,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+  String get autoOfflineSettingDescription =>
+      'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
 
   @override
   String get autoOfflineSettingTitle => 'Automated Offline Mode';
@@ -2006,7 +2044,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
 class AppLocalizationsZhHant extends AppLocalizationsZh {
-  AppLocalizationsZhHant(): super('zh_Hant');
+  AppLocalizationsZhHant() : super('zh_Hant');
 
   @override
   String get finamp => 'Finamp';
@@ -2062,7 +2100,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get serverUrl => '伺服器 URL';
 
   @override
-  String get internalExternalIpExplanation => '如果您希望能夠遠程訪問您的 Jellyfin 伺服器，則需要使用您的外部 IP。\n\n如果您的伺服器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的伺服器位於反向代理後面，則可能會出現這種情況。\n\n如果網址正確，輸入欄位下方應該會出現一些關於你的伺服器的相關資訊。';
+  String get internalExternalIpExplanation =>
+      '如果您希望能夠遠程訪問您的 Jellyfin 伺服器，則需要使用您的外部 IP。\n\n如果您的伺服器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的伺服器位於反向代理後面，則可能會出現這種情況。\n\n如果網址正確，輸入欄位下方應該會出現一些關於你的伺服器的相關資訊。';
 
   @override
   String get serverUrlHint => '例如：demo.jellyfin.org/stable';
@@ -2104,7 +2143,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get loginFlowQuickConnectPrompt => '使用快速連接代碼';
 
   @override
-  String get loginFlowQuickConnectInstructions => '打開 Jellyfin 應用程式或網站，點擊你的用戶圖示，然後選擇「快速連線」。';
+  String get loginFlowQuickConnectInstructions =>
+      '打開 Jellyfin 應用程式或網站，點擊你的用戶圖示，然後選擇「快速連線」。';
 
   @override
   String get loginFlowQuickConnectDisabled => '快速連接已在此伺服器上停用。';
@@ -2283,7 +2323,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing) {
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing) {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
@@ -2527,13 +2568,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get directoryMustBeEmpty => '目錄必須為空';
 
   @override
-  String get customLocationsBuggy => '自訂位置可能會導致嚴重錯誤，通常不建議使用。存放於系統「音樂」資料夾內的位置，因作業系統的限制，無法儲存專輯封面。';
+  String get customLocationsBuggy =>
+      '自訂位置可能會導致嚴重錯誤，通常不建議使用。存放於系統「音樂」資料夾內的位置，因作業系統的限制，無法儲存專輯封面。';
 
   @override
   String get enterLowPriorityStateOnPause => '暫停時進入低優先級狀態';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => '啓用後，通知可以在暫停時滑動。 啓用此功能還允許 Android 在暫停時終止服務。';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      '啓用後，通知可以在暫停時滑動。 啓用此功能還允許 Android 在暫停時終止服務。';
 
   @override
   String get shuffleAllTrackCount => '隨機播放所有歌曲次數';
@@ -2563,7 +2606,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get playbackSpeedControlSettingSubtitle => '播放速度控制是否顯示在播放器介面的選單中';
 
   @override
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList) {
     return '自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 $trackDuration 分鐘、專輯總時長超過 $albumDuration 小時，或曲風包含以下任一項：$genreList。\n播放速度控制選單將會顯示於播放器介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。';
   }
 
@@ -2617,13 +2661,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get playerScreenMinimumCoverPaddingEditorTitle => '專輯封面最小邊距';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => '專輯封面在播放器介面上的最小間隔距離，以螢幕寬度的百分比計算。';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle =>
+      '專輯封面在播放器介面上的最小間隔距離，以螢幕寬度的百分比計算。';
 
   @override
   String get hideTrackArtistsIfSameAsAlbumArtists => '如果與專輯藝人相同，則隱藏歌曲藝人';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => '當歌曲藝人與專輯藝人相同時，是否在專輯介面顯示歌曲藝人。';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      '當歌曲藝人與專輯藝人相同時，是否在專輯介面顯示歌曲藝人。';
 
   @override
   String get showArtistsTopTracks => '在藝人介面顯示熱門歌曲';
@@ -2861,7 +2907,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get bufferDisableSizeConstraintsTitle => '不要限制緩衝區大小';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => '關閉「緩衝區大小」的限制，無論檔案大小多大，緩衝區都會依照設定的「緩衝區持續時間」載入。不過，這可能會導致程式當機，並且需要重新啟動才能生效。';
+  String get bufferDisableSizeConstraintsSubtitle =>
+      '關閉「緩衝區大小」的限制，無論檔案大小多大，緩衝區都會依照設定的「緩衝區持續時間」載入。不過，這可能會導致程式當機，並且需要重新啟動才能生效。';
 
   @override
   String get bufferSizeTitle => '緩衝區大小';
@@ -3062,7 +3109,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String queueRestoreTitle(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
+    final intl.DateFormat dateDateFormat =
+        intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
     return '$dateString 已儲存';
@@ -3100,16 +3148,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get reportQueueToServer => '將當前佇列回報至伺服器？';
 
   @override
-  String get reportQueueToServerSubtitle => '啟用後，Finamp 會將當前播放佇列回報至 Jellyfin 伺服器。目前此功能的實際用途有限，且可能增加網路流量。';
+  String get reportQueueToServerSubtitle =>
+      '啟用後，Finamp 會將當前播放佇列回報至 Jellyfin 伺服器。目前此功能的實際用途有限，且可能增加網路流量。';
 
   @override
   String get periodicPlaybackSessionUpdateFrequency => '播放狀態更新頻率';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencySubtitle => '設定向 Jellyfin 伺服器回報當前播放狀態頻率（秒）的進階細節。設定向伺服器回報當前播放狀態的頻率（以秒計算）。此數值應小於 5 分鐘（300 秒），以防止會話逾時。';
+  String get periodicPlaybackSessionUpdateFrequencySubtitle =>
+      '設定向 Jellyfin 伺服器回報當前播放狀態頻率（秒）的進階細節。設定向伺服器回報當前播放狀態的頻率（以秒計算）。此數值應小於 5 分鐘（300 秒），以防止會話逾時。';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencyDetails => '調整目前播放狀態向 Jellyfin 伺服器回報頻率（秒數）的進階細節。若 Jellyfin 伺服器在過去 5 分鐘內未收到來自客戶端的更新，則會假設播放已結束。這表示對於長度超過 5 分鐘的歌曲，系統可能會錯誤地判定播放已結束，從而降低播放回報數據的準確性。';
+  String get periodicPlaybackSessionUpdateFrequencyDetails =>
+      '調整目前播放狀態向 Jellyfin 伺服器回報頻率（秒數）的進階細節。若 Jellyfin 伺服器在過去 5 分鐘內未收到來自客戶端的更新，則會假設播放已結束。這表示對於長度超過 5 分鐘的歌曲，系統可能會錯誤地判定播放已結束，從而降低播放回報數據的準確性。';
 
   @override
   String get topTracks => '熱門歌曲';
@@ -3193,7 +3244,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get noMusicLibrariesTitle => '尚無音樂媒體庫';
 
   @override
-  String get noMusicLibrariesBody => '找不到音樂媒體庫。請確保 Jellyfin 中至少有一個媒體庫的類別需設置成\"音樂\"。';
+  String get noMusicLibrariesBody =>
+      '找不到音樂媒體庫。請確保 Jellyfin 中至少有一個媒體庫的類別需設置成\"音樂\"。';
 
   @override
   String get refresh => '重新整理';
@@ -3217,7 +3269,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get volumeNormalizationModeSelectorSubtitle => '音量正規化的適用時機與方法';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => '混合模式（單曲 + 專輯）：\n平常播放單曲時會套用單曲音軌增益，確保每首歌曲音量適中。然而，當整張專輯作為播放來源（或是曾經被加入播放佇列）時，將優先使用專輯音軌增益，以維持專輯內歌曲的音量平衡。\n\n依音軌調整：\n不論當前播放的是單曲或是完整專輯，皆使用音軌增益調整音量。\n\n依專輯調整：\n僅在播放完整專輯時套用音軌增益（基於專輯增益），單獨播放歌曲時不會調整音量。';
+  String get volumeNormalizationModeSelectorDescription =>
+      '混合模式（單曲 + 專輯）：\n平常播放單曲時會套用單曲音軌增益，確保每首歌曲音量適中。然而，當整張專輯作為播放來源（或是曾經被加入播放佇列）時，將優先使用專輯音軌增益，以維持專輯內歌曲的音量平衡。\n\n依音軌調整：\n不論當前播放的是單曲或是完整專輯，皆使用音軌增益調整音量。\n\n依專輯調整：\n僅在播放完整專輯時套用音軌增益（基於專輯增益），單獨播放歌曲時不會調整音量。';
 
   @override
   String get volumeNormalizationModeHybrid => '混合模式（單曲 + 專輯）';
@@ -3235,7 +3288,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get volumeNormalizationIOSBaseGainEditorTitle => '基礎增益';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => '在 iOS 上，音量標準化的實作方式是透過調整播放音量來模擬增益變化。由於無法將音量提高超過 100%，我們預設會先降低音量，使較安靜的音軌在需要時能夠獲得額外的音量提升。該數值以分貝（dB）為單位，-10 dB 對應約 30% 音量，-4.5 dB 對應約 60% 音量，而 -2 dB 對應約 80% 音量。';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle =>
+      '在 iOS 上，音量標準化的實作方式是透過調整播放音量來模擬增益變化。由於無法將音量提高超過 100%，我們預設會先降低音量，使較安靜的音軌在需要時能夠獲得額外的音量提升。該數值以分貝（dB）為單位，-10 dB 對應約 30% 音量，-4.5 dB 對應約 60% 音量，而 -2 dB 對應約 80% 音量。';
 
   @override
   String numberAsDecibel(double value) {
@@ -3246,13 +3300,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get swipeInsertQueueNext => '滑動接續播放歌曲';
 
   @override
-  String get swipeInsertQueueNextSubtitle => '開啟後滑動清單中的歌曲，可以將歌曲接著播放，而不是加到播放清單的最後一首。';
+  String get swipeInsertQueueNextSubtitle =>
+      '開啟後滑動清單中的歌曲，可以將歌曲接著播放，而不是加到播放清單的最後一首。';
 
   @override
   String get startInstantMixForIndividualTracksSwitchTitle => '為單曲啟動即時組合';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => '開啟此功能後，在「歌曲」標籤頁點擊某首歌曲時，系統將會立即產生該歌曲的即時組合，而非僅播放該歌曲本身。';
+  String get startInstantMixForIndividualTracksSwitchSubtitle =>
+      '開啟此功能後，在「歌曲」標籤頁點擊某首歌曲時，系統將會立即產生該歌曲的即時組合，而非僅播放該歌曲本身。';
 
   @override
   String get downloadItem => '下載';
@@ -3319,10 +3375,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get connectionInterrupted => '連線中斷，暫停下載。';
 
   @override
-  String get connectionInterruptedBackground => '連線在背景下載時中斷，這可能是作業系統設定導致的，請確認您的系統允許背景下載。';
+  String get connectionInterruptedBackground =>
+      '連線在背景下載時中斷，這可能是作業系統設定導致的，請確認您的系統允許背景下載。';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => '背景下載時發生連線中斷。這可能是由於您啟用了「暫停時進入低優先級狀態」或作業系統的設定限制了背景下載，請確認相關設定。';
+  String get connectionInterruptedBackgroundAndroid =>
+      '背景下載時發生連線中斷。這可能是由於您啟用了「暫停時進入低優先級狀態」或作業系統的設定限制了背景下載，請確認相關設定。';
 
   @override
   String get activeDownloadSize => '正在下載···';
@@ -3343,13 +3401,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get showNullLibraryItemsTitle => '顯示未知媒體庫中的媒體。';
 
   @override
-  String get showNullLibraryItemsSubtitle => '某些媒體可能來自未知媒體庫。關閉此選項可將這些媒體隱藏，使其僅顯示於原始收藏中。';
+  String get showNullLibraryItemsSubtitle =>
+      '某些媒體可能來自未知媒體庫。關閉此選項可將這些媒體隱藏，使其僅顯示於原始收藏中。';
 
   @override
   String get maxConcurrentDownloads => '最大同時下載數量';
 
   @override
-  String get maxConcurrentDownloadsSubtitle => '調高同時下載的數量可能增加背景下載的速度，但當下載檔案過大時，可能會導致部分下載失敗，或在特定情況下造成顯著的延遲。';
+  String get maxConcurrentDownloadsSubtitle =>
+      '調高同時下載的數量可能增加背景下載的速度，但當下載檔案過大時，可能會導致部分下載失敗，或在特定情況下造成顯著的延遲。';
 
   @override
   String maxConcurrentDownloadsLabel(String count) {
@@ -3360,7 +3420,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get downloadsWorkersSetting => '下載工作執行緒數量';
 
   @override
-  String get downloadsWorkersSettingSubtitle => '設定同步下載中繼資料與刪除檔案時所使用的執行緒數量。當伺服器延遲較高時，提高此數值可提升下載同步與刪除的速度，但可能會導致系統運作延遲。';
+  String get downloadsWorkersSettingSubtitle =>
+      '設定同步下載中繼資料與刪除檔案時所使用的執行緒數量。當伺服器延遲較高時，提高此數值可提升下載同步與刪除的速度，但可能會導致系統運作延遲。';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
@@ -3374,7 +3435,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get preferQuickSyncSwitch => '優先快速同步';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => '在進行同步時，某些靜態內容（例如歌曲與專輯）不會更新。若執行下載修復，則將強制進行完整同步。';
+  String get preferQuickSyncSwitchSubtitle =>
+      '在進行同步時，某些靜態內容（例如歌曲與專輯）不會更新。若執行下載修復，則將強制進行完整同步。';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
@@ -3423,7 +3485,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get transcodingStreamingContainerTitle => '選擇轉碼器格式';
 
   @override
-  String get transcodingStreamingContainerSubtitle => '選擇串流轉碼音訊時要使用的區段容器。已排入佇列的歌曲將不受影響。';
+  String get transcodingStreamingContainerSubtitle =>
+      '選擇串流轉碼音訊時要使用的區段容器。已排入佇列的歌曲將不受影響。';
 
   @override
   String get downloadTranscodeEnableTitle => '啟用轉碼下載';
@@ -3572,13 +3635,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hidePlayerBottomActions => '隱藏底部按鈕';
 
   @override
-  String get hidePlayerBottomActionsSubtitle => '隱藏播放器畫面的佇列與歌詞按鈕。欲查看播放佇列，請向上滑動；若該歌曲支援歌詞，請在專輯封面下方向左滑動以顯示。';
+  String get hidePlayerBottomActionsSubtitle =>
+      '隱藏播放器畫面的佇列與歌詞按鈕。欲查看播放佇列，請向上滑動；若該歌曲支援歌詞，請在專輯封面下方向左滑動以顯示。';
 
   @override
   String get prioritizePlayerCover => '優先顯示專輯封面';
 
   @override
-  String get prioritizePlayerCoverSubtitle => '播放器介面將優先顯示較大的專輯封面顯示，而在較小螢幕上，非必要的操作介面將進一步隱藏，以提升視覺體驗。';
+  String get prioritizePlayerCoverSubtitle =>
+      '播放器介面將優先顯示較大的專輯封面顯示，而在較小螢幕上，非必要的操作介面將進一步隱藏，以提升視覺體驗。';
 
   @override
   String get suppressPlayerPadding => '抑制播放器控制元件之間的距離';
@@ -3658,19 +3723,22 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fiveLatestAlbumsSetting => '下載最新的 5 張專輯';
 
   @override
-  String get fiveLatestAlbumsSettingSubtitle => '下載內容會在到期後自動移除。若要防止專輯被移除，請鎖定下載。';
+  String get fiveLatestAlbumsSettingSubtitle =>
+      '下載內容會在到期後自動移除。若要防止專輯被移除，請鎖定下載。';
 
   @override
   String get cacheLibraryImagesSettings => '快取現在的媒體庫圖片';
 
   @override
-  String get cacheLibraryImagesSettingsSubtitle => '目前啟用的媒體庫內的專輯、藝人、曲風與播放清單封面將會下載。';
+  String get cacheLibraryImagesSettingsSubtitle =>
+      '目前啟用的媒體庫內的專輯、藝人、曲風與播放清單封面將會下載。';
 
   @override
   String get showProgressOnNowPlayingBarTitle => '在應用程式內的迷你播放器上顯示歌曲播放進度';
 
   @override
-  String get showProgressOnNowPlayingBarSubtitle => '控制應用程式內下方的迷你播放器 / 正在播放欄位是否同時作為進度條。';
+  String get showProgressOnNowPlayingBarSubtitle =>
+      '控制應用程式內下方的迷你播放器 / 正在播放欄位是否同時作為進度條。';
 
   @override
   String get lyricsScreen => '歌詞介面';
@@ -3685,13 +3753,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get showStopButtonOnMediaNotificationTitle => '在媒體通知上顯示停止按鈕';
 
   @override
-  String get showStopButtonOnMediaNotificationSubtitle => '控制媒體通知上除了暫停按鈕以外是否還有停止按鈕。這可以讓你在不打開應用程式的情況下停止播放。';
+  String get showStopButtonOnMediaNotificationSubtitle =>
+      '控制媒體通知上除了暫停按鈕以外是否還有停止按鈕。這可以讓你在不打開應用程式的情況下停止播放。';
 
   @override
   String get showSeekControlsOnMediaNotificationTitle => '在媒體通知上顯示進度控制';
 
   @override
-  String get showSeekControlsOnMediaNotificationSubtitle => '控制媒體通知上是否顯示可以調整播放進度的進度條。這可以讓你在不打開應用程式的情況下改變播放位置。';
+  String get showSeekControlsOnMediaNotificationSubtitle =>
+      '控制媒體通知上是否顯示可以調整播放進度的進度條。這可以讓你在不打開應用程式的情況下改變播放位置。';
 
   @override
   String get alignmentOptionStart => '靠左排列';
@@ -3864,7 +3934,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get allowDeleteFromServerTitle => '允許從伺服器刪除';
 
   @override
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
@@ -3955,7 +4026,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get showAlbumReleaseDateOnPlayerScreenTitle => '在播放器介面上顯示專輯發行日期';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => '在播放器介面中顯示專輯發行日期於專輯名稱之後。';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle =>
+      '在播放器介面中顯示專輯發行日期於專輯名稱之後。';
 
   @override
   String get releaseDateFormatTitle => '發行日期格式';
@@ -3966,7 +4038,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
 class AppLocalizationsZhHantHk extends AppLocalizationsZh {
-  AppLocalizationsZhHantHk(): super('zh_Hant_HK');
+  AppLocalizationsZhHantHk() : super('zh_Hant_HK');
 
   @override
   String get finamp => 'Finamp';
@@ -3983,7 +4055,8 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get serverUrl => '伺服器 URL';
 
   @override
-  String get internalExternalIpExplanation => '如果您需要在局部區域網絡（LAN）以外的地方連接 Jellyfin，請使用伺服器的區域網絡（WAN）IP。\n\n如果目標伺服器使用的連接埠（port）是 HTTP 的預設連接埠（80／433），則毋須填寫連接埠。';
+  String get internalExternalIpExplanation =>
+      '如果您需要在局部區域網絡（LAN）以外的地方連接 Jellyfin，請使用伺服器的區域網絡（WAN）IP。\n\n如果目標伺服器使用的連接埠（port）是 HTTP 的預設連接埠（80／433），則毋須填寫連接埠。';
 
   @override
   String get emptyServerUrl => '伺服器 URL 並不能漏空';
@@ -4305,7 +4378,8 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get enterLowPriorityStateOnPause => '暫停播放時會進入「低優先」狀態';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => '在停止播放時，允許本程式的「通知」能被掃走及關閉應用程式（適用於 Android 裝置）。';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      '在停止播放時，允許本程式的「通知」能被掃走及關閉應用程式（適用於 Android 裝置）。';
 
   @override
   String get shuffleAllTrackCount => '隨機播放上限';
@@ -4357,7 +4431,8 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get hideTrackArtistsIfSameAsAlbumArtists => '隱藏與專輯歌手同名的歌手名稱';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => '當專輯的歌手與歌曲的歌手相同時，隱藏歌曲的歌手名稱。';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      '當專輯的歌手與歌曲的歌手相同時，隱藏歌曲的歌手名稱。';
 
   @override
   String get disableGesture => '禁用「手勢」功能';
@@ -4529,7 +4604,8 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
   String get noMusicLibrariesTitle => '沒有音樂類媒體庫';
 
   @override
-  String get noMusicLibrariesBody => 'Finamp 未有發現任何音樂媒體庫。請檢查 Jellyfin 伺服器上最少有一個屬於「音樂」類別的媒體庫。';
+  String get noMusicLibrariesBody =>
+      'Finamp 未有發現任何音樂媒體庫。請檢查 Jellyfin 伺服器上最少有一個屬於「音樂」類別的媒體庫。';
 
   @override
   String get refresh => '重新載入';

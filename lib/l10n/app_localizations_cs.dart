@@ -23,7 +23,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get about => 'O aplikaci Finamp';
 
   @override
-  String get aboutContributionPrompt => 'Vytvořeno úžasnými lidmi v jejich volném čase.\nMůžete být jedním z nich!';
+  String get aboutContributionPrompt =>
+      'Vytvořeno úžasnými lidmi v jejich volném čase.\nMůžete být jedním z nich!';
 
   @override
   String get aboutContributionLink => 'Přispějte do Finampu na GitHubu:';
@@ -32,7 +33,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get aboutReleaseNotes => 'Přečtěte si informace o posledním vydání:';
 
   @override
-  String get aboutTranslations => 'Pomozte s překladem Finampu do vašeho jazyka:';
+  String get aboutTranslations =>
+      'Pomozte s překladem Finampu do vašeho jazyka:';
 
   @override
   String get aboutThanks => 'Děkujeme za používání Finampu!';
@@ -62,7 +64,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get serverUrl => 'Adresa URL serveru';
 
   @override
-  String get internalExternalIpExplanation => 'Pokud budete chtít vzdáleně přistupovat k vašemu serveru Jellyfin, budete muset použít vaši externí IP.\n\nPokud je váš server na výchozím portu HTTP (80 nebo 443), nebo výchozím portu Jellyfinu (8096), nemusíte zadávat port.\n\nPokud je adresa URL správná, měly by se pod polem níže zobrazit informace o vašem serveru.';
+  String get internalExternalIpExplanation =>
+      'Pokud budete chtít vzdáleně přistupovat k vašemu serveru Jellyfin, budete muset použít vaši externí IP.\n\nPokud je váš server na výchozím portu HTTP (80 nebo 443), nebo výchozím portu Jellyfinu (8096), nemusíte zadávat port.\n\nPokud je adresa URL správná, měly by se pod polem níže zobrazit informace o vašem serveru.';
 
   @override
   String get serverUrlHint => 'např. demo.jellyfin.org/stable';
@@ -80,7 +83,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get loginFlowLocalNetworkServers => 'Servery na vaší lokální síti:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'Vyhledávání serverů…';
+  String get loginFlowLocalNetworkServersScanningForServers =>
+      'Vyhledávání serverů…';
 
   @override
   String get loginFlowAccountSelectionHeading => 'Vyberte svůj účet';
@@ -104,10 +108,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get loginFlowQuickConnectPrompt => 'Použít kód Rychlého připojení';
 
   @override
-  String get loginFlowQuickConnectInstructions => 'Otevřete aplikaci nebo web Jellyfinu, klepněte na vaši uživatelskou ikonu a vybere Rychlé připojení.';
+  String get loginFlowQuickConnectInstructions =>
+      'Otevřete aplikaci nebo web Jellyfinu, klepněte na vaši uživatelskou ikonu a vybere Rychlé připojení.';
 
   @override
-  String get loginFlowQuickConnectDisabled => 'Rychlé připojení je na tomto serveru zakázáno.';
+  String get loginFlowQuickConnectDisabled =>
+      'Rychlé připojení je na tomto serveru zakázáno.';
 
   @override
   String get orDivider => 'nebo';
@@ -122,7 +128,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get usernameHint => 'Zadejte své uživatelské jméno';
 
   @override
-  String get usernameValidationMissingUsername => 'Zadejte prosím uživatelské jméno';
+  String get usernameValidationMissingUsername =>
+      'Zadejte prosím uživatelské jméno';
 
   @override
   String get password => 'Heslo';
@@ -167,13 +174,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get startMix => 'Spustit mix';
 
   @override
-  String get startMixNoTracksArtist => 'Dlouze podržte prst na umělci pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním';
+  String get startMixNoTracksArtist =>
+      'Dlouze podržte prst na umělci pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním';
 
   @override
-  String get startMixNoTracksAlbum => 'Dlouze podržte prst na albu pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním';
+  String get startMixNoTracksAlbum =>
+      'Dlouze podržte prst na albu pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním';
 
   @override
-  String get startMixNoTracksGenre => 'Dlouze podržte prst na žánru pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním';
+  String get startMixNoTracksGenre =>
+      'Dlouze podržte prst na žánru pro jeho přidání nebo odebrání z tvorby mixu před jeho spuštěním';
 
   @override
   String get music => 'Hudba';
@@ -251,7 +261,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get runtime => 'Doba běhu';
 
   @override
-  String get syncDownloadedPlaylists => 'Synchronizovat stažené seznamy skladeb';
+  String get syncDownloadedPlaylists =>
+      'Synchronizovat stažené seznamy skladeb';
 
   @override
   String get downloadMissingImages => 'Stáhnout chybějící obrázky';
@@ -284,7 +295,8 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing) {
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing) {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
@@ -342,10 +354,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get noActiveDownloads => 'Žádná aktivní stahování.';
 
   @override
-  String get errorScreenError => 'Při načítání seznamu chyb došlo k chybě! Vytvořte prosím problém na GitHubu a vymažte data aplikace';
+  String get errorScreenError =>
+      'Při načítání seznamu chyb došlo k chybě! Vytvořte prosím problém na GitHubu a vymažte data aplikace';
 
   @override
-  String get failedToGetTrackFromDownloadId => 'Nepodařilo se získat skladbu z ID stahování';
+  String get failedToGetTrackFromDownloadId =>
+      'Nepodařilo se získat skladbu z ID stahování';
 
   @override
   String deleteDownloadsPrompt(String itemName, String itemType) {
@@ -498,25 +512,29 @@ class AppLocalizationsCs extends AppLocalizations {
   String get logOut => 'Odhlásit se';
 
   @override
-  String get downloadedTracksWillNotBeDeleted => 'Stažené skladby nebudou odstraněny';
+  String get downloadedTracksWillNotBeDeleted =>
+      'Stažené skladby nebudou odstraněny';
 
   @override
   String get areYouSure => 'Opravdu?';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin používá pro překódování formát AAC';
+  String get jellyfinUsesAACForTranscoding =>
+      'Jellyfin používá pro překódování formát AAC';
 
   @override
   String get enableTranscoding => 'Zapnout překódování';
 
   @override
-  String get enableTranscodingSubtitle => 'Překóduje hudební streamy na straně serveru.';
+  String get enableTranscodingSubtitle =>
+      'Překóduje hudební streamy na straně serveru.';
 
   @override
   String get bitrate => 'Datový tok';
 
   @override
-  String get bitrateSubtitle => 'Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší využití internetu.';
+  String get bitrateSubtitle =>
+      'Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší využití internetu.';
 
   @override
   String get customLocation => 'Vlastní umístění';
@@ -534,25 +552,31 @@ class AppLocalizationsCs extends AppLocalizations {
   String get unknownError => 'Neznámá chyba';
 
   @override
-  String get pathReturnSlashErrorMessage => 'Cesty, které vracejí „/“, nelze použít';
+  String get pathReturnSlashErrorMessage =>
+      'Cesty, které vracejí „/“, nelze použít';
 
   @override
   String get directoryMustBeEmpty => 'Adresář musí být prázdný';
 
   @override
-  String get customLocationsBuggy => 'Vlastní umístění mohou být extrémně chybové a ve většině případů nejsou doporučeny. Umístění v systémové složce „Music“ zabraňují ukládání obalů alb z důvodu omezení systému.';
+  String get customLocationsBuggy =>
+      'Vlastní umístění mohou být extrémně chybové a ve většině případů nejsou doporučeny. Umístění v systémové složce „Music“ zabraňují ukládání obalů alb z důvodu omezení systému.';
 
   @override
-  String get enterLowPriorityStateOnPause => 'Po pozastavení vstoupit do stavu nízké priority';
+  String get enterLowPriorityStateOnPause =>
+      'Po pozastavení vstoupit do stavu nízké priority';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => 'Umožní odstranění notifikace při pozastavení. Také umožní systému ukončit službu.';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      'Umožní odstranění notifikace při pozastavení. Také umožní systému ukončit službu.';
 
   @override
-  String get shuffleAllTrackCount => 'Počet skladeb pro náhodné přehrávání všeho';
+  String get shuffleAllTrackCount =>
+      'Počet skladeb pro náhodné přehrávání všeho';
 
   @override
-  String get shuffleAllTrackCountSubtitle => 'Počet skladeb, které se mají načíst při použití tlačítka náhodného přehrávání všech skladeb.';
+  String get shuffleAllTrackCountSubtitle =>
+      'Počet skladeb, které se mají načíst při použití tlačítka náhodného přehrávání všech skladeb.';
 
   @override
   String get viewType => 'Typ zobrazení';
@@ -573,10 +597,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get playbackSpeedControlSetting => 'Viditelnost rychlosti přehrávání';
 
   @override
-  String get playbackSpeedControlSettingSubtitle => 'Zda se v nabídce na obrazovce přehrávače mají zobrazit ovládací prvky rychlosti přehrávání';
+  String get playbackSpeedControlSettingSubtitle =>
+      'Zda se v nabídce na obrazovce přehrávače mají zobrazit ovládací prvky rychlosti přehrávání';
 
   @override
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList) {
     return 'Automaticky:\nFinamp se pokusí rozpoznat, zda je přehrávaná skladba podcast nebo audiokniha (její část). Za takový případ se považuje, pokud je stopa delší než $trackDuration minut, pokud je album stopy delší než $albumDuration hodin nebo pokud má stopa přiřazen alespoň jeden z těchto žánrů: $genreList\nV nabídce na obrazovce přehrávače se pak zobrazí ovládací prvky rychlosti přehrávání.\n\nZobrazené:\nOvládací prvky rychlosti přehrávání v nabídce obrazovky přehrávače budou vždy zobrazeny.\n\nSkryté:\nOvládací prvky rychlosti přehrávání v nabídce obrazovky přehrávače budou vždy skryté.';
   }
 
@@ -618,31 +644,40 @@ class AppLocalizationsCs extends AppLocalizations {
   String get showTextOnGridView => 'Zobrazit text v zobrazení v mřížce';
 
   @override
-  String get showTextOnGridViewSubtitle => 'Zda zobrazit text (název, umělce atd.) v mřížkovém zobrazení hudební obrazovky.';
+  String get showTextOnGridViewSubtitle =>
+      'Zda zobrazit text (název, umělce atd.) v mřížkovém zobrazení hudební obrazovky.';
 
   @override
-  String get useCoverAsBackground => 'Zobrazit rozmazaný obal jako pozadí přehrávače';
+  String get useCoverAsBackground =>
+      'Zobrazit rozmazaný obal jako pozadí přehrávače';
 
   @override
-  String get useCoverAsBackgroundSubtitle => 'Zda použít rozmazaný obal alba jako pozadí na obrazovce přehrávače.';
+  String get useCoverAsBackgroundSubtitle =>
+      'Zda použít rozmazaný obal alba jako pozadí na obrazovce přehrávače.';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorTitle => 'Minimální odsazení obalu alba';
+  String get playerScreenMinimumCoverPaddingEditorTitle =>
+      'Minimální odsazení obalu alba';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => 'Minimální odsazení kolem obalu alba na obrazovce přehrávače, v % šířky obrazovky.';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle =>
+      'Minimální odsazení kolem obalu alba na obrazovce přehrávače, v % šířky obrazovky.';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtists => 'Nezobrazovat umělce skladby, pokud je totožný s umělcem alba';
+  String get hideTrackArtistsIfSameAsAlbumArtists =>
+      'Nezobrazovat umělce skladby, pokud je totožný s umělcem alba';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => 'Zda zobrazit umělce skladby na obrazovce alba, pokud se neliší od umělců alba.';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      'Zda zobrazit umělce skladby na obrazovce alba, pokud se neliší od umělců alba.';
 
   @override
-  String get showArtistsTopTracks => 'Zobrazit nejlepší skladby v zobrazení umělce';
+  String get showArtistsTopTracks =>
+      'Zobrazit nejlepší skladby v zobrazení umělce';
 
   @override
-  String get showArtistsTopTracksSubtitle => 'Zda zobrazit 5 nejposlouchanějších skladeb na stránce umělce.';
+  String get showArtistsTopTracksSubtitle =>
+      'Zda zobrazit 5 nejposlouchanějších skladeb na stránce umělce.';
 
   @override
   String get disableGesture => 'Zakázat gesta';
@@ -751,7 +786,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get playlistCreated => 'Seznam skladeb vytvořen.';
 
   @override
-  String get playlistActionsMenuButtonTooltip => 'Klepněte pro přidání do seznamu skladeb. Podržte pro přepnutí oblíbení.';
+  String get playlistActionsMenuButtonTooltip =>
+      'Klepněte pro přidání do seznamu skladeb. Podržte pro přepnutí oblíbení.';
 
   @override
   String get noAlbum => 'Žádné album';
@@ -869,25 +905,30 @@ class AppLocalizationsCs extends AppLocalizations {
   String get bufferDuration => 'Trvání vyrovnávací paměti';
 
   @override
-  String get bufferDurationSubtitle => 'Maximální doba trvání, která má být uložena do vyrovnávací paměti, v sekundách. Vyžaduje restart aplikace.';
+  String get bufferDurationSubtitle =>
+      'Maximální doba trvání, která má být uložena do vyrovnávací paměti, v sekundách. Vyžaduje restart aplikace.';
 
   @override
-  String get bufferDisableSizeConstraintsTitle => 'Neomezovat velikost vyrovnávací paměti';
+  String get bufferDisableSizeConstraintsTitle =>
+      'Neomezovat velikost vyrovnávací paměti';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => 'Zakáže omezení velikosti vyrovnávací paměti. Vyrovnávací paměť bude vždy načtena na nastavené trvání, i pro velmi velké soubory. Může způsobit pády. Vyžaduje restart.';
+  String get bufferDisableSizeConstraintsSubtitle =>
+      'Zakáže omezení velikosti vyrovnávací paměti. Vyrovnávací paměť bude vždy načtena na nastavené trvání, i pro velmi velké soubory. Může způsobit pády. Vyžaduje restart.';
 
   @override
   String get bufferSizeTitle => 'Velikost vyrovnávací paměti';
 
   @override
-  String get bufferSizeSubtitle => 'Maximální velikost vyrovnávací paměti v MB. Vyžaduje restart';
+  String get bufferSizeSubtitle =>
+      'Maximální velikost vyrovnávací paměti v MB. Vyžaduje restart';
 
   @override
   String get language => 'Jazyk';
 
   @override
-  String get skipToPreviousTrackButtonTooltip => 'Přeskočit na začátek nebo na předchozí skladbu';
+  String get skipToPreviousTrackButtonTooltip =>
+      'Přeskočit na začátek nebo na předchozí skladbu';
 
   @override
   String get skipToNextTrackButtonTooltip => 'Přeskočit na další skladbu';
@@ -1035,13 +1076,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get playbackOrderLinearButtonLabel => 'Přehrávání v pořadí';
 
   @override
-  String get playbackOrderLinearButtonTooltip => 'Přehrávání v pořadí. Klepněte pro zamíchání.';
+  String get playbackOrderLinearButtonTooltip =>
+      'Přehrávání v pořadí. Klepněte pro zamíchání.';
 
   @override
   String get playbackOrderShuffledButtonLabel => 'Míchání skladeb';
 
   @override
-  String get playbackOrderShuffledButtonTooltip => 'Míchání skladeb. Klepněte pro přehrání v pořadí.';
+  String get playbackOrderShuffledButtonTooltip =>
+      'Míchání skladeb. Klepněte pro přehrání v pořadí.';
 
   @override
   String playbackSpeedButtonLabel(double speed) {
@@ -1076,7 +1119,8 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String queueRestoreTitle(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
+    final intl.DateFormat dateDateFormat =
+        intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
     return 'Uloženo $dateString';
@@ -1106,25 +1150,31 @@ class AppLocalizationsCs extends AppLocalizations {
   String get queueRetryMessage => 'Nepodařilo se obnovit frontu. Opakovat?';
 
   @override
-  String get autoloadLastQueueOnStartup => 'Automaticky obnovit poslední frontu';
+  String get autoloadLastQueueOnStartup =>
+      'Automaticky obnovit poslední frontu';
 
   @override
-  String get autoloadLastQueueOnStartupSubtitle => 'Po spuštění aplikace se pokusit obnovit naposledy přehrávanou frontu.';
+  String get autoloadLastQueueOnStartupSubtitle =>
+      'Po spuštění aplikace se pokusit obnovit naposledy přehrávanou frontu.';
 
   @override
   String get reportQueueToServer => 'Nahlásit aktuální frontu serveru?';
 
   @override
-  String get reportQueueToServerSubtitle => 'Pokud je tato možnost povolena, odešle Finamp aktuální frontu na server. Tato funkce v současné době není přiliš užitečná a zvyšuje síťový provoz.';
+  String get reportQueueToServerSubtitle =>
+      'Pokud je tato možnost povolena, odešle Finamp aktuální frontu na server. Tato funkce v současné době není přiliš užitečná a zvyšuje síťový provoz.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequency => 'Frekvence aktualizace relace přehrávání';
+  String get periodicPlaybackSessionUpdateFrequency =>
+      'Frekvence aktualizace relace přehrávání';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencySubtitle => 'Jak často posílat aktuální stav přehrávání na server, v sekundách. Mělo by být méně než 5 minut (300 sekund) pro zabránění vypršení relace.';
+  String get periodicPlaybackSessionUpdateFrequencySubtitle =>
+      'Jak často posílat aktuální stav přehrávání na server, v sekundách. Mělo by být méně než 5 minut (300 sekund) pro zabránění vypršení relace.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencyDetails => 'Pokud server Jellyfin neobdrží od klienta za posledních 5 minut žádnou aktualizaci, předpokládá, že přehrávání skončilo. To znamená, že u skladeb delších než 5 minut by mohlo být toto přehrávání nesprávně hlášeno jako ukončené, což by snižovalo kvalitu dat hlášení přehrávání.';
+  String get periodicPlaybackSessionUpdateFrequencyDetails =>
+      'Pokud server Jellyfin neobdrží od klienta za posledních 5 minut žádnou aktualizaci, předpokládá, že přehrávání skončilo. To znamená, že u skladeb delších než 5 minut by mohlo být toto přehrávání nesprávně hlášeno jako ukončené, což by snižovalo kvalitu dat hlášení přehrávání.';
 
   @override
   String get topTracks => 'Nejlepší skladby';
@@ -1197,7 +1247,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get close => 'Zavřít';
 
   @override
-  String get showUncensoredLogMessage => 'Tento protokol zobrazuje vaše přihlašovací informace. Chcete jej zobrazit?';
+  String get showUncensoredLogMessage =>
+      'Tento protokol zobrazuje vaše přihlašovací informace. Chcete jej zobrazit?';
 
   @override
   String get resetTabs => 'Obnovit karty';
@@ -1209,7 +1260,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get noMusicLibrariesTitle => 'Žádné hudební knihovny';
 
   @override
-  String get noMusicLibrariesBody => 'Finamp nenalezl žádné hudební knihovny. Ujistěte se prosím, že váš server Jellyfin obsahuje alespoň jednu knihovnu s typem obsahu nastaveným na „Hudba“.';
+  String get noMusicLibrariesBody =>
+      'Finamp nenalezl žádné hudební knihovny. Ujistěte se prosím, že váš server Jellyfin obsahuje alespoň jednu knihovnu s typem obsahu nastaveným na „Hudba“.';
 
   @override
   String get refresh => 'Obnovit';
@@ -1224,16 +1276,20 @@ class AppLocalizationsCs extends AppLocalizations {
   String get volumeNormalizationSwitchTitle => 'Povolit normalizaci hlasitosti';
 
   @override
-  String get volumeNormalizationSwitchSubtitle => 'Použít informace o zesílení k normalizaci hlasitosti skladeb („Replay Gain“)';
+  String get volumeNormalizationSwitchSubtitle =>
+      'Použít informace o zesílení k normalizaci hlasitosti skladeb („Replay Gain“)';
 
   @override
-  String get volumeNormalizationModeSelectorTitle => 'Režim normalizace hlasitosti';
+  String get volumeNormalizationModeSelectorTitle =>
+      'Režim normalizace hlasitosti';
 
   @override
-  String get volumeNormalizationModeSelectorSubtitle => 'Kdy a jak použít normalizaci hlasitosti';
+  String get volumeNormalizationModeSelectorSubtitle =>
+      'Kdy a jak použít normalizaci hlasitosti';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => 'Hybridní (skladba + album):\nZesílení skladby bude použito pro klasické přehrávání, pokud ale hraje album (buď protože je hlavním zdrojem fronty přehrávání, nebo protože bylo v určitém bodě přidáno do fronty), bude namísto toho použito zesílení alba.\n\nPodle skladby:\nVždy bude použito zesílení skladby, nezávisle na tom, zda hraje album.\n\nPouze alba:\nNormalizace hlasitosti bude použita pouze při přehrávání alb (použitím zesílení alba), ale ne pro jednotlivé skladby.';
+  String get volumeNormalizationModeSelectorDescription =>
+      'Hybridní (skladba + album):\nZesílení skladby bude použito pro klasické přehrávání, pokud ale hraje album (buď protože je hlavním zdrojem fronty přehrávání, nebo protože bylo v určitém bodě přidáno do fronty), bude namísto toho použito zesílení alba.\n\nPodle skladby:\nVždy bude použito zesílení skladby, nezávisle na tom, zda hraje album.\n\nPouze alba:\nNormalizace hlasitosti bude použita pouze při přehrávání alb (použitím zesílení alba), ale ne pro jednotlivé skladby.';
 
   @override
   String get volumeNormalizationModeHybrid => 'Hybridní (skladba + album)';
@@ -1251,7 +1307,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get volumeNormalizationIOSBaseGainEditorTitle => 'Základní zesílení';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => 'Normalizace hlasitosti v systému iOS v současné době vyžaduje změnu hlasitosti přehrávání, aby se napodobila změna zesílení. Protože nemůžeme zvýšit hlasitost nad 100 %, musíme ve výchozím nastavení hlasitost snížit, abychom mohli zvýšit hlasitost tichých skladeb. Hodnota je v decibelech (dB), kde -10 dB je ~30% hlasitost, -4,5 dB je ~60% hlasitost a -2 dB je ~80% hlasitost.';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle =>
+      'Normalizace hlasitosti v systému iOS v současné době vyžaduje změnu hlasitosti přehrávání, aby se napodobila změna zesílení. Protože nemůžeme zvýšit hlasitost nad 100 %, musíme ve výchozím nastavení hlasitost snížit, abychom mohli zvýšit hlasitost tichých skladeb. Hodnota je v decibelech (dB), kde -10 dB je ~30% hlasitost, -4,5 dB je ~60% hlasitost a -2 dB je ~80% hlasitost.';
 
   @override
   String numberAsDecibel(double value) {
@@ -1262,13 +1319,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get swipeInsertQueueNext => 'Přehrát posunutou skladbu jako další';
 
   @override
-  String get swipeInsertQueueNextSubtitle => 'Zapněte pro vložení skladby jako další položku do fronty po posunutí prstem na skladbě v seznamu skladeb, namísto jejího přiřazení na konec.';
+  String get swipeInsertQueueNextSubtitle =>
+      'Zapněte pro vložení skladby jako další položku do fronty po posunutí prstem na skladbě v seznamu skladeb, namísto jejího přiřazení na konec.';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchTitle => 'Spustit okamžité mixy pro jednotlivé skladby';
+  String get startInstantMixForIndividualTracksSwitchTitle =>
+      'Spustit okamžité mixy pro jednotlivé skladby';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => 'Pokud je povoleno, klepnutím na skladbu na kartě skladeb spustíte okamžitý mix této skladby, namísto přehrání pouze té, na kterou jste klepli.';
+  String get startInstantMixForIndividualTracksSwitchSubtitle =>
+      'Pokud je povoleno, klepnutím na skladbu na kartě skladeb spustíte okamžitý mix této skladby, namísto přehrání pouze té, na kterou jste klepli.';
 
   @override
   String get downloadItem => 'Stáhnout';
@@ -1283,7 +1343,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get syncDownloads => 'Synchronizovat a stáhnout chybějící položky.';
 
   @override
-  String get repairDownloads => 'Opravit chyby se staženými soubory nebo metadaty.';
+  String get repairDownloads =>
+      'Opravit chyby se staženými soubory nebo metadaty.';
 
   @override
   String get requireWifiForDownloads => 'Stahovat pouze na Wi-Fi.';
@@ -1330,16 +1391,20 @@ class AppLocalizationsCs extends AppLocalizations {
   String get onlyShowFullyDownloaded => 'Zobrazit pouze plně stažená alba';
 
   @override
-  String get filesystemFull => 'Zbývající stahování nelze dokončit. Souborový systém je plný.';
+  String get filesystemFull =>
+      'Zbývající stahování nelze dokončit. Souborový systém je plný.';
 
   @override
-  String get connectionInterrupted => 'Spojení přerušeno, pozastavuji stahování.';
+  String get connectionInterrupted =>
+      'Spojení přerušeno, pozastavuji stahování.';
 
   @override
-  String get connectionInterruptedBackground => 'Během stahování na pozadí bylo přerušeno spojení. Může to být způsobeno nastavením operačního systému.';
+  String get connectionInterruptedBackground =>
+      'Během stahování na pozadí bylo přerušeno spojení. Může to být způsobeno nastavením operačního systému.';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => 'Během stahování na pozadí bylo přerušeno spojení. Může to být způsobeno povolením možnosti „Po pozastavení vstoupit do stavu nízké priority“ nebo nastavením operačního systému.';
+  String get connectionInterruptedBackgroundAndroid =>
+      'Během stahování na pozadí bylo přerušeno spojení. Může to být způsobeno povolením možnosti „Po pozastavení vstoupit do stavu nízké priority“ nebo nastavením operačního systému.';
 
   @override
   String get activeDownloadSize => 'Stahování…';
@@ -1351,22 +1416,26 @@ class AppLocalizationsCs extends AppLocalizations {
   String get syncingDownloadSize => 'Synchronizace…';
 
   @override
-  String get runRepairWarning => 'Server se nepodařilo kontaktovat za účelem dokončení migrace stahování. Jakmile budete opět online, spusťte z obrazovky stahování příkaz „Opravit stažené“.';
+  String get runRepairWarning =>
+      'Server se nepodařilo kontaktovat za účelem dokončení migrace stahování. Jakmile budete opět online, spusťte z obrazovky stahování příkaz „Opravit stažené“.';
 
   @override
   String get downloadSettings => 'Stahování';
 
   @override
-  String get showNullLibraryItemsTitle => 'Zobrazit média s neznámou knihovnou.';
+  String get showNullLibraryItemsTitle =>
+      'Zobrazit média s neznámou knihovnou.';
 
   @override
-  String get showNullLibraryItemsSubtitle => 'Některá média mohla být stažena s neznámou knihovnou. Jejich vypnutím je skryjete mimo jejich původní sbírku.';
+  String get showNullLibraryItemsSubtitle =>
+      'Některá média mohla být stažena s neznámou knihovnou. Jejich vypnutím je skryjete mimo jejich původní sbírku.';
 
   @override
   String get maxConcurrentDownloads => 'Maximální počet souběžných stahování';
 
   @override
-  String get maxConcurrentDownloadsSubtitle => 'Zvýšení počtu souběžných stahování může umožnit zvýšené stahování na pozadí, ale může způsobit, že některá stahování selžou, pokud jsou velmi velká, nebo v některých případech způsobit nadměrné zpoždění.';
+  String get maxConcurrentDownloadsSubtitle =>
+      'Zvýšení počtu souběžných stahování může umožnit zvýšené stahování na pozadí, ale může způsobit, že některá stahování selžou, pokud jsou velmi velká, nebo v některých případech způsobit nadměrné zpoždění.';
 
   @override
   String maxConcurrentDownloadsLabel(String count) {
@@ -1377,7 +1446,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get downloadsWorkersSetting => 'Počet workerů stahování';
 
   @override
-  String get downloadsWorkersSettingSubtitle => 'Množství workerů pro synchronizaci metadat a mazání stažených souborů. Zvýšení počtu workerů pro stahování může urychlit synchronizaci stahování a mazání, zejména při vysoké latenci serveru, ale může způsobit záseky.';
+  String get downloadsWorkersSettingSubtitle =>
+      'Množství workerů pro synchronizaci metadat a mazání stažených souborů. Zvýšení počtu workerů pro stahování může urychlit synchronizaci stahování a mazání, zejména při vysoké latenci serveru, ale může způsobit záseky.';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
@@ -1385,13 +1455,15 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get syncOnStartupSwitch => 'Automaticky synchronizovat stažené po spuštění';
+  String get syncOnStartupSwitch =>
+      'Automaticky synchronizovat stažené po spuštění';
 
   @override
   String get preferQuickSyncSwitch => 'Preferovat rychlou synchronizaci';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => 'Při synchronizaci nebudou aktualizovány některé obvykle statické položky (např. skladby a alba). Oprava stažených vždy provede úplnou synchronizaci.';
+  String get preferQuickSyncSwitchSubtitle =>
+      'Při synchronizaci nebudou aktualizovány některé obvykle statické položky (např. skladby a alba). Oprava stažených vždy provede úplnou synchronizaci.';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
@@ -1437,10 +1509,12 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Vyberte kontejner překódování';
+  String get transcodingStreamingContainerTitle =>
+      'Vyberte kontejner překódování';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Vyberte kontejner segmentů k použití při streamování překódovaného zvuku. Skladby, které jsou ve frontě, nebudou ovlivněny.';
+  String get transcodingStreamingContainerSubtitle =>
+      'Vyberte kontejner segmentů k použití při streamování překódovaného zvuku. Skladby, které jsou ve frontě, nebudou ovlivněny.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Povolit překódovaná stahování';
@@ -1466,7 +1540,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get downloadBitrate => 'Datový tok stažených';
 
   @override
-  String get downloadBitrateSubtitle => 'Vyšší datový tok umožní lepší kvalitu zvuku za cenu vyšších požadavků na úložiště.';
+  String get downloadBitrateSubtitle =>
+      'Vyšší datový tok umožní lepší kvalitu zvuku za cenu vyšších požadavků na úložiště.';
 
   @override
   String get transcodeHint => 'Překódovat?';
@@ -1526,16 +1601,20 @@ class AppLocalizationsCs extends AppLocalizations {
   String get redownloadTitle => 'Automaticky znovu stáhnout překódované';
 
   @override
-  String get redownloadSubtitle => 'Automaticky znovu stáhnout skladby, které jsou očekávány v jiné kvalitě z důvodu změny nadřazené sbírky.';
+  String get redownloadSubtitle =>
+      'Automaticky znovu stáhnout skladby, které jsou očekávány v jiné kvalitě z důvodu změny nadřazené sbírky.';
 
   @override
-  String get defaultDownloadLocationButton => 'Nastavit jako výchozí umístění stahování.  Zakažte pro výběr u každého stahování zvlášť.';
+  String get defaultDownloadLocationButton =>
+      'Nastavit jako výchozí umístění stahování.  Zakažte pro výběr u každého stahování zvlášť.';
 
   @override
-  String get fixedGridSizeSwitchTitle => 'Použít pevnou velikost dlaždic mřížky';
+  String get fixedGridSizeSwitchTitle =>
+      'Použít pevnou velikost dlaždic mřížky';
 
   @override
-  String get fixedGridSizeSwitchSubtitle => 'Velikost dlaždic mřížky nebude reagovat na velikost okna/obrazovky.';
+  String get fixedGridSizeSwitchSubtitle =>
+      'Velikost dlaždic mřížky nebude reagovat na velikost okna/obrazovky.';
 
   @override
   String get fixedGridSizeTitle => 'Velikost dlaždic mřížky';
@@ -1559,7 +1638,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get allowSplitScreenTitle => 'Povolit režim rozdělené obrazovky';
 
   @override
-  String get allowSplitScreenSubtitle => 'Přehrávač bude zobrazen vedle dalších obrazovek na širších displejích.';
+  String get allowSplitScreenSubtitle =>
+      'Přehrávač bude zobrazen vedle dalších obrazovek na širších displejích.';
 
   @override
   String get enableVibration => 'Povolit vibrace';
@@ -1571,37 +1651,43 @@ class AppLocalizationsCs extends AppLocalizations {
   String get hideQueueButton => 'Skrýt tlačítko fronty';
 
   @override
-  String get hideQueueButtonSubtitle => 'Skrýt tlačítko fronty na obrazovce přehrávače. Přejeďte nahoru pro zobrazení fronty.';
+  String get hideQueueButtonSubtitle =>
+      'Skrýt tlačítko fronty na obrazovce přehrávače. Přejeďte nahoru pro zobrazení fronty.';
 
   @override
   String get oneLineMarqueeTextButton => 'Automaticky posouvat dlouhé názvy';
 
   @override
-  String get oneLineMarqueeTextButtonSubtitle => 'Automaticky posouvat názvy skladeb, které jsou příliš dlouhé na zobrazení ve dvou řádcích';
+  String get oneLineMarqueeTextButtonSubtitle =>
+      'Automaticky posouvat názvy skladeb, které jsou příliš dlouhé na zobrazení ve dvou řádcích';
 
   @override
   String get marqueeOrTruncateButton => 'Použít výpustku pro dlouhé názvy';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Namísto posouvajícího se textu zobrazit … na konci dlouhých názvů';
+  String get marqueeOrTruncateButtonSubtitle =>
+      'Namísto posouvajícího se textu zobrazit … na konci dlouhých názvů';
 
   @override
   String get hidePlayerBottomActions => 'Skrýt spodní akce';
 
   @override
-  String get hidePlayerBottomActionsSubtitle => 'Skrýt tlačítka fronty a textu na obrazovce přehrávače. Přejetím prstem nahoru získáte přístup k frontě, přejetím prstem doleva (pod obalem alba) zobrazíte texty písní, pokud jsou k dispozici.';
+  String get hidePlayerBottomActionsSubtitle =>
+      'Skrýt tlačítka fronty a textu na obrazovce přehrávače. Přejetím prstem nahoru získáte přístup k frontě, přejetím prstem doleva (pod obalem alba) zobrazíte texty písní, pokud jsou k dispozici.';
 
   @override
   String get prioritizePlayerCover => 'Upřednostnit obal alba';
 
   @override
-  String get prioritizePlayerCoverSubtitle => 'Upřednostnit zobrazení většího obalu alba na obrazovce přehrávače. Nekritické ovládací prvky budou při malých velikostech obrazovky agresivněji skryty.';
+  String get prioritizePlayerCoverSubtitle =>
+      'Upřednostnit zobrazení většího obalu alba na obrazovce přehrávače. Nekritické ovládací prvky budou při malých velikostech obrazovky agresivněji skryty.';
 
   @override
   String get suppressPlayerPadding => 'Potlačit odsazení ovládání přehrávače';
 
   @override
-  String get suppressPlayerPaddingSubtitle => 'Zminimalizuje odsazení mezi ovládáním přehrávače, pokud není obal alba v plné velikosti.';
+  String get suppressPlayerPaddingSubtitle =>
+      'Zminimalizuje odsazení mezi ovládáním přehrávače, pokud není obal alba v plné velikosti.';
 
   @override
   String get lockDownload => 'Vždy ponechat na zařízení';
@@ -1610,7 +1696,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get showArtistChipImage => 'Zobrazit obrázky umělce vedle jeho jména';
 
   @override
-  String get showArtistChipImageSubtitle => 'Ovlivní malé náhledy obrázků umělce, například na obrazovce přehrávače.';
+  String get showArtistChipImageSubtitle =>
+      'Ovlivní malé náhledy obrázků umělce, například na obrazovce přehrávače.';
 
   @override
   String get scrollToCurrentTrack => 'Posunout na aktuální skladbu';
@@ -1657,13 +1744,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get trackOfflineFavorites => 'Synchronizovat všechny stavy oblíbených';
 
   @override
-  String get trackOfflineFavoritesSubtitle => 'Umožňuje zobrazení aktuálnějších stavů oblíbených, když jste offline.  Nestahuje žádné další soubory.';
+  String get trackOfflineFavoritesSubtitle =>
+      'Umožňuje zobrazení aktuálnějších stavů oblíbených, když jste offline.  Nestahuje žádné další soubory.';
 
   @override
   String get allPlaylistsInfoSetting => 'Stáhnout metadata seznamu skladeb';
 
   @override
-  String get allPlaylistsInfoSettingSubtitle => 'Synchronizovat metadata všech seznamů skladeb pro zlepšení zážitku ze seznamů skladeb';
+  String get allPlaylistsInfoSettingSubtitle =>
+      'Synchronizovat metadata všech seznamů skladeb pro zlepšení zážitku ze seznamů skladeb';
 
   @override
   String get downloadFavoritesSetting => 'Stáhnout všechny oblíbené';
@@ -1675,40 +1764,51 @@ class AppLocalizationsCs extends AppLocalizations {
   String get fiveLatestAlbumsSetting => 'Stáhnout 5 nejnovějších alb';
 
   @override
-  String get fiveLatestAlbumsSettingSubtitle => 'Stažené soubory budou po jejich vypršení smazány.  Uzamkněte stažený soubor pro zabránění smazání alba.';
+  String get fiveLatestAlbumsSettingSubtitle =>
+      'Stažené soubory budou po jejich vypršení smazány.  Uzamkněte stažený soubor pro zabránění smazání alba.';
 
   @override
-  String get cacheLibraryImagesSettings => 'Uložit aktuální obrázky knihovny do mezipaměti';
+  String get cacheLibraryImagesSettings =>
+      'Uložit aktuální obrázky knihovny do mezipaměti';
 
   @override
-  String get cacheLibraryImagesSettingsSubtitle => 'Všechny obaly alb, umělců, žánrů a seznamů skladeb v aktivní knihovně budou staženy.';
+  String get cacheLibraryImagesSettingsSubtitle =>
+      'Všechny obaly alb, umělců, žánrů a seznamů skladeb v aktivní knihovně budou staženy.';
 
   @override
-  String get showProgressOnNowPlayingBarTitle => 'Zobrazit průběh skladby v minipřehrávači v aplikaci';
+  String get showProgressOnNowPlayingBarTitle =>
+      'Zobrazit průběh skladby v minipřehrávači v aplikaci';
 
   @override
-  String get showProgressOnNowPlayingBarSubtitle => 'Ovládá, zda bude minipřehrávač v aplikaci / lišta právě hrající skladby v dolní částy obrazovky fungovat jako lišta průběhu skladby.';
+  String get showProgressOnNowPlayingBarSubtitle =>
+      'Ovládá, zda bude minipřehrávač v aplikaci / lišta právě hrající skladby v dolní částy obrazovky fungovat jako lišta průběhu skladby.';
 
   @override
   String get lyricsScreen => 'Zobrazení textů';
 
   @override
-  String get showLyricsTimestampsTitle => 'Zobrazit časové značky u synchronizovaných textů';
+  String get showLyricsTimestampsTitle =>
+      'Zobrazit časové značky u synchronizovaných textů';
 
   @override
-  String get showLyricsTimestampsSubtitle => 'Ovládá, zda bude u každého řádku textu v zobrazení textů zobrazena časová značka, pokud je dostupná.';
+  String get showLyricsTimestampsSubtitle =>
+      'Ovládá, zda bude u každého řádku textu v zobrazení textů zobrazena časová značka, pokud je dostupná.';
 
   @override
-  String get showStopButtonOnMediaNotificationTitle => 'Zobrazit tlačítko zastavení v oznámení médií';
+  String get showStopButtonOnMediaNotificationTitle =>
+      'Zobrazit tlačítko zastavení v oznámení médií';
 
   @override
-  String get showStopButtonOnMediaNotificationSubtitle => 'Určuje, zda má oznámení médií mít kromě tlačítka pro pozastavení také tlačítko pro zastavení. To umožňuje zastavit přehrávání bez otevření aplikace.';
+  String get showStopButtonOnMediaNotificationSubtitle =>
+      'Určuje, zda má oznámení médií mít kromě tlačítka pro pozastavení také tlačítko pro zastavení. To umožňuje zastavit přehrávání bez otevření aplikace.';
 
   @override
-  String get showSeekControlsOnMediaNotificationTitle => 'Zobrazit ovládání posunu v oznámení médií';
+  String get showSeekControlsOnMediaNotificationTitle =>
+      'Zobrazit ovládání posunu v oznámení médií';
 
   @override
-  String get showSeekControlsOnMediaNotificationSubtitle => 'Ovládá, zda má oznámení médií mít posouvatelný ukazatel průběhu. To umožňuje změnit pozici přehrávání bez otevření aplikace.';
+  String get showSeekControlsOnMediaNotificationSubtitle =>
+      'Ovládá, zda má oznámení médií mít posouvatelný ukazatel průběhu. To umožňuje změnit pozici přehrávání bez otevření aplikace.';
 
   @override
   String get alignmentOptionStart => 'Spustit';
@@ -1732,19 +1832,22 @@ class AppLocalizationsCs extends AppLocalizations {
   String get lyricsAlignmentTitle => 'Zarovnání textů';
 
   @override
-  String get lyricsAlignmentSubtitle => 'Ovládá zarovnání textů v zobrazení textů.';
+  String get lyricsAlignmentSubtitle =>
+      'Ovládá zarovnání textů v zobrazení textů.';
 
   @override
   String get lyricsFontSizeTitle => 'Velikost písma textů';
 
   @override
-  String get lyricsFontSizeSubtitle => 'Ovládá velikost písma v zobrazení textů.';
+  String get lyricsFontSizeSubtitle =>
+      'Ovládá velikost písma v zobrazení textů.';
 
   @override
   String get showLyricsScreenAlbumPreludeTitle => 'Zobrazit album před texty';
 
   @override
-  String get showLyricsScreenAlbumPreludeSubtitle => 'Ovládá, zda bude zobrazen obal alba nad texty před jeho odsunutím pryč.';
+  String get showLyricsScreenAlbumPreludeSubtitle =>
+      'Ovládá, zda bude zobrazen obal alba nad texty před jeho odsunutím pryč.';
 
   @override
   String get keepScreenOn => 'Ponechat zapnutou obrazovku';
@@ -1765,10 +1868,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get keepScreenOnWhileLyrics => 'Při zobrazování textů';
 
   @override
-  String get keepScreenOnWhilePluggedIn => 'Ponechat obrazovku zapnutou pouze při nabíjení';
+  String get keepScreenOnWhilePluggedIn =>
+      'Ponechat obrazovku zapnutou pouze při nabíjení';
 
   @override
-  String get keepScreenOnWhilePluggedInSubtitle => 'Ignorovat nastavení Ponechat zapnutou obrazovku, pokud je zařízení odpojeno';
+  String get keepScreenOnWhilePluggedInSubtitle =>
+      'Ignorovat nastavení Ponechat zapnutou obrazovku, pokud je zařízení odpojeno';
 
   @override
   String get genericToggleButtonTooltip => 'Klepněte pro přepnutí.';
@@ -1814,10 +1919,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get sampleRate => 'Vzorkovací frekvence';
 
   @override
-  String get showFeatureChipsToggleTitle => 'Zobrazit pokročilé informace o skladbě';
+  String get showFeatureChipsToggleTitle =>
+      'Zobrazit pokročilé informace o skladbě';
 
   @override
-  String get showFeatureChipsToggleSubtitle => 'Zobrazit na obrazovce přehrávače pokročilé informace o skladbě, jako je kodek, přenosová rychlost a další.';
+  String get showFeatureChipsToggleSubtitle =>
+      'Zobrazit na obrazovce přehrávače pokročilé informace o skladbě, jako je kodek, přenosová rychlost a další.';
 
   @override
   String get albumScreen => 'Obrazovka alba';
@@ -1826,28 +1933,33 @@ class AppLocalizationsCs extends AppLocalizations {
   String get showCoversOnAlbumScreenTitle => 'Zobrazit obaly alba u skladeb';
 
   @override
-  String get showCoversOnAlbumScreenSubtitle => 'Zobrazit obaly alb odděleně u každé skladby na obrazovce alba.';
+  String get showCoversOnAlbumScreenSubtitle =>
+      'Zobrazit obaly alb odděleně u každé skladby na obrazovce alba.';
 
   @override
-  String get emptyTopTracksList => 'Od tohoto umělce jste zatím neposlouchali žádnou skladbu.';
+  String get emptyTopTracksList =>
+      'Od tohoto umělce jste zatím neposlouchali žádnou skladbu.';
 
   @override
   String get emptyFilteredListTitle => 'Nenalezeny žádné položky';
 
   @override
-  String get emptyFilteredListSubtitle => 'Žádné položky neodpovídají filtru. Zkuste vypnout filtr nebo změnit hledaný výraz.';
+  String get emptyFilteredListSubtitle =>
+      'Žádné položky neodpovídají filtru. Zkuste vypnout filtr nebo změnit hledaný výraz.';
 
   @override
   String get resetFiltersButton => 'Resetovat filtry';
 
   @override
-  String get resetSettingsPromptGlobal => 'Opravdu chcete resetovat VŠECHNA nastavení na jejich výchozí hodnoty?';
+  String get resetSettingsPromptGlobal =>
+      'Opravdu chcete resetovat VŠECHNA nastavení na jejich výchozí hodnoty?';
 
   @override
   String get resetSettingsPromptGlobalConfirm => 'Resetovat VŠECHNA nastavení';
 
   @override
-  String get resetSettingsPromptLocal => 'Opravdu chcete resetovat tato nastavení na jejich výchozí hodnoty?';
+  String get resetSettingsPromptLocal =>
+      'Opravdu chcete resetovat tato nastavení na jejich výchozí hodnoty?';
 
   @override
   String get genericCancel => 'Zrušit';
@@ -1881,10 +1993,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get allowDeleteFromServerTitle => 'Povolit smazání ze serveru';
 
   @override
-  String get allowDeleteFromServerSubtitle => 'Zapnout nebo vypnout možnost trvalého smazání skladby ze souborového systému serveru, pokud je smazání možné.';
+  String get allowDeleteFromServerSubtitle =>
+      'Zapnout nebo vypnout možnost trvalého smazání skladby ze souborového systému serveru, pokud je smazání možné.';
 
   @override
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
@@ -1901,7 +2015,8 @@ class AppLocalizationsCs extends AppLocalizations {
       deleteType,
       {
         'canDelete': ' Tímto také odstraníte tuto položku z tohoto zařízení.',
-        'cantDelete': ' Tato položka zůstane na tomto zařízení do příští synchronizace.',
+        'cantDelete':
+            ' Tato položka zůstane na tomto zařízení do příští synchronizace.',
         'notDownloaded': '',
         'other': '',
       },
@@ -1910,7 +2025,8 @@ class AppLocalizationsCs extends AppLocalizations {
       device,
       {
         'device': 'z tohoto zařízení',
-        'server': 'ze souborového systému a knihovny serveru.$_temp1\nTato akce je nevratná',
+        'server':
+            'ze souborového systému a knihovny serveru.$_temp1\nTato akce je nevratná',
         'other': '',
       },
     );
@@ -1936,10 +2052,12 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get downloadSizeWarningCutoff => 'Varování o useknutí velikosti stahování';
+  String get downloadSizeWarningCutoff =>
+      'Varování o useknutí velikosti stahování';
 
   @override
-  String get downloadSizeWarningCutoffSubtitle => 'Během stahování více než tohoto počtu skladeb bude zobrazeno varování.';
+  String get downloadSizeWarningCutoffSubtitle =>
+      'Během stahování více než tohoto počtu skladeb bude zobrazeno varování.';
 
   @override
   String confirmAddAlbumToPlaylist(String itemType, String itemName) {
@@ -1972,16 +2090,19 @@ class AppLocalizationsCs extends AppLocalizations {
   String get releaseDateFormatMonthDayYear => 'Měsíc, den a rok';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenTitle => 'Zobrazit datum vydání alba na obrazovce přehrávače';
+  String get showAlbumReleaseDateOnPlayerScreenTitle =>
+      'Zobrazit datum vydání alba na obrazovce přehrávače';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => 'Zobrazit datum vydání alba na obrazovce přehrávače, za názvem alba.';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle =>
+      'Zobrazit datum vydání alba na obrazovce přehrávače, za názvem alba.';
 
   @override
   String get releaseDateFormatTitle => 'Formát data vydání';
 
   @override
-  String get releaseDateFormatSubtitle => 'Ovládá formát všech dat vydání zobrazených v aplikaci.';
+  String get releaseDateFormatSubtitle =>
+      'Ovládá formát všech dat vydání zobrazených v aplikaci.';
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
@@ -1996,7 +2117,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+  String get autoOfflineSettingDescription =>
+      'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
 
   @override
   String get autoOfflineSettingTitle => 'Automated Offline Mode';

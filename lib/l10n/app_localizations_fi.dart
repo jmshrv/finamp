@@ -23,10 +23,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get about => 'Tietoa Finampista';
 
   @override
-  String get aboutContributionPrompt => 'Vapaa-ajallaan upeiden ihmisten teettämä.\nVoit olla yksi heistä!';
+  String get aboutContributionPrompt =>
+      'Vapaa-ajallaan upeiden ihmisten teettämä.\nVoit olla yksi heistä!';
 
   @override
-  String get aboutContributionLink => 'Osallistu Finampin kehittämiseen GitHubissa:';
+  String get aboutContributionLink =>
+      'Osallistu Finampin kehittämiseen GitHubissa:';
 
   @override
   String get aboutReleaseNotes => 'Uusimmat päivitystiedot:';
@@ -41,7 +43,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get loginFlowWelcomeHeading => 'Tervetuloa sovellukseen';
 
   @override
-  String get loginFlowSlogan => 'Oma musiikkikirjastosi, juuri niin kuin sen haluat.';
+  String get loginFlowSlogan =>
+      'Oma musiikkikirjastosi, juuri niin kuin sen haluat.';
 
   @override
   String get loginFlowGetStarted => 'Aloita tästä!';
@@ -62,13 +65,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get serverUrl => 'Palvelimen URL';
 
   @override
-  String get internalExternalIpExplanation => 'Jos haluat päästä etäkäyttöön Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on oikea, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.';
+  String get internalExternalIpExplanation =>
+      'Jos haluat päästä etäkäyttöön Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on oikea, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.';
 
   @override
   String get serverUrlHint => 'esim. demo.jellyfin.org/stable';
 
   @override
-  String get serverUrlInfoButtonTooltip => 'Apua palvelinosoitteen syöttämiseen';
+  String get serverUrlInfoButtonTooltip =>
+      'Apua palvelinosoitteen syöttämiseen';
 
   @override
   String get emptyServerUrl => 'Palvelimen URL ei voi olla tyhjä';
@@ -80,7 +85,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get loginFlowLocalNetworkServers => 'Palvelimet paikallisverkossasi:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'Etsitään palvelimia..';
+  String get loginFlowLocalNetworkServersScanningForServers =>
+      'Etsitään palvelimia..';
 
   @override
   String get loginFlowAccountSelectionHeading => 'Valitse tilisi';
@@ -104,10 +110,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get loginFlowQuickConnectPrompt => 'Käytä pikayhdistyskoodia';
 
   @override
-  String get loginFlowQuickConnectInstructions => 'Avaa Jellyfin-sovellus tai sivu, klikkaa käyttäjäkuvaketta, ja valitse Pikayhdistys.';
+  String get loginFlowQuickConnectInstructions =>
+      'Avaa Jellyfin-sovellus tai sivu, klikkaa käyttäjäkuvaketta, ja valitse Pikayhdistys.';
 
   @override
-  String get loginFlowQuickConnectDisabled => 'Pikayhdistys poistettu käytöstä tällä palvelimella.';
+  String get loginFlowQuickConnectDisabled =>
+      'Pikayhdistys poistettu käytöstä tällä palvelimella.';
 
   @override
   String get orDivider => 'tai';
@@ -122,7 +130,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get usernameHint => 'Syötä käyttäjätunnus';
 
   @override
-  String get usernameValidationMissingUsername => 'Ole hyvä ja syötä käyttäjätunnus';
+  String get usernameValidationMissingUsername =>
+      'Ole hyvä ja syötä käyttäjätunnus';
 
   @override
   String get password => 'Salasana';
@@ -167,13 +176,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get startMix => 'Aloita sekoitus';
 
   @override
-  String get startMixNoTracksArtist => 'Paina pitkään artistia lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista';
+  String get startMixNoTracksArtist =>
+      'Paina pitkään artistia lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista';
 
   @override
-  String get startMixNoTracksAlbum => 'Paina albumia pitkään lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista';
+  String get startMixNoTracksAlbum =>
+      'Paina albumia pitkään lisätäksesi tai poistaaksesi sen miksaukseen ennen miksauksen aloittamista';
 
   @override
-  String get startMixNoTracksGenre => 'Long-press an genre to add or remove it from the mix builder before starting a mix';
+  String get startMixNoTracksGenre =>
+      'Long-press an genre to add or remove it from the mix builder before starting a mix';
 
   @override
   String get music => 'Musiikki';
@@ -283,7 +295,8 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String downloadedCountUnified(int trackCount, int imageCount, int syncCount, int repairing) {
+  String downloadedCountUnified(
+      int trackCount, int imageCount, int syncCount, int repairing) {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
@@ -338,10 +351,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get noActiveDownloads => 'Ei aktiivisia latauksia.';
 
   @override
-  String get errorScreenError => 'Virhe tapahtui virheiden luettelon hakemisessa! Tässä vaiheessa sinun pitäisi luultavasti vain luoda virheilmoitus GitHubiin ja poistaa sovelluksen tiedot';
+  String get errorScreenError =>
+      'Virhe tapahtui virheiden luettelon hakemisessa! Tässä vaiheessa sinun pitäisi luultavasti vain luoda virheilmoitus GitHubiin ja poistaa sovelluksen tiedot';
 
   @override
-  String get failedToGetTrackFromDownloadId => 'Kappaleen nouto lataus ID:stä epäonnistui';
+  String get failedToGetTrackFromDownloadId =>
+      'Kappaleen nouto lataus ID:stä epäonnistui';
 
   @override
   String deleteDownloadsPrompt(String itemName, String itemType) {
@@ -491,25 +506,29 @@ class AppLocalizationsFi extends AppLocalizations {
   String get logOut => 'Kirjaudu ulos';
 
   @override
-  String get downloadedTracksWillNotBeDeleted => 'Ladattuja kappaleita ei poisteta';
+  String get downloadedTracksWillNotBeDeleted =>
+      'Ladattuja kappaleita ei poisteta';
 
   @override
   String get areYouSure => 'Oletko varma?';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin käyttää AAC:tä transkoodaukseen';
+  String get jellyfinUsesAACForTranscoding =>
+      'Jellyfin käyttää AAC:tä transkoodaukseen';
 
   @override
   String get enableTranscoding => 'Ota transkoodaus käyttöön';
 
   @override
-  String get enableTranscodingSubtitle => 'Transkoodaa musiikin suoratoiston palvelimen päässä.';
+  String get enableTranscodingSubtitle =>
+      'Transkoodaa musiikin suoratoiston palvelimen päässä.';
 
   @override
   String get bitrate => 'Bittinopeus';
 
   @override
-  String get bitrateSubtitle => 'Korkeampi bittinopeus antaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.';
+  String get bitrateSubtitle =>
+      'Korkeampi bittinopeus antaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.';
 
   @override
   String get customLocation => 'Mukautettu sijainti';
@@ -527,25 +546,30 @@ class AppLocalizationsFi extends AppLocalizations {
   String get unknownError => 'Tuntematon virhe';
 
   @override
-  String get pathReturnSlashErrorMessage => 'Polkuja jotka palauttavat \"/\" ei voi käyttää';
+  String get pathReturnSlashErrorMessage =>
+      'Polkuja jotka palauttavat \"/\" ei voi käyttää';
 
   @override
   String get directoryMustBeEmpty => 'Hakemiston pitää olla tyhjä';
 
   @override
-  String get customLocationsBuggy => 'Mukautetut sijainnit ovat erittäin bugisia ja niiden käyttöä ei suositella useimmissa tapauksissa. Sijainnit systeemin Musiikki-hakemiston alla estävät albumin kansikuvien tallentamisen käyttöjärjestelmän rajoitusten vuoksi.';
+  String get customLocationsBuggy =>
+      'Mukautetut sijainnit ovat erittäin bugisia ja niiden käyttöä ei suositella useimmissa tapauksissa. Sijainnit systeemin Musiikki-hakemiston alla estävät albumin kansikuvien tallentamisen käyttöjärjestelmän rajoitusten vuoksi.';
 
   @override
-  String get enterLowPriorityStateOnPause => 'Siirtyminen matalan prioriteetin tilaan tauon aikana';
+  String get enterLowPriorityStateOnPause =>
+      'Siirtyminen matalan prioriteetin tilaan tauon aikana';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => 'Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.';
+  String get enterLowPriorityStateOnPauseSubtitle =>
+      'Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.';
 
   @override
   String get shuffleAllTrackCount => 'Kaikkien sekoitettujen kappaleiden määrä';
 
   @override
-  String get shuffleAllTrackCountSubtitle => 'Ladattavien kappaleiden määrä, kun käytät sekoita kaikki kappaleet painiketta.';
+  String get shuffleAllTrackCountSubtitle =>
+      'Ladattavien kappaleiden määrä, kun käytät sekoita kaikki kappaleet painiketta.';
 
   @override
   String get viewType => 'Näkymän Tyyppi';
@@ -566,10 +590,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get playbackSpeedControlSetting => 'Toistonopeuden näkyvyys';
 
   @override
-  String get playbackSpeedControlSettingSubtitle => 'Näytetäänkö toistonopeuden säätimet soittimen valikossa';
+  String get playbackSpeedControlSettingSubtitle =>
+      'Näytetäänkö toistonopeuden säätimet soittimen valikossa';
 
   @override
-  String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
+  String playbackSpeedControlSettingDescription(
+      int trackDuration, int albumDuration, String genreList) {
     return 'Automaattinen:\nFinamp yrittää tunnistaa, onko toistamasi kappale podcast tai äänikirja. Tämän katsotaan tapahtuvan, jos kappale on pidempi kuin $trackDuration minuutti(a), tai jos kappaleen albumi on pidempi kuin $albumDuration tunti(a), tai jos kappaleella on ainakin yksi näistä tyylilajeista: $genreList\nToistonopeuden säätimet ovat tällöin esillä soittimen valikossa.\n\nEsillä:\nToistonopeuden säätimet ovat aina esillä soittimen valikossa.\n\nPiilotettu:\nToistonopeuden säätimet ovat aina piilossa soittimen valikossa.';
   }
 
@@ -611,31 +637,39 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showTextOnGridView => 'Näytä teksti ruudukkonäkymässä';
 
   @override
-  String get showTextOnGridViewSubtitle => 'Näytetäänkö teksti (nimi, artisti jne.) ruudukon musiikkinäytöllä vai ei.';
+  String get showTextOnGridViewSubtitle =>
+      'Näytetäänkö teksti (nimi, artisti jne.) ruudukon musiikkinäytöllä vai ei.';
 
   @override
   String get useCoverAsBackground => 'Käytä sumennettua kansikuvaa taustana';
 
   @override
-  String get useCoverAsBackgroundSubtitle => 'Käytetäänkö sumennettua albumin kansikuvaa sovelluksen eri osioiden taustakuvana.';
+  String get useCoverAsBackgroundSubtitle =>
+      'Käytetäänkö sumennettua albumin kansikuvaa sovelluksen eri osioiden taustakuvana.';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorTitle => 'Albumin kansikuvan minimimarginaalit';
+  String get playerScreenMinimumCoverPaddingEditorTitle =>
+      'Albumin kansikuvan minimimarginaalit';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => 'Albumin kansikuvan minimimarginaalit soittimen reunoilla, prosenttiyksiköissä näytön leveydestä.';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle =>
+      'Albumin kansikuvan minimimarginaalit soittimen reunoilla, prosenttiyksiköissä näytön leveydestä.';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtists => 'Piilota kappaleen artistit, jos samat kuin albumin artistit';
+  String get hideTrackArtistsIfSameAsAlbumArtists =>
+      'Piilota kappaleen artistit, jos samat kuin albumin artistit';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => 'Näytetäänkö kappaleiden artistit albumin näytöllä, jos ne eivät poikkea albumin artisteista.';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle =>
+      'Näytetäänkö kappaleiden artistit albumin näytöllä, jos ne eivät poikkea albumin artisteista.';
 
   @override
-  String get showArtistsTopTracks => 'Näytä suosituimmat kappaleet artistinäkymässä';
+  String get showArtistsTopTracks =>
+      'Näytä suosituimmat kappaleet artistinäkymässä';
 
   @override
-  String get showArtistsTopTracksSubtitle => 'Näytetäänkö artistin viisi kuunneltuinta kappaletta.';
+  String get showArtistsTopTracksSubtitle =>
+      'Näytetäänkö artistin viisi kuunneltuinta kappaletta.';
 
   @override
   String get disableGesture => 'Poista eleet käytöstä';
@@ -744,7 +778,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get playlistCreated => 'Soittolista on luotu.';
 
   @override
-  String get playlistActionsMenuButtonTooltip => 'Napauta lisätäksesi soittolistalle. Vaihda suosikkia painamalla pitkään.';
+  String get playlistActionsMenuButtonTooltip =>
+      'Napauta lisätäksesi soittolistalle. Vaihda suosikkia painamalla pitkään.';
 
   @override
   String get noAlbum => 'Ei albumia';
@@ -861,25 +896,29 @@ class AppLocalizationsFi extends AppLocalizations {
   String get bufferDuration => 'Puskurin kesto';
 
   @override
-  String get bufferDurationSubtitle => 'Maksimiaika, kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.';
+  String get bufferDurationSubtitle =>
+      'Maksimiaika, kuinka paljon soittimen pitäisi puskuroida, sekunteina. Vaatii uudelleenkäynnistyksen.';
 
   @override
   String get bufferDisableSizeConstraintsTitle => 'Älä rajoita puskurin kokoa';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => 'Poistaa käytöstä puskurin koon rajan. Puskuri ladataan aina määriteltyyn kokoonsa, myös erittäin suurilla tiedostoilla. Tämä voi aiheuttaa ohjelman epävakautta. Vaatii uudelleenkäynnistämisen.';
+  String get bufferDisableSizeConstraintsSubtitle =>
+      'Poistaa käytöstä puskurin koon rajan. Puskuri ladataan aina määriteltyyn kokoonsa, myös erittäin suurilla tiedostoilla. Tämä voi aiheuttaa ohjelman epävakautta. Vaatii uudelleenkäynnistämisen.';
 
   @override
   String get bufferSizeTitle => 'Puskurin koko';
 
   @override
-  String get bufferSizeSubtitle => 'Puskurin maksimikoko megatavuissa (Mt). Vaatii uudelleenkäynnistyksen';
+  String get bufferSizeSubtitle =>
+      'Puskurin maksimikoko megatavuissa (Mt). Vaatii uudelleenkäynnistyksen';
 
   @override
   String get language => 'Kieli';
 
   @override
-  String get skipToPreviousTrackButtonTooltip => 'Siirry alkuun tai edelliseen kappaleeseen';
+  String get skipToPreviousTrackButtonTooltip =>
+      'Siirry alkuun tai edelliseen kappaleeseen';
 
   @override
   String get skipToNextTrackButtonTooltip => 'Siirry seuraavaan kappaleeseen';
@@ -1027,13 +1066,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get playbackOrderLinearButtonLabel => 'Toistetaan järjestyksessä';
 
   @override
-  String get playbackOrderLinearButtonTooltip => 'Toistetaan järjestyksessä. Napauta sekoittaaksesi.';
+  String get playbackOrderLinearButtonTooltip =>
+      'Toistetaan järjestyksessä. Napauta sekoittaaksesi.';
 
   @override
   String get playbackOrderShuffledButtonLabel => 'Sekoitetaan kappaleita';
 
   @override
-  String get playbackOrderShuffledButtonTooltip => 'Sekoitetaan kappaleet. Napauta toistaaksesi järjestyksessä.';
+  String get playbackOrderShuffledButtonTooltip =>
+      'Sekoitetaan kappaleet. Napauta toistaaksesi järjestyksessä.';
 
   @override
   String playbackSpeedButtonLabel(double speed) {
@@ -1068,7 +1109,8 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String queueRestoreTitle(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
+    final intl.DateFormat dateDateFormat =
+        intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
     return 'Tallennettu $dateString';
@@ -1094,28 +1136,35 @@ class AppLocalizationsFi extends AppLocalizations {
   String get queueLoadingMessage => 'Palautetaan jonoa...';
 
   @override
-  String get queueRetryMessage => 'Jonon palautus epäonnistui. Yritä uudelleen?';
+  String get queueRetryMessage =>
+      'Jonon palautus epäonnistui. Yritä uudelleen?';
 
   @override
-  String get autoloadLastQueueOnStartup => 'Palauta edeltävä jono automaattisesti';
+  String get autoloadLastQueueOnStartup =>
+      'Palauta edeltävä jono automaattisesti';
 
   @override
-  String get autoloadLastQueueOnStartupSubtitle => 'Yritä palauttaa edeltävä jono automaattisesti ohjelman käynnistyessä.';
+  String get autoloadLastQueueOnStartupSubtitle =>
+      'Yritä palauttaa edeltävä jono automaattisesti ohjelman käynnistyessä.';
 
   @override
   String get reportQueueToServer => 'Raportoi nykyinen jono palvelimelle?';
 
   @override
-  String get reportQueueToServerSubtitle => 'Kun valittu, Finamp lähettää nykyisen jonon palvelimelle. Tällä hetkellä asetukselle on vähän käyttöä ja se nostaa verkon käyttöä.';
+  String get reportQueueToServerSubtitle =>
+      'Kun valittu, Finamp lähettää nykyisen jonon palvelimelle. Tällä hetkellä asetukselle on vähän käyttöä ja se nostaa verkon käyttöä.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequency => 'Toistoistunnon päivitystiheys';
+  String get periodicPlaybackSessionUpdateFrequency =>
+      'Toistoistunnon päivitystiheys';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencySubtitle => 'Kuinka tiheään palvelimelle lähetetään nykyisen toistoistunnon tila, sekunneissa. Tämän pitäisi olla vähemmän kuin 5 minuuttia (300 sekuntia), jotta sessiota ei aikakatkaista.';
+  String get periodicPlaybackSessionUpdateFrequencySubtitle =>
+      'Kuinka tiheään palvelimelle lähetetään nykyisen toistoistunnon tila, sekunneissa. Tämän pitäisi olla vähemmän kuin 5 minuuttia (300 sekuntia), jotta sessiota ei aikakatkaista.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequencyDetails => 'Jos Jellyfin palvelin ei ole saanut yhtäkään päivitystä liitetyltä laitteelta viimeiseen 5 minuuttiin, palvelin olettaa toiston loppuneeksi. Tämä tarkoittaa, että kappaleille, jotka ovat yli 5 minuuttia pitkiä, toisto voidaan virheellisesti raportoida loppuneeksi, mikä vähentää toistoraporttien datan laatua.';
+  String get periodicPlaybackSessionUpdateFrequencyDetails =>
+      'Jos Jellyfin palvelin ei ole saanut yhtäkään päivitystä liitetyltä laitteelta viimeiseen 5 minuuttiin, palvelin olettaa toiston loppuneeksi. Tämä tarkoittaa, että kappaleille, jotka ovat yli 5 minuuttia pitkiä, toisto voidaan virheellisesti raportoida loppuneeksi, mikä vähentää toistoraporttien datan laatua.';
 
   @override
   String get topTracks => 'Parhaat kappaleet';
@@ -1187,7 +1236,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get close => 'Sulje';
 
   @override
-  String get showUncensoredLogMessage => 'Tämä loki sisältää kirjautumistietosi. Näytä?';
+  String get showUncensoredLogMessage =>
+      'Tämä loki sisältää kirjautumistietosi. Näytä?';
 
   @override
   String get resetTabs => 'Nollaa välilehdet';
@@ -1199,7 +1249,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get noMusicLibrariesTitle => 'Ei musiikkikirjastoja';
 
   @override
-  String get noMusicLibrariesBody => 'Finamp ei löytänyt musiikkikirjastoja. Varmista, että Jellyfin-palvelimellasi on vähintään yksi kirjasto, jonka sisältötyypiksi on asetettu \"Musiikki\".';
+  String get noMusicLibrariesBody =>
+      'Finamp ei löytänyt musiikkikirjastoja. Varmista, että Jellyfin-palvelimellasi on vähintään yksi kirjasto, jonka sisältötyypiksi on asetettu \"Musiikki\".';
 
   @override
   String get refresh => 'Virkistä';
@@ -1211,19 +1262,24 @@ class AppLocalizationsFi extends AppLocalizations {
   String get volumeNormalizationSettingsTitle => 'Volyymitason normalisointi';
 
   @override
-  String get volumeNormalizationSwitchTitle => 'Ota volyymitason normalisointi käyttöön';
+  String get volumeNormalizationSwitchTitle =>
+      'Ota volyymitason normalisointi käyttöön';
 
   @override
-  String get volumeNormalizationSwitchSubtitle => 'Käyttää kappaleen vahvistustietoja (gain) normalisoidakseen kappaleiden äänekkyystason';
+  String get volumeNormalizationSwitchSubtitle =>
+      'Käyttää kappaleen vahvistustietoja (gain) normalisoidakseen kappaleiden äänekkyystason';
 
   @override
-  String get volumeNormalizationModeSelectorTitle => 'Volyymitason normalisoinnin tila';
+  String get volumeNormalizationModeSelectorTitle =>
+      'Volyymitason normalisoinnin tila';
 
   @override
-  String get volumeNormalizationModeSelectorSubtitle => 'Miloin ja miten käytetään volyymitason normalisointia';
+  String get volumeNormalizationModeSelectorSubtitle =>
+      'Miloin ja miten käytetään volyymitason normalisointia';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => 'Hybridi (Kappale + Albumi):\nKappalevahvistusta käytetään normaalissa toistossa, mutta albumia toistaessa (jos jono on toison päälähde, tai albumi lisättiin jonoon jossain vaiheessa), albumivahvistusta käytetään.\n\nKappale-pohjainen:\nKappalevahvistusta käytetään aina, välittämättä soiko albumi vai ei.\n\nVain albumit:\nVolyymitason normalisointia käytetään vain, kun albumia toistetaan (käyttäen albumivahvistusta), mutta ei yksittäisten kappaleiden toistossa.';
+  String get volumeNormalizationModeSelectorDescription =>
+      'Hybridi (Kappale + Albumi):\nKappalevahvistusta käytetään normaalissa toistossa, mutta albumia toistaessa (jos jono on toison päälähde, tai albumi lisättiin jonoon jossain vaiheessa), albumivahvistusta käytetään.\n\nKappale-pohjainen:\nKappalevahvistusta käytetään aina, välittämättä soiko albumi vai ei.\n\nVain albumit:\nVolyymitason normalisointia käytetään vain, kun albumia toistetaan (käyttäen albumivahvistusta), mutta ei yksittäisten kappaleiden toistossa.';
 
   @override
   String get volumeNormalizationModeHybrid => 'Hybridi (Kappale + Albumi)';
@@ -1241,7 +1297,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get volumeNormalizationIOSBaseGainEditorTitle => 'Perusvahvistus';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => 'Tällä hetkellä, volyymitason normalisointi iOS-laitteilla vaatii toistovolyymin muutoksen emuloidakseen vahvistuksen muutosta. Koska ohjelma ei voi lisätä volyymiä yli 100 prosentin, täytyy volyymiä alentaa oletuksena, jotta tarvittaessa normalisointi voi vahvistaa hiljaisia kappaleita tarpeeksi. Arvot ovat desibeleissä (dB), missä -10 dB on noin ~30% volyymistä, -4.5 dB on noin ~60% volyymistä ja -2dB on noin ~80% täydestä volyymistä.';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle =>
+      'Tällä hetkellä, volyymitason normalisointi iOS-laitteilla vaatii toistovolyymin muutoksen emuloidakseen vahvistuksen muutosta. Koska ohjelma ei voi lisätä volyymiä yli 100 prosentin, täytyy volyymiä alentaa oletuksena, jotta tarvittaessa normalisointi voi vahvistaa hiljaisia kappaleita tarpeeksi. Arvot ovat desibeleissä (dB), missä -10 dB on noin ~30% volyymistä, -4.5 dB on noin ~60% volyymistä ja -2dB on noin ~80% täydestä volyymistä.';
 
   @override
   String numberAsDecibel(double value) {
@@ -1252,13 +1309,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get swipeInsertQueueNext => 'Toista Pyyhkäisty Kappale Seuraavaksi';
 
   @override
-  String get swipeInsertQueueNextSubtitle => 'Mahdollistaa kappaleen lisäämisen jonon seuraavaksi kohteeksi, kun sitä pyyhkäistään kappaleiden luettelossa sen sijaan, että se liitettäisiin loppuun.';
+  String get swipeInsertQueueNextSubtitle =>
+      'Mahdollistaa kappaleen lisäämisen jonon seuraavaksi kohteeksi, kun sitä pyyhkäistään kappaleiden luettelossa sen sijaan, että se liitettäisiin loppuun.';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchTitle => 'Aloita Välitön Sekoitus yksittäisille kappaleille';
+  String get startInstantMixForIndividualTracksSwitchTitle =>
+      'Aloita Välitön Sekoitus yksittäisille kappaleille';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => 'Kun käytössä, kappaleen napautus kappaleiden välilehdessä aloittaa välittömän sekoituksen napautetusta kappaleesta yksittäisen kappaleen toiston sijaan.';
+  String get startInstantMixForIndividualTracksSwitchSubtitle =>
+      'Kun käytössä, kappaleen napautus kappaleiden välilehdessä aloittaa välittömän sekoituksen napautetusta kappaleesta yksittäisen kappaleen toiston sijaan.';
 
   @override
   String get downloadItem => 'Lataa';
@@ -1273,7 +1333,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get syncDownloads => 'Synkronoi ja lataa puuttuvat kohteet.';
 
   @override
-  String get repairDownloads => 'Korjaa ongelmat ladatuissa tiedostoissa tai liitännästiedoissa.';
+  String get repairDownloads =>
+      'Korjaa ongelmat ladatuissa tiedostoissa tai liitännästiedoissa.';
 
   @override
   String get requireWifiForDownloads => 'Vaatii WiFi:n latauksiin.';
@@ -1319,16 +1380,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get onlyShowFullyDownloaded => 'Näytä vain kokonaan ladatut albumit';
 
   @override
-  String get filesystemFull => 'Jäljellä olevia latauksia ei voida viimeistellä. Tiedostojärjestelmä on täysi.';
+  String get filesystemFull =>
+      'Jäljellä olevia latauksia ei voida viimeistellä. Tiedostojärjestelmä on täysi.';
 
   @override
   String get connectionInterrupted => 'Yhteys katkesi, lataukset keskeytetty.';
 
   @override
-  String get connectionInterruptedBackground => 'Yhteys katkesi, kun lataukset olivat taustalla. Tämä voi johtua järjestelmän asetuksista.';
+  String get connectionInterruptedBackground =>
+      'Yhteys katkesi, kun lataukset olivat taustalla. Tämä voi johtua järjestelmän asetuksista.';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => 'Yhteys katkesi, kun lataukset olivat taustalla. Tämä voi johtua käyttämällä asetusta \"Siirry matalan prioriteetin tilaan tauon aikana\" tai järjestelmän asetuksista.';
+  String get connectionInterruptedBackgroundAndroid =>
+      'Yhteys katkesi, kun lataukset olivat taustalla. Tämä voi johtua käyttämällä asetusta \"Siirry matalan prioriteetin tilaan tauon aikana\" tai järjestelmän asetuksista.';
 
   @override
   String get activeDownloadSize => 'Ladataan...';
@@ -1340,22 +1404,26 @@ class AppLocalizationsFi extends AppLocalizations {
   String get syncingDownloadSize => 'Synkronoidaan...';
 
   @override
-  String get runRepairWarning => 'Palvelimeen ei saatu yhteyttä viimeistelläkseen latausten siirtoa. Suoritathan \"Korjaa lataukset\" valinnan latausnäytöstä heti, kun olet takaisin yhteydessä palvelimeen online-tilassa.';
+  String get runRepairWarning =>
+      'Palvelimeen ei saatu yhteyttä viimeistelläkseen latausten siirtoa. Suoritathan \"Korjaa lataukset\" valinnan latausnäytöstä heti, kun olet takaisin yhteydessä palvelimeen online-tilassa.';
 
   @override
   String get downloadSettings => 'Latauskset';
 
   @override
-  String get showNullLibraryItemsTitle => 'Näytä media tuntemattomista kirjastoista.';
+  String get showNullLibraryItemsTitle =>
+      'Näytä media tuntemattomista kirjastoista.';
 
   @override
-  String get showNullLibraryItemsSubtitle => 'Osaa media tuntemattomalla kirjastolla saatetaan ladata. Poista käytöstä piilottaaksen nämä niiden alkuperäisen kokoelman ulkopuolelle.';
+  String get showNullLibraryItemsSubtitle =>
+      'Osaa media tuntemattomalla kirjastolla saatetaan ladata. Poista käytöstä piilottaaksen nämä niiden alkuperäisen kokoelman ulkopuolelle.';
 
   @override
   String get maxConcurrentDownloads => 'Maksimimäärä samanaikaisia latauksia';
 
   @override
-  String get maxConcurrentDownloadsSubtitle => 'Samanaikaisten latausten lisääminen voi mahdollistaa suuremman latausmäärän taustalla, mutta voi johtaa joidenkin latausten epäonnistumiseen, jos tiedostokoot ovat suuria, tai aiheuttaa aiheetonta viivästymistä ohjelmistossa.';
+  String get maxConcurrentDownloadsSubtitle =>
+      'Samanaikaisten latausten lisääminen voi mahdollistaa suuremman latausmäärän taustalla, mutta voi johtaa joidenkin latausten epäonnistumiseen, jos tiedostokoot ovat suuria, tai aiheuttaa aiheetonta viivästymistä ohjelmistossa.';
 
   @override
   String maxConcurrentDownloadsLabel(String count) {
@@ -1366,7 +1434,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get downloadsWorkersSetting => 'Lataushallinnoijien määrä';
 
   @override
-  String get downloadsWorkersSettingSubtitle => 'Lataushallinnoijien määrä synkronoimaan liitännäistietoja ja poistamaan latauksia. Lisäämällä näiden määrää voi nopeuttaa latausten synkronointia, varsinkin jos palvelimen latenssi on suuri, mutta voi aiheuttaa viivettä laitteessa.';
+  String get downloadsWorkersSettingSubtitle =>
+      'Lataushallinnoijien määrä synkronoimaan liitännäistietoja ja poistamaan latauksia. Lisäämällä näiden määrää voi nopeuttaa latausten synkronointia, varsinkin jos palvelimen latenssi on suuri, mutta voi aiheuttaa viivettä laitteessa.';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
@@ -1374,13 +1443,15 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get syncOnStartupSwitch => 'Automaattisesti synkronoi lataukset käynnistyessä';
+  String get syncOnStartupSwitch =>
+      'Automaattisesti synkronoi lataukset käynnistyessä';
 
   @override
   String get preferQuickSyncSwitch => 'Suosi pikasynkronointia';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => 'Kun synkronointia suoritetaan, osaa vakiona pysyvistä kohteista (kuten kappaleista tai albumeista) ei päivitetä. Korjausten lataus aina toteuttaa täyden synkronoinnin.';
+  String get preferQuickSyncSwitchSubtitle =>
+      'Kun synkronointia suoritetaan, osaa vakiona pysyvistä kohteista (kuten kappaleista tai albumeista) ei päivitetä. Korjausten lataus aina toteuttaa täyden synkronoinnin.';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
@@ -1426,10 +1497,12 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Valite transkoodauksen säiliö';
+  String get transcodingStreamingContainerTitle =>
+      'Valite transkoodauksen säiliö';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Valitse lohkosäiliö käytettäväksi, kun suoratoistetaan transkoodattua ääntä. Ei vaikuta jo jonossa oleviin kappaleisiin.';
+  String get transcodingStreamingContainerSubtitle =>
+      'Valitse lohkosäiliö käytettäväksi, kun suoratoistetaan transkoodattua ääntä. Ei vaikuta jo jonossa oleviin kappaleisiin.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Käytä transkoodattuja latauksia';
@@ -1455,7 +1528,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get downloadBitrate => 'Latausten bittinopeus';
 
   @override
-  String get downloadBitrateSubtitle => 'Korkeampi bittinopeus tarjoaa paremman laadun ääntä suuremman tiedostokoon kustannuksella.';
+  String get downloadBitrateSubtitle =>
+      'Korkeampi bittinopeus tarjoaa paremman laadun ääntä suuremman tiedostokoon kustannuksella.';
 
   @override
   String get transcodeHint => 'Transkoodaa?';
@@ -1512,19 +1586,23 @@ class AppLocalizationsFi extends AppLocalizations {
   String get redownloadcomplete => 'Uudelleenlatausten transkoodaus jonossa.';
 
   @override
-  String get redownloadTitle => 'Automaattisesti uudelleenlataa transkoodaukset';
+  String get redownloadTitle =>
+      'Automaattisesti uudelleenlataa transkoodaukset';
 
   @override
-  String get redownloadSubtitle => 'Automaattisesti uudelleenlataa kappaleet, jotka oletetaan olevan eri laadulla niiden pääkokoelman muutosten takia.';
+  String get redownloadSubtitle =>
+      'Automaattisesti uudelleenlataa kappaleet, jotka oletetaan olevan eri laadulla niiden pääkokoelman muutosten takia.';
 
   @override
-  String get defaultDownloadLocationButton => 'Aseta latausten oletussijainti. Poista käytöstä valitaksesi joka latauksella erikseen.';
+  String get defaultDownloadLocationButton =>
+      'Aseta latausten oletussijainti. Poista käytöstä valitaksesi joka latauksella erikseen.';
 
   @override
   String get fixedGridSizeSwitchTitle => 'Käytä vakiokoon ruudukkotiiliä';
 
   @override
-  String get fixedGridSizeSwitchSubtitle => 'Ruudukkotiilien koot eivät reagoi ikkunan tai näytön koon muutokseen.';
+  String get fixedGridSizeSwitchSubtitle =>
+      'Ruudukkotiilien koot eivät reagoi ikkunan tai näytön koon muutokseen.';
 
   @override
   String get fixedGridSizeTitle => 'Ruudukkotiilien koko';
@@ -1548,7 +1626,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get allowSplitScreenTitle => 'Salli jaetun näytön tila';
 
   @override
-  String get allowSplitScreenSubtitle => 'Soitin näytetään muiden ohjelmien kanssa isommilla näytöillä.';
+  String get allowSplitScreenSubtitle =>
+      'Soitin näytetään muiden ohjelmien kanssa isommilla näytöillä.';
 
   @override
   String get enableVibration => 'Käytä värinää';
@@ -1560,46 +1639,56 @@ class AppLocalizationsFi extends AppLocalizations {
   String get hideQueueButton => 'Piilota jononäppäin';
 
   @override
-  String get hideQueueButtonSubtitle => 'Piilota jononäppäin soittimen näytöltä. Pyyhkäise ylös päästäksesi jonoon.';
+  String get hideQueueButtonSubtitle =>
+      'Piilota jononäppäin soittimen näytöltä. Pyyhkäise ylös päästäksesi jonoon.';
 
   @override
-  String get oneLineMarqueeTextButton => 'Selaa pitkiä otsikoita automaattisesti';
+  String get oneLineMarqueeTextButton =>
+      'Selaa pitkiä otsikoita automaattisesti';
 
   @override
-  String get oneLineMarqueeTextButtonSubtitle => 'Selaa automaattisesti pitkiä kappaleotsikoita, jotka eivät mahdu näytettäväksi kerralla kahdelle riville';
+  String get oneLineMarqueeTextButtonSubtitle =>
+      'Selaa automaattisesti pitkiä kappaleotsikoita, jotka eivät mahdu näytettäväksi kerralla kahdelle riville';
 
   @override
-  String get marqueeOrTruncateButton => 'Käytä kolmea pistettä pitkille nimille';
+  String get marqueeOrTruncateButton =>
+      'Käytä kolmea pistettä pitkille nimille';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Näytä ... pitkän nimen lopussa nimen selaamisen sijaan';
+  String get marqueeOrTruncateButtonSubtitle =>
+      'Näytä ... pitkän nimen lopussa nimen selaamisen sijaan';
 
   @override
   String get hidePlayerBottomActions => 'Piilota alavalinnat';
 
   @override
-  String get hidePlayerBottomActionsSubtitle => 'Piilota jono- ja lyriikkanäppäimen soittimen näytöstä. Pyyhkäise ylös päästäksesi jonoon, vasemmalle (albumikannen alta) päästäksesi lyriikoihin, jos saatavilla.';
+  String get hidePlayerBottomActionsSubtitle =>
+      'Piilota jono- ja lyriikkanäppäimen soittimen näytöstä. Pyyhkäise ylös päästäksesi jonoon, vasemmalle (albumikannen alta) päästäksesi lyriikoihin, jos saatavilla.';
 
   @override
   String get prioritizePlayerCover => 'Priorisoi albumin kansikuva';
 
   @override
-  String get prioritizePlayerCoverSubtitle => 'Priorisoi näyttämään isompi albumin kansikuva soittimen näytöllä. Ei-kriittiset ohjaukset piilotetaan herkemmin pienillä näyttökooilla.';
+  String get prioritizePlayerCoverSubtitle =>
+      'Priorisoi näyttämään isompi albumin kansikuva soittimen näytöllä. Ei-kriittiset ohjaukset piilotetaan herkemmin pienillä näyttökooilla.';
 
   @override
   String get suppressPlayerPadding => 'Peitä soittimien ohjausten marginaali';
 
   @override
-  String get suppressPlayerPaddingSubtitle => 'Täysin minimoi marginaalit soittimen ohjauksen ja albumin kansikuvan välillä jos kansikuva ei ole täysikokoinen.';
+  String get suppressPlayerPaddingSubtitle =>
+      'Täysin minimoi marginaalit soittimen ohjauksen ja albumin kansikuvan välillä jos kansikuva ei ole täysikokoinen.';
 
   @override
   String get lockDownload => 'Pidä aina laitteella';
 
   @override
-  String get showArtistChipImage => 'Näytä artistin kuvat artistin nimen kanssa';
+  String get showArtistChipImage =>
+      'Näytä artistin kuvat artistin nimen kanssa';
 
   @override
-  String get showArtistChipImageSubtitle => 'Tämä vaikuttaa pienten artistin kuvien esikatseluun, kuten soittimen näytöllä.';
+  String get showArtistChipImageSubtitle =>
+      'Tämä vaikuttaa pienten artistin kuvien esikatseluun, kuten soittimen näytöllä.';
 
   @override
   String get scrollToCurrentTrack => 'Vieritä nykyiseen kappaleeseen';
@@ -1646,13 +1735,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get trackOfflineFavorites => 'Synkronoi kaikki Suosikki-tilat';
 
   @override
-  String get trackOfflineFavoritesSubtitle => 'Tämä mahdollistaa ajantaisempien suosikkitilojen näyttämisen offline-tilassa. Ei lataa lisätiedostoja.';
+  String get trackOfflineFavoritesSubtitle =>
+      'Tämä mahdollistaa ajantaisempien suosikkitilojen näyttämisen offline-tilassa. Ei lataa lisätiedostoja.';
 
   @override
   String get allPlaylistsInfoSetting => 'Lataa soittolistan liitännäistiedot';
 
   @override
-  String get allPlaylistsInfoSettingSubtitle => 'Synkronoi liitännäistiedot kaikilta soittolistoilta parantaakseen soittolistojen kokemustasi';
+  String get allPlaylistsInfoSettingSubtitle =>
+      'Synkronoi liitännäistiedot kaikilta soittolistoilta parantaakseen soittolistojen kokemustasi';
 
   @override
   String get downloadFavoritesSetting => 'Lataa kaikki Suosikit';
@@ -1664,40 +1755,51 @@ class AppLocalizationsFi extends AppLocalizations {
   String get fiveLatestAlbumsSetting => 'Lataa viimeisimmät viisi albumia';
 
   @override
-  String get fiveLatestAlbumsSettingSubtitle => 'Lataukset poistetaan kun ne ikääntyvät. Lukitse lataukset estääksesi albumi poistolta.';
+  String get fiveLatestAlbumsSettingSubtitle =>
+      'Lataukset poistetaan kun ne ikääntyvät. Lukitse lataukset estääksesi albumi poistolta.';
 
   @override
-  String get cacheLibraryImagesSettings => 'Tallenna nykyisen kirjaston kuvat välimuistiin';
+  String get cacheLibraryImagesSettings =>
+      'Tallenna nykyisen kirjaston kuvat välimuistiin';
 
   @override
-  String get cacheLibraryImagesSettingsSubtitle => 'Kaikki albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa tulee ladatuksi.';
+  String get cacheLibraryImagesSettingsSubtitle =>
+      'Kaikki albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa tulee ladatuksi.';
 
   @override
-  String get showProgressOnNowPlayingBarTitle => 'Näytä kappaleen edistyminen sovelluksen minisoittimessa';
+  String get showProgressOnNowPlayingBarTitle =>
+      'Näytä kappaleen edistyminen sovelluksen minisoittimessa';
 
   @override
-  String get showProgressOnNowPlayingBarSubtitle => 'Ohjaa sovelluksen sisäisen minisoittimen / tällä hetkellä toistettavan kappaleen palkki musiikkinäytön alareunassa edistymispalkkina.';
+  String get showProgressOnNowPlayingBarSubtitle =>
+      'Ohjaa sovelluksen sisäisen minisoittimen / tällä hetkellä toistettavan kappaleen palkki musiikkinäytön alareunassa edistymispalkkina.';
 
   @override
   String get lyricsScreen => 'Sanoitusnäkymä';
 
   @override
-  String get showLyricsTimestampsTitle => 'Näytä aikaleimat synkronoiduissa sanoituksissa';
+  String get showLyricsTimestampsTitle =>
+      'Näytä aikaleimat synkronoiduissa sanoituksissa';
 
   @override
-  String get showLyricsTimestampsSubtitle => 'Ohjaa mikäli aikaleimat näytetään jokaiselle sanoituksen riville sanoitusnäkymässä, jos saatavilla.';
+  String get showLyricsTimestampsSubtitle =>
+      'Ohjaa mikäli aikaleimat näytetään jokaiselle sanoituksen riville sanoitusnäkymässä, jos saatavilla.';
 
   @override
-  String get showStopButtonOnMediaNotificationTitle => 'Näytä pysäytyspainike mediailmoituksessa';
+  String get showStopButtonOnMediaNotificationTitle =>
+      'Näytä pysäytyspainike mediailmoituksessa';
 
   @override
-  String get showStopButtonOnMediaNotificationSubtitle => 'Ohjaa mikäli mediailmoituksessa on pysätysnäppäin keskeytysnäppäimen lisäksi. Tämä mahdollistaa toiston lopettamisen ilman ohjelman avaamista.';
+  String get showStopButtonOnMediaNotificationSubtitle =>
+      'Ohjaa mikäli mediailmoituksessa on pysätysnäppäin keskeytysnäppäimen lisäksi. Tämä mahdollistaa toiston lopettamisen ilman ohjelman avaamista.';
 
   @override
-  String get showSeekControlsOnMediaNotificationTitle => 'Näytä hakusäätimet mediailmoituksessa';
+  String get showSeekControlsOnMediaNotificationTitle =>
+      'Näytä hakusäätimet mediailmoituksessa';
 
   @override
-  String get showSeekControlsOnMediaNotificationSubtitle => 'Ohjaa mikäli mediailmoituksessa on hakusäätimenä esityspalkki. Tämä mahdollistaa toiston sijainnin muutoksen ilman ohjelmiston avaamista.';
+  String get showSeekControlsOnMediaNotificationSubtitle =>
+      'Ohjaa mikäli mediailmoituksessa on hakusäätimenä esityspalkki. Tämä mahdollistaa toiston sijainnin muutoksen ilman ohjelmiston avaamista.';
 
   @override
   String get alignmentOptionStart => 'Alku';
@@ -1721,19 +1823,23 @@ class AppLocalizationsFi extends AppLocalizations {
   String get lyricsAlignmentTitle => 'Sanoitusten tasaus';
 
   @override
-  String get lyricsAlignmentSubtitle => 'Ohjaa sanoitusten tasausta sanoitusnäkymässä.';
+  String get lyricsAlignmentSubtitle =>
+      'Ohjaa sanoitusten tasausta sanoitusnäkymässä.';
 
   @override
   String get lyricsFontSizeTitle => 'Sanoitusten kirjaisinkoko';
 
   @override
-  String get lyricsFontSizeSubtitle => 'Ohjaa sanoitusten kirjaisinkokoa sanoitusnäkymässä.';
+  String get lyricsFontSizeSubtitle =>
+      'Ohjaa sanoitusten kirjaisinkokoa sanoitusnäkymässä.';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => 'Näytä albumi ennen sanoituksia';
+  String get showLyricsScreenAlbumPreludeTitle =>
+      'Näytä albumi ennen sanoituksia';
 
   @override
-  String get showLyricsScreenAlbumPreludeSubtitle => 'Ohjaa mikäli albumin kansikuva näytetään sanoitusten yläpuolella, ennen kuin se vierii pois.';
+  String get showLyricsScreenAlbumPreludeSubtitle =>
+      'Ohjaa mikäli albumin kansikuva näytetään sanoitusten yläpuolella, ennen kuin se vierii pois.';
 
   @override
   String get keepScreenOn => 'Pidä näyttö päällä';
@@ -1754,10 +1860,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get keepScreenOnWhileLyrics => 'Kun näytetään sanoituksia';
 
   @override
-  String get keepScreenOnWhilePluggedIn => 'Pidä näyttö päällä vain, kun laite on kytketty lataukseen';
+  String get keepScreenOnWhilePluggedIn =>
+      'Pidä näyttö päällä vain, kun laite on kytketty lataukseen';
 
   @override
-  String get keepScreenOnWhilePluggedInSubtitle => 'Ohita Pidä Näyttö Päällä asetus jos laite on irroitettu latauksesta';
+  String get keepScreenOnWhilePluggedInSubtitle =>
+      'Ohita Pidä Näyttö Päällä asetus jos laite on irroitettu latauksesta';
 
   @override
   String get genericToggleButtonTooltip => 'Napauta vaihtaaksesi.';
@@ -1806,37 +1914,44 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showFeatureChipsToggleTitle => 'Näytä kappaleen lisätiedot';
 
   @override
-  String get showFeatureChipsToggleSubtitle => 'Näytä kappaleen lisätiedot kuten koodekki, bittinopeus jne. soitinnäkymässä.';
+  String get showFeatureChipsToggleSubtitle =>
+      'Näytä kappaleen lisätiedot kuten koodekki, bittinopeus jne. soitinnäkymässä.';
 
   @override
   String get albumScreen => 'Albuminäkymä';
 
   @override
-  String get showCoversOnAlbumScreenTitle => 'Näytä albumin kansikuva kappaleille';
+  String get showCoversOnAlbumScreenTitle =>
+      'Näytä albumin kansikuva kappaleille';
 
   @override
-  String get showCoversOnAlbumScreenSubtitle => 'Näytä albumin kansikuva jokaiselle kappaleelle erikseen albuminäkymässä.';
+  String get showCoversOnAlbumScreenSubtitle =>
+      'Näytä albumin kansikuva jokaiselle kappaleelle erikseen albuminäkymässä.';
 
   @override
-  String get emptyTopTracksList => 'Et ole kuunnellut vielä yhtäkään kappaletta tältä artistilta.';
+  String get emptyTopTracksList =>
+      'Et ole kuunnellut vielä yhtäkään kappaletta tältä artistilta.';
 
   @override
   String get emptyFilteredListTitle => 'Kohteita ei löytynyt';
 
   @override
-  String get emptyFilteredListSubtitle => 'Yhtäkään suodatinta vastaavaa kohdetta ei löytynyt. Kokeile poistaa suodatin tai vaihtamalla hakutermiä.';
+  String get emptyFilteredListSubtitle =>
+      'Yhtäkään suodatinta vastaavaa kohdetta ei löytynyt. Kokeile poistaa suodatin tai vaihtamalla hakutermiä.';
 
   @override
   String get resetFiltersButton => 'Nollaa suodatin';
 
   @override
-  String get resetSettingsPromptGlobal => 'Haluatko varmasti nollata KAIKKI asetukset niiden oletuksiinsa?';
+  String get resetSettingsPromptGlobal =>
+      'Haluatko varmasti nollata KAIKKI asetukset niiden oletuksiinsa?';
 
   @override
   String get resetSettingsPromptGlobalConfirm => 'Nollaa KAIKKI asetukset';
 
   @override
-  String get resetSettingsPromptLocal => 'Haluatko nollata kaikki näistä asetuksista niiden oletuksiin?';
+  String get resetSettingsPromptLocal =>
+      'Haluatko nollata kaikki näistä asetuksista niiden oletuksiin?';
 
   @override
   String get genericCancel => 'Peruuta';
@@ -1870,10 +1985,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get allowDeleteFromServerTitle => 'Salli poisto palvelimelta';
 
   @override
-  String get allowDeleteFromServerSubtitle => 'Ota käyttöön tai poista käytöstä valinta poistaakseen lopullisesti kappale palvelimen tiedostojärjestelmältä jos mahdollista.';
+  String get allowDeleteFromServerSubtitle =>
+      'Ota käyttöön tai poista käytöstä valinta poistaakseen lopullisesti kappale palvelimen tiedostojärjestelmältä jos mahdollista.';
 
   @override
-  String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
+  String deleteFromTargetDialogText(
+      String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
@@ -1890,7 +2007,8 @@ class AppLocalizationsFi extends AppLocalizations {
       deleteType,
       {
         'canDelete': ' Tämä myös poistaa kohteen tältä laitteelta.',
-        'cantDelete': ' Tämä kohde pysyy laitteella seuraavaan synkronointiin saakka.',
+        'cantDelete':
+            ' Tämä kohde pysyy laitteella seuraavaan synkronointiin saakka.',
         'notDownloaded': '',
         'other': '',
       },
@@ -1899,7 +2017,8 @@ class AppLocalizationsFi extends AppLocalizations {
       device,
       {
         'device': 'tämä laite',
-        'server': 'palvelimen tiedostojärjestelmä ja kirjasto.$_temp1\nTätä ei voi peruuttaa',
+        'server':
+            'palvelimen tiedostojärjestelmä ja kirjasto.$_temp1\nTätä ei voi peruuttaa',
         'other': '',
       },
     );
@@ -1928,7 +2047,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get downloadSizeWarningCutoff => 'Latauksen koon varoituksen raja';
 
   @override
-  String get downloadSizeWarningCutoffSubtitle => 'Varoitusviesti näytetään ladattaessa suurempaa määrää kappaleita kuin raja kerralla.';
+  String get downloadSizeWarningCutoffSubtitle =>
+      'Varoitusviesti näytetään ladattaessa suurempaa määrää kappaleita kuin raja kerralla.';
 
   @override
   String confirmAddAlbumToPlaylist(String itemType, String itemName) {
@@ -1961,16 +2081,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get releaseDateFormatMonthDayYear => 'Kuukausi, päivä ja vuosi';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenTitle => 'Näytä albumin julkaisupäivä soitinnäkymässä';
+  String get showAlbumReleaseDateOnPlayerScreenTitle =>
+      'Näytä albumin julkaisupäivä soitinnäkymässä';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => 'Näyttää albumin julkaisupäivän soitinnäkymässä, albuminimen takana.';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle =>
+      'Näyttää albumin julkaisupäivän soitinnäkymässä, albuminimen takana.';
 
   @override
   String get releaseDateFormatTitle => 'Julkaisupäivän muoto';
 
   @override
-  String get releaseDateFormatSubtitle => 'Ohjaa kaikkien julkaisupäivän muotoja ohjelmassa.';
+  String get releaseDateFormatSubtitle =>
+      'Ohjaa kaikkien julkaisupäivän muotoja ohjelmassa.';
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
@@ -1985,7 +2108,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+  String get autoOfflineSettingDescription =>
+      'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
 
   @override
   String get autoOfflineSettingTitle => 'Automated Offline Mode';
