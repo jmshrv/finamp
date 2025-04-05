@@ -1448,13 +1448,13 @@ class DownloadsService {
                 q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
         // Returns albums where the artist (relatedTo) is an Album Artist
         .optional(
-                artistType == BaseItemDtoType.album &&
+                artistType == ArtistType.albumartist &&
                 relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))))
         // Returns albums where the artist (relatedTo) is a Performing Artist
         .optional(
-                artistType == BaseItemDtoType.track &&
+                artistType == ArtistType.artist &&
                 relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection)))))
