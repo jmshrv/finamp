@@ -220,61 +220,21 @@ class _AlbumImageErrorPlaceholder extends StatelessWidget {
   }
 }
 
-class TapToZoomThumbnail extends StatefulWidget {
+class TapToZoomImage extends StatefulWidget {
   final AlbumImage albumImg;
   final bool isDisabled;
 
-  const TapToZoomThumbnail({
+  const TapToZoomImage({
     Key? key,
     required this.albumImg,
     this.isDisabled = false,
   }) : super(key: key);
 
   @override
-  _TapToZoomThumbnailState createState() => _TapToZoomThumbnailState();
+  _TapToZoomImageState createState() => _TapToZoomImageState();
 }
 
-class _TapToZoomThumbnailState extends State<TapToZoomThumbnail> {
-  OverlayEntry? overlayEntry;
-
-  void insertOverlay() {
-    overlayEntry = OverlayEntry(
-      builder: (context) => Material(
-        color: Colors.transparent,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () => removeOverlay(),
-                child: Container(
-                  color: Colors.black.withAlpha(30),
-                ),
-              ),
-            ),
-            Center(
-              child: Hero(
-                tag: widget.albumImg.hashCode,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: InteractiveViewer(child: widget.albumImg),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(overlayEntry!);
-  }
-
-  void removeOverlay() {
-    overlayEntry?.remove();
-    setState(() {
-      overlayEntry = null;
-    });
-  }
-
+class _TapToZoomImageState extends State<TapToZoomImage> {
   @override
   Widget build(BuildContext context) {
     if (widget.isDisabled) {
@@ -282,11 +242,52 @@ class _TapToZoomThumbnailState extends State<TapToZoomThumbnail> {
     }
 
     return GestureDetector(
-      onTap: insertOverlay,
+      onTap: () => Navigator.of(context).push(
+        PageRouteBuilder(
+          opaque: false,
+          barrierDismissible: true,
+          transitionDuration: const Duration(milliseconds: 300),
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation1,
+            Animation<double> animation2
+          ) {
+            return ZoomedImage(img: widget.albumImg);
+          }
+        )
+      ),
       child: Hero(
-        tag: widget.albumImg.hashCode,
+        tag: 'album-image-zoom',
         child: widget.albumImg,
       ),
+    );
+  }
+}
+
+class ZoomedImage extends StatelessWidget {
+  final AlbumImage img;
+
+  const ZoomedImage({
+    Key? key,
+    required this.img,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Dismissible(
+        key: Key(img.hashCode.toString()),
+        direction: DismissDirection.vertical,
+        onDismissed: (_) {
+          Navigator.of(context).pop();
+        },
+        child: InteractiveViewer(
+          child: Hero(
+            tag: 'album-image-zoom',
+            child: img,
+          ),
+        )
+      )
     );
   }
 }
