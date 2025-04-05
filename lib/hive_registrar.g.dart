@@ -15,7 +15,6 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(BaseItemDtoAdapter());
     registerAdapter(BaseItemPersonAdapter());
     registerAdapter(ClientCapabilitiesAdapter());
-    registerAdapter(ClientDiscoveryResponseAdapter());
     registerAdapter(CodecProfileAdapter());
     registerAdapter(ContainerProfileAdapter());
     registerAdapter(ContentViewTypeAdapter());
@@ -62,7 +61,6 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(PlaybackSpeedVisibilityAdapter());
     registerAdapter(PlayerStateInfoAdapter());
     registerAdapter(ProfileConditionAdapter());
-    registerAdapter(PublicSystemInfoResultAdapter());
     registerAdapter(PublicUsersResponseAdapter());
     registerAdapter(QueueItemAdapter());
     registerAdapter(QueueItemQueueTypeAdapter());
