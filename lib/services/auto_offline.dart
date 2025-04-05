@@ -47,6 +47,12 @@ class AutoOffline extends _$AutoOffline {
 }
 
 Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
+  // skip when feature not enabled
+  if (FinampSettingsHelper.finampSettings.autoOffline ==
+      AutoOfflineOption.disabled) return;
+  // skip when user overwrote offline mode
+  if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
+  
   bool state = await _shouldBeOffline(connections);
 
   // Attempt to combat IOS reliability problems
@@ -55,11 +61,6 @@ Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
     state = await _shouldBeOffline(null);
   }
 
-  // skip when feature not enabled
-  if (FinampSettingsHelper.finampSettings.autoOffline ==
-      AutoOfflineOption.disabled) return;
-  // skip when user overwrote offline mode
-  if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
   // skip if nothing changed
   if (FinampSettingsHelper.finampSettings.isOffline == state) return;
 
