@@ -208,6 +208,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
+      audioFadeOutDuration:
+          fields[86] == null ? Duration.zero : fields[86] as Duration,
+      audioFadeInDuration:
+          fields[87] == null ? Duration.zero : fields[87] as Duration,
     )
       ..sleepTimer = fields[14] as SleepTimer?
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
@@ -219,7 +223,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(81)
+      ..writeByte(83)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -381,7 +385,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(84)
       ..write(obj.releaseDateFormat)
       ..writeByte(85)
-      ..write(obj.lastUsedDownloadLocationId);
+      ..write(obj.lastUsedDownloadLocationId)
+      ..writeByte(86)
+      ..write(obj.audioFadeOutDuration)
+      ..writeByte(87)
+      ..write(obj.audioFadeInDuration);
   }
 
   @override

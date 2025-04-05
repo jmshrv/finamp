@@ -1730,7 +1730,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get lyricsFontSizeSubtitle => 'Controls the font size of lyrics in the lyrics view.';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => 'Show album before lyrics';
+  String get showLyricsScreenAlbumPreludeTitle => 'Show album cover before lyrics';
 
   @override
   String get showLyricsScreenAlbumPreludeSubtitle => 'Controls if the album cover is shown above the lyrics before being scrolled away.';
@@ -1974,4 +1974,16 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';
+
+  @override
+  String get audioFadeOutDurationSettingSubtitle => 'The duration of the audio fade out in milliseconds.';
+
+  @override
+  String get audioFadeInDurationSettingTitle => 'Audio fade-in duration';
+
+  @override
+  String get audioFadeInDurationSettingSubtitle => 'The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.';
 }

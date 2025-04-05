@@ -136,7 +136,7 @@ void main() async {
 
 Future<void> _setupEdgeToEdgeOverlayStyle() async {
   if (Platform.isAndroid) {
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent));
     final binding = WidgetsFlutterBinding.ensureInitialized();
@@ -369,7 +369,7 @@ Future<void> _setupPlaybackServices() async {
         androidNotificationIcon: "mipmap/white",
         androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
         // notificationColor: TODO use the theme color for older versions of Android,
-        preloadArtwork: false,
+        preloadArtwork: true,
         androidBrowsableRootExtras: <String, dynamic>{
           // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
           "android.media.browse.SEARCH_SUPPORTED": true,

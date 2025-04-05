@@ -2849,7 +2849,7 @@ abstract class AppLocalizations {
   /// Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view
   ///
   /// In en, this message translates to:
-  /// **'Show album before lyrics'**
+  /// **'Show album cover before lyrics'**
   String get showLyricsScreenAlbumPreludeTitle;
 
   /// Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view
@@ -3175,6 +3175,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading available libraries for user'**
   String get librarySelectError;
+
+  /// Title for the audio fade-in duration setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio fade-out duration'**
+  String get audioFadeOutDurationSettingTitle;
+
+  /// Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in.
+  ///
+  /// In en, this message translates to:
+  /// **'The duration of the audio fade out in milliseconds.'**
+  String get audioFadeOutDurationSettingSubtitle;
+
+  /// No description provided for @audioFadeInDurationSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio fade-in duration'**
+  String get audioFadeInDurationSettingTitle;
+
+  /// No description provided for @audioFadeInDurationSettingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.'**
+  String get audioFadeInDurationSettingSubtitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

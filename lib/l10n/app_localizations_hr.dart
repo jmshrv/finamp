@@ -1983,4 +1983,16 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';
+
+  @override
+  String get audioFadeOutDurationSettingSubtitle => 'The duration of the audio fade out in milliseconds.';
+
+  @override
+  String get audioFadeInDurationSettingTitle => 'Audio fade-in duration';
+
+  @override
+  String get audioFadeInDurationSettingSubtitle => 'The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.';
 }

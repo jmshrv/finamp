@@ -1996,4 +1996,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get audioFadeOutDurationSettingTitle => 'Audioausblendungsdauer';
+
+  @override
+  String get audioFadeOutDurationSettingSubtitle => 'Die Dauer der Audioausblendung in millisekunden. Auf 0 setzen zum Deaktivieren der Audioausblendung.';
+
+  @override
+  String get audioFadeInDurationSettingTitle => 'Audioeinblendungsdauer';
+
+  @override
+  String get audioFadeInDurationSettingSubtitle => 'Die Dauer der Audioeinblendung in millisekunden. Auf 0 setzen zum Deaktivieren der Audioeinblendung.';
 }

@@ -1721,7 +1721,7 @@
   "@lyricsFontSizeSubtitle": {
     "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
   },
-  "showLyricsScreenAlbumPreludeTitle": "Show album before lyrics",
+  "showLyricsScreenAlbumPreludeTitle": "Show album cover before lyrics",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1943,5 +1943,21 @@
   "librarySelectError": "Error loading available libraries for user",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
+  },
+  "audioFadeOutDurationSettingTitle": "Audio fade-out duration",
+  "@audioFadeOutDurationSettingTitle": {
+      "description": "Title for the audio fade-out duration setting."
+  },
+  "audioFadeOutDurationSettingSubtitle": "The duration of the audio fade out in milliseconds.",
+  "@audioFadeOutDurationSettingSubtitle": {
+      "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+  },
+  "audioFadeInDurationSettingTitle": "Audio fade-in duration",
+  "@audioFadeOutDurationSettingTitle": {
+      "description": "Title for the audio fade-in duration setting."
+  },
+  "audioFadeInDurationSettingSubtitle": "The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.",
+  "@audioFadeOutDurationSettingSubtitle": {
+      "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
   }
 }
