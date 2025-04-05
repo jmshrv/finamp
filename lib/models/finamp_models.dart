@@ -125,8 +125,8 @@ class DefaultSettings {
   static const keepScreenOnOption = KeepScreenOnOption.whileLyrics;
   static const keepScreenOnWhilePluggedIn = true;
   static const hasDownloadedPlaylistInfo = false;
-  static const transcodingSegmentContainer =
-      FinampSegmentContainer.fragmentedMp4;
+  static const transcodingStreamingFormat =
+      FinampTranscodingStreamingFormat.aacFragmentedMp4;
   static const featureChipsConfiguration =
       FinampFeatureChipsConfiguration(enabled: true, features: [
     FinampFeatureChipType.playCount,
@@ -254,8 +254,8 @@ class FinampSettings {
       this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
       this.hasDownloadedPlaylistInfo =
           DefaultSettings.hasDownloadedPlaylistInfo,
-      this.transcodingSegmentContainer =
-          DefaultSettings.transcodingSegmentContainer,
+      this.transcodingStreamingFormat =
+          DefaultSettings.transcodingStreamingFormat,
       this.downloadSizeWarningCutoff =
           DefaultSettings.downloadSizeWarningCutoff,
       this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
@@ -509,8 +509,8 @@ class FinampSettings {
   @HiveField(74, defaultValue: DefaultSettings.hasDownloadedPlaylistInfo)
   bool hasDownloadedPlaylistInfo;
 
-  @HiveField(75, defaultValue: DefaultSettings.transcodingSegmentContainer)
-  FinampSegmentContainer transcodingSegmentContainer;
+  @HiveField(75, defaultValue: DefaultSettings.transcodingStreamingFormat)
+  FinampTranscodingStreamingFormat transcodingStreamingFormat;
 
   @HiveField(76, defaultValue: DefaultSettings.featureChipsConfiguration)
   FinampFeatureChipsConfiguration featureChipsConfiguration;
@@ -2433,14 +2433,19 @@ enum KeepScreenOnOption {
 }
 
 @HiveType(typeId: 73)
-enum FinampSegmentContainer {
+enum FinampTranscodingStreamingFormat {
   @HiveField(0)
-  mpegTS("ts"),
+  aacMpegTS("aac", "ts"),
   @HiveField(1)
-  fragmentedMp4("mp4");
+  aacFragmentedMp4("aac", "mp4"),
+  @HiveField(2)
+  opusFragmentedMp4("opus", "mp4"),
+  @HiveField(3)
+  flacFragmentedMp4("flac", "mp4");
 
-  const FinampSegmentContainer(this.container);
+  const FinampTranscodingStreamingFormat(this.codec, this.container);
 
+  final String codec;
   /// The container to use to transport the segments
   final String container;
 }
