@@ -3,7 +3,7 @@
   "@unknownError": {},
   "removedFromPlaylist": "Poistettu soittolistalta.",
   "@removedFromPlaylist": {},
-  "addFavourite": "Lisää suosikki",
+  "addFavourite": "Lisää suosikiksi",
   "@addFavourite": {},
   "goToAlbum": "Mene albumiin",
   "@goToAlbum": {},
@@ -13,7 +13,7 @@
   "@settings": {},
   "shareLogs": "Jaa lokit",
   "@shareLogs": {},
-  "removeFavourite": "Poista suosikki",
+  "removeFavourite": "Poista suosikeista",
   "@removeFavourite": {},
   "playNext": "Toista seuraavaksi",
   "@playNext": {
@@ -147,7 +147,7 @@
   "@logsCopied": {},
   "message": "Viesti",
   "@message": {},
-  "downloadLocations": "Latauksen sijainnit",
+  "downloadLocations": "Latausten sijainnit",
   "@downloadLocations": {},
   "transcoding": "Transkoodaus",
   "@transcoding": {},
@@ -340,7 +340,7 @@
   "@noItem": {},
   "noMusicLibrariesBody": "Finamp ei löytänyt musiikkikirjastoja. Varmista, että Jellyfin-palvelimellasi on vähintään yksi kirjasto, jonka sisältötyypiksi on asetettu \"Musiikki\".",
   "@noMusicLibrariesBody": {},
-  "instantMix": "Välitön Sekoitus",
+  "instantMix": "Välitön sekoitus",
   "@instantMix": {},
   "replaceQueue": "Korvaa Jono",
   "@replaceQueue": {},
@@ -382,7 +382,7 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "startMixNoTracksAlbum": "Paina albumia pitkään lisätäksesi tai poistaaksesi sen mixistä ennen sen aloittamista",
+  "startMixNoTracksAlbum": "Paina albumia pitkään lisätäksesi tai poistaaksesi sen sekoituksesta ennen sen aloittamista",
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
@@ -413,7 +413,7 @@
       }
     }
   },
-  "gridCrossAxisCountSubtitle": "Rivikohtaisesti käytettävien ruudukkotiilien määrä, kun {value}.",
+  "gridCrossAxisCountSubtitle": "Rivikohtaisesti käytettävien ruudukkolaattojen määrä, kun {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -452,7 +452,7 @@
   },
   "swipeInsertQueueNextSubtitle": "Mahdollistaa kappaleluettelossa kappaleen lisäämisen pyyhkäisemällä jonon seuraavaksi kohteeksi sen sijaan, että se lisättäisiin johon hännille.",
   "@swipeInsertQueueNextSubtitle": {},
-  "startMixNoTracksArtist": "Paina artistin nimeä pitkään lisätäksesi tai poistaaksesi sen mixistä ennen sen aloittamista",
+  "startMixNoTracksArtist": "Paina artistin nimeä pitkään lisätäksesi tai poistaaksesi sen sekoituksesta ennen sen aloittamista",
   "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
@@ -700,7 +700,7 @@
   "@playbackModeLocal": {
     "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
   },
-  "goToArtist": "Mene artistille",
+  "goToArtist": "Mene artistiin",
   "@goToArtist": {},
   "goToGenre": "Mene tyylilajiin",
   "@goToGenre": {},
@@ -860,7 +860,7 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "requireWifiForDownloads": "Vaatii WiFi:n latauksiin.",
+  "requireWifiForDownloads": "Vaadi WiFi-yhteys latauksiin.",
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
@@ -933,7 +933,7 @@
   },
   "trackOfflineFavorites": "Synkronoi kaikki suosikit",
   "@trackOfflineFavorites": {},
-  "downloadFavoritesSetting": "Lataa kaikki Suosikit",
+  "downloadFavoritesSetting": "Lataa kaikki suosikit",
   "@downloadFavoritesSetting": {},
   "fiveLatestAlbumsSetting": "Lataa viimeisimmät viisi albumia",
   "@fiveLatestAlbumsSetting": {},
@@ -945,7 +945,7 @@
   "@lyricsScreen": {
     "description": "Name for the view/screen that shows lyrics for the currently playing track"
   },
-  "showLyricsTimestampsSubtitle": "Ohjaa mikäli aikaleimat näytetään jokaiselle sanoituksen riville sanoitusnäkymässä, jos saatavilla.",
+  "showLyricsTimestampsSubtitle": "Näytä aikaleimat jokaiselle sanoituksen riville sanoitusnäkymässä, jos saatavilla.",
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
@@ -953,11 +953,11 @@
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "showSeekControlsOnMediaNotificationSubtitle": "Ohjaa mikäli mediailmoituksessa on hakusäätimenä esityspalkki. Tämä mahdollistaa toiston sijainnin muutoksen ilman ohjelmiston avaamista.",
+  "showSeekControlsOnMediaNotificationSubtitle": "Näytä hakupalkki mediailmoituksissa. Mahdollistaa toistokohdan valinnan ilman ohjelman avaamista.",
   "@showSeekControlsOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
   },
-  "fontSizeOptionLarge": "Iso",
+  "fontSizeOptionLarge": "Suuri",
   "@fontSizeOptionLarge": {
     "description": "Font size option for things like the lyrics view. Large means a larger font size."
   },
@@ -981,11 +981,11 @@
   "@emptyTopTracksList": {
     "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
   },
-  "emptyFilteredListSubtitle": "Yhtäkään suodatinta vastaavaa kohdetta ei löytynyt. Kokeile poistaa suodatin tai vaihtamalla hakutermiä.",
+  "emptyFilteredListSubtitle": "Yhtäkään suodatinta vastaavaa kohdetta ei löytynyt. Kokeile poistaa suodatin tai vaihtaa hakutermiä.",
   "@emptyFilteredListSubtitle": {
     "description": "Message shown when a list of items is filtered and no items match the filter"
   },
-  "resetSettingsPromptGlobal": "Haluatko varmasti nollata KAIKKI asetukset niiden oletuksiinsa?",
+  "resetSettingsPromptGlobal": "Haluatko varmasti nollata KAIKKI asetukset oletusasetuksiin?",
   "@resetSettingsPromptGlobal": {
     "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
   },
@@ -1001,11 +1001,11 @@
   "@allowDeleteFromServerTitle": {
     "description": "Title for the setting that controls if items can be deleted from the server"
   },
-  "allowDeleteFromServerSubtitle": "Ota käyttöön tai poista käytöstä valinta poistaakseen lopullisesti kappale palvelimen tiedostojärjestelmältä jos mahdollista.",
+  "allowDeleteFromServerSubtitle": "Ota käyttöön tai poista käytöstä mahdollisuus poistaa kappale palvelimen tiedostojärjestelmästä, kun poisto on palvelimen asetusten puolesta mahdollista.",
   "@allowDeleteFromServerSubtitle": {
     "description": "Subtitle for the setting that controls if items can be deleted from the server"
   },
-  "largeDownloadWarning": "Varoitus: Olet aloittamassa latausta {count} kappaleelle.",
+  "largeDownloadWarning": "Varoitus: Olet aloittamassa {count} kappaleen lataamista.",
   "@largeDownloadWarning": {
     "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
     "placeholders": {
@@ -1156,7 +1156,7 @@
   },
   "removeFromPlaylistConfirm": "Poista",
   "@removeFromPlaylistConfirm": {},
-  "alignmentOptionStart": "Alku",
+  "alignmentOptionStart": "Vasen",
   "@alignmentOptionStart": {
     "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
   },
@@ -1168,11 +1168,11 @@
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Näytä sovelluksen sisäisen minisoittimen / musiikkinäytön alareunassa sijaitsevan 'tällä hetkellä toistettavan kappaleen' palkki kappaleen toiston mukaan etenevänä väripalkkina.",
+  "showProgressOnNowPlayingBarSubtitle": "Näytä toiston mukaan etenevä väripalkki sovelluksen sisäisen minisoittimen / musiikkinäytön alareunassa sijaitsevan tällä hetkellä toistettavan kappaleen palkissa.",
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
-  "downloadSizeWarningCutoffSubtitle": "Varoitusviesti näytetään ladattaessa suurempaa määrää kappaleita kuin raja kerralla.",
+  "downloadSizeWarningCutoffSubtitle": "Varoitusviesti näytetään ladattaessa kerralla suurempaa määrää kappaleita kuin tässä asetettu raja.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
@@ -1228,7 +1228,7 @@
       }
     }
   },
-  "allPlaylistsInfoSettingSubtitle": "Synkronoi metadata kaikilta soittolistoilta parantaaksesi soittolistojen kokemusta",
+  "allPlaylistsInfoSettingSubtitle": "Synkronoi kaikkien soittolistojen metadata parantaaksesi soittolistojen kokemusta",
   "@allPlaylistsInfoSettingSubtitle": {},
   "addRemoveFromPlaylist": "Lisää tai poista soittolistoilta",
   "@addRemoveFromPlaylist": {
@@ -1238,7 +1238,7 @@
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
-  "allPlaylistsInfoSetting": "Lataa soittolistan liitännäistiedot (metadata)",
+  "allPlaylistsInfoSetting": "Lataa soittolistan liitännäistiedostot (metadata)",
   "@allPlaylistsInfoSetting": {},
   "cacheLibraryImagesSettingsSubtitle": "Kaikki albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa tulee ladatuksi.",
   "@cacheLibraryImagesSettingsSubtitle": {},
@@ -1268,7 +1268,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "aboutContributionPrompt": "Pyyteettömien ihmisten vapaa-ajallaan tekemä sovellus.\nVoit olla yksi heistä!",
+  "aboutContributionPrompt": "Pyyteettömien ja upeiden ihmisten vapaa-ajallaan tekemä sovellus.\nVoit olla yksi heistä!",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
@@ -1351,7 +1351,7 @@
       }
     }
   },
-  "syncOnStartupSwitch": "Automaattisesti synkronoi lataukset käynnistyessä",
+  "syncOnStartupSwitch": "Synkronoi lataukset automaattisesti ohjelman käynnistyessä",
   "@syncOnStartupSwitch": {
     "description": "Title of setting for automatically triggering a throttled resync on app startup."
   },
@@ -1461,7 +1461,7 @@
       }
     }
   },
-  "alignmentOptionEnd": "Loppu",
+  "alignmentOptionEnd": "Oikea",
   "@alignmentOptionEnd": {
     "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
   },
@@ -1489,11 +1489,11 @@
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "showNullLibraryItemsSubtitle": "Osaa media tuntemattomalla kirjastolla saatetaan ladata. Poista käytöstä piilottaaksen nämä niiden alkuperäisen kokoelman ulkopuolelle.",
+  "showNullLibraryItemsSubtitle": "Osa mediasta saatetaan ladata tuntemattomalla kirjastolla. Poista käytöstä piilottaaksesi nämä niiden alkuperäisen kokoelman ulkopuolelle.",
   "@showNullLibraryItemsSubtitle": {
     "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
-  "downloadsWorkersSettingSubtitle": "Lataushallinnoijien määrä synkronoimaan liitännäistietoja ja poistamaan latauksia. Lisäämällä näiden määrää voi nopeuttaa latausten synkronointia, varsinkin jos palvelimen latenssi on suuri, mutta voi aiheuttaa viivettä laitteessa.",
+  "downloadsWorkersSettingSubtitle": "Lataushallinnoijien määrä liitännäistiedostojen ja latausten poiston synkronointiin. Lisäämällä hallinnoijien määrää voit nopeuttaa latausten synkronointia, etenkin jos palvelimen latenssi on suuri. Voi aiheuttaa viivettä toiminnoissa.",
   "@downloadsWorkersSettingSubtitle": {
     "description": "Description of setting controlling download worker count."
   },
@@ -1512,7 +1512,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "lyricsFontSizeSubtitle": "Ohjaa sanoitusten kirjaisinkokoa sanoitusnäkymässä.",
+  "lyricsFontSizeSubtitle": "Säätää sanoitusten kirjasinkokoa sanoitusnäkymässä.",
   "@lyricsFontSizeSubtitle": {
     "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
   },
@@ -1539,7 +1539,7 @@
   "@enableAutoScroll": {
     "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
   },
-  "lyricsFontSizeTitle": "Sanoitusten kirjaisinkoko",
+  "lyricsFontSizeTitle": "Sanoitusten kirjasinkoko",
   "@lyricsFontSizeTitle": {
     "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
   },
@@ -1547,7 +1547,7 @@
   "@emptyFilteredListTitle": {
     "description": "Message shown when a list of items is filtered and no items match the filter"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Ohjaa mikäli mediailmoituksessa on pysätysnäppäin keskeytysnäppäimen lisäksi. Tämä mahdollistaa toiston lopettamisen ilman ohjelman avaamista.",
+  "showStopButtonOnMediaNotificationSubtitle": "Näytä stop-näppäin pause-näppäimen lisäksi mediailmoituksissa. Mahdollistaa toiston lopettamisen ilman ohjelman avaamista.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1555,7 +1555,7 @@
   "@alignmentOptionCenter": {
     "description": "Alignment option for things like the lyrics view. Center means centered."
   },
-  "releaseDateFormatSubtitle": "Ohjaa kaikkien julkaisupäivän muotoja ohjelmassa.",
+  "releaseDateFormatSubtitle": "Ohjaa kaikkia julkaisupäivämuotoja ohjelmassa.",
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
@@ -1563,11 +1563,11 @@
   "@fontSizeOptionSmall": {
     "description": "Font size option for things like the lyrics view. Small means a smaller font size."
   },
-  "resetFiltersButton": "Nollaa suodatin",
+  "resetFiltersButton": "Nollaa suodattimet",
   "@resetFiltersButton": {
     "description": "Button to reset filters on a list of items"
   },
-  "lyricsAlignmentSubtitle": "Ohjaa sanoitusten tasausta sanoitusnäkymässä.",
+  "lyricsAlignmentSubtitle": "Säätää sanoitusten tasausta sanoitusnäkymässä.",
   "@lyricsAlignmentSubtitle": {
     "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
   },
@@ -1662,13 +1662,13 @@
       }
     }
   },
-  "preferQuickSyncSwitchSubtitle": "Kun synkronointia suoritetaan, osaa vakiona pysyvistä kohteista (kuten kappaleista tai albumeista) ei päivitetä. Korjausten lataus aina toteuttaa täyden synkronoinnin.",
+  "preferQuickSyncSwitchSubtitle": "Kun synkronointia suoritetaan, osaa vakiona pysyvistä kohteista (kuten kappaleista tai albumeista) ei päivitetä. Latausten korjaus toteuttaa täyden synkronoinnin aina.",
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "fixedGridSizeSwitchSubtitle": "Ruudukkotiilien koot eivät reagoi ikkunan tai näytön koon muutokseen.",
+  "fixedGridSizeSwitchSubtitle": "Ruudukkolaattojen koot eivät reagoi ikkunan tai näytön koon muutokseen.",
   "@fixedGridSizeSwitchSubtitle": {},
-  "fixedGridSizeTitle": "Ruudukkotiilien koko",
+  "fixedGridSizeTitle": "Ruudukkolaattojen koko",
   "@fixedGridSizeTitle": {},
   "fixedGridTileSizeEnum": "{size, select, small{Pieni} medium{Keskikokoinen} large{Iso} veryLarge{Todella iso} other{???}}",
   "@fixedGridTileSizeEnum": {
@@ -1749,11 +1749,11 @@
   "@redownloadcomplete": {
     "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
   },
-  "redownloadTitle": "Automaattisesti uudelleenlataa transkoodaukset",
+  "redownloadTitle": "Uudelleenlataa transkoodaukset automaattisesti",
   "@redownloadTitle": {
     "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
   },
-  "redownloadSubtitle": "Automaattisesti uudelleenlataa kappaleet, jotka oletetaan olevan eri laadulla niiden pääkokoelman muutosten takia.",
+  "redownloadSubtitle": "Uudelleenlataa automaattisesti kappaleet, joiden oletetaan olevan eri laadulla pääkokoelman muutosten takia.",
   "@redownloadSubtitle": {
     "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
   },
@@ -1761,7 +1761,7 @@
   "@defaultDownloadLocationButton": {
     "description": "Tooltip for button that sets a download location as the default."
   },
-  "fixedGridSizeSwitchTitle": "Käytä vakiokoon ruudukkotiiliä",
+  "fixedGridSizeSwitchTitle": "Käytä vakiokoon ruudukkolaattoja",
   "@fixedGridSizeSwitchTitle": {},
   "showLyricsTimestampsTitle": "Näytä aikaleimat synkronoiduissa sanoituksissa",
   "@showLyricsTimestampsTitle": {
@@ -1801,7 +1801,7 @@
     },
     "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
   },
-  "playerAlbumArtworkTooltip": "Taideteos albumille/kappaleelle {title}. Napauta vaihtaaksesi toistoa. Pyyhkäise vasemmalle tai oikealla vaihtaaksesi kappaletta.",
+  "playerAlbumArtworkTooltip": "Kansikuva albumille/kappaleelle {title}. Napauta kuvaa aloittaaksesi / pysäyttääksesi toisto. Pyyhkäise vasemmalle tai oikealla vaihtaaksesi kappaletta.",
   "@playerAlbumArtworkTooltip": {
     "placeholders": {
       "title": {
@@ -1811,7 +1811,7 @@
     },
     "description": "Tooltip for the album artwork on the player screen"
   },
-  "resetSettingsPromptLocal": "Haluatko nollata kaikki näistä asetuksista niiden oletuksiin?",
+  "resetSettingsPromptLocal": "Haluatko nollata nämä asetukset niiden oletuksiin?",
   "@resetSettingsPromptLocal": {
     "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
   },
@@ -1907,7 +1907,7 @@
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
   },
-  "startMixNoTracksGenre": "Paina tyylilajia pitkään lisätäksesi tai poistaaksesi sen mixistä ennen sen aloittamista",
+  "startMixNoTracksGenre": "Paina tyylilajia pitkään lisätäksesi tai poistaaksesi sen sekoituksesta ennen sen aloittamista",
   "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
@@ -1923,7 +1923,7 @@
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "downloadsQueued": "Valmistauduttu poimuajoon, ladataan tiedostoja",
+  "downloadsQueued": "Valmistauduttu poimuajoon, tiedostoja ladataan",
   "@downloadsQueued": {},
   "togglePlaybackButtonTooltip": "Toista / pysäytä",
   "@togglePlaybackButtonTooltip": {
@@ -1972,5 +1972,17 @@
       }
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "audioFadeOutDurationSettingSubtitle": "Äänen uloshäivytyksen kesto millisekunneissa.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "audioFadeInDurationSettingTitle": "Äänen sisäänhäivytyksen kesto",
+  "@audioFadeInDurationSettingTitle": {},
+  "audioFadeInDurationSettingSubtitle": "Äänen sisäänhäivytyksen kesto millisekunneissa. Aseta arvoon 0 poistaaksesi sisäänhäivytys käytöstä.",
+  "@audioFadeInDurationSettingSubtitle": {},
+  "audioFadeOutDurationSettingTitle": "Äänen uloshäivytyksen kesto",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
   }
 }
