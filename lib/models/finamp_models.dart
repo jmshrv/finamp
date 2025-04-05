@@ -153,7 +153,7 @@ class DefaultSettings {
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
   static const autoOffline = AutoOfflineOption.disconnected;
-  static const autoOfflineListenerActive = false;
+  static const autoOfflineListenerActive = true;
 }
 
 @HiveType(typeId: 28)
