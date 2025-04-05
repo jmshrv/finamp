@@ -1,3 +1,4 @@
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -29,7 +30,17 @@ class AlbumScreenContent extends StatefulWidget {
   State<AlbumScreenContent> createState() => _AlbumScreenContentState();
 }
 
+var _listener;
 class _AlbumScreenContentState extends State<AlbumScreenContent> {
+  @override
+  void dispose() {
+    super.dispose();
+    if (_listener != null) {
+      _listener.cancel();
+      _listener = null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final downloadStub = DownloadStub.fromItem(
@@ -45,6 +56,12 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
         widget.displayChildren.removeWhere((element) => element.id == item.id);
       });
     }
+    if (_listener != null) {
+      _listener.cancel();
+    }
+    _listener = musicScreenRefreshStream.stream.listen((_) {
+      setState(() {});
+    });
 
     List<List<BaseItemDto>> childrenPerDisc = [];
     // if not in playlist, try splitting up tracks by disc numbers
