@@ -820,5 +820,247 @@
         "type": "int"
       }
     }
+  },
+  "togglePlaybackButtonTooltip": "Commuta la reproducció",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "playbackOrderShuffledButtonTooltip": "Barrejant pistes. Clica per reproduir en ordre.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedButtonLabel": "Reproduint a x{speed} velocitat",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "tracksFormerNextUp": "Cançons afegides des de Pròxims",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "bufferDurationSubtitle": "La durada màxima que s'ha d'amortitzar, en segons. Requereix reiniciar.",
+  "@bufferDurationSubtitle": {},
+  "skipToNextTrackButtonTooltip": "Salta a la següent cançó",
+  "@skipToNextTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the next track"
+  },
+  "playingFrom": "Reproduint des de",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "confirmShuffleNext": "Barrejarà el següent",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "playbackSpeedFeatureText": "x{speed} velocitat",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "shuffleToNextUp": "Barreja a Pròxims",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "confirmPlayNext": "{type, select, track{Cançó} album{Àlbum} artist{Artista} playlist{Llista de Reproducció} genre{Gènere} other{Element}} es reproduirà a continuació",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "shuffleNext": "Barreja els Pròxims",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "playbackOrderLinearButtonTooltip": "Reproduint en ordre. Clica per barrejar.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "addToNextUp": "Afegeix a Pròxims",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "confirmAddToNextUp": "Afegit {type, select, track{Cançó} album{Àlbum} artist{Artista} playlist{Llista de Reproducció} genre{Gènere} other{Element}} a Pròxims",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "placeholderSource": "En algun lloc",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "yourLikes": "Els teus m'agrada",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "playingFromType": "Reproduint des de {source, select, album{l'Àlbum} playlist{la Llista de reproducció} trackMix{la Barreja de pistes} artistMix{la Barreja d'artistes} albumMix{la Barreja d'àlbums} genreMix{la Barreja de gèneres} favorites{els Preferits} allTracks{Totes les pistes} filteredList{les Pistes} genre{el Gènere} artist{l'Artista} track{la Pista} nextUpAlbum{l'Àlbum a Pròxims} nextUpPlaylist{la Llista de reproducció a Pròxims} nextUpArtist{l'Artista a Pròxims} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "bufferDuration": "Durada de la memòria intermèdia",
+  "@bufferDuration": {},
+  "previousTracks": "Cançons anteriors",
+  "@previousTracks": {
+    "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+  },
+  "nextUp": "Pròxims",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "clearNextUp": "Esborrar Pròximes",
+  "@clearNextUp": {
+    "description": "Label for the action that deletes all tracks added to Next Up"
+  },
+  "shuffleToQueue": "Barreja a la cua",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "confirmShuffleToNextUp": "Barrejat a Pròxims",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "playbackHistory": "Historial de Reproducció",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "shareOfflineListens": "Compartir reproduccions fora de línia",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "shuffleAllQueueSource": "Barreja tot",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "Reproduint en ordre",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackSpeedIncreaseLabel": "Incrementar velocitat de reproducció",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeOneButtonLabel": "Repetint aquesta pista",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeAllButtonLabel": "Repetint tot",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "Restaurar la reproducció actual",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "Restaurar",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "Guardat {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "Reproduint: {track}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "track": {
+        "type": "String"
+      }
+    }
+  },
+  "skipToPreviousTrackButtonTooltip": "Salta cap al principi o cap a la cançó prèvia",
+  "@skipToPreviousTrackButtonTooltip": {
+    "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+  },
+  "confirmShuffleToQueue": "Barrejat a la cua",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "mix": "{mixSource} - Barreja",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "savedQueue": "Cua Guardada",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "loopModeNoneButtonLabel": "No es repeteix",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "playNext": "Reproduir següent",
+  "@playNext": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "playbackOrderShuffledButtonLabel": "Barrejant pistes",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Pista} other{{count} Pistes}}, {remaining} per Reproduir",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "language": "Llenguatge",
+  "@language": {},
+  "playbackSpeedDecreaseLabel": "Reduir velocitat de reproducció",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "bufferDisableSizeConstraintsTitle": "No limitar la mida de la memòria intermèdia",
+  "@bufferDisableSizeConstraintsTitle": {},
+  "bufferDisableSizeConstraintsSubtitle": "Desactiva les restriccions de mida de la memòria intermèdia ('Mida del cursor'). La memòria intermèdia sempre es carregarà a la durada configurada ('Duració de la memòria intermèdia'), fins i tot per a fitxers molt grans. Pot causar fallades. Requereix reiniciar.",
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "bufferSizeTitle": "Mida de la meòria intermèdia",
+  "@bufferSizeTitle": {},
+  "bufferSizeSubtitle": "Mida màxima de la memòria intermèdia en MB. Requereix reiniciar",
+  "@bufferSizeSubtitle": {},
+  "confirmAddToQueue": "Afegit {type, select, track{Cançó} album{Àlbum} artist{Artista} playlist{Llista de Reproducció} genre{Gènere} other{Element}} a la cua",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
   }
 }
