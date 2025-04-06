@@ -645,6 +645,20 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setCurrentVolume(double newCurrentVolume) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.currentVolume = newCurrentVolume;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlayOnStaleDelay(int newPlayOnStaleDelay) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.playOnStaleDelay = newPlayOnStaleDelay;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -864,6 +878,10 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
       finampSettingsProvider
           .select((value) => value.requireValue.itemSwipeActionRightToLeft);
+  ProviderListenable<double> get currentVolume => finampSettingsProvider
+      .select((value) => value.requireValue.currentVolume);
+  ProviderListenable<int> get playOnStaleDelay => finampSettingsProvider
+      .select((value) => value.requireValue.playOnStaleDelay);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

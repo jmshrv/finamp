@@ -70,7 +70,8 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setItemSwipeAction(DismissDirection direction, ItemSwipeActions newItemSwipeAction){
+  static void setItemSwipeAction(
+      DismissDirection direction, ItemSwipeActions newItemSwipeAction) {
     FinampSettings finampSettingsTemp = finampSettings;
     if (direction == DismissDirection.startToEnd) {
       finampSettingsTemp.itemSwipeActionLeftToRight = newItemSwipeAction;
@@ -230,9 +231,13 @@ class FinampSettingsHelper {
         seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
     FinampSetters.setAutoloadLastQueueOnStartup(
         DefaultSettings.autoLoadLastQueueOnStartup);
+  }
+
+  static void resetPlaybackReportingSettings() {
     FinampSetters.setPeriodicPlaybackSessionUpdateFrequencySeconds(DefaultSettings
         .periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
     FinampSetters.setReportQueueToServer(DefaultSettings.reportQueueToServer);
+    FinampSetters.setPlayOnStaleDelay(DefaultSettings.playOnStaleDelay);
     FinampSetters.setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
     FinampSetters.setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
   }
@@ -254,8 +259,10 @@ class FinampSettingsHelper {
   static void resetInteractionsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight;
-    finampSettingsTemp.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft;
+    finampSettingsTemp.itemSwipeActionLeftToRight =
+        DefaultSettings.itemSwipeActionLeftToRight;
+    finampSettingsTemp.itemSwipeActionRightToLeft =
+        DefaultSettings.itemSwipeActionRightToLeft;
     finampSettingsTemp.startInstantMixForIndividualTracks =
         DefaultSettings.startInstantMixForIndividualTracks;
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);
@@ -265,6 +272,18 @@ class FinampSettingsHelper {
     FinampSetters.setKeepScreenOnWhilePluggedIn(
         DefaultSettings.keepScreenOnWhilePluggedIn);
 
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setCurrentVolume(double newVolume) {
+    FinampSettings finampSettingsTemp = finampSettings;
+    if (newVolume < 0) {
+      newVolume = 0.0;
+    } else if (newVolume > 1) {
+      newVolume = 1.0;
+    }
+    finampSettingsTemp.currentVolume = newVolume;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

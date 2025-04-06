@@ -448,6 +448,8 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
+  "playbackReporting": "Playback reporting & Play On",
+  "@playbackReporting": {},
   "interactions": "Interactions",
   "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
@@ -958,7 +960,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{a Remote Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1002,6 +1004,16 @@
     "placeholders": {
       "speed": {
         "type": "double"
+      }
+    }
+  },
+  "currentVolumeFeatureText": "{volume}% volume",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
       }
     }
   },
@@ -1101,6 +1113,14 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
+  "playOnStaleDelay": "PlayOn session as active delay",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
   "topTracks": "Top Tracks",
   "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
@@ -1167,6 +1187,10 @@
   "volumeNormalizationSettingsTitle": "Volume Normalization",
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
+  },
+  "playbackReportingSettingsTitle": "Playback reporting & Play On",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
   },
   "volumeNormalizationSwitchTitle": "Enable Volume Normalization",
   "@volumeNormalizationSwitchTitle": {
@@ -2011,18 +2035,47 @@
   },
   "audioFadeOutDurationSettingTitle": "Audio fade-out duration",
   "@audioFadeOutDurationSettingTitle": {
-      "description": "Title for the audio fade-out duration setting."
+    "description": "Title for the audio fade-out duration setting."
   },
   "audioFadeOutDurationSettingSubtitle": "The duration of the audio fade out in milliseconds.",
   "@audioFadeOutDurationSettingSubtitle": {
-      "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+    "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
   },
   "audioFadeInDurationSettingTitle": "Audio fade-in duration",
-  "@audioFadeOutDurationSettingTitle": {
-      "description": "Title for the audio fade-in duration setting."
+  "@audioFadeInDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
   },
   "audioFadeInDurationSettingSubtitle": "The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.",
-  "@audioFadeOutDurationSettingSubtitle": {
+  "@audioFadeInDurationSettingSubtitle": {
       "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "outputMenuButtonTitle": "Output",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuTitle": "Change Output",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuVolumeSectionTitle": "Volume",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "Available Devices",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Connect to a device",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "deviceType": "{type, select, speaker{Device Speaker} tv{TV} bluetooth{Bluetooth} other{Unknown}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
   }
 }

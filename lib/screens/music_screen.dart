@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:finamp/services/playon_handler.dart';
 import 'package:finamp/services/auto_offline.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/gestures.dart';
@@ -27,6 +28,7 @@ final _musicScreenLogger = Logger("MusicScreen");
 
 void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
+  final playonHandler = GetIt.instance<PlayonHandler>();
   ref.listenManual(autoOfflineProvider, (_, __) {});
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
@@ -37,6 +39,10 @@ void postLaunchHook(WidgetRef ref) async {
     });
     FinampSetters.setHasDownloadedPlaylistInfo(true);
   }
+
+  // Initialize playon handler
+  unawaited(playonHandler.initialize());
+  playonHandler.ref = ref;
 }
 
 class MusicScreen extends ConsumerStatefulWidget {
