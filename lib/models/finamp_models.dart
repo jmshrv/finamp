@@ -222,7 +222,8 @@ class FinampSettings {
       this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
       this.shouldRedownloadTranscodes =
           DefaultSettings.shouldRedownloadTranscodes,
-      this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
+      this.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight,
+      this.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft,
       this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
       this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
       this.allowSplitScreen = DefaultSettings.allowSplitScreen,
@@ -2667,6 +2668,8 @@ enum AutoOfflineOption {
       case AutoOfflineOption.disconnected:
         // return AppLocalizations.of(context)!.keepScreenOnWhilePlaying;
         return AppLocalizations.of(context)!.autoOfflineOptionDisconnected;
+    }
+  }
 }
     
 @HiveType(typeId: 92)
@@ -2684,7 +2687,10 @@ enum ItemSwipeActions {
   @override
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
-  
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
   String _humanReadableName(ItemSwipeActions itemSwipeAction) {
     switch (itemSwipeAction) {
       case ItemSwipeActions.nothing:

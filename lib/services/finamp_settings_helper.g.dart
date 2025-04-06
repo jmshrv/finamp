@@ -599,24 +599,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setItemSwipeActionLeftToRight(
-      ItemSwipeActions newItemSwipeActionLeftToRight) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.itemSwipeActionLeftToRight =
-        newItemSwipeActionLeftToRight;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setItemSwipeActionRightToLeft(
-      ItemSwipeActions newItemSwipeActionRightToLeft) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.itemSwipeActionRightToLeft =
-        newItemSwipeActionRightToLeft;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setAudioFadeOutDuration(Duration newAudioFadeOutDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.audioFadeOutDuration = newAudioFadeOutDuration;
@@ -641,6 +623,24 @@ extension FinampSetters on FinampSettingsHelper {
   static void setAutoOfflineListenerActive(bool newAutoOfflineListenerActive) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.autoOfflineListenerActive = newAutoOfflineListenerActive;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setItemSwipeActionLeftToRight(
+      ItemSwipeActions newItemSwipeActionLeftToRight) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.itemSwipeActionLeftToRight =
+        newItemSwipeActionLeftToRight;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setItemSwipeActionRightToLeft(
+      ItemSwipeActions newItemSwipeActionRightToLeft) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.itemSwipeActionRightToLeft =
+        newItemSwipeActionRightToLeft;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -848,12 +848,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<String?> get lastUsedDownloadLocationId =>
       finampSettingsProvider
           .select((value) => value.requireValue.lastUsedDownloadLocationId);
-  ProviderListenable<ItemSwipeActions> get itemSwipeActionLeftToRight =>
-      finampSettingsProvider
-          .select((value) => value.requireValue.itemSwipeActionLeftToRight);
-  ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
-      finampSettingsProvider
-          .select((value) => value.requireValue.itemSwipeActionRightToLeft);
   ProviderListenable<Duration> get audioFadeOutDuration =>
       finampSettingsProvider
           .select((value) => value.requireValue.audioFadeOutDuration);
@@ -864,6 +858,12 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get autoOfflineListenerActive =>
       finampSettingsProvider
           .select((value) => value.requireValue.autoOfflineListenerActive);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionLeftToRight =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.itemSwipeActionLeftToRight);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.itemSwipeActionRightToLeft);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);
