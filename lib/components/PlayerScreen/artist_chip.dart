@@ -1,3 +1,4 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -37,18 +38,18 @@ class ArtistChips extends StatelessWidget {
     this.backgroundColor,
     this.color,
     this.baseItem,
-    this.useAlbumArtist = false,
+    this.artistType = ArtistType.artist,
   });
 
   final BaseItemDto? baseItem;
   final Color? backgroundColor;
   final Color? color;
-  final bool useAlbumArtist;
+  final ArtistType artistType;
 
   @override
   Widget build(BuildContext context) {
     final artists =
-        (useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
+        ((artistType == ArtistType.albumartist) ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
     final filteredArtists = {
       for (var artist in artists) artist.id: artist
     }.values.toList();

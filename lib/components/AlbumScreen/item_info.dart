@@ -1,4 +1,5 @@
 import 'package:finamp/components/PlayerScreen/artist_chip.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class ItemInfo extends StatelessWidget {
         if (item.type != "Playlist")
           ArtistChips(
             baseItem: item,
-            useAlbumArtist: true,
+            artistType: ArtistType.albumartist,
           ),
         IconAndText(
             iconData: Icons.music_note,
