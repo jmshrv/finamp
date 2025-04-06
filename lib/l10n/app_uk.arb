@@ -1980,5 +1980,13 @@
   "audioFadeOutDurationSettingSubtitle": "Тривалість затухання звуку в мілісекундах.",
   "@audioFadeOutDurationSettingSubtitle": {
     "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
-  }
+  },
+  "swipeRightToLeftAction": "Проведіть пальцем вліво",
+  "@swipeRightToLeftAction": {},
+  "swipeLeftToRightAction": "Проведіть пальцем до дії вправо",
+  "@swipeLeftToRightAction": {},
+  "swipeLeftToRightActionSubtitle": "Дія запускається під час гортання треку в списку зліва направо.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeRightToLeftActionSubtitle": "Дія запускається під час гортання треку в списку справа наліво.",
+  "@swipeRightToLeftActionSubtitle": {}
 }
