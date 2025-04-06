@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,10 @@ class ArtistScreenContent extends StatefulWidget {
 class _ArtistScreenContentState extends State<ArtistScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsService = GetIt.instance<DownloadsService>();
+  bool _showTopTracks = true;
+  bool _showAlbums = true;
+  bool _showAppearsOnAlbums = true;
+
 
   StreamSubscription<void>? _refreshStream;
 
@@ -55,11 +60,14 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     final Future<List<List<BaseItemDto>?>> futures;
     final Future<List<BaseItemDto>?> allTracks;
     final bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
+
+    // Get Items
     if (isOffline) {
+      // In Offline Mode
       futures = Future.wait([
         Future.value(
             <BaseItemDto>[]), // Play count tracking is not implemented offline
-        // Get Albums where artist is Album Artist sorted by Premiere Date
+        // Get Albums for Genre or where artist is Album Artist sorted by Premiere Date
         Future.sync(() async {
           final List<DownloadStub> artistAlbums =
               await _downloadsService.getAllCollections(
@@ -82,22 +90,46 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
         })
       ]);
+      // Get All Tracks for Track Count and Playback
       allTracks = Future.sync(() async {
-        final List<DownloadStub> artistAlbums =
+        // First fetch every album of the album artist or genre
+        final List<DownloadStub> albumArtistAlbums =
             await _downloadsService.getAllCollections(
                 baseTypeFilter: BaseItemDtoType.album,
                 relatedTo: widget.parent,
                 artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.albumartist);
-        artistAlbums.sort((a, b) => (a.name).compareTo(b.name));
-
+        albumArtistAlbums.sort((a, b) => (a.name).compareTo(b.name));
+        // Then add the tracks of every album
         final List<BaseItemDto> sortedTracks = [];
-        for (var album in artistAlbums) {
+        for (var album in albumArtistAlbums) {
           sortedTracks.addAll(await _downloadsService
               .getCollectionTracks(album.baseItem!, playable: true));
         }
-        return sortedTracks;
+        // Genre is already ready
+        if (widget.parent.type == "MusicGenre") return sortedTracks;
+        // Fetch every album where the artist is a performing artist
+        final List<DownloadStub> performingArtistAlbums =
+            await _downloadsService.getAllCollections(
+                baseTypeFilter: BaseItemDtoType.album,
+                relatedTo: widget.parent,
+                artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist);
+        performingArtistAlbums.sort((a, b) => (a.name).compareTo(b.name));
+        // Filter out albums already fetched in the first query
+        final List<DownloadStub> filteredPerformingArtistAlbums = performingArtistAlbums.where((performingAlbum) {
+          return !albumArtistAlbums.any((albumArtistAlbum) => albumArtistAlbum.id == performingAlbum.id);
+        }).toList();
+        // Again add the tracks of every album
+        final List<BaseItemDto> sortedTracksIncludingAppearsOn = [];
+        for (var album in filteredPerformingArtistAlbums) {
+          sortedTracks.addAll(await _downloadsService
+              .getCollectionTracks(album.baseItem!, playable: true));
+        }
+        // Combine the results and return
+        final combinedTracks = [...sortedTracks, ...sortedTracksIncludingAppearsOn];
+        return combinedTracks;
       });
     } else {
+      // In Online Mode
       futures = Future.wait([
         // Get Tracks sorted by Play Count
         if (FinampSettingsHelper.finampSettings.showArtistsTopTracks)
@@ -106,6 +138,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             filters: "Artist=${widget.parent.name}",
             sortBy: "PlayCount,SortName",
             sortOrder: "Descending",
+            limit: 5,
             includeItemTypes: "Audio",
           )
         else
@@ -127,12 +160,37 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist
         ),
       ]);
-      allTracks = jellyfinApiHelper.getItems(
-        parentItem: widget.parent,
-        filters: "Artist=${widget.parent.name}",
-        sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-        includeItemTypes: "Audio",
-      );
+      // Get All Tracks for Track Count and Playback
+      allTracks = Future.sync(() async {
+        // Fetch every genre or album artist track
+        final allAlbumArtistTracksResponse = await jellyfinApiHelper.getItems(
+          parentItem: widget.parent,
+          filters: "Artist=${widget.parent.name}",
+          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+          includeItemTypes: "Audio",
+          artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.albumartist,
+        );
+        // Genre is already ready
+        if (widget.parent.type == "MusicGenre") return allAlbumArtistTracksResponse;
+        // Now we fetch every performing artist track
+        final allPerformingTracksResponse = await jellyfinApiHelper.getItems(
+          parentItem: widget.parent,
+          filters: "Artist=${widget.parent.name}",
+          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+          includeItemTypes: "Audio",
+          artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist,
+        );
+        // We exclude albumartist tracks from performance artist tracks
+        final allAlbumArtistTracks = allAlbumArtistTracksResponse ?? [];
+        final allPerformingTracks = allPerformingTracksResponse ?? [];
+        final albumArtistTrackIds = allAlbumArtistTracks.map((item) => item.id).toSet();
+        final filteredPerformingTracks = allPerformingTracks
+            .where((performingTrack) => !albumArtistTrackIds.contains(performingTrack.id))
+            .toList();
+        // combine and return
+        final combinedTracks = [...allAlbumArtistTracks, ...filteredPerformingTracks];
+        return combinedTracks;
+      });
     }
 
     return FutureBuilder(
@@ -178,63 +236,136 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               ],
             ),
             if (!isOffline &&
-                FinampSettingsHelper.finampSettings.showArtistsTopTracks)
-              SliverPadding(
-                  padding: EdgeInsets.fromLTRB(
+              FinampSettingsHelper.finampSettings.showArtistsTopTracks)
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(
                       6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-                  sliver: SliverToBoxAdapter(
-                      child: Text(
-                    AppLocalizations.of(context)!.topTracks,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ))),
+              sliver: SliverToBoxAdapter(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showTopTracks = !_showTopTracks;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Transform.rotate(
+                          angle: _showTopTracks ? 0 : -math.pi / 2,
+                          child: const Icon(Icons.arrow_drop_down, size: 24),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          AppLocalizations.of(context)!.topTracks,
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             if (!isOffline &&
-                FinampSettingsHelper.finampSettings.showArtistsTopTracks)
-              TracksSliverList(
-                childrenForList: topTracks,
-                childrenForQueue: Future.value(tracks),
-                showPlayCount: true,
-                isOnArtistScreen: true,
-                parent: widget.parent,
+                FinampSettingsHelper.finampSettings.showArtistsTopTracks &&
+                _showTopTracks)
+            TracksSliverList(
+              childrenForList: topTracks,
+              childrenForQueue: Future.value(tracks),
+              showPlayCount: true,
+              isOnArtistScreen: true,
+              parent: widget.parent,
+            ),
+
+            if (albums.isNotEmpty)
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+              sliver: SliverToBoxAdapter(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showAlbums = !_showAlbums;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Transform.rotate(
+                          angle: _showAlbums ? 0 : -math.pi / 2,
+                          child: const Icon(Icons.arrow_drop_down, size: 24),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          AppLocalizations.of(context)!.albums,
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            if (!albums.isEmpty)
-              SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
-                  sliver: SliverToBoxAdapter(
-                      child: Text(
-                    AppLocalizations.of(context)!.albums,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ))),
-            if (!albums.isEmpty)
-              AlbumsSliverList(
-                childrenForList: albums,
-                parent: widget.parent,
+            ),
+            if (_showAlbums && albums.isNotEmpty)
+            AlbumsSliverList(
+              childrenForList: albums,
+              parent: widget.parent,
+            ),
+            if (appearsOnAlbums.isNotEmpty)
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+              sliver: SliverToBoxAdapter(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showAppearsOnAlbums = !_showAppearsOnAlbums;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Transform.rotate(
+                          angle: _showAppearsOnAlbums ? 0 : -math.pi / 2,
+                          child: const Icon(Icons.arrow_drop_down, size: 24),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          AppLocalizations.of(context)!.appearsOnAlbums,
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            if (!appearsOnAlbums.isEmpty)
-              SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
-                  sliver: SliverToBoxAdapter(
-                      child: Text(
-                    AppLocalizations.of(context)!.appearsOnAlbums,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ))),
-            if (!appearsOnAlbums.isEmpty)
-              AlbumsSliverList(
-                childrenForList: appearsOnAlbums,
-                parent: widget.parent,
-              ),
+            ),
+            if (_showAppearsOnAlbums && appearsOnAlbums.isNotEmpty)
+            AlbumsSliverList(
+              childrenForList: appearsOnAlbums,
+              parent: widget.parent,
+            ),
             if (albums.isEmpty && appearsOnAlbums.isEmpty)
-              SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
-                  sliver: SliverToBoxAdapter(
-                      child: Text(
-                    AppLocalizations.of(context)!.emptyFilteredListTitle,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ))),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(6, 12, 6, 0), // Keeping horizontal and vertical padding the same
+              sliver: SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12), // Updated inner padding
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.emptyFilteredListTitle,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ]);
-        });
+        }
+    );
   }
 }

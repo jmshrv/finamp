@@ -2619,7 +2619,6 @@ enum ReleaseDateFormat {
 enum ArtistType {
   @HiveField(0)
   albumartist,
-
   @HiveField(1)
   artist;
 }

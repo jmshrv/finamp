@@ -125,6 +125,10 @@ abstract class JellyfinApi extends ChopperService {
     @Query("ArtistIds") String? artistIds,
 
     /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified contributing artist id.
+    @Query("contributingArtistIds") String? contributingArtistIds,
+
+    /// Optional. If specified, results will be filtered to include only those
     /// containing the specified album id.
     @Query("AlbumIds") String? albumIds,
 
