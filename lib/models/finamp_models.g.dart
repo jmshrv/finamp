@@ -203,9 +203,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       showCoversOnAlbumScreen: fields[77] == null ? false : fields[77] as bool,
       hasDownloadedPlaylistInfo:
           fields[74] == null ? false : fields[74] as bool,
-      transcodingSegmentContainer: fields[75] == null
-          ? FinampSegmentContainer.fragmentedMp4
-          : fields[75] as FinampSegmentContainer,
+      transcodingStreamingFormat: fields[75] == null
+          ? FinampTranscodingStreamingFormat.aacFragmentedMp4
+          : fields[75] as FinampTranscodingStreamingFormat,
       downloadSizeWarningCutoff:
           fields[80] == null ? 150 : (fields[80] as num).toInt(),
       allowDeleteFromServer: fields[81] == null ? false : fields[81] as bool,
@@ -373,7 +373,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(74)
       ..write(obj.hasDownloadedPlaylistInfo)
       ..writeByte(75)
-      ..write(obj.transcodingSegmentContainer)
+      ..write(obj.transcodingStreamingFormat)
       ..writeByte(76)
       ..write(obj.featureChipsConfiguration)
       ..writeByte(77)
@@ -1941,30 +1941,46 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
           typeId == other.typeId;
 }
 
-class FinampSegmentContainerAdapter
-    extends TypeAdapter<FinampSegmentContainer> {
+class FinampTranscodingStreamingFormatAdapter
+    extends TypeAdapter<FinampTranscodingStreamingFormat> {
   @override
   final int typeId = 73;
 
   @override
-  FinampSegmentContainer read(BinaryReader reader) {
+  FinampTranscodingStreamingFormat read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return FinampSegmentContainer.mpegTS;
+        return FinampTranscodingStreamingFormat.aacMpegTS;
       case 1:
-        return FinampSegmentContainer.fragmentedMp4;
+        return FinampTranscodingStreamingFormat.aacFragmentedMp4;
+      case 2:
+        return FinampTranscodingStreamingFormat.opusFragmentedMp4;
+      case 3:
+        return FinampTranscodingStreamingFormat.flacFragmentedMp4;
+      case 4:
+        return FinampTranscodingStreamingFormat.vorbisMpegTS;
+      case 5:
+        return FinampTranscodingStreamingFormat.vorbisFragmentedMp4;
       default:
-        return FinampSegmentContainer.mpegTS;
+        return FinampTranscodingStreamingFormat.aacFragmentedMp4;
     }
   }
 
   @override
-  void write(BinaryWriter writer, FinampSegmentContainer obj) {
+  void write(BinaryWriter writer, FinampTranscodingStreamingFormat obj) {
     switch (obj) {
-      case FinampSegmentContainer.mpegTS:
+      case FinampTranscodingStreamingFormat.aacMpegTS:
         writer.writeByte(0);
-      case FinampSegmentContainer.fragmentedMp4:
+      case FinampTranscodingStreamingFormat.aacFragmentedMp4:
         writer.writeByte(1);
+      case FinampTranscodingStreamingFormat.opusFragmentedMp4:
+        writer.writeByte(2);
+      case FinampTranscodingStreamingFormat.flacFragmentedMp4:
+        writer.writeByte(3);
+      case FinampTranscodingStreamingFormat.vorbisMpegTS:
+        writer.writeByte(4);
+      case FinampTranscodingStreamingFormat.vorbisFragmentedMp4:
+        writer.writeByte(5);
     }
   }
 
@@ -1974,7 +1990,7 @@ class FinampSegmentContainerAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FinampSegmentContainerAdapter &&
+      other is FinampTranscodingStreamingFormatAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

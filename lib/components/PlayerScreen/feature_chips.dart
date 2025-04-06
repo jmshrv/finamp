@@ -50,7 +50,8 @@ class FeatureState {
       !isDownloaded &&
       (currentTrack?.item.extras?["shouldTranscode"] as bool? ?? false);
   String get container =>
-      isTranscoding ? "aac" : metadata?.mediaSourceInfo.container ?? "";
+      isTranscoding ? settings.transcodingStreamingFormat.codec
+          : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
   MediaStream? get audioStream => isTranscoding
       ? null
@@ -61,7 +62,7 @@ class FeatureState {
   // should have a valid mediaStream, so use that audio-only bitrate instead of the
   // whole-file bitrate.
   int? get bitrate => isTranscoding
-      ? settings.transcodeBitrate
+      ? (settings.transcodingStreamingFormat.codec == 'flac' ? null : settings.transcodeBitrate)
       : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;
@@ -145,7 +146,7 @@ class FeatureState {
               FeatureProperties(
                 type: feature,
                 text:
-                    "${configuration.features.contains(FinampFeatureChipType.codec) ? container.toUpperCase() : ""}${configuration.features.contains(FinampFeatureChipType.codec) && configuration.features.contains(FinampFeatureChipType.bitRate) ? " @ " : ""}${configuration.features.contains(FinampFeatureChipType.bitRate) && bitrate != null ? AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate! ~/ 1000) : ""}",
+                    "${configuration.features.contains(FinampFeatureChipType.codec) ? container.toUpperCase() : ""}${configuration.features.contains(FinampFeatureChipType.codec) && configuration.features.contains(FinampFeatureChipType.bitRate) && bitrate != null ? " @ " : ""}${configuration.features.contains(FinampFeatureChipType.bitRate) && bitrate != null ? AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate! ~/ 1000) : ""}",
               ),
             );
           }
