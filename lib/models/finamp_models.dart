@@ -2443,7 +2443,11 @@ enum FinampSegmentContainer {
   @HiveField(2)
   opusFragmentedMp4("opus", "mp4"),
   @HiveField(3)
-  flacFragmentedMp4("flac", "mp4");
+  flacFragmentedMp4("flac", "mp4"),
+  @HiveField(4)
+  vorbisMpegTS("vorbis", "ts"),
+  @HiveField(5)
+  vorbisFragmentedMp4("vorbis", "mp4");
 
   const FinampSegmentContainer(this.codec, this.container);
 

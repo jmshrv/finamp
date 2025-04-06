@@ -1949,6 +1949,10 @@ class FinampTranscodingStreamingFormatAdapter
         return FinampTranscodingStreamingFormat.opusFragmentedMp4;
       case 3:
         return FinampTranscodingStreamingFormat.flacFragmentedMp4;
+      case 4:
+        return FinampTranscodingStreamingFormat.vorbisMpegTS;
+      case 5:
+        return FinampTranscodingStreamingFormat.vorbisFragmentedMp4;
       default:
         return FinampTranscodingStreamingFormat.aacFragmentedMp4;
     }
@@ -1965,6 +1969,10 @@ class FinampTranscodingStreamingFormatAdapter
         writer.writeByte(2);
       case FinampTranscodingStreamingFormat.flacFragmentedMp4:
         writer.writeByte(3);
+      case FinampTranscodingStreamingFormat.vorbisMpegTS:
+        writer.writeByte(4);
+      case FinampTranscodingStreamingFormat.vorbisFragmentedMp4:
+        writer.writeByte(5);
     }
   }
 
