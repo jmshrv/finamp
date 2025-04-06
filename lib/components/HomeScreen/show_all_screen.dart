@@ -82,6 +82,16 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
     super.didChangeDependencies();
     sectionInfo =
         ModalRoute.of(context)!.settings.arguments as HomeScreenSectionInfo;
+    final prefetchedItems = ref
+        .read(loadHomeSectionItemsProvider(
+          sectionInfo: sectionInfo,
+          startIndex: 0,
+          limit: homeScreenSectionItemLimit,
+        ))
+        .value;
+    if (prefetchedItems != null) {
+      _pagingController.appendPage(prefetchedItems, prefetchedItems.length);
+    }
   }
 
   // This function just lets us easily set stuff to the getItems call we want.
@@ -96,11 +106,14 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
     int localRefreshCount = refreshCount;
     try {
       final sortOrder = SortOrder.ascending.toString();
-      final newItems = await loadHomeSectionItems(
+      final newItems = await ref.watch(loadHomeSectionItemsProvider(
         sectionInfo: sectionInfo,
         startIndex: pageKey,
         limit: _pageSize,
-      );
+      ).future);
+      if (newItems == null) {
+        return;
+      }
       // Skip appending page if a refresh triggered while processing
       if (localRefreshCount == refreshCount && mounted) {
         if (newItems!.length < _pageSize) {
@@ -150,9 +163,9 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
 
   void _refresh() {
     refreshCount++;
-    _requestedPageKey = -1;
+    _requestedPageKey = 0;
     // This makes refreshing actually work in error cases
-    _pagingController.value = const PagingState(nextPageKey: 0, itemList: []);
+    _pagingController.value = PagingState(nextPageKey: 0, itemList: []);
     _pagingController.refresh();
   }
 

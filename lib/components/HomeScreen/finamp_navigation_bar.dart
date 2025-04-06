@@ -39,7 +39,7 @@ class FinampNavigationBar extends ConsumerWidget {
           labelTextStyle: WidgetStateProperty.fromMap({
             WidgetState.selected: TextStyle(
               color: Theme.of(context).colorScheme.primary,
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             WidgetState.any: TextStyle(
@@ -48,7 +48,7 @@ class FinampNavigationBar extends ConsumerWidget {
                   .bodyMedium!
                   .color!
                   .withOpacity(0.75),
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: FontWeight.w400,
             ),
           }),
