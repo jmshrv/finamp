@@ -1,6 +1,8 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/settings_screen.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,47 @@ class FinampHomeScreenHeader extends ConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    final FinampSettings? settings = ref.watch(finampSettingsProvider).value;
+
+    Widget connectionInfo;
+    if (settings?.isOffline ?? false) {
+      connectionInfo = Text.rich(
+        TextSpan(
+          text: 'Offline Mode',
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    } else {
+      connectionInfo = FutureBuilder<PublicSystemInfoResult?>(
+          future: jellyfinApiHelper.loadServerPublicInfo(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Text("Connected");
+            }
+            final PublicSystemInfoResult serverInfo = snapshot.data!;
+            return Text.rich(
+              TextSpan(
+                text: 'Connected to* ',
+                children: [
+                  TextSpan(
+                    text: '${serverInfo.serverName}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            );
+          });
+    }
+    
     return FutureBuilder(
         future: PackageInfo.fromPlatform(),
         builder: (context, snapshot) {
@@ -61,33 +104,7 @@ class FinampHomeScreenHeader extends ConsumerWidget
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),
-                            FutureBuilder(
-                                future:
-                                    jellyfinApiHelper.loadServerPublicInfo(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return Text("Connected");
-                                  }
-                                  final PublicSystemInfoResult serverInfo =
-                                      snapshot.data!;
-                                  return Text.rich(
-                                    TextSpan(
-                                      text: 'Connected to* ',
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                            '${serverInfo.serverName}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  );
-                                }
-                            ),
+                            connectionInfo,
                           ],
                         ),
                       ),

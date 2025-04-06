@@ -1,14 +1,14 @@
-import 'package:finamp/components/Buttons/cta_small.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/HomeScreen/auto_grid_item.dart';
-import 'package:finamp/components/HomeScreen/finamp_home_screen_header.dart';
 import 'package:finamp/components/HomeScreen/show_all_button.dart';
 import 'package:finamp/components/HomeScreen/show_all_screen.dart';
-import 'package:finamp/components/MusicScreen/album_item.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +49,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
     return SafeArea(
       bottom: false,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 120.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 200.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -212,7 +212,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
               separatorBuilder: (context, index) => const SizedBox(width: 8),
             ),
           );
-        } else if (snapshot.hasData) {
+        } else if (snapshot.hasData && (snapshot.data?.length ?? 0) > 0) {
           return SizedBox(
             height: 175,
             child: ListView.separated(
@@ -243,6 +243,11 @@ Future<List<BaseItemDto>?> loadHomeSectionItems({
   final settings = FinampSettingsHelper.finampSettings;
 
   final Future<List<BaseItemDto>?> newItemsFuture;
+
+  if (settings.isOffline) {
+    newItemsFuture = loadHomeSectionItemsOffline(sectionInfo: sectionInfo, startIndex: startIndex, limit: limit);
+    return newItemsFuture;
+  }
 
   switch (sectionInfo.type) {
     case HomeScreenSectionType.listenAgain:
@@ -300,4 +305,63 @@ Future<List<BaseItemDto>?> loadHomeSectionItems({
   }
 
   return newItemsFuture;
+}
+
+Future<List<BaseItemDto>?> loadHomeSectionItemsOffline({
+  required HomeScreenSectionInfo sectionInfo,
+  int startIndex = 0,
+  int limit = 10,
+}) async {
+  final FinampSettings settings = FinampSettingsHelper.finampSettings;
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+  List<DownloadStub> offlineItems;
+  List<BaseItemDto> items;
+
+  switch (sectionInfo.type) {
+    case HomeScreenSectionType.listenAgain:
+      offlineItems = await downloadsService.getAllCollections(
+        baseTypeFilter: BaseItemDtoType.album, //FIXME support allowing multiple types
+        fullyDownloaded: settings.onlyShowFullyDownloaded,
+        viewFilter: finampUserHelper.currentUser?.currentViewId,
+        childViewFilter: null,
+        nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+        onlyFavorites: settings.onlyShowFavorites && settings.trackOfflineFavorites,
+      );
+
+      items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
+      items = sortItems(items, SortBy.datePlayed, SortOrder.descending);
+      break;
+
+    case HomeScreenSectionType.newlyAdded:
+      offlineItems = await downloadsService.getAllCollections(
+        baseTypeFilter: BaseItemDtoType.album, //FIXME support allowing multiple types
+        fullyDownloaded: settings.onlyShowFullyDownloaded,
+        viewFilter: finampUserHelper.currentUser?.currentViewId,
+        childViewFilter: null,
+        nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+        onlyFavorites: settings.onlyShowFavorites && settings.trackOfflineFavorites,
+      );
+      items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
+      items = sortItems(items, SortBy.dateCreated, SortOrder.descending);
+      break;
+    case HomeScreenSectionType.favoriteArtists:
+      offlineItems = await downloadsService.getAllCollections(
+        baseTypeFilter: BaseItemDtoType.artist,
+        fullyDownloaded: settings.onlyShowFullyDownloaded,
+        viewFilter: finampUserHelper.currentUser?.currentViewId,
+        childViewFilter: null,
+        nullableViewFilters: false,
+        onlyFavorites: settings.onlyShowFavorites && settings.trackOfflineFavorites,
+      );
+      items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
+      items = sortItems(items, SortBy.datePlayed, SortOrder.descending);
+      break;
+    default:
+      offlineItems = <DownloadStub>[]; // No items for other sections
+      items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
+  }
+
+  return items;
 }

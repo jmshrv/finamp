@@ -93,9 +93,6 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
     }
     _requestedPageKey = pageKey;
     var settings = FinampSettingsHelper.finampSettings;
-    if (settings.isOffline) {
-      return _getPageOffline();
-    }
     int localRefreshCount = refreshCount;
     try {
       final sortOrder = SortOrder.ascending.toString();
@@ -118,25 +115,6 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
       if (GetIt.instance<FinampUserHelper>().currentUser != null) {
         GlobalSnackbar.error(e);
       }
-    }
-  }
-
-  Future<void> _getPageOffline() async {
-    var settings = FinampSettingsHelper.finampSettings;
-    int localRefreshCount = refreshCount;
-
-    List<DownloadStub> offlineItems;
-    offlineItems = [];
-
-    var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
-
-    // items = sortItems(items, settings.tabSortBy[widget.tabContentType],
-    //     settings.tabSortOrder[widget.tabContentType]);
-
-    // Skip appending page if a refresh triggered while processing
-    if (localRefreshCount == refreshCount && mounted) {
-      _pagingController.appendLastPage(items);
-      fullyLoadedRefresh = localRefreshCount;
     }
   }
 
@@ -234,25 +212,19 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
       ),
     );
 
-    var tabContent = PagedListView<int, BaseItemDto>.separated(
+    var content = PagedListView<int, BaseItemDto>.separated(
       pagingController: _pagingController,
       scrollController: controller,
       physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
         itemBuilder: (context, item, index) {
-          // Use right padding inherited from fast scroller minus
-          // built-in icon padding
-          return Padding(
-            padding: EdgeInsets.only(
-                right: max(0, MediaQuery.paddingOf(context).right - 20)),
-            child: AutoScrollTag(
-              key: ValueKey(index),
-              controller: controller,
-              index: index,
-              child: AutoListItem(
-                baseItem: item,
-              ),
+          return AutoScrollTag(
+            key: ValueKey(index),
+            controller: controller,
+            index: index,
+            child: AutoListItem(
+              baseItem: item,
             ),
           );
         },
@@ -290,7 +262,7 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
       ),
       body: RefreshIndicator(
         onRefresh: () async => _refresh(),
-        child: tabContent,
+        child: content,
       ),
       bottomSheet: const NowPlayingBar(),
       bottomNavigationBar: const FinampNavigationBar(),
@@ -353,66 +325,4 @@ class _DeferredLoadingAlwaysScrollableScrollPhysics
       double velocity, ScrollMetrics metrics, BuildContext context) {
     return super.recommendDeferredLoading(velocity, metrics, context);
   }
-}
-
-List<BaseItemDto> sortItems(
-    List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
-  if (sortBy == SortBy.random) {
-    itemsToSort.shuffle();
-  } else {
-    itemsToSort.sort((a, b) {
-      switch (sortBy ?? SortBy.sortName) {
-        case SortBy.sortName:
-          if (a.nameForSorting == null || b.nameForSorting == null) {
-            // Returning 0 is the same as both being the same
-            return 0;
-          } else {
-            return a.nameForSorting!.compareTo(b.nameForSorting!);
-          }
-        case SortBy.albumArtist:
-          if (a.albumArtist == null || b.albumArtist == null) {
-            return 0;
-          } else {
-            return a.albumArtist!.compareTo(b.albumArtist!);
-          }
-        case SortBy.communityRating:
-          if (a.communityRating == null || b.communityRating == null) {
-            return 0;
-          } else {
-            return a.communityRating!.compareTo(b.communityRating!);
-          }
-        case SortBy.criticRating:
-          if (a.criticRating == null || b.criticRating == null) {
-            return 0;
-          } else {
-            return a.criticRating!.compareTo(b.criticRating!);
-          }
-        case SortBy.dateCreated:
-          if (a.dateCreated == null || b.dateCreated == null) {
-            return 0;
-          } else {
-            return a.dateCreated!.compareTo(b.dateCreated!);
-          }
-        case SortBy.premiereDate:
-          if (a.premiereDate == null || b.premiereDate == null) {
-            return 0;
-          } else {
-            return a.premiereDate!.compareTo(b.premiereDate!);
-          }
-        case SortBy.playCount:
-          if (a.userData?.playCount == null || b.userData?.playCount == null) {
-            return 0;
-          } else {
-            return a.userData!.playCount.compareTo(b.userData!.playCount);
-          }
-        // SortBy.random is handled outside this switch as per-comparison logic does not produce a good shuffle
-        default:
-          throw UnimplementedError("Unimplemented offline sort mode $sortBy");
-      }
-    });
-  }
-
-  return sortOrder == SortOrder.descending
-      ? itemsToSort.reversed.toList()
-      : itemsToSort;
 }
