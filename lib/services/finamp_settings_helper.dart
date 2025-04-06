@@ -185,8 +185,8 @@ class FinampSettingsHelper {
 
     finampSettingsTemp.shouldTranscode = DefaultSettings.shouldTranscode;
     FinampSetters.setTranscodeBitrate(DefaultSettings.transcodeBitrate);
-    finampSettingsTemp.transcodingSegmentContainer =
-        DefaultSettings.transcodingSegmentContainer;
+    finampSettingsTemp.transcodingStreamingFormat =
+        DefaultSettings.transcodingStreamingFormat;
     finampSettingsTemp.shouldTranscodeDownloads =
         DefaultSettings.shouldTranscodeDownloads;
     finampSettingsTemp.downloadTranscodingCodec = FinampTranscodingCodec

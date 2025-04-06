@@ -1157,17 +1157,21 @@ class QueueService {
       ]);
 
       queryParameters.addAll({
-        "audioCodec": "aac",
-        // Ideally we'd use 48kHz when the source is, realistically it doesn't
-        // matter too much
-        "audioSampleRate": "44100",
+        "audioCodec": FinampSettingsHelper
+            .finampSettings.transcodingStreamingFormat.codec,
+        // Ideally we'd switch between 44.1/48kHz depending on the source is,
+        // realistically it doesn't matter too much
+        // default to 44100, only use 48000 for opus because opus doesn't support 44100
+        "audioSampleRate": FinampSettingsHelper
+            .finampSettings.transcodingStreamingFormat.codec == 'opus' ? '48000' : '44100',
         "maxAudioBitDepth": "16",
         "audioBitRate":
             FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
         "segmentContainer": FinampSettingsHelper
-            .finampSettings.transcodingSegmentContainer.container,
+            .finampSettings.transcodingStreamingFormat.container,
         "transcodeReasons": "ContainerBitrateExceedsLimit",
       });
+
     } else {
       builtPath.addAll([
         "Items",

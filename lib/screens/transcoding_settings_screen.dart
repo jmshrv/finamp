@@ -31,16 +31,9 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
       body: ListView(
         children: [
           const TranscodeSwitch(),
+          const StreamingTranscodingFormatDropdownListTile(),
           const BitrateSelector(),
-          const StreamingTranscodeSegmentContainerDropdownListTile(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              AppLocalizations.of(context)!.jellyfinUsesAACForTranscoding,
-              style: Theme.of(context).textTheme.bodySmall,
-              textAlign: TextAlign.center,
-            ),
-          ),
+          Divider(),
           const DownloadTranscodeEnableDropdownListTile(),
           const DownloadTranscodeCodecDropdownListTile(),
           const DownloadBitrateSelector(),
@@ -134,26 +127,26 @@ class DownloadTranscodeCodecDropdownListTile extends ConsumerWidget {
   }
 }
 
-class StreamingTranscodeSegmentContainerDropdownListTile
+class StreamingTranscodingFormatDropdownListTile
     extends ConsumerWidget {
-  const StreamingTranscodeSegmentContainerDropdownListTile({super.key});
+  const StreamingTranscodingFormatDropdownListTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       title: Text(
-          AppLocalizations.of(context)!.transcodingStreamingContainerTitle),
+          AppLocalizations.of(context)!.transcodingStreamingFormatTitle),
       subtitle: Text(
-          AppLocalizations.of(context)!.transcodingStreamingContainerSubtitle),
-      trailing: DropdownButton<FinampSegmentContainer>(
-        value: ref.watch(finampSettingsProvider.transcodingSegmentContainer),
-        items: FinampSegmentContainer.values
-            .map((e) => DropdownMenuItem<FinampSegmentContainer>(
+          AppLocalizations.of(context)!.transcodingStreamingFormatSubtitle),
+      trailing: DropdownButton<FinampTranscodingStreamingFormat>(
+        value: ref.watch(finampSettingsProvider.transcodingStreamingFormat),
+        items: FinampTranscodingStreamingFormat.values
+            .map((e) => DropdownMenuItem<FinampTranscodingStreamingFormat>(
                   value: e,
-                  child: Text(e.container.toUpperCase()),
+                  child: Text("${e.codec}+${e.container}".toUpperCase()),
                 ))
             .toList(),
-        onChanged: FinampSetters.setTranscodingSegmentContainer.ifNonNull,
+        onChanged: FinampSetters.setTranscodingStreamingFormat.ifNonNull,
       ),
     );
   }
