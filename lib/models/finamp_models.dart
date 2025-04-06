@@ -96,7 +96,8 @@ class DefaultSettings {
   static const bufferDurationSeconds = 600;
   static const bufferSizeMegabytes = 50;
   static const tabOrder = TabContentType.values;
-  static const swipeInsertQueueNext = true;
+  static const itemSwipeActionLeftToRight = ItemSwipeActions.nothing;
+  static const itemSwipeActionRightToLeft = ItemSwipeActions.addToNextUp;
   static const loopMode = FinampLoopMode.none;
   static const playbackSpeed = 1.0;
   static const autoLoadLastQueueOnStartup = true;
@@ -359,9 +360,6 @@ class FinampSettings {
   @HiveField(25, defaultValue: DefaultSettings.showFastScroller)
   bool showFastScroller = DefaultSettings.showFastScroller;
 
-  @HiveField(26, defaultValue: DefaultSettings.swipeInsertQueueNext)
-  bool swipeInsertQueueNext;
-
   @HiveField(27, defaultValue: DefaultSettings.loopMode)
   FinampLoopMode loopMode;
 
@@ -548,6 +546,7 @@ class FinampSettings {
   @HiveField(85, defaultValue: null)
   String? lastUsedDownloadLocationId;
 
+ 
   @HiveField(86, defaultValue: DefaultSettings.audioFadeOutDuration)
   Duration audioFadeOutDuration;
 
@@ -564,6 +563,12 @@ class FinampSettings {
   // automatically disabled when connecting to wifi
   @HiveField(89, defaultValue: DefaultSettings.autoOfflineListenerActive)
   bool autoOfflineListenerActive;
+  
+  @HiveField(90, defaultValue: DefaultSettings.itemSwipeActionLeftToRight)
+  ItemSwipeActions itemSwipeActionLeftToRight;
+
+  @HiveField(91, defaultValue: DefaultSettings.itemSwipeActionRightToLeft)
+  ItemSwipeActions itemSwipeActionRightToLeft;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2662,6 +2667,48 @@ enum AutoOfflineOption {
       case AutoOfflineOption.disconnected:
         // return AppLocalizations.of(context)!.keepScreenOnWhilePlaying;
         return AppLocalizations.of(context)!.autoOfflineOptionDisconnected;
+}
+    
+@HiveType(typeId: 92)
+enum ItemSwipeActions {
+  @HiveField(0)
+  nothing,
+  @HiveField(1)
+  addToQueue,
+  @HiveField(2)
+  addToNextUp,
+  @HiveField(3)
+  playNext;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+  
+  String _humanReadableName(ItemSwipeActions itemSwipeAction) {
+    switch (itemSwipeAction) {
+      case ItemSwipeActions.nothing:
+        return "Disabled";
+      case ItemSwipeActions.addToQueue:
+        return "Add To Queue";
+      case ItemSwipeActions.addToNextUp:
+        return "Add To Next Up";
+      case ItemSwipeActions.playNext:
+        return "Play next";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ItemSwipeActions itemSwipeAction, BuildContext context) {
+    switch (itemSwipeAction) {
+      case ItemSwipeActions.nothing:
+        return AppLocalizations.of(context)!.keepScreenOnDisabled; // reused here
+      case ItemSwipeActions.addToQueue:
+        return AppLocalizations.of(context)!.addToQueue;
+      case ItemSwipeActions.addToNextUp:
+        return AppLocalizations.of(context)!.addToNextUp;
+      case ItemSwipeActions.playNext:
+        return AppLocalizations.of(context)!.playNext;
     }
   }
 }

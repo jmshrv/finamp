@@ -154,7 +154,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
-      swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
+      itemSwipeActionLeftToRight: fields[88] == null
+          ? ItemSwipeActions.nothing
+          : fields[88] as ItemSwipeActions,
+      itemSwipeActionRightToLeft: fields[89] == null
+          ? ItemSwipeActions.addToNextUp
+          : fields[89] as ItemSwipeActions,
       useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
       fixedGridTileSize: fields[60] == null ? 150 : (fields[60] as num).toInt(),
       allowSplitScreen: fields[61] == null ? true : fields[61] as bool,
@@ -228,7 +233,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(85)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -275,8 +279,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.tabOrder)
       ..writeByte(25)
       ..write(obj.showFastScroller)
-      ..writeByte(26)
-      ..write(obj.swipeInsertQueueNext)
       ..writeByte(27)
       ..write(obj.loopMode)
       ..writeByte(28)
@@ -396,9 +398,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(87)
       ..write(obj.audioFadeInDuration)
       ..writeByte(88)
-      ..write(obj.autoOffline)
-      ..writeByte(89)
-      ..write(obj.autoOfflineListenerActive);
   }
 
   @override
@@ -2082,35 +2081,6 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
           typeId == other.typeId;
 }
 
-class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
-  @override
-  final int typeId = 78;
-
-  @override
-  AutoOfflineOption read(BinaryReader reader) {
-    switch (reader.readByte()) {
-      case 0:
-        return AutoOfflineOption.disabled;
-      case 1:
-        return AutoOfflineOption.network;
-      case 2:
-        return AutoOfflineOption.disconnected;
-      default:
-        return AutoOfflineOption.disabled;
-    }
-  }
-
-  @override
-  void write(BinaryWriter writer, AutoOfflineOption obj) {
-    switch (obj) {
-      case AutoOfflineOption.disabled:
-        writer.writeByte(0);
-      case AutoOfflineOption.network:
-        writer.writeByte(1);
-      case AutoOfflineOption.disconnected:
-        writer.writeByte(2);
-    }
-  }
 
   @override
   int get hashCode => typeId.hashCode;
@@ -2118,7 +2088,6 @@ class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AutoOfflineOptionAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

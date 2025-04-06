@@ -1,6 +1,7 @@
 import 'package:finamp/components/InteractionSettingsScreen/auto_offline_selector.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
+import 'package:finamp/components/InteractionSettingsScreen/item_swipe_action_dropdown_list_tile.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../components/InteractionSettingsScreen/FastScrollSelector.dart';
 import '../components/InteractionSettingsScreen/disable_gestures.dart';
 import '../components/InteractionSettingsScreen/disable_vibration.dart';
-import '../components/InteractionSettingsScreen/swipe_insert_queue_next_selector.dart';
+
 
 class InteractionSettingsScreen extends StatefulWidget {
   const InteractionSettingsScreen({super.key});
@@ -32,7 +33,8 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
       ),
       body: ListView(
         children: const [
-          SwipeInsertQueueNextSelector(),
+          ItemSwipeActionDropdownListTile(DismissDirection.startToEnd),
+          ItemSwipeActionDropdownListTile(DismissDirection.endToStart),
           StartInstantMixForIndividualTracksSwitch(),
           FastScrollSelector(),
           ShowDeleteFromServerOptionToggle(),

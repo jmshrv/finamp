@@ -43,6 +43,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(FinampUserAdapter());
     registerAdapter(HttpHeaderInfoAdapter());
     registerAdapter(ImageBlurHashesAdapter());
+    registerAdapter(ItemSwipeActionsAdapter());
     registerAdapter(KeepScreenOnOptionAdapter());
     registerAdapter(LyricDtoAdapter());
     registerAdapter(LyricLineAdapter());
