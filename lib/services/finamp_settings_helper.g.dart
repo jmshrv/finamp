@@ -818,8 +818,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get hasDownloadedPlaylistInfo =>
       finampSettingsProvider
           .select((value) => value.requireValue.hasDownloadedPlaylistInfo);
-  ProviderListenable<FinampTranscodingStreamingFormat> get transcodingStreamingFormat =>
-      finampSettingsProvider
+  ProviderListenable<FinampTranscodingStreamingFormat>
+      get transcodingStreamingFormat => finampSettingsProvider
           .select((value) => value.requireValue.transcodingStreamingFormat);
   ProviderListenable<FinampFeatureChipsConfiguration>
       get featureChipsConfiguration => finampSettingsProvider

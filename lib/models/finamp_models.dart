@@ -258,8 +258,8 @@ class FinampSettings {
       this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
       this.hasDownloadedPlaylistInfo =
           DefaultSettings.hasDownloadedPlaylistInfo,
-      this.transcodingSegmentContainer =
-          DefaultSettings.transcodingSegmentContainer,
+      this.transcodingStreamingFormat =
+          DefaultSettings.transcodingStreamingFormat,
       this.downloadSizeWarningCutoff =
           DefaultSettings.downloadSizeWarningCutoff,
       this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,

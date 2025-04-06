@@ -1962,7 +1962,7 @@ class FinampTranscodingStreamingFormatAdapter
       case 5:
         return FinampTranscodingStreamingFormat.vorbisFragmentedMp4;
       default:
-        return FinampTranscodingStreamingFormat.aacFragmentedMp4;
+        return FinampTranscodingStreamingFormat.aacMpegTS;
     }
   }
 
