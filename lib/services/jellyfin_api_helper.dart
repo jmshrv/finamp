@@ -187,8 +187,8 @@ class JellyfinApiHelper {
           );
         }
       } else if (parentItem?.type == "MusicArtist") {
-        // For getting the children of artists, we need to use artistIDs or albumArtistIds
-        // instead of parentId
+        // For getting the children of artists, we need to use
+        // artistIDs or albumArtistIds instead of parentId
         if (artistType == ArtistType.albumartist || artistType == null) {
           // Albums of Album Artists
           response = await api.getItems(

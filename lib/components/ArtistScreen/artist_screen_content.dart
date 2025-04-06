@@ -161,7 +161,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist
         ),
         // Now we fetch every performing artist track
-        // (this has to happen in Future.wait, because otherwise we
+        // (this has to happen in Future.wait, because otherwise we will
         // get the correct childrenCount for the Download Status too late)
         if (widget.parent.type != "MusicGenre")
           jellyfinApiHelper.getItems(
