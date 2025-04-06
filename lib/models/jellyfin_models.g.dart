@@ -2570,59 +2570,6 @@ class QueueItemAdapter extends TypeAdapter<QueueItem> {
           typeId == other.typeId;
 }
 
-class PublicSystemInfoResultAdapter
-    extends TypeAdapter<PublicSystemInfoResult> {
-  @override
-  final int typeId = 39;
-
-  @override
-  PublicSystemInfoResult read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return PublicSystemInfoResult(
-      localAddress: fields[0] as String?,
-      serverName: fields[1] as String?,
-      version: fields[2] as String?,
-      productName: fields[3] as String?,
-      operatingSystem: fields[4] as String?,
-      id: fields[5] as String?,
-      startupWizardCompleted: fields[6] as bool?,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, PublicSystemInfoResult obj) {
-    writer
-      ..writeByte(7)
-      ..writeByte(0)
-      ..write(obj.localAddress)
-      ..writeByte(1)
-      ..write(obj.serverName)
-      ..writeByte(2)
-      ..write(obj.version)
-      ..writeByte(3)
-      ..write(obj.productName)
-      ..writeByte(4)
-      ..write(obj.operatingSystem)
-      ..writeByte(5)
-      ..write(obj.id)
-      ..writeByte(6)
-      ..write(obj.startupWizardCompleted);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PublicSystemInfoResultAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
 class PublicUsersResponseAdapter extends TypeAdapter<PublicUsersResponse> {
   @override
   final int typeId = 41;
@@ -2708,50 +2655,6 @@ class QuickConnectStateAdapter extends TypeAdapter<QuickConnectState> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is QuickConnectStateAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class ClientDiscoveryResponseAdapter
-    extends TypeAdapter<ClientDiscoveryResponse> {
-  @override
-  final int typeId = 43;
-
-  @override
-  ClientDiscoveryResponse read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return ClientDiscoveryResponse(
-      address: fields[0] as String?,
-      id: fields[1] as String?,
-      name: fields[2] as String?,
-      endpointAddress: fields[3] as String?,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, ClientDiscoveryResponse obj) {
-    writer
-      ..writeByte(4)
-      ..writeByte(0)
-      ..write(obj.address)
-      ..writeByte(1)
-      ..write(obj.id)
-      ..writeByte(2)
-      ..write(obj.name)
-      ..writeByte(3)
-      ..write(obj.endpointAddress);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ClientDiscoveryResponseAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

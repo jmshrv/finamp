@@ -311,6 +311,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  connectivity_plus:
+    dependency: "direct main"
+    description:
+      name: connectivity_plus
+      sha256: "04bf81bb0b77de31557b58d052b24b3eee33f09a6e7a8c68a3e247c7df19ec27"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.3"
+  connectivity_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: connectivity_plus_platform_interface
+      sha256: "42657c1715d48b167930d5f34d00222ac100475f73d10162ddf43e714932f204"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   console:
     dependency: transitive
     description:
@@ -988,6 +1004,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  nm:
+    dependency: transitive
+    description:
+      name: nm
+      sha256: "2c9aae4127bdc8993206464fcc063611e0e36e72018696cd9631023a31b24254"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   octo_image:
     dependency: "direct main"
     description:
@@ -1181,6 +1205,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.1"
+  progress_border:
+    dependency: "direct main"
+    description:
+      name: progress_border
+      sha256: f47c2b951c29f04d7a2232d9f72210874df893ea45c7bd313076291d8c4d8a57
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.5"
   provider:
     dependency: "direct main"
     description:
@@ -1700,7 +1732,7 @@ packages:
     source: hosted
     version: "2.1.4"
   visibility_detector:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: visibility_detector
       sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420

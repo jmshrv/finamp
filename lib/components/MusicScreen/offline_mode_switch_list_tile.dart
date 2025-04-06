@@ -24,6 +24,11 @@ class OfflineModeSwitchListTile extends StatelessWidget {
           inactiveTrackColor: Colors.transparent,
           value: box.get("FinampSettings")?.isOffline ?? false,
           onChanged: (value) {
+            // when offline mode is enabled manually,
+            // prevent the auto offline feature from turning off
+            // offline mode automatically. When offline mode
+            // is manually turned off, reenable the listener.
+            FinampSetters.setAutoOfflineListenerActive(!value);
             FinampSetters.setIsOffline(value);
           },
         );

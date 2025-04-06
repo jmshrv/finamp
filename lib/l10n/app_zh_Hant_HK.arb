@@ -167,7 +167,7 @@
   "@logOut": {},
   "areYouSure": "您確定嗎？",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin 使用 ACC 進行轉碼",
+  "jellyfinUsesAACForTranscoding": "Jellyfin 使用 AAC 進行轉碼",
   "@jellyfinUsesAACForTranscoding": {},
   "enableTranscodingSubtitle": "啟用後，音訊會先在伺服器轉碼。",
   "@enableTranscodingSubtitle": {},

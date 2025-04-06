@@ -1942,5 +1942,21 @@
   "allowDeleteFromServerTitle": "Serverseitiges Löschen von Medien erlauben",
   "@allowDeleteFromServerTitle": {
     "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "audioFadeOutDurationSettingTitle": "Audioausblendungsdauer",
+  "@audioFadeOutDurationSettingTitle": {
+      "description": "Title for the audio fade out duration setting."
+  },
+  "audioFadeOutDurationSettingSubtitle": "Die Dauer der Audioausblendung in millisekunden. Auf 0 setzen zum Deaktivieren der Audioausblendung.",
+  "@audioFadeOutDurationSettingSubtitle": {
+      "description": "Subtitle for the audio fade out duration setting."
+  },
+  "audioFadeInDurationSettingTitle": "Audioeinblendungsdauer",
+  "@audioFadeOutDurationSettingTitle": {
+      "description": "Title for the audio fade-in duration setting."
+  },
+  "audioFadeInDurationSettingSubtitle": "Die Dauer der Audioeinblendung in millisekunden. Auf 0 setzen zum Deaktivieren der Audioeinblendung.",
+  "@audioFadeOutDurationSettingSubtitle": {
+      "description": "Subtitle for the audio fade-in duration setting."
   }
 }

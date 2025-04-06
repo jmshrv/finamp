@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -24,6 +26,7 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
+    final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
     return StreamBuilder<FinampQueueInfo?>(
       stream: queueService.getQueueStream(),
       builder: (context, snapshot) {
@@ -60,9 +63,7 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
             child: SimpleGestureDetector(
               //TODO replace with PageView, this is just a placeholder
               onTap: () {
-                final audioService =
-                    GetIt.instance<MusicPlayerBackgroundTask>();
-                audioService.togglePlayback();
+                unawaited(audioService.togglePlayback());
                 FeedbackHelper.feedback(FeedbackType.selection);
               },
               onDoubleTap: () {
@@ -75,7 +76,6 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
                 }
               },
               onHorizontalSwipe: (direction) {
-                final queueService = GetIt.instance<QueueService>();
                 if (direction == SwipeDirection.left) {
                   if (!FinampSettingsHelper.finampSettings.disableGesture) {
                     queueService.skipByOffset(1);
