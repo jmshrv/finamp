@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:finamp/services/auto_offline.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ final _musicScreenLogger = Logger("MusicScreen");
 
 void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
+  ref.listenManual(autoOfflineProvider, (_, __) {});
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
