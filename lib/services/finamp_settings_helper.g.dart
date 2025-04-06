@@ -159,13 +159,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSwipeInsertQueueNext(bool newSwipeInsertQueueNext) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.swipeInsertQueueNext = newSwipeInsertQueueNext;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setLoopMode(FinampLoopMode newLoopMode) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.loopMode = newLoopMode;
@@ -520,11 +513,11 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setTranscodingSegmentContainer(
-      FinampSegmentContainer newTranscodingSegmentContainer) {
+  static void setTranscodingStreamingFormat(
+      FinampTranscodingStreamingFormat newTranscodingStreamingFormat) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.transcodingSegmentContainer =
-        newTranscodingSegmentContainer;
+    finampSettingsTemp.transcodingStreamingFormat =
+        newTranscodingStreamingFormat;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -606,6 +599,52 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAudioFadeOutDuration(Duration newAudioFadeOutDuration) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.audioFadeOutDuration = newAudioFadeOutDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAudioFadeInDuration(Duration newAudioFadeInDuration) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.audioFadeInDuration = newAudioFadeInDuration;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAutoOffline(AutoOfflineOption newAutoOffline) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoOffline = newAutoOffline;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAutoOfflineListenerActive(bool newAutoOfflineListenerActive) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoOfflineListenerActive = newAutoOfflineListenerActive;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setItemSwipeActionLeftToRight(
+      ItemSwipeActions newItemSwipeActionLeftToRight) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.itemSwipeActionLeftToRight =
+        newItemSwipeActionLeftToRight;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setItemSwipeActionRightToLeft(
+      ItemSwipeActions newItemSwipeActionRightToLeft) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.itemSwipeActionRightToLeft =
+        newItemSwipeActionRightToLeft;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setCurrentVolume(double newCurrentVolume) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.currentVolume = newCurrentVolume;
@@ -675,8 +714,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.tabOrder);
   ProviderListenable<bool> get showFastScroller => finampSettingsProvider
       .select((value) => value.requireValue.showFastScroller);
-  ProviderListenable<bool> get swipeInsertQueueNext => finampSettingsProvider
-      .select((value) => value.requireValue.swipeInsertQueueNext);
   ProviderListenable<FinampLoopMode> get loopMode =>
       finampSettingsProvider.select((value) => value.requireValue.loopMode);
   ProviderListenable<bool> get autoloadLastQueueOnStartup =>
@@ -795,9 +832,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get hasDownloadedPlaylistInfo =>
       finampSettingsProvider
           .select((value) => value.requireValue.hasDownloadedPlaylistInfo);
-  ProviderListenable<FinampSegmentContainer> get transcodingSegmentContainer =>
-      finampSettingsProvider
-          .select((value) => value.requireValue.transcodingSegmentContainer);
+  ProviderListenable<FinampTranscodingStreamingFormat>
+      get transcodingStreamingFormat => finampSettingsProvider
+          .select((value) => value.requireValue.transcodingStreamingFormat);
   ProviderListenable<FinampFeatureChipsConfiguration>
       get featureChipsConfiguration => finampSettingsProvider
           .select((value) => value.requireValue.featureChipsConfiguration);
@@ -825,6 +862,22 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<String?> get lastUsedDownloadLocationId =>
       finampSettingsProvider
           .select((value) => value.requireValue.lastUsedDownloadLocationId);
+  ProviderListenable<Duration> get audioFadeOutDuration =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.audioFadeOutDuration);
+  ProviderListenable<Duration> get audioFadeInDuration => finampSettingsProvider
+      .select((value) => value.requireValue.audioFadeInDuration);
+  ProviderListenable<AutoOfflineOption> get autoOffline =>
+      finampSettingsProvider.select((value) => value.requireValue.autoOffline);
+  ProviderListenable<bool> get autoOfflineListenerActive =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.autoOfflineListenerActive);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionLeftToRight =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.itemSwipeActionLeftToRight);
+  ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.itemSwipeActionRightToLeft);
   ProviderListenable<double> get currentVolume => finampSettingsProvider
       .select((value) => value.requireValue.currentVolume);
   ProviderListenable<int> get playOnStaleDelay => finampSettingsProvider

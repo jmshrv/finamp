@@ -12,7 +12,6 @@ class SortByMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final sortOptions = tabType == TabContentType.tracks
         ? SortBy.trackSortOptions
         : SortBy.defaults;

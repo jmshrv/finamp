@@ -154,7 +154,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[44] as TranscodeDownloadsSetting,
       shouldRedownloadTranscodes:
           fields[46] == null ? false : fields[46] as bool,
-      swipeInsertQueueNext: fields[26] == null ? true : fields[26] as bool,
+      itemSwipeActionLeftToRight: fields[90] == null
+          ? ItemSwipeActions.nothing
+          : fields[90] as ItemSwipeActions,
+      itemSwipeActionRightToLeft: fields[91] == null
+          ? ItemSwipeActions.addToNextUp
+          : fields[91] as ItemSwipeActions,
       useFixedSizeGridTiles: fields[59] == null ? false : fields[59] as bool,
       fixedGridTileSize: fields[60] == null ? 150 : (fields[60] as num).toInt(),
       allowSplitScreen: fields[61] == null ? true : fields[61] as bool,
@@ -168,7 +173,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : (fields[53] as num).toInt(),
-      playOnStaleDelay: fields[87] == null ? 90 : (fields[87] as num).toInt(),
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
@@ -199,9 +203,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       showCoversOnAlbumScreen: fields[77] == null ? false : fields[77] as bool,
       hasDownloadedPlaylistInfo:
           fields[74] == null ? false : fields[74] as bool,
-      transcodingSegmentContainer: fields[75] == null
-          ? FinampSegmentContainer.fragmentedMp4
-          : fields[75] as FinampSegmentContainer,
+      transcodingStreamingFormat: fields[75] == null
+          ? FinampTranscodingStreamingFormat.aacFragmentedMp4
+          : fields[75] as FinampTranscodingStreamingFormat,
       downloadSizeWarningCutoff:
           fields[80] == null ? 150 : (fields[80] as num).toInt(),
       allowDeleteFromServer: fields[81] == null ? false : fields[81] as bool,
@@ -211,7 +215,16 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
-      currentVolume: fields[86] == null ? 1.0 : (fields[86] as num).toDouble(),
+      autoOffline: fields[88] == null
+          ? AutoOfflineOption.disconnected
+          : fields[88] as AutoOfflineOption,
+      autoOfflineListenerActive: fields[89] == null ? true : fields[89] as bool,
+      audioFadeOutDuration:
+          fields[86] == null ? Duration.zero : fields[86] as Duration,
+      audioFadeInDuration:
+          fields[87] == null ? Duration.zero : fields[87] as Duration,
+      currentVolume: fields[92] == null ? 1.0 : (fields[92] as num).toDouble(),
+      playOnStaleDelay: fields[93] == null ? 90 : (fields[93] as num).toInt(),
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -222,7 +235,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(83)
+      ..writeByte(88)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -269,8 +282,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..write(obj.tabOrder)
       ..writeByte(25)
       ..write(obj.showFastScroller)
-      ..writeByte(26)
-      ..write(obj.swipeInsertQueueNext)
       ..writeByte(27)
       ..write(obj.loopMode)
       ..writeByte(28)
@@ -364,7 +375,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(74)
       ..write(obj.hasDownloadedPlaylistInfo)
       ..writeByte(75)
-      ..write(obj.transcodingSegmentContainer)
+      ..write(obj.transcodingStreamingFormat)
       ..writeByte(76)
       ..write(obj.featureChipsConfiguration)
       ..writeByte(77)
@@ -386,8 +397,20 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(85)
       ..write(obj.lastUsedDownloadLocationId)
       ..writeByte(86)
-      ..write(obj.currentVolume)
+      ..write(obj.audioFadeOutDuration)
       ..writeByte(87)
+      ..write(obj.audioFadeInDuration)
+      ..writeByte(88)
+      ..write(obj.autoOffline)
+      ..writeByte(89)
+      ..write(obj.autoOfflineListenerActive)
+      ..writeByte(90)
+      ..write(obj.itemSwipeActionLeftToRight)
+      ..writeByte(91)
+      ..write(obj.itemSwipeActionRightToLeft)
+      ..writeByte(92)
+      ..write(obj.currentVolume)
+      ..writeByte(93)
       ..write(obj.playOnStaleDelay);
   }
 
@@ -1932,30 +1955,46 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
           typeId == other.typeId;
 }
 
-class FinampSegmentContainerAdapter
-    extends TypeAdapter<FinampSegmentContainer> {
+class FinampTranscodingStreamingFormatAdapter
+    extends TypeAdapter<FinampTranscodingStreamingFormat> {
   @override
   final int typeId = 73;
 
   @override
-  FinampSegmentContainer read(BinaryReader reader) {
+  FinampTranscodingStreamingFormat read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return FinampSegmentContainer.mpegTS;
+        return FinampTranscodingStreamingFormat.aacMpegTS;
       case 1:
-        return FinampSegmentContainer.fragmentedMp4;
+        return FinampTranscodingStreamingFormat.aacFragmentedMp4;
+      case 2:
+        return FinampTranscodingStreamingFormat.opusFragmentedMp4;
+      case 3:
+        return FinampTranscodingStreamingFormat.flacFragmentedMp4;
+      case 4:
+        return FinampTranscodingStreamingFormat.vorbisMpegTS;
+      case 5:
+        return FinampTranscodingStreamingFormat.vorbisFragmentedMp4;
       default:
-        return FinampSegmentContainer.mpegTS;
+        return FinampTranscodingStreamingFormat.aacMpegTS;
     }
   }
 
   @override
-  void write(BinaryWriter writer, FinampSegmentContainer obj) {
+  void write(BinaryWriter writer, FinampTranscodingStreamingFormat obj) {
     switch (obj) {
-      case FinampSegmentContainer.mpegTS:
+      case FinampTranscodingStreamingFormat.aacMpegTS:
         writer.writeByte(0);
-      case FinampSegmentContainer.fragmentedMp4:
+      case FinampTranscodingStreamingFormat.aacFragmentedMp4:
         writer.writeByte(1);
+      case FinampTranscodingStreamingFormat.opusFragmentedMp4:
+        writer.writeByte(2);
+      case FinampTranscodingStreamingFormat.flacFragmentedMp4:
+        writer.writeByte(3);
+      case FinampTranscodingStreamingFormat.vorbisMpegTS:
+        writer.writeByte(4);
+      case FinampTranscodingStreamingFormat.vorbisFragmentedMp4:
+        writer.writeByte(5);
     }
   }
 
@@ -1965,7 +2004,7 @@ class FinampSegmentContainerAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FinampSegmentContainerAdapter &&
+      other is FinampTranscodingStreamingFormatAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -2076,6 +2115,92 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ReleaseDateFormatAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
+  @override
+  final int typeId = 78;
+
+  @override
+  AutoOfflineOption read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return AutoOfflineOption.disabled;
+      case 1:
+        return AutoOfflineOption.network;
+      case 2:
+        return AutoOfflineOption.disconnected;
+      default:
+        return AutoOfflineOption.disabled;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, AutoOfflineOption obj) {
+    switch (obj) {
+      case AutoOfflineOption.disabled:
+        writer.writeByte(0);
+      case AutoOfflineOption.network:
+        writer.writeByte(1);
+      case AutoOfflineOption.disconnected:
+        writer.writeByte(2);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AutoOfflineOptionAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
+  @override
+  final int typeId = 92;
+
+  @override
+  ItemSwipeActions read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ItemSwipeActions.nothing;
+      case 1:
+        return ItemSwipeActions.addToQueue;
+      case 2:
+        return ItemSwipeActions.addToNextUp;
+      case 3:
+        return ItemSwipeActions.playNext;
+      default:
+        return ItemSwipeActions.nothing;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ItemSwipeActions obj) {
+    switch (obj) {
+      case ItemSwipeActions.nothing:
+        writer.writeByte(0);
+      case ItemSwipeActions.addToQueue:
+        writer.writeByte(1);
+      case ItemSwipeActions.addToNextUp:
+        writer.writeByte(2);
+      case ItemSwipeActions.playNext:
+        writer.writeByte(3);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ItemSwipeActionsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

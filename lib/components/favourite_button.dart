@@ -64,8 +64,7 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
             ? null
             : () {
                 ref
-                    .read(isFavoriteProvider(widget.item)
-                        .notifier)
+                    .read(isFavoriteProvider(widget.item).notifier)
                     .updateFavorite(!isFav);
               },
       );

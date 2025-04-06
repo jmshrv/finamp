@@ -96,7 +96,8 @@ class DefaultSettings {
   static const bufferDurationSeconds = 600;
   static const bufferSizeMegabytes = 50;
   static const tabOrder = TabContentType.values;
-  static const swipeInsertQueueNext = true;
+  static const itemSwipeActionLeftToRight = ItemSwipeActions.nothing;
+  static const itemSwipeActionRightToLeft = ItemSwipeActions.addToNextUp;
   static const loopMode = FinampLoopMode.none;
   static const playbackSpeed = 1.0;
   static const autoLoadLastQueueOnStartup = true;
@@ -126,8 +127,8 @@ class DefaultSettings {
   static const keepScreenOnOption = KeepScreenOnOption.whileLyrics;
   static const keepScreenOnWhilePluggedIn = true;
   static const hasDownloadedPlaylistInfo = false;
-  static const transcodingSegmentContainer =
-      FinampSegmentContainer.fragmentedMp4;
+  static const transcodingStreamingFormat =
+      FinampTranscodingStreamingFormat.aacFragmentedMp4;
   static const featureChipsConfiguration =
       FinampFeatureChipsConfiguration(enabled: true, features: [
     FinampFeatureChipType.playCount,
@@ -154,6 +155,10 @@ class DefaultSettings {
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
   static const double currentVolume = 1.0;
+  static const autoOffline = AutoOfflineOption.disconnected;
+  static const autoOfflineListenerActive = true;
+  static const audioFadeOutDuration = Duration(milliseconds: 0);
+  static const audioFadeInDuration = Duration(milliseconds: 0);
 }
 
 @HiveType(typeId: 28)
@@ -218,7 +223,10 @@ class FinampSettings {
     this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
     this.shouldRedownloadTranscodes =
         DefaultSettings.shouldRedownloadTranscodes,
-    this.swipeInsertQueueNext = DefaultSettings.swipeInsertQueueNext,
+    this.itemSwipeActionLeftToRight =
+        DefaultSettings.itemSwipeActionLeftToRight,
+    this.itemSwipeActionRightToLeft =
+        DefaultSettings.itemSwipeActionRightToLeft,
     this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
     this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
     this.allowSplitScreen = DefaultSettings.allowSplitScreen,
@@ -230,7 +238,6 @@ class FinampSettings {
     this.reportQueueToServer = DefaultSettings.reportQueueToServer,
     this.periodicPlaybackSessionUpdateFrequencySeconds =
         DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
-    this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
     this.showArtistChipImage = DefaultSettings.showArtistChipImage,
     this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
     this.showProgressOnNowPlayingBar =
@@ -252,15 +259,20 @@ class FinampSettings {
     this.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration,
     this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
     this.hasDownloadedPlaylistInfo = DefaultSettings.hasDownloadedPlaylistInfo,
-    this.transcodingSegmentContainer =
-        DefaultSettings.transcodingSegmentContainer,
+    this.transcodingStreamingFormat =
+        DefaultSettings.transcodingStreamingFormat,
     this.downloadSizeWarningCutoff = DefaultSettings.downloadSizeWarningCutoff,
     this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
     this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
     this.showAlbumReleaseDateOnPlayerScreen =
         DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
+    this.autoOffline = DefaultSettings.autoOffline,
+    this.autoOfflineListenerActive = DefaultSettings.autoOfflineListenerActive,
+    this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
+    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
     this.currentVolume = DefaultSettings.currentVolume,
+    this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -350,9 +362,6 @@ class FinampSettings {
 
   @HiveField(25, defaultValue: DefaultSettings.showFastScroller)
   bool showFastScroller = DefaultSettings.showFastScroller;
-
-  @HiveField(26, defaultValue: DefaultSettings.swipeInsertQueueNext)
-  bool swipeInsertQueueNext;
 
   @HiveField(27, defaultValue: DefaultSettings.loopMode)
   FinampLoopMode loopMode;
@@ -506,8 +515,8 @@ class FinampSettings {
   @HiveField(74, defaultValue: DefaultSettings.hasDownloadedPlaylistInfo)
   bool hasDownloadedPlaylistInfo;
 
-  @HiveField(75, defaultValue: DefaultSettings.transcodingSegmentContainer)
-  FinampSegmentContainer transcodingSegmentContainer;
+  @HiveField(75, defaultValue: DefaultSettings.transcodingStreamingFormat)
+  FinampTranscodingStreamingFormat transcodingStreamingFormat;
 
   @HiveField(76, defaultValue: DefaultSettings.featureChipsConfiguration)
   FinampFeatureChipsConfiguration featureChipsConfiguration;
@@ -540,12 +549,35 @@ class FinampSettings {
   @HiveField(85, defaultValue: null)
   String? lastUsedDownloadLocationId;
 
-  @HiveField(86, defaultValue: DefaultSettings.currentVolume)
+  @HiveField(86, defaultValue: DefaultSettings.audioFadeOutDuration)
+  Duration audioFadeOutDuration;
+
+  @HiveField(87, defaultValue: DefaultSettings.audioFadeInDuration)
+  Duration audioFadeInDuration;
+
+  @HiveField(88, defaultValue: DefaultSettings.autoOffline)
+  AutoOfflineOption autoOffline;
+
+  // this will get set to false when the user
+  // manually enables offline mode and set to
+  // true when the user disables offline mode
+  // again. This prevents offline mode from beeing
+  // automatically disabled when connecting to wifi
+  @HiveField(89, defaultValue: DefaultSettings.autoOfflineListenerActive)
+  bool autoOfflineListenerActive;
+
+  @HiveField(90, defaultValue: DefaultSettings.itemSwipeActionLeftToRight)
+  ItemSwipeActions itemSwipeActionLeftToRight;
+
+  @HiveField(91, defaultValue: DefaultSettings.itemSwipeActionRightToLeft)
+  ItemSwipeActions itemSwipeActionRightToLeft;
+
+  @HiveField(92, defaultValue: DefaultSettings.currentVolume)
   double currentVolume;
 
-  @HiveField(87, defaultValue: DefaultSettings.playOnStaleDelay)
+  @HiveField(93, defaultValue: DefaultSettings.playOnStaleDelay)
   int playOnStaleDelay;
-  
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: DownloadLocation.internalStorageName,
@@ -2436,13 +2468,23 @@ enum KeepScreenOnOption {
 }
 
 @HiveType(typeId: 73)
-enum FinampSegmentContainer {
+enum FinampTranscodingStreamingFormat {
   @HiveField(0)
-  mpegTS("ts"),
+  aacMpegTS("aac", "ts"),
   @HiveField(1)
-  fragmentedMp4("mp4");
+  aacFragmentedMp4("aac", "mp4"),
+  @HiveField(2)
+  opusFragmentedMp4("opus", "mp4"),
+  @HiveField(3)
+  flacFragmentedMp4("flac", "mp4"),
+  @HiveField(4)
+  vorbisMpegTS("vorbis", "ts"),
+  @HiveField(5)
+  vorbisFragmentedMp4("vorbis", "mp4");
 
-  const FinampSegmentContainer(this.container);
+  const FinampTranscodingStreamingFormat(this.codec, this.container);
+
+  final String codec;
 
   /// The container to use to transport the segments
   final String container;
@@ -2625,6 +2667,82 @@ enum ReleaseDateFormat {
   }
 }
 
+@HiveType(typeId: 78)
+enum AutoOfflineOption {
+  @HiveField(0)
+  disabled,
+  @HiveField(1)
+  network,
+  @HiveField(2)
+  disconnected;
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableLocalisedName(
+      AutoOfflineOption offlineOption, BuildContext context) {
+    switch (offlineOption) {
+      case AutoOfflineOption.disabled:
+        // return AppLocalizations.of(context)!.keepScreenOnDisabled;
+        return AppLocalizations.of(context)!.autoOfflineOptionOff;
+      case AutoOfflineOption.network:
+        // return AppLocalizations.of(context)!.keepScreenOnAlwaysOn;
+        return AppLocalizations.of(context)!.autoOfflineOptionNetwork;
+      case AutoOfflineOption.disconnected:
+        // return AppLocalizations.of(context)!.keepScreenOnWhilePlaying;
+        return AppLocalizations.of(context)!.autoOfflineOptionDisconnected;
+    }
+  }
+}
+
+@HiveType(typeId: 92)
+enum ItemSwipeActions {
+  @HiveField(0)
+  nothing,
+  @HiveField(1)
+  addToQueue,
+  @HiveField(2)
+  addToNextUp,
+  @HiveField(3)
+  playNext;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(ItemSwipeActions itemSwipeAction) {
+    switch (itemSwipeAction) {
+      case ItemSwipeActions.nothing:
+        return "Disabled";
+      case ItemSwipeActions.addToQueue:
+        return "Add To Queue";
+      case ItemSwipeActions.addToNextUp:
+        return "Add To Next Up";
+      case ItemSwipeActions.playNext:
+        return "Play next";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ItemSwipeActions itemSwipeAction, BuildContext context) {
+    switch (itemSwipeAction) {
+      case ItemSwipeActions.nothing:
+        return AppLocalizations.of(context)!
+            .keepScreenOnDisabled; // reused here
+      case ItemSwipeActions.addToQueue:
+        return AppLocalizations.of(context)!.addToQueue;
+      case ItemSwipeActions.addToNextUp:
+        return AppLocalizations.of(context)!.addToNextUp;
+      case ItemSwipeActions.playNext:
+        return AppLocalizations.of(context)!.playNext;
+    }
+  }
+}
+
 @JsonSerializable()
 class FinampOutputRoute {
   // mapOf(
@@ -2690,5 +2808,10 @@ class FinampOutputRoute {
 
   Map<String, dynamic> toJson() {
     return _$FinampOutputRouteToJson(this);
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
   }
 }

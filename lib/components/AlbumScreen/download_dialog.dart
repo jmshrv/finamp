@@ -135,8 +135,6 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = ref.watch(finampSettingsProvider).value;
-
     assert(widget.children?.every((child) =>
             BaseItemDtoType.fromItem(child) == BaseItemDtoType.track) ??
         true);
@@ -179,14 +177,20 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
     }
 
     DownloadLocation? getFirstSelectedLocation() {
+      FinampSettings settings = FinampSettingsHelper.finampSettings;
       // If we haven't selected anything, first try and grab the lastUsedDownloadLocation, then try the default, otherwise just select the first available option
       selectedDownloadLocation ??= settings
-              ?.downloadLocationsMap[settings.lastUsedDownloadLocationId] ??
-          settings?.downloadLocationsMap[settings.defaultDownloadLocation] ??
+              ?.downloadLocationsMap[settings.defaultDownloadLocation] ??
+          settings?.downloadLocationsMap[settings.lastUsedDownloadLocationId] ??
           FinampSettingsHelper.finampSettings.internalTrackDir;
 
       return selectedDownloadLocation;
     }
+
+    final userSelectableDownloadLocations = FinampSettingsHelper
+        .finampSettings.downloadLocationsMap.values
+        .where((element) =>
+            element.baseDirectory != DownloadLocationType.internalDocuments);
 
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.addDownloads),
@@ -195,9 +199,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Only show if there are multiple download locations
-          if (FinampSettingsHelper
-                  .finampSettings.downloadLocationsMap.values.length >
-              1)
+          if (userSelectableDownloadLocations.length > 1)
             DropdownButton<DownloadLocation>(
                 hint: Text(AppLocalizations.of(context)!.location),
                 isExpanded: true,
@@ -205,11 +207,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
                       selectedDownloadLocation = value;
                     }),
                 value: getFirstSelectedLocation(),
-                items: FinampSettingsHelper
-                    .finampSettings.downloadLocationsMap.values
-                    .where((element) =>
-                        element.baseDirectory !=
-                        DownloadLocationType.internalDocuments)
+                items: userSelectableDownloadLocations
                     .map((downloadLocation) =>
                         DropdownMenuItem<DownloadLocation>(
                           value: downloadLocation,

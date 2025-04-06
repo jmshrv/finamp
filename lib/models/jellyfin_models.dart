@@ -3708,7 +3708,6 @@ enum SortOrder {
   explicitToJson: true,
   anyMap: true,
 )
-@HiveType(typeId: 39)
 class PublicSystemInfoResult {
   PublicSystemInfoResult({
     this.localAddress,
@@ -3808,7 +3807,6 @@ class QuickConnectState {
   explicitToJson: true,
   anyMap: true,
 )
-@HiveType(typeId: 43)
 class ClientDiscoveryResponse {
   ClientDiscoveryResponse({
     this.address,
@@ -3817,16 +3815,12 @@ class ClientDiscoveryResponse {
     this.endpointAddress,
   });
 
-  @HiveField(0)
   String? address;
 
-  @HiveField(1)
   String? id;
 
-  @HiveField(2)
   String? name;
 
-  @HiveField(3)
   String? endpointAddress;
 
   factory ClientDiscoveryResponse.fromJson(Map<String, dynamic> json) =>
