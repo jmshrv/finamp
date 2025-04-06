@@ -548,10 +548,10 @@ class QueueService {
       _queueFromConcatenatingAudioSource();
 
       if (beginPlaying) {
-        unawaited(_audioHandler
-            .play()); // don't await this, because it will not return until playback is finished
+        // don't await this, because it will not return until playback is finished
+        unawaited(_audioHandler.play(disableFade: true));
       } else {
-        unawaited(_audioHandler.pause());
+        unawaited(_audioHandler.pause(disableFade: true));
       }
 
       _audioHandler.nextInitialIndex = null;

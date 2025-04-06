@@ -17,8 +17,11 @@ You can ignore the Chrome/Web component, since Finamp is not a web app.
 ### Building for Android
 
 You can build debug builds for Android right-away, but you will get an error if you try to build a release build (which is the default type).  
-To build release APKs, you need to set up a signing key for Android. To get that set up, follow [this guide](https://docs.flutter.dev/deployment/android#signing-the-app) from the Flutter documentation.  
-Note that Finamp is configured to use a different app ID for debug builds, so if you install a release build and a debug build, you will have two independent versions of Finamp installed on your device. This also means that you can keep using your regular install of Finamp (from the Play Store, etc.) while developing new features for Finamp, without breaking your ability to listen to music :)  
+To build release APKs, you need to set up a signing key for Android. To get that set up, follow [this guide](https://docs.flutter.dev/deployment/android#signing-the-app) from the Flutter documentation.
+Respectively, you can also set a custom keystore for debug builds by setting the `debugKeystoreFile`, `debugKeystorePassword`, `debugKeyAlias`, and `debugKeyPassword` variables in the same `android/key.properties` file.
+This should not be necessary for most users, but can be useful if you develop on multiple machines and easily want to share the same debug key.
+Note that Finamp is configured to use a different app ID for debug builds by default, so if you install a release build and a debug build, you will have two independent versions of Finamp installed on your device.
+This also means that you can keep using your regular install of Finamp (from the Play Store, etc.) while developing new features for Finamp, without breaking your ability to listen to music :)  
 
 If you try to install a release build you built yourself (with your signing key) on top of a release build you downloaded from the Play Store or GitHub, Android will prevent you from doing so and show a generic error message. The only solution here is to uninstall the existing version, and then install your build. Note that this will delete any logins, settings and downloads that you had configured.  
 This generally shouldn't be needed, since debug builds works fine for daily usage, even though they are a bit less performant.

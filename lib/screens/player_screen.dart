@@ -7,6 +7,7 @@ import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
@@ -17,7 +18,6 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
@@ -180,7 +180,7 @@ class _PlayerScreenContent extends ConsumerWidget {
           // This should never actually be called until widget finishes build and controller is initialized
           if (!FinampSettingsHelper.finampSettings.disableGesture ||
               !controller.shouldShow(PlayerHideable.bottomActions)) {
-            showQueueBottomSheet(context);
+            showQueueBottomSheet(context, ref);
           }
         }
       },

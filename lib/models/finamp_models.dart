@@ -154,6 +154,8 @@ class DefaultSettings {
   static const releaseDateFormat = ReleaseDateFormat.year;
   static const autoOffline = AutoOfflineOption.disconnected;
   static const autoOfflineListenerActive = true;
+  static const audioFadeOutDuration = Duration(milliseconds: 0);
+  static const audioFadeInDuration = Duration(milliseconds: 0);
 }
 
 @HiveType(typeId: 28)
@@ -265,7 +267,9 @@ class FinampSettings {
       this.releaseDateFormat = DefaultSettings.releaseDateFormat,
       this.autoOffline = DefaultSettings.autoOffline,
       this.autoOfflineListenerActive =
-          DefaultSettings.autoOfflineListenerActive});
+          DefaultSettings.autoOfflineListenerActive,
+      this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
+      this.audioFadeInDuration = DefaultSettings.audioFadeInDuration});
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -541,7 +545,16 @@ class FinampSettings {
   @HiveField(84, defaultValue: DefaultSettings.releaseDateFormat)
   ReleaseDateFormat releaseDateFormat;
 
-  @HiveField(85, defaultValue: DefaultSettings.autoOffline)
+  @HiveField(85, defaultValue: null)
+  String? lastUsedDownloadLocationId;
+
+  @HiveField(86, defaultValue: DefaultSettings.audioFadeOutDuration)
+  Duration audioFadeOutDuration;
+
+  @HiveField(87, defaultValue: DefaultSettings.audioFadeInDuration)
+  Duration audioFadeInDuration;
+
+  @HiveField(88, defaultValue: DefaultSettings.autoOffline)
   AutoOfflineOption autoOffline;
 
   // this will get set to false when the user
@@ -549,7 +562,7 @@ class FinampSettings {
   // true when the user disables offline mode
   // again. This prevents offline mode from beeing
   // automatically disabled when connecting to wifi
-  @HiveField(86, defaultValue: DefaultSettings.autoOfflineListenerActive)
+  @HiveField(89, defaultValue: DefaultSettings.autoOfflineListenerActive)
   bool autoOfflineListenerActive;
 
   static Future<FinampSettings> create() async {

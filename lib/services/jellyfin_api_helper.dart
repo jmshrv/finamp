@@ -882,13 +882,17 @@ class JellyfinApiHelper {
     if (offline) {
       return false;
     }
+    var itemType = BaseItemDtoType.fromItem(item);
+    var isPlaylist = itemType == BaseItemDtoType.playlist;
     bool deleteEnabled =
         ref.watch(finampSettingsProvider.allowDeleteFromServer);
-    if (!deleteEnabled) {
+
+    // always check if a playlist is deletable
+    if (!deleteEnabled && !isPlaylist) {
       return false;
     }
+
     // do not bother checking server for item types known to not be deletable
-    var itemType = BaseItemDtoType.fromItem(item);
     if (![
       BaseItemDtoType.album,
       BaseItemDtoType.playlist,

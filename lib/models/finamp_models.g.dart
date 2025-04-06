@@ -210,20 +210,25 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
-      autoOffline: fields[85] == null
+      autoOffline: fields[88] == null
           ? AutoOfflineOption.disconnected
-          : fields[85] as AutoOfflineOption,
-      autoOfflineListenerActive: fields[86] == null ? true : fields[86] as bool,
+          : fields[88] as AutoOfflineOption,
+      autoOfflineListenerActive: fields[89] == null ? true : fields[89] as bool,
+      audioFadeOutDuration:
+          fields[86] == null ? Duration.zero : fields[86] as Duration,
+      audioFadeInDuration:
+          fields[87] == null ? Duration.zero : fields[87] as Duration,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
-      ..defaultDownloadLocation = fields[58] as String?;
+      ..defaultDownloadLocation = fields[58] as String?
+      ..lastUsedDownloadLocationId = fields[85] as String?;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(82)
+      ..writeByte(85)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -385,8 +390,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(84)
       ..write(obj.releaseDateFormat)
       ..writeByte(85)
-      ..write(obj.autoOffline)
+      ..write(obj.lastUsedDownloadLocationId)
       ..writeByte(86)
+      ..write(obj.audioFadeOutDuration)
+      ..writeByte(87)
+      ..write(obj.audioFadeInDuration)
+      ..writeByte(88)
+      ..write(obj.autoOffline)
+      ..writeByte(89)
       ..write(obj.autoOfflineListenerActive);
   }
 
