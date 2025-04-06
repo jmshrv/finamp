@@ -1358,6 +1358,23 @@ class DownloadsSyncService {
             DownloadStub.fromItem(type: DownloadItemType.track, item: e));
         childStubs.addAll(trackChildStubs);
       }
+      // If we are an artist, we also need to add the tracks where the artist
+      // only is a performing artist, but not an album artist
+      // We might get some overlap because we often see albumartist = performingartist,
+      // but they will get filtered out later
+      if (parent.baseItemType == BaseItemDtoType.artist) {
+        var artistTrackChildItems = await _jellyfinApiData.getItems(
+                parentItem: item,
+                includeItemTypes: BaseItemDtoType.track.idString,
+                filters: "Artist=${parent.name}",
+                artistType: ArtistType.artist,
+                fields:
+                    "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName") ??
+            [];
+        var artistTrackChildStubs = artistTrackChildItems.map((e) =>
+            DownloadStub.fromItem(type: DownloadItemType.track, item: e));
+        childStubs.addAll(artistTrackChildStubs);
+      }
       itemFetch.complete(childItems.map((e) => e.id.raw).toList());
       for (var element in childStubs) {
         _metadataCache[BaseItemId(element.id)] = Future.value(element);

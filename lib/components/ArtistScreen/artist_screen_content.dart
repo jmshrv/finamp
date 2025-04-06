@@ -60,6 +60,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     final Future<List<List<BaseItemDto>?>> futures;
     final Future<List<BaseItemDto>?> allTracks;
     final bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
+    List<BaseItemDto> allChildren = [];
 
     // Get Items
     if (isOffline) {
@@ -159,9 +160,26 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           includeItemTypes: "MusicAlbum",
           artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist
         ),
+        // Now we fetch every performing artist track
+        // (this has to happen in Future.wait, because otherwise we
+        // get the correct childrenCount for the Download Status too late)
+        if (widget.parent.type != "MusicGenre")
+          jellyfinApiHelper.getItems(
+            parentItem: widget.parent,
+            filters: "Artist=${widget.parent.name}",
+            sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+            includeItemTypes: "Audio",
+            artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist,
+          )
+        else
+          Future.value(null)
       ]);
+
       // Get All Tracks for Track Count and Playback
       allTracks = Future.sync(() async {
+        final previousResults = await futures;
+        final allPerformingTracksResponse = previousResults[3];
+
         // Fetch every genre or album artist track
         final allAlbumArtistTracksResponse = await jellyfinApiHelper.getItems(
           parentItem: widget.parent,
@@ -170,16 +188,10 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           includeItemTypes: "Audio",
           artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.albumartist,
         );
+
         // Genre is already ready
         if (widget.parent.type == "MusicGenre") return allAlbumArtistTracksResponse;
-        // Now we fetch every performing artist track
-        final allPerformingTracksResponse = await jellyfinApiHelper.getItems(
-          parentItem: widget.parent,
-          filters: "Artist=${widget.parent.name}",
-          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-          includeItemTypes: "Audio",
-          artistType: (widget.parent.type == "MusicGenre") ? null : ArtistType.artist,
-        );
+
         // We exclude albumartist tracks from performance artist tracks
         final allAlbumArtistTracks = allAlbumArtistTracksResponse ?? [];
         final allPerformingTracks = allPerformingTracksResponse ?? [];
@@ -187,6 +199,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
         final filteredPerformingTracks = allPerformingTracks
             .where((performingTrack) => !albumArtistTrackIds.contains(performingTrack.id))
             .toList();
+        
         // combine and return
         final combinedTracks = [...allAlbumArtistTracks, ...filteredPerformingTracks];
         return combinedTracks;
@@ -199,12 +212,18 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
           var albumsAsPerformingArtist = snapshot.data?.elementAtOrNull(2) ?? [];
+          var allPerformingArtistTracks = snapshot.data?.elementAtOrNull(3) ?? [];
+
           var appearsOnAlbums = albumsAsPerformingArtist.where((a) =>
               !albums.any((b) => b.id == a.id)).toList();
           var topTracks = tracks
               .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
               .take(5)
               .toList();
+
+          // Combine Children to get correct ChildrenCount
+          // for the Download Status Sync Display for Artists
+          allChildren = [...albums, ...allPerformingArtistTracks];
 
           return PaddedCustomScrollview(slivers: <Widget>[
             SliverAppBar(
@@ -232,7 +251,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 DownloadButton(
                     item: DownloadStub.fromItem(
                         item: widget.parent, type: DownloadItemType.collection),
-                    children: albums)
+                    children: (widget.parent.type == "MusicGenre") ? albums : allChildren)
               ],
             ),
             if (!isOffline &&
