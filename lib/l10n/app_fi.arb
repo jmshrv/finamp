@@ -159,8 +159,6 @@
   "@logOut": {},
   "downloadedTracksWillNotBeDeleted": "Ladattuja kappaleita ei poisteta",
   "@downloadedTracksWillNotBeDeleted": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin käyttää AAC:tä transkoodaukseen",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Ota transkoodaus käyttöön",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transkoodaa musiikin suoratoistoa varten palvelimen päässä.",
@@ -885,12 +883,6 @@
       }
     }
   },
-  "transcodingStreamingContainerTitle": "Valitse transkoodauksen säiliö",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Valitse säiliömuoto, jota käytetään suoratoistettaessa transkoodattua ääntä. Ei vaikuta jonossa jo oleviin kappaleisiin.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeCodecTitle": "Valitse latausten koodekki",
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"

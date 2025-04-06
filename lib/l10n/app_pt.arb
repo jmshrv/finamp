@@ -31,8 +31,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Tem a certeza?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "O Jellyfin utiliza AAC para transcodificação",
-  "@jellyfinUsesAACForTranscoding": {},
   "bitrateSubtitle": "Uma taxa de bits mais alta oferece áudio de melhor qualidade, mas consome uma largura de banda maior.",
   "@bitrateSubtitle": {},
   "enterLowPriorityStateOnPause": "Entrar Estado de Baixa-Prioridade durante Pausa",
@@ -719,10 +717,6 @@
       }
     }
   },
-  "transcodingStreamingContainerTitle": "Selecionar Contentor de Transcodificação",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "downloadTranscodeEnableTitle": "Ativar Transferências Transcodificadas",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -747,8 +741,6 @@
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
   },
-  "transcodingStreamingContainerSubtitle": "Selecione o contentor de segmentos a usar ao transmitir áudio transcodificado. As faixas já na fila não serão afetadas.",
-  "@transcodingStreamingContainerSubtitle": {},
   "volumeNormalizationSettingsTitle": "Normalização de Volume",
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"

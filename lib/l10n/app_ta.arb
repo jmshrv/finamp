@@ -591,8 +591,6 @@
   "@notAvailableInOfflineMode": {},
   "areYouSure": "நீங்கள் உறுதியாக இருக்கிறீர்களா?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "செல்லிஃபின் டிரான்ச்கோடிங்கிற்கு AAC ஐப் பயன்படுத்துகிறது",
-  "@jellyfinUsesAACForTranscoding": {},
   "logOut": "விடுபதிகை",
   "@logOut": {},
   "enableTranscoding": "டிரான்ச்கோடிங்கை இயக்கவும்",
@@ -1440,10 +1438,6 @@
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
-  "transcodingStreamingContainerTitle": "டிரான்ச்கோடிங் கொள்கலனைத் தேர்ந்தெடுக்கவும்",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "downloadTranscodeEnableOption": "{option, select, always{எப்போதும்} never{ஒருபோதும்} ask{கேளுங்கள்} other{{option}}}",
   "@downloadTranscodeEnableOption": {
     "placeholders": {
@@ -1453,8 +1447,6 @@
     },
     "description": "Options in Select Download Codec dropdown"
   },
-  "transcodingStreamingContainerSubtitle": "டிரான்ச்கோடட் ஆடியோவை ச்ட்ரீமிங் செய்யும் போது பயன்படுத்த பிரிவு கொள்கலனைத் தேர்ந்தெடுக்கவும். ஏற்கனவே வரிசைப்படுத்தப்பட்ட தடங்கள் பாதிக்கப்படாது.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadBitrate": "பிட்ரேட்டைப் பதிவிறக்கவும்",
   "@downloadBitrate": {
     "description": "Title for Download Bitrate settings slider"

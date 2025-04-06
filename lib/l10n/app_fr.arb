@@ -238,8 +238,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Êtes-vous sûr ?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin utilise AAC lors du transcodage",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Activer le transcodage",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transcode les flux musicaux côté serveur.",
@@ -1263,10 +1261,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Sélection du format de transcodage",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "downloadTranscodeEnableTitle": "Activer le transcodage pour le téléchargement",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -1457,8 +1451,6 @@
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
   },
-  "transcodingStreamingContainerSubtitle": "Sélectionner le segment du format à utiliser lors du stream d'audio transcodé. Les titres déjà dans la queue ne seront pas affectés.",
-  "@transcodingStreamingContainerSubtitle": {},
   "prioritizePlayerCover": "Prioriser la pochette de l'album",
   "@prioritizePlayerCover": {},
   "prioritizePlayerCoverSubtitle": "Favorise la taille de la pochette d'album sur le lecteur. Les boutons moins importants seront cachés sur les écrans de petite taille.",

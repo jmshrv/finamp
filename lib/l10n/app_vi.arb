@@ -189,8 +189,6 @@
   "@logOut": {},
   "downloadedTracksWillNotBeDeleted": "Các bài hát được tải xuống sẽ không bị xoá",
   "@downloadedTracksWillNotBeDeleted": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin dùng codec AAC để chuyển đổi",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Bật chuyển đổi",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Chuyển đổi các luồng truyền phát nhạc trên phía máy chủ.",

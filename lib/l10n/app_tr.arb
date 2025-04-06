@@ -152,8 +152,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Çıkış Yap",
   "@logOut": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin kod dönüştürme için AAC kullanıyor",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Kod dönüştürmeyi etkinleştir",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Sunucu tarafındaki ses akışlarının kodunu dönüştürür.",
@@ -1386,12 +1384,6 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "transcodingStreamingContainerTitle": "Kod dönüştürme kalıbını seçin",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Kodu dönüştürülmüş ses akışı sırasında kullanılacak bölüm kapsayıcısını seçin. Zaten sıraya alınmış parçalar etkilenmeyecektir.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableTitle": "Kodu dönüştürülmüş indirmeleri etkinleştir",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"

@@ -137,8 +137,6 @@
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transcodifica I flussi di musica dal lato server.",
   "@enableTranscodingSubtitle": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC per la transcodifica",
-  "@jellyfinUsesAACForTranscoding": {},
   "appDirectory": "Cartella dell'App",
   "@appDirectory": {},
   "directoryMustBeEmpty": "La cartella deve essere vuota",
@@ -1178,12 +1176,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Seleziona l'estensione dei file di transcodifica",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Seleziona l'estensione per i segmenti di file quando si effettua lo streaming di audio transcodificato. I brani già in coda non saranno interessati.",
-  "@transcodingStreamingContainerSubtitle": {},
   "confirmAddToNextUp": "Aggiunto {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} alla coda A Seguire",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",

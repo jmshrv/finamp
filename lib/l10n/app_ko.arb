@@ -169,8 +169,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "확실한가요?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin은 트랜스코딩에 AAC를 사용합니다",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "트랜스코딩 활성화",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "서버 측에서 음악 스트리밍을 트랜스코딩 합니다.",
@@ -1399,12 +1397,6 @@
       }
     },
     "description": "Localized names of special downloadable collections like favorites."
-  },
-  "transcodingStreamingContainerSubtitle": "트랜스코딩한 오디오를 스트리밍할 때 사용할 분할 컨테이너. 재생목록에 있는 트랙에는 적용되지 않습니다.",
-  "@transcodingStreamingContainerSubtitle": {},
-  "transcodingStreamingContainerTitle": "트랜스코딩 컨테이터 선택",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
   "downloadTranscodeEnableTitle": "트랜스코드 다운로드 활성화",
   "@downloadTranscodeEnableTitle": {

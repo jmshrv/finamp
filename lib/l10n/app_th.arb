@@ -138,8 +138,6 @@
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "ไม่พร้อมใช้งานในโหมดออฟไลน์",
   "@notAvailableInOfflineMode": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin ใช้รหัส AAC สำหรับการแปลงไฟล์",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "เปิดใช้งานการแปลงไฟล์",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "การแปลงไฟล์เพลงจะถูกดำเนินการจากฝั่งเซิร์ฟเวอร์",

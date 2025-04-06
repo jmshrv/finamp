@@ -154,8 +154,6 @@
   "@message": {},
   "notAvailableInOfflineMode": "Ikke tilgjengelig i frakoblet modus",
   "@notAvailableInOfflineMode": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin bruker AAC for transkoding",
-  "@jellyfinUsesAACForTranscoding": {},
   "list": "Liste",
   "@list": {},
   "light": "Lys",

@@ -5,8 +5,6 @@
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Недоступне в оффлайн режимі",
   "@notAvailableInOfflineMode": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin використовує ААС для транскодування",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscodingSubtitle": "Перекодування музичного потоку відбувається зі сторони сервера.",
   "@enableTranscodingSubtitle": {},
   "customLocation": "Власна папка",
@@ -1016,10 +1014,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Обрати контейнер для транскодування",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "finampCollectionNames": "{itemType, select, favorites{Обране} allPlaylists{Усі списки відтворення} fiveLatestAlbums{5 Останніх альбомів} allPlaylistsMetadata{Метадані списку відтворення} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
@@ -1609,8 +1603,6 @@
   "@syncComplete": {
     "description": "Message displayed after download sync completes."
   },
-  "transcodingStreamingContainerSubtitle": "Обрати сегментований контейнер для використання при потоковому відтворення транскодованого аудіо. Не буде застосовано для попередньо доданих в чергу композицій.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableTitle": "Увімкнути транскодовані завантаження",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"

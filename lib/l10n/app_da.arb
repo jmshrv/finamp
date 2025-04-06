@@ -155,8 +155,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Er du sikker?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin bruger AAC ved omkodning",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Aktivér omkodning",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Omkoder musik under afspilning på serveren.",
