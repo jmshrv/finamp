@@ -2435,7 +2435,7 @@ enum KeepScreenOnOption {
 }
 
 @HiveType(typeId: 73)
-enum FinampSegmentContainer {
+enum FinampTranscodingStreamingFormat {
   @HiveField(0)
   aacMpegTS("aac", "ts"),
   @HiveField(1)
@@ -2449,7 +2449,7 @@ enum FinampSegmentContainer {
   @HiveField(5)
   vorbisFragmentedMp4("vorbis", "mp4");
 
-  const FinampSegmentContainer(this.codec, this.container);
+  const FinampTranscodingStreamingFormat(this.codec, this.container);
 
   final String codec;
   /// The container to use to transport the segments
