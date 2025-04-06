@@ -67,7 +67,7 @@
   "@addButtonLabel": {},
   "addDownloadLocation": "Přidat umístění stažených",
   "@addDownloadLocation": {},
-  "bitrateSubtitle": "Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší využití internetu.",
+  "bitrateSubtitle": "Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší využití internetu. Neplatí pro bezztrátové kodeky, např. FLAC",
   "@bitrateSubtitle": {},
   "appDirectory": "Adresář aplikací",
   "@appDirectory": {},
@@ -1978,5 +1978,33 @@
   "swipeLeftToRightActionSubtitle": "Akce vyvolaná při přejetí po skladbě v seznamu zleva doprava.",
   "@swipeLeftToRightActionSubtitle": {},
   "swipeRightToLeftActionSubtitle": "Akce vyvolaná při přejetí po skladbě v seznamu zprava doleva.",
-  "@swipeRightToLeftActionSubtitle": {}
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Vyberte formát překódování",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "Vyberte formát, který se má použít při streamování překódovaného zvuku. Skladby, které jsou již ve frontě, nebudou ovlivněny.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "autoOfflineOptionNetwork": "Síť",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineSettingTitle": "Automatický offline režim",
+  "@autoOfflineSettingTitle": {},
+  "autoOfflineNotification": "Offline režim automaticky {state, select, enabled{zapnut} disabled{vypnut} other{nastavena kvantová pozice}}",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "autoOfflineOptionOff": "Zakázáno",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineOptionDisconnected": "Odpojeno",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nSíť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  }
 }
