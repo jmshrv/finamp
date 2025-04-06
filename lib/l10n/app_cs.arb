@@ -1978,5 +1978,13 @@
   "audioFadeOutDurationSettingTitle": "Délka ztlumování zvuku",
   "@audioFadeOutDurationSettingTitle": {
     "description": "Title for the audio fade-in duration setting."
-  }
+  },
+  "swipeRightToLeftAction": "Akce při přejetí doleva",
+  "@swipeRightToLeftAction": {},
+  "swipeLeftToRightAction": "Akce při přejetí doprava",
+  "@swipeLeftToRightAction": {},
+  "swipeLeftToRightActionSubtitle": "Akce vyvolaná při přejetí po skladbě v seznamu zleva doprava.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeRightToLeftActionSubtitle": "Akce vyvolaná při přejetí po skladbě v seznamu zprava doleva.",
+  "@swipeRightToLeftActionSubtitle": {}
 }
