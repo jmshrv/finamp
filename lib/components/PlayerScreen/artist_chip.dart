@@ -49,6 +49,10 @@ class ArtistChips extends StatelessWidget {
   Widget build(BuildContext context) {
     final artists =
         (useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
+    final filteredArtists = {
+      for (var artist in artists) artist.id: artist
+    }.values.toList();
+
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -58,30 +62,33 @@ class ArtistChips extends StatelessWidget {
           spacing: 4.0,
           runSpacing: 4.0,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: artists.isEmpty
+          children: filteredArtists.isEmpty
               ? [
                   ArtistChip(
-                      backgroundColor: backgroundColor,
-                      color: color,
-                      artist: null,
-                      key: const ValueKey(null))
+                    backgroundColor: backgroundColor,
+                    color: color,
+                    artist: null,
+                    key: const ValueKey(null),
+                  )
                 ]
-              : List.generate(artists.length, (index) {
-                  final currentArtist = artists[index];
+              : List.generate(filteredArtists.length, (index) {
+                  final currentArtist = filteredArtists[index];
 
                   return ArtistChip(
-                      backgroundColor: backgroundColor,
-                      color: color,
-                      artist: BaseItemDto(
-                        id: currentArtist.id,
-                        name: currentArtist.name,
-                        type: "MusicArtist",
-                      ),
-                      key: ValueKey(currentArtist.id));
+                    backgroundColor: backgroundColor,
+                    color: color,
+                    artist: BaseItemDto(
+                      id: currentArtist.id,
+                      name: currentArtist.name,
+                      type: "MusicArtist",
+                    ),
+                    key: ValueKey(currentArtist.id),
+                  );
                 }),
         ),
       ),
     );
+
   }
 }
 
