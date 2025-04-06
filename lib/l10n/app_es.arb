@@ -164,8 +164,6 @@
   "@error": {},
   "favourite": "Favorito",
   "@favourite": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC para transcodificar",
-  "@jellyfinUsesAACForTranscoding": {},
   "list": "Lista",
   "@list": {},
   "location": "Ubicación",
@@ -1472,10 +1470,6 @@
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
-  "transcodingStreamingContainerTitle": "Seleccionar Contenedor de Transcodificación",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "downloadBitrateSubtitle": "Una mayor tasa de bits da una mejor calidad de audio a costa de mayor requerimientos de almacenamiento.",
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
@@ -1722,8 +1716,6 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "transcodingStreamingContainerSubtitle": "Seleccione el contenedor a usar para el segmento al transmitir audio transcodificado. Las pistas que ya se encuentren en la cola no serán afectados.",
-  "@transcodingStreamingContainerSubtitle": {},
   "showProgressOnNowPlayingBarTitle": "Mostrar el progreso de la pista en el mini reproductor de la aplicación",
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"

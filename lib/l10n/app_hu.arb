@@ -181,8 +181,6 @@
   "@favourite": {},
   "enableTranscodingSubtitle": "Transzkódolja a zenestreameket a szerver oldalon.",
   "@enableTranscodingSubtitle": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin AAC-t használ az transzkódoláshoz",
-  "@jellyfinUsesAACForTranscoding": {},
   "layoutAndTheme": "Elrendezés & Téma",
   "@layoutAndTheme": {},
   "location": "Elhelyezkedés",

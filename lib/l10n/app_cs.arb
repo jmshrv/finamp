@@ -345,8 +345,6 @@
   "@downloadLocations": {},
   "audioService": "Služba zvuku",
   "@audioService": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin používá pro překódování formát AAC",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscodingSubtitle": "Překóduje hudební streamy na straně serveru.",
   "@enableTranscodingSubtitle": {},
   "selectDirectory": "Vybrat adresář",
@@ -1050,12 +1048,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Vyberte kontejner překódování",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Vyberte kontejner segmentů k použití při streamování překódovaného zvuku. Skladby, které jsou ve frontě, nebudou ovlivněny.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableOption": "{option, select, always{Vždy} never{Nikdy} ask{Zeptat} other{{option}} }",
   "@downloadTranscodeEnableOption": {
     "placeholders": {

@@ -270,8 +270,6 @@
   "@logOut": {},
   "downloadedTracksWillNotBeDeleted": "Gedownloade nummers worden niet verwijderd",
   "@downloadedTracksWillNotBeDeleted": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin gebruikt AAC voor conversie",
-  "@jellyfinUsesAACForTranscoding": {},
   "selectDirectory": "Selecteer map",
   "@selectDirectory": {},
   "unknownError": "Onbekende Fout",

@@ -259,8 +259,6 @@
   "@transcoding": {},
   "audioService": "سرویس صدا",
   "@audioService": {},
-  "jellyfinUsesAACForTranscoding": "جلی‌فین از AAC برای رمزگردانی (transcoding) استفاده می‌کند",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "فعال‌سازی رمزگردانی (transcoding)",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "آهنگ را سمت سرور رمزگردانی می‌کند.",
@@ -1351,12 +1349,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "گزینش ظرف رمزگردانی (Transcoding Container)",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "ظرف سگمنت را انتخاب کنید تا به هنگام پخش لحظه‌ای صدای رمزگردانی شده به کار بسته شود. قطعه‌های به صف شده کنونی تحت تأثیر قرار نمی‌گیرند.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadBitrate": "نرخ انتقال بارگیری",
   "@downloadBitrate": {
     "description": "Title for Download Bitrate settings slider"

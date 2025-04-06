@@ -321,8 +321,6 @@
   "@noArtist": {},
   "playCount": "播放计数",
   "@playCount": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin 使用 AAC 进行转码",
-  "@jellyfinUsesAACForTranscoding": {},
   "noItem": "没有项目",
   "@noItem": {},
   "applicationLegalese": "以 Mozilla Public License 2.0 协议许可。\n源代码位于：{sourceCodeLink}。",
@@ -1304,10 +1302,6 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "transcodingStreamingContainerTitle": "选择转码容器",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "downloadTranscodeEnableTitle": "启用转码下载",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -1316,8 +1310,6 @@
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
-  "transcodingStreamingContainerSubtitle": "选择流式传输转码音频时要使用的分段容器。已排队的歌曲不会受到影响。",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadBitrate": "下载比特率",
   "@downloadBitrate": {
     "description": "Title for Download Bitrate settings slider"

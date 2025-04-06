@@ -177,8 +177,6 @@
   "@logOut": {},
   "downloadedTracksWillNotBeDeleted": "ダウロード済みの曲は削除されません",
   "@downloadedTracksWillNotBeDeleted": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin はトランスコードに AAC を利用します",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "トランスコード有効",
   "@enableTranscoding": {},
   "bitrate": "ビットレート",

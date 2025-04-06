@@ -115,8 +115,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Вы уверены?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin использует AAC для транскодирования",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Включить транскодирование",
   "@enableTranscoding": {},
   "bitrate": "Битрейт",
@@ -888,8 +886,6 @@
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   },
-  "transcodingStreamingContainerSubtitle": "Выберите контейнер для сегментов при использовании потоковой передачи транскодированного аудио. Уже добавленные в очередь композиции не будут затронуты.",
-  "@transcodingStreamingContainerSubtitle": {},
   "maxConcurrentDownloadsSubtitle": "Увеличение количества одновременных загрузок может способствовать более эффективной загрузке в фоновом режиме, но может привести к сбоям некоторых загрузок, если они очень большие, или вызвать значительную задержку в некоторых случаях.",
   "@maxConcurrentDownloadsSubtitle": {
     "description": "Description of setting controlling max concurrent downloads."
@@ -1277,10 +1273,6 @@
   "downloadsWorkersSetting": "Количество потоков-загрузчиков",
   "@downloadsWorkersSetting": {
     "description": "Title of setting controlling download worker count."
-  },
-  "transcodingStreamingContainerTitle": "Выбор контейнера для транскодирования",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
   "dontTranscode": "Загрузить оригинал{description, select, null{} other{ - {description}}}",
   "@dontTranscode": {

@@ -234,8 +234,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "你確定嗎？",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin 使用 AAC 進行轉碼",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "啟用轉碼",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "如果啟用，音訊將由伺服器轉碼。",
@@ -1555,12 +1553,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "選擇轉碼容器格式",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "選擇串流轉碼音訊時要使用的區段容器。已排入佇列的歌曲將不受影響。",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeCodecTitle": "選擇下載用的編碼",
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"

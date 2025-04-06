@@ -288,8 +288,6 @@
   },
   "invalidNumber": "Ogiltigt Nummer",
   "@invalidNumber": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin använder AAC för transkodning",
-  "@jellyfinUsesAACForTranscoding": {},
   "datePlayed": "Datum Uppspelad",
   "@datePlayed": {},
   "downloads": "Nedladdningar",
@@ -1520,10 +1518,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Välj transkodningsbehållare",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "finampCollectionNames": "{itemType, select, favorites{Favoriter} allPlaylists{Alla spellistor} fiveLatestAlbums{De 5 senaste albumen} allPlaylistsMetadata{Metadata för spellista} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
@@ -1541,8 +1535,6 @@
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
-  "transcodingStreamingContainerSubtitle": "Välj bitbehållare som skall användas vid strömning av transkodat ljud. Redan kölagda ljudspår påverkas inte.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} transkodad}}",
   "@downloadInfo": {
     "placeholders": {
