@@ -199,7 +199,6 @@ class _OutputTargetListState extends State<OutputTargetList> {
               return OutputSelectorTile(
                   routeInfo: route,
                   onSelect: () {
-                    print("refreshing2");
                     setState(() {});
                   });
             },
@@ -236,7 +235,8 @@ class _OutputTargetListState extends State<OutputTargetList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CTAMedium(
-            text: "Connect to a device*",
+            text: AppLocalizations.of(context)!
+                .outputMenuOpenConnectionSettingsButtonTitle,
             icon: TablerIcons.cast,
             //accentColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
@@ -268,11 +268,11 @@ class OutputSelectorTile extends StatelessWidget {
       forceLoading: isLoading,
       title: routeInfo.name ?? AppLocalizations.of(context)!.unknownName,
       subtitle: (routeInfo.isDeviceSpeaker
-          ? "Device Speaker*"
+          ? AppLocalizations.of(context)!.deviceType("speaker")
           : switch (routeInfo.deviceType) {
-              1 => "TV*",
-              3 => "Bluetooth*",
-              _ => "Unknown*",
+              1 => AppLocalizations.of(context)!.deviceType("tv"),
+              3 => AppLocalizations.of(context)!.deviceType("bluetooth"),
+              _ => AppLocalizations.of(context)!.deviceType("unknown"),
             }),
       // subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
       leading: Container(
@@ -291,7 +291,6 @@ class OutputSelectorTile extends StatelessWidget {
         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
         await audioHandler.setOutputToRoute(routeInfo);
         unawaited(Future.delayed(const Duration(milliseconds: 1250)).then((_) {
-          print("refreshing");
           onSelect?.call();
         }));
         return true;

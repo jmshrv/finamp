@@ -1960,6 +1960,10 @@
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
   },
+  "outputMenuButtonTitle": "Output",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
   "outputMenuTitle": "Change Output",
   "@outputMenuTitle": {
     "description": "Title for the output menu that allows the user to change the audio output device and volume"
@@ -1971,5 +1975,19 @@
   "outputMenuDevicesSectionTitle": "Available Devices",
   "@outputMenuDevicesSectionTitle": {
     "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Connect to a device",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "deviceType": "{type, select, speaker{Device Speaker} tv{TV} bluetooth{Bluetooth} other{Unknown}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
   }
+
 }

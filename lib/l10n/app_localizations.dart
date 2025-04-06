@@ -3206,6 +3206,12 @@ abstract class AppLocalizations {
   /// **'Error loading available libraries for user'**
   String get librarySelectError;
 
+  /// Button title for opening the output menu/panel
+  ///
+  /// In en, this message translates to:
+  /// **'Output'**
+  String get outputMenuButtonTitle;
+
   /// Title for the output menu that allows the user to change the audio output device and volume
   ///
   /// In en, this message translates to:
@@ -3223,6 +3229,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available Devices'**
   String get outputMenuDevicesSectionTitle;
+
+  /// Button title for connecting to a device from the output menu
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to a device'**
+  String get outputMenuOpenConnectionSettingsButtonTitle;
+
+  /// Label for the type of device in the output menu
+  ///
+  /// In en, this message translates to:
+  /// **'{type, select, speaker{Device Speaker} tv{TV} bluetooth{Bluetooth} other{Unknown}}'**
+  String deviceType(String type);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

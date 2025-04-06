@@ -1994,6 +1994,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get librarySelectError => 'Error loading available libraries for user';
 
   @override
+  String get outputMenuButtonTitle => 'Output';
+
+  @override
   String get outputMenuTitle => 'Change Output';
 
   @override
@@ -2001,4 +2004,21 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get outputMenuDevicesSectionTitle => 'Available Devices';
+
+  @override
+  String get outputMenuOpenConnectionSettingsButtonTitle => 'Connect to a device';
+
+  @override
+  String deviceType(String type) {
+    String _temp0 = intl.Intl.selectLogic(
+      type,
+      {
+        'speaker': 'Device Speaker',
+        'tv': 'TV',
+        'bluetooth': 'Bluetooth',
+        'other': 'Unknown',
+      },
+    );
+    return '$_temp0';
+  }
 }
