@@ -240,7 +240,7 @@
   "@enableTranscodingSubtitle": {},
   "bitrate": "位元速率",
   "@bitrate": {},
-  "bitrateSubtitle": "更高的位元速率可提升音訊品質，但也會消耗更多的頻寬。",
+  "bitrateSubtitle": "更高的位元速率可提升音訊品質，但也會消耗更多的頻寬。此設定不適用於無損壓縮編碼，例如 FLAC",
   "@bitrateSubtitle": {},
   "customLocation": "自定義位置",
   "@customLocation": {},
@@ -1960,5 +1960,53 @@
   "librarySelectError": "載入可用媒體庫時發生錯誤",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
+  },
+  "audioFadeOutDurationSettingTitle": "音訊淡出時長",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
+  },
+  "audioFadeInDurationSettingTitle": "音訊淡入時長",
+  "@audioFadeInDurationSettingTitle": {},
+  "swipeLeftToRightActionSubtitle": "在音軌清單中將音軌由左往右滑時觸發的動作。",
+  "@swipeLeftToRightActionSubtitle": {},
+  "audioFadeOutDurationSettingSubtitle": "音訊淡出的時間長度，以毫秒為單位。",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "swipeRightToLeftAction": "左滑動作",
+  "@swipeRightToLeftAction": {},
+  "transcodingStreamingFormatTitle": "選擇轉檔格式",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "選擇串流轉檔使用的格式。已經加入播放隊列的歌曲不會受到影響。",
+  "@transcodingStreamingFormatSubtitle": {},
+  "autoOfflineOptionOff": "停用",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineSettingTitle": "自動離線模式",
+  "@autoOfflineSettingTitle": {},
+  "swipeLeftToRightAction": "右滑動作",
+  "@swipeLeftToRightAction": {},
+  "swipeRightToLeftActionSubtitle": "在音軌清單中將音軌由右往左滑時觸發的動作。",
+  "@swipeRightToLeftActionSubtitle": {},
+  "autoOfflineOptionNetwork": "區域網路",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineOptionDisconnected": "離線",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "audioFadeInDurationSettingSubtitle": "音訊淡入的時間長度，以毫秒為單位。設為 0 以停用音訊淡入。",
+  "@audioFadeInDurationSettingSubtitle": {},
+  "autoOfflineNotification": "自動 {state, select, enabled{啟用} disabled{停用} other{薛丁格}} 離線模式",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "autoOfflineSettingDescription": "自動啟用離線模式。\n停用：不會自動啟用離線模式。可能可以節省電力。\n區域網路：離開 Wifi 或乙太網路連線時啟用離線模式。\n離線：失去網路連線時啟用離線模式。\n\n你可以手動啟用離線模式，這麼做將會暫停自動離線模式，直到離線模式被手動關閉",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
   }
 }
