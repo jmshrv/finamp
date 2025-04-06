@@ -460,15 +460,13 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Are you sure?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin uses AAC for transcoding",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Enable Transcoding",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transcodes music streams on the server side.",
   "@enableTranscodingSubtitle": {},
   "bitrate": "Bitrate",
   "@bitrate": {},
-  "bitrateSubtitle": "A higher bitrate gives higher quality audio at the cost of higher bandwidth.",
+  "bitrateSubtitle": "A higher bitrate gives higher quality audio at the cost of higher bandwidth. Does not apply to lossless codecs, e.g. FLAC",
   "@bitrateSubtitle": {},
   "customLocation": "Custom Location",
   "@customLocation": {},
@@ -1421,11 +1419,11 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Select Transcoding Container",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
+  "transcodingStreamingFormatTitle": "Select Transcoding Format",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
   },
-  "transcodingStreamingContainerSubtitle": "Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.",
+  "transcodingStreamingFormatSubtitle": "Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.",
   "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
