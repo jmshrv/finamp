@@ -1958,5 +1958,35 @@
   "hideQueueButton": "隐藏队列按钮",
   "@hideQueueButton": {},
   "hideQueueButtonSubtitle": "隐藏播放器屏幕上的队列按钮。向上滑动即可访问队列。",
-  "@hideQueueButtonSubtitle": {}
+  "@hideQueueButtonSubtitle": {},
+  "autoOfflineOptionDisconnected": "断开",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingTitle": "自动离线模式",
+  "@autoOfflineSettingTitle": {},
+  "albumArtists": "专辑艺术家",
+  "@albumArtists": {},
+  "swipeLeftToRightAction": "向右轻扫操作",
+  "@swipeLeftToRightAction": {},
+  "swipeLeftToRightActionSubtitle": "从左到右滑动列表中的曲目时触发的动作.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeRightToLeftAction": "向左轻扫操作",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "从右向左滑动列表中的音轨时触发的动作.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "autoOfflineOptionNetwork": "网络",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "transcodingStreamingFormatTitle": "选择转码格式",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "autoOfflineSettingDescription": "自动启用脱机模式.\n已禁用:不会自动开启离线模式,可节省电池.\n网络: 在未连接到wifi或以太网时打开脱机模式.\n断开连接: 在未连接任何设备时打开脱机模式.\n您可以随时手动开启离线模式,它会暂停自动化,直到您再次关闭离线模式.",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "transcodingStreamingFormatSubtitle": "选择串流转码音频时要使用的格式.已排队的音轨不会受到影响.",
+  "@transcodingStreamingFormatSubtitle": {}
 }
