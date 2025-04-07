@@ -276,6 +276,10 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void resetNetworkSettings() {
+    // TODO
+  }
+
   static void resetAllSettings() {
     resetTranscodingSettings();
     resetDownloadSettings();
@@ -289,6 +293,7 @@ class FinampSettingsHelper {
     resetLyricsSettings();
     resetAlbumSettings();
     resetTabsSettings();
+    resetNetworkSettings();
 
     LocaleHelper.setLocale(null); // Reset to System Language
   }

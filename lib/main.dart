@@ -13,6 +13,7 @@ import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
+import 'package:finamp/screens/network_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
@@ -511,6 +512,8 @@ class _FinampState extends State<Finamp> with WindowListener {
                           const LanguageSelectionScreen(),
                       AlbumSettingsScreen.routeName: (context) =>
                           const AlbumSettingsScreen(),
+                      NetworkSettingsScreen.routeName: (context) =>
+                          const NetworkSettingsScreen()
                     },
                     initialRoute: SplashScreen.routeName,
                     navigatorObservers: [

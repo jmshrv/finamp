@@ -112,6 +112,7 @@ dependencies:
   connectivity_plus: ^6.1.3
   progress_border: ^0.1.5
   visibility_detector: ^0.4.0+2
+  network_info_plus: ^6.1.3
 
 dev_dependencies:
   flutter_test:

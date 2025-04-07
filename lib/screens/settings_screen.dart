@@ -1,4 +1,5 @@
 import 'package:finamp/screens/interaction_settings_screen.dart';
+import 'package:finamp/screens/network_settings_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -166,6 +167,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text(AppLocalizations.of(context)!.downloadSettings),
             onTap: () => Navigator.of(context)
                 .pushNamed(DownloadsSettingsScreen.routeName),
+          ),
+          ListTile(
+            leading: const Icon(Icons.wifi),
+            title: Text("Network"), // TODO TRANSLATION
+            onTap: () => Navigator.of(context)
+                .pushNamed(NetworkSettingsScreen.routeName)
           ),
           ListTile(
             leading: const Icon(Icons.music_note),
