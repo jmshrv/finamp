@@ -2006,5 +2006,11 @@
   "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nSíť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
-  }
+  },
+  "appearsOnAlbums": "Také na",
+  "@appearsOnAlbums": {},
+  "albumArtists": "Umělci alba",
+  "@albumArtists": {},
+  "performingArtists": "Účinkující umělci",
+  "@performingArtists": {}
 }
