@@ -1502,5 +1502,49 @@
   "hideQueueButton": "Cacher le bouton de la file d'attente",
   "@hideQueueButton": {},
   "marqueeOrTruncateButton": "Utiliser des ellipses pour les longs titres",
-  "@marqueeOrTruncateButton": {}
+  "@marqueeOrTruncateButton": {},
+  "fiveLatestAlbumsSettingSubtitle": "Les téléchargements seront enlevés lorsqu'ils deviennent trop vieux. Verrouillez le téléchargement pour empêcher la suppression.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "allPlaylistsInfoSetting": "Télécharger les métadonnées des playlists",
+  "@allPlaylistsInfoSetting": {},
+  "downloadAllPlaylistsSetting": "Télécharger toutes les playlists",
+  "@downloadAllPlaylistsSetting": {},
+  "fiveLatestAlbumsSetting": "Télécharger les 5 derniers albums",
+  "@fiveLatestAlbumsSetting": {},
+  "cacheLibraryImagesSettingsSubtitle": "Toutes les couvertures des albums, artistes, genres et playlists de la bibliothèque active seront téléchargées.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "cacheLibraryImagesSettings": "Mettre les images actuelles de la bibliothèque en cache",
+  "@cacheLibraryImagesSettings": {},
+  "showStopButtonOnMediaNotificationTitle": "Afficher le bouton stop sur la notification du lecteur",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showProgressOnNowPlayingBarTitle": "Montrer la progression du titre sur le \"mini lecteur\" de l'application",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Contrôle si la notification du lecteur a un bouton stop en plus d'un bouton pause. Cela vous permet d'arrêter la lecture sans ouvrir l'application.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "allPlaylistsInfoSettingSubtitle": "Synchroniser les métadonnées pour toutes les playlists afin d'améliorer votre expérience",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "downloadFavoritesSetting": "Télécharger tous les favoris",
+  "@downloadFavoritesSetting": {},
+  "lyricsScreen": "Écran des paroles",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsTitle": "Afficher les temps pour les paroles synchronisées",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Afficher la barre de progression sur la notification du lecteur",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showLyricsTimestampsSubtitle": "Contrôle si les temps de chaque parole sont affichées dans l'écran des paroles, s'ils sont disponibles.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  }
 }
