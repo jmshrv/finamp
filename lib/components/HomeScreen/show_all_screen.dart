@@ -82,13 +82,14 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
     super.didChangeDependencies();
     sectionInfo =
         ModalRoute.of(context)!.settings.arguments as HomeScreenSectionInfo;
-    final prefetchedItems = ref
-        .read(loadHomeSectionItemsProvider(
-          sectionInfo: sectionInfo,
-          startIndex: 0,
-          limit: homeScreenSectionItemLimit,
-        ))
-        .value;
+    final itemsProviderInstance = loadHomeSectionItemsProvider(
+      sectionInfo: sectionInfo,
+      startIndex: 0,
+      limit: homeScreenSectionItemLimit,
+    );
+    final prefetchedItems = ref.exists(itemsProviderInstance)
+        ? ref.read(itemsProviderInstance).value
+        : null;
     if (prefetchedItems != null) {
       _pagingController.appendPage(prefetchedItems, prefetchedItems.length);
     }
@@ -179,7 +180,7 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
     // This also means we don't redo a search unless we actually need to.
     FinampSettings? settings = ref.watch(finampSettingsProvider).value;
     var newRefreshHash = Object.hash(
-      settings?.onlyShowFavourites,
+      settings?.onlyShowFavorites,
       settings?.onlyShowFullyDownloaded,
       settings?.isOffline,
       settings?.trackOfflineFavorites,
@@ -215,8 +216,7 @@ class _ShowAllScreenState extends ConsumerState<ShowAllScreen>
             icon: TablerIcons.filter_x,
             text: AppLocalizations.of(context)!.resetFiltersButton,
             onPressed: () {
-              FinampSetters.setOnlyShowFavourites(
-                  DefaultSettings.onlyShowFavourites);
+              FinampSetters.setOnlyShowFavorites(DefaultSettings.onlyShowFavorites);
               FinampSetters.setOnlyShowFullyDownloaded(
                   DefaultSettings.onlyShowFullyDownloaded);
             },

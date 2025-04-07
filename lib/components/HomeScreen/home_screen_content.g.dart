@@ -1,5 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: deprecated_member_use_from_same_package, strict_raw_type
+
+// dart format off
+
+
 part of 'home_screen_content.dart';
 
 // **************************************************************************
@@ -7,7 +12,7 @@ part of 'home_screen_content.dart';
 // **************************************************************************
 
 String _$loadHomeSectionItemsHash() =>
-    r'885a0d41386aa5a336e9ccab9f153a612f48abaf';
+    r'05a9a4c66ddec825de1cedd3b6c8167f939bdcea';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -80,33 +85,31 @@ class LoadHomeSectionItemsFamily
 }
 
 /// See also [loadHomeSectionItems].
-class LoadHomeSectionItemsProvider
-    extends AutoDisposeFutureProvider<List<BaseItemDto>?> {
+class LoadHomeSectionItemsProvider extends FutureProvider<List<BaseItemDto>?> {
   /// See also [loadHomeSectionItems].
   LoadHomeSectionItemsProvider({
     required HomeScreenSectionInfo sectionInfo,
     int startIndex = 0,
     int limit = homeScreenSectionItemLimit,
   }) : this._internal(
-          (ref) => loadHomeSectionItems(
-            ref as LoadHomeSectionItemsRef,
-            sectionInfo: sectionInfo,
-            startIndex: startIndex,
-            limit: limit,
-          ),
-          from: loadHomeSectionItemsProvider,
-          name: r'loadHomeSectionItemsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$loadHomeSectionItemsHash,
-          dependencies: LoadHomeSectionItemsFamily._dependencies,
-          allTransitiveDependencies:
-              LoadHomeSectionItemsFamily._allTransitiveDependencies,
-          sectionInfo: sectionInfo,
-          startIndex: startIndex,
-          limit: limit,
-        );
+         (ref) => loadHomeSectionItems(
+           ref as LoadHomeSectionItemsRef,
+           sectionInfo: sectionInfo,
+           startIndex: startIndex,
+           limit: limit,
+         ),
+         from: loadHomeSectionItemsProvider,
+         name: r'loadHomeSectionItemsProvider',
+         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+             ? null
+             : _$loadHomeSectionItemsHash,
+         dependencies: LoadHomeSectionItemsFamily._dependencies,
+         allTransitiveDependencies:
+             LoadHomeSectionItemsFamily._allTransitiveDependencies,
+         sectionInfo: sectionInfo,
+         startIndex: startIndex,
+         limit: limit,
+       );
 
   LoadHomeSectionItemsProvider._internal(
     super._createNotifier, {
@@ -127,7 +130,7 @@ class LoadHomeSectionItemsProvider
   @override
   Override overrideWith(
     FutureOr<List<BaseItemDto>?> Function(LoadHomeSectionItemsRef provider)
-        create,
+    create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -146,7 +149,7 @@ class LoadHomeSectionItemsProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<BaseItemDto>?> createElement() {
+  FutureProviderElement<List<BaseItemDto>?> createElement() {
     return _LoadHomeSectionItemsProviderElement(this);
   }
 
@@ -171,8 +174,7 @@ class LoadHomeSectionItemsProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin LoadHomeSectionItemsRef
-    on AutoDisposeFutureProviderRef<List<BaseItemDto>?> {
+mixin LoadHomeSectionItemsRef on FutureProviderRef<List<BaseItemDto>?> {
   /// The parameter `sectionInfo` of this provider.
   HomeScreenSectionInfo get sectionInfo;
 
@@ -184,7 +186,7 @@ mixin LoadHomeSectionItemsRef
 }
 
 class _LoadHomeSectionItemsProviderElement
-    extends AutoDisposeFutureProviderElement<List<BaseItemDto>?>
+    extends FutureProviderElement<List<BaseItemDto>?>
     with LoadHomeSectionItemsRef {
   _LoadHomeSectionItemsProviderElement(super.provider);
 
@@ -196,5 +198,6 @@ class _LoadHomeSectionItemsProviderElement
   @override
   int get limit => (origin as LoadHomeSectionItemsProvider).limit;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

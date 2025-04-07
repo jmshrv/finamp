@@ -56,28 +56,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
     return SafeArea(
       bottom: false,
       child: RefreshIndicator(
-        onRefresh: () async => Future.wait([
-          ref.refresh(
-            loadHomeSectionItemsProvider(
-              sectionInfo: HomeScreenSectionInfo(type: HomeScreenSectionType.listenAgain),
-            ).future,
-          ),
-          ref.refresh(
-            loadHomeSectionItemsProvider(
-              sectionInfo: HomeScreenSectionInfo(type: HomeScreenSectionType.newlyAdded),
-            ).future,
-          ),
-          ref.refresh(
-            loadHomeSectionItemsProvider(
-              sectionInfo: HomeScreenSectionInfo(type: HomeScreenSectionType.favoriteArtists),
-            ).future,
-          ),
-          ref.refresh(
-            loadHomeSectionItemsProvider(
-              sectionInfo: HomeScreenSectionInfo(type: HomeScreenSectionType.collection, itemId: BaseItemId("")),
-            ).future,
-          ),
-        ]),
+        onRefresh: () async => ref.invalidate(loadHomeSectionItemsProvider),
         child: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 200.0),
           child: Column(
@@ -215,7 +194,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
         null => _buildHorizontalSkeletonLoader(),
         [] => const Center(child: Text("No items available.", maxLines: 1)),
         _ => SizedBox(
-          height: 175,
+          height: 190,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: value.length,
@@ -223,7 +202,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
               final BaseItemDto item = value[index];
               return AutoGridItem(baseItem: item);
             },
-            separatorBuilder: (context, index) => const SizedBox(width: 2),
+            separatorBuilder: (context, index) => const SizedBox(width: 8),
           ),
         ),
       },
@@ -237,7 +216,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
 
   Widget _buildHorizontalSkeletonLoader() {
     return SizedBox(
-      height: 175,
+      height: 190,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: 5, // Show 5 skeleton items
@@ -271,7 +250,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent> {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<BaseItemDto>?> loadHomeSectionItems(
   Ref ref, {
   required HomeScreenSectionInfo sectionInfo,

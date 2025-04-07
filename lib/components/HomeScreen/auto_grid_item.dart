@@ -43,6 +43,6 @@ class AutoGridItem extends ConsumerWidget {
         gridItem = SizedBox.shrink();
     }
 
-    return SizedBox(width: 120, height: 175, child: gridItem);
+    return SizedBox(width: 120, height: 190, child: gridItem);
   }
 }

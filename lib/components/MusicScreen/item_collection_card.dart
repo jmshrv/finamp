@@ -67,7 +67,7 @@ class _ItemCollectionCardText extends ConsumerWidget {
               item.name ?? "Unknown Name",
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w600),
             ),
             if (subtitle != null)
               Text(

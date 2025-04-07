@@ -54,7 +54,7 @@ Future<(int, BaseItemDtoType)> itemAmount(
     case BaseItemDtoType.genre:
       if (ref.watch(finampSettingsProvider.isOffline)) {
         var items = await downloadsService.getAllCollections(
-          baseTypeFilter: BaseItemDtoType.album,
+          includeItemTypes: [BaseItemDtoType.album],
           fullyDownloaded: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
           viewFilter: library?.id,
           nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),

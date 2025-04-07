@@ -1,6 +1,6 @@
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
-import 'package:finamp/components/MusicScreen/album_item.dart';
 import 'package:finamp/components/MusicScreen/artist_item.dart';
+import 'package:finamp/components/MusicScreen/item_collection_card.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
@@ -18,19 +18,15 @@ class AutoListItem extends ConsumerWidget {
     final BaseItemDtoType itemType = BaseItemDtoType.fromItem(baseItem);
     switch (itemType) {
       case BaseItemDtoType.album:
-        listItem = AlbumItem(
+        listItem = ItemCollectionCard(
           key: ValueKey(baseItem.id),
-          album: baseItem,
-          isPlaylist: false,
-          isGrid: false,
+          item: baseItem,
         );
         break;
       case BaseItemDtoType.playlist:
-        listItem = AlbumItem(
+        listItem = ItemCollectionCard(
           key: ValueKey(baseItem.id),
-          album: baseItem,
-          isPlaylist: true,
-          isGrid: false,
+          item: baseItem,
         );
         break;
       case BaseItemDtoType.artist:
@@ -45,17 +41,15 @@ class AutoListItem extends ConsumerWidget {
           key: ValueKey(baseItem.id),
           item: baseItem,
           isTrack: true,
-          index: Future.value(0),
-          isShownInSearch: false,
+          index: 0,
+          isShownInSearchOrHistory: false,
           allowDismiss: false,
         );
         break;
       case BaseItemDtoType.genre:
-        listItem = AlbumItem(
+        listItem = ItemCollectionCard(
           key: ValueKey(baseItem.id),
-          album: baseItem,
-          isPlaylist: false,
-          isGrid: false,
+          item: baseItem,
         );
         break;
       default:
