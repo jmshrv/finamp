@@ -1976,5 +1976,23 @@
   "audioFadeOutDurationSettingTitle": "Äänen uloshäivytyksen kesto",
   "@audioFadeOutDurationSettingTitle": {
     "description": "Title for the audio fade-in duration setting."
+  },
+  "swipeLeftToRightAction": "Oikealle pyyhkäisyn toiminto",
+  "@swipeLeftToRightAction": {},
+  "swipeLeftToRightActionSubtitle": "Toiminto joka suoritetaan pyyhkäistessä kappaletta luettelossa vasemmalta oikealle.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeRightToLeftAction": "Vasemmalle pyyhkäisyn toiminto",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Toiminto joka suoritetaan pyyhkäistessä kappaletta luettelossa oikealta vasemmalle.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Valitse transkoodauksen muoto",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "Valitse tiedostomuoto, jota käytetään suoratoistettaessa transkoodattua audiota. Ei vaikuta jonossa jo oleviin raitoihin.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "autoOfflineOptionOff": "Pois päältä",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
   }
 }
