@@ -144,7 +144,7 @@
   "@unknownError": {},
   "addDownloadLocation": "Lägg Till Nedladdningsplats",
   "@addDownloadLocation": {},
-  "bitrateSubtitle": "Högre bithastighet ger bättre ljudkvalitet, men förbrukar också mer data.",
+  "bitrateSubtitle": "En högre bithastighet ger bättre ljudkvalitet, men förbrukar också mer data. Gäller ej förlustfria codecs, t.ex. FLAC",
   "@bitrateSubtitle": {},
   "selectDirectory": "Välj Filmapp",
   "@selectDirectory": {},
@@ -1960,5 +1960,23 @@
   "normalizationGain": "Förstärkning",
   "@normalizationGain": {
     "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
-  }
+  },
+  "swipeLeftToRightAction": "Åtgärd högersvepning",
+  "@swipeLeftToRightAction": {},
+  "swipeRightToLeftAction": "Åtgärd vänstersvepning",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Åtgärd som utförs när du sveper ett spår i listan från höger till vänster.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "albumArtists": "Albumartister",
+  "@albumArtists": {},
+  "transcodingStreamingFormatTitle": "Välj transkodningsformat",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "performingArtists": "Medverkande artister",
+  "@performingArtists": {},
+  "appearsOnAlbums": "Medverkar i",
+  "@appearsOnAlbums": {},
+  "swipeLeftToRightActionSubtitle": "Åtgärd som utförs när du sveper ett spår i listan från vänster till höger.",
+  "@swipeLeftToRightActionSubtitle": {}
 }
