@@ -34,9 +34,6 @@ class ArtistScreenContent extends StatefulWidget {
 class _ArtistScreenContentState extends State<ArtistScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsService = GetIt.instance<DownloadsService>();
-  bool _showTopTracks = true;
-  bool _showAlbums = true;
-  bool _showAppearsOnAlbums = true;
   bool _isLoading = true;
 
 
@@ -260,144 +257,166 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
             ),
             if (!_isLoading && !isOffline &&
               FinampSettingsHelper.finampSettings.showArtistsTopTracks)
-            SliverPadding(
-              padding: EdgeInsets.fromLTRB(
-                      6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-              sliver: SliverToBoxAdapter(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _showTopTracks = !_showTopTracks;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Transform.rotate(
-                          angle: _showTopTracks ? 0 : -math.pi / 2,
-                          child: const Icon(Icons.arrow_drop_down, size: 24),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          AppLocalizations.of(context)!.topTracks,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            if (!_isLoading && !isOffline &&
-                FinampSettingsHelper.finampSettings.showArtistsTopTracks &&
-                _showTopTracks)
-            TracksSliverList(
-              childrenForList: topTracks,
-              childrenForQueue: Future.value(tracks),
-              showPlayCount: true,
-              isOnArtistScreen: true,
-              parent: widget.parent,
-            ),
-
+              BuildTopTracksSection(parent: widget.parent, topTracks: topTracks,
+                childrenForQueue: Future.value(tracks)),
             if (albums.isNotEmpty)
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
-              sliver: SliverToBoxAdapter(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _showAlbums = !_showAlbums;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Transform.rotate(
-                          angle: _showAlbums ? 0 : -math.pi / 2,
-                          child: const Icon(Icons.arrow_drop_down, size: 24),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          AppLocalizations.of(context)!.albums,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            if (_showAlbums && albums.isNotEmpty)
-            AlbumsSliverList(
-              childrenForList: albums,
-              parent: widget.parent,
-            ),
+              BuildAlbumSection(parent: widget.parent,
+                albumsText: AppLocalizations.of(context)!.albums, albums: albums),
             if (appearsOnAlbums.isNotEmpty)
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
-              sliver: SliverToBoxAdapter(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _showAppearsOnAlbums = !_showAppearsOnAlbums;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Transform.rotate(
-                          angle: _showAppearsOnAlbums ? 0 : -math.pi / 2,
-                          child: const Icon(Icons.arrow_drop_down, size: 24),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          AppLocalizations.of(context)!.appearsOnAlbums,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            if (_showAppearsOnAlbums && appearsOnAlbums.isNotEmpty)
-            AlbumsSliverList(
-              childrenForList: appearsOnAlbums,
-              parent: widget.parent,
-            ),
+              BuildAlbumSection(parent: widget.parent,
+                albumsText: AppLocalizations.of(context)!.appearsOnAlbums, albums: appearsOnAlbums),
             if (!_isLoading && (albums.isEmpty && appearsOnAlbums.isEmpty))
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(6, 12, 6, 0), // Keeping horizontal and vertical padding the same
-              sliver: SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12), // Updated inner padding
-                  child: Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.emptyFilteredListTitle,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(6, 12, 6, 0), // Keeping horizontal and vertical padding the same
+                sliver: SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12), // Updated inner padding
+                    child: Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.emptyFilteredListTitle,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
             if (_isLoading)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-                child: Center(
-                  child: CircularProgressIndicator.adaptive(),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                  child: Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
                 ),
-              ),
-            )
+              )
           ]);
         }
+    );
+  }
+}
+
+class BuildTopTracksSection extends StatefulWidget {
+  const BuildTopTracksSection({
+    required this.parent,
+    required this.topTracks,
+    required this.childrenForQueue,
+  });
+
+  final BaseItemDto parent;
+  final List<BaseItemDto> topTracks;
+  final Future<List<BaseItemDto>> childrenForQueue;
+
+  @override
+  State<BuildTopTracksSection> createState() => _BuildTopTracksSectionState();
+}
+
+class _BuildTopTracksSectionState extends State<BuildTopTracksSection> {
+  bool _showTopTracks = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.fromLTRB(
+                6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
+          sliver: SliverToBoxAdapter(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _showTopTracks = !_showTopTracks;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Transform.rotate(
+                      angle: _showTopTracks ? 0 : -math.pi / 2,
+                      child: const Icon(Icons.arrow_drop_down, size: 24),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      AppLocalizations.of(context)!.topTracks,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (_showTopTracks)
+          TracksSliverList(
+            childrenForList: widget.topTracks,
+            childrenForQueue: widget.childrenForQueue,
+            showPlayCount: true,
+            isOnArtistScreen: true,
+            parent: widget.parent,
+          ),
+      ],
+    );
+  }
+}
+
+class BuildAlbumSection extends StatefulWidget {
+  const BuildAlbumSection({
+    required this.parent,
+    required this.albumsText,
+    required this.albums,
+  });
+
+  final BaseItemDto parent;
+  final String albumsText;
+  final List<BaseItemDto> albums;
+
+  @override
+  State<BuildAlbumSection> createState() => _BuildAlbumSectionState();
+}
+
+class _BuildAlbumSectionState extends State<BuildAlbumSection> {
+  bool _showAlbums = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+          sliver: SliverToBoxAdapter(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _showAlbums = !_showAlbums;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Transform.rotate(
+                      angle: _showAlbums ? 0 : -math.pi / 2,
+                      child: const Icon(Icons.arrow_drop_down, size: 24),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      widget.albumsText,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (_showAlbums && widget.albums.isNotEmpty)
+          AlbumsSliverList(
+            childrenForList: widget.albums,
+            parent: widget.parent,
+          ),
+      ],
     );
   }
 }
