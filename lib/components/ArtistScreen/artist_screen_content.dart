@@ -392,7 +392,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 24),
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 ),
               ),
             )
