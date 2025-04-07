@@ -1034,7 +1034,7 @@
   "@releaseDateFormatTitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
-  "title": "Nimi",
+  "title": "Kappaleen nimi",
   "@title": {},
   "automatic": "Automaattinen",
   "@automatic": {
