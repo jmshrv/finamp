@@ -1121,6 +1121,14 @@
   "@playOnStaleDelaySubtitle": {
     "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
   },
+  "playOnReconnectionDelay": "PlayOn session reconnection delay",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelaySubtitle": "Controls the delay between the attempts to reconnect to the PlayOn websocket when it gets disconnected (in seconds). A lower delay increases bandwidth usage.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
   "topTracks": "Top Tracks",
   "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",

@@ -8,6 +8,7 @@ import 'package:finamp/l10n/app_localizations.dart';
 import '../components/PlaybackReportingSettingsScreen/periodic_playback_session_update_frequency_editor.dart';
 import '../components/PlaybackReportingSettingsScreen/report_queue_to_server_toggle.dart';
 import '../components/PlaybackReportingSettingsScreen/play_on_stale_delay_editor.dart';
+import '../components/PlaybackReportingSettingsScreen/play_on_reconnection_delay_editor.dart';
 
 class PlaybackReportingSettingsScreen extends StatefulWidget {
   const PlaybackReportingSettingsScreen({super.key});
@@ -42,7 +43,8 @@ class _PlaybackReportingSettingsScreenState
         children: [
           const PeriodicPlaybackSessionUpdateFrequencyEditor(),
           const ReportQueueToServerToggle(),
-          const PlayOnStaleDelayEditor()
+          const PlayOnStaleDelayEditor(),
+          const PlayOnReconnectionDelayEditor()
         ],
       ),
     );

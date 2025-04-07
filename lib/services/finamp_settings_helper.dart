@@ -240,6 +240,7 @@ class FinampSettingsHelper {
     FinampSetters.setPlayOnStaleDelay(DefaultSettings.playOnStaleDelay);
     FinampSetters.setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
     FinampSetters.setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
+    FinampSetters.setPlayOnReconnectionDelay(DefaultSettings.playOnReconnectionDelay);
   }
 
   static void resetNormalizationSettings() {

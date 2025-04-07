@@ -173,6 +173,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : (fields[53] as num).toInt(),
+      playOnStaleDelay: fields[93] == null ? 90 : (fields[93] as num).toInt(),
+      playOnReconnectionDelay:
+          fields[94] == null ? 5 : (fields[94] as num).toInt(),
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
@@ -224,7 +227,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
       currentVolume: fields[92] == null ? 1.0 : (fields[92] as num).toDouble(),
-      playOnStaleDelay: fields[93] == null ? 90 : (fields[93] as num).toInt(),
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -235,7 +237,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(88)
+      ..writeByte(89)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -411,7 +413,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(92)
       ..write(obj.currentVolume)
       ..writeByte(93)
-      ..write(obj.playOnStaleDelay);
+      ..write(obj.playOnStaleDelay)
+      ..writeByte(94)
+      ..write(obj.playOnReconnectionDelay);
   }
 
   @override

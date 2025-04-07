@@ -116,10 +116,10 @@ class PlayonHandler {
 
   Future<void> startReconnectionLoop() async {
     _reconnectionSubscription =
-        Stream.periodic(const Duration(seconds: 5), (count) {
+        Stream.periodic(Duration(seconds: FinampSettingsHelper.finampSettings.playOnReconnectionDelay), (count) {
       return count;
     }).listen((count) {
-      if (count < 24) { // We try to connect for two minutes before giving up
+      if (count < (120 / FinampSettingsHelper.finampSettings.playOnReconnectionDelay).round()) { // We try to connect for two minutes before giving up
         _playOnHandlerLogger.warning("Attempt $count to restart playon listener");
         startListener();
       } else {
