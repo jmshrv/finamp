@@ -178,6 +178,10 @@ abstract class JellyfinApi extends ChopperService {
     /// will be dropped from the results.
     @Query("StartIndex") int? startIndex,
 
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified artist id.
+    @Query("Artists") List<String>? artists,
+
     /// Optional. The maximum number of records to return.
     @Query("Limit") int? limit,
 

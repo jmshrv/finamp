@@ -29,6 +29,7 @@ class AlbumImage extends ConsumerWidget {
     this.disabled = false,
     this.autoScale = true,
     this.decoration,
+    this.isMusicVideo = false,
   });
 
   /// The item to get an image for.
@@ -45,6 +46,8 @@ class AlbumImage extends ConsumerWidget {
   /// Whether to automatically scale the image to the size of the widget.
   final bool autoScale;
 
+  final bool isMusicVideo;
+
   /// The decoration to use for the album image. This is defined in AlbumImage
   /// instead of being used as a separate widget so that non-square images don't
   /// look incorrect due to AlbumImage having an aspect ratio of 1:1
@@ -60,10 +63,12 @@ class AlbumImage extends ConsumerWidget {
       return ClipRRect(
         borderRadius: borderRadius,
         child: AspectRatio(
-          aspectRatio: 1,
+          aspectRatio: isMusicVideo ? 16 / 9 : 1,
           child: Container(
             decoration: decoration,
-            child: const _AlbumImageErrorPlaceholder(),
+            child: isMusicVideo
+                ? const Icon(Icons.music_video_rounded)
+                : const _AlbumImageErrorPlaceholder(),
           ),
         ),
       );
@@ -73,7 +78,7 @@ class AlbumImage extends ConsumerWidget {
       // label: item?.name != null ? AppLocalizations.of(context)!.artworkTooltip(item!.name!) : AppLocalizations.of(context)!.artwork, // removed to reduce screen reader verbosity
       excludeSemantics: true,
       child: AspectRatio(
-        aspectRatio: 1.0,
+        aspectRatio: isMusicVideo ? 16 / 9 : 1.0,
         child: Align(
           child: ClipRRect(
             borderRadius: borderRadius,
