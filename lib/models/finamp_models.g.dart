@@ -215,6 +215,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
+      artistListType: fields[92] == null
+          ? ArtistType.albumartist
+          : fields[92] as ArtistType,
       autoOffline: fields[88] == null
           ? AutoOfflineOption.disconnected
           : fields[88] as AutoOfflineOption,
@@ -233,7 +236,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(86)
+      ..writeByte(87)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -405,7 +408,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(90)
       ..write(obj.itemSwipeActionLeftToRight)
       ..writeByte(91)
-      ..write(obj.itemSwipeActionRightToLeft);
+      ..write(obj.itemSwipeActionRightToLeft)
+      ..writeByte(92)
+      ..write(obj.artistListType);
   }
 
   @override
@@ -2187,6 +2192,43 @@ class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ItemSwipeActionsAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
+  @override
+  final int typeId = 93;
+
+  @override
+  ArtistType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ArtistType.albumartist;
+      case 1:
+        return ArtistType.artist;
+      default:
+        return ArtistType.albumartist;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ArtistType obj) {
+    switch (obj) {
+      case ArtistType.albumartist:
+        writer.writeByte(0);
+      case ArtistType.artist:
+        writer.writeByte(1);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ArtistTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

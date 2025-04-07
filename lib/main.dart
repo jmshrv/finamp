@@ -209,6 +209,7 @@ Future<void> _setupKeepScreenOnHelper() async {
 Future<void> setupHive() async {
   await Hive.initFlutter();
   Hive.registerAdapters();
+
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
       : await getApplicationSupportDirectory();

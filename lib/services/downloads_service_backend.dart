@@ -993,6 +993,20 @@ class DownloadsSyncService {
           infoChildren.add(
               DownloadStub.fromItem(type: DownloadItemType.image, item: item));
         }
+        if (parent.baseItemType == BaseItemDtoType.album) {
+          // If we are an album, add the album artists as info children
+          try {
+            var collectionChildren = await Future.wait(
+              (item.albumArtists?.map((e) => e.id) ?? [])
+                  .map((e) => _getCollectionInfo(e, DownloadItemType.collection, false))
+            );
+            infoChildren.addAll(collectionChildren.nonNulls);
+          } catch (e) {
+            _syncLogger.info("Failed to download metadata for ${item.name}: $e");
+            rethrow;
+          }
+        }
+
       case DownloadItemType.track:
         var item = newBaseItem ?? parent.baseItem!;
         if ((item.blurHash ?? item.imageId) != null) {
@@ -1010,7 +1024,6 @@ class DownloadsSyncService {
           List<BaseItemId> collectionIds = [];
           collectionIds.addAll(item.genreItems?.map((e) => e.id) ?? []);
           collectionIds.addAll(item.artistItems?.map((e) => e.id) ?? []);
-          collectionIds.addAll(item.albumArtists?.map((e) => e.id) ?? []);
           if (item.albumId != null) {
             collectionIds.add(item.albumId!);
           }
@@ -1344,6 +1357,23 @@ class DownloadsSyncService {
         var trackChildStubs = trackChildItems.map((e) =>
             DownloadStub.fromItem(type: DownloadItemType.track, item: e));
         childStubs.addAll(trackChildStubs);
+      }
+      // If we are an artist, we also need to add the tracks where the artist
+      // only is a performing artist, but not an album artist
+      // We might get some overlap because we often see albumartist = performingartist,
+      // but they will get filtered out later
+      if (parent.baseItemType == BaseItemDtoType.artist) {
+        var artistTrackChildItems = await _jellyfinApiData.getItems(
+                parentItem: item,
+                includeItemTypes: BaseItemDtoType.track.idString,
+                filters: "Artist=${parent.name}",
+                artistType: ArtistType.artist,
+                fields:
+                    "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName") ??
+            [];
+        var artistTrackChildStubs = artistTrackChildItems.map((e) =>
+            DownloadStub.fromItem(type: DownloadItemType.track, item: e));
+        childStubs.addAll(artistTrackChildStubs);
       }
       itemFetch.complete(childItems.map((e) => e.id.raw).toList());
       for (var element in childStubs) {

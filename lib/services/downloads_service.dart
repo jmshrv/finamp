@@ -920,8 +920,16 @@ class DownloadsService {
     if (item.type.hasFiles) return;
     if (item.state == DownloadItemState.syncFailed && !removeSyncFailed) return;
     Set<DownloadItemState> childStates = {};
-    if (item.baseItemType == BaseItemDtoType.album ||
-        item.baseItemType == BaseItemDtoType.playlist) {
+    if (item.baseItemType == BaseItemDtoType.album){
+      childStates.addAll(item.info
+          .filter()
+          .typeEqualTo(DownloadItemType.track)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
+          .distinctByState()
+          .stateProperty()
+          .findAllSync());
+    } else if (item.baseItemType == BaseItemDtoType.playlist) {
       // Use full list of tracks in info links for album/playlist
       childStates.addAll(
           item.info.filter().distinctByState().stateProperty().findAllSync());
@@ -1405,6 +1413,7 @@ class DownloadsService {
   /// + childViewFilter - only return collections with children in the given library.
   /// Useful for artists/genres, which may need to be shown in several libraries.
   /// + onlyFavorites - return only favorite items
+  /// + infoForType - only return collections that are info childs for the provided type
   Future<List<DownloadStub>> getAllCollections(
       {String? nameFilter,
       BaseItemDtoType? baseTypeFilter,
@@ -1413,11 +1422,15 @@ class DownloadsService {
       BaseItemId? viewFilter,
       BaseItemId? childViewFilter,
       bool nullableViewFilters = true,
-      bool onlyFavorites = false}) {
+      bool onlyFavorites = false,
+      BaseItemDtoType? infoForType,
+      ArtistType? artistType,
+      }) {
     List<int> favoriteIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
       favoriteIds = _getFavoriteIds() ?? [];
     }
+    
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1433,11 +1446,24 @@ class DownloadsService {
             baseTypeFilter == BaseItemDtoType.playlist,
             (q) => q.info((q) =>
                 q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
+        // Returns albums where the artist (relatedTo) is an Album Artist
         .optional(
-            relatedTo != null,
+                artistType == ArtistType.albumartist &&
+                relatedTo != null,
+            (q) => q.info((q) => q.isarIdEqualTo(
+                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))))
+        // Returns albums where the artist (relatedTo) is a Performing Artist
+        .optional(
+                artistType == ArtistType.artist &&
+                relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
-                DownloadStub.getHash(
-                    relatedTo!.id.raw, DownloadItemType.collection)))))
+                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection)))))
+        // Returns Albums for a genre (relatedTo)
+        .optional(
+                artistType == null &&
+                relatedTo != null,
+            (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
+                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
         .optional(onlyFavorites,
@@ -1451,6 +1477,9 @@ class DownloadsService {
             (q) => q.infoFor((q) => q.group((q) => q
                 .isarViewIdEqualTo(childViewFilter?.raw)
                 .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
+        .optional(
+          infoForType != null,
+          (q) => q.infoFor((q) => q.baseItemTypeEqualTo(infoForType!)))
         .findAll();
   }
 
@@ -1637,8 +1666,10 @@ class DownloadsService {
       return DownloadItemStatus.notNeeded;
     }
     int childCount;
-    if (stub.baseItemType == BaseItemDtoType.album ||
-        stub.baseItemType == BaseItemDtoType.playlist) {
+    if (stub.baseItemType == BaseItemDtoType.album) {
+      childCount =
+          item.info.filter().typeEqualTo(DownloadItemType.track).countSync();
+    } else if (stub.baseItemType == BaseItemDtoType.playlist) {
       // albums/playlists get marked as incidentally required if all info children
       // are required.  Use info links to calculate child count for this case
       childCount = item.info

@@ -15,6 +15,7 @@ import '../components/MusicScreen/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
 import '../components/MusicScreen/sort_order_button.dart';
+import '../components/MusicScreen/artist_type_selection_row.dart';
 import '../components/global_snackbar.dart';
 import '../components/now_playing_bar.dart';
 import '../models/finamp_models.dart';
@@ -193,6 +194,10 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     }
   }
 
+  void refreshTab(TabContentType tabType) {
+    refreshMap[tabType]?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_tabController == null) {
@@ -359,14 +364,24 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                     ? const NeverScrollableScrollPhysics()
                     : const AlwaysScrollableScrollPhysics(),
                 dragStartBehavior: DragStartBehavior.down,
+                
                 children: sortedTabs
-                    .map((tabType) => MusicScreenTabView(
-                          tabContentType: tabType,
-                          searchTerm: searchQuery,
-                          view: _finampUserHelper.currentUser?.currentView,
-                          refresh: refreshMap[tabType],
-                        ))
-                    .toList(),
+                   .map((tabType) {
+                    return Column(
+                      children: [
+                        buildArtistTypeSelectionRow(context, tabType, finampSettings.artistListType, refreshTab),
+                        Expanded(
+                          child: MusicScreenTabView(
+                            tabContentType: tabType,
+                            searchTerm: searchQuery,
+                            view: _finampUserHelper.currentUser?.currentView,
+                            refresh: refreshMap[tabType],
+                          ),
+                        ),
+                      ],
+                    );
+                  })
+                  .toList(),
               );
 
               if (Platform.isAndroid) {
