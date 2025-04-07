@@ -318,7 +318,7 @@
   "@audioService": {},
   "bitrate": "Bittinopeus",
   "@bitrate": {},
-  "bitrateSubtitle": "Korkeampi bittinopeus tuottaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
+  "bitrateSubtitle": "Korkeampi bittinopeus tuottaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi. Ei koske häviöttömie koodekkeja, kuten FLAC",
   "@bitrateSubtitle": {},
   "customLocation": "Mukautettu sijainti",
   "@customLocation": {},
@@ -937,7 +937,7 @@
   "@lyricsScreen": {
     "description": "Name for the view/screen that shows lyrics for the currently playing track"
   },
-  "showLyricsTimestampsSubtitle": "Näytä aikaleimat jokaiselle sanoituksen riville sanoitusnäkymässä, jos saatavilla.",
+  "showLyricsTimestampsSubtitle": "Näytä aikaleimat jokaiselle sanoituksen riville sanoitusnäkymässä, mikäli saatavilla.",
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
@@ -1232,7 +1232,7 @@
   },
   "allPlaylistsInfoSetting": "Lataa soittolistan liitännäistiedostot (metadata)",
   "@allPlaylistsInfoSetting": {},
-  "cacheLibraryImagesSettingsSubtitle": "Kaikki albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa tulee ladatuksi.",
+  "cacheLibraryImagesSettingsSubtitle": "Kaikkien albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa ladataan.",
   "@cacheLibraryImagesSettingsSubtitle": {},
   "fontSizeOptionMedium": "Keskikokoinen",
   "@fontSizeOptionMedium": {
@@ -1889,13 +1889,13 @@
   "@size": {
     "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
   },
-  "trackOfflineFavoritesSubtitle": "Tämä mahdollistaa ajantaisempien suosikkitilojen näyttämisen offline-tilassa. Ei lataa lisätiedostoja.",
+  "trackOfflineFavoritesSubtitle": "Tämä mahdollistaa ajantasaisempien suosikkitilojen näyttämisen offline-tilassa. Ei lataa ylimääräisiä tiedostoja.",
   "@trackOfflineFavoritesSubtitle": {},
   "deleteFromTargetConfirmButton": "Poista {target, select, device{laitteelta} server{palvelimelta} other{}}",
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
   },
-  "loginFlowCustomUser": "Muokattu käyttäjä",
+  "loginFlowCustomUser": "Räätälöity käyttäjä",
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
   },
@@ -1994,5 +1994,29 @@
   "autoOfflineOptionOff": "Pois päältä",
   "@autoOfflineOptionOff": {
     "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "appearsOnAlbums": "Esiintyy",
+  "@appearsOnAlbums": {},
+  "performingArtists": "Esiintyvät artistit",
+  "@performingArtists": {},
+  "autoOfflineOptionNetwork": "Ei lähiverkkoa",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineSettingTitle": "Automaattinen Offline-tila",
+  "@autoOfflineSettingTitle": {},
+  "autoOfflineNotification": "Automaattinen Offline-tila {state, select, enabled{kytketty päälle} disabled{kytketty pois päältä} other{set quantum position for}}",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "albumArtists": "Albumin artistit",
+  "@albumArtists": {},
+  "autoOfflineOptionDisconnected": "Ei yhteyttä",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingDescription": "Kytke Offline-tila automaattisesti.\nPois päältä: Ei kytke offline-tilaa automaattisesti. Voi säästää akkua.\nEi lähiverkkoa: Kytke offline-tila päälle, kun ei yhteyttä wifin tai ethernetin kautta.\nEi yhteyttä: Kytke offline-tila päälle, kun ei yhteyttä mihinkään.\nVoit aina kytkeä offline-tilan päälle käsin. Tämä kytkee offline-automaation pois päältä, kunnes taas kytket offline-tilan pois päältä.",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
   }
 }
