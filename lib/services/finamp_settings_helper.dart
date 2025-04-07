@@ -70,6 +70,24 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setItemSwipeAction(DismissDirection direction, ItemSwipeActions newItemSwipeAction){
+    FinampSettings finampSettingsTemp = finampSettings;
+    if (direction == DismissDirection.startToEnd) {
+      finampSettingsTemp.itemSwipeActionLeftToRight = newItemSwipeAction;
+    } else if (direction == DismissDirection.endToStart) {
+      finampSettingsTemp.itemSwipeActionRightToLeft = newItemSwipeAction;
+    }
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setArtistListType(ArtistType artistListType){
+    FinampSettings finampSettingsTemp = finampSettings;
+    finampSettingsTemp.artistListType = artistListType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+  
   static void overwriteFinampSettings(FinampSettings newFinampSettings) {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", newFinampSettings);
@@ -174,8 +192,8 @@ class FinampSettingsHelper {
 
     finampSettingsTemp.shouldTranscode = DefaultSettings.shouldTranscode;
     FinampSetters.setTranscodeBitrate(DefaultSettings.transcodeBitrate);
-    finampSettingsTemp.transcodingSegmentContainer =
-        DefaultSettings.transcodingSegmentContainer;
+    finampSettingsTemp.transcodingStreamingFormat =
+        DefaultSettings.transcodingStreamingFormat;
     finampSettingsTemp.shouldTranscodeDownloads =
         DefaultSettings.shouldTranscodeDownloads;
     finampSettingsTemp.downloadTranscodingCodec = FinampTranscodingCodec
@@ -243,7 +261,8 @@ class FinampSettingsHelper {
   static void resetInteractionsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    FinampSetters.setSwipeInsertQueueNext(DefaultSettings.swipeInsertQueueNext);
+    finampSettingsTemp.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight;
+    finampSettingsTemp.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft;
     finampSettingsTemp.startInstantMixForIndividualTracks =
         DefaultSettings.startInstantMixForIndividualTracks;
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);

@@ -478,7 +478,7 @@
   "@back": {
     "description": "Label for the back button."
   },
-  "connectingToServer": "正在连接到服务器...",
+  "connectingToServer": "正在连接到服务器…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -554,7 +554,7 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "正在扫描服务器...",
+  "loginFlowLocalNetworkServersScanningForServers": "正在扫描服务器…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -761,11 +761,11 @@
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "syncingDownloadSize": "同步中...",
+  "syncingDownloadSize": "同步中…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
-  "missingDownloadSize": "删除中...",
+  "missingDownloadSize": "删除中…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1111,7 +1111,7 @@
       }
     }
   },
-  "queueLoadingMessage": "正在恢复队列...",
+  "queueLoadingMessage": "正在恢复队列…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1664,7 +1664,7 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "showLyricsScreenAlbumPreludeTitle": "在歌词前显示专辑封面",
+  "showLyricsScreenAlbumPreludeTitle": "在歌词之前显示专辑封面",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1884,5 +1884,87 @@
   "deleteFromTargetDialogText": "你将删除此{itemType, select, album{专辑} playlist{播放列表} artist{艺术家} genre{流派} track{歌曲} library{库} other{item}}自{device, select, device{此设备} server{此服务器文件系统和库。{deleteType, select, canDelete{这也将从设备中删除此项目。} cantDelete{此项目将保留在此设备上，直到下次同步。} notDownloaded{} other{}}\n该操作不可撤销} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
-  }
+  },
+  "deleteDownloadsConfirmButtonText": "删除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "oneLineMarqueeTextButton": "自动滚动长标题",
+  "@oneLineMarqueeTextButton": {},
+  "oneLineMarqueeTextButtonSubtitle": "自动滚动太长而无法在两行中显示的曲目标题",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "noItemsDownloaded": "沒有下载任何项目。",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "marqueeOrTruncateButton": "对长标题使用省略号",
+  "@marqueeOrTruncateButton": {},
+  "marqueeOrTruncateButtonSubtitle": "在长标题末尾显示...而不是滚动文本",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "allowDeleteFromServerTitle": "允许从服务器删除",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "allowDeleteFromServerSubtitle": "当可以删除时，启用或禁用从服务器文件系统中永久删除轨道的选项。",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "releaseDateFormatYear": "年",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthYear": "月份和年份",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatTitle": "发布日期格式",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "控制应用程序中显示的所有发布日期的格式。",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatMonthDayYear": "月、日、年",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "在播放器屏幕上显示专辑发行日期",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "在播放器屏幕上，专辑名称后面显示专辑的发行日期。",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "librarySelectError": "为用户加载可用库时出错",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "deleteDownloadsPrompt": "您确定要从此设备中删除 {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' 吗？",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "specialDownloads": "特别下载",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "hideQueueButton": "隐藏队列按钮",
+  "@hideQueueButton": {},
+  "hideQueueButtonSubtitle": "隐藏播放器屏幕上的队列按钮。向上滑动即可访问队列。",
+  "@hideQueueButtonSubtitle": {}
 }

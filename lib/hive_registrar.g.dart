@@ -9,12 +9,13 @@ import 'package:finamp/models/jellyfin_models.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AccessScheduleAdapter());
+    registerAdapter(ArtistTypeAdapter());
     registerAdapter(AuthenticationResultAdapter());
+    registerAdapter(AutoOfflineOptionAdapter());
     registerAdapter(BaseItemAdapter());
     registerAdapter(BaseItemDtoAdapter());
     registerAdapter(BaseItemPersonAdapter());
     registerAdapter(ClientCapabilitiesAdapter());
-    registerAdapter(ClientDiscoveryResponseAdapter());
     registerAdapter(CodecProfileAdapter());
     registerAdapter(ContainerProfileAdapter());
     registerAdapter(ContentViewTypeAdapter());
@@ -36,13 +37,14 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(FinampQueueInfoAdapter());
     registerAdapter(FinampQueueItemAdapter());
     registerAdapter(FinampQueueOrderAdapter());
-    registerAdapter(FinampSegmentContainerAdapter());
     registerAdapter(FinampSettingsAdapter());
     registerAdapter(FinampStorableQueueInfoAdapter());
     registerAdapter(FinampTranscodingCodecAdapter());
+    registerAdapter(FinampTranscodingStreamingFormatAdapter());
     registerAdapter(FinampUserAdapter());
     registerAdapter(HttpHeaderInfoAdapter());
     registerAdapter(ImageBlurHashesAdapter());
+    registerAdapter(ItemSwipeActionsAdapter());
     registerAdapter(KeepScreenOnOptionAdapter());
     registerAdapter(LyricDtoAdapter());
     registerAdapter(LyricLineAdapter());
@@ -61,7 +63,6 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(PlaybackSpeedVisibilityAdapter());
     registerAdapter(PlayerStateInfoAdapter());
     registerAdapter(ProfileConditionAdapter());
-    registerAdapter(PublicSystemInfoResultAdapter());
     registerAdapter(PublicUsersResponseAdapter());
     registerAdapter(QueueItemAdapter());
     registerAdapter(QueueItemQueueTypeAdapter());

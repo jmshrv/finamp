@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:finamp/services/auto_offline.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import '../components/MusicScreen/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
 import '../components/MusicScreen/sort_order_button.dart';
+import '../components/MusicScreen/artist_type_selection_row.dart';
 import '../components/global_snackbar.dart';
 import '../components/now_playing_bar.dart';
 import '../models/finamp_models.dart';
@@ -26,6 +28,7 @@ final _musicScreenLogger = Logger("MusicScreen");
 
 void postLaunchHook(WidgetRef ref) async {
   final downloadsService = GetIt.instance<DownloadsService>();
+  ref.listenManual(autoOfflineProvider, (_, __) {});
 
   // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
@@ -189,6 +192,10 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     } else {
       return null;
     }
+  }
+
+  void refreshTab(TabContentType tabType) {
+    refreshMap[tabType]?.call();
   }
 
   @override
@@ -357,14 +364,24 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                     ? const NeverScrollableScrollPhysics()
                     : const AlwaysScrollableScrollPhysics(),
                 dragStartBehavior: DragStartBehavior.down,
+                
                 children: sortedTabs
-                    .map((tabType) => MusicScreenTabView(
-                          tabContentType: tabType,
-                          searchTerm: searchQuery,
-                          view: _finampUserHelper.currentUser?.currentView,
-                          refresh: refreshMap[tabType],
-                        ))
-                    .toList(),
+                   .map((tabType) {
+                    return Column(
+                      children: [
+                        buildArtistTypeSelectionRow(context, tabType, finampSettings.artistListType, refreshTab),
+                        Expanded(
+                          child: MusicScreenTabView(
+                            tabContentType: tabType,
+                            searchTerm: searchQuery,
+                            view: _finampUserHelper.currentUser?.currentView,
+                            refresh: refreshMap[tabType],
+                          ),
+                        ),
+                      ],
+                    );
+                  })
+                  .toList(),
               );
 
               if (Platform.isAndroid) {
