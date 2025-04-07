@@ -2008,5 +2008,11 @@
     "description": "Setting description. Make sure the Mode names match the translations."
   },
   "autoOfflineSettingTitle": "Автоматичний режим офлайн",
-  "@autoOfflineSettingTitle": {}
+  "@autoOfflineSettingTitle": {},
+  "appearsOnAlbums": "З'являється на",
+  "@appearsOnAlbums": {},
+  "performingArtists": "Артисти-виконавці",
+  "@performingArtists": {},
+  "albumArtists": "Виконавці альбому",
+  "@albumArtists": {}
 }
