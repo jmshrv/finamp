@@ -37,6 +37,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
   bool _showTopTracks = true;
   bool _showAlbums = true;
   bool _showAppearsOnAlbums = true;
+  bool _isLoading = true;
 
 
   StreamSubscription<void>? _refreshStream;
@@ -91,6 +92,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
           return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
         })
       ]);
+
       // Get All Tracks for Track Count and Playback
       allTracks = Future.sync(() async {
         // First fetch every album of the album artist or genre
@@ -209,6 +211,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
     return FutureBuilder(
         future: futures,
         builder: (context, snapshot) {
+          _isLoading = (_isLoading) ? (snapshot.connectionState == ConnectionState.waiting) : false;
           var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
           var albumsAsPerformingArtist = snapshot.data?.elementAtOrNull(2) ?? [];
@@ -248,13 +251,14 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 // this screen is also used for genres, which can't be favorited
                 if (widget.parent.type != "MusicGenre")
                   FavoriteButton(item: widget.parent),
-                DownloadButton(
-                    item: DownloadStub.fromItem(
-                        item: widget.parent, type: DownloadItemType.collection),
-                    children: (widget.parent.type == "MusicGenre") ? albums : allChildren)
+                if (!_isLoading)
+                  DownloadButton(
+                      item: DownloadStub.fromItem(
+                          item: widget.parent, type: DownloadItemType.collection),
+                      children: (widget.parent.type == "MusicGenre") ? albums : allChildren)
               ],
             ),
-            if (!isOffline &&
+            if (!_isLoading && !isOffline &&
               FinampSettingsHelper.finampSettings.showArtistsTopTracks)
             SliverPadding(
               padding: EdgeInsets.fromLTRB(
@@ -287,7 +291,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               ),
             ),
 
-            if (!isOffline &&
+            if (!_isLoading && !isOffline &&
                 FinampSettingsHelper.finampSettings.showArtistsTopTracks &&
                 _showTopTracks)
             TracksSliverList(
@@ -368,7 +372,7 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
               childrenForList: appearsOnAlbums,
               parent: widget.parent,
             ),
-            if (albums.isEmpty && appearsOnAlbums.isEmpty)
+            if (!_isLoading && (albums.isEmpty && appearsOnAlbums.isEmpty))
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(6, 12, 6, 0), // Keeping horizontal and vertical padding the same
               sliver: SliverToBoxAdapter(
@@ -383,6 +387,15 @@ class _ArtistScreenContentState extends State<ArtistScreenContent> {
                 ),
               ),
             ),
+            if (_isLoading)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            )
           ]);
         }
     );
