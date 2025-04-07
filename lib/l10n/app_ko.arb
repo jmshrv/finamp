@@ -388,7 +388,7 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "로그아웃",
   "@logOut": {},
-  "bitrateSubtitle": "비트레이트가 높으면 고품질의 음악을 들을 수 있습니다. 데이터 사용량도 증가합니다.",
+  "bitrateSubtitle": "비트레이트가 높으면 고품질의 음악을 들을 수 있습니다. 데이터 사용량도 증가합니다. FLAC 등 무손실 코덱에는 적용되지 않습니다.",
   "@bitrateSubtitle": {},
   "appDirectory": "앱 디렉토리",
   "@appDirectory": {},
@@ -396,7 +396,7 @@
   "@addDownloadLocation": {},
   "selectDirectory": "디렉토리 선택",
   "@selectDirectory": {},
-  "pathReturnSlashErrorMessage": "\"/(슬래시)\"로 끝나는 경로는 사용할 수 없습니다",
+  "pathReturnSlashErrorMessage": "\"/\"로 끝나는 경로는 사용할 수 없습니다",
   "@pathReturnSlashErrorMessage": {},
   "gridCrossAxisCountSubtitle": "{value} 일때 한 행당 그리드 타일의 개수.",
   "@gridCrossAxisCountSubtitle": {
@@ -1414,5 +1414,112 @@
       }
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "dontTranscode": "원본 다운로드{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "redownloadTitle": "자동으로 트랜스코드 재다운로드",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "downloadBitrate": "다운로드 비트레이트",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "swipeRightToLeftActionSubtitle": "리스트에 있는 트랙을 오른쪽에서 왼쪽으로 밀었을 때 실행할 동작.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "트랜스코딩 형식 선택",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodeHint": "트랜스코딩하시겠습니까?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ 트랜스코딩 후 {bitrate}}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "swipeLeftToRightActionSubtitle": "리스트에 있는 트랙을 왼쪽에서 오른쪽으로 밀었을 때 실행할 동작.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "collectionDownloadInfo": "{codec, select, ORIGINAL{} other{{codec} @ {bitrate}로 }}{size}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "swipeRightToLeftAction": "왼쪽 스와이프 동작",
+  "@swipeRightToLeftAction": {},
+  "transcodingStreamingFormatSubtitle": "트랜스코딩한 오디오를 스트리밍할 때 사용할 형식을 지정하십시오. 이미 대기열에 있는 트랙은 영향받지 않습니다.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "swipeLeftToRightAction": "오른쪽 스와이프 동작",
+  "@swipeLeftToRightAction": {},
+  "doTranscode": "{codec} @ {bitrate}{size, select, null{} other{ - ~{size}}}로 다운로드",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{항상} never{안 함} ask{묻기} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "downloadBitrateSubtitle": "높은 비트레이트는 음원의 음질을 높이지만 용량을 늘립니다.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "redownloadcomplete": "트랜스코드 재다운로드 대기 중.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
   }
 }
