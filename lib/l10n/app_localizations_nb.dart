@@ -16,47 +16,47 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String startupError(String error) {
-    return 'Noe gikk galt under oppstart av programmet. Feilen var: $error\n\nOpprett en feilrapport på github.com/UnicornsOnLSD/finamp med en skjermavbildning av denne siden. Hvis problemet vedvarer kan du tømme programdata for å tilbakestille programmet.';
+    return 'Noe gikk galt under oppstart av programmet. Feilen var:\n $error\n\nOpprett en feilrapport på github.com/UnicornsOnLSD/finamp med en skjermavbildning av denne siden. Hvis problemet vedvarer kan du tømme programdata for å tilbakestille programmet.';
   }
 
   @override
-  String get about => 'About Finamp';
+  String get about => 'Om Finamp';
 
   @override
-  String get aboutContributionPrompt => 'Made by awesome people in their free time.\nYou could be one of them!';
+  String get aboutContributionPrompt => 'Laget av fantastiske mennesker på fritiden.\nDu kan være en av dem!';
 
   @override
-  String get aboutContributionLink => 'Contribute to Finamp on GitHub:';
+  String get aboutContributionLink => 'Bidra til Finamp på GitHub:';
 
   @override
-  String get aboutReleaseNotes => 'Read the latest release notes:';
+  String get aboutReleaseNotes => 'Les de siste utgivelsesnotatene:';
 
   @override
-  String get aboutTranslations => 'Help translate Finamp into your language:';
+  String get aboutTranslations => 'Hjelp med å oversette Finamp til ditt språk:';
 
   @override
-  String get aboutThanks => 'Thank you for using Finamp!';
+  String get aboutThanks => 'Takk for at du bruker Finamp!';
 
   @override
-  String get loginFlowWelcomeHeading => 'Welcome to';
+  String get loginFlowWelcomeHeading => 'Velkommen til';
 
   @override
-  String get loginFlowSlogan => 'Your music, the way you want it.';
+  String get loginFlowSlogan => 'Din musikk, slik du vil ha det.';
 
   @override
-  String get loginFlowGetStarted => 'Get Started!';
+  String get loginFlowGetStarted => 'Sett i gang!';
 
   @override
-  String get viewLogs => 'View Logs';
+  String get viewLogs => 'Vis logger';
 
   @override
-  String get changeLanguage => 'Change Language';
+  String get changeLanguage => 'Endre Språk';
 
   @override
-  String get loginFlowServerSelectionHeading => 'Connect to Jellyfin';
+  String get loginFlowServerSelectionHeading => 'Koble til Jellyfin';
 
   @override
-  String get back => 'Back';
+  String get back => 'Tilbake';
 
   @override
   String get serverUrl => 'Tjener-nettadresse';
@@ -65,61 +65,61 @@ class AppLocalizationsNb extends AppLocalizations {
   String get internalExternalIpExplanation => 'Hvis du vil ha tilgang til Jellyfin-tjeneren din annensteds fra må du bruke din eksterne IP-adresse.\n\nHvis tjeneren din er på en HTTP-port (80/443) må du angi en port. Dette er sannsynligvis tilfelle hvis tjeneren din er bak en omvendt mellomtjener.';
 
   @override
-  String get serverUrlHint => 'e.g. demo.jellyfin.org/stable';
+  String get serverUrlHint => 'f.eks. demo.jellyfin.org/stable';
 
   @override
-  String get serverUrlInfoButtonTooltip => 'Server URL Help';
+  String get serverUrlInfoButtonTooltip => 'Server URL-hjelp';
 
   @override
   String get emptyServerUrl => 'Tjener-nettadressen kan ikke stå tom';
 
   @override
-  String get connectingToServer => 'Connecting to server...';
+  String get connectingToServer => 'Kobler til server…';
 
   @override
-  String get loginFlowLocalNetworkServers => 'Servers on your local network:';
+  String get loginFlowLocalNetworkServers => 'Servere på ditt lokale nettverk:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'Scanning for servers...';
+  String get loginFlowLocalNetworkServersScanningForServers => 'Leter etter servere…';
 
   @override
-  String get loginFlowAccountSelectionHeading => 'Select your account';
+  String get loginFlowAccountSelectionHeading => 'Velg kontoen din';
 
   @override
-  String get backToServerSelection => 'Back to Server Selection';
+  String get backToServerSelection => 'Tilbake til servervalg';
 
   @override
-  String get loginFlowNamelessUser => 'Unnamed User';
+  String get loginFlowNamelessUser => 'Bruker uten navn';
 
   @override
-  String get loginFlowCustomUser => 'Custom User';
+  String get loginFlowCustomUser => 'Egendefinert bruker';
 
   @override
-  String get loginFlowAuthenticationHeading => 'Log in to your account';
+  String get loginFlowAuthenticationHeading => 'Logg på din bruker';
 
   @override
-  String get backToAccountSelection => 'Back to Account Selection';
+  String get backToAccountSelection => 'Tilbake til brukervalg';
 
   @override
   String get loginFlowQuickConnectPrompt => 'Use Quick Connect code';
 
   @override
-  String get loginFlowQuickConnectInstructions => 'Open the Jellyfin app or website, click on your user icon, and select Quick Connect.';
+  String get loginFlowQuickConnectInstructions => 'Åpne Jellyfin-app eller nettside, trykk på ditt brukerikon, og velg Quick Connect.';
 
   @override
-  String get loginFlowQuickConnectDisabled => 'Quick Connect is disabled on this server.';
+  String get loginFlowQuickConnectDisabled => 'Quick Connect er deaktivert på denne serveren.';
 
   @override
-  String get orDivider => 'or';
+  String get orDivider => 'eller';
 
   @override
-  String get loginFlowSelectAUser => 'Select a user';
+  String get loginFlowSelectAUser => 'Velg en bruker';
 
   @override
   String get username => 'Brukernavn';
 
   @override
-  String get usernameHint => 'Enter your username';
+  String get usernameHint => 'Skriv inn brukernavnet ditt';
 
   @override
   String get usernameValidationMissingUsername => 'Please enter a username';
@@ -131,7 +131,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get passwordHint => 'Enter your password';
 
   @override
-  String get login => 'Log In';
+  String get login => 'Logg in';
 
   @override
   String get logs => 'Loggføring';
@@ -153,6 +153,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get albums => 'Album';
+
+  @override
+  String get appearsOnAlbums => 'Appears On';
 
   @override
   String get artists => 'Artister';
@@ -210,6 +213,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get albumArtist => 'Albumsartist';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Artist';
@@ -495,9 +504,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get areYouSure => 'Er du sikker?';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin bruker AAC for transkoding';
 
   @override
   String get enableTranscoding => 'Skru på transkoding';
@@ -1091,7 +1097,7 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get queueLoadingMessage => 'Restoring queue...';
+  String get queueLoadingMessage => 'Restoring queue…';
 
   @override
   String get queueRetryMessage => 'Failed to restore queue. Retry?';
@@ -1255,6 +1261,18 @@ class AppLocalizationsNb extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'Enable to insert a track as next item in queue when swiped in track list instead of appending it to the end.';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'Start Instant Mixes for Individual Tracks';
 
   @override
@@ -1331,13 +1349,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get connectionInterruptedBackgroundAndroid => 'Connection was interrupted while downloading in the background. This can be caused by enabling \'Enter Low-Priority State on Pause\' or OS settings.';
 
   @override
-  String get activeDownloadSize => 'Downloading...';
+  String get activeDownloadSize => 'Downloading…';
 
   @override
-  String get missingDownloadSize => 'Deleting...';
+  String get missingDownloadSize => 'Deleting…';
 
   @override
-  String get syncingDownloadSize => 'Syncing...';
+  String get syncingDownloadSize => 'Syncing…';
 
   @override
   String get runRepairWarning => 'The server could not be contacted to finalize downloads migration. Please run \'Repair Downloads\' from the downloads screen as soon as you are back online.';
@@ -1426,10 +1444,10 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Select Transcoding Container';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Enable Transcoded Downloads';
@@ -1572,7 +1590,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle => 'Show … at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'Hide bottom actions';
@@ -1974,6 +1992,34 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';

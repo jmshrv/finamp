@@ -155,6 +155,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get albums => 'Alba';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Umělci';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get albumArtist => 'Umělec alba';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Umělec';
@@ -368,10 +377,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get deleteDownloadsConfirmButtonText => 'Odstranit';
 
   @override
-  String get specialDownloads => 'Special downloads';
+  String get specialDownloads => 'Zvláštní stahování';
 
   @override
-  String get noItemsDownloaded => 'No items downloaded.';
+  String get noItemsDownloaded => 'Nebyly staženy žádné položky.';
 
   @override
   String get error => 'Chyba';
@@ -502,9 +511,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get areYouSure => 'Opravdu?';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin používá pro překódování formát AAC';
 
   @override
   String get enableTranscoding => 'Zapnout překódování';
@@ -1265,6 +1271,18 @@ class AppLocalizationsCs extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'Zapněte pro vložení skladby jako další položku do fronty po posunutí prstem na skladbě v seznamu skladeb, namísto jejího přiřazení na konec.';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'Spustit okamžité mixy pro jednotlivé skladby';
 
   @override
@@ -1437,10 +1455,10 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Vyberte kontejner překódování';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Vyberte kontejner segmentů k použití při streamování překódovaného zvuku. Skladby, které jsou ve frontě, nebudou ovlivněny.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Povolit překódovaná stahování';
@@ -1741,7 +1759,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get lyricsFontSizeSubtitle => 'Ovládá velikost písma v zobrazení textů.';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => 'Zobrazit album před texty';
+  String get showLyricsScreenAlbumPreludeTitle => 'Zobrazit obal alba před texty';
 
   @override
   String get showLyricsScreenAlbumPreludeSubtitle => 'Ovládá, zda bude zobrazen obal alba nad texty před jeho odsunutím pryč.';
@@ -1984,17 +2002,45 @@ class AppLocalizationsCs extends AppLocalizations {
   String get releaseDateFormatSubtitle => 'Ovládá formát všech dat vydání zobrazených v aplikaci.';
 
   @override
-  String get librarySelectError => 'Error loading available libraries for user';
+  String get librarySelectError => 'Chyba při načítání dostupných knihoven';
 
   @override
-  String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';
+  String get autoOfflineOptionOff => 'Disabled';
 
   @override
-  String get audioFadeOutDurationSettingSubtitle => 'The duration of the audio fade out in milliseconds.';
+  String get autoOfflineOptionNetwork => 'Network';
 
   @override
-  String get audioFadeInDurationSettingTitle => 'Audio fade-in duration';
+  String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get audioFadeInDurationSettingSubtitle => 'The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.';
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
+
+  @override
+  String get audioFadeOutDurationSettingTitle => 'Délka ztlumování zvuku';
+
+  @override
+  String get audioFadeOutDurationSettingSubtitle => 'Délka, po kterou se bude postupně snižovat hlasitost zvuku, v milisekundách.';
+
+  @override
+  String get audioFadeInDurationSettingTitle => 'Délka zesilování zvuku';
+
+  @override
+  String get audioFadeInDurationSettingSubtitle => 'Délka, po kterou se bude postupně zvyšovat hlasitost zvuku, v milisekundách. Nastavte na 0 pro zakázání.';
 }

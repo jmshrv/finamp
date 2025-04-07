@@ -28,6 +28,7 @@ import 'app_localizations_nb.dart';
 import 'app_localizations_nl.dart';
 import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
+import 'app_localizations_ro.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_sl.dart';
 import 'app_localizations_sr.dart';
@@ -148,6 +149,7 @@ abstract class AppLocalizations {
     Locale('pl'),
     Locale('pt'),
     Locale('pt', 'BR'),
+    Locale('ro'),
     Locale('ru'),
     Locale('sl'),
     Locale('sr'),
@@ -293,7 +295,7 @@ abstract class AppLocalizations {
   /// Text shown while the connection to the specified server is attempted
   ///
   /// In en, this message translates to:
-  /// **'Connecting to server...'**
+  /// **'Connecting to server…'**
   String get connectingToServer;
 
   /// Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end.
@@ -305,7 +307,7 @@ abstract class AppLocalizations {
   /// Text shown while servers are being discovered via UDP broadcasts
   ///
   /// In en, this message translates to:
-  /// **'Scanning for servers...'**
+  /// **'Scanning for servers…'**
   String get loginFlowLocalNetworkServersScanningForServers;
 
   /// Heading for the account selection step during the login flow.
@@ -452,6 +454,12 @@ abstract class AppLocalizations {
   /// **'Albums'**
   String get albums;
 
+  /// No description provided for @appearsOnAlbums.
+  ///
+  /// In en, this message translates to:
+  /// **'Appears On'**
+  String get appearsOnAlbums;
+
   /// No description provided for @artists.
   ///
   /// In en, this message translates to:
@@ -565,6 +573,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Album Artist'**
   String get albumArtist;
+
+  /// No description provided for @albumArtists.
+  ///
+  /// In en, this message translates to:
+  /// **'Album Artists'**
+  String get albumArtists;
+
+  /// No description provided for @performingArtists.
+  ///
+  /// In en, this message translates to:
+  /// **'Performing Artists'**
+  String get performingArtists;
 
   /// No description provided for @artist.
   ///
@@ -950,12 +970,6 @@ abstract class AppLocalizations {
   /// **'Are you sure?'**
   String get areYouSure;
 
-  /// No description provided for @jellyfinUsesAACForTranscoding.
-  ///
-  /// In en, this message translates to:
-  /// **'Jellyfin uses AAC for transcoding'**
-  String get jellyfinUsesAACForTranscoding;
-
   /// No description provided for @enableTranscoding.
   ///
   /// In en, this message translates to:
@@ -977,7 +991,7 @@ abstract class AppLocalizations {
   /// No description provided for @bitrateSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'A higher bitrate gives higher quality audio at the cost of higher bandwidth.'**
+  /// **'A higher bitrate gives higher quality audio at the cost of higher bandwidth. Does not apply to lossless codecs, e.g. FLAC'**
   String get bitrateSubtitle;
 
   /// No description provided for @customLocation.
@@ -1013,7 +1027,7 @@ abstract class AppLocalizations {
   /// No description provided for @pathReturnSlashErrorMessage.
   ///
   /// In en, this message translates to:
-  /// **'Paths that return \"/\" can\'\'t be used'**
+  /// **'Paths that return \"/\" can\'t be used'**
   String get pathReturnSlashErrorMessage;
 
   /// No description provided for @directoryMustBeEmpty.
@@ -1913,7 +1927,7 @@ abstract class AppLocalizations {
   /// Message displayed on now-playing bar when a saved queue is loading.
   ///
   /// In en, this message translates to:
-  /// **'Restoring queue...'**
+  /// **'Restoring queue…'**
   String get queueLoadingMessage;
 
   /// Message displayed on now-playing bar when all items in a saved queue fail to load.
@@ -2156,6 +2170,30 @@ abstract class AppLocalizations {
   /// **'Enable to insert a track as next item in queue when swiped in track list instead of appending it to the end.'**
   String get swipeInsertQueueNextSubtitle;
 
+  /// No description provided for @swipeLeftToRightAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe to Right Action'**
+  String get swipeLeftToRightAction;
+
+  /// No description provided for @swipeLeftToRightActionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Action triggered when swiping a track in the list from left to right.'**
+  String get swipeLeftToRightActionSubtitle;
+
+  /// No description provided for @swipeRightToLeftAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe to Left Action'**
+  String get swipeRightToLeftAction;
+
+  /// No description provided for @swipeRightToLeftActionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Action triggered when swiping a track in the list from right to left.'**
+  String get swipeRightToLeftActionSubtitle;
+
   /// Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track.
   ///
   /// In en, this message translates to:
@@ -2255,19 +2293,19 @@ abstract class AppLocalizations {
   /// Message shown for download size while item is still being downloaded
   ///
   /// In en, this message translates to:
-  /// **'Downloading...'**
+  /// **'Downloading…'**
   String get activeDownloadSize;
 
   /// Message shown for download size while item is being deleted but is not fully removed
   ///
   /// In en, this message translates to:
-  /// **'Deleting...'**
+  /// **'Deleting…'**
   String get missingDownloadSize;
 
   /// Message shown for download size while item is still syncing.
   ///
   /// In en, this message translates to:
-  /// **'Syncing...'**
+  /// **'Syncing…'**
   String get syncingDownloadSize;
 
   /// Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection.
@@ -2372,17 +2410,17 @@ abstract class AppLocalizations {
   /// **'Cached Images for \'{libraryName}\''**
   String cacheLibraryImagesName(String libraryName);
 
-  /// Title for the dropdown that selects the container format for transcoded streams
+  /// Title for the dropdown that selects the format for transcoded streams
   ///
   /// In en, this message translates to:
-  /// **'Select Transcoding Container'**
-  String get transcodingStreamingContainerTitle;
+  /// **'Select Transcoding Format'**
+  String get transcodingStreamingFormatTitle;
 
-  /// No description provided for @transcodingStreamingContainerSubtitle.
+  /// No description provided for @transcodingStreamingFormatSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.'**
-  String get transcodingStreamingContainerSubtitle;
+  /// **'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.'**
+  String get transcodingStreamingFormatSubtitle;
 
   /// Title for Enable Transcoded Downloads dropdown
   ///
@@ -2549,7 +2587,7 @@ abstract class AppLocalizations {
   /// No description provided for @marqueeOrTruncateButtonSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Show ... at the end of long titles instead of scrolling text'**
+  /// **'Show … at the end of long titles instead of scrolling text'**
   String get marqueeOrTruncateButtonSubtitle;
 
   /// No description provided for @hidePlayerBottomActions.
@@ -3176,6 +3214,42 @@ abstract class AppLocalizations {
   /// **'Error loading available libraries for user'**
   String get librarySelectError;
 
+  /// This is shown when the autoOffline feature is turned off and has no effects
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get autoOfflineOptionOff;
+
+  /// This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get autoOfflineOptionNetwork;
+
+  /// This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get autoOfflineOptionDisconnected;
+
+  /// Setting description. Make sure the Mode names match the translations.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again'**
+  String get autoOfflineSettingDescription;
+
+  /// No description provided for @autoOfflineSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automated Offline Mode'**
+  String get autoOfflineSettingTitle;
+
+  /// The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically {state, select, enabled{enabled} disabled{disabled} other{set quantum position for}} Offline Mode'**
+  String autoOfflineNotification(String state);
+
   /// Title for the audio fade-in duration setting.
   ///
   /// In en, this message translates to:
@@ -3210,7 +3284,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fa', 'fi', 'fr', 'hi', 'hr', 'hu', 'it', 'ja', 'ko', 'nb', 'nl', 'pl', 'pt', 'ru', 'sl', 'sr', 'sv', 'sw', 'szl', 'ta', 'th', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['ar', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fa', 'fi', 'fr', 'hi', 'hr', 'hu', 'it', 'ja', 'ko', 'nb', 'nl', 'pl', 'pt', 'ro', 'ru', 'sl', 'sr', 'sv', 'sw', 'szl', 'ta', 'th', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -3267,6 +3341,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'nl': return AppLocalizationsNl();
     case 'pl': return AppLocalizationsPl();
     case 'pt': return AppLocalizationsPt();
+    case 'ro': return AppLocalizationsRo();
     case 'ru': return AppLocalizationsRu();
     case 'sl': return AppLocalizationsSl();
     case 'sr': return AppLocalizationsSr();

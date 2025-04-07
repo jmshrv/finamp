@@ -74,13 +74,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get emptyServerUrl => 'La URL del servidor no pot estar buida';
 
   @override
-  String get connectingToServer => 'Connectant amb el servidor...';
+  String get connectingToServer => 'Connectant amb el servidor…';
 
   @override
   String get loginFlowLocalNetworkServers => 'Servidors a la teva xarxa local:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'Buscant servidors...';
+  String get loginFlowLocalNetworkServersScanningForServers => 'Buscant servidors…';
 
   @override
   String get loginFlowAccountSelectionHeading => 'Selecciona el teu compte';
@@ -155,6 +155,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get albums => 'Àlbums';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Artistes';
 
   @override
@@ -170,10 +173,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get startMixNoTracksArtist => 'Prém sostingudament per afegir o eliminar un artista de la llista de cançons abans de començar la llista';
 
   @override
-  String get startMixNoTracksAlbum => 'Long-press an album to add or remove it from the mix builder before starting a mix';
+  String get startMixNoTracksAlbum => 'Manté pres un àlbum per afegir o esborrar-lo del creador de barreges abans de començar una barreja';
 
   @override
-  String get startMixNoTracksGenre => 'Long-press an genre to add or remove it from the mix builder before starting a mix';
+  String get startMixNoTracksGenre => 'Manté pres un gènere per afegir o esborrar-lo del creador de barreges abans de començar una barreja';
 
   @override
   String get music => 'Música';
@@ -191,7 +194,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get downloads => 'Descàrregues';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Configuració';
 
   @override
   String get offlineMode => 'Mode sense connexió';
@@ -206,40 +209,46 @@ class AppLocalizationsCa extends AppLocalizations {
   String get title => 'Títol';
 
   @override
-  String get album => 'Album';
+  String get album => 'Àlbum';
 
   @override
-  String get albumArtist => 'Album Artist';
+  String get albumArtist => 'Artista de l\'Àlbum';
 
   @override
-  String get artist => 'Artist';
+  String get albumArtists => 'Album Artists';
 
   @override
-  String get budget => 'Budget';
+  String get performingArtists => 'Performing Artists';
 
   @override
-  String get communityRating => 'Community Rating';
+  String get artist => 'Artista';
 
   @override
-  String get criticRating => 'Critic Rating';
+  String get budget => 'Pressupost';
 
   @override
-  String get dateAdded => 'Date Added';
+  String get communityRating => 'Nota de la Comunitat';
 
   @override
-  String get datePlayed => 'Date Played';
+  String get criticRating => 'Nota de la Crítica';
 
   @override
-  String get playCount => 'Play Count';
+  String get dateAdded => 'Data on s\'afegí';
 
   @override
-  String get premiereDate => 'Premiere Date';
+  String get datePlayed => 'Data on es reproduí';
 
   @override
-  String get productionYear => 'Production Year';
+  String get playCount => 'Recompte de reproduccions';
 
   @override
-  String get name => 'Name';
+  String get premiereDate => 'Data d\'estrena';
+
+  @override
+  String get productionYear => 'Any de Producció';
+
+  @override
+  String get name => 'Nom';
 
   @override
   String get random => 'Aleatori';
@@ -254,30 +263,30 @@ class AppLocalizationsCa extends AppLocalizations {
   String get syncDownloadedPlaylists => 'Sincronitza les llistes de reproducció descarregades';
 
   @override
-  String get downloadMissingImages => 'Download missing images';
+  String get downloadMissingImages => 'Descarregar imatges mancants';
 
   @override
   String downloadedMissingImages(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Downloaded $count missing images',
-      one: 'Downloaded $count missing image',
-      zero: 'No missing images found',
+      other: 'Descarregades $count imatges mancants',
+      one: 'Descarregades $count imatges mancants',
+      zero: 'No s\'han trobat imatges mancants',
     );
     return '$_temp0';
   }
 
   @override
-  String get activeDownloads => 'Active Downloads';
+  String get activeDownloads => 'Descàrregues Actives';
 
   @override
   String downloadCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count downloads',
-      one: '$count download',
+      other: '$count descàrregues',
+      one: '$count descàrrega',
     );
     return '$_temp0';
   }
@@ -287,25 +296,25 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       trackCount,
       locale: localeName,
-      other: '$trackCount tracks',
-      one: '$trackCount track',
+      other: '$trackCount pistes',
+      one: '$trackCount pista',
     );
     String _temp1 = intl.Intl.pluralLogic(
       imageCount,
       locale: localeName,
-      other: '$imageCount images',
-      one: '$imageCount image',
+      other: '$imageCount imatges',
+      one: '$imageCount imatge',
     );
     String _temp2 = intl.Intl.pluralLogic(
       syncCount,
       locale: localeName,
-      other: '$syncCount nodes syncing',
-      one: '$syncCount node syncing',
+      other: '$syncCount nodes sincronitzats',
+      one: '$syncCount node sincronitzat',
     );
     String _temp3 = intl.Intl.pluralLogic(
       repairing,
       locale: localeName,
-      other: '\nCurrently repairing',
+      other: '\nReparant',
       zero: '',
     );
     return '$_temp0, $_temp1\n$_temp2$_temp3';
@@ -313,35 +322,35 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String dlComplete(int count) {
-    return '$count complete';
+    return '$count completat';
   }
 
   @override
   String dlFailed(int count) {
-    return '$count failed';
+    return '$count fallat';
   }
 
   @override
   String dlEnqueued(int count) {
-    return '$count enqueued';
+    return '$count en cua';
   }
 
   @override
   String dlRunning(int count) {
-    return '$count running';
+    return '$count funcionant';
   }
 
   @override
-  String get activeDownloadsTitle => 'Active Downloads';
+  String get activeDownloadsTitle => 'Descàrregues Actives';
 
   @override
-  String get noActiveDownloads => 'No active downloads.';
+  String get noActiveDownloads => 'Cap descàrrega activa.';
 
   @override
-  String get errorScreenError => 'An error occurred while getting the list of errors! At this point, you should probably just create an issue on GitHub and delete app data';
+  String get errorScreenError => 'Un error ha succeït mentre s\'intentava obtenir la llista d\'errors! En aquest punt, probablement hauries de crear una sol·licitud a GitHub i esborrar les dades de l\'aplicació';
 
   @override
-  String get failedToGetTrackFromDownloadId => 'Failed to get track from download ID';
+  String get failedToGetTrackFromDownloadId => 'Error a l\'hora de trobar-lo pel seu ID de descàrrega';
 
   @override
   String deleteDownloadsPrompt(String itemName, String itemType) {
@@ -357,17 +366,17 @@ class AppLocalizationsCa extends AppLocalizations {
         'other': 'item',
       },
     );
-    return 'Are you sure you want to delete the $_temp0 \'$itemName\' from this device?';
+    return 'Estàs segur que vols esborrar el $_temp0 \'$itemName\' d\'aquest dispositiu?';
   }
 
   @override
-  String get deleteDownloadsConfirmButtonText => 'Delete';
+  String get deleteDownloadsConfirmButtonText => 'Esborrar';
 
   @override
-  String get specialDownloads => 'Special downloads';
+  String get specialDownloads => 'Descàrregues especials';
 
   @override
-  String get noItemsDownloaded => 'No items downloaded.';
+  String get noItemsDownloaded => 'Cap ítem descarregat.';
 
   @override
   String get error => 'Error';
@@ -388,8 +397,8 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Tracks',
-      one: '$count Track',
+      other: '$count Pistes',
+      one: '$count Pista',
     );
     return '$_temp0';
   }
@@ -399,10 +408,10 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Tracks',
-      one: '$count Track',
+      other: '$count Pistes',
+      one: '$count Pista',
     );
-    return '$_temp0, $downloads Downloaded';
+    return '$_temp0, $downloads Descarregat/es';
   }
 
   @override
@@ -410,362 +419,359 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Tracks',
-      one: '$count Track',
+      other: '$count Pistes',
+      one: '$count Pista',
     );
-    return '$_temp0 Downloaded';
+    return '$_temp0 Descarregat/es';
   }
 
   @override
-  String get editPlaylistNameTooltip => 'Edit playlist name';
+  String get editPlaylistNameTooltip => 'Edita el nom de la llista de reproducció';
 
   @override
-  String get editPlaylistNameTitle => 'Edit Playlist Name';
+  String get editPlaylistNameTitle => 'Edita el nom de la llista de reproducció';
 
   @override
   String get required => 'Requerit';
 
   @override
-  String get updateButtonLabel => 'Update';
+  String get updateButtonLabel => 'Actualitzar';
 
   @override
-  String get playlistNameUpdated => 'Playlist name updated.';
+  String get playlistNameUpdated => 'Nom de la llista de reproducció actualitzat.';
 
   @override
-  String get favourite => 'Favourite';
+  String get favourite => 'Preferit';
 
   @override
-  String get downloadsDeleted => 'Downloads deleted.';
+  String get downloadsDeleted => 'Descàrregues esborrades.';
 
   @override
-  String get addDownloads => 'Add Downloads';
+  String get addDownloads => 'Afegir Descàrregues';
 
   @override
-  String get location => 'Location';
+  String get location => 'Localització';
 
   @override
-  String get confirmDownloadStarted => 'Download started';
+  String get confirmDownloadStarted => 'Descàrrega començada';
 
   @override
-  String get downloadsQueued => 'Download prepared, downloading files';
+  String get downloadsQueued => 'Descàrrega preparada, descarregant fitxers';
 
   @override
   String get addButtonLabel => 'Afegeix';
 
   @override
-  String get shareLogs => 'Share logs';
+  String get shareLogs => 'Compartir registres';
 
   @override
-  String get logsCopied => 'Logs copied.';
+  String get logsCopied => 'Registres copiats.';
 
   @override
-  String get message => 'Message';
+  String get message => 'Missatge';
 
   @override
-  String get stackTrace => 'Stack Trace';
+  String get stackTrace => 'Traç de pila';
 
   @override
   String applicationLegalese(String sourceCodeLink) {
-    return 'Licensed with the Mozilla Public License 2.0.\nSource code available at $sourceCodeLink.';
+    return 'Llicenciat amb Mozilla Public License 2.0.\nCodi font disponible a $sourceCodeLink.';
   }
 
   @override
-  String get transcoding => 'Transcoding';
+  String get transcoding => 'Codificació';
 
   @override
-  String get downloadLocations => 'Download Locations';
+  String get downloadLocations => 'Ubicació de Descàrregues';
 
   @override
-  String get audioService => 'Audio Service';
+  String get audioService => 'Servei d\'Àudio';
 
   @override
-  String get interactions => 'Interactions';
+  String get interactions => 'Interaccions';
 
   @override
-  String get layoutAndTheme => 'Layout & Theme';
+  String get layoutAndTheme => 'Disseny i Tema';
 
   @override
-  String get notAvailableInOfflineMode => 'Not available in offline mode';
+  String get notAvailableInOfflineMode => 'No disponible en mode sense connexió';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Tancar sessió';
 
   @override
-  String get downloadedTracksWillNotBeDeleted => 'Downloaded tracks will not be deleted';
+  String get downloadedTracksWillNotBeDeleted => 'Les pistes descarregades no s\'esborraran';
 
   @override
-  String get areYouSure => 'Are you sure?';
+  String get areYouSure => 'Estàs segur?';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin uses AAC for transcoding';
+  String get enableTranscoding => 'Habilitar codificació';
 
   @override
-  String get enableTranscoding => 'Enable Transcoding';
+  String get enableTranscodingSubtitle => 'Codifica la música en el costat del servidor.';
 
   @override
-  String get enableTranscodingSubtitle => 'Transcodes music streams on the server side.';
+  String get bitrate => 'Taxa de bits';
 
   @override
-  String get bitrate => 'Bitrate';
+  String get bitrateSubtitle => 'Una taxa de bits més alta dona una millor qualitat d\'àudio a canvi d\'una major amplada de banda.';
 
   @override
-  String get bitrateSubtitle => 'A higher bitrate gives higher quality audio at the cost of higher bandwidth.';
+  String get customLocation => 'Ubicació Personalitzada';
 
   @override
-  String get customLocation => 'Custom Location';
+  String get appDirectory => 'Directori de l\'aplicació';
 
   @override
-  String get appDirectory => 'App Directory';
+  String get addDownloadLocation => 'Afegir una Ubicació de Descàrregues';
 
   @override
-  String get addDownloadLocation => 'Add Download Location';
+  String get selectDirectory => 'Selecciona un Directori';
 
   @override
-  String get selectDirectory => 'Select Directory';
+  String get unknownError => 'Error desconegut';
 
   @override
-  String get unknownError => 'Unknown Error';
+  String get pathReturnSlashErrorMessage => 'Rutes que retornen \"/\" no poden ser utilitzades';
 
   @override
-  String get pathReturnSlashErrorMessage => 'Paths that return \"/\" can\'\'t be used';
+  String get directoryMustBeEmpty => 'El directori ha d\'estar buit';
 
   @override
-  String get directoryMustBeEmpty => 'Directory must be empty';
+  String get customLocationsBuggy => 'Ubicacions personalitzades poden ser extremadament inestables i no són recomanables en la majoria dels casos. Les ubicacions sota el sistema de carpeta \'Music\' prevenen la portada de l\'àlbum de poder guardar-se per limitacions del SO.';
 
   @override
-  String get customLocationsBuggy => 'Custom locations can be extremely buggy and are not recommended in most cases. Locations under the system \'Music\' folder prevent saving album covers due to OS limitations.';
+  String get enterLowPriorityStateOnPause => 'Introdueix un Estat de Baixa Prioritat en la Pausa';
 
   @override
-  String get enterLowPriorityStateOnPause => 'Enter Low-Priority State on Pause';
+  String get enterLowPriorityStateOnPauseSubtitle => 'Permet que la notificació sigui descartable quan estigui pausat. A més, permet a Android parar el servei quan està pausat.';
 
   @override
-  String get enterLowPriorityStateOnPauseSubtitle => 'Lets the notification be swiped away when paused. Also allows Android to kill the service when paused.';
+  String get shuffleAllTrackCount => 'Recompte Total de Pistes Barrejades';
 
   @override
-  String get shuffleAllTrackCount => 'Shuffle All Track Count';
+  String get shuffleAllTrackCountSubtitle => 'Quantitat de cançons que es carreguen quan s\'utilitza el botó barrejador de cançons.';
 
   @override
-  String get shuffleAllTrackCountSubtitle => 'Amount of tracks to load when using the shuffle all tracks button.';
+  String get viewType => 'Tipus de Visualització';
 
   @override
-  String get viewType => 'View Type';
+  String get viewTypeSubtitle => 'Tipus de vista per a la pantalla de música';
 
   @override
-  String get viewTypeSubtitle => 'View type for the music screen';
+  String get list => 'Llista';
 
   @override
-  String get list => 'List';
+  String get grid => 'Graella';
 
   @override
-  String get grid => 'Grid';
+  String get customizationSettingsTitle => 'Personalització';
 
   @override
-  String get customizationSettingsTitle => 'Customization';
+  String get playbackSpeedControlSetting => 'Visualització de la Velocitat de Reproducció';
 
   @override
-  String get playbackSpeedControlSetting => 'Playback Speed Visibility';
-
-  @override
-  String get playbackSpeedControlSettingSubtitle => 'Whether the playback speed controls are shown in the player screen menu';
+  String get playbackSpeedControlSettingSubtitle => 'Si es mostren els controls de velocitat de reproducció al menú de la pantalla del reproductor';
 
   @override
   String playbackSpeedControlSettingDescription(int trackDuration, int albumDuration, String genreList) {
-    return 'Automatic:\nFinamp tries to identify whether the track you are playing is a podcast or (part of) an audiobook. This is considered to be the case if the track is longer than $trackDuration minutes, if the track\'\'s album is longer than $albumDuration hours, or if the track has at least one of these genres assigned: $genreList\nPlayback speed controls will then be shown in the player screen menu.\n\nShown:\nThe playback speed controls will always be shown in the player screen menu.\n\nHidden:\nThe playback speed controls in the player screen menu are always hidden.';
+    return 'Automàtic:  \nFinamp intenta identificar si la pista que estàs reproduint és un pòdcast o (part) d\'un audiollibre. Es considera que aquest és el cas si la pista dura més de $trackDuration minuts, si l\'àlbum de la pista dura més de $albumDuration hores o si la pista té assignat almenys un d’aquests gèneres: $genreList.\nEls controls de velocitat de reproducció es mostraran aleshores al menú de la pantalla del reproductor.\n\nMostrat:\nEls controls de velocitat de reproducció sempre es mostraran al menú de la pantalla del reproductor.\n\nAmagat:\nEls controls de velocitat de reproducció al menú de la pantalla del reproductor sempre estaran ocults.';
   }
 
   @override
-  String get automatic => 'Automatic';
+  String get automatic => 'Automàtic';
 
   @override
-  String get shown => 'Shown';
+  String get shown => 'Mostrat';
 
   @override
-  String get hidden => 'Hidden';
+  String get hidden => 'Amagat';
 
   @override
-  String get speed => 'Speed';
+  String get speed => 'Velocitat';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Reiniciar';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Aplicar';
 
   @override
-  String get portrait => 'Portrait';
+  String get portrait => 'Vertical';
 
   @override
-  String get landscape => 'Landscape';
+  String get landscape => 'Horitzontal';
 
   @override
   String gridCrossAxisCount(String value) {
-    return '$value Grid Cross-Axis Count';
+    return 'Columnes en vista de quadrícula en $value';
   }
 
   @override
   String gridCrossAxisCountSubtitle(String value) {
-    return 'Amount of grid tiles to use per-row when $value.';
+    return 'Quantitat de columnes utilitzades per fila quan el dispositiu està en $value.';
   }
 
   @override
-  String get showTextOnGridView => 'Show text in grid view';
+  String get showTextOnGridView => 'Veure text en mode graella';
 
   @override
-  String get showTextOnGridViewSubtitle => 'Whether or not to show the text (title, artist etc) on the grid music screen.';
+  String get showTextOnGridViewSubtitle => 'Mostrar el text (títol, artista, etc.) a la pantalla de música en graella.';
 
   @override
-  String get useCoverAsBackground => 'Use blurred cover as background';
+  String get useCoverAsBackground => 'Utilitza una cobertura difuminada pel fons de pantalla';
 
   @override
-  String get useCoverAsBackgroundSubtitle => 'Whether or not to use a blurred album cover as background in various parts of the app.';
+  String get useCoverAsBackgroundSubtitle => 'Utilitzar una portada d\'àlbum difuminada com a fons de pantalla en diferents apartats de l\'aplicació.';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorTitle => 'Minimum album cover padding';
+  String get playerScreenMinimumCoverPaddingEditorTitle => 'Marge interior mínim per l\'àlbum';
 
   @override
-  String get playerScreenMinimumCoverPaddingEditorSubtitle => 'Minimum padding around the album cover on the player screen, in % of the screen width.';
+  String get playerScreenMinimumCoverPaddingEditorSubtitle => 'Marge interior mínim al voltant de la portada de l\'àlbum en la pantalla del reproductor, en % en l\'amplada de la pantalla.';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtists => 'Hide track artists if same as album artists';
+  String get hideTrackArtistsIfSameAsAlbumArtists => 'Amaga els artistes de la cançó si són els mateixos que els de l\'àlbum';
 
   @override
-  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => 'Whether to show track artists on the album screen if not differing from album artists.';
+  String get hideTrackArtistsIfSameAsAlbumArtistsSubtitle => 'Amaga als artistes de les cançons en la pantalla de l\'àlbum si no difereixen dels de l\'àlbum.';
 
   @override
-  String get showArtistsTopTracks => 'Show top tracks in artist view';
+  String get showArtistsTopTracks => 'Mostra les cançons que estan al top en la vista d\'artistes';
 
   @override
-  String get showArtistsTopTracksSubtitle => 'Whether to show the top 5 most listened to tracks of an artist.';
+  String get showArtistsTopTracksSubtitle => 'Mostrar el top 5 més sentit en les cançons d\'un artista.';
 
   @override
-  String get disableGesture => 'Disable gestures';
+  String get disableGesture => 'Deshabilitar gesticulacions';
 
   @override
-  String get disableGestureSubtitle => 'Whether to disables gestures.';
+  String get disableGestureSubtitle => 'Deshabilitar o no les gesticulacions.';
 
   @override
-  String get showFastScroller => 'Show fast scroller';
+  String get showFastScroller => 'Mostrar el desplaçament ràpid';
 
   @override
-  String get theme => 'Theme';
+  String get theme => 'Tema';
 
   @override
-  String get system => 'System';
+  String get system => 'Sistema';
 
   @override
-  String get light => 'Light';
+  String get light => 'Clar';
 
   @override
-  String get dark => 'Dark';
+  String get dark => 'Fosc';
 
   @override
-  String get tabs => 'Tabs';
+  String get tabs => 'Capçaleres';
 
   @override
-  String get playerScreen => 'Player Screen';
+  String get playerScreen => 'Pantalla de reproducció';
 
   @override
-  String get cancelSleepTimer => 'Cancel Sleep Timer?';
+  String get cancelSleepTimer => 'Cancel·lo el temporitzador per dormir?';
 
   @override
-  String get yesButtonLabel => 'Yes';
+  String get yesButtonLabel => 'Sí';
 
   @override
   String get noButtonLabel => 'No';
 
   @override
-  String get setSleepTimer => 'Set Sleep Timer';
+  String get setSleepTimer => 'Estableix un temportitzador';
 
   @override
-  String get hours => 'Hours';
+  String get hours => 'Hores';
 
   @override
-  String get seconds => 'Seconds';
+  String get seconds => 'Segons';
 
   @override
-  String get minutes => 'Minutes';
+  String get minutes => 'Minuts';
 
   @override
   String timeFractionTooltip(Object currentTime, Object totalTime) {
-    return '$currentTime of $totalTime';
+    return '$currentTime de$totalTime';
   }
 
   @override
   String trackCountTooltip(int currentTrackIndex, int totalTrackCount) {
-    return 'Track $currentTrackIndex of $totalTrackCount';
+    return 'Pista $currentTrackIndex de$totalTrackCount';
   }
 
   @override
-  String get invalidNumber => 'Invalid Number';
+  String get invalidNumber => 'Nombre invàlid';
 
   @override
-  String get sleepTimerTooltip => 'Sleep timer';
+  String get sleepTimerTooltip => 'Temporitzador';
 
   @override
   String sleepTimerRemainingTime(int time, String prefix, String suffix) {
-    return 'Sleeping in $prefix$time $suffix';
+    return 'Aturar en $time minuts';
   }
 
   @override
-  String get addToPlaylistTooltip => 'Add to playlist';
+  String get addToPlaylistTooltip => 'Afegir a la llista';
 
   @override
-  String get addToPlaylistTitle => 'Add to Playlist';
+  String get addToPlaylistTitle => 'Afegir a llista';
 
   @override
-  String get addToMorePlaylistsTooltip => 'Add to more playlists';
+  String get addToMorePlaylistsTooltip => 'Afageix a més llistes de reproducció';
 
   @override
-  String get addToMorePlaylistsTitle => 'Add to More Playlists';
+  String get addToMorePlaylistsTitle => 'Afegeix a més llistes de reproducció';
 
   @override
-  String get removeFromPlaylistTooltip => 'Remove from this playlist';
+  String get removeFromPlaylistTooltip => 'Elimina d\'aquesta llista de reproducció';
 
   @override
-  String get removeFromPlaylistTitle => 'Remove From This Playlist';
+  String get removeFromPlaylistTitle => 'Eliminar d\'aquesta llista de reproducció';
 
   @override
   String removeFromPlaylistNamedTooltip(String playlistName) {
-    return 'Remove from playlist \'$playlistName\'';
+    return 'Elimina de la llista de reproducció \'$playlistName\'';
   }
 
   @override
   String removeFromPlaylistNamedTitle(String playlistName) {
-    return 'Remove from Playlist \'$playlistName\'';
+    return 'Eliminar de la llista \'$playlistName\'';
   }
 
   @override
-  String get newPlaylist => 'New Playlist';
+  String get newPlaylist => 'Nova llista de reproducció';
 
   @override
-  String get createButtonLabel => 'Create';
+  String get createButtonLabel => 'Crea';
 
   @override
-  String get playlistCreated => 'Playlist created.';
+  String get playlistCreated => 'Llista de reproducció creada.';
 
   @override
-  String get playlistActionsMenuButtonTooltip => 'Tap to add to playlist. Long press to toggle favorite.';
+  String get playlistActionsMenuButtonTooltip => 'Toca per afegir a la llista de reproducció. Premer sostingut per afegir un favorit.';
 
   @override
-  String get noAlbum => 'No Album';
+  String get noAlbum => 'Sense Àlbum';
 
   @override
-  String get noItem => 'No Item';
+  String get noItem => 'Sense Objecte';
 
   @override
-  String get noArtist => 'No Artist';
+  String get noArtist => 'Sense Artista';
 
   @override
-  String get unknownArtist => 'Unknown Artist';
+  String get unknownArtist => 'Artista desconegut';
 
   @override
-  String get unknownAlbum => 'Unknown Album';
+  String get unknownAlbum => 'Àlbum desconegut';
 
   @override
-  String get playbackModeDirectPlaying => 'Direct Playing';
+  String get playbackModeDirectPlaying => 'Reproducció directa';
 
   @override
-  String get playbackModeTranscoding => 'Transcoding';
+  String get playbackModeTranscoding => 'Transcodificació';
 
   @override
   String kiloBitsPerSecondLabel(int bitrate) {
@@ -773,7 +779,7 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get playbackModeLocal => 'Locally Playing';
+  String get playbackModeLocal => 'Reproduccint localment';
 
   @override
   String get queue => 'Cua';
@@ -791,10 +797,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get goToAlbum => 'Vés a l\'àlbum';
 
   @override
-  String get goToArtist => 'Go to Artist';
+  String get goToArtist => 'Ves a l\'artista';
 
   @override
-  String get goToGenre => 'Go to Genre';
+  String get goToGenre => 'Ves a Gènere';
 
   @override
   String get removeFavourite => 'Suprimeix el favorit';
@@ -803,22 +809,22 @@ class AppLocalizationsCa extends AppLocalizations {
   String get addFavourite => 'Afegeix favorit';
 
   @override
-  String get confirmFavoriteAdded => 'Added Favorite';
+  String get confirmFavoriteAdded => 'Favorit afegit';
 
   @override
-  String get confirmFavoriteRemoved => 'Removed Favorite';
+  String get confirmFavoriteRemoved => 'Favorit eliminat';
 
   @override
   String get addedToQueue => 'S\'ha afegit a la cua.';
 
   @override
-  String get insertedIntoQueue => 'Inserted into queue.';
+  String get insertedIntoQueue => 'Insertat a la cua.';
 
   @override
   String get queueReplaced => 'S\'ha substituït la cua.';
 
   @override
-  String get confirmAddedToPlaylist => 'Added to playlist.';
+  String get confirmAddedToPlaylist => 'Afegit a la llista de reproducció.';
 
   @override
   String get removedFromPlaylist => 'S\'ha suprimit de la llista de reproducció.';
@@ -858,76 +864,76 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get bufferDuration => 'Buffer Duration';
+  String get bufferDuration => 'Durada de la memòria intermèdia';
 
   @override
-  String get bufferDurationSubtitle => 'The maximum duration that should be buffered, in seconds. Requires a restart.';
+  String get bufferDurationSubtitle => 'La durada màxima que s\'ha d\'amortitzar, en segons. Requereix reiniciar.';
 
   @override
-  String get bufferDisableSizeConstraintsTitle => 'Don\'t limit buffer size';
+  String get bufferDisableSizeConstraintsTitle => 'No limitar la mida de la memòria intermèdia';
 
   @override
-  String get bufferDisableSizeConstraintsSubtitle => 'Disables the buffer size constraints (\'Buffer Size\'). The buffer will always be loaded to the configured duration (\'Buffer Duration\'), even for very large files. Can cause crashes. Requires a restart.';
+  String get bufferDisableSizeConstraintsSubtitle => 'Desactiva les restriccions de mida de la memòria intermèdia (\'Mida del cursor\'). La memòria intermèdia sempre es carregarà a la durada configurada (\'Duració de la memòria intermèdia\'), fins i tot per a fitxers molt grans. Pot causar fallades. Requereix reiniciar.';
 
   @override
-  String get bufferSizeTitle => 'Buffer Size';
+  String get bufferSizeTitle => 'Mida de la meòria intermèdia';
 
   @override
-  String get bufferSizeSubtitle => 'The maximum size of the buffer in MB. Requires a restart';
+  String get bufferSizeSubtitle => 'Mida màxima de la memòria intermèdia en MB. Requereix reiniciar';
 
   @override
-  String get language => 'Language';
+  String get language => 'Llenguatge';
 
   @override
-  String get skipToPreviousTrackButtonTooltip => 'Skip to beginning or to previous track';
+  String get skipToPreviousTrackButtonTooltip => 'Salta cap al principi o cap a la cançó prèvia';
 
   @override
-  String get skipToNextTrackButtonTooltip => 'Skip to next track';
+  String get skipToNextTrackButtonTooltip => 'Salta a la següent cançó';
 
   @override
-  String get togglePlaybackButtonTooltip => 'Toggle playback';
+  String get togglePlaybackButtonTooltip => 'Commuta la reproducció';
 
   @override
-  String get previousTracks => 'Previous Tracks';
+  String get previousTracks => 'Cançons anteriors';
 
   @override
-  String get nextUp => 'Next Up';
+  String get nextUp => 'Pròxims';
 
   @override
-  String get clearNextUp => 'Clear Next Up';
+  String get clearNextUp => 'Esborrar Pròximes';
 
   @override
-  String get playingFrom => 'Playing from';
+  String get playingFrom => 'Reproduint des de';
 
   @override
-  String get playNext => 'Play next';
+  String get playNext => 'Reproduir següent';
 
   @override
-  String get addToNextUp => 'Add to Next Up';
+  String get addToNextUp => 'Afegeix a Pròxims';
 
   @override
-  String get shuffleNext => 'Shuffle next';
+  String get shuffleNext => 'Barreja els Pròxims';
 
   @override
-  String get shuffleToNextUp => 'Shuffle to Next Up';
+  String get shuffleToNextUp => 'Barreja a Pròxims';
 
   @override
-  String get shuffleToQueue => 'Shuffle to queue';
+  String get shuffleToQueue => 'Barreja a la cua';
 
   @override
   String confirmPlayNext(String type) {
     String _temp0 = intl.Intl.selectLogic(
       type,
       {
-        'track': 'Track',
-        'album': 'Album',
-        'artist': 'Artist',
-        'playlist': 'Playlist',
-        'genre': 'Genre',
-        'other': 'Item',
+        'track': 'Cançó',
+        'album': 'Àlbum',
+        'artist': 'Artista',
+        'playlist': 'Llista de Reproducció',
+        'genre': 'Gènere',
+        'other': 'Element',
       },
     );
-    return '$_temp0 will play next';
+    return '$_temp0 es reproduirà a continuació';
   }
 
   @override
@@ -935,15 +941,15 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       type,
       {
-        'track': 'Track',
-        'album': 'album',
-        'artist': 'artist',
-        'playlist': 'playlist',
-        'genre': 'genre',
-        'other': 'item',
+        'track': 'Cançó',
+        'album': 'Àlbum',
+        'artist': 'Artista',
+        'playlist': 'Llista de Reproducció',
+        'genre': 'Gènere',
+        'other': 'Element',
       },
     );
-    return 'Added $_temp0 to Next Up';
+    return 'Afegit $_temp0 a Pròxims';
   }
 
   @override
@@ -951,132 +957,132 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       type,
       {
-        'track': 'track',
-        'album': 'album',
-        'artist': 'artist',
-        'playlist': 'playlist',
-        'genre': 'genre',
-        'other': 'item',
+        'track': 'Cançó',
+        'album': 'Àlbum',
+        'artist': 'Artista',
+        'playlist': 'Llista de Reproducció',
+        'genre': 'Gènere',
+        'other': 'Element',
       },
     );
-    return 'Added $_temp0 to queue';
+    return 'Afegit $_temp0 a la cua';
   }
 
   @override
-  String get confirmShuffleNext => 'Will shuffle next';
+  String get confirmShuffleNext => 'Barrejarà el següent';
 
   @override
-  String get confirmShuffleToNextUp => 'Shuffled to Next Up';
+  String get confirmShuffleToNextUp => 'Barrejat a Pròxims';
 
   @override
-  String get confirmShuffleToQueue => 'Shuffled to queue';
+  String get confirmShuffleToQueue => 'Barrejat a la cua';
 
   @override
-  String get placeholderSource => 'Somewhere';
+  String get placeholderSource => 'En algun lloc';
 
   @override
-  String get playbackHistory => 'Playback History';
+  String get playbackHistory => 'Historial de Reproducció';
 
   @override
-  String get shareOfflineListens => 'Share offline listens';
+  String get shareOfflineListens => 'Compartir reproduccions fora de línia';
 
   @override
-  String get yourLikes => 'Your Likes';
+  String get yourLikes => 'Els teus m\'agrada';
 
   @override
   String mix(String mixSource) {
-    return '$mixSource - Mix';
+    return '$mixSource - Barreja';
   }
 
   @override
-  String get tracksFormerNextUp => 'Tracks added via Next Up';
+  String get tracksFormerNextUp => 'Cançons afegides des de Pròxims';
 
   @override
-  String get savedQueue => 'Saved Queue';
+  String get savedQueue => 'Cua Guardada';
 
   @override
   String playingFromType(String source) {
     String _temp0 = intl.Intl.selectLogic(
       source,
       {
-        'album': 'Album',
-        'playlist': 'Playlist',
-        'trackMix': 'Track Mix',
-        'artistMix': 'Artist Mix',
-        'albumMix': 'Album Mix',
-        'genreMix': 'Genre Mix',
-        'favorites': 'Favorites',
-        'allTracks': 'All Tracks',
-        'filteredList': 'Tracks',
-        'genre': 'Genre',
-        'artist': 'Artist',
-        'track': 'Track',
-        'nextUpAlbum': 'Album in Next Up',
-        'nextUpPlaylist': 'Playlist in Next Up',
-        'nextUpArtist': 'Artist in Next Up',
+        'album': 'l\'Àlbum',
+        'playlist': 'la Llista de reproducció',
+        'trackMix': 'la Barreja de pistes',
+        'artistMix': 'la Barreja d\'artistes',
+        'albumMix': 'la Barreja d\'àlbums',
+        'genreMix': 'la Barreja de gèneres',
+        'favorites': 'els Preferits',
+        'allTracks': 'Totes les pistes',
+        'filteredList': 'les Pistes',
+        'genre': 'el Gènere',
+        'artist': 'l\'Artista',
+        'track': 'la Pista',
+        'nextUpAlbum': 'l\'Àlbum a Pròxims',
+        'nextUpPlaylist': 'la Llista de reproducció a Pròxims',
+        'nextUpArtist': 'l\'Artista a Pròxims',
         'other': '',
       },
     );
-    return 'Playing From $_temp0';
+    return 'Reproduint des de $_temp0';
   }
 
   @override
-  String get shuffleAllQueueSource => 'Shuffle All';
+  String get shuffleAllQueueSource => 'Barreja tot';
 
   @override
-  String get playbackOrderLinearButtonLabel => 'Playing in order';
+  String get playbackOrderLinearButtonLabel => 'Reproduint en ordre';
 
   @override
-  String get playbackOrderLinearButtonTooltip => 'Playing in order. Tap to shuffle.';
+  String get playbackOrderLinearButtonTooltip => 'Reproduint en ordre. Clica per barrejar.';
 
   @override
-  String get playbackOrderShuffledButtonLabel => 'Shuffling tracks';
+  String get playbackOrderShuffledButtonLabel => 'Barrejant pistes';
 
   @override
-  String get playbackOrderShuffledButtonTooltip => 'Shuffling tracks. Tap to play in order.';
+  String get playbackOrderShuffledButtonTooltip => 'Barrejant pistes. Clica per reproduir en ordre.';
 
   @override
   String playbackSpeedButtonLabel(double speed) {
-    return 'Playing at x$speed speed';
+    return 'Reproduint a x$speed velocitat';
   }
 
   @override
   String playbackSpeedFeatureText(double speed) {
-    return 'x$speed speed';
+    return 'x$speed velocitat';
   }
 
   @override
-  String get playbackSpeedDecreaseLabel => 'Decrease playback speed';
+  String get playbackSpeedDecreaseLabel => 'Reduir velocitat de reproducció';
 
   @override
-  String get playbackSpeedIncreaseLabel => 'Increase playback speed';
+  String get playbackSpeedIncreaseLabel => 'Incrementar velocitat de reproducció';
 
   @override
-  String get loopModeNoneButtonLabel => 'Not looping';
+  String get loopModeNoneButtonLabel => 'No es repeteix';
 
   @override
-  String get loopModeOneButtonLabel => 'Looping this track';
+  String get loopModeOneButtonLabel => 'Repetint aquesta pista';
 
   @override
-  String get loopModeAllButtonLabel => 'Looping all';
+  String get loopModeAllButtonLabel => 'Repetint tot';
 
   @override
-  String get queuesScreen => 'Restore Now Playing';
+  String get queuesScreen => 'Restaurar la reproducció actual';
 
   @override
-  String get queueRestoreButtonLabel => 'Restore';
+  String get queueRestoreButtonLabel => 'Restaurar';
 
   @override
   String queueRestoreTitle(DateTime date) {
     final intl.DateFormat dateDateFormat = intl.DateFormat('yyy-MM-dd hh:mm', localeName);
     final String dateString = dateDateFormat.format(date);
 
-    return 'Saved $dateString';
+    return 'Guardat $dateString';
   }
 
   @override
   String queueRestoreSubtitle1(String track) {
-    return 'Playing: $track';
+    return 'Reproduint: $track';
   }
 
   @override
@@ -1084,14 +1090,14 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Tracks',
-      one: '1 Track',
+      other: '$count Pistes',
+      one: '1 Pista',
     );
-    return '$_temp0, $remaining Unplayed';
+    return '$_temp0, $remaining per Reproduir';
   }
 
   @override
-  String get queueLoadingMessage => 'Restoring queue...';
+  String get queueLoadingMessage => 'Restoring queue…';
 
   @override
   String get queueRetryMessage => 'Failed to restore queue. Retry?';
@@ -1255,6 +1261,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'Enable to insert a track as next item in queue when swiped in track list instead of appending it to the end.';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'Start Instant Mixes for Individual Tracks';
 
   @override
@@ -1331,13 +1349,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get connectionInterruptedBackgroundAndroid => 'Connection was interrupted while downloading in the background. This can be caused by enabling \'Enter Low-Priority State on Pause\' or OS settings.';
 
   @override
-  String get activeDownloadSize => 'Downloading...';
+  String get activeDownloadSize => 'Downloading…';
 
   @override
-  String get missingDownloadSize => 'Deleting...';
+  String get missingDownloadSize => 'Deleting…';
 
   @override
-  String get syncingDownloadSize => 'Syncing...';
+  String get syncingDownloadSize => 'Syncing…';
 
   @override
   String get runRepairWarning => 'The server could not be contacted to finalize downloads migration. Please run \'Repair Downloads\' from the downloads screen as soon as you are back online.';
@@ -1426,10 +1444,10 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Select Transcoding Container';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Enable Transcoded Downloads';
@@ -1572,7 +1590,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle => 'Show … at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'Hide bottom actions';
@@ -1974,6 +1992,34 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';

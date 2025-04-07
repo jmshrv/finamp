@@ -225,7 +225,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
     )
-      ..sleepTimer = fields[14] as SleepTimer?
+      ..sleepTimer = fields[14] as InvalidType
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
       ..defaultDownloadLocation = fields[58] as String?
@@ -1107,46 +1107,6 @@ class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DeviceInfoAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class SleepTimerAdapter extends TypeAdapter<SleepTimer> {
-  @override
-  final int typeId = 79;
-
-  @override
-  SleepTimer read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return SleepTimer(
-      fields[0] == null ? SleepTimerType.duration : fields[0] as SleepTimerType,
-      fields[1] == null ? 1800 : (fields[1] as num).toInt(),
-      fields[2] as DateTime?,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, SleepTimer obj) {
-    writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.type)
-      ..writeByte(1)
-      ..write(obj.length)
-      ..writeByte(2)
-      ..write(obj.startTime);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SleepTimerAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

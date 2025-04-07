@@ -155,6 +155,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get albums => 'Albümler';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Sanatçılar';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get albumArtist => 'Albüm Sanatçısı';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Sanatçı';
@@ -495,9 +504,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get areYouSure => 'Emin misiniz?';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin kod dönüştürme için AAC kullanıyor';
 
   @override
   String get enableTranscoding => 'Kod dönüştürmeyi etkinleştir';
@@ -1255,6 +1261,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'Parça listesinde kaydırılan parçayı sona eklemek yerine sıradaki öge olarak eklemeyi etkinleştirin.';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'Start Instant Mixes for Individual Tracks';
 
   @override
@@ -1426,10 +1444,10 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Kod dönüştürme kalıbını seçin';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Kodu dönüştürülmüş ses akışı sırasında kullanılacak bölüm kapsayıcısını seçin. Zaten sıraya alınmış parçalar etkilenmeyecektir.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Kodu dönüştürülmüş indirmeleri etkinleştir';
@@ -1572,7 +1590,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle => 'Show … at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'Hide bottom actions';
@@ -1974,6 +1992,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';

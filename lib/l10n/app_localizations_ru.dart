@@ -155,6 +155,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get albums => 'Альбомы';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Исполнители';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get albumArtist => 'Исполнитель Альбома';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Исполнитель';
@@ -503,9 +512,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get areYouSure => 'Вы уверены?';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin использует AAC для транскодирования';
 
   @override
   String get enableTranscoding => 'Включить транскодирование';
@@ -1267,6 +1273,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'Включите чтобы вставлять композицию следующей в очереди при смахивании в списке композиций вместо того чтобы добавлять ее в конец.';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'Запускать мгновенные миксы для отдельных композиций';
 
   @override
@@ -1440,10 +1458,10 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Выбор контейнера для транскодирования';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Выберите контейнер для сегментов при использовании потоковой передачи транскодированного аудио. Уже добавленные в очередь композиции не будут затронуты.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Включить транскодированные загрузки';
@@ -1988,6 +2006,34 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';

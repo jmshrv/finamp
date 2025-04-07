@@ -74,13 +74,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get emptyServerUrl => '服务器 URL 不能为空';
 
   @override
-  String get connectingToServer => '正在连接到服务器...';
+  String get connectingToServer => '正在连接到服务器…';
 
   @override
   String get loginFlowLocalNetworkServers => '在您本地网络上的服务器：';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => '正在扫描服务器...';
+  String get loginFlowLocalNetworkServersScanningForServers => '正在扫描服务器…';
 
   @override
   String get loginFlowAccountSelectionHeading => '选择你的账户';
@@ -155,6 +155,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get albums => '专辑';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => '艺术家';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get albumArtist => '专辑艺术家';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => '艺术家';
@@ -357,17 +366,17 @@ class AppLocalizationsZh extends AppLocalizations {
         'other': 'item',
       },
     );
-    return 'Are you sure you want to delete the $_temp0 \'$itemName\' from this device?';
+    return '您确定要从此设备中删除 $_temp0 \'$itemName\' 吗？';
   }
 
   @override
-  String get deleteDownloadsConfirmButtonText => 'Delete';
+  String get deleteDownloadsConfirmButtonText => '删除';
 
   @override
-  String get specialDownloads => 'Special downloads';
+  String get specialDownloads => '特别下载';
 
   @override
-  String get noItemsDownloaded => 'No items downloaded.';
+  String get noItemsDownloaded => '沒有下载任何项目。';
 
   @override
   String get error => '错误';
@@ -495,9 +504,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get areYouSure => '你确定吗？';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin 使用 AAC 进行转码';
 
   @override
   String get enableTranscoding => '启用转码';
@@ -1091,7 +1097,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get queueLoadingMessage => '正在恢复队列...';
+  String get queueLoadingMessage => '正在恢复队列…';
 
   @override
   String get queueRetryMessage => '无法恢复队列。是否重试？';
@@ -1255,6 +1261,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => '在歌曲列表中滑动时，可以将歌曲作为队列中的下一个项目插入，而不是将其附加到末尾。';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => '为单个歌曲生成速成合辑';
 
   @override
@@ -1334,10 +1352,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get activeDownloadSize => '下载中…';
 
   @override
-  String get missingDownloadSize => '删除中...';
+  String get missingDownloadSize => '删除中…';
 
   @override
-  String get syncingDownloadSize => '同步中...';
+  String get syncingDownloadSize => '同步中…';
 
   @override
   String get runRepairWarning => '无法联系服务器以完成下载迁移。恢复在线后请立即从下载屏幕运行 “修复下载”。';
@@ -1426,10 +1444,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => '选择转码容器';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => '选择流式传输转码音频时要使用的分段容器。已排队的歌曲不会受到影响。';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => '启用转码下载';
@@ -1557,22 +1575,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get enableVibrationSubtitle => '是否开启振动。';
 
   @override
-  String get hideQueueButton => 'Hide queue button';
+  String get hideQueueButton => '隐藏队列按钮';
 
   @override
-  String get hideQueueButtonSubtitle => 'Hide the queue button on the player screen. Swipe up to access the queue.';
+  String get hideQueueButtonSubtitle => '隐藏播放器屏幕上的队列按钮。向上滑动即可访问队列。';
 
   @override
-  String get oneLineMarqueeTextButton => 'Auto-scroll Long Titles';
+  String get oneLineMarqueeTextButton => '自动滚动长标题';
 
   @override
-  String get oneLineMarqueeTextButtonSubtitle => 'Automatically scroll track titles that are too long to display in two lines';
+  String get oneLineMarqueeTextButtonSubtitle => '自动滚动太长而无法在两行中显示的曲目标题';
 
   @override
-  String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
+  String get marqueeOrTruncateButton => '对长标题使用省略号';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle => '在长标题末尾显示...而不是滚动文本';
 
   @override
   String get hidePlayerBottomActions => '隐藏底部按钮';
@@ -1730,7 +1748,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lyricsFontSizeSubtitle => '控制歌词界面中歌词的字体大小。';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => '在歌词前显示专辑封面';
+  String get showLyricsScreenAlbumPreludeTitle => '在歌词之前显示专辑封面';
 
   @override
   String get showLyricsScreenAlbumPreludeSubtitle => '控制专辑封面在滚动之前是否显示在歌词上方。';
@@ -1867,10 +1885,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get allowDeleteFromServerTitle => 'Allow deletion from server';
+  String get allowDeleteFromServerTitle => '允许从服务器删除';
 
   @override
-  String get allowDeleteFromServerSubtitle => 'Enable and disable the option to permanently delete a track from the servers file system when deletion is possible.';
+  String get allowDeleteFromServerSubtitle => '当可以删除时，启用或禁用从服务器文件系统中永久删除轨道的选项。';
 
   @override
   String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
@@ -1949,31 +1967,59 @@ class AppLocalizationsZh extends AppLocalizations {
   String get publiclyVisiblePlaylist => '公开可见：';
 
   @override
-  String get releaseDateFormatYear => 'Year';
+  String get releaseDateFormatYear => '年';
 
   @override
   String get releaseDateFormatISO => 'ISO 8601';
 
   @override
-  String get releaseDateFormatMonthYear => 'Month & Year';
+  String get releaseDateFormatMonthYear => '月份和年份';
 
   @override
-  String get releaseDateFormatMonthDayYear => 'Month, Day & Year';
+  String get releaseDateFormatMonthDayYear => '月、日、年';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenTitle => 'Show Album Release Date on Player Screen';
+  String get showAlbumReleaseDateOnPlayerScreenTitle => '在播放器屏幕上显示专辑发行日期';
 
   @override
-  String get showAlbumReleaseDateOnPlayerScreenSubtitle => 'Show the release date of the album on the player screen, behind the album name.';
+  String get showAlbumReleaseDateOnPlayerScreenSubtitle => '在播放器屏幕上，专辑名称后面显示专辑的发行日期。';
 
   @override
-  String get releaseDateFormatTitle => 'Release Date Format';
+  String get releaseDateFormatTitle => '发布日期格式';
 
   @override
-  String get releaseDateFormatSubtitle => 'Controls the format of all release dates shown in the app.';
+  String get releaseDateFormatSubtitle => '控制应用程序中显示的所有发布日期的格式。';
 
   @override
-  String get librarySelectError => 'Error loading available libraries for user';
+  String get librarySelectError => '为用户加载可用库时出错';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';
@@ -2000,7 +2046,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String startupError(String error) {
-    return '應用程式啓動時出現問題！ 錯誤訊息：$error\n\n請在 github.com/UnicornsOnLSD/finamp 上提出一個 Github 問題，並附上此頁面的螢幕截圖。 如果此頁面一直顯示，請清除您的應用程式資料以重置應用程式。';
+    return '應用程式啓動時出現問題！ 錯誤訊息：$error\n\n請在 github.com/UnicornsOnLSD/finamp 上提出一個 Github Issue，並附上此頁面的螢幕截圖。 如果此頁面一直顯示，請清除您的應用程式資料以重置應用程式。';
   }
 
   @override
@@ -2058,13 +2104,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get emptyServerUrl => '伺服器 URL 不能為空';
 
   @override
-  String get connectingToServer => '正在連線至伺服器中...';
+  String get connectingToServer => '正在連線至伺服器…';
 
   @override
   String get loginFlowLocalNetworkServers => '區域網路上的伺服器：';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => '正在掃描伺服器...';
+  String get loginFlowLocalNetworkServersScanningForServers => '正在掃描伺服器…';
 
   @override
   String get loginFlowAccountSelectionHeading => '選擇您的帳號';
@@ -2348,6 +2394,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get deleteDownloadsConfirmButtonText => '刪除';
 
   @override
+  String get specialDownloads => '特別下載';
+
+  @override
+  String get noItemsDownloaded => '沒有任何已經下載的項目。';
+
+  @override
   String get error => '錯誤';
 
   @override
@@ -2475,13 +2527,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get areYouSure => '你確定嗎？';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin 使用 AAC 進行轉碼';
+  String get enableTranscoding => '啟用轉碼';
 
   @override
-  String get enableTranscoding => '啓用轉碼';
-
-  @override
-  String get enableTranscodingSubtitle => '如果啓用，音樂串流將由伺服器轉碼。';
+  String get enableTranscodingSubtitle => '如果啟用，音訊將由伺服器轉碼。';
 
   @override
   String get bitrate => '位元速率';
@@ -2505,7 +2554,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get unknownError => '未知錯誤';
 
   @override
-  String get pathReturnSlashErrorMessage => '不能使用返回“/”的路徑';
+  String get pathReturnSlashErrorMessage => '不能使用「/」作為下載路徑';
 
   @override
   String get directoryMustBeEmpty => '目錄必須為空';
@@ -3069,7 +3118,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get queueLoadingMessage => '正在恢復播放佇列...';
+  String get queueLoadingMessage => '正在恢復播放佇列…';
 
   @override
   String get queueRetryMessage => '無法還原佇列。是否要重試？';
@@ -3309,13 +3358,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get connectionInterruptedBackgroundAndroid => '背景下載時發生連線中斷。這可能是由於您啟用了「暫停時進入低優先級狀態」或作業系統的設定限制了背景下載，請確認相關設定。';
 
   @override
-  String get activeDownloadSize => '正在下載···';
+  String get activeDownloadSize => '正在下載…';
 
   @override
-  String get missingDownloadSize => '正在刪除···';
+  String get missingDownloadSize => '正在刪除…';
 
   @override
-  String get syncingDownloadSize => '正在同步···';
+  String get syncingDownloadSize => '正在同步…';
 
   @override
   String get runRepairWarning => '無法聯繫伺服器以完成下載遷移。請在您恢復網路連線後，立即從下載畫面執行「修復下載」。';
@@ -3404,16 +3453,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => '選擇轉碼器格式';
-
-  @override
-  String get transcodingStreamingContainerSubtitle => '選擇串流轉碼音訊時要使用的區段容器。已排入佇列的歌曲將不受影響。';
-
-  @override
   String get downloadTranscodeEnableTitle => '啟用轉碼下載';
 
   @override
-  String get downloadTranscodeCodecTitle => '選擇下載用的轉碼器';
+  String get downloadTranscodeCodecTitle => '選擇下載用的編碼';
 
   @override
   String downloadTranscodeEnableOption(String option) {
@@ -3550,7 +3593,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get marqueeOrTruncateButton => '在較長的標題使用刪節號';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => '在較長的標題盡頭顯示 ... 代替捲動文字';
+  String get marqueeOrTruncateButtonSubtitle => '在較長的標題盡頭顯示 … 代替捲動文字';
 
   @override
   String get hidePlayerBottomActions => '隱藏底部按鈕';
@@ -3708,7 +3751,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lyricsFontSizeSubtitle => '控制歌詞介面中的歌詞字體大小。';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => '顯示專輯封面於歌詞前';
+  String get showLyricsScreenAlbumPreludeTitle => '在歌詞之前顯示專輯封面';
 
   @override
   String get showLyricsScreenAlbumPreludeSubtitle => '控制是否在歌詞檢視畫面中，於滾動前顯示專輯封面。';
@@ -3848,6 +3891,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get allowDeleteFromServerTitle => '允許從伺服器刪除';
 
   @override
+  String get allowDeleteFromServerSubtitle => '當使用者有權限時，啟用或停用從伺服器上永久刪除音軌的選項。';
+
+  @override
   String deleteFromTargetDialogText(String deleteType, String device, String itemType) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
@@ -3946,6 +3992,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get releaseDateFormatSubtitle => '控制專輯發行日期於應用程式中顯示的格式。';
+
+  @override
+  String get librarySelectError => '載入可用媒體庫時發生錯誤';
 }
 
 /// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
@@ -4245,9 +4294,6 @@ class AppLocalizationsZhHantHk extends AppLocalizationsZh {
 
   @override
   String get areYouSure => '您確定嗎？';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin 使用 ACC 進行轉碼';
 
   @override
   String get enableTranscoding => '啟用轉碼';

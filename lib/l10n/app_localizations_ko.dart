@@ -74,7 +74,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get emptyServerUrl => '서버 URL은 필수값 입니다';
 
   @override
-  String get connectingToServer => '서버 접속중…';
+  String get connectingToServer => '서버에 접속중…';
 
   @override
   String get loginFlowLocalNetworkServers => '로컬 네트워크의 서버:';
@@ -155,6 +155,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get albums => '앨범';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => '아티스트';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get albumArtist => '앨범 아티스트';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => '아티스트';
@@ -348,26 +357,26 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
-        'album': 'album',
-        'playlist': 'playlist',
-        'artist': 'artist',
-        'genre': 'genre',
-        'track': 'track',
-        'library': 'library',
+        'album': '앨범 ',
+        'playlist': '플레이리스트 ',
+        'artist': '아티스트 ',
+        'genre': '장르 ',
+        'track': '트랙 ',
+        'library': '라이브러리 ',
         'other': 'item',
       },
     );
-    return 'Are you sure you want to delete the $_temp0 \'$itemName\' from this device?';
+    return '이 기기에서 $_temp0 \'$itemName\'을/를 삭제하시겠습니까?';
   }
 
   @override
-  String get deleteDownloadsConfirmButtonText => 'Delete';
+  String get deleteDownloadsConfirmButtonText => '삭제';
 
   @override
-  String get specialDownloads => 'Special downloads';
+  String get specialDownloads => '특수 다운로드';
 
   @override
-  String get noItemsDownloaded => 'No items downloaded.';
+  String get noItemsDownloaded => '다운로드한 항목이 없습니다.';
 
   @override
   String get error => '오류';
@@ -495,9 +504,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get areYouSure => '확실한가요?';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin은 트랜스코딩에 AAC를 사용합니다';
 
   @override
   String get enableTranscoding => '트랜스코딩 활성화';
@@ -992,61 +998,61 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tracksFormerNextUp => '넥스트 업으로 추가된 곡들';
 
   @override
-  String get savedQueue => 'Saved Queue';
+  String get savedQueue => '저장된 재생목록';
 
   @override
   String playingFromType(String source) {
     String _temp0 = intl.Intl.selectLogic(
       source,
       {
-        'album': 'Album',
-        'playlist': 'Playlist',
-        'trackMix': 'Track Mix',
-        'artistMix': 'Artist Mix',
-        'albumMix': 'Album Mix',
-        'genreMix': 'Genre Mix',
-        'favorites': 'Favorites',
-        'allTracks': 'All Tracks',
-        'filteredList': 'Tracks',
-        'genre': 'Genre',
-        'artist': 'Artist',
-        'track': 'Track',
-        'nextUpAlbum': 'Album in Next Up',
-        'nextUpPlaylist': 'Playlist in Next Up',
-        'nextUpArtist': 'Artist in Next Up',
+        'album': '앨범 ',
+        'playlist': '플레이리스트 ',
+        'trackMix': '트랙 믹스 ',
+        'artistMix': '아티스트 믹스 ',
+        'albumMix': '앨범 믹스 ',
+        'genreMix': '장르 믹스 ',
+        'favorites': '즐겨찾기 ',
+        'allTracks': '전체 트랙 ',
+        'filteredList': '트랙 목록 ',
+        'genre': '장르 ',
+        'artist': '아티스트 ',
+        'track': '트랙 ',
+        'nextUpAlbum': '앨범 우선',
+        'nextUpPlaylist': '플레이리스트 우선',
+        'nextUpArtist': '아티스트 우선',
         'other': '',
       },
     );
-    return 'Playing From $_temp0';
+    return '$_temp0재생 중';
   }
 
   @override
-  String get shuffleAllQueueSource => 'Shuffle All';
+  String get shuffleAllQueueSource => '전부 셔플';
 
   @override
-  String get playbackOrderLinearButtonLabel => 'Playing in order';
+  String get playbackOrderLinearButtonLabel => '순차 재생 중';
 
   @override
-  String get playbackOrderLinearButtonTooltip => 'Playing in order. Tap to shuffle.';
+  String get playbackOrderLinearButtonTooltip => '순차 재생 중입니다. 탭하여 셔플 재생하세요.';
 
   @override
-  String get playbackOrderShuffledButtonLabel => 'Shuffling tracks';
+  String get playbackOrderShuffledButtonLabel => '셔플 재생 중';
 
   @override
-  String get playbackOrderShuffledButtonTooltip => 'Shuffling tracks. Tap to play in order.';
+  String get playbackOrderShuffledButtonTooltip => '셔플 재생 중입니다. 탭하여 순차 재생하세요.';
 
   @override
   String playbackSpeedButtonLabel(double speed) {
-    return 'Playing at x$speed speed';
+    return 'x$speed배속 재생 중';
   }
 
   @override
   String playbackSpeedFeatureText(double speed) {
-    return 'x$speed speed';
+    return 'x$speed배속';
   }
 
   @override
-  String get playbackSpeedDecreaseLabel => 'Decrease playback speed';
+  String get playbackSpeedDecreaseLabel => '재생속도 줄이기';
 
   @override
   String get playbackSpeedIncreaseLabel => '재생 속도 빠르게';
@@ -1132,24 +1138,24 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get shuffleAlbums => 'Shuffle Albums';
+  String get shuffleAlbums => '앨범 셔플';
 
   @override
-  String get shuffleAlbumsNext => 'Shuffle Albums Next';
+  String get shuffleAlbumsNext => '앨범 셔플하여 다음 재생';
 
   @override
-  String get shuffleAlbumsToNextUp => 'Shuffle Albums To Next Up';
+  String get shuffleAlbumsToNextUp => '앨범 셔플하여 우선재생에 추가';
 
   @override
-  String get shuffleAlbumsToQueue => 'Shuffle Albums To Queue';
+  String get shuffleAlbumsToQueue => '앨범 셔플하여 재생목록에 추가';
 
   @override
   String playCountValue(int playCount) {
     String _temp0 = intl.Intl.pluralLogic(
       playCount,
       locale: localeName,
-      other: '$playCount plays',
-      one: '$playCount play',
+      other: '$playCount회 재생',
+      one: '$playCount회 재생',
     );
     return '$_temp0';
   }
@@ -1159,32 +1165,32 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       source,
       {
-        'album': 'album',
-        'playlist': 'playlist',
-        'trackMix': 'track mix',
-        'artistMix': 'artist mix',
-        'albumMix': 'album mix',
-        'genreMix': 'genre mix',
-        'favorites': 'favorites',
-        'allTracks': 'all tracks',
-        'filteredList': 'tracks',
-        'genre': 'genre',
-        'artist': 'artist',
-        'track': 'track',
-        'nextUpAlbum': 'album in next up',
-        'nextUpPlaylist': 'playlist in next up',
-        'nextUpArtist': 'artist in next up',
+        'album': '앨범 ',
+        'playlist': '플레이리스트 ',
+        'trackMix': '트랙 믹스 ',
+        'artistMix': '아티스트 믹스 ',
+        'albumMix': '앨범 믹스 ',
+        'genreMix': '장르 믹스 ',
+        'favorites': '즐겨찾기 ',
+        'allTracks': '전체 트랙 ',
+        'filteredList': '트랙 목록 ',
+        'genre': '장르 ',
+        'artist': '아티스트 ',
+        'track': '트랙 ',
+        'nextUpAlbum': '우선재생 앨범 ',
+        'nextUpPlaylist': '우선재생 플레이리스트 ',
+        'nextUpArtist': '우선재생 아티스트 ',
         'other': '',
       },
     );
-    return 'Couldn\'\'t load $_temp0';
+    return '$_temp0로딩에 실패하였습니다';
   }
 
   @override
   String get confirm => '확인';
 
   @override
-  String get close => 'Close';
+  String get close => '닫기';
 
   @override
   String get showUncensoredLogMessage => '이 로그(사용기록)는 귀하의 로그인 정보를 포함합니다. 표시할까요?';
@@ -1193,7 +1199,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get resetTabs => '탭 초기화';
 
   @override
-  String get resetToDefaults => 'Reset to defaults';
+  String get resetToDefaults => '초기화';
 
   @override
   String get noMusicLibrariesTitle => '음악 라이브러리 없음';
@@ -1205,43 +1211,43 @@ class AppLocalizationsKo extends AppLocalizations {
   String get refresh => '새로고침';
 
   @override
-  String get moreInfo => 'More Info';
+  String get moreInfo => '상세정보';
 
   @override
-  String get volumeNormalizationSettingsTitle => 'Volume Normalization';
+  String get volumeNormalizationSettingsTitle => '볼륨 표준화';
 
   @override
-  String get volumeNormalizationSwitchTitle => 'Enable Volume Normalization';
+  String get volumeNormalizationSwitchTitle => '볼륨 표준화 켜기';
 
   @override
-  String get volumeNormalizationSwitchSubtitle => 'Use gain information to normalize the loudness of tracks (\"Replay Gain\")';
+  String get volumeNormalizationSwitchSubtitle => '음량 정보로 트랙 볼륨 표준화 (ReplayGain)';
 
   @override
-  String get volumeNormalizationModeSelectorTitle => 'Volume Normalization Mode';
+  String get volumeNormalizationModeSelectorTitle => '볼륨 표준화 모드';
 
   @override
-  String get volumeNormalizationModeSelectorSubtitle => 'When and how to apply Volume Normalization';
+  String get volumeNormalizationModeSelectorSubtitle => '볼륨 표준화가 적용되는 위치와 도출되는 방식';
 
   @override
-  String get volumeNormalizationModeSelectorDescription => 'Hybrid (Track + Album):\nTrack gain is used for regular playback, but if an album is playing (either because it\'\'s the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.';
+  String get volumeNormalizationModeSelectorDescription => '하이브리드 (트랙 + 앨범)\n평상시에는 트랙의 음량 정보를 참조하지만, 앨범이 재생 중인 경우 앨범의 음량 정보를 참조합니다.\n\n트랙 기반\n항상 트랙의 음량 정보를 사용합니다.\n\n앨범만\n앨범을 재생할 때에만, 앨범의 음량 정보에 기반한 볼륨 표준화가 적용됩니다. 앨범 외의 개별적인 트랙에는 적용되지 않습니다.';
 
   @override
-  String get volumeNormalizationModeHybrid => 'Hybrid (Track + Album)';
+  String get volumeNormalizationModeHybrid => '하이브리드 (트랙 + 앨범)';
 
   @override
-  String get volumeNormalizationModeTrackBased => 'Track-based';
+  String get volumeNormalizationModeTrackBased => '트랙 기반';
 
   @override
-  String get volumeNormalizationModeAlbumBased => 'Album-based';
+  String get volumeNormalizationModeAlbumBased => '앨범 기반';
 
   @override
-  String get volumeNormalizationModeAlbumOnly => 'Only for Albums';
+  String get volumeNormalizationModeAlbumOnly => '앨범만';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorTitle => 'Base Gain';
+  String get volumeNormalizationIOSBaseGainEditorTitle => '음량 기준선';
 
   @override
-  String get volumeNormalizationIOSBaseGainEditorSubtitle => 'Currently, Volume Normalization on iOS requires changing the playback volume to emulate the gain change. Since we can\'\'t increase the volume above 100%, we need to decrease the volume by default so that we can boost the volume of quiet tracks. The value is in decibels (dB), where -10 dB is ~30% volume, -4.5 dB is ~60% volume and -2 dB is ~80% volume.';
+  String get volumeNormalizationIOSBaseGainEditorSubtitle => '현재 iOS에서의 볼륨 표준화는 재생 볼륨을 조절하여 음량 변화를 표현하는 방식으로 이루어집니다. 다만 볼륨을 100% 이상 키울 수는 없으니, 전체적으로 볼륨을 줄여 조용한 트랙에서 음량을 키울 수 있도록 합니다. 단위는 데시벨 (dB) 이며, -10 dB 은 볼륨 ~30%, -4.5 dB 은 볼륨 ~60%, -2 dB 은 볼륨 ~80%에 상응합니다.';
 
   @override
   String numberAsDecibel(double value) {
@@ -1255,89 +1261,101 @@ class AppLocalizationsKo extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => '곡 목록에서 스와이프 했을 때, 곡을 대기열 끝에 추가하는 대신 바로 다음 곡으로 삽입할 수 있습니다.';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchTitle => 'Start Instant Mixes for Individual Tracks';
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
 
   @override
-  String get startInstantMixForIndividualTracksSwitchSubtitle => 'When enabled, tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track.';
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
 
   @override
-  String get downloadItem => 'Download';
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
 
   @override
-  String get repairComplete => 'Downloads Repair complete.';
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
 
   @override
-  String get syncComplete => 'All downloads re-synced.';
+  String get startInstantMixForIndividualTracksSwitchTitle => '개별 트랙부터 믹스 재생';
 
   @override
-  String get syncDownloads => 'Sync and download missing items.';
+  String get startInstantMixForIndividualTracksSwitchSubtitle => '활성화되면 트랙을 탭할 때 해당 트랙에 이어 믹스를 재생합니다.';
 
   @override
-  String get repairDownloads => 'Repair issues with downloaded files or metadata.';
+  String get downloadItem => '다운로드';
 
   @override
-  String get requireWifiForDownloads => 'Require WiFi when downloading.';
+  String get repairComplete => '다운로드 복구 완료.';
+
+  @override
+  String get syncComplete => '다운로드 동기화 완료.';
+
+  @override
+  String get syncDownloads => '동기화하며 존재하지 않는 항목을 다운로드합니다.';
+
+  @override
+  String get repairDownloads => '다운로드한 리소스에 발생한 오류를 복구합니다.';
+
+  @override
+  String get requireWifiForDownloads => 'WiFi 환경에서만 다운로드합니다.';
 
   @override
   String queueRestoreError(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count tracks',
-      one: '$count track',
+      other: '$count개',
+      one: '$count개',
     );
-    return 'Warning: $_temp0 could not be restored to the queue.';
+    return '경고: 재생목록에서 트랙 $_temp0를 복원에 실패했습니다.';
   }
 
   @override
   String activeDownloadsListHeader(String typeName, int itemCount) {
-    String _temp0 = intl.Intl.selectLogic(
-      typeName,
-      {
-        'downloading': 'Running',
-        'failed': 'Failed',
-        'syncFailed': 'Repeatedly Unsynced',
-        'enqueued': 'Queued',
-        'other': '',
-      },
-    );
-    String _temp1 = intl.Intl.pluralLogic(
+    String _temp0 = intl.Intl.pluralLogic(
       itemCount,
       locale: localeName,
-      other: 'Downloads',
-      one: 'Download',
+      other: '개',
+      one: '개',
     );
-    return '$itemCount $_temp0 $_temp1';
+    String _temp1 = intl.Intl.selectLogic(
+      typeName,
+      {
+        'downloading': '중',
+        'failed': '실패',
+        'syncFailed': '동기화 실패',
+        'enqueued': '대기 중',
+        'other': '처리 중',
+      },
+    );
+    return '$itemCount$_temp0 다운로드 $_temp1';
   }
 
   @override
   String downloadLibraryPrompt(String libraryName) {
-    return 'Are you sure you want to download all contents of the library \'\'$libraryName\'\'?';
+    return '정말로 라이브러리 \"$libraryName\"의 모든 항목을 다운로드하시겠습니까?';
   }
 
   @override
-  String get onlyShowFullyDownloaded => 'Only show fully downloaded albums';
+  String get onlyShowFullyDownloaded => '전체 다운로드한 앨범만 표시';
 
   @override
-  String get filesystemFull => 'Remaining downloads cannot be completed. The filesystem is full.';
+  String get filesystemFull => '남은 다운로드에 실패하였습니다. 저장공간이 부족합니다.';
 
   @override
-  String get connectionInterrupted => 'Connection interrupted, pausing downloads.';
+  String get connectionInterrupted => '연결이 끊겼습니다. 다운로드를 일시정지합니다.';
 
   @override
-  String get connectionInterruptedBackground => 'Connection was interrupted while downloading in the background. This can be caused by OS settings.';
+  String get connectionInterruptedBackground => '백그라운드에서 다운로드 중 연결이 끊겼습니다. OS의 설정이 원인일 수 있습니다.';
 
   @override
-  String get connectionInterruptedBackgroundAndroid => 'Connection was interrupted while downloading in the background. This can be caused by enabling \'Enter Low-Priority State on Pause\' or OS settings.';
+  String get connectionInterruptedBackgroundAndroid => '백그라운드에서 다운로드 중 연결이 끊겼습니다. \'일시 정지시 우선순위가 낮은 상태로 전환\'기능이 활성화되었거나 OS의 설정이 원인일 수 있습니다.';
 
   @override
-  String get activeDownloadSize => 'Downloading...';
+  String get activeDownloadSize => '다운로드중…';
 
   @override
-  String get missingDownloadSize => 'Deleting...';
+  String get missingDownloadSize => '삭제중…';
 
   @override
-  String get syncingDownloadSize => 'Syncing...';
+  String get syncingDownloadSize => '동기화중…';
 
   @override
   String get runRepairWarning => '다운로드 마이그레이션을 완료하기 위한 서버 연결이 안됩니다. 다시 온라인에 접속하면 즉시 다운로드 화면에서 \'다운로드 복구\'를 실행하십시오.';
@@ -1349,7 +1367,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get showNullLibraryItemsTitle => '알 수 없는 라이브러리의 미디어 보여주기.';
 
   @override
-  String get showNullLibraryItemsSubtitle => 'Some media may be downloaded with an unknown library. Turn off to hide these outside their original collection.';
+  String get showNullLibraryItemsSubtitle => '특정 미디어는 알 수 없는 라이브러리로 다운로드 됩니다. 설정을 끄면 원래 컬렉션 외부에 있는 이러한 미디어들을 숨깁니다.';
 
   @override
   String get maxConcurrentDownloads => '동시 다운로드 최대값';
@@ -1366,34 +1384,34 @@ class AppLocalizationsKo extends AppLocalizations {
   String get downloadsWorkersSetting => '다운로드 작업자 개수';
 
   @override
-  String get downloadsWorkersSettingSubtitle => 'Amount of workers for syncing metadata and deleting downloads. Increasing download workers may speed up download syncing and deleting, especially when server latency is high, but can introduce lag.';
+  String get downloadsWorkersSettingSubtitle => '메타데이터를 동기화하고 다운로드를 지우는 스레드의 개수. 스레드를 늘리면 특히 서버 지연이 심할 경우 다운로드와 삭제가 빨라질 수 있지만, 렉이 발생할 수 있습니다.';
 
   @override
   String downloadsWorkersSettingLabel(String count) {
-    return '$count Download Workers';
+    return '다운로드 스레드 $count개';
   }
 
   @override
-  String get syncOnStartupSwitch => 'Automatically Sync Downloads at Startup';
+  String get syncOnStartupSwitch => '시작할 때 자동으로 다운로드 동기화';
 
   @override
-  String get preferQuickSyncSwitch => 'Prefer Quick Syncs';
+  String get preferQuickSyncSwitch => '빠른 동기화 선호';
 
   @override
-  String get preferQuickSyncSwitchSubtitle => 'When performing syncs, some typically static items (like tracks and albums) will not be updated. Download repair will always perform a full sync.';
+  String get preferQuickSyncSwitchSubtitle => '자주 변하지 않는 트랙이나 앨범 등 항목은 동기화 시 업데이트되지 않습니다. 다운로드 복원은 언제나 모든 항목을 재동기화합니다.';
 
   @override
   String itemTypeSubtitle(String itemType, String itemName) {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
-        'album': 'Album',
-        'playlist': 'Playlist',
-        'artist': 'Artist',
-        'genre': 'Genre',
-        'track': 'Track',
-        'library': 'Library',
-        'unknown': 'Item',
+        'album': '앨범',
+        'playlist': '플레이리스트',
+        'artist': '아티스트',
+        'genre': '장르',
+        'track': '트랙',
+        'library': '라이브러리',
+        'unknown': '항목',
         'other': '$itemType',
       },
     );
@@ -1402,7 +1420,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String incidentalDownloadTooltip(String parentName) {
-    return 'This item is required to be downloaded by $parentName.';
+    return '$parentName이/가 이 항목의 다운로드를 요구합니다.';
   }
 
   @override
@@ -1410,10 +1428,10 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.selectLogic(
       itemType,
       {
-        'favorites': 'Favorites',
-        'allPlaylists': 'All Playlists',
-        'fiveLatestAlbums': '5 Latest Albums',
-        'allPlaylistsMetadata': 'Playlist Metadata',
+        'favorites': '즐겨찾기',
+        'allPlaylists': '모든 플레이리스트',
+        'fiveLatestAlbums': '최신 앨범 다섯',
+        'allPlaylistsMetadata': '플레이리스트 정보',
         'other': '$itemType',
       },
     );
@@ -1422,20 +1440,20 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String cacheLibraryImagesName(String libraryName) {
-    return 'Cached Images for \'$libraryName\'';
+    return '\'$libraryName\'의 캐시된 이미지';
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Select Transcoding Container';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
-  String get downloadTranscodeEnableTitle => 'Enable Transcoded Downloads';
+  String get downloadTranscodeEnableTitle => '트랜스코드 다운로드 활성화';
 
   @override
-  String get downloadTranscodeCodecTitle => 'Select Download Codec';
+  String get downloadTranscodeCodecTitle => '다운로드 코덱 선택';
 
   @override
   String downloadTranscodeEnableOption(String option) {
@@ -1572,7 +1590,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle => 'Show … at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'Hide bottom actions';
@@ -1974,6 +1992,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';

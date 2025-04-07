@@ -74,13 +74,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get emptyServerUrl => 'Server URL kan ikke være tom';
 
   @override
-  String get connectingToServer => 'Connecting to server...';
+  String get connectingToServer => 'Connecting to server…';
 
   @override
   String get loginFlowLocalNetworkServers => 'Servers on your local network:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'Scanning for servers...';
+  String get loginFlowLocalNetworkServersScanningForServers => 'Scanning for servers…';
 
   @override
   String get loginFlowAccountSelectionHeading => 'Select your account';
@@ -155,6 +155,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get albums => 'Albummer';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Kunstnere';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get albumArtist => 'Album kunstner';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Kunstner';
@@ -495,9 +504,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get areYouSure => 'Er du sikker?';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin bruger AAC ved omkodning';
 
   @override
   String get enableTranscoding => 'Aktivér omkodning';
@@ -1091,7 +1097,7 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get queueLoadingMessage => 'Restoring queue...';
+  String get queueLoadingMessage => 'Restoring queue…';
 
   @override
   String get queueRetryMessage => 'Failed to restore queue. Retry?';
@@ -1255,6 +1261,18 @@ class AppLocalizationsDa extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'Enable to insert a track as next item in queue when swiped in track list instead of appending it to the end.';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'Start Instant Mixes for Individual Tracks';
 
   @override
@@ -1331,13 +1349,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get connectionInterruptedBackgroundAndroid => 'Connection was interrupted while downloading in the background. This can be caused by enabling \'Enter Low-Priority State on Pause\' or OS settings.';
 
   @override
-  String get activeDownloadSize => 'Downloading...';
+  String get activeDownloadSize => 'Downloading…';
 
   @override
-  String get missingDownloadSize => 'Deleting...';
+  String get missingDownloadSize => 'Deleting…';
 
   @override
-  String get syncingDownloadSize => 'Syncing...';
+  String get syncingDownloadSize => 'Syncing…';
 
   @override
   String get runRepairWarning => 'The server could not be contacted to finalize downloads migration. Please run \'Repair Downloads\' from the downloads screen as soon as you are back online.';
@@ -1426,10 +1444,10 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Select Transcoding Container';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Select the segment container to use when streaming transcoded audio. Already queued tracks will not be affected.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Enable Transcoded Downloads';
@@ -1572,7 +1590,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle => 'Show … at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'Hide bottom actions';
@@ -1974,6 +1992,34 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';

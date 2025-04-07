@@ -155,6 +155,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get albums => 'एल्बम';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'कलाकार';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get albumArtist => 'एल्बम कलाकार द्वारा';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'कलाकार द्वारा';
@@ -495,9 +504,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get areYouSure => 'क्या आप निश्चित हैं?';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'जेलीफ़िन ट्रांसकोडिंग के लिए AAC का उपयोग करता है';
 
   @override
   String get enableTranscoding => 'ट्रांसकोडिंग सक्षम करें';
@@ -1255,6 +1261,18 @@ class AppLocalizationsHi extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'ट्रैक सूची में स्वाइप करने पर उसे अंत में जोड़ने के बजाय कतार में अगले आइटम के रूप में सम्मिलित करने को सक्षम करें।';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'व्यक्तिगत ट्रैक के लिए इंस्टेंट मिक्स शुरू करें';
 
   @override
@@ -1426,10 +1444,10 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'ट्रांसकोडिंग कंटेनर चुनें';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'ट्रांसकोडेड ऑडियो स्ट्रीम करते समय उपयोग करने के लिए सेगमेंट कंटेनर चुनें। पहले से कतारबद्ध ट्रैक प्रभावित नहीं होंगे।';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'ट्रांसकोडेड डाउनलोड सक्षम करें';
@@ -1974,6 +1992,34 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';

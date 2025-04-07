@@ -155,6 +155,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get albums => 'Album';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Artisti';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get albumArtist => 'Artista dell\'Album';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Artista';
@@ -495,9 +504,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get areYouSure => 'Sei sicuro?';
-
-  @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin usa AAC per la transcodifica';
 
   @override
   String get enableTranscoding => 'Attiva Transcodifica';
@@ -1255,6 +1261,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'Attiva per far si che quando si striscia il dito su un brano nella lista dei brani, questo venga aggiunto come prossimo elemento della coda invece di essere aggiunto alla fine della coda.';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'Fai partire un Mix Istantaneo per i singoli Brani';
 
   @override
@@ -1426,10 +1444,10 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Seleziona l\'estensione dei file di transcodifica';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Seleziona l\'estensione per i segmenti di file quando si effettua lo streaming di audio transcodificato. I brani già in coda non saranno interessati.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Attiva i Download Transcodificati';
@@ -1572,7 +1590,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get marqueeOrTruncateButton => 'Use ellipsis for long titles';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Show ... at the end of long titles instead of scrolling text';
+  String get marqueeOrTruncateButtonSubtitle => 'Show … at the end of long titles instead of scrolling text';
 
   @override
   String get hidePlayerBottomActions => 'Nascondi le azioni in basso';
@@ -1974,6 +1992,34 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get librarySelectError => 'Error loading available libraries for user';
+
+  @override
+  String get autoOfflineOptionOff => 'Disabled';
+
+  @override
+  String get autoOfflineOptionNetwork => 'Network';
+
+  @override
+  String get autoOfflineOptionDisconnected => 'Disconnected';
+
+  @override
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
 
   @override
   String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';

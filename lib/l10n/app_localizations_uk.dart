@@ -74,13 +74,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get emptyServerUrl => 'URL серверу не може бути порожнім';
 
   @override
-  String get connectingToServer => 'Під\'єднання до серверу...';
+  String get connectingToServer => 'Підключення до сервера…';
 
   @override
   String get loginFlowLocalNetworkServers => 'Сервери у вашій локальній мережі:';
 
   @override
-  String get loginFlowLocalNetworkServersScanningForServers => 'Сканування серверів...';
+  String get loginFlowLocalNetworkServersScanningForServers => 'Сканування серверів…';
 
   @override
   String get loginFlowAccountSelectionHeading => 'Оберіть ваш обліковий запис';
@@ -155,6 +155,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get albums => 'Альбоми';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Виконавці';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get albumArtist => 'Виконавцями альбомів';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Виконавцями';
@@ -364,10 +373,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get deleteDownloadsConfirmButtonText => 'Видалити';
 
   @override
-  String get specialDownloads => 'Special downloads';
+  String get specialDownloads => 'Спеціальні завантаження';
 
   @override
-  String get noItemsDownloaded => 'No items downloaded.';
+  String get noItemsDownloaded => 'Немає завантажених елементів.';
 
   @override
   String get error => 'Помилка';
@@ -497,9 +506,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get areYouSure => 'Ви впевнені ?';
 
   @override
-  String get jellyfinUsesAACForTranscoding => 'Jellyfin використовує ААС для транскодування';
-
-  @override
   String get enableTranscoding => 'Ввімкнути транскодування';
 
   @override
@@ -527,7 +533,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get unknownError => 'Невідома помилка';
 
   @override
-  String get pathReturnSlashErrorMessage => 'Шляхи, які повертають \"/\", не можуть бути використані';
+  String get pathReturnSlashErrorMessage => 'Шляхи, які повертають \"/\", не можна використовувати';
 
   @override
   String get directoryMustBeEmpty => 'Тека повинна бути порожньою';
@@ -1091,7 +1097,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get queueLoadingMessage => 'Відновлення черги...';
+  String get queueLoadingMessage => 'Відновлення черги…';
 
   @override
   String get queueRetryMessage => 'Не вдалось відновити чергу. Спробувати ще раз?';
@@ -1255,6 +1261,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get swipeInsertQueueNextSubtitle => 'Увімкнути можливість вставляти композицію як наступний об\'єкт у черзі, якщо вона була додана замість вставки у кінець черги.';
 
   @override
+  String get swipeLeftToRightAction => 'Swipe to Right Action';
+
+  @override
+  String get swipeLeftToRightActionSubtitle => 'Action triggered when swiping a track in the list from left to right.';
+
+  @override
+  String get swipeRightToLeftAction => 'Swipe to Left Action';
+
+  @override
+  String get swipeRightToLeftActionSubtitle => 'Action triggered when swiping a track in the list from right to left.';
+
+  @override
   String get startInstantMixForIndividualTracksSwitchTitle => 'Почати миттєвий мікс для окремих композицій';
 
   @override
@@ -1331,13 +1349,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get connectionInterruptedBackgroundAndroid => 'Під час фонового завантаження було обірвано з\'єднання. Це може бути спричинено увімкненням параметра \"Входити у стан низького пріоритету на паузі\" або налаштуваннями ОС.';
 
   @override
-  String get activeDownloadSize => 'Завантаження...';
+  String get activeDownloadSize => 'Завантаження…';
 
   @override
-  String get missingDownloadSize => 'Видалення...';
+  String get missingDownloadSize => 'Видалення…';
 
   @override
-  String get syncingDownloadSize => 'Синхронізація...';
+  String get syncingDownloadSize => 'Синхронізація…';
 
   @override
   String get runRepairWarning => 'Не можна встановити з\'єднання з цим сервером задля завершення міграції завантаження. Будь ласка, запустіть \"Відновити Завантаження\" із екрану завантажень коли відновите з\'єднання.';
@@ -1426,10 +1444,10 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get transcodingStreamingContainerTitle => 'Обрати контейнер для транскодування';
+  String get transcodingStreamingFormatTitle => 'Select Transcoding Format';
 
   @override
-  String get transcodingStreamingContainerSubtitle => 'Обрати сегментований контейнер для використання при потоковому відтворення транскодованого аудіо. Не буде застосовано для попередньо доданих в чергу композицій.';
+  String get transcodingStreamingFormatSubtitle => 'Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.';
 
   @override
   String get downloadTranscodeEnableTitle => 'Увімкнути транскодовані завантаження';
@@ -1572,7 +1590,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get marqueeOrTruncateButton => 'Використовуйте три крапки для довгих заголовків';
 
   @override
-  String get marqueeOrTruncateButtonSubtitle => 'Показувати ... в кінці довгих заголовків замість тексту, що прокручується';
+  String get marqueeOrTruncateButtonSubtitle => 'Показувати … у кінці довгих заголовків замість тексту, що прокручується';
 
   @override
   String get hidePlayerBottomActions => 'Приховати нижні дії';
@@ -1730,7 +1748,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get lyricsFontSizeSubtitle => 'Керує розміром шрифту тексту пісень у відповідному поданні.';
 
   @override
-  String get showLyricsScreenAlbumPreludeTitle => 'Показувати альбом перед текстом пісень';
+  String get showLyricsScreenAlbumPreludeTitle => 'Показати обкладинку альбому перед текстом';
 
   @override
   String get showLyricsScreenAlbumPreludeSubtitle => 'Дозволяє контролювати, чи показувати обкладинку альбому над текстом пісень перед прокруткою.';
@@ -1973,17 +1991,45 @@ class AppLocalizationsUk extends AppLocalizations {
   String get releaseDateFormatSubtitle => 'Керує форматом усіх дат випуску, які відображаються в програмі.';
 
   @override
-  String get librarySelectError => 'Error loading available libraries for user';
+  String get librarySelectError => 'Помилка завантаження доступних бібліотек для користувача';
 
   @override
-  String get audioFadeOutDurationSettingTitle => 'Audio fade-out duration';
+  String get autoOfflineOptionOff => 'Disabled';
 
   @override
-  String get audioFadeOutDurationSettingSubtitle => 'The duration of the audio fade out in milliseconds.';
+  String get autoOfflineOptionNetwork => 'Network';
 
   @override
-  String get audioFadeInDurationSettingTitle => 'Audio fade-in duration';
+  String get autoOfflineOptionDisconnected => 'Disconnected';
 
   @override
-  String get audioFadeInDurationSettingSubtitle => 'The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.';
+  String get autoOfflineSettingDescription => 'Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again';
+
+  @override
+  String get autoOfflineSettingTitle => 'Automated Offline Mode';
+
+  @override
+  String autoOfflineNotification(String state) {
+    String _temp0 = intl.Intl.selectLogic(
+      state,
+      {
+        'enabled': 'enabled',
+        'disabled': 'disabled',
+        'other': 'set quantum position for',
+      },
+    );
+    return 'Automatically $_temp0 Offline Mode';
+  }
+
+  @override
+  String get audioFadeOutDurationSettingTitle => 'Тривалість затухання звуку';
+
+  @override
+  String get audioFadeOutDurationSettingSubtitle => 'Тривалість затухання звуку в мілісекундах.';
+
+  @override
+  String get audioFadeInDurationSettingTitle => 'Тривалість затухання звуку';
+
+  @override
+  String get audioFadeInDurationSettingSubtitle => 'Тривалість затухання звуку в мілісекундах. Встановіть значення 0, щоб вимкнути плавне збільшення.';
 }
