@@ -95,7 +95,7 @@
   "@bitrate": {},
   "enableTranscoding": "启用转码",
   "@enableTranscoding": {},
-  "bitrateSubtitle": "更高的比特率以更高的带宽为代价提供更高质量的音频。",
+  "bitrateSubtitle": "更高的比特率可以提供更高质量的音频，但需要更高的带宽。不适用于无损编解码器，例如 FLAC",
   "@bitrateSubtitle": {},
   "appDirectory": "应用目录",
   "@appDirectory": {},
@@ -1983,10 +1983,34 @@
   "@transcodingStreamingFormatTitle": {
     "description": "Title for the dropdown that selects the format for transcoded streams"
   },
-  "autoOfflineSettingDescription": "自动启用脱机模式.\n已禁用:不会自动开启离线模式,可节省电池.\n网络: 在未连接到wifi或以太网时打开脱机模式.\n断开连接: 在未连接任何设备时打开脱机模式.\n您可以随时手动开启离线模式,它会暂停自动化,直到您再次关闭离线模式.",
+  "autoOfflineSettingDescription": "自动启用脱机模式.\n已禁用:不会自动开启离线模式,可节省电池.\n网络: 在未连接到wifi或以太网时打开脱机模式.\n断开连接: 在未连接任何设备时打开脱机模式.\n您可以随时手动开启离线模式,它会暂停自动化,直到您再次关闭离线模式",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
   "transcodingStreamingFormatSubtitle": "选择串流转码音频时要使用的格式.已排队的音轨不会受到影响.",
-  "@transcodingStreamingFormatSubtitle": {}
+  "@transcodingStreamingFormatSubtitle": {},
+  "audioFadeInDurationSettingSubtitle": "音频淡入的持续时间（以毫秒为单位）。设置为 0 可禁用淡入。",
+  "@audioFadeInDurationSettingSubtitle": {},
+  "audioFadeInDurationSettingTitle": "音频淡入持续时间",
+  "@audioFadeInDurationSettingTitle": {},
+  "audioFadeOutDurationSettingSubtitle": "音频淡出的持续时间（以毫秒为单位）。",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "audioFadeOutDurationSettingTitle": "音频淡出持续时间",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
+  },
+  "appearsOnAlbums": "出现在",
+  "@appearsOnAlbums": {},
+  "performingArtists": "表演艺术家",
+  "@performingArtists": {},
+  "autoOfflineOptionOff": "已禁用",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineNotification": "自动 {state, select, enabled{启动} disabled{停用} other{set quantum position for}} 离线模式",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  }
 }
