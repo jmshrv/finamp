@@ -146,9 +146,6 @@ class QueueService {
     // );
   }
 
-  Future initializePlayer() =>
-      _audioHandler.initializeAudioSource(_queueAudioSource, preload: true);
-
   void _queueFromConcatenatingAudioSource({
     bool logUpdate = true,
   }) {
@@ -504,9 +501,6 @@ class QueueService {
         }
       }
 
-      //await stopPlayback(); //TODO is this really needed?
-      // await _audioHandler.initializeAudioSource(_queueAudioSource);
-      await _audioHandler.stopPlayback();
       await _queueAudioSource.clear();
 
       List<AudioSource> audioSources = [];
@@ -550,8 +544,6 @@ class QueueService {
       if (beginPlaying) {
         // don't await this, because it will not return until playback is finished
         unawaited(_audioHandler.play(disableFade: true));
-      } else {
-        unawaited(_audioHandler.pause(disableFade: true));
       }
 
       _audioHandler.nextInitialIndex = null;
