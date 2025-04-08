@@ -151,7 +151,7 @@
   "@downloadLocations": {},
   "transcoding": "Transkoodaus",
   "@transcoding": {},
-  "notAvailableInOfflineMode": "Ei saatavilla offline tilassa",
+  "notAvailableInOfflineMode": "Ei saatavilla offline-tilassa",
   "@notAvailableInOfflineMode": {},
   "areYouSure": "Oletko varma?",
   "@areYouSure": {},
@@ -300,7 +300,7 @@
   "@directoryMustBeEmpty": {},
   "selectDirectory": "Valitse hakemisto",
   "@selectDirectory": {},
-  "trackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaleita}}",
+  "trackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaletta}}",
   "@trackCount": {
     "placeholders": {
       "count": {
@@ -318,7 +318,7 @@
   "@audioService": {},
   "bitrate": "Bittinopeus",
   "@bitrate": {},
-  "bitrateSubtitle": "Korkeampi bittinopeus tuottaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi. Ei koske häviöttömiä koodekkeja, kuten FLAC",
+  "bitrateSubtitle": "Korkeampi bittinopeus tuottaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi. Ei päde häviöttömiin koodekkeihin, kuten FLAC",
   "@bitrateSubtitle": {},
   "customLocation": "Mukautettu sijainti",
   "@customLocation": {},
@@ -356,13 +356,13 @@
   "@swipeInsertQueueNext": {},
   "startMix": "Aloita sekoitus",
   "@startMix": {},
-  "failedToGetTrackFromDownloadId": "Kappaleen nouto lataus ID:stä epäonnistui",
+  "failedToGetTrackFromDownloadId": "Kappaleen nouto lataus-ID:llä epäonnistui",
   "@failedToGetTrackFromDownloadId": {},
   "stackTrace": "Pinon jäljitys",
   "@stackTrace": {},
   "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä.\nLähdekoodi saatavilla osoitteessa: {sourceCodeLink}.",
   "@applicationLegalese": {},
-  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia ja niiden käyttöä ei suositella useimmissa tapauksissa. Sijainnit systeemin Musiikki-hakemiston alla estävät albumin kansikuvien tallentamisen käyttöjärjestelmän rajoitusten vuoksi.",
+  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia ja niiden käyttöä ei suositella useimmissa tapauksissa. Sijainnit järjestelmän Musiikki-hakemiston alla estävät albumin kansikuvien tallentamisen käyttöjärjestelmän rajoitusten vuoksi.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
@@ -384,7 +384,7 @@
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "downloadedMissingImages": "{count,plural, =0{Puuttuvia kuvia ei löytynyt} =1{Ladattu {count} puuttuvaa kuvaa} other{Ladattu {count} puuttuvia kuvia}}",
+  "downloadedMissingImages": "{count,plural, =0{Puuttuvia kuvia ei löytynyt} =1{Ladattu {count} puuttuva kuva} other{Ladattu {count} puuttuvaa kuvaa}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -393,7 +393,7 @@
       }
     }
   },
-  "errorScreenError": "Virhe tapahtui virheiden luettelon hakemisessa! Tässä vaiheessa sinun pitäisi luultavasti vain luoda virheilmoitus GitHubiin ja poistaa sovelluksen tiedot",
+  "errorScreenError": "Tapahtui virhe vikalistan haussa! Tässä vaiheessa sinun kannattaa luultavasti vain luoda virheilmoitus GitHubiin ja poistaa sovelluksen data",
   "@errorScreenError": {},
   "enterLowPriorityStateOnPause": "Siirtyminen matalan prioriteetin tilaan tauon aikana",
   "@enterLowPriorityStateOnPause": {},
@@ -1332,7 +1332,7 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "offlineTrackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaletta}}, {downloads} Ladattu",
+  "offlineTrackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaletta}},{downloads} Ladattu",
   "@offlineTrackCount": {
     "placeholders": {
       "count": {
@@ -1925,7 +1925,7 @@
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
   },
-  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} kappale} other{{trackCount} kappaletta}}, {imageCount,plural,=1{{imageCount} kuva} other{{imageCount} kuvaa}}\n{syncCount,plural,=1{{syncCount} yksikkö synkronoi} other{{syncCount} yksikköä synkronoivat}}{repairing, plural, =0{} other{\nParhaillaan korjauksessa}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} kappale} other{{trackCount} kappaletta}}, {imageCount,plural,=1{{imageCount} kuva} other{{imageCount} kuvaa}}\n{syncCount,plural,=1{{syncCount} yksikkö synkronoi} other{{syncCount} yksikköä synkronoivat}}{repairing, plural, =0{} other{\nKorjataan parhaillaan}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
