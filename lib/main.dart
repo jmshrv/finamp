@@ -324,7 +324,6 @@ Future<void> _setupPlaybackServices() async {
   GetIt.instance.registerSingleton<MusicPlayerBackgroundTask>(audioHandler);
   var queueService = QueueService();
   GetIt.instance.registerSingleton(queueService);
-  await GetIt.instance<QueueService>().initializePlayer();
   GetIt.instance.registerSingleton(PlaybackHistoryService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
 
