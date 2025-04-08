@@ -272,7 +272,7 @@
   "@audioService": {},
   "transcoding": "Transcodificar",
   "@transcoding": {},
-  "bitrateSubtitle": "Una tasa de bits más alta da una mayor calidad de audio a costa de un mayor ancho de banda.",
+  "bitrateSubtitle": "Una tasa de bits más alta da una mayor calidad de audio a costa de un mayor ancho de banda. No aplica a códecs de audio sin pérdida, p. ej. FLAC",
   "@bitrateSubtitle": {},
   "selectDirectory": "Seleccionar directorio",
   "@selectDirectory": {},
@@ -1958,5 +1958,19 @@
     }
   },
   "fiveLatestAlbumsSettingSubtitle": "Las descargas serán eliminadas conforme envejezcan.  Bloquee la descarga para prevenir que el álbum sea eliminado.",
-  "@fiveLatestAlbumsSettingSubtitle": {}
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "swipeLeftToRightActionSubtitle": "Acción activada al deslizar una pista de la lista de izquierda a derecha.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "appearsOnAlbums": "Aparece en",
+  "@appearsOnAlbums": {},
+  "albumArtists": "Artistas del álbum",
+  "@albumArtists": {},
+  "performingArtists": "Artistas intérpretes",
+  "@performingArtists": {},
+  "swipeLeftToRightAction": "Acción de deslizar a la derecha",
+  "@swipeLeftToRightAction": {},
+  "swipeRightToLeftAction": "Acción de deslizar a la izquierda",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Acción activada al deslizar una pista de la lista de derecha a izquierda.",
+  "@swipeRightToLeftActionSubtitle": {}
 }
