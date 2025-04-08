@@ -193,7 +193,6 @@ class FinampSettings {
     this.contentGridViewCrossAxisCountLandscape =
         DefaultSettings.contentGridViewCrossAxisCountLandscape,
     this.showTextOnGridView = DefaultSettings.showTextOnGridView,
-    this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
     required this.downloadLocationsMap,
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
     this.playerScreenCoverMinimumPadding =
@@ -2689,7 +2688,24 @@ enum AutoOfflineOption {
     }
   }
 }
-    
+
+@HiveType(typeId: 79)
+enum SleepTimerType {
+  @HiveField(0)
+  duration("Duration"), // TODO: Use localizations?
+
+  @HiveField(1)
+  tracks("Tracks");
+
+  final String _display;
+
+  const SleepTimerType(this._display);
+
+  @override
+  String toString() => _display;
+}
+
+
 @HiveType(typeId: 92)
 enum ItemSwipeActions {
   @HiveField(0)
@@ -2744,4 +2760,93 @@ enum ArtistType {
   albumartist,
   @HiveField(1)
   artist;
+}
+
+@HiveType(typeId: 80)
+class SleepTimer {
+  @HiveField(0, defaultValue: DefaultSettings.sleepTimerType)
+  SleepTimerType type;
+
+  @HiveField(1, defaultValue: DefaultSettings.sleepTimerDuration)
+  int length;
+
+  @HiveField(2)
+  DateTime? startTime;
+
+  @HiveField(3, defaultValue: DefaultSettings.sleepTimerDuration)
+  int remainingLength = DefaultSettings.sleepTimerDuration;
+
+  @HiveField(4)
+  Timer? timer;
+
+  // What to run when the timer finishes.
+  // TODO: Can we call logs a better way?
+  Function callback = (() => FinampLogsHelper().addLog(LogRecord(Level.INFO, "Sleep Timer done", "Playback")));
+
+  // Standard constructor (non-const) with optional `startTime`
+  SleepTimer(this.type, this.length)
+  {
+    remainingLength = length;
+  }
+
+  Future<void> start (Function callback) async
+  {
+    startTime = DateTime.now();
+    this.callback = callback;
+
+    if (type == SleepTimerType.duration) {
+      timer = Timer(getDuration(), () async {
+      return await this.callback();
+
+    });
+    }
+
+    return;
+  }
+
+  void cancel ()
+  {
+    remainingLength = 0;
+    startTime = null;
+
+    if (timer != null)
+    {
+      timer!.cancel();
+    }
+
+    timer = null;
+  }
+
+  Duration getDuration()
+  {
+    return Duration(seconds: length);
+  }
+
+  Duration getRemaining()
+  {
+    return startTime != null ? startTime!.add(getDuration()).difference(DateTime.now()) : Duration.zero;
+  }
+
+  // TODO: use localizations
+  String asString(BuildContext context)
+  {
+    // TODO: If < 1 min, string should be Sleeping in < x minutes
+    String durationPrefix = "";
+
+  if (type == SleepTimerType.duration)
+  {
+    remainingLength = (getRemaining().inSeconds / 60).ceil();
+
+    if (remainingLength == 1)
+    {
+      durationPrefix = "<";
+    }
+  }
+  
+    // TODO: use localizations
+    String durationSuffix = type == SleepTimerType.duration ? AppLocalizations.of(context)!.minutes.toLowerCase()  : AppLocalizations.of(context)!.tracks.toLowerCase();
+
+    return AppLocalizations.of(context)!.
+          sleepTimerRemainingTime(remainingLength, durationPrefix, durationSuffix);
+  }
 }
