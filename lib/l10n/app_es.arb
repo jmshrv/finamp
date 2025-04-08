@@ -322,7 +322,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin de forma remota, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP predeterminado (80/443) o el predefinido de Jellyfin (8096), no tendrás que especificar el puerto.\n\nSi la dirección es correcta, deberías ver la información sobre el servidor resaltado debajo.",
+  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin remotamente, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP (80/443) o en el puerto predeterminado de Jellyfin (8096), no tienes que especificar el puerto.\n\nSi la dirección es correcta, podrás ver algunos datos sobre tu servidor en el formulario.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
