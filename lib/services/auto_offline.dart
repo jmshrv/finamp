@@ -8,42 +8,50 @@ import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 part 'auto_offline.g.dart';
 
-final _autoOfflineLogger = Logger("AutoOffline");
-StreamSubscription<List<ConnectivityResult>> listener = Connectivity()
+StreamSubscription<List<ConnectivityResult>> _listener = Connectivity()
     .onConnectivityChanged
-    .listen((List<ConnectivityResult> result) {
-  _setOfflineMode(result);
-});
+    .listen(_onConnectivityChange);
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
   @override
   void build() {
-    listener = Connectivity()
+    _listener = Connectivity()
         .onConnectivityChanged
-        .listen((List<ConnectivityResult> result) {
-      _setOfflineMode(result);
-    });
+        .listen(_onConnectivityChange);
 
-    bool featureEnabled = ref.watch(finampSettingsProvider.autoOffline) !=
+    bool autoOfflineEnabled = ref.watch(finampSettingsProvider.autoOffline) !=
         AutoOfflineOption.disabled;
+
     // false = user overwrote offline mode
-    bool featureActive =
+    bool autoOfflineActive =
         ref.watch(finampSettingsProvider.autoOfflineListenerActive);
 
-    if (featureEnabled && featureActive) {
+    bool autoServerSwitch =
+        ref.watch(finampSettingsProvider.preferHomeNetwork);
+
+    Logger _autoOfflineLogger = Logger("AutoOffline");
+    if ((autoOfflineEnabled && autoOfflineActive) || autoServerSwitch) {
       _autoOfflineLogger.info("Resumed Automation");
-      listener.resume();
+      _listener.resume();
       // directly check if offline mode should be on to avoid desync
-      _setOfflineMode(null);
+      _onConnectivityChange(null);
     } else {
       _autoOfflineLogger.info("Paused Automation");
-      listener.pause();
+      _listener.pause();
     }
-    ref.onDispose(listener.cancel);
+    ref.onDispose(_listener.cancel);
   }
+}
+
+Future<void> _onConnectivityChange(List<ConnectivityResult>? connections) async {
+  await Future.wait([
+    _setOfflineMode(connections),
+    changeTargetUrl()
+  ]);
 }
 
 Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
@@ -86,5 +94,35 @@ Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
           !connections.contains(ConnectivityResult.wifi);
     default:
       return false;
+  }
+}
+
+void _toLocal() {
+  Logger("Hallo").info("Using Local Network");
+}
+void _toNotLocal() {
+  Logger("Hallo").info("Use public Network");
+
+}
+
+Future<void> changeTargetUrl({bool? isLocal}) async {
+  if (isLocal != null) {
+    if (isLocal) _toLocal();
+    else _toNotLocal();
+    return;
+  }
+
+
+  if (!FinampSettingsHelper.finampSettings.preferHomeNetwork) return _toLocal();
+
+
+  String? current_wifi = await NetworkInfo().getWifiName();
+  String target_wifi = FinampSettingsHelper.finampSettings.homeNetworkName;
+
+
+  if (current_wifi == target_wifi) {
+    _toLocal();
+  } else {
+    _toNotLocal();
   }
 }

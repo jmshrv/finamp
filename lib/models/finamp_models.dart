@@ -158,6 +158,9 @@ class DefaultSettings {
   static const audioFadeOutDuration = Duration(milliseconds: 0);
   static const audioFadeInDuration = Duration(milliseconds: 0);
   static const artistListType = ArtistType.albumartist;
+  static const preferHomeNetwork = false;
+  static const homeNetworkName = "";
+  static const homeNetworkAddress = "0.0.0.0:1234";
 }
 
 @HiveType(typeId: 28)
@@ -272,7 +275,11 @@ class FinampSettings {
     this.autoOfflineListenerActive =
         DefaultSettings.autoOfflineListenerActive,
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
-    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration
+    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
+    this.preferHomeNetwork = DefaultSettings.preferHomeNetwork,
+    this.homeNetworkName = DefaultSettings.homeNetworkName,
+    this.homeNetworkAddress = DefaultSettings.homeNetworkAddress,
+    this.publicAddress = ""
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -574,6 +581,18 @@ class FinampSettings {
 
   @HiveField(92, defaultValue: DefaultSettings.artistListType)
   ArtistType artistListType;
+
+  @HiveField(93, defaultValue: DefaultSettings.preferHomeNetwork)
+  bool preferHomeNetwork;
+
+  @HiveField(94, defaultValue: DefaultSettings.homeNetworkName)
+  String homeNetworkName;
+
+  @HiveField(95, defaultValue: DefaultSettings.homeNetworkAddress)
+  String homeNetworkAddress;
+
+  @HiveField(96, defaultValue: "")
+  String publicAddress;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

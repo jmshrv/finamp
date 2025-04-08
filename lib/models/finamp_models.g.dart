@@ -226,6 +226,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[86] == null ? Duration.zero : fields[86] as Duration,
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
+      preferHomeNetwork: fields[93] == null ? false : fields[93] as bool,
+      homeNetworkName: fields[94] == null ? '' : fields[94] as String,
+      homeNetworkAddress:
+          fields[95] == null ? '0.0.0.0:1234' : fields[95] as String,
+      publicAddress: fields[96] == null ? '' : fields[96] as String,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -236,7 +241,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(87)
+      ..writeByte(91)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -410,7 +415,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(91)
       ..write(obj.itemSwipeActionRightToLeft)
       ..writeByte(92)
-      ..write(obj.artistListType);
+      ..write(obj.artistListType)
+      ..writeByte(93)
+      ..write(obj.preferHomeNetwork)
+      ..writeByte(94)
+      ..write(obj.homeNetworkName)
+      ..writeByte(95)
+      ..write(obj.homeNetworkAddress)
+      ..writeByte(96)
+      ..write(obj.publicAddress);
   }
 
   @override
