@@ -91,15 +91,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// new queue.
   int? nextInitialIndex;
 
-  // Duration _sleepTimerDuration = Duration.zero;
-  // DateTime _sleepTimerStartTime = DateTime.now();
-  SleepTimer sleepTimer = SleepTimer(SleepTimerType.duration, 0, DateTime.now());
+  // Init the new sleep timer with a length of 0
+  // SleepTimer sleepTimer = SleepTimer(SleepTimerType.duration, 0);
 
-    /// Holds the current sleep timer, if any. This is a ValueNotifier so that
+  /// Holds the current sleep timer, if any. This is a ValueNotifier so that
   /// widgets like SleepTimerButton can update when the sleep timer is/isn't
   /// null.
-  final ValueNotifier<Timer?> _timer = ValueNotifier<Timer?>(null);
-  ValueListenable<Timer?> get timer => _timer;
+  final ValueNotifier<SleepTimer?> _timer = ValueNotifier<SleepTimer?>(null);
+  ValueListenable<SleepTimer?> get timer => _timer;
 
   Future<bool> Function()? _queueCallbackPreviousTrack;
 
@@ -292,16 +291,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       final event = _transformEvent(_player.playbackEvent);
 
       if (event.bufferedPosition == Duration.zero
-        && sleepTimer.type == SleepTimerType.tracks
-        && sleepTimer.startTime != null
+        && getSleepTimer() != null
+        && getSleepTimer()!.type == SleepTimerType.tracks
+        && getSleepTimer()!.startTime != null
         )
       {
         // Listen for events if it's the next track, and it's a tracks timer, reduce the length
-        sleepTimer.remainingLength--;
+        getSleepTimer()!.remainingLength--;
 
-        if (sleepTimer.remainingLength <= 0)
+        if (getSleepTimer()!.remainingLength <= 0)
         {
-          sleepTimerActions();
+          getSleepTimer()!.callback();
         }
       }
 
@@ -310,6 +310,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     fadeState = BehaviorSubject.seeded(
         FadeState(recoverVolume: _player.volume, fadeVolume: _player.volume));
+  }
+
+  SleepTimer? getSleepTimer () 
+  {
+    return _timer.value;
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
@@ -950,23 +955,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     clearSleepTimer();
   }
 
-  /// Sets the sleep timer with the given [duration].
-  Timer? setSleepTimer(SleepTimer newSleepTimer) {
-     sleepTimer = newSleepTimer;
-
-    if (newSleepTimer.type == SleepTimerType.duration)
-    {
-      _timer.value = newSleepTimer.startTimer(() => sleepTimerActions());
-      return _timer.value!;
-    }
-
-    return null;
+  /// Starts the new sleep timer
+  Timer? startSleepTimer(SleepTimer newSleepTimer) {
+    
+    _timer.value = newSleepTimer;
+    getSleepTimer()!.start(() => sleepTimerActions());
+    return _timer.value!.timer;
   }
 
   /// Cancels the sleep timer and clears it.
   void clearSleepTimer() {
     // _sleepTimerDuration = Duration.zero;
-    sleepTimer.remainingLength = 0;
+    // sleepTimer.remainingLength = 0;
     _timer.value?.cancel();
     _timer.value = null;
   }

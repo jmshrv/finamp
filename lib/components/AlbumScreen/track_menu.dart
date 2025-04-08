@@ -655,7 +655,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                             : Theme.of(context).textTheme.bodyMedium?.color ??
                                 Colors.white,
                   ),
-                  ValueListenableBuilder<Timer?>(
+                  ValueListenableBuilder<SleepTimer?>(
                     valueListenable: _audioHandler.timer,
                     builder: (context, timerValue, child) {
                       return PlaybackAction(
@@ -663,7 +663,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                             ? TablerIcons.hourglass_high
                             : TablerIcons.hourglass_empty,
                         onPressed: () async {
-                          if (timerValue != null || _audioHandler.sleepTimer.remainingLength > 0) {
+                          if (timerValue != null && _audioHandler.getSleepTimer()!.remainingLength > 0) {
                             await showDialog(
                               context: context,
                               builder: (context) =>
@@ -676,10 +676,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                             );
                           }
                         },
-                        tooltip: timerValue != null || _audioHandler.sleepTimer.remainingLength > 0 ? 
-                                _audioHandler.sleepTimer.asString(context)
+                        tooltip: timerValue != null && _audioHandler.getSleepTimer()!.remainingLength > 0 ? 
+                                _audioHandler.getSleepTimer()!.asString(context)
                             : AppLocalizations.of(context)!.sleepTimerTooltip,
-                        iconColor: timerValue != null || _audioHandler.sleepTimer.remainingLength > 0
+                        iconColor: timerValue != null && _audioHandler.getSleepTimer()!.remainingLength > 0
                             ? iconColor
                             : Theme.of(context).textTheme.bodyMedium?.color ??
                                 Colors.white,
