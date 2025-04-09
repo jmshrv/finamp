@@ -658,32 +658,48 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                   ValueListenableBuilder<SleepTimer?>(
                     valueListenable: _audioHandler.timer,
                     builder: (context, timerValue, child) {
-                      return PlaybackAction(
-                        icon: timerValue != null
-                            ? TablerIcons.hourglass_high
-                            : TablerIcons.hourglass_empty,
-                        onPressed: () async {
-                          if (timerValue != null && _audioHandler.getSleepTimer()!.remainingLength > 0) {
-                            await showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  const SleepTimerCancelDialog(),
-                            );
-                          } else {
+                      if (timerValue == null) {
+                        return PlaybackAction(
+                          icon: TablerIcons.hourglass_empty,
+                          onPressed: () async {
                             await showDialog(
                               context: context,
                               builder: (context) => const SleepTimerDialog(),
                             );
-                          }
+                          },
+                          tooltip: AppLocalizations.of(context)!.sleepTimerTooltip,
+                          iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                        );
+                      }
+
+                      return ValueListenableBuilder<int>(
+                        valueListenable: timerValue.remainingNotifier,
+                        builder: (context, remaining, _) {
+                          final hasTimeLeft = remaining > 0;
+
+                          return PlaybackAction(
+                            icon: TablerIcons.hourglass_high,
+                            onPressed: () async {
+                              if (hasTimeLeft) {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) => const SleepTimerCancelDialog(),
+                                );
+                              } else {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) => const SleepTimerDialog(),
+                                );
+                              }
+                            },
+                            tooltip: hasTimeLeft
+                                ? timerValue.asString(context)
+                                : AppLocalizations.of(context)!.sleepTimerTooltip,
+                            iconColor: hasTimeLeft
+                                ? iconColor
+                                : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                          );
                         },
-                        // TODO: This should probably be using the remainingNotifier in the SleepTimer?
-                        tooltip: timerValue != null && _audioHandler.getSleepTimer()!.remainingLength > 0 ? 
-                                _audioHandler.getSleepTimer()!.asString(context)
-                            : AppLocalizations.of(context)!.sleepTimerTooltip,
-                        iconColor: timerValue != null && _audioHandler.getSleepTimer()!.remainingLength > 0
-                            ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
                       );
                     },
                   ),

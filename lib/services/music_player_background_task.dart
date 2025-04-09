@@ -260,6 +260,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     mediaItem.listen((currentTrack) {
+      if (getSleepTimer() != null
+        && getSleepTimer()!.type == SleepTimerType.tracks
+        && getSleepTimer()!.startTime != null
+        )
+      {
+        // Listen for events if it's the next track, and it's a tracks timer, reduce the length
+        getSleepTimer()!.remainingLength--;
+
+        if (getSleepTimer()!.remainingLength <= 0)
+        {
+          getSleepTimer()!.callback();
+          return;
+        }
+      }
+
       _applyVolumeNormalization(currentTrack);
     });
 
@@ -289,21 +304,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // not updating between tracks (https://github.com/jmshrv/finamp/issues/844)
     mediaItem.listen((_) {
       final event = _transformEvent(_player.playbackEvent);
-
-      if (event.bufferedPosition == Duration.zero
-        && getSleepTimer() != null
-        && getSleepTimer()!.type == SleepTimerType.tracks
-        && getSleepTimer()!.startTime != null
-        )
-      {
-        // Listen for events if it's the next track, and it's a tracks timer, reduce the length
-        getSleepTimer()!.remainingLength--;
-
-        if (getSleepTimer()!.remainingLength <= 0)
-        {
-          getSleepTimer()!.callback();
-        }
-      }
 
       playbackState.add(event);
     });
