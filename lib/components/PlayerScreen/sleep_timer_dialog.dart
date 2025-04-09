@@ -18,30 +18,23 @@ class SleepTimerDialog extends ConsumerStatefulWidget {
 
 class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-  final _textController = TextEditingController(
-      text: (DefaultSettings.sleepTimerDuration ~/ 60).toString());
+  final _textController = TextEditingController(text: (DefaultSettings.sleepTimerDuration ~/ 60).toString());
   final _formKey = GlobalKey<FormState>();
   // SleepTimerType _selectedMode = SleepTimerType.duration; // Default selection
   SleepTimer newSleepTimer = SleepTimer(SleepTimerType.duration, DefaultSettings.sleepTimerDuration);
-  int selectedValue = 5; // Default to 5 minutes
-  bool durationMode = false;
-  bool trackMode = false;
+  
   final _trackCountController = TextEditingController(text: "1");
-  late double viewPortWidth;
-  bool finishTrack = false;
-  bool afterCurrentTrack = false;
-  final markerTotalWidth = 6.0; // 2px line + 4px margin
+
+  bool durationMode = false, trackMode = false, finishTrack = false, afterCurrentTrack = false;
 
   void saveSleepTimer() {
-      // TODO: why need in two locations?
+      // TODO: do we need this in both locations?
     _audioHandler.startSleepTimer(newSleepTimer);
-    // FinampSetters.setSleepTimerSeconds(durationInSeconds);
     FinampSetters.setSleepTimer(newSleepTimer);
   }
 
   @override
   Widget build(BuildContext context) {
-    viewPortWidth = MediaQuery.of(context).size.width;
 
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.setSleepTimer),

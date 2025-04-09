@@ -1122,11 +1122,11 @@ class SleepTimerAdapter extends TypeAdapter<SleepTimer> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SleepTimer(
-      fields[0] as SleepTimerType,
-      (fields[1] as num).toInt(),
+      fields[0] == null ? SleepTimerType.duration : fields[0] as SleepTimerType,
+      fields[1] == null ? 1800 : (fields[1] as num).toInt(),
     )
       ..startTime = fields[2] as DateTime?
-      ..remainingLength = (fields[3] as num).toInt();
+      ..remainingLength = fields[3] == null ? 1800 : (fields[3] as num).toInt();
   }
 
   @override
