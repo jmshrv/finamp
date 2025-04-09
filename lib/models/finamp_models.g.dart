@@ -1113,7 +1113,7 @@ class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
 
 class SleepTimerAdapter extends TypeAdapter<SleepTimer> {
   @override
-  final int typeId = 80;
+  final int typeId = 82;
 
   @override
   SleepTimer read(BinaryReader reader) {
@@ -1122,18 +1122,17 @@ class SleepTimerAdapter extends TypeAdapter<SleepTimer> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SleepTimer(
-      fields[0] == null ? SleepTimerType.duration : fields[0] as SleepTimerType,
-      fields[1] == null ? 1800 : (fields[1] as num).toInt(),
+      fields[0] as SleepTimerType,
+      (fields[1] as num).toInt(),
     )
       ..startTime = fields[2] as DateTime?
-      ..remainingLength = fields[3] == null ? 1800 : (fields[3] as num).toInt()
-      ..timer = fields[4] as Timer?;
+      ..remainingLength = (fields[3] as num).toInt();
   }
 
   @override
   void write(BinaryWriter writer, SleepTimer obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.type)
       ..writeByte(1)
@@ -1141,9 +1140,7 @@ class SleepTimerAdapter extends TypeAdapter<SleepTimer> {
       ..writeByte(2)
       ..write(obj.startTime)
       ..writeByte(3)
-      ..write(obj.remainingLength)
-      ..writeByte(4)
-      ..write(obj.timer);
+      ..write(obj.remainingLength);
   }
 
   @override
@@ -2196,43 +2193,6 @@ class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
           typeId == other.typeId;
 }
 
-class SleepTimerTypeAdapter extends TypeAdapter<SleepTimerType> {
-  @override
-  final int typeId = 79;
-
-  @override
-  SleepTimerType read(BinaryReader reader) {
-    switch (reader.readByte()) {
-      case 0:
-        return SleepTimerType.duration;
-      case 1:
-        return SleepTimerType.tracks;
-      default:
-        return SleepTimerType.duration;
-    }
-  }
-
-  @override
-  void write(BinaryWriter writer, SleepTimerType obj) {
-    switch (obj) {
-      case SleepTimerType.duration:
-        writer.writeByte(0);
-      case SleepTimerType.tracks:
-        writer.writeByte(1);
-    }
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SleepTimerTypeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
 class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
   @override
   final int typeId = 92;
@@ -2311,6 +2271,43 @@ class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ArtistTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SleepTimerTypeAdapter extends TypeAdapter<SleepTimerType> {
+  @override
+  final int typeId = 81;
+
+  @override
+  SleepTimerType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return SleepTimerType.duration;
+      case 1:
+        return SleepTimerType.tracks;
+      default:
+        return SleepTimerType.duration;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, SleepTimerType obj) {
+    switch (obj) {
+      case SleepTimerType.duration:
+        writer.writeByte(0);
+      case SleepTimerType.tracks:
+        writer.writeByte(1);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SleepTimerTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

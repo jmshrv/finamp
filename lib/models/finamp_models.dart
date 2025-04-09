@@ -2689,22 +2689,6 @@ enum AutoOfflineOption {
   }
 }
 
-@HiveType(typeId: 79)
-enum SleepTimerType {
-  @HiveField(0)
-  duration("Duration"), // TODO: Use localizations?
-
-  @HiveField(1)
-  tracks("Tracks");
-
-  final String _display;
-
-  const SleepTimerType(this._display);
-
-  @override
-  String toString() => _display;
-}
-
 
 @HiveType(typeId: 92)
 enum ItemSwipeActions {
@@ -2762,7 +2746,7 @@ enum ArtistType {
   artist;
 }
 
-@HiveType(typeId: 80)
+@HiveType(typeId: 82)
 class SleepTimer {
   @HiveField(0, defaultValue: DefaultSettings.sleepTimerType)
   SleepTimerType type;
@@ -2776,77 +2760,82 @@ class SleepTimer {
   @HiveField(3, defaultValue: DefaultSettings.sleepTimerDuration)
   int remainingLength = DefaultSettings.sleepTimerDuration;
 
-  @HiveField(4)
+  // Used in conjunction with duration timer
+  bool finishTrack = false;
   Timer? timer;
 
-  // What to run when the timer finishes.
-  // TODO: Can we call logs a better way?
-  Function callback = (() => FinampLogsHelper().addLog(LogRecord(Level.INFO, "Sleep Timer done", "Playback")));
+  Function callback;
 
-  // Standard constructor (non-const) with optional `startTime`
+  final ValueNotifier<int> remainingNotifier = ValueNotifier<int>(0);
+
   SleepTimer(this.type, this.length)
-  {
-    remainingLength = length;
-  }
+      : remainingLength = length,
+        callback = (() => FinampLogsHelper().addLog(LogRecord(Level.INFO, "Sleep Timer done", "Playback")));
 
-  Future<void> start (Function callback) async
-  {
+  Future<void> start(Function callback) async {
+    remainingLength = length;
     startTime = DateTime.now();
     this.callback = callback;
 
+    // TODO: Implement this regardless of type, so that the text updates
+    // Immediately update remaining
+    remainingNotifier.value = remainingLength;
+
     if (type == SleepTimerType.duration) {
-      timer = Timer(getDuration(), () async {
-      return await this.callback();
+      timer = Timer.periodic(const Duration(seconds: 1), (t) async {
+        final secondsLeft = getRemaining().inSeconds;
 
-    });
+        remainingNotifier.value = secondsLeft;
+
+        if (secondsLeft <= 0) {
+          t.cancel();
+          await this.callback();
+        }
+      });
     }
-
-    return;
   }
 
-  void cancel ()
-  {
+  void cancel() {
     remainingLength = 0;
     startTime = null;
-
-    if (timer != null)
-    {
-      timer!.cancel();
-    }
-
+    timer?.cancel();
     timer = null;
+    remainingNotifier.value = 0;
   }
 
-  Duration getDuration()
-  {
-    return Duration(seconds: length);
+  Duration getDuration() => Duration(seconds: length);
+
+  Duration getRemaining() {
+    if (startTime == null) return Duration.zero;
+    final diff = startTime!.add(getDuration()).difference(DateTime.now());
+    return diff.isNegative ? Duration.zero : diff;
   }
 
-  Duration getRemaining()
-  {
-    return startTime != null ? startTime!.add(getDuration()).difference(DateTime.now()) : Duration.zero;
+  String asString(BuildContext context) {
+    final minutes = type == SleepTimerType.duration ? (getRemaining().inSeconds / 60).ceil() : remainingLength;
+    final durationPrefix = type == SleepTimerType.duration && minutes == 1 ? "<" : "";
+    final durationSuffix = type == SleepTimerType.duration
+        ? AppLocalizations.of(context)!.minutes.toLowerCase()
+        : AppLocalizations.of(context)!.tracks.toLowerCase();
+
+    return AppLocalizations.of(context)!
+        .sleepTimerRemainingTime(minutes, durationPrefix, durationSuffix);
   }
+}
 
-  // TODO: use localizations
-  String asString(BuildContext context)
-  {
-    // TODO: If < 1 min, string should be Sleeping in < x minutes
-    String durationPrefix = "";
 
-  if (type == SleepTimerType.duration)
-  {
-    remainingLength = (getRemaining().inSeconds / 60).ceil();
+@HiveType(typeId: 81)
+enum SleepTimerType {
+  @HiveField(0)
+  duration("Duration"), // TODO: Use localizations?
 
-    if (remainingLength == 1)
-    {
-      durationPrefix = "<";
-    }
-  }
-  
-    // TODO: use localizations
-    String durationSuffix = type == SleepTimerType.duration ? AppLocalizations.of(context)!.minutes.toLowerCase()  : AppLocalizations.of(context)!.tracks.toLowerCase();
+  @HiveField(1)
+  tracks("Tracks");
 
-    return AppLocalizations.of(context)!.
-          sleepTimerRemainingTime(remainingLength, durationPrefix, durationSuffix);
-  }
+  final String _display;
+
+  const SleepTimerType(this._display);
+
+  @override
+  String toString() => _display;
 }

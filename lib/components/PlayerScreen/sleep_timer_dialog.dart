@@ -86,7 +86,9 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                       if (value.isNotEmpty) newSleepTimer.length = (double.parse(value) * 60).round();
                     },
                     validator: (value) {
+                      if (!durationMode && newSleepTimer.type == SleepTimerType.duration) return AppLocalizations.of(context)!.required;
                       if (!durationMode) return null;
+
                       if (value == null || value.isEmpty) {
                         return AppLocalizations.of(context)!.required;
                       }
@@ -119,6 +121,7 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                         afterCurrentTrack = false;
                         durationMode = true;
                       }
+                      newSleepTimer.finishTrack = value;
                     });
                   },
                 ),
@@ -142,6 +145,7 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                         durationMode = false;
                         finishTrack = false;
                         afterCurrentTrack = false;
+                        newSleepTimer.length = int.parse(_trackCountController.value.text);
                       }
                     });
                   },
@@ -155,10 +159,14 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                     controller: _trackCountController,
                     keyboardType: TextInputType.number,
                     enabled: trackMode,
+                    onChanged: (value) {
+                      if (value.isNotEmpty) newSleepTimer.length = int.parse(value);
+                    },
                     decoration: const InputDecoration(
                       isDense: true,
                     ),
                     validator: (value) {
+                      if ((!trackMode && !afterCurrentTrack) && newSleepTimer.type == SleepTimerType.tracks) return AppLocalizations.of(context)!.required;
 
                       // TODO: On set, calculate duration from queue?
                       if (!trackMode) return null;
@@ -190,6 +198,8 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                         trackMode = false;
                         durationMode = false;
                         finishTrack = false;
+                        newSleepTimer.finishTrack = true;
+                        newSleepTimer.length = 1;
                       }
                     });
                   },
@@ -199,8 +209,8 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
               ],
             ),
 
-            // TODO: Set/Calulate this text
-            // Text("Playback will end in 12m 34s",
+            // TODO: Set/Calculate this text
+            // Text("Playback will end in ~12m 34s",
             // style: Theme.of(context).textTheme.labelSmall,)
           ],
         ),

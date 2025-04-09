@@ -951,7 +951,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   void sleepTimerActions()
   {
-    pause();
     clearSleepTimer();
   }
 
@@ -965,8 +964,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   /// Cancels the sleep timer and clears it.
   void clearSleepTimer() {
+
+    // This was a timer and we want to finish this track, convert it to a tracks timer with 0
+    if (getSleepTimer()!.type == SleepTimerType.duration && getSleepTimer()!.finishTrack)
+    {
+      getSleepTimer()!.type = SleepTimerType.tracks;
+      getSleepTimer()!.length = 1;
+      // restart the timer
+      getSleepTimer()!.start(() => sleepTimerActions());
+      return;
+    }
+
     // _sleepTimerDuration = Duration.zero;
     // sleepTimer.remainingLength = 0;
+    pause();
     _timer.value?.cancel();
     _timer.value = null;
   }

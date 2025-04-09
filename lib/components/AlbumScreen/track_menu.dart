@@ -676,6 +676,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                             );
                           }
                         },
+                        // TODO: This should probably be using the remainingNotifier in the SleepTimer?
                         tooltip: timerValue != null && _audioHandler.getSleepTimer()!.remainingLength > 0 ? 
                                 _audioHandler.getSleepTimer()!.asString(context)
                             : AppLocalizations.of(context)!.sleepTimerTooltip,
