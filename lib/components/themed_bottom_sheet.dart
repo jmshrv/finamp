@@ -8,7 +8,6 @@ import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 import '../models/jellyfin_models.dart';
 import '../services/feedback_helper.dart';
@@ -29,7 +28,7 @@ Future<void> showThemedBottomSheet({
   double minDraggableHeight = 0.6,
   bool showDragHandle = true,
 }) async {
-  FeedbackHelper.feedback(FeedbackType.impact);
+  FeedbackHelper.feedback(FeedbackType.heavy);
   var ref = ProviderScope.containerOf(context, listen: false);
   var themeInfo = ref.read(localThemeInfoProvider);
   ThemeImage? themeImage;

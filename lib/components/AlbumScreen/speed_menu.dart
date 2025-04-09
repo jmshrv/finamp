@@ -7,7 +7,6 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_settings_helper.dart';
@@ -78,7 +77,7 @@ class _SpeedSliderState extends State<SpeedSlider> {
               setState(() {
                 _dragValue = value;
               });
-              FeedbackHelper.feedback(FeedbackType.impact);
+              FeedbackHelper.feedback(FeedbackType.heavy);
               _debouncer?.cancel();
               _debouncer = Timer(const Duration(milliseconds: 150), () {
                 widget.saveSpeedInput(value);
@@ -206,9 +205,9 @@ class _SpeedMenuState extends State<SpeedMenu> {
                                   speedSliderMin,
                                   double.parse((currentSpeed - speedButtonStep)
                                       .toStringAsFixed(2)));
-                              Vibrate.feedback(FeedbackType.success);
+                              FeedbackHelper.feedback(FeedbackType.success);
                             } else {
-                              Vibrate.feedback(FeedbackType.error);
+                              FeedbackHelper.feedback(FeedbackType.error);
                             }
                           },
                           visualDensity: VisualDensity.compact,
@@ -235,9 +234,9 @@ class _SpeedMenuState extends State<SpeedMenu> {
                                   speedSliderMax,
                                   double.parse((currentSpeed + speedButtonStep)
                                       .toStringAsFixed(2)));
-                              Vibrate.feedback(FeedbackType.success);
+                              FeedbackHelper.feedback(FeedbackType.success);
                             } else {
-                              Vibrate.feedback(FeedbackType.error);
+                              FeedbackHelper.feedback(FeedbackType.error);
                             }
                           },
                           visualDensity: VisualDensity.compact,
