@@ -252,8 +252,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
   GlobalKey queueHeaderKey = GlobalKey();
   GlobalKey<JumpToCurrentButtonState> jumpToCurrentKey = GlobalKey();
 
-  ref.read(displayFeaturesProvider).attach(context);
-
   FeedbackHelper.feedback(FeedbackType.impact);
 
   return showModalBottomSheet(
@@ -274,14 +272,14 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
       return PlayerScreenTheme(
         child: Consumer(
           builder: (context, ref, child) {
-            final displayFeatures = ref.watch(displayFeaturesProvider);
+            final halfOpened = ref.watch(halfOpenFoldableProvider);
 
             return DraggableScrollableSheet(
               snap: false,
               snapAnimationDuration: const Duration(milliseconds: 200),
               // Cover the whole sub screen when in half opened mode
-              initialChildSize: displayFeatures.halfOpened ? 1.0 : 0.92,
-              minChildSize: displayFeatures.halfOpened ? 1.0 : 0.25,
+              initialChildSize: halfOpened ? 1.0 : 0.92,
+              minChildSize: halfOpened ? 1.0 : 0.25,
               expand: false,
               builder: (context, scrollController) {
                 return Scaffold(

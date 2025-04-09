@@ -46,7 +46,8 @@ class _PlaybackHistoryListTileState
     return GestureDetector(
         onTapDown: (_) {
           // Begin precalculating theme for song menu
-          ref.listen(finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
+          ref.listenManual(
+              finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
         },
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),

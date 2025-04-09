@@ -4,6 +4,7 @@ import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dar
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/current_album_image_provider.dart';
@@ -11,7 +12,6 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -189,53 +189,56 @@ class TrackListTile extends StatelessWidget {
           : currentSettings.itemSwipeActionRightToLeft;
 
       final queueService = GetIt.instance<QueueService>();
-      
+
       switch (followUpAction) {
         case ItemSwipeActions.addToNextUp:
           unawaited(queueService.addToNextUp(
-            items: [item],
-            source: QueueItemSource.rawId(
-              type: QueueItemSourceType.nextUp,
-              name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: AppLocalizations.of(context)!.queue),
-              id: parentItem?.id.raw ?? "",
-              item: parentItem,
-          )));
+              items: [item],
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.nextUp,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: parentItem?.id.raw ?? "",
+                item: parentItem,
+              )));
           GlobalSnackbar.message(
-              (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
-              isConfirmation: true,
+            (scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
+            isConfirmation: true,
           );
           break;
         case ItemSwipeActions.playNext:
           unawaited(queueService.addNext(
-            items: [item],
-            source: QueueItemSource.rawId(
-              type: QueueItemSourceType.nextUp,
-              name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: AppLocalizations.of(context)!.queue),
-              id: parentItem?.id.raw ?? "",
-              item: parentItem,
-          )));
+              items: [item],
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.nextUp,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: parentItem?.id.raw ?? "",
+                item: parentItem,
+              )));
           GlobalSnackbar.message(
-              (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
-              isConfirmation: true,
+            (scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
+            isConfirmation: true,
           );
           break;
         case ItemSwipeActions.addToQueue:
           unawaited(queueService.addToQueue(
-            items: [item],
-            source: QueueItemSource.rawId(
-              type: QueueItemSourceType.queue,
-              name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: AppLocalizations.of(context)!.queue),
-              id: parentItem?.id.raw ?? "",
-              item: parentItem,
-          )));
+              items: [item],
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.queue,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: parentItem?.id.raw ?? "",
+                item: parentItem,
+              )));
           GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
+            (scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
             isConfirmation: true,
           );
           break;
@@ -269,12 +272,15 @@ class TrackListTile extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(getSwipeActionIcon(currentSettings.itemSwipeActionLeftToRight),
+              Icon(
+                getSwipeActionIcon(currentSettings.itemSwipeActionLeftToRight),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
               const SizedBox(width: 4.0),
-              Text(currentSettings.itemSwipeActionLeftToRight.toLocalisedString(context),
+              Text(
+                currentSettings.itemSwipeActionLeftToRight
+                    .toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -284,13 +290,16 @@ class TrackListTile extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(currentSettings.itemSwipeActionRightToLeft.toLocalisedString(context),
+              Text(
+                currentSettings.itemSwipeActionRightToLeft
+                    .toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
               const SizedBox(width: 4.0),
-              Icon(getSwipeActionIcon(currentSettings.itemSwipeActionRightToLeft),
+              Icon(
+                getSwipeActionIcon(currentSettings.itemSwipeActionRightToLeft),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
@@ -486,8 +495,10 @@ class TrackListItemState extends ConsumerState<TrackListItem>
       }
 
       final currentSettings = FinampSettingsHelper.finampSettings;
-      final swipeLeftEnabled = (currentSettings.itemSwipeActionLeftToRight != ItemSwipeActions.nothing);
-      final swipeRightEnabled = (currentSettings.itemSwipeActionRightToLeft != ItemSwipeActions.nothing);
+      final swipeLeftEnabled = (currentSettings.itemSwipeActionLeftToRight !=
+          ItemSwipeActions.nothing);
+      final swipeRightEnabled = (currentSettings.itemSwipeActionRightToLeft !=
+          ItemSwipeActions.nothing);
       final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
           ? DismissDirection.horizontal
           : swipeLeftEnabled
@@ -499,7 +510,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
       return GestureDetector(
         onTapDown: (_) {
           // Begin precalculating theme for song menu
-          ref.listen(
+          ref.listenManual(
               finampThemeProvider(ThemeInfo(widget.baseItem)), (_, __) {});
         },
         onLongPressStart: (details) => menuCallback(),

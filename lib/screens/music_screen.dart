@@ -1,21 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:finamp/services/auto_offline.dart';
-import 'package:finamp/services/downloads_service.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:logging/logging.dart';
 
+import '../components/MusicScreen/artist_type_selection_row.dart';
 import '../components/MusicScreen/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
 import '../components/MusicScreen/sort_order_button.dart';
-import '../components/MusicScreen/artist_type_selection_row.dart';
 import '../components/global_snackbar.dart';
 import '../components/now_playing_bar.dart';
 import '../models/finamp_models.dart';
@@ -25,20 +23,6 @@ import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
 
 final _musicScreenLogger = Logger("MusicScreen");
-
-void postLaunchHook(WidgetRef ref) async {
-  final downloadsService = GetIt.instance<DownloadsService>();
-  ref.listenManual(autoOfflineProvider, (_, __) {});
-
-  // make sure playlist info is downloaded for users upgrading from older versions and new installations AFTER logging in and selecting their libraries/views
-  if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
-    await downloadsService.addDefaultPlaylistInfoDownload().catchError((e) {
-      // log error without snackbar, we don't want users to be greeted with errors on first launch
-      _musicScreenLogger.severe("Failed to download playlist metadata: $e");
-    });
-    FinampSetters.setHasDownloadedPlaylistInfo(true);
-  }
-}
 
 class MusicScreen extends ConsumerStatefulWidget {
   const MusicScreen({super.key});
@@ -104,12 +88,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     );
 
     _tabController!.addListener(_tabIndexCallback);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    postLaunchHook(ref);
   }
 
   @override
@@ -364,24 +342,22 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                     ? const NeverScrollableScrollPhysics()
                     : const AlwaysScrollableScrollPhysics(),
                 dragStartBehavior: DragStartBehavior.down,
-                
-                children: sortedTabs
-                   .map((tabType) {
-                    return Column(
-                      children: [
-                        buildArtistTypeSelectionRow(context, tabType, finampSettings.artistListType, refreshTab),
-                        Expanded(
-                          child: MusicScreenTabView(
-                            tabContentType: tabType,
-                            searchTerm: searchQuery,
-                            view: _finampUserHelper.currentUser?.currentView,
-                            refresh: refreshMap[tabType],
-                          ),
+                children: sortedTabs.map((tabType) {
+                  return Column(
+                    children: [
+                      buildArtistTypeSelectionRow(context, tabType,
+                          finampSettings.artistListType, refreshTab),
+                      Expanded(
+                        child: MusicScreenTabView(
+                          tabContentType: tabType,
+                          searchTerm: searchQuery,
+                          view: _finampUserHelper.currentUser?.currentView,
+                          refresh: refreshMap[tabType],
                         ),
-                      ],
-                    );
-                  })
-                  .toList(),
+                      ),
+                    ],
+                  );
+                }).toList(),
               );
 
               if (Platform.isAndroid) {

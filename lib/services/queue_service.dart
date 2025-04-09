@@ -6,9 +6,9 @@ import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/gen/assets.gen.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -544,6 +544,8 @@ class QueueService {
       if (beginPlaying) {
         // don't await this, because it will not return until playback is finished
         unawaited(_audioHandler.play(disableFade: true));
+      } else if (!Platform.isAndroid && !Platform.isIOS) {
+        unawaited(_audioHandler.pause(disableFade: true));
       }
 
       _audioHandler.nextInitialIndex = null;
@@ -1155,7 +1157,10 @@ class QueueService {
         // realistically it doesn't matter too much
         // default to 44100, only use 48000 for opus because opus doesn't support 44100
         "audioSampleRate": FinampSettingsHelper
-            .finampSettings.transcodingStreamingFormat.codec == 'opus' ? '48000' : '44100',
+                    .finampSettings.transcodingStreamingFormat.codec ==
+                'opus'
+            ? '48000'
+            : '44100',
         "maxAudioBitDepth": "16",
         "audioBitRate":
             FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
@@ -1163,7 +1168,6 @@ class QueueService {
             .finampSettings.transcodingStreamingFormat.container,
         "transcodeReasons": "ContainerBitrateExceedsLimit",
       });
-
     } else {
       builtPath.addAll([
         "Items",

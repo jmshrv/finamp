@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-
-Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType, ArtistType artistListType, Function(TabContentType) refreshTab) {
+Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
+    ArtistType artistListType, Function(TabContentType) refreshTab) {
   if (tabType == TabContentType.artists) {
     var currentSettings = FinampSettingsHelper.finampSettings;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -17,19 +17,20 @@ Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
       top: false,
       bottom: false,
       child: Padding(
-        padding: (Platform.isWindows || Platform.isLinux || Platform.isMacOS) 
-          ? const EdgeInsets.symmetric(horizontal: 4) 
-          : EdgeInsets.zero,
+        padding: (Platform.isWindows || Platform.isLinux || Platform.isMacOS)
+            ? const EdgeInsets.symmetric(horizontal: 4)
+            : EdgeInsets.zero,
         child: SizedBox(
           height: 48,
           width: double.infinity,
           child: Row(
-            mainAxisAlignment: alignLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
+            mainAxisAlignment:
+                alignLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: [
               FilterChip(
                 label: Text(AppLocalizations.of(context)!.albumArtists),
                 onSelected: (_) {
-                  FinampSettingsHelper.setArtistListType(ArtistType.albumartist);
+                  FinampSetters.setArtistListType(ArtistType.albumartist);
                   refreshTab(tabType);
                 },
                 selected: artistListType == ArtistType.albumartist,
@@ -47,18 +48,17 @@ Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
               FilterChip(
                 label: Text(AppLocalizations.of(context)!.performingArtists),
                 onSelected: (_) {
-                  FinampSettingsHelper.setArtistListType(ArtistType.artist);
+                  FinampSetters.setArtistListType(ArtistType.artist);
                   refreshTab(tabType);
-                }, 
+                },
                 selected: artistListType == ArtistType.artist,
                 showCheckmark: false,
                 selectedColor: Theme.of(context).colorScheme.primary,
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 labelStyle: TextStyle(
-                  color: artistListType == ArtistType.artist
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.onSurface
-                ),
+                    color: artistListType == ArtistType.artist
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.onSurface),
                 shape: StadiumBorder(),
               ),
             ],

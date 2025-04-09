@@ -73,7 +73,6 @@ Future<void> showThemedBottomSheet({
         ],
         child: ThemedBottomSheet(
           key: ValueKey(item.id.raw + routeName),
-          item: item,
           buildSlivers: buildSlivers,
           buildWrapper: buildWrapper,
           minDraggableHeight: minDraggableHeight,
@@ -87,14 +86,12 @@ Future<void> showThemedBottomSheet({
 class ThemedBottomSheet extends ConsumerStatefulWidget {
   const ThemedBottomSheet({
     super.key,
-    required this.item,
     this.buildSlivers,
     this.buildWrapper,
     required this.minDraggableHeight,
     required this.showDragHandle,
   });
 
-  final BaseItemDto item;
   final SliverBuilder? buildSlivers;
   final WrapperBuilder? buildWrapper;
   final double minDraggableHeight;

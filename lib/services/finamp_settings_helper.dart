@@ -1,9 +1,9 @@
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/locale_helper.dart';
 import 'package:finamp/services/theme_mode_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -30,7 +30,7 @@ class FinampSettingsHelper {
   // This shouldn't be null as FinampSettings is created on startup.
   // This decision will probably come back to haunt me later.
   static FinampSettings get finampSettings =>
-      Hive.box<FinampSettings>("FinampSettings").get("FinampSettings")!;
+     Hive.box<FinampSettings>("FinampSettings").get("FinampSettings")!;
 
   /// Deletes the downloadLocation at the given index.
   static void deleteDownloadLocation(String id) {
@@ -70,24 +70,6 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setItemSwipeAction(DismissDirection direction, ItemSwipeActions newItemSwipeAction){
-    FinampSettings finampSettingsTemp = finampSettings;
-    if (direction == DismissDirection.startToEnd) {
-      finampSettingsTemp.itemSwipeActionLeftToRight = newItemSwipeAction;
-    } else if (direction == DismissDirection.endToStart) {
-      finampSettingsTemp.itemSwipeActionRightToLeft = newItemSwipeAction;
-    }
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setArtistListType(ArtistType artistListType){
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.artistListType = artistListType;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-  
   static void overwriteFinampSettings(FinampSettings newFinampSettings) {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", newFinampSettings);
@@ -261,8 +243,10 @@ class FinampSettingsHelper {
   static void resetInteractionsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight;
-    finampSettingsTemp.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft;
+    finampSettingsTemp.itemSwipeActionLeftToRight =
+        DefaultSettings.itemSwipeActionLeftToRight;
+    finampSettingsTemp.itemSwipeActionRightToLeft =
+        DefaultSettings.itemSwipeActionRightToLeft;
     finampSettingsTemp.startInstantMixForIndividualTracks =
         DefaultSettings.startInstantMixForIndividualTracks;
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);
