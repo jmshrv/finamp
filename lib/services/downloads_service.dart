@@ -587,17 +587,16 @@ class DownloadsService {
     // sorts of children.  It enforces a dependency graph with no loops which will
     // be completely deleted if the anchor is removed.  The type hierarchy is anchor->
     // non-album/playlist collection->album/playlist->track->image.  Items can only
-    // link to types lower in the hierarchy, not ones higher or equal to themselves.
-    // The only exception is tracks, which can have info links to higher types but
-    // only if the track is required.  To prevent this from allowing loops which include
-    // require links, no type above tracks in the hierarchy, namely collections, may have
-    // any required children if they themselves are not required.  This exception
-    // does allow for the formation of loops of info links, but the fact that participating
-    // tracks must be required means that the loops can always be cleaned up as tracks
-    // are deleted and prevents info dependency chains from propagating between
-    // info only collections and tracks to eventually require metadata on every item
-    // the server has.
-    // TODO update this
+    // require types lower in the hierarchy, not ones higher or equal to themselves.
+    // Only required items can require other items to maintain this hierarchy.  The exception
+    // to this is that anyone can require an image, but images cannot link anyone.
+    // Info links have a separate type hierarchy which goes anchor-> album/playlist ->
+    // non-album/playlist collection->track->image.  This is only enforced for non-required
+    // items, required items can info link any type of node.  This does allow for info
+    // loops, but they will always be cleaned as as the participating required member
+    // The require and info hierarchies are enforced here.  The global syncDelete
+    // in repair step 5 will enforce the restriction that you must be required to require
+    // other nodes.
     _isar.writeTxnSync(() {
       List<
           (
@@ -643,47 +642,51 @@ class DownloadsService {
           item.requires.resetSync();
         }
       }
+
       List<
-          QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
-              QueryBuilder<DownloadItem, DownloadItem,
-                  QFilterCondition>)> infoFilters = [
-        // Select albums/playlists that only info link tracks or images
-        (q) => q
-            .typeEqualTo(DownloadItemType.collection)
-            .anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
-                (q, element) => q.baseItemTypeEqualTo(element))
-            .not()
-            .info((q) => q.not().group((q) => q
-                .typeEqualTo(DownloadItemType.track)
-                .or()
-                .typeEqualTo(DownloadItemType.image))),
-        // Select required tracks that only link collections or images
-        (q) => q
-            .typeEqualTo(DownloadItemType.track)
-            .requiredByIsNotEmpty()
-            .not()
-            .info((q) => q.not().group((q) => q
-                .typeEqualTo(DownloadItemType.collection)
-                .or()
-                .typeEqualTo(DownloadItemType.image))),
-        // Select nodes which only info link images or have no info links
-        (q) => q.not().info((q) => q.not().typeEqualTo(DownloadItemType.image)),
-        (q) => q.typeEqualTo(DownloadItemType.anchor),
+          (
+            DownloadItemType,
+            QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
+                QueryBuilder<DownloadItem, DownloadItem, QFilterCondition>)?
+          )> infoFilters = [
+        (DownloadItemType.anchor, null),
+        (DownloadItemType.finampCollection, null),
+        (
+          DownloadItemType.collection,
+          (q) => q.anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
+              (q, element) => q.baseItemTypeEqualTo(element))
+        ),
+        (
+          DownloadItemType.collection,
+          (q) => q.allOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
+              (q, element) => q.not().baseItemTypeEqualTo(element))
+        ),
+        (DownloadItemType.track, null),
+        (DownloadItemType.image, null),
       ];
-      // albums/playlist can require info on tracks.  required tracks can require info on
-      // collections.  Anyone can require info on an image.  The anchor can info link
-      // anyone.  All other info links are disallowed.
-      var badInfoItems = _isar.downloadItems
-          .filter()
-          .not()
-          .anyOf(infoFilters, (q, element) => element(q))
-          .findAllSync();
-      // All items not matching one of the three above filters are invalid
-      for (var item in badInfoItems) {
-        _downloadsLogger.severe("Unlinking invalid info on node ${item.name}.");
-        _downloadsLogger
-            .severe("Current children: ${item.info.filter().findAllSync()}.");
-        item.info.resetSync();
+
+      // Objects matching an info filter cannot require elements matching earlier filters or the current filter.
+      // This only applies to info-only items - required items can have any info links they want
+      for (int i = 0; i < infoFilters.length; i++) {
+        var items = _isar.downloadItems
+            .where()
+            .typeEqualTo(infoFilters[i].$1)
+            .filter()
+            .requiredByIsEmpty()
+            .optional(infoFilters[i].$2 != null, (q) => infoFilters[i].$2!(q))
+            .info((q) => q.anyOf(
+                infoFilters.slice(0, i + 1),
+                (q, element) => q
+                    .typeEqualTo(element.$1)
+                    .optional(element.$2 != null, (q) => element.$2!(q))))
+            .findAllSync();
+        for (var item in items) {
+          _downloadsLogger
+              .severe("Unlinking invalid requires on node ${item.name}.");
+          _downloadsLogger.severe(
+              "Current children: ${item.requires.filter().findAllSync()}.");
+          item.requires.resetSync();
+        }
       }
     });
     // Allow other tasks to run between these steps, which are both synchronous
