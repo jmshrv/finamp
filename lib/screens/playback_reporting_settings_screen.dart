@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -9,6 +8,7 @@ import '../components/PlaybackReportingSettingsScreen/periodic_playback_session_
 import '../components/PlaybackReportingSettingsScreen/report_queue_to_server_toggle.dart';
 import '../components/PlaybackReportingSettingsScreen/play_on_stale_delay_editor.dart';
 import '../components/PlaybackReportingSettingsScreen/play_on_reconnection_delay_editor.dart';
+import '../components/PlaybackReportingSettingsScreen/disable_playon_toggle.dart';
 
 class PlaybackReportingSettingsScreen extends StatefulWidget {
   const PlaybackReportingSettingsScreen({super.key});
@@ -28,8 +28,8 @@ class _PlaybackReportingSettingsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            AppLocalizations.of(context)!.playbackReportingSettingsTitle),
+        title:
+            Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {
@@ -41,6 +41,7 @@ class _PlaybackReportingSettingsScreenState
       ),
       body: ListView(
         children: [
+          const DisablePlayonToggle(),
           const PeriodicPlaybackSessionUpdateFrequencyEditor(),
           const ReportQueueToServerToggle(),
           const PlayOnStaleDelayEditor(),

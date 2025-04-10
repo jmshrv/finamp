@@ -236,11 +236,13 @@ class FinampSettingsHelper {
   static void resetPlaybackReportingSettings() {
     FinampSetters.setPeriodicPlaybackSessionUpdateFrequencySeconds(DefaultSettings
         .periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
+    FinampSetters.setDisablePlayon(DefaultSettings.disablePlayon);
     FinampSetters.setReportQueueToServer(DefaultSettings.reportQueueToServer);
     FinampSetters.setPlayOnStaleDelay(DefaultSettings.playOnStaleDelay);
     FinampSetters.setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
     FinampSetters.setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
-    FinampSetters.setPlayOnReconnectionDelay(DefaultSettings.playOnReconnectionDelay);
+    FinampSetters.setPlayOnReconnectionDelay(
+        DefaultSettings.playOnReconnectionDelay);
   }
 
   static void resetNormalizationSettings() {

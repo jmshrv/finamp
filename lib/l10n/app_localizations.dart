@@ -1984,6 +1984,18 @@ abstract class AppLocalizations {
   /// **'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.'**
   String get playOnStaleDelaySubtitle;
 
+  /// Label for the settings to disable Jellyfin PlayOn
+  ///
+  /// In en, this message translates to:
+  /// **'Disable PlayOn feature'**
+  String get disablePlayon;
+
+  /// Description of the setting to disable Jellyfin PlayOn
+  ///
+  /// In en, this message translates to:
+  /// **'Disables PlayOn (controlling your session from a remote client). This avoids unnecessary errors if your reverse proxy or server doesn\'t support websockets.'**
+  String get disablePlayonSubtitle;
+
   /// Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session
   ///
   /// In en, this message translates to:
@@ -1993,7 +2005,7 @@ abstract class AppLocalizations {
   /// Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session
   ///
   /// In en, this message translates to:
-  /// **'Controls the delay between the attempts to reconnect to the PlayOn websocket when it gets disconnected. A lower delay increases bandwidth usage.'**
+  /// **'Controls the delay between the attempts to reconnect to the PlayOn websocket when it gets disconnected (in seconds). A lower delay increases bandwidth usage.'**
   String get playOnReconnectionDelaySubtitle;
 
   /// No description provided for @topTracks.

@@ -1121,6 +1121,14 @@
   "@playOnStaleDelaySubtitle": {
     "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
   },
+  "disablePlayon": "Disable PlayOn feature",
+  "@disablePlayon": {
+    "description": "Label for the settings to disable Jellyfin PlayOn"
+  },
+  "disablePlayonSubtitle": "Disables PlayOn (controlling your session from a remote client). This avoids unnecessary errors if your reverse proxy or server doesn't support websockets.",
+  "@disablePlayonSubtitle": {
+    "description": "Description of the setting to disable Jellyfin PlayOn"
+  },
   "playOnReconnectionDelay": "PlayOn session reconnection delay",
   "@playOnReconnectionDelay": {
     "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"

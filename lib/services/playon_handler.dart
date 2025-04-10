@@ -41,7 +41,10 @@ class PlayonHandler {
         _playOnHandlerLogger
             .info("Offline mode enabled, closing playon listener now");
         await closeListener();
-      } else if (!isConnected) {
+      } else if (FinampSettingsHelper.finampSettings.disablePlayon) {
+        await closeListener();
+      } else if (!isConnected &&
+          !FinampSettingsHelper.finampSettings.disablePlayon) {
         await startListener();
       }
     });
@@ -51,7 +54,8 @@ class PlayonHandler {
 
   Future<void> startListener() async {
     try {
-      if (!FinampSettingsHelper.finampSettings.isOffline) {
+      if (!FinampSettingsHelper.finampSettings.isOffline &&
+          !FinampSettingsHelper.finampSettings.disablePlayon) {
         await _jellyfinApiHelper.updateCapabilitiesFull(ClientCapabilities(
           supportsMediaControl: true,
           supportsPersistentIdentifier: true,
@@ -115,12 +119,18 @@ class PlayonHandler {
   }
 
   Future<void> startReconnectionLoop() async {
-    _reconnectionSubscription =
-        Stream.periodic(Duration(seconds: FinampSettingsHelper.finampSettings.playOnReconnectionDelay), (count) {
+    _reconnectionSubscription = Stream.periodic(
+        Duration(
+            seconds: FinampSettingsHelper
+                .finampSettings.playOnReconnectionDelay), (count) {
       return count;
     }).listen((count) {
-      if (count < (120 / FinampSettingsHelper.finampSettings.playOnReconnectionDelay).round()) { // We try to connect for two minutes before giving up
-        _playOnHandlerLogger.warning("Attempt $count to restart playon listener");
+      if (count <
+          (120 / FinampSettingsHelper.finampSettings.playOnReconnectionDelay)
+              .round()) {
+        // We try to connect for two minutes before giving up
+        _playOnHandlerLogger
+            .warning("Attempt $count to restart playon listener");
         startListener();
       } else {
         _playOnHandlerLogger.warning("Stopped attempting to connect playon");
@@ -191,21 +201,21 @@ class PlayonHandler {
 
     if (request['MessageType'] != 'ForceKeepAlive' &&
         request['MessageType'] != 'KeepAlive') {
-
       // Because the Jellyfin server doesn't notify remote client connection/disconnection,
       // we mark the remote controlling as stale after 5 minutes without input as a workaround.
       // This is particularly useful to stop agressively reporting playback when it's not needed
       await _isControlledSubscription?.cancel();
       isControlled = true;
-      _isControlledSubscription =
-        Stream.periodic(Duration(seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay), (count) {
-            return count;
+      _isControlledSubscription = Stream.periodic(
+          Duration(
+              seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay),
+          (count) {
+        return count;
       }).listen((event) {
         _playOnHandlerLogger.info("Mark remote controlling as stale");
         isControlled = false;
         _isControlledSubscription?.cancel();
       });
-
 
       switch (request['MessageType']) {
         case "GeneralCommand":
@@ -296,7 +306,7 @@ class PlayonHandler {
                       items: items,
                       source: QueueItemSource(
                         name: QueueItemSourceName(
-                            type: QueueItemSourceNameType.remoteClient,
+                          type: QueueItemSourceNameType.remoteClient,
                         ),
                         type: QueueItemSourceType.remoteClient,
                         id: items[0].id,

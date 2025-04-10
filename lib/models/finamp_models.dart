@@ -115,6 +115,7 @@ class DefaultSettings {
   static const periodicPlaybackSessionUpdateFrequencySeconds = 150;
   static const playOnStaleDelay = 90;
   static const playOnReconnectionDelay = 5;
+  static const disablePlayon = false;
   static const showArtistChipImage = true;
   static const trackOfflineFavorites = true;
   static const showProgressOnNowPlayingBar = true;
@@ -241,6 +242,7 @@ class FinampSettings {
         DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
     this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
     this.playOnReconnectionDelay = DefaultSettings.playOnReconnectionDelay,
+    this.disablePlayon = DefaultSettings.disablePlayon,
     this.showArtistChipImage = DefaultSettings.showArtistChipImage,
     this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
     this.showProgressOnNowPlayingBar =
@@ -582,7 +584,10 @@ class FinampSettings {
 
   @HiveField(94, defaultValue: DefaultSettings.playOnReconnectionDelay)
   int playOnReconnectionDelay;
-  
+
+  @HiveField(95, defaultValue: DefaultSettings.disablePlayon)
+  bool disablePlayon;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: DownloadLocation.internalStorageName,
