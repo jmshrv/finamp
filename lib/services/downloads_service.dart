@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
@@ -155,20 +155,35 @@ class DownloadsService {
   /// Provider for user-downloaded items of a specific category.
   /// Used to show and group downloaded items on the downloads screen.
   late final userDownloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>(
-    (ref, type) => _isar.downloadItems
-        .where()
-        .typeEqualTo(type.type)
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .optional(
-          type.baseItemType != null,
-          (q) => q.baseItemTypeEqualTo(type.baseItemType!),
-        )
-        .sortByName()
-        .build()
-        .watch(fireImmediately: true),
-  );
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, type) {
+    if (type == DownloadsScreenCategory.special) {
+      return _isar.downloadItems
+          .filter()
+          .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+          .group((q) => q
+              .typeEqualTo(DownloadItemType.finampCollection)
+              .or()
+              .group((q) => q
+                  .typeEqualTo(DownloadItemType.collection)
+                  .baseItemTypeEqualTo(BaseItemDtoType.library)))
+          .sortByName()
+          .build()
+          .watch(fireImmediately: true);
+    } else {
+      return _isar.downloadItems
+          .where()
+          .typeEqualTo(type.type)
+          .filter()
+          .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+          .optional(
+            type.baseItemType != null,
+            (q) => q.baseItemTypeEqualTo(type.baseItemType!),
+          )
+          .sortByName()
+          .build()
+          .watch(fireImmediately: true);
+    }
+  });
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
@@ -582,6 +597,7 @@ class DownloadsService {
     // are deleted and prevents info dependency chains from propagating between
     // info only collections and tracks to eventually require metadata on every item
     // the server has.
+    // TODO update this
     _isar.writeTxnSync(() {
       List<
           (
@@ -920,7 +936,9 @@ class DownloadsService {
     if (item.type.hasFiles) return;
     if (item.state == DownloadItemState.syncFailed && !removeSyncFailed) return;
     Set<DownloadItemState> childStates = {};
-    if (item.baseItemType == BaseItemDtoType.album){
+    if (item.baseItemType == BaseItemDtoType.album ||
+        item.baseItemType == BaseItemDtoType.playlist) {
+      // Use full list of tracks in info links for album/playlist
       childStates.addAll(item.info
           .filter()
           .typeEqualTo(DownloadItemType.track)
@@ -929,10 +947,6 @@ class DownloadsService {
           .distinctByState()
           .stateProperty()
           .findAllSync());
-    } else if (item.baseItemType == BaseItemDtoType.playlist) {
-      // Use full list of tracks in info links for album/playlist
-      childStates.addAll(
-          item.info.filter().distinctByState().stateProperty().findAllSync());
     } else {
       // Non-required artists/genres have unknown children and should never be considered downloaded.
       if (item.requiredBy.filter().countSync() == 0) {
@@ -1414,23 +1428,23 @@ class DownloadsService {
   /// Useful for artists/genres, which may need to be shown in several libraries.
   /// + onlyFavorites - return only favorite items
   /// + infoForType - only return collections that are info childs for the provided type
-  Future<List<DownloadStub>> getAllCollections(
-      {String? nameFilter,
-      BaseItemDtoType? baseTypeFilter,
-      BaseItemDto? relatedTo,
-      bool fullyDownloaded = false,
-      BaseItemId? viewFilter,
-      BaseItemId? childViewFilter,
-      bool nullableViewFilters = true,
-      bool onlyFavorites = false,
-      BaseItemDtoType? infoForType,
-      ArtistType? artistType,
-      }) {
+  Future<List<DownloadStub>> getAllCollections({
+    String? nameFilter,
+    BaseItemDtoType? baseTypeFilter,
+    BaseItemDto? relatedTo,
+    bool fullyDownloaded = false,
+    BaseItemId? viewFilter,
+    BaseItemId? childViewFilter,
+    bool nullableViewFilters = true,
+    bool onlyFavorites = false,
+    BaseItemDtoType? infoForType,
+    ArtistType? artistType,
+  }) {
     List<int> favoriteIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
       favoriteIds = _getFavoriteIds() ?? [];
     }
-    
+
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1448,22 +1462,15 @@ class DownloadsService {
                 q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
         // Returns albums where the artist (relatedTo) is an Album Artist
         .optional(
-                artistType == ArtistType.albumartist &&
-                relatedTo != null,
-            (q) => q.info((q) => q.isarIdEqualTo(
-                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))))
-        // Returns albums where the artist (relatedTo) is a Performing Artist
+            artistType == ArtistType.albumartist && relatedTo != null,
+            (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
+                relatedTo!.id.raw, DownloadItemType.collection))))
+        // Returns albums related to the performing artist or genre
         .optional(
-                artistType == ArtistType.artist &&
-                relatedTo != null,
+            artistType != ArtistType.albumartist && relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
-                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection)))))
-        // Returns Albums for a genre (relatedTo)
-        .optional(
-                artistType == null &&
-                relatedTo != null,
-            (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
-                DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection)))))
+                DownloadStub.getHash(
+                    relatedTo!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
         .optional(onlyFavorites,
@@ -1474,12 +1481,9 @@ class DownloadsService {
                 nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
         .optional(
             childViewFilter != null,
-            (q) => q.infoFor((q) => q.group((q) => q
-                .isarViewIdEqualTo(childViewFilter?.raw)
-                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
-        .optional(
-          infoForType != null,
-          (q) => q.infoFor((q) => q.baseItemTypeEqualTo(infoForType!)))
+            (q) => q.infoFor(
+                (q) => q.group((q) => q.isarViewIdEqualTo(childViewFilter?.raw).optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
+        .optional(infoForType != null, (q) => q.infoFor((q) => q.baseItemTypeEqualTo(infoForType!)))
         .findAll();
   }
 
@@ -1568,25 +1572,33 @@ class DownloadsService {
 
   /// Returns the size of a download by recursively calculating the size of all
   /// required children.  Used to display item sizes on downloads screen.
-  Future<int> getFileSize(DownloadStub item) async {
-    var canonItem = await _isar.downloadItems.get(item.isarId);
-    if (canonItem == null) return 0;
-    Set<DownloadItem> info = {};
-    Set<DownloadItem> required = {};
-    _getFileChildren(canonItem, required, info, true);
-    info = info.difference(required);
-    int size = 0;
-    for (var item in required) {
-      size += await _getFileSize(item, true);
-    }
-    for (var item in info) {
-      size += await _getFileSize(item, false);
-    }
-    return size;
+  Future<int> getFileSize(DownloadStub item) =>
+      GetIt.instance<JellyfinApiHelper>()
+          .runInIsolate(_getFileSizeBackground(item.isarId));
+
+  static Future<int> Function(dynamic) _getFileSizeBackground(int isarId) {
+    // Pass the download location map, as settings cannot be accessed in background
+    var map = FinampSettingsHelper.finampSettings.downloadLocationsMap;
+    return (dynamic _) async {
+      var canonItem = await GetIt.instance<Isar>().downloadItems.get(isarId);
+      if (canonItem == null) return 0;
+      Set<DownloadItem> info = {};
+      Set<DownloadItem> required = {};
+      _getFileChildren(canonItem, required, info, true);
+      info = info.difference(required);
+      int size = 0;
+      for (var item in required) {
+        size += await _getFileSize(item, true, map);
+      }
+      for (var item in info) {
+        size += await _getFileSize(item, false, map);
+      }
+      return size;
+    };
   }
 
   /// Recursive subcomponent of [getFileSize].
-  void _getFileChildren(DownloadItem item, Set<DownloadItem> required,
+  static void _getFileChildren(DownloadItem item, Set<DownloadItem> required,
       Set<DownloadItem> info, bool isRequired) {
     if (required.contains(item) || (info.contains(item) && !isRequired)) {
       return;
@@ -1612,7 +1624,18 @@ class DownloadsService {
   }
 
   /// Recursive subcomponent of [getFileSize].
-  Future<int> _getFileSize(DownloadItem item, bool required) async {
+  static Future<int> _getFileSize(DownloadItem item, bool required,
+      Map<String, DownloadLocation> map) async {
+    File? file(DownloadItem item) {
+      if (map[item.fileTranscodingProfile?.downloadLocationId] == null ||
+          item.path == null) {
+        return null;
+      }
+      return File(path_helper.join(
+          map[item.fileTranscodingProfile?.downloadLocationId]!.currentPath,
+          item.path));
+    }
+
     if (item.type == DownloadItemType.track &&
         item.state.isComplete &&
         required) {
@@ -1620,11 +1643,11 @@ class DownloadsService {
           item.fileTranscodingProfile!.codec !=
               FinampTranscodingCodec.original ||
           item.baseItem?.mediaSources == null) {
-        return await item.file
+        return await file(item)
                 ?.stat()
                 .then((value) => value.size)
                 .catchError((e) {
-              _downloadsLogger.fine(
+              Logger("downloadsServiceBackground").fine(
                   "No file for track ${item.name} when calculating size.");
               return 0;
             }) ??
@@ -1635,11 +1658,11 @@ class DownloadsService {
     }
     if (item.type == DownloadItemType.image &&
         item.state == DownloadItemState.complete) {
-      return await item.file
+      return await file(item)
               ?.stat()
               .then((value) => value.size)
               .catchError((e) {
-            _downloadsLogger
+            Logger("downloadsServiceBackground")
                 .fine("No file for image ${item.name} when calculating size.");
             return 0;
           }) ??
@@ -1666,17 +1689,12 @@ class DownloadsService {
       return DownloadItemStatus.notNeeded;
     }
     int childCount;
-    if (stub.baseItemType == BaseItemDtoType.album) {
-      childCount =
-          item.info.filter().typeEqualTo(DownloadItemType.track).countSync();
-    } else if (stub.baseItemType == BaseItemDtoType.playlist) {
+    if (stub.baseItemType == BaseItemDtoType.album ||
+        stub.baseItemType == BaseItemDtoType.playlist) {
       // albums/playlists get marked as incidentally required if all info children
       // are required.  Use info links to calculate child count for this case
-      childCount = item.info
-          .filter()
-          .not()
-          .typeEqualTo(DownloadItemType.image)
-          .countSync();
+      childCount =
+          item.info.filter().typeEqualTo(DownloadItemType.track).countSync();
     } else {
       childCount = item.requires
           .filter()

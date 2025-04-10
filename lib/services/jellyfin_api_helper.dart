@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -85,17 +86,22 @@ class JellyfinApiHelper {
   }
 
   /// Runs the given function in a background isolate, supplying a valid API instance.
-  Future<T> _runInIsolate<T>(
+  Future<T> runInIsolate<T>(
       Future<T> Function(jellyfin_api.JellyfinApi) func) async {
     if (_workerIsolatePort == null) {
       return func(jellyfinApi);
     }
     ReceivePort port = ReceivePort();
-    _workerIsolatePort!.send((func, port.sendPort));
+    try {
+      _workerIsolatePort!.send((func, port.sendPort));
+    } catch (e) {
+      GlobalSnackbar.error(e);
+    }
     dynamic output = await port.first;
     if (output is T) {
       return output;
     }
+    GlobalSnackbar.error(output);
     throw output as Object;
   }
 
@@ -141,7 +147,7 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.fine("Getting items.");
     }
 
-    return _runInIsolate((api) async {
+    return runInIsolate((api) async {
       dynamic response;
 
       // We send a different request for playlists so that we get them back in the
@@ -173,7 +179,8 @@ class JellyfinApiHelper {
             userId: currentUserId,
             fields: fields,
           );
-        } else { //artistType == ArtistType.artist
+        } else {
+          //artistType == ArtistType.artist
           // Performing Artists
           response = await api.getArtists(
             parentId: parentItem?.id,
@@ -204,7 +211,8 @@ class JellyfinApiHelper {
             limit: limit,
             fields: fields,
           );
-        } else { //artistType == ArtistType.artist
+        } else {
+          //artistType == ArtistType.artist
           // Performing Artists
           response = await api.getItems(
             userId: currentUserId,
@@ -302,7 +310,7 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.fine("Getting artists.");
     }
 
-    return _runInIsolate((api) async {
+    return runInIsolate((api) async {
       dynamic response;
 
       response = await api.getArtists(
