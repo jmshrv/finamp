@@ -1,11 +1,10 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/album_screen.dart';
@@ -20,8 +19,6 @@ class TrackName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-    final JellyfinApiHelper jellyfinApiHelper =
-        GetIt.instance<JellyfinApiHelper>();
 
     final textColour = Theme.of(context).colorScheme.onSurface;
 
@@ -49,16 +46,15 @@ class TrackName extends StatelessWidget {
                     style: TextStyle(color: textColour),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        // Offline artists aren't implemented yet so we return if
-                        // offline
-                        if (FinampSettingsHelper.finampSettings.isOffline) {
-                          return;
-                        }
+                        var item = BaseItemDto(
+                          id: e.id,
+                          name: e.name,
+                          type: "MusicArtist",
+                        );
 
-                        jellyfinApiHelper.getItemById(e.id).then((artist) =>
-                            Navigator.of(context).popAndPushNamed(
-                                ArtistScreen.routeName,
-                                arguments: artist));
+                        Navigator.of(context).popAndPushNamed(
+                            ArtistScreen.routeName,
+                            arguments: item);
                       }))
                 .forEach((artistTextSpan) {
               separatedArtistTextSpans.add(artistTextSpan);

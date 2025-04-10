@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/favorite_provider.dart';
@@ -13,7 +14,6 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
@@ -242,15 +242,24 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       playbackState.add(_transformEvent(event));
     });
 
+    double prevIosGain =
+        FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
+    bool? prevNormActive =
+        FinampSettingsHelper.finampSettings.volumeNormalizationActive;
     FinampSettingsHelper.finampSettingsListener.addListener(() {
+      var iosGain =
+          FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
+      var normalizationActive =
+          FinampSettingsHelper.finampSettings.volumeNormalizationActive;
+      if (iosGain == prevIosGain && normalizationActive == prevNormActive) {
+        return;
+      }
+      prevIosGain = iosGain;
+      prevNormActive = normalizationActive;
       // update replay gain settings every time settings are changed
-      iosBaseVolumeGainFactor = pow(
-              10.0,
-              FinampSettingsHelper
-                      .finampSettings.volumeNormalizationIOSBaseGain /
-                  20.0)
+      iosBaseVolumeGainFactor = pow(10.0, iosGain / 20.0)
           as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
-      if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
+      if (normalizationActive) {
         _loudnessEnhancerEffect?.setEnabled(true);
         _applyVolumeNormalization(mediaItem.valueOrNull);
       } else {

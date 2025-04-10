@@ -5,6 +5,7 @@ import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dar
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
+import 'package:finamp/components/one_line_marquee_helper.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/main.dart';
@@ -13,7 +14,6 @@ import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/display_features_helper.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -285,8 +285,8 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
                 return Scaffold(
                   body: Stack(
                     children: [
-                      if (FinampSettingsHelper
-                          .finampSettings.useCoverAsBackground)
+                      if (ref
+                          .watch(finampSettingsProvider.useCoverAsBackground))
                         BlurredPlayerScreenBackground(
                             opacityFactor:
                                 Theme.of(context).brightness == Brightness.dark

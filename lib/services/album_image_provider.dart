@@ -74,7 +74,7 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
       isardownloader.getImageDownload(item: request.item);
 
   if (downloadedImage?.file == null) {
-    if (FinampSettingsHelper.finampSettings.isOffline) {
+    if (ref.watch(finampSettingsProvider.isOffline)) {
       return null;
     }
 

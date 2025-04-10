@@ -45,7 +45,8 @@ class _LyricsScreenContent extends ConsumerStatefulWidget {
   const _LyricsScreenContent();
 
   @override
-  ConsumerState<_LyricsScreenContent> createState() => _LyricsScreenContentState();
+  ConsumerState<_LyricsScreenContent> createState() =>
+      _LyricsScreenContentState();
 }
 
 class _LyricsScreenContentState extends ConsumerState<_LyricsScreenContent> {
@@ -105,14 +106,15 @@ class _LyricsScreenContentState extends ConsumerState<_LyricsScreenContent> {
           resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
           body: Stack(
             children: [
-              if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+              if (ref.watch(finampSettingsProvider.useCoverAsBackground))
                 const BlurredPlayerScreenBackground(),
               SafeArea(
                 minimum: EdgeInsets.only(top: toolbarHeight),
                 child: LayoutBuilder(builder: (context, constraints) {
                   controller.setSize(
                       Size(constraints.maxWidth, constraints.maxHeight),
-                      MediaQuery.orientationOf(context));
+                      MediaQuery.orientationOf(context),
+                      ref);
                   if (controller.useLandscape) {
                     return const LyricsView();
                   } else {
@@ -353,7 +355,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                       children: [
                         if (index == 0)
                           AutoScrollTag(
-                            key: const ValueKey(-1),
+                              key: const ValueKey(-1),
                               controller: autoScrollController,
                               index: -1,
                               child: (finampSettings
@@ -368,8 +370,8 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                                       )),
                                     )
                                   : SizedBox(
-                                    height: constraints.maxHeight * 0.2,
-                                  )),                           
+                                      height: constraints.maxHeight * 0.2,
+                                    )),
                         AutoScrollTag(
                           key: ValueKey(index),
                           controller: autoScrollController,

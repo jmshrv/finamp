@@ -30,7 +30,7 @@ class FinampSettingsHelper {
   // This shouldn't be null as FinampSettings is created on startup.
   // This decision will probably come back to haunt me later.
   static FinampSettings get finampSettings =>
-     Hive.box<FinampSettings>("FinampSettings").get("FinampSettings")!;
+      Hive.box<FinampSettings>("FinampSettings").get("FinampSettings")!;
 
   /// Deletes the downloadLocation at the given index.
   static void deleteDownloadLocation(String id) {

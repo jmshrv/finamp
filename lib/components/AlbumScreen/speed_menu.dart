@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
@@ -123,7 +124,6 @@ class SpeedMenu extends StatefulWidget {
 class _SpeedMenuState extends State<SpeedMenu> {
   final _textController = TextEditingController(
       text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
-  final _settingsListener = FinampSettingsHelper.finampSettingsListener;
 
   InputDecoration inputFieldDecoration() {
     return InputDecoration(
@@ -169,11 +169,10 @@ class _SpeedMenuState extends State<SpeedMenu> {
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-        child: ValueListenableBuilder(
-          valueListenable: _settingsListener,
-          builder: (BuildContext builder, value, Widget? child) {
+        child: Consumer(
+          builder: (BuildContext builder, ref, _) {
             _textController.text =
-                FinampSettingsHelper.finampSettings.playbackSpeed.toString();
+                ref.watch(finampSettingsProvider.playbackSpeed).toString();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -184,7 +183,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       mainColour: widget.iconColor,
                       values: presets,
                       activeValue:
-                          FinampSettingsHelper.finampSettings.playbackSpeed,
+                          ref.watch(finampSettingsProvider.playbackSpeed),
                     )),
                 Padding(
                   padding: const EdgeInsets.only(

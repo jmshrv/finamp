@@ -9,7 +9,6 @@ import '../../services/finamp_settings_helper.dart';
 Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
     ArtistType artistListType, Function(TabContentType) refreshTab) {
   if (tabType == TabContentType.artists) {
-    var currentSettings = FinampSettingsHelper.finampSettings;
     double screenWidth = MediaQuery.of(context).size.width;
     bool alignLeft = screenWidth > 600;
 

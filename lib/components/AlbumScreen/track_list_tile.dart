@@ -39,7 +39,7 @@ enum TrackListTileMenuItems {
   delete,
 }
 
-class TrackListTile extends StatelessWidget {
+class TrackListTile extends ConsumerWidget {
   const TrackListTile({
     super.key,
     required this.item,
@@ -90,9 +90,7 @@ class TrackListTile extends StatelessWidget {
   final bool highlightCurrentTrack;
 
   @override
-  Widget build(BuildContext context) {
-    final currentSettings = FinampSettingsHelper.finampSettings;
-
+  Widget build(BuildContext context, WidgetRef ref) {
     Future<void> trackListTileOnTap(bool playable) async {
       final queueService = GetIt.instance<QueueService>();
       final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
@@ -185,8 +183,8 @@ class TrackListTile extends StatelessWidget {
 
     Future<bool> trackListTileConfirmDismiss(DismissDirection direction) async {
       var followUpAction = (direction == DismissDirection.startToEnd)
-          ? currentSettings.itemSwipeActionLeftToRight
-          : currentSettings.itemSwipeActionRightToLeft;
+          ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
+          : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
 
       final queueService = GetIt.instance<QueueService>();
 
@@ -273,13 +271,15 @@ class TrackListTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                getSwipeActionIcon(currentSettings.itemSwipeActionLeftToRight),
+                getSwipeActionIcon(ref
+                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
               const SizedBox(width: 4.0),
               Text(
-                currentSettings.itemSwipeActionLeftToRight
+                ref
+                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)
                     .toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
@@ -291,7 +291,8 @@ class TrackListTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                currentSettings.itemSwipeActionRightToLeft
+                ref
+                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)
                     .toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
@@ -299,7 +300,8 @@ class TrackListTile extends StatelessWidget {
               ),
               const SizedBox(width: 4.0),
               Icon(
-                getSwipeActionIcon(currentSettings.itemSwipeActionRightToLeft),
+                getSwipeActionIcon(ref
+                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
@@ -437,7 +439,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     BuildContext context,
   ) {
     bool playable;
-    if (FinampSettingsHelper.finampSettings.isOffline) {
+    if (ref.watch(finampSettingsProvider.isOffline)) {
       playable = ref.watch(GetIt.instance<DownloadsService>()
           .stateProvider(DownloadStub.fromItem(
               type: DownloadItemType.track, item: widget.baseItem))
@@ -494,11 +496,12 @@ class TrackListItemState extends ConsumerState<TrackListItem>
         }
       }
 
-      final currentSettings = FinampSettingsHelper.finampSettings;
-      final swipeLeftEnabled = (currentSettings.itemSwipeActionLeftToRight !=
-          ItemSwipeActions.nothing);
-      final swipeRightEnabled = (currentSettings.itemSwipeActionRightToLeft !=
-          ItemSwipeActions.nothing);
+      final swipeLeftEnabled =
+          ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) !=
+              ItemSwipeActions.nothing;
+      final swipeRightEnabled =
+          ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) !=
+              ItemSwipeActions.nothing;
       final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
           ? DismissDirection.horizontal
           : swipeLeftEnabled
@@ -519,7 +522,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
             ? listItem
             : Dismissible(
                 key: Key(widget.listIndex.toString()),
-                direction: FinampSettingsHelper.finampSettings.disableGesture ||
+                direction: ref.watch(finampSettingsProvider.disableGesture) ||
                         !widget.allowDismiss
                     ? DismissDirection.none
                     : allowedDismissDirection,

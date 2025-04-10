@@ -159,7 +159,7 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
     );
     return Stack(
       children: [
-        if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+        if (ref.watch(finampSettingsProvider.useCoverAsBackground))
           const BlurredPlayerScreenBackground(),
         widget.showDragHandle
             ? Column(
