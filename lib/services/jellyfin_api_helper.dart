@@ -68,6 +68,7 @@ class JellyfinApiHelper {
     );
     GetIt.instance.registerSingleton(isar);
     GetIt.instance.registerSingleton(FinampUserHelper());
+    // TODO get logging working in background isolate
     await GetIt.instance<FinampUserHelper>().setAuthHeader();
     jellyfin_api.JellyfinApi backgroundApi =
         jellyfin_api.JellyfinApi.create(false);
@@ -464,7 +465,7 @@ class JellyfinApiHelper {
     required String username,
     String? password,
   }) async {
-    var response;
+    dynamic response;
 
     // Some users won't have a password.
     if (password == null) {
@@ -769,7 +770,7 @@ class JellyfinApiHelper {
 
   /// Removes the current user from the DB and revokes the token on Jellyfin
   Future<void> logoutCurrentUser() async {
-    Response? response;
+    Response<dynamic>? response;
 
     // We put this in a try-catch loop that basically ignores errors so that the
     // user can still log out during scenarios like wrong IP, no internet etc.
