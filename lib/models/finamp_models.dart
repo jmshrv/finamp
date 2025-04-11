@@ -1632,7 +1632,9 @@ enum QueueItemSourceType {
   @HiveField(18)
   genreMix,
   @HiveField(19)
-  track;
+  track,
+  @HiveField(20)
+  nextUpGenre;
 }
 
 @HiveType(typeId: 53)
