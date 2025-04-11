@@ -251,8 +251,6 @@
   "@editPlaylistNameTitle": {},
   "audioService": "Usuga audio",
   "@audioService": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin używo AAC do transkodowanio",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscodingSubtitle": "Jeźli zaznaczōne, to strumiynie muzyki bydōm transkodowane na serwerze.",
   "@enableTranscodingSubtitle": {},
   "addDownloadLocation": "Dodej lokacyjo pobiyranio",

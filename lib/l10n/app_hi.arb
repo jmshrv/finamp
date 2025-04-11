@@ -285,10 +285,6 @@
     },
     "description": "Localized names of special downloadable collections like favorites."
   },
-  "transcodingStreamingContainerTitle": "ट्रांसकोडिंग कंटेनर चुनें",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "downloadTranscodeCodecTitle": "डाउनलोड Codec चुनें",
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
@@ -820,8 +816,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "लॉग आउट",
   "@logOut": {},
-  "jellyfinUsesAACForTranscoding": "जेलीफ़िन ट्रांसकोडिंग के लिए AAC का उपयोग करता है",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "ट्रांसकोडिंग सक्षम करें",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "संगीत स्ट्रीम को सर्वर पर ही ट्रांसकोड करता है।",
@@ -1708,8 +1702,6 @@
   "@showFeatureChipsToggleTitle": {
     "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "transcodingStreamingContainerSubtitle": "ट्रांसकोडेड ऑडियो स्ट्रीम करते समय उपयोग करने के लिए सेगमेंट कंटेनर चुनें। पहले से कतारबद्ध ट्रैक प्रभावित नहीं होंगे।",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableTitle": "ट्रांसकोडेड डाउनलोड सक्षम करें",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"

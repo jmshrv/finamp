@@ -598,8 +598,6 @@
   },
   "bitrate": "Taxa de bits",
   "@bitrate": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin utilitza ACC per la codificació",
-  "@jellyfinUsesAACForTranscoding": {},
   "layoutAndTheme": "Disseny i Tema",
   "@layoutAndTheme": {},
   "enableTranscodingSubtitle": "Codifica la música en el costat del servidor.",

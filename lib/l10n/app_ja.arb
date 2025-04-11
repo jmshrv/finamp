@@ -177,8 +177,6 @@
   "@logOut": {},
   "downloadedTracksWillNotBeDeleted": "ダウロード済みの曲は削除されません",
   "@downloadedTracksWillNotBeDeleted": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin はトランスコードに AAC を利用します",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "トランスコード有効",
   "@enableTranscoding": {},
   "bitrate": "ビットレート",
@@ -259,9 +257,9 @@
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "newPlaylist": "新規プレイリスト",
   "@newPlaylist": {},
-  "removeFromPlaylistTooltip": "プレイリストから外す",
+  "removeFromPlaylistTooltip": "このプレイリストから外す",
   "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "プレイリストから外す",
+  "removeFromPlaylistTitle": "このプレイリストから外す",
   "@removeFromPlaylistTitle": {},
   "createButtonLabel": "作成",
   "@createButtonLabel": {},
@@ -403,13 +401,13 @@
   "@customLocation": {},
   "refresh": "リフレッシュ",
   "@refresh": {},
-  "confirm": "確認する",
+  "confirm": "確認",
   "@confirm": {},
   "playNext": "再生次",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
-  "resetTabs": "タブリセット",
+  "resetTabs": "タブをリセット",
   "@resetTabs": {},
   "viewTypeSubtitle": "ミュージック画面の表示形式",
   "@viewTypeSubtitle": {},
@@ -440,7 +438,7 @@
   "@syncDownloadedPlaylists": {},
   "applicationLegalese": "Mozilla Public License 2.0 のもとでライセンスされています。\nソースコードは {sourceCodeLink} で入手できます。",
   "@applicationLegalese": {},
-  "customLocationsBuggy": "カスタムの場所は、権限の問題により、非常にバグが多くなります。これを修正する方法を考えていますが、今のところは使用しないことをお勧めします。",
+  "customLocationsBuggy": "カスタムの場所は、非常にバグが多くなるかも知れないので 、ほとんどの場合お勧めません。ＯＳ制限 ので 、「Music」ディレクトリの仲に場所は、ジャケット画像をセーブのが止めされる。",
   "@customLocationsBuggy": {},
   "showFastScroller": "高速スクロールを表示",
   "@showFastScroller": {},
@@ -642,5 +640,27 @@
   "playbackSpeedControlSetting": "再生速度の表示",
   "@playbackSpeedControlSetting": {
     "description": "Title of the visibility setting of the playback speed controls"
-  }
+  },
+  "releaseDateFormatYear": "年",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "seconds": "秒",
+  "@seconds": {},
+  "hours": "時間",
+  "@hours": {},
+  "releaseDateFormatMonthYear": "月と年",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "nextUp": "次の曲",
+  "@nextUp": {
+    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "downloadItem": "ダウンロードする",
+  "@downloadItem": {
+    "description": "Option to download item in long-press menu."
+  },
+  "downloadSettings": "ダウンロード",
+  "@downloadSettings": {}
 }

@@ -234,8 +234,6 @@
   "@applicationLegalese": {},
   "downloadLocations": "Τοποθεσίες λήψεων",
   "@downloadLocations": {},
-  "jellyfinUsesAACForTranscoding": "Το Jellyfin χρησιμοποιεί AAC για την μετακωδικοποίηση",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Ενεργοποίηση μετακωδικοποίησης",
   "@enableTranscoding": {},
   "bitrate": "Bitrate",

@@ -216,8 +216,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Kas oled kindel?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin kasutab transkodeerimiseks AAC-d",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Luba transkodeerimine",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transkodeerib muusikavooge serveri poolel.",
