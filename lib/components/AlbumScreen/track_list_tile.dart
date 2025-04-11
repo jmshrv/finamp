@@ -14,7 +14,6 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/audio_service_helper.dart';
@@ -279,7 +278,8 @@ class TrackListTile extends ConsumerWidget {
               const SizedBox(width: 4.0),
               Text(
                 ref
-                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)
+                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight
+                    )
                     .toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
@@ -292,7 +292,8 @@ class TrackListTile extends ConsumerWidget {
             children: [
               Text(
                 ref
-                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)
+                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft
+                    )
                     .toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
@@ -367,7 +368,7 @@ class QueueListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<bool> queueListTileConfirmDismiss(direction) async {
       final queueService = GetIt.instance<QueueService>();
-      FeedbackHelper.feedback(FeedbackType.impact);
+      FeedbackHelper.feedback(FeedbackType.heavy);
       unawaited(queueService.removeAtOffset(indexOffset));
       return true;
     }

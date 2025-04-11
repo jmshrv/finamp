@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -261,7 +260,7 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
                     });
                     final result = await widget.onToggle(currentState);
                     if (widget.tapFeedback) {
-                      FeedbackHelper.feedback(FeedbackType.success);
+                      FeedbackHelper.feedback(FeedbackType.heavy);
                     }
                     setState(() {
                       isLoading = false;

@@ -5,7 +5,6 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:logging/logging.dart';
 
 @Deprecated("Use GlobalSnackbar.error(dynamic error) instead")
