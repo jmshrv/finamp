@@ -938,7 +938,7 @@ class PlaybackAction extends StatelessWidget {
           ],
         ),
         onPressed: () {
-          FeedbackHelper.feedback(FeedbackType.success);
+          FeedbackHelper.feedback(FeedbackType.selection);
           onPressed();
         },
         visualDensity: VisualDensity.compact,

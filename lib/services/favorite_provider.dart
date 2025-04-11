@@ -87,7 +87,7 @@ class IsFavorite extends _$IsFavorite {
         }
         state = newUserData.isFavorite;
 
-        FeedbackHelper.feedback(FeedbackType.success);
+        FeedbackHelper.feedback(FeedbackType.heavy);
       } catch (e) {
         state = oldState;
         GlobalSnackbar.error(e);

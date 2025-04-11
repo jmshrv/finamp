@@ -765,7 +765,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             ),
                             child: IconButton(
                               onPressed: () {
-                                FeedbackHelper.feedback(FeedbackType.success);
+                                FeedbackHelper.feedback(FeedbackType.selection);
                                 _audioHandler.togglePlayback();
                               },
                               icon: mediaState!.playbackState.playing
@@ -1110,7 +1110,7 @@ class QueueSectionHeader extends StatelessWidget {
                                 .withOpacity(0.85),
                         onPressed: () {
                           queueService.togglePlaybackOrder();
-                          FeedbackHelper.feedback(FeedbackType.success);
+                          FeedbackHelper.feedback(FeedbackType.selection);
                           Future.delayed(
                               const Duration(milliseconds: 200),
                               () => scrollToKey(
@@ -1139,7 +1139,7 @@ class QueueSectionHeader extends StatelessWidget {
                                 .withOpacity(0.85),
                         onPressed: () {
                           queueService.toggleLoopMode();
-                          FeedbackHelper.feedback(FeedbackType.success);
+                          FeedbackHelper.feedback(FeedbackType.selection);
                         }),
                   ],
                 );

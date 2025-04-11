@@ -261,7 +261,7 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
                     });
                     final result = await widget.onToggle(currentState);
                     if (widget.tapFeedback) {
-                      FeedbackHelper.feedback(FeedbackType.success);
+                      FeedbackHelper.feedback(FeedbackType.heavy);
                     }
                     setState(() {
                       isLoading = false;

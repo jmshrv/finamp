@@ -201,11 +201,11 @@ class _SpeedMenuState extends State<SpeedMenu> {
                                 .finampSettings.playbackSpeed;
 
                             if (currentSpeed > speedSliderMin) {
+                              FeedbackHelper.feedback(FeedbackType.selection);
                               _queueService.playbackSpeed = max(
                                   speedSliderMin,
                                   double.parse((currentSpeed - speedButtonStep)
                                       .toStringAsFixed(2)));
-                              FeedbackHelper.feedback(FeedbackType.success);
                             } else {
                               FeedbackHelper.feedback(FeedbackType.error);
                             }
@@ -230,11 +230,11 @@ class _SpeedMenuState extends State<SpeedMenu> {
                                 .finampSettings.playbackSpeed;
 
                             if (currentSpeed < speedSliderMax) {
+                              FeedbackHelper.feedback(FeedbackType.selection);
                               _queueService.playbackSpeed = min(
                                   speedSliderMax,
                                   double.parse((currentSpeed + speedButtonStep)
                                       .toStringAsFixed(2)));
-                              FeedbackHelper.feedback(FeedbackType.success);
                             } else {
                               FeedbackHelper.feedback(FeedbackType.error);
                             }
