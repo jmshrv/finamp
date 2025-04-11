@@ -14,7 +14,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models/jellyfin_models.dart';
-import 'display_features_helper.dart';
+import 'widget_bindings_observer_provider.dart';
 
 part 'theme_provider.g.dart';
 

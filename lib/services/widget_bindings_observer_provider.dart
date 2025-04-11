@@ -18,7 +18,7 @@ final halfOpenFoldableProvider = Provider((ref) => ref.watch(
     displayFeaturesProvider.select((x) => x.any((d) =>
         (d.type == DisplayFeatureType.fold ||
             d.type == DisplayFeatureType.hinge) &&
-// Flip-style foldable, top == bottom, height == 0
+        // Flip-style foldable, top == bottom, height == 0
         d.bounds.height == 0 &&
         d.state == DisplayFeatureState.postureHalfOpened))));
 
