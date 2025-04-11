@@ -219,3 +219,75 @@ class _AlbumImageErrorPlaceholder extends StatelessWidget {
     );
   }
 }
+
+class TapToZoomImage extends StatefulWidget {
+  final AlbumImage albumImg;
+  final bool isDisabled;
+
+  const TapToZoomImage({
+    Key? key,
+    required this.albumImg,
+    this.isDisabled = false,
+  }) : super(key: key);
+
+  @override
+  _TapToZoomImageState createState() => _TapToZoomImageState();
+}
+
+class _TapToZoomImageState extends State<TapToZoomImage> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isDisabled) {
+      return widget.albumImg;
+    }
+
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        PageRouteBuilder(
+          opaque: false,
+          barrierDismissible: true,
+          transitionDuration: const Duration(milliseconds: 300),
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation1,
+            Animation<double> animation2
+          ) {
+            return ZoomedImage(img: widget.albumImg);
+          }
+        )
+      ),
+      child: Hero(
+        tag: 'album-image-zoom',
+        child: widget.albumImg,
+      ),
+    );
+  }
+}
+
+class ZoomedImage extends StatelessWidget {
+  final AlbumImage img;
+
+  const ZoomedImage({
+    Key? key,
+    required this.img,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Dismissible(
+        key: Key(img.hashCode.toString()),
+        direction: DismissDirection.vertical,
+        onDismissed: (_) {
+          Navigator.of(context).pop();
+        },
+        child: InteractiveViewer(
+          child: Hero(
+            tag: 'album-image-zoom',
+            child: img,
+          ),
+        )
+      )
+    );
+  }
+}

@@ -232,7 +232,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 125,
-                      child: AlbumImage(item: parentItem),
+                      child: TapToZoomImage(albumImg: AlbumImage(item: parentItem)),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4),
