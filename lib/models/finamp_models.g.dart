@@ -1338,6 +1338,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         return QueueItemSourceType.track;
       case 20:
         return QueueItemSourceType.remoteClient;
+      case 21:
+        return QueueItemSourceType.nextUpGenre;
       default:
         return QueueItemSourceType.album;
     }
@@ -1388,6 +1390,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         writer.writeByte(19);
       case QueueItemSourceType.remoteClient:
         writer.writeByte(20);
+      case QueueItemSourceType.nextUpGenre:
+        writer.writeByte(21);
     }
   }
 

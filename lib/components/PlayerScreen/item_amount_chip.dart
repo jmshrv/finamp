@@ -23,7 +23,10 @@ class ItemAmountChip extends StatelessWidget {
 
     final itemCount = switch (BaseItemDtoType.fromItem(baseItem!)) {
       BaseItemDtoType.album => baseItem?.childCount ?? 0,
-      BaseItemDtoType.artist => baseItem?.albumCount ?? 0,
+      BaseItemDtoType.artist => baseItem?.albumCount ??
+          0, //FIXME this doesn't necessarily reflect the actual number of albums, for that a separate API request would be needed. But that should be handled by a provider down the road (or, even better, fixed server-side)
+      BaseItemDtoType.genre => baseItem?.albumCount ??
+          0, //FIXME this is not requested by default, as it takes a lot of time to load
       BaseItemDtoType.playlist => baseItem?.childCount ?? 0,
       _ => baseItem?.childCount ?? 0,
     };
@@ -31,6 +34,7 @@ class ItemAmountChip extends StatelessWidget {
     final childItemType = switch (BaseItemDtoType.fromItem(baseItem!)) {
       BaseItemDtoType.album => BaseItemDtoType.track,
       BaseItemDtoType.artist => BaseItemDtoType.album,
+      BaseItemDtoType.genre => BaseItemDtoType.album,
       BaseItemDtoType.playlist => BaseItemDtoType.track,
       _ => BaseItemDtoType.unknown,
     };

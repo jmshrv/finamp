@@ -1696,7 +1696,9 @@ enum QueueItemSourceType {
   @HiveField(19)
   track,
   @HiveField(20)
-  remoteClient;
+  remoteClient,
+  @HiveField(21)
+  nextUpGenre;
 }
 
 @HiveType(typeId: 53)

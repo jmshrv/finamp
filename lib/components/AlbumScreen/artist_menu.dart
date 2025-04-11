@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/AlbumScreen/speed_menu.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/PlayerScreen/item_amount_chip.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
@@ -44,11 +45,8 @@ Future<void> showModalArtistMenu({
   required BuildContext context,
   required BaseItemDto item,
   BaseItemDto? parentItem,
-  Function? onRemoveFromList,
-  bool confirmPlaylistRemoval = true,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final canGoToArtist = (item.artistItems?.isNotEmpty ?? false);
   final canGoToGenre = (item.genreItems?.isNotEmpty ?? false);
 
   await showThemedBottomSheet(
@@ -62,8 +60,6 @@ Future<void> showModalArtistMenu({
           parentItem: parentItem,
           isOffline: isOffline,
           canGoToGenre: canGoToGenre,
-          onRemoveFromList: onRemoveFromList,
-          confirmPlaylistRemoval: confirmPlaylistRemoval,
           childBuilder: childBuilder,
           dragController: dragController,
         );
@@ -78,8 +74,6 @@ class ArtistMenu extends ConsumerStatefulWidget {
     required this.item,
     required this.isOffline,
     required this.canGoToGenre,
-    required this.onRemoveFromList,
-    required this.confirmPlaylistRemoval,
     this.parentItem,
     required this.childBuilder,
     required this.dragController,
@@ -89,8 +83,6 @@ class ArtistMenu extends ConsumerStatefulWidget {
   final BaseItemDto? parentItem;
   final bool isOffline;
   final bool canGoToGenre;
-  final Function? onRemoveFromList;
-  final bool confirmPlaylistRemoval;
   final ScrollBuilder childBuilder;
   final DraggableScrollableController dragController;
 
@@ -507,20 +499,8 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
                 var item = DownloadStub.fromItem(
                     type: DownloadItemType.collection, item: widget.item);
                 await askBeforeDeleteFromServerAndDevice(context, item);
-                final BaseItemDto newAlbumOrPlaylist =
-                    await _jellyfinApiHelper.getItemById(widget.parentItem!.id);
-                if (context.mounted) {
-                  Navigator.pop(context); // close dialog
-                  // pop current album screen and reload with new album data
-                  Navigator.of(context).popUntil((route) {
-                    return route.settings.name != null // unnamed dialog
-                        &&
-                        route.settings.name !=
-                            AlbumScreen.routeName; // albums screen
-                  });
-                  await Navigator.of(context).pushNamed(AlbumScreen.routeName,
-                      arguments: newAlbumOrPlaylist);
-                }
+                Navigator.pop(context); // close popup
+                musicScreenRefreshStream.add(null);
               },
             ));
       }),
