@@ -257,9 +257,22 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
 
     // Propagate all events from the audio player to AudioService clients.
+    int? replayQueueIndex;
     _player.playbackEventStream.listen((event) async {
+      if (event.currentIndex != replayQueueIndex) {
+        replayQueueIndex = event.currentIndex;
+        if (replayQueueIndex != null) {
+          var queueItem =
+              effectiveSequence?[replayQueueIndex!].tag as FinampQueueItem;
+          _applyVolumeNormalization(queueItem.item);
+        }
+      }
       playbackState.add(_transformEvent(event));
     });
+
+    //mediaItem.listen((currentTrack) {
+    //  _applyVolumeNormalization(currentTrack);
+    //});
 
     double prevIosGain =
         FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
@@ -286,10 +299,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         _volume.setReplayGainVolume(1.0); // disable replay gain on iOS
         _volumeNormalizationLogger.info("Replay gain disabled");
       }
-    });
-
-    mediaItem.listen((currentTrack) {
-      _applyVolumeNormalization(currentTrack);
     });
 
     // Special processing for state transitions.
@@ -663,6 +672,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) async {
+    if (!Platform.isAndroid &&
+        !Platform.isIOS &&
+        shuffleMode != AudioServiceShuffleMode.none) {
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.desktopShuffleWarning);
+      shuffleMode = AudioServiceShuffleMode.none;
+    }
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:

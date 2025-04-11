@@ -23,9 +23,9 @@ extension CensoredMessage on LogRecord {
     // If userHelper is not initialized, calling code cannot have used baseurl/token
     // so skipping censoring is fine.
     if (GetIt.instance.isRegistered<FinampUserHelper>()) {
-      final finampUserHelper = GetIt.instance<FinampUserHelper>();
+      final user = GetIt.instance<FinampUserHelper>().currentUser;
 
-      for (final user in finampUserHelper.finampUsers) {
+      if (user != null) {
         workingLogString = workingLogString.replaceAll(
             CaseInsensitivePattern(user.baseUrl), "BASEURL");
         workingLogString = workingLogString.replaceAll(

@@ -156,33 +156,18 @@ class DownloadsService {
   /// Used to show and group downloaded items on the downloads screen.
   late final userDownloadedItemsProvider = StreamProvider.family
       .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, type) {
-    if (type == DownloadsScreenCategory.special) {
-      return _isar.downloadItems
-          .filter()
-          .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-          .group((q) => q
-              .typeEqualTo(DownloadItemType.finampCollection)
-              .or()
-              .group((q) => q
-                  .typeEqualTo(DownloadItemType.collection)
-                  .baseItemTypeEqualTo(BaseItemDtoType.library)))
-          .sortByName()
-          .build()
-          .watch(fireImmediately: true);
-    } else {
-      return _isar.downloadItems
-          .where()
-          .typeEqualTo(type.type)
-          .filter()
-          .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-          .optional(
-            type.baseItemType != null,
-            (q) => q.baseItemTypeEqualTo(type.baseItemType!),
-          )
-          .sortByName()
-          .build()
-          .watch(fireImmediately: true);
-    }
+    return _isar.downloadItems
+        .where()
+        .typeEqualTo(type.type)
+        .filter()
+        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+        .optional(
+          type.baseItemType != null,
+          (q) => q.baseItemTypeEqualTo(type.baseItemType!),
+        )
+        .sortByName()
+        .build()
+        .watch(fireImmediately: true);
   });
 
   /// Constructs the service.  startQueues should also be called to complete initialization.

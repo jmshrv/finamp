@@ -1566,7 +1566,8 @@ enum DownloadsScreenCategory {
   playlists(DownloadItemType.collection, BaseItemDtoType.playlist),
   genres(DownloadItemType.collection, BaseItemDtoType.genre),
   tracks(DownloadItemType.track, BaseItemDtoType.track),
-  special(DownloadItemType.finampCollection, null);
+  special(DownloadItemType.finampCollection, null),
+  library(DownloadItemType.collection, BaseItemDtoType.library);
 
   const DownloadsScreenCategory(this.type, this.baseItemType);
 

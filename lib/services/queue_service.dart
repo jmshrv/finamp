@@ -106,7 +106,8 @@ class QueueService {
       final previousIndex = _queueAudioSourceIndex;
       _queueAudioSourceIndex = event.queueIndex ?? 0;
 
-      if (previousIndex != _queueAudioSourceIndex) {
+      // Ignore playback events if queue is empty.
+      if (previousIndex != _queueAudioSourceIndex && _currentTrack != null) {
         _queueServiceLogger.finer(
             "Play queue index changed, new index: $_queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
@@ -115,7 +116,7 @@ class QueueService {
       }
     });
 
-    Stream.periodic(const Duration(seconds: 10)).listen((event) {
+    Stream<void>.periodic(const Duration(seconds: 10)).listen((event) {
       // Update once per minute while playing in background, and up to once every ten seconds if
       // pausing/seeking is occurring
       // We also update on every track switch.
@@ -891,6 +892,13 @@ class QueueService {
   FinampLoopMode get loopMode => _loopMode;
 
   set playbackOrder(FinampPlaybackOrder order) {
+    if (!Platform.isAndroid &&
+        !Platform.isIOS &&
+        order != FinampPlaybackOrder.linear) {
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.desktopShuffleWarning);
+      order = FinampPlaybackOrder.linear;
+    }
     _playbackOrder = order;
     _queueServiceLogger.fine("Playback order set to $order");
 
