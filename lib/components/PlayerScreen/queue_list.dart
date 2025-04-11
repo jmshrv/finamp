@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -254,7 +253,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
 
   ref.read(displayFeaturesProvider).attach(context);
 
-  FeedbackHelper.feedback(FeedbackType.impact);
+  FeedbackHelper.feedback(FeedbackType.heavy);
 
   return showModalBottomSheet(
     context: context,
@@ -370,7 +369,7 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
     return _jumpToCurrentTrackDirection != 0
         ? FloatingActionButton.extended(
             onPressed: () {
-              FeedbackHelper.feedback(FeedbackType.impact);
+              FeedbackHelper.feedback(FeedbackType.heavy);
               scrollToKey(
                   key: widget.previousTracksHeaderKey,
                   duration: const Duration(milliseconds: 500));
@@ -429,7 +428,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               int draggingOffset = -(_previousTracks!.length - oldIndex);
               int newPositionOffset = -(_previousTracks!.length - newIndex);
               if (mounted) {
-                FeedbackHelper.feedback(FeedbackType.impact);
+                FeedbackHelper.feedback(FeedbackType.heavy);
                 setState(() {
                   // temporarily update internal queue
                   FinampQueueItem tmp = _previousTracks!.removeAt(oldIndex);
@@ -521,7 +520,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     int draggingOffset = oldIndex + 1;
                     int newPositionOffset = newIndex + 1;
                     if (mounted) {
-                      FeedbackHelper.feedback(FeedbackType.impact);
+                      FeedbackHelper.feedback(FeedbackType.heavy);
                       setState(() {
                         // temporarily update internal queue
                         FinampQueueItem tmp = _nextUp!.removeAt(oldIndex);
@@ -618,7 +617,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                   // update external queue to commit changes, but don't await it
                   _queueService.reorderByOffset(
                       draggingOffset, newPositionOffset);
-                  FeedbackHelper.feedback(FeedbackType.impact);
+                  FeedbackHelper.feedback(FeedbackType.heavy);
                   setState(() {
                     // temporarily update internal queue
                     FinampQueueItem tmp = _queue!.removeAt(oldIndex);
@@ -766,7 +765,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                             ),
                             child: IconButton(
                               onPressed: () {
-                                FeedbackHelper.feedback(FeedbackType.success);
+                                FeedbackHelper.feedback(FeedbackType.selection);
                                 _audioHandler.togglePlayback();
                               },
                               icon: mediaState!.playbackState.playing
@@ -1111,7 +1110,7 @@ class QueueSectionHeader extends StatelessWidget {
                                 .withOpacity(0.85),
                         onPressed: () {
                           queueService.togglePlaybackOrder();
-                          FeedbackHelper.feedback(FeedbackType.success);
+                          FeedbackHelper.feedback(FeedbackType.selection);
                           Future.delayed(
                               const Duration(milliseconds: 200),
                               () => scrollToKey(
@@ -1140,7 +1139,7 @@ class QueueSectionHeader extends StatelessWidget {
                                 .withOpacity(0.85),
                         onPressed: () {
                           queueService.toggleLoopMode();
-                          FeedbackHelper.feedback(FeedbackType.success);
+                          FeedbackHelper.feedback(FeedbackType.selection);
                         }),
                   ],
                 );
