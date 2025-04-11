@@ -56,13 +56,13 @@ class _AudioFadeProgressVisualizerContainerState
       if (_isVisible && state.fadeDirection != _state.fadeDirection) {
         if (state.fadeDirection == FadeDirection.fadeOut) {
           if (_state.fadeDirection == FadeDirection.fadeIn) {
-            startFadeOut(from: state.fadeVolumePercent);
+            startFadeOut(from: state.fadeVolume);
           } else {
             startFadeOut();
           }
         } else if (state.fadeDirection == FadeDirection.fadeIn) {
           if (_state.fadeDirection == FadeDirection.fadeOut) {
-            startFadeIn(from: state.fadeVolumePercent);
+            startFadeIn(from: state.fadeVolume);
           } else {
             startFadeIn();
           }
@@ -81,9 +81,9 @@ class _AudioFadeProgressVisualizerContainerState
 
     if (_state.fadeDirection != FadeDirection.none) {
       if (_state.fadeDirection == FadeDirection.fadeOut) {
-        startFadeOut(from: _state.fadeVolumePercent);
+        startFadeOut(from: _state.fadeVolume);
       } else if (_state.fadeDirection == FadeDirection.fadeIn) {
-        startFadeIn(from: _state.fadeVolumePercent);
+        startFadeIn(from: _state.fadeVolume);
       }
     }
   }

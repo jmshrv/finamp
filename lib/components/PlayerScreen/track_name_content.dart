@@ -1,15 +1,16 @@
+import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/PlayerScreen/album_chip.dart';
+import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/screens/player_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/scrolling_text_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
-import 'package:finamp/components/PlayerScreen/player_buttons_more.dart';
-import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:flutter/semantics.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/queue_service.dart';
 import 'artist_chip.dart';
@@ -57,13 +58,11 @@ class TrackNameContent extends StatelessWidget {
                         ),
                         excludeSemantics: true,
                         container: true,
-                        child: Builder(
-                          builder: (context) {
+                        child: Consumer(
+                          builder: (context, ref, _) {
                             final text = currentTrack.item.title;
                             final isTwoLineMode = controller
                                 .shouldShow(PlayerHideable.twoLineTitle);
-                            final isMarqueeEnabled = FinampSettingsHelper
-                                .finampSettings.oneLineMarqueeTextButton;
 
                             final textStyle = TextStyle(
                               fontSize: 20,
@@ -102,7 +101,8 @@ class TrackNameContent extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 );
                               } else {
-                                if (isMarqueeEnabled) {
+                                if (ref.watch(finampSettingsProvider
+                                    .oneLineMarqueeTextButton)) {
                                   return SizedBox(
                                     width: 280,
                                     height: 30,

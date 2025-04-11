@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:file_sizes/file_sizes.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
@@ -9,7 +10,6 @@ import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -49,9 +49,9 @@ class FeatureState {
   bool get isTranscoding =>
       !isDownloaded &&
       (currentTrack?.item.extras?["shouldTranscode"] as bool? ?? false);
-  String get container =>
-      isTranscoding ? settings.transcodingStreamingFormat.codec
-          : metadata?.mediaSourceInfo.container ?? "";
+  String get container => isTranscoding
+      ? settings.transcodingStreamingFormat.codec
+      : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
   MediaStream? get audioStream => isTranscoding
       ? null
@@ -62,7 +62,9 @@ class FeatureState {
   // should have a valid mediaStream, so use that audio-only bitrate instead of the
   // whole-file bitrate.
   int? get bitrate => isTranscoding
-      ? (settings.transcodingStreamingFormat.codec == 'flac' ? null : settings.transcodeBitrate)
+      ? (settings.transcodingStreamingFormat.codec == 'flac'
+          ? null
+          : settings.transcodeBitrate)
       : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;
@@ -221,46 +223,43 @@ class FeatureChips extends ConsumerWidget {
 
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
-    return ValueListenableBuilder(
-        valueListenable: FinampSettingsHelper.finampSettingsListener,
-        builder: (context, value, child) {
-          final settings = FinampSettingsHelper.finampSettings;
-          return StreamBuilder<FinampQueueItem?>(
-              stream: queueService.getCurrentTrackStream(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const SizedBox.shrink();
-                }
-                final featureState = FeatureState(
-                  context: context,
-                  currentTrack: snapshot.data,
-                  settings: settings,
-                  metadata: metadata.valueOrNull,
-                );
+    // TODO refactor this to not rebuild on every settings change
+    final settings = ref.watch(finampSettingsProvider).requireValue;
+    return StreamBuilder<FinampQueueItem?>(
+        stream: queueService.getCurrentTrackStream(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const SizedBox.shrink();
+          }
+          final featureState = FeatureState(
+            context: context,
+            currentTrack: snapshot.data,
+            settings: settings,
+            metadata: metadata.valueOrNull,
+          );
 
-                // log feature state for debugging
-                //TODO if feature chips are disabled, this won't be logged, but is super useful for debugging. Ideally, move the whole metadata stuff into the metadata provider and log it there, and then use the generated values to create the feature chips if needed
-                featureLogger.finer(
-                    "Current track features: ${featureState.properties}");
+          // log feature state for debugging
+          //TODO if feature chips are disabled, this won't be logged, but is super useful for debugging. Ideally, move the whole metadata stuff into the metadata provider and log it there, and then use the generated values to create the feature chips if needed
+          featureLogger
+              .finer("Current track features: ${featureState.properties}");
 
-                return Padding(
-                  padding: const EdgeInsets.only(left: 32.0, right: 32.0),
-                  child: ScrollConfiguration(
-                    // Allow drag scrolling on desktop
-                    behavior: ScrollConfiguration.of(context).copyWith(
-                        dragDevices: PointerDeviceKind.values.toSet()),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Features(
-                        backgroundColor:
-                            IconTheme.of(context).color?.withOpacity(0.1) ??
-                                _defaultBackgroundColour,
-                        features: featureState,
-                      ),
-                    ),
-                  ),
-                );
-              });
+          return Padding(
+            padding: const EdgeInsets.only(left: 32.0, right: 32.0),
+            child: ScrollConfiguration(
+              // Allow drag scrolling on desktop
+              behavior: ScrollConfiguration.of(context)
+                  .copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Features(
+                  backgroundColor:
+                      IconTheme.of(context).color?.withOpacity(0.1) ??
+                          _defaultBackgroundColour,
+                  features: featureState,
+                ),
+              ),
+            ),
+          );
         });
   }
 }
@@ -279,11 +278,12 @@ class Features extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var featureList = features.features;
     return Wrap(
       spacing: 4.0,
       runSpacing: 4.0,
-      children: List.generate(features.features.length, (index) {
-        final feature = features.features[index];
+      children: List.generate(featureList.length, (index) {
+        final feature = featureList[index];
 
         return _FeatureContent(
           backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??

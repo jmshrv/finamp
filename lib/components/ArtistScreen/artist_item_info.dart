@@ -1,6 +1,7 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -8,7 +9,7 @@ import '../../screens/artist_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../icon_and_text.dart';
 
-class ArtistItemInfo extends StatelessWidget {
+class ArtistItemInfo extends ConsumerWidget {
   const ArtistItemInfo({
     super.key,
     required this.item,
@@ -22,8 +23,7 @@ class ArtistItemInfo extends StatelessWidget {
 
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
-  Widget build(BuildContext context) {
-    bool isOffline = FinampSettingsHelper.finampSettings.isOffline;
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +31,7 @@ class ArtistItemInfo extends StatelessWidget {
         IconAndText(
             iconData: Icons.music_note,
             textSpan: TextSpan(
-              text: isOffline
+              text: ref.watch(finampSettingsProvider.isOffline)
                   ? AppLocalizations.of(context)!
                       .offlineTrackCountArtist(itemTracks)
                   : AppLocalizations.of(context)!.trackCount(itemTracks),

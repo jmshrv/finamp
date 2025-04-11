@@ -21,7 +21,7 @@ final currentTrackMetadataProvider =
           queueItem: itemToPrecache,
           includeLyrics: true,
           checkIfSpeedControlNeeded:
-              FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
+              ref.watch(finampSettingsProvider.playbackSpeedVisibility) ==
                   PlaybackSpeedVisibility.automatic);
       ref.listen(metadataProvider(request), (_, __) {});
     }
@@ -34,7 +34,7 @@ final currentTrackMetadataProvider =
       queueItem: currentTrack,
       includeLyrics: true,
       checkIfSpeedControlNeeded:
-          FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
+          ref.watch(finampSettingsProvider.playbackSpeedVisibility) ==
               PlaybackSpeedVisibility.automatic,
     );
     return ref.watch(metadataProvider(request));

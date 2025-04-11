@@ -6,6 +6,7 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:focus_on_it/focus_on_it.dart';
 
 enum Drag {
@@ -14,7 +15,7 @@ enum Drag {
   end;
 }
 
-class AlphabetList extends StatefulWidget {
+class AlphabetList extends ConsumerStatefulWidget {
   final Function(String) callback;
 
   final SortOrder sortOrder;
@@ -30,10 +31,10 @@ class AlphabetList extends StatefulWidget {
       required this.scrollController});
 
   @override
-  State<AlphabetList> createState() => _AlphabetListState();
+  ConsumerState<AlphabetList> createState() => _AlphabetListState();
 }
 
-class _AlphabetListState extends State<AlphabetList> {
+class _AlphabetListState extends ConsumerState<AlphabetList> {
   List<String> alphabet = ['#'] +
       List.generate(26, (int index) {
         return String.fromCharCode('A'.codeUnitAt(0) + index);
@@ -65,7 +66,7 @@ class _AlphabetListState extends State<AlphabetList> {
       margin: EdgeInsets.only(
         bottom: MediaQuery.paddingOf(context).bottom + _bottomPadding / 2,
       ),
-      decoration: FinampSettingsHelper.finampSettings.contentViewType ==
+      decoration: ref.watch(finampSettingsProvider.contentViewType) ==
               ContentViewType.grid
           ? BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
@@ -110,8 +111,6 @@ class _AlphabetListState extends State<AlphabetList> {
     // while dragging on alphabet, but still allows all gestures on main content.
     // I don't know why this works, there's weird interactions between the listener,
     // gestureDetecters, and the stack.-
-
-    var mediaQuery = MediaQuery.of(context);
 
     return GestureDetector(
       onVerticalDragStart: (_) {},

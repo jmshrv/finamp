@@ -1,17 +1,18 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-class SortByMenuButton extends StatelessWidget {
+class SortByMenuButton extends ConsumerWidget {
   const SortByMenuButton(this.tabType, {super.key});
 
   final TabContentType tabType;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final sortOptions = tabType == TabContentType.tracks
         ? SortBy.trackSortOptions
         : SortBy.defaults;
@@ -26,11 +27,10 @@ class SortByMenuButton extends StatelessWidget {
             child: Text(
               sortBy.toLocalisedString(context),
               style: TextStyle(
-                color:
-                    FinampSettingsHelper.finampSettings.getTabSortBy(tabType) ==
-                            sortBy
-                        ? Theme.of(context).colorScheme.secondary
-                        : null,
+                color: ref.watch(finampSettingsProvider.select(
+                        (x) => x.requireValue.getTabSortBy(tabType) == sortBy))
+                    ? Theme.of(context).colorScheme.secondary
+                    : null,
               ),
             ),
           )

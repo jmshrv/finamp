@@ -5,16 +5,16 @@ import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dar
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
+import 'package:finamp/components/one_line_marquee_helper.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/main.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
-import 'package:finamp/services/display_features_helper.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
+import 'package:finamp/services/widget_bindings_observer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -251,8 +251,6 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
   GlobalKey queueHeaderKey = GlobalKey();
   GlobalKey<JumpToCurrentButtonState> jumpToCurrentKey = GlobalKey();
 
-  ref.read(displayFeaturesProvider).attach(context);
-
   FeedbackHelper.feedback(FeedbackType.heavy);
 
   return showModalBottomSheet(
@@ -273,21 +271,21 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
       return PlayerScreenTheme(
         child: Consumer(
           builder: (context, ref, child) {
-            final displayFeatures = ref.watch(displayFeaturesProvider);
+            final halfOpened = ref.watch(halfOpenFoldableProvider);
 
             return DraggableScrollableSheet(
               snap: false,
               snapAnimationDuration: const Duration(milliseconds: 200),
               // Cover the whole sub screen when in half opened mode
-              initialChildSize: displayFeatures.halfOpened ? 1.0 : 0.92,
-              minChildSize: displayFeatures.halfOpened ? 1.0 : 0.25,
+              initialChildSize: halfOpened ? 1.0 : 0.92,
+              minChildSize: halfOpened ? 1.0 : 0.25,
               expand: false,
               builder: (context, scrollController) {
                 return Scaffold(
                   body: Stack(
                     children: [
-                      if (FinampSettingsHelper
-                          .finampSettings.useCoverAsBackground)
+                      if (ref
+                          .watch(finampSettingsProvider.useCoverAsBackground))
                         BlurredPlayerScreenBackground(
                             opacityFactor:
                                 Theme.of(context).brightness == Brightness.dark

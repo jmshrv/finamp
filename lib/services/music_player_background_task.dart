@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/favorite_provider.dart';
@@ -13,7 +14,6 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
@@ -28,13 +28,8 @@ import 'locale_helper.dart';
 enum FadeDirection { fadeIn, fadeOut, none }
 
 class FadeState {
-  // volume value to recover after fading
-  final double recoverVolume;
-
   // current fade volume
   late final double fadeVolume;
-  // current fade volume in percent relative to recoverVolume
-  late final double fadeVolumePercent;
 
   // volume step sizes for fade-in and fade-out
   final double volumeFadeOutStepSize;
@@ -44,13 +39,10 @@ class FadeState {
   final FadeDirection fadeDirection;
 
   FadeState(
-      {required this.recoverVolume,
-      required this.fadeVolume,
+      {required this.fadeVolume,
       this.volumeFadeInStepSize = 0.0,
       this.volumeFadeOutStepSize = 0.0,
-      this.fadeDirection = FadeDirection.none}) {
-    fadeVolumePercent = fadeVolume / recoverVolume;
-  }
+      this.fadeDirection = FadeDirection.none});
 
   FadeState copyWith({
     double? recoverVolume,
@@ -60,12 +52,38 @@ class FadeState {
     FadeDirection? fadeDirection,
   }) {
     return FadeState(
-        recoverVolume: recoverVolume ?? this.recoverVolume,
         fadeVolume: fadeVolume ?? this.fadeVolume,
         volumeFadeInStepSize: volumeFadeInStepSize ?? this.volumeFadeInStepSize,
         volumeFadeOutStepSize:
             volumeFadeOutStepSize ?? this.volumeFadeOutStepSize,
         fadeDirection: fadeDirection ?? this.fadeDirection);
+  }
+}
+
+class PlayerVolumeController {
+  PlayerVolumeController(this._player);
+
+  final AudioPlayer _player;
+
+  double _replayGainVolume = 1.0;
+  double _fadeVolume = 1.0;
+  Future<void> setReplayGainVolume(double volume) {
+    if (volume == _replayGainVolume) return Future.value();
+    _replayGainVolume = volume;
+    return _updateVolume();
+  }
+
+  Future<void> setFadeVolume(double volume) {
+    if (volume == _fadeVolume) return Future.value();
+    _fadeVolume = volume;
+    return _updateVolume();
+  }
+
+  Future<void> _updateVolume() {
+    var vol1 = _replayGainVolume.clamp(0.0, 1.0);
+    var vol2 = _fadeVolume.clamp(0.0, 1.0);
+    var totalVol = vol1 * vol2;
+    return _player.setVolume(totalVol.clamp(0.0, 1.0));
   }
 }
 
@@ -106,6 +124,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   double iosBaseVolumeGainFactor = 1.0;
+  late final PlayerVolumeController _volume = PlayerVolumeController(_player);
   Duration minBufferDuration = Duration(seconds: 90);
 
   final _audioFadeStepDuration = Duration(milliseconds: 50);
@@ -238,30 +257,48 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
 
     // Propagate all events from the audio player to AudioService clients.
+    int? replayQueueIndex;
     _player.playbackEventStream.listen((event) async {
+      if (event.currentIndex != replayQueueIndex) {
+        replayQueueIndex = event.currentIndex;
+        if (replayQueueIndex != null) {
+          var queueItem =
+              effectiveSequence?[replayQueueIndex!].tag as FinampQueueItem;
+          _applyVolumeNormalization(queueItem.item);
+        }
+      }
       playbackState.add(_transformEvent(event));
     });
 
+    //mediaItem.listen((currentTrack) {
+    //  _applyVolumeNormalization(currentTrack);
+    //});
+
+    double prevIosGain =
+        FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
+    bool? prevNormActive =
+        FinampSettingsHelper.finampSettings.volumeNormalizationActive;
     FinampSettingsHelper.finampSettingsListener.addListener(() {
+      var iosGain =
+          FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
+      var normalizationActive =
+          FinampSettingsHelper.finampSettings.volumeNormalizationActive;
+      if (iosGain == prevIosGain && normalizationActive == prevNormActive) {
+        return;
+      }
+      prevIosGain = iosGain;
+      prevNormActive = normalizationActive;
       // update replay gain settings every time settings are changed
-      iosBaseVolumeGainFactor = pow(
-              10.0,
-              FinampSettingsHelper
-                      .finampSettings.volumeNormalizationIOSBaseGain /
-                  20.0)
+      iosBaseVolumeGainFactor = pow(10.0, iosGain / 20.0)
           as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
-      if (FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
+      if (normalizationActive) {
         _loudnessEnhancerEffect?.setEnabled(true);
         _applyVolumeNormalization(mediaItem.valueOrNull);
       } else {
         _loudnessEnhancerEffect?.setEnabled(false);
-        _player.setVolume(1.0); // disable replay gain on iOS
+        _volume.setReplayGainVolume(1.0); // disable replay gain on iOS
         _volumeNormalizationLogger.info("Replay gain disabled");
       }
-    });
-
-    mediaItem.listen((currentTrack) {
-      _applyVolumeNormalization(currentTrack);
     });
 
     // Special processing for state transitions.
@@ -293,8 +330,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       playbackState.add(event);
     });
 
-    fadeState = BehaviorSubject.seeded(
-        FadeState(recoverVolume: _player.volume, fadeVolume: _player.volume));
+    fadeState = BehaviorSubject.seeded(FadeState(fadeVolume: 1.0));
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
@@ -338,6 +374,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             Duration.zero) {
       return fadeInAndPlay();
     } else {
+      await _volume.setFadeVolume(1.0);
       return _player.play();
     }
   }
@@ -366,56 +403,53 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   double _getVolumeFadeInStepSize() {
     final steps =
         getFadeSteps(FinampSettingsHelper.finampSettings.audioFadeInDuration);
-    return fadeState.value.recoverVolume / steps;
+    return 1.0 / steps;
   }
 
   double _getVolumeFadeOutStepSize() {
     final steps =
         getFadeSteps(FinampSettingsHelper.finampSettings.audioFadeOutDuration);
-    return fadeState.value.recoverVolume / steps;
+    return 1.0 / steps;
   }
 
   Future<void> _fadeAudio(FadeDirection direction) async {
     fadeState.add(FadeState(
-        recoverVolume: _player.volume,
-        fadeVolume: direction == FadeDirection.fadeIn ? 0.0 : _player.volume,
+        fadeVolume: direction == FadeDirection.fadeIn ? 0.0 : 1.0,
         volumeFadeInStepSize: _getVolumeFadeInStepSize(),
         volumeFadeOutStepSize: _getVolumeFadeOutStepSize(),
         fadeDirection: direction));
 
     // Prepare fade-in
-    late Future fut;
+    Future<void>? fut;
     if (direction == FadeDirection.fadeIn) {
-      await _player.setVolume(0.0);
+      await _volume.setFadeVolume(0.0);
       fut = _player.play();
     }
 
-    await Stream.periodic(
-            _audioFadeStepDuration, (_) => fadeState.value.fadeDirection)
-        .takeWhile((_) => fadeState.value.fadeDirection != FadeDirection.none)
-        .forEach((fadeDirection) async {
-      var state = fadeState.value;
-      switch (fadeDirection) {
+    bool cancelled = false;
+    await Stream.periodic(_audioFadeStepDuration, (_) => fadeState.value)
+        .takeWhile(
+            (fade) => fade.fadeDirection != FadeDirection.none && !cancelled)
+        .forEach((state) async {
+      switch (state.fadeDirection) {
         case FadeDirection.fadeIn:
-          await _player.setVolume(min(
-              _player.volume + state.volumeFadeInStepSize,
-              state.recoverVolume));
-          fadeState.add(state.copyWith(fadeVolume: _player.volume));
-          if (_player.volume >= state.recoverVolume) {
+          var newVolume = state.fadeVolume + state.volumeFadeInStepSize;
+          await _volume.setFadeVolume(newVolume);
+          fadeState.add(state.copyWith(fadeVolume: newVolume));
+          if (newVolume >= 1.0) {
             fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
+            cancelled = true;
           }
           break;
         case FadeDirection.fadeOut:
-          await _player.setVolume(
-              max(_player.volume - state.volumeFadeOutStepSize, 0.0));
-          fadeState.add(state.copyWith(fadeVolume: _player.volume));
-          if (_player.volume <= 0.0) {
+          var newVolume = state.fadeVolume - state.volumeFadeOutStepSize;
+          await _volume.setFadeVolume(newVolume);
+          fadeState.add(state.copyWith(fadeVolume: newVolume));
+          if (newVolume <= 0.0) {
             fadeState.add(state.copyWith(fadeDirection: FadeDirection.none));
+            cancelled = true;
 
             fut = _player.pause();
-
-            // restore volume
-            await _player.setVolume(fadeState.value.recoverVolume);
           }
           break;
         default:
@@ -638,6 +672,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   @override
   Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) async {
+    if (!Platform.isAndroid &&
+        !Platform.isIOS &&
+        shuffleMode != AudioServiceShuffleMode.none) {
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.desktopShuffleWarning);
+      shuffleMode = AudioServiceShuffleMode.none;
+    }
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
@@ -865,8 +906,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             ));
           }
           return refreshPlaybackStateAndMediaNotification();
-        default:
-        // NOP, handled below
       }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(
@@ -915,16 +954,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                   10.0,
                   effectiveGainChange /
                       20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
-          final newVolumeClamped = newVolume.clamp(0.0, 1.0);
-          _volumeNormalizationLogger
-              .finer("new volume: $newVolume ($newVolumeClamped clipped)");
-          _player.setVolume(newVolumeClamped);
+          _volumeNormalizationLogger.finer("new volume: $newVolume");
+          _volume.setReplayGainVolume(newVolume);
         }
       } else {
         // reset gain offset
         _loudnessEnhancerEffect?.setTargetGain(0 /
             10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856ua630329c4e6 is merged)
-        _player.setVolume(
+        _volume.setReplayGainVolume(
             iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without normalization gain information don't fall back to full volume, but to the base volume for iOS
       }
     }

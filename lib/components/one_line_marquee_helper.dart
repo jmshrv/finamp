@@ -1,9 +1,10 @@
+import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marquee/marquee.dart';
-import 'package:balanced_text/balanced_text.dart';
 
-class OneLineMarqueeHelper extends StatelessWidget {
+class OneLineMarqueeHelper extends ConsumerWidget {
   final String text;
   final TextStyle style;
 
@@ -14,8 +15,8 @@ class OneLineMarqueeHelper extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    if (!FinampSettingsHelper.finampSettings.oneLineMarqueeTextButton) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!ref.watch(finampSettingsProvider.oneLineMarqueeTextButton)) {
       return Text(
         text,
         style: style,

@@ -1,7 +1,7 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/favorite_provider.dart';
@@ -31,7 +31,7 @@ class FavoriteButton extends ConsumerStatefulWidget {
 class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
   @override
   Widget build(BuildContext context) {
-    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+    final isOffline = ref.watch(finampSettingsProvider.isOffline);
 
     if (widget.item == null) {
       return const SizedBox.shrink();
@@ -39,7 +39,7 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
 
     bool isFav = ref.watch(isFavoriteProvider(widget.item));
     if (widget.onlyIfFav) {
-      if (isFav && !FinampSettingsHelper.finampSettings.onlyShowFavourites) {
+      if (isFav && !ref.watch(finampSettingsProvider.onlyShowFavourites)) {
         return Icon(
           Icons.favorite,
           color: Colors.red,

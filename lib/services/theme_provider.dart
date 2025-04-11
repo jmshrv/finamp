@@ -14,6 +14,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models/jellyfin_models.dart';
+import 'widget_bindings_observer_provider.dart';
 
 part 'theme_provider.g.dart';
 
@@ -135,9 +136,6 @@ final Provider<ColorScheme> localThemeProvider = Provider((ref) {
   return ref.watch(finampThemeFromImageProvider(
       ThemeRequestFromImage(image.image, image.useIsolate)));
 }, dependencies: [localImageProvider]);
-
-// This provider gets updated to the latest brightness by a valuelistner in main.dart
-final brightnessProvider = StateProvider((ref) => Brightness.dark);
 
 @riverpod
 ColorScheme finampTheme(Ref ref, ThemeInfo request) {

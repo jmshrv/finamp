@@ -1,6 +1,6 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 
 import '../components/DownloadsScreen/download_error_screen_button.dart';
 import '../components/DownloadsScreen/downloaded_items_list.dart';
@@ -40,6 +40,8 @@ class DownloadsScreen extends StatelessWidget {
           ),
           DownloadedItemsTitle(title: localizations.specialDownloads),
           const DownloadedItemsList(type: DownloadsScreenCategory.special),
+          DownloadedItemsTitle(title: localizations.libraryDownloads),
+          const DownloadedItemsList(type: DownloadsScreenCategory.library),
           DownloadedItemsTitle(title: localizations.playlists),
           const DownloadedItemsList(type: DownloadsScreenCategory.playlists),
           DownloadedItemsTitle(title: localizations.artists),

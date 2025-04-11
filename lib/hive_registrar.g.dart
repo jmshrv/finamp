@@ -63,7 +63,6 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(PlaybackSpeedVisibilityAdapter());
     registerAdapter(PlayerStateInfoAdapter());
     registerAdapter(ProfileConditionAdapter());
-    registerAdapter(PublicUsersResponseAdapter());
     registerAdapter(QueueItemAdapter());
     registerAdapter(QueueItemQueueTypeAdapter());
     registerAdapter(QueueItemSourceAdapter());

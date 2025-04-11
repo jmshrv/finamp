@@ -105,14 +105,15 @@ class _LyricsScreenContentState extends ConsumerState<_LyricsScreenContent> {
           resizeToAvoidBottomInset: false, extendBodyBehindAppBar: true,
           body: Stack(
             children: [
-              if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+              if (ref.watch(finampSettingsProvider.useCoverAsBackground))
                 const BlurredPlayerScreenBackground(),
               SafeArea(
                 minimum: EdgeInsets.only(top: toolbarHeight),
                 child: LayoutBuilder(builder: (context, constraints) {
                   controller.setSize(
                       Size(constraints.maxWidth, constraints.maxHeight),
-                      MediaQuery.orientationOf(context));
+                      MediaQuery.orientationOf(context),
+                      ref);
                   if (controller.useLandscape) {
                     return const LyricsView();
                   } else {

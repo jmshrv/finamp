@@ -4,12 +4,13 @@ import 'package:collection/collection.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/components/album_image.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
@@ -160,7 +161,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
   }
 }
 
-class AddToPlaylistTile extends StatefulWidget {
+class AddToPlaylistTile extends ConsumerStatefulWidget {
   const AddToPlaylistTile(
       {super.key,
       required this.playlist,
@@ -174,10 +175,10 @@ class AddToPlaylistTile extends StatefulWidget {
   final bool isLoading;
 
   @override
-  State<AddToPlaylistTile> createState() => _AddToPlaylistTileState();
+  ConsumerState<AddToPlaylistTile> createState() => _AddToPlaylistTileState();
 }
 
-class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
+class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
   String? playlistItemId;
   int? childCount;
   bool? itemIsIncluded;
@@ -210,7 +211,7 @@ class _AddToPlaylistTileState extends State<AddToPlaylistTile> {
 
   @override
   Widget build(BuildContext context) {
-    final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+    final isOffline = ref.watch(finampSettingsProvider.isOffline);
     return ToggleableListTile(
       forceLoading: widget.isLoading,
       title: widget.playlist.name ?? AppLocalizations.of(context)!.unknownName,

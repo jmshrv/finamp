@@ -1,7 +1,8 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -12,7 +13,7 @@ import '../../services/jellyfin_api_helper.dart';
 
 final _borderRadius = BorderRadius.circular(4);
 
-class AlbumChips extends StatelessWidget {
+class AlbumChips extends ConsumerWidget {
   const AlbumChips({
     super.key,
     this.baseItem,
@@ -27,7 +28,7 @@ class AlbumChips extends StatelessWidget {
   final bool? includeReleaseDate;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: SingleChildScrollView(
@@ -45,8 +46,8 @@ class AlbumChips extends StatelessWidget {
               ),
               if (((includeReleaseDate ?? false) ||
                       (includeReleaseDate == null &&
-                          FinampSettingsHelper.finampSettings
-                              .showAlbumReleaseDateOnPlayerScreen)) &&
+                          ref.watch(finampSettingsProvider
+                              .showAlbumReleaseDateOnPlayerScreen))) &&
                   ReleaseDateHelper.autoFormat(baseItem) != null)
                 _ReleaseDateChip(
                   baseItem: baseItem,

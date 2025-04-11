@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/generate_subtitle.dart';
@@ -9,22 +8,20 @@ import '../album_image.dart';
 
 /// Card content for AlbumItem. You probably shouldn't use this widget directly,
 /// use AlbumItem instead.
-class AlbumItemCard extends StatelessWidget {
+class AlbumItemCard extends ConsumerWidget {
   const AlbumItemCard({
     super.key,
     required this.item,
     this.parentType,
     this.onTap,
-    this.addSettingsListener = false,
   });
 
   final BaseItemDto item;
   final String? parentType;
   final void Function()? onTap;
-  final bool addSettingsListener;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       // In AlbumItem, the OpenContainer handles padding.
       margin: EdgeInsets.zero,
@@ -33,29 +30,9 @@ class AlbumItemCard extends StatelessWidget {
         child: Stack(
           children: [
             AlbumImage(item: item),
-            addSettingsListener
-                ? // We need this ValueListenableBuilder to react to changes to
-                // showTextOnGridView. When shown in a MusicScreen, this widget
-                // would refresh anyway since MusicScreen also listens to
-                // FinampSettings, but there may be cases where this widget is used
-                // elsewhere.
-                ValueListenableBuilder<Box<FinampSettings>>(
-                    valueListenable:
-                        FinampSettingsHelper.finampSettingsListener,
-                    builder: (_, box, __) {
-                      if (box.get("FinampSettings")!.showTextOnGridView) {
-                        return _AlbumItemCardText(
-                            item: item, parentType: parentType);
-                      } else {
-                        // ValueListenableBuilder doesn't let us return null, so we
-                        // return a 0-sized SizedBox.
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  )
-                : FinampSettingsHelper.finampSettings.showTextOnGridView
-                    ? _AlbumItemCardText(item: item, parentType: parentType)
-                    : const SizedBox.shrink(),
+            ref.watch(finampSettingsProvider.showTextOnGridView)
+                ? _AlbumItemCardText(item: item, parentType: parentType)
+                : const SizedBox.shrink(),
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,

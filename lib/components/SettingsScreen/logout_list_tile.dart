@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../screens/splash_screen.dart';
@@ -11,37 +12,31 @@ import '../../services/jellyfin_api_helper.dart';
 import '../../services/music_player_background_task.dart';
 import '../global_snackbar.dart';
 
-class LogoutListTile extends StatefulWidget {
+class LogoutListTile extends ConsumerWidget {
   const LogoutListTile({super.key});
 
   @override
-  State<LogoutListTile> createState() => _LogoutListTileState();
-}
-
-class _LogoutListTileState extends State<LogoutListTile> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       leading: Icon(
         Icons.logout,
-        color:
-            FinampSettingsHelper.finampSettings.isOffline ? null : Colors.red,
+        color: ref.watch(finampSettingsProvider.isOffline) ? null : Colors.red,
       ),
       title: Text(
         AppLocalizations.of(context)!.logOut,
-        style: FinampSettingsHelper.finampSettings.isOffline
+        style: ref.watch(finampSettingsProvider.isOffline)
             ? null
             : const TextStyle(
                 color: Colors.red,
               ),
       ),
-      subtitle: FinampSettingsHelper.finampSettings.isOffline
+      subtitle: ref.watch(finampSettingsProvider.isOffline)
           ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
           : Text(
               AppLocalizations.of(context)!.downloadedTracksWillNotBeDeleted,
               style: const TextStyle(color: Colors.red),
             ),
-      enabled: !FinampSettingsHelper.finampSettings.isOffline,
+      enabled: !ref.watch(finampSettingsProvider.isOffline),
       onTap: () {
         showDialog(
           context: context,
@@ -77,7 +72,7 @@ class _LogoutListTileState extends State<LogoutListTile> {
                         .logoutCurrentUser()
                         .onError((_, __) {});
 
-                    if (!mounted) return;
+                    if (!context.mounted) return;
 
                     await Navigator.of(context).pushNamedAndRemoveUntil(
                         SplashScreen.routeName, (route) => false);

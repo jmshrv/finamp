@@ -1,7 +1,7 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -48,12 +48,12 @@ class ArtistChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final artists =
-        ((artistType == ArtistType.albumartist) ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
-    final filteredArtists = {
-      for (var artist in artists) artist.id: artist
-    }.values.toList();
-
+    final artists = ((artistType == ArtistType.albumartist)
+            ? baseItem?.albumArtists
+            : baseItem?.artistItems) ??
+        [];
+    final filteredArtists =
+        {for (var artist in artists) artist.id: artist}.values.toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -89,7 +89,6 @@ class ArtistChips extends StatelessWidget {
         ),
       ),
     );
-
   }
 }
 
@@ -112,7 +111,7 @@ class ArtistChip extends ConsumerWidget {
         color ?? Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
     final BaseItemDto? localArtist;
     if (artist != null &&
-        FinampSettingsHelper.finampSettings.showArtistChipImage) {
+        ref.watch(finampSettingsProvider.showArtistChipImage)) {
       localArtist =
           ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
     } else {
