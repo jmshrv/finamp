@@ -76,6 +76,8 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(SavedQueueStateAdapter());
     registerAdapter(SessionInfoAdapter());
     registerAdapter(SessionUserInfoAdapter());
+    registerAdapter(SleepTimerAdapter());
+    registerAdapter(SleepTimerTypeAdapter());
     registerAdapter(SortByAdapter());
     registerAdapter(SortOrderAdapter());
     registerAdapter(SubtitleProfileAdapter());

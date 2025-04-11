@@ -91,19 +91,18 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   /// new queue.
   int? nextInitialIndex;
 
-  Duration _sleepTimerDuration = Duration.zero;
-  DateTime _sleepTimerStartTime = DateTime.now();
+  // Init the new sleep timer with a length of 0
+  // SleepTimer sleepTimer = SleepTimer(SleepTimerType.duration, 0);
 
   /// Holds the current sleep timer, if any. This is a ValueNotifier so that
   /// widgets like SleepTimerButton can update when the sleep timer is/isn't
   /// null.
-  final ValueNotifier<Timer?> _sleepTimer = ValueNotifier<Timer?>(null);
+  final ValueNotifier<SleepTimer?> _timer = ValueNotifier<SleepTimer?>(null);
+  ValueListenable<SleepTimer?> get timer => _timer;
 
   Future<bool> Function()? _queueCallbackPreviousTrack;
 
   List<int>? get shuffleIndices => _player.shuffleIndices;
-
-  ValueListenable<Timer?> get sleepTimer => _sleepTimer;
 
   double iosBaseVolumeGainFactor = 1.0;
   Duration minBufferDuration = Duration(seconds: 90);
@@ -261,6 +260,21 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     mediaItem.listen((currentTrack) {
+      if (getSleepTimer() != null
+        && getSleepTimer()!.type == SleepTimerType.tracks
+        && getSleepTimer()!.startTime != null
+        )
+      {
+        // Listen for events if it's the next track, and it's a tracks timer, reduce the length
+        getSleepTimer()!.remainingLength--;
+
+        if (getSleepTimer()!.remainingLength <= 0)
+        {
+          getSleepTimer()!.callback();
+          return;
+        }
+      }
+
       _applyVolumeNormalization(currentTrack);
     });
 
@@ -290,11 +304,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // not updating between tracks (https://github.com/jmshrv/finamp/issues/844)
     mediaItem.listen((_) {
       final event = _transformEvent(_player.playbackEvent);
+
       playbackState.add(event);
     });
 
     fadeState = BehaviorSubject.seeded(
         FadeState(recoverVolume: _player.volume, fadeVolume: _player.volume));
+  }
+
+  SleepTimer? getSleepTimer () 
+  {
+    return _timer.value;
   }
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
@@ -474,10 +494,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
       // await handleEndOfQueue();
 
-      _sleepTimerDuration = Duration.zero;
-
-      _sleepTimer.value?.cancel();
-      _sleepTimer.value = null;
+      // TODO: Do we want to actually cancel the sleep timer if we stop the music?
+      _timer.value?.cancel();
+      _timer.value = null;
 
       await super.stop();
     } catch (e) {
@@ -930,35 +949,42 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  /// Sets the sleep timer with the given [duration].
-  Timer setSleepTimer(Duration duration) {
-    _sleepTimerDuration = duration;
-    _sleepTimerStartTime = DateTime.now();
+  void sleepTimerActions()
+  {
+    clearSleepTimer();
+  }
 
-    _sleepTimer.value = Timer(duration, () async {
-      _sleepTimer.value = null;
-      return await pause(disableFade: false);
-    });
-    return _sleepTimer.value!;
+  /// Starts the new sleep timer
+  Timer? startSleepTimer(SleepTimer newSleepTimer) {
+    
+    _timer.value = newSleepTimer;
+    getSleepTimer()!.start(() => sleepTimerActions());
+    return _timer.value!.timer;
   }
 
   /// Cancels the sleep timer and clears it.
   void clearSleepTimer() {
-    _sleepTimerDuration = Duration.zero;
 
-    _sleepTimer.value?.cancel();
-    _sleepTimer.value = null;
-  }
-
-  Duration get sleepTimerRemaining {
-    if (_sleepTimer.value == null) {
-      return Duration.zero;
-    } else {
-      return _sleepTimerStartTime
-          .add(_sleepTimerDuration)
-          .difference(DateTime.now());
+    // This was a timer and we want to finish this track, convert it to a tracks timer with 0
+    if (getSleepTimer()!.type == SleepTimerType.duration && getSleepTimer()!.finishTrack)
+    {
+      getSleepTimer()!.type = SleepTimerType.tracks;
+      getSleepTimer()!.length = 1;
+      // restart the timer
+      getSleepTimer()!.start(() => sleepTimerActions());
+      return;
     }
+
+    // _sleepTimerDuration = Duration.zero;
+    // sleepTimer.remainingLength = 0;
+    pause();
+    _timer.value?.cancel();
+    _timer.value = null;
   }
+
+  // Duration get sleepTimerRemaining {
+  //   return sleepTimer.getRemaining();
+  // }
 
   /// Transform a just_audio event into an audio_service state.
   ///

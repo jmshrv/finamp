@@ -654,40 +654,51 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                             : Theme.of(context).textTheme.bodyMedium?.color ??
                                 Colors.white,
                   ),
-                  ValueListenableBuilder<Timer?>(
-                    valueListenable: _audioHandler.sleepTimer,
+                  ValueListenableBuilder<SleepTimer?>(
+                    valueListenable: _audioHandler.timer,
                     builder: (context, timerValue, child) {
-                      final remainingMinutes =
-                          (_audioHandler.sleepTimerRemaining.inSeconds / 60.0)
-                              .ceil();
-                      return PlaybackAction(
-                        icon: timerValue != null
-                            ? TablerIcons.hourglass_high
-                            : TablerIcons.hourglass_empty,
-                        onPressed: () async {
-                          if (timerValue != null) {
-                            await showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  const SleepTimerCancelDialog(),
-                            );
-                          } else {
+                      if (timerValue == null) {
+                        return PlaybackAction(
+                          icon: TablerIcons.hourglass_empty,
+                          onPressed: () async {
                             await showDialog(
                               context: context,
                               builder: (context) => const SleepTimerDialog(),
                             );
-                          }
+                          },
+                          tooltip: AppLocalizations.of(context)!.sleepTimerTooltip,
+                          iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                        );
+                      }
+
+                      return ValueListenableBuilder<int>(
+                        valueListenable: timerValue.remainingNotifier,
+                        builder: (context, remaining, _) {
+                          final hasTimeLeft = remaining > 0;
+
+                          return PlaybackAction(
+                            icon: TablerIcons.hourglass_high,
+                            onPressed: () async {
+                              if (hasTimeLeft) {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) => const SleepTimerCancelDialog(),
+                                );
+                              } else {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) => const SleepTimerDialog(),
+                                );
+                              }
+                            },
+                            tooltip: hasTimeLeft
+                                ? timerValue.asString(context)
+                                : AppLocalizations.of(context)!.sleepTimerTooltip,
+                            iconColor: hasTimeLeft
+                                ? iconColor
+                                : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                          );
                         },
-                        tooltip: timerValue != null
-                            ? AppLocalizations.of(context)
-                                    ?.sleepTimerRemainingTime(
-                                        remainingMinutes) ??
-                                "Sleeping in $remainingMinutes minutes"
-                            : AppLocalizations.of(context)!.sleepTimerTooltip,
-                        iconColor: timerValue != null
-                            ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
                       );
                     },
                   ),
