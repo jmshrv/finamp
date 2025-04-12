@@ -278,8 +278,7 @@ class TrackListTile extends ConsumerWidget {
               const SizedBox(width: 4.0),
               Text(
                 ref
-                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight
-                    )
+                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)
                     .toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
@@ -292,8 +291,7 @@ class TrackListTile extends ConsumerWidget {
             children: [
               Text(
                 ref
-                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft
-                    )
+                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)
                     .toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,

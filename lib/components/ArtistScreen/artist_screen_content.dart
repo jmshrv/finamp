@@ -20,9 +20,6 @@ import '../favourite_button.dart';
 import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 
-/// ToDo for proper Albums and Appears On Section + reasonable playback queue:
-/// - Offline: Include both albumartist and performingartist tracks in allTracks but DISTINCT (see downloads_service.dart)
-/// - Online: Modify allTracks to include both albumartist and performingartist tracks DISTINCT
 class ArtistScreenContent extends ConsumerStatefulWidget {
   const ArtistScreenContent({super.key, required this.parent});
 
