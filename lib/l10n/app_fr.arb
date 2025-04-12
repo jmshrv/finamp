@@ -244,7 +244,7 @@
   "@enableTranscodingSubtitle": {},
   "bitrate": "Débit binaire",
   "@bitrate": {},
-  "bitrateSubtitle": "Un débit binaire plus élevé offre une meilleure qualité audio au prix d'une bande passante plus importante.",
+  "bitrateSubtitle": "Un débit binaire plus élevé offre une meilleure qualité audio au prix d'une bande passante plus importante. Cela ne s'applique pas aux codecs sans perte, par exemple FLAC.",
   "@bitrateSubtitle": {},
   "customLocation": "Emplacement personnalisé",
   "@customLocation": {},
@@ -1546,5 +1546,29 @@
   "showLyricsTimestampsSubtitle": "Contrôle si les temps de chaque parole sont affichées dans l'écran des paroles, s'ils sont disponibles.",
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "swipeLeftToRightActionSubtitle": "Action déclenchée lors du glissement d'un morceau de gauche à droite dans la liste.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeLeftToRightAction": "Glissement à droite",
+  "@swipeLeftToRightAction": {},
+  "appearsOnAlbums": "Apparaît dans",
+  "@appearsOnAlbums": {},
+  "albumArtists": "Artistes de l’album",
+  "@albumArtists": {},
+  "performingArtists": "Artistes interprètes",
+  "@performingArtists": {},
+  "swipeRightToLeftAction": "Glissement à gauche",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Action déclenchée lors du glissement d'un morceau de droite à gauche dans la liste.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Sélectionner le format de transcodage",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "Sélectionnez le format à utiliser lors du streaming audio transcodé. Les morceaux déjà en file d'attente ne seront pas affectés.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin ne reçoit aucune mise à jour d’un client pendant plus de 5 minutes, il suppose que la lecture est terminée. Cela signifie que, pour les morceaux de plus de 5 minutes, la lecture peut être signalée à tort comme terminée, ce qui réduit la qualité des données de rapport de lecture.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   }
 }
