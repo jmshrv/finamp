@@ -166,6 +166,112 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
     }
 
     return [
+      ListTile(
+        leading: Icon(
+          TablerIcons.player_play,
+          color: iconColor,
+        ),
+        title: Text(AppLocalizations.of(context)!.playButtonLabel),
+        onTap: () async {
+          List<BaseItemDto>? artistTracks;
+          try {
+            FeedbackHelper.feedback(FeedbackType.selection);
+            if (widget.isOffline) {
+              artistTracks = await downloadsService
+                  .getCollectionTracks(widget.item, playable: true);
+            } else {
+              artistTracks = await _jellyfinApiHelper.getItems(
+                parentItem: widget.item,
+                sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+              );
+            }
+
+            if (artistTracks == null) {
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(
+                      BaseItemDtoType.fromItem(widget.item).name));
+              return;
+            }
+
+            await _queueService.startPlayback(
+              items: artistTracks,
+              source: QueueItemSource(
+                type: QueueItemSourceType.artist,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: widget.item.name ??
+                        AppLocalizations.of(context)!.placeholderSource),
+                id: widget.item.id,
+                item: widget.item,
+                contextNormalizationGain: null, // use track gain
+              ),
+              order: FinampPlaybackOrder.linear,
+            );
+
+            GlobalSnackbar.message(
+                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
+                    BaseItemDtoType.fromItem(widget.item).name),
+                isConfirmation: true);
+            Navigator.pop(context);
+          } catch (e) {
+            GlobalSnackbar.error(e);
+          }
+        },
+      ),
+      ListTile(
+        leading: Icon(
+          TablerIcons.arrows_shuffle,
+          color: iconColor,
+        ),
+        title: Text(AppLocalizations.of(context)!.shuffleButtonLabel),
+        onTap: () async {
+          List<BaseItemDto>? artistTracks;
+          try {
+            FeedbackHelper.feedback(FeedbackType.selection);
+            if (widget.isOffline) {
+              artistTracks = await downloadsService
+                  .getCollectionTracks(widget.item, playable: true);
+            } else {
+              artistTracks = await _jellyfinApiHelper.getItems(
+                parentItem: widget.item,
+                sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+              );
+            }
+
+            if (artistTracks == null) {
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(
+                      BaseItemDtoType.fromItem(widget.item).name));
+              return;
+            }
+
+            await _queueService.startPlayback(
+              items: artistTracks,
+              source: QueueItemSource(
+                type: QueueItemSourceType.artist,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: widget.item.name ??
+                        AppLocalizations.of(context)!.placeholderSource),
+                id: widget.item.id,
+                item: widget.item,
+                contextNormalizationGain: null, // use track gain
+              ),
+              order: FinampPlaybackOrder.shuffled,
+            );
+
+            GlobalSnackbar.message(
+                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
+                    BaseItemDtoType.fromItem(widget.item).name),
+                isConfirmation: true);
+            Navigator.pop(context);
+          } catch (e) {
+            GlobalSnackbar.error(e);
+          }
+        },
+      ),
       Visibility(
         visible: !widget.isOffline,
         child: ListTile(
@@ -631,6 +737,7 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                         softWrap: true,
                         maxLines: 2,
                       ),
+                      const SizedBox(height: 4),
                       if (!widget.condensed)
                         ItemAmountChip(
                           baseItem: widget
