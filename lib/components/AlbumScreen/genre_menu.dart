@@ -162,6 +162,112 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
     }
 
     return [
+      ListTile(
+        leading: Icon(
+          TablerIcons.player_play,
+          color: iconColor,
+        ),
+        title: Text(AppLocalizations.of(context)!.playButtonLabel),
+        onTap: () async {
+          List<BaseItemDto>? genreTracks;
+          try {
+            FeedbackHelper.feedback(FeedbackType.selection);
+            if (widget.isOffline) {
+              genreTracks = await downloadsService
+                  .getCollectionTracks(widget.item, playable: true);
+            } else {
+              genreTracks = await _jellyfinApiHelper.getItems(
+                parentItem: widget.item,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+              );
+            }
+
+            if (genreTracks == null) {
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(
+                      BaseItemDtoType.fromItem(widget.item).name));
+              return;
+            }
+
+            await _queueService.startPlayback(
+              items: genreTracks,
+              source: QueueItemSource(
+                type: QueueItemSourceType.genre,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: widget.item.name ??
+                        AppLocalizations.of(context)!.placeholderSource),
+                id: widget.item.id,
+                item: widget.item,
+                contextNormalizationGain: null, // use track gain
+              ),
+              order: FinampPlaybackOrder.linear,
+            );
+
+            GlobalSnackbar.message(
+                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
+                    BaseItemDtoType.fromItem(widget.item).name),
+                isConfirmation: true);
+            Navigator.pop(context);
+          } catch (e) {
+            GlobalSnackbar.error(e);
+          }
+        },
+      ),
+      ListTile(
+        leading: Icon(
+          TablerIcons.arrows_shuffle,
+          color: iconColor,
+        ),
+        title: Text(AppLocalizations.of(context)!.shuffleButtonLabel),
+        onTap: () async {
+          List<BaseItemDto>? genreTracks;
+          try {
+            FeedbackHelper.feedback(FeedbackType.selection);
+            if (widget.isOffline) {
+              genreTracks = await downloadsService
+                  .getCollectionTracks(widget.item, playable: true);
+            } else {
+              genreTracks = await _jellyfinApiHelper.getItems(
+                parentItem: widget.item,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+              );
+            }
+
+            if (genreTracks == null) {
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(
+                      BaseItemDtoType.fromItem(widget.item).name));
+              return;
+            }
+
+            await _queueService.startPlayback(
+              items: genreTracks,
+              source: QueueItemSource(
+                type: QueueItemSourceType.genre,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: widget.item.name ??
+                        AppLocalizations.of(context)!.placeholderSource),
+                id: widget.item.id,
+                item: widget.item,
+                contextNormalizationGain: null, // use track gain
+              ),
+              order: FinampPlaybackOrder.shuffled,
+            );
+
+            GlobalSnackbar.message(
+                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
+                    BaseItemDtoType.fromItem(widget.item).name),
+                isConfirmation: true);
+            Navigator.pop(context);
+          } catch (e) {
+            GlobalSnackbar.error(e);
+          }
+        },
+      ),
       Visibility(
         visible: !widget.isOffline,
         child: ListTile(

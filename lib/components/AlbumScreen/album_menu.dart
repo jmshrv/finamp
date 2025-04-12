@@ -183,23 +183,111 @@ class _AlbumMenuState extends ConsumerState<AlbumMenu> {
     }
 
     return [
-      Visibility(
-        visible: !widget.isOffline,
-        child: ListTile(
-          leading: Icon(
-            Icons.playlist_add,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
-          enabled: !widget.isOffline,
-          onTap: () {
-            Navigator.pop(context); // close menu
-            showPlaylistActionsMenu(
-              context: context,
-              item: widget.item,
-            );
-          },
+      ListTile(
+        leading: Icon(
+          TablerIcons.player_play,
+          color: iconColor,
         ),
+        title: Text(AppLocalizations.of(context)!.playButtonLabel),
+        onTap: () async {
+          List<BaseItemDto>? albumTracks;
+          try {
+            FeedbackHelper.feedback(FeedbackType.selection);
+            if (widget.isOffline) {
+              albumTracks = await downloadsService
+                  .getCollectionTracks(widget.item, playable: true);
+            } else {
+              albumTracks = await _jellyfinApiHelper.getItems(
+                parentItem: widget.item,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+              );
+            }
+
+            if (albumTracks == null) {
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(
+                      BaseItemDtoType.fromItem(widget.item).name));
+              return;
+            }
+
+            await _queueService.startPlayback(
+              items: albumTracks,
+              source: QueueItemSource(
+                type: QueueItemSourceType.album,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: widget.item.name ??
+                        AppLocalizations.of(context)!.placeholderSource),
+                id: widget.item.id,
+                item: widget.item,
+                contextNormalizationGain: widget.item.normalizationGain,
+              ),
+              order: FinampPlaybackOrder.linear,
+            );
+      
+            GlobalSnackbar.message(
+                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
+                    BaseItemDtoType.fromItem(widget.item).name),
+                isConfirmation: true);
+            Navigator.pop(context);
+          } catch (e) {
+            GlobalSnackbar.error(e);
+          }
+        },
+      ),
+      ListTile(
+        leading: Icon(
+          TablerIcons.arrows_shuffle,
+          color: iconColor,
+        ),
+        title: Text(AppLocalizations.of(context)!.shuffleButtonLabel),
+        onTap: () async {
+          List<BaseItemDto>? albumTracks;
+          try {
+            FeedbackHelper.feedback(FeedbackType.selection);
+            if (widget.isOffline) {
+              albumTracks = await downloadsService
+                  .getCollectionTracks(widget.item, playable: true);
+            } else {
+              albumTracks = await _jellyfinApiHelper.getItems(
+                parentItem: widget.item,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                includeItemTypes: "Audio",
+              );
+            }
+
+            if (albumTracks == null) {
+              GlobalSnackbar.message((scaffold) =>
+                  AppLocalizations.of(scaffold)!.couldNotLoad(
+                      BaseItemDtoType.fromItem(widget.item).name));
+              return;
+            }
+
+            await _queueService.startPlayback(
+              items: albumTracks,
+              source: QueueItemSource(
+                type: QueueItemSourceType.album,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: widget.item.name ??
+                        AppLocalizations.of(context)!.placeholderSource),
+                id: widget.item.id,
+                item: widget.item,
+                contextNormalizationGain: widget.item.normalizationGain,
+              ),
+              order: FinampPlaybackOrder.shuffled,
+            );
+
+            GlobalSnackbar.message(
+                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
+                    BaseItemDtoType.fromItem(widget.item).name),
+                isConfirmation: true);
+            Navigator.pop(context);
+          } catch (e) {
+            GlobalSnackbar.error(e);
+          }
+        },
       ),
       Visibility(
         visible: _queueService.getQueue().nextUp.isNotEmpty,
