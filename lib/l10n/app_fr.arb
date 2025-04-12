@@ -244,7 +244,7 @@
   "@enableTranscodingSubtitle": {},
   "bitrate": "Débit binaire",
   "@bitrate": {},
-  "bitrateSubtitle": "Un débit binaire plus élevé offre une meilleure qualité audio au prix d'une bande passante plus importante. Cela ne s'applique pas aux codecs sans perte, par exemple FLAC.",
+  "bitrateSubtitle": "Un bitrate plus élevé offre une meilleure qualité audio au prix d'une bande passante plus importante. Cela ne s'applique pas aux codecs sans pertes, par exemple FLAC.",
   "@bitrateSubtitle": {},
   "customLocation": "Emplacement personnalisé",
   "@customLocation": {},
@@ -1031,7 +1031,7 @@
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
-  "autoloadLastQueueOnStartupSubtitle": "Au démarrage, essaie de restaurer la dernière file d'attente.",
+  "autoloadLastQueueOnStartupSubtitle": "Au démarrage de l'application, restaurer la dernière file d'attente.",
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
@@ -1039,7 +1039,7 @@
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "topTracks": "Musiques les plus jouées",
+  "topTracks": "Morceaux les plus joués",
   "@topTracks": {},
   "shuffleAlbumsNext": "Mélanger les albums au début de la file d'attente",
   "@shuffleAlbumsNext": {
@@ -1097,7 +1097,7 @@
       }
     }
   },
-  "queueLoadingMessage": "Restauration de la file d'attente...",
+  "queueLoadingMessage": "Restauration de la file d'attente…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1549,7 +1549,7 @@
   },
   "swipeLeftToRightActionSubtitle": "Action déclenchée lors du glissement d'un morceau de gauche à droite dans la liste.",
   "@swipeLeftToRightActionSubtitle": {},
-  "swipeLeftToRightAction": "Glissement à droite",
+  "swipeLeftToRightAction": "Balayage à droite",
   "@swipeLeftToRightAction": {},
   "appearsOnAlbums": "Apparaît dans",
   "@appearsOnAlbums": {},
@@ -1567,7 +1567,7 @@
   },
   "transcodingStreamingFormatSubtitle": "Sélectionnez le format à utiliser lors du streaming audio transcodé. Les morceaux déjà en file d'attente ne seront pas affectés.",
   "@transcodingStreamingFormatSubtitle": {},
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin ne reçoit aucune mise à jour d’un client pendant plus de 5 minutes, il suppose que la lecture est terminée. Cela signifie que, pour les morceaux de plus de 5 minutes, la lecture peut être signalée à tort comme terminée, ce qui réduit la qualité des données de rapport de lecture.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin ne reçoit aucune mise à jour d’un client pendant plus de 5 minutes, il suppose que la lecture est terminée. Cela signifie que pour les morceaux durant plus de 5 minutes, la lecture peut être considérée comme terminée, ce qui peut fausser les données de rapport de lecture.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   }
