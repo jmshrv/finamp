@@ -89,7 +89,7 @@
   "@areYouSure": {},
   "audioService": "Audiodienst",
   "@audioService": {},
-  "bitrateSubtitle": "Het gebruik van een hogere bitrate geeft betere audiokwaliteit, maar gebruikt meer netwerkbandbreedte.",
+  "bitrateSubtitle": "Het gebruik van een hogere bitrate geeft betere audiokwaliteit, maar gebruikt meer netwerkbandbreedte. Wordt niet toegepast op lossless codecs zoals FLAC.",
   "@bitrateSubtitle": {},
   "cancelSleepTimer": "Annuleer sleep timer?",
   "@cancelSleepTimer": {},
@@ -336,7 +336,7 @@
   "@noItem": {},
   "noArtist": "Geen artiest",
   "@noArtist": {},
-  "unknownArtist": "Onbekende artiest",
+  "unknownArtist": "Onbekende Artiest",
   "@unknownArtist": {},
   "queue": "Afspeelrij",
   "@queue": {},
@@ -358,7 +358,7 @@
   "@addToMix": {},
   "bufferDuration": "Bufferlengte",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "De lengte van de buffer, in seconden. Dit vereist een herstart.",
+  "bufferDurationSubtitle": "De maximale duur van de buffer, in seconden. Dit vereist een herstart.",
   "@bufferDurationSubtitle": {},
   "redownloadedItems": "{count,plural, =0{Geen downloads nodig.} =1{{count} element opnieuw gedownload} other{ {count} elementen opnieuw gedownload}}",
   "@redownloadedItems": {
@@ -390,7 +390,7 @@
   "@enableTranscoding": {},
   "pathReturnSlashErrorMessage": "Paden met \"/\" kunnen niet worden gebruikt",
   "@pathReturnSlashErrorMessage": {},
-  "customLocationsBuggy": "Persoonlijke locaties hebben veel bug door permissies. We denken over oplossingen hiervoor. Voor nu raden we aan deze niet te gebruiken.",
+  "customLocationsBuggy": "Persoonlijke locaties hebben veel bugs en worden over het algemeen niet aanbevolen. Locaties onder de \"Muziek\" folder van het systeem voorkomen het opslaan van albumhoezen door begrenzingen van het besturingssysteem.",
   "@customLocationsBuggy": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "Artiest van nummer verbergen wanneer deze hetzelfde is als de albumartiest",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
@@ -660,7 +660,7 @@
   "@aboutContributionLink": {
     "description": "Link to the Finamp GitHub repository, shown in the about screen."
   },
-  "connectingToServer": "Verbindt met server…",
+  "connectingToServer": "Verbinden met de server…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -1185,5 +1185,111 @@
       }
     },
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "queueRetryMessage": "Wachtrij herstellen niet gelukt. Opnieuw proberen?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "appearsOnAlbums": "Komt voor in",
+  "@appearsOnAlbums": {},
+  "albumArtists": "Album Artiesten",
+  "@albumArtists": {},
+  "performingArtists": "Deelnemende Artiesten",
+  "@performingArtists": {},
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Hoe vaak de huidige afspeelstatus naar de server gestuurd word, in seconden. Dit moet minder dan 5 minuten (300 seconden) zijn om een time-out van de sessie te voorkomen.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "noItemsDownloaded": "Niets gedownload.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "specialDownloads": "Speciale downloads",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Updatefrequentie afspeelsessie",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "topTracks": "Meest Gespeeld",
+  "@topTracks": {},
+  "queueRestoreButtonLabel": "Herstel",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queuesScreen": "Herstel Afspeellijst",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "shuffleAlbumsNext": "",
+  "@shuffleAlbumsNext": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+  },
+  "togglePlaybackButtonTooltip": "Afspeelmodus omschakelen",
+  "@togglePlaybackButtonTooltip": {
+    "description": "Tooltip for the button that toggles playback"
+  },
+  "queueRestoreSubtitle1": "Aan het spelen: {track}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "track": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 Nummer} other{{count} Nummers}}, {remaining} Nog niet gespeeld",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "queueLoadingMessage": "Wachtrij herstellen…",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Bij het opstarten van de app, probeer de laatst gespeelde wachtrij te herstellen.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Huidige wachtrij naar de server sturen?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "reportQueueToServerSubtitle": "Als dit geactiveerd is stuurt Finamp de wachtrij naar de server. Er lijkt niet op dit moment niet veel nut voor te zijn en het zorgt voor meer netwerkverkeer.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "autoloadLastQueueOnStartup": "Laatste Wachtrij Automatisch Herstellen",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
+  "@albumCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffleAlbums": "Shuffle Albums",
+  "@shuffleAlbums": {
+    "description": "Label for action that shuffles all albums of an artist or genre"
+  },
+  "playCountValue": "{playCount} keer gespeeld",
+  "@playCountValue": {
+    "placeholders": {
+      "playCount": {
+        "type": "int",
+        "example": "12"
+      }
+    }
   }
 }
