@@ -77,7 +77,6 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
               }
 
               bool inPlaylist = queueItemInPlaylist(widget.queueItem);
-              final currentTrack = _queueService.getCurrentTrack()?.baseItem;
               await showPlaylistActionsMenu(
                 context: context,
                 item: widget.item!,

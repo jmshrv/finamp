@@ -360,6 +360,10 @@
   "@specialDownloads": {
     "description": "Title for the special downloads section on the downloads screen."
   },
+  "libraryDownloads": "Library downloads",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
   "noItemsDownloaded": "No items downloaded.",
   "@noItemsDownloaded": {
     "description": "Shown on the downloads screen for sections without any downloaded items."
@@ -2024,11 +2028,15 @@
       "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
   },
   "audioFadeInDurationSettingTitle": "Audio fade-in duration",
-  "@audioFadeOutDurationSettingTitle": {
+  "@audioFadeInDurationSettingTitle": {
       "description": "Title for the audio fade-in duration setting."
   },
   "audioFadeInDurationSettingSubtitle": "The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.",
-  "@audioFadeOutDurationSettingSubtitle": {
+  "@audioFadeInDurationSettingSubtitle": {
       "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "desktopShuffleWarning": "Shuffle is not currently available on desktop.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   }
 }

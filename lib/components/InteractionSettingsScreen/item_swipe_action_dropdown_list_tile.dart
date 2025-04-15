@@ -1,50 +1,62 @@
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-
-class ItemSwipeActionDropdownListTile extends StatelessWidget {
-  final DismissDirection direction;
-  const ItemSwipeActionDropdownListTile(this.direction, {super.key});
+class ItemSwipeLeftToRightActionDropdownListTile extends ConsumerWidget {
+  const ItemSwipeLeftToRightActionDropdownListTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        final currentSettings = FinampSettingsHelper.finampSettings;
-        final text_title = (direction == DismissDirection.startToEnd)
-            ? Text(AppLocalizations.of(context)!.swipeLeftToRightAction)
-            : Text(AppLocalizations.of(context)!.swipeRightToLeftAction);
-        final text_subtitle = (direction == DismissDirection.startToEnd)
-            ? Text(AppLocalizations.of(context)!.swipeLeftToRightActionSubtitle)
-            : Text(AppLocalizations.of(context)!.swipeRightToLeftActionSubtitle);
-        final dropdownValue = (direction == DismissDirection.startToEnd) 
-            ? currentSettings.itemSwipeActionLeftToRight
-            : currentSettings.itemSwipeActionRightToLeft;
-         
-        return ListTile(
-          title: text_title,
-          subtitle: text_subtitle,
-          trailing: DropdownButton<ItemSwipeActions>(
-            value: dropdownValue,
-            items: ItemSwipeActions.values
-                .map((e) => DropdownMenuItem<ItemSwipeActions>(
-                      value: e,
-                      child: Text(e.toLocalisedString(context)),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                FinampSettingsHelper.setItemSwipeAction(direction, value);
-              }
-            },
-          ),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    var action = ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight);
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.swipeLeftToRightAction),
+      subtitle:
+          Text(AppLocalizations.of(context)!.swipeLeftToRightActionSubtitle),
+      trailing: DropdownButton<ItemSwipeActions>(
+        value: action,
+        items: ItemSwipeActions.values
+            .map((e) => DropdownMenuItem<ItemSwipeActions>(
+                  value: e,
+                  child: Text(e.toLocalisedString(context)),
+                ))
+            .toList(),
+        onChanged: (value) {
+          if (value != null) {
+            FinampSetters.setItemSwipeActionLeftToRight(value);
+          }
+        },
+      ),
+    );
+  }
+}
+
+class ItemSwipeRightToLeftActionDropdownListTile extends ConsumerWidget {
+  const ItemSwipeRightToLeftActionDropdownListTile({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var action = ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft);
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.swipeRightToLeftAction),
+      subtitle:
+          Text(AppLocalizations.of(context)!.swipeRightToLeftActionSubtitle),
+      trailing: DropdownButton<ItemSwipeActions>(
+        value: action,
+        items: ItemSwipeActions.values
+            .map((e) => DropdownMenuItem<ItemSwipeActions>(
+                  value: e,
+                  child: Text(e.toLocalisedString(context)),
+                ))
+            .toList(),
+        onChanged: (value) {
+          if (value != null) {
+            FinampSetters.setItemSwipeActionRightToLeft(value);
+          }
+        },
+      ),
     );
   }
 }

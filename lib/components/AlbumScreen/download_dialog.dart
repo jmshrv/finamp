@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:file_sizes/file_sizes.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -178,10 +178,9 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
 
     DownloadLocation? getFirstSelectedLocation() {
       FinampSettings settings = FinampSettingsHelper.finampSettings;
-      // If we haven't selected anything, first try and grab the lastUsedDownloadLocation, then try the default, otherwise just select the first available option
       selectedDownloadLocation ??= settings
-              ?.downloadLocationsMap[settings.defaultDownloadLocation] ??
-          settings?.downloadLocationsMap[settings.lastUsedDownloadLocationId] ??
+              .downloadLocationsMap[widget.downloadLocationId] ??
+          settings.downloadLocationsMap[settings.lastUsedDownloadLocationId] ??
           FinampSettingsHelper.finampSettings.internalTrackDir;
 
       return selectedDownloadLocation;
