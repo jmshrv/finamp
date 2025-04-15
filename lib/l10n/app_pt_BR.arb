@@ -1600,7 +1600,7 @@
       }
     }
   },
-  "enableAutoScroll": "Habiliar rolagem automática",
+  "enableAutoScroll": "Habilitar rolagem automática",
   "@enableAutoScroll": {
     "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
   },
