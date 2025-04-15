@@ -2018,5 +2018,13 @@
   "autoOfflineSettingDescription": "Kytke Offline-tila automaattisesti.\nPois päältä: Ei kytke offline-tilaa automaattisesti. Voi säästää akkua.\nEi lähiverkkoa: Kytke offline-tila päälle, kun ei yhteyttä wifin tai ethernetin kautta.\nEi yhteyttä: Kytke offline-tila päälle, kun ei yhteyttä mihinkään.\nVoit aina kytkeä offline-tilan päälle käsin. Tämä kytkee offline-automaation pois päältä, kunnes taas kytket offline-tilan pois päältä.",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "libraryDownloads": "Kirjaston lataukset",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "desktopShuffleWarning": "Sekoitus ei ole tällä hetkellä saatavilla sovelluksen työpöytäversiossa.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   }
 }
