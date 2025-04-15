@@ -2012,5 +2012,13 @@
   "albumArtists": "Umělci alba",
   "@albumArtists": {},
   "performingArtists": "Účinkující umělci",
-  "@performingArtists": {}
+  "@performingArtists": {},
+  "libraryDownloads": "Stahování z knihovny",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "desktopShuffleWarning": "Náhodné přehrávání není v současné době dostupné na počítačích.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  }
 }
