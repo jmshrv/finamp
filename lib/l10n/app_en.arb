@@ -1949,5 +1949,9 @@
         "type": "int"
       }
     }
+  },
+  "menuButtonLabel": "More actions",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
   }
 }
