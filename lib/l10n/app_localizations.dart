@@ -1951,7 +1951,7 @@ abstract class AppLocalizations {
   /// Description of the setting that toggles reporting of the current queue to the Jellyfin server
   ///
   /// In en, this message translates to:
-  /// **'When enabled, Finamp will send the current queue to the server. There currently seems to be little use for this, and it increases network traffic.'**
+  /// **'When enabled, Finamp will send the current queue to the server. This can improve remote control and allow server-side restoration of the queue. Always enabled if the \'Play On\' feature is enabled.'**
   String get reportQueueToServerSubtitle;
 
   /// Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server
@@ -1975,31 +1975,31 @@ abstract class AppLocalizations {
   /// Label for the setting that controls how long a PlayOn remote session is considered active
   ///
   /// In en, this message translates to:
-  /// **'PlayOn session as active delay'**
+  /// **'\'Play On\' Session Timeout'**
   String get playOnStaleDelay;
 
   /// Description of the setting that controls how long a PlayOn remote session is considered active
   ///
   /// In en, this message translates to:
-  /// **'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.'**
+  /// **'How long a remote \'Play On\' session is considered active after receiving a command. When considered active, playback is reported more frequently, which can lead to increased bandwidth usage.'**
   String get playOnStaleDelaySubtitle;
 
-  /// Label for the settings to disable Jellyfin PlayOn
+  /// Label for the setting to enable Jellyfin's 'Play On' feature (remote control)
   ///
   /// In en, this message translates to:
-  /// **'Disable PlayOn feature'**
-  String get disablePlayon;
+  /// **'Enable \'Play On\' Support'**
+  String get enablePlayonTitle;
 
-  /// Description of the setting to disable Jellyfin PlayOn
+  /// Description of the setting to enable Jellyfin's 'Play On' feature (remote control)
   ///
   /// In en, this message translates to:
-  /// **'Disables PlayOn (controlling your session from a remote client). This avoids unnecessary errors if your reverse proxy or server doesn\'t support websockets.'**
-  String get disablePlayonSubtitle;
+  /// **'Enables Jellyfin\'s \'Play On\' feature (remote-controlling Finamp from another client). Disable this if your reverse proxy or server doesn\'t support websockets.'**
+  String get enablePlayonSubtitle;
 
   /// Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session
   ///
   /// In en, this message translates to:
-  /// **'PlayOn session reconnection delay'**
+  /// **'\'Play On\' Session Reconnection Delay'**
   String get playOnReconnectionDelay;
 
   /// Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session

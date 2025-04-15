@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/services/music_player_background_task.dart';
-import 'package:finamp/services/playon_handler.dart';
+import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -23,7 +23,7 @@ class PlaybackHistoryService {
   final _queueService = GetIt.instance<QueueService>();
   final _offlineListenLogHelper = GetIt.instance<OfflineListenLogHelper>();
   final _playbackHistoryServiceLogger = Logger("PlaybackHistoryService");
-  final _playonHandler = GetIt.instance<PlayonHandler>();
+  final _playOnService = GetIt.instance<PlayOnService>();
 
   // internal state
 
@@ -80,7 +80,7 @@ class PlaybackHistoryService {
 
       final currentItem = _queueService.getCurrentTrack();
 
-      if (_playonHandler.isControlled) {
+      if (_playOnService.isControlled) {
         _playbackHistoryServiceLogger.fine(
             "Handling playbackState event as controlled by a remote session");
         // If the session is being remote controlled, report playback agressively
@@ -467,7 +467,8 @@ class PlaybackHistoryService {
           ? duration
           : state.position,
       includeNowPlayingQueue:
-          FinampSettingsHelper.finampSettings.reportQueueToServer,
+          FinampSettingsHelper.finampSettings.enablePlayon ||
+              FinampSettingsHelper.finampSettings.reportQueueToServer,
     );
   }
 
@@ -625,7 +626,8 @@ class PlaybackHistoryService {
   List<jellyfin_models.QueueItem>? getQueueToReport(
       {bool? includeNowPlayingQueue}) {
     if ((includeNowPlayingQueue ?? false) &&
-        FinampSettingsHelper.finampSettings.reportQueueToServer) {
+        (FinampSettingsHelper.finampSettings.enablePlayon ||
+            FinampSettingsHelper.finampSettings.reportQueueToServer)) {
       final queue = _queueService
           .peekQueue(next: _maxQueueLengthToReport)
           .map((e) => jellyfin_models.QueueItem(

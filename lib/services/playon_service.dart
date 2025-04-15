@@ -16,7 +16,7 @@ import 'finamp_user_helper.dart';
 
 import 'package:get_it/get_it.dart';
 
-final _playOnHandlerLogger = Logger("PlayOnHandler");
+final _playOnServiceLogger = Logger("PlayOnService");
 final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 final _queueService = GetIt.instance<QueueService>();
@@ -26,7 +26,7 @@ StreamSubscription<int>? _keepaliveSubscription;
 StreamSubscription<int>? _reconnectionSubscription;
 StreamSubscription<int>? _isControlledSubscription;
 
-class PlayonHandler {
+class PlayOnService {
   late WidgetRef ref;
   // If the websocket connection to the server is established
   bool isConnected = false;
@@ -38,13 +38,13 @@ class PlayonHandler {
     var settingsListener = FinampSettingsHelper.finampSettingsListener;
     settingsListener.addListener(() async {
       if (isConnected && FinampSettingsHelper.finampSettings.isOffline) {
-        _playOnHandlerLogger
-            .info("Offline mode enabled, closing playon listener now");
+        _playOnServiceLogger
+            .info("Offline mode enabled, closing PlayOn listener now");
         await closeListener();
-      } else if (FinampSettingsHelper.finampSettings.disablePlayon) {
+      } else if (!FinampSettingsHelper.finampSettings.enablePlayon) {
         await closeListener();
       } else if (!isConnected &&
-          !FinampSettingsHelper.finampSettings.disablePlayon) {
+          FinampSettingsHelper.finampSettings.enablePlayon) {
         await startListener();
       }
     });
@@ -55,7 +55,7 @@ class PlayonHandler {
   Future<void> startListener() async {
     try {
       if (!FinampSettingsHelper.finampSettings.isOffline &&
-          !FinampSettingsHelper.finampSettings.disablePlayon) {
+          FinampSettingsHelper.finampSettings.enablePlayon) {
         await _jellyfinApiHelper.updateCapabilitiesFull(ClientCapabilities(
           supportsMediaControl: true,
           supportsPersistentIdentifier: true,
@@ -113,7 +113,7 @@ class PlayonHandler {
     } catch (e) {
       if (_reconnectionSubscription == null) {
         unawaited(startReconnectionLoop());
-        _playOnHandlerLogger.severe("Error starting PlayOn listener: $e");
+        _playOnServiceLogger.severe("Error starting PlayOn listener: $e");
       }
     }
   }
@@ -129,11 +129,11 @@ class PlayonHandler {
           (120 / FinampSettingsHelper.finampSettings.playOnReconnectionDelay)
               .round()) {
         // We try to connect for two minutes before giving up
-        _playOnHandlerLogger
+        _playOnServiceLogger
             .warning("Attempt $count to restart playon listener");
         startListener();
       } else {
-        _playOnHandlerLogger.warning("Stopped attempting to connect playon");
+        _playOnServiceLogger.warning("Stopped attempting to connect playon");
         _reconnectionSubscription?.cancel();
       }
     });
@@ -148,7 +148,7 @@ class PlayonHandler {
     _channel = WebSocketChannel.connect(wsUrl);
 
     await _channel.ready;
-    _playOnHandlerLogger.info("WebSocket connection to server established");
+    _playOnServiceLogger.info("WebSocket connection to server established");
     isConnected = true;
 
     _channel.sink.add('{"MessageType":"KeepAlive"}');
@@ -161,14 +161,14 @@ class PlayonHandler {
         _keepaliveSubscription?.cancel();
         isConnected = false;
         if (!FinampSettingsHelper.finampSettings.isOffline) {
-          _playOnHandlerLogger
+          _playOnServiceLogger
               .warning("WebSocket connection closed, attempting to reconnect");
           isConnected = false;
           startReconnectionLoop();
         }
       },
       onError: (error) {
-        _playOnHandlerLogger.severe("WebSocket Error: $error");
+        _playOnServiceLogger.severe("WebSocket Error: $error");
         isConnected = false;
       },
     );
@@ -177,13 +177,13 @@ class PlayonHandler {
         Stream.periodic(const Duration(seconds: 30), (count) {
       return count;
     }).listen((event) {
-      _playOnHandlerLogger.info("Sent KeepAlive message through websocket");
+      _playOnServiceLogger.info("Sent KeepAlive message through websocket");
       _channel.sink.add('{"MessageType":"KeepAlive"}');
     });
   }
 
   Future<void> closeListener() async {
-    _playOnHandlerLogger.info("Closing playon session");
+    _playOnServiceLogger.info("Closing playon session");
     _channel.sink.add('{"MessageType":"SessionsStop"}');
     _channel.sink.close();
     _keepaliveSubscription?.cancel();
@@ -195,7 +195,7 @@ class PlayonHandler {
   }
 
   Future<void> handleMessage(dynamic value) async {
-    _playOnHandlerLogger.finest("Received message: $value");
+    _playOnServiceLogger.finest("Received message: $value");
 
     var request = jsonDecode(value as String);
 
@@ -212,7 +212,7 @@ class PlayonHandler {
           (count) {
         return count;
       }).listen((event) {
-        _playOnHandlerLogger.info("Mark remote controlling as stale");
+        _playOnServiceLogger.info("Mark remote controlling as stale");
         isControlled = false;
         _isControlledSubscription?.cancel();
       });
@@ -224,13 +224,13 @@ class PlayonHandler {
               final messageFromServer = request['Data']['Arguments']['Text'];
               final header = request['Data']['Arguments']['Header'];
               final timeout = request['Data']['Arguments']['Timeout'];
-              _playOnHandlerLogger
+              _playOnServiceLogger
                   .info("Displaying message from server: '$messageFromServer'");
               GlobalSnackbar.message(
                   (context) => "$header: $messageFromServer");
               break;
             case "SetVolume":
-              _playOnHandlerLogger.info("Server requested a volume adjustment");
+              _playOnServiceLogger.info("Server requested a volume adjustment");
 
               final desiredVolume =
                   request['Data']['Arguments']['Volume'] as String;
@@ -243,7 +243,7 @@ class PlayonHandler {
               request['Data']['UserDataList'][0]['ItemId'] as String));
 
           // Handle favoritig from remote client
-          _playOnHandlerLogger.info("Updating favorite ui state");
+          _playOnServiceLogger.info("Updating favorite ui state");
           ref
               .read(isFavoriteProvider(item).notifier)
               .updateState(item.userData!.isFavorite);
@@ -315,7 +315,7 @@ class PlayonHandler {
                       startingIndex: request['Data']['StartIndex'] as int,
                     ));
                   } else {
-                    _playOnHandlerLogger
+                    _playOnServiceLogger
                         .severe("Server asked to start an unplayable item");
                   }
                   break;

@@ -86,6 +86,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       ConcatenatingAudioSource(children: []);
   final _audioServiceBackgroundTaskLogger = Logger("MusicPlayerBackgroundTask");
   final _volumeNormalizationLogger = Logger("VolumeNormalization");
+  final _outputLogger = Logger("Output");
 
   /// Set when creating a new queue. Will be used to set the first index in a
   /// new queue.
@@ -119,13 +120,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       return;
     }
     try {
-      print("Showing output switcher dialog");
+      _outputLogger.fine("Showing output switcher dialog");
       await outputSwitcherChannel.invokeMethod('showOutputSwitcherDialog');
-      print("Output switcher dialog shown");
+      _outputLogger.finer("Output switcher dialog shown");
     } on PlatformException catch (e) {
-      print("Failed to show output switcher dialog: ${e.message}");
+      _outputLogger
+          .severe("Failed to show output switcher dialog: ${e.message}");
     } catch (e) {
-      print("Failed to show output switcher dialog: $e");
+      _outputLogger.severe("Failed to show output switcher dialog: $e");
     }
   }
 
@@ -134,12 +136,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       return;
     }
     try {
-      print("Opening Bluetooth settings");
+      _outputLogger.fine("Opening Bluetooth settings");
       await outputSwitcherChannel.invokeMethod('openBluetoothSettings');
     } on PlatformException catch (e) {
-      print("Failed to open Bluetooth settings: ${e.message}");
+      _outputLogger.severe("Failed to open Bluetooth settings: ${e.message}");
     } catch (e) {
-      print("Failed to open Bluetooth settings: $e");
+      _outputLogger.severe("Failed to open Bluetooth settings: $e");
     }
   }
 
@@ -158,10 +160,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           [];
       return routes;
     } on PlatformException catch (e) {
-      print("Failed to get routes: ${e.message}");
+      _outputLogger.severe("Failed to get routes: ${e.message}");
       return [];
     } catch (e) {
-      print("Failed to get routes: $e");
+      _outputLogger.severe("Failed to get routes: $e");
       return [];
     }
   }
@@ -173,9 +175,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       await outputSwitcherChannel.invokeMethod('setOutputToDeviceSpeaker');
     } on PlatformException catch (e) {
-      print("Failed to switch output: ${e.message}");
+      _outputLogger.severe("Failed to switch output: ${e.message}");
     } catch (e) {
-      print("Failed to switch output: $e");
+      _outputLogger.severe("Failed to switch output: $e");
     }
   }
 
@@ -186,9 +188,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       await outputSwitcherChannel.invokeMethod('setOutputToBluetoothDevice');
     } on PlatformException catch (e) {
-      print("Failed to switch output: ${e.message}");
+      _outputLogger.severe("Failed to switch output: ${e.message}");
     } catch (e) {
-      print("Failed to switch output: $e");
+      _outputLogger.severe("Failed to switch output: $e");
     }
   }
 
@@ -200,9 +202,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       await outputSwitcherChannel
           .invokeMethod('setOutputToRouteByName', {'name': route.name});
     } on PlatformException catch (e) {
-      print("Failed to switch output: ${e.message}");
+      _outputLogger.severe("Failed to switch output: ${e.message}");
     } catch (e) {
-      print("Failed to switch output: $e");
+      _outputLogger.severe("Failed to switch output: $e");
     }
   }
 

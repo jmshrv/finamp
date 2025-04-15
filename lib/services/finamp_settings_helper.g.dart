@@ -666,9 +666,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setDisablePlayon(bool newDisablePlayon) {
+  static void setEnablePlayon(bool newEnablePlayon) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.disablePlayon = newDisablePlayon;
+    finampSettingsTemp.enablePlayon = newEnablePlayon;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -898,8 +898,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       .select((value) => value.requireValue.playOnStaleDelay);
   ProviderListenable<int> get playOnReconnectionDelay => finampSettingsProvider
       .select((value) => value.requireValue.playOnReconnectionDelay);
-  ProviderListenable<bool> get disablePlayon => finampSettingsProvider
-      .select((value) => value.requireValue.disablePlayon);
+  ProviderListenable<bool> get enablePlayon =>
+      finampSettingsProvider.select((value) => value.requireValue.enablePlayon);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

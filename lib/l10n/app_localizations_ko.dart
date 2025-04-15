@@ -1123,19 +1123,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get periodicPlaybackSessionUpdateFrequencyDetails => '젤리핀 Jellyfin서버가 최근 5분 동안 클라이언트로부터 어떠한 업데이트도 받지 못하면, 서버는 재생이 종료된 것으로 간주합니다. 이는 5분 이상의 곡의 경우 재생이 종료된 것으로 잘못 보고되어 재생 보고 데이터의 품질이 저하될 수 있음을 의미합니다.';
 
   @override
-  String get playOnStaleDelay => 'PlayOn session as active delay';
+  String get playOnStaleDelay => '\'Play On\' Session Timeout';
 
   @override
-  String get playOnStaleDelaySubtitle => 'How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.';
+  String get playOnStaleDelaySubtitle => 'How long a remote \'Play On\' session is considered active after receiving a command. When considered active, playback is reported more frequently, which can lead to increased bandwidth usage.';
 
   @override
-  String get disablePlayon => 'Disable PlayOn feature';
+  String get enablePlayonTitle => 'Enable \'Play On\' Support';
 
   @override
-  String get disablePlayonSubtitle => 'Disables PlayOn (controlling your session from a remote client). This avoids unnecessary errors if your reverse proxy or server doesn\'t support websockets.';
+  String get enablePlayonSubtitle => 'Enables Jellyfin\'s \'Play On\' feature (remote-controlling Finamp from another client). Disable this if your reverse proxy or server doesn\'t support websockets.';
 
   @override
-  String get playOnReconnectionDelay => 'PlayOn session reconnection delay';
+  String get playOnReconnectionDelay => '\'Play On\' Session Reconnection Delay';
 
   @override
   String get playOnReconnectionDelaySubtitle => 'Controls the delay between the attempts to reconnect to the PlayOn websocket when it gets disconnected (in seconds). A lower delay increases bandwidth usage.';

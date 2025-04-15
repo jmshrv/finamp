@@ -8,7 +8,7 @@ import '../components/PlaybackReportingSettingsScreen/periodic_playback_session_
 import '../components/PlaybackReportingSettingsScreen/report_queue_to_server_toggle.dart';
 import '../components/PlaybackReportingSettingsScreen/play_on_stale_delay_editor.dart';
 import '../components/PlaybackReportingSettingsScreen/play_on_reconnection_delay_editor.dart';
-import '../components/PlaybackReportingSettingsScreen/disable_playon_toggle.dart';
+import '../components/PlaybackReportingSettingsScreen/enable_playon_toggle.dart';
 
 class PlaybackReportingSettingsScreen extends StatefulWidget {
   const PlaybackReportingSettingsScreen({super.key});
@@ -41,7 +41,7 @@ class _PlaybackReportingSettingsScreenState
       ),
       body: ListView(
         children: [
-          const DisablePlayonToggle(),
+          const EnablePlayonToggle(),
           const PeriodicPlaybackSessionUpdateFrequencyEditor(),
           const ReportQueueToServerToggle(),
           const PlayOnStaleDelayEditor(),

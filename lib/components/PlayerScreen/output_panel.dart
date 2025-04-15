@@ -149,23 +149,25 @@ Future<void> showOutputMenu({
                   menuEntries,
                 ))),
           ),
-          SliverStickyHeader(
-            header: Padding(
-              padding: const EdgeInsets.only(
-                  top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text(
-                  AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
-                  // AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
-                  style: Theme.of(context).textTheme.titleMedium),
+          if (Platform.isAndroid)
+            SliverStickyHeader(
+              header: Padding(
+                padding: const EdgeInsets.only(
+                    top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
+                child: Text(
+                    AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
+                    // AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
+                    style: Theme.of(context).textTheme.titleMedium),
+              ),
+              sliver: MenuMask(
+                height: 35.0,
+                child: OutputTargetList(), // Pass the outputRoutes
+              ),
             ),
-            sliver: MenuMask(
-              height: 35.0,
-              child: OutputTargetList(), // Pass the outputRoutes
-            ),
-          ),
         ];
         // TODO better estimate, how to deal with lag getting playlists?
-        var stackHeight = MediaQuery.sizeOf(context).height * 0.65;
+        var stackHeight = MediaQuery.sizeOf(context).height *
+            (Platform.isAndroid ? 0.65 : 0.3);
         return (stackHeight, menu);
       });
 }

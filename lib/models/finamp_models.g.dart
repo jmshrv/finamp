@@ -176,7 +176,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       playOnStaleDelay: fields[93] == null ? 90 : (fields[93] as num).toInt(),
       playOnReconnectionDelay:
           fields[94] == null ? 5 : (fields[94] as num).toInt(),
-      disablePlayon: fields[95] == null ? false : fields[95] as bool,
+      enablePlayon: fields[95] == null ? true : fields[95] as bool,
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
@@ -418,7 +418,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(94)
       ..write(obj.playOnReconnectionDelay)
       ..writeByte(95)
-      ..write(obj.disablePlayon);
+      ..write(obj.enablePlayon);
   }
 
   @override

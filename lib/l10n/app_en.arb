@@ -1097,11 +1097,11 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "reportQueueToServerSubtitle": "When enabled, Finamp will send the current queue to the server. There currently seems to be little use for this, and it increases network traffic.",
+  "reportQueueToServerSubtitle": "When enabled, Finamp will send the current queue to the server. This can improve remote control and allow server-side restoration of the queue. Always enabled if the 'Play On' feature is enabled.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Playback session update frequency",
+  "periodicPlaybackSessionUpdateFrequency": "Playback Session Update Frequency",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1113,23 +1113,23 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "playOnStaleDelay": "PlayOn session as active delay",
+  "playOnStaleDelay": "'Play On' Session Timeout",
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   },
-  "playOnStaleDelaySubtitle": "How long a remote PlayOn session is considered active after receiving a command. When considered active, playback is reported more frequently and can lead to increased bandwidth usage.",
+  "playOnStaleDelaySubtitle": "How long a remote 'Play On' session is considered active after receiving a command. When considered active, playback is reported more frequently, which can lead to increased bandwidth usage.",
   "@playOnStaleDelaySubtitle": {
     "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
   },
-  "disablePlayon": "Disable PlayOn feature",
-  "@disablePlayon": {
-    "description": "Label for the settings to disable Jellyfin PlayOn"
+  "enablePlayonTitle": "Enable 'Play On' Support",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "disablePlayonSubtitle": "Disables PlayOn (controlling your session from a remote client). This avoids unnecessary errors if your reverse proxy or server doesn't support websockets.",
-  "@disablePlayonSubtitle": {
-    "description": "Description of the setting to disable Jellyfin PlayOn"
+  "enablePlayonSubtitle": "Enables Jellyfin's 'Play On' feature (remote-controlling Finamp from another client). Disable this if your reverse proxy or server doesn't support websockets.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "playOnReconnectionDelay": "PlayOn session reconnection delay",
+  "playOnReconnectionDelay": "'Play On' Session Reconnection Delay",
   "@playOnReconnectionDelay": {
     "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },

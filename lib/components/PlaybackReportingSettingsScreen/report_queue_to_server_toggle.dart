@@ -17,8 +17,11 @@ class ReportQueueToServerToggle extends StatelessWidget {
           title: Text(AppLocalizations.of(context)!.reportQueueToServer),
           subtitle:
               Text(AppLocalizations.of(context)!.reportQueueToServerSubtitle),
-          value: FinampSettingsHelper.finampSettings.reportQueueToServer,
-          onChanged: (value) => FinampSetters.setReportQueueToServer(value),
+          value: FinampSettingsHelper.finampSettings.reportQueueToServer ||
+              FinampSettingsHelper.finampSettings.enablePlayon,
+          onChanged: FinampSettingsHelper.finampSettings.enablePlayon
+              ? null // disable switch tile, since queue is always reported if play on is active
+              : (value) => FinampSetters.setReportQueueToServer(value),
         );
       },
     );
