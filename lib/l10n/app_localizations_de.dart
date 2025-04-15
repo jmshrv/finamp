@@ -1739,6 +1739,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Steuert, ob der In-App-Miniplayer bzw. die aktuelle Wiedergabeleiste unten in der Wiedergabe-Ansicht als Fortschrittsbalken fungiert.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Lyrics-Ansicht';
 
   @override

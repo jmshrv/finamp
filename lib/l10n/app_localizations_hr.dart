@@ -1122,7 +1122,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get reportQueueToServerSubtitle => 'When enabled, Finamp will send the current queue to the server. This can improve remote control and allow server-side restoration of the queue. Always enabled if the \'Play On\' feature is enabled.';
 
   @override
-  String get periodicPlaybackSessionUpdateFrequency => 'Playback session update frequency';
+  String get periodicPlaybackSessionUpdateFrequency => 'Playback Session Update Frequency';
 
   @override
   String get periodicPlaybackSessionUpdateFrequencySubtitle => 'How often to send the current playback status to the server, in seconds. This should be less than 5 minutes (300 seconds), to prevent the session from timing out.';
@@ -1725,6 +1725,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get showProgressOnNowPlayingBarSubtitle => 'Upravlja hoće li ugrađeni miniplayer / traka trenutačne reprodukcije na dnu ekrana glazbe funkcionirati kao traka napretka.';
+
+  @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
 
   @override
   String get lyricsScreen => 'Prikaz teksta pjesme';

@@ -1728,6 +1728,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Ovládá, zda bude minipřehrávač v aplikaci / lišta právě hrající skladby v dolní částy obrazovky fungovat jako lišta průběhu skladby.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Zobrazení textů';
 
   @override

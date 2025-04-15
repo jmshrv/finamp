@@ -1717,6 +1717,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'این‌که پخش‌کننده‌ی کوچک/میله‌ی پخش کنونی در پایین صفحه‌ی آهنگ مانند یک میله‌ی پیشروری رفتار کند را واپایش می‌کند.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'نمای متن شعر';
 
   @override

@@ -1718,6 +1718,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Oynatma ekranının alt kısmındaki uygulama içi mini oynatıcının / şimdi oynatılıyor çubuğunun bir ilerleme çubuğu olarak çalışıp çalışmadığını kontrol eder.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Şarkı Sözleri Görünümü';
 
   @override

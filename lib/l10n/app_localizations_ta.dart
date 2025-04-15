@@ -1678,6 +1678,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'பயன்பாட்டு மினி பிளேயர் / இப்போது இசைத் திரையின் அடிப்பகுதியில் விளையாடும் பட்டியை முன்னேற்றப் பட்டியாக செயல்பட்டால் கட்டுப்படுத்துகிறது.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'பாடல் பார்வை';
 
   @override

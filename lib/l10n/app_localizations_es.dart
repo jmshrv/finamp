@@ -1729,6 +1729,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Controla que el mini reproductor de la aplicación / la barra de reproduciendo ahora en la parte inferior de la pantalla de musica funcionen como una barra de progreso.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Ventana de Letras';
 
   @override

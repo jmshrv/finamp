@@ -1730,6 +1730,10 @@
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
+  "lyricsScreenButtonTitle": "Lyrics",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
   "lyricsScreen": "Lyrics View",
   "@lyricsScreen": {
     "description": "Name for the view/screen that shows lyrics for the currently playing track"

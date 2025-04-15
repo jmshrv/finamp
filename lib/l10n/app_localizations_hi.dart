@@ -1717,6 +1717,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'यह नियंत्रित करता है कि संगीत स्क्रीन के नीचे स्थित इन-ऐप मिनी प्लेयर / Now Playing बार प्रगति बार के रूप में कार्य करता है या नहीं।';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'बोल दृश्यता';
 
   @override

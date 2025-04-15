@@ -1730,6 +1730,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Lyrics View';
 
   @override

@@ -1731,6 +1731,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Управляет тем, будет ли мини-плеер в приложении / панель «сейчас играет» в нижней части экрана музыки функционировать как индикатор прогресса.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Просмотр текста песни';
 
   @override

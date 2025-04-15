@@ -1717,6 +1717,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => '控制音乐播放界面底部的应用内迷你播放器 / 正在播放栏是否用作进度条。';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => '歌词界面';
 
   @override

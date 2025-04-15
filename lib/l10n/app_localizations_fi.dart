@@ -1717,6 +1717,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Näytä toiston mukaan etenevä väripalkki sovelluksen sisäisen minisoittimen / musiikkinäytön alareunassa sijaitsevan tällä hetkellä toistettavan kappaleen palkissa.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Sanoitusnäkymä';
 
   @override

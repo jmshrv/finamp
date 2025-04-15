@@ -1957,7 +1957,7 @@ abstract class AppLocalizations {
   /// Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server
   ///
   /// In en, this message translates to:
-  /// **'Playback session update frequency'**
+  /// **'Playback Session Update Frequency'**
   String get periodicPlaybackSessionUpdateFrequency;
 
   /// Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server
@@ -2817,6 +2817,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar.'**
   String get showProgressOnNowPlayingBarSubtitle;
+
+  /// Label for the button for opening the lyrics screen
+  ///
+  /// In en, this message translates to:
+  /// **'Lyrics'**
+  String get lyricsScreenButtonTitle;
 
   /// Name for the view/screen that shows lyrics for the currently playing track
   ///

@@ -1717,6 +1717,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Controlla se il miniplayer in-app / la barra in riproduzione nella parte inferiore della schermata musicale funzionano come una barra di avanzamento.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Visualizzazione dei testi';
 
   @override

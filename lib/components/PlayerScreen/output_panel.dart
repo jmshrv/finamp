@@ -127,6 +127,8 @@ Future<void> showOutputMenu({
                           audioHandler.showOutputSwitcherDialog();
                         },
                       ),
+                    if (!Platform.isAndroid && !Platform.isIOS)
+                      SizedBox(width: 32, height: 8),
                   ],
                 ),
               ),
@@ -167,7 +169,7 @@ Future<void> showOutputMenu({
         ];
         // TODO better estimate, how to deal with lag getting playlists?
         var stackHeight = MediaQuery.sizeOf(context).height *
-            (Platform.isAndroid ? 0.65 : 0.3);
+            (Platform.isAndroid ? 0.65 : 0.4);
         return (stackHeight, menu);
       });
 }

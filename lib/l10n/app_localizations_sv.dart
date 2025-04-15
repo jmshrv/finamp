@@ -1723,6 +1723,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Styr ifall appens minispelare / nu spelas-fält längst ned på musikskärmen fungerar som en förloppsindikator.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Låttextvy';
 
   @override

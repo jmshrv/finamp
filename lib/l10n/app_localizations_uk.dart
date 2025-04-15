@@ -1717,6 +1717,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Контролює, чи міні-програвач у програмі/панель зараз відтворюється внизу екрана музики функціонує як панель прогресу.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Текст пісні';
 
   @override

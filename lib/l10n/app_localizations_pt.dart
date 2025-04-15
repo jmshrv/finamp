@@ -1717,6 +1717,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Controla se o mini-reprodutor dentro da aplicação / a tocar agora no fundo do ecrã da música funciona como barra de progresso.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Vista das Letras';
 
   @override

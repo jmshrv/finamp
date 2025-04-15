@@ -1724,6 +1724,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get showProgressOnNowPlayingBarSubtitle => 'Kontroluje, czy pasek miniodtwarzacza / teraz odtwarzane na dole ekranu muzyki działa jako pasek postępu.';
 
   @override
+  String get lyricsScreenButtonTitle => 'Lyrics';
+
+  @override
   String get lyricsScreen => 'Widok Tekstu';
 
   @override

@@ -393,7 +393,7 @@ class _PlayerScreenContent extends ConsumerWidget {
               Flexible(
                 fit: FlexFit.tight,
                 child: SimpleButton(
-                  text: "Output*",
+                  text: AppLocalizations.of(context)!.outputMenuButtonTitle,
                   icon: TablerIcons.device_speaker,
                   onPressed: () async {
                     await showOutputMenu(context: context);
@@ -405,7 +405,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                 fit: FlexFit.tight,
                 child: SimpleButton(
                   inactive: !isLyricsAvailable,
-                  text: "Lyrics",
+                  text: AppLocalizations.of(context)!.lyricsScreenButtonTitle,
                   icon: getLyricsIcon(),
                   onPressed: () {
                     Navigator.of(context).push(_buildSlideRouteTransition(
