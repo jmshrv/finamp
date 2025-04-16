@@ -178,7 +178,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           ListTile(
             leading: const Icon(TablerIcons.cast),
-            title: Text(AppLocalizations.of(context)!.playbackReporting),
+            title: Text(
+                AppLocalizations.of(context)!.playbackReportingSettingsTitle),
             onTap: () => Navigator.of(context)
                 .pushNamed(PlaybackReportingSettingsScreen.routeName),
           ),

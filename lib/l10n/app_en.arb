@@ -458,10 +458,8 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
-  "playbackReporting": "Playback Reporting & Play On",
-  "@playbackReporting": {
-    "description": "Title for the playback reporting settings"
-  },
+  "playbackReporting": "Playback Reporting",
+  "@playbackReporting": {},
   "interactions": "Interactions",
   "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
@@ -1216,7 +1214,7 @@
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
   },
-  "playbackReportingSettingsTitle": "Playback reporting & Play On",
+  "playbackReportingSettingsTitle": "Playback Reporting & Play On",
   "@playbackReportingSettingsTitle": {
     "description": "Title for the playback reporting settings screen"
   },
