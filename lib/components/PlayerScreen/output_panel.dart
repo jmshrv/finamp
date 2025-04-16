@@ -36,8 +36,6 @@ Future<void> showOutputMenu({
 }) async {
   final outputPanelLogger = Logger("OutputPanel");
 
-  final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final queueService = GetIt.instance<QueueService>();
 
   FeedbackHelper.feedback(FeedbackType.selection);
@@ -59,9 +57,7 @@ Future<void> showOutputMenu({
             builder: (context, ref, child) {
             return VolumeSlider(
               initialValue:
-                  ((ref.watch(finampSettingsProvider).value?.currentVolume ??
-                                  1.0) *
-                              100)
+                  (ref.watch(finampSettingsProvider.currentVolume) * 100)
                           .floor() /
                       100.0,
               onChange: (double currentValue) async {
