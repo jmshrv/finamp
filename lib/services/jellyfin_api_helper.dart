@@ -446,7 +446,8 @@ class JellyfinApiHelper {
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
-    );
+    ); 
+    FinampSetters.setPublicAddress(baseUrlTemp!.toString());
 
     await _finampUserHelper.saveUser(newUser);
   }
@@ -476,6 +477,7 @@ class JellyfinApiHelper {
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
     );
+    FinampSetters.setPublicAddress(baseUrlTemp!.toString());
 
     await _finampUserHelper.saveUser(newUser);
   }

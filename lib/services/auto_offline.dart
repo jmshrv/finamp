@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:io';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:logging/logging.dart';
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
@@ -97,32 +98,31 @@ Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
   }
 }
 
-void _toLocal() {
-  Logger("Hallo").info("Using Local Network");
-}
-void _toNotLocal() {
-  Logger("Hallo").info("Use public Network");
-
-}
 
 Future<void> changeTargetUrl({bool? isLocal}) async {
   if (isLocal != null) {
-    if (isLocal) _toLocal();
-    else _toNotLocal();
+    if (isLocal) {
+        Logger("Network Switcher").info("Changed active network to home address");
+        FinampUserHelper()
+        .currentUser!
+        .changeUrl(FinampSettingsHelper
+            .finampSettings.homeNetworkAddress);}
+    else {
+        Logger("Network Switcher").info("Changed active network to public address");
+        FinampUserHelper()
+        .currentUser!
+        .changeUrl(FinampSettingsHelper
+            .finampSettings.publicAddress);}
     return;
   }
 
 
-  if (!FinampSettingsHelper.finampSettings.preferHomeNetwork) return _toLocal();
+  if (!FinampSettingsHelper.finampSettings.preferHomeNetwork) {
+    return changeTargetUrl(isLocal: false);}
 
 
-  String? current_wifi = await NetworkInfo().getWifiName();
-  String target_wifi = FinampSettingsHelper.finampSettings.homeNetworkName;
+  String? currentWifi = await NetworkInfo().getWifiName();
+  String targetWifi = FinampSettingsHelper.finampSettings.homeNetworkName;
 
-
-  if (current_wifi == target_wifi) {
-    _toLocal();
-  } else {
-    _toNotLocal();
-  }
+  await changeTargetUrl(isLocal: currentWifi == targetWifi);
 }
