@@ -65,8 +65,17 @@ class PlayerVolumeController {
 
   final AudioPlayer _player;
 
+  double _internalVolume = FinampSettingsHelper.finampSettings.currentVolume;
   double _replayGainVolume = 1.0;
   double _fadeVolume = 1.0;
+
+  Future<void> setInternalVolume(double volume) {
+    if (volume == _internalVolume) return Future.value();
+    _internalVolume = volume;
+    FinampSetters.setCurrentVolume(volume);
+    return _updateVolume();
+  }
+
   Future<void> setReplayGainVolume(double volume) {
     if (volume == _replayGainVolume) return Future.value();
     _replayGainVolume = volume;
@@ -80,9 +89,10 @@ class PlayerVolumeController {
   }
 
   Future<void> _updateVolume() {
-    var vol1 = _replayGainVolume.clamp(0.0, 1.0);
-    var vol2 = _fadeVolume.clamp(0.0, 1.0);
-    var totalVol = vol1 * vol2;
+    var vol1 = _internalVolume.clamp(0.0, 1.0);
+    var vol2 = _replayGainVolume.clamp(0.0, 1.0);
+    var vol3 = _fadeVolume.clamp(0.0, 1.0);
+    var totalVol = vol1 * vol2 * vol3;
     return _player.setVolume(totalVol.clamp(0.0, 1.0));
   }
 }
@@ -434,6 +444,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> setSpeed(final double speed) async {
     return _player.setSpeed(speed);
+  }
+
+  void setVolume(final double volume) async {
+    return _volume.setInternalVolume(volume);
   }
 
   @override
@@ -998,7 +1012,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       if (effectiveGainChange != null) {
         _volumeNormalizationLogger.info("Gain change: $effectiveGainChange");
         if (Platform.isAndroid) {
-          _player.setVolume(FinampSettingsHelper.finampSettings.currentVolume);
           _loudnessEnhancerEffect?.setTargetGain(effectiveGainChange /
               10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
         } else {

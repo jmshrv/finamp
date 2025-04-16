@@ -491,7 +491,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get audioService => 'Servizio Audio';
 
   @override
-  String get playbackReporting => 'Playback reporting & Play On';
+  String get playbackReporting => 'Playback Reporting & Play On';
 
   @override
   String get interactions => 'Interazioni';

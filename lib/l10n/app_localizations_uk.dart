@@ -491,7 +491,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get audioService => 'Служба аудіовідтворення';
 
   @override
-  String get playbackReporting => 'Playback reporting & Play On';
+  String get playbackReporting => 'Playback Reporting & Play On';
 
   @override
   String get interactions => 'Взаємодії';

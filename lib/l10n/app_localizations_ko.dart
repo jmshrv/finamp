@@ -491,7 +491,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get audioService => '오디오 서비스';
 
   @override
-  String get playbackReporting => 'Playback reporting & Play On';
+  String get playbackReporting => 'Playback Reporting & Play On';
 
   @override
   String get interactions => '상호작용';

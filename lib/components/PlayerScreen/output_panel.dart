@@ -65,7 +65,9 @@ Future<void> showOutputMenu({
                           .floor() /
                       100.0,
               onChange: (double currentValue) async {
-                FinampSettingsHelper.setCurrentVolume(currentValue);
+                final audioHandler =
+                    GetIt.instance<MusicPlayerBackgroundTask>();
+                audioHandler.setVolume(currentValue);
                 outputPanelLogger.fine("Volume set to $currentValue");
               },
               forceLoading: true,

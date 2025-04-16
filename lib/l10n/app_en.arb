@@ -458,8 +458,10 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
-  "playbackReporting": "Playback reporting & Play On",
-  "@playbackReporting": {},
+  "playbackReporting": "Playback Reporting & Play On",
+  "@playbackReporting": {
+    "description": "Title for the playback reporting settings"
+  },
   "interactions": "Interactions",
   "@interactions": {},
   "layoutAndTheme": "Layout & Theme",

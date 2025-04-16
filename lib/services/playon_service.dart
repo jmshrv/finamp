@@ -234,7 +234,7 @@ class PlayOnService {
 
               final desiredVolume =
                   request['Data']['Arguments']['Volume'] as String;
-              FinampSettingsHelper.setCurrentVolume(
+              _audioHandler.setVolume(
                   double.parse(desiredVolume) / 100.0);
           }
           break;

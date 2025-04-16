@@ -503,7 +503,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get audioService => 'Service audio';
 
   @override
-  String get playbackReporting => 'Playback reporting & Play On';
+  String get playbackReporting => 'Playback Reporting & Play On';
 
   @override
   String get interactions => 'Intéractions';

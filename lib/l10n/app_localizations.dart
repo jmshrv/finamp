@@ -940,10 +940,10 @@ abstract class AppLocalizations {
   /// **'Audio Service'**
   String get audioService;
 
-  /// No description provided for @playbackReporting.
+  /// Title for the playback reporting settings
   ///
   /// In en, this message translates to:
-  /// **'Playback reporting & Play On'**
+  /// **'Playback Reporting & Play On'**
   String get playbackReporting;
 
   /// No description provided for @interactions.

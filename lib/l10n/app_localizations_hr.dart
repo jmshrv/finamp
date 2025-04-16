@@ -496,7 +496,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get audioService => 'Usluga audioreprodukcije';
 
   @override
-  String get playbackReporting => 'Playback reporting & Play On';
+  String get playbackReporting => 'Playback Reporting & Play On';
 
   @override
   String get interactions => 'Interakcije';

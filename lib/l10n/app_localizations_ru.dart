@@ -499,7 +499,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get audioService => 'Аудиосервис';
 
   @override
-  String get playbackReporting => 'Playback reporting & Play On';
+  String get playbackReporting => 'Playback Reporting & Play On';
 
   @override
   String get interactions => 'Взаимодействие';

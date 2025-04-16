@@ -491,7 +491,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get audioService => 'Ses Servisi';
 
   @override
-  String get playbackReporting => 'Playback reporting & Play On';
+  String get playbackReporting => 'Playback Reporting & Play On';
 
   @override
   String get interactions => 'Etkileşimler';
