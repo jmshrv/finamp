@@ -1972,5 +1972,13 @@
   "swipeRightToLeftAction": "Acción de deslizar a la izquierda",
   "@swipeRightToLeftAction": {},
   "swipeRightToLeftActionSubtitle": "Acción activada al deslizar una pista de la lista de derecha a izquierda.",
-  "@swipeRightToLeftActionSubtitle": {}
+  "@swipeRightToLeftActionSubtitle": {},
+  "libraryDownloads": "Descargas de la biblioteca",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "autoOfflineOptionOff": "Desactivado",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  }
 }
