@@ -83,6 +83,16 @@ class FeatureState {
       );
     }
 
+    if (FinampSettingsHelper.finampSettings.currentVolume != 1.0) {
+      features.add(
+        FeatureProperties(
+          text: AppLocalizations.of(context)!.currentVolumeFeatureText(
+              (FinampSettingsHelper.finampSettings.currentVolume * 100)
+                  .floor()),
+        ),
+      );
+    }
+
     for (var feature in configuration.features) {
       // TODO this will likely be extremely outdated if offline, hide?
       if (feature == FinampFeatureChipType.playCount &&

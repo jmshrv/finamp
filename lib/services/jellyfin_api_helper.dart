@@ -525,6 +525,22 @@ class JellyfinApiHelper {
         .items);
   }
 
+  /// Updates capabilities for this client.
+  Future<void> updateCapabilities(ClientCapabilities capabilities) async {
+    await jellyfinApi.updateCapabilities(
+      playableMediaTypes: capabilities.playableMediaTypes?.join(",") ?? "",
+      supportedCommands: capabilities.supportedCommands?.join(",") ?? "",
+      supportsMediaControl: capabilities.supportsMediaControl ?? false,
+      supportsPersistentIdentifier:
+          capabilities.supportsPersistentIdentifier ?? false,
+    );
+  }
+
+  /// Updates capabilities for this client.
+  Future<void> updateCapabilitiesFull(ClientCapabilities capabilities) async {
+    await jellyfinApi.updateCapabilitiesFull(capabilities);
+  }
+
   /// Tells the Jellyfin server that playback has started
   Future<void> reportPlaybackStart(
       PlaybackProgressInfo playbackProgressInfo) async {

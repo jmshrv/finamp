@@ -458,6 +458,8 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
+  "playbackReporting": "Playback Reporting",
+  "@playbackReporting": {},
   "interactions": "Interactions",
   "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
@@ -968,7 +970,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{a Remote Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1012,6 +1014,16 @@
     "placeholders": {
       "speed": {
         "type": "double"
+      }
+    }
+  },
+  "currentVolumeFeatureText": "{volume}% volume",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
       }
     }
   },
@@ -1095,11 +1107,11 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "reportQueueToServerSubtitle": "When enabled, Finamp will send the current queue to the server. There currently seems to be little use for this, and it increases network traffic.",
+  "reportQueueToServerSubtitle": "When enabled, Finamp will send the current queue to the server. This can improve remote control and allow server-side restoration of the queue. Always enabled if the 'Play On' feature is enabled.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Playback session update frequency",
+  "periodicPlaybackSessionUpdateFrequency": "Playback Session Update Frequency",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1110,6 +1122,30 @@
   "periodicPlaybackSessionUpdateFrequencyDetails": "If the Jellyfin server hasn''t received any updates from a client in the last 5 minutes, it assumes that playback has ended. This means that for tracks longer than 5 minutes, that playback could be incorrectly reported as having ended, which reduced the quality of the playback reporting data.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "playOnStaleDelay": "'Play On' Session Timeout",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "How long a remote 'Play On' session is considered active after receiving a command. When considered active, playback is reported more frequently, which can lead to increased bandwidth usage.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Enable 'Play On' Support",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Enables Jellyfin's 'Play On' feature (remote-controlling Finamp from another client). Disable this if your reverse proxy or server doesn't support websockets.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "'Play On' Session Reconnection Delay",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelaySubtitle": "Controls the delay between the attempts to reconnect to the PlayOn websocket when it gets disconnected (in seconds). A lower delay increases bandwidth usage.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
   "topTracks": "Top Tracks",
   "@topTracks": {},
@@ -1177,6 +1213,10 @@
   "volumeNormalizationSettingsTitle": "Volume Normalization",
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
+  },
+  "playbackReportingSettingsTitle": "Playback Reporting & Play On",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
   },
   "volumeNormalizationSwitchTitle": "Enable Volume Normalization",
   "@volumeNormalizationSwitchTitle": {
@@ -1700,6 +1740,10 @@
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
+  "lyricsScreenButtonTitle": "Lyrics",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
   "lyricsScreen": "Lyrics View",
   "@lyricsScreen": {
     "description": "Name for the view/screen that shows lyrics for the currently playing track"
@@ -2021,19 +2065,48 @@
   },
   "audioFadeOutDurationSettingTitle": "Audio fade-out duration",
   "@audioFadeOutDurationSettingTitle": {
-      "description": "Title for the audio fade-out duration setting."
+    "description": "Title for the audio fade-out duration setting."
   },
   "audioFadeOutDurationSettingSubtitle": "The duration of the audio fade out in milliseconds.",
   "@audioFadeOutDurationSettingSubtitle": {
-      "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+    "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
   },
   "audioFadeInDurationSettingTitle": "Audio fade-in duration",
   "@audioFadeInDurationSettingTitle": {
-      "description": "Title for the audio fade-in duration setting."
+    "description": "Title for the audio fade-in duration setting."
   },
   "audioFadeInDurationSettingSubtitle": "The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.",
   "@audioFadeInDurationSettingSubtitle": {
       "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "outputMenuButtonTitle": "Output",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuTitle": "Change Output",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuVolumeSectionTitle": "Volume",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "Available Devices",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Connect to a device",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "deviceType": "{type, select, speaker{Device Speaker} tv{TV} bluetooth{Bluetooth} other{Unknown}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
   },
   "desktopShuffleWarning": "Shuffle is not currently available on desktop.",
   "@desktopShuffleWarning": {

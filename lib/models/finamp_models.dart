@@ -113,6 +113,9 @@ class DefaultSettings {
   static const hidePlayerBottomActions = false;
   static const reportQueueToServer = false;
   static const periodicPlaybackSessionUpdateFrequencySeconds = 150;
+  static const playOnStaleDelay = 90;
+  static const playOnReconnectionDelay = 5;
+  static const enablePlayon = true;
   static const showArtistChipImage = true;
   static const trackOfflineFavorites = true;
   static const showProgressOnNowPlayingBar = true;
@@ -153,6 +156,7 @@ class DefaultSettings {
   static const oneLineMarqueeTextButton = false;
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
+  static const double currentVolume = 1.0;
   static const autoOffline = AutoOfflineOption.disconnected;
   static const autoOfflineListenerActive = true;
   static const audioFadeOutDuration = Duration(milliseconds: 0);
@@ -238,6 +242,10 @@ class FinampSettings {
       this.reportQueueToServer = DefaultSettings.reportQueueToServer,
       this.periodicPlaybackSessionUpdateFrequencySeconds =
           DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+      this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
+      this.playOnReconnectionDelay = DefaultSettings.playOnReconnectionDelay,
+      this.enablePlayon = DefaultSettings.enablePlayon,
+      this.currentVolume = DefaultSettings.currentVolume,
       this.showArtistChipImage = DefaultSettings.showArtistChipImage,
       this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
       this.showProgressOnNowPlayingBar =
@@ -576,6 +584,18 @@ class FinampSettings {
 
   @HiveField(92, defaultValue: DefaultSettings.artistListType)
   ArtistType artistListType;
+
+  @HiveField(93, defaultValue: DefaultSettings.currentVolume)
+  double currentVolume;
+
+  @HiveField(94, defaultValue: DefaultSettings.playOnStaleDelay)
+  int playOnStaleDelay;
+
+  @HiveField(95, defaultValue: DefaultSettings.playOnReconnectionDelay)
+  int playOnReconnectionDelay;
+
+  @HiveField(96, defaultValue: DefaultSettings.enablePlayon)
+  bool enablePlayon;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1674,7 +1694,9 @@ enum QueueItemSourceType {
   @HiveField(18)
   genreMix,
   @HiveField(19)
-  track;
+  track,
+  @HiveField(20)
+  remoteClient;
 }
 
 @HiveType(typeId: 53)
@@ -1743,6 +1765,8 @@ enum QueueItemSourceNameType {
   savedQueue,
   @HiveField(8)
   queue,
+  @HiveField(9)
+  remoteClient
 }
 
 @HiveType(typeId: 56)
@@ -1780,6 +1804,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.savedQueue;
       case QueueItemSourceNameType.queue:
         return AppLocalizations.of(context)!.queue;
+      case QueueItemSourceNameType.remoteClient:
+        return "";
     }
   }
 }
@@ -2744,4 +2770,77 @@ enum ArtistType {
   albumartist,
   @HiveField(1)
   artist;
+}
+
+@JsonSerializable()
+class FinampOutputRoute {
+  // mapOf(
+  //   "name" to route.name,
+  //   "connectionState" to route.connectionState,
+  //   "isSystemRoute" to route.isSystemRoute,
+  //   "isDefault" to route.isDefault,
+  //   "isDeviceSpeaker" to route.isDeviceSpeaker,
+  //   "isBluetooth" to route.isBluetooth,
+  //   "volume" to route.volume,
+  //   "providerPackageName" to route.provider.packageName
+  // )
+
+  @HiveField(0)
+  final String name;
+  @HiveField(1)
+  final int connectionState;
+  @HiveField(2)
+  final bool isSystemRoute;
+  @HiveField(3)
+  final bool isDefault;
+  @HiveField(4)
+  final bool isDeviceSpeaker;
+  @HiveField(5)
+  final bool isBluetooth;
+  @HiveField(6)
+  final double volume;
+  @HiveField(7)
+  final String providerPackageName;
+  @HiveField(8)
+  final bool isSelected;
+  @HiveField(9)
+  final int deviceType;
+  @HiveField(10)
+  final String? description;
+  @HiveField(11)
+  final Object? extras;
+  @HiveField(12)
+  final String? iconUri;
+  // @HiveField(13)
+  // final List<Object>? controlFilters;
+
+  FinampOutputRoute({
+    required this.name,
+    required this.connectionState,
+    required this.isSystemRoute,
+    required this.isDefault,
+    required this.isDeviceSpeaker,
+    required this.isBluetooth,
+    required this.volume,
+    required this.providerPackageName,
+    required this.isSelected,
+    required this.deviceType,
+    required this.description,
+    required this.extras,
+    required this.iconUri,
+    // required this.controlFilters,
+  });
+
+  factory FinampOutputRoute.fromJson(Map<String, dynamic> json) {
+    return _$FinampOutputRouteFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return _$FinampOutputRouteToJson(this);
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,6 +20,7 @@ import 'layout_settings_screen.dart';
 import 'transcoding_settings_screen.dart';
 import 'view_selector.dart';
 import 'volume_normalization_settings_screen.dart';
+import 'playback_reporting_settings_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -173,6 +175,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: Text(AppLocalizations.of(context)!.audioService),
             onTap: () => Navigator.of(context)
                 .pushNamed(AudioServiceSettingsScreen.routeName),
+          ),
+          ListTile(
+            leading: const Icon(TablerIcons.cast),
+            title: Text(
+                AppLocalizations.of(context)!.playbackReportingSettingsTitle),
+            onTap: () => Navigator.of(context)
+                .pushNamed(PlaybackReportingSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.equalizer_rounded),

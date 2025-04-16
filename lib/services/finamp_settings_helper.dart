@@ -219,11 +219,18 @@ class FinampSettingsHelper {
         seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
     FinampSetters.setAutoloadLastQueueOnStartup(
         DefaultSettings.autoLoadLastQueueOnStartup);
+  }
+
+  static void resetPlaybackReportingSettings() {
     FinampSetters.setPeriodicPlaybackSessionUpdateFrequencySeconds(DefaultSettings
         .periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
+    FinampSetters.setEnablePlayon(DefaultSettings.enablePlayon);
     FinampSetters.setReportQueueToServer(DefaultSettings.reportQueueToServer);
+    FinampSetters.setPlayOnStaleDelay(DefaultSettings.playOnStaleDelay);
     FinampSetters.setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
     FinampSetters.setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
+    FinampSetters.setPlayOnReconnectionDelay(
+        DefaultSettings.playOnReconnectionDelay);
   }
 
   static void resetNormalizationSettings() {
@@ -259,7 +266,7 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
-
+  
   static void resetAllSettings() {
     resetTranscodingSettings();
     resetDownloadSettings();

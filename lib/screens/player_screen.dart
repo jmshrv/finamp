@@ -6,6 +6,7 @@ import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
+import 'package:finamp/components/PlayerScreen/output_panel.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -216,35 +217,7 @@ class _PlayerScreenContent extends ConsumerWidget {
               : FinampAppBarButton(
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-          actions: [
-            if (Platform.isIOS)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 1000),
-                  switchOutCurve: const Threshold(0.0),
-                  child: AirPlayRoutePickerView(
-                    key: ValueKey(ref.watch(localThemeProvider).primary),
-                    tintColor: ref.watch(localThemeProvider).primary,
-                    activeTintColor: jellyfinBlueColor,
-                    onShowPickerView: () =>
-                        FeedbackHelper.feedback(FeedbackType.selection),
-                  ),
-                ),
-              ),
-            if (Platform.isAndroid)
-              IconButton(
-                icon: Icon(TablerIcons.cast),
-                onPressed: () {
-                  final audioHandler =
-                      GetIt.instance<MusicPlayerBackgroundTask>();
-                  audioHandler.getRoutes();
-                  // audioHandler.setOutputToDeviceSpeaker();
-                  // audioHandler.setOutputToBluetoothDevice();
-                  audioHandler.showOutputSwitcherDialog();
-                },
-              ),
-          ],
+          actions: [],
         ),
         // Required for sleep timer input
         resizeToAvoidBottomInset: false,
@@ -415,13 +388,22 @@ class _PlayerScreenContent extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Spacer(),
+              Flexible(
+                fit: FlexFit.tight,
+                child: SimpleButton(
+                  text: AppLocalizations.of(context)!.outputMenuButtonTitle,
+                  icon: TablerIcons.device_speaker,
+                  onPressed: () async {
+                    await showOutputMenu(context: context);
+                  },
+                ),
+              ),
               const Flexible(fit: FlexFit.tight, child: QueueButton()),
               Flexible(
                 fit: FlexFit.tight,
                 child: SimpleButton(
                   inactive: !isLyricsAvailable,
-                  text: "Lyrics",
+                  text: AppLocalizations.of(context)!.lyricsScreenButtonTitle,
                   icon: getLyricsIcon(),
                   onPressed: () {
                     Navigator.of(context).push(_buildSlideRouteTransition(
@@ -445,11 +427,11 @@ class _PlayerScreenContent extends ConsumerWidget {
 enum PlayerHideable {
   bigPlayButton(14, 14, 1),
   bottomActions(0, 27, 2),
-  progressSlider(0, 14, 4),
+  progressSlider(0, 20, 4),
   twoLineTitle(0, 27, 3),
   features(0, 20, 3),
   loopShuffleButtons(96, 0, 0),
-  unhideableElements(144, 162, 0),
+  unhideableElements(144, 165, 0),
   controlsPaddingSmall(0, 8, 2),
   controlsPaddingBig(0, 12, 1);
 

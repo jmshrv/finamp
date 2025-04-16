@@ -620,19 +620,16 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
       supportedCommands: (fields[1] as List?)?.cast<String>(),
       supportsMediaControl: fields[2] as bool?,
       supportsPersistentIdentifier: fields[3] as bool?,
-      supportsSync: fields[4] as bool?,
       deviceProfile: fields[5] as DeviceProfile?,
-      iconUrl: fields[6] as String?,
-      supportsContentUploading: fields[7] as bool?,
-      messageCallbackUrl: fields[8] as String?,
       appStoreUrl: fields[9] as String?,
+      iconUrl: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ClientCapabilities obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.playableMediaTypes)
       ..writeByte(1)
@@ -641,16 +638,10 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
       ..write(obj.supportsMediaControl)
       ..writeByte(3)
       ..write(obj.supportsPersistentIdentifier)
-      ..writeByte(4)
-      ..write(obj.supportsSync)
       ..writeByte(5)
       ..write(obj.deviceProfile)
       ..writeByte(6)
       ..write(obj.iconUrl)
-      ..writeByte(7)
-      ..write(obj.supportsContentUploading)
-      ..writeByte(8)
-      ..write(obj.messageCallbackUrl)
       ..writeByte(9)
       ..write(obj.appStoreUrl);
   }
@@ -3303,15 +3294,12 @@ ClientCapabilities _$ClientCapabilitiesFromJson(Map json) => ClientCapabilities(
       supportsMediaControl: json['SupportsMediaControl'] as bool?,
       supportsPersistentIdentifier:
           json['SupportsPersistentIdentifier'] as bool?,
-      supportsSync: json['SupportsSync'] as bool?,
       deviceProfile: json['DeviceProfile'] == null
           ? null
           : DeviceProfile.fromJson(
               Map<String, dynamic>.from(json['DeviceProfile'] as Map)),
-      iconUrl: json['IconUrl'] as String?,
-      supportsContentUploading: json['SupportsContentUploading'] as bool?,
-      messageCallbackUrl: json['MessageCallbackUrl'] as String?,
       appStoreUrl: json['AppStoreUrl'] as String?,
+      iconUrl: json['IconUrl'] as String?,
     );
 
 Map<String, dynamic> _$ClientCapabilitiesToJson(ClientCapabilities instance) =>
@@ -3320,11 +3308,8 @@ Map<String, dynamic> _$ClientCapabilitiesToJson(ClientCapabilities instance) =>
       'SupportedCommands': instance.supportedCommands,
       'SupportsMediaControl': instance.supportsMediaControl,
       'SupportsPersistentIdentifier': instance.supportsPersistentIdentifier,
-      'SupportsSync': instance.supportsSync,
       'DeviceProfile': instance.deviceProfile?.toJson(),
       'IconUrl': instance.iconUrl,
-      'SupportsContentUploading': instance.supportsContentUploading,
-      'MessageCallbackUrl': instance.messageCallbackUrl,
       'AppStoreUrl': instance.appStoreUrl,
     };
 

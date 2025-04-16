@@ -275,6 +275,23 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   @FactoryConverter(request: JsonConverter.requestFactory)
+  @Post(path: "/Sessions/Capabilities")
+  Future<dynamic> updateCapabilities({
+    @Query() required String playableMediaTypes,
+    @Query() required String supportedCommands,
+    @Query() required bool supportsMediaControl,
+    @Query() required bool supportsPersistentIdentifier,
+  });
+
+
+  @FactoryConverter(request: JsonConverter.requestFactory)
+  @Post(path: "/Sessions/Capabilities/Full")
+  Future<dynamic> updateCapabilitiesFull(
+    // @Query() required String id,
+    @Body() ClientCapabilities clientCapabilities,
+  );
+
+  @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Sessions/Playing")
   Future<dynamic> startPlayback(
       @Body() PlaybackProgressInfo playbackProgressInfo);

@@ -7,8 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../components/AudioServiceSettingsScreen/buffer_duration_list_tile.dart';
 import '../components/AudioServiceSettingsScreen/loadQueueOnStartup_selector.dart';
-import '../components/AudioServiceSettingsScreen/periodic_playback_session_update_frequency_editor.dart';
-import '../components/AudioServiceSettingsScreen/report_queue_to_server_toggle.dart';
 import '../components/AudioServiceSettingsScreen/stop_foreground_selector.dart';
 import '../components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 
@@ -50,8 +48,6 @@ class _AudioServiceSettingsScreenState
           BufferDurationListTile(key: _updateChildren),
           BufferDisableSizeConstraintsSelector(key: _updateChildren),
           const LoadQueueOnStartupSelector(),
-          PeriodicPlaybackSessionUpdateFrequencyEditor(key: _updateChildren),
-          const ReportQueueToServerToggle(),
         ],
       ),
     );

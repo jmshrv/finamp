@@ -12,8 +12,11 @@ class ReportQueueToServerToggle extends ConsumerWidget {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.reportQueueToServer),
       subtitle: Text(AppLocalizations.of(context)!.reportQueueToServerSubtitle),
-      value: ref.watch(finampSettingsProvider.reportQueueToServer),
-      onChanged: (value) => FinampSetters.setReportQueueToServer(value),
+      value: ref.watch(finampSettingsProvider.reportQueueToServer) ||
+          ref.watch(finampSettingsProvider.enablePlayon),
+      onChanged: ref.watch(finampSettingsProvider.enablePlayon)
+          ? null // disable switch tile, since queue is always reported if play on is active
+          : (value) => FinampSetters.setReportQueueToServer(value),
     );
   }
 }

@@ -57,6 +57,8 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
       break;
     case QueueItemSourceType.formerNextUp:
       break;
+    case QueueItemSourceType.remoteClient:
+      break;
     case QueueItemSourceType.unknown:
       break;
     case QueueItemSourceType.favorites:

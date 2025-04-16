@@ -15,6 +15,7 @@ import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/playback_reporting_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/android_auto_helper.dart';
@@ -26,6 +27,7 @@ import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/keep_screen_on_helper.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
+import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:finamp/services/widget_bindings_observer_provider.dart';
@@ -100,6 +102,8 @@ void main() async {
     _mainLog.info("Setup downloads service");
     await _setupOSIntegration();
     _mainLog.info("Setup os integrations");
+    await _setupPlayOnService();
+    _mainLog.info("Setup PlayOnService");
     await _setupPlaybackServices();
     _mainLog.info("Setup audio player");
     await _setupKeepScreenOnHelper();
@@ -208,6 +212,12 @@ Future<void> _setupDownloadsHelper() async {
       FinampSetters.setHasDownloadedPlaylistInfo(true);
     });
   }
+}
+
+Future<void> _setupPlayOnService() async {
+  final playOnService = PlayOnService();
+  GetIt.instance.registerSingleton(playOnService);
+  unawaited(playOnService.initialize());
 }
 
 Future<void> _setupKeepScreenOnHelper() async {
@@ -492,6 +502,9 @@ class _FinampState extends State<Finamp> with WindowListener {
                                 const DownloadsSettingsScreen(),
                             AddDownloadLocationScreen.routeName: (context) =>
                                 const AddDownloadLocationScreen(),
+                            PlaybackReportingSettingsScreen.routeName:
+                                (context) =>
+                                    const PlaybackReportingSettingsScreen(),
                             AudioServiceSettingsScreen.routeName: (context) =>
                                 const AudioServiceSettingsScreen(),
                             VolumeNormalizationSettingsScreen.routeName:
