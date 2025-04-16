@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:finamp/services/auto_offline.dart';
-import 'package:finamp/services/downloads_service.dart';
-import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -25,15 +22,6 @@ import '../services/finamp_user_helper.dart';
 import '../services/jellyfin_api_helper.dart';
 
 final _musicScreenLogger = Logger("MusicScreen");
-
-void postLaunchHook(WidgetRef ref) async {
-  final playOnService = GetIt.instance<PlayOnService>();
-  ref.listenManual(autoOfflineProvider, (_, __) {});
-
-  // Initialize playon handler
-  unawaited(playOnService.initialize());
-  playOnService.ref = ref;
-}
 
 class MusicScreen extends ConsumerStatefulWidget {
   const MusicScreen({super.key});
@@ -99,12 +87,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     );
 
     _tabController!.addListener(_tabIndexCallback);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    postLaunchHook(ref);
   }
 
   @override

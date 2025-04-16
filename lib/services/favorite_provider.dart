@@ -38,8 +38,12 @@ class IsFavorite extends _$IsFavorite {
         _initializing = Future.sync(() async {
           try {
             final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+            final oldState = item.userData?.isFavorite;
             var newItem = await jellyfinApiHelper.getItemById(item.id);
-            if (!_changed) {
+            _changed = oldState != newItem.userData?.isFavorite;
+            if (_changed) {
+              ref.keepAlive();
+            } else {
               state = newItem.userData?.isFavorite ?? false;
             }
           } catch (e) {

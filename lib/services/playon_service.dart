@@ -27,7 +27,6 @@ StreamSubscription<int>? _reconnectionSubscription;
 StreamSubscription<int>? _isControlledSubscription;
 
 class PlayOnService {
-  late WidgetRef ref;
   // If the websocket connection to the server is established
   bool isConnected = false;
   // If a remote client is controlling the session
@@ -244,7 +243,9 @@ class PlayOnService {
 
           // Handle favoritig from remote client
           _playOnServiceLogger.info("Updating favorite ui state");
-          ref
+          ProviderScope.containerOf(
+                  GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                  listen: false)
               .read(isFavoriteProvider(item).notifier)
               .updateState(item.userData!.isFavorite);
           break;
