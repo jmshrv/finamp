@@ -2014,5 +2014,13 @@
   "performingArtists": "Артисти-виконавці",
   "@performingArtists": {},
   "albumArtists": "Виконавці альбому",
-  "@albumArtists": {}
+  "@albumArtists": {},
+  "libraryDownloads": "Завантаження бібліотеки",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "desktopShuffleWarning": "Shuffle наразі недоступний на комп’ютері.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  }
 }
