@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:finamp/components/AlbumScreen/download_button.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive_ce/hive.dart';
 
 import '../components/global_snackbar.dart';
 import '../models/finamp_models.dart';
@@ -221,11 +220,12 @@ class ConcurentDownloadsSelector extends ConsumerWidget {
   }
 }
 
-class DownloadWorkersSelector extends StatelessWidget {
+class DownloadWorkersSelector extends ConsumerWidget {
   const DownloadWorkersSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var workers = ref.watch(finampSettingsProvider.downloadWorkers);
     return Column(
       children: [
         ListTile(
@@ -233,33 +233,25 @@ class DownloadWorkersSelector extends StatelessWidget {
           subtitle: Text(
               AppLocalizations.of(context)!.downloadsWorkersSettingSubtitle),
         ),
-        ValueListenableBuilder<Box<FinampSettings>>(
-          valueListenable: FinampSettingsHelper.finampSettingsListener,
-          builder: (context, box, child) {
-            final finampSettings = box.get("FinampSettings")!;
-
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Slider(
-                  min: 1,
-                  max: 10,
-                  value: finampSettings.downloadWorkers.clamp(1, 10).toDouble(),
-                  label: AppLocalizations.of(context)!
-                      .downloadsWorkersSettingLabel(
-                          finampSettings.downloadWorkers.toString()),
-                  onChanged: (value) =>
-                      FinampSetters.setDownloadWorkers(value.toInt()),
-                ),
-                Text(
-                  AppLocalizations.of(context)!.downloadsWorkersSettingLabel(
-                      finampSettings.downloadWorkers.toString()),
-                  style: Theme.of(context).textTheme.titleLarge,
-                )
-              ],
-            );
-          },
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Slider(
+              min: 1,
+              max: 10,
+              value: workers.clamp(1, 10).toDouble(),
+              label: AppLocalizations.of(context)!
+                  .downloadsWorkersSettingLabel(workers.toString()),
+              onChanged: (value) =>
+                  FinampSetters.setDownloadWorkers(value.toInt()),
+            ),
+            Text(
+              AppLocalizations.of(context)!
+                  .downloadsWorkersSettingLabel(workers.toString()),
+              style: Theme.of(context).textTheme.titleLarge,
+            )
+          ],
         ),
       ],
     );

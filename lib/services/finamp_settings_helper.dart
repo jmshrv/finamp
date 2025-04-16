@@ -1,9 +1,9 @@
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/locale_helper.dart';
 import 'package:finamp/services/theme_mode_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -66,18 +66,6 @@ class FinampSettingsHelper {
   static void setSortOrder(TabContentType tabType, SortOrder sortOrder) {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.tabSortOrder[tabType] = sortOrder;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setItemSwipeAction(
-      DismissDirection direction, ItemSwipeActions newItemSwipeAction) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    if (direction == DismissDirection.startToEnd) {
-      finampSettingsTemp.itemSwipeActionLeftToRight = newItemSwipeAction;
-    } else if (direction == DismissDirection.endToStart) {
-      finampSettingsTemp.itemSwipeActionRightToLeft = newItemSwipeAction;
-    }
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }

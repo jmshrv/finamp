@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import '../../components/favourite_button.dart';
@@ -15,7 +18,7 @@ import 'track_list_tile.dart';
 
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
-class AlbumScreenContent extends StatefulWidget {
+class AlbumScreenContent extends ConsumerStatefulWidget {
   const AlbumScreenContent(
       {super.key,
       required this.parent,
@@ -27,18 +30,17 @@ class AlbumScreenContent extends StatefulWidget {
   final List<BaseItemDto> queueChildren;
 
   @override
-  State<AlbumScreenContent> createState() => _AlbumScreenContentState();
+  ConsumerState<AlbumScreenContent> createState() => _AlbumScreenContentState();
 }
 
-var _listener;
-class _AlbumScreenContentState extends State<AlbumScreenContent> {
+StreamSubscription<void>? _listener;
+
+class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
   @override
   void dispose() {
     super.dispose();
-    if (_listener != null) {
-      _listener.cancel();
-      _listener = null;
-    }
+    _listener?.cancel();
+    _listener = null;
   }
 
   @override
@@ -56,9 +58,8 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
         widget.displayChildren.removeWhere((element) => element.id == item.id);
       });
     }
-    if (_listener != null) {
-      _listener.cancel();
-    }
+
+    _listener?.cancel();
     _listener = musicScreenRefreshStream.stream.listen((_) {
       setState(() {});
     });
@@ -99,7 +100,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
           ),
           actions: [
             if (widget.parent.type == "Playlist" &&
-                !FinampSettingsHelper.finampSettings.isOffline)
+                !ref.watch(finampSettingsProvider.isOffline))
               PlaylistNameEditButton(playlist: widget.parent),
             FavoriteButton(item: widget.parent),
             DownloadButton(
@@ -144,7 +145,7 @@ class _AlbumScreenContentState extends State<AlbumScreenContent> {
   }
 }
 
-class TracksSliverList extends StatefulWidget {
+class TracksSliverList extends ConsumerStatefulWidget {
   const TracksSliverList({
     super.key,
     required this.childrenForList,
@@ -163,10 +164,10 @@ class TracksSliverList extends StatefulWidget {
   final bool isOnArtistScreen;
 
   @override
-  State<TracksSliverList> createState() => _TracksSliverListState();
+  ConsumerState<TracksSliverList> createState() => _TracksSliverListState();
 }
 
-class _TracksSliverListState extends State<TracksSliverList> {
+class _TracksSliverListState extends ConsumerState<TracksSliverList> {
   final GlobalKey<SliverAnimatedListState> sliverListKey =
       GlobalKey<SliverAnimatedListState>();
 
@@ -220,7 +221,7 @@ class _TracksSliverListState extends State<TracksSliverList> {
             index: indexOffset,
             showIndex: item.albumId == widget.parent.id,
             showCover: item.albumId != widget.parent.id ||
-                FinampSettingsHelper.finampSettings.showCoversOnAlbumScreen,
+                ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
             parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();

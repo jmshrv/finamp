@@ -9,9 +9,9 @@
 library;
 
 import 'package:collection/collection.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -3745,7 +3745,6 @@ class PublicSystemInfoResult {
   Map<String, dynamic> toJson() => _$PublicSystemInfoResultToJson(this);
 }
 
-@HiveType(typeId: 41)
 class PublicUsersResponse {
   PublicUsersResponse({
     required this.users,

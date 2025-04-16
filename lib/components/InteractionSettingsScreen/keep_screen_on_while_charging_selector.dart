@@ -1,27 +1,21 @@
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-class KeepScreenOnWhilePluggedInSelector extends StatelessWidget {
+class KeepScreenOnWhilePluggedInSelector extends ConsumerWidget {
   const KeepScreenOnWhilePluggedInSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.keepScreenOnWhilePluggedIn),
-          subtitle: Text(
-              AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
-          value: FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn,
-          onChanged: (value) {
-            FinampSetters.setKeepScreenOnWhilePluggedIn(value);
-          },
-        );
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.keepScreenOnWhilePluggedIn),
+      subtitle: Text(
+          AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
+      value: ref.watch(finampSettingsProvider.keepScreenOnWhilePluggedIn),
+      onChanged: (value) {
+        FinampSetters.setKeepScreenOnWhilePluggedIn(value);
       },
     );
   }

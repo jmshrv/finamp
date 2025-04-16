@@ -155,6 +155,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get albums => 'Albums';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Artistes';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get albumArtist => 'Artiste de l\'album';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Artiste';
@@ -377,6 +386,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get specialDownloads => 'Téléchargements spéciaux';
+
+  @override
+  String get libraryDownloads => 'Library downloads';
 
   @override
   String get noItemsDownloaded => 'Pas de téléchargements.';
@@ -2097,4 +2109,7 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get desktopShuffleWarning => 'Shuffle is not currently available on desktop.';
 }

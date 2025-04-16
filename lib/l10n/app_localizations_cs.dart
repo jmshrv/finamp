@@ -155,6 +155,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get albums => 'Alba';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Umělci';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get albumArtist => 'Umělec alba';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Umělec';
@@ -369,6 +378,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get specialDownloads => 'Zvláštní stahování';
+
+  @override
+  String get libraryDownloads => 'Library downloads';
 
   @override
   String get noItemsDownloaded => 'Nebyly staženy žádné položky.';
@@ -2095,4 +2107,7 @@ class AppLocalizationsCs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get desktopShuffleWarning => 'Shuffle is not currently available on desktop.';
 }

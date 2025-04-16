@@ -2561,40 +2561,6 @@ class QueueItemAdapter extends TypeAdapter<QueueItem> {
           typeId == other.typeId;
 }
 
-class PublicUsersResponseAdapter extends TypeAdapter<PublicUsersResponse> {
-  @override
-  final int typeId = 41;
-
-  @override
-  PublicUsersResponse read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return PublicUsersResponse(
-      users: (fields[0] as List).cast<UserDto>(),
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, PublicUsersResponse obj) {
-    writer
-      ..writeByte(1)
-      ..writeByte(0)
-      ..write(obj.users);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PublicUsersResponseAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
 class QuickConnectStateAdapter extends TypeAdapter<QuickConnectState> {
   @override
   final int typeId = 42;

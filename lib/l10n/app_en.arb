@@ -181,6 +181,8 @@
   "@tracks": {},
   "albums": "Albums",
   "@albums": {},
+  "appearsOnAlbums": "Appears On",
+  "@appearsOnAlbums": {},
   "artists": "Artists",
   "@artists": {},
   "genres": "Genres",
@@ -225,6 +227,10 @@
   "@album": {},
   "albumArtist": "Album Artist",
   "@albumArtist": {},
+  "albumArtists": "Album Artists",
+  "@albumArtists": {},
+  "performingArtists": "Performing Artists",
+  "@performingArtists": {},
   "artist": "Artist",
   "@artist": {},
   "budget": "Budget",
@@ -353,6 +359,10 @@
   "specialDownloads": "Special downloads",
   "@specialDownloads": {
     "description": "Title for the special downloads section on the downloads screen."
+  },
+  "libraryDownloads": "Library downloads",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
   },
   "noItemsDownloaded": "No items downloaded.",
   "@noItemsDownloaded": {
@@ -2097,5 +2107,9 @@
       }
     },
     "description": "Label for the type of device in the output menu"
+  },
+  "desktopShuffleWarning": "Shuffle is not currently available on desktop.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   }
 }

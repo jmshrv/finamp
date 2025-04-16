@@ -173,10 +173,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : (fields[53] as num).toInt(),
-      playOnStaleDelay: fields[93] == null ? 90 : (fields[93] as num).toInt(),
+      playOnStaleDelay: fields[94] == null ? 90 : (fields[94] as num).toInt(),
       playOnReconnectionDelay:
-          fields[94] == null ? 5 : (fields[94] as num).toInt(),
-      enablePlayon: fields[95] == null ? true : fields[95] as bool,
+          fields[95] == null ? 5 : (fields[95] as num).toInt(),
+      enablePlayon: fields[96] == null ? true : fields[96] as bool,
+      currentVolume: fields[93] == null ? 1.0 : (fields[93] as num).toDouble(),
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
@@ -219,6 +220,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
+      artistListType: fields[92] == null
+          ? ArtistType.albumartist
+          : fields[92] as ArtistType,
       autoOffline: fields[88] == null
           ? AutoOfflineOption.disconnected
           : fields[88] as AutoOfflineOption,
@@ -227,7 +231,6 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[86] == null ? Duration.zero : fields[86] as Duration,
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
-      currentVolume: fields[92] == null ? 1.0 : (fields[92] as num).toDouble(),
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -238,7 +241,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(90)
+      ..writeByte(91)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -412,12 +415,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(91)
       ..write(obj.itemSwipeActionRightToLeft)
       ..writeByte(92)
-      ..write(obj.currentVolume)
+      ..write(obj.artistListType)
       ..writeByte(93)
-      ..write(obj.playOnStaleDelay)
+      ..write(obj.currentVolume)
       ..writeByte(94)
-      ..write(obj.playOnReconnectionDelay)
+      ..write(obj.playOnStaleDelay)
       ..writeByte(95)
+      ..write(obj.playOnReconnectionDelay)
+      ..writeByte(96)
       ..write(obj.enablePlayon);
   }
 
@@ -2208,6 +2213,43 @@ class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ItemSwipeActionsAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
+  @override
+  final int typeId = 93;
+
+  @override
+  ArtistType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ArtistType.albumartist;
+      case 1:
+        return ArtistType.artist;
+      default:
+        return ArtistType.albumartist;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ArtistType obj) {
+    switch (obj) {
+      case ArtistType.albumartist:
+        writer.writeByte(0);
+      case ArtistType.artist:
+        writer.writeByte(1);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ArtistTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

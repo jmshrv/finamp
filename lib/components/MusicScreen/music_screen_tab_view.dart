@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
@@ -111,6 +111,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         filters: settings.onlyShowFavourites ? "IsFavorite" : null,
         startIndex: pageKey,
         limit: _pageSize,
+        artistType: settings.artistListType,
       );
 
       // Skip appending page if a refresh triggered while processing
@@ -136,6 +137,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
     int localRefreshCount = refreshCount;
+    var artistInfoForType = (settings.artistListType == ArtistType.albumartist)
+        ? BaseItemDtoType.album
+        : BaseItemDtoType.track;
 
     List<DownloadStub> offlineItems;
     if (widget.tabContentType == TabContentType.tracks) {
@@ -149,20 +153,24 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               settings.onlyShowFavourites && settings.trackOfflineFavorites);
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
-          nameFilter: widget.searchTerm,
-          baseTypeFilter: widget.tabContentType.itemType,
-          fullyDownloaded: settings.onlyShowFullyDownloaded,
-          viewFilter: widget.tabContentType == TabContentType.albums
-              ? widget.view?.id
-              : null,
-          childViewFilter: (widget.tabContentType != TabContentType.albums &&
-                  widget.tabContentType != TabContentType.playlists)
-              ? widget.view?.id
-              : null,
-          nullableViewFilters: widget.tabContentType == TabContentType.albums &&
-              settings.showDownloadsWithUnknownLibrary,
-          onlyFavorites:
-              settings.onlyShowFavourites && settings.trackOfflineFavorites);
+        nameFilter: widget.searchTerm,
+        baseTypeFilter: widget.tabContentType.itemType,
+        fullyDownloaded: settings.onlyShowFullyDownloaded,
+        viewFilter: widget.tabContentType == TabContentType.albums
+            ? widget.view?.id
+            : null,
+        childViewFilter: (widget.tabContentType != TabContentType.albums &&
+                widget.tabContentType != TabContentType.playlists)
+            ? widget.view?.id
+            : null,
+        nullableViewFilters: widget.tabContentType == TabContentType.albums &&
+            settings.showDownloadsWithUnknownLibrary,
+        onlyFavorites:
+            settings.onlyShowFavourites && settings.trackOfflineFavorites,
+        infoForType: (widget.tabContentType == TabContentType.artists)
+            ? artistInfoForType
+            : null,
+      );
     }
 
     var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
@@ -301,6 +309,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     super.build(context);
     widget.refresh?.callback = _refresh;
 
+    // TODO stop unnecessary rebuilds from unrelated settings changes
     return ValueListenableBuilder<Box<FinampSettings>>(
         valueListenable: FinampSettingsHelper.finampSettingsListener,
         builder: (context, box, _) {
@@ -428,7 +437,6 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           isPlaylist:
                               widget.tabContentType == TabContentType.playlists,
                           isGrid: true,
-                          gridAddSettingsListener: false,
                         ),
                       );
                     },

@@ -155,6 +155,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get albums => 'Álbuns';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Artistas';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get albumArtist => 'Artista do Álbum';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Artista';
@@ -365,6 +374,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get specialDownloads => 'Special downloads';
+
+  @override
+  String get libraryDownloads => 'Library downloads';
 
   @override
   String get noItemsDownloaded => 'No items downloaded.';
@@ -2084,6 +2096,9 @@ class AppLocalizationsPt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get desktopShuffleWarning => 'Shuffle is not currently available on desktop.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).

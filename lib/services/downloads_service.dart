@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
@@ -155,8 +155,8 @@ class DownloadsService {
   /// Provider for user-downloaded items of a specific category.
   /// Used to show and group downloaded items on the downloads screen.
   late final userDownloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>(
-    (ref, type) => _isar.downloadItems
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, type) {
+    return _isar.downloadItems
         .where()
         .typeEqualTo(type.type)
         .filter()
@@ -167,8 +167,8 @@ class DownloadsService {
         )
         .sortByName()
         .build()
-        .watch(fireImmediately: true),
-  );
+        .watch(fireImmediately: true);
+  });
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
@@ -572,16 +572,16 @@ class DownloadsService {
     // sorts of children.  It enforces a dependency graph with no loops which will
     // be completely deleted if the anchor is removed.  The type hierarchy is anchor->
     // non-album/playlist collection->album/playlist->track->image.  Items can only
-    // link to types lower in the hierarchy, not ones higher or equal to themselves.
-    // The only exception is tracks, which can have info links to higher types but
-    // only if the track is required.  To prevent this from allowing loops which include
-    // require links, no type above tracks in the hierarchy, namely collections, may have
-    // any required children if they themselves are not required.  This exception
-    // does allow for the formation of loops of info links, but the fact that participating
-    // tracks must be required means that the loops can always be cleaned up as tracks
-    // are deleted and prevents info dependency chains from propagating between
-    // info only collections and tracks to eventually require metadata on every item
-    // the server has.
+    // require types lower in the hierarchy, not ones higher or equal to themselves.
+    // Only required items can require other items to maintain this hierarchy.  The exception
+    // to this is that anyone can require an image, but images cannot link anyone.
+    // Info links have a separate type hierarchy which goes anchor-> album/playlist ->
+    // non-album/playlist collection->track->image.  This is only enforced for non-required
+    // items, required items can info link any type of node.  This does allow for info
+    // loops, but they will always be cleaned as as the participating required member
+    // The require and info hierarchies are enforced here.  The global syncDelete
+    // in repair step 5 will enforce the restriction that you must be required to require
+    // other nodes.
     _isar.writeTxnSync(() {
       List<
           (
@@ -627,47 +627,51 @@ class DownloadsService {
           item.requires.resetSync();
         }
       }
+
       List<
-          QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
-              QueryBuilder<DownloadItem, DownloadItem,
-                  QFilterCondition>)> infoFilters = [
-        // Select albums/playlists that only info link tracks or images
-        (q) => q
-            .typeEqualTo(DownloadItemType.collection)
-            .anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
-                (q, element) => q.baseItemTypeEqualTo(element))
-            .not()
-            .info((q) => q.not().group((q) => q
-                .typeEqualTo(DownloadItemType.track)
-                .or()
-                .typeEqualTo(DownloadItemType.image))),
-        // Select required tracks that only link collections or images
-        (q) => q
-            .typeEqualTo(DownloadItemType.track)
-            .requiredByIsNotEmpty()
-            .not()
-            .info((q) => q.not().group((q) => q
-                .typeEqualTo(DownloadItemType.collection)
-                .or()
-                .typeEqualTo(DownloadItemType.image))),
-        // Select nodes which only info link images or have no info links
-        (q) => q.not().info((q) => q.not().typeEqualTo(DownloadItemType.image)),
-        (q) => q.typeEqualTo(DownloadItemType.anchor),
+          (
+            DownloadItemType,
+            QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
+                QueryBuilder<DownloadItem, DownloadItem, QFilterCondition>)?
+          )> infoFilters = [
+        (DownloadItemType.anchor, null),
+        (DownloadItemType.finampCollection, null),
+        (
+          DownloadItemType.collection,
+          (q) => q.anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
+              (q, element) => q.baseItemTypeEqualTo(element))
+        ),
+        (
+          DownloadItemType.collection,
+          (q) => q.allOf([BaseItemDtoType.album, BaseItemDtoType.playlist],
+              (q, element) => q.not().baseItemTypeEqualTo(element))
+        ),
+        (DownloadItemType.track, null),
+        (DownloadItemType.image, null),
       ];
-      // albums/playlist can require info on tracks.  required tracks can require info on
-      // collections.  Anyone can require info on an image.  The anchor can info link
-      // anyone.  All other info links are disallowed.
-      var badInfoItems = _isar.downloadItems
-          .filter()
-          .not()
-          .anyOf(infoFilters, (q, element) => element(q))
-          .findAllSync();
-      // All items not matching one of the three above filters are invalid
-      for (var item in badInfoItems) {
-        _downloadsLogger.severe("Unlinking invalid info on node ${item.name}.");
-        _downloadsLogger
-            .severe("Current children: ${item.info.filter().findAllSync()}.");
-        item.info.resetSync();
+
+      // Objects matching an info filter cannot require elements matching earlier filters or the current filter.
+      // This only applies to info-only items - required items can have any info links they want
+      for (int i = 0; i < infoFilters.length; i++) {
+        var items = _isar.downloadItems
+            .where()
+            .typeEqualTo(infoFilters[i].$1)
+            .filter()
+            .requiredByIsEmpty()
+            .optional(infoFilters[i].$2 != null, (q) => infoFilters[i].$2!(q))
+            .info((q) => q.anyOf(
+                infoFilters.slice(0, i + 1),
+                (q, element) => q
+                    .typeEqualTo(element.$1)
+                    .optional(element.$2 != null, (q) => element.$2!(q))))
+            .findAllSync();
+        for (var item in items) {
+          _downloadsLogger
+              .severe("Unlinking invalid requires on node ${item.name}.");
+          _downloadsLogger.severe(
+              "Current children: ${item.requires.filter().findAllSync()}.");
+          item.requires.resetSync();
+        }
       }
     });
     // Allow other tasks to run between these steps, which are both synchronous
@@ -923,8 +927,14 @@ class DownloadsService {
     if (item.baseItemType == BaseItemDtoType.album ||
         item.baseItemType == BaseItemDtoType.playlist) {
       // Use full list of tracks in info links for album/playlist
-      childStates.addAll(
-          item.info.filter().distinctByState().stateProperty().findAllSync());
+      childStates.addAll(item.info
+          .filter()
+          .typeEqualTo(DownloadItemType.track)
+          .or()
+          .typeEqualTo(DownloadItemType.image)
+          .distinctByState()
+          .stateProperty()
+          .findAllSync());
     } else {
       // Non-required artists/genres have unknown children and should never be considered downloaded.
       if (item.requiredBy.filter().countSync() == 0) {
@@ -1405,19 +1415,24 @@ class DownloadsService {
   /// + childViewFilter - only return collections with children in the given library.
   /// Useful for artists/genres, which may need to be shown in several libraries.
   /// + onlyFavorites - return only favorite items
-  Future<List<DownloadStub>> getAllCollections(
-      {String? nameFilter,
-      BaseItemDtoType? baseTypeFilter,
-      BaseItemDto? relatedTo,
-      bool fullyDownloaded = false,
-      BaseItemId? viewFilter,
-      BaseItemId? childViewFilter,
-      bool nullableViewFilters = true,
-      bool onlyFavorites = false}) {
+  /// + infoForType - only return collections that are info childs for the provided type
+  Future<List<DownloadStub>> getAllCollections({
+    String? nameFilter,
+    BaseItemDtoType? baseTypeFilter,
+    BaseItemDto? relatedTo,
+    bool fullyDownloaded = false,
+    BaseItemId? viewFilter,
+    BaseItemId? childViewFilter,
+    bool nullableViewFilters = true,
+    bool onlyFavorites = false,
+    BaseItemDtoType? infoForType,
+    ArtistType? artistType,
+  }) {
     List<int> favoriteIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
       favoriteIds = _getFavoriteIds() ?? [];
     }
+
     return _isar.downloadItems
         .where()
         .typeEqualTo(DownloadItemType.collection)
@@ -1433,8 +1448,14 @@ class DownloadsService {
             baseTypeFilter == BaseItemDtoType.playlist,
             (q) => q.info((q) =>
                 q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
+        // Returns albums where the artist (relatedTo) is an Album Artist
         .optional(
-            relatedTo != null,
+            artistType == ArtistType.albumartist && relatedTo != null,
+            (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
+                relatedTo!.id.raw, DownloadItemType.collection))))
+        // Returns albums related to the performing artist or genre
+        .optional(
+            artistType != ArtistType.albumartist && relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
                     relatedTo!.id.raw, DownloadItemType.collection)))))
@@ -1448,9 +1469,9 @@ class DownloadsService {
                 nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
         .optional(
             childViewFilter != null,
-            (q) => q.infoFor((q) => q.group((q) => q
-                .isarViewIdEqualTo(childViewFilter?.raw)
-                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
+            (q) => q.infoFor(
+                (q) => q.group((q) => q.isarViewIdEqualTo(childViewFilter?.raw).optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
+        .optional(infoForType != null, (q) => q.infoFor((q) => q.baseItemTypeEqualTo(infoForType!)))
         .findAll();
   }
 
@@ -1539,25 +1560,33 @@ class DownloadsService {
 
   /// Returns the size of a download by recursively calculating the size of all
   /// required children.  Used to display item sizes on downloads screen.
-  Future<int> getFileSize(DownloadStub item) async {
-    var canonItem = await _isar.downloadItems.get(item.isarId);
-    if (canonItem == null) return 0;
-    Set<DownloadItem> info = {};
-    Set<DownloadItem> required = {};
-    _getFileChildren(canonItem, required, info, true);
-    info = info.difference(required);
-    int size = 0;
-    for (var item in required) {
-      size += await _getFileSize(item, true);
-    }
-    for (var item in info) {
-      size += await _getFileSize(item, false);
-    }
-    return size;
+  Future<int> getFileSize(DownloadStub item) =>
+      GetIt.instance<JellyfinApiHelper>()
+          .runInIsolate(_getFileSizeBackground(item.isarId));
+
+  static Future<int> Function(dynamic) _getFileSizeBackground(int isarId) {
+    // Pass the download location map, as settings cannot be accessed in background
+    var map = FinampSettingsHelper.finampSettings.downloadLocationsMap;
+    return (dynamic _) async {
+      var canonItem = await GetIt.instance<Isar>().downloadItems.get(isarId);
+      if (canonItem == null) return 0;
+      Set<DownloadItem> info = {};
+      Set<DownloadItem> required = {};
+      _getFileChildren(canonItem, required, info, true);
+      info = info.difference(required);
+      int size = 0;
+      for (var item in required) {
+        size += await _getFileSize(item, true, map);
+      }
+      for (var item in info) {
+        size += await _getFileSize(item, false, map);
+      }
+      return size;
+    };
   }
 
   /// Recursive subcomponent of [getFileSize].
-  void _getFileChildren(DownloadItem item, Set<DownloadItem> required,
+  static void _getFileChildren(DownloadItem item, Set<DownloadItem> required,
       Set<DownloadItem> info, bool isRequired) {
     if (required.contains(item) || (info.contains(item) && !isRequired)) {
       return;
@@ -1583,7 +1612,18 @@ class DownloadsService {
   }
 
   /// Recursive subcomponent of [getFileSize].
-  Future<int> _getFileSize(DownloadItem item, bool required) async {
+  static Future<int> _getFileSize(DownloadItem item, bool required,
+      Map<String, DownloadLocation> map) async {
+    File? file(DownloadItem item) {
+      if (map[item.fileTranscodingProfile?.downloadLocationId] == null ||
+          item.path == null) {
+        return null;
+      }
+      return File(path_helper.join(
+          map[item.fileTranscodingProfile?.downloadLocationId]!.currentPath,
+          item.path));
+    }
+
     if (item.type == DownloadItemType.track &&
         item.state.isComplete &&
         required) {
@@ -1591,11 +1631,11 @@ class DownloadsService {
           item.fileTranscodingProfile!.codec !=
               FinampTranscodingCodec.original ||
           item.baseItem?.mediaSources == null) {
-        return await item.file
+        return await file(item)
                 ?.stat()
                 .then((value) => value.size)
                 .catchError((e) {
-              _downloadsLogger.fine(
+              Logger("downloadsServiceBackground").fine(
                   "No file for track ${item.name} when calculating size.");
               return 0;
             }) ??
@@ -1606,11 +1646,11 @@ class DownloadsService {
     }
     if (item.type == DownloadItemType.image &&
         item.state == DownloadItemState.complete) {
-      return await item.file
+      return await file(item)
               ?.stat()
               .then((value) => value.size)
               .catchError((e) {
-            _downloadsLogger
+            Logger("downloadsServiceBackground")
                 .fine("No file for image ${item.name} when calculating size.");
             return 0;
           }) ??
@@ -1641,11 +1681,8 @@ class DownloadsService {
         stub.baseItemType == BaseItemDtoType.playlist) {
       // albums/playlists get marked as incidentally required if all info children
       // are required.  Use info links to calculate child count for this case
-      childCount = item.info
-          .filter()
-          .not()
-          .typeEqualTo(DownloadItemType.image)
-          .countSync();
+      childCount =
+          item.info.filter().typeEqualTo(DownloadItemType.track).countSync();
     } else {
       childCount = item.requires
           .filter()

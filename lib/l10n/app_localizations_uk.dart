@@ -155,6 +155,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get albums => 'Альбоми';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => 'Виконавці';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get albumArtist => 'Виконавцями альбомів';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => 'Виконавцями';
@@ -365,6 +374,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get specialDownloads => 'Спеціальні завантаження';
+
+  @override
+  String get libraryDownloads => 'Library downloads';
 
   @override
   String get noItemsDownloaded => 'Немає завантажених елементів.';
@@ -2084,4 +2096,7 @@ class AppLocalizationsUk extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get desktopShuffleWarning => 'Shuffle is not currently available on desktop.';
 }

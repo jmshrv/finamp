@@ -22,7 +22,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -46,8 +45,6 @@ class PlayerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Rebuild player screen if settings change
-    ref.watch(finampSettingsProvider);
     final queueService = GetIt.instance<QueueService>();
 
     // close the player screen if the queue is empty
@@ -227,14 +224,15 @@ class _PlayerScreenContent extends ConsumerWidget {
         extendBodyBehindAppBar: true,
         body: Stack(
           children: [
-            if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+            if (ref.watch(finampSettingsProvider.useCoverAsBackground))
               const BlurredPlayerScreenBackground(),
             SafeArea(
               minimum: EdgeInsets.only(top: toolbarHeight),
               child: LayoutBuilder(builder: (context, constraints) {
                 controller.setSize(
                     Size(constraints.maxWidth, constraints.maxHeight),
-                    screenOrientation);
+                    screenOrientation,
+                    ref);
                 if (controller.useLandscape) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -470,9 +468,9 @@ class PlayerHideableController {
   bool? _useLandscape;
 
   /// Update player screen hidden elements based on usable area in portrait mode.
-  void _updateLayoutPortrait(Size size) {
+  void _updateLayoutPortrait(Size size, WidgetRef ref) {
     var minAlbumPadding =
-        FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding;
+        ref.watch(finampSettingsProvider.playerScreenCoverMinimumPadding);
     var maxAlbumSize = min(size.width, size.height);
 
     var targetWidth = min(size.width, 1000.0);
@@ -485,7 +483,7 @@ class PlayerHideableController {
       // if it allows us to show more controls.  Allow shrinking by greater amounts as album size grows.
       var maxDesiredPadding = minAlbumPadding +
           element.maxShrink *
-              FinampSettingsHelper.finampSettings.prioritizeCoverFactor *
+              ref.watch(finampSettingsProvider.prioritizeCoverFactor) *
               ((maxAlbumSize - 300) / 300.0).clamp(1.0, 3.0);
       // Calculate max allowable control height to avoid shrinking album cover beyond maxPadding.
       var targetHeight =
@@ -508,7 +506,7 @@ class PlayerHideableController {
   }
 
   /// Update player screen hidden elements based on usable area in landscape mode.
-  void _updateLayoutLandscape(Size size) {
+  void _updateLayoutLandscape(Size size, WidgetRef ref) {
     // We never want to allocate extra width to album covers while some controls
     // are hidden.
     var desiredControlsWidth =
@@ -516,7 +514,7 @@ class PlayerHideableController {
 
     // Never expand the controls beyond 65% unless the remaining space is just album padding
     var widthPercent =
-        FinampSettingsHelper.finampSettings.prioritizeCoverFactor * 2 + 49;
+        ref.watch(finampSettingsProvider.prioritizeCoverFactor) * 2 + 49;
     var maxControlsWidth =
         max(size.width * (widthPercent / 100), size.width - size.height);
     _updateLayoutFromWidth(maxControlsWidth);
@@ -529,7 +527,7 @@ class PlayerHideableController {
     }
     // Force controls width to always be at least 50% of screen.
     var minPercent =
-        FinampSettingsHelper.finampSettings.prioritizeCoverFactor * 2 + 34;
+        ref.watch(finampSettingsProvider.prioritizeCoverFactor) * 2 + 34;
     var minControlsWidth =
         max(_getSize().width, size.width * (minPercent / 100));
     // If the minimum and maximum sizes do not form a valid range, prioritize the minimum
@@ -567,8 +565,8 @@ class PlayerHideableController {
     }
   }
 
-  void setSize(Size size, Orientation screenOrientation) {
-    _reset();
+  void setSize(Size size, Orientation screenOrientation, WidgetRef ref) {
+    _reset(ref);
     assert(_target == null && _album == null && _useLandscape == null);
     // Estimate control height as average of min and max
     var controlsSize = Size(PlayerHideable.unhideableElements.width,
@@ -582,27 +580,26 @@ class PlayerHideableController {
       _useLandscape = landscapeAlbum > portraitAlbum;
     }
     if (_useLandscape!) {
-      _updateLayoutLandscape(size);
+      _updateLayoutLandscape(size, ref);
     } else {
-      _updateLayoutPortrait(size);
+      _updateLayoutPortrait(size, ref);
     }
   }
 
   /// Reset controller to visibility
-  void _reset() {
+  void _reset(WidgetRef ref) {
     _target = null;
     _album = null;
     _useLandscape = null;
     _visible = List.from(PlayerHideable.values);
-    if (FinampSettingsHelper.finampSettings.hidePlayerBottomActions) {
+    if (ref.watch(finampSettingsProvider.hidePlayerBottomActions)) {
       _visible.remove(PlayerHideable.bottomActions);
     }
-    if (FinampSettingsHelper.finampSettings.suppressPlayerPadding) {
+    if (ref.watch(finampSettingsProvider.suppressPlayerPadding)) {
       _visible.remove(PlayerHideable.controlsPaddingSmall);
       _visible.remove(PlayerHideable.controlsPaddingBig);
     }
-    if (!FinampSettingsHelper
-        .finampSettings.featureChipsConfiguration.enabled) {
+    if (!ref.watch(finampSettingsProvider.featureChipsConfiguration).enabled) {
       _visible.remove(PlayerHideable.features);
     }
   }

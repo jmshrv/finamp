@@ -155,6 +155,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get albums => '앨범';
 
   @override
+  String get appearsOnAlbums => 'Appears On';
+
+  @override
   String get artists => '아티스트';
 
   @override
@@ -210,6 +213,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get albumArtist => '앨범 아티스트';
+
+  @override
+  String get albumArtists => 'Album Artists';
+
+  @override
+  String get performingArtists => 'Performing Artists';
 
   @override
   String get artist => '아티스트';
@@ -365,6 +374,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get specialDownloads => '특수 다운로드';
+
+  @override
+  String get libraryDownloads => 'Library downloads';
 
   @override
   String get noItemsDownloaded => '다운로드한 항목이 없습니다.';
@@ -2084,4 +2096,7 @@ class AppLocalizationsKo extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get desktopShuffleWarning => 'Shuffle is not currently available on desktop.';
 }

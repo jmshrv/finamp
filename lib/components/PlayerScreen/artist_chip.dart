@@ -1,6 +1,7 @@
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -37,18 +38,22 @@ class ArtistChips extends StatelessWidget {
     this.backgroundColor,
     this.color,
     this.baseItem,
-    this.useAlbumArtist = false,
+    this.artistType = ArtistType.artist,
   });
 
   final BaseItemDto? baseItem;
   final Color? backgroundColor;
   final Color? color;
-  final bool useAlbumArtist;
+  final ArtistType artistType;
 
   @override
   Widget build(BuildContext context) {
-    final artists =
-        (useAlbumArtist ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
+    final artists = ((artistType == ArtistType.albumartist)
+            ? baseItem?.albumArtists
+            : baseItem?.artistItems) ??
+        [];
+    final filteredArtists =
+        {for (var artist in artists) artist.id: artist}.values.toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -58,26 +63,28 @@ class ArtistChips extends StatelessWidget {
           spacing: 4.0,
           runSpacing: 4.0,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: artists.isEmpty
+          children: filteredArtists.isEmpty
               ? [
                   ArtistChip(
-                      backgroundColor: backgroundColor,
-                      color: color,
-                      artist: null,
-                      key: const ValueKey(null))
+                    backgroundColor: backgroundColor,
+                    color: color,
+                    artist: null,
+                    key: const ValueKey(null),
+                  )
                 ]
-              : List.generate(artists.length, (index) {
-                  final currentArtist = artists[index];
+              : List.generate(filteredArtists.length, (index) {
+                  final currentArtist = filteredArtists[index];
 
                   return ArtistChip(
-                      backgroundColor: backgroundColor,
-                      color: color,
-                      artist: BaseItemDto(
-                        id: currentArtist.id,
-                        name: currentArtist.name,
-                        type: "MusicArtist",
-                      ),
-                      key: ValueKey(currentArtist.id));
+                    backgroundColor: backgroundColor,
+                    color: color,
+                    artist: BaseItemDto(
+                      id: currentArtist.id,
+                      name: currentArtist.name,
+                      type: "MusicArtist",
+                    ),
+                    key: ValueKey(currentArtist.id),
+                  );
                 }),
         ),
       ),
@@ -104,7 +111,7 @@ class ArtistChip extends ConsumerWidget {
         color ?? Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
     final BaseItemDto? localArtist;
     if (artist != null &&
-        FinampSettingsHelper.finampSettings.showArtistChipImage) {
+        ref.watch(finampSettingsProvider.showArtistChipImage)) {
       localArtist =
           ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
     } else {

@@ -454,6 +454,12 @@ abstract class AppLocalizations {
   /// **'Albums'**
   String get albums;
 
+  /// No description provided for @appearsOnAlbums.
+  ///
+  /// In en, this message translates to:
+  /// **'Appears On'**
+  String get appearsOnAlbums;
+
   /// No description provided for @artists.
   ///
   /// In en, this message translates to:
@@ -567,6 +573,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Album Artist'**
   String get albumArtist;
+
+  /// No description provided for @albumArtists.
+  ///
+  /// In en, this message translates to:
+  /// **'Album Artists'**
+  String get albumArtists;
+
+  /// No description provided for @performingArtists.
+  ///
+  /// In en, this message translates to:
+  /// **'Performing Artists'**
+  String get performingArtists;
 
   /// No description provided for @artist.
   ///
@@ -747,6 +765,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Special downloads'**
   String get specialDownloads;
+
+  /// Title for the library downloads section on the downloads screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Library downloads'**
+  String get libraryDownloads;
 
   /// Shown on the downloads screen for sections without any downloaded items.
   ///
@@ -3351,6 +3375,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{type, select, speaker{Device Speaker} tv{TV} bluetooth{Bluetooth} other{Unknown}}'**
   String deviceType(String type);
+
+  /// Warning message when trying to shuffle queue on desktop saying it is not implemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle is not currently available on desktop.'**
+  String get desktopShuffleWarning;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
