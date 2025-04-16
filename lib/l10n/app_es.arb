@@ -164,8 +164,6 @@
   "@error": {},
   "favourite": "Favorito",
   "@favourite": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC para transcodificar",
-  "@jellyfinUsesAACForTranscoding": {},
   "list": "Lista",
   "@list": {},
   "location": "Ubicación",
@@ -274,7 +272,7 @@
   "@audioService": {},
   "transcoding": "Transcodificar",
   "@transcoding": {},
-  "bitrateSubtitle": "Una tasa de bits más alta da una mayor calidad de audio a costa de un mayor ancho de banda.",
+  "bitrateSubtitle": "Una tasa de bits más alta da una mayor calidad de audio a costa de un mayor ancho de banda. No aplica a códecs de audio sin pérdida, p. ej. FLAC",
   "@bitrateSubtitle": {},
   "selectDirectory": "Seleccionar directorio",
   "@selectDirectory": {},
@@ -324,7 +322,7 @@
       }
     }
   },
-  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin de forma remota, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP predeterminado (80/443) o el predefinido de Jellyfin (8096), no tendrás que especificar el puerto.\n\nSi la dirección es correcta, deberías ver la información sobre el servidor resaltado debajo.",
+  "internalExternalIpExplanation": "Si quieres acceder a tu servidor Jellyfin remotamente, tendrás que usar tu dirección IP externa.\n\nSi tu servidor está en un puerto HTTP (80/443) o en el puerto predeterminado de Jellyfin (8096), no tienes que especificar el puerto.\n\nSi la dirección es correcta, podrás ver algunos datos sobre tu servidor en el formulario.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -530,7 +528,7 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Buscando servidores…",
+  "loginFlowLocalNetworkServersScanningForServers": "Escaneando servidores…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -1472,10 +1470,6 @@
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
-  "transcodingStreamingContainerTitle": "Seleccionar Contenedor de Transcodificación",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
   "downloadBitrateSubtitle": "Una mayor tasa de bits da una mejor calidad de audio a costa de mayor requerimientos de almacenamiento.",
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
@@ -1722,8 +1716,6 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "transcodingStreamingContainerSubtitle": "Seleccione el contenedor a usar para el segmento al transmitir audio transcodificado. Las pistas que ya se encuentren en la cola no serán afectados.",
-  "@transcodingStreamingContainerSubtitle": {},
   "showProgressOnNowPlayingBarTitle": "Mostrar el progreso de la pista en el mini reproductor de la aplicación",
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
@@ -1966,5 +1958,27 @@
     }
   },
   "fiveLatestAlbumsSettingSubtitle": "Las descargas serán eliminadas conforme envejezcan.  Bloquee la descarga para prevenir que el álbum sea eliminado.",
-  "@fiveLatestAlbumsSettingSubtitle": {}
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "swipeLeftToRightActionSubtitle": "Acción activada al deslizar una pista de la lista de izquierda a derecha.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "appearsOnAlbums": "Aparece en",
+  "@appearsOnAlbums": {},
+  "albumArtists": "Artistas del álbum",
+  "@albumArtists": {},
+  "performingArtists": "Artistas intérpretes",
+  "@performingArtists": {},
+  "swipeLeftToRightAction": "Acción de deslizar a la derecha",
+  "@swipeLeftToRightAction": {},
+  "swipeRightToLeftAction": "Acción de deslizar a la izquierda",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Acción activada al deslizar una pista de la lista de derecha a izquierda.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "libraryDownloads": "Descargas de la biblioteca",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "autoOfflineOptionOff": "Desactivado",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  }
 }

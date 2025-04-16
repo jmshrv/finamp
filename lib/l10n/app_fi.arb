@@ -151,7 +151,7 @@
   "@downloadLocations": {},
   "transcoding": "Transkoodaus",
   "@transcoding": {},
-  "notAvailableInOfflineMode": "Ei saatavilla offline tilassa",
+  "notAvailableInOfflineMode": "Ei saatavilla offline-tilassa",
   "@notAvailableInOfflineMode": {},
   "areYouSure": "Oletko varma?",
   "@areYouSure": {},
@@ -159,8 +159,6 @@
   "@logOut": {},
   "downloadedTracksWillNotBeDeleted": "Ladattuja kappaleita ei poisteta",
   "@downloadedTracksWillNotBeDeleted": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin käyttää AAC:tä transkoodaukseen",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Ota transkoodaus käyttöön",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transkoodaa musiikin suoratoistoa varten palvelimen päässä.",
@@ -193,7 +191,7 @@
   },
   "required": "Pakollinen",
   "@required": {},
-  "layoutAndTheme": "Asettelu ja Teema",
+  "layoutAndTheme": "Asettelu ja teema",
   "@layoutAndTheme": {},
   "viewType": "Näkymän Tyyppi",
   "@viewType": {},
@@ -302,7 +300,7 @@
   "@directoryMustBeEmpty": {},
   "selectDirectory": "Valitse hakemisto",
   "@selectDirectory": {},
-  "trackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaleita}}",
+  "trackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaletta}}",
   "@trackCount": {
     "placeholders": {
       "count": {
@@ -314,13 +312,13 @@
   "@sortBy": {},
   "premiereDate": "Ensiesityspäivä",
   "@premiereDate": {},
-  "interactions": "Vuorovaikutusasetukset",
+  "interactions": "Vuorovaikutukset",
   "@interactions": {},
-  "audioService": "Äänipalvelinasetukset",
+  "audioService": "Äänipalvelu",
   "@audioService": {},
   "bitrate": "Bittinopeus",
   "@bitrate": {},
-  "bitrateSubtitle": "Korkeampi bittinopeus tuottaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi.",
+  "bitrateSubtitle": "Korkeampi bittinopeus tuottaa laadukkaamman äänen, mutta sen käyttämä kaistanleveys on suurempi. Ei päde häviöttömiin koodekkeihin, kuten FLAC",
   "@bitrateSubtitle": {},
   "customLocation": "Mukautettu sijainti",
   "@customLocation": {},
@@ -358,13 +356,13 @@
   "@swipeInsertQueueNext": {},
   "startMix": "Aloita sekoitus",
   "@startMix": {},
-  "failedToGetTrackFromDownloadId": "Kappaleen nouto lataus ID:stä epäonnistui",
+  "failedToGetTrackFromDownloadId": "Kappaleen nouto lataus-ID:llä epäonnistui",
   "@failedToGetTrackFromDownloadId": {},
   "stackTrace": "Pinon jäljitys",
   "@stackTrace": {},
   "applicationLegalese": "Lisensoitu Mozilla Public License 2.0 -lisenssillä.\nLähdekoodi saatavilla osoitteessa: {sourceCodeLink}.",
   "@applicationLegalese": {},
-  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia ja niiden käyttöä ei suositella useimmissa tapauksissa. Sijainnit systeemin Musiikki-hakemiston alla estävät albumin kansikuvien tallentamisen käyttöjärjestelmän rajoitusten vuoksi.",
+  "customLocationsBuggy": "Mukautetut sijainnit ovat erittäin bugisia ja niiden käyttöä ei suositella useimmissa tapauksissa. Sijainnit järjestelmän Musiikki-hakemiston alla estävät albumin kansikuvien tallentamisen käyttöjärjestelmän rajoitusten vuoksi.",
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
@@ -386,7 +384,7 @@
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "downloadedMissingImages": "{count,plural, =0{Puuttuvia kuvia ei löytynyt} =1{Ladattu {count} puuttuvaa kuvaa} other{Ladattu {count} puuttuvia kuvia}}",
+  "downloadedMissingImages": "{count,plural, =0{Puuttuvia kuvia ei löytynyt} =1{Ladattu {count} puuttuva kuva} other{Ladattu {count} puuttuvaa kuvaa}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -395,7 +393,7 @@
       }
     }
   },
-  "errorScreenError": "Virhe tapahtui virheiden luettelon hakemisessa! Tässä vaiheessa sinun pitäisi luultavasti vain luoda virheilmoitus GitHubiin ja poistaa sovelluksen tiedot",
+  "errorScreenError": "Tapahtui virhe vikalistan haussa! Tässä vaiheessa sinun kannattaa luultavasti vain luoda virheilmoitus GitHubiin ja poistaa sovelluksen data",
   "@errorScreenError": {},
   "enterLowPriorityStateOnPause": "Siirtyminen matalan prioriteetin tilaan tauon aikana",
   "@enterLowPriorityStateOnPause": {},
@@ -885,12 +883,6 @@
       }
     }
   },
-  "transcodingStreamingContainerTitle": "Valitse transkoodauksen säiliö",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Valitse säiliömuoto, jota käytetään suoratoistettaessa transkoodattua ääntä. Ei vaikuta jonossa jo oleviin kappaleisiin.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeCodecTitle": "Valitse latausten koodekki",
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
@@ -945,7 +937,7 @@
   "@lyricsScreen": {
     "description": "Name for the view/screen that shows lyrics for the currently playing track"
   },
-  "showLyricsTimestampsSubtitle": "Näytä aikaleimat jokaiselle sanoituksen riville sanoitusnäkymässä, jos saatavilla.",
+  "showLyricsTimestampsSubtitle": "Näytä aikaleimat jokaiselle sanoituksen riville sanoitusnäkymässä, mikäli saatavilla.",
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
@@ -1042,7 +1034,7 @@
   "@releaseDateFormatTitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
-  "title": "Nimi",
+  "title": "Kappaleen nimi",
   "@title": {},
   "automatic": "Automaattinen",
   "@automatic": {
@@ -1240,7 +1232,7 @@
   },
   "allPlaylistsInfoSetting": "Lataa soittolistan liitännäistiedostot (metadata)",
   "@allPlaylistsInfoSetting": {},
-  "cacheLibraryImagesSettingsSubtitle": "Kaikki albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa tulee ladatuksi.",
+  "cacheLibraryImagesSettingsSubtitle": "Kaikkien albumien, artistien, tyylilajien ja soittolistojen kansikuvat tämänhetkisessä kirjastossa ladataan.",
   "@cacheLibraryImagesSettingsSubtitle": {},
   "fontSizeOptionMedium": "Keskikokoinen",
   "@fontSizeOptionMedium": {
@@ -1340,7 +1332,7 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "offlineTrackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaletta}}, {downloads} Ladattu",
+  "offlineTrackCount": "{count,plural,=1{{count} Kappale} other{{count} Kappaletta}},{downloads} Ladattu",
   "@offlineTrackCount": {
     "placeholders": {
       "count": {
@@ -1897,13 +1889,13 @@
   "@size": {
     "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
   },
-  "trackOfflineFavoritesSubtitle": "Tämä mahdollistaa ajantaisempien suosikkitilojen näyttämisen offline-tilassa. Ei lataa lisätiedostoja.",
+  "trackOfflineFavoritesSubtitle": "Tämä mahdollistaa ajantasaisempien suosikkitilojen näyttämisen offline-tilassa. Ei lataa ylimääräisiä tiedostoja.",
   "@trackOfflineFavoritesSubtitle": {},
   "deleteFromTargetConfirmButton": "Poista {target, select, device{laitteelta} server{palvelimelta} other{}}",
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
   },
-  "loginFlowCustomUser": "Muokattu käyttäjä",
+  "loginFlowCustomUser": "Räätälöity käyttäjä",
   "@loginFlowCustomUser": {
     "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
   },
@@ -1933,7 +1925,7 @@
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
   },
-  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} kappale} other{{trackCount} kappaletta}}, {imageCount,plural,=1{{imageCount} kuva} other{{imageCount} kuvaa}}\n{syncCount,plural,=1{{syncCount} yksikkö synkronoi} other{{syncCount} yksikköä synkronoivat}}{repairing, plural, =0{} other{\nParhaillaan korjauksessa}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} kappale} other{{trackCount} kappaletta}}, {imageCount,plural,=1{{imageCount} kuva} other{{imageCount} kuvaa}}\n{syncCount,plural,=1{{syncCount} yksikkö synkronoi} other{{syncCount} yksikköä synkronoivat}}{repairing, plural, =0{} other{\nKorjataan parhaillaan}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
@@ -1984,5 +1976,55 @@
   "audioFadeOutDurationSettingTitle": "Äänen uloshäivytyksen kesto",
   "@audioFadeOutDurationSettingTitle": {
     "description": "Title for the audio fade-in duration setting."
+  },
+  "swipeLeftToRightAction": "Oikealle pyyhkäisyn toiminto",
+  "@swipeLeftToRightAction": {},
+  "swipeLeftToRightActionSubtitle": "Toiminto joka suoritetaan pyyhkäistessä kappaletta luettelossa vasemmalta oikealle.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeRightToLeftAction": "Vasemmalle pyyhkäisyn toiminto",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Toiminto joka suoritetaan pyyhkäistessä kappaletta luettelossa oikealta vasemmalle.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Valitse transkoodauksen muoto",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "Valitse tiedostomuoto, jota käytetään suoratoistettaessa transkoodattua audiota. Ei vaikuta jonossa jo oleviin kappaleisiin.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "autoOfflineOptionOff": "Pois päältä",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "appearsOnAlbums": "Esiintyy",
+  "@appearsOnAlbums": {},
+  "performingArtists": "Esiintyvät artistit",
+  "@performingArtists": {},
+  "autoOfflineOptionNetwork": "Ei lähiverkkoa",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineSettingTitle": "Automaattinen Offline-tila",
+  "@autoOfflineSettingTitle": {},
+  "autoOfflineNotification": "Automaattinen Offline-tila {state, select, enabled{kytketty päälle} disabled{kytketty pois päältä} other{set quantum position for}}",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "albumArtists": "Albumin artistit",
+  "@albumArtists": {},
+  "autoOfflineOptionDisconnected": "Ei yhteyttä",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingDescription": "Kytke Offline-tila automaattisesti.\nPois päältä: Ei kytke offline-tilaa automaattisesti. Voi säästää akkua.\nEi lähiverkkoa: Kytke offline-tila päälle, kun ei yhteyttä wifin tai ethernetin kautta.\nEi yhteyttä: Kytke offline-tila päälle, kun ei yhteyttä mihinkään.\nVoit aina kytkeä offline-tilan päälle käsin. Tämä kytkee offline-automaation pois päältä, kunnes taas kytket offline-tilan pois päältä.",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "libraryDownloads": "Kirjaston lataukset",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "desktopShuffleWarning": "Sekoitus ei ole tällä hetkellä saatavilla sovelluksen työpöytäversiossa.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   }
 }

@@ -5,8 +5,6 @@
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Недоступне в оффлайн режимі",
   "@notAvailableInOfflineMode": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin використовує ААС для транскодування",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscodingSubtitle": "Перекодування музичного потоку відбувається зі сторони сервера.",
   "@enableTranscodingSubtitle": {},
   "customLocation": "Власна папка",
@@ -128,7 +126,7 @@
   },
   "playlists": "Списки відтворення",
   "@playlists": {},
-  "album": "Альбомами",
+  "album": "Альбомом",
   "@album": {},
   "trackCount": "{count,plural,=1{{count} Композиція} other{{count} Композиції}}",
   "@trackCount": {
@@ -140,7 +138,7 @@
   },
   "dateAdded": "Датою додавання",
   "@dateAdded": {},
-  "startMixNoTracksArtist": "Затисніть виконавця, щоб додати або видалити його з конструктора міксів перед початком міксування",
+  "startMixNoTracksArtist": "Затисніть на виконавцеві, щоб додати або видалити його з конструктора міксів перед початком мікшування",
   "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
@@ -150,15 +148,15 @@
   },
   "startMix": "Почати перемішування",
   "@startMix": {},
-  "artist": "Виконавцями",
+  "artist": "Виконавцем",
   "@artist": {},
-  "startMixNoTracksAlbum": "Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком міксування",
+  "startMixNoTracksAlbum": "Затисніть альбом, щоб додати або видалити його з конструктора міксів перед початком мікшування",
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
   "sortBy": "Сортування за",
   "@sortBy": {},
-  "albumArtist": "Виконавцями альбомів",
+  "albumArtist": "Виконавцем альбому",
   "@albumArtist": {},
   "communityRating": "Оцінкою спільноти",
   "@communityRating": {},
@@ -178,7 +176,7 @@
   "@datePlayed": {},
   "name": "Ім'ям",
   "@name": {},
-  "downloadedMissingImages": "{count,plural, =0{Відсутніх зображень не знайдено} =1{Завантажено {count} відсутніх зображень} other{Завантажено {count} відсутніх зображень}}",
+  "downloadedMissingImages": "{count,plural, =0{Відсутніх зображень не знайдено} =1{Завантажено {count} відсутнє зображення} other{Завантажено {count} відсутніх зображень}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
     "placeholders": {
@@ -267,7 +265,7 @@
   "@dark": {},
   "appDirectory": "Тека застосунку",
   "@appDirectory": {},
-  "bitrateSubtitle": "Вищий бітрейт забезпечує вищу якість звуку за рахунок вищої пропускної здатності.",
+  "bitrateSubtitle": "Вищий бітрейт забезпечує вищу якість звуку за рахунок вищої пропускної здатності. Не застосовується на формати без втрат штибу FLAC",
   "@bitrateSubtitle": {},
   "addDownloadLocation": "Додати теку завантаження",
   "@addDownloadLocation": {},
@@ -350,7 +348,7 @@
   },
   "bufferDuration": "Тривалість буферу",
   "@bufferDuration": {},
-  "offlineMode": "Оффлайн режим",
+  "offlineMode": "Офлайн режим",
   "@offlineMode": {},
   "sortOrder": "Порядок сортування",
   "@sortOrder": {},
@@ -358,7 +356,7 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "username": "Логін",
+  "username": "Імʼя користувача",
   "@username": {},
   "password": "Пароль",
   "@password": {},
@@ -366,7 +364,7 @@
   "@logs": {},
   "next": "Далі",
   "@next": {},
-  "selectMusicLibraries": "Виберіть музичну бібліотеку",
+  "selectMusicLibraries": "Оберіть музичну бібліотеку",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -384,7 +382,7 @@
   "@music": {},
   "clear": "Очистити",
   "@clear": {},
-  "favourites": "Вибране",
+  "favourites": "Обране",
   "@favourites": {},
   "shuffleAll": "Перемішати все",
   "@shuffleAll": {},
@@ -394,7 +392,7 @@
   "@downloads": {},
   "settings": "Налаштування",
   "@settings": {},
-  "budget": "Бюджет",
+  "budget": "Бюджетом",
   "@budget": {},
   "criticRating": "Оцінкою критиків",
   "@criticRating": {},
@@ -402,7 +400,7 @@
   "@productionYear": {},
   "random": "Випадково",
   "@random": {},
-  "revenue": "Дохід",
+  "revenue": "Доходом",
   "@revenue": {},
   "runtime": "Тривалістю",
   "@runtime": {},
@@ -498,7 +496,7 @@
   "@back": {
     "description": "Label for the back button."
   },
-  "connectingToServer": "Підключення до сервера…",
+  "connectingToServer": "Підʼєднання до серверу…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -542,11 +540,11 @@
   "@login": {
     "description": "Label for the login button."
   },
-  "startMixNoTracksGenre": "Натисніть та утримуйте на жанрі для його додавання чи видалення із конструктора міксів перед початком міксування",
+  "startMixNoTracksGenre": "Натисніть та утримуйте на жанрі для його додавання чи видалення із конструктора міксів перед початком мікшування",
   "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
   },
-  "title": "Заголовок",
+  "title": "Заголовком",
   "@title": {},
   "activeDownloads": "Активні завантаження",
   "@activeDownloads": {},
@@ -804,7 +802,7 @@
   },
   "interactions": "Взаємодії",
   "@interactions": {},
-  "loginFlowQuickConnectInstructions": "Відкрийте застосунок чи сайт Jellyfin, натисність на іконку користувача та оберіть \"Швидке Під'єднання\".",
+  "loginFlowQuickConnectInstructions": "Відкрийте застосунок чи сайт Jellyfin, натисніть на іконку користувача та оберіть \"Швидке Під'єднання\".",
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
@@ -1015,10 +1013,6 @@
       }
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
-  },
-  "transcodingStreamingContainerTitle": "Обрати контейнер для транскодування",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
   "finampCollectionNames": "{itemType, select, favorites{Обране} allPlaylists{Усі списки відтворення} fiveLatestAlbums{5 Останніх альбомів} allPlaylistsMetadata{Метадані списку відтворення} other{{itemType}} }",
   "@finampCollectionNames": {
@@ -1609,8 +1603,6 @@
   "@syncComplete": {
     "description": "Message displayed after download sync completes."
   },
-  "transcodingStreamingContainerSubtitle": "Обрати сегментований контейнер для використання при потоковому відтворення транскодованого аудіо. Не буде застосовано для попередньо доданих в чергу композицій.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableTitle": "Увімкнути транскодовані завантаження",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -1903,7 +1895,7 @@
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
   },
-  "deleteDownloadsPrompt": "Ви впевнені, що хочете видалити {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' з цього пристрою?",
+  "deleteDownloadsPrompt": "Ви впевнені, що хочете видалити {itemType, select, album{альбом} playlist{список відтворення} artist{виконавця} genre{жанр} track{композицію} library{бібліотеку} other{елемент}} '{itemName}' з цього пристрою?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -1980,5 +1972,55 @@
   "audioFadeOutDurationSettingSubtitle": "Тривалість затухання звуку в мілісекундах.",
   "@audioFadeOutDurationSettingSubtitle": {
     "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "swipeRightToLeftAction": "Проведіть пальцем вліво",
+  "@swipeRightToLeftAction": {},
+  "swipeLeftToRightAction": "Проведіть пальцем до дії вправо",
+  "@swipeLeftToRightAction": {},
+  "swipeLeftToRightActionSubtitle": "Дія запускається під час гортання треку в списку зліва направо.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeRightToLeftActionSubtitle": "Дія запускається під час гортання треку в списку справа наліво.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Оберіть формат транскодування",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "autoOfflineOptionDisconnected": "Відʼєднано",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineNotification": "Автоматично {state, select, enabled{встановлено} disabled{не встановлено} other{не все так однозначно}} режим офлайн",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "transcodingStreamingFormatSubtitle": "Оберіть формат який використовуватиметься для транслювання транскодованого аудіо. Не буде застосовано до попередньо доданих композицій.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "autoOfflineOptionOff": "Деактивовано",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineOptionNetwork": "Мережа",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineSettingDescription": "Автоматично перемикатись у режим офлайн.\nДеактивовано: Не перемикатиме автоматично у режим офлайн. Може зберігати заряд батареї.\nМережа: Вмикати режим офлайн при відсутності зʼєднання до Інтернету.\nВідʼєднано: Вмикати режим офлайн при відсутності зʼєднання з будь-чим.\nВи завжди можете вручну увімкнути режим офлайн, що призупинить автоматичне увімкнення до моменту поки ви не вийдете з режиму офлайн",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "autoOfflineSettingTitle": "Автоматичний режим офлайн",
+  "@autoOfflineSettingTitle": {},
+  "appearsOnAlbums": "З'являється на",
+  "@appearsOnAlbums": {},
+  "performingArtists": "Артисти-виконавці",
+  "@performingArtists": {},
+  "albumArtists": "Виконавці альбому",
+  "@albumArtists": {},
+  "libraryDownloads": "Завантаження бібліотеки",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "desktopShuffleWarning": "Shuffle наразі недоступний на комп’ютері.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   }
 }

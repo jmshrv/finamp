@@ -152,15 +152,13 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Çıkış Yap",
   "@logOut": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin kod dönüştürme için AAC kullanıyor",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Kod dönüştürmeyi etkinleştir",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Sunucu tarafındaki ses akışlarının kodunu dönüştürür.",
   "@enableTranscodingSubtitle": {},
   "bitrate": "Bit oranı",
   "@bitrate": {},
-  "bitrateSubtitle": "Daha yüksek bir bit oranı, daha fazla bant genişliği kullanır ancak daha kaliteli ses verir.",
+  "bitrateSubtitle": "Daha yüksek bir bit oranı, daha fazla bant genişliği kullanır ancak daha kaliteli ses verir. Kayıpsız kodlamalar için geçerli değildir, örn. FLAC",
   "@bitrateSubtitle": {},
   "customLocation": "Özel Konum",
   "@customLocation": {},
@@ -576,7 +574,7 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Sunucular taranıyor...",
+  "loginFlowLocalNetworkServersScanningForServers": "Sunucular taranıyor…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -584,7 +582,7 @@
   "@loginFlowAccountSelectionHeading": {
     "description": "Heading for the account selection step during the login flow."
   },
-  "connectingToServer": "Sunucuya bağlanılıyor...",
+  "connectingToServer": "Sunucuya bağlanılıyor…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -1386,12 +1384,6 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "transcodingStreamingContainerTitle": "Kod dönüştürme kalıbını seçin",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Kodu dönüştürülmüş ses akışı sırasında kullanılacak bölüm kapsayıcısını seçin. Zaten sıraya alınmış parçalar etkilenmeyecektir.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableTitle": "Kodu dönüştürülmüş indirmeleri etkinleştir",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -1614,5 +1606,19 @@
   "fixedGridSizeTitle": "Izgara Karo Boyutu",
   "@fixedGridSizeTitle": {},
   "enableVibrationSubtitle": "Titreşim etkinleştirilsin mi?",
-  "@enableVibrationSubtitle": {}
+  "@enableVibrationSubtitle": {},
+  "deleteDownloadsConfirmButtonText": "Sil",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "specialDownloads": "Özel indirmeler",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "İndirilen öğe yok.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "albumArtists": "Albüm Sanatçıları",
+  "@albumArtists": {}
 }

@@ -173,8 +173,6 @@
   "@addDownloadLocation": {},
   "downloadLocations": "Lokalizacje pobierania",
   "@downloadLocations": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin używa AAC do transkodowania",
-  "@jellyfinUsesAACForTranscoding": {},
   "theme": "Motyw",
   "@theme": {},
   "goToAlbum": "Idź do albumu",

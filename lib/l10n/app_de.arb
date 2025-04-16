@@ -87,8 +87,6 @@
   "@enableTranscoding": {},
   "grid": "Raster",
   "@grid": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin verwendet AAC zur Transkodierung",
-  "@jellyfinUsesAACForTranscoding": {},
   "list": "Liste",
   "@list": {},
   "unknownError": "Unbekannter Fehler",
@@ -225,7 +223,7 @@
   "@transcoding": {},
   "enableTranscodingSubtitle": "Transkodiert Musikstreams serverseitig.",
   "@enableTranscodingSubtitle": {},
-  "bitrateSubtitle": "Eine höhere Bitrate verbessert die Audioqualität auf Kosten der benötigten Bandbreite.",
+  "bitrateSubtitle": "Eine höhere Bitrate verbessert die Audioqualität auf Kosten der benötigten Bandbreite. Dies betrifft keine verlustfreien Codecs, wie z.B. FLAC",
   "@bitrateSubtitle": {},
   "customLocation": "Benutzerdefinierter Ort",
   "@customLocation": {},
@@ -269,7 +267,7 @@
   "@useCoverAsBackground": {},
   "useCoverAsBackgroundSubtitle": "Ob verschwommene Cover als Hintergrund in der Wiedergabe-Ansicht benutzt werden sollen.",
   "@useCoverAsBackgroundSubtitle": {},
-  "hideTrackArtistsIfSameAsAlbumArtists": "Verstecke Track-Künstler, falls dieser dem Album-Künstler entspricht",
+  "hideTrackArtistsIfSameAsAlbumArtists": "Verstecke Interpreten, falls dieser dem Albumkünstler entspricht",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "showArtistsTopTracks": "Meistgehörte Tracks von Künstlern anzeigen",
   "@showArtistsTopTracks": {},
@@ -372,7 +370,7 @@
       }
     }
   },
-  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Ob Titel-Künstler in der Albenansicht angezeigt werden sollen, falls sie sich nicht von den Album-Künstlern unterscheiden.",
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Ob Interpreten in der Albenansicht angezeigt werden sollen, falls sie sich nicht von den Albumkünstlern unterscheiden.",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "sleepTimerTooltip": "Schlaf-Timer",
   "@sleepTimerTooltip": {},
@@ -512,7 +510,7 @@
   "@viewLogs": {
     "description": "Label for button shown during the login process that allows the user to view the app logs"
   },
-  "connectingToServer": "Verbinde mit dem Server...",
+  "connectingToServer": "Verbinde mit Server…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -681,7 +679,7 @@
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Suche nach Servern...",
+  "loginFlowLocalNetworkServersScanningForServers": "Suche nach Servern…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -1016,7 +1014,7 @@
   "@filesystemFull": {
     "description": "Message shown when a download cannot complete due to the filesystem being full."
   },
-  "missingDownloadSize": "Wird gelöscht...",
+  "missingDownloadSize": "Wird gelöscht…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1032,10 +1030,6 @@
         "type": "String"
       }
     }
-  },
-  "transcodingStreamingContainerTitle": "Transkodierungscontainer auswählen",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
   "transcodeHint": "Transkodieren?",
   "@transcodeHint": {
@@ -1081,7 +1075,7 @@
   "@fontSizeOptionMedium": {
     "description": "Font size option for things like the lyrics view. Medium means a medium font size."
   },
-  "showLyricsScreenAlbumPreludeTitle": "Album vor den Lyrics anzeigen",
+  "showLyricsScreenAlbumPreludeTitle": "Album-Cover vor den Lyrics anzeigen",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1155,7 +1149,7 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "syncingDownloadSize": "Wird synchronisiert...",
+  "syncingDownloadSize": "Wird synchronisiert…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1279,7 +1273,7 @@
   },
   "close": "Schließen",
   "@close": {},
-  "activeDownloadSize": "Wird heruntergeladen...",
+  "activeDownloadSize": "Wird heruntergeladen…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
@@ -1588,8 +1582,6 @@
   "@hideQueueButtonSubtitle": {},
   "hideQueueButton": "Warteschlangen-Button verstecken",
   "@hideQueueButton": {},
-  "transcodingStreamingContainerSubtitle": "Wähle den Transkodierungscontainer, der beim Streamen von transkodiertem Audio verwendet wird. Tracks, die sich bereits in der Warteschlange befinden, werden nicht beeinflusst.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableOption": "{option, select, always{Immer} never{Niemals} ask{Fragen} other{{option}} }",
   "@downloadTranscodeEnableOption": {
     "placeholders": {
@@ -1682,7 +1674,7 @@
   },
   "oneLineMarqueeTextButton": "Auto-Scrollen bei langen Titeln",
   "@oneLineMarqueeTextButton": {},
-  "marqueeOrTruncateButtonSubtitle": "Am Ende zu langer Tracktitel ... anzeigen, statt zu scrollen",
+  "marqueeOrTruncateButtonSubtitle": "Am Ende zu langer Tracktitel … anzeigen, statt zu scrollen",
   "@marqueeOrTruncateButtonSubtitle": {},
   "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nFür normales Playback wird der Track Gain benutzt. Wenn ein Album gespielt wird (entweder direkt oder weil es irgendwann zur Warteschlange hinzugefügt wurde), wird stattdessen der Album-Gain verwendet.\n\nTrack-basiert:\nEs wird immer der Track Gain verwendet, selbst wenn ein ganzes Album gespielt wird.\n\nNur Alben:\nLautstärken-Normalisierung wird nur bei der Wiedergabe von Alben (mit dem Album Gain) angewendet, aber nicht für individuelle Tracks.",
   "@volumeNormalizationModeSelectorDescription": {
@@ -1945,18 +1937,72 @@
   },
   "audioFadeOutDurationSettingTitle": "Audioausblendungsdauer",
   "@audioFadeOutDurationSettingTitle": {
-      "description": "Title for the audio fade out duration setting."
+    "description": "Title for the audio fade-in duration setting."
   },
   "audioFadeOutDurationSettingSubtitle": "Die Dauer der Audioausblendung in millisekunden. Auf 0 setzen zum Deaktivieren der Audioausblendung.",
   "@audioFadeOutDurationSettingSubtitle": {
-      "description": "Subtitle for the audio fade out duration setting."
+    "description": "Subtitle for the audio fade-in duration setting."
   },
   "audioFadeInDurationSettingTitle": "Audioeinblendungsdauer",
-  "@audioFadeOutDurationSettingTitle": {
-      "description": "Title for the audio fade-in duration setting."
-  },
+  "@audioFadeInDurationSettingTitle": {},
   "audioFadeInDurationSettingSubtitle": "Die Dauer der Audioeinblendung in millisekunden. Auf 0 setzen zum Deaktivieren der Audioeinblendung.",
-  "@audioFadeOutDurationSettingSubtitle": {
-      "description": "Subtitle for the audio fade-in duration setting."
+  "@audioFadeInDurationSettingSubtitle": {},
+  "transcodingStreamingFormatTitle": "Wähle Transkodierungs-Format",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "Wähle das Format für das Streamen von transkodiertem Audio. Titel, die sich bereits in der Warteschlange befinden, werden nicht beeinflusst.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "appearsOnAlbums": "Erscheint auf",
+  "@appearsOnAlbums": {},
+  "performingArtists": "Interpreten",
+  "@performingArtists": {},
+  "albumArtists": "Albumkünstler",
+  "@albumArtists": {},
+  "swipeLeftToRightAction": "Swipe nach Rechts Aktion",
+  "@swipeLeftToRightAction": {},
+  "swipeRightToLeftAction": "Swipe nach Links Aktion",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Aktion, die ausgeführt wird, wenn ein Titel in der Liste von Rechts nach Links geswipt wird.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "allowDeleteFromServerSubtitle": "Aktiviere oder Deaktivere die Option, einen Titel falls möglich permanent vom Dateisystem des Servers zu löschen.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "autoOfflineOptionOff": "Deaktiviert",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineOptionNetwork": "Netzwerk",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineOptionDisconnected": "Getrennt",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingTitle": "Automatisierter Offline Modus",
+  "@autoOfflineSettingTitle": {},
+  "autoOfflineNotification": "Der Offline Modus wurde automatisch {state, select, enabled{aktiviert} disabled{deaktiviert} other{angepasst}}",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "specialDownloads": "Spezielle Downloads",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "librarySelectError": "Fehler beim Laden der für den Benutzer verfügbaren Bibliotheken",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "swipeLeftToRightActionSubtitle": "Aktion, die ausgeführt wird, wenn ein Titel in der Liste von links nach rechts geswipt wird.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "autoOfflineSettingDescription": "Automatisch den Offline Modus aktivieren.\nDeaktiviert: Der Offline Modus wird nicht automatisch aktiviert. Könnte Batterie sparen.\nNetzwerk: Der Offline Modus wird aktiviert, wenn keine Verbindung über WLAN oder Ethernet besteht.\nGetrennt: Der Offline Modus wird aktiviert, wenn keine Internetverbindung besteht.\nDu kannst den Offline Modus jederzeit manuell aktivieren, wodurch die Automation pausiert wird, bis du ihn wieder manuell deaktivierst",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "noItemsDownloaded": "Keine Items heruntergeladen.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
   }
 }
