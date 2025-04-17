@@ -2022,5 +2022,7 @@
   "desktopShuffleWarning": "Shuffle наразі недоступний на комп’ютері.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
-  }
+  },
+  "playbackReporting": "Звіт про відтворення",
+  "@playbackReporting": {}
 }
