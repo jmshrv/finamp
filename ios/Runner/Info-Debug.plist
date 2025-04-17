@@ -30,6 +30,8 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -43,6 +45,12 @@
 	</array>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Required for debugging</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
+	<key>NSLocationUsageDescription</key>
+	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>I don't know why this permission is being requested, you should probably deny it. If you can, create a GitHub issue with a screenshot of this message.</string>
 	<key>UIBackgroundModes</key>
@@ -51,6 +59,8 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -70,18 +80,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>Required for debugging</string>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<!-- Enable viewing Finamp downloads on iOS -->
-	<key>UIFileSharingEnabled</key>
-	<true/>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
 </dict>
 </plist>
