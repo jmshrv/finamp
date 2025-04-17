@@ -182,11 +182,11 @@
   "@yesButtonLabel": {},
   "unknownArtist": "Okänd Artist",
   "@unknownArtist": {},
-  "addToQueue": "Lägg till i Uppspelningskö",
+  "addToQueue": "Lägg till i spelkö",
   "@addToQueue": {},
   "goToAlbum": "Gå till Album",
   "@goToAlbum": {},
-  "addedToQueue": "Tillagd i uppspelningskön.",
+  "addedToQueue": "Tillagd i spelkön.",
   "@addedToQueue": {},
   "addFavourite": "Lägg Till Favorit",
   "@addFavourite": {},
@@ -266,7 +266,7 @@
       }
     }
   },
-  "queue": "Uppspelningskö",
+  "queue": "Spelkö",
   "@queue": {},
   "bitrate": "Bithastighet",
   "@bitrate": {},
@@ -296,7 +296,7 @@
   "@errorScreenError": {},
   "shuffleAllTrackCountSubtitle": "Antal ljudspår att ladda vid användning av Shuffle-knappen.",
   "@shuffleAllTrackCountSubtitle": {},
-  "shuffleAll": "Blanda alla",
+  "shuffleAll": "Shuffla alla",
   "@shuffleAll": {},
   "shuffleButtonLabel": "Shuffla",
   "@shuffleButtonLabel": {},
@@ -322,9 +322,9 @@
   "@sleepTimerTooltip": {},
   "playlistCreated": "Spellista skapad.",
   "@playlistCreated": {},
-  "replaceQueue": "Ersätt Uppspelningskö",
+  "replaceQueue": "Ersätt spelkö",
   "@replaceQueue": {},
-  "queueReplaced": "Uppspelningskö ersatt.",
+  "queueReplaced": "Spelkön ersattes.",
   "@queueReplaced": {},
   "removeFavourite": "Ta Bort Favorit",
   "@removeFavourite": {},
@@ -592,7 +592,7 @@
   "@playbackHistory": {
     "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
   },
-  "shuffleAllQueueSource": "Blanda allt",
+  "shuffleAllQueueSource": "Shuffla alla",
   "@shuffleAllQueueSource": {
     "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
@@ -857,7 +857,7 @@
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
   },
-  "shuffleToNextUp": "Blanda efter Nästa",
+  "shuffleToNextUp": "Shuffla efter Nästa",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
@@ -875,11 +875,11 @@
       }
     }
   },
-  "shuffleNext": "Blanda följande",
+  "shuffleNext": "Shuffla innan Nästa",
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
-  "confirmShuffleToQueue": "Blandade efter uppspelningskön",
+  "confirmShuffleToQueue": "Shufflade efter spelkön",
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
@@ -925,7 +925,7 @@
   "@previousTracks": {
     "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
   },
-  "shuffleToQueue": "Blanda efter uppspelningskö",
+  "shuffleToQueue": "Shuffla efter spelkö",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
@@ -938,7 +938,7 @@
       }
     }
   },
-  "confirmAddToQueue": "Lade till {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} i uppspelningskön",
+  "confirmAddToQueue": "Lade till {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} i spelkön",
   "@confirmAddToQueue": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
     "placeholders": {
@@ -947,11 +947,11 @@
       }
     }
   },
-  "confirmShuffleNext": "Blandar nästa",
+  "confirmShuffleNext": "Shufflade innan Nästa",
   "@confirmShuffleNext": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
   },
-  "confirmShuffleToNextUp": "Blandade efter Nästa",
+  "confirmShuffleToNextUp": "Shufflade efter Nästa",
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
   },
@@ -963,15 +963,15 @@
   "@tracksFormerNextUp": {
     "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
   },
-  "savedQueue": "Sparad uppspelningskö",
+  "savedQueue": "Sparad spelkö",
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "shuffleAlbumsToNextUp": "Blanda album till Nästa",
+  "shuffleAlbumsToNextUp": "Shuffla album efter Nästa",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
-  "queueLoadingMessage": "Återställer uppspelningskö…",
+  "queueLoadingMessage": "Återställer spelkö…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -983,7 +983,7 @@
       }
     }
   },
-  "playbackOrderLinearButtonTooltip": "Spelar upp i ordning. Tryck för att blanda.",
+  "playbackOrderLinearButtonTooltip": "Spelar upp i ordning. Tryck för att shuffla.",
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
@@ -1124,11 +1124,11 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "reportQueueToServerSubtitle": "När funktionen är aktiverad skickar Finamp den aktuella uppspelningskön till servern. Det kan förbättra fjärrstyrning och tillåter återställning av uppspelningskö från serversidan. Alltid aktiv ifall 'Spela på'-funktionen är aktiverad.",
+  "reportQueueToServerSubtitle": "När funktionen är aktiverad skickar Finamp den aktuella spelkön till servern. Det kan förbättra fjärrstyrning och tillåter återställning av spelkö från serversidan. Alltid aktiv ifall 'Spela på'-funktionen är aktiverad.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "autoloadLastQueueOnStartup": "Återställ automatiskt senaste uppspelningskö",
+  "autoloadLastQueueOnStartup": "Återställ automatiskt senaste spelkö",
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
@@ -1140,15 +1140,15 @@
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
-  "queueRetryMessage": "Misslyckades med att återställa uppspelningskö. Försök igen?",
+  "queueRetryMessage": "Misslyckades med att återställa spelkön. Försök igen?",
   "@queueRetryMessage": {
     "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
   },
-  "autoloadLastQueueOnStartupSubtitle": "Försök att återställa den senast spelade uppspelningskön när appen startas.",
+  "autoloadLastQueueOnStartupSubtitle": "Försök att återställa den senast spelade spelkön när appen startas.",
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServer": "Rapportera nuvarande uppspelningskö till servern?",
+  "reportQueueToServer": "Rapportera nuvarande spelkö till servern?",
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1160,7 +1160,7 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "shuffleAlbumsNext": "Blanda album innan Nästa",
+  "shuffleAlbumsNext": "Shuffla album innan Nästa",
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
@@ -1185,7 +1185,7 @@
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybrid (Spår + Album):\nSpårets förstärkning används för vanlig uppspelning, men ifall ett album spelas upp (antingen för att det är källan till den huvudsakliga uppspelningskön, eller för att det lades till i kön vid något tillfälle), så används albumets förstärkning istället.\n\nEnstaka spår:\nSpårets förstärkning används alltid, oavsett ifall ett album spelas eller inte.\n\nEndast album:\nVolymnormalisering tillämpas endast vid uppspelning av album (utifrån albumets förstärkning), men inte för individuella spår.",
+  "volumeNormalizationModeSelectorDescription": "Hybrid (Spår + Album):\nSpårets förstärkning används för vanlig uppspelning, men ifall ett album spelas upp (antingen för att det är källan till den huvudsakliga spelkön, eller för att det lades till i kön vid något tillfälle), så används albumets förstärkning istället.\n\nEnstaka spår:\nSpårets förstärkning används alltid, oavsett ifall ett album spelas eller inte.\n\nEndast album:\nVolymnormalisering tillämpas endast vid uppspelning av album (utifrån albumets förstärkning), men inte för individuella spår.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -1199,7 +1199,7 @@
       }
     }
   },
-  "swipeInsertQueueNextSubtitle": "Aktivera för att lägga in ett spår som nästa artikel i uppspelningskön när det sveps i spårlistan i stället för att lägga till det på slutet.",
+  "swipeInsertQueueNextSubtitle": "Aktivera för att lägga in ett spår som nästa artikel i spelkön när det sveps i spårlistan i stället för att lägga till det på slutet.",
   "@swipeInsertQueueNextSubtitle": {},
   "startInstantMixForIndividualTracksSwitchTitle": "Starta snabbmixar för enstaka spår",
   "@startInstantMixForIndividualTracksSwitchTitle": {
@@ -1244,7 +1244,7 @@
   "@volumeNormalizationModeAlbumBased": {
     "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
   },
-  "shuffleAlbumsToQueue": "Blanda album efter uppspelningskö",
+  "shuffleAlbumsToQueue": "Shuffla album efter spelkö",
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
@@ -1262,7 +1262,7 @@
   "@volumeNormalizationIOSBaseGainEditorTitle": {
     "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "queueRestoreError": "Varning: {count,plural, =1{{count} spår} other{{count} spår}} kunde inte återställas till uppspelningskön.",
+  "queueRestoreError": "Varning: {count,plural, =1{{count} spår} other{{count} spår}} kunde inte återställas till spelkön.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
@@ -1297,7 +1297,7 @@
       }
     }
   },
-  "shuffleAlbums": "Blanda album",
+  "shuffleAlbums": "Shuffla album",
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
   },
@@ -1333,7 +1333,7 @@
   "@showNullLibraryItemsSubtitle": {
     "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
   },
-  "hidePlayerBottomActionsSubtitle": "Dölj knapparna för uppspelningskö och sångexter på spelarskärmen. Svep upp för att komma åt uppspelningskön, och svep vänster (under skivomslaget) för att visa sångtexter ifall de finns tillgängliga.",
+  "hidePlayerBottomActionsSubtitle": "Dölj knapparna för spelkö och sångexter på spelarskärmen. Svep upp för att komma åt spelkön, och svep vänster (under skivomslaget) för att visa sångtexter ifall de finns tillgängliga.",
   "@hidePlayerBottomActionsSubtitle": {},
   "prioritizePlayerCoverSubtitle": "Priorisera visning av ett större albumomslag på spelarskärmen. Mindre viktiga kontroller döljs mer aggressivt vid små skärmstorlekar.",
   "@prioritizePlayerCoverSubtitle": {},
@@ -1593,9 +1593,9 @@
   "@redownloadTitle": {
     "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
   },
-  "hideQueueButton": "Dölj knapp för uppspelningskö",
+  "hideQueueButton": "Dölj knapp för spelkö",
   "@hideQueueButton": {},
-  "hideQueueButtonSubtitle": "Dölj knappen för uppspelningskön på spelarskärmen. Svep upp för att komma åt uppspelningskön.",
+  "hideQueueButtonSubtitle": "Dölj knappen för spelkön på spelarskärmen. Svep upp för att komma åt spelkön.",
   "@hideQueueButtonSubtitle": {},
   "oneLineMarqueeTextButton": "Rulla automatiskt långa titlar",
   "@oneLineMarqueeTextButton": {},
