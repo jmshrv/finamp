@@ -1047,7 +1047,7 @@
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
-  "playingFromType": "Spelar ifrån {source, select, album{album} playlist{spellista} trackMix{spårmix} artistMix{artistmix} albumMix{albummix} genreMix{genremix} favorites{favoriter} allTracks{alla spår} filteredList{spår} genre{genre} artist{artist} track{spår} nextUpAlbum{album i Nästa} nextUpPlaylist{spellista i Nästa} nextUpArtist{artist i Nästa} other{}}",
+  "playingFromType": "Spelar ifrån {source, select, album{album} playlist{spellista} trackMix{spårmix} artistMix{artistmix} albumMix{albummix} genreMix{genremix} favorites{favoriter} allTracks{alla spår} filteredList{spår} genre{genre} artist{artist} track{spår} nextUpAlbum{album i Nästa} nextUpPlaylist{spellista i Nästa} nextUpArtist{artist i Nästa} remoteClient{en fjärrenhet} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1124,7 +1124,7 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "reportQueueToServerSubtitle": "När funktionen är aktiverad skickar Finamp den aktuella uppspelningskön till servern. Det verkar för närvarande inte finnas mycket nytta för detta, och det ökar nätverkstrafiken.",
+  "reportQueueToServerSubtitle": "När funktionen är aktiverad skickar Finamp den aktuella uppspelningskön till servern. Det kan förbättra fjärrstyrning och tillåter återställning av uppspelningskö från serversidan. Alltid aktiv ifall 'Spela på'-funktionen är aktiverad.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -2034,5 +2034,66 @@
   "libraryDownloads": "Biblioteksnedladdningar",
   "@libraryDownloads": {
     "description": "Title for the library downloads section on the downloads screen."
+  },
+  "enablePlayonTitle": "Aktivera stöd för 'Spela på'",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "Fördröjning av återanslutning till 'Spela på'-session",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playbackReportingSettingsTitle": "Uppspelningsrapportering & Spela på",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "lyricsScreenButtonTitle": "Sångtexter",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "outputMenuTitle": "Ändra ljudkälla",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "enablePlayonSubtitle": "Aktiverar Jellyfins 'Spela på'-funktion (fjärrstyrning av Finamp från en annan klient). Stäng av ifall din reverse proxy eller server inte stödjer websockets.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "deviceType": "{type, select, speaker{Enhetens högtalare} tv{TV} bluetooth{Bluetooth} other{Okänd}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "playOnStaleDelaySubtitle": "Hur länge en 'Spela på'-fjärrsession anses vara aktiv efter att ha mottagit ett kommando. Uppspelning rapporteras mer frekvent i en aktiv session, vilket kan leda till ökad dataanvändning.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "outputMenuDevicesSectionTitle": "Tillgängliga enheter",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuVolumeSectionTitle": "Volym",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Anslut till en enhet",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "playOnReconnectionDelaySubtitle": "Styr över fördröjningen mellan försöken att återansluta till SpelaPå-websocketen när anslutningen avbryts (i sekunder). En lägre fördröjning ökar dataanvändningen.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuButtonTitle": "Ljudkälla",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "desktopShuffleWarning": "Shuffle är för närvarande inte tillgänglig på PC.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   }
 }
