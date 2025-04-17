@@ -344,7 +344,10 @@ class PlayOnService {
                       // sortBy: "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                       includeItemTypes: "Audio",
                       itemIds: List<BaseItemId>.from(
-                          request['Data']['ItemIds'] as List<dynamic>),
+                              request['Data']['ItemIds'] as List<dynamic>)
+                          // limit amount of requested tracks. Jellyfin sometimes sends more item IDs than the GET request can handle in the query string
+                          .take(200)
+                          .toList(),
                     );
                     if (items!.isNotEmpty) {
                       //TODO check if all tracks in the request are in the upcoming queue (peekQueue). If they are, we should try to only reorder the upcoming queue instead of treating it as a new queue, and then skip to the correct index.
@@ -371,7 +374,10 @@ class PlayOnService {
                           "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                       includeItemTypes: "Audio",
                       itemIds: List<BaseItemId>.from(
-                          request['Data']['ItemIds'] as List<dynamic>),
+                              request['Data']['ItemIds'] as List<dynamic>)
+                          // limit amount of requested tracks. Jellyfin sometimes sends more item IDs than the GET request can handle in the query string
+                          .take(200)
+                          .toList(),
                     );
                     unawaited(_queueService.addToNextUp(
                       items: items!,
@@ -383,7 +389,10 @@ class PlayOnService {
                           "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                       includeItemTypes: "Audio",
                       itemIds: List<BaseItemId>.from(
-                          request['Data']['ItemIds'] as List<dynamic>),
+                              request['Data']['ItemIds'] as List<dynamic>)
+                          // limit amount of requested tracks. Jellyfin sometimes sends more item IDs than the GET request can handle in the query string
+                          .take(200)
+                          .toList(),
                     );
                     unawaited(_queueService.addToQueue(
                       items: items!,
