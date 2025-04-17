@@ -79,5 +79,9 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
 </dict>
 </plist>
