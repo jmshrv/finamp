@@ -43,7 +43,9 @@ class PlayOnService {
             .info("Offline mode enabled, closing PlayOn listener now");
         await closeListener();
       } else if (!FinampSettingsHelper.finampSettings.enablePlayon) {
-        await closeListener();
+        if (isConnected) {
+          await closeListener();
+        }
       } else if (!isConnected &&
           FinampSettingsHelper.finampSettings.enablePlayon) {
         await startListener();
@@ -182,7 +184,8 @@ class PlayOnService {
       onDone: () {
         _keepaliveSubscription?.cancel();
         isConnected = false;
-        if (!FinampSettingsHelper.finampSettings.isOffline) {
+        if (!FinampSettingsHelper.finampSettings.isOffline &&
+            FinampSettingsHelper.finampSettings.enablePlayon) {
           _playOnServiceLogger
               .warning("WebSocket connection closed, attempting to reconnect");
           isConnected = false;
