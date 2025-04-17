@@ -814,7 +814,7 @@
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   },
-  "playingFromType": "Afspelen Van {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Afspelen Van {source, select, album{Album} playlist{Afspeellijst} trackMix{Nummermix} artistMix{Artiestenmix} albumMix{Albummix} genreMix{Genremix} favorites{Favorieten} allTracks{Alle nummers} filteredList{nummers} genre{Genre} artist{Artiest} track{Nummer} nextUpAlbum{Album Hierna} nextUpPlaylist{Afspeellijst Hierna} nextUpArtist{Artiest Hierna} remoteClient{een Ander Apparaat} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1208,7 +1208,7 @@
   "@specialDownloads": {
     "description": "Title for the special downloads section on the downloads screen."
   },
-  "periodicPlaybackSessionUpdateFrequency": "Updatefrequentie afspeelsessie",
+  "periodicPlaybackSessionUpdateFrequency": "Updatefrequentie Afspeelsessie",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1263,7 +1263,7 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "reportQueueToServerSubtitle": "Als dit geactiveerd is stuurt Finamp de wachtrij naar de server. Er lijkt niet op dit moment niet veel nut voor te zijn en het zorgt voor meer netwerkverkeer.",
+  "reportQueueToServerSubtitle": "Als dit geactiveerd is stuurt Finamp de wachtrij naar de server. Dit kan besturing vanaf een ander apparaat verbeteren en zorgt dat de server de wachtrij kan herstellen. Staat altijd aan als 'Afspelen Op' geactiveerd is.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1291,5 +1291,124 @@
         "example": "12"
       }
     }
+  },
+  "volumeNormalizationModeSelectorSubtitle": "Wanneer en hoe Volume-normalisatie toegepast wordt",
+  "@volumeNormalizationModeSelectorSubtitle": {
+    "description": "Subtitle for the dropdown that selects the replay gain mode"
+  },
+  "libraryDownloads": "Bibliotheek downloads",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "currentVolumeFeatureText": "{volume}% volume",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "queueRestoreTitle": "Opgeslagen op {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "enablePlayonTitle": "Activeer ondersteuning voor 'Afspelen Op'",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "'Afspelen Op'-sessie Herverbindingsvertraging",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "shuffleAlbumsToQueue": "Shuffle Albums Naar de Wachtrij",
+  "@shuffleAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+  },
+  "close": "Sluiten",
+  "@close": {},
+  "noMusicLibrariesTitle": "Geen Muziekbibliotheken",
+  "@noMusicLibrariesTitle": {
+    "description": "Title for message that shows on the views screen when no music libraries could be found."
+  },
+  "volumeNormalizationSwitchTitle": "Volume-nomalisatie activeren",
+  "@volumeNormalizationSwitchTitle": {
+    "description": "Title for the switch that toggles replay gain"
+  },
+  "volumeNormalizationSwitchSubtitle": "Gebruik Gain-informatie om het volume van nummer te normaliseren (\"Replay Gain\")",
+  "@volumeNormalizationSwitchSubtitle": {
+    "description": "Subtitle for the switch that toggles replay gain"
+  },
+  "volumeNormalizationModeSelectorTitle": "Volume-normalisatiemodus",
+  "@volumeNormalizationModeSelectorTitle": {
+    "description": "Title for the dropdown that selects the replay gain mode"
+  },
+  "volumeNormalizationIOSBaseGainEditorTitle": "Basis-Gain",
+  "@volumeNormalizationIOSBaseGainEditorTitle": {
+    "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "playOnReconnectionDelaySubtitle": "Stelt de vertraging in tussen pogingen om te verbinden met de 'Afspelen Op'-websocket als die verbroken is (in seconden). Een lagere vertraging zorgt voor meer datagebruik.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "enablePlayonSubtitle": "Activeert Jellyfins 'Afspelen Op' functie (Finamp op afstand besturen vanaf een ander apparaat). Zet dit uit als je reverse proxy of server geen websockets ondersteunt.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnStaleDelaySubtitle": "Hoe lang een 'Afspelen Op'-sessie op als actief wordt beschouwd na het ontvangen van een commando. Als een sessie als actief is beschouwd wordt de afspeelstatus vaker doorgestuurd, wat voor meer datagebruik kan zorgen.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelay": "Timeout 'Afspelen Op'-sessie",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "couldNotLoad": "Kon {source, select, album{album} playlist{afspeellijst} trackMix{nummermix} artistMix{artiestenmix} albumMix{albummix} genreMix{genremix} favorites{favorieten} allTracks{alle nummers} filteredList{nummers} genre{genre} artist{artiest} track{nummer} nextUpAlbum{album in ''Hierna''} nextUpPlaylist{playlist in ''Hierna''} nextUpArtist{artiest in ''Hierna''} other{}} niet laden",
+  "@couldNotLoad": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "volumeNormalizationModeSelectorDescription": "Hybride (Nummer + Album):\nNummer-Gain wordt normaal gebruikt, maar als een album afgespeeld wordt (omdat het oorspronkelijk afgespeeld is, of omdat een album op een gegeven moment in de wachtrij gezet is) wordt de album-Gain gebruikt\n\nPer nummer:\nNummer-Gain wordt altijd gebruikt, ongeacht of er een album gespeeld wordt.\n\nAlleen Album-Gain:\nVolume-normalisatie wordt alleen toegepast bij het spelen van albums (met de album-gain), maar niet voor losse nummers.",
+  "@volumeNormalizationModeSelectorDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
+  },
+  "volumeNormalizationModeAlbumOnly": "Alleen Album-Gain",
+  "@volumeNormalizationModeAlbumOnly": {
+    "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
+  },
+  "moreInfo": "Meer informatie",
+  "@moreInfo": {},
+  "volumeNormalizationSettingsTitle": "Volume-normalisatie",
+  "@volumeNormalizationSettingsTitle": {
+    "description": "Title for the replay gain settings screen"
+  },
+  "refresh": "Ververs",
+  "@refresh": {},
+  "volumeNormalizationModeAlbumBased": "Per album",
+  "@volumeNormalizationModeAlbumBased": {
+    "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
+  },
+  "resetToDefaults": "Terugzetten naar standaardinstellingen",
+  "@resetToDefaults": {},
+  "noMusicLibrariesBody": "Finamp kon geen muziekbibliotheken vinden. Zorg ervoor dat je Jellyfin server minstens één bibliotheek heeft met het type \"Muziek\".",
+  "@noMusicLibrariesBody": {},
+  "volumeNormalizationModeHybrid": "Hybride (Nummer + Album)",
+  "@volumeNormalizationModeHybrid": {
+    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+  },
+  "volumeNormalizationModeTrackBased": "Per nummer",
+  "@volumeNormalizationModeTrackBased": {
+    "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   }
 }
