@@ -1570,5 +1570,140 @@
   "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin ne reçoit aucune mise à jour d’un client pendant plus de 5 minutes, il suppose que la lecture est terminée. Cela signifie que pour les morceaux durant plus de 5 minutes, la lecture peut être considérée comme terminée, ce qui peut fausser les données de rapport de lecture.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "remainingDuration": "{duration} restante",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "removeFromPlaylistConfirm": "Retirer",
+  "@removeFromPlaylistConfirm": {},
+  "alignmentOptionEnd": "Fin",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "playbackReporting": "Rapport de lecture",
+  "@playbackReporting": {},
+  "lyricsScreenButtonTitle": "Paroles",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "keepScreenOnWhilePluggedIn": "L'écran ne reste allumé que lorsqu'il est branché",
+  "@keepScreenOnWhilePluggedIn": {},
+  "currentVolumeFeatureText": "{volume}% volume",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "lyricsFontSizeTitle": "Taille de la police des paroles",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "showArtistChipImageSubtitle": "Cela affecte les petits aperçus d'images d'artistes, par exemple, sur l'écran du lecteur.",
+  "@showArtistChipImageSubtitle": {},
+  "keepScreenOnWhilePluggedInSubtitle": "Ignorer le paramètre de maintien de l'écran allumé si l'appareil est débranché",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "fontSizeOptionSmall": "Petite",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "keepScreenOnDisabled": "Désactivé",
+  "@keepScreenOnDisabled": {},
+  "fixedGridTileSizeEnum": "{size, select, small{Petit} medium{Moyen} large{Grand} veryLarge{Très Grand} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "removeFromPlaylistPrompt": "Retirer '{itemName}' de la liste de lecture '{playlistName}' ?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "scrollToCurrentTrack": "Défiler jusqu'à la chanson en cours",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "enableAutoScroll": "Activer le défilement automatique",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "addRemoveFromPlaylist": "Ajouter aux / Retirer des listes de lecture",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "keepScreenOnSubtitle": "Quand garder l'écran allumé",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnAlwaysOn": "Toujours allumé",
+  "@keepScreenOnAlwaysOn": {},
+  "fontSizeOptionLarge": "Grande",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "fontSizeOptionMedium": "Moyenne",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "keepScreenOnWhileLyrics": "Pendant l'affichage des paroles",
+  "@keepScreenOnWhileLyrics": {},
+  "downloadTranscodeEnableOption": "{option, select, always{Toujours} never{Jamais} ask{Demander} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "keepScreenOnWhilePlaying": "Pendant l'écoute de la musique",
+  "@keepScreenOnWhilePlaying": {},
+  "quickActions": "Actions rapides",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "addPlaylistSubheader": "Ajouter une chanson à une liste de lecture",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "alignmentOptionStart": "Début",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "Milieu",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "keepScreenOn": "Maintenir l'écran allumé",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
   }
 }
