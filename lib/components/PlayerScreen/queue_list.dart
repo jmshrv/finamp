@@ -1170,12 +1170,14 @@ class NextUpSectionHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-              child: Flex(
-                  direction: Axis.horizontal,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+            child: Flex(
+              direction: Axis.horizontal,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
                 Text(AppLocalizations.of(context)!.nextUp),
-              ])),
+              ],
+            ),
+          ),
           if (controls)
             SimpleButton(
               text: AppLocalizations.of(context)!.clearNextUp,
@@ -1214,52 +1216,79 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
     return Padding(
-      // color: Colors.black.withOpacity(0.5),
       padding: const EdgeInsets.only(
-          left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
-      child: GestureDetector(
-        onTap: () {
-          try {
-            if (onTap != null) {
-              onTap!();
-              FeedbackHelper.feedback(FeedbackType.selection);
-            }
-          } catch (e) {
-            FeedbackHelper.feedback(FeedbackType.error);
-          }
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Text(AppLocalizations.of(context)!.previousTracks),
-            ),
-            const SizedBox(width: 4.0),
-            StreamBuilder<bool>(
-                stream: isRecentTracksExpanded,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data!) {
-                    return Icon(
-                      TablerIcons.chevron_up,
-                      size: 28.0,
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black
-                          : Colors.white,
-                    );
-                  } else {
-                    return Icon(
-                      TablerIcons.chevron_down,
-                      size: 28.0,
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black
-                          : Colors.white,
-                    );
+        left: 14.0,
+        right: 14.0,
+        bottom: 12.0,
+        top: 8.0,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                try {
+                  if (onTap != null) {
+                    onTap!();
+                    FeedbackHelper.feedback(FeedbackType.selection);
                   }
-                }),
-          ],
-        ),
+                } catch (e) {
+                  FeedbackHelper.feedback(FeedbackType.error);
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(AppLocalizations.of(context)!.previousTracks),
+                  ),
+                  const SizedBox(width: 4.0),
+                  StreamBuilder<bool>(
+                    stream: isRecentTracksExpanded,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data!) {
+                        return Icon(
+                          TablerIcons.chevron_up,
+                          size: 28.0,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Colors.black
+                                  : Colors.white,
+                        );
+                      } else {
+                        return Icon(
+                          TablerIcons.chevron_down,
+                          size: 28.0,
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Colors.black
+                                  : Colors.white,
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SimpleButton(
+            text: AppLocalizations.of(context)!.clearQueue,
+            icon: TablerIcons.x,
+            iconPosition: IconPosition.end,
+            iconSize: 32.0,
+            iconColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
+            onPressed: () async {
+              final queueService = GetIt.instance<QueueService>();
+              FeedbackHelper.feedback(FeedbackType.success);
+              await queueService.stopPlayback();
+            },
+          )
+        ],
       ),
     );
   }
