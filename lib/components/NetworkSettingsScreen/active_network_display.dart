@@ -16,7 +16,7 @@ class ActiveNetworkDisplay extends ConsumerWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return ListTile(
-          title: Text("Active Address"), // TODO TRANSLATION
+          leading: Icon(Icons.router_outlined),
           subtitle: Text("This Address is currently in use"),
           trailing: Text(address)
         );

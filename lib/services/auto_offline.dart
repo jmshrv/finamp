@@ -66,7 +66,7 @@ Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
 
   // Attempt to combat IOS reliability problems
   if (Platform.isIOS) {
-    await Future.delayed(Duration(seconds: 7));
+    await Future.delayed(Duration(seconds: 7), () => {});
     state = await _shouldBeOffline(null);
   }
 
@@ -98,31 +98,42 @@ Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
   }
 }
 
+void _usePublicAddress() {
+  Logger("Network Switcher").info("Changed active network to public address");
+  FinampUserHelper()
+    .currentUser!
+    .changeUrl(FinampSettingsHelper
+        .finampSettings.publicAddress);
+  Logger("Hallo").info(FinampUserHelper().currentUser!.baseUrl);
+}
+void _useHomeAddress() {
+  Logger("Network Switcher").info("Changed active network to home address");
+  FinampUserHelper()
+    .currentUser!
+    .changeUrl(FinampSettingsHelper
+        .finampSettings.homeNetworkAddress);
+  Logger("Hallo").info(FinampUserHelper().currentUser!.baseUrl);
+
+}
 
 Future<void> changeTargetUrl({bool? isLocal}) async {
-  if (isLocal != null) {
-    if (isLocal) {
-        Logger("Network Switcher").info("Changed active network to home address");
-        FinampUserHelper()
-        .currentUser!
-        .changeUrl(FinampSettingsHelper
-            .finampSettings.homeNetworkAddress);}
-    else {
-        Logger("Network Switcher").info("Changed active network to public address");
-        FinampUserHelper()
-        .currentUser!
-        .changeUrl(FinampSettingsHelper
-            .finampSettings.publicAddress);}
-    return;
+  if (isLocal != null && isLocal) {
+    return _useHomeAddress();
+  }
+  else if (isLocal != null && !isLocal) {
+    return _usePublicAddress();
   }
 
-
   if (!FinampSettingsHelper.finampSettings.preferHomeNetwork) {
-    return changeTargetUrl(isLocal: false);}
-
+    return changeTargetUrl(isLocal: false);
+  }
 
   String? currentWifi = await NetworkInfo().getWifiName();
-  String targetWifi = FinampSettingsHelper.finampSettings.homeNetworkName;
+  if (currentWifi == null) return changeTargetUrl(isLocal: false);
 
-  await changeTargetUrl(isLocal: currentWifi == targetWifi);
+  // Android returns wifi name with quotes
+  currentWifi = currentWifi.replaceAll("\"", "");
+  Logger("Network Switcher").finest("Wifi Name detected: $currentWifi");
+
+  await changeTargetUrl(isLocal: currentWifi == FinampSettingsHelper.finampSettings.homeNetworkName);
 }
