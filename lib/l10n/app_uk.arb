@@ -1148,7 +1148,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Коли увімкнено, Finamp надсилатиме поточну чергу до серверу. Наразі здається, що від цього мало користі, і це збільшує мережевий трафік.",
+  "reportQueueToServerSubtitle": "Якщо ввімкнено, Finamp надішле поточну чергу на сервер. Це може покращити дистанційне керування та дозволити відновлення черги на стороні сервера. Завжди ввімкнено, якщо ввімкнено функцію «Відтворити».",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1160,7 +1160,7 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Частота оновлення сесії відтворення",
+  "periodicPlaybackSessionUpdateFrequency": "Частота оновлення сеансу відтворення",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -2024,5 +2024,76 @@
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },
   "playbackReporting": "Звіт про відтворення",
-  "@playbackReporting": {}
+  "@playbackReporting": {},
+  "playOnStaleDelay": "'Час очікування сеансу відтворення",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Увімкніть підтримку «Відтворення»",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Вмикає функцію Jellyfin «Play On» (дистанційне керування Finamp з іншого клієнта). Вимкніть це, якщо ваш зворотний проксі або сервер не підтримує веб-сокети.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playbackReportingSettingsTitle": "Звіт про відтворення та відтворення",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "lyricsScreenButtonTitle": "Тексти пісень",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "outputMenuButtonTitle": "Вихід",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuVolumeSectionTitle": "Обсяг",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "currentVolumeFeatureText": "{volume}% обсягу",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playOnStaleDelaySubtitle": "Скільки часу віддалений сеанс «Відтворення» вважається активним після отримання команди. Коли відтворення вважається активним, повідомляється частіше, що може призвести до збільшення використання пропускної здатності.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnReconnectionDelay": "Затримка повторного підключення сеансу «Відтворення»",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuDevicesSectionTitle": "Доступні пристрої",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "playOnReconnectionDelaySubtitle": "Контролює затримку між спробами повторного підключення до веб-сокета PlayOn після його відключення (у секундах). Менша затримка збільшує використання пропускної здатності.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuTitle": "Змінити вихід",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Підключіться до пристрою",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "deviceType": "{type, select, speaker{Динамік пристрою} tv{TV} bluetooth{Bluetooth} other{Unknown}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  }
 }
