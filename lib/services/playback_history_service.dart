@@ -539,6 +539,10 @@ class PlaybackHistoryService {
     await _updateQueueInfo();
   }
 
+  Future<void> reportQueueStatus() async {
+    await _updateQueueInfo();
+  }
+
   /// Generates PlaybackProgressInfo for the supplied item and player info.
   jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfo(
     FinampQueueItem item, {

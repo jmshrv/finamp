@@ -151,6 +151,8 @@ class QueueService {
   void _queueFromConcatenatingAudioSource({
     bool logUpdate = true,
   }) {
+    final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
+
     List<FinampQueueItem> allTracks = _audioHandler.effectiveSequence
             ?.map((e) => e.tag as FinampQueueItem)
             .toList() ??
@@ -261,6 +263,12 @@ class QueueService {
     if (logUpdate) {
       _logQueues(message: "(current)");
     }
+
+    if (FinampSettingsHelper.finampSettings.reportQueueToServer ||
+        FinampSettingsHelper.finampSettings.enablePlayon) {
+      unawaited(playbackHistoryService.reportQueueStatus());
+    }
+
   }
 
   Future<void> performInitialQueueLoad() async {
