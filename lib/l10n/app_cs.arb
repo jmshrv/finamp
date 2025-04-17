@@ -695,7 +695,7 @@
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
-  "reportQueueToServerSubtitle": "Pokud je tato možnost povolena, odešle Finamp aktuální frontu na server. Tato funkce v současné době není přiliš užitečná a zvyšuje síťový provoz.",
+  "reportQueueToServerSubtitle": "Pokud je tato možnost povolena, odešle Finamp aktuální frontu na server. Tato funkce může zlepšit vzdálené ovládání a umožnit serverové obnovení fronty. Povoleno vždy, pokud je povolena možnost „Přehrát na“.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1725,7 +1725,7 @@
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
-  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} other{}}",
+  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} remoteClient{vzdáleného zařízení} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -2020,5 +2020,78 @@
   "desktopShuffleWarning": "Náhodné přehrávání není v současné době dostupné na počítačích.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "playbackReporting": "Hlášení přehrávání",
+  "@playbackReporting": {},
+  "currentVolumeFeatureText": "Hlasitost {volume} %",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playOnStaleDelay": "Vypršení relace „Přehrát na“",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Povolit podporu „Přehrát na“",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Povolí funkci „Přehrát na“ služby Jellyfin (vzdálené ovládání aplikace Finamp z jiného klienta). Zakažte, pokud vaše reverzní proxy nebo server nepodporuje websockety.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelaySubtitle": "Ovládá zpoždění mezi pokusy o opětovné připojení k websocketu PlayOn po jeho odpojení (v sekundách). Nižší zpoždění zvýší využití dat.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playbackReportingSettingsTitle": "Hlášení přehrávání a „Přehrát na“",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "lyricsScreenButtonTitle": "Text",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "outputMenuButtonTitle": "Výstup",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuTitle": "Změnit výstup",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuVolumeSectionTitle": "Hlasitost",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "playOnStaleDelaySubtitle": "Jak dlouho po obdržení příkazu bude relace „Přehrát na“ považována za aktivní. Když je považována za aktivní, je přehrávání hlášeno častěji, což může vést ke zvýšené spotřebě dat.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Připojit se k zařízení",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "playOnReconnectionDelay": "Zpoždění opětovného spojení relace „Přehrát na“",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuDevicesSectionTitle": "Dostupná zařízení",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "deviceType": "{type, select, speaker{Reproduktor zařízení} tv{TV} bluetooth{Bluetooth} other{Neznámé}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
   }
 }
