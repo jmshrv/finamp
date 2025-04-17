@@ -2014,5 +2014,25 @@
     "description": "Setting description. Make sure the Mode names match the translations."
   },
   "transcodingStreamingFormatSubtitle": "Välj format som ska användas när du strömmar transkodat ljud. Redan kölagda spår kommer inte att påverkas.",
-  "@transcodingStreamingFormatSubtitle": {}
+  "@transcodingStreamingFormatSubtitle": {},
+  "playOnStaleDelay": "Varaktighet 'Spela på'-session",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "currentVolumeFeatureText": "{volume}% volym",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playbackReporting": "Uppspelningsrapportering",
+  "@playbackReporting": {},
+  "libraryDownloads": "Biblioteksnedladdningar",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  }
 }
