@@ -33,6 +33,8 @@ class PlayOnService {
   bool isControlled = false;
 
   Future<void> initialize() async {
+    _playOnServiceLogger.info("Initializing PlayOn service");
+
     // Turn on/off when offline mode is toggled
     var settingsListener = FinampSettingsHelper.finampSettingsListener;
     settingsListener.addListener(() async {
@@ -47,6 +49,27 @@ class PlayOnService {
         await startListener();
       }
     });
+
+    //!!! not working, context is null during initialization
+    // ProviderScope.containerOf(
+    //         GlobalSnackbar.materialAppScaffoldKey.currentContext!)
+    //     .listen(
+    //         finampSettingsProvider.select((s) => (
+    //               s.value?.isOffline ?? false,
+    //               s.value?.enablePlayon ?? false
+    //             )), (previous, next) async {
+    //   final (isOffline, enablePlayon) = next;
+    //   if (isConnected && isOffline) {
+    //     _playOnServiceLogger
+    //         .info("Offline mode enabled, closing PlayOn listener now");
+    //     await closeListener();
+    //   } else if (!enablePlayon) {
+    //     await closeListener();
+    //   } else if (!isConnected && enablePlayon) {
+    //     await startListener();
+    //   }
+    // });
+
 
     await startListener();
   }
@@ -184,168 +207,175 @@ class PlayOnService {
   Future<void> closeListener() async {
     _playOnServiceLogger.info("Closing playon session");
     _channel.sink.add('{"MessageType":"SessionsStop"}');
-    _channel.sink.close();
-    _keepaliveSubscription?.cancel();
+    unawaited(_channel.sink.close());
+    unawaited(_keepaliveSubscription?.cancel());
     isConnected = false;
 
     // In case offline mod is turned on while attempting to reconnect
-    _reconnectionSubscription?.cancel();
+    unawaited(_reconnectionSubscription?.cancel());
     _reconnectionSubscription = null;
   }
 
   Future<void> handleMessage(dynamic value) async {
-    _playOnServiceLogger.finest("Received message: $value");
+    try {
+      _playOnServiceLogger.finest("Received message: $value");
 
-    var request = jsonDecode(value as String);
+      var request = jsonDecode(value as String);
 
-    if (request['MessageType'] != 'ForceKeepAlive' &&
-        request['MessageType'] != 'KeepAlive') {
-      // Because the Jellyfin server doesn't notify remote client connection/disconnection,
-      // we mark the remote controlling as stale after 5 minutes without input as a workaround.
-      // This is particularly useful to stop agressively reporting playback when it's not needed
-      await _isControlledSubscription?.cancel();
-      isControlled = true;
-      _isControlledSubscription = Stream.periodic(
-          Duration(
-              seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay),
-          (count) {
-        return count;
-      }).listen((event) {
-        _playOnServiceLogger.info("Mark remote controlling as stale");
-        isControlled = false;
-        _isControlledSubscription?.cancel();
-      });
+      if (request['MessageType'] != 'ForceKeepAlive' &&
+          request['MessageType'] != 'KeepAlive') {
+        // Because the Jellyfin server doesn't notify remote client connection/disconnection,
+        // we mark the remote controlling as stale after 5 minutes without input as a workaround.
+        // This is particularly useful to stop agressively reporting playback when it's not needed
+        await _isControlledSubscription?.cancel();
+        isControlled = true;
+        _isControlledSubscription = Stream.periodic(
+            Duration(
+                seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay),
+            (count) {
+          return count;
+        }).listen((event) {
+          _playOnServiceLogger.info("Mark remote controlling as stale");
+          isControlled = false;
+          _isControlledSubscription?.cancel();
+        });
 
-      switch (request['MessageType']) {
-        case "GeneralCommand":
-          switch (request['Data']['Name']) {
-            case "DisplayMessage":
-              final messageFromServer = request['Data']['Arguments']['Text'];
-              final header = request['Data']['Arguments']['Header'];
-              final timeout = request['Data']['Arguments']['Timeout'];
-              _playOnServiceLogger
-                  .info("Displaying message from server: '$messageFromServer'");
-              GlobalSnackbar.message(
-                  (context) => "$header: $messageFromServer");
-              break;
-            case "SetVolume":
-              _playOnServiceLogger.info("Server requested a volume adjustment");
+        switch (request['MessageType']) {
+          case "GeneralCommand":
+            switch (request['Data']['Name']) {
+              case "DisplayMessage":
+                final messageFromServer = request['Data']['Arguments']['Text'];
+                final header = request['Data']['Arguments']['Header'];
+                final timeout = request['Data']['Arguments']['Timeout'];
+                _playOnServiceLogger.info(
+                    "Displaying message from server: '$messageFromServer'");
+                GlobalSnackbar.message(
+                    (context) => "$header: $messageFromServer");
+                break;
+              case "SetVolume":
+                _playOnServiceLogger
+                    .info("Server requested a volume adjustment");
 
-              final desiredVolume =
-                  request['Data']['Arguments']['Volume'] as String;
-              _audioHandler.setVolume(
-                  double.parse(desiredVolume) / 100.0);
-          }
-          break;
-        case "UserDataChanged":
-          var item = await _jellyfinApiHelper.getItemById(BaseItemId(
-              request['Data']['UserDataList'][0]['ItemId'] as String));
+                final desiredVolume =
+                    request['Data']['Arguments']['Volume'] as String;
+                _audioHandler.setVolume(double.parse(desiredVolume) / 100.0);
+            }
+            break;
+          case "UserDataChanged":
+            var item = await _jellyfinApiHelper.getItemById(BaseItemId(
+                request['Data']['UserDataList'][0]['ItemId'] as String));
 
-          // Handle favoritig from remote client
-          _playOnServiceLogger.info("Updating favorite ui state");
-          ProviderScope.containerOf(
-                  GlobalSnackbar.materialAppScaffoldKey.currentContext!,
-                  listen: false)
-              .read(isFavoriteProvider(item).notifier)
-              .updateState(item.userData!.isFavorite);
-          break;
-        default:
-          switch (request['Data']['Command']) {
-            case "Stop":
-              await _audioHandler.stop();
-              break;
-            case "Pause":
-              await _audioHandler.pause();
-              break;
-            case "Unpause":
-              await _audioHandler.play();
-              break;
-            case "NextTrack":
-              await _audioHandler.skipToNext();
-              break;
-            case "PreviousTrack":
-              await _audioHandler.skipToPrevious();
-              break;
-            case "Seek":
-              // val to = message.data?.seekPositionTicks?.ticks ?: Duration.ZERO
-              final seekPosition = request['Data']['SeekPositionTicks'] != null
-                  ? Duration(
-                      milliseconds:
-                          ((request['Data']['SeekPositionTicks'] as int) /
-                                  10000)
-                              .round())
-                  : Duration.zero;
-              await _audioHandler.seek(seekPosition);
-              final currentItem = _queueService.getCurrentTrack();
-              break;
-            case "Rewind":
-              await _audioHandler.rewind();
-              break;
-            case "FastForward":
-              await _audioHandler.fastForward();
-              break;
-            case "PlayPause":
-              await _audioHandler.togglePlayback();
-              break;
+            // Handle toggling favorite status from remote client
+            _playOnServiceLogger.info("Updating favorite ui state");
+            ProviderScope.containerOf(
+                    GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                    listen: false)
+                .read(isFavoriteProvider(item).notifier)
+                .updateState(item.userData!.isFavorite);
+            break;
+          default:
+            switch (request['Data']['Command']) {
+              case "Stop":
+                await _audioHandler.stop();
+                break;
+              case "Pause":
+                await _audioHandler.pause();
+                break;
+              case "Unpause":
+                await _audioHandler.play();
+                break;
+              case "NextTrack":
+                await _audioHandler.skipToNext();
+                break;
+              case "PreviousTrack":
+                await _audioHandler.skipToPrevious();
+                break;
+              case "Seek":
+                // val to = message.data?.seekPositionTicks?.ticks ?: Duration.ZERO
+                final seekPosition =
+                    request['Data']['SeekPositionTicks'] != null
+                        ? Duration(
+                            milliseconds:
+                                ((request['Data']['SeekPositionTicks'] as int) /
+                                        10000)
+                                    .round())
+                        : Duration.zero;
+                await _audioHandler.seek(seekPosition);
+                final currentItem = _queueService.getCurrentTrack();
+                break;
+              case "Rewind":
+                await _audioHandler.rewind();
+                break;
+              case "FastForward":
+                await _audioHandler.fastForward();
+                break;
+              case "PlayPause":
+                await _audioHandler.togglePlayback();
+                break;
 
-            // Do nothing
-            default:
-              switch (request['Data']['PlayCommand']) {
-                case 'PlayNow':
-                  if (!(request['Data'].containsKey('StartIndex') as bool)) {
-                    request['Data']['StartIndex'] = 0;
-                  }
-                  var items = await _jellyfinApiHelper.getItems(
-                    // sortBy: "IndexNumber", //!!! don't sort, use the sorting provided by the command!
-                    includeItemTypes: "Audio",
-                    itemIds: List<BaseItemId>.from(
-                        request['Data']['ItemIds'] as List<dynamic>),
-                  );
-                  if (items!.isNotEmpty) {
-                    //TODO check if all tracks in the request are in the upcoming queue (peekQueue). If they are, we should try to only reorder the upcoming queue instead of treating it as a new queue, and then skip to the correct index.
-                    unawaited(_queueService.startPlayback(
-                      items: items,
-                      source: QueueItemSource(
-                        name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.remoteClient,
+              // Do nothing
+              default:
+                switch (request['Data']['PlayCommand']) {
+                  case 'PlayNow':
+                    if (!(request['Data'].containsKey('StartIndex') as bool)) {
+                      request['Data']['StartIndex'] = 0;
+                    }
+                    var items = await _jellyfinApiHelper.getItems(
+                      // sortBy: "IndexNumber", //!!! don't sort, use the sorting provided by the command!
+                      includeItemTypes: "Audio",
+                      itemIds: List<BaseItemId>.from(
+                          request['Data']['ItemIds'] as List<dynamic>),
+                    );
+                    if (items!.isNotEmpty) {
+                      //TODO check if all tracks in the request are in the upcoming queue (peekQueue). If they are, we should try to only reorder the upcoming queue instead of treating it as a new queue, and then skip to the correct index.
+                      unawaited(_queueService.startPlayback(
+                        items: items,
+                        source: QueueItemSource(
+                          name: QueueItemSourceName(
+                            type: QueueItemSourceNameType.remoteClient,
+                          ),
+                          type: QueueItemSourceType.remoteClient,
+                          id: items[0].id,
                         ),
-                        type: QueueItemSourceType.remoteClient,
-                        id: items[0].id,
-                      ),
-                      // seems like Jellyfin isn't always sending the correct index
-                      startingIndex: request['Data']['StartIndex'] as int,
+                        // seems like Jellyfin isn't always sending the correct index
+                        startingIndex: request['Data']['StartIndex'] as int,
+                      ));
+                    } else {
+                      _playOnServiceLogger
+                          .severe("Server asked to start an unplayable item");
+                    }
+                    break;
+                  case 'PlayNext':
+                    var items = await _jellyfinApiHelper.getItems(
+                      sortBy:
+                          "IndexNumber", //!!! don't sort, use the sorting provided by the command!
+                      includeItemTypes: "Audio",
+                      itemIds: List<BaseItemId>.from(
+                          request['Data']['ItemIds'] as List<dynamic>),
+                    );
+                    unawaited(_queueService.addToNextUp(
+                      items: items!,
                     ));
-                  } else {
-                    _playOnServiceLogger
-                        .severe("Server asked to start an unplayable item");
-                  }
-                  break;
-                case 'PlayNext':
-                  var items = await _jellyfinApiHelper.getItems(
-                    sortBy: "IndexNumber",
-                    includeItemTypes: "Audio",
-                    itemIds: List<BaseItemId>.from(
-                        request['Data']['ItemIds'] as List<dynamic>),
-                  );
-                  unawaited(_queueService.addToNextUp(
-                    items: items!,
-                  ));
-                  break;
-                case 'PlayLast':
-                  var items = await _jellyfinApiHelper.getItems(
-                    sortBy: "IndexNumber",
-                    includeItemTypes: "Audio",
-                    itemIds: List<BaseItemId>.from(
-                        request['Data']['ItemIds'] as List<dynamic>),
-                  );
-                  unawaited(_queueService.addToQueue(
-                    items: items!,
-                  ));
-                  break;
-              }
-          }
-          break;
+                    break;
+                  case 'PlayLast':
+                    var items = await _jellyfinApiHelper.getItems(
+                      sortBy:
+                          "IndexNumber", //!!! don't sort, use the sorting provided by the command!
+                      includeItemTypes: "Audio",
+                      itemIds: List<BaseItemId>.from(
+                          request['Data']['ItemIds'] as List<dynamic>),
+                    );
+                    unawaited(_queueService.addToQueue(
+                      items: items!,
+                    ));
+                    break;
+                }
+            }
+            break;
+        }
       }
+    } catch (e) {
+      _playOnServiceLogger.severe("Error handling message: $e");
     }
   }
 }

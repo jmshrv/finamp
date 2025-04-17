@@ -16,7 +16,7 @@ class ReportQueueToServerToggle extends ConsumerWidget {
           ref.watch(finampSettingsProvider.enablePlayon),
       onChanged: ref.watch(finampSettingsProvider.enablePlayon)
           ? null // disable switch tile, since queue is always reported if play on is active
-          : (value) => FinampSetters.setReportQueueToServer(value),
+          : FinampSetters.setReportQueueToServer,
     );
   }
 }
