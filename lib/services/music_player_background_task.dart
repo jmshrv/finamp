@@ -61,7 +61,9 @@ class FadeState {
 }
 
 class PlayerVolumeController {
-  PlayerVolumeController(this._player);
+  PlayerVolumeController(this._player) {
+    _updateVolume();
+  }
 
   final AudioPlayer _player;
 
