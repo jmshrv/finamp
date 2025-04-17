@@ -662,5 +662,21 @@
     "description": "Option to download item in long-press menu."
   },
   "downloadSettings": "ダウンロード",
-  "@downloadSettings": {}
+  "@downloadSettings": {},
+  "deleteDownloadsPrompt": "この装置から、{itemType, select, album{アルバム} playlist{playlist} artist{アーティスト} genre{ジャンル} track{曲} library{ライブラリ} other{アイテム}} 「{itemName}」を削除してもよろしいですか?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "albumArtists": "アルバムアーティスト",
+  "@albumArtists": {}
 }
