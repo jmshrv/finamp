@@ -1415,7 +1415,7 @@
       }
     }
   },
-  "reportQueueToServerSubtitle": "Wenn aktiviert sendet Finamp die aktuelle Warteschlange an den Server. Das kann die Fernsteuerung verbessern und erlaubt die serverseitige Wiederherstellung der Warteschlange. Immer aktiviert wenn die „Play On“ Funktion aktiviert ist.",
+  "reportQueueToServerSubtitle": "Wenn aktiviert sendet Finamp die aktuelle Warteschlange an den Server. Das kann die Fernsteuerung verbessern und erlaubt die serverseitige Wiederherstellung der Warteschlange. Immer aktiviert, wenn die 'Abspielen auf' Funktion aktiviert ist.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -2005,15 +2005,15 @@
   "@noItemsDownloaded": {
     "description": "Shown on the downloads screen for sections without any downloaded items."
   },
-  "playOnStaleDelay": "'Play On' Sitzungs-Timeout",
+  "playOnStaleDelay": "'Abspielen auf' Sitzungs-Timeout",
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   },
-  "enablePlayonTitle": "Aktiviere 'Play On' Unterstützung",
+  "enablePlayonTitle": "Aktiviere 'Abspielen auf' Unterstützung",
   "@enablePlayonTitle": {
     "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "playbackReportingSettingsTitle": "Wiedergabe Bericht & Play On",
+  "playbackReportingSettingsTitle": "Wiedergabe Bericht & Abspielen auf",
   "@playbackReportingSettingsTitle": {
     "description": "Title for the playback reporting settings screen"
   },
@@ -2038,15 +2038,15 @@
     },
     "description": "Label for the type of device in the output menu"
   },
-  "playOnStaleDelaySubtitle": "Wie lange eine entfernte 'Play On' Sitzung als aktiv angesehen wird, nachdem der Befehl empfangen wurde. Wenn als aktiv angesehen, wird die Wiedergabe dem Server häufiger berichtet, was zu einer erhöhten Bandbreite führen kann.",
+  "playOnStaleDelaySubtitle": "Wie lange eine entfernte 'Abspielen auf' Sitzung als aktiv angesehen wird, nachdem der Befehl empfangen wurde. Wenn als aktiv angesehen, wird die Wiedergabe dem Server häufiger berichtet, was zu einer erhöhten Bandbreite führen kann.",
   "@playOnStaleDelaySubtitle": {
     "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
   },
-  "playOnReconnectionDelaySubtitle": "Steuert den Delay zwischen Verbindungsversuchen zum PlayOn Websocket (in Sekunden), wenn die Verbindung getrennt wird. Ein kürzeres Delay erhöht die genutzte Bandbreite.",
+  "playOnReconnectionDelaySubtitle": "Steuert den Delay zwischen Verbindungsversuchen zum 'Abspielen auf' Websocket (in Sekunden), wenn die Verbindung getrennt wird. Ein kürzeres Delay erhöht die genutzte Bandbreite.",
   "@playOnReconnectionDelaySubtitle": {
     "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
-  "playOnReconnectionDelay": "'Play On' Sitzung Wiederverbindungs-Delay",
+  "playOnReconnectionDelay": "'Abspielen auf' Sitzung Wiederverbindungs-Delay",
   "@playOnReconnectionDelay": {
     "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
@@ -2070,7 +2070,7 @@
   "@outputMenuTitle": {
     "description": "Title for the output menu that allows the user to change the audio output device and volume"
   },
-  "enablePlayonSubtitle": "Aktiviert Jellyfin's 'Play On' Feature (fernsteuert Finamp von einem anderen Client). Deaktiviere diese Funktion, wenn dein Reverse Proxy oder Server keine Websockets unterstützt.",
+  "enablePlayonSubtitle": "Aktiviert Jellyfin's 'Abspielen auf' Feature (fernsteuert Finamp von einem anderen Client). Deaktiviere diese Funktion, wenn dein Reverse Proxy oder Server keine Websockets unterstützt.",
   "@enablePlayonSubtitle": {
     "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
