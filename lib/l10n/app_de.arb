@@ -1415,7 +1415,7 @@
       }
     }
   },
-  "reportQueueToServerSubtitle": "Wenn aktiviert sendet Finamp die aktuelle Warteschlange an den Server. Aktuell scheint es wenig Nutzen dafür zu geben und es erhöht die Netzwerkbelastung.",
+  "reportQueueToServerSubtitle": "Wenn aktiviert sendet Finamp die aktuelle Warteschlange an den Server. Das kann die Fernsteuerung verbessern und erlaubt die serverseitige Wiederherstellung der Warteschlange. Immer aktiviert wenn die „Play On“ Funktion aktiviert ist.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1480,7 +1480,7 @@
       }
     }
   },
-  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allTracks{allen Tracks} filteredList{Tracks} genre{Genre} artist{Künstler} track{Track} nextUpAlbum{Album in \"Als Nächstes\"} nextUpPlaylist{Playlist in \"Als Nächstes\"} nextUpArtist{Artist in \"Als Nächstes\"} other{}}",
+  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allTracks{allen Tracks} filteredList{Tracks} genre{Genre} artist{Künstler} track{Track} nextUpAlbum{Album in \"Als Nächstes\"} nextUpPlaylist{Playlist in \"Als Nächstes\"} nextUpArtist{Artist in \"Als Nächstes\"} remoteClient{anderem Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -2004,5 +2004,86 @@
   "noItemsDownloaded": "Keine Items heruntergeladen.",
   "@noItemsDownloaded": {
     "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "playOnStaleDelay": "'Play On' Sitzungs-Timeout",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Aktiviere 'Play On' Unterstützung",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playbackReportingSettingsTitle": "Wiedergabe Bericht & Play On",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "lyricsScreenButtonTitle": "Lyrics",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "outputMenuDevicesSectionTitle": "Verfügbare Geräte",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Verbinde zu einem Gerät",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "deviceType": "{type, select, speaker{Gerät-Lautsprecher} tv{TV} bluetooth{Bluetooth} other{Unbekannt}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "playOnStaleDelaySubtitle": "Wie lange eine entfernte 'Play On' Sitzung als aktiv angesehen wird, nachdem der Befehl empfangen wurde. Wenn als aktiv angesehen, wird die Wiedergabe dem Server häufiger berichtet, was zu einer erhöhten Bandbreite führen kann.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnReconnectionDelaySubtitle": "Steuert den Delay zwischen Verbindungsversuchen zum PlayOn Websocket (in Sekunden), wenn die Verbindung getrennt wird. Ein kürzeres Delay erhöht die genutzte Bandbreite.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelay": "'Play On' Sitzung Wiederverbindungs-Delay",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "currentVolumeFeatureText": "{volume}% Lautstärke",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playbackReporting": "Wiedergabe Bericht",
+  "@playbackReporting": {},
+  "outputMenuVolumeSectionTitle": "Lautstärke",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuTitle": "Ändere Ausgabe-Gerät",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "enablePlayonSubtitle": "Aktiviert Jellyfin's 'Play On' Feature (fernsteuert Finamp von einem anderen Client). Deaktiviere diese Funktion, wenn dein Reverse Proxy oder Server keine Websockets unterstützt.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "outputMenuButtonTitle": "Ausgabe",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "desktopShuffleWarning": "Zufallswiedergabe ist auf dem Desktop zur Zeit nicht verfügbar.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "libraryDownloads": "Bibliothek Downloads",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
   }
 }
