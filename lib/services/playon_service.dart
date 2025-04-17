@@ -4,6 +4,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finamp/services/favorite_provider.dart';
 import 'package:logging/logging.dart';
@@ -72,6 +73,20 @@ class PlayOnService {
     //   }
     // });
 
+    // Sometimes we temporarily lose connection while the screen is locked.
+    // Try reconnecting once again when the user begins interacting again, if still disconnected
+    AppLifecycleListener(
+        onRestart: () {},
+        onHide: () {},
+        onShow: () {
+          if (!isConnected &&
+              FinampSettingsHelper.finampSettings.enablePlayon) {
+            _playOnServiceLogger.info(
+                "App in foreground and visible, attempting to reconnect.");
+            startReconnectionLoop();
+          }
+        },
+        onPause: () {});
 
     await startListener();
   }
@@ -143,16 +158,18 @@ class PlayOnService {
   }
 
   Future<void> startReconnectionLoop() async {
+    unawaited(_reconnectionSubscription?.cancel());
     _reconnectionSubscription = Stream.periodic(
         Duration(
             seconds: FinampSettingsHelper
                 .finampSettings.playOnReconnectionDelay), (count) {
       return count;
     }).listen((count) {
+      // We try to connect for five minutes before giving up
       if (count <
-          (120 / FinampSettingsHelper.finampSettings.playOnReconnectionDelay)
+          (Duration(minutes: 5).inSeconds /
+                  FinampSettingsHelper.finampSettings.playOnReconnectionDelay)
               .round()) {
-        // We try to connect for two minutes before giving up
         _playOnServiceLogger
             .warning("Attempt $count to restart playon listener");
         startListener();
