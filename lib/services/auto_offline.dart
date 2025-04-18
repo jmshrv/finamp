@@ -15,6 +15,7 @@ part 'auto_offline.g.dart';
 StreamSubscription<List<ConnectivityResult>> _listener = Connectivity()
     .onConnectivityChanged
     .listen(_onConnectivityChange);
+final currentAddressTextUpdateStream = StreamController<void>.broadcast();
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
@@ -104,7 +105,7 @@ void _usePublicAddress() {
     .currentUser!
     .changeUrl(FinampSettingsHelper
         .finampSettings.publicAddress);
-  Logger("Hallo").info(FinampUserHelper().currentUser!.baseUrl);
+  currentAddressTextUpdateStream.add(null);
 }
 void _useHomeAddress() {
   Logger("Network Switcher").info("Changed active network to home address");
@@ -112,8 +113,7 @@ void _useHomeAddress() {
     .currentUser!
     .changeUrl(FinampSettingsHelper
         .finampSettings.homeNetworkAddress);
-  Logger("Hallo").info(FinampUserHelper().currentUser!.baseUrl);
-
+  currentAddressTextUpdateStream.add(null);
 }
 
 Future<void> changeTargetUrl({bool? isLocal}) async {

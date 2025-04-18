@@ -24,20 +24,16 @@ Future<bool> _infoPrompt(BuildContext context) async {
   return userIsOkay;
 }
 
-Future<bool> _confirmPrompt(BuildContext context) async {
-  bool userIsSure = false;
+Future<void> _confirmPrompt(BuildContext context) async {
   await showDialog(
     context: context,
     builder: (_) => ConfirmationPromptDialog(
-      promptText: "Without location permission the automatic URL switching feature cant be enabled since it wont work anyway.\nIf you like to use this feature you must enable location permissions manually.",
+      promptText: "Without location permission the automatic URL switching feature cant be enabled since it wont work anyway.\nIf you like to use this feature you need to enable location permissions manually.",
       confirmButtonText: "I understand",
       abortButtonText: null,
-      onConfirmed: () => userIsSure = true,
-      onAborted: () {
-        // already false
-      },
-      centerText: true,));
-  return userIsSure;
+      onConfirmed: () => {},
+      onAborted: () {},
+      centerText: true));
 }
 
 Future<bool> ensureLocationPermissions(BuildContext context) async {
@@ -55,7 +51,6 @@ Future<bool> ensureLocationPermissions(BuildContext context) async {
 
   if (permission.isGranted) return true;
 
-  // confirm the user doesn't want to grant permissions.
   // Inform the user that they must enable location manually
   await _confirmPrompt(context);
 

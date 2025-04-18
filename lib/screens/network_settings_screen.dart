@@ -57,7 +57,7 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
                   GlobalSnackbar.error("Failed to get current network name");
                   return;
                 }
-                
+
                 // android returns the network name with quotes
                 FinampSetters.setHomeNetworkName(network.replaceAll("\"", ""));
               },
