@@ -6,6 +6,7 @@ import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_addr
 import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_name_selector.dart';
 import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_selector.dart';
 import 'package:finamp/components/NetworkSettingsScreen/public_address_selector.dart';
+import 'package:finamp/components/ensure_location_permission_prompt.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -47,25 +48,16 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
           HomeNetworkNameSelector(),
           TextButton(
               onPressed: () async {
-                //Check if location permission is granted
-                if (Platform.isAndroid || Platform.isIOS) {
-                  PermissionStatus status =
-                      await Permission.locationWhenInUse.status;
-                  if (status.isDenied) {
-                    status = await Permission.locationWhenInUse.request();
-                  }
-                  if (!status.isGranted) {
-                    GlobalSnackbar.error(
-                        "Location Permission is denied but required for this feature");
-                    return;
-                  }
-                }
-                //Get the current network name
+                bool allowed = await ensureLocationPermissions(context);
+                if (!allowed) return;
+
+                // Get the current network name
                 String? network = await NetworkInfo().getWifiName();
                 if (network == null) {
                   GlobalSnackbar.error("Failed to get current network name");
                   return;
                 }
+                
                 // android returns the network name with quotes
                 FinampSetters.setHomeNetworkName(network.replaceAll("\"", ""));
               },
