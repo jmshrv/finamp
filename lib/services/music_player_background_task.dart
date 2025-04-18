@@ -1102,15 +1102,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                   : "Add favorite"),
         ),
         //!!! Android Auto adds a shuffle toggle button automatically, adding it here would result in a duplicate button
-        // MediaControl.custom(
-        //     name: CustomPlaybackActions.shuffle.name,
-        //     androidIcon: _player.shuffleModeEnabled
-        //         ? "drawable/baseline_shuffle_on_24"
-        //         : "drawable/baseline_shuffle_24",
-        //     label: _player.shuffleModeEnabled ?
-        //       (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderShuffledButtonLabel : "Shuffle enabled") :
-        //       (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderLinearButtonLabel : "Shuffle disabled"),
-        // ),
+        MediaControl.custom(
+            name: CustomPlaybackActions.shuffle.name,
+            androidIcon: _player.shuffleModeEnabled
+                ? "drawable/baseline_shuffle_on_24"
+                : "drawable/baseline_shuffle_24",
+            label: _player.shuffleModeEnabled ?
+              (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderShuffledButtonLabel : "Shuffle enabled") :
+              (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderLinearButtonLabel : "Shuffle disabled"),
+        ),
         if (FinampSettingsHelper
             .finampSettings.showStopButtonOnMediaNotification)
           MediaControl.stop.copyWith(androidIcon: "drawable/baseline_stop_24"),
