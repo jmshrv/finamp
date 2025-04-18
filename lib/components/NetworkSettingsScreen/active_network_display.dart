@@ -1,3 +1,4 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/auto_offline.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +36,10 @@ class _ActiveNetworkDisplay extends State<ActiveNetworkDisplay> {
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
+      builder: (context, box, __) {
         return ListTile(
           leading: Icon(Icons.router_outlined),
-          subtitle: Text("This Address is currently in use"),
+          subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkActiveAddressInfoText),
           trailing: Text(address)
         );
       }

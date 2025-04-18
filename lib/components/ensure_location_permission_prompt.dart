@@ -11,8 +11,8 @@ Future<bool> _infoPrompt(BuildContext context) async {
   await showDialog(
         context: context,
         builder: (_) => ConfirmationPromptDialog(
-            promptText: "In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name.",
-            confirmButtonText: "Okay",
+            promptText: AppLocalizations.of(context)!.requestLocationPermissionInfoDialog,
+            confirmButtonText: AppLocalizations.of(context)!.confirm,
             abortButtonText: AppLocalizations.of(context)!.genericCancel,
             onConfirmed: () {
               userIsOkay = true;
@@ -28,8 +28,8 @@ Future<void> _confirmPrompt(BuildContext context) async {
   await showDialog(
     context: context,
     builder: (_) => ConfirmationPromptDialog(
-      promptText: "Without location permission the automatic URL switching feature cant be enabled since it wont work anyway.\nIf you like to use this feature you need to enable location permissions manually.",
-      confirmButtonText: "I understand",
+      promptText: AppLocalizations.of(context)!.requestLocationPermissionEnsureDialog,
+      confirmButtonText: AppLocalizations.of(context)!.confirm,
       abortButtonText: null,
       onConfirmed: () => {},
       onAborted: () {},
@@ -54,6 +54,6 @@ Future<bool> ensureLocationPermissions(BuildContext context) async {
   // Inform the user that they must enable location manually
   await _confirmPrompt(context);
 
-  GlobalSnackbar.error("Location Permission is denied but required for this feature");
+  GlobalSnackbar.message((context) => AppLocalizations.of(context)!.requestLocationPermissionErrorMessage);
   return false;
 }

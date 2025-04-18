@@ -1,3 +1,4 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -19,8 +20,8 @@ class PublicAddressSelector extends ConsumerWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
         return ListTile(
-          title: Text("Public Address"), // TODO TRANSLATION
-          subtitle: Text("The is the primary address to use to connect to your jellyfin Server"),
+          title: Text(AppLocalizations.of(context)!.preferHomeNetworkPublicAddressSettingTitle),
+          subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkPublicAddressSettingDescription),
           trailing: SizedBox(
             width: 200 * MediaQuery.of(context).textScaleFactor,
             child: TextField(

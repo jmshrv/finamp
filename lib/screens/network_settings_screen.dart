@@ -8,6 +8,7 @@ import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_sele
 import 'package:finamp/components/NetworkSettingsScreen/public_address_selector.dart';
 import 'package:finamp/components/ensure_location_permission_prompt.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
@@ -26,7 +27,7 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Network"),
+        title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
               context, FinampSettingsHelper.resetNetworkSettings)
@@ -41,8 +42,7 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
           if (Platform.isAndroid || Platform.isIOS)
             ListTile(
               leading: Icon(Icons.info_outline),
-              subtitle: Text(
-                  "This Feature requires Location permissions in order to access the network name. Additionally location needs to be enabled."),
+              subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkInfoBox),
             ),
           HomeNetworkSelector(),
           HomeNetworkNameSelector(),
@@ -54,14 +54,14 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
                 // Get the current network name
                 String? network = await NetworkInfo().getWifiName();
                 if (network == null) {
-                  GlobalSnackbar.error("Failed to get current network name");
+                  GlobalSnackbar.message((context) => AppLocalizations.of(context)!.preferHomeNetworkFailedToReadNetworkNameError);
                   return;
                 }
 
                 // android returns the network name with quotes
                 FinampSetters.setHomeNetworkName(network.replaceAll("\"", ""));
               },
-              child: Text("Use current network name")),
+              child: Text(AppLocalizations.of(context)!.preferHomeNetworkGetNetworkNameButton)),
           HomeNetworkAddressSelector(),
         ],
       ),

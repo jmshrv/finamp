@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:finamp/components/ensure_location_permission_prompt.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/auto_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,8 +23,8 @@ class HomeNetworkSelector extends ConsumerWidget {
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, __) {
         return SwitchListTile.adaptive(
-          title: Text("Prefer Home Network"), // TODO TRANSLATION
-          subtitle: Text("When your home network is detected the local IP you give will be used."),
+          title: Text(AppLocalizations.of(context)!.preferHomeNetworkEnableSwitchTitle), // TODO TRANSLATION
+          subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkEnableSwitchDescription),
           value: preferLocalNetwork,
           onChanged: (value) async {
             if (value) {

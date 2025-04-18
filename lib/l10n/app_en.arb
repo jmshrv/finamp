@@ -2030,5 +2030,36 @@
   "audioFadeInDurationSettingSubtitle": "The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.",
   "@audioFadeOutDurationSettingSubtitle": {
       "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
-  }
+  },
+  "preferHomeNetworkActiveAddressInfoText": "Active Address",
+  "@preferHomeNetworkActiveAddressInfoText": {
+      "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "Home Network Address",
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "Target address of the Jellyfin server inside your home network",
+  "preferHomeNetworkSettingNetworkNameTitle": "Home Network Name",
+  "preferHomeNetworkSettingNetworkNameDescription": "The name of your home network will be used to determine if you are at home or not",
+  "preferHomeNetworkEnableSwitchTitle": "Prefer Home Network",
+  "preferHomeNetworkEnableSwitchDescription": "Whether or not to use a different address when you are at home",
+  "preferHomeNetworkPublicAddressSettingTitle": "Public Address",
+  "preferHomeNetworkPublicAddressSettingDescription": "The primary address used to connect to your Jellyfin server",
+  "requestLocationPermissionInfoDialog": "In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name.",
+  "@requestLocationPermissionInfoDialog": {
+    "description": "This is only shown on android to inform the user why location permissions are needed"
+  },
+  "requestLocationPermissionEnsureDialog": "Without location permissions the automatic URL switching feature cant be enabled since it wont work. In order to use this feature you need to grant location permissions manually.",
+  "@requestLocationPermissionEnsureDialog": {
+    "description": "This is shown when the user denied location permissions and since the app cant ask a second time the permission needs to be granted manually"
+  },
+  "requestLocationPermissionErrorMessage": "Location Access is denied but required for this feature.",
+  "@requestLocationPermissionErrorMessage": {
+    "description": "This is shown in the snackbar when the auto-address-switching-feature couldnt be enabled because location permission isnt granted"
+  },
+  "preferHomeNetworkInfoBox": "This Feature requires Location permissions (and location needs to be enabled) to read the network name.",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "preferHomeNetworkFailedToReadNetworkNameError": "Failed to read network name",
+  "preferHomeNetworkGetNetworkNameButton": "Use current network",
+  "networkSettingsTitle": "Network"
 }

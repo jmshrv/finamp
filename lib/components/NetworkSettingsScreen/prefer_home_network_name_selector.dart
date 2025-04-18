@@ -1,3 +1,4 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/auto_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,11 +22,11 @@ class HomeNetworkNameSelector extends ConsumerWidget {
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
+      builder: (context, box, __) {
         return ListTile(
           enabled:  preferLocalNetwork,
-          title: Text("Home Network Name"), // TODO TRANSLATION
-          subtitle: Text("This name will be used to decide if you are in your home network or not."),
+          title: Text(AppLocalizations.of(context)!.preferHomeNetworkSettingNetworkNameTitle), // TODO TRANSLATION
+          subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkSettingNetworkNameDescription),
           trailing: SizedBox(
             width: 200 * MediaQuery.of(context).textScaleFactor,
             child: TextField(

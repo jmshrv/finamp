@@ -170,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ListTile(
             leading: const Icon(Icons.wifi),
-            title: Text("Network"), // TODO TRANSLATION
+            title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
             onTap: () => Navigator.of(context)
                 .pushNamed(NetworkSettingsScreen.routeName)
           ),

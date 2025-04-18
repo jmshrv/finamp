@@ -1,3 +1,4 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/auto_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,11 +22,11 @@ class HomeNetworkAddressSelector extends ConsumerWidget {
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
+      builder: (context, box, __) {
         return ListTile(
           enabled: preferLocalNetwork,
-          title: Text("Home address"), // TODO TRANSLATION
-          subtitle: Text("Address to use to connect to your Jellyfin Server when being at home"),
+          title: Text(AppLocalizations.of(context)!.preferHomeNetworkTargetAddressLocalSettingTitle), // TODO TRANSLATION
+          subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkTargetAddressLocalSettingDescription),
           trailing: SizedBox(
             width: 200 * MediaQuery.of(context).textScaleFactor,
             child: TextField(
