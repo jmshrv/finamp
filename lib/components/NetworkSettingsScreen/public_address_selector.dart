@@ -1,4 +1,5 @@
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/auto_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -16,6 +17,8 @@ class PublicAddressSelector extends ConsumerWidget {
     final _controller = TextEditingController(
         text: publicAddress.toString());
 
+    DateTime lastSave = DateTime.now();
+    
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
@@ -29,7 +32,14 @@ class PublicAddressSelector extends ConsumerWidget {
               textAlign: TextAlign.center,
               keyboardType: TextInputType.url,
               onChanged: (value) {
-                FinampSetters.setPublicAddress(value);
+                Future.delayed(Duration(milliseconds: 500), () async {
+                    if (DateTime.now().millisecondsSinceEpoch - lastSave.millisecondsSinceEpoch > 480 ) {
+                      FinampSetters.setPublicAddress(value);
+                    await changeTargetUrl();
+                  }
+                });
+
+                lastSave = DateTime.now();
               },
             ),
           ),
