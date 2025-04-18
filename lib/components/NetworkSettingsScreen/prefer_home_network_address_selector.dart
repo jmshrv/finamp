@@ -1,3 +1,4 @@
+import 'package:finamp/services/auto_offline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -34,9 +35,10 @@ class HomeNetworkAddressSelector extends ConsumerWidget {
               keyboardType: TextInputType.url,
               onChanged: (value) {
                 // only save after 500 ms of inactivity
-                Future.delayed(Duration(milliseconds: 500), () {
+                Future.delayed(Duration(milliseconds: 500), () async {
                   if (DateTime.now().millisecondsSinceEpoch - lastSave.millisecondsSinceEpoch > 480 ) {
                     FinampSetters.setHomeNetworkAddress(value);
+                    await changeTargetUrl();
                   }
                 });
 
