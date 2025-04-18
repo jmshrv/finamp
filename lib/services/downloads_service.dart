@@ -1376,6 +1376,7 @@ class DownloadsService {
   /// + nameFilter - only return tracks containing nameFilter in their name, case insensitive.
   /// + relatedTo - only return tracks which have relatedTo as their artist, album, or genre.
   /// + viewFilter - only return tracks in the given library.
+  /// + genreFiter - only return tracks that have the provided genreID assigned
   Future<List<DownloadStub>> getAllTracks(
       {String? nameFilter,
       BaseItemDto? relatedTo,
@@ -1428,6 +1429,7 @@ class DownloadsService {
   /// Useful for artists/genres, which may need to be shown in several libraries.
   /// + onlyFavorites - return only favorite items
   /// + infoForType - only return collections that are info childs for the provided type
+  /// + genreFilter - only return albums that have the provided genre id assigned
   Future<List<DownloadStub>> getAllCollections({
     String? nameFilter,
     BaseItemDtoType? baseTypeFilter,

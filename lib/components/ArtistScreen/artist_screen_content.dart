@@ -21,10 +21,16 @@ import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 
 class ArtistScreenContent extends ConsumerStatefulWidget {
-  const ArtistScreenContent({super.key, required this.parent, this.genreFilter});
+  const ArtistScreenContent({
+    super.key,
+    required this.parent,
+    this.genreFilter,
+    required this.resetGenreFilter,
+  });
 
   final BaseItemDto parent;
   final String? genreFilter;
+  final VoidCallback resetGenreFilter;
 
   @override
   ConsumerState<ArtistScreenContent> createState() =>
@@ -273,6 +279,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                 isGenre: widget.parent.type == "MusicGenre",
                 allTracks: allTracks,
                 albumCount: albums.length,
+                genreFilter: widget.genreFilter,
+                resetGenreFilter: widget.resetGenreFilter,
               ),
               actions: [
                 // this screen is also used for genres, which can't be favorited

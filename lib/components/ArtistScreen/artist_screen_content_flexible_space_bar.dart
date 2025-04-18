@@ -34,12 +34,16 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     required this.isGenre,
     required this.allTracks,
     required this.albumCount,
+    this.genreFilter,
+    required this.resetGenreFilter,
   });
 
   final BaseItemDto parentItem;
   final bool isGenre;
   final Future<List<BaseItemDto>?> allTracks;
   final int albumCount;
+  final String? genreFilter;
+  final VoidCallback resetGenreFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -328,6 +332,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                           item: parentItem,
                           itemTracks: snapshot.data?.length ?? 0,
                           itemAlbums: albumCount,
+                          genreFilter: genreFilter,
+                          resetGenreFilter: resetGenreFilter,
                         ),
                       ),
                     )

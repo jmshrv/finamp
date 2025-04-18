@@ -15,11 +15,15 @@ class ArtistItemInfo extends ConsumerWidget {
     required this.item,
     required this.itemTracks,
     required this.itemAlbums,
+    this.genreFilter,
+    required this.resetGenreFilter,
   });
 
   final BaseItemDto item;
   final int itemTracks;
   final int itemAlbums;
+  final String? genreFilter;
+  final VoidCallback resetGenreFilter;
 
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
@@ -44,31 +48,83 @@ class ArtistItemInfo extends ConsumerWidget {
         if (item.type != "MusicGenre" &&
             item.genreItems != null &&
             item.genreItems!.isNotEmpty)
-          _GenreIconAndText(genres: item.genreItems!)
+          _GenreIconAndText(
+              genres: item.genreItems!,
+              genreFilter: genreFilter,
+              resetGenreFilter: resetGenreFilter
+          )
       ],
     );
   }
 }
 
 class _GenreIconAndText extends StatelessWidget {
-  const _GenreIconAndText({required this.genres});
+  const _GenreIconAndText({
+    required this.genres,
+    this.genreFilter,
+    required this.resetGenreFilter
+  });
 
   final List<NameLongIdPair> genres;
+  final String? genreFilter;
+  final VoidCallback resetGenreFilter;
 
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final filteredGenres = genreFilter != null
+        ? genres.where((g) => g.id == genreFilter).toList()
+        : genres;
+    final genreNames = filteredGenres.map((g) => g.name).join(", ");
 
-    return GestureDetector(
-      onTap: () => jellyfinApiHelper.getItemById(genres.first.id).then(
-          (artist) => Navigator.of(context)
-              .pushNamed(ArtistScreen.routeName, arguments: artist)),
-      child: IconAndText(
-        iconData: Icons.album,
-        textSpan: TextSpan(
-          text: genres.map((genre) => genre.name).join(", "),
-        ),
+    Widget content = IconAndText(
+      iconData: Icons.album,
+      textSpan: TextSpan(
+        text: "$genreNames",
+        style: (genreFilter != null)
+            ? TextStyle(color: Theme.of(context).colorScheme.onPrimary)
+            : null,
       ),
+      iconColor: (genreFilter != null)
+            ? Theme.of(context).colorScheme.onPrimary
+            : null,
     );
+
+    if (genreFilter != null) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 1),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: content),
+            GestureDetector(
+              onTap: () {
+                resetGenreFilter();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 1),
+                child: Icon(
+                  Icons.close,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return GestureDetector(
+        onTap: () => jellyfinApiHelper
+            .getItemById(filteredGenres.first.id)
+            .then((artist) => Navigator.of(context)
+                .pushNamed(ArtistScreen.routeName, arguments: artist)),
+        child: content,
+      );
+    }
   }
 }

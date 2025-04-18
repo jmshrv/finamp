@@ -4,7 +4,7 @@ import '../components/ArtistScreen/artist_screen_content.dart';
 import '../components/now_playing_bar.dart';
 import '../models/jellyfin_models.dart';
 
-class ArtistScreen extends StatelessWidget {
+class ArtistScreen extends StatefulWidget {
   const ArtistScreen({
     super.key,
     this.widgetArtist,
@@ -20,8 +20,29 @@ class ArtistScreen extends StatelessWidget {
   final String? genreFilter;
 
   @override
+  _ArtistScreenState createState() => _ArtistScreenState();
+}
+
+class _ArtistScreenState extends State<ArtistScreen> {
+  String? currentGenreFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with the provided genre filter or default to null
+    currentGenreFilter = widget.genreFilter;
+  }
+
+  // Function to reset the genre filter and refresh the screen
+  void resetGenreFilter() {
+    setState(() {
+      currentGenreFilter = null;  // Reset the genre filter
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final BaseItemDto artist = widgetArtist ??
+    final BaseItemDto artist = widget.widgetArtist ??
         ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
@@ -29,7 +50,8 @@ class ArtistScreen extends StatelessWidget {
       body: SafeArea(
         child: ArtistScreenContent(
           parent: artist,
-          genreFilter: genreFilter,
+          genreFilter: currentGenreFilter,
+          resetGenreFilter: resetGenreFilter,
         ),
       ),
       bottomNavigationBar: const NowPlayingBar(),

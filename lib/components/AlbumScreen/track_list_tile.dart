@@ -71,6 +71,7 @@ class TrackListTile extends ConsumerWidget {
     this.isShownInSearch = false,
     this.allowDismiss = true,
     this.highlightCurrentTrack = true,
+    this.genreFilter,
   });
 
   final jellyfin_models.BaseItemDto item;
@@ -87,6 +88,7 @@ class TrackListTile extends ConsumerWidget {
   final bool isShownInSearch;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
+  final String? genreFilter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -137,6 +139,7 @@ class TrackListTile extends ConsumerWidget {
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
             onlyFavorites:
                 settings.onlyShowFavourites && settings.trackOfflineFavorites,
+            genreFilter: genreFilter,
           );
 
           var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
