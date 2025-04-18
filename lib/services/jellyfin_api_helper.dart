@@ -117,6 +117,7 @@ class JellyfinApiHelper {
     String? fields,
     bool? recursive,
     ArtistType? artistType,
+    String? genreFilter,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -175,6 +176,7 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter,
             startIndex: startIndex,
             limit: limit,
             userId: currentUserId,
@@ -189,6 +191,7 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
@@ -208,6 +211,7 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
@@ -224,6 +228,7 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
@@ -264,6 +269,7 @@ class JellyfinApiHelper {
           sortOrder: sortOrder,
           searchTerm: searchTerm,
           filters: filters,
+          genreIds: genreFilter,
           startIndex: startIndex,
           limit: limit,
           ids: itemIds?.join(","),

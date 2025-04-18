@@ -34,12 +34,14 @@ class MusicScreenTabView extends StatefulWidget {
     this.searchTerm,
     required this.view,
     this.refresh,
+    this.genreFilter
   });
 
   final TabContentType tabContentType;
   final String? searchTerm;
   final BaseItemDto? view;
   final MusicRefreshCallback? refresh;
+  final String? genreFilter; 
 
   @override
   State<MusicScreenTabView> createState() => _MusicScreenTabViewState();
@@ -112,6 +114,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         startIndex: pageKey,
         limit: _pageSize,
         artistType: settings.artistListType,
+        genreFilter: widget.genreFilter,
       );
 
       // Skip appending page if a refresh triggered while processing
@@ -150,7 +153,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           viewFilter: widget.view?.id,
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
           onlyFavorites:
-              settings.onlyShowFavourites && settings.trackOfflineFavorites);
+              settings.onlyShowFavourites && settings.trackOfflineFavorites,
+          genreFilter: widget.genreFilter
+      );
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
         nameFilter: widget.searchTerm,
@@ -170,6 +175,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         infoForType: (widget.tabContentType == TabContentType.artists)
             ? artistInfoForType
             : null,
+         genreFilter: widget.genreFilter
       );
     }
 
@@ -406,6 +412,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   album: item,
                                   isPlaylist: widget.tabContentType ==
                                       TabContentType.playlists,
+                                  genreFilter: widget.genreFilter,
                                 ),
                         ),
                       );

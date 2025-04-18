@@ -8,12 +8,16 @@ class ArtistScreen extends StatelessWidget {
   const ArtistScreen({
     super.key,
     this.widgetArtist,
+    this.genreFilter,
   });
 
   static const routeName = "/music/artist";
 
   /// The artist to show. Can also be provided as an argument in a named route
   final BaseItemDto? widgetArtist;
+
+  // The genreFilter to apply
+  final String? genreFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +29,7 @@ class ArtistScreen extends StatelessWidget {
       body: SafeArea(
         child: ArtistScreenContent(
           parent: artist,
+          genreFilter: genreFilter,
         ),
       ),
       bottomNavigationBar: const NowPlayingBar(),

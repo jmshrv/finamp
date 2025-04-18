@@ -21,9 +21,10 @@ import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 
 class ArtistScreenContent extends ConsumerStatefulWidget {
-  const ArtistScreenContent({super.key, required this.parent});
+  const ArtistScreenContent({super.key, required this.parent, this.genreFilter});
 
   final BaseItemDto parent;
+  final String? genreFilter;
 
   @override
   ConsumerState<ArtistScreenContent> createState() =>
@@ -72,7 +73,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                   relatedTo: widget.parent,
                   artistType: (widget.parent.type == "MusicGenre")
                       ? null
-                      : ArtistType.albumartist);
+                      : ArtistType.albumartist,
+                  genreFilter: widget.genreFilter);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
           return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
@@ -85,7 +87,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                   relatedTo: widget.parent,
                   artistType: (widget.parent.type == "MusicGenre")
                       ? null
-                      : ArtistType.artist);
+                      : ArtistType.artist,
+                  genreFilter: widget.genreFilter);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
           return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
@@ -101,7 +104,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                 relatedTo: widget.parent,
                 artistType: (widget.parent.type == "MusicGenre")
                     ? null
-                    : ArtistType.albumartist);
+                    : ArtistType.albumartist,
+                genreFilter: widget.genreFilter);
         albumArtistAlbums.sort((a, b) => (a.name).compareTo(b.name));
         // Then add the tracks of every album
         final List<BaseItemDto> sortedTracks = [];
@@ -118,7 +122,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                 relatedTo: widget.parent,
                 artistType: (widget.parent.type == "MusicGenre")
                     ? null
-                    : ArtistType.artist);
+                    : ArtistType.artist,
+                genreFilter: widget.genreFilter);
         performingArtistAlbums.sort((a, b) => (a.name).compareTo(b.name));
         // Filter out albums already fetched in the first query
         final List<DownloadStub> filteredPerformingArtistAlbums =
@@ -146,7 +151,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         if (ref.watch(finampSettingsProvider.showArtistsTopTracks))
           jellyfinApiHelper.getItems(
             parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
+            genreFilter: widget.genreFilter,
             sortBy: "PlayCount,SortName",
             sortOrder: "Descending",
             limit: 5,
@@ -157,7 +162,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         // Get Albums where artist is Album Artist sorted by Premiere Date
         jellyfinApiHelper.getItems(
             parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
+            genreFilter: widget.genreFilter,
             sortBy: "PremiereDate,SortName",
             includeItemTypes: "MusicAlbum",
             artistType: (widget.parent.type == "MusicGenre")
@@ -166,7 +171,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         // Get Albums where artist is Performing Artist sorted by Premiere Date
         jellyfinApiHelper.getItems(
             parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
+            genreFilter: widget.genreFilter,
             sortBy: "PremiereDate,SortName",
             includeItemTypes: "MusicAlbum",
             artistType: (widget.parent.type == "MusicGenre")
@@ -178,7 +183,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         if (widget.parent.type != "MusicGenre")
           jellyfinApiHelper.getItems(
             parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
+            genreFilter: widget.genreFilter,
             sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
             includeItemTypes: "Audio",
             artistType:
@@ -196,7 +201,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         // Fetch every genre or album artist track
         final allAlbumArtistTracksResponse = await jellyfinApiHelper.getItems(
           parentItem: widget.parent,
-          filters: "Artist=${widget.parent.name}",
+          genreFilter: widget.genreFilter,
           sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
           includeItemTypes: "Audio",
           artistType: (widget.parent.type == "MusicGenre")
@@ -303,11 +308,11 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             if (!_isLoading && (albums.isEmpty && appearsOnAlbums.isEmpty))
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(6, 12, 6,
-                    0), // Keeping horizontal and vertical padding the same
+                    0),
                 sliver: SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 2, vertical: 12), // Updated inner padding
+                        horizontal: 2, vertical: 12),
                     child: Center(
                       child: Text(
                         AppLocalizations.of(context)!.emptyFilteredListTitle,

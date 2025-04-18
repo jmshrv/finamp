@@ -54,6 +54,7 @@ class AlbumItem extends ConsumerStatefulWidget {
     this.parentType,
     this.onTap,
     this.isGrid = false,
+    this.genreFilter,
   });
 
   /// The album (or item, I just used to call items albums before Finamp
@@ -74,6 +75,10 @@ class AlbumItem extends ConsumerStatefulWidget {
   /// If specified, use cards instead of list tiles. Use this if you want to use
   /// this widget in a grid view.
   final bool isGrid;
+
+  /// If a genre filter is specified, it will propagate down to for example the ArtistScreen,
+  /// showing only tracks and albums of that artist that match the genre filter
+  final String? genreFilter;
 
   @override
   ConsumerState<AlbumItem> createState() => _AlbumItemState();
@@ -97,8 +102,14 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         () {
           if (mutableAlbum.type == "MusicArtist" ||
               mutableAlbum.type == "MusicGenre") {
-            Navigator.of(context)
-                .pushNamed(ArtistScreen.routeName, arguments: mutableAlbum);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ArtistScreen(
+                  widgetArtist: mutableAlbum,
+                  genreFilter: widget.genreFilter,
+                ),
+              ),
+            );
           } else {
             Navigator.of(context)
                 .pushNamed(AlbumScreen.routeName, arguments: mutableAlbum);

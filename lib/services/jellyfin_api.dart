@@ -403,6 +403,10 @@ abstract class JellyfinApi extends ChopperService {
     /// IsFavorite, IsResumable, Likes, Dislikes.
     @Query("Filters") String? filters,
 
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified genre id.
+    @Query("GenreIds") String? genreIds,
+
     /// Optional. The record index to start at. All items with a lower index
     /// will be dropped from the results.
     @Query("StartIndex") int? startIndex,
@@ -441,6 +445,10 @@ abstract class JellyfinApi extends ChopperService {
     /// "IsFavorite" "IsResumable" "Likes" "Dislikes" "IsFavoriteOrLikes"
     /// Optional. Specify additional filters to apply.
     @Query("Filters") String? filters,
+
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified genre id.
+    @Query("GenreIds") String? genreIds,
 
     /// Optional. The record index to start at. All items with a lower index
     /// will be dropped from the results.
