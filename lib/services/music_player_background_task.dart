@@ -1101,7 +1101,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                       .addFavourite
                   : "Add favorite"),
         ),
-        //!!! Android Auto adds a shuffle toggle button automatically, adding it here would result in a duplicate button
         MediaControl.custom(
             name: CustomPlaybackActions.shuffle.name,
             androidIcon: _player.shuffleModeEnabled
