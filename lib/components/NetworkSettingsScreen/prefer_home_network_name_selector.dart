@@ -16,6 +16,8 @@ class HomeNetworkNameSelector extends ConsumerWidget {
     final _controller = TextEditingController(
         text: localNetworkName.toString());
 
+    DateTime lastSave = DateTime.now();
+
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (_, box, __) {
@@ -31,7 +33,14 @@ class HomeNetworkNameSelector extends ConsumerWidget {
               textAlign: TextAlign.left,
               keyboardType: TextInputType.text,
               onChanged: (value) {
-                FinampSetters.setHomeNetworkName(value);
+                // only save after 500 ms of inactivity
+                Future.delayed(Duration(milliseconds: 500), () {
+                  if (DateTime.now().millisecondsSinceEpoch - lastSave.millisecondsSinceEpoch > 480 ) {
+                    FinampSetters.setHomeNetworkName(value);
+                  }
+                });
+
+                lastSave = DateTime.now();
               },
             ),
           ),

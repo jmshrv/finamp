@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
@@ -14,6 +15,8 @@ class HomeNetworkAddressSelector extends ConsumerWidget {
 
     final _controller = TextEditingController(
         text: localNetworkAddress.toString());
+
+    DateTime lastSave = DateTime.now();
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
@@ -30,7 +33,14 @@ class HomeNetworkAddressSelector extends ConsumerWidget {
               textAlign: TextAlign.center,
               keyboardType: TextInputType.url,
               onChanged: (value) {
-                FinampSetters.setHomeNetworkAddress(value);
+                // only save after 500 ms of inactivity
+                Future.delayed(Duration(milliseconds: 500), () {
+                  if (DateTime.now().millisecondsSinceEpoch - lastSave.millisecondsSinceEpoch > 480 ) {
+                    FinampSetters.setHomeNetworkAddress(value);
+                  }
+                });
+
+                lastSave = DateTime.now();
               },
             ),
           ),
