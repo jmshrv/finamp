@@ -335,6 +335,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             settings.isOffline,
             settings.tabOrder.indexOf(widget.tabContentType),
             settings.trackOfflineFavorites,
+            widget.genreFilter?.id,
           );
           if (refreshHash == null) {
             refreshHash = newRefreshHash;

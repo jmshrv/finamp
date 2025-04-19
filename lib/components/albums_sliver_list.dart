@@ -1,3 +1,4 @@
+import 'package:finamp/components/MusicScreen/album_item.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -8,10 +9,12 @@ class AlbumsSliverList extends StatefulWidget {
     super.key,
     required this.childrenForList,
     required this.parent,
+    this.genreFilter,
   });
 
   final List<BaseItemDto> childrenForList;
   final BaseItemDto parent;
+  final BaseItemDto? genreFilter;
 
   @override
   State<AlbumsSliverList> createState() => _AlbumsSliverListState();
@@ -32,17 +35,25 @@ class _AlbumsSliverListState extends State<AlbumsSliverList> {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           final BaseItemDto item = widget.childrenForList[index];
-
-          return AlbumListTile(
-            item: item,
-            children: widget.childrenForList,
-            index: index,
-            parentId: widget.parent.id,
-            parentName: widget.parent.name,
-            // show artists except for this one scenario
-            // TODO we could do it here like with the track sliver list
-            // showArtists: false,
-          );
+          if (item.isArtist) {
+            return AlbumItem(
+              key: ValueKey(item.id),
+              album: item,
+              isPlaylist: false,
+              genreFilter: widget.genreFilter,
+            );
+          } else {
+            return AlbumListTile(
+              item: item,
+              children: widget.childrenForList,
+              index: index,
+              parentId: widget.parent.id,
+              parentName: widget.parent.name,
+              // show artists except for this one scenario
+              // TODO we could do it here like with the track sliver list
+              // showArtists: false,
+            );
+          }
         },
         childCount: widget.childrenForList.length,
       ),

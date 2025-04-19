@@ -55,7 +55,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MusicScreen(
-          genreFilterItem: widget.parent,
+          genreFilter: widget.parent,
           tabTypeFilter: tabContentType,
         ),
       ),
@@ -175,20 +175,23 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                   tracks: topTracks,
                   childrenForQueue: Future.value(tracks),
                   tracksText: AppLocalizations.of(context)!.topTracks,
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.tracks)),
-                  
+                  seeAllCallbackFunction: () => openSeeAll(TabContentType.tracks),
+              ),
             if (!_isLoading)
               AlbumSection(
                   parent: widget.parent,
                   albumsText: "Top Albums",
                   albums: topAlbums,
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.albums)),
+                  seeAllCallbackFunction: () => openSeeAll(TabContentType.albums),
+              ),
             if (!_isLoading)
               AlbumSection(
                   parent: widget.parent,
                   albumsText: "Top Artists",
                   albums: topArtists,
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.artists)),
+                  seeAllCallbackFunction: () => openSeeAll(TabContentType.artists),
+                  genreFilter: widget.parent,
+              ),
             /*if (!_isLoading && (albums.isEmpty && appearsOnAlbums.isEmpty))
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(6, 12, 6,

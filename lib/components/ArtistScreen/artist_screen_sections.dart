@@ -125,13 +125,15 @@ class AlbumSection extends StatefulWidget {
     required this.parent,
     required this.albumsText,
     this.albums,
-    this.seeAllCallbackFunction
+    this.seeAllCallbackFunction,
+    this.genreFilter,
   });
 
   final BaseItemDto parent;
   final String albumsText;
   final List<BaseItemDto>? albums;
   final VoidCallback? seeAllCallbackFunction;
+  final BaseItemDto? genreFilter;
 
   @override
   State<AlbumSection> createState() => _AlbumSectionState();
@@ -218,6 +220,7 @@ class _AlbumSectionState extends State<AlbumSection> {
               AlbumsSliverList(
                 childrenForList: widget.albums!,
                 parent: widget.parent,
+                genreFilter: widget.genreFilter,
               ),
               SliverToBoxAdapter(
                   child: SizedBox(

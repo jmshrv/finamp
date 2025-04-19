@@ -27,14 +27,14 @@ final _musicScreenLogger = Logger("MusicScreen");
 class MusicScreen extends ConsumerStatefulWidget {
   const MusicScreen({
     super.key,
-    this.genreFilterItem,
+    this.genreFilter,
     this.tabTypeFilter,
   });
 
   static const routeName = "/music";
 
   // Optional parameters for genre and tab filtering
-  final BaseItemDto? genreFilterItem;
+  final BaseItemDto? genreFilter;
   final TabContentType? tabTypeFilter;
 
   @override
@@ -257,8 +257,43 @@ void _buildTabController() {
                     widget.tabTypeFilter?.toLocalisedString(context) ??
                         _finampUserHelper.currentUser?.currentView?.name ??
                         AppLocalizations.of(context)!.music,
-                ),
-          bottom: widget.genreFilterItem == null
+                ),/*
+                // Alternative Design Choice:
+                widget.tabTypeFilter != null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (widget.genreFilter != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 2.0, left: 2.0),
+                          child: Text(
+                            widget.genreFilter?.name ?? "Unknown Genre",
+                            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ),
+                      Text(
+                        widget.tabTypeFilter!.toLocalisedString(context)
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                     if (widget.genreFilter != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 2.0, left: 2.0),
+                          child: Text(
+                            widget.genreFilter?.name ?? "Unknown Genre",
+                            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ),
+                      Text(_finampUserHelper.currentUser?.currentView?.name ??
+                        AppLocalizations.of(context)!.music
+                      ),
+                    ],
+                  ),*/
+          bottom: widget.genreFilter == null
             ? TabBar(
               controller: _tabController,
               tabs: sortedTabs
@@ -280,7 +315,8 @@ void _buildTabController() {
             )
             : PreferredSize(
                 preferredSize: const Size.fromHeight(36),
-                //child: const Divider(height: 1),*/
+                // Alternative Design Choice:
+                // child: const Divider(height: 1),
                 child: Container(
                   alignment: Alignment.centerLeft,
                   width: double.infinity,
@@ -291,7 +327,7 @@ void _buildTabController() {
                   ),
                   color: Theme.of(context).colorScheme.primary,
                   child: Text(
-                    widget.genreFilterItem?.name ?? "",
+                    widget.genreFilter?.name ?? "",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
@@ -303,7 +339,7 @@ void _buildTabController() {
               ? BackButton(
                   onPressed: () => _stopSearching(),
                 )
-              : (widget.genreFilterItem != null
+              : (widget.genreFilter != null
                 ? BackButton(
                     onPressed: () => Navigator.of(context).pop(),
                   )
@@ -402,11 +438,11 @@ void _buildTabController() {
                       searchTerm: searchQuery,
                       view: _finampUserHelper.currentUser?.currentView,
                       refresh: refreshMap[tabType],
-                      genreFilter: (widget.genreFilterItem != null &&
+                      genreFilter: (widget.genreFilter != null &&
                           (tabType.itemType == BaseItemDtoType.track ||
                           tabType.itemType == BaseItemDtoType.album || 
                           tabType.itemType == BaseItemDtoType.artist))
-                          ? widget.genreFilterItem
+                          ? widget.genreFilter
                           : null,
                       tabBarFiltered: (widget.tabTypeFilter != null),
                     ),
