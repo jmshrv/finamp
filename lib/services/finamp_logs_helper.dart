@@ -56,15 +56,8 @@ class FinampLogsHelper {
     return logsStringBuffer.toString();
   }
 
-  Future<void> copyLogs() async =>
-      await FlutterClipboard.copy(getSanitisedLogs());
-
-  /// Write logs to a file and share the file
-  Future<void> shareLogs() async {
-    final tempDir = await getTemporaryDirectory();
-    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
-    tempFile.createSync();
-
+  Future<String> getFullLogs() async {
+    final fullLogsBuffer = StringBuffer();
     if (_logFileWriter != null) {
       final basePath = (Platform.isAndroid || Platform.isIOS)
           ? await getApplicationDocumentsDirectory()
@@ -73,16 +66,27 @@ class FinampLogsHelper {
           File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
       var newLogs = File(path_helper.join(basePath.path, "finamp-logs.txt"));
       if (oldLogs.existsSync()) {
-        await tempFile.writeAsBytes(await oldLogs.readAsBytes(),
-            mode: FileMode.writeOnly);
+        fullLogsBuffer.write(await oldLogs.readAsBytes());
       }
       if (newLogs.existsSync()) {
-        await tempFile.writeAsBytes(await newLogs.readAsBytes(),
-            mode: FileMode.writeOnlyAppend);
+        fullLogsBuffer.write(await newLogs.readAsBytes());
       }
     } else {
-      await tempFile.writeAsString(getSanitisedLogs());
+      fullLogsBuffer.write(getSanitisedLogs());
     }
+    return fullLogsBuffer.toString();
+  }
+
+  Future<void> copyLogs() async =>
+      await FlutterClipboard.copy(await getSanitisedLogs());
+
+  /// Write logs to a file and share the file
+  Future<void> shareLogs() async {
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
+    tempFile.createSync();
+
+    tempFile.writeAsStringSync(await getFullLogs());
 
     final xFile = XFile(tempFile.path, mimeType: "text/plain");
 

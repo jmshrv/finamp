@@ -17,7 +17,7 @@ class LogsScreen extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.logs),
         actions: const [
           ShareLogsButton(),
-          CopyLogsButton(),
+          // CopyLogsButton(), //!!! this doesn't return the full logs, only logs since the app started. Full logs can get quite large, so we need a better solution for this.
         ],
       ),
       body: const LogsView(),
