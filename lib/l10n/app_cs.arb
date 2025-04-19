@@ -2083,5 +2083,9 @@
       }
     },
     "description": "Label for the type of device in the output menu"
+  },
+  "startupErrorTitle": "Při spouštění aplikace se něco nepovedlo!\nZa to se omlouváme…",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
   }
 }
