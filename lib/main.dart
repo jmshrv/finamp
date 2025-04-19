@@ -9,6 +9,7 @@ import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/hive_registrar.g.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/locale_adapter.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
@@ -228,6 +229,7 @@ Future<void> setupHive() async {
   await Hive.initFlutter();
   Hive.registerAdapters();
   Hive.registerAdapter(ThemeModeAdapter());
+  Hive.registerAdapter(LocaleAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
