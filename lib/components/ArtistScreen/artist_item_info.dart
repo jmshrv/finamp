@@ -22,7 +22,7 @@ class ArtistItemInfo extends ConsumerWidget {
   final BaseItemDto item;
   final int itemTracks;
   final int itemAlbums;
-  final String? genreFilter;
+  final BaseItemDto? genreFilter;
   final VoidCallback? resetGenreFilter;
 
 // TODO: see if there's a way to expand this column to the row that it's in
@@ -46,9 +46,9 @@ class ArtistItemInfo extends ConsumerWidget {
               text: AppLocalizations.of(context)!.albumCount(itemAlbums),
             )),
         if (item.type != "MusicGenre" &&
-            item.genreItems != null &&
-            item.genreItems!.isNotEmpty &&
-            resetGenreFilter != null)
+            resetGenreFilter != null &&
+            ((item.genreItems != null && item.genreItems!.isNotEmpty) ||
+            genreFilter != null))
           _GenreIconAndText(
               genres: item.genreItems!,
               genreFilter: genreFilter,
@@ -67,34 +67,34 @@ class _GenreIconAndText extends StatelessWidget {
   });
 
   final List<NameLongIdPair> genres;
-  final String? genreFilter;
+  final BaseItemDto? genreFilter;
   final VoidCallback resetGenreFilter;
 
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final filteredGenres = genreFilter != null
-        ? genres.where((g) => g.id == genreFilter).toList()
-        : genres;
-    final genreNames = filteredGenres.map((g) => g.name).join(", ");
+    
+    final genreNames = genreFilter?.name ?? genres.map((g) => g.name).join(", ");
+    final bool hasFilter = genreFilter != null;
+    final theme = Theme.of(context);
 
     Widget content = IconAndText(
       iconData: Icons.album,
       textSpan: TextSpan(
-        text: "$genreNames",
-        style: (genreFilter != null)
+        text: genreNames,
+        style: hasFilter
             ? TextStyle(color: Theme.of(context).colorScheme.onPrimary)
             : null,
       ),
-      iconColor: (genreFilter != null)
-            ? Theme.of(context).colorScheme.onPrimary
+      iconColor: hasFilter
+            ? theme.colorScheme.onPrimary
             : null,
     );
 
-    if (genreFilter != null) {
+    if (hasFilter) {
       return Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
+          color: theme.colorScheme.primary,
           borderRadius: BorderRadius.circular(6),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 1),
@@ -111,7 +111,7 @@ class _GenreIconAndText extends StatelessWidget {
                 child: Icon(
                   Icons.close,
                   size: 18,
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: theme.colorScheme.onPrimary,
                 ),
               ),
             ),
@@ -121,9 +121,9 @@ class _GenreIconAndText extends StatelessWidget {
     } else {
       return GestureDetector(
         onTap: () => jellyfinApiHelper
-            .getItemById(filteredGenres.first.id)
-            .then((artist) => Navigator.of(context)
-                .pushNamed(ArtistScreen.routeName, arguments: artist)),
+            .getItemById(genres.first.id)
+            .then((genre) => Navigator.of(context)
+                .pushNamed(ArtistScreen.routeName, arguments: genre)),
         child: content,
       );
     }

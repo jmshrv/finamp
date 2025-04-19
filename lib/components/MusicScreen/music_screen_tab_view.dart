@@ -34,14 +34,16 @@ class MusicScreenTabView extends StatefulWidget {
     this.searchTerm,
     required this.view,
     this.refresh,
-    this.genreFilter
+    this.genreFilter,
+    this.tabBarFiltered = false,
   });
 
   final TabContentType tabContentType;
   final String? searchTerm;
   final BaseItemDto? view;
   final MusicRefreshCallback? refresh;
-  final String? genreFilter; 
+  final BaseItemDto? genreFilter; 
+  final bool tabBarFiltered;
 
   @override
   State<MusicScreenTabView> createState() => _MusicScreenTabViewState();
@@ -405,7 +407,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   isTrack: true,
                                   index: Future.value(index),
                                   isShownInSearch: widget.searchTerm != null,
-                                  allowDismiss: false,
+                                  // when the tabBar was filtered and we only have the tracks tab,
+                                  // we can allow Dismiss gestures in the track list
+                                  allowDismiss: widget.tabBarFiltered,
                                   genreFilter: widget.genreFilter,
                                 )
                               : AlbumItem(
@@ -445,6 +449,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                           isPlaylist:
                               widget.tabContentType == TabContentType.playlists,
                           isGrid: true,
+                          genreFilter: widget.genreFilter,
                         ),
                       );
                     },

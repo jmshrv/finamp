@@ -6,7 +6,7 @@ import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -74,13 +74,13 @@ class TrackListTile extends ConsumerWidget {
     this.genreFilter,
   });
 
-  final jellyfin_models.BaseItemDto item;
-  final Future<List<jellyfin_models.BaseItemDto>>? children;
+  final BaseItemDto item;
+  final Future<List<BaseItemDto>>? children;
   final Future<int>? index;
   final bool showIndex;
   final bool showCover;
   final bool isTrack;
-  final jellyfin_models.BaseItemDto? parentItem;
+  final BaseItemDto? parentItem;
   final VoidCallback? onRemoveFromList;
   final bool showPlayCount;
   final bool isInPlaylist;
@@ -88,7 +88,7 @@ class TrackListTile extends ConsumerWidget {
   final bool isShownInSearch;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
-  final String? genreFilter;
+  final BaseItemDto? genreFilter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -335,8 +335,8 @@ class TrackListTile extends ConsumerWidget {
 }
 
 class QueueListTile extends StatelessWidget {
-  final jellyfin_models.BaseItemDto item;
-  final jellyfin_models.BaseItemDto? parentItem;
+  final BaseItemDto item;
+  final BaseItemDto? parentItem;
   final Future<int>? listIndex;
   final int actualIndex;
   final int indexOffset;
@@ -393,8 +393,8 @@ class QueueListTile extends StatelessWidget {
 }
 
 class TrackListItem extends ConsumerStatefulWidget {
-  final jellyfin_models.BaseItemDto baseItem;
-  final jellyfin_models.BaseItemDto? parentItem;
+  final BaseItemDto baseItem;
+  final BaseItemDto? parentItem;
   final Future<int>? listIndex;
   final int? actualIndex;
   final bool showIndex;
@@ -585,7 +585,7 @@ class TrackListItemTile extends StatelessWidget {
     this.highlightCurrentTrack = true,
   });
 
-  final jellyfin_models.BaseItemDto baseItem;
+  final BaseItemDto baseItem;
   final bool isCurrentTrack;
   final bool allowReorder;
   final Future<int>? listIndex;

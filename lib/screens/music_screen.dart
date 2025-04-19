@@ -384,7 +384,9 @@ void _buildTabController() {
             controller: _tabController,
             physics: ref.watch(finampSettingsProvider.disableGesture)
                 ? const NeverScrollableScrollPhysics()
-                : const AlwaysScrollableScrollPhysics(),
+                : widget.tabTypeFilter != null
+                    ? NeverScrollableScrollPhysics()
+                    : AlwaysScrollableScrollPhysics(),
             dragStartBehavior: DragStartBehavior.down,
             children: sortedTabs.map((tabType) {
               return Column(
@@ -404,8 +406,9 @@ void _buildTabController() {
                           (tabType.itemType == BaseItemDtoType.track ||
                           tabType.itemType == BaseItemDtoType.album || 
                           tabType.itemType == BaseItemDtoType.artist))
-                          ? widget.genreFilterItem?.id.raw
+                          ? widget.genreFilterItem
                           : null,
+                      tabBarFiltered: (widget.tabTypeFilter != null),
                     ),
                   ),
                 ],

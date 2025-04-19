@@ -1383,7 +1383,7 @@ class DownloadsService {
       BaseItemId? viewFilter,
       bool nullableViewFilters = true,
       bool onlyFavorites = false,
-      String? genreFilter}) {
+      BaseItemDto? genreFilter}) {
     List<int> favoriteIds = [];
     if (onlyFavorites) {
       favoriteIds = _getFavoriteIds() ?? [];
@@ -1408,7 +1408,7 @@ class DownloadsService {
         .optional(
             genreFilter != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
-                genreFilter!, DownloadItemType.collection))))
+                genreFilter!.id.raw, DownloadItemType.collection))))
         .optional(
             viewFilter != null,
             (q) => q.group((q) => q.isarViewIdEqualTo(viewFilter?.raw).optional(
@@ -1441,7 +1441,7 @@ class DownloadsService {
     bool onlyFavorites = false,
     BaseItemDtoType? infoForType,
     ArtistType? artistType,
-    String? genreFilter,
+    BaseItemDto? genreFilter,
   }) {
     List<int> favoriteIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
@@ -1479,7 +1479,7 @@ class DownloadsService {
             genreFilter != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
-                    genreFilter!, DownloadItemType.collection)))))
+                    genreFilter!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
             (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
         .optional(onlyFavorites,

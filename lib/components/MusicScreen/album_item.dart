@@ -79,7 +79,7 @@ class AlbumItem extends ConsumerStatefulWidget {
 
   /// If a genre filter is specified, it will propagate down to for example the ArtistScreen,
   /// showing only tracks and albums of that artist that match the genre filter
-  final String? genreFilter;
+  final BaseItemDto? genreFilter;
 
   @override
   ConsumerState<AlbumItem> createState() => _AlbumItemState();

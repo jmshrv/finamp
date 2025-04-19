@@ -42,7 +42,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
   final bool isGenre;
   final Future<List<BaseItemDto>?> allTracks;
   final int albumCount;
-  final String? genreFilter;
+  final BaseItemDto? genreFilter;
   final VoidCallback? resetGenreFilter;
 
   @override

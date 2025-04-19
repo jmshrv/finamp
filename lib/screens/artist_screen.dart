@@ -17,14 +17,14 @@ class ArtistScreen extends StatefulWidget {
   final BaseItemDto? widgetArtist;
 
   // The genreFilter to apply
-  final String? genreFilter;
+  final BaseItemDto? genreFilter;
 
   @override
   _ArtistScreenState createState() => _ArtistScreenState();
 }
 
 class _ArtistScreenState extends State<ArtistScreen> {
-  String? currentGenreFilter;
+  BaseItemDto? currentGenreFilter;
 
   @override
   void initState() {

@@ -26,7 +26,7 @@ class ArtistScreenContent extends ConsumerStatefulWidget {
   });
 
   final BaseItemDto parent;
-  final String? genreFilter;
+  final BaseItemDto? genreFilter;
   final VoidCallback resetGenreFilter;
 
   @override
@@ -253,7 +253,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
               ),
               actions: [
                 FavoriteButton(item: widget.parent),
-                if (!_isLoading)
+                if (!_isLoading && widget.genreFilter == null)
                   DownloadButton(
                       item: DownloadStub.fromItem(
                           item: widget.parent,
@@ -264,6 +264,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             ),
             if (!_isLoading &&
                 !isOffline &&
+                topTracks.isNotEmpty &&
                 ref.watch(finampSettingsProvider.showArtistsTopTracks))
               TracksSection(
                   parent: widget.parent,

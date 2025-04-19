@@ -94,7 +94,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
             onlyFavorites:
                 settings.onlyShowFavourites && settings.trackOfflineFavorites,
-            genreFilter: widget.parent.id.raw
+            genreFilter: widget.parent
           );
         var items = allTracks.map((e) => e.baseItem).nonNulls.toList();
         items = sortItems(items, settings.tabSortBy[TabContentType.tracks],
@@ -121,9 +121,10 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             includeItemTypes: "MusicAlbum"),
         // Get Top Artists (either Album or Performing Artists, depending on setting)
         jellyfinApiHelper.getItems(
-            parentItem: widget.parent,
-            sortBy: "PlayCount,PremiereDate,SortName",
+            genreFilter: widget.parent,
+            sortBy: "PlayCount,SortName",
             sortOrder: "Descending",
+            //filters: "IsFavoriteOrLikes",
             limit: 5,
             includeItemTypes: "MusicArtist",
             artistType: settings.artistListType),
@@ -158,19 +159,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             SliverAppBar(
               title: Text(widget.parent.name ??
                   AppLocalizations.of(context)!.unknownName),
-              // 125 + 116 is the total height of the widget we use as a
-              // FlexibleSpaceBar. We add the toolbar height since the widget
-              // should appear below the appbar.
-              // As genres don't have the buttons, we only add the 125 for them
-              // TODO: This height is affected by platform density.
-              expandedHeight: kToolbarHeight + 125 + 16,
               pinned: true,
-              flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
-                parentItem: widget.parent,
-                isGenre: true,
-                allTracks: allTracks,
-                albumCount: topAlbums.length, // This is not right!!! 
-              ),
               actions: [
                 if (!_isLoading)
                   DownloadButton(
