@@ -446,16 +446,6 @@
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "곡 목록에서 스와이프 했을 때, 곡을 대기열 끝에 추가하는 대신 바로 다음 곡으로 삽입할 수 있습니다.",
   "@swipeInsertQueueNextSubtitle": {},
-  "startupError": "앱 시작중에 문제가 발생했습니다. 오류 내용:{error}\n\n\"github.com/UnicornsOnLSD/finamp\"에 이 페이지의 캡처 화면을 첨부하여 '이슈'를 등록 해주세요. 이 문제가 지속되면 당신은 앱 데이터를 삭제하여 앱을 초기화 할 수 있습니다.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "about": "Finamp(핀앰프) 소개",
   "@about": {},
   "changeLanguage": "언어 변경",

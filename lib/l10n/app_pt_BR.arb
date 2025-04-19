@@ -102,16 +102,6 @@
   },
   "tracks": "Faixas",
   "@tracks": {},
-  "startupError": "Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, crie um chamado em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro persistir, limpe os dados para restaurar o aplicativo.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "Se você deseja acessar seu servidor Jellyfin remotamente, você precisa usar seu IP externo.\n\nSe seu servidor está em uma porta HTTP padrão (80 ou 443), ou na porta padrão do Jellyfin (8096), você não precisa especificar a porta.\n\nSe a URL estiver correta, você deverá ver informações sobre o seu servidor aparecerem abaixo do campo de texto.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."

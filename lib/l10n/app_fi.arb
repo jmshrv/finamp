@@ -366,16 +366,6 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "startupError": "Jokin meni pieleen sovelluksen käynnistyksen aikana. Virhe oli: {error}\n\nOle hyvä ja luo virheilmoitus osoitteessa github.com/UnicornsOnLSD/finamp. Liitä oheen kuvakaappaus tästä sivusta. Mikäli ongelma jatkuu, voit tyhjentää sovelluksen datan nollataksesi sovelluksen.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "Jos haluat saada etäyhteyden Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on syötetty oikein, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."

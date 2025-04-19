@@ -402,16 +402,6 @@
   },
   "bufferDurationSubtitle": "Maximální doba trvání, která má být uložena do vyrovnávací paměti, v sekundách. Vyžaduje restart aplikace.",
   "@bufferDurationSubtitle": {},
-  "startupError": "Při spouštění aplikace se něco pokazilo. Chyba: {error}\n\nNahlaste prosím problém na stránce github.com/UnicornsOnLSD/finamp společně se snímkem obrazovky této stránky. Pokud tento problém přetrvává, můžete vymazat data aplikace pro její obnovení.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "startMix": "Spustit mix",
   "@startMix": {},
   "music": "Hudba",

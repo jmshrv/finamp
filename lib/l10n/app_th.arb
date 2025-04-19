@@ -272,16 +272,6 @@
   "@offlineMode": {},
   "album": "อัลบั้ม",
   "@album": {},
-  "startupError": "พบข้อผิดพลาดขณะเริ่มต้นแอป ข้อผิดพลาด: {error}\n\nโปรดสร้าง Issue บน github.com/UnicornsOnLSD/finamp พร้อมแนบภาพหน้าจอของหน้านี้ หากปัญหานี้ยังคงเป็นอยู่ให้ลองเคลียร์ข้อมูลของแอปเพื่อรีเซ็ต",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "selectDirectory": "เลือกโฟลเดอร์",
   "@selectDirectory": {},
   "dateAdded": "วันที่เพิ่ม",

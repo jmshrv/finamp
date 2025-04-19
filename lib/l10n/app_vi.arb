@@ -229,16 +229,6 @@
   "@removeFromPlaylistTitle": {},
   "newPlaylist": "Danh sách phát mới",
   "@newPlaylist": {},
-  "startupError": "Đã xảy ra lỗi khi khởi động ứng dụng. Lỗi: {error}\n\nXin hãy tạo một Issue trên github.com/UnicornsOnLSD/finamp với ảnh chụp màn hình của trang này. Nếu vấn đề tái diễn bạn có thể dọn dữ liệu ứng dụng để thiết lập lại ứng dụng.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "Nếu bạn muốn có thể truy cập máy chủ Jellyfin của mình từ xa, bạn cần sử dụng IP bên ngoài của mình.\n\nNếu máy chủ của bạn sử dụng cổng HTTP (cổng mặc định 80/443 (80 hoặc 443) hoặc cổng mặc định của Jellyfin (8096), thì bạn không cần phải chỉ định cổng đó. Điều này có thể xảy ra nếu máy chủ của bạn sử dụng proxy ngược\n\nNếu URL chính xác, bạn sẽ thấy một số thông tin về máy chủ của mình bật lên bên dưới trường nhập.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."

@@ -3,16 +3,6 @@
   "@serverUrl": {},
   "showTextOnGridViewSubtitle": "是否在網格音樂螢幕上顯示文字（標題、歌手等）。",
   "@showTextOnGridViewSubtitle": {},
-  "startupError": "應用程式啓動時出現問題！ 錯誤訊息：{error}\n\n請在 github.com/UnicornsOnLSD/finamp 上提出一個 Github Issue，並附上此頁面的螢幕截圖。 如果此頁面一直顯示，請清除您的應用程式資料以重置應用程式。",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "如果您希望能夠遠程訪問您的 Jellyfin 伺服器，則需要使用您的外部 IP。\n\n如果您的伺服器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的伺服器位於反向代理後面，則可能會出現這種情況。\n\n如果網址正確，輸入欄位下方應該會出現一些關於你的伺服器的相關資訊。",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."

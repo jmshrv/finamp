@@ -357,16 +357,6 @@
   },
   "shuffleAllTrackCount": "随机播放歌曲数量",
   "@shuffleAllTrackCount": {},
-  "startupError": "应用程序启动期间出现问题！ 错误是：{error}\n\n请在 github.com/UnicornsOnLSD/finamp 上创建一个 Github 问题，并附上此页面的屏幕截图。 如果问题一直显示，请清除您的应用数据以重置应用。",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "tabs": "选项卡",
   "@tabs": {},
   "theme": "主题",

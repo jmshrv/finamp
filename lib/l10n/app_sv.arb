@@ -276,16 +276,6 @@
   },
   "downloadsQueued": "Nedladdning förberedd, laddar ned filer",
   "@downloadsQueued": {},
-  "startupError": "Någonting gick fel under uppstarten. Felet var: {error}\n\nSkapa gärna ett ärende på github.com/UnicornsOnLSD/finamp med en skärmdump av denna sida. Om problemet kvarstår så kan du rensa appdatan för att återställa appen.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "invalidNumber": "Ogiltigt Nummer",
   "@invalidNumber": {},
   "datePlayed": "Uppspelad datum",
