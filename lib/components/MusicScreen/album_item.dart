@@ -15,6 +15,7 @@ import 'package:get_it/get_it.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/artist_screen.dart';
+import '../../screens/genre_screen.dart';
 import '../../services/downloads_service.dart';
 import '../../services/favorite_provider.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -100,8 +101,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
     // this is jank lol
     onTap = widget.onTap ??
         () {
-          if (mutableAlbum.type == "MusicArtist" ||
-              mutableAlbum.type == "MusicGenre") {
+          if (mutableAlbum.type == "MusicArtist") {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => ArtistScreen(
@@ -110,6 +110,9 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                 ),
               ),
             );
+          } else if (mutableAlbum.type == "MusicGenre") {
+            Navigator.of(context)
+                .pushNamed(GenreScreen.routeName, arguments: mutableAlbum);
           } else {
             Navigator.of(context)
                 .pushNamed(AlbumScreen.routeName, arguments: mutableAlbum);

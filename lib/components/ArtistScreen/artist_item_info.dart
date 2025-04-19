@@ -16,14 +16,14 @@ class ArtistItemInfo extends ConsumerWidget {
     required this.itemTracks,
     required this.itemAlbums,
     this.genreFilter,
-    required this.resetGenreFilter,
+    this.resetGenreFilter,
   });
 
   final BaseItemDto item;
   final int itemTracks;
   final int itemAlbums;
   final String? genreFilter;
-  final VoidCallback resetGenreFilter;
+  final VoidCallback? resetGenreFilter;
 
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
@@ -47,11 +47,12 @@ class ArtistItemInfo extends ConsumerWidget {
             )),
         if (item.type != "MusicGenre" &&
             item.genreItems != null &&
-            item.genreItems!.isNotEmpty)
+            item.genreItems!.isNotEmpty &&
+            resetGenreFilter != null)
           _GenreIconAndText(
               genres: item.genreItems!,
               genreFilter: genreFilter,
-              resetGenreFilter: resetGenreFilter
+              resetGenreFilter: resetGenreFilter!
           )
       ],
     );

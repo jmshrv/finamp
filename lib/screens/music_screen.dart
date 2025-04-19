@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,9 +25,17 @@ import '../services/jellyfin_api_helper.dart';
 final _musicScreenLogger = Logger("MusicScreen");
 
 class MusicScreen extends ConsumerStatefulWidget {
-  const MusicScreen({super.key});
+  const MusicScreen({
+    super.key,
+    this.genreFilterItem,
+    this.tabTypeFilter,
+  });
 
   static const routeName = "/music";
+
+  // Optional parameters for genre and tab filtering
+  final BaseItemDto? genreFilterItem;
+  final TabContentType? tabTypeFilter;
 
   @override
   ConsumerState<MusicScreen> createState() => _MusicScreenState();
@@ -75,19 +84,25 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     }
   }
 
-  void _buildTabController() {
-    _tabController?.removeListener(_tabIndexCallback);
+void _buildTabController() {
+  _tabController?.removeListener(_tabIndexCallback);
 
-    _tabController = TabController(
-      length: FinampSettingsHelper.finampSettings.showTabs.entries
-          .where((element) => element.value)
-          .length,
-      vsync: this,
-      initialIndex: ModalRoute.of(context)?.settings.arguments as int? ?? 0,
-    );
+  final tabs = widget.tabTypeFilter != null
+      ? [widget.tabTypeFilter!]
+      : ref
+          .read(finampSettingsProvider.tabOrder)
+          .where((e) => ref.read(finampSettingsProvider.showTabs)[e] ?? false)
+          .toList();
 
-    _tabController!.addListener(_tabIndexCallback);
-  }
+  _tabController = TabController(
+    length: tabs.length,
+    vsync: this,
+    initialIndex: 0,
+  );
+
+  _tabController!.addListener(_tabIndexCallback);
+}
+
 
   @override
   void dispose() {
@@ -181,11 +196,15 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
       _buildTabController();
     }
     ref.watch(FinampUserHelper.finampCurrentUserProvider);
-    // Get the tabs from the user's tab order, and filter them to only
-    // include enabled tabs
-    final sortedTabs = ref
-        .watch(finampSettingsProvider.tabOrder)
-        .where((e) => ref.watch(finampSettingsProvider.showTabs)[e] ?? false);
+    // Get the filtered tab or the tabs from the user's tab order,
+    // and filter them to only include enabled tabs
+    final sortedTabs = widget.tabTypeFilter != null
+        ? [widget.tabTypeFilter!]
+        : ref
+            .watch(finampSettingsProvider.tabOrder)
+            .where((e) => ref.watch(finampSettingsProvider.showTabs)[e] ?? false);
+
+
     refreshMap[sortedTabs.elementAt(_tabController!.index)] =
         MusicRefreshCallback();
 
@@ -234,32 +253,62 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                         MaterialLocalizations.of(context).searchFieldLabel,
                   ),
                 )
-              : Text(_finampUserHelper.currentUser?.currentView?.name ??
-                  AppLocalizations.of(context)!.music),
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: sortedTabs
-                .map((tabType) => Tab(
-                        child: Container(
-                      constraints: const BoxConstraints(minWidth: 50),
-                      alignment: Alignment.center,
-                      child: Text(
-                        tabType.toLocalisedString(context).toUpperCase(),
-                        // style: TextStyle(
-                        //   fontSize: 12,
-                        //   fontWeight: FontWeight.bold,
-                        // ),
-                      ),
-                    )))
-                .toList(),
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-          ),
+              : Text(
+                    widget.tabTypeFilter?.toLocalisedString(context) ??
+                        _finampUserHelper.currentUser?.currentView?.name ??
+                        AppLocalizations.of(context)!.music,
+                ),
+          bottom: widget.genreFilterItem == null
+            ? TabBar(
+              controller: _tabController,
+              tabs: sortedTabs
+                  .map((tabType) => Tab(
+                          child: Container(
+                        constraints: const BoxConstraints(minWidth: 50),
+                        alignment: Alignment.center,
+                        child: Text(
+                          tabType.toLocalisedString(context).toUpperCase(),
+                          // style: TextStyle(
+                          //   fontSize: 12,
+                          //   fontWeight: FontWeight.bold,
+                          // ),
+                        ),
+                      )))
+                  .toList(),
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+            )
+            : PreferredSize(
+                preferredSize: const Size.fromHeight(36),
+                //child: const Divider(height: 1),*/
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  width: double.infinity,
+                  height: 36.0,
+                  padding: EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                  ),
+                  color: Theme.of(context).colorScheme.primary,
+                  child: Text(
+                    widget.genreFilterItem?.name ?? "",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
           leading: isSearching
               ? BackButton(
                   onPressed: () => _stopSearching(),
                 )
-              : null,
+              : (widget.genreFilterItem != null
+                ? BackButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                  )
+                : null
+                ),
           actions: isSearching
               ? [
                   IconButton(
@@ -351,6 +400,12 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       searchTerm: searchQuery,
                       view: _finampUserHelper.currentUser?.currentView,
                       refresh: refreshMap[tabType],
+                      genreFilter: (widget.genreFilterItem != null &&
+                          (tabType.itemType == BaseItemDtoType.track ||
+                          tabType.itemType == BaseItemDtoType.album || 
+                          tabType.itemType == BaseItemDtoType.artist))
+                          ? widget.genreFilterItem?.id.raw
+                          : null,
                     ),
                   ),
                 ],

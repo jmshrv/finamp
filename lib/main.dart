@@ -56,6 +56,7 @@ import 'screens/active_downloads_screen.dart';
 import 'screens/add_download_location_screen.dart';
 import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
+import 'screens/genre_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
 import 'screens/customization_settings_screen.dart';
 import 'screens/downloads_location_screen.dart';
@@ -479,6 +480,8 @@ class _FinampState extends State<Finamp> with WindowListener {
                                 const AlbumScreen(),
                             ArtistScreen.routeName: (context) =>
                                 const ArtistScreen(),
+                            GenreScreen.routeName: (context) =>
+                                const GenreScreen(),
                             PlayerScreen.routeName: (context) =>
                                 const PlayerScreen(
                                     key: ValueKey(PlayerScreen.routeName)),

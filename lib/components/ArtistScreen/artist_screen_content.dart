@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
+import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -13,9 +12,7 @@ import '../../models/jellyfin_models.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../AlbumScreen/album_screen_content.dart';
 import '../AlbumScreen/download_button.dart';
-import '../albums_sliver_list.dart';
 import '../favourite_button.dart';
 import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
@@ -77,9 +74,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
               await _downloadsService.getAllCollections(
                   baseTypeFilter: BaseItemDtoType.album,
                   relatedTo: widget.parent,
-                  artistType: (widget.parent.type == "MusicGenre")
-                      ? null
-                      : ArtistType.albumartist,
+                  artistType: ArtistType.albumartist,
                   genreFilter: widget.genreFilter);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
@@ -91,9 +86,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
               await _downloadsService.getAllCollections(
                   baseTypeFilter: BaseItemDtoType.album,
                   relatedTo: widget.parent,
-                  artistType: (widget.parent.type == "MusicGenre")
-                      ? null
-                      : ArtistType.artist,
+                  artistType: ArtistType.artist,
                   genreFilter: widget.genreFilter);
           artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
               .compareTo(b.baseItem!.premiereDate ?? ""));
@@ -108,9 +101,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             await _downloadsService.getAllCollections(
                 baseTypeFilter: BaseItemDtoType.album,
                 relatedTo: widget.parent,
-                artistType: (widget.parent.type == "MusicGenre")
-                    ? null
-                    : ArtistType.albumartist,
+                artistType: ArtistType.albumartist,
                 genreFilter: widget.genreFilter);
         albumArtistAlbums.sort((a, b) => (a.name).compareTo(b.name));
         // Then add the tracks of every album
@@ -119,16 +110,12 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           sortedTracks.addAll(await _downloadsService
               .getCollectionTracks(album.baseItem!, playable: true));
         }
-        // Genre is already ready
-        if (widget.parent.type == "MusicGenre") return sortedTracks;
         // Fetch every album where the artist is a performing artist
         final List<DownloadStub> performingArtistAlbums =
             await _downloadsService.getAllCollections(
                 baseTypeFilter: BaseItemDtoType.album,
                 relatedTo: widget.parent,
-                artistType: (widget.parent.type == "MusicGenre")
-                    ? null
-                    : ArtistType.artist,
+                artistType: ArtistType.artist,
                 genreFilter: widget.genreFilter);
         performingArtistAlbums.sort((a, b) => (a.name).compareTo(b.name));
         // Filter out albums already fetched in the first query
@@ -171,32 +158,24 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             genreFilter: widget.genreFilter,
             sortBy: "PremiereDate,SortName",
             includeItemTypes: "MusicAlbum",
-            artistType: (widget.parent.type == "MusicGenre")
-                ? null
-                : ArtistType.albumartist),
+            artistType: ArtistType.albumartist),
         // Get Albums where artist is Performing Artist sorted by Premiere Date
         jellyfinApiHelper.getItems(
             parentItem: widget.parent,
             genreFilter: widget.genreFilter,
             sortBy: "PremiereDate,SortName",
             includeItemTypes: "MusicAlbum",
-            artistType: (widget.parent.type == "MusicGenre")
-                ? null
-                : ArtistType.artist),
+            artistType: ArtistType.artist),
         // Now we fetch every performing artist track
         // (this has to happen in Future.wait, because otherwise we will
         // get the correct childrenCount for the Download Status too late)
-        if (widget.parent.type != "MusicGenre")
-          jellyfinApiHelper.getItems(
-            parentItem: widget.parent,
-            genreFilter: widget.genreFilter,
-            sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-            includeItemTypes: "Audio",
-            artistType:
-                (widget.parent.type == "MusicGenre") ? null : ArtistType.artist,
-          )
-        else
-          Future.value(null)
+        jellyfinApiHelper.getItems(
+          parentItem: widget.parent,
+          genreFilter: widget.genreFilter,
+          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+          includeItemTypes: "Audio",
+          artistType: ArtistType.artist,
+        )
       ]);
 
       // Get All Tracks for Track Count and Playback
@@ -210,14 +189,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           genreFilter: widget.genreFilter,
           sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
           includeItemTypes: "Audio",
-          artistType: (widget.parent.type == "MusicGenre")
-              ? null
-              : ArtistType.albumartist,
+          artistType: ArtistType.albumartist,
         );
-
-        // Genre is already ready
-        if (widget.parent.type == "MusicGenre")
-          return allAlbumArtistTracksResponse;
 
         // We exclude albumartist tracks from performance artist tracks
         final allAlbumArtistTracks = allAlbumArtistTracksResponse ?? [];
@@ -268,41 +241,35 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
               // 125 + 116 is the total height of the widget we use as a
               // FlexibleSpaceBar. We add the toolbar height since the widget
               // should appear below the appbar.
-              // As genres don't have the buttons, we only add the 125 for them
-              // TODO: This height is affected by platform density.
-              expandedHeight: widget.parent.type != "MusicGenre"
-                  ? kToolbarHeight + 125 + 96
-                  : kToolbarHeight + 125 + 16,
+              expandedHeight: kToolbarHeight + 125 + 96,
               pinned: true,
               flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
-                isGenre: widget.parent.type == "MusicGenre",
+                isGenre: false,
                 allTracks: allTracks,
                 albumCount: albums.length,
                 genreFilter: widget.genreFilter,
                 resetGenreFilter: widget.resetGenreFilter,
               ),
               actions: [
-                // this screen is also used for genres, which can't be favorited
-                if (widget.parent.type != "MusicGenre")
-                  FavoriteButton(item: widget.parent),
+                FavoriteButton(item: widget.parent),
                 if (!_isLoading)
                   DownloadButton(
                       item: DownloadStub.fromItem(
                           item: widget.parent,
                           type: DownloadItemType.collection),
-                      children: (widget.parent.type == "MusicGenre")
-                          ? albums
-                          : allChildren)
+                      children: allChildren
+                  )
               ],
             ),
             if (!_isLoading &&
                 !isOffline &&
                 ref.watch(finampSettingsProvider.showArtistsTopTracks))
-              TopTracksSection(
+              TracksSection(
                   parent: widget.parent,
-                  topTracks: topTracks,
-                  childrenForQueue: Future.value(tracks)),
+                  tracks: topTracks,
+                  childrenForQueue: Future.value(tracks),
+                  tracksText: AppLocalizations.of(context)!.topTracks),
             if (albums.isNotEmpty)
               AlbumSection(
                   parent: widget.parent,
@@ -342,140 +309,5 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
               )
           ]);
         });
-  }
-}
-
-class TopTracksSection extends StatefulWidget {
-  const TopTracksSection({
-    required this.parent,
-    required this.topTracks,
-    required this.childrenForQueue,
-  });
-
-  final BaseItemDto parent;
-  final List<BaseItemDto> topTracks;
-  final Future<List<BaseItemDto>> childrenForQueue;
-
-  @override
-  State<TopTracksSection> createState() => _TopTracksSectionState();
-}
-
-class _TopTracksSectionState extends State<TopTracksSection> {
-  bool _showTopTracks = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverStickyHeader(
-      header: Container(
-        padding: EdgeInsets.fromLTRB(
-            6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              _showTopTracks = !_showTopTracks;
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Transform.rotate(
-                  angle: _showTopTracks ? 0 : -math.pi / 2,
-                  child: const Icon(Icons.arrow_drop_down, size: 24),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  AppLocalizations.of(context)!.topTracks,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      sliver: _showTopTracks
-          ? SliverMainAxisGroup(slivers: [
-              TracksSliverList(
-                childrenForList: widget.topTracks,
-                childrenForQueue: widget.childrenForQueue,
-                showPlayCount: true,
-                isOnArtistScreen: true,
-                parent: widget.parent,
-              ),
-              SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
-            ])
-          : SliverToBoxAdapter(child: SizedBox.shrink()),
-    );
-  }
-}
-
-class AlbumSection extends StatefulWidget {
-  const AlbumSection({
-    required this.parent,
-    required this.albumsText,
-    required this.albums,
-  });
-
-  final BaseItemDto parent;
-  final String albumsText;
-  final List<BaseItemDto> albums;
-
-  @override
-  State<AlbumSection> createState() => _AlbumSectionState();
-}
-
-class _AlbumSectionState extends State<AlbumSection> {
-  bool _showAlbums = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverStickyHeader(
-      header: Container(
-        padding: EdgeInsets.fromLTRB(
-            6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              _showAlbums = !_showAlbums;
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Transform.rotate(
-                  angle: _showAlbums ? 0 : -math.pi / 2,
-                  child: const Icon(Icons.arrow_drop_down, size: 24),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  widget.albumsText,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      sliver: _showAlbums
-          ? SliverMainAxisGroup(slivers: [
-              AlbumsSliverList(
-                childrenForList: widget.albums,
-                parent: widget.parent,
-              ),
-              SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
-            ])
-          : SliverToBoxAdapter(child: SizedBox.shrink()),
-    );
   }
 }
