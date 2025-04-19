@@ -1,14 +1,4 @@
 {
-  "startupError": "Uygulama başlarken bir hata meydana geldi. Hata: {error}\n\nLütfen bu sayfanın ekran görüntüsüyle github.com/UnicornsOnLSD/finamp adresinde bir issue oluşturun. Eğer bu sorun devam ederse uygulamayı sıfırlamak için uygulama verisini sıfırlayabilirsiniz.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "serverUrl": "Sunucu URL'si",
   "@serverUrl": {},
   "internalExternalIpExplanation": "Jellyfin sunucunuza uzaktan erişmek istiyorsanız dış IP adresinizi kullanmalısınız.\n\nSunucunuz bir HTTP varsayılan bağlantı noktasında (80 veya 443) veya Jellyfin'in varsayılan bağlantı noktasında (8096) bulunuyorsa, bağlantı noktasını belirtmeniz gerekmez.\n\nURL doğruysa, giriş alanının altında sunucunuzla ilgili bazı bilgilerin açıldığını görmelisiniz.",

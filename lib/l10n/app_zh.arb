@@ -357,16 +357,6 @@
   },
   "shuffleAllTrackCount": "随机播放歌曲数量",
   "@shuffleAllTrackCount": {},
-  "startupError": "应用程序启动期间出现问题！ 错误是：{error}\n\n请在 github.com/UnicornsOnLSD/finamp 上创建一个 Github 问题，并附上此页面的屏幕截图。 如果问题一直显示，请清除您的应用数据以重置应用。",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "tabs": "选项卡",
   "@tabs": {},
   "theme": "主题",
@@ -1125,7 +1115,7 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "reportQueueToServerSubtitle": "启用后，Finamp 会将当前队列发送到服务器。目前看来这个功能用处不大，而且会增加网络流量。",
+  "reportQueueToServerSubtitle": "启用后，Finamp 会将当前队列发送到服务器。这可以改善远程控制，并允许服务器端恢复队列。如果启用了“继续播放”功能，则始终启用。",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -2012,5 +2002,77 @@
   "autoOfflineNotification": "自动 {state, select, enabled{启动} disabled{停用} other{set quantum position for}} 离线模式",
   "@autoOfflineNotification": {
     "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "playbackReporting": "播放报告",
+  "@playbackReporting": {},
+  "playOnStaleDelay": "“继续播放”会话超时",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "远程“继续播放”会话在收到命令后多久被视为处于活动状态。当被视为处于活动状态时，播放报告会更频繁，这可能会导致带宽使用量增加。",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "启用“继续播放”支持",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "“继续播放”会话重新连接延迟",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelaySubtitle": "控制 继续播放 websocket 断开连接后重新连接尝试的延迟时间（以秒为单位）。延迟越低，带宽使用量就越大。",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playbackReportingSettingsTitle": "播放报告和播放继续",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "enablePlayonSubtitle": "启用 Jellyfin 的“继续播放”功能（从其他客户端远程控制 Finamp）。如果您的反向代理或服务器不支持 websockets，请禁用此功能。",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "currentVolumeFeatureText": "{volume}% 音量",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "outputMenuButtonTitle": "输出",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuVolumeSectionTitle": "音量",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "可用设备",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "libraryDownloads": "媒体库下载",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "desktopShuffleWarning": "随机播放目前在桌面版不可用",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "lyricsScreenButtonTitle": "歌词",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "outputMenuTitle": "更改输出",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "连接到设备",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
   }
 }

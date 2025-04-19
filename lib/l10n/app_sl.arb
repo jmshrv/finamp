@@ -15,16 +15,6 @@
   "@about": {
     "description": "Label for the about/info button on the settings screen"
   },
-  "startupError": "Pri zagonu aplikacije je prislo do napake. Napaka: {error}\n\nUstvarite težavo na github.com/UnicornsOnLSD/finamp s posnetkom zaslona te strani. Če se ta težava ponovi, lahko izbrišete podatke aplikacije, da ponastavite aplikacijo.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "loginFlowWelcomeHeading": "Dobrodošli v",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
