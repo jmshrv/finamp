@@ -108,16 +108,6 @@
   "@bufferDurationSubtitle": {},
   "language": "Мова",
   "@language": {},
-  "startupError": "Щось пішло не так під час запуску програми. помилка: {error}\n\nБудь ласка, створіть проблему на github.com/UnicornsOnLSD/finamp із знімком екрана цієї сторінки. Якщо проблема не зникне, ви можете очистити дані програми, щоб скинути налаштування програми.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "serverUrl": "URL серверу",
   "@serverUrl": {},
   "couldNotFindLibraries": "Не вдається знайти жодної бібліотеки.",

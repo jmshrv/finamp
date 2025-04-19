@@ -1,16 +1,6 @@
 {
   "serverUrl": "URL del Server",
   "@serverUrl": {},
-  "startupError": "Qualcosa è andato storto durante l'avvio dell'app. L'errore è stato: {error}\n\nPerfavore apri una segnalazione su github.com/UnicornsOnLSD/finamp con uno screenshot di questa pagina. Se il problema persiste puoi cancellare i dati dell'app per riportarla alle impostazioni iniziali.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "emptyServerUrl": "l'URL del Server non può essere vuoto",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
