@@ -332,16 +332,6 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "showTextOnGridView": "Mostrar texto en vista de cuadrícula",
   "@showTextOnGridView": {},
-  "startupError": "¡Algo ha salido mal en el arranque de la aplicación! El error es: {error}\n\nPor favor crea una incidencia en github.com/UnicornsOnLSD/finamp con una captura de pantalla de esta página. Si el problema persiste, borra los datos de la aplicación para resetearla.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "shuffleAll": "Reproducir aleatoriamente todas las canciones",
   "@shuffleAll": {},
   "premiereDate": "Fecha de lanzamiento",

@@ -272,16 +272,6 @@
   "@finamp": {
     "description": "App name, possibly translated"
   },
-  "startupError": "Došlo je do greške prilikom pokretanja aplikacije. Greška je \n\nMolimo vas na da otvorite novi problem na github.com/UnicornsOnLSD/finamp sa skrinšotom ove stranice. Ako se ovaj problem ponovi, možete resetovati aplikaciju tako što ćete obrisati njene podatke.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "loginFlowQuickConnectPrompt": "Koristi kod za brzo povezivanje",
   "@loginFlowQuickConnectPrompt": {
     "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."

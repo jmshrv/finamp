@@ -404,16 +404,6 @@
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "system": "Systeem",
   "@system": {},
-  "startupError": "Er ging iets mis bij het starten van de app. Dit was de foutmelding: {error}\n\nCreëer een issue op github.com/UnicornsOnLSD/finamp met een schermafbeelding van deze pagina. Wanneer het probleem zich vaker voordoet, kan je de app-data verwijderen om de app te resetten.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "emptyServerUrl": "De URL van je server mag niet leeg zijn",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"

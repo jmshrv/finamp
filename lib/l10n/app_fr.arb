@@ -3,16 +3,6 @@
   "@downloadsQueued": {},
   "grid": "Mosaïque",
   "@grid": {},
-  "startupError": "Une erreur est survenue lors du démarrage de l'application. L'erreur est : {error}\n\nVeuillez créer une issue sur Github à l'adresse github.com/UnicornsOnLSD/finamp avec une capture d'écran de cette page. Si le problème persiste, supprimez les données de l'application pour la réinitialiser.",
-  "@startupError": {
-    "description": "Le message d'erreur affiché lorsque le démarrage de l'application échoue.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Impossible d'accéder aux données de téléchargement"
-      }
-    }
-  },
   "serverUrl": "Adresse du serveur",
   "@serverUrl": {},
   "internalExternalIpExplanation": "Si vous souhaitez pouvoir accéder à votre serveur Jellyfin à distance, vous devez utiliser votre adresse IP externe.\n\nSi votre serveur utilise les ports HTTP par défaut (80/443) ou le port par défaut de Jellyfin (8096), vous n'avez pas besoin de spécifier le port. \n\nSi l'URL est correcte, vous devriez voir apparaître des informations sur votre serveur sous le champ de saisie.",

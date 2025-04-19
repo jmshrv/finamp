@@ -312,16 +312,6 @@
   "@bufferDuration": {},
   "bufferDurationSubtitle": "播放器可以預先載入多少的音訊數據（秒）。重啟以套用設定。",
   "@bufferDurationSubtitle": {},
-  "startupError": "應用程式啟動時出錯（{error}）\n\n您可以在 github.com/UnicornsOnLSD/finamp 回報有關問題並附上截圖。如果問題持續，您可以嘗試重設應用程式。",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "downloadedMissingImages": "{count,plural, =0{沒有缺少的圖片} =1{已下載{count}張圖片} other{已下載{count}張圖片}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
