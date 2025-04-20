@@ -112,16 +112,16 @@ Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
 }
 
 Future<void> changeTargetUrl({bool? isLocal}) async {
-  if (isLocal != null) {
+  FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+  if (user == null) return;
+
+  if (isLocal != null && isLocal != user.isLocal) {
     _networKSwitcherLogger.info("Changed active network to ${isLocal ? "home" : "public"} address");
     GetIt.instance<FinampUserHelper>()
       .currentUser
       ?.update(newIsLocal: isLocal);
     return;
   }
-
-  FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
-  if (user == null) return;
 
   // Disable this feature
   if (!user.preferHomeNetwork) return changeTargetUrl(isLocal: false);

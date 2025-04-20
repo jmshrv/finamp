@@ -42,7 +42,11 @@ class FinampUser {
 
   // @HiveField(1)
   // String baseUrl;
-  String get baseUrl => isLocal ? homeAddress : publicAddress;
+  @HiveField(1)
+  @Name("baseUrl")
+  String publicAddress;
+
+  String get baseUrl => isLocal && preferHomeNetwork ? homeAddress : publicAddress;
 
   @HiveField(2)
   String accessToken;
@@ -58,9 +62,6 @@ class FinampUser {
   @ignore
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
-
-  @HiveField(6)
-  String publicAddress;
 
   @HiveField(7)
   String homeAddress;
