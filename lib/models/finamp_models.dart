@@ -8,6 +8,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -25,7 +26,11 @@ part 'finamp_models.g.dart';
 class FinampUser {
   FinampUser({
     required this.id,
-    required this.baseUrl,
+    required this.publicAddress,
+    required this.homeAddress,
+    required this.homeNetworkName,
+    required this.preferHomeNetwork,
+    required this.isLocal,
     required this.accessToken,
     required this.serverId,
     this.currentViewId,
@@ -34,8 +39,11 @@ class FinampUser {
 
   @HiveField(0)
   String id;
-  @HiveField(1)
-  String baseUrl;
+
+  // @HiveField(1)
+  // String baseUrl;
+  String get baseUrl => isLocal ? homeAddress : publicAddress;
+
   @HiveField(2)
   String accessToken;
   @HiveField(3)
@@ -51,6 +59,21 @@ class FinampUser {
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
 
+  @HiveField(6)
+  String publicAddress;
+
+  @HiveField(7)
+  String homeAddress;
+
+  @HiveField(8)
+  String homeNetworkName;
+
+  @HiveField(9)
+  bool isLocal;
+
+  @HiveField(10)
+  bool preferHomeNetwork;
+
   // We only need 1 user, the current user
   final Id isarId = 0;
   String get isarViews => jsonEncode(views);
@@ -61,9 +84,13 @@ class FinampUser {
   @ignore
   BaseItemDto? get currentView => views[currentViewId];
 
-  void changeUrl(String newUrl) {
-    this.baseUrl = newUrl;
-    FinampUserHelper().saveUser(this);
+  void update({bool? newIsLocal, String? newHomeAddress, String? newPublicAddress, String? newHomeNetworkName, bool? newPreferHomeNetwork}) {
+    isLocal = newIsLocal ?? isLocal;
+    homeAddress = newHomeAddress ?? homeAddress;
+    publicAddress = newPublicAddress ?? publicAddress; 
+    homeNetworkName = newHomeNetworkName ?? homeNetworkName;
+    preferHomeNetwork = newPreferHomeNetwork ?? preferHomeNetwork;
+    GetIt.instance<FinampUserHelper>().saveUser(this);
   }
 }
 
@@ -279,11 +306,7 @@ class FinampSettings {
     this.autoOfflineListenerActive =
         DefaultSettings.autoOfflineListenerActive,
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
-    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
-    this.preferHomeNetwork = DefaultSettings.preferHomeNetwork,
-    this.homeNetworkName = DefaultSettings.homeNetworkName,
-    this.homeNetworkAddress = DefaultSettings.homeNetworkAddress,
-    this.publicAddress = ""
+    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -585,18 +608,6 @@ class FinampSettings {
 
   @HiveField(92, defaultValue: DefaultSettings.artistListType)
   ArtistType artistListType;
-
-  @HiveField(93, defaultValue: DefaultSettings.preferHomeNetwork)
-  bool preferHomeNetwork;
-
-  @HiveField(94, defaultValue: DefaultSettings.homeNetworkName)
-  String homeNetworkName;
-
-  @HiveField(95, defaultValue: DefaultSettings.homeNetworkAddress)
-  String homeNetworkAddress;
-
-  @HiveField(96, defaultValue: "")
-  String publicAddress;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

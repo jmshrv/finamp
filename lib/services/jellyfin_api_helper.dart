@@ -442,12 +442,15 @@ class JellyfinApiHelper {
 
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
-      baseUrl: baseUrlTemp!.toString(),
+      publicAddress: baseUrlTemp!.toString(),
+      homeAddress: DefaultSettings.homeNetworkAddress,
+      homeNetworkName: DefaultSettings.homeNetworkName,
+      isLocal: false,
+      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
-    ); 
-    FinampSetters.setPublicAddress(baseUrlTemp!.toString());
+    );
 
     await _finampUserHelper.saveUser(newUser);
   }
@@ -472,12 +475,15 @@ class JellyfinApiHelper {
 
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
-      baseUrl: baseUrlTemp!.toString(),
+      publicAddress: baseUrlTemp!.toString(),
+      homeAddress: DefaultSettings.homeNetworkAddress,
+      homeNetworkName: DefaultSettings.homeNetworkName,
+      isLocal: false,
+      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
     );
-    FinampSetters.setPublicAddress(baseUrlTemp!.toString());
 
     await _finampUserHelper.saveUser(newUser);
   }

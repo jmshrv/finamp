@@ -6,7 +6,7 @@ part of 'auto_offline.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$autoOfflineHash() => r'5470200dd62e25cdfb19757b95c917db88b4217d';
+String _$autoOfflineHash() => r'd87ec57338f2f3b5d23c0ec34e2a6f1ddea9292d';
 
 /// See also [AutoOffline].
 @ProviderFor(AutoOffline)

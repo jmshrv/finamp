@@ -652,34 +652,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setPreferHomeNetwork(bool newPreferHomeNetwork) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.preferHomeNetwork = newPreferHomeNetwork;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setHomeNetworkName(String newHomeNetworkName) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.homeNetworkName = newHomeNetworkName;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setHomeNetworkAddress(String newHomeNetworkAddress) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.homeNetworkAddress = newHomeNetworkAddress;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setPublicAddress(String newPublicAddress) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.publicAddress = newPublicAddress;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -901,14 +873,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
           .select((value) => value.requireValue.itemSwipeActionRightToLeft);
   ProviderListenable<ArtistType> get artistListType => finampSettingsProvider
       .select((value) => value.requireValue.artistListType);
-  ProviderListenable<bool> get preferHomeNetwork => finampSettingsProvider
-      .select((value) => value.requireValue.preferHomeNetwork);
-  ProviderListenable<String> get homeNetworkName => finampSettingsProvider
-      .select((value) => value.requireValue.homeNetworkName);
-  ProviderListenable<String> get homeNetworkAddress => finampSettingsProvider
-      .select((value) => value.requireValue.homeNetworkAddress);
-  ProviderListenable<String> get publicAddress => finampSettingsProvider
-      .select((value) => value.requireValue.publicAddress);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

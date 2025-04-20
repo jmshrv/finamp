@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
@@ -12,18 +13,24 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 part 'auto_offline.g.dart';
 
-StreamSubscription<List<ConnectivityResult>> _listener = Connectivity()
+// this is to avoid an infinite loop.
+// `finampCurrentUserProvider` fires for every change on the object
+// including when changing the baseURL. So basically this happens:
+// urlChange -> Update -> reload listener -> urlChange -> Update -> ...
+bool? _lastState;
+
+Logger _networkAutomationLogger = Logger("Network Automation");
+Logger _autoOfflineLogger = Logger("Auto Offline");
+Logger _networKSwitcherLogger = Logger("Network Switcher"); 
+
+final StreamSubscription<List<ConnectivityResult>> _listener = Connectivity()
     .onConnectivityChanged
     .listen(_onConnectivityChange);
-final currentAddressTextUpdateStream = StreamController<void>.broadcast();
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
   @override
   void build() {
-    _listener = Connectivity()
-        .onConnectivityChanged
-        .listen(_onConnectivityChange);
 
     bool autoOfflineEnabled = ref.watch(finampSettingsProvider.autoOffline) !=
         AutoOfflineOption.disabled;
@@ -33,23 +40,30 @@ class AutoOffline extends _$AutoOffline {
         ref.watch(finampSettingsProvider.autoOfflineListenerActive);
 
     bool autoServerSwitch =
-        ref.watch(finampSettingsProvider.preferHomeNetwork);
+        ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferHomeNetwork ?? DefaultSettings.preferHomeNetwork;
 
-    Logger _autoOfflineLogger = Logger("AutoOffline");
-    if ((autoOfflineEnabled && autoOfflineActive) || autoServerSwitch) {
-      _autoOfflineLogger.info("Resumed Automation");
-      _listener.resume();
-      // directly check if offline mode should be on to avoid desync
-      _onConnectivityChange(null);
-    } else {
-      _autoOfflineLogger.info("Paused Automation");
-      _listener.pause();
+    bool state = (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
+
+    // Avoid infinite loop as described above
+    if (state != _lastState) {
+      if (state) {
+        _networkAutomationLogger.info("Resumed Automation");
+        _listener.resume();
+        // directly check if offline mode should be on
+        _onConnectivityChange(null);
+      } else {
+        _networkAutomationLogger.info("Paused Automation");
+        _listener.pause();
+      }
     }
-    ref.onDispose(_listener.cancel);
+
+    _lastState = state;
   }
 }
 
 Future<void> _onConnectivityChange(List<ConnectivityResult>? connections) async {
+  _networkAutomationLogger.finest("Network Change: ${
+    connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
   await Future.wait([
     _setOfflineMode(connections),
     changeTargetUrl()
@@ -77,9 +91,7 @@ Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
   GlobalSnackbar.message((context) => AppLocalizations.of(context)!
       .autoOfflineNotification(state ? "enabled" : "disabled"));
 
-  Logger("AutoOffline").info(state
-      ? "Automatically Enabled Offline Mode"
-      : "Automatically Disabled Offline Mode");
+  _autoOfflineLogger.info("Automatically ${state ? "Enabled" : "Disabled"} Offline Mode");
 
   FinampSetters.setIsOffline(state);
 }
@@ -99,41 +111,31 @@ Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
   }
 }
 
-void _usePublicAddress() {
-  Logger("Network Switcher").info("Changed active network to public address");
-  FinampUserHelper()
-    .currentUser!
-    .changeUrl(FinampSettingsHelper
-        .finampSettings.publicAddress);
-  currentAddressTextUpdateStream.add(null);
-}
-void _useHomeAddress() {
-  Logger("Network Switcher").info("Changed active network to home address");
-  FinampUserHelper()
-    .currentUser!
-    .changeUrl(FinampSettingsHelper
-        .finampSettings.homeNetworkAddress);
-  currentAddressTextUpdateStream.add(null);
-}
-
 Future<void> changeTargetUrl({bool? isLocal}) async {
-  if (isLocal != null && isLocal) {
-    return _useHomeAddress();
-  }
-  else if (isLocal != null && !isLocal) {
-    return _usePublicAddress();
+  if (isLocal != null) {
+    _networKSwitcherLogger.info("Changed active network to ${isLocal ? "home" : "public"} address");
+    GetIt.instance<FinampUserHelper>()
+      .currentUser
+      ?.update(newIsLocal: isLocal);
+    return;
   }
 
-  if (!FinampSettingsHelper.finampSettings.preferHomeNetwork) {
-    return changeTargetUrl(isLocal: false);
-  }
+  FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+  if (user == null) return;
+
+  // Disable this feature
+  if (!user.preferHomeNetwork) return changeTargetUrl(isLocal: false);
+
+  // Avoid Further Calculation when no network name is set
+  String targetWifi = user.homeNetworkName;
+  if (targetWifi.isEmpty) return changeTargetUrl(isLocal: false);
 
   String? currentWifi = await NetworkInfo().getWifiName();
   if (currentWifi == null) return changeTargetUrl(isLocal: false);
 
   // Android returns wifi name with quotes
   currentWifi = currentWifi.replaceAll("\"", "");
-  Logger("Network Switcher").finest("Wifi Name detected: $currentWifi");
+  _networkAutomationLogger.finest("Wifi Name detected: $currentWifi");
 
-  await changeTargetUrl(isLocal: currentWifi == FinampSettingsHelper.finampSettings.homeNetworkName);
+  await changeTargetUrl(isLocal: currentWifi == targetWifi);
 }

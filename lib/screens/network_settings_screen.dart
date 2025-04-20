@@ -11,9 +11,10 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/auto_offline.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:network_info_plus/network_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class NetworkSettingsScreen extends StatefulWidget {
   const NetworkSettingsScreen({super.key});
@@ -60,7 +61,11 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
                 }
 
                 // android returns the network name with quotes
-                FinampSetters.setHomeNetworkName(network.replaceAll("\"", ""));
+                GetIt
+                  .instance<FinampUserHelper>()
+                  .currentUser
+                  ?.update(
+                    newHomeNetworkName: network.replaceAll("\"", ""));
                 await changeTargetUrl();
               },
               child: Text(AppLocalizations.of(context)!.preferHomeNetworkGetNetworkNameButton)),

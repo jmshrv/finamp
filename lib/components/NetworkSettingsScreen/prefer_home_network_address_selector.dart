@@ -1,54 +1,54 @@
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/auto_offline.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_ce_flutter/hive_flutter.dart';
-
-import '../../models/finamp_models.dart';
+import 'package:get_it/get_it.dart';
 import '../../services/finamp_settings_helper.dart';
 
-class HomeNetworkAddressSelector extends ConsumerWidget {
+class HomeNetworkAddressSelector extends ConsumerStatefulWidget {
   const HomeNetworkAddressSelector({super.key});
+  
+  @override
+  ConsumerState<HomeNetworkAddressSelector> createState() => _HomeNetworkAddressSelector();
+}
+
+class _HomeNetworkAddressSelector extends ConsumerState<HomeNetworkAddressSelector> {
+
+  TextEditingController? _controller;
+  @override
+  void dispose() {
+    super.dispose();
+    _controller?.dispose();
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    bool preferLocalNetwork = ref.watch(finampSettingsProvider.preferHomeNetwork);
-    String localNetworkAddress = ref.watch(finampSettingsProvider.homeNetworkAddress);
+  Widget build(BuildContext context) {
+    FinampUser? user = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull;
+    String address = user?.homeAddress ?? DefaultSettings.homeNetworkAddress;
+    bool featureEnabled = user?.preferHomeNetwork ?? DefaultSettings.preferHomeNetwork;
 
-    final _controller = TextEditingController(
-        text: localNetworkAddress.toString());
+    _controller = TextEditingController(
+      text: address);
 
-    DateTime lastSave = DateTime.now();
-
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, __) {
-        return ListTile(
-          enabled: preferLocalNetwork,
-          title: Text(AppLocalizations.of(context)!.preferHomeNetworkTargetAddressLocalSettingTitle), // TODO TRANSLATION
-          subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkTargetAddressLocalSettingDescription),
-          trailing: SizedBox(
-            width: 200 * MediaQuery.of(context).textScaleFactor,
-            child: TextField(
-              enabled: preferLocalNetwork,
-              controller: _controller,
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.url,
-              onChanged: (value) {
-                // only save after 500 ms of inactivity
-                Future.delayed(Duration(milliseconds: 500), () async {
-                  if (DateTime.now().millisecondsSinceEpoch - lastSave.millisecondsSinceEpoch > 480 ) {
-                    FinampSetters.setHomeNetworkAddress(value);
-                    await changeTargetUrl();
-                  }
-                });
-
-                lastSave = DateTime.now();
-              },
-            ),
-          ),
-        );
-      }
+    return ListTile(
+      enabled: featureEnabled,
+      title: Text(AppLocalizations.of(context)!.preferHomeNetworkTargetAddressLocalSettingTitle),
+      subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkTargetAddressLocalSettingDescription),
+      trailing: SizedBox(
+        width: 200 * MediaQuery.of(context).textScaleFactor,
+        child: TextField(
+          enabled: featureEnabled,
+          controller: _controller,
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.url,
+          onSubmitted: (value) async {
+            GetIt.instance<FinampUserHelper>().currentUser?.update(newHomeAddress: value);
+            await changeTargetUrl();
+          },
+        ),
+      ),
     );
   }
 }
