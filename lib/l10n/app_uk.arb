@@ -2085,5 +2085,17 @@
       }
     },
     "description": "Label for the type of device in the output menu"
+  },
+  "startupErrorTitle": "Щось пішло не так під час запуску програми!\nВибачте за це...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Будь ласка, створіть проблему на github.com/jmshrv/finamp із журналами (!) (скористайтеся кнопкою нижче) і знімком екрана цієї сторінки, щоб ми могли якнайшвидше її виправити.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "Як обхідний шлях ви можете очистити дані програми, щоб скинути налаштування програми. Майте на увазі, що в цьому випадку всі ваші налаштування та завантаження будуть видалені.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   }
 }
