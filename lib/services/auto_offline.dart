@@ -122,6 +122,8 @@ Future<void> changeTargetUrl({bool? isLocal}) async {
       ?.update(newIsLocal: isLocal);
     return;
   }
+  // this avoids an infinite loop... again :)
+  if (isLocal != null) {return;}
 
   // Disable this feature
   if (!user.preferHomeNetwork) return changeTargetUrl(isLocal: false);

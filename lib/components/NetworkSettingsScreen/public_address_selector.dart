@@ -40,7 +40,6 @@ class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
           keyboardType: TextInputType.url,
           onSubmitted: (value)  async {
               GetIt.instance<FinampUserHelper>().currentUser?.update(newPublicAddress: value);
-              await changeTargetUrl();
           },
         ),
       ),
