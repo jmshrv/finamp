@@ -2087,5 +2087,13 @@
   "startupErrorTitle": "Při spouštění aplikace se něco nepovedlo!\nZa to se omlouváme…",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Vytvořte prosím problém na github.com/jmshrv/finamp i s protokoly(!) (použijte tlačítko níže) a snímkem této stránky, abychom chybu mohli opravit co nejrychleji to bude možné.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "Jako řešení můžete vymazat data aplikace a resetovat ji. Mějte na paměti, že v tomto případě budou odstraněna všechna vaše nastavení a stažené soubory.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   }
 }
