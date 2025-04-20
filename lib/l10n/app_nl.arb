@@ -342,7 +342,7 @@
   "@queue": {},
   "replaceQueue": "Afspeelrij vervangen",
   "@replaceQueue": {},
-  "instantMix": "Instant mix",
+  "instantMix": "Instantmix",
   "@instantMix": {},
   "goToAlbum": "Ga naar album",
   "@goToAlbum": {},
@@ -1212,7 +1212,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "shuffleAlbumsNext": "",
+  "shuffleAlbumsNext": "Shuffle Albums Hierna",
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
@@ -1400,5 +1400,57 @@
   "volumeNormalizationModeTrackBased": "Per nummer",
   "@volumeNormalizationModeTrackBased": {
     "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
+  },
+  "shuffleAlbumsToNextUp": "Shuffle Albums naar Volgende",
+  "@shuffleAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+  },
+  "playbackReportingSettingsTitle": "Afspelen Rapporteren & Afspelen Op",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "swipeLeftToRightAction": "Swipe naar Rechts Actie",
+  "@swipeLeftToRightAction": {},
+  "swipeRightToLeftAction": "Swipe naar Links Actie",
+  "@swipeRightToLeftAction": {},
+  "swipeLeftToRightActionSubtitle": "Actie die uitgevoerd wordt wanneer een nummer in een lijst van links naar rechts wordt gesleept.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "playbackReporting": "Afspelen Rapporteren",
+  "@playbackReporting": {},
+  "numberAsDecibel": "{value} dB",
+  "@numberAsDecibel": {
+    "description": "Label for a number that represents a decibel value. The value will be the decibel value.",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "example": "-9.6"
+      }
+    }
+  },
+  "swipeInsertQueueNextSubtitle": "Zet dit aan om een nummer als volgende in de wachtrij te zetten wanneer het gesleept wordt in een lijst van nummers in plaats van het aan het einde van de wachtrij toevoegen.",
+  "@swipeInsertQueueNextSubtitle": {},
+  "startInstantMixForIndividualTracksSwitchTitle": "Begin Instantmixes voor Losse Nummers",
+  "@startInstantMixForIndividualTracksSwitchTitle": {
+    "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+  },
+  "startupErrorTitle": "Er ging iets mis bij het opstarten van de app!\nSorry daarvoor...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorWorkaround": "Als een alternatieve oplossing kan je de app data verwijderen om de app te resetten. Hierdoor verlies je wel al je instellingen en downloads.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Op dit moment werkt Volume-normalisatie op iOS door het afspeelvolume te veranderen om veranderingen in Gain te emuleren. Omdat we het volume niet boven 100% kunnen zetten moeten we het standaardvolume lager instellen om het volume van stillere nummers hoger te krijgen. De waarde is in decibel (dB). -10dB is ~30% volume, -4.5 dB is ~60% volume en -2 dB is ~80% volume.",
+  "@volumeNormalizationIOSBaseGainEditorSubtitle": {
+    "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
+  },
+  "swipeRightToLeftActionSubtitle": "Actie die uitgevoerd wordt wanneer een nummer in een lijst van rechts naar links wordt gesleept.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "swipeInsertQueueNext": "Speel Geswipete Nummer Hierna",
+  "@swipeInsertQueueNext": {},
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Als de Jellyfin server langer dan 5 minuten geen updates ontvangt van een apparaat neemt het aan dat het afspelen is gestopt. Dit betekent dat het rapporteren van afspeeldata incorrect kan zijn voor nummers langer dan 5 minuten.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   }
 }
