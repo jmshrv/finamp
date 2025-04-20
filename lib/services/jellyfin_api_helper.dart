@@ -118,6 +118,7 @@ class JellyfinApiHelper {
     bool? recursive,
     ArtistType? artistType,
     BaseItemDto? genreFilter,
+    bool? isFavorite,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -181,6 +182,7 @@ class JellyfinApiHelper {
             limit: limit,
             userId: currentUserId,
             fields: fields,
+            isFavorite: isFavorite,
           );
         } else {
           //artistType == ArtistType.artist
@@ -195,6 +197,7 @@ class JellyfinApiHelper {
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         }
       } else if (parentItem?.type == "MusicArtist") {
@@ -215,6 +218,7 @@ class JellyfinApiHelper {
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         } else {
           //artistType == ArtistType.artist
@@ -232,6 +236,7 @@ class JellyfinApiHelper {
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         }
       } else if (includeItemTypes == "MusicGenre") {
@@ -256,6 +261,7 @@ class JellyfinApiHelper {
           startIndex: startIndex,
           limit: limit,
           fields: fields,
+          isFavorite: isFavorite,
         );
       } else {
         // This will be run when getting albums, tracks in albums, and stuff like
@@ -274,6 +280,7 @@ class JellyfinApiHelper {
           limit: limit,
           ids: itemIds?.join(","),
           fields: fields,
+          isFavorite: isFavorite,
         );
       }
 

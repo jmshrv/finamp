@@ -178,6 +178,13 @@ abstract class JellyfinApi extends ChopperService {
     /// IsFavorite, IsResumable, Likes, Dislikes.
     @Query("Filters") String? filters,
 
+    /// Optional filter by items that are marked as favorite, or not.
+    @Query("isFavorite") bool? isFavorite,
+
+    /// Optional. If specified, results will be filtered by excluding item ids.
+    /// This allows multiple, comma delimited.
+    @Query("excludeItemIds") String? excludeItemIds,
+
     /// Optional. The record index to start at. All items with a lower index
     /// will be dropped from the results.
     @Query("StartIndex") int? startIndex,
@@ -414,8 +421,8 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. The maximum number of records to return.
     @Query("Limit") int? limit,
 
-    /// Optional. If enabled, only favorite artists will be returned.
-    @Query("IsFavorite") bool? isFavorite,
+    /// Optional filter by items that are marked as favorite, or not.
+    @Query("isFavorite") bool? isFavorite,
   });
 
   @FactoryConverter(
@@ -460,6 +467,9 @@ abstract class JellyfinApi extends ChopperService {
     /// User id. Technically nullable in the Jellyfin API docs, but getting
     /// favourited artists will break if this is not given.
     @Query("UserId") required String userId,
+
+    /// Optional filter by items that are marked as favorite, or not.
+    @Query("isFavorite") bool? isFavorite,
   });
 
   /// Gets all genres from a given item, folder, or the entire library.

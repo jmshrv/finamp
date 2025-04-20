@@ -208,6 +208,8 @@ final class _$JellyfinApi extends JellyfinApi {
     String? fields = defaultFields,
     String? searchTerm,
     String? filters,
+    bool? isFavorite,
+    String? excludeItemIds,
     int? startIndex,
     int? limit,
     bool? collapseMultiDiscAlbums,
@@ -228,6 +230,8 @@ final class _$JellyfinApi extends JellyfinApi {
       'Fields': fields,
       'SearchTerm': searchTerm,
       'Filters': filters,
+      'isFavorite': isFavorite,
+      'excludeItemIds': excludeItemIds,
       'StartIndex': startIndex,
       'Limit': limit,
       'CollapseBoxSetItems': collapseMultiDiscAlbums,
@@ -578,7 +582,7 @@ final class _$JellyfinApi extends JellyfinApi {
       'GenreIds': genreIds,
       'StartIndex': startIndex,
       'Limit': limit,
-      'IsFavorite': isFavorite,
+      'isFavorite': isFavorite,
     };
     final Request $request = Request(
       'GET',
@@ -609,6 +613,7 @@ final class _$JellyfinApi extends JellyfinApi {
     int? startIndex,
     int? limit,
     required String userId,
+    bool? isFavorite,
   }) async {
     final Uri $url = Uri.parse('/Artists/AlbumArtists');
     final Map<String, dynamic> $params = <String, dynamic>{
@@ -625,6 +630,7 @@ final class _$JellyfinApi extends JellyfinApi {
       'StartIndex': startIndex,
       'Limit': limit,
       'UserId': userId,
+      'isFavorite': isFavorite,
     };
     final Request $request = Request(
       'GET',
