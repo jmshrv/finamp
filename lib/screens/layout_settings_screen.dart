@@ -2,6 +2,7 @@ import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_tracks.d
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/customization_settings_screen.dart';
+import 'package:finamp/screens/genre_settings_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -58,10 +59,16 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
                 Navigator.of(context).pushNamed(LyricsSettingsScreen.routeName),
           ),
           ListTile(
-            leading: const Icon(TablerIcons.disc),
+            leading: const Icon(TablerIcons.vinyl),
             title: Text(AppLocalizations.of(context)!.albumScreen),
             onTap: () =>
                 Navigator.of(context).pushNamed(AlbumSettingsScreen.routeName),
+          ),
+          ListTile(
+            leading: const Icon(TablerIcons.disc),
+            title: Text(AppLocalizations.of(context)!.genreScreen),
+            onTap: () =>
+                Navigator.of(context).pushNamed(GenreSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.tab),

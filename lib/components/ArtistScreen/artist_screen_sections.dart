@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:finamp/components/AlbumScreen/album_screen_content.dart';
 import 'package:finamp/components/albums_sliver_list.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -81,7 +82,7 @@ class _TracksSectionState extends State<TracksSection> {
                     child: Row(
                       children: [
                         Text(
-                          "See All",
+                          AppLocalizations.of(context)!.seeAll,
                           style: TextStyle(
                             fontSize: 14,
                             color: Theme.of(context).colorScheme.primary,
@@ -194,7 +195,7 @@ class _AlbumSectionState extends State<AlbumSection> {
                     child: Row(
                       children: [
                         Text(
-                          "See All",
+                          AppLocalizations.of(context)!.seeAll,
                           style: TextStyle(
                             fontSize: 14,
                             color: Theme.of(context).colorScheme.primary,

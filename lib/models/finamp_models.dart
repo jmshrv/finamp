@@ -162,6 +162,8 @@ class DefaultSettings {
   static const audioFadeOutDuration = Duration(milliseconds: 0);
   static const audioFadeInDuration = Duration(milliseconds: 0);
   static const artistListType = ArtistType.albumartist;
+  static const genreCuratedItemSelectionTypeOnline = GenreCuratedItemSelectionType.randomWithFavorites;
+  static const genreCuratedItemSelectionTypeOffline = GenreCuratedItemSelectionType.randomWithFavorites;
 }
 
 @HiveType(typeId: 28)
@@ -283,7 +285,10 @@ class FinampSettings {
       this.autoOfflineListenerActive =
           DefaultSettings.autoOfflineListenerActive,
       this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
-      this.audioFadeInDuration = DefaultSettings.audioFadeInDuration});
+      this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
+      this.genreCuratedItemSelectionTypeOnline = DefaultSettings.genreCuratedItemSelectionTypeOnline,
+      this.genreCuratedItemSelectionTypeOffline = DefaultSettings.genreCuratedItemSelectionTypeOffline,
+      });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -596,6 +601,12 @@ class FinampSettings {
 
   @HiveField(96, defaultValue: DefaultSettings.enablePlayon)
   bool enablePlayon;
+
+  @HiveField(97, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeOnline)
+  GenreCuratedItemSelectionType genreCuratedItemSelectionTypeOnline;
+
+  @HiveField(98, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeOffline)
+  GenreCuratedItemSelectionType genreCuratedItemSelectionTypeOffline;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2842,5 +2853,87 @@ class FinampOutputRoute {
   @override
   String toString() {
     return jsonEncode(toJson());
+  }
+}
+
+@HiveType(typeId: 94)
+enum GenreCuratedItemSelectionType {
+  @HiveField(0)
+  mostPlayed,
+  @HiveField(1)
+  favoritesOnly,
+  @HiveField(2)
+  randomWithFavorites,
+  @HiveField(3)
+  randomAll;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String toLocalisedSectionTitle(BuildContext context, BaseItemDtoType baseType) =>
+      _toLocalisedSectionTitle(this, context, baseType);
+
+  String _humanReadableName(
+      GenreCuratedItemSelectionType genreCuratedItemSelectionType) {
+    switch (genreCuratedItemSelectionType) {
+      case GenreCuratedItemSelectionType.mostPlayed:
+        return "Most Played";
+      case GenreCuratedItemSelectionType.favoritesOnly:
+        return "Favorites and Likes only";
+      case GenreCuratedItemSelectionType.randomWithFavorites:
+        return "Random (preferring Favorites";
+      case GenreCuratedItemSelectionType.randomAll:
+        return "Random";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      GenreCuratedItemSelectionType genreCuratedItemSelectionType,
+      BuildContext context) {
+    switch (genreCuratedItemSelectionType) {
+      case GenreCuratedItemSelectionType.mostPlayed:
+        return AppLocalizations.of(context)!.mostPlayed;
+      case GenreCuratedItemSelectionType.favoritesOnly:
+        return AppLocalizations.of(context)!.favoritesOnly;
+      case GenreCuratedItemSelectionType.randomWithFavorites:
+        return AppLocalizations.of(context)!.randomWithFavorites;
+      case GenreCuratedItemSelectionType.randomAll:
+        return AppLocalizations.of(context)!.randomAll;
+    }
+  }
+
+  String _toLocalisedSectionTitle(
+      GenreCuratedItemSelectionType genreCuratedItemSelectionType,
+      BuildContext context,
+      BaseItemDtoType baseType) {
+    final loc = AppLocalizations.of(context)!;
+
+    String? getTitle(String track, String album, String artist) {
+      switch (baseType) {
+        case BaseItemDtoType.track:
+          return track;
+        case BaseItemDtoType.album:
+          return album;
+        case BaseItemDtoType.artist:
+          return artist;
+        default:
+          return null;
+      }
+    }
+
+    switch (genreCuratedItemSelectionType) {
+      case GenreCuratedItemSelectionType.mostPlayed:
+        return getTitle(loc.topTracks, loc.topAlbums, loc.topArtists) ?? "Unsupported Type";
+      case GenreCuratedItemSelectionType.favoritesOnly:
+        return getTitle(loc.favoriteTracks, loc.favoriteAlbums, loc.favoriteArtists) ?? "Unsupported Type";
+      case GenreCuratedItemSelectionType.randomWithFavorites:
+      case GenreCuratedItemSelectionType.randomAll:
+        return getTitle(loc.randomTracks, loc.randomAlbums, loc.randomArtists) ?? "Unsupported Type";
+    }
   }
 }

@@ -217,6 +217,8 @@
   "@settings": {},
   "offlineMode": "Offline Mode",
   "@offlineMode": {},
+  "onlineMode": "Online Mode",
+  "@onlineMode": {},
   "sortOrder": "Sort order",
   "@sortOrder": {},
   "sortBy": "Sort by",
@@ -1149,6 +1151,44 @@
   },
   "topTracks": "Top Tracks",
   "@topTracks": {},
+  "topAlbums": "Top Albums",
+  "@topAlbums": {},
+  "topArtists": "Top Artists",
+  "@topArtists": {},
+  "mostPlayedTracks": "Tracks (Most Plays)",
+  "@mostPlayedTracks": {},
+  "mostPlayedAlbums": "Albums (Most Plays)",
+  "@mostPlayedAlbums": {},
+  "mostPlayedArtists": "Artists (Most Plays)",
+  "@mostPlayedArtists": {},
+  "favoriteTracks": "Favorite Tracks",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "Favorite Albums",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "Favorite Artists",
+  "@favoriteArtists": {},
+  "randomTracks": "Tracks (Random Picks)",
+  "@randomTracks": {},
+  "randomAlbums": "Albums (Random Picks)",
+  "@randomAlbums": {},
+  "randomArtists": "Artists (Random Picks)",
+  "@randomArtists": {},
+  "mostPlayed": "Most Played",
+  "@mostPlayed": {},
+  "favoritesOnly": "Favorites and Likes only",
+  "@favoritesOnly": {},
+  "randomWithFavorites": "Random (preferring Favorites)",
+  "@randomWithFavorites": {},
+  "randomAll": "Random",
+  "@randomAll": {},
+  "genreItemCurationType": "Item Curation Type",
+  "@genreItemCurationType": {
+    "description": "Label for the setting that controls the item curation type on the genre screen."
+  },
+  "genreItemCurationTypeSubtitle": "Controls how tracks, albums and artists on the Genre Screen will get curated. In Offline Mode, \"Most Played\" is not available, so you can configure it independently from Online Mode.",
+  "@genreItemCurationTypeSubtitle": {
+    "description": "Description of the setting that controls the item curation type on the genre screen."
+  },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {
@@ -1908,6 +1948,10 @@
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
+  "seeAll": "See All",
+  "@seeAll": {
+    "description": ""
+  },
   "albumScreen": "Album Screen",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
@@ -1919,6 +1963,10 @@
   "showCoversOnAlbumScreenSubtitle": "Show album covers for each track separately on the album screen.",
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "genreScreen": "Genre Screen",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
   },
   "emptyTopTracksList": "You haven't listened to any track by this artist yet.",
   "@emptyTopTracksList": {

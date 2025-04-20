@@ -42,6 +42,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(FinampTranscodingCodecAdapter());
     registerAdapter(FinampTranscodingStreamingFormatAdapter());
     registerAdapter(FinampUserAdapter());
+    registerAdapter(GenreCuratedItemSelectionTypeAdapter());
     registerAdapter(HttpHeaderInfoAdapter());
     registerAdapter(ImageBlurHashesAdapter());
     registerAdapter(ItemSwipeActionsAdapter());

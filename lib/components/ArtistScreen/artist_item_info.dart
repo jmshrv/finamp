@@ -1,11 +1,11 @@
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../screens/artist_screen.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../icon_and_text.dart';
 
@@ -123,7 +123,7 @@ class _GenreIconAndText extends StatelessWidget {
         onTap: () => jellyfinApiHelper
             .getItemById(genres.first.id)
             .then((genre) => Navigator.of(context)
-                .pushNamed(ArtistScreen.routeName, arguments: genre)),
+                .pushNamed(GenreScreen.routeName, arguments: genre)),
         child: content,
       );
     }

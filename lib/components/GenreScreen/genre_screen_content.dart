@@ -15,7 +15,6 @@ import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/download_button.dart';
 import '../padded_custom_scrollview.dart';
-import '../ArtistScreen/artist_screen_content_flexible_space_bar.dart';
 
 class GenreScreenContent extends ConsumerStatefulWidget {
   const GenreScreenContent({
@@ -66,72 +65,259 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
   @override
   Widget build(BuildContext context) {
     final Future<List<List<BaseItemDto>?>> futures;
-    final Future<List<BaseItemDto>?> allTracks;
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
     var settings = FinampSettingsHelper.finampSettings;
+    List<BaseItemDto> allChildren = [];
+
+    final genreCuratedItemSelectionType = (isOffline)
+        ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeOffline)
+        : ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeOnline);
 
     // Get Items
     if (isOffline) {
-      // In Offline Mode
+      // Offline Mode
+        var artistInfoForType = (settings.artistListType == ArtistType.albumartist)
+            ? BaseItemDtoType.album
+            : BaseItemDtoType.track;
+
       futures = Future.wait([
-        // Top Tracks - Play count tracking is not implemented offline
-        Future.value(
-            <BaseItemDto>[]),
-        // Top Albums - Play count tracking is not implemented offline
-        Future.value(
-            <BaseItemDto>[]),
-        // Top Artists - Play count tracking is not implemented offline
-        Future.value(
-            <BaseItemDto>[]),
+        // Tracks
+        Future.sync(() async {
+          List<BaseItemDto>? fetched = [];
+          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
+            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
+              final List<DownloadStub> genreTracksFavorites =
+                await _downloadsService.getAllTracks(
+                  nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+                  onlyFavorites: settings.trackOfflineFavorites,
+                  genreFilter: widget.parent
+              );
+              var items = genreTracksFavorites.map((e) => e.baseItem).nonNulls.toList();
+              items = sortItems(items, SortBy.random, SortOrder.descending);
+              items = items.take(5).toList();
+              fetched.addAll(items);
+          }
+          if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly &&
+            fetched.length < 5) {
+            var remainingLimit = 5 - fetched.length;
+            final List<DownloadStub> genreTracks =
+              await _downloadsService.getAllTracks(
+                nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+                genreFilter: widget.parent
+            );
+            var items = genreTracks.map((e) => e.baseItem).nonNulls
+              .where((item) => !fetched.contains(item)).toList();
+            items = sortItems(items, SortBy.random, SortOrder.descending);
+            items = items.take(remainingLimit).toList();
+            fetched.addAll(items);
+          }
+          return fetched;
+        }),
+        // Albums
+        Future.sync(() async {
+          List<BaseItemDto>? fetched = [];
+          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
+            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
+              final List<DownloadStub> genreAlbumsFavorites =
+                await _downloadsService.getAllCollections(
+                  baseTypeFilter: BaseItemDtoType.album,
+                  fullyDownloaded: settings.onlyShowFullyDownloaded,
+                  onlyFavorites: settings.trackOfflineFavorites,
+                  genreFilter: widget.parent
+              );
+              var items = genreAlbumsFavorites.map((e) => e.baseItem).nonNulls.toList();
+              items = sortItems(items, SortBy.random, SortOrder.descending);
+              items = items.take(5).toList();
+              fetched.addAll(items);
+          }
+          if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly &&
+            fetched.length < 5) {
+            var remainingLimit = 5 - fetched.length;
+            final List<DownloadStub> genreAlbums =
+                await _downloadsService.getAllCollections(
+                  baseTypeFilter: BaseItemDtoType.album,
+                  fullyDownloaded: settings.onlyShowFullyDownloaded,
+                  genreFilter: widget.parent
+              );
+            var items = genreAlbums.map((e) => e.baseItem).nonNulls
+              .where((item) => !fetched.contains(item)).toList();
+            items = sortItems(items, SortBy.random, SortOrder.descending);
+            items = items.take(remainingLimit).toList();
+            fetched.addAll(items);
+          }
+          return fetched;
+        }),
+        // Artists
+        Future.sync(() async {
+          List<BaseItemDto>? fetched = [];
+          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
+            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
+              final List<DownloadStub> genreArtistsFavorites =
+                await _downloadsService.getAllCollections(
+                  baseTypeFilter: BaseItemDtoType.artist,
+                  fullyDownloaded: settings.onlyShowFullyDownloaded,
+                  onlyFavorites: settings.trackOfflineFavorites,
+                  infoForType: artistInfoForType,
+                  genreFilter: widget.parent
+              );
+              var items = genreArtistsFavorites.map((e) => e.baseItem).nonNulls.toList();
+              items = sortItems(items, SortBy.random, SortOrder.descending);
+              items = items.take(5).toList();
+              fetched.addAll(items);
+          }
+          if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly &&
+            fetched.length < 5) {
+            var remainingLimit = 5 - fetched.length;
+            final List<DownloadStub> genreArtists =
+                await _downloadsService.getAllCollections(
+                  baseTypeFilter: BaseItemDtoType.artist,
+                  fullyDownloaded: settings.onlyShowFullyDownloaded,
+                  infoForType: artistInfoForType,
+                  genreFilter: widget.parent
+              );
+            var items = genreArtists.map((e) => e.baseItem).nonNulls
+              .where((item) => !fetched.contains(item)).toList();
+            items = sortItems(items, SortBy.random, SortOrder.descending);
+            items = items.take(remainingLimit).toList();
+            fetched.addAll(items);
+          }
+          return fetched;
+        }),
       ]);
 
-      // Get All Tracks for Track Count and Playback
-      allTracks = Future.sync(() async {
-        // First fetch every album of the album artist or genre
-        final List<DownloadStub> allTracks =
-          await _downloadsService.getAllTracks(
-            // viewFilter: widget.view?.id,
-            nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-            onlyFavorites:
-                settings.onlyShowFavourites && settings.trackOfflineFavorites,
-            genreFilter: widget.parent
+      // Get All downloaded Tracks for Playback
+      Future.sync(() async {
+       final List<DownloadStub> allGenreTracks =
+              await _downloadsService.getAllTracks(
+                nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+                onlyFavorites:
+                    settings.onlyShowFavourites && settings.trackOfflineFavorites,
+                genreFilter: widget.parent
           );
-        var items = allTracks.map((e) => e.baseItem).nonNulls.toList();
+        // First fetch every album of the album artist or genre
+        var items = allGenreTracks.map((e) => e.baseItem).nonNulls.toList();
         items = sortItems(items, settings.tabSortBy[TabContentType.tracks],
         settings.tabSortOrder[TabContentType.tracks]);
         return items;
       });
     } else {
-      // In Online Mode
+      // Online Mode
       futures = Future.wait([
-        // Get Top Tracks
-        jellyfinApiHelper.getItems(
-          parentItem: widget.parent,
-          sortBy: "PlayCount,SortName",
-          sortOrder: "Descending",
-          limit: 5,
-          includeItemTypes: "Audio",
-        ),
-        // Get Top Albums
-        jellyfinApiHelper.getItems(
-            parentItem: widget.parent,
-            sortBy: "PlayCount,PremiereDate,SortName",
-            sortOrder: "Descending",
-            limit: 5,
-            includeItemTypes: "MusicAlbum"),
-        // Get Top Artists (either Album or Performing Artists, depending on setting)
-        jellyfinApiHelper.getItems(
-            genreFilter: widget.parent,
-            sortBy: "PlayCount,SortName",
-            sortOrder: "Descending",
-            //filters: "IsFavoriteOrLikes",
-            limit: 5,
-            includeItemTypes: "MusicArtist",
-            artistType: settings.artistListType),
+        // Tracks 
+        Future.sync(() async {
+          List<BaseItemDto>? fetched = [];
+          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed) {
+            fetched = await jellyfinApiHelper.getItems(
+              parentItem: widget.parent,
+              sortBy: "PlayCount,SortName",
+              sortOrder: "Descending",
+              limit: 5,
+              includeItemTypes: "Audio",
+            );
+          } else {
+            if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
+            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
+              fetched = await jellyfinApiHelper.getItems(
+                parentItem: widget.parent,
+                sortBy: "Random",
+                filters: "IsFavoriteOrLikes",
+                limit: 5,
+                includeItemTypes: "Audio",
+                );
+            }
+            if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly && 
+              fetched!.length < 5) {
+                var remainingLimit = 5 - fetched.length;
+                var randomTracks = await jellyfinApiHelper.getItems(
+                  parentItem: widget.parent,
+                  sortBy: "Random",
+                  limit: remainingLimit,
+                  includeItemTypes: "Audio",
+                );
+                fetched = [...fetched, ...randomTracks ?? []];
+            }
+          }
+          return fetched;
+        }),
+        // Albums
+        Future.sync(() async {
+          List<BaseItemDto>? fetched = [];
+          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed) {
+            fetched = await jellyfinApiHelper.getItems(
+              parentItem: widget.parent,
+              sortBy: "PlayCount,PremiereDate,SortName",
+              sortOrder: "Descending",
+              limit: 5,
+              includeItemTypes: "MusicAlbum",
+            );
+          } else {
+            if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
+            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
+              fetched = await jellyfinApiHelper.getItems(
+                parentItem: widget.parent,
+                sortBy: "Random",
+                filters: "IsFavoriteOrLikes",
+                limit: 5,
+                includeItemTypes: "MusicAlbum",
+              );
+            }
+            if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly) {
+              if (fetched!.length < 5) {
+                var remainingLimit = 5 - fetched.length;
+                var randomAlbums = await jellyfinApiHelper.getItems(
+                  parentItem: widget.parent,
+                  sortBy: "Random",
+                  limit: remainingLimit,
+                  includeItemTypes: "MusicAlbum",
+                );
+                fetched = [...fetched, ...randomAlbums ?? []];
+              }
+            }
+          }
+          return fetched;
+        }),
+        // Artists
+        Future.sync(() async {
+          List<BaseItemDto>? fetched = [];
+          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed) {
+            fetched = await jellyfinApiHelper.getItems(
+              genreFilter: widget.parent,
+              sortBy: "PlayCount,SortName",
+              sortOrder: "Descending",
+              limit: 5,
+              includeItemTypes: "MusicArtist",
+              artistType: settings.artistListType,
+            );
+          } else {
+            if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
+            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
+              fetched = await jellyfinApiHelper.getItems(
+                genreFilter: widget.parent,
+                sortBy: "Random",
+                filters: "IsFavoriteOrLikes",
+                limit: 5,
+                includeItemTypes: "MusicArtist",
+              );
+            }
+            if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly) {
+              if (fetched!.length < 5) {
+                var remainingLimit = 5 - fetched.length;
+                var randomArtists = await jellyfinApiHelper.getItems(
+                  genreFilter: widget.parent,
+                  sortBy: "Random",
+                  limit: remainingLimit,
+                  includeItemTypes: "MusicArtist",
+                );
+                fetched = [...fetched, ...randomArtists ?? []];
+              }
+            }
+          }
+          return fetched;
+        }),
       ]);
 
-      // Get All Tracks for Track Count and Playback
-      allTracks = Future.sync(() async {
+      // Get All Tracks for Download Sync Button and Playback
+      Future.sync(() async {
         // Fetch every genre track
         return await jellyfinApiHelper.getItems(
           parentItem: widget.parent,
@@ -149,11 +335,9 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
           var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
           var topAlbums = snapshot.data?.elementAtOrNull(1) ?? [];
           var topArtists = snapshot.data?.elementAtOrNull(2) ?? [];
+          var allTracks = snapshot.data?.elementAtOrNull(3) ?? [];
 
-          var topTracks = tracks
-              .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
-              .take(5)
-              .toList();
+          allChildren = [...allTracks];
 
           return PaddedCustomScrollview(slivers: <Widget>[
             SliverAppBar(
@@ -166,51 +350,41 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                       item: DownloadStub.fromItem(
                           item: widget.parent,
                           type: DownloadItemType.collection),
-                      children: topAlbums) // This is not right as well!!!
+                      children: (allChildren.isNotEmpty) ? allChildren : null)
               ],
             ),
             if (!_isLoading)
-              TracksSection(
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                sliver: TracksSection(
                   parent: widget.parent,
-                  tracks: topTracks,
+                  tracks: tracks,
                   childrenForQueue: Future.value(tracks),
-                  tracksText: AppLocalizations.of(context)!.topTracks,
+                  tracksText: genreCuratedItemSelectionType.toLocalisedSectionTitle(context, BaseItemDtoType.track),
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.tracks),
+                ),
               ),
             if (!_isLoading)
-              AlbumSection(
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                sliver: AlbumSection(
                   parent: widget.parent,
-                  albumsText: "Top Albums",
+                  albumsText: genreCuratedItemSelectionType.toLocalisedSectionTitle(context, BaseItemDtoType.album),
                   albums: topAlbums,
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.albums),
+                ),
               ),
             if (!_isLoading)
-              AlbumSection(
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                sliver: AlbumSection(
                   parent: widget.parent,
-                  albumsText: "Top Artists",
+                  albumsText: genreCuratedItemSelectionType.toLocalisedSectionTitle(context, BaseItemDtoType.artist),
                   albums: topArtists,
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.artists),
                   genreFilter: widget.parent,
-              ),
-            /*if (!_isLoading && (albums.isEmpty && appearsOnAlbums.isEmpty))
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(6, 12, 6,
-                    0),
-                sliver: SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 2, vertical: 12),
-                    child: Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.emptyFilteredListTitle,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
                 ),
               ),
-              */
             if (_isLoading)
               SliverToBoxAdapter(
                 child: Padding(

@@ -231,6 +231,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[86] == null ? Duration.zero : fields[86] as Duration,
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
+      genreCuratedItemSelectionTypeOnline: fields[97] == null
+          ? GenreCuratedItemSelectionType.randomWithFavorites
+          : fields[97] as GenreCuratedItemSelectionType,
+      genreCuratedItemSelectionTypeOffline: fields[98] == null
+          ? GenreCuratedItemSelectionType.randomWithFavorites
+          : fields[98] as GenreCuratedItemSelectionType,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -241,7 +247,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(91)
+      ..writeByte(93)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -423,7 +429,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(95)
       ..write(obj.playOnReconnectionDelay)
       ..writeByte(96)
-      ..write(obj.enablePlayon);
+      ..write(obj.enablePlayon)
+      ..writeByte(97)
+      ..write(obj.genreCuratedItemSelectionTypeOnline)
+      ..writeByte(98)
+      ..write(obj.genreCuratedItemSelectionTypeOffline);
   }
 
   @override
@@ -2250,6 +2260,52 @@ class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ArtistTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class GenreCuratedItemSelectionTypeAdapter
+    extends TypeAdapter<GenreCuratedItemSelectionType> {
+  @override
+  final int typeId = 94;
+
+  @override
+  GenreCuratedItemSelectionType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return GenreCuratedItemSelectionType.mostPlayed;
+      case 1:
+        return GenreCuratedItemSelectionType.favoritesOnly;
+      case 2:
+        return GenreCuratedItemSelectionType.randomWithFavorites;
+      case 3:
+        return GenreCuratedItemSelectionType.randomAll;
+      default:
+        return GenreCuratedItemSelectionType.mostPlayed;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, GenreCuratedItemSelectionType obj) {
+    switch (obj) {
+      case GenreCuratedItemSelectionType.mostPlayed:
+        writer.writeByte(0);
+      case GenreCuratedItemSelectionType.favoritesOnly:
+        writer.writeByte(1);
+      case GenreCuratedItemSelectionType.randomWithFavorites:
+        writer.writeByte(2);
+      case GenreCuratedItemSelectionType.randomAll:
+        writer.writeByte(3);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GenreCuratedItemSelectionTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
