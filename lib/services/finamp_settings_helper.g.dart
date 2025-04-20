@@ -680,20 +680,11 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setGenreCuratedItemSelectionTypeOnline(
-      GenreCuratedItemSelectionType newGenreCuratedItemSelectionTypeOnline) {
+  static void setGenreCuratedItemSelectionType(
+      GenreCuratedItemSelectionType newGenreCuratedItemSelectionType) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.genreCuratedItemSelectionTypeOnline =
-        newGenreCuratedItemSelectionTypeOnline;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setGenreCuratedItemSelectionTypeOffline(
-      GenreCuratedItemSelectionType newGenreCuratedItemSelectionTypeOffline) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.genreCuratedItemSelectionTypeOffline =
-        newGenreCuratedItemSelectionTypeOffline;
+    finampSettingsTemp.genreCuratedItemSelectionType =
+        newGenreCuratedItemSelectionType;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -928,11 +919,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get enablePlayon =>
       finampSettingsProvider.select((value) => value.requireValue.enablePlayon);
   ProviderListenable<GenreCuratedItemSelectionType>
-      get genreCuratedItemSelectionTypeOnline => finampSettingsProvider.select(
-          (value) => value.requireValue.genreCuratedItemSelectionTypeOnline);
-  ProviderListenable<GenreCuratedItemSelectionType>
-      get genreCuratedItemSelectionTypeOffline => finampSettingsProvider.select(
-          (value) => value.requireValue.genreCuratedItemSelectionTypeOffline);
+      get genreCuratedItemSelectionType => finampSettingsProvider
+          .select((value) => value.requireValue.genreCuratedItemSelectionType);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

@@ -162,8 +162,7 @@ class DefaultSettings {
   static const audioFadeOutDuration = Duration(milliseconds: 0);
   static const audioFadeInDuration = Duration(milliseconds: 0);
   static const artistListType = ArtistType.albumartist;
-  static const genreCuratedItemSelectionTypeOnline = GenreCuratedItemSelectionType.randomWithFavorites;
-  static const genreCuratedItemSelectionTypeOffline = GenreCuratedItemSelectionType.randomWithFavorites;
+  static const genreCuratedItemSelectionType = GenreCuratedItemSelectionType.mostPlayed;
 }
 
 @HiveType(typeId: 28)
@@ -286,8 +285,7 @@ class FinampSettings {
           DefaultSettings.autoOfflineListenerActive,
       this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
       this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
-      this.genreCuratedItemSelectionTypeOnline = DefaultSettings.genreCuratedItemSelectionTypeOnline,
-      this.genreCuratedItemSelectionTypeOffline = DefaultSettings.genreCuratedItemSelectionTypeOffline,
+      this.genreCuratedItemSelectionType = DefaultSettings.genreCuratedItemSelectionType,
       });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -602,11 +600,9 @@ class FinampSettings {
   @HiveField(96, defaultValue: DefaultSettings.enablePlayon)
   bool enablePlayon;
 
-  @HiveField(97, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeOnline)
-  GenreCuratedItemSelectionType genreCuratedItemSelectionTypeOnline;
+  @HiveField(97, defaultValue: DefaultSettings.genreCuratedItemSelectionType)
+  GenreCuratedItemSelectionType genreCuratedItemSelectionType;
 
-  @HiveField(98, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeOffline)
-  GenreCuratedItemSelectionType genreCuratedItemSelectionTypeOffline;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2861,11 +2857,15 @@ enum GenreCuratedItemSelectionType {
   @HiveField(0)
   mostPlayed,
   @HiveField(1)
-  favoritesOnly,
+  randomFavoritesFirst,
   @HiveField(2)
-  randomWithFavorites,
+  favorites,
   @HiveField(3)
-  randomAll;
+  random,
+  @HiveField(4)
+  latestReleases,
+  @HiveField(5)
+  recentlyAdded;
 
   /// Human-readable version of this enum.
   @override
@@ -2883,12 +2883,16 @@ enum GenreCuratedItemSelectionType {
     switch (genreCuratedItemSelectionType) {
       case GenreCuratedItemSelectionType.mostPlayed:
         return "Most Played";
-      case GenreCuratedItemSelectionType.favoritesOnly:
-        return "Random Favorites only";
-      case GenreCuratedItemSelectionType.randomWithFavorites:
-        return "Random (preferring Favorites)";
-      case GenreCuratedItemSelectionType.randomAll:
+      case GenreCuratedItemSelectionType.randomFavoritesFirst:
+        return "Random (Favorites First)";        
+      case GenreCuratedItemSelectionType.favorites:
+        return "Favorites";
+      case GenreCuratedItemSelectionType.random:
         return "Random";
+      case GenreCuratedItemSelectionType.latestReleases:
+        return "Latest Releases";
+      case GenreCuratedItemSelectionType.recentlyAdded:
+        return "Recently Added";
     }
   }
 
@@ -2898,12 +2902,16 @@ enum GenreCuratedItemSelectionType {
     switch (genreCuratedItemSelectionType) {
       case GenreCuratedItemSelectionType.mostPlayed:
         return AppLocalizations.of(context)!.mostPlayed;
-      case GenreCuratedItemSelectionType.favoritesOnly:
-        return AppLocalizations.of(context)!.favoritesOnly;
-      case GenreCuratedItemSelectionType.randomWithFavorites:
-        return AppLocalizations.of(context)!.randomWithFavorites;
-      case GenreCuratedItemSelectionType.randomAll:
-        return AppLocalizations.of(context)!.randomAll;
+      case GenreCuratedItemSelectionType.randomFavoritesFirst:
+        return AppLocalizations.of(context)!.randomFavoritesFirst;        
+      case GenreCuratedItemSelectionType.favorites:
+        return AppLocalizations.of(context)!.favorites;
+      case GenreCuratedItemSelectionType.random:
+        return AppLocalizations.of(context)!.random;
+      case GenreCuratedItemSelectionType.latestReleases:
+        return AppLocalizations.of(context)!.latestReleases;
+      case GenreCuratedItemSelectionType.recentlyAdded:
+        return AppLocalizations.of(context)!.recentlyAdded;
     }
   }
 
@@ -2929,11 +2937,14 @@ enum GenreCuratedItemSelectionType {
     switch (genreCuratedItemSelectionType) {
       case GenreCuratedItemSelectionType.mostPlayed:
         return getTitle(loc.topTracks, loc.topAlbums, loc.topArtists) ?? "Unsupported Type";
-      case GenreCuratedItemSelectionType.favoritesOnly:
+      case GenreCuratedItemSelectionType.recentlyAdded:
+      case GenreCuratedItemSelectionType.latestReleases:
+        return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
+      case GenreCuratedItemSelectionType.favorites:
         return getTitle(loc.favoriteTracks, loc.favoriteAlbums, loc.favoriteArtists) ?? "Unsupported Type";
-      case GenreCuratedItemSelectionType.randomWithFavorites:
-      case GenreCuratedItemSelectionType.randomAll:
-        return getTitle(loc.randomTracks, loc.randomAlbums, loc.randomArtists) ?? "Unsupported Type";
+      case GenreCuratedItemSelectionType.randomFavoritesFirst:
+      case GenreCuratedItemSelectionType.random:
+        return getTitle(loc.tracks, loc.albums, loc.artists) ?? "Unsupported Type";
     }
   }
 }

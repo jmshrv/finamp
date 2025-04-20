@@ -231,12 +231,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[86] == null ? Duration.zero : fields[86] as Duration,
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
-      genreCuratedItemSelectionTypeOnline: fields[97] == null
-          ? GenreCuratedItemSelectionType.randomWithFavorites
+      genreCuratedItemSelectionType: fields[97] == null
+          ? GenreCuratedItemSelectionType.mostPlayed
           : fields[97] as GenreCuratedItemSelectionType,
-      genreCuratedItemSelectionTypeOffline: fields[98] == null
-          ? GenreCuratedItemSelectionType.randomWithFavorites
-          : fields[98] as GenreCuratedItemSelectionType,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -247,7 +244,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(93)
+      ..writeByte(92)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -431,9 +428,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(96)
       ..write(obj.enablePlayon)
       ..writeByte(97)
-      ..write(obj.genreCuratedItemSelectionTypeOnline)
-      ..writeByte(98)
-      ..write(obj.genreCuratedItemSelectionTypeOffline);
+      ..write(obj.genreCuratedItemSelectionType);
   }
 
   @override
@@ -2275,11 +2270,15 @@ class GenreCuratedItemSelectionTypeAdapter
       case 0:
         return GenreCuratedItemSelectionType.mostPlayed;
       case 1:
-        return GenreCuratedItemSelectionType.favoritesOnly;
+        return GenreCuratedItemSelectionType.randomFavoritesFirst;
       case 2:
-        return GenreCuratedItemSelectionType.randomWithFavorites;
+        return GenreCuratedItemSelectionType.favorites;
       case 3:
-        return GenreCuratedItemSelectionType.randomAll;
+        return GenreCuratedItemSelectionType.random;
+      case 4:
+        return GenreCuratedItemSelectionType.recentlyAdded;
+      case 5:
+        return GenreCuratedItemSelectionType.latestReleases;
       default:
         return GenreCuratedItemSelectionType.mostPlayed;
     }
@@ -2290,12 +2289,16 @@ class GenreCuratedItemSelectionTypeAdapter
     switch (obj) {
       case GenreCuratedItemSelectionType.mostPlayed:
         writer.writeByte(0);
-      case GenreCuratedItemSelectionType.favoritesOnly:
+      case GenreCuratedItemSelectionType.randomFavoritesFirst:
         writer.writeByte(1);
-      case GenreCuratedItemSelectionType.randomWithFavorites:
+      case GenreCuratedItemSelectionType.favorites:
         writer.writeByte(2);
-      case GenreCuratedItemSelectionType.randomAll:
+      case GenreCuratedItemSelectionType.random:
         writer.writeByte(3);
+      case GenreCuratedItemSelectionType.recentlyAdded:
+        writer.writeByte(4);
+      case GenreCuratedItemSelectionType.latestReleases:
+        writer.writeByte(5);
     }
   }
 

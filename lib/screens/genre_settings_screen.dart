@@ -32,17 +32,17 @@ class _GenreSettingsScreenState extends State<GenreSettingsScreen> {
               title: Text(AppLocalizations.of(context)!.genreItemCurationType),
               subtitle: Text(AppLocalizations.of(context)!.genreItemCurationTypeSubtitle),
             ),
-            const SizedBox(height: 8),
+            /*const SizedBox(height: 8),
             const GenreCuratedItemsSelectionTypeSelector(isOffline: false),
             const SizedBox(height: 8),
-            const GenreCuratedItemsSelectionTypeSelector(isOffline: true),
+            const GenreCuratedItemsSelectionTypeSelector(isOffline: true),*/
           ],
         ),
       ),
     );
   }
 }
-
+/*
 class GenreCuratedItemsSelectionTypeSelector extends ConsumerWidget {
   const GenreCuratedItemsSelectionTypeSelector({
     super.key,
@@ -98,3 +98,4 @@ class GenreCuratedItemsSelectionTypeSelector extends ConsumerWidget {
   }
 }
 
+*/
