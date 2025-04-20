@@ -59,13 +59,13 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
                 Navigator.of(context).pushNamed(LyricsSettingsScreen.routeName),
           ),
           ListTile(
-            leading: const Icon(TablerIcons.vinyl),
+            leading: const Icon(TablerIcons.disc),
             title: Text(AppLocalizations.of(context)!.albumScreen),
             onTap: () =>
                 Navigator.of(context).pushNamed(AlbumSettingsScreen.routeName),
           ),
           ListTile(
-            leading: const Icon(TablerIcons.disc),
+            leading: const Icon(TablerIcons.color_swatch),
             title: Text(AppLocalizations.of(context)!.genreScreen),
             onTap: () =>
                 Navigator.of(context).pushNamed(GenreSettingsScreen.routeName),
