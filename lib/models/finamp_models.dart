@@ -2884,9 +2884,9 @@ enum GenreCuratedItemSelectionType {
       case GenreCuratedItemSelectionType.mostPlayed:
         return "Most Played";
       case GenreCuratedItemSelectionType.favoritesOnly:
-        return "Favorites and Likes only";
+        return "Random Favorites only";
       case GenreCuratedItemSelectionType.randomWithFavorites:
-        return "Random (preferring Favorites";
+        return "Random (preferring Favorites)";
       case GenreCuratedItemSelectionType.randomAll:
         return "Random";
     }

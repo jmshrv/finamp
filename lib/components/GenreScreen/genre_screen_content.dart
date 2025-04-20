@@ -59,7 +59,6 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         ),
       ),
     );
-
   }
 
   @override
@@ -73,6 +72,112 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeOffline)
         : ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeOnline);
 
+    Future<List<BaseItemDto>?> getCuratedItemsOnline({
+      required GenreCuratedItemSelectionType genreCuratedItemSelectionType,
+      required String mostPlayedSortBy,
+      required BaseItemDtoType includeItemType,
+      ArtistType? artistListType,
+    }) async {
+      List<BaseItemDto>? fetched = [];
+      if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed) {
+        var mostPlayedItems = await jellyfinApiHelper.getItems(
+          parentItem: (includeItemType == BaseItemDtoType.artist) 
+              ? null : widget.parent,
+          genreFilter: (includeItemType == BaseItemDtoType.artist)
+              ? widget.parent : null, 
+          sortBy: mostPlayedSortBy,
+          sortOrder: "Descending",
+          limit: 5,
+          includeItemTypes: includeItemType.idString,
+          artistType: (includeItemType == BaseItemDtoType.artist)
+              ? artistListType : null,
+        );
+        fetched.addAll(mostPlayedItems ?? []);
+      } else {
+        if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
+            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
+          var favoriteItems = await jellyfinApiHelper.getItems(
+            parentItem: (includeItemType == BaseItemDtoType.artist) 
+                ? null : widget.parent,
+            genreFilter: (includeItemType == BaseItemDtoType.artist)
+                ? widget.parent : null, 
+            sortBy: "Random",
+            isFavorite: true,
+            limit: 5,
+            includeItemTypes: includeItemType.idString,
+            artistType: (includeItemType == BaseItemDtoType.artist)
+              ? artistListType : null,
+          );
+          fetched.addAll(favoriteItems ?? []);
+        }
+        if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly &&
+            fetched.length < 5) {
+          var remainingLimit = 5 - fetched.length;
+          var randomItems = await jellyfinApiHelper.getItems(
+            parentItem: (includeItemType == BaseItemDtoType.artist) 
+                ? null : widget.parent,
+            genreFilter: (includeItemType == BaseItemDtoType.artist)
+                ? widget.parent : null, 
+            sortBy: "Random",
+            isFavorite: false,
+            limit: remainingLimit,
+            includeItemTypes: includeItemType.idString,
+            artistType: (includeItemType == BaseItemDtoType.artist)
+              ? artistListType : null,
+          );
+          fetched.addAll(randomItems ?? []);
+        }
+      }
+      return fetched;
+    }
+
+    Future<List<BaseItemDto>?> getCuratedItemsOffline({
+      required GenreCuratedItemSelectionType genreCuratedItemSelectionType,
+      required BaseItemDtoType baseItemType,
+      BaseItemDtoType? artistInfoForType,
+    }) async {
+      List<BaseItemDto>? fetched = [];
+      if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
+        genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
+          final List<DownloadStub> genreItemsFavorites = (baseItemType == BaseItemDtoType.track)
+            ? await _downloadsService.getAllTracks(
+                  nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+                  onlyFavorites: settings.trackOfflineFavorites,
+                  genreFilter: widget.parent)
+            : await _downloadsService.getAllCollections(
+                  baseTypeFilter: baseItemType,
+                  fullyDownloaded: settings.onlyShowFullyDownloaded,
+                  onlyFavorites: settings.trackOfflineFavorites,
+                  infoForType: (baseItemType == BaseItemDtoType.artist)
+                    ? artistInfoForType : null,
+                  genreFilter: widget.parent);
+          var items = genreItemsFavorites.map((e) => e.baseItem).nonNulls.toList();
+          items = sortItems(items, SortBy.random, SortOrder.descending);
+          items = items.take(5).toList();
+          fetched.addAll(items);
+      }
+      if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly &&
+        fetched.length < 5) {
+        var remainingLimit = 5 - fetched.length;
+        final List<DownloadStub> genreItems = (baseItemType == BaseItemDtoType.track)
+          ? await _downloadsService.getAllTracks(
+                nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+                genreFilter: widget.parent)
+          : await _downloadsService.getAllCollections(
+                baseTypeFilter: baseItemType,
+                fullyDownloaded: settings.onlyShowFullyDownloaded,
+                infoForType: (baseItemType == BaseItemDtoType.artist)
+                    ? artistInfoForType : null,
+                genreFilter: widget.parent);
+        var items = genreItems.map((e) => e.baseItem).nonNulls
+          .where((item) => !fetched.contains(item)).toList();
+        items = sortItems(items, SortBy.random, SortOrder.descending);
+        items = items.take(remainingLimit).toList();
+        fetched.addAll(items);
+      }
+      return fetched;
+    }
+
     // Get Items
     if (isOffline) {
       // Offline Mode
@@ -82,119 +187,29 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
 
       futures = Future.wait([
         // Tracks
-        Future.sync(() async {
-          List<BaseItemDto>? fetched = [];
-          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
-            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
-              final List<DownloadStub> genreTracksFavorites =
-                await _downloadsService.getAllTracks(
-                  nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-                  onlyFavorites: settings.trackOfflineFavorites,
-                  genreFilter: widget.parent
-              );
-              var items = genreTracksFavorites.map((e) => e.baseItem).nonNulls.toList();
-              items = sortItems(items, SortBy.random, SortOrder.descending);
-              items = items.take(5).toList();
-              fetched.addAll(items);
-          }
-          if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly &&
-            fetched.length < 5) {
-            var remainingLimit = 5 - fetched.length;
-            final List<DownloadStub> genreTracks =
-              await _downloadsService.getAllTracks(
-                nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-                genreFilter: widget.parent
-            );
-            var items = genreTracks.map((e) => e.baseItem).nonNulls
-              .where((item) => !fetched.contains(item)).toList();
-            items = sortItems(items, SortBy.random, SortOrder.descending);
-            items = items.take(remainingLimit).toList();
-            fetched.addAll(items);
-          }
-          return fetched;
-        }),
+        getCuratedItemsOffline(
+          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+          baseItemType: BaseItemDtoType.track,
+        ),
         // Albums
-        Future.sync(() async {
-          List<BaseItemDto>? fetched = [];
-          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
-            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
-              final List<DownloadStub> genreAlbumsFavorites =
-                await _downloadsService.getAllCollections(
-                  baseTypeFilter: BaseItemDtoType.album,
-                  fullyDownloaded: settings.onlyShowFullyDownloaded,
-                  onlyFavorites: settings.trackOfflineFavorites,
-                  genreFilter: widget.parent
-              );
-              var items = genreAlbumsFavorites.map((e) => e.baseItem).nonNulls.toList();
-              items = sortItems(items, SortBy.random, SortOrder.descending);
-              items = items.take(5).toList();
-              fetched.addAll(items);
-          }
-          if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly &&
-            fetched.length < 5) {
-            var remainingLimit = 5 - fetched.length;
-            final List<DownloadStub> genreAlbums =
-                await _downloadsService.getAllCollections(
-                  baseTypeFilter: BaseItemDtoType.album,
-                  fullyDownloaded: settings.onlyShowFullyDownloaded,
-                  genreFilter: widget.parent
-              );
-            var items = genreAlbums.map((e) => e.baseItem).nonNulls
-              .where((item) => !fetched.contains(item)).toList();
-            items = sortItems(items, SortBy.random, SortOrder.descending);
-            items = items.take(remainingLimit).toList();
-            fetched.addAll(items);
-          }
-          return fetched;
-        }),
+        getCuratedItemsOffline(
+          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+          baseItemType: BaseItemDtoType.album,
+        ),
         // Artists
-        Future.sync(() async {
-          List<BaseItemDto>? fetched = [];
-          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
-            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
-              final List<DownloadStub> genreArtistsFavorites =
-                await _downloadsService.getAllCollections(
-                  baseTypeFilter: BaseItemDtoType.artist,
-                  fullyDownloaded: settings.onlyShowFullyDownloaded,
-                  onlyFavorites: settings.trackOfflineFavorites,
-                  infoForType: artistInfoForType,
-                  genreFilter: widget.parent
-              );
-              var items = genreArtistsFavorites.map((e) => e.baseItem).nonNulls.toList();
-              items = sortItems(items, SortBy.random, SortOrder.descending);
-              items = items.take(5).toList();
-              fetched.addAll(items);
-          }
-          if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly &&
-            fetched.length < 5) {
-            var remainingLimit = 5 - fetched.length;
-            final List<DownloadStub> genreArtists =
-                await _downloadsService.getAllCollections(
-                  baseTypeFilter: BaseItemDtoType.artist,
-                  fullyDownloaded: settings.onlyShowFullyDownloaded,
-                  infoForType: artistInfoForType,
-                  genreFilter: widget.parent
-              );
-            var items = genreArtists.map((e) => e.baseItem).nonNulls
-              .where((item) => !fetched.contains(item)).toList();
-            items = sortItems(items, SortBy.random, SortOrder.descending);
-            items = items.take(remainingLimit).toList();
-            fetched.addAll(items);
-          }
-          return fetched;
-        }),
+        getCuratedItemsOffline(
+          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+          baseItemType: BaseItemDtoType.artist,
+          artistInfoForType: artistInfoForType
+        ),
       ]);
-
       // Get All downloaded Tracks for Playback
       Future.sync(() async {
-       final List<DownloadStub> allGenreTracks =
+        final List<DownloadStub> allGenreTracks =
               await _downloadsService.getAllTracks(
                 nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-                onlyFavorites:
-                    settings.onlyShowFavourites && settings.trackOfflineFavorites,
                 genreFilter: widget.parent
           );
-        // First fetch every album of the album artist or genre
         var items = allGenreTracks.map((e) => e.baseItem).nonNulls.toList();
         items = sortItems(items, settings.tabSortBy[TabContentType.tracks],
         settings.tabSortOrder[TabContentType.tracks]);
@@ -204,118 +219,25 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
       // Online Mode
       futures = Future.wait([
         // Tracks 
-        Future.sync(() async {
-          List<BaseItemDto>? fetched = [];
-          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed) {
-            fetched = await jellyfinApiHelper.getItems(
-              parentItem: widget.parent,
-              sortBy: "PlayCount,SortName",
-              sortOrder: "Descending",
-              limit: 5,
-              includeItemTypes: "Audio",
-            );
-          } else {
-            if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
-            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
-              fetched = await jellyfinApiHelper.getItems(
-                parentItem: widget.parent,
-                sortBy: "Random",
-                filters: "IsFavoriteOrLikes",
-                limit: 5,
-                includeItemTypes: "Audio",
-                );
-            }
-            if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly && 
-              fetched!.length < 5) {
-                var remainingLimit = 5 - fetched.length;
-                var randomTracks = await jellyfinApiHelper.getItems(
-                  parentItem: widget.parent,
-                  sortBy: "Random",
-                  limit: remainingLimit,
-                  includeItemTypes: "Audio",
-                );
-                fetched = [...fetched, ...randomTracks ?? []];
-            }
-          }
-          return fetched;
-        }),
+        getCuratedItemsOnline(
+          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+          mostPlayedSortBy: "PlayCount,SortName",
+          includeItemType: BaseItemDtoType.track,
+        ),
         // Albums
-        Future.sync(() async {
-          List<BaseItemDto>? fetched = [];
-          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed) {
-            fetched = await jellyfinApiHelper.getItems(
-              parentItem: widget.parent,
-              sortBy: "PlayCount,PremiereDate,SortName",
-              sortOrder: "Descending",
-              limit: 5,
-              includeItemTypes: "MusicAlbum",
-            );
-          } else {
-            if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
-            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
-              fetched = await jellyfinApiHelper.getItems(
-                parentItem: widget.parent,
-                sortBy: "Random",
-                filters: "IsFavoriteOrLikes",
-                limit: 5,
-                includeItemTypes: "MusicAlbum",
-              );
-            }
-            if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly) {
-              if (fetched!.length < 5) {
-                var remainingLimit = 5 - fetched.length;
-                var randomAlbums = await jellyfinApiHelper.getItems(
-                  parentItem: widget.parent,
-                  sortBy: "Random",
-                  limit: remainingLimit,
-                  includeItemTypes: "MusicAlbum",
-                );
-                fetched = [...fetched, ...randomAlbums ?? []];
-              }
-            }
-          }
-          return fetched;
-        }),
+        getCuratedItemsOnline(
+          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+          mostPlayedSortBy: "PlayCount,PremiereDate,SortName",
+          includeItemType: BaseItemDtoType.album,
+        ),
         // Artists
-        Future.sync(() async {
-          List<BaseItemDto>? fetched = [];
-          if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed) {
-            fetched = await jellyfinApiHelper.getItems(
-              genreFilter: widget.parent,
-              sortBy: "PlayCount,SortName",
-              sortOrder: "Descending",
-              limit: 5,
-              includeItemTypes: "MusicArtist",
-              artistType: settings.artistListType,
-            );
-          } else {
-            if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomWithFavorites ||
-            genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favoritesOnly) {
-              fetched = await jellyfinApiHelper.getItems(
-                genreFilter: widget.parent,
-                sortBy: "Random",
-                filters: "IsFavoriteOrLikes",
-                limit: 5,
-                includeItemTypes: "MusicArtist",
-              );
-            }
-            if (genreCuratedItemSelectionType != GenreCuratedItemSelectionType.favoritesOnly) {
-              if (fetched!.length < 5) {
-                var remainingLimit = 5 - fetched.length;
-                var randomArtists = await jellyfinApiHelper.getItems(
-                  genreFilter: widget.parent,
-                  sortBy: "Random",
-                  limit: remainingLimit,
-                  includeItemTypes: "MusicArtist",
-                );
-                fetched = [...fetched, ...randomArtists ?? []];
-              }
-            }
-          }
-          return fetched;
-        }),
+        getCuratedItemsOnline(
+          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+          mostPlayedSortBy: "PlayCount,SortName",
+          includeItemType: BaseItemDtoType.artist,
+          artistListType: settings.artistListType,
+        ),
       ]);
-
       // Get All Tracks for Download Sync Button and Playback
       Future.sync(() async {
         // Fetch every genre track
@@ -395,7 +317,6 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                 ),
               )
           ]);
-        });
+        }); 
   }
-
 }

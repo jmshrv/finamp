@@ -1175,7 +1175,7 @@
   "@randomArtists": {},
   "mostPlayed": "Most Played",
   "@mostPlayed": {},
-  "favoritesOnly": "Favorites and Likes only",
+  "favoritesOnly": "Random Favorites only",
   "@favoritesOnly": {},
   "randomWithFavorites": "Random (preferring Favorites)",
   "@randomWithFavorites": {},
