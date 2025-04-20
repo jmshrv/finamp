@@ -157,8 +157,12 @@ TODO
 
 
 # Shoutout
-- Thanks to all the [Contributors and Maintainer](https://github.com/jmshrv/finamp/graphs/contributors) who helped to make, fix and improve Finamp! Without you Finamp wouldn't be Finamp. ❤️
+- Thanks to all the [Contributors and Maintainer](https://github.com/jmshrv/finamp/graphs/contributors) (see bellow) who helped to make, fix and improve Finamp! Without you Finamp wouldn't be Finamp. ❤️
 - Thanks to the [Jellyfin Contributors](https://jellyfin.org/contribute/) without whom Finamp wouldn't exists in the first place and thanks for making self-hosting and privacy easier!
 - Thanks to all the Developers who created and maintain packages Finamp uses!
 - And thank **you** for using Finamp!
 
+# Contributers 
+<a href="https://github.com/jmshrv/finamp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=jmshrv/finamp" width="100%"/>
+</a>
