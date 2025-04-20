@@ -124,11 +124,17 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           return !albumArtistAlbums.any(
               (albumArtistAlbum) => albumArtistAlbum.id == performingAlbum.id);
         }).toList();
-        // Again add the tracks of every album
+        // Again add the tracks of every album,
+        // but this time only the tracks where the artist is a performing artist
         final List<BaseItemDto> sortedTracksIncludingAppearsOn = [];
         for (var album in filteredPerformingArtistAlbums) {
-          sortedTracks.addAll(await _downloadsService
-              .getCollectionTracks(album.baseItem!, playable: true));
+          final performingArtistAlbumTracks = await _downloadsService.getCollectionTracks(
+            album.baseItem!, playable: true,
+          );
+          final filteredPerformingArtistTracks = performingArtistAlbumTracks.where((track) {
+            return track.artistItems?.any((artist) => artist.id == widget.parent.id) ?? false;
+          });
+          sortedTracks.addAll(filteredPerformingArtistTracks);
         }
         // Combine the results and return
         final combinedTracks = [
