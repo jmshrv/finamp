@@ -264,7 +264,7 @@
   "@transcoding": {},
   "layoutAndTheme": "Layout & Thema",
   "@layoutAndTheme": {},
-  "notAvailableInOfflineMode": "Niet beschikbaar in offline-modus",
+  "notAvailableInOfflineMode": "Niet beschikbaar in Offline Modus",
   "@notAvailableInOfflineMode": {},
   "logOut": "Uitloggen",
   "@logOut": {},
@@ -1452,5 +1452,71 @@
   "periodicPlaybackSessionUpdateFrequencyDetails": "Als de Jellyfin server langer dan 5 minuten geen updates ontvangt van een apparaat neemt het aan dat het afspelen is gestopt. Dit betekent dat het rapporteren van afspeeldata incorrect kan zijn voor nummers langer dan 5 minuten.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "outputMenuButtonTitle": "Output",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuTitle": "Verander Output-apparaat",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuVolumeSectionTitle": "Volume",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Verbind met een apparaat",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "autoOfflineOptionNetwork": "Netwerk",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineOptionOff": "Uit",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineOptionDisconnected": "Offline",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingTitle": "Automatische Offline Modus",
+  "@autoOfflineSettingTitle": {},
+  "audioFadeInDurationSettingSubtitle": "De lengte van fade-in van geluid in milliseconden. Stel in op 0 om fade-in uit te zetten.",
+  "@audioFadeInDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "audioFadeOutDurationSettingTitle": "Geluid fade-out lengte",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-out duration setting."
+  },
+  "audioFadeInDurationSettingTitle": "Geluid fade-in lengte",
+  "@audioFadeInDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
+  },
+  "outputMenuDevicesSectionTitle": "Beschikbare apparaten",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "autoOfflineNotification": "Automatisch Offline Modus {state, select, enabled{aangezet} disabled{uitgezet} other{in superpositie gezet}}",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "audioFadeOutDurationSettingSubtitle": "De lengte van fade-out van geluid in milliseconden. Stel in op 0 om fade-out uit te zetten.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+  },
+  "librarySelectError": "Error bij het laden van beschikbare bibliotheken voor de gebruiker",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "startupErrorCallToAction": "Maak aub een issue aan op github.com/jmshrv/finamp met de logs (!) (gebruik de knop hieronder) en een screenshot van deze pagina zodat we dit zo snel mogelijk kunnen oplossen.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "autoOfflineSettingDescription": "Automatisch Offline Modus aanzetten\nUit: Zal niet automatisch Offline Modus aanzetten. Kan batterij besparen.\nNetwerk: Zet Offline Modus aan als er geen wifi-verbinding is.\nOffline: Zet Offline Modus aan als er helemaal geen internetverbinding is.\nJe kan altijd handmatig Offline Modus aanzetten. Dit stopt het automatiseren totdat je Offline Modus weer uit zet",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
   }
 }
