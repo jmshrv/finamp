@@ -127,14 +127,93 @@ class JellyfinApiHelper {
     /// The maximum number of records to return.
     int? limit,
   }) async {
+    final response = await _fetchGetItemsResponse(
+      parentItem: parentItem,
+      includeItemTypes: includeItemTypes,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      searchTerm: searchTerm,
+      itemIds: itemIds,
+      filters: filters,
+      fields:fields,
+      recursive: recursive,
+      artistType: artistType,
+      genreFilter: genreFilter,
+      isFavorite: isFavorite,
+      startIndex: startIndex,
+      limit: limit,
+    );
+    return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
+      .items;
+  }
+
+  Future<Map<String, dynamic>> getItemsWithTotalRecordCount({
+    BaseItemDto? parentItem,
+    String? includeItemTypes,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    List<BaseItemId>? itemIds,
+    String? filters,
+    String? fields,
+    bool? recursive,
+    ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
+    int? startIndex,
+    int? limit,
+  }) async {
+    final response = await _fetchGetItemsResponse(
+      parentItem: parentItem,
+      includeItemTypes: includeItemTypes,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      searchTerm: searchTerm,
+      itemIds: itemIds,
+      filters: filters,
+      fields: fields,
+      recursive: recursive,
+      artistType: artistType,
+      genreFilter: genreFilter,
+      isFavorite: isFavorite,
+      startIndex: startIndex,
+      limit: limit,
+    );
+    final result = QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>);
+    return {
+      'totalRecordCount': result.totalRecordCount,
+      'items': result.items,
+    };
+  }
+
+  Future<dynamic> _fetchGetItemsResponse ({
+    BaseItemDto? parentItem,
+    String? includeItemTypes,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    List<BaseItemId>? itemIds,
+    String? filters,
+    String? fields,
+    bool? recursive,
+    ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
+    int? startIndex,
+    int? limit,
+  }) async {
     final currentUserId = _finampUserHelper.currentUser?.id;
     if (currentUserId == null) {
       // When logging out, this request causes errors since currentUser is
-      // required sometimes. We just return an empty list since this error
-      // usually happens becuase the listeners on MusicScreenTabView update
-      // milliseconds before the page is popped. This shouldn't happen in normal
-      // use.
-      return [];
+      // required sometimes. We just return an fake api response that is empty,
+      // since this error usually happens because the listeners on MusicScreenTabView
+      // update milliseconds before the page is popped.
+      // This shouldn't happen in normal use.
+      return {
+        'startIndex': 0,
+        'totalRecordCount': 0,
+        'items': [],
+      };
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
@@ -283,9 +362,7 @@ class JellyfinApiHelper {
           isFavorite: isFavorite,
         );
       }
-
-      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-          .items;
+      return response;
     });
   }
 

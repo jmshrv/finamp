@@ -66,7 +66,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     final Future<List<List<BaseItemDto>?>> futures;
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
     var settings = FinampSettingsHelper.finampSettings;
-    List<BaseItemDto> allChildren = [];
+    int? totalRecordCount;
     final genreCuratedItemSelectionType =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionType);
     final genreItemSectionsOrder =
@@ -77,6 +77,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
       required GenreCuratedItemSelectionType genreCuratedItemSelectionType,
       required BaseItemDtoType baseItemType,
       String? sortBySecondary,
+      bool setTotalRecordCount = false,
       ArtistType? artistListType,
     }) async {
       final sortByMain = switch (genreCuratedItemSelectionType) {
@@ -88,7 +89,8 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
       final sortBy = 
         [sortByMain, if (sortBySecondary != null && sortBySecondary.isNotEmpty) sortBySecondary]
         .join(',');
-      final items = await jellyfinApiHelper.getItems(
+
+      final fetchedItems = await jellyfinApiHelper.getItemsWithTotalRecordCount(
         parentItem: (baseItemType == BaseItemDtoType.artist) 
             ? null : widget.parent,
         genreFilter: (baseItemType == BaseItemDtoType.artist)
@@ -102,12 +104,32 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         artistType: (baseItemType == BaseItemDtoType.artist)
             ? artistListType : null,
       );
+      // Set the Total Record Count
+      if (setTotalRecordCount && genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) {
+        // When we filter the favorites, we have to make an additional request to get the correct number
+        // otherwise we would only get the totalRecordCount of Favorites of that genre
+        final fetchedItemCountWithoutFavorites = await jellyfinApiHelper.getItemsWithTotalRecordCount(
+          parentItem: (baseItemType == BaseItemDtoType.artist) 
+              ? null : widget.parent,
+          genreFilter: (baseItemType == BaseItemDtoType.artist)
+              ? widget.parent : null,
+          limit: 1,
+          includeItemTypes: baseItemType.idString,
+          artistType: (baseItemType == BaseItemDtoType.artist)
+              ? artistListType : null,
+        );
+        totalRecordCount = fetchedItemCountWithoutFavorites['totalRecordCount'] as int;
+      } else if (setTotalRecordCount) {
+        totalRecordCount = (setTotalRecordCount) ? fetchedItems['totalRecordCount'] as int : totalRecordCount;
+      }
+      final List<BaseItemDto>? items = fetchedItems['items'] as List<BaseItemDto>;
       return items;
     }
 
     Future<List<BaseItemDto>?> getCuratedItemsOffline({
       required GenreCuratedItemSelectionType genreCuratedItemSelectionType,
       required BaseItemDtoType baseItemType,
+      bool setTotalRecordCount = false,
       BaseItemDtoType? artistInfoForType,
     }) async {
       final sortBy = switch (genreCuratedItemSelectionType) {
@@ -131,6 +153,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                 ? artistInfoForType : null,
               genreFilter: widget.parent);
       var items = fetchedItems.map((e) => e.baseItem).nonNulls.toList();
+      totalRecordCount = (setTotalRecordCount) ? items.length : totalRecordCount;
       items = sortItems(items, sortBy, SortOrder.descending);
       items = items.take(5).toList();
       return items;
@@ -153,6 +176,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         getCuratedItemsOffline(
           genreCuratedItemSelectionType: genreCuratedItemSelectionType,
           baseItemType: BaseItemDtoType.album,
+          setTotalRecordCount: true,
         ),
         // Artists
         getCuratedItemsOffline(
@@ -161,18 +185,6 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
           artistInfoForType: artistInfoForType
         ),
       ]);
-      // Get All downloaded Tracks for Playback
-      Future.sync(() async {
-        final List<DownloadStub> allGenreTracks =
-              await _downloadsService.getAllTracks(
-                nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-                genreFilter: widget.parent
-          );
-        var items = allGenreTracks.map((e) => e.baseItem).nonNulls.toList();
-        items = sortItems(items, settings.tabSortBy[TabContentType.tracks],
-        settings.tabSortOrder[TabContentType.tracks]);
-        return items;
-      });
     } else {
       // Online Mode
       futures = Future.wait([
@@ -187,6 +199,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
           genreCuratedItemSelectionType: genreCuratedItemSelectionType,
           baseItemType: BaseItemDtoType.album,
           sortBySecondary: "PremiereDate,SortName",
+          setTotalRecordCount: true,
         ),
         // Artists
         getCuratedItemsOnline(
@@ -196,16 +209,6 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
           artistListType: settings.artistListType,
         ),
       ]);
-      // Get All Tracks for Download Sync Button and Playback
-      Future.sync(() async {
-        // Fetch every genre track
-        return await jellyfinApiHelper.getItems(
-          parentItem: widget.parent,
-          sortBy: settings.tabSortBy[TabContentType.tracks]
-                ?.jellyfinName(TabContentType.tracks) ?? "Album,SortName",
-                  includeItemTypes: "Audio",
-        );
-      });
     }
 
     return FutureBuilder(
@@ -213,11 +216,8 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         builder: (context, snapshot) {
           _isLoading = (snapshot.connectionState == ConnectionState.waiting);
           var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
-          var topAlbums = snapshot.data?.elementAtOrNull(1) ?? [];
-          var topArtists = snapshot.data?.elementAtOrNull(2) ?? [];
-          var allTracks = snapshot.data?.elementAtOrNull(3) ?? [];
-
-          allChildren = [...allTracks];
+          var albums = snapshot.data?.elementAtOrNull(1) ?? [];
+          var artists = snapshot.data?.elementAtOrNull(2) ?? [];
 
           return PaddedCustomScrollview(slivers: <Widget>[
             SliverAppBar(
@@ -230,7 +230,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                       item: DownloadStub.fromItem(
                           item: widget.parent,
                           type: DownloadItemType.collection),
-                      children: (allChildren.isNotEmpty) ? allChildren : null)
+                      childrenCount: totalRecordCount)
               ],
             ),
             SliverToBoxAdapter(
@@ -294,7 +294,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                         parent: widget.parent,
                         albumsText: genreCuratedItemSelectionType
                             .toLocalisedSectionTitle(context, BaseItemDtoType.album),
-                        albums: topAlbums,
+                        albums: albums,
                         seeAllCallbackFunction: () => openSeeAll(TabContentType.albums),
                       ),
                     );
@@ -305,7 +305,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                         parent: widget.parent,
                         albumsText: genreCuratedItemSelectionType
                             .toLocalisedSectionTitle(context, BaseItemDtoType.artist),
-                        albums: topArtists,
+                        albums: artists,
                         seeAllCallbackFunction: () => openSeeAll(TabContentType.artists),
                         genreFilter: widget.parent,
                       ),

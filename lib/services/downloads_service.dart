@@ -1699,8 +1699,7 @@ class DownloadsService {
     }
     int childCount;
     if (stub.baseItemType == BaseItemDtoType.album ||
-        stub.baseItemType == BaseItemDtoType.playlist ||
-        stub.baseItemType == BaseItemDtoType.genre) {
+        stub.baseItemType == BaseItemDtoType.playlist) {
       // albums/playlists get marked as incidentally required if all info children
       // are required.  Use info links to calculate child count for this case
       childCount =
