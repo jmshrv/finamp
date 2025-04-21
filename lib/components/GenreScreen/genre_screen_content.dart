@@ -128,7 +128,8 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             genreFilter: (baseItemType == BaseItemDtoType.artist)
                 ? widget.parent : null, 
             sortBy: "Random",
-            isFavorite: false,
+            isFavorite: (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomFavoritesFirst) 
+              ? false : null,
             limit: remainingLimit,
             includeItemTypes: baseItemType.idString,
             artistType: (baseItemType == BaseItemDtoType.artist)
