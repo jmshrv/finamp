@@ -39,6 +39,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -725,14 +726,20 @@ class ErrorScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CTAMedium(
-                    text: AppLocalizations.of(context)!.shareLogs,
-                    icon: Icons.adaptive.share,
+                    text: AppLocalizations.of(context)!.exportLogs,
+                    icon: TablerIcons.file_download,
                     onPressed: () async {
                       final finampLogsHelper =
                           GetIt.instance<FinampLogsHelper>();
-                      await finampLogsHelper.shareLogs();
+                      await finampLogsHelper.exportLogs();
                     },
                   ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ShareLogsButton(),
                   CopyLogsButton(),
                 ],
               ),

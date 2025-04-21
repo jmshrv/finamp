@@ -439,6 +439,8 @@
   "@addButtonLabel": {},
   "shareLogs": "Share logs",
   "@shareLogs": {},
+  "exportLogs": "Save logs",
+  "@exportLogs": {},
   "logsCopied": "Logs copied.",
   "@logsCopied": {},
   "message": "Message",

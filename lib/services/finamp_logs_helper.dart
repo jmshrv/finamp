@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:clipboard/clipboard.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:finamp/services/censored_log.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -66,10 +67,10 @@ class FinampLogsHelper {
           File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
       var newLogs = File(path_helper.join(basePath.path, "finamp-logs.txt"));
       if (oldLogs.existsSync()) {
-        fullLogsBuffer.write(await oldLogs.readAsBytes());
+        fullLogsBuffer.write(await oldLogs.readAsString());
       }
       if (newLogs.existsSync()) {
-        fullLogsBuffer.write(await newLogs.readAsBytes());
+        fullLogsBuffer.write(await newLogs.readAsString());
       }
     } else {
       fullLogsBuffer.write(getSanitisedLogs());
@@ -88,9 +89,41 @@ class FinampLogsHelper {
 
     tempFile.writeAsStringSync(await getFullLogs());
 
-    final xFile = XFile(tempFile.path, mimeType: "text/plain");
+    if (Platform.isAndroid || Platform.isIOS) {
+      final xFile = XFile(tempFile.path, mimeType: "text/plain");
+      await Share.shareXFiles([xFile]);
+    } else {
+      var filename = await FilePicker.platform.saveFile(
+        fileName: "finamp-logs.txt",
+        initialDirectory: (await getApplicationDocumentsDirectory()).path,
+      );
+      if (filename != null) {
+        await tempFile.copy(filename);
+      }
+    }
 
-    await Share.shareXFiles([xFile]);
+    await tempFile.delete();
+  }
+
+  /// Write logs to a file and save to user-picked directory
+  Future<void> exportLogs() async {
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
+    tempFile.createSync();
+
+    tempFile.writeAsStringSync(await getFullLogs());
+
+    var filename = await FilePicker.platform.saveFile(
+      fileName: "finamp-logs.txt",
+      initialDirectory: (await getApplicationDocumentsDirectory()).path,
+      bytes: (Platform.isAndroid || Platform.isIOS)
+          ? await tempFile.readAsBytes()
+          : null, // just get the file name and then manually copy on desktop
+    );
+    if (filename != null && !(Platform.isAndroid || Platform.isIOS)) {
+      // On desktop, we need to copy the file to the user-picked location
+      await tempFile.copy(filename);
+    }
 
     await tempFile.delete();
   }
