@@ -2095,5 +2095,7 @@
   "startupErrorWorkaround": "Jako řešení můžete vymazat data aplikace a resetovat ji. Mějte na paměti, že v tomto případě budou odstraněna všechna vaše nastavení a stažené soubory.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
-  }
+  },
+  "exportLogs": "Uložit protokoly",
+  "@exportLogs": {}
 }
