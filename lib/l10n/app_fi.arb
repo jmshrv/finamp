@@ -2089,5 +2089,19 @@
   "outputMenuButtonTitle": "Äänen ulostulo",
   "@outputMenuButtonTitle": {
     "description": "Button title for opening the output menu/panel"
+  },
+  "startupErrorTitle": "Jokin meni pieleen sovelluksen käynnistyksessä!\nPahoittelut siitä..",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "exportLogs": "Tallenna lokit",
+  "@exportLogs": {},
+  "startupErrorCallToAction": "Ole hyvä ja luo tiketti osoitteessa github.com/jmshrv/finamp , ja liitä mukaan lokitiedot(!) (Käytä nappia alla) Liitä myös näyttökuva tästä sivusta, jotta voimme korjata vian mahdollisimman nopeasti.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "Tilapäiskorjauksena voit yrittää tyhjentää sovelluksen datan nollataksesi sovelluksen. Ota huomioon, että tämä poistaa kaikki asetukset ja ladatut tiedostot.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   }
 }
