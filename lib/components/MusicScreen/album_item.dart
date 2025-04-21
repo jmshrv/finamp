@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/album_menu.dart';
-import 'package:finamp/components/AlbumScreen/artist_menu.dart';
-import 'package:finamp/components/AlbumScreen/genre_menu.dart';
-import 'package:finamp/components/AlbumScreen/playlist_menu.dart';
+import 'package:finamp/menus/album_menu.dart';
+import 'package:finamp/menus/artist_menu.dart';
+import 'package:finamp/menus/genre_menu.dart';
+import 'package:finamp/menus/playlist_menu.dart';
 import 'package:finamp/components/MusicScreen/album_item_list_tile.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/delete_prompts.dart';
@@ -22,7 +22,7 @@ import '../../screens/artist_screen.dart';
 import '../../services/downloads_service.dart';
 import '../../services/favorite_provider.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../AddToPlaylistScreen/playlist_actions_menu.dart';
+import '../../menus/playlist_actions_menu.dart';
 import '../AlbumScreen/download_dialog.dart';
 import '../global_snackbar.dart';
 import 'album_item_card.dart';

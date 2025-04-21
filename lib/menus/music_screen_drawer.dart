@@ -6,12 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../screens/downloads_screen.dart';
-import '../../screens/logs_screen.dart';
-import '../../screens/settings_screen.dart';
-import '../../services/finamp_user_helper.dart';
-import 'offline_mode_switch_list_tile.dart';
-import 'view_list_tile.dart';
+import '../screens/downloads_screen.dart';
+import '../screens/logs_screen.dart';
+import '../screens/settings_screen.dart';
+import '../services/finamp_user_helper.dart';
+import '../components/MusicScreen/offline_mode_switch_list_tile.dart';
+import '../components/MusicScreen/view_list_tile.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
   const MusicScreenDrawer({super.key});

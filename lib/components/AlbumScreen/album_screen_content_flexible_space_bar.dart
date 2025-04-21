@@ -1,8 +1,8 @@
-import 'package:finamp/components/AlbumScreen/album_menu.dart';
-import 'package:finamp/components/AlbumScreen/playlist_menu.dart';
+import 'package:finamp/menus/album_menu.dart';
+import 'package:finamp/menus/playlist_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/components/overflow_menu_button.dart';
+import 'package:finamp/menus/components/overflow_menu_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';

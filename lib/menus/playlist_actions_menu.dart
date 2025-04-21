@@ -6,15 +6,15 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../services/favorite_provider.dart';
-import '../../services/feedback_helper.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../AlbumScreen/track_menu.dart';
-import '../global_snackbar.dart';
-import '../themed_bottom_sheet.dart';
-import 'add_to_playlist_list.dart';
+import '../models/jellyfin_models.dart';
+import '../services/favorite_provider.dart';
+import '../services/feedback_helper.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/jellyfin_api_helper.dart';
+import 'track_menu.dart';
+import '../components/global_snackbar.dart';
+import '../components/themed_bottom_sheet.dart';
+import '../components/AddToPlaylistScreen/add_to_playlist_list.dart';
 
 const playlistActionsMenuRouteName = "/playlist-actions-menu";
 

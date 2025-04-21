@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
-import 'package:finamp/components/AddToPlaylistScreen/playlist_actions_menu.dart';
+import 'package:finamp/menus/playlist_actions_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -19,14 +19,14 @@ import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../services/favorite_provider.dart';
-import '../../services/feedback_helper.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../../services/theme_provider.dart';
-import '../global_snackbar.dart';
-import '../themed_bottom_sheet.dart';
+import '../models/jellyfin_models.dart';
+import '../services/favorite_provider.dart';
+import '../services/feedback_helper.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/jellyfin_api_helper.dart';
+import '../services/theme_provider.dart';
+import '../components/global_snackbar.dart';
+import '../components/themed_bottom_sheet.dart';
 
 const outputMenuRouteName = "/output-menu";
 
@@ -53,8 +53,7 @@ Future<void> showOutputMenu({
           //   item: item,
           //   useThemeImage: usePlayerTheme,
           // ),
-          Consumer(
-            builder: (context, ref, child) {
+          Consumer(builder: (context, ref, child) {
             return VolumeSlider(
               initialValue:
                   (ref.watch(finampSettingsProvider.currentVolume) * 100)
@@ -67,9 +66,8 @@ Future<void> showOutputMenu({
                 outputPanelLogger.fine("Volume set to $currentValue");
               },
               forceLoading: true,
-              );
-            }
-          ),
+            );
+          }),
           const SizedBox(height: 10),
         ];
 
@@ -373,27 +371,27 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
                     inactiveTrackColor: themeColor.withOpacity(0.3),
                     overlayShape: SliderComponentShape.noOverlay,
                   ),
-              child: Slider(
-                value: currentValue,
-                onChanged: (value) {
-                  setState(() {
+                  child: Slider(
+                    value: currentValue,
+                    onChanged: (value) {
+                      setState(() {
                         currentValue = value;
-                  });
+                      });
                       if (debounce?.isActive ?? false) debounce!.cancel();
                       debounce = Timer(const Duration(milliseconds: 100), () {
                         widget.onChange(value);
                       });
-                },
-                onChangeEnd: (value) async {
-                  unawaited(widget.onChange(value));
-                  if (widget.feedback) {
-                    FeedbackHelper.feedback(FeedbackType.selection);
-                  }
-                  setState(() {
-                    currentValue = value;
-                  });
-                },
-              ),
+                    },
+                    onChangeEnd: (value) async {
+                      unawaited(widget.onChange(value));
+                      if (widget.feedback) {
+                        FeedbackHelper.feedback(FeedbackType.selection);
+                      }
+                      setState(() {
+                        currentValue = value;
+                      });
+                    },
+                  ),
                 )),
             Positioned(
               top: 0,

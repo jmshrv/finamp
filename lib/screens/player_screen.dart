@@ -4,9 +4,9 @@ import 'dart:math';
 
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/AlbumScreen/track_menu.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
-import 'package:finamp/components/PlayerScreen/output_panel.dart';
+import 'package:finamp/menus/output_panel.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -25,7 +25,7 @@ import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
-import '../components/AddToPlaylistScreen/playlist_actions_menu.dart';
+import '../menus/playlist_actions_menu.dart';
 import '../components/PlayerScreen/control_area.dart';
 import '../components/PlayerScreen/player_screen_album_image.dart';
 import '../components/PlayerScreen/player_split_screen_scaffold.dart';

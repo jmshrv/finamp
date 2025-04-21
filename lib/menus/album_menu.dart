@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/speed_menu.dart';
+import 'package:finamp/menus/components/speed_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
-import 'package:finamp/components/PlayerScreen/item_amount_chip.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
@@ -21,141 +20,55 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../screens/album_screen.dart';
-import '../../services/audio_service_helper.dart';
-import '../../services/downloads_service.dart';
-import '../../services/favorite_provider.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../AddToPlaylistScreen/playlist_actions_menu.dart';
-import '../PlayerScreen/album_chip.dart';
-import '../PlayerScreen/artist_chip.dart';
-import '../PlayerScreen/queue_source_helper.dart';
-import '../album_image.dart';
-import '../global_snackbar.dart';
-import 'download_dialog.dart';
+import '../models/jellyfin_models.dart';
+import '../screens/album_screen.dart';
+import '../services/audio_service_helper.dart';
+import '../services/downloads_service.dart';
+import '../services/favorite_provider.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/jellyfin_api_helper.dart';
+import 'playlist_actions_menu.dart';
+import '../components/PlayerScreen/album_chip.dart';
+import '../components/PlayerScreen/artist_chip.dart';
+import '../components/PlayerScreen/queue_source_helper.dart';
+import '../components/album_image.dart';
+import '../components/global_snackbar.dart';
+import '../components/AlbumScreen/download_dialog.dart';
 
-const Duration ArtistMenuDefaultAnimationDuration = Duration(milliseconds: 750);
-const Curve ArtistMenuDefaultInCurve = Curves.easeOutCubic;
-const Curve ArtistMenuDefaultOutCurve = Curves.easeInCubic;
+const albumMenuRouteName = "/album-menu";
+const Duration albumMenuDefaultAnimationDuration = Duration(milliseconds: 750);
+const Curve albumMenuDefaultInCurve = Curves.easeOutCubic;
+const Curve albumMenuDefaultOutCurve = Curves.easeInCubic;
 
-Future<void> showModalArtistMenu({
+Future<void> showModalAlbumMenu({
   required BuildContext context,
-  required BaseItemDto item,
+  required BaseItemDto baseItem,
   BaseItemDto? parentItem,
+  Function? onRemoveFromList,
+  bool confirmPlaylistRemoval = true,
 }) async {
-  final isOffline = FinampSettingsHelper.finampSettings.isOffline;
-  final canGoToGenre = (item.genreItems?.isNotEmpty ?? false);
-
-  await showThemedBottomSheet(
-      context: context,
-      item: item,
-      routeName: ArtistMenu.routeName,
-      buildWrapper: (context, dragController, childBuilder) {
-        return ArtistMenu(
-          key: ValueKey(item.id),
-          item: item,
-          parentItem: parentItem,
-          isOffline: isOffline,
-          canGoToGenre: canGoToGenre,
-          childBuilder: childBuilder,
-          dragController: dragController,
-        );
-      });
-}
-
-class ArtistMenu extends ConsumerStatefulWidget {
-  static const routeName = "/artist-menu";
-
-  const ArtistMenu({
-    super.key,
-    required this.item,
-    required this.isOffline,
-    required this.canGoToGenre,
-    this.parentItem,
-    required this.childBuilder,
-    required this.dragController,
-  });
-
-  final BaseItemDto item;
-  final BaseItemDto? parentItem;
-  final bool isOffline;
-  final bool canGoToGenre;
-  final ScrollBuilder childBuilder;
-  final DraggableScrollableController dragController;
-
-  @override
-  ConsumerState<ArtistMenu> createState() => _ArtistMenuState();
-}
-
-class _ArtistMenuState extends ConsumerState<ArtistMenu> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
 
-  double initialSheetExtent = 0.0;
-  double inputStep = 0.9;
-  double oldExtent = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    initialSheetExtent = 0.45;
-    oldExtent = initialSheetExtent;
-  }
-
-  bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
-    if (queueItem != null) {
-      final baseItem = BaseItemDto.fromJson(
-          queueItem.item.extras!["itemJson"] as Map<String, dynamic>);
-      return baseItem.id == queueItem.id;
-    }
-    return false;
-  }
-
-  void scrollToExtent(
-      DraggableScrollableController scrollController, double? percentage) {
-    var currentSize = scrollController.size;
-    if ((percentage != null && currentSize < percentage) ||
-        scrollController.size == inputStep) {
-      scrollController.animateTo(
-        percentage ?? oldExtent,
-        duration: ArtistMenuDefaultAnimationDuration,
-        curve: ArtistMenuDefaultInCurve,
-      );
-    }
-    oldExtent = currentSize;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final menuEntries = _menuEntries(context);
-    var stackHeight = 155.0;
-    stackHeight += menuEntries
-            .where((element) =>
-                switch (element) { Visibility e => e.visible, _ => true })
-            .length *
-        56;
-
-    return widget.childBuilder(stackHeight, menu(context, menuEntries));
-  }
+  final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+  final canGoToArtist = (baseItem.artistItems?.isNotEmpty ?? false);
+  final canGoToGenre = (baseItem.genreItems?.isNotEmpty ?? false);
 
   // Normal album menu entries, excluding headers
-  List<Widget> _menuEntries(BuildContext context) {
+  List<Widget> getMenuEntries(BuildContext context) {
     final downloadsService = GetIt.instance<DownloadsService>();
     final downloadStatus = downloadsService.getStatus(
         DownloadStub.fromItem(
-            type: DownloadItemType.collection, item: widget.item),
+            type: DownloadItemType.collection, item: baseItem),
         null);
     var iconColor = Theme.of(context).colorScheme.primary;
 
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
       var parent = downloadsService.getFirstRequiringItem(DownloadStub.fromItem(
-          type: DownloadItemType.collection, item: widget.item));
+          type: DownloadItemType.collection, item: baseItem));
       if (parent != null) {
         var parentName = AppLocalizations.of(context)!
             .itemTypeSubtitle(parent.baseItemType.name, parent.name);
@@ -172,45 +85,45 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.playButtonLabel),
         onTap: () async {
-          List<BaseItemDto>? artistTracks;
+          List<BaseItemDto>? albumTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
-            if (widget.isOffline) {
-              artistTracks = await downloadsService
-                  .getCollectionTracks(widget.item, playable: true);
+            if (isOffline) {
+              albumTracks = await downloadsService.getCollectionTracks(baseItem,
+                  playable: true);
             } else {
-              artistTracks = await _jellyfinApiHelper.getItems(
-                parentItem: widget.item,
-                sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+              albumTracks = await _jellyfinApiHelper.getItems(
+                parentItem: baseItem,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (artistTracks == null) {
+            if (albumTracks == null) {
               GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad(
-                      BaseItemDtoType.fromItem(widget.item).name));
+                  AppLocalizations.of(scaffold)!
+                      .couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
               return;
             }
 
             await _queueService.startPlayback(
-              items: artistTracks,
+              items: albumTracks,
               source: QueueItemSource(
-                type: QueueItemSourceType.artist,
+                type: QueueItemSourceType.album,
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName: widget.item.name ??
+                    pretranslatedName: baseItem.name ??
                         AppLocalizations.of(context)!.placeholderSource),
-                id: widget.item.id,
-                item: widget.item,
-                contextNormalizationGain: null, // use track gain
+                id: baseItem.id,
+                item: baseItem,
+                contextNormalizationGain: baseItem.normalizationGain,
               ),
               order: FinampPlaybackOrder.linear,
             );
 
             GlobalSnackbar.message(
-                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
-                    BaseItemDtoType.fromItem(widget.item).name),
+                (scaffold) => AppLocalizations.of(scaffold)!
+                    .confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
                 isConfirmation: true);
             Navigator.pop(context);
           } catch (e) {
@@ -225,69 +138,51 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.shuffleButtonLabel),
         onTap: () async {
-          List<BaseItemDto>? artistTracks;
+          List<BaseItemDto>? albumTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
-            if (widget.isOffline) {
-              artistTracks = await downloadsService
-                  .getCollectionTracks(widget.item, playable: true);
+            if (isOffline) {
+              albumTracks = await downloadsService.getCollectionTracks(baseItem,
+                  playable: true);
             } else {
-              artistTracks = await _jellyfinApiHelper.getItems(
-                parentItem: widget.item,
-                sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+              albumTracks = await _jellyfinApiHelper.getItems(
+                parentItem: baseItem,
+                sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (artistTracks == null) {
+            if (albumTracks == null) {
               GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad(
-                      BaseItemDtoType.fromItem(widget.item).name));
+                  AppLocalizations.of(scaffold)!
+                      .couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
               return;
             }
 
             await _queueService.startPlayback(
-              items: artistTracks,
+              items: albumTracks,
               source: QueueItemSource(
-                type: QueueItemSourceType.artist,
+                type: QueueItemSourceType.album,
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName: widget.item.name ??
+                    pretranslatedName: baseItem.name ??
                         AppLocalizations.of(context)!.placeholderSource),
-                id: widget.item.id,
-                item: widget.item,
-                contextNormalizationGain: null, // use track gain
+                id: baseItem.id,
+                item: baseItem,
+                contextNormalizationGain: baseItem.normalizationGain,
               ),
               order: FinampPlaybackOrder.shuffled,
             );
 
             GlobalSnackbar.message(
-                (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
-                    BaseItemDtoType.fromItem(widget.item).name),
+                (scaffold) => AppLocalizations.of(scaffold)!
+                    .confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
                 isConfirmation: true);
             Navigator.pop(context);
           } catch (e) {
             GlobalSnackbar.error(e);
           }
         },
-      ),
-      Visibility(
-        visible: !widget.isOffline,
-        child: ListTile(
-          leading: Icon(
-            Icons.playlist_add,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.addToPlaylistTitle),
-          enabled: !widget.isOffline,
-          onTap: () {
-            Navigator.pop(context); // close menu
-            showPlaylistActionsMenu(
-              context: context,
-              item: widget.item,
-            );
-          },
-        ),
       ),
       Visibility(
         visible: _queueService.getQueue().nextUp.isNotEmpty,
@@ -298,43 +193,43 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
           ),
           title: Text(AppLocalizations.of(context)!.playNext),
           onTap: () async {
-            List<BaseItemDto>? artistTracks;
+            List<BaseItemDto>? albumTracks;
             try {
               FeedbackHelper.feedback(FeedbackType.selection);
-              if (widget.isOffline) {
-                artistTracks = await downloadsService
-                    .getCollectionTracks(widget.item, playable: true);
+              if (isOffline) {
+                albumTracks = await downloadsService
+                    .getCollectionTracks(baseItem, playable: true);
               } else {
-                artistTracks = await _jellyfinApiHelper.getItems(
-                  parentItem: widget.item,
+                albumTracks = await _jellyfinApiHelper.getItems(
+                  parentItem: baseItem,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
               }
 
-              if (artistTracks == null) {
+              if (albumTracks == null) {
                 GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!.couldNotLoad(
-                        BaseItemDtoType.fromItem(widget.item).name));
+                    AppLocalizations.of(scaffold)!
+                        .couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
                 return;
               }
 
               await _queueService.addNext(
-                  items: artistTracks,
+                  items: albumTracks,
                   source: QueueItemSource(
-                    type: QueueItemSourceType.nextUpArtist,
+                    type: QueueItemSourceType.nextUpAlbum,
                     name: QueueItemSourceName(
                         type: QueueItemSourceNameType.preTranslated,
-                        pretranslatedName: widget.item.name ??
+                        pretranslatedName: baseItem.name ??
                             AppLocalizations.of(context)!.placeholderSource),
-                    id: widget.item.id,
-                    item: widget.item,
-                    contextNormalizationGain: widget.item.normalizationGain,
+                    id: baseItem.id,
+                    item: baseItem,
+                    contextNormalizationGain: baseItem.normalizationGain,
                   ));
 
               GlobalSnackbar.message(
-                  (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(
-                      BaseItemDtoType.fromItem(widget.item).name),
+                  (scaffold) => AppLocalizations.of(scaffold)!
+                      .confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
                   isConfirmation: true);
               Navigator.pop(context);
             } catch (e) {
@@ -350,43 +245,43 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.addToNextUp),
         onTap: () async {
-          List<BaseItemDto>? artistTracks;
+          List<BaseItemDto>? albumTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
-            if (widget.isOffline) {
-              artistTracks = await downloadsService
-                  .getCollectionTracks(widget.item, playable: true);
+            if (isOffline) {
+              albumTracks = await downloadsService.getCollectionTracks(baseItem,
+                  playable: true);
             } else {
-              artistTracks = await _jellyfinApiHelper.getItems(
-                parentItem: widget.item,
+              albumTracks = await _jellyfinApiHelper.getItems(
+                parentItem: baseItem,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (artistTracks == null) {
+            if (albumTracks == null) {
               GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad(
-                      BaseItemDtoType.fromItem(widget.item).name));
+                  AppLocalizations.of(scaffold)!
+                      .couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
               return;
             }
 
             await _queueService.addToNextUp(
-                items: artistTracks,
+                items: albumTracks,
                 source: QueueItemSource(
-                  type: QueueItemSourceType.nextUpArtist,
+                  type: QueueItemSourceType.nextUpAlbum,
                   name: QueueItemSourceName(
                       type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName: widget.item.name ??
+                      pretranslatedName: baseItem.name ??
                           AppLocalizations.of(context)!.placeholderSource),
-                  id: widget.item.id,
-                  item: widget.item,
-                  contextNormalizationGain: widget.item.normalizationGain,
+                  id: baseItem.id,
+                  item: baseItem,
+                  contextNormalizationGain: baseItem.normalizationGain,
                 ));
 
             GlobalSnackbar.message(
                 (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp(
-                    BaseItemDtoType.fromItem(widget.item).name),
+                    BaseItemDtoType.fromItem(baseItem).name),
                 isConfirmation: true);
             Navigator.pop(context);
           } catch (e) {
@@ -401,43 +296,43 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.addToQueue),
         onTap: () async {
-          List<BaseItemDto>? artistTracks;
+          List<BaseItemDto>? albumTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
-            if (widget.isOffline) {
-              artistTracks = await downloadsService
-                  .getCollectionTracks(widget.item, playable: true);
+            if (isOffline) {
+              albumTracks = await downloadsService.getCollectionTracks(baseItem,
+                  playable: true);
             } else {
-              artistTracks = await _jellyfinApiHelper.getItems(
-                parentItem: widget.item,
+              albumTracks = await _jellyfinApiHelper.getItems(
+                parentItem: baseItem,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (artistTracks == null) {
+            if (albumTracks == null) {
               GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad(
-                      BaseItemDtoType.fromItem(widget.item).name));
+                  AppLocalizations.of(scaffold)!
+                      .couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
               return;
             }
 
             await _queueService.addToQueue(
-                items: artistTracks,
+                items: albumTracks,
                 source: QueueItemSource(
-                  type: QueueItemSourceType.artist,
+                  type: QueueItemSourceType.album,
                   name: QueueItemSourceName(
                       type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName: widget.item.name ??
+                      pretranslatedName: baseItem.name ??
                           AppLocalizations.of(context)!.placeholderSource),
-                  id: widget.item.id,
-                  item: widget.item,
-                  contextNormalizationGain: widget.item.normalizationGain,
+                  id: baseItem.id,
+                  item: baseItem,
+                  contextNormalizationGain: baseItem.normalizationGain,
                 ));
 
             GlobalSnackbar.message(
-                (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue(
-                    BaseItemDtoType.fromItem(widget.item).name),
+                (scaffold) => AppLocalizations.of(scaffold)!
+                    .confirmAddToQueue(BaseItemDtoType.fromItem(baseItem).name),
                 isConfirmation: true);
             Navigator.pop(context);
           } catch (e) {
@@ -446,16 +341,16 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
         },
       ),
       Visibility(
-        visible: !widget.isOffline,
+        visible: !isOffline,
         child: ListTile(
           leading: Icon(
             Icons.explore,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.instantMix),
-          enabled: !widget.isOffline,
+          enabled: !isOffline,
           onTap: () async {
-            await _audioServiceHelper.startInstantMixForItem(widget.item);
+            await _audioServiceHelper.startInstantMixForItem(baseItem);
 
             if (!context.mounted) return;
 
@@ -479,7 +374,7 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
               enabled: downloadStatus.isRequired,
               onTap: () async {
                 var item = DownloadStub.fromItem(
-                    type: DownloadItemType.collection, item: widget.item);
+                    type: DownloadItemType.collection, item: baseItem);
                 await askBeforeDeleteDownloadFromDevice(context, item);
               })),
       Visibility(
@@ -490,11 +385,10 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.downloadItem),
-          enabled: !widget.isOffline &&
-              downloadStatus == DownloadItemStatus.notNeeded,
+          enabled: !isOffline && downloadStatus == DownloadItemStatus.notNeeded,
           onTap: () async {
             var item = DownloadStub.fromItem(
-                type: DownloadItemType.collection, item: widget.item);
+                type: DownloadItemType.collection, item: baseItem);
             await DownloadDialog.show(context, item, null);
             if (context.mounted) {
               Navigator.pop(context);
@@ -509,13 +403,13 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
           child: ListTile(
             leading: Icon(
               Icons.lock_outlined,
-              color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
+              color: isOffline ? iconColor.withOpacity(0.3) : iconColor,
             ),
             title: Text(AppLocalizations.of(context)!.lockDownload),
-            enabled: !widget.isOffline && downloadStatus.isIncidental,
+            enabled: !isOffline && downloadStatus.isIncidental,
             onTap: () async {
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.collection, item: widget.item);
+                  type: DownloadItemType.collection, item: baseItem);
               await DownloadDialog.show(context, item, null);
               if (context.mounted) {
                 Navigator.pop(context);
@@ -526,28 +420,24 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
       ),
       Consumer(
         builder: (context, ref, child) {
-          bool isFav = ref.watch(isFavoriteProvider(widget.item));
+          bool isFav = ref.watch(isFavoriteProvider(baseItem));
           return ListTile(
-            enabled: !widget.isOffline,
+            enabled: !isOffline,
             leading: isFav
                 ? Icon(
                     Icons.favorite,
-                    color: widget.isOffline
-                        ? iconColor.withOpacity(0.3)
-                        : iconColor,
+                    color: isOffline ? iconColor.withOpacity(0.3) : iconColor,
                   )
                 : Icon(
                     Icons.favorite_border,
-                    color: widget.isOffline
-                        ? iconColor.withOpacity(0.3)
-                        : iconColor,
+                    color: isOffline ? iconColor.withOpacity(0.3) : iconColor,
                   ),
             title: Text(isFav
                 ? AppLocalizations.of(context)!.removeFavourite
                 : AppLocalizations.of(context)!.addFavourite),
             onTap: () async {
               ref
-                  .read(isFavoriteProvider(widget.item).notifier)
+                  .read(isFavoriteProvider(baseItem).notifier)
                   .updateFavorite(!isFav);
               if (context.mounted) Navigator.pop(context);
             },
@@ -555,25 +445,58 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
         },
       ),
       Visibility(
-        visible: widget.canGoToGenre,
+        visible: canGoToArtist,
+        child: ListTile(
+          leading: Icon(
+            Icons.person,
+            color: iconColor,
+          ),
+          title: Text(AppLocalizations.of(context)!.goToArtist),
+          enabled: canGoToArtist,
+          onTap: () async {
+            late BaseItemDto artist;
+            try {
+              if (FinampSettingsHelper.finampSettings.isOffline) {
+                final downloadsService = GetIt.instance<DownloadsService>();
+                artist = (await downloadsService.getCollectionInfo(
+                        id: baseItem.artistItems!.first.id))!
+                    .baseItem!;
+              } else {
+                artist = await _jellyfinApiHelper
+                    .getItemById(baseItem.artistItems!.first.id);
+              }
+            } catch (e) {
+              GlobalSnackbar.error(e);
+              return;
+            }
+            if (context.mounted) {
+              Navigator.pop(context);
+              await Navigator.of(context)
+                  .pushNamed(ArtistScreen.routeName, arguments: artist);
+            }
+          },
+        ),
+      ),
+      Visibility(
+        visible: canGoToGenre,
         child: ListTile(
           leading: Icon(
             Icons.category_outlined,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToGenre),
-          enabled: widget.canGoToGenre,
+          enabled: canGoToGenre,
           onTap: () async {
             late BaseItemDto genre;
             try {
               if (FinampSettingsHelper.finampSettings.isOffline) {
                 final downloadsService = GetIt.instance<DownloadsService>();
                 genre = (await downloadsService.getCollectionInfo(
-                        id: widget.item.genreItems!.first.id))!
+                        id: baseItem.genreItems!.first.id))!
                     .baseItem!;
               } else {
                 genre = await _jellyfinApiHelper
-                    .getItemById(widget.item.genreItems!.first.id);
+                    .getItemById(baseItem.genreItems!.first.id);
               }
             } catch (e) {
               GlobalSnackbar.error(e);
@@ -588,8 +511,8 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
         ),
       ),
       Consumer(builder: (context, ref, _) {
-        var canDelete = ref
-            .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
+        var canDelete =
+            ref.watch(_jellyfinApiHelper.canDeleteFromServerProvider(baseItem));
         return Visibility(
             visible: canDelete,
             child: ListTile(
@@ -602,7 +525,7 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
               enabled: canDelete,
               onTap: () async {
                 var item = DownloadStub.fromItem(
-                    type: DownloadItemType.collection, item: widget.item);
+                    type: DownloadItemType.collection, item: baseItem);
                 await askBeforeDeleteFromServerAndDevice(context, item);
                 Navigator.pop(context); // close popup
                 musicScreenRefreshStream.add(null);
@@ -612,13 +535,19 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
     ];
   }
 
-  // All album menu slivers, including headers
-  List<Widget> menu(BuildContext context, List<Widget> menuEntries) {
-    var iconColor = Theme.of(context).colorScheme.primary;
-    return [
+  (double, List<Widget>) getMenuProperties(BuildContext context) {
+    var stackHeight = 155.0;
+    var menuEntries = getMenuEntries(context);
+    stackHeight += menuEntries
+            .where((element) =>
+                switch (element) { Visibility e => e.visible, _ => true })
+            .length *
+        56;
+
+    List<Widget> menu = [
       SliverPersistentHeader(
-        delegate: ArtistMenuSliverAppBar(
-          item: widget.item,
+        delegate: AlbumMenuSliverAppBar(
+          item: baseItem,
         ),
         pinned: true,
       ),
@@ -632,13 +561,22 @@ class _ArtistMenuState extends ConsumerState<ArtistMenu> {
         ),
       )
     ];
+
+    return (stackHeight, menu);
   }
+
+  await showThemedBottomSheet(
+    context: context,
+    item: baseItem,
+    routeName: albumMenuRouteName,
+    buildSlivers: (context) => getMenuProperties(context),
+  );
 }
 
-class ArtistMenuSliverAppBar extends SliverPersistentHeaderDelegate {
+class AlbumMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
 
-  ArtistMenuSliverAppBar({
+  AlbumMenuSliverAppBar({
     required this.item,
   });
 
@@ -695,12 +633,7 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                 ? Colors.black.withOpacity(0.25)
                 : Colors.white.withOpacity(0.15),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(9999),
-                  bottomLeft: Radius.circular(9999),
-                  // circular radii influence each other. this should look roughly the same as BorderRadius.circular(12)
-                  topRight: Radius.circular(2000),
-                  bottomRight: Radius.circular(2000)),
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
           child: Row(
@@ -710,7 +643,7 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                 aspectRatio: 1.0,
                 child: AlbumImage(
                   item: widget.item,
-                  borderRadius: BorderRadius.circular(9999),
+                  borderRadius: BorderRadius.zero,
                 ),
               ),
               Expanded(
@@ -736,11 +669,25 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                         softWrap: true,
                         maxLines: 2,
                       ),
-                      const SizedBox(height: 4),
+                      Padding(
+                        padding: widget.condensed
+                            ? const EdgeInsets.only(top: 6.0)
+                            : const EdgeInsets.symmetric(vertical: 4.0),
+                        child: ArtistChips(
+                          baseItem: widget.item,
+                          backgroundColor: IconTheme.of(context)
+                                  .color
+                                  ?.withOpacity(0.1) ??
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white,
+                          color:
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white,
+                        ),
+                      ),
                       if (!widget.condensed)
-                        ItemAmountChip(
-                          baseItem: widget
-                              .item, //FIXME fetch extended item when menu is opened to include BaseItemDto.albumCount
+                        ReleaseDateChip(
+                          baseItem: widget.item,
                           backgroundColor: IconTheme.of(context)
                                   .color
                                   ?.withOpacity(0.1) ??

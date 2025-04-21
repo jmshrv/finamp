@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/speed_menu.dart';
+import 'package:finamp/menus/components/speed_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
@@ -21,20 +21,20 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../screens/album_screen.dart';
-import '../../services/audio_service_helper.dart';
-import '../../services/downloads_service.dart';
-import '../../services/favorite_provider.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../AddToPlaylistScreen/playlist_actions_menu.dart';
-import '../PlayerScreen/album_chip.dart';
-import '../PlayerScreen/artist_chip.dart';
-import '../PlayerScreen/queue_source_helper.dart';
-import '../album_image.dart';
-import '../global_snackbar.dart';
-import 'download_dialog.dart';
+import '../models/jellyfin_models.dart';
+import '../screens/album_screen.dart';
+import '../services/audio_service_helper.dart';
+import '../services/downloads_service.dart';
+import '../services/favorite_provider.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/jellyfin_api_helper.dart';
+import 'playlist_actions_menu.dart';
+import '../components/PlayerScreen/album_chip.dart';
+import '../components/PlayerScreen/artist_chip.dart';
+import '../components/PlayerScreen/queue_source_helper.dart';
+import '../components/album_image.dart';
+import '../components/global_snackbar.dart';
+import '../components/AlbumScreen/download_dialog.dart';
 
 const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 750);
 const Curve trackMenuDefaultInCurve = Curves.easeOutCubic;

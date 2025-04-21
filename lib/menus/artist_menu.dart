@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/speed_menu.dart';
+import 'package:finamp/menus/components/speed_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/PlayerScreen/item_amount_chip.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
@@ -21,55 +21,58 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../screens/album_screen.dart';
-import '../../services/audio_service_helper.dart';
-import '../../services/downloads_service.dart';
-import '../../services/favorite_provider.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../AddToPlaylistScreen/playlist_actions_menu.dart';
-import '../PlayerScreen/album_chip.dart';
-import '../PlayerScreen/artist_chip.dart';
-import '../PlayerScreen/queue_source_helper.dart';
-import '../album_image.dart';
-import '../global_snackbar.dart';
-import 'download_dialog.dart';
+import '../models/jellyfin_models.dart';
+import '../screens/album_screen.dart';
+import '../services/audio_service_helper.dart';
+import '../services/downloads_service.dart';
+import '../services/favorite_provider.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/jellyfin_api_helper.dart';
+import 'playlist_actions_menu.dart';
+import '../components/PlayerScreen/album_chip.dart';
+import '../components/PlayerScreen/artist_chip.dart';
+import '../components/PlayerScreen/queue_source_helper.dart';
+import '../components/album_image.dart';
+import '../components/global_snackbar.dart';
+import '../components/AlbumScreen/download_dialog.dart';
 
-const Duration GenreMenuDefaultAnimationDuration = Duration(milliseconds: 750);
-const Curve GenreMenuDefaultInCurve = Curves.easeOutCubic;
-const Curve GenreMenuDefaultOutCurve = Curves.easeInCubic;
+const Duration ArtistMenuDefaultAnimationDuration = Duration(milliseconds: 750);
+const Curve ArtistMenuDefaultInCurve = Curves.easeOutCubic;
+const Curve ArtistMenuDefaultOutCurve = Curves.easeInCubic;
 
-Future<void> showModalGenreMenu({
+Future<void> showModalArtistMenu({
   required BuildContext context,
   required BaseItemDto item,
   BaseItemDto? parentItem,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
+  final canGoToGenre = (item.genreItems?.isNotEmpty ?? false);
 
   await showThemedBottomSheet(
       context: context,
       item: item,
-      routeName: GenreMenu.routeName,
+      routeName: ArtistMenu.routeName,
       buildWrapper: (context, dragController, childBuilder) {
-        return GenreMenu(
+        return ArtistMenu(
           key: ValueKey(item.id),
           item: item,
           parentItem: parentItem,
           isOffline: isOffline,
+          canGoToGenre: canGoToGenre,
           childBuilder: childBuilder,
           dragController: dragController,
         );
       });
 }
 
-class GenreMenu extends ConsumerStatefulWidget {
-  static const routeName = "/genre-menu";
+class ArtistMenu extends ConsumerStatefulWidget {
+  static const routeName = "/artist-menu";
 
-  const GenreMenu({
+  const ArtistMenu({
     super.key,
     required this.item,
     required this.isOffline,
+    required this.canGoToGenre,
     this.parentItem,
     required this.childBuilder,
     required this.dragController,
@@ -78,14 +81,15 @@ class GenreMenu extends ConsumerStatefulWidget {
   final BaseItemDto item;
   final BaseItemDto? parentItem;
   final bool isOffline;
+  final bool canGoToGenre;
   final ScrollBuilder childBuilder;
   final DraggableScrollableController dragController;
 
   @override
-  ConsumerState<GenreMenu> createState() => _GenreMenuState();
+  ConsumerState<ArtistMenu> createState() => _ArtistMenuState();
 }
 
-class _GenreMenuState extends ConsumerState<GenreMenu> {
+class _ArtistMenuState extends ConsumerState<ArtistMenu> {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -119,8 +123,8 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
         scrollController.size == inputStep) {
       scrollController.animateTo(
         percentage ?? oldExtent,
-        duration: GenreMenuDefaultAnimationDuration,
-        curve: GenreMenuDefaultInCurve,
+        duration: ArtistMenuDefaultAnimationDuration,
+        curve: ArtistMenuDefaultInCurve,
       );
     }
     oldExtent = currentSize;
@@ -168,21 +172,21 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.playButtonLabel),
         onTap: () async {
-          List<BaseItemDto>? genreTracks;
+          List<BaseItemDto>? artistTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
             if (widget.isOffline) {
-              genreTracks = await downloadsService
+              artistTracks = await downloadsService
                   .getCollectionTracks(widget.item, playable: true);
             } else {
-              genreTracks = await _jellyfinApiHelper.getItems(
+              artistTracks = await _jellyfinApiHelper.getItems(
                 parentItem: widget.item,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (genreTracks == null) {
+            if (artistTracks == null) {
               GlobalSnackbar.message((scaffold) =>
                   AppLocalizations.of(scaffold)!.couldNotLoad(
                       BaseItemDtoType.fromItem(widget.item).name));
@@ -190,9 +194,9 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
             }
 
             await _queueService.startPlayback(
-              items: genreTracks,
+              items: artistTracks,
               source: QueueItemSource(
-                type: QueueItemSourceType.genre,
+                type: QueueItemSourceType.artist,
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
                     pretranslatedName: widget.item.name ??
@@ -221,21 +225,21 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.shuffleButtonLabel),
         onTap: () async {
-          List<BaseItemDto>? genreTracks;
+          List<BaseItemDto>? artistTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
             if (widget.isOffline) {
-              genreTracks = await downloadsService
+              artistTracks = await downloadsService
                   .getCollectionTracks(widget.item, playable: true);
             } else {
-              genreTracks = await _jellyfinApiHelper.getItems(
+              artistTracks = await _jellyfinApiHelper.getItems(
                 parentItem: widget.item,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (genreTracks == null) {
+            if (artistTracks == null) {
               GlobalSnackbar.message((scaffold) =>
                   AppLocalizations.of(scaffold)!.couldNotLoad(
                       BaseItemDtoType.fromItem(widget.item).name));
@@ -243,9 +247,9 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
             }
 
             await _queueService.startPlayback(
-              items: genreTracks,
+              items: artistTracks,
               source: QueueItemSource(
-                type: QueueItemSourceType.genre,
+                type: QueueItemSourceType.artist,
                 name: QueueItemSourceName(
                     type: QueueItemSourceNameType.preTranslated,
                     pretranslatedName: widget.item.name ??
@@ -294,21 +298,21 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
           ),
           title: Text(AppLocalizations.of(context)!.playNext),
           onTap: () async {
-            List<BaseItemDto>? genreTracks;
+            List<BaseItemDto>? artistTracks;
             try {
               FeedbackHelper.feedback(FeedbackType.selection);
               if (widget.isOffline) {
-                genreTracks = await downloadsService
+                artistTracks = await downloadsService
                     .getCollectionTracks(widget.item, playable: true);
               } else {
-                genreTracks = await _jellyfinApiHelper.getItems(
+                artistTracks = await _jellyfinApiHelper.getItems(
                   parentItem: widget.item,
                   sortBy: "ParentIndexNumber,IndexNumber,SortName",
                   includeItemTypes: "Audio",
                 );
               }
 
-              if (genreTracks == null) {
+              if (artistTracks == null) {
                 GlobalSnackbar.message((scaffold) =>
                     AppLocalizations.of(scaffold)!.couldNotLoad(
                         BaseItemDtoType.fromItem(widget.item).name));
@@ -316,9 +320,9 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
               }
 
               await _queueService.addNext(
-                  items: genreTracks,
+                  items: artistTracks,
                   source: QueueItemSource(
-                    type: QueueItemSourceType.nextUpGenre,
+                    type: QueueItemSourceType.nextUpArtist,
                     name: QueueItemSourceName(
                         type: QueueItemSourceNameType.preTranslated,
                         pretranslatedName: widget.item.name ??
@@ -346,21 +350,21 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.addToNextUp),
         onTap: () async {
-          List<BaseItemDto>? genreTracks;
+          List<BaseItemDto>? artistTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
             if (widget.isOffline) {
-              genreTracks = await downloadsService
+              artistTracks = await downloadsService
                   .getCollectionTracks(widget.item, playable: true);
             } else {
-              genreTracks = await _jellyfinApiHelper.getItems(
+              artistTracks = await _jellyfinApiHelper.getItems(
                 parentItem: widget.item,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (genreTracks == null) {
+            if (artistTracks == null) {
               GlobalSnackbar.message((scaffold) =>
                   AppLocalizations.of(scaffold)!.couldNotLoad(
                       BaseItemDtoType.fromItem(widget.item).name));
@@ -368,9 +372,9 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
             }
 
             await _queueService.addToNextUp(
-                items: genreTracks,
+                items: artistTracks,
                 source: QueueItemSource(
-                  type: QueueItemSourceType.nextUpGenre,
+                  type: QueueItemSourceType.nextUpArtist,
                   name: QueueItemSourceName(
                       type: QueueItemSourceNameType.preTranslated,
                       pretranslatedName: widget.item.name ??
@@ -397,21 +401,21 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
         ),
         title: Text(AppLocalizations.of(context)!.addToQueue),
         onTap: () async {
-          List<BaseItemDto>? genreTracks;
+          List<BaseItemDto>? artistTracks;
           try {
             FeedbackHelper.feedback(FeedbackType.selection);
             if (widget.isOffline) {
-              genreTracks = await downloadsService
+              artistTracks = await downloadsService
                   .getCollectionTracks(widget.item, playable: true);
             } else {
-              genreTracks = await _jellyfinApiHelper.getItems(
+              artistTracks = await _jellyfinApiHelper.getItems(
                 parentItem: widget.item,
                 sortBy: "ParentIndexNumber,IndexNumber,SortName",
                 includeItemTypes: "Audio",
               );
             }
 
-            if (genreTracks == null) {
+            if (artistTracks == null) {
               GlobalSnackbar.message((scaffold) =>
                   AppLocalizations.of(scaffold)!.couldNotLoad(
                       BaseItemDtoType.fromItem(widget.item).name));
@@ -419,9 +423,9 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
             }
 
             await _queueService.addToQueue(
-                items: genreTracks,
+                items: artistTracks,
                 source: QueueItemSource(
-                  type: QueueItemSourceType.genre,
+                  type: QueueItemSourceType.artist,
                   name: QueueItemSourceName(
                       type: QueueItemSourceNameType.preTranslated,
                       pretranslatedName: widget.item.name ??
@@ -550,6 +554,39 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
           );
         },
       ),
+      Visibility(
+        visible: widget.canGoToGenre,
+        child: ListTile(
+          leading: Icon(
+            Icons.category_outlined,
+            color: iconColor,
+          ),
+          title: Text(AppLocalizations.of(context)!.goToGenre),
+          enabled: widget.canGoToGenre,
+          onTap: () async {
+            late BaseItemDto genre;
+            try {
+              if (FinampSettingsHelper.finampSettings.isOffline) {
+                final downloadsService = GetIt.instance<DownloadsService>();
+                genre = (await downloadsService.getCollectionInfo(
+                        id: widget.item.genreItems!.first.id))!
+                    .baseItem!;
+              } else {
+                genre = await _jellyfinApiHelper
+                    .getItemById(widget.item.genreItems!.first.id);
+              }
+            } catch (e) {
+              GlobalSnackbar.error(e);
+              return;
+            }
+            if (context.mounted) {
+              Navigator.pop(context);
+              await Navigator.of(context)
+                  .pushNamed(ArtistScreen.routeName, arguments: genre);
+            }
+          },
+        ),
+      ),
       Consumer(builder: (context, ref, _) {
         var canDelete = ref
             .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
@@ -580,7 +617,7 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
     var iconColor = Theme.of(context).colorScheme.primary;
     return [
       SliverPersistentHeader(
-        delegate: GenreMenuSliverAppBar(
+        delegate: ArtistMenuSliverAppBar(
           item: widget.item,
         ),
         pinned: true,
@@ -598,10 +635,10 @@ class _GenreMenuState extends ConsumerState<GenreMenu> {
   }
 }
 
-class GenreMenuSliverAppBar extends SliverPersistentHeaderDelegate {
+class ArtistMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   BaseItemDto item;
 
-  GenreMenuSliverAppBar({
+  ArtistMenuSliverAppBar({
     required this.item,
   });
 
@@ -658,7 +695,12 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                 ? Colors.black.withOpacity(0.25)
                 : Colors.white.withOpacity(0.15),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(9999),
+                  bottomLeft: Radius.circular(9999),
+                  // circular radii influence each other. this should look roughly the same as BorderRadius.circular(12)
+                  topRight: Radius.circular(2000),
+                  bottomRight: Radius.circular(2000)),
             ),
           ),
           child: Row(
@@ -668,7 +710,7 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                 aspectRatio: 1.0,
                 child: AlbumImage(
                   item: widget.item,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(9999),
                 ),
               ),
               Expanded(
@@ -694,17 +736,17 @@ class _AlbumInfoState extends ConsumerState<AlbumInfo> {
                         softWrap: true,
                         maxLines: 2,
                       ),
-                      //!!! the data needed for this currently isn't loaded, as it's quite intensive on the server
-                      // if (!widget.condensed)
-                      //   ItemAmountChip(
-                      //     baseItem: widget
-                      //         .item, //FIXME fetch extended item when menu is opened to include BaseItemDto.albumCount
-                      //     backgroundColor: IconTheme.of(context)
-                      //             .color
-                      //             ?.withOpacity(0.1) ??
-                      //         Theme.of(context).textTheme.bodyMedium?.color ??
-                      //         Colors.white,
-                      //   )
+                      const SizedBox(height: 4),
+                      if (!widget.condensed)
+                        ItemAmountChip(
+                          baseItem: widget
+                              .item, //FIXME fetch extended item when menu is opened to include BaseItemDto.albumCount
+                          backgroundColor: IconTheme.of(context)
+                                  .color
+                                  ?.withOpacity(0.1) ??
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white,
+                        )
                     ],
                   ),
                 ),
