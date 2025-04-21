@@ -2097,5 +2097,7 @@
   "startupErrorWorkaround": "Як обхідний шлях ви можете очистити дані програми, щоб скинути налаштування програми. Майте на увазі, що в цьому випадку всі ваші налаштування та завантаження будуть видалені.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
-  }
+  },
+  "exportLogs": "Зберегти журнали",
+  "@exportLogs": {}
 }
