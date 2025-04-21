@@ -282,7 +282,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                               ? showModalPlaylistMenu(
                                   context: context, item: parentItem)
                               : showModalAlbumMenu(
-                                  context: context, item: parentItem),
+                                  context: context, baseItem: parentItem),
                           label: AppLocalizations.of(context)!.menuButtonLabel,
                         ),
                       ]),

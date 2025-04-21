@@ -132,7 +132,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           await showModalPlaylistMenu(context: context, item: mutableAlbum);
           break;
         default:
-          await showModalAlbumMenu(context: context, item: mutableAlbum);
+          await showModalAlbumMenu(context: context, baseItem: mutableAlbum);
       }
     }
 
