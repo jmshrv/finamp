@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -11,7 +12,6 @@ import '../services/favorite_provider.dart';
 import '../services/feedback_helper.dart';
 import '../services/finamp_settings_helper.dart';
 import '../services/jellyfin_api_helper.dart';
-import 'track_menu.dart';
 import '../components/global_snackbar.dart';
 import '../components/themed_bottom_sheet.dart';
 import '../components/AddToPlaylistScreen/add_to_playlist_list.dart';
