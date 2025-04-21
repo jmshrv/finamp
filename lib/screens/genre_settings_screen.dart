@@ -44,23 +44,15 @@ class _GenreSettingsScreenState extends State<GenreSettingsScreen> {
                   );
                 },
                 onReorder: (oldIndex, newIndex) {
-                  // It's a bit of a hack to call setState with no actual widget
-                  // state, but it saves us from using listeners
                   setState(() {
-                    // For some weird reason newIndex is one above what it should be
-                    // when oldIndex is lower. This if statement is in Flutter's
-                    // ReorderableListView documentation.
-                    if (oldIndex < newIndex) {
-                      newIndex -= 1;
-                    }
+                    if (oldIndex < newIndex) newIndex -= 1;
 
-                    var currentGenreItemSectionsOrder = FinampSettingsHelper.finampSettings.genreItemSectionsOrder;
+                    final currentOrder = List.of(FinampSettingsHelper.finampSettings.genreItemSectionsOrder);
 
-                    // move all values below newIndex down by one
-                    final oldTab = currentGenreItemSectionsOrder[oldIndex];
-                    currentGenreItemSectionsOrder.removeAt(oldIndex);
-                    currentGenreItemSectionsOrder.insert(newIndex, oldTab);
-                    FinampSetters.setGenreItemSectionsOrder(currentGenreItemSectionsOrder);
+                    final movedItem = currentOrder.removeAt(oldIndex);
+                    currentOrder.insert(newIndex, movedItem);
+
+                    FinampSetters.setGenreItemSectionsOrder(currentOrder);
                   });
                 }
               ),
