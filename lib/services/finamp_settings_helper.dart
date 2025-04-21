@@ -143,6 +143,16 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void resetGenreSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    
+    finampSettingsTemp.genreItemSectionsOrder =
+        DefaultSettings.genreItemSectionsOrder;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void resetLayoutSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
@@ -164,6 +174,7 @@ class FinampSettingsHelper {
     finampSettingsTemp.allowSplitScreen = DefaultSettings.allowSplitScreen;
     finampSettingsTemp.showProgressOnNowPlayingBar =
         DefaultSettings.showProgressOnNowPlayingBar;
+
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -279,6 +290,7 @@ class FinampSettingsHelper {
     resetPlayerScreenSettings();
     resetLyricsSettings();
     resetAlbumSettings();
+    resetGenreSettings();
     resetTabsSettings();
 
     LocaleHelper.setLocale(null); // Reset to System Language

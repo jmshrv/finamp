@@ -69,11 +69,13 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     List<BaseItemDto> allChildren = [];
     final genreCuratedItemSelectionType =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionType);
+    final genreItemSectionsOrder =
+        ref.watch(finampSettingsProvider.genreItemSectionsOrder);
 
 
     Future<List<BaseItemDto>?> getCuratedItemsOnline({
       required GenreCuratedItemSelectionType genreCuratedItemSelectionType,
-      required BaseItemDtoType itemType,
+      required BaseItemDtoType baseItemType,
       required String sortBySecondary,
       ArtistType? artistListType,
     }) async {
@@ -88,15 +90,15 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
               ? "DateCreated"
               : "PremiereDate";
         var mostPlayedOrLatestItems = await jellyfinApiHelper.getItems(
-          parentItem: (itemType == BaseItemDtoType.artist) 
+          parentItem: (baseItemType == BaseItemDtoType.artist) 
               ? null : widget.parent,
-          genreFilter: (itemType == BaseItemDtoType.artist)
+          genreFilter: (baseItemType == BaseItemDtoType.artist)
               ? widget.parent : null, 
           sortBy: [sortByMain, sortBySecondary].where((s) => s.isNotEmpty).join(','),
           sortOrder: "Descending",
           limit: 5,
-          includeItemTypes: itemType.idString,
-          artistType: (itemType == BaseItemDtoType.artist)
+          includeItemTypes: baseItemType.idString,
+          artistType: (baseItemType == BaseItemDtoType.artist)
               ? artistListType : null,
         );
         fetched.addAll(mostPlayedOrLatestItems ?? []);
@@ -104,15 +106,15 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.randomFavoritesFirst ||
             genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) {
           var favoriteItems = await jellyfinApiHelper.getItems(
-            parentItem: (itemType == BaseItemDtoType.artist) 
+            parentItem: (baseItemType == BaseItemDtoType.artist) 
                 ? null : widget.parent,
-            genreFilter: (itemType == BaseItemDtoType.artist)
+            genreFilter: (baseItemType == BaseItemDtoType.artist)
                 ? widget.parent : null, 
             sortBy: "Random",
             isFavorite: true,
             limit: 5,
-            includeItemTypes: itemType.idString,
-            artistType: (itemType == BaseItemDtoType.artist)
+            includeItemTypes: baseItemType.idString,
+            artistType: (baseItemType == BaseItemDtoType.artist)
               ? artistListType : null,
           );
           fetched.addAll(favoriteItems ?? []);
@@ -121,15 +123,15 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             fetched.length < 5) {
           var remainingLimit = 5 - fetched.length;
           var randomItems = await jellyfinApiHelper.getItems(
-            parentItem: (itemType == BaseItemDtoType.artist) 
+            parentItem: (baseItemType == BaseItemDtoType.artist) 
                 ? null : widget.parent,
-            genreFilter: (itemType == BaseItemDtoType.artist)
+            genreFilter: (baseItemType == BaseItemDtoType.artist)
                 ? widget.parent : null, 
             sortBy: "Random",
             isFavorite: false,
             limit: remainingLimit,
-            includeItemTypes: itemType.idString,
-            artistType: (itemType == BaseItemDtoType.artist)
+            includeItemTypes: baseItemType.idString,
+            artistType: (baseItemType == BaseItemDtoType.artist)
               ? artistListType : null,
           );
           fetched.addAll(randomItems ?? []);
@@ -253,19 +255,19 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         // Tracks 
         getCuratedItemsOnline(
           genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          itemType: BaseItemDtoType.track,
+          baseItemType: BaseItemDtoType.track,
           sortBySecondary: "SortName",
         ),
         // Albums
         getCuratedItemsOnline(
           genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          itemType: BaseItemDtoType.album,
+          baseItemType: BaseItemDtoType.album,
           sortBySecondary: "PremiereDate,SortName",
         ),
         // Artists
         getCuratedItemsOnline(
           genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          itemType: BaseItemDtoType.artist,
+          baseItemType: BaseItemDtoType.artist,
           sortBySecondary: "SortName",
           artistListType: settings.artistListType,
         ),
@@ -347,37 +349,45 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
               ),
             ),
             if (!_isLoading)
-              SliverPadding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                sliver: TracksSection(
-                  parent: widget.parent,
-                  tracks: tracks,
-                  childrenForQueue: Future.value(tracks),
-                  tracksText: genreCuratedItemSelectionType.toLocalisedSectionTitle(context, BaseItemDtoType.track),
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.tracks),
-                ),
-              ),
-            if (!_isLoading)
-              SliverPadding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                sliver: AlbumSection(
-                  parent: widget.parent,
-                  albumsText: genreCuratedItemSelectionType.toLocalisedSectionTitle(context, BaseItemDtoType.album),
-                  albums: topAlbums,
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.albums),
-                ),
-              ),
-            if (!_isLoading)
-              SliverPadding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                sliver: AlbumSection(
-                  parent: widget.parent,
-                  albumsText: genreCuratedItemSelectionType.toLocalisedSectionTitle(context, BaseItemDtoType.artist),
-                  albums: topArtists,
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.artists),
-                  genreFilter: widget.parent,
-                ),
-              ),
+              ...genreItemSectionsOrder.map((type) {
+                switch (type) {
+                  case GenreItemSections.tracks:
+                    return SliverPadding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      sliver: TracksSection(
+                        parent: widget.parent,
+                        tracks: tracks,
+                        childrenForQueue: Future.value(tracks),
+                        tracksText: genreCuratedItemSelectionType
+                            .toLocalisedSectionTitle(context, BaseItemDtoType.track),
+                        seeAllCallbackFunction: () => openSeeAll(TabContentType.tracks),
+                      ),
+                    );
+                  case GenreItemSections.albums:
+                    return SliverPadding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      sliver: AlbumSection(
+                        parent: widget.parent,
+                        albumsText: genreCuratedItemSelectionType
+                            .toLocalisedSectionTitle(context, BaseItemDtoType.album),
+                        albums: topAlbums,
+                        seeAllCallbackFunction: () => openSeeAll(TabContentType.albums),
+                      ),
+                    );
+                  case GenreItemSections.artists:
+                    return SliverPadding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      sliver: AlbumSection(
+                        parent: widget.parent,
+                        albumsText: genreCuratedItemSelectionType
+                            .toLocalisedSectionTitle(context, BaseItemDtoType.artist),
+                        albums: topArtists,
+                        seeAllCallbackFunction: () => openSeeAll(TabContentType.artists),
+                        genreFilter: widget.parent,
+                      ),
+                    );
+                }
+              }).toList(),
             if (_isLoading)
               SliverToBoxAdapter(
                 child: Padding(

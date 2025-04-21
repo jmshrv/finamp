@@ -1329,7 +1329,7 @@ class DownloadsService {
   /// album/playlist screen.  Can return all tracks in the album/playlist or
   /// just fully downloaded ones.
   Future<List<BaseItemDto>> getCollectionTracks(BaseItemDto item,
-      {bool playable = true, String? genreFilter}) async {
+      {bool playable = true, BaseItemDto? genreFilter}) async {
     var stub =
         DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
 
@@ -1350,7 +1350,7 @@ class DownloadsService {
             genreFilter != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
-                    genreFilter!, DownloadItemType.collection)))));
+                    genreFilter!.id.raw, DownloadItemType.collection)))));
 
     var canonItem = _isar.downloadItems.getSync(stub.isarId);
     if (canonItem?.orderedChildren == null) {

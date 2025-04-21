@@ -234,6 +234,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       genreCuratedItemSelectionType: fields[97] == null
           ? GenreCuratedItemSelectionType.mostPlayed
           : fields[97] as GenreCuratedItemSelectionType,
+      genreItemSectionsOrder: fields[98] == null
+          ? [
+              GenreItemSections.tracks,
+              GenreItemSections.albums,
+              GenreItemSections.artists
+            ]
+          : (fields[98] as List).cast<GenreItemSections>(),
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -244,7 +251,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(92)
+      ..writeByte(93)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -428,7 +435,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(96)
       ..write(obj.enablePlayon)
       ..writeByte(97)
-      ..write(obj.genreCuratedItemSelectionType);
+      ..write(obj.genreCuratedItemSelectionType)
+      ..writeByte(98)
+      ..write(obj.genreItemSectionsOrder);
   }
 
   @override
@@ -2276,9 +2285,9 @@ class GenreCuratedItemSelectionTypeAdapter
       case 3:
         return GenreCuratedItemSelectionType.random;
       case 4:
-        return GenreCuratedItemSelectionType.recentlyAdded;
-      case 5:
         return GenreCuratedItemSelectionType.latestReleases;
+      case 5:
+        return GenreCuratedItemSelectionType.recentlyAdded;
       default:
         return GenreCuratedItemSelectionType.mostPlayed;
     }
@@ -2295,9 +2304,9 @@ class GenreCuratedItemSelectionTypeAdapter
         writer.writeByte(2);
       case GenreCuratedItemSelectionType.random:
         writer.writeByte(3);
-      case GenreCuratedItemSelectionType.recentlyAdded:
-        writer.writeByte(4);
       case GenreCuratedItemSelectionType.latestReleases:
+        writer.writeByte(4);
+      case GenreCuratedItemSelectionType.recentlyAdded:
         writer.writeByte(5);
     }
   }
@@ -2309,6 +2318,47 @@ class GenreCuratedItemSelectionTypeAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is GenreCuratedItemSelectionTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class GenreItemSectionsAdapter extends TypeAdapter<GenreItemSections> {
+  @override
+  final int typeId = 95;
+
+  @override
+  GenreItemSections read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return GenreItemSections.tracks;
+      case 1:
+        return GenreItemSections.albums;
+      case 2:
+        return GenreItemSections.artists;
+      default:
+        return GenreItemSections.tracks;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, GenreItemSections obj) {
+    switch (obj) {
+      case GenreItemSections.tracks:
+        writer.writeByte(0);
+      case GenreItemSections.albums:
+        writer.writeByte(1);
+      case GenreItemSections.artists:
+        writer.writeByte(2);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GenreItemSectionsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

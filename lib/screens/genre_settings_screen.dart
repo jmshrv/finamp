@@ -1,9 +1,7 @@
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/finamp_models.dart';
-import '../services/finamp_settings_helper.dart';
 
 class GenreSettingsScreen extends StatefulWidget {
   const GenreSettingsScreen({super.key});
@@ -20,7 +18,7 @@ class _GenreSettingsScreenState extends State<GenreSettingsScreen> {
         title: Text(AppLocalizations.of(context)!.genreScreen),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetLyricsSettings)
+              context, FinampSettingsHelper.resetGenreSettings)
         ],
       ),
       body: Padding(
@@ -29,73 +27,47 @@ class _GenreSettingsScreenState extends State<GenreSettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              title: Text(AppLocalizations.of(context)!.genreItemCurationType),
-              subtitle: Text(AppLocalizations.of(context)!.genreItemCurationTypeSubtitle),
+              title: Text(AppLocalizations.of(context)!.genreItemSectionsOrder),
+              subtitle: Text(AppLocalizations.of(context)!.genreItemSectionsOrderSubtitle),
             ),
-            /*const SizedBox(height: 8),
-            const GenreCuratedItemsSelectionTypeSelector(isOffline: false),
-            const SizedBox(height: 8),
-            const GenreCuratedItemsSelectionTypeSelector(isOffline: true),*/
-          ],
+            Expanded( 
+              child: ReorderableListView.builder(
+                itemCount: FinampSettingsHelper.finampSettings.genreItemSectionsOrder.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    key: ValueKey(FinampSettingsHelper.finampSettings.genreItemSectionsOrder[index]),
+                    title: Text(FinampSettingsHelper.finampSettings.genreItemSectionsOrder[index].toLocalisedString(context)),
+                    leading: ReorderableDragStartListener(
+                      index: index,
+                      child: const Icon(Icons.drag_handle),
+                    ),
+                  );
+                },
+                onReorder: (oldIndex, newIndex) {
+                  // It's a bit of a hack to call setState with no actual widget
+                  // state, but it saves us from using listeners
+                  setState(() {
+                    // For some weird reason newIndex is one above what it should be
+                    // when oldIndex is lower. This if statement is in Flutter's
+                    // ReorderableListView documentation.
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+
+                    var currentGenreItemSectionsOrder = FinampSettingsHelper.finampSettings.genreItemSectionsOrder;
+
+                    // move all values below newIndex down by one
+                    final oldTab = currentGenreItemSectionsOrder[oldIndex];
+                    currentGenreItemSectionsOrder.removeAt(oldIndex);
+                    currentGenreItemSectionsOrder.insert(newIndex, oldTab);
+                    FinampSetters.setGenreItemSectionsOrder(currentGenreItemSectionsOrder);
+                  });
+                }
+              ),
+            ),
+          ]
         ),
       ),
     );
   }
 }
-/*
-class GenreCuratedItemsSelectionTypeSelector extends ConsumerWidget {
-  const GenreCuratedItemsSelectionTypeSelector({
-    super.key,
-    required this.isOffline,
-  });
-
-  final bool isOffline;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final value = isOffline
-        ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeOffline)
-        : ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeOnline);
-
-    final onChanged = isOffline
-        ? FinampSetters.setGenreCuratedItemSelectionTypeOffline.ifNonNull
-        : FinampSetters.setGenreCuratedItemSelectionTypeOnline.ifNonNull;
-
-    final label = isOffline
-        ? AppLocalizations.of(context)!.offlineMode
-        : AppLocalizations.of(context)!.onlineMode;
-
-    final items = GenreCuratedItemSelectionType.values
-        .where((e) => !(isOffline && e == GenreCuratedItemSelectionType.mostPlayed))
-        .map(
-          (e) => DropdownMenuItem<GenreCuratedItemSelectionType>(
-            value: e,
-            child: Text(e.toLocalisedString(context)),
-          ),
-        )
-        .toList();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 18),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-          ),
-          DropdownButton<GenreCuratedItemSelectionType>(
-            isExpanded: false,
-            value: value,
-            items: items,
-            onChanged: onChanged,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-*/

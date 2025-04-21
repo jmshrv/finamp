@@ -1189,13 +1189,13 @@
   "@recentlyAdded": {},
   "latestReleases": "Latest Releases",
   "@latestReleases": {},
-  "genreItemCurationType": "Item Curation Type",
-  "@genreItemCurationType": {
-    "description": "Label for the setting that controls the item curation type on the genre screen."
+  "genreItemSectionsOrder": "Item Sections Order",
+  "@genreItemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the genre screen."
   },
-  "genreItemCurationTypeSubtitle": "Controls how tracks, albums and artists on the Genre Screen will get curated. In Offline Mode, \"Most Played\" is not available, so you can configure it independently from Online Mode.",
-  "@genreItemCurationTypeSubtitle": {
-    "description": "Description of the setting that controls the item curation type on the genre screen."
+  "genreItemSectionsOrderSubtitle": "Controls the order of Item Sections on the Genre Screen.",
+  "@genreItemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the genre screen."
   },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {

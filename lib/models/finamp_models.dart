@@ -163,6 +163,7 @@ class DefaultSettings {
   static const audioFadeInDuration = Duration(milliseconds: 0);
   static const artistListType = ArtistType.albumartist;
   static const genreCuratedItemSelectionType = GenreCuratedItemSelectionType.mostPlayed;
+  static const genreItemSectionsOrder = GenreItemSections.values;
 }
 
 @HiveType(typeId: 28)
@@ -286,6 +287,7 @@ class FinampSettings {
       this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
       this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
       this.genreCuratedItemSelectionType = DefaultSettings.genreCuratedItemSelectionType,
+      this.genreItemSectionsOrder = DefaultSettings.genreItemSectionsOrder,
       });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -602,6 +604,9 @@ class FinampSettings {
 
   @HiveField(97, defaultValue: DefaultSettings.genreCuratedItemSelectionType)
   GenreCuratedItemSelectionType genreCuratedItemSelectionType;
+
+  @HiveField(98, defaultValue: DefaultSettings.genreItemSectionsOrder)
+  List<GenreItemSections> genreItemSectionsOrder;
 
 
   static Future<FinampSettings> create() async {
@@ -2945,6 +2950,48 @@ enum GenreCuratedItemSelectionType {
       case GenreCuratedItemSelectionType.randomFavoritesFirst:
       case GenreCuratedItemSelectionType.random:
         return getTitle(loc.tracks, loc.albums, loc.artists) ?? "Unsupported Type";
+    }
+  }
+}
+
+
+@HiveType(typeId: 95)
+enum GenreItemSections {
+  @HiveField(0)
+  tracks,
+  @HiveField(1)
+  albums,
+  @HiveField(2)
+  artists;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(GenreItemSections genreItemSection) {
+    switch (genreItemSection) {
+      case GenreItemSections.tracks:
+        return "Tracks";
+      case GenreItemSections.albums:
+        return "Albums";
+      case GenreItemSections.artists:
+        return "Artists";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      GenreItemSections genreItemSection, BuildContext context) {
+    switch (genreItemSection) {
+      case GenreItemSections.tracks:
+        return AppLocalizations.of(context)!.tracks;
+      case GenreItemSections.albums:
+        return AppLocalizations.of(context)!.albums;
+      case GenreItemSections.artists:
+        return AppLocalizations.of(context)!.artists;
     }
   }
 }
