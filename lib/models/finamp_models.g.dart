@@ -2279,14 +2279,12 @@ class GenreCuratedItemSelectionTypeAdapter
       case 0:
         return GenreCuratedItemSelectionType.mostPlayed;
       case 1:
-        return GenreCuratedItemSelectionType.randomFavoritesFirst;
-      case 2:
         return GenreCuratedItemSelectionType.favorites;
-      case 3:
+      case 2:
         return GenreCuratedItemSelectionType.random;
-      case 4:
+      case 3:
         return GenreCuratedItemSelectionType.latestReleases;
-      case 5:
+      case 4:
         return GenreCuratedItemSelectionType.recentlyAdded;
       default:
         return GenreCuratedItemSelectionType.mostPlayed;
@@ -2298,16 +2296,14 @@ class GenreCuratedItemSelectionTypeAdapter
     switch (obj) {
       case GenreCuratedItemSelectionType.mostPlayed:
         writer.writeByte(0);
-      case GenreCuratedItemSelectionType.randomFavoritesFirst:
-        writer.writeByte(1);
       case GenreCuratedItemSelectionType.favorites:
-        writer.writeByte(2);
+        writer.writeByte(1);
       case GenreCuratedItemSelectionType.random:
-        writer.writeByte(3);
+        writer.writeByte(2);
       case GenreCuratedItemSelectionType.latestReleases:
-        writer.writeByte(4);
+        writer.writeByte(3);
       case GenreCuratedItemSelectionType.recentlyAdded:
-        writer.writeByte(5);
+        writer.writeByte(4);
     }
   }
 

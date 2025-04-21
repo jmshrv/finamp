@@ -2862,14 +2862,12 @@ enum GenreCuratedItemSelectionType {
   @HiveField(0)
   mostPlayed,
   @HiveField(1)
-  randomFavoritesFirst,
-  @HiveField(2)
   favorites,
-  @HiveField(3)
+  @HiveField(2)
   random,
-  @HiveField(4)
+  @HiveField(3)
   latestReleases,
-  @HiveField(5)
+  @HiveField(4)
   recentlyAdded;
 
   /// Human-readable version of this enum.
@@ -2887,9 +2885,7 @@ enum GenreCuratedItemSelectionType {
       GenreCuratedItemSelectionType genreCuratedItemSelectionType) {
     switch (genreCuratedItemSelectionType) {
       case GenreCuratedItemSelectionType.mostPlayed:
-        return "Most Played";
-      case GenreCuratedItemSelectionType.randomFavoritesFirst:
-        return "Random (Favorites First)";        
+        return "Most Played";    
       case GenreCuratedItemSelectionType.favorites:
         return "Favorites";
       case GenreCuratedItemSelectionType.random:
@@ -2907,8 +2903,6 @@ enum GenreCuratedItemSelectionType {
     switch (genreCuratedItemSelectionType) {
       case GenreCuratedItemSelectionType.mostPlayed:
         return AppLocalizations.of(context)!.mostPlayed;
-      case GenreCuratedItemSelectionType.randomFavoritesFirst:
-        return AppLocalizations.of(context)!.randomFavoritesFirst;        
       case GenreCuratedItemSelectionType.favorites:
         return AppLocalizations.of(context)!.favorites;
       case GenreCuratedItemSelectionType.random:
@@ -2942,14 +2936,14 @@ enum GenreCuratedItemSelectionType {
     switch (genreCuratedItemSelectionType) {
       case GenreCuratedItemSelectionType.mostPlayed:
         return getTitle(loc.topTracks, loc.topAlbums, loc.topArtists) ?? "Unsupported Type";
-      case GenreCuratedItemSelectionType.recentlyAdded:
-      case GenreCuratedItemSelectionType.latestReleases:
-        return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
       case GenreCuratedItemSelectionType.favorites:
         return getTitle(loc.favoriteTracks, loc.favoriteAlbums, loc.favoriteArtists) ?? "Unsupported Type";
-      case GenreCuratedItemSelectionType.randomFavoritesFirst:
       case GenreCuratedItemSelectionType.random:
         return getTitle(loc.tracks, loc.albums, loc.artists) ?? "Unsupported Type";
+      case GenreCuratedItemSelectionType.latestReleases:
+        return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
+      case GenreCuratedItemSelectionType.recentlyAdded:
+        return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
     }
   }
 }
