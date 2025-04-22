@@ -31,9 +31,7 @@ class DownloadButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final childrenLength = (childrenCount != null) 
-      ? childrenCount
-      : children?.length;
+    final childrenLength = childrenCount ?? children?.length;
     final downloadsService = GetIt.instance<DownloadsService>();
     DownloadItemStatus? status = ref
         .watch(downloadsService.statusProvider((item, childrenLength)))

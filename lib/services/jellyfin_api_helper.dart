@@ -147,7 +147,7 @@ class JellyfinApiHelper {
       .items;
   }
 
-  Future<Map<String, dynamic>> getItemsWithTotalRecordCount({
+  Future<QueryResult_BaseItemDto> getItemsWithTotalRecordCount({
     BaseItemDto? parentItem,
     String? includeItemTypes,
     String? sortBy,
@@ -179,11 +179,7 @@ class JellyfinApiHelper {
       startIndex: startIndex,
       limit: limit,
     );
-    final result = QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>);
-    return {
-      'totalRecordCount': result.totalRecordCount,
-      'items': result.items,
-    };
+    return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>);
   }
 
   Future<dynamic> _fetchGetItemsResponse ({
