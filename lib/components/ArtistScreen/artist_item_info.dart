@@ -42,7 +42,7 @@ class ArtistItemInfo extends ConsumerWidget {
                   : AppLocalizations.of(context)!.trackCount(itemTracks),
             )),
         IconAndText(
-            iconData: Icons.book,
+            iconData: TablerIcons.disc,
             textSpan: TextSpan(
               text: AppLocalizations.of(context)!.albumCount(itemAlbums),
             )),
