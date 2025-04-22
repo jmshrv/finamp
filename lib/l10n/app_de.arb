@@ -199,7 +199,7 @@
   "@addDownloads": {},
   "location": "Ort",
   "@location": {},
-  "shareLogs": "Logs teilen",
+  "shareLogs": "Protokolle teilen",
   "@shareLogs": {},
   "stackTrace": "Stacktrace",
   "@stackTrace": {},
@@ -340,7 +340,7 @@
   "@editPlaylistNameTooltip": {},
   "playlistNameUpdated": "Playlist-Name aktualisiert.",
   "@playlistNameUpdated": {},
-  "logsCopied": "Logs kopiert.",
+  "logsCopied": "Protokolle kopiert.",
   "@logsCopied": {},
   "downloadsQueued": "Downloads hinzugefügt",
   "@downloadsQueued": {},
@@ -2075,5 +2075,7 @@
   "libraryDownloads": "Bibliothek Downloads",
   "@libraryDownloads": {
     "description": "Title for the library downloads section on the downloads screen."
-  }
+  },
+  "exportLogs": "Protokolle speichern",
+  "@exportLogs": {}
 }
