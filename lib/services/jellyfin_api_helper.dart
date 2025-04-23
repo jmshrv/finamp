@@ -143,8 +143,7 @@ class JellyfinApiHelper {
       startIndex: startIndex,
       limit: limit,
     );
-    return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-      .items;
+    return response.items;
   }
 
   Future<QueryResult_BaseItemDto> getItemsWithTotalRecordCount({
@@ -179,10 +178,10 @@ class JellyfinApiHelper {
       startIndex: startIndex,
       limit: limit,
     );
-    return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>);
+    return response;
   }
 
-  Future<dynamic> _fetchGetItemsResponse ({
+  Future<QueryResult_BaseItemDto> _fetchGetItemsResponse ({
     BaseItemDto? parentItem,
     String? includeItemTypes,
     String? sortBy,
@@ -205,11 +204,7 @@ class JellyfinApiHelper {
       // since this error usually happens because the listeners on MusicScreenTabView
       // update milliseconds before the page is popped.
       // This shouldn't happen in normal use.
-      return {
-        'startIndex': 0,
-        'totalRecordCount': 0,
-        'items': [],
-      };
+      return QueryResult_BaseItemDto(totalRecordCount: 0, startIndex: 0, items: []);
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
@@ -358,7 +353,7 @@ class JellyfinApiHelper {
           isFavorite: isFavorite,
         );
       }
-      return response;
+      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>);
     });
   }
 
