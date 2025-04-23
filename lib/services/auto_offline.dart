@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -66,25 +67,27 @@ class AutoOffline extends _$AutoOffline {
 Future<void> _onConnectivityChange(List<ConnectivityResult>? connections) async {
   _networkAutomationLogger.finest("Network Change: ${
     connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
+  connections ??= await Connectivity().checkConnectivity();
   await Future.wait([
     _setOfflineMode(connections),
-    changeTargetUrl()
+    changeTargetUrl(),
   ]);
+  notifyOfPausedDownloads(connections);
 }
 
-Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
+Future<void> _setOfflineMode(List<ConnectivityResult> connections) async {
   // skip when feature not enabled
   if (FinampSettingsHelper.finampSettings.autoOffline ==
       AutoOfflineOption.disabled) return;
   // skip when user overwrote offline mode
   if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
 
-  bool state = await _shouldBeOffline(connections);
+  bool state = _shouldBeOffline(connections);
 
   // Attempt to combat IOS reliability problems
   if (Platform.isIOS) {
     await Future.delayed(Duration(seconds: 7), () => {});
-    state = await _shouldBeOffline(null);
+    state = _shouldBeOffline(await Connectivity().checkConnectivity());
   }
 
   // skip if nothing changed
@@ -98,8 +101,7 @@ Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
   FinampSetters.setIsOffline(state);
 }
 
-Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
-  connections ??= await Connectivity().checkConnectivity();
+bool _shouldBeOffline(List<ConnectivityResult> connections) {
   switch (FinampSettingsHelper.finampSettings.autoOffline) {
     case AutoOfflineOption.disconnected:
       return !connections.contains(ConnectivityResult.mobile) &&
@@ -142,4 +144,27 @@ Future<void> changeTargetUrl({bool? isLocal}) async {
   _networkAutomationLogger.finest("Wifi Name detected: $currentWifi");
 
   await changeTargetUrl(isLocal: currentWifi == targetWifi);
+}
+
+void notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
+  // desktop doesn't have this setting
+  if (!(Platform.isAndroid || Platform.isIOS)) return;
+
+  if (FinampSettingsHelper.finampSettings.requireWifiForDownloads) {
+    final connectedToWifi = connections.contains(ConnectivityResult.wifi);
+    if (connectedToWifi) return;
+
+    final downloadsService = GetIt.instance<DownloadsService>();
+    downloadsService.updateDownloadCounts();
+
+    final downloadingTracks = downloadsService.downloadCounts["track"]!;
+    final downloadingImage = downloadsService.downloadCounts["image"]!;
+    final downloadingSyncs = downloadsService.downloadCounts["sync"]!;
+
+    final downloads = downloadingTracks + downloadingImage + downloadingSyncs;
+
+    if (downloads == 0) return;
+
+    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);
+  }
 }

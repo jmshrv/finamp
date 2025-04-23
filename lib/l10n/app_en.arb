@@ -2146,5 +2146,9 @@
   },
   "preferHomeNetworkFailedToReadNetworkNameError": "Failed to read network name",
   "preferHomeNetworkGetNetworkNameButton": "Use current network",
-  "networkSettingsTitle": "Network"
+  "networkSettingsTitle": "Network",
+  "downloadPaused": "Downloading paused due to loosing Wifi connection",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  }
 }
