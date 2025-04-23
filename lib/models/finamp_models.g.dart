@@ -18,7 +18,7 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
     };
     return FinampUser(
       id: fields[0] as String,
-      publicAddress: fields[6] as String,
+      publicAddress: fields[1] as String,
       homeAddress: fields[7] as String,
       homeNetworkName: fields[8] as String,
       preferHomeNetwork: fields[10] as bool,
@@ -38,6 +38,8 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.publicAddress)
       ..writeByte(2)
       ..write(obj.accessToken)
       ..writeByte(3)
@@ -46,8 +48,6 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       ..write(obj.currentViewId)
       ..writeByte(5)
       ..write(obj.views)
-      ..writeByte(6)
-      ..write(obj.publicAddress)
       ..writeByte(7)
       ..write(obj.homeAddress)
       ..writeByte(8)
