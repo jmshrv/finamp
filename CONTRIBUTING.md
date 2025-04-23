@@ -26,7 +26,7 @@ This also means that you can keep using your regular install of Finamp (from the
 If you try to install a release build you built yourself (with your signing key) on top of a release build you downloaded from the Play Store or GitHub, Android will prevent you from doing so and show a generic error message. The only solution here is to uninstall the existing version, and then install your build. Note that this will delete any logins, settings and downloads that you had configured.  
 This generally shouldn't be needed, since debug builds works fine for daily usage, even though they are a bit less performant.
 
-### Developing on an Android Device without Android Studio (on linux)
+### Developing on an Android Device without Android Studio on linux (not recommended)
 1. You need the following packages  
     *you may need to find out the equivalents for your distro, these are for Arch*  
     `android-sdk android-sdk-build-tools android-sdk-cmdline-tools-latest android-platform android-sdk-platform-tools`
@@ -96,8 +96,17 @@ As mentioned above, Finamp uses Hive for most data storage needs. If you're doin
 When creating new types, note that you'll also have to register an adapter in `main.dart`. After code generation, there should be a class called `[YourType]Adapter`, which you can initialize in `setupHive`.
 
 ## Project Structure
+Here is a short description on the paths you'll most likely come across
+```
+lib/                                -- the codebase also known as src in other projects
+    components/                     -- Contains elements used by screens
+    l10n/                           -- Translations files. Edit the en file to add translations and run code generation
+        models/
+            finamp_models.g.dart    -- Mostly database and settings
+        screens/                    -- All the "pages", "screens", "views" what ever you want to call them
+        services/                   -- Things that run in the background, kinda like backend
+```
 
-TODO
 
 ## The Redesign
 

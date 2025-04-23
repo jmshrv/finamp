@@ -18,7 +18,7 @@ class HomeNetworkSelector extends ConsumerWidget {
     bool preferLocalNetwork = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferHomeNetwork ?? DefaultSettings.preferHomeNetwork;
 
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.preferHomeNetworkEnableSwitchTitle), // TODO TRANSLATION
+      title: Text(AppLocalizations.of(context)!.preferHomeNetworkEnableSwitchTitle),
       subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkEnableSwitchDescription),
       value: preferLocalNetwork,
       onChanged: (value) async {
