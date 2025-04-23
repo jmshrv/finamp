@@ -26,6 +26,22 @@ This also means that you can keep using your regular install of Finamp (from the
 If you try to install a release build you built yourself (with your signing key) on top of a release build you downloaded from the Play Store or GitHub, Android will prevent you from doing so and show a generic error message. The only solution here is to uninstall the existing version, and then install your build. Note that this will delete any logins, settings and downloads that you had configured.  
 This generally shouldn't be needed, since debug builds works fine for daily usage, even though they are a bit less performant.
 
+### Developing on an Android Device without Android Studio (on linux)
+1. You need the following packages  
+    *you may need to find out the equivalents for your distro, these are for Arch*  
+    `android-sdk android-sdk-build-tools android-sdk-cmdline-tools-latest android-platform android-sdk-platform-tools`
+2. Ensure your active java version is jdk17, newer/older might still work but 17 definitely does
+3. Accept license  
+    `flutter doctor --android-licenses && sudo /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses`
+4. Enable USB debugging on your phone
+5. Connect your phone via usb to your pc
+6. Find your device  
+    `flutter devices`
+7. Run on device  
+    `flutter run -d <device>` eg. for google pixel phones `flutter run -d pixel`   
+8. Go back to develop on linux   
+    `flutter run -d linux`
+
 ### Code Generation (The Arcane Arts)
 
 ![A conversation between jmshrv and Chaphasilor. I say "did you try running (the Dart build command)?" They reply "I wasn't aware I need to use the arcane arts for this"](assets/arcane-arts.png)
