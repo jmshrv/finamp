@@ -1,7 +1,7 @@
 import 'package:finamp/components/delete_prompts.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
@@ -66,7 +66,7 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                             if ((!(stub.baseItemType == BaseItemDtoType.album ||
                                     stub.baseItemType ==
                                         BaseItemDtoType.track)) &&
-                                !FinampSettingsHelper.finampSettings.isOffline)
+                                !ref.watch(finampSettingsProvider.isOffline))
                               IconButton(
                                 icon: const Icon(Icons.sync),
                                 onPressed: () {

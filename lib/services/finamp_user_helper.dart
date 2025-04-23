@@ -23,6 +23,8 @@ class FinampUserHelper {
 
   final _isar = GetIt.instance<Isar>();
 
+  final List<void Function()> _postUserHooks = [];
+
   /// Checks if there are any saved users.
   bool get isUsersEmpty => _isar.finampUsers.countSync() == 0;
 
@@ -66,6 +68,17 @@ class FinampUserHelper {
       _isar.finampUsers.putSync(newUser);
     });
     await setAuthHeader();
+    while (_postUserHooks.isNotEmpty) {
+      _postUserHooks.removeAt(0)();
+    }
+  }
+
+  void runUserHook(void Function() func) {
+    if (currentUser != null) {
+      func();
+    } else {
+      _postUserHooks.add(func);
+    }
   }
 
   /// Sets the views of the current user

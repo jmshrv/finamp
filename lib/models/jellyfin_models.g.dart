@@ -620,19 +620,16 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
       supportedCommands: (fields[1] as List?)?.cast<String>(),
       supportsMediaControl: fields[2] as bool?,
       supportsPersistentIdentifier: fields[3] as bool?,
-      supportsSync: fields[4] as bool?,
       deviceProfile: fields[5] as DeviceProfile?,
-      iconUrl: fields[6] as String?,
-      supportsContentUploading: fields[7] as bool?,
-      messageCallbackUrl: fields[8] as String?,
       appStoreUrl: fields[9] as String?,
+      iconUrl: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ClientCapabilities obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.playableMediaTypes)
       ..writeByte(1)
@@ -641,16 +638,10 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
       ..write(obj.supportsMediaControl)
       ..writeByte(3)
       ..write(obj.supportsPersistentIdentifier)
-      ..writeByte(4)
-      ..write(obj.supportsSync)
       ..writeByte(5)
       ..write(obj.deviceProfile)
       ..writeByte(6)
       ..write(obj.iconUrl)
-      ..writeByte(7)
-      ..write(obj.supportsContentUploading)
-      ..writeByte(8)
-      ..write(obj.messageCallbackUrl)
       ..writeByte(9)
       ..write(obj.appStoreUrl);
   }
@@ -2570,95 +2561,6 @@ class QueueItemAdapter extends TypeAdapter<QueueItem> {
           typeId == other.typeId;
 }
 
-class PublicUsersResponseAdapter extends TypeAdapter<PublicUsersResponse> {
-  @override
-  final int typeId = 41;
-
-  @override
-  PublicUsersResponse read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return PublicUsersResponse(
-      users: (fields[0] as List).cast<UserDto>(),
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, PublicUsersResponse obj) {
-    writer
-      ..writeByte(1)
-      ..writeByte(0)
-      ..write(obj.users);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PublicUsersResponseAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class QuickConnectStateAdapter extends TypeAdapter<QuickConnectState> {
-  @override
-  final int typeId = 42;
-
-  @override
-  QuickConnectState read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return QuickConnectState(
-      authenticated: fields[0] as bool,
-      secret: fields[1] as String?,
-      code: fields[2] as String?,
-      deviceId: fields[3] as String?,
-      deviceName: fields[4] as String?,
-      appName: fields[5] as String?,
-      appVersion: fields[6] as String?,
-      dateAdded: fields[7] as String?,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, QuickConnectState obj) {
-    writer
-      ..writeByte(8)
-      ..writeByte(0)
-      ..write(obj.authenticated)
-      ..writeByte(1)
-      ..write(obj.secret)
-      ..writeByte(2)
-      ..write(obj.code)
-      ..writeByte(3)
-      ..write(obj.deviceId)
-      ..writeByte(4)
-      ..write(obj.deviceName)
-      ..writeByte(5)
-      ..write(obj.appName)
-      ..writeByte(6)
-      ..write(obj.appVersion)
-      ..writeByte(7)
-      ..write(obj.dateAdded);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is QuickConnectStateAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
 class LyricMetadataAdapter extends TypeAdapter<LyricMetadata> {
   @override
   final int typeId = 44;
@@ -3337,15 +3239,12 @@ ClientCapabilities _$ClientCapabilitiesFromJson(Map json) => ClientCapabilities(
       supportsMediaControl: json['SupportsMediaControl'] as bool?,
       supportsPersistentIdentifier:
           json['SupportsPersistentIdentifier'] as bool?,
-      supportsSync: json['SupportsSync'] as bool?,
       deviceProfile: json['DeviceProfile'] == null
           ? null
           : DeviceProfile.fromJson(
               Map<String, dynamic>.from(json['DeviceProfile'] as Map)),
-      iconUrl: json['IconUrl'] as String?,
-      supportsContentUploading: json['SupportsContentUploading'] as bool?,
-      messageCallbackUrl: json['MessageCallbackUrl'] as String?,
       appStoreUrl: json['AppStoreUrl'] as String?,
+      iconUrl: json['IconUrl'] as String?,
     );
 
 Map<String, dynamic> _$ClientCapabilitiesToJson(ClientCapabilities instance) =>
@@ -3354,11 +3253,8 @@ Map<String, dynamic> _$ClientCapabilitiesToJson(ClientCapabilities instance) =>
       'SupportedCommands': instance.supportedCommands,
       'SupportsMediaControl': instance.supportsMediaControl,
       'SupportsPersistentIdentifier': instance.supportsPersistentIdentifier,
-      'SupportsSync': instance.supportsSync,
       'DeviceProfile': instance.deviceProfile?.toJson(),
       'IconUrl': instance.iconUrl,
-      'SupportsContentUploading': instance.supportsContentUploading,
-      'MessageCallbackUrl': instance.messageCallbackUrl,
       'AppStoreUrl': instance.appStoreUrl,
     };
 

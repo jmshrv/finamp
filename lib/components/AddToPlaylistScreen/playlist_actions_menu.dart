@@ -1,10 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -24,7 +23,6 @@ Future<void> showPlaylistActionsMenu({
   required BaseItemDto item,
   required BaseItemDto? parentPlaylist,
 }) async {
-  final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   FeedbackHelper.feedback(FeedbackType.selection);
@@ -75,7 +73,7 @@ Future<void> showPlaylistActionsMenu({
                       .read(isFavoriteProvider(item).notifier)
                       .updateFavorite(!isFavorite);
                 },
-                enabled: !isOffline,
+                enabled: !ref.watch(finampSettingsProvider.isOffline),
               );
             },
           ),
@@ -262,7 +260,7 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
                     });
                     final result = await widget.onToggle(currentState);
                     if (widget.tapFeedback) {
-                      FeedbackHelper.feedback(FeedbackType.success);
+                      FeedbackHelper.feedback(FeedbackType.heavy);
                     }
                     setState(() {
                       isLoading = false;

@@ -1,10 +1,12 @@
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/network_settings_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,15 +21,16 @@ import 'layout_settings_screen.dart';
 import 'transcoding_settings_screen.dart';
 import 'view_selector.dart';
 import 'volume_normalization_settings_screen.dart';
+import 'playback_reporting_settings_screen.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
   static const routeName = "/settings";
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   static const repoLink = "https://github.com/jmshrv/finamp";
   static const releaseNotesLink = "https://github.com/jmshrv/finamp/releases";
   static const translationsLink = "https://hosted.weblate.org/projects/finamp";
@@ -181,6 +184,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 .pushNamed(AudioServiceSettingsScreen.routeName),
           ),
           ListTile(
+            leading: const Icon(TablerIcons.cast),
+            title: Text(
+                AppLocalizations.of(context)!.playbackReportingSettingsTitle),
+            onTap: () => Navigator.of(context)
+                .pushNamed(PlaybackReportingSettingsScreen.routeName),
+          ),
+          ListTile(
             leading: const Icon(Icons.equalizer_rounded),
             title: Text(
                 AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
@@ -202,10 +212,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.library_music),
             title: Text(AppLocalizations.of(context)!.selectMusicLibraries),
-            subtitle: FinampSettingsHelper.finampSettings.isOffline
+            subtitle: ref.watch(finampSettingsProvider.isOffline)
                 ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
                 : null,
-            enabled: !FinampSettingsHelper.finampSettings.isOffline,
+            enabled: !ref.watch(finampSettingsProvider.isOffline),
             onTap: () =>
                 Navigator.of(context).pushNamed(ViewSelector.routeName),
           ),

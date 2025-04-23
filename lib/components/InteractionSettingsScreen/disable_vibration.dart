@@ -1,25 +1,19 @@
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-class DisableVibrationSelector extends StatelessWidget {
+class DisableVibrationSelector extends ConsumerWidget {
   const DisableVibrationSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        return SwitchListTile.adaptive(
-          title: Text(AppLocalizations.of(context)!.enableVibration),
-          subtitle: Text(AppLocalizations.of(context)!.enableVibrationSubtitle),
-          value: FinampSettingsHelper.finampSettings.enableVibration,
-          onChanged: (value) => FinampSetters.setEnableVibration(value),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.enableVibration),
+      subtitle: Text(AppLocalizations.of(context)!.enableVibrationSubtitle),
+      value: ref.watch(finampSettingsProvider.enableVibration),
+      onChanged: (value) => FinampSetters.setEnableVibration(value),
     );
   }
 }

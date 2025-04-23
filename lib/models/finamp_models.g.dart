@@ -185,6 +185,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       reportQueueToServer: fields[52] == null ? false : fields[52] as bool,
       periodicPlaybackSessionUpdateFrequencySeconds:
           fields[53] == null ? 150 : (fields[53] as num).toInt(),
+      playOnStaleDelay: fields[94] == null ? 90 : (fields[94] as num).toInt(),
+      playOnReconnectionDelay:
+          fields[95] == null ? 5 : (fields[95] as num).toInt(),
+      enablePlayon: fields[96] == null ? true : fields[96] as bool,
+      currentVolume: fields[93] == null ? 1.0 : (fields[93] as num).toDouble(),
       showArtistChipImage: fields[55] == null ? true : fields[55] as bool,
       trackOfflineFavorites: fields[63] == null ? true : fields[63] as bool,
       showProgressOnNowPlayingBar:
@@ -248,7 +253,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(87)
+      ..writeByte(91)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -422,7 +427,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(91)
       ..write(obj.itemSwipeActionRightToLeft)
       ..writeByte(92)
-      ..write(obj.artistListType);
+      ..write(obj.artistListType)
+      ..writeByte(93)
+      ..write(obj.currentVolume)
+      ..writeByte(94)
+      ..write(obj.playOnStaleDelay)
+      ..writeByte(95)
+      ..write(obj.playOnReconnectionDelay)
+      ..writeByte(96)
+      ..write(obj.enablePlayon);
   }
 
   @override
@@ -1335,6 +1348,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         return QueueItemSourceType.genreMix;
       case 19:
         return QueueItemSourceType.track;
+      case 20:
+        return QueueItemSourceType.remoteClient;
       default:
         return QueueItemSourceType.album;
     }
@@ -1383,6 +1398,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         writer.writeByte(18);
       case QueueItemSourceType.track:
         writer.writeByte(19);
+      case QueueItemSourceType.remoteClient:
+        writer.writeByte(20);
     }
   }
 
@@ -1468,6 +1485,8 @@ class QueueItemSourceNameTypeAdapter
         return QueueItemSourceNameType.savedQueue;
       case 8:
         return QueueItemSourceNameType.queue;
+      case 9:
+        return QueueItemSourceNameType.remoteClient;
       default:
         return QueueItemSourceNameType.preTranslated;
     }
@@ -1494,6 +1513,8 @@ class QueueItemSourceNameTypeAdapter
         writer.writeByte(7);
       case QueueItemSourceNameType.queue:
         writer.writeByte(8);
+      case QueueItemSourceNameType.remoteClient:
+        writer.writeByte(9);
     }
   }
 
@@ -8039,3 +8060,37 @@ const _$FinampFeatureChipTypeEnumMap = {
   FinampFeatureChipType.normalizationGain: 'normalizationGain',
   FinampFeatureChipType.sampleRate: 'sampleRate',
 };
+
+FinampOutputRoute _$FinampOutputRouteFromJson(Map<String, dynamic> json) =>
+    FinampOutputRoute(
+      name: json['name'] as String,
+      connectionState: (json['connectionState'] as num).toInt(),
+      isSystemRoute: json['isSystemRoute'] as bool,
+      isDefault: json['isDefault'] as bool,
+      isDeviceSpeaker: json['isDeviceSpeaker'] as bool,
+      isBluetooth: json['isBluetooth'] as bool,
+      volume: (json['volume'] as num).toDouble(),
+      providerPackageName: json['providerPackageName'] as String,
+      isSelected: json['isSelected'] as bool,
+      deviceType: (json['deviceType'] as num).toInt(),
+      description: json['description'] as String?,
+      extras: json['extras'],
+      iconUri: json['iconUri'] as String?,
+    );
+
+Map<String, dynamic> _$FinampOutputRouteToJson(FinampOutputRoute instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'connectionState': instance.connectionState,
+      'isSystemRoute': instance.isSystemRoute,
+      'isDefault': instance.isDefault,
+      'isDeviceSpeaker': instance.isDeviceSpeaker,
+      'isBluetooth': instance.isBluetooth,
+      'volume': instance.volume,
+      'providerPackageName': instance.providerPackageName,
+      'isSelected': instance.isSelected,
+      'deviceType': instance.deviceType,
+      'description': instance.description,
+      'extras': instance.extras,
+      'iconUri': instance.iconUri,
+    };

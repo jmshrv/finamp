@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -939,7 +938,7 @@ class PlaybackAction extends StatelessWidget {
           ],
         ),
         onPressed: () {
-          FeedbackHelper.feedback(FeedbackType.success);
+          FeedbackHelper.feedback(FeedbackType.selection);
           onPressed();
         },
         visualDensity: VisualDensity.compact,

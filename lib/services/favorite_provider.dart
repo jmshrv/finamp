@@ -1,7 +1,6 @@
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -88,7 +87,7 @@ class IsFavorite extends _$IsFavorite {
         }
         state = newUserData.isFavorite;
 
-        FeedbackHelper.feedback(FeedbackType.success);
+        FeedbackHelper.feedback(FeedbackType.heavy);
       } catch (e) {
         state = oldState;
         GlobalSnackbar.error(e);
@@ -100,6 +99,15 @@ class IsFavorite extends _$IsFavorite {
       audioHandler.refreshPlaybackStateAndMediaNotification();
     }
     return state;
+  }
+
+  void updateState(bool isFavorite) {
+    if (state != isFavorite) {
+      // cache new state to override existing BaseItemDto data from queue
+      _changed = true;
+      ref.keepAlive();
+    }
+    state = isFavorite;
   }
 
   void toggleFavorite() async {

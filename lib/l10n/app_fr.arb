@@ -238,15 +238,13 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Êtes-vous sûr ?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin utilise AAC lors du transcodage",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Activer le transcodage",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transcode les flux musicaux côté serveur.",
   "@enableTranscodingSubtitle": {},
   "bitrate": "Débit binaire",
   "@bitrate": {},
-  "bitrateSubtitle": "Un débit binaire plus élevé offre une meilleure qualité audio au prix d'une bande passante plus importante.",
+  "bitrateSubtitle": "Un bitrate plus élevé offre une meilleure qualité audio au prix d'une bande passante plus importante. Cela ne s'applique pas aux codecs sans pertes, par exemple FLAC.",
   "@bitrateSubtitle": {},
   "customLocation": "Emplacement personnalisé",
   "@customLocation": {},
@@ -905,7 +903,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Joué à partir de {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Joué à partir {source, select, album{d'un Album} playlist{d'une Playlist} trackMix{d'une Track Mix} artistMix{d'un Artist Mix} albumMix{d'un Album Mix} genreMix{d'un Genre Mix} favorites{vos favorites} allTracks{toutes vos musiques} filteredList{vos musiques} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{d'un autre appareil} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1033,7 +1031,7 @@
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
-  "autoloadLastQueueOnStartupSubtitle": "Au démarrage, essaie de restaurer la dernière file d'attente.",
+  "autoloadLastQueueOnStartupSubtitle": "Au démarrage de l'application, restaurer la dernière file d'attente.",
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
@@ -1041,7 +1039,7 @@
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "topTracks": "Musiques les plus jouées",
+  "topTracks": "Morceaux les plus joués",
   "@topTracks": {},
   "shuffleAlbumsNext": "Mélanger les albums au début de la file d'attente",
   "@shuffleAlbumsNext": {
@@ -1099,7 +1097,7 @@
       }
     }
   },
-  "queueLoadingMessage": "Restauration de la file d'attente...",
+  "queueLoadingMessage": "Restauration de la file d'attente…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1262,10 +1260,6 @@
       }
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
-  },
-  "transcodingStreamingContainerTitle": "Sélection du format de transcodage",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
   "downloadTranscodeEnableTitle": "Activer le transcodage pour le téléchargement",
   "@downloadTranscodeEnableTitle": {
@@ -1457,8 +1451,6 @@
   "@connectionInterrupted": {
     "description": "Message shown when the connection is interrupted during a download."
   },
-  "transcodingStreamingContainerSubtitle": "Sélectionner le segment du format à utiliser lors du stream d'audio transcodé. Les titres déjà dans la queue ne seront pas affectés.",
-  "@transcodingStreamingContainerSubtitle": {},
   "prioritizePlayerCover": "Prioriser la pochette de l'album",
   "@prioritizePlayerCover": {},
   "prioritizePlayerCoverSubtitle": "Favorise la taille de la pochette d'album sur le lecteur. Les boutons moins importants seront cachés sur les écrans de petite taille.",
@@ -1510,5 +1502,73 @@
   "hideQueueButton": "Cacher le bouton de la file d'attente",
   "@hideQueueButton": {},
   "marqueeOrTruncateButton": "Utiliser des ellipses pour les longs titres",
-  "@marqueeOrTruncateButton": {}
+  "@marqueeOrTruncateButton": {},
+  "fiveLatestAlbumsSettingSubtitle": "Les téléchargements seront enlevés lorsqu'ils deviennent trop vieux. Verrouillez le téléchargement pour empêcher la suppression.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "allPlaylistsInfoSetting": "Télécharger les métadonnées des playlists",
+  "@allPlaylistsInfoSetting": {},
+  "downloadAllPlaylistsSetting": "Télécharger toutes les playlists",
+  "@downloadAllPlaylistsSetting": {},
+  "fiveLatestAlbumsSetting": "Télécharger les 5 derniers albums",
+  "@fiveLatestAlbumsSetting": {},
+  "cacheLibraryImagesSettingsSubtitle": "Toutes les couvertures des albums, artistes, genres et playlists de la bibliothèque active seront téléchargées.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "cacheLibraryImagesSettings": "Mettre les images actuelles de la bibliothèque en cache",
+  "@cacheLibraryImagesSettings": {},
+  "showStopButtonOnMediaNotificationTitle": "Afficher le bouton stop sur la notification du lecteur",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "showProgressOnNowPlayingBarTitle": "Montrer la progression du titre sur le \"mini lecteur\" de l'application",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Contrôle si la notification du lecteur a un bouton stop en plus d'un bouton pause. Cela vous permet d'arrêter la lecture sans ouvrir l'application.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+  },
+  "allPlaylistsInfoSettingSubtitle": "Synchroniser les métadonnées pour toutes les playlists afin d'améliorer votre expérience",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "downloadFavoritesSetting": "Télécharger tous les favoris",
+  "@downloadFavoritesSetting": {},
+  "lyricsScreen": "Écran des paroles",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsTitle": "Afficher les temps pour les paroles synchronisées",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Afficher la barre de progression sur la notification du lecteur",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showLyricsTimestampsSubtitle": "Contrôle si les temps de chaque parole sont affichées dans l'écran des paroles, s'ils sont disponibles.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "swipeLeftToRightActionSubtitle": "Action déclenchée lors du glissement d'un morceau de gauche à droite dans la liste.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeLeftToRightAction": "Balayage à droite",
+  "@swipeLeftToRightAction": {},
+  "appearsOnAlbums": "Apparaît dans",
+  "@appearsOnAlbums": {},
+  "albumArtists": "Artistes de l’album",
+  "@albumArtists": {},
+  "performingArtists": "Artistes interprètes",
+  "@performingArtists": {},
+  "swipeRightToLeftAction": "Glissement à gauche",
+  "@swipeRightToLeftAction": {},
+  "swipeRightToLeftActionSubtitle": "Action déclenchée lors du glissement d'un morceau de droite à gauche dans la liste.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Sélectionner le format de transcodage",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "Sélectionnez le format à utiliser lors du streaming audio transcodé. Les morceaux déjà en file d'attente ne seront pas affectés.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin ne reçoit aucune mise à jour d’un client pendant plus de 5 minutes, il suppose que la lecture est terminée. Cela signifie que pour les morceaux durant plus de 5 minutes, la lecture peut être considérée comme terminée, ce qui peut fausser les données de rapport de lecture.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  }
 }

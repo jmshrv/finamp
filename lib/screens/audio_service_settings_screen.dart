@@ -1,16 +1,12 @@
 import 'dart:io';
 
-import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_ce/hive.dart';
 
 import '../components/AudioServiceSettingsScreen/buffer_duration_list_tile.dart';
 import '../components/AudioServiceSettingsScreen/loadQueueOnStartup_selector.dart';
-import '../components/AudioServiceSettingsScreen/periodic_playback_session_update_frequency_editor.dart';
-import '../components/AudioServiceSettingsScreen/report_queue_to_server_toggle.dart';
 import '../components/AudioServiceSettingsScreen/stop_foreground_selector.dart';
 import '../components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 
@@ -52,8 +48,6 @@ class _AudioServiceSettingsScreenState
           BufferDurationListTile(key: _updateChildren),
           BufferDisableSizeConstraintsSelector(key: _updateChildren),
           const LoadQueueOnStartupSelector(),
-          PeriodicPlaybackSessionUpdateFrequencyEditor(key: _updateChildren),
-          const ReportQueueToServerToggle(),
         ],
       ),
     );
@@ -65,18 +59,13 @@ class BufferDisableSizeConstraintsSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        return SwitchListTile.adaptive(
-          title: Text(
-              AppLocalizations.of(context)!.bufferDisableSizeConstraintsTitle),
-          subtitle: Text(AppLocalizations.of(context)!
-              .bufferDisableSizeConstraintsSubtitle),
-          value: ref.watch(finampSettingsProvider.bufferDisableSizeConstraints),
-          onChanged: FinampSetters.setBufferDisableSizeConstraints,
-        );
-      },
+    return SwitchListTile.adaptive(
+      title:
+          Text(AppLocalizations.of(context)!.bufferDisableSizeConstraintsTitle),
+      subtitle: Text(
+          AppLocalizations.of(context)!.bufferDisableSizeConstraintsSubtitle),
+      value: ref.watch(finampSettingsProvider.bufferDisableSizeConstraints),
+      onChanged: FinampSetters.setBufferDisableSizeConstraints,
     );
   }
 }

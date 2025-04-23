@@ -36,6 +36,18 @@
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		1A1A25612DB2978A00F8BEE4 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Main.strings; sourceTree = "<group>"; };
+		1A1A25622DB2978A00F8BEE4 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1A1A25632DB2979600F8BEE4 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Main.strings; sourceTree = "<group>"; };
+		1A1A25642DB2979600F8BEE4 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1A1A25652DB297AE00F8BEE4 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Main.strings; sourceTree = "<group>"; };
+		1A1A25662DB297AE00F8BEE4 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1A1A25672DB297CF00F8BEE4 /* sr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sr; path = sr.lproj/Main.strings; sourceTree = "<group>"; };
+		1A1A25682DB297CF00F8BEE4 /* sr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sr; path = sr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1A1A25692DB297D700F8BEE4 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Main.strings; sourceTree = "<group>"; };
+		1A1A256A2DB297D700F8BEE4 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1A1A256B2DB297E400F8BEE4 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/Main.strings; sourceTree = "<group>"; };
+		1A1A256C2DB297E400F8BEE4 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		1A1D18DF2964B12600AFE66F /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Main.strings; sourceTree = "<group>"; };
 		1A1D18E02964B12600AFE66F /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		1A1D18E12964B15800AFE66F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -272,6 +284,12 @@
 				el,
 				th,
 				uk,
+				fi,
+				hi,
+				fa,
+				sr,
+				sl,
+				ta,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
@@ -309,9 +327,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -379,9 +401,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -436,6 +462,12 @@
 				1AC8B9DE2A73FD9000200E3C /* el */,
 				1AC8B9E02A73FDB500200E3C /* th */,
 				1AC8B9E22A73FDC000200E3C /* uk */,
+				1A1A25612DB2978A00F8BEE4 /* fi */,
+				1A1A25632DB2979600F8BEE4 /* hi */,
+				1A1A25652DB297AE00F8BEE4 /* fa */,
+				1A1A25672DB297CF00F8BEE4 /* sr */,
+				1A1A25692DB297D700F8BEE4 /* sl */,
+				1A1A256B2DB297E400F8BEE4 /* ta */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -473,6 +505,12 @@
 				1AC8B9DF2A73FD9000200E3C /* el */,
 				1AC8B9E12A73FDB500200E3C /* th */,
 				1AC8B9E32A73FDC000200E3C /* uk */,
+				1A1A25622DB2978A00F8BEE4 /* fi */,
+				1A1A25642DB2979600F8BEE4 /* hi */,
+				1A1A25662DB297AE00F8BEE4 /* fa */,
+				1A1A25682DB297CF00F8BEE4 /* sr */,
+				1A1A256A2DB297D700F8BEE4 /* sl */,
+				1A1A256C2DB297E400F8BEE4 /* ta */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

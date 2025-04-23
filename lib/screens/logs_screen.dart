@@ -1,3 +1,4 @@
+import 'package:finamp/components/LogsScreen/export_logs_button.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 
@@ -16,8 +17,9 @@ class LogsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.logs),
         actions: const [
+          ExportLogsButton(),
           ShareLogsButton(),
-          CopyLogsButton(),
+          // CopyLogsButton(), //!!! this doesn't return the full logs, only logs since the app started. Full logs can get quite large, so we need a better solution for this.
         ],
       ),
       body: const LogsView(),

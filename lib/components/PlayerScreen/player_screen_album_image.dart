@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -91,14 +90,12 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
               child: LayoutBuilder(builder: (context, constraints) {
                 //print(
                 //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
-                final horizontalPadding = constraints.maxWidth *
-                    (FinampSettingsHelper
-                            .finampSettings.playerScreenCoverMinimumPadding /
-                        100.0);
-                final verticalPadding = constraints.maxHeight *
-                    (FinampSettingsHelper
-                            .finampSettings.playerScreenCoverMinimumPadding /
-                        100.0);
+                final minPadding = ref.watch(
+                    finampSettingsProvider.playerScreenCoverMinimumPadding);
+                final horizontalPadding =
+                    constraints.maxWidth * (minPadding / 100.0);
+                final verticalPadding =
+                    constraints.maxHeight * (minPadding / 100.0);
                 return Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: horizontalPadding,

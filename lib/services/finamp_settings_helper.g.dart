@@ -652,6 +652,34 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setCurrentVolume(double newCurrentVolume) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.currentVolume = newCurrentVolume;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlayOnStaleDelay(int newPlayOnStaleDelay) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.playOnStaleDelay = newPlayOnStaleDelay;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlayOnReconnectionDelay(int newPlayOnReconnectionDelay) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.playOnReconnectionDelay = newPlayOnReconnectionDelay;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setEnablePlayon(bool newEnablePlayon) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.enablePlayon = newEnablePlayon;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -873,6 +901,14 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
           .select((value) => value.requireValue.itemSwipeActionRightToLeft);
   ProviderListenable<ArtistType> get artistListType => finampSettingsProvider
       .select((value) => value.requireValue.artistListType);
+  ProviderListenable<double> get currentVolume => finampSettingsProvider
+      .select((value) => value.requireValue.currentVolume);
+  ProviderListenable<int> get playOnStaleDelay => finampSettingsProvider
+      .select((value) => value.requireValue.playOnStaleDelay);
+  ProviderListenable<int> get playOnReconnectionDelay => finampSettingsProvider
+      .select((value) => value.requireValue.playOnReconnectionDelay);
+  ProviderListenable<bool> get enablePlayon =>
+      finampSettingsProvider.select((value) => value.requireValue.enablePlayon);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

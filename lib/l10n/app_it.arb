@@ -137,8 +137,6 @@
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transcodifica I flussi di musica dal lato server.",
   "@enableTranscodingSubtitle": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC per la transcodifica",
-  "@jellyfinUsesAACForTranscoding": {},
   "appDirectory": "Cartella dell'App",
   "@appDirectory": {},
   "directoryMustBeEmpty": "La cartella deve essere vuota",
@@ -396,7 +394,7 @@
   "@dark": {},
   "createButtonLabel": "Crea",
   "@createButtonLabel": {},
-  "customLocationsBuggy": "Le posizioni personalizzate sono estremamente instabili a causa di problemi con i permessi. Sto pensando a un modo di aggiustarle, ma per adesso non ne consiglio l'utilizzo.",
+  "customLocationsBuggy": "Le posizioni personalizzate possono essere estremamente instabili e sono sconsigliate nella maggior parte dei casi. Posizioni all'interno della cartella di sistema \"Musica\" impediscono il salvataggio delle cover degli album a causa delle limitazioni del sistema operativo.",
   "@customLocationsBuggy": {},
   "removeFromMix": "Rimuovi dal Mix",
   "@removeFromMix": {},
@@ -968,7 +966,7 @@
     },
     "description": "Localized names of special downloadable collections like favorites."
   },
-  "missingDownloadSize": "Cancello...",
+  "missingDownloadSize": "Cancello…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1178,12 +1176,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Seleziona l'estensione dei file di transcodifica",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Seleziona l'estensione per i segmenti di file quando si effettua lo streaming di audio transcodificato. I brani già in coda non saranno interessati.",
-  "@transcodingStreamingContainerSubtitle": {},
   "confirmAddToNextUp": "Aggiunto {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} alla coda A Seguire",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
@@ -1214,11 +1206,11 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "activeDownloadSize": "In download...",
+  "activeDownloadSize": "In download…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "syncingDownloadSize": "Sincronizzo...",
+  "syncingDownloadSize": "Sincronizzo…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1681,7 +1673,7 @@
       }
     }
   },
-  "queueLoadingMessage": "Ripristino la coda...",
+  "queueLoadingMessage": "Ripristino la coda…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1840,5 +1832,47 @@
   "bufferDisableSizeConstraintsTitle": "Non limitare la dimensione del buffer",
   "@bufferDisableSizeConstraintsTitle": {},
   "bufferDisableSizeConstraintsSubtitle": "Disattiva i vincoli sulla dimensione del buffer (\"Buffer Size\"). Il buffer verrà sempre caricato fino alla durata configurata (\"Buffer Duration\"), anche per file di grandi dimensioni. Può causare arresti anomali. Richiede un riavvio.",
-  "@bufferDisableSizeConstraintsSubtitle": {}
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "deleteDownloadsPrompt": "Sei sicuro di voler eliminare {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}}'{itemName}' da questo dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Elimina",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "swipeLeftToRightActionSubtitle": "Azione attivata facendo swipe su una traccia nella lista da sinistra verso destra.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeLeftToRightAction": "Azione Scorrimento a Destra",
+  "@swipeLeftToRightAction": {},
+  "specialDownloads": "Download speciali",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "swipeRightToLeftActionSubtitle": "Azione attivata facendo swipe su una traccia nella lista da destra verso sinistra.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Seleziona il formato di transcodifica",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "albumArtists": "Artisti dell'album",
+  "@albumArtists": {},
+  "appearsOnAlbums": "Compare In",
+  "@appearsOnAlbums": {},
+  "swipeRightToLeftAction": "Azione Scorrimento a Sinistra",
+  "@swipeRightToLeftAction": {},
+  "noItemsDownloaded": "Nessun elemento scaricato.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  }
 }

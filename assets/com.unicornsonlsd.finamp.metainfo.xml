@@ -39,6 +39,38 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
+    <release version="0.9.16-beta" date="2025-04-17">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.16-beta</url>
+      <description>
+        <p>
+          "Finamplify" Hackathon Update! Lots of improvements!
+        </p>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Choose between artists and album artists</li>
+          <li>Automatic offline mode</li>
+          <li>More transcoding options</li>
+          <li>Customize swipe gestures</li>
+          <li>Play On support</li>
+          <li>Control volume and switch between devices</li>
+          <li>Fade in/out on play/pause</li>
+          <li>...</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fix hang on startup/resume</li>
+          <li>Add libraries to downloads screen</li>
+          <li>...</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
     <release version="0.9.15-beta" date="2025-03-29">
       <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.15-beta</url>
       <description>

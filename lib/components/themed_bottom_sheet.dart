@@ -8,7 +8,6 @@ import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 import '../models/jellyfin_models.dart';
 import '../services/feedback_helper.dart';
@@ -29,7 +28,7 @@ Future<void> showThemedBottomSheet({
   double minDraggableHeight = 0.6,
   bool showDragHandle = true,
 }) async {
-  FeedbackHelper.feedback(FeedbackType.impact);
+  FeedbackHelper.feedback(FeedbackType.heavy);
   var ref = ProviderScope.containerOf(context, listen: false);
   var themeInfo = ref.read(localThemeInfoProvider);
   ThemeImage? themeImage;
@@ -73,7 +72,6 @@ Future<void> showThemedBottomSheet({
         ],
         child: ThemedBottomSheet(
           key: ValueKey(item.id.raw + routeName),
-          item: item,
           buildSlivers: buildSlivers,
           buildWrapper: buildWrapper,
           minDraggableHeight: minDraggableHeight,
@@ -87,14 +85,12 @@ Future<void> showThemedBottomSheet({
 class ThemedBottomSheet extends ConsumerStatefulWidget {
   const ThemedBottomSheet({
     super.key,
-    required this.item,
     this.buildSlivers,
     this.buildWrapper,
     required this.minDraggableHeight,
     required this.showDragHandle,
   });
 
-  final BaseItemDto item;
   final SliverBuilder? buildSlivers;
   final WrapperBuilder? buildWrapper;
   final double minDraggableHeight;
@@ -162,7 +158,7 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
     );
     return Stack(
       children: [
-        if (FinampSettingsHelper.finampSettings.useCoverAsBackground)
+        if (ref.watch(finampSettingsProvider.useCoverAsBackground))
           const BlurredPlayerScreenBackground(),
         widget.showDragHandle
             ? Column(

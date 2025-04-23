@@ -9,9 +9,9 @@
 library;
 
 import 'package:collection/collection.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -784,29 +784,18 @@ class SessionUserInfo {
 @HiveType(typeId: 16)
 class ClientCapabilities {
   ClientCapabilities({
-    this.playableMediaTypes,
-    this.supportedCommands,
+    required this.playableMediaTypes,
+    required this.supportedCommands,
     required this.supportsMediaControl,
     required this.supportsPersistentIdentifier,
-    required this.supportsSync,
     this.deviceProfile,
-    this.iconUrl,
-    required this.supportsContentUploading,
-    this.messageCallbackUrl,
     this.appStoreUrl,
+    this.iconUrl,
   });
 
   @HiveField(0)
   List<String>? playableMediaTypes;
 
-  /// Items Enum: "MoveUp" "MoveDown" "MoveLeft" "MoveRight" "PageUp" "PageDown"
-  /// "PreviousLetter" "NextLetter" "ToggleOsd" "ToggleContextMenu" "Select"
-  /// "Back" "TakeScreenshot" "SendKey" "SendString" "GoHome" "GoToSettings"
-  /// "VolumeUp" "VolumeDown" "Mute" "Unmute" "ToggleMute" "SetVolume"
-  /// "SetAudioStreamIndex" "SetSubtitleStreamIndex" "ToggleFullscreen"
-  /// "DisplayContent" "GoToSearch" "DisplayMessage" "SetRepeatMode" "ChannelUp"
-  /// "ChannelDown" "Guide" "ToggleStats" "PlayMediaSource" "PlayTrailers"
-  /// "SetShuffleQueue" "PlayState" "PlayNext" "ToggleOsdMenu" "Play"
   @HiveField(1)
   List<String>? supportedCommands;
 
@@ -816,9 +805,6 @@ class ClientCapabilities {
   @HiveField(3)
   bool? supportsPersistentIdentifier;
 
-  @HiveField(4)
-  bool? supportsSync;
-
   /// Defines the MediaBrowser.Model.Dlna.DeviceProfile.
   @HiveField(5)
   DeviceProfile? deviceProfile;
@@ -827,12 +813,6 @@ class ClientCapabilities {
   String? iconUrl;
 
   // Below fields were added during null safety migration (0.5.0)
-
-  @HiveField(7)
-  bool? supportsContentUploading;
-
-  @HiveField(8)
-  String? messageCallbackUrl;
 
   @HiveField(9)
   String? appStoreUrl;
@@ -3765,7 +3745,6 @@ class PublicSystemInfoResult {
   Map<String, dynamic> toJson() => _$PublicSystemInfoResultToJson(this);
 }
 
-@HiveType(typeId: 41)
 class PublicUsersResponse {
   PublicUsersResponse({
     required this.users,
@@ -3780,7 +3759,6 @@ class PublicUsersResponse {
   explicitToJson: true,
   anyMap: true,
 )
-@HiveType(typeId: 42)
 class QuickConnectState {
   QuickConnectState({
     required this.authenticated,

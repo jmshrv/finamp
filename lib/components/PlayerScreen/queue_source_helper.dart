@@ -9,7 +9,6 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -57,6 +56,8 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     case QueueItemSourceType.nextUp:
       break;
     case QueueItemSourceType.formerNextUp:
+      break;
+    case QueueItemSourceType.remoteClient:
       break;
     case QueueItemSourceType.unknown:
       break;

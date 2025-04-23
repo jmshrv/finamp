@@ -6,9 +6,10 @@ import 'package:audio_service/audio_service.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/gen/assets.gen.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/playback_history_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -106,7 +107,8 @@ class QueueService {
       final previousIndex = _queueAudioSourceIndex;
       _queueAudioSourceIndex = event.queueIndex ?? 0;
 
-      if (previousIndex != _queueAudioSourceIndex) {
+      // Ignore playback events if queue is empty.
+      if (previousIndex != _queueAudioSourceIndex && _currentTrack != null) {
         _queueServiceLogger.finer(
             "Play queue index changed, new index: $_queueAudioSourceIndex");
         _queueFromConcatenatingAudioSource();
@@ -115,7 +117,7 @@ class QueueService {
       }
     });
 
-    Stream.periodic(const Duration(seconds: 10)).listen((event) {
+    Stream<void>.periodic(const Duration(seconds: 10)).listen((event) {
       // Update once per minute while playing in background, and up to once every ten seconds if
       // pausing/seeking is occurring
       // We also update on every track switch.
@@ -146,12 +148,11 @@ class QueueService {
     // );
   }
 
-  Future initializePlayer() =>
-      _audioHandler.initializeAudioSource(_queueAudioSource, preload: true);
-
   void _queueFromConcatenatingAudioSource({
     bool logUpdate = true,
   }) {
+    final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
+
     List<FinampQueueItem> allTracks = _audioHandler.effectiveSequence
             ?.map((e) => e.tag as FinampQueueItem)
             .toList() ??
@@ -262,6 +263,12 @@ class QueueService {
     if (logUpdate) {
       _logQueues(message: "(current)");
     }
+
+    if (FinampSettingsHelper.finampSettings.reportQueueToServer ||
+        FinampSettingsHelper.finampSettings.enablePlayon) {
+      unawaited(playbackHistoryService.reportQueueStatus());
+    }
+
   }
 
   Future<void> performInitialQueueLoad() async {
@@ -317,6 +324,7 @@ class QueueService {
   }
 
   Future<void> loadSavedQueue(FinampStorableQueueInfo info) async {
+    final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
     if (_savedQueueState == SavedQueueState.loading) {
       return Future.error("A saved queue is currently loading");
     }
@@ -424,6 +432,9 @@ class QueueService {
         _savedQueueState = finalState;
       }
       refreshQueueStream();
+      await Future<void>.delayed(const Duration(seconds: 1)).then((_) {
+        unawaited(playbackHistoryService.reportRestoredSessionStatus());
+      });
     }
   }
 
@@ -504,9 +515,6 @@ class QueueService {
         }
       }
 
-      //await stopPlayback(); //TODO is this really needed?
-      // await _audioHandler.initializeAudioSource(_queueAudioSource);
-      await _audioHandler.stopPlayback();
       await _queueAudioSource.clear();
 
       List<AudioSource> audioSources = [];
@@ -550,7 +558,7 @@ class QueueService {
       if (beginPlaying) {
         // don't await this, because it will not return until playback is finished
         unawaited(_audioHandler.play(disableFade: true));
-      } else {
+      } else if (!Platform.isAndroid && !Platform.isIOS) {
         unawaited(_audioHandler.pause(disableFade: true));
       }
 
@@ -897,6 +905,13 @@ class QueueService {
   FinampLoopMode get loopMode => _loopMode;
 
   set playbackOrder(FinampPlaybackOrder order) {
+    if (!Platform.isAndroid &&
+        !Platform.isIOS &&
+        order != FinampPlaybackOrder.linear) {
+      GlobalSnackbar.message(
+          (scaffold) => AppLocalizations.of(scaffold)!.desktopShuffleWarning);
+      order = FinampPlaybackOrder.linear;
+    }
     _playbackOrder = order;
     _queueServiceLogger.fine("Playback order set to $order");
 
@@ -1163,7 +1178,10 @@ class QueueService {
         // realistically it doesn't matter too much
         // default to 44100, only use 48000 for opus because opus doesn't support 44100
         "audioSampleRate": FinampSettingsHelper
-            .finampSettings.transcodingStreamingFormat.codec == 'opus' ? '48000' : '44100',
+                    .finampSettings.transcodingStreamingFormat.codec ==
+                'opus'
+            ? '48000'
+            : '44100',
         "maxAudioBitDepth": "16",
         "audioBitRate":
             FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
@@ -1171,7 +1189,6 @@ class QueueService {
             .finampSettings.transcodingStreamingFormat.container,
         "transcodeReasons": "ContainerBitrateExceedsLimit",
       });
-
     } else {
       builtPath.addAll([
         "Items",

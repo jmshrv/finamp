@@ -187,8 +187,6 @@
   "@enableTranscoding": {},
   "notAvailableInOfflineMode": "عير متوفر في وضع غير الإتصال",
   "@notAvailableInOfflineMode": {},
-  "jellyfinUsesAACForTranscoding": "\"جلي فين\" يستعمل مشفر <AAC> للتحويل",
-  "@jellyfinUsesAACForTranscoding": {},
   "layoutAndTheme": "تخطيط و ظاهرة",
   "@layoutAndTheme": {},
   "logOut": "تسجيل الخروج",

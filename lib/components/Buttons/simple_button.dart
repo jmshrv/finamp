@@ -1,4 +1,7 @@
+import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 enum IconPosition {
   start,
@@ -53,29 +56,36 @@ class SimpleButton extends StatelessWidget {
 
     return Tooltip(
       message: disabled ? "$text (Disabled)" : text,
-      child: TextButton(
-        onPressed: disabled ? null : onPressed,
-        style: ButtonStyle(
-          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      child: GestureDetector(
+        onLongPress: () async {
+          final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+          FeedbackHelper.feedback(FeedbackType.selection);
+          await audioHandler.openBluetoothSettings();
+        },
+        child: TextButton(
+          onPressed: disabled ? null : onPressed,
+          style: ButtonStyle(
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
+            padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+              const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
+            ),
+            backgroundColor: WidgetStateProperty.all<Color>(
+              Colors.transparent,
+            ),
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
           ),
-          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-            const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.center,
+            spacing: 6.0,
+            children: iconPosition == IconPosition.start
+                ? contents
+                : contents.reversed.toList(),
           ),
-          backgroundColor: WidgetStateProperty.all<Color>(
-            Colors.transparent,
-          ),
-          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-        ),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.center,
-          spacing: 6.0,
-          children: iconPosition == IconPosition.start
-              ? contents
-              : contents.reversed.toList(),
         ),
       ),
     );

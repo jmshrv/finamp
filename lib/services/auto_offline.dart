@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:io';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 part 'auto_offline.g.dart';
 
@@ -76,7 +78,7 @@ Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
       AutoOfflineOption.disabled) return;
   // skip when user overwrote offline mode
   if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
-  
+
   bool state = await _shouldBeOffline(connections);
 
   // Attempt to combat IOS reliability problems

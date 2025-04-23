@@ -163,8 +163,6 @@
   "@logOut": {},
   "areYouSure": "Сигурни ли сте?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin използва AAC за транскодиране",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Активиране на транскодирането",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Транскодирането на музикалните потоци се осъществява от страна на сървъра.",

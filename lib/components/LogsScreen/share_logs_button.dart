@@ -1,3 +1,4 @@
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -9,12 +10,11 @@ class ShareLogsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.adaptive.share),
-      tooltip: AppLocalizations.of(context)!.shareLogs,
+    return SimpleButton(
+      text: AppLocalizations.of(context)!.shareLogs,
+      icon: Icons.adaptive.share,
       onPressed: () async {
         final finampLogsHelper = GetIt.instance<FinampLogsHelper>();
-
         await finampLogsHelper.shareLogs();
       },
     );

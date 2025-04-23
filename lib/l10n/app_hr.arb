@@ -295,8 +295,6 @@
   "@audioService": {},
   "areYouSure": "Jeste li sigurni?",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin koristi AAC za transkodiranje",
-  "@jellyfinUsesAACForTranscoding": {},
   "notAvailableInOfflineMode": "Nije dostupno u neumreženom modusu",
   "@notAvailableInOfflineMode": {},
   "addDownloadLocation": "Dodaj lokaciju preuzimanja",
@@ -753,10 +751,6 @@
   "loginFlowAuthenticationHeading": "Prijavi se na tvoj račun",
   "@loginFlowAuthenticationHeading": {
     "description": "Heading for the authentication step during the login flow."
-  },
-  "transcodingStreamingContainerTitle": "Odaberi kontejner transkodiranja",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
   },
   "loginFlowGetStarted": "Započni!",
   "@loginFlowGetStarted": {

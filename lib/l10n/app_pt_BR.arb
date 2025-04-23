@@ -190,8 +190,6 @@
   "@addDownloads": {},
   "logOut": "Sair",
   "@logOut": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC para transcodificação",
-  "@jellyfinUsesAACForTranscoding": {},
   "bitrate": "Taxa de bits",
   "@bitrate": {},
   "downloadsDeleted": "Transferências apagadas.",
@@ -1428,12 +1426,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Selecionar contêiner de transcodificação",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Selecione o contêiner de segmento a ser usado ao transmitir áudio transcodificado. As faixas que já estejam na fila não serão afetadas.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableTitle": "Habilitar transferências transcodificadas",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -1608,7 +1600,7 @@
       }
     }
   },
-  "enableAutoScroll": "Habiliar rolagem automática",
+  "enableAutoScroll": "Habilitar rolagem automática",
   "@enableAutoScroll": {
     "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
   },
