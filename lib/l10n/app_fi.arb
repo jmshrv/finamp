@@ -1162,7 +1162,7 @@
   "@sampleRate": {
     "description": "Label for the feature chips showing the sample rate of a track"
   },
-  "keepScreenOnWhilePluggedInSubtitle": "Ohita Pidä Näyttö Päällä asetus jos laite on irroitettu latauksesta",
+  "keepScreenOnWhilePluggedInSubtitle": "Ohita pidä näyttö päällä-asetus, jos laite on irroitettu latauksesta",
   "@keepScreenOnWhilePluggedInSubtitle": {},
   "resetSettingsPromptGlobalConfirm": "Nollaa KAIKKI asetukset",
   "@resetSettingsPromptGlobalConfirm": {
@@ -2086,7 +2086,7 @@
   "@playOnReconnectionDelaySubtitle": {
     "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
-  "outputMenuButtonTitle": "Äänen ulostulo",
+  "outputMenuButtonTitle": "Ulostulo",
   "@outputMenuButtonTitle": {
     "description": "Button title for opening the output menu/panel"
   },
