@@ -14,7 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
 import 'package:network_info_plus/network_info_plus.dart';
-part 'auto_offline.g.dart';
+part 'network_manager.g.dart';
 
 // this is to avoid an infinite loop.
 // `finampCurrentUserProvider` fires for every change on the object

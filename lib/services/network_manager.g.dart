@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auto_offline.dart';
+part of 'network_manager.dart';
 
 // **************************************************************************
 // RiverpodGenerator

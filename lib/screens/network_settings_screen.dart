@@ -9,7 +9,7 @@ import 'package:finamp/components/NetworkSettingsScreen/public_address_selector.
 import 'package:finamp/components/ensure_location_permission_prompt.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/services/auto_offline.dart';
+import 'package:finamp/services/network_manager.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';

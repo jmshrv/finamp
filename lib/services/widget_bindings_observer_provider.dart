@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce/hive.dart';
 
-import 'auto_offline.dart';
+import 'network_manager.dart';
 import 'finamp_settings_helper.dart';
 
 final displayFeaturesProvider = StateProvider<List<DisplayFeature>>((ref) {

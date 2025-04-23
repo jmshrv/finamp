@@ -1,5 +1,5 @@
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/services/auto_offline.dart';
+import 'package:finamp/services/network_manager.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
