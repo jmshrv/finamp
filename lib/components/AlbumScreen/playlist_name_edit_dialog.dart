@@ -1,3 +1,4 @@
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -20,6 +21,7 @@ class PlaylistNameEditDialog extends StatefulWidget {
 
 class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   String? _name;
+  bool _public_visibility = false;
   bool _isUpdating = false;
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -35,22 +37,43 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.editPlaylistNameTitle),
-      content: Form(
-        key: _formKey,
-        child: TextFormField(
-          initialValue: _name,
-          decoration:
-              InputDecoration(labelText: AppLocalizations.of(context)!.name),
-          textInputAction: TextInputAction.done,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.required;
-            }
-            return null;
-          },
-          onFieldSubmitted: (_) async => await _submit(),
-          onSaved: (newValue) => _name = newValue,
-        ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 8,
+        children: [
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              initialValue: _name,
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.name),
+              textInputAction: TextInputAction.done,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.of(context)!.required;
+                }
+                return null;
+              },
+              onFieldSubmitted: (_) async => await _submit(),
+              onSaved: (newValue) => _name = newValue,
+            ),
+          ),
+          FormField<bool>(
+            builder: (state) {
+              return CheckboxListTile(
+                value: state.value,
+                title: Text(
+                  AppLocalizations.of(context)!.publiclyVisiblePlaylist,
+                  textAlign: TextAlign.left,
+                ),
+                onChanged: state.didChange,
+                contentPadding: EdgeInsets.zero,
+              );
+            },
+            initialValue: false,
+            onSaved: (newValue) => _public_visibility = newValue!,
+          ),
+        ],
       ),
       actions: [
         TextButton(
@@ -58,7 +81,7 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
           child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
-          onPressed: _isUpdating ? null : () async => await _submit(),
+          onPressed: (_isUpdating ? null : () async => await _submit()),
           child: Text(AppLocalizations.of(context)!.updateButtonLabel),
         ),
       ],

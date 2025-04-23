@@ -411,15 +411,15 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Edit playlist name",
+  "editPlaylistNameTooltip": "Edit playlist",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Edit Playlist Name",
+  "editPlaylistNameTitle": "Edit Playlist",
   "@editPlaylistNameTitle": {},
   "required": "Required",
   "@required": {},
   "updateButtonLabel": "Update",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Playlist name updated.",
+  "playlistNameUpdated": "Playlist updated.",
   "@playlistNameUpdated": {},
   "favourite": "Favourite",
   "@favourite": {},
