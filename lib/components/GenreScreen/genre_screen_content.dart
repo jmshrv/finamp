@@ -32,8 +32,14 @@ class GenreScreenContent extends ConsumerStatefulWidget {
 class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsService = GetIt.instance<DownloadsService>();
-  bool _isLoading = true;
-
+  Future<List<List<BaseItemDto>?>>? futures;
+  Map<BaseItemDtoType, int?> itemCount = {
+    BaseItemDtoType.track: null,
+    BaseItemDtoType.album: null,
+    BaseItemDtoType.artist: null,
+  };
+  final settings = FinampSettingsHelper.finampSettings;
+    
   StreamSubscription<void>? _refreshStream;
 
   @override
@@ -42,6 +48,14 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
       setState(() {});
     });
     super.initState();
+
+    _fetchData();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initData());
+  }
+
+  Future<void> _initData() async {
+    await _fetchData();
+    setState(() {});
   }
 
   @override
@@ -61,25 +75,51 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final Future<List<List<BaseItemDto>?>> futures;
+  Future<void> _fetchData() async {
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-    var settings = FinampSettingsHelper.finampSettings;
-    final genreCuratedItemSelectionType =
-        ref.watch(finampSettingsProvider.genreCuratedItemSelectionType);
-    final genreItemSectionsOrder =
-        ref.watch(finampSettingsProvider.genreItemSectionsOrder);
-    var artistInfoForType = (settings.artistListType == ArtistType.albumartist)
-            ? BaseItemDtoType.album
-            : BaseItemDtoType.track;
-    Map<BaseItemDtoType, int?> itemCount = {
-      BaseItemDtoType.track: null,
-      BaseItemDtoType.album: null,
-      BaseItemDtoType.artist: null,
-    };
+    final genreCuratedItemSelectionType = ref.read(finampSettingsProvider.genreCuratedItemSelectionType);
+    final artistInfoForType = (settings.artistListType == ArtistType.albumartist)
+        ? BaseItemDtoType.album
+        : BaseItemDtoType.track;
 
-    Future<List<BaseItemDto>?> getCuratedItemsOnline({
+    setState(() {
+      futures = Future.wait([
+        isOffline
+            ? getCuratedItemsOffline(
+                genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+                baseItemType: BaseItemDtoType.track
+              )
+            : getCuratedItemsOnline(
+                genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+                baseItemType: BaseItemDtoType.track,
+                sortBySecondary: "SortName"
+              ),
+        isOffline
+            ? getCuratedItemsOffline(
+                genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+                baseItemType: BaseItemDtoType.album
+              )
+            : getCuratedItemsOnline(
+                genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+                baseItemType: BaseItemDtoType.album,
+                sortBySecondary: "PremiereDate,SortName"
+              ),
+        isOffline
+            ? getCuratedItemsOffline(
+                genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+                baseItemType: BaseItemDtoType.artist,
+                artistInfoForType: artistInfoForType
+              )
+            : getCuratedItemsOnline(
+                genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+                baseItemType: BaseItemDtoType.artist, sortBySecondary: "SortName",
+                artistListType: settings.artistListType
+              ),
+      ]);
+    });
+  }
+
+  Future<List<BaseItemDto>?> getCuratedItemsOnline({
       required GenreCuratedItemSelectionType genreCuratedItemSelectionType,
       required BaseItemDtoType baseItemType,
       String? sortBySecondary,
@@ -162,56 +202,43 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
       return items;
     }
 
-    // Get Items
-    if (isOffline) {
-      // Offline Mode
-      futures = Future.wait([
-        // Tracks
-        getCuratedItemsOffline(
-          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          baseItemType: BaseItemDtoType.track,
-        ),
-        // Albums
-        getCuratedItemsOffline(
-          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          baseItemType: BaseItemDtoType.album,
-        ),
-        // Artists
-        getCuratedItemsOffline(
-          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          baseItemType: BaseItemDtoType.artist,
-          artistInfoForType: artistInfoForType
-        ),
-      ]);
-    } else {
-      // Online Mode
-      futures = Future.wait([
-        // Tracks 
-        getCuratedItemsOnline(
-          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          baseItemType: BaseItemDtoType.track,
-          sortBySecondary: "SortName",
-        ),
-        // Albums
-        getCuratedItemsOnline(
-          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          baseItemType: BaseItemDtoType.album,
-          sortBySecondary: "PremiereDate,SortName",
-        ),
-        // Artists
-        getCuratedItemsOnline(
-          genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-          baseItemType: BaseItemDtoType.artist,
-          sortBySecondary: "SortName",
-          artistListType: settings.artistListType,
-        ),
-      ]);
-    }
+  @override
+  Widget build(BuildContext context) {
+    ref.listen<bool>(
+      finampSettingsProvider.isOffline,
+      (prev, next) {
+        if (prev != next) {
+          _fetchData();
+        }
+      },
+    );
+    ref.listen<GenreCuratedItemSelectionType>(
+      finampSettingsProvider.genreCuratedItemSelectionType,
+      (prev, next) {
+        if (prev != next) {
+          _fetchData();
+        }
+      },
+    );
+    ref.listen<ArtistType>(
+      finampSettingsProvider.artistListType,
+      (prev, next) {
+        if (prev != next) {
+          _fetchData();
+        }
+      },
+    );
+
+    final genreCuratedItemSelectionType =
+        ref.watch(finampSettingsProvider.genreCuratedItemSelectionType);
+    final genreItemSectionsOrder =
+        ref.watch(finampSettingsProvider.genreItemSectionsOrder);
 
     return FutureBuilder(
         future: futures,
         builder: (context, snapshot) {
-          _isLoading = (snapshot.connectionState == ConnectionState.waiting);
+          bool isLoading = (!snapshot.hasData || 
+                        snapshot.connectionState == ConnectionState.waiting);
           var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
           var albums = snapshot.data?.elementAtOrNull(1) ?? [];
           var artists = snapshot.data?.elementAtOrNull(2) ?? [];
@@ -222,7 +249,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                   AppLocalizations.of(context)!.unknownName),
               pinned: true,
               actions: [
-                if (!_isLoading)
+                if (!isLoading)
                   DownloadButton(
                       item: DownloadStub.fromItem(
                           item: widget.parent,
@@ -308,7 +335,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                 ),
               ),
             ),
-            if (!_isLoading)
+            if (!isLoading)
               ...genreItemSectionsOrder.map((type) {
                 switch (type) {
                   case GenreItemSections.tracks:
@@ -348,7 +375,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                     );
                 }
               }).toList(),
-            if (_isLoading)
+            if (isLoading)
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -357,8 +384,10 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                   ),
                 ),
               )
-          ]);
-        }); 
+          ]
+        );
+      }
+    ); 
   }
 }
 
