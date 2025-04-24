@@ -146,14 +146,7 @@ Future<void> changeTargetUrl({bool? isLocal}) async {
   await changeTargetUrl(isLocal: currentWifi == targetWifi);
 }
 
-void notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
-  // desktop doesn't have this setting
-  if (!(Platform.isAndroid || Platform.isIOS)) return;
-
-  if (FinampSettingsHelper.finampSettings.requireWifiForDownloads) {
-    final connectedToWifi = connections.contains(ConnectivityResult.wifi);
-    if (connectedToWifi) return;
-
+int _getDownloads() {
     final downloadsService = GetIt.instance<DownloadsService>();
     downloadsService.updateDownloadCounts();
 
@@ -162,8 +155,24 @@ void notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
     final downloadingSyncs = downloadsService.downloadCounts["sync"]!;
 
     final downloads = downloadingTracks + downloadingImage + downloadingSyncs;
+    return downloads;
+}
 
-    if (downloads == 0) return;
+void notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
+  if (connections.contains(ConnectivityResult.none)) {
+    if (_getDownloads() == 0) return;
+    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);
+    return;
+  }
+
+  // desktop doesn't have this setting
+  if (!(Platform.isAndroid || Platform.isIOS)) return;
+
+  if (FinampSettingsHelper.finampSettings.requireWifiForDownloads) {
+    final connectedToWifi = connections.contains(ConnectivityResult.wifi);
+    if (connectedToWifi) return;
+
+    if (_getDownloads() == 0) return;
 
     GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);
   }
