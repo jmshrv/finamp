@@ -2286,50 +2286,50 @@ const FinampUserSchema = CollectionSchema(
       name: r'accessToken',
       type: IsarType.string,
     ),
-    r'baseUrl': PropertySchema(
+    r'baseURL': PropertySchema(
       id: 1,
+      name: r'baseURL',
+      type: IsarType.string,
+    ),
+    r'baseUrl': PropertySchema(
+      id: 2,
       name: r'baseUrl',
       type: IsarType.string,
     ),
     r'currentViewId': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'currentViewId',
       type: IsarType.string,
     ),
     r'homeAddress': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'homeAddress',
       type: IsarType.string,
     ),
     r'homeNetworkName': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'homeNetworkName',
       type: IsarType.string,
     ),
     r'id': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'id',
       type: IsarType.string,
     ),
     r'isLocal': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'isLocal',
       type: IsarType.bool,
     ),
     r'isarViews': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'isarViews',
       type: IsarType.string,
     ),
     r'preferHomeNetwork': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'preferHomeNetwork',
       type: IsarType.bool,
-    ),
-    r'publicAddress': PropertySchema(
-      id: 9,
-      name: r'publicAddress',
-      type: IsarType.string,
     ),
     r'serverId': PropertySchema(
       id: 10,
@@ -2358,7 +2358,8 @@ int _finampUserEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.accessToken.length * 3;
-  bytesCount += 3 + object.baseUrl.length * 3;
+  bytesCount += 3 + object.baseURL.length * 3;
+  bytesCount += 3 + object.publicAddress.length * 3;
   {
     final value = object.isarCurrentViewId;
     if (value != null) {
@@ -2369,7 +2370,6 @@ int _finampUserEstimateSize(
   bytesCount += 3 + object.homeNetworkName.length * 3;
   bytesCount += 3 + object.id.length * 3;
   bytesCount += 3 + object.isarViews.length * 3;
-  bytesCount += 3 + object.publicAddress.length * 3;
   bytesCount += 3 + object.serverId.length * 3;
   return bytesCount;
 }
@@ -2381,15 +2381,15 @@ void _finampUserSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.accessToken);
-  writer.writeString(offsets[1], object.baseUrl);
-  writer.writeString(offsets[2], object.isarCurrentViewId);
-  writer.writeString(offsets[3], object.homeAddress);
-  writer.writeString(offsets[4], object.homeNetworkName);
-  writer.writeString(offsets[5], object.id);
-  writer.writeBool(offsets[6], object.isLocal);
-  writer.writeString(offsets[7], object.isarViews);
-  writer.writeBool(offsets[8], object.preferHomeNetwork);
-  writer.writeString(offsets[9], object.publicAddress);
+  writer.writeString(offsets[1], object.baseURL);
+  writer.writeString(offsets[2], object.publicAddress);
+  writer.writeString(offsets[3], object.isarCurrentViewId);
+  writer.writeString(offsets[4], object.homeAddress);
+  writer.writeString(offsets[5], object.homeNetworkName);
+  writer.writeString(offsets[6], object.id);
+  writer.writeBool(offsets[7], object.isLocal);
+  writer.writeString(offsets[8], object.isarViews);
+  writer.writeBool(offsets[9], object.preferHomeNetwork);
   writer.writeString(offsets[10], object.serverId);
 }
 
@@ -2401,16 +2401,16 @@ FinampUser _finampUserDeserialize(
 ) {
   final object = FinampUser(
     accessToken: reader.readString(offsets[0]),
-    homeAddress: reader.readString(offsets[3]),
-    homeNetworkName: reader.readString(offsets[4]),
-    id: reader.readString(offsets[5]),
-    isLocal: reader.readBool(offsets[6]),
-    preferHomeNetwork: reader.readBool(offsets[8]),
-    publicAddress: reader.readString(offsets[9]),
+    publicAddress: reader.readString(offsets[2]),
+    homeAddress: reader.readString(offsets[4]),
+    homeNetworkName: reader.readString(offsets[5]),
+    id: reader.readString(offsets[6]),
+    isLocal: reader.readBool(offsets[7]),
+    preferHomeNetwork: reader.readBool(offsets[9]),
     serverId: reader.readString(offsets[10]),
   );
-  object.isarCurrentViewId = reader.readStringOrNull(offsets[2]);
-  object.isarViews = reader.readString(offsets[7]);
+  object.isarCurrentViewId = reader.readStringOrNull(offsets[3]);
+  object.isarViews = reader.readString(offsets[8]);
   return object;
 }
 
@@ -2426,21 +2426,21 @@ P _finampUserDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
-    case 3:
       return (reader.readString(offset)) as P;
+    case 3:
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readString(offset)) as P;
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 7:
-      return (reader.readString(offset)) as P;
-    case 8:
       return (reader.readBool(offset)) as P;
-    case 9:
+    case 8:
       return (reader.readString(offset)) as P;
+    case 9:
+      return (reader.readBool(offset)) as P;
     case 10:
       return (reader.readString(offset)) as P;
     default:
@@ -2677,7 +2677,140 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlEqualTo(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      baseURLGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'baseURL',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'baseURL',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'baseURL',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      baseURLIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'baseURL',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2691,7 +2824,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      baseUrlGreaterThan(
+      publicAddressGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2706,7 +2839,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlLessThan(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2721,7 +2855,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlBetween(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -2740,7 +2875,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlStartsWith(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2753,7 +2889,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlEndsWith(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2766,9 +2903,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'baseUrl',
@@ -2778,9 +2914,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'baseUrl',
@@ -2790,7 +2925,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlIsEmpty() {
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'baseUrl',
@@ -2800,7 +2936,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      baseUrlIsNotEmpty() {
+      publicAddressIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'baseUrl',
@@ -3572,142 +3708,6 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'publicAddress',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'publicAddress',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'publicAddress',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'publicAddress',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'publicAddress',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'publicAddress',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'publicAddress',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'publicAddress',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'publicAddress',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      publicAddressIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'publicAddress',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> serverIdEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -3863,13 +3863,25 @@ extension FinampUserQuerySortBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByBaseUrl() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByBaseURL() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseURL', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByBaseURLDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseURL', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByPublicAddress() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'baseUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByBaseUrlDesc() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByPublicAddressDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'baseUrl', Sort.desc);
     });
@@ -3962,18 +3974,6 @@ extension FinampUserQuerySortBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByPublicAddress() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'publicAddress', Sort.asc);
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByPublicAddressDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'publicAddress', Sort.desc);
-    });
-  }
-
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByServerId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'serverId', Sort.asc);
@@ -4001,13 +4001,25 @@ extension FinampUserQuerySortThenBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByBaseUrl() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByBaseURL() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseURL', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByBaseURLDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseURL', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByPublicAddress() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'baseUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByBaseUrlDesc() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByPublicAddressDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'baseUrl', Sort.desc);
     });
@@ -4112,18 +4124,6 @@ extension FinampUserQuerySortThenBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByPublicAddress() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'publicAddress', Sort.asc);
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByPublicAddressDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'publicAddress', Sort.desc);
-    });
-  }
-
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByServerId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'serverId', Sort.asc);
@@ -4146,7 +4146,14 @@ extension FinampUserQueryWhereDistinct
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByBaseUrl(
+  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByBaseURL(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'baseURL', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByPublicAddress(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'baseUrl', caseSensitive: caseSensitive);
@@ -4203,14 +4210,6 @@ extension FinampUserQueryWhereDistinct
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByPublicAddress(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'publicAddress',
-          caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByServerId(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -4233,7 +4232,13 @@ extension FinampUserQueryProperty
     });
   }
 
-  QueryBuilder<FinampUser, String, QQueryOperations> baseUrlProperty() {
+  QueryBuilder<FinampUser, String, QQueryOperations> baseURLProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'baseURL');
+    });
+  }
+
+  QueryBuilder<FinampUser, String, QQueryOperations> publicAddressProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'baseUrl');
     });
@@ -4279,12 +4284,6 @@ extension FinampUserQueryProperty
   QueryBuilder<FinampUser, bool, QQueryOperations> preferHomeNetworkProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'preferHomeNetwork');
-    });
-  }
-
-  QueryBuilder<FinampUser, String, QQueryOperations> publicAddressProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'publicAddress');
     });
   }
 

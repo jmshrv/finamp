@@ -11,7 +11,7 @@ class ActiveNetworkDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String? address = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.baseUrl;
+    String? address = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.baseURL;
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,

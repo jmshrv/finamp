@@ -847,7 +847,7 @@ class JellyfinApiHelper {
       return null;
     }
 
-    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseURL);
     List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
     builtPath.addAll([
       "Items",
@@ -907,7 +907,7 @@ class JellyfinApiHelper {
     required BaseItemDto item,
     required DownloadProfile? transcodingProfile,
   }) {
-    Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseURL);
 
     if (transcodingProfile != null &&
         transcodingProfile.codec != FinampTranscodingCodec.original) {

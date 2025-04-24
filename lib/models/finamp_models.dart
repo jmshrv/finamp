@@ -43,9 +43,10 @@ class FinampUser {
   // @HiveField(1)
   // String baseUrl;
   @HiveField(1)
+  @Name("baseUrl")
   String publicAddress;
 
-  String get baseUrl => isLocal && preferHomeNetwork ? homeAddress : publicAddress;
+  String get baseURL => isLocal && preferHomeNetwork ? homeAddress : publicAddress;
 
   @HiveField(2)
   String accessToken;

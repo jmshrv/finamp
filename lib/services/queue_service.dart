@@ -1151,7 +1151,7 @@ class QueueService {
     // 0.18), the value would be wrong if changed while a track was playing since
     // Hive is bad at multi-isolate stuff.
 
-    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseURL);
 
     List<String> builtPath = List.from(parsedBaseUrl.pathSegments);
 

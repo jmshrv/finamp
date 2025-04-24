@@ -27,9 +27,9 @@ extension CensoredMessage on LogRecord {
 
       if (user != null) {
         workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.baseUrl), "BASEURL");
+            CaseInsensitivePattern(user.baseURL), "BASEURL");
         workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.baseUrl), "BASEURL");
+            CaseInsensitivePattern(user.baseURL), "BASEURL");
         workingLogString = workingLogString.replaceAll(
             CaseInsensitivePattern(user.accessToken), "TOKEN");
         workingLogString = workingLogString.replaceAll(

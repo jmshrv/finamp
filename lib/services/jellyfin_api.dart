@@ -596,7 +596,7 @@ class JellyfinInterceptor implements Interceptor {
     // If baseUrlTemp is null, use the baseUrl of the current user.
     // If baseUrlTemp is set, we're setting up a new user and should use it instead.
     Uri baseUri =
-        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
+        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseURL);
 
     // Add the request path on to the baseUrl
     baseUri = baseUri.replace(
