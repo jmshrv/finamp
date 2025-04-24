@@ -106,6 +106,16 @@ lib/                                -- the codebase also known as src in other p
         screens/                    -- All the "pages", "screens", "views" what ever you want to call them
         services/                   -- Things that run in the background, kinda like backend
 ```
+## Developing
+
+### Extending the Jellyfin API
+
+1. Figure out the endpoint you need. You can use https://api.jellyfin.org for this, for example
+2. Create a new matching endpoint in `jellyfin_api.dart`. Just copy-paste the needed annotations from other similar endpoints.
+3. Run code-generation (`dart run build_runner build --delete-conflicting-outputs`) to generate actual code based on the endpoint annotations
+4. Create a new method for interacting with the endpoint in `jellyfin_api_helper.dart`. Again, just copy-paste what you need.
+5. Call the new method through `JellyfinApiHelper` to make your request
+
 
 
 ## The Redesign
