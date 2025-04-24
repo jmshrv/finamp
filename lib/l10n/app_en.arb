@@ -2150,5 +2150,9 @@
   "downloadPaused": "Downloading paused due to loosing Wifi connection",
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "urlDoesntStartWithHttp": "Url needs to start with http(s)://",
+  "@urlDoesntStartWithHttp": {
+    "description": "Snackbar message when the user changes their home/public address but it doesnt start with http"
   }
 }

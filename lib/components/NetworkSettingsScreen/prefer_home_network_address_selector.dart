@@ -1,3 +1,4 @@
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/network_manager.dart';
@@ -44,6 +45,7 @@ class _HomeNetworkAddressSelector extends ConsumerState<HomeNetworkAddressSelect
           textAlign: TextAlign.center,
           keyboardType: TextInputType.url,
           onSubmitted: (value) async {
+            if (!value.startsWith("http")) return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.urlDoesntStartWithHttp);
             GetIt.instance<FinampUserHelper>().currentUser?.update(newHomeAddress: value);
             await changeTargetUrl();
           },

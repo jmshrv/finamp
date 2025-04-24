@@ -1,3 +1,4 @@
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/network_manager.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -39,6 +40,7 @@ class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
           textAlign: TextAlign.center,
           keyboardType: TextInputType.url,
           onSubmitted: (value)  async {
+              if (!value.startsWith("http")) return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.urlDoesntStartWithHttp);
               GetIt.instance<FinampUserHelper>().currentUser?.update(newPublicAddress: value);
               await changeTargetUrl();
           },
