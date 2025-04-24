@@ -26,6 +26,7 @@ class HomeNetworkSelector extends ConsumerWidget {
           value = await ensureLocationPermissions(context);
         }
         GetIt.instance<FinampUserHelper>().currentUser?.update(newPreferHomeNetwork: value);
+        await changeTargetUrl();
       },
     );
   }

@@ -45,6 +45,7 @@ class _HomeNetworkAddressSelector extends ConsumerState<HomeNetworkAddressSelect
           keyboardType: TextInputType.url,
           onSubmitted: (value) async {
             GetIt.instance<FinampUserHelper>().currentUser?.update(newHomeAddress: value);
+            await changeTargetUrl();
           },
         ),
       ),
