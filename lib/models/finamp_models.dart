@@ -196,7 +196,7 @@ class DefaultSettings {
   static const artistListType = ArtistType.albumartist;
   static const preferHomeNetwork = false;
   static const homeNetworkName = "";
-  static const homeNetworkAddress = "0.0.0.0:1234";
+  static const homeNetworkAddress = "http://0.0.0.0:8096";
 }
 
 @HiveType(typeId: 28)
