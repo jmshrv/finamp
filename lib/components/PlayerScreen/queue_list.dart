@@ -980,6 +980,7 @@ class _CurrentTrackState extends State<CurrentTrack> {
                                               queueItemInPlaylist(currentTrack),
                                           parentItem: currentTrack?.source.item,
                                           confirmPlaylistRemoval: true,
+                                          showClearQueue: true,
                                         );
                                       })
                                 ],
@@ -1170,12 +1171,14 @@ class NextUpSectionHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-              child: Flex(
-                  direction: Axis.horizontal,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+            child: Flex(
+              direction: Axis.horizontal,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
                 Text(AppLocalizations.of(context)!.nextUp),
-              ])),
+              ],
+            ),
+          ),
           if (controls)
             SimpleButton(
               text: AppLocalizations.of(context)!.clearNextUp,
@@ -1214,9 +1217,12 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
     return Padding(
-      // color: Colors.black.withOpacity(0.5),
       padding: const EdgeInsets.only(
-          left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
+        left: 14.0,
+        right: 14.0,
+        bottom: 12.0,
+        top: 8.0,
+      ),
       child: GestureDetector(
         onTap: () {
           try {
@@ -1238,26 +1244,29 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
             ),
             const SizedBox(width: 4.0),
             StreamBuilder<bool>(
-                stream: isRecentTracksExpanded,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data!) {
-                    return Icon(
-                      TablerIcons.chevron_up,
-                      size: 28.0,
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black
-                          : Colors.white,
-                    );
-                  } else {
-                    return Icon(
-                      TablerIcons.chevron_down,
-                      size: 28.0,
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black
-                          : Colors.white,
-                    );
-                  }
-                }),
+              stream: isRecentTracksExpanded,
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data!) {
+                  return Icon(
+                    TablerIcons.chevron_up,
+                    size: 28.0,
+                    color:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
+                  );
+                } else {
+                  return Icon(
+                    TablerIcons.chevron_down,
+                    size: 28.0,
+                    color:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),
