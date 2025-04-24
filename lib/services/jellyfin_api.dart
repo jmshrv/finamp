@@ -543,6 +543,9 @@ abstract class JellyfinApi extends ChopperService {
   @Post(path: "/Sessions/Logout", optionalBody: true)
   Future<Response<dynamic>> logout();
 
+  @Get(path: "/System/Endpoint", optionalBody: true)
+  Future<Response<dynamic>> pingServer();
+
   static JellyfinApi create(bool inForeground) {
     final chopperHttpLogLevel = Level
         .body; //TODO allow changing the log level in settings (and a debug config file?)

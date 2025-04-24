@@ -2154,5 +2154,13 @@
   "urlDoesntStartWithHttp": "Url needs to start with http(s)://",
   "@urlDoesntStartWithHttp": {
     "description": "Snackbar message when the user changes their home/public address but it doesnt start with http"
+  },
+  "pingSuccessful": "The server can be accessed using the active address",
+  "@pingSuccessful": {
+    "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings"
+  },
+  "pingFailed": "The server cannot be accessed using the active address",
+  "@pingFailed": {
+    "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings"
   }
 }

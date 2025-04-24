@@ -831,6 +831,19 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.warning("User has completed logout.");
     }
   }
+  
+  Future<bool> pingServer() async {
+    try {
+      Response<dynamic>? response = await jellyfinApi
+          .pingServer()
+          .then((e) => e as Response<dynamic>?)
+          .timeout(Duration(seconds: 3));
+      return response?.statusCode == 200;
+    } catch (e) {
+      _jellyfinApiHelperLogger.severe(e);
+      return false;
+    }
+  }
 
   /// Returns the correct image URL for the given item, or null if there is no
   /// image. Uses [getImageId] to get the actual id. [maxWidth] and [maxHeight]

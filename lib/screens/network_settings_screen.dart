@@ -9,11 +9,14 @@ import 'package:finamp/components/NetworkSettingsScreen/public_address_selector.
 import 'package:finamp/components/ensure_location_permission_prompt.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/jellyfin_api.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/network_manager.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 class NetworkSettingsScreen extends StatefulWidget {
@@ -70,6 +73,18 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
               },
               child: Text(AppLocalizations.of(context)!.preferHomeNetworkGetNetworkNameButton)),
           HomeNetworkAddressSelector(),
+          TextButton(
+            onPressed: () async {
+              await GetIt.instance<JellyfinApiHelper>().pingServer()
+                .then((available) {
+                  if (available) {
+                    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingSuccessful);
+                  } else {
+                    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingFailed);
+                  }
+                });
+            },
+            child: Text("Test connection"))
         ],
       ),
     );
