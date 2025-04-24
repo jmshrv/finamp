@@ -73,7 +73,7 @@
   "@sortBy": {},
   "album": "Album",
   "@album": {},
-  "albumArtist": "Artiste de l'album",
+  "albumArtist": "Artistes d'albums",
   "@albumArtist": {},
   "artist": "Artiste",
   "@artist": {},
@@ -1545,7 +1545,7 @@
   "@appearsOnAlbums": {},
   "albumArtists": "Artistes de l’album",
   "@albumArtists": {},
-  "performingArtists": "Artistes interprètes",
+  "performingArtists": "Artistes",
   "@performingArtists": {},
   "swipeRightToLeftAction": "Glissement à gauche",
   "@swipeRightToLeftAction": {},
@@ -2005,5 +2005,21 @@
   "genericCancel": "Annuler",
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "outputMenuButtonTitle": "Sortie",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuTitle": "Changer la sortie",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuDevicesSectionTitle": "Appareils disponibles",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Connecter un appareil",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
   }
 }
