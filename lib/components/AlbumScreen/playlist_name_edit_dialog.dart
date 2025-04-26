@@ -21,7 +21,7 @@ class PlaylistNameEditDialog extends StatefulWidget {
 
 class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   String? _name;
-  bool _public_visibility = false;
+  bool _publicVisibility = false;
   bool _isUpdating = false;
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -70,8 +70,8 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
                 contentPadding: EdgeInsets.zero,
               );
             },
-            initialValue: false,
-            onSaved: (newValue) => _public_visibility = newValue!,
+            initialValue: _publicVisibility,
+            onSaved: (newValue) => _publicVisibility = newValue!,
           ),
         ],
       ),
@@ -81,7 +81,7 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
           child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
-          onPressed: (_isUpdating ? null : () async => await _submit()),
+          onPressed: _isUpdating ? null : () async => await _submit(),
           child: Text(AppLocalizations.of(context)!.updateButtonLabel),
         ),
       ],
@@ -103,6 +103,31 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
           itemId: widget.playlist.id,
           newItem: playlistTemp,
         );
+
+        if (!mounted) return;
+
+        GlobalSnackbar.message(
+          (context) => AppLocalizations.of(context)!.playlistNameUpdated,
+          isConfirmation: true,
+        );
+        Navigator.of(context).pop();
+      } catch (e) {
+        errorSnackbar(e, context);
+        setState(() {
+          _isUpdating = false;
+        });
+        return;
+      }
+
+      try {
+        BaseItemDto playlistTemp = widget.playlist;
+        playlistTemp.name = _name;
+        await _jellyfinApiHelper.updatePlaylist(newPlaylist: NewPlaylist(
+          isPublic: _publicVisibility,
+          userId: GetIt.instance<FinampUserHelper>().currentUserId,
+          ids: null,          
+          name: _name
+        ), itemId: widget.playlist.id);
 
         if (!mounted) return;
 
