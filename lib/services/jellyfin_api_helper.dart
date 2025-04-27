@@ -462,6 +462,8 @@ class JellyfinApiHelper {
     );
 
     await _finampUserHelper.saveUser(newUser);
+    baseUrlTemp =
+        null; // Clear the temporary base URL after authentication, since this has priority over the regular URL
   }
 
   /// Authenticates a user and saves the login details
@@ -495,6 +497,8 @@ class JellyfinApiHelper {
     );
 
     await _finampUserHelper.saveUser(newUser);
+    baseUrlTemp =
+        null; // Clear the temporary base URL after authentication, since this has priority over the regular URL
   }
 
   /// Gets all the user's views.
