@@ -7,6 +7,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/playon_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -24,17 +25,15 @@ bool? _lastState;
 
 Logger _networkAutomationLogger = Logger("Network Automation");
 Logger _autoOfflineLogger = Logger("Auto Offline");
-Logger _networKSwitcherLogger = Logger("Network Switcher"); 
+Logger _networKSwitcherLogger = Logger("Network Switcher");
 
-final StreamSubscription<List<ConnectivityResult>> _listener = Connectivity()
-    .onConnectivityChanged
-    .listen(_onConnectivityChange);
+final StreamSubscription<List<ConnectivityResult>> _listener =
+    Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
   @override
   void build() {
-
     bool autoOfflineEnabled = ref.watch(finampSettingsProvider.autoOffline) !=
         AutoOfflineOption.disabled;
 
@@ -42,8 +41,11 @@ class AutoOffline extends _$AutoOffline {
     bool autoOfflineActive =
         ref.watch(finampSettingsProvider.autoOfflineListenerActive);
 
-    bool autoServerSwitch =
-        ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferHomeNetwork ?? DefaultSettings.preferHomeNetwork;
+    bool autoServerSwitch = ref
+            .watch(FinampUserHelper.finampCurrentUserProvider)
+            .valueOrNull
+            ?.preferHomeNetwork ??
+        DefaultSettings.preferHomeNetwork;
 
     bool state = (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
 
@@ -64,23 +66,33 @@ class AutoOffline extends _$AutoOffline {
   }
 }
 
-Future<void> _onConnectivityChange(List<ConnectivityResult>? connections) async {
-  _networkAutomationLogger.finest("Network Change: ${
-    connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
+Future<void> _onConnectivityChange(
+    List<ConnectivityResult>? connections) async {
+  _networkAutomationLogger.finest(
+      "Network Change: ${connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
   connections ??= await Connectivity().checkConnectivity();
-  await Future.wait([
+  final [offlineModeActive, baseUrlChanged] = await Future.wait([
     _setOfflineMode(connections),
     changeTargetUrl(),
   ]);
   notifyOfPausedDownloads(connections);
+  if (baseUrlChanged) {
+    reconnectPlayOnService(connections);
+  }
 }
 
-Future<void> _setOfflineMode(List<ConnectivityResult> connections) async {
+/// Sets the offline mode based on the current connectivity and user settings
+/// Returns true if offline mode is now enabled
+Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   // skip when feature not enabled
   if (FinampSettingsHelper.finampSettings.autoOffline ==
-      AutoOfflineOption.disabled) return;
+      AutoOfflineOption.disabled) {
+    return FinampSettingsHelper.finampSettings.isOffline;
+  }
   // skip when user overwrote offline mode
-  if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
+  if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
+    return false;
+  }
 
   bool state = _shouldBeOffline(connections);
 
@@ -91,14 +103,16 @@ Future<void> _setOfflineMode(List<ConnectivityResult> connections) async {
   }
 
   // skip if nothing changed
-  if (FinampSettingsHelper.finampSettings.isOffline == state) return;
+  if (FinampSettingsHelper.finampSettings.isOffline == state) return state;
 
   GlobalSnackbar.message((context) => AppLocalizations.of(context)!
       .autoOfflineNotification(state ? "enabled" : "disabled"));
 
-  _autoOfflineLogger.info("Automatically ${state ? "Enabled" : "Disabled"} Offline Mode");
+  _autoOfflineLogger
+      .info("Automatically ${state ? "Enabled" : "Disabled"} Offline Mode");
 
   FinampSetters.setIsOffline(state);
+  return state;
 }
 
 bool _shouldBeOffline(List<ConnectivityResult> connections) {
@@ -115,19 +129,22 @@ bool _shouldBeOffline(List<ConnectivityResult> connections) {
   }
 }
 
-Future<void> changeTargetUrl({bool? isLocal}) async {
+/// Changes the base URL based on the current connectivity and user settings
+/// Returns true if the URL was changed
+Future<bool> changeTargetUrl({bool? isLocal}) async {
   FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
-  if (user == null) return;
+  if (user == null) return false;
 
   if (isLocal != null && isLocal != user.isLocal) {
-    _networKSwitcherLogger.info("Changed active network to ${isLocal ? "home" : "public"} address");
-    GetIt.instance<FinampUserHelper>()
-      .currentUser
-      ?.update(newIsLocal: isLocal);
-    return;
+    _networKSwitcherLogger.info(
+        "Changed active network to ${isLocal ? "home" : "public"} address");
+    GetIt.instance<FinampUserHelper>().currentUser?.update(newIsLocal: isLocal);
+    return true;
   }
   // this avoids an infinite loop... again :)
-  if (isLocal != null) {return;}
+  if (isLocal != null) {
+    return false;
+  }
 
   // Disable this feature
   if (!user.preferHomeNetwork) return changeTargetUrl(isLocal: false);
@@ -143,25 +160,29 @@ Future<void> changeTargetUrl({bool? isLocal}) async {
   currentWifi = currentWifi.replaceAll("\"", "");
   _networkAutomationLogger.finest("Wifi Name detected: $currentWifi");
 
-  await changeTargetUrl(isLocal: currentWifi == targetWifi);
+  return await changeTargetUrl(isLocal: currentWifi == targetWifi);
 }
 
 int _getDownloads() {
-    final downloadsService = GetIt.instance<DownloadsService>();
-    downloadsService.updateDownloadCounts();
+  final downloadsService = GetIt.instance<DownloadsService>();
+  downloadsService.updateDownloadCounts();
 
-    final downloadingTracks = downloadsService.downloadCounts["track"]!;
-    final downloadingImage = downloadsService.downloadCounts["image"]!;
-    final downloadingSyncs = downloadsService.downloadCounts["sync"]!;
+  final nodesSyncing = downloadsService.downloadCounts["sync"]!;
+  final downloadingEnqueued =
+      downloadsService.downloadStatuses[DownloadItemState.enqueued]!;
+  final downloadingRunning =
+      downloadsService.downloadStatuses[DownloadItemState.downloading]!;
 
-    final downloads = downloadingTracks + downloadingImage + downloadingSyncs;
-    return downloads;
+  final activeDownloads =
+      nodesSyncing + downloadingEnqueued + downloadingRunning;
+  return activeDownloads;
 }
 
 void notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
   if (connections.contains(ConnectivityResult.none)) {
     if (_getDownloads() == 0) return;
-    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);
+    GlobalSnackbar.message(
+        (context) => AppLocalizations.of(context)!.downloadPaused);
     return;
   }
 
@@ -174,6 +195,16 @@ void notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
 
     if (_getDownloads() == 0) return;
 
-    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);
+    GlobalSnackbar.message(
+        (context) => AppLocalizations.of(context)!.downloadPaused);
+  }
+}
+
+void reconnectPlayOnService(List<ConnectivityResult> connections) async {
+  final playOnService = GetIt.instance<PlayOnService>();
+
+  await playOnService.closeListener();
+  if (!connections.contains(ConnectivityResult.none)) {
+    await playOnService.startReconnectionLoop();
   }
 }
