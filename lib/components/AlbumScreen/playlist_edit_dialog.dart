@@ -66,12 +66,17 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
                   AppLocalizations.of(context)!.publiclyVisiblePlaylist,
                   textAlign: TextAlign.left,
                 ),
-                onChanged: state.didChange,
                 contentPadding: EdgeInsets.zero,
+                onChanged: (value) {
+                  state.didChange(value);
+                  setState(() {
+                    _publicVisibility = value!;
+                  });
+                }                
               );
             },
-            initialValue: _publicVisibility,
-            onSaved: (newValue) => _publicVisibility = newValue!,
+            initialValue: _publicVisibility,            
+            onSaved: (newValue) => _publicVisibility = newValue!,            
           ),
         ],
       ),
@@ -99,29 +104,6 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
       try {
         BaseItemDto playlistTemp = widget.playlist;
         playlistTemp.name = _name;
-        await _jellyfinApiHelper.updateItem(
-          itemId: widget.playlist.id,
-          newItem: playlistTemp,
-        );
-
-        if (!mounted) return;
-
-        GlobalSnackbar.message(
-          (context) => AppLocalizations.of(context)!.playlistNameUpdated,
-          isConfirmation: true,
-        );
-        Navigator.of(context).pop();
-      } catch (e) {
-        errorSnackbar(e, context);
-        setState(() {
-          _isUpdating = false;
-        });
-        return;
-      }
-
-      try {
-        BaseItemDto playlistTemp = widget.playlist;
-        playlistTemp.name = _name;
         await _jellyfinApiHelper.updatePlaylist(newPlaylist: NewPlaylist(
           isPublic: _publicVisibility,
           userId: GetIt.instance<FinampUserHelper>().currentUserId,
@@ -132,7 +114,7 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
         if (!mounted) return;
 
         GlobalSnackbar.message(
-          (context) => AppLocalizations.of(context)!.playlistNameUpdated,
+          (context) => AppLocalizations.of(context)!.playlistUpdated,
           isConfirmation: true,
         );
         Navigator.of(context).pop();
