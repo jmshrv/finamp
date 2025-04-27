@@ -214,7 +214,7 @@ class AndroidAutoHelper {
         _searchTracks(searchQuery, limit: 5),
         _searchAlbums(searchQuery, limit: 5),
         _searchArtists(searchQuery, limit: 3),
-        // _searchGenres(searchQuery, limit: 3), //!!! don't include genres, since they aren't directly playable and won't be shown in the search results anyway. Only playable items are allowed as search results
+        _searchGenres(searchQuery, limit: 3),
       ]);
 
       final [
@@ -222,14 +222,14 @@ class AndroidAutoHelper {
         trackResults,
         albumResults,
         artistResults,
-        // genreResults //!!! don't include genres, since they aren't directly playable and won't be shown in the search results anyway. Only playable items are allowed as search results
+        genreResults,
       ] = await searchFuture;
 
       final List<BaseItemDto> allSearchResults = playlistResults
           .followedBy(trackResults)
           .followedBy(albumResults)
           .followedBy(artistResults)
-          // .followedBy(genreResults) //!!! don't include genres, since they aren't directly playable and won't be shown in the search results anyway. Only playable items are allowed as search results
+          .followedBy(genreResults)
           .toList();
 
       final List<MediaItem> mediaItems = [];
