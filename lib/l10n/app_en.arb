@@ -2145,22 +2145,31 @@
     "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "preferHomeNetworkFailedToReadNetworkNameError": "Failed to read network name",
+  "@preferHomeNetworkFailedToReadNetworkNameError": {
+    "description": "This is shown in the snackbar when the app failed to read the network name"
+  },
   "preferHomeNetworkGetNetworkNameButton": "Use current network",
+  "@preferHomeNetworkGetNetworkNameButton": {
+    "description": "Title for the button that gets the current network name"
+  },
   "networkSettingsTitle": "Network",
-  "downloadPaused": "Downloading paused due to loosing Wifi connection",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "downloadPaused": "Downloading paused because device is not connected to WiFi",
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
   },
-  "urlDoesntStartWithHttp": "Url needs to start with http(s)://",
-  "@urlDoesntStartWithHttp": {
-    "description": "Snackbar message when the user changes their home/public address but it doesnt start with http"
+  "missingSchemaError": "Url needs to start with http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
   },
-  "pingSuccessful": "The server can be accessed using the active address",
+  "pingSuccessful": "Server connection successful!",
   "@pingSuccessful": {
-    "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings"
+    "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings and the server is reachable."
   },
-  "pingFailed": "The server cannot be accessed using the active address",
+  "pingFailed": "FAILED to reach the server via the active address!",
   "@pingFailed": {
-    "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings"
+    "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings but the server can't be reached."
   }
 }

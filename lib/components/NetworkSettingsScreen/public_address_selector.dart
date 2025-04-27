@@ -40,9 +40,14 @@ class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
           textAlign: TextAlign.center,
           keyboardType: TextInputType.url,
           onSubmitted: (value)  async {
-              if (!value.startsWith("http")) return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.urlDoesntStartWithHttp);
-              GetIt.instance<FinampUserHelper>().currentUser?.update(newPublicAddress: value);
-              await changeTargetUrl();
+            if (!value.startsWith("http")) {
+              return GlobalSnackbar.message((context) =>
+                  AppLocalizations.of(context)!.missingSchemaError);
+            }
+            GetIt.instance<FinampUserHelper>()
+                .currentUser
+                ?.update(newPublicAddress: value);
+            await changeTargetUrl();
           },
         ),
       ),
