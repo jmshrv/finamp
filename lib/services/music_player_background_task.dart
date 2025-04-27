@@ -323,20 +323,20 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // Propagate all events from the audio player to AudioService clients.
     int? replayQueueIndex;
     _player.playbackEventStream.listen((event) async {
-      if (event.currentIndex != replayQueueIndex) {
-        replayQueueIndex = event.currentIndex;
-        if (replayQueueIndex != null) {
-          var queueItem =
-              effectiveSequence?[replayQueueIndex!].tag as FinampQueueItem;
-          _applyVolumeNormalization(queueItem.item);
+      if (_player.sequenceState?.sequence != null) {
+        if (event.currentIndex != replayQueueIndex) {
+          replayQueueIndex = event.currentIndex;
+          if (replayQueueIndex != null) {
+            var queueItem =
+                // event.currentIndex is based on the original sequence, not the effectiveSequence
+                _player.sequenceState?.sequence[replayQueueIndex!].tag
+                    as FinampQueueItem;
+            _applyVolumeNormalization(queueItem.item);
+          }
         }
       }
       playbackState.add(_transformEvent(event));
     });
-
-    //mediaItem.listen((currentTrack) {
-    //  _applyVolumeNormalization(currentTrack);
-    //});
 
     double prevIosGain =
         FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
@@ -384,14 +384,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       playbackState.add(event);
       _audioServiceBackgroundTaskLogger.info(
           "Loop mode changed to ${event.repeatMode} (${_player.loopMode}).");
-    });
-
-    // This listener basically just kicks the playback state into updating
-    // whenever a track changes, since some stuff. Done to fix the favorite state
-    // not updating between tracks (https://github.com/jmshrv/finamp/issues/844)
-    mediaItem.listen((_) {
-      final event = _transformEvent(_player.playbackEvent);
-      playbackState.add(event);
     });
 
     fadeState = BehaviorSubject.seeded(FadeState(fadeVolume: 1.0));
