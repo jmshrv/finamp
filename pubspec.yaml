@@ -73,7 +73,9 @@ dependencies:
       ref: 8b2b0f0e1c8470183cb2df40815a05bfdb3fe219
   share_plus: ^10.1.4
   isar: ^3.1.0
-  isar_flutter_libs: ^3.1.0
+  isar_flutter_libs:
+    git: 
+      url: https://github.com/MrLittleWhite/isar_flutter_libs.git
 
   path: ^1.9.0
   intl: ">=0.18.1 < 1.0.0"
