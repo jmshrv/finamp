@@ -4,5 +4,9 @@ import 'package:meta/meta_meta.dart';
 /// finampSettingsProvider selector created
 @Target({TargetKind.setter, TargetKind.field})
 class FinampSetterIgnore {
-  const FinampSetterIgnore();
+  final String message;
+  const FinampSetterIgnore(this.message);
+  @override
+  String toString() =>
+      "Excluded from automatic sub-provider/setter generation: $message";
 }
