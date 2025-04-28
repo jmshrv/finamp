@@ -97,7 +97,7 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   bool state = _shouldBeOffline(connections);
 
   // Attempt to combat IOS reliability problems
-  if (Platform.isIOS) {
+  if (Platform.isIOS || Platform.isMacOS) {
     await Future.delayed(Duration(seconds: 7), () => {});
     state = _shouldBeOffline(await Connectivity().checkConnectivity());
   }
