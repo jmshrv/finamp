@@ -956,7 +956,7 @@
     },
     "description": "Localized names of special downloadable collections like favorites."
   },
-  "missingDownloadSize": "Cancello…",
+  "missingDownloadSize": "Eliminazione…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1005,7 +1005,7 @@
   "@playbackSpeedIncreaseLabel": {
     "description": "Label for the button in the speed menu that increases the playback speed."
   },
-  "playingFromType": "Riproduco da {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Riproduzione da {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{a Remote Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1196,11 +1196,11 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "activeDownloadSize": "In download…",
+  "activeDownloadSize": "Download…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "syncingDownloadSize": "Sincronizzo…",
+  "syncingDownloadSize": "Sincronizzazione…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1335,7 +1335,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Se abilitato, Finamp invierà la coda corrente al server. Al momento sembra che ci sia poca utilità per questa funzionalità, inoltre aumenta il traffico di rete.",
+  "reportQueueToServerSubtitle": "Se abilitato, Finamp invierà la coda corrente al server. Questo può migliorare il controllo remoto e permette la ripresa della coda via server. Sempre attivo se la funzione 'Play On' è attiva.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1540,7 +1540,7 @@
   "@lyricsAlignmentTitle": {
     "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
   },
-  "showLyricsScreenAlbumPreludeTitle": "Mostra l'album prima dei testi",
+  "showLyricsScreenAlbumPreludeTitle": "Mostra la cover dell'album prima dei testi",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1612,7 +1612,7 @@
   "@codec": {
     "description": "Label for the feature chips showing the codec of a track"
   },
-  "showFeatureChipsToggleSubtitle": "Mostra sullo schermo del lettore informazioni avanzate sul brano come codec, bit rate e altro.",
+  "showFeatureChipsToggleSubtitle": "Mostra sullo schermo del lettore informazioni avanzate sul brano come codec, bitrate e altro.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -1885,7 +1885,7 @@
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   },
-  "playOnStaleDelaySubtitle": "Quanto a lungo una sessione remota 'Riproduci Su' è considerata attiva dopo aver ricevuto un comando. Quando è considerata attiva la riproduzione viene riportata più frequentemente, ciò può portare ad un aumento del consumo di dati.",
+  "playOnStaleDelaySubtitle": "Quanto a lungo una sessione remota 'Play On' è considerata attiva dopo aver ricevuto un comando. Quando è considerata attiva, la riproduzione viene riportata più frequentemente, ciò può portare ad un aumento del consumo di dati.",
   "@playOnStaleDelaySubtitle": {
     "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
   },
@@ -2049,7 +2049,7 @@
   "@enablePlayonSubtitle": {
     "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "playbackReporting": "Report Riproduzione",
+  "playbackReporting": "Report riproduzione",
   "@playbackReporting": {},
   "startupErrorWorkaround": "Come soluzione alternativa puoi cancellare i tuoi dati dell'app per resettare l'app. Tieni presente che in tal caso tutte le tue impostazioni e i download saranno cancellati.",
   "@startupErrorWorkaround": {
