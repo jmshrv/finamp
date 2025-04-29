@@ -128,4 +128,29 @@ class GlobalSnackbar {
       ),
     );
   }
+
+  /// Show a localized action to the user using the global context
+  static void action(
+    String Function(BuildContext scaffold) message, {
+    required SnackBarAction Function(BuildContext scaffold) action,
+    bool isConfirmation = false,
+  }) =>
+      _enqueue(() => _action(message, action, isConfirmation));
+  static void _action(
+      String Function(BuildContext scaffold) message,
+      SnackBarAction Function(BuildContext scaffold) action,
+      bool isConfirmation) {
+    BuildContext context = materialAppNavigatorKey.currentContext!;
+    var text = message(context);
+    _logger.info("Displaying message: $text");
+    materialAppScaffoldKey.currentState!.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        duration: isConfirmation
+            ? const Duration(milliseconds: 1500)
+            : const Duration(seconds: 4),
+        action: action(context),
+      ),
+    );
+  }
 }

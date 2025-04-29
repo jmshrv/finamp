@@ -34,7 +34,7 @@ class QueueService {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
-  final downloadsService = GetIt.instance<DownloadsService>();
+  final _downloadsService = GetIt.instance<DownloadsService>();
   final _queueServiceLogger = Logger("QueueService");
   final _queuesBox = Hive.box<FinampStorableQueueInfo>("Queues");
 
@@ -130,9 +130,7 @@ class QueueService {
         if (_savedQueueState == SavedQueueState.saving) {
           _saveUpdateImmediate = false;
           _saveUpdateCycleCount = 0;
-          FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
-              getQueue(), _audioHandler.playbackPosition.inMilliseconds);
-          _queuesBox.put("latest", info);
+          final info = _saveCurrentQueue(withPosition: true);
           _queueServiceLogger.finest("Saved new periodic queue $info");
         }
       } else {
@@ -252,9 +250,7 @@ class QueueService {
     _audioHandler.queueTitle.add("Finamp");
 
     if (_savedQueueState == SavedQueueState.saving) {
-      FinampStorableQueueInfo info =
-          FinampStorableQueueInfo.fromQueueInfo(getQueue(), null);
-      _queuesBox.put("latest", info);
+      final info = _saveCurrentQueue(withPosition: false);
       _queueServiceLogger.finest("Saved new rebuilt queue $info");
       _saveUpdateImmediate = false;
       _saveUpdateCycleCount = 0;
@@ -268,7 +264,15 @@ class QueueService {
         FinampSettingsHelper.finampSettings.enablePlayon) {
       unawaited(playbackHistoryService.reportQueueStatus());
     }
+  }
 
+  Future<FinampStorableQueueInfo> _saveCurrentQueue(
+      {bool withPosition = false}) async {
+    FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
+        getQueue(),
+        withPosition ? _audioHandler.playbackPosition.inMilliseconds : null);
+    await _queuesBox.put("latest", info);
+    return info;
   }
 
   Future<void> performInitialQueueLoad() async {
@@ -323,7 +327,10 @@ class QueueService {
     }
   }
 
-  Future<void> loadSavedQueue(FinampStorableQueueInfo info) async {
+  Future<void> loadSavedQueue(
+    FinampStorableQueueInfo info, {
+    Map<jellyfin_models.BaseItemId, jellyfin_models.BaseItemDto>? existingItems,
+  }) async {
     final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
     if (_savedQueueState == SavedQueueState.loading) {
       return Future.error("A saved queue is currently loading");
@@ -343,7 +350,8 @@ class QueueService {
           ((info.currentTrack == null) ? [] : [info.currentTrack!]) +
           info.nextUp +
           info.queue;
-      Map<jellyfin_models.BaseItemId, jellyfin_models.BaseItemDto> idMap = {};
+      Map<jellyfin_models.BaseItemId, jellyfin_models.BaseItemDto> idMap =
+          existingItems ?? {};
       Set<jellyfin_models.BaseItemId> playlistIds = {};
 
       // If queue source is playlist, fetch via parent to retrieve metadata needed
@@ -364,13 +372,16 @@ class QueueService {
       }
 
       // Get list of unique ids that do not yet have an associated item.
-      List<jellyfin_models.BaseItemId> missingIds =
-          allIds.toSet().difference(playlistIds).toList();
+      List<jellyfin_models.BaseItemId> missingIds = allIds
+          .toSet()
+          .difference(playlistIds)
+          .difference(idMap.keys.toSet())
+          .toList();
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in missingIds) {
           jellyfin_models.BaseItemDto? item =
-              downloadsService.getTrackDownload(id: id)?.baseItem;
+              _downloadsService.getTrackDownload(id: id)?.baseItem;
           if (item != null) {
             idMap[id] = item;
           }
@@ -403,7 +414,8 @@ class QueueService {
       await _replaceWholeQueue(
           itemList: items["previous"]! + items["current"]! + items["queue"]!,
           initialIndex: items["previous"]!.length,
-          beginPlaying: false,
+          beginPlaying:
+              _audioHandler.playbackState.valueOrNull?.playing ?? false,
           source: info.source ??
               QueueItemSource.rawId(
                   type: QueueItemSourceType.unknown,
@@ -412,9 +424,9 @@ class QueueService {
                   id: "savedqueue"));
 
       Future<void> seekFuture = Future.value();
-      if ((info.currentTrackSeek ?? 0) > 5000) {
+      if ((info.currentTrackSeek ?? 0) > 500) {
         seekFuture = _audioHandler
-            .seek(Duration(milliseconds: (info.currentTrackSeek ?? 0) - 1000));
+            .seek(Duration(milliseconds: info.currentTrackSeek ?? 0));
       }
 
       await addToNextUp(items: items["next"]!);
@@ -565,6 +577,37 @@ class QueueService {
       _audioHandler.nextInitialIndex = null;
     } catch (e) {
       _queueServiceLogger.severe("Error while initializing queue: $e");
+    }
+  }
+
+  Future<void> reloadQueue() async {
+    _queueServiceLogger.info("Reloading queue");
+
+    if (_queueAudioSource.length == 0) {
+      return Future.error("Queue is empty, cannot reload!");
+    }
+
+    await _saveCurrentQueue(withPosition: true);
+    archiveSavedQueue();
+
+    var info = _queuesBox.get("latest");
+    if (info != null) {
+      final Map<jellyfin_models.BaseItemId, jellyfin_models.BaseItemDto>
+          existingItems = {};
+      final queueInfo = getQueue();
+      for (var item in (FinampSettingsHelper.finampSettings.isOffline
+          ? queueInfo.fullQueue.where(
+              (e) => e.item.extras?["android.media.extra.DOWNLOAD_STATUS"] == 2)
+          : queueInfo.fullQueue)) {
+        if (item.baseItem != null) {
+          existingItems[item.baseItemId] = item.baseItem!;
+        }
+      }
+
+      await loadSavedQueue(
+        info,
+        existingItems: existingItems,
+      );
     }
   }
 
@@ -1023,20 +1066,20 @@ class QueueService {
     DownloadItem? downloadedImage;
 
     if (item.type == "Audio") {
-      downloadedTrack = downloadsService.getTrackDownload(item: item);
+      downloadedTrack = _downloadsService.getTrackDownload(item: item);
       isDownloaded = downloadedTrack != null;
     } else {
       downloadedCollection =
-          await downloadsService.getCollectionInfo(item: item);
+          await _downloadsService.getCollectionInfo(item: item);
       if (downloadedCollection != null) {
         final downloadStatus =
-            downloadsService.getStatus(downloadedCollection, null);
+            _downloadsService.getStatus(downloadedCollection, null);
         isDownloaded = downloadStatus != DownloadItemStatus.notNeeded;
       }
     }
 
     try {
-      downloadedImage = downloadsService.getImageDownload(item: item);
+      downloadedImage = _downloadsService.getImageDownload(item: item);
     } catch (e) {
       _queueServiceLogger.warning(
           "Couldn't get the offline image for track '${item.name}' because it's not downloaded or missing a blurhash");

@@ -11,6 +11,7 @@ import 'package:finamp/services/playon_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
@@ -26,6 +27,10 @@ bool? _lastState;
 Logger _networkAutomationLogger = Logger("Network Automation");
 Logger _autoOfflineLogger = Logger("Auto Offline");
 Logger _networKSwitcherLogger = Logger("Network Switcher");
+
+final BehaviorSubject<String> baseUrlChangeStream =
+    BehaviorSubject<String>.seeded(
+        GetIt.instance<FinampUserHelper>().currentUser!.baseURL);
 
 final StreamSubscription<List<ConnectivityResult>> _listener =
     Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
@@ -76,7 +81,9 @@ Future<void> _onConnectivityChange(
     changeTargetUrl(),
   ]);
   notifyOfPausedDownloads(connections);
+  final activeBaseUrl = GetIt.instance<FinampUserHelper>().currentUser!.baseURL;
   if (baseUrlChanged) {
+    baseUrlChangeStream.add(activeBaseUrl);
     reconnectPlayOnService(connections);
   }
 }

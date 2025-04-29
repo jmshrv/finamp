@@ -197,6 +197,7 @@ class DefaultSettings {
   static const preferHomeNetwork = false;
   static const homeNetworkName = "";
   static const homeNetworkAddress = "http://0.0.0.0:8096";
+  static const autoReloadQueue = false;
 }
 
 @HiveType(typeId: 28)
@@ -318,7 +319,9 @@ class FinampSettings {
       this.autoOfflineListenerActive =
           DefaultSettings.autoOfflineListenerActive,
       this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
-      this.audioFadeInDuration = DefaultSettings.audioFadeInDuration});
+    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
+    this.autoReloadQueue = DefaultSettings.autoReloadQueue,
+  });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -631,6 +634,9 @@ class FinampSettings {
 
   @HiveField(96, defaultValue: DefaultSettings.enablePlayon)
   bool enablePlayon;
+
+  @HiveField(97, defaultValue: DefaultSettings.autoReloadQueue)
+  bool autoReloadQueue;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1943,7 +1949,13 @@ class FinampQueueInfo {
   int get currentTrackIndex =>
       previousTracks.length + (currentTrack == null ? 0 : 1);
   int get remainingTrackCount => nextUp.length + queue.length;
-  int get trackCount => currentTrackIndex + remainingTrackCount;
+  int get trackCount => currentTrackIndex + remainingTrackCount;  
+  List<FinampQueueItem> get fullQueue => CombinedIterableView([
+        previousTracks,
+        currentTrack != null ? [currentTrack!] : <FinampQueueItem>[],
+        nextUp,
+        queue
+      ]).toList(growable: false);
 
   /// Remaining duration of queue.  Does not consider position in current track.
   Duration get remainingDuration {
@@ -1956,15 +1968,17 @@ class FinampQueueInfo {
 
   Duration get totalDuration {
     var total = 0;
-    for (var item in CombinedIterableView([
-      previousTracks,
-      [currentTrack],
-      nextUp,
-      queue
-    ])) {
+    for (var item in fullQueue) {
       total += item?.item.duration?.inMicroseconds ?? 0;
     }
     return Duration(microseconds: total);
+  }
+
+  int get undownloadedTracks {
+    return fullQueue
+        .where(
+            (e) => e.item.extras?["android.media.extra.DOWNLOAD_STATUS"] != 2)
+        .length;
   }
 }
 

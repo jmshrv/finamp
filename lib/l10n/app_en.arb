@@ -2171,5 +2171,30 @@
   "pingFailed": "FAILED to reach the server via the active address!",
   "@pingFailed": {
     "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings but the server can't be reached."
+  },
+  "autoReloadQueueTitle": "Automatically Reload Queue",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "Automatically reload the queue when the source changes (i.e. offline mode enabled or server address switch). If disabled, Finamp will prompt you instead.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadPrompt": "Reload queue to apply new network settings",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings"
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} will be removed from the queue because they aren't downloaded.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "autoReloadPromptReloadButton": "Reload",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
   }
 }
