@@ -29,7 +29,7 @@ class _HomeNetworkNameSelector extends ConsumerState<HomeNetworkNameSelector> {
     String networkName = user?.homeNetworkName ?? DefaultSettings.homeNetworkName;
     bool featureEnabled = user?.preferHomeNetwork ?? DefaultSettings.preferHomeNetwork;
 
-    _controller = TextEditingController(
+    _controller ??= TextEditingController(
         text: networkName.toString());
 
     return ListTile(

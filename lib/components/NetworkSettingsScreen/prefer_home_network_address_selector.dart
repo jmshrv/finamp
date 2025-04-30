@@ -30,7 +30,7 @@ class _HomeNetworkAddressSelector extends ConsumerState<HomeNetworkAddressSelect
     String address = user?.homeAddress ?? DefaultSettings.homeNetworkAddress;
     bool featureEnabled = user?.preferHomeNetwork ?? DefaultSettings.preferHomeNetwork;
 
-    _controller = TextEditingController(
+    _controller ??= TextEditingController(
       text: address);
 
     return ListTile(
