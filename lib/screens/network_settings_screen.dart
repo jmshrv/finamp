@@ -84,7 +84,7 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
                   }
                 });
             },
-            child: Text("Test connection"))
+            child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel))
         ],
       ),
     );
