@@ -64,16 +64,16 @@ class FinampUser {
   Map<BaseItemId, BaseItemDto> views;
 
   @HiveField(7)
-  String homeAddress;
+  String homeAddress = DefaultSettings.homeNetworkAddress;
 
   @HiveField(8)
-  String homeNetworkName;
+  String homeNetworkName = DefaultSettings.homeNetworkName;
 
   @HiveField(9)
-  bool isLocal;
+  bool isLocal = DefaultSettings.isLocal;
 
   @HiveField(10)
-  bool preferHomeNetwork;
+  bool preferHomeNetwork = DefaultSettings.preferHomeNetwork;
 
   // We only need 1 user, the current user
   final Id isarId = 0;
@@ -194,6 +194,7 @@ class DefaultSettings {
   static const audioFadeOutDuration = Duration(milliseconds: 0);
   static const audioFadeInDuration = Duration(milliseconds: 0);
   static const artistListType = ArtistType.albumartist;
+  static const isLocal = false;
   static const preferHomeNetwork = false;
   static const homeNetworkName = "";
   static const homeNetworkAddress = "http://0.0.0.0:8096";

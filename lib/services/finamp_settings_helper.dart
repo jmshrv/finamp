@@ -221,6 +221,8 @@ class FinampSettingsHelper {
         seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
     FinampSetters.setAutoloadLastQueueOnStartup(
         DefaultSettings.autoLoadLastQueueOnStartup);
+    FinampSetters.setAutoReloadQueue(
+      DefaultSettings.autoReloadQueue);
   }
 
   static void resetPlaybackReportingSettings() {
@@ -271,12 +273,13 @@ class FinampSettingsHelper {
 
   static void resetNetworkSettings() {
     GetIt.instance<FinampUserHelper>().currentUser?.update(
-      newIsLocal: false,
+      newIsLocal: DefaultSettings.isLocal,
       newHomeAddress: DefaultSettings.homeNetworkAddress,
       newHomeNetworkName: DefaultSettings.homeNetworkName,
       newPreferHomeNetwork: DefaultSettings.preferHomeNetwork,
     );
     FinampSetters.setAutoOffline(DefaultSettings.autoOffline);
+    
   }
 
   static void resetAllSettings() {
