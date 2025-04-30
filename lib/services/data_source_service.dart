@@ -38,14 +38,13 @@ class DataSourceService extends _$DataSourceService {
     final FinampUserHelper finampUserHelper =
         GetIt.instance<FinampUserHelper>();
 
-    ref.listen(finampSettingsProvider.isOffline, (_, value) {
-      final offlineEnabled = value;
-      if (offlineEnabled) {
+    ref.listen(finampSettingsProvider.isOffline, (_, isOffline) {
+      if (isOffline) {
         _dataSourceServiceLogger.info("Offline Mode Enabled");
       } else {
         _dataSourceServiceLogger.info("Offline Mode Disabled");
       }
-      _onDataSourceChange(offlineEnabled
+      _onDataSourceChange(isOffline
           ? SourceChangeType.toOffline
           : SourceChangeType.toOnline);
     });
