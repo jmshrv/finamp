@@ -103,11 +103,13 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
 
   bool state = _shouldBeOffline(connections);
 
-  // Attempt to combat IOS reliability problems
-  if (Platform.isIOS || Platform.isMacOS) {
-    await Future.delayed(Duration(seconds: 7), () => {});
-    state = _shouldBeOffline(await Connectivity().checkConnectivity());
-  }
+  // this prevents an issue on ios (and mac?) where the
+  // listener gets called even though it shouldnt.
+  // The wait also acts as an timeout so offline mode is less
+  // likely to engage when it doesnt need to and this helps
+  // with queue reloading
+  await Future.delayed(Duration(seconds: 7), () => {});
+  state = _shouldBeOffline(await Connectivity().checkConnectivity());
 
   // skip if nothing changed
   if (FinampSettingsHelper.finampSettings.isOffline == state) return state;
