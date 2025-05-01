@@ -1669,7 +1669,7 @@
   "@downloadBitrate": {
     "description": "Title for Download Bitrate settings slider"
   },
-  "downloadBitrateSubtitle": "Korkeampi bittinopeus tarjoaa paremman laadun ääntä suuremman tiedostokoon kustannuksella.",
+  "downloadBitrateSubtitle": "Korkeampi bittinopeus tarjoaa paremman äänenlaadun, mutta vie enemmän tallennustilaa.",
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
   },
