@@ -29,15 +29,42 @@ class TracksSection extends StatefulWidget {
 class _TracksSectionState extends State<TracksSection> {
   bool _showTracks = true;
   bool _isExpandable = true;
-        
+
+  @override
+  void initState() {
+    super.initState();
+    _evaluateTrackVisibility();
+  }
+
+  @override
+  void didUpdateWidget(covariant TracksSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _evaluateTrackVisibility();
+  }
+
+  void _evaluateTrackVisibility() {
+    final hasTracks = widget.tracks != null && widget.tracks!.isNotEmpty;
+    final hasQueue = widget.childrenForQueue != null;
+
+    if (hasTracks && hasQueue) {
+      if (!_showTracks || !_isExpandable) {
+        setState(() {
+          _showTracks = true;
+          _isExpandable = true;
+        });
+      }
+    } else {
+      if (_showTracks || _isExpandable) {
+        setState(() {
+          _showTracks = false;
+          _isExpandable = false;
+        });
+      }
+    }
+  }
+      
   @override
   Widget build(BuildContext context) {
-    if (widget.tracks == null || widget.tracks?.isEmpty != false ||
-      widget.childrenForQueue == null) {
-        _showTracks = false;
-        _isExpandable = false;
-    }
-
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(
@@ -143,14 +170,41 @@ class AlbumSection extends StatefulWidget {
 class _AlbumSectionState extends State<AlbumSection> {
   bool _showAlbums = true;
   bool _isExpandable = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _evaluateAlbumVisibility();
+  }
+
+  @override
+  void didUpdateWidget(covariant AlbumSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _evaluateAlbumVisibility();
+  }
+
+  void _evaluateAlbumVisibility() {
+    final hasAlbums = widget.albums != null && widget.albums!.isNotEmpty;
+
+    if (hasAlbums) {
+      if (!_showAlbums || !_isExpandable) {
+        setState(() {
+          _showAlbums = true;
+          _isExpandable = true;
+        });
+      }
+    } else {
+      if (_showAlbums || _isExpandable) {
+        setState(() {
+          _showAlbums = false;
+          _isExpandable = false;
+        });
+      }
+    }
+  }
         
   @override
   Widget build(BuildContext context) {
-    if (widget.albums == null || widget.albums?.isEmpty != false) {
-        _showAlbums = false;
-        _isExpandable = false;
-    }
-
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(
