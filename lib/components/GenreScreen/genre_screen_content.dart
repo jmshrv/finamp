@@ -47,12 +47,6 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
     );
     items = result.$1;
     itemCount = result.$2;
-
-    final listener = GetIt.instance<DownloadsService>()
-        .offlineDeletesStream
-        .listen((_) => ref.invalidateSelf());
-
-    ref.onDispose(() => listener.cancel());
   } else {
     final result = await getCuratedItemsOnline(
       parent: parent,
@@ -140,17 +134,22 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOffline({
     _ => SortBy.random, // for Favorites and Random
   };
 
+  final listener = GetIt.instance<DownloadsService>()
+        .offlineDeletesStream
+        .listen((_) => ref.invalidateSelf());
+  ref.onDispose(() => listener.cancel());
+
   final List<DownloadStub> fetchedItems = (baseItemType == BaseItemDtoType.track)
     ? await downloadsService.getAllTracks(
-          nullableViewFilters: ref.read(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+          nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
           onlyFavorites: (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) 
-            ? ref.read(finampSettingsProvider.trackOfflineFavorites) : false,
+            ? ref.watch(finampSettingsProvider.trackOfflineFavorites) : false,
           genreFilter: parent)
     : await downloadsService.getAllCollections(
           baseTypeFilter: baseItemType,
-          fullyDownloaded: ref.read(finampSettingsProvider.onlyShowFullyDownloaded),
+          fullyDownloaded: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
           onlyFavorites: (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) 
-            ? ref.read(finampSettingsProvider.trackOfflineFavorites) : false,
+            ? ref.watch(finampSettingsProvider.trackOfflineFavorites) : false,
           infoForType: (baseItemType == BaseItemDtoType.artist)
             ? artistInfoForType : null,
           genreFilter: parent);

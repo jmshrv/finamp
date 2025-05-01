@@ -148,6 +148,8 @@ class FinampSettingsHelper {
     
     finampSettingsTemp.genreItemSectionsOrder =
         DefaultSettings.genreItemSectionsOrder;
+    finampSettingsTemp.genreFilterArtistScreens =
+        DefaultSettings.genreFilterArtistScreens;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);

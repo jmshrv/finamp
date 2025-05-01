@@ -1207,6 +1207,14 @@
   "@genreItemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the genre screen."
   },
+  "genreFilterArtistScreens": "Filter Artist Screens",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterArtistScreensSubtitle": "When activated, Artist Screens (that get accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter from an Artist Screen to reveal all tracks and albums.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {

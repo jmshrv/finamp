@@ -106,7 +106,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               MaterialPageRoute(
                 builder: (_) => ArtistScreen(
                   widgetArtist: mutableAlbum,
-                  genreFilter: widget.genreFilter,
+                  genreFilter: (ref.watch(finampSettingsProvider.genreFilterArtistScreens)) ? widget.genreFilter : null,
                 ),
               ),
             );

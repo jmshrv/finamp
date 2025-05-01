@@ -1,10 +1,12 @@
 import 'package:finamp/components/MusicScreen/album_item.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/jellyfin_models.dart';
 import 'album_list_tile.dart';
 
-class AlbumsSliverList extends StatefulWidget {
+class AlbumsSliverList extends ConsumerStatefulWidget {
   const AlbumsSliverList({
     super.key,
     required this.childrenForList,
@@ -17,10 +19,10 @@ class AlbumsSliverList extends StatefulWidget {
   final BaseItemDto? genreFilter;
 
   @override
-  State<AlbumsSliverList> createState() => _AlbumsSliverListState();
+  ConsumerState<AlbumsSliverList> createState() => _AlbumsSliverListState();
 }
 
-class _AlbumsSliverListState extends State<AlbumsSliverList> {
+class _AlbumsSliverListState extends ConsumerState<AlbumsSliverList> {
   final GlobalKey<SliverAnimatedListState> sliverListKey =
       GlobalKey<SliverAnimatedListState>();
 
@@ -40,7 +42,7 @@ class _AlbumsSliverListState extends State<AlbumsSliverList> {
               key: ValueKey(item.id),
               album: item,
               isPlaylist: false,
-              genreFilter: widget.genreFilter,
+              genreFilter: (ref.watch(finampSettingsProvider.genreFilterArtistScreens)) ? widget.genreFilter : null,
             );
           } else {
             return AlbumListTile(

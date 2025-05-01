@@ -1,16 +1,17 @@
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
-class GenreSettingsScreen extends StatefulWidget {
+class GenreSettingsScreen extends ConsumerStatefulWidget {
   const GenreSettingsScreen({super.key});
   static const routeName = "/settings/genre";
   @override
-  State<GenreSettingsScreen> createState() => _GenreSettingsScreenState();
+  ConsumerState<GenreSettingsScreen> createState() => _GenreSettingsScreenState();
 }
 
-class _GenreSettingsScreenState extends State<GenreSettingsScreen> {
+class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +27,12 @@ class _GenreSettingsScreenState extends State<GenreSettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SwitchListTile.adaptive(
+              title: Text(AppLocalizations.of(context)!.genreFilterArtistScreens),
+              subtitle: Text(AppLocalizations.of(context)!.genreFilterArtistScreensSubtitle),
+              value: ref.watch(finampSettingsProvider.genreFilterArtistScreens),
+              onChanged: FinampSetters.setGenreFilterArtistScreens,
+            ),
             ListTile(
               title: Text(AppLocalizations.of(context)!.genreItemSectionsOrder),
               subtitle: Text(AppLocalizations.of(context)!.genreItemSectionsOrderSubtitle),

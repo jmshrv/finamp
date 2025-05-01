@@ -164,6 +164,7 @@ class DefaultSettings {
   static const artistListType = ArtistType.albumartist;
   static const genreCuratedItemSelectionType = GenreCuratedItemSelectionType.mostPlayed;
   static const genreItemSectionsOrder = GenreItemSections.values;
+  static const genreFilterArtistScreens = true;
 }
 
 @HiveType(typeId: 28)
@@ -288,6 +289,7 @@ class FinampSettings {
       this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
       this.genreCuratedItemSelectionType = DefaultSettings.genreCuratedItemSelectionType,
       this.genreItemSectionsOrder = DefaultSettings.genreItemSectionsOrder,
+      this.genreFilterArtistScreens = DefaultSettings.genreFilterArtistScreens,
       });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -612,6 +614,9 @@ class FinampSettings {
 
   @HiveField(98, defaultValue: DefaultSettings.genreItemSectionsOrder)
   List<GenreItemSections> genreItemSectionsOrder;
+
+  @HiveField(99, defaultValue: DefaultSettings.genreFilterArtistScreens)
+  bool genreFilterArtistScreens;
 
 
   static Future<FinampSettings> create() async {
