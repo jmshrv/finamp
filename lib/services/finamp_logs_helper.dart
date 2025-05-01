@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:clipboard/clipboard.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:finamp/services/censored_log.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -56,15 +57,8 @@ class FinampLogsHelper {
     return logsStringBuffer.toString();
   }
 
-  Future<void> copyLogs() async =>
-      await FlutterClipboard.copy(getSanitisedLogs());
-
-  /// Write logs to a file and share the file
-  Future<void> shareLogs() async {
-    final tempDir = await getTemporaryDirectory();
-    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
-    tempFile.createSync();
-
+  Future<String> getFullLogs() async {
+    final fullLogsBuffer = StringBuffer();
     if (_logFileWriter != null) {
       final basePath = (Platform.isAndroid || Platform.isIOS)
           ? await getApplicationDocumentsDirectory()
@@ -73,20 +67,63 @@ class FinampLogsHelper {
           File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
       var newLogs = File(path_helper.join(basePath.path, "finamp-logs.txt"));
       if (oldLogs.existsSync()) {
-        await tempFile.writeAsBytes(await oldLogs.readAsBytes(),
-            mode: FileMode.writeOnly);
+        fullLogsBuffer.write(await oldLogs.readAsString());
       }
       if (newLogs.existsSync()) {
-        await tempFile.writeAsBytes(await newLogs.readAsBytes(),
-            mode: FileMode.writeOnlyAppend);
+        fullLogsBuffer.write(await newLogs.readAsString());
       }
     } else {
-      await tempFile.writeAsString(getSanitisedLogs());
+      fullLogsBuffer.write(getSanitisedLogs());
+    }
+    return fullLogsBuffer.toString();
+  }
+
+  Future<void> copyLogs() async =>
+      await FlutterClipboard.copy(await getSanitisedLogs());
+
+  /// Write logs to a file and share the file
+  Future<void> shareLogs() async {
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
+    tempFile.createSync();
+
+    tempFile.writeAsStringSync(await getFullLogs());
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      final xFile = XFile(tempFile.path, mimeType: "text/plain");
+      await Share.shareXFiles([xFile]);
+    } else {
+      var filename = await FilePicker.platform.saveFile(
+        fileName: "finamp-logs.txt",
+        initialDirectory: (await getApplicationDocumentsDirectory()).path,
+      );
+      if (filename != null) {
+        await tempFile.copy(filename);
+      }
     }
 
-    final xFile = XFile(tempFile.path, mimeType: "text/plain");
+    await tempFile.delete();
+  }
 
-    await Share.shareXFiles([xFile]);
+  /// Write logs to a file and save to user-picked directory
+  Future<void> exportLogs() async {
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
+    tempFile.createSync();
+
+    tempFile.writeAsStringSync(await getFullLogs());
+
+    var filename = await FilePicker.platform.saveFile(
+      fileName: "finamp-logs.txt",
+      initialDirectory: (await getApplicationDocumentsDirectory()).path,
+      bytes: (Platform.isAndroid || Platform.isIOS)
+          ? await tempFile.readAsBytes()
+          : null, // just get the file name and then manually copy on desktop
+    );
+    if (filename != null && !(Platform.isAndroid || Platform.isIOS)) {
+      // On desktop, we need to copy the file to the user-picked location
+      await tempFile.copy(filename);
+    }
 
     await tempFile.delete();
   }

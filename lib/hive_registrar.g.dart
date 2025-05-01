@@ -71,7 +71,6 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(QueueItemSourceNameAdapter());
     registerAdapter(QueueItemSourceNameTypeAdapter());
     registerAdapter(QueueItemSourceTypeAdapter());
-    registerAdapter(QuickConnectStateAdapter());
     registerAdapter(ReleaseDateFormatAdapter());
     registerAdapter(ResponseProfileAdapter());
     registerAdapter(SavedQueueStateAdapter());

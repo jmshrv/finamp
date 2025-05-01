@@ -3759,7 +3759,6 @@ class PublicUsersResponse {
   explicitToJson: true,
   anyMap: true,
 )
-@HiveType(typeId: 42)
 class QuickConnectState {
   QuickConnectState({
     required this.authenticated,

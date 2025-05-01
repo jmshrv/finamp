@@ -50,13 +50,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setShowTabs(Map<TabContentType, bool> newShowTabs) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.showTabs = newShowTabs;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setOnlyShowFavourites(bool newOnlyShowFavourites) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.onlyShowFavourites = newOnlyShowFavourites;
@@ -719,8 +712,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get androidStopForegroundOnPause =>
       finampSettingsProvider
           .select((value) => value.requireValue.androidStopForegroundOnPause);
-  ProviderListenable<Map<TabContentType, bool>> get showTabs =>
-      finampSettingsProvider.select((value) => value.requireValue.showTabs);
   ProviderListenable<bool> get onlyShowFavourites => finampSettingsProvider
       .select((value) => value.requireValue.onlyShowFavourites);
   ProviderListenable<SortBy> get sortBy =>

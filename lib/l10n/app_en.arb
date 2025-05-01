@@ -7,15 +7,17 @@
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "startupError": "Something went wrong during app startup. The error was: {error}\n\nPlease create an issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this problem persists you can clear your app data to reset the app.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
+  "startupErrorTitle": "Something went wrong during app startup!\nSorry about that...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Please create an issue on github.com/jmshrv/finamp with the logs(!) (use the button below) and a screenshot of this page, so that we can fix it as quickly as possible.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "As a workaround you could clear your app data to reset the app. Keep in mind that in this case all your settings and downloads will be deleted.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   },
   "about": "About Finamp",
   "@about": {
@@ -439,6 +441,8 @@
   "@addButtonLabel": {},
   "shareLogs": "Share logs",
   "@shareLogs": {},
+  "exportLogs": "Save logs",
+  "@exportLogs": {},
   "logsCopied": "Logs copied.",
   "@logsCopied": {},
   "message": "Message",

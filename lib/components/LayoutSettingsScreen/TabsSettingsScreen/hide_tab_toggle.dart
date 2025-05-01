@@ -23,7 +23,9 @@ class HideTabToggle extends ConsumerWidget {
         child: const Icon(Icons.drag_handle),
       ),
       // This should never be null, but it gets set to true if it is.
-      value: ref.watch(finampSettingsProvider.showTabs)[tabContentType] ?? true,
+      value: ref.watch(finampSettingsProvider
+              .select((value) => value.value?.showTabs[tabContentType])) ??
+          true,
       onChanged: (value) =>
           FinampSettingsHelper.setShowTab(tabContentType, value),
     );

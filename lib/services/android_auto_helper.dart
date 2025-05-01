@@ -214,15 +214,22 @@ class AndroidAutoHelper {
         _searchTracks(searchQuery, limit: 5),
         _searchAlbums(searchQuery, limit: 5),
         _searchArtists(searchQuery, limit: 3),
+        _searchGenres(searchQuery, limit: 3),
       ]);
 
-      final [playlistResults, trackResults, albumResults, artistResults] =
-          await searchFuture;
+      final [
+        playlistResults,
+        trackResults,
+        albumResults,
+        artistResults,
+        genreResults,
+      ] = await searchFuture;
 
       final List<BaseItemDto> allSearchResults = playlistResults
           .followedBy(trackResults)
           .followedBy(albumResults)
           .followedBy(artistResults)
+          .followedBy(genreResults)
           .toList();
 
       final List<MediaItem> mediaItems = [];
@@ -286,8 +293,9 @@ class AndroidAutoHelper {
         mediaItems.add(mediaItem);
       }
       return mediaItems;
-    } catch (err) {
-      _androidAutoHelperLogger.severe("Error while searching:", err);
+    } catch (err, trace) {
+      _androidAutoHelperLogger.severe(
+          "Error while searching: ${err.toString()}", err, trace);
       return [];
     }
   }
@@ -1033,6 +1041,91 @@ class AndroidAutoHelper {
         // Title matches exactly, highest priority
         return 1;
       } else if (title == wantedArtist) {
+        // Title matches, normal priority
+        return 0;
+      } else {
+        // No exact match, lower priority
+        return -1;
+      }
+    }
+
+    // sort items based on match quality with extras
+    filteredSearchResults.sort((a, b) {
+      final aMatchQuality = calculateMatchQuality(a, searchQuery);
+      final bMatchQuality = calculateMatchQuality(b, searchQuery);
+      return bMatchQuality.compareTo(aMatchQuality);
+    });
+
+    return filteredSearchResults;
+  }
+
+  Future<List<BaseItemDto>> _searchGenres(
+    AndroidAutoSearchQuery searchQuery, {
+    int limit = 20,
+  }) async {
+    List<BaseItemDto>? searchResult;
+
+    bool hasGenreMetadata =
+        searchQuery.extras?["android.intent.extra.genre"] != null;
+
+    // search for exact query first, then search for adjusted query
+    // sometimes Google's adjustment might not be what we want, but sometimes it actually helps
+    List<BaseItemDto>? searchResultExactQuery;
+    List<BaseItemDto>? searchResultAdjustedQuery;
+    try {
+      searchResultExactQuery = await _getResults(
+        searchTerm: searchQuery.rawQuery.trim(),
+        itemTypes: [TabContentType.genres.itemType],
+        limit: hasGenreMetadata ? (limit / 2).round() : limit,
+      );
+    } catch (e) {
+      _androidAutoHelperLogger.severe(
+          "Error while searching for exact query:", e);
+    }
+    if (hasGenreMetadata) {
+      try {
+        searchResultAdjustedQuery = await _getResults(
+          searchTerm:
+              (searchQuery.extras!["android.intent.extra.genre"] as String)
+                  .trim(),
+          itemTypes: [TabContentType.genres.itemType],
+          limit: limit - (searchResultExactQuery?.length ?? 0),
+        );
+      } catch (e) {
+        _androidAutoHelperLogger.severe(
+            "Error while searching for adjusted query:", e);
+      }
+    }
+
+    searchResult = searchResultExactQuery
+            ?.followedBy(searchResultAdjustedQuery ?? [])
+            .toList() ??
+        [];
+
+    final List<BaseItemDto> filteredSearchResults = [];
+    // filter out duplicates
+    for (final item in searchResult) {
+      if (!filteredSearchResults.any((element) => element.id == item.id)) {
+        filteredSearchResults.add(item);
+      }
+    }
+
+    if (searchResult.isEmpty) {
+      _androidAutoHelperLogger.warning(
+          "No search results found for query: ${searchQuery.rawQuery} (extras: ${searchQuery.extras})");
+    }
+
+    int calculateMatchQuality(
+        BaseItemDto item, AndroidAutoSearchQuery searchQuery) {
+      final title = item.name ?? "";
+
+      final wantedGenre =
+          searchQuery.extras?["android.intent.extra.genre"]?.toString().trim();
+
+      if (title.toLowerCase() == searchQuery.rawQuery.toLowerCase()) {
+        // Title matches exactly, highest priority
+        return 1;
+      } else if (title == wantedGenre) {
         // Title matches, normal priority
         return 0;
       } else {

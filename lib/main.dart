@@ -6,9 +6,11 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/hive_registrar.g.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/locale_adapter.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/genre_settings_screen.dart';
@@ -23,6 +25,7 @@ import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
+import 'package:finamp/services/finamp_logs_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/keep_screen_on_helper.dart';
@@ -36,6 +39,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -113,7 +118,7 @@ void main() async {
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
-    runApp(FinampErrorApp(error: error));
+    runApp(FinampErrorApp(error: error, trace: trace));
   }
 
   if (!hasFailed) {
@@ -230,6 +235,7 @@ Future<void> setupHive() async {
   await Hive.initFlutter();
   Hive.registerAdapters();
   Hive.registerAdapter(ThemeModeAdapter());
+  Hive.registerAdapter(LocaleAdapter());
 
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
@@ -633,9 +639,10 @@ class _FinampState extends State<Finamp> with WindowListener {
 }
 
 class FinampErrorApp extends StatelessWidget {
-  const FinampErrorApp({super.key, required this.error});
+  const FinampErrorApp({super.key, required this.error, this.trace});
 
   final dynamic error;
+  final StackTrace? trace;
 
   @override
   Widget build(BuildContext context) {
@@ -647,8 +654,16 @@ class FinampErrorApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      theme: ThemeData(
+        brightness: Brightness.light,
+        colorScheme: lightColorScheme,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: darkColorScheme,
+      ),
       supportedLocales: AppLocalizations.supportedLocales,
-      home: ErrorScreen(error: error),
+      home: ErrorScreen(error: error, trace: trace),
       scaffoldMessengerKey: GlobalSnackbar.materialAppScaffoldKey,
       navigatorKey: GlobalSnackbar.materialAppNavigatorKey,
     );
@@ -656,22 +671,97 @@ class FinampErrorApp extends StatelessWidget {
 }
 
 class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({super.key, this.error});
+  const ErrorScreen({super.key, this.error, this.trace});
 
   final dynamic error;
+  final StackTrace? trace;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(
-          AppLocalizations.of(context)!.startupError(error.toString()),
-        ),
-      ),
-      bottomNavigationBar: const SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [ShareLogsButton(), CopyLogsButton()],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Hero(
+                tag: "finamp_logo",
+                child: SvgPicture.asset(
+                  'images/finamp_cropped.svg',
+                  width: 75,
+                  height: 75,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Text.rich(TextSpan(
+                  text: AppLocalizations.of(context)!.startupErrorTitle,
+                  style: const TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "\n\n${error.toString()}",
+                      style: const TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "monospace",
+                        color: Colors.red,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          "\n\n${AppLocalizations.of(context)!.startupErrorCallToAction}",
+                      style: const TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          "\n\n${AppLocalizations.of(context)!.startupErrorWorkaround}",
+                      style: const TextStyle(
+                        fontSize: 10.0,
+                      ),
+                    ),
+                  ])),
+              SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CTAMedium(
+                    text: AppLocalizations.of(context)!.exportLogs,
+                    icon: TablerIcons.file_download,
+                    onPressed: () async {
+                      final finampLogsHelper =
+                          GetIt.instance<FinampLogsHelper>();
+                      await finampLogsHelper.exportLogs();
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ShareLogsButton(),
+                  CopyLogsButton(),
+                ],
+              ),
+              SizedBox(height: 10.0),
+              if (trace != null)
+                Text.rich(
+                  TextSpan(
+                    text: trace.toString(),
+                    style: const TextStyle(
+                      fontSize: 10.0,
+                      fontFamily: "monospace",
+                    ),
+                  ),
+                )
+            ],
+          ),
         ),
       ),
     );

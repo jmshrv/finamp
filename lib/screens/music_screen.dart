@@ -90,9 +90,11 @@ void _buildTabController() {
   final tabs = widget.tabTypeFilter != null
       ? [widget.tabTypeFilter!]
       : ref
-          .read(finampSettingsProvider.tabOrder)
-          .where((e) => ref.read(finampSettingsProvider.showTabs)[e] ?? false)
-          .toList();
+            .watch(finampSettingsProvider.tabOrder)
+            .where((e) =>
+            ref.watch(finampSettingsProvider
+                .select((value) => value.value?.showTabs[e])) ??
+            false);
 
   _tabController = TabController(
     length: tabs.length,
@@ -196,15 +198,16 @@ void _buildTabController() {
       _buildTabController();
     }
     ref.watch(FinampUserHelper.finampCurrentUserProvider);
-    // Get the filtered tab or the tabs from the user's tab order,
+// Get the filtered tab or the tabs from the user's tab order,
     // and filter them to only include enabled tabs
     final sortedTabs = widget.tabTypeFilter != null
         ? [widget.tabTypeFilter!]
         : ref
             .watch(finampSettingsProvider.tabOrder)
-            .where((e) => ref.watch(finampSettingsProvider.showTabs)[e] ?? false);
-
-
+            .where((e) =>
+            ref.watch(finampSettingsProvider
+                .select((value) => value.value?.showTabs[e])) ??
+            false);
     refreshMap[sortedTabs.elementAt(_tabController!.index)] =
         MusicRefreshCallback();
 
