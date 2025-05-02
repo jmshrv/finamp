@@ -1944,5 +1944,17 @@
   "trackMenuButtonTooltip": "Menu de faixas",
   "@trackMenuButtonTooltip": {
     "description": "Tooltip for the button that opens the track menu"
+  },
+  "startupErrorWorkaround": "Para uma correção temporária, limpe os dados do aplicativo. Lembre-se que fazendo isso, você irá reiniciar o aplicativo, e todas as suas configurações e faixas baixadas serão excluídas.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "startupErrorTitle": "Algo deu errado na inicialização!\nSentimos muito pelo transtorno...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Por favor, crie uma issue em github.com/jmshrv/finamp com o registro de logs (use o botão abaixo) e uma captura de tela desta página, para que possamos consertar o problema o mais rápido possível.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
   }
 }
