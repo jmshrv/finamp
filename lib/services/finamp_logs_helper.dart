@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -89,42 +90,18 @@ class FinampLogsHelper {
 
     tempFile.writeAsStringSync(await getFullLogs());
 
-    if (Platform.isAndroid || Platform.isIOS) {
-      final xFile = XFile(tempFile.path, mimeType: "text/plain");
-      await Share.shareXFiles([xFile]);
-    } else {
-      var filename = await FilePicker.platform.saveFile(
-        fileName: "finamp-logs.txt",
-        initialDirectory: (await getApplicationDocumentsDirectory()).path,
-      );
-      if (filename != null) {
-        await tempFile.copy(filename);
-      }
-    }
+    final xFile = XFile(tempFile.path, mimeType: "text/plain");
+    await Share.shareXFiles([xFile]);
 
     await tempFile.delete();
   }
 
   /// Write logs to a file and save to user-picked directory
   Future<void> exportLogs() async {
-    final tempDir = await getTemporaryDirectory();
-    final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
-    tempFile.createSync();
-
-    tempFile.writeAsStringSync(await getFullLogs());
-
-    var filename = await FilePicker.platform.saveFile(
-      fileName: "finamp-logs.txt",
-      initialDirectory: (await getApplicationDocumentsDirectory()).path,
-      bytes: (Platform.isAndroid || Platform.isIOS)
-          ? await tempFile.readAsBytes()
-          : null, // just get the file name and then manually copy on desktop
-    );
-    if (filename != null && !(Platform.isAndroid || Platform.isIOS)) {
-      // On desktop, we need to copy the file to the user-picked location
-      await tempFile.copy(filename);
-    }
-
-    await tempFile.delete();
+    await FilePicker.platform.saveFile(
+        fileName: "finamp-logs.txt",
+        // This is ignored on desktop
+        initialDirectory: (await getApplicationDocumentsDirectory()).path,
+        bytes: utf8.encode(await getFullLogs()));
   }
 }
