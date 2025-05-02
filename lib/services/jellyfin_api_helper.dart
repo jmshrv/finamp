@@ -313,6 +313,8 @@ class JellyfinApiHelper {
         response = await api.getGenres(
           parentId: parentItem?.id,
           // includeItemTypes: includeItemTypes,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
           searchTerm: searchTerm,
           startIndex: startIndex,
           limit: limit,

@@ -504,6 +504,15 @@ abstract class JellyfinApi extends ChopperService {
     /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
     @Query("Fields") String? fields = defaultFields,
 
+    /// Optional. Specify one or more sort orders, comma delimited. Options:
+    /// Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating,
+    /// DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear,
+    /// SortName, Random, Revenue, Runtime.
+    @Query("SortBy") String? sortBy,
+
+    /// Sort Order - Ascending,Descending.
+    @Query("SortOrder") String? sortOrder,
+
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
 
