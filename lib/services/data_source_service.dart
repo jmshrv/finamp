@@ -62,28 +62,47 @@ Future<void> _onDataSourceChange(SourceChangeType event) async {
   final queueInfo = queueService.getQueue();
 
   if (queueInfo.trackCount > 0) {
-    if ((event == SourceChangeType.toOffline &&
-            queueInfo.undownloadedTracks > 0) ||
-        (event == SourceChangeType.toLocalUrl &&
-            queueInfo.undownloadedTracks > 0) ||
-        (event == SourceChangeType.toRemoteUrl &&
-            queueInfo.undownloadedTracks > 0)) {
-      if (FinampSettingsHelper.finampSettings.autoReloadQueue) {
-        await queueService.reloadQueue();
-      } else {
-        GlobalSnackbar.action(
-          (context) =>
-              "${AppLocalizations.of(context)!.autoReloadPrompt}${event == SourceChangeType.toOffline && queueInfo.undownloadedTracks > 0 ? ". ${AppLocalizations.of(context)!.autoReloadPromptMissingTracks(queueInfo.undownloadedTracks)}" : ""}",
-          action: (context) => SnackBarAction(
-            label: AppLocalizations.of(context)!.autoReloadPromptReloadButton,
-            onPressed: () {
-              queueService.reloadQueue();
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            },
-          ),
-          isConfirmation: false,
-        );
-      }
+    switch (event) {
+      case SourceChangeType.toLocalUrl:
+      case SourceChangeType.toRemoteUrl:
+      case SourceChangeType.toOffline:
+        if (queueInfo.undownloadedTracks > 0) {
+          if (FinampSettingsHelper.finampSettings.autoReloadQueue) {
+            await queueService.reloadQueue();
+          } else {
+            GlobalSnackbar.message(
+              (context) {
+                final reloadPrompt =
+                    AppLocalizations.of(context)!.autoReloadPrompt;
+                final reloadPromptMissingTracks = AppLocalizations.of(context)!
+                    .autoReloadPromptMissingTracks(
+                        queueInfo.undownloadedTracks);
+                if (event == SourceChangeType.toOffline &&
+                    queueInfo.undownloadedTracks > 0) {
+                  // we want to warn the user about undownloaded tracks that won't be available after reloading the queue, before they actually reload
+                  return "$reloadPrompt. $reloadPromptMissingTracks";
+                } else {
+                  return reloadPrompt;
+                }
+              },
+              action: (context) => SnackBarAction(
+                label:
+                    AppLocalizations.of(context)!.autoReloadPromptReloadButton,
+                onPressed: () {
+                  // archived queues are not overwritten and can always be restored again
+                  bool archivalNeeded = event == SourceChangeType.toOffline;
+                  queueService.reloadQueue(archiveQueue: archivalNeeded);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
+              isConfirmation: false,
+            );
+          }
+        }
+        break;
+      case SourceChangeType.toOnline:
+        // nop, queue won't change since Finamp prefers downloaded data anyway
+        break;
     }
   }
 }

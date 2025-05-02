@@ -250,8 +250,8 @@ class QueueService {
     _audioHandler.queueTitle.add("Finamp");
 
     if (_savedQueueState == SavedQueueState.saving) {
-      final info = _saveCurrentQueue(withPosition: false);
-      _queueServiceLogger.finest("Saved new rebuilt queue $info");
+      _saveCurrentQueue(withPosition: false);
+      _queueServiceLogger.finest("Saved new rebuilt queue");
       _saveUpdateImmediate = false;
       _saveUpdateCycleCount = 0;
     }
@@ -266,12 +266,11 @@ class QueueService {
     }
   }
 
-  Future<FinampStorableQueueInfo> _saveCurrentQueue(
-      {bool withPosition = false}) async {
+  FinampStorableQueueInfo _saveCurrentQueue({bool withPosition = false}) {
     FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
         getQueue(),
         withPosition ? _audioHandler.playbackPosition.inMilliseconds : null);
-    await _queuesBox.put("latest", info);
+    _queuesBox.put("latest", info);
     return info;
   }
 
@@ -330,6 +329,7 @@ class QueueService {
   Future<void> loadSavedQueue(
     FinampStorableQueueInfo info, {
     Map<jellyfin_models.BaseItemId, jellyfin_models.BaseItemDto>? existingItems,
+    bool isReload = false,
   }) async {
     final playbackHistoryService = GetIt.instance<PlaybackHistoryService>();
     if (_savedQueueState == SavedQueueState.loading) {
@@ -352,7 +352,6 @@ class QueueService {
           info.queue;
       Map<jellyfin_models.BaseItemId, jellyfin_models.BaseItemDto> idMap =
           existingItems ?? {};
-      Set<jellyfin_models.BaseItemId> playlistIds = {};
 
       // If queue source is playlist, fetch via parent to retrieve metadata needed
       // for removal from playlist via queueItem
@@ -368,15 +367,11 @@ class QueueService {
         for (var d2 in itemList) {
           idMap[d2.id] = d2;
         }
-        playlistIds = itemList.map((e) => e.id).toSet();
       }
 
       // Get list of unique ids that do not yet have an associated item.
-      List<jellyfin_models.BaseItemId> missingIds = allIds
-          .toSet()
-          .difference(playlistIds)
-          .difference(idMap.keys.toSet())
-          .toList();
+      List<jellyfin_models.BaseItemId> missingIds =
+          allIds.toSet().difference(idMap.keys.toSet()).toList();
 
       if (FinampSettingsHelper.finampSettings.isOffline) {
         for (var id in missingIds) {
@@ -414,8 +409,8 @@ class QueueService {
       await _replaceWholeQueue(
           itemList: items["previous"]! + items["current"]! + items["queue"]!,
           initialIndex: items["previous"]!.length,
-          beginPlaying:
-              _audioHandler.playbackState.valueOrNull?.playing ?? false,
+          beginPlaying: isReload &&
+              (_audioHandler.playbackState.valueOrNull?.playing ?? false),
           source: info.source ??
               QueueItemSource.rawId(
                   type: QueueItemSourceType.unknown,
@@ -424,7 +419,7 @@ class QueueService {
                   id: "savedqueue"));
 
       Future<void> seekFuture = Future.value();
-      if ((info.currentTrackSeek ?? 0) > 500) {
+      if ((info.currentTrackSeek ?? 0) > (isReload ? 500 : 5000)) {
         seekFuture = _audioHandler
             .seek(Duration(milliseconds: info.currentTrackSeek ?? 0));
       }
@@ -580,28 +575,39 @@ class QueueService {
     }
   }
 
-  Future<void> reloadQueue() async {
+  Future<void> reloadQueue({bool archiveQueue = false}) async {
     _queueServiceLogger.info("Reloading queue");
 
     if (_queueAudioSource.length == 0) {
       return Future.error("Queue is empty, cannot reload!");
     }
 
-    await _saveCurrentQueue(withPosition: true);
-    archiveSavedQueue();
+    _saveCurrentQueue(withPosition: true);
+    if (archiveQueue) {
+      archiveSavedQueue();
+    }
 
     var info = _queuesBox.get("latest");
     if (info != null) {
       final Map<jellyfin_models.BaseItemId, jellyfin_models.BaseItemDto>
           existingItems = {};
       final queueInfo = getQueue();
-      for (var item in (FinampSettingsHelper.finampSettings.isOffline
-          ? queueInfo.fullQueue.where(
-              (e) => e.item.extras?["android.media.extra.DOWNLOAD_STATUS"] == 2)
-          : queueInfo.fullQueue)) {
-        if (item.baseItem != null) {
-          existingItems[item.baseItemId] = item.baseItem!;
+
+      // re-use items in online mode, re-fetch from downloads service in offline mode (will happen later on)
+      if (!FinampSettingsHelper.finampSettings.isOffline) {
+        for (var item in queueInfo.fullQueue) {
+          if (item.baseItem != null) {
+            existingItems[item.baseItemId] = item.baseItem!;
+          }
         }
+      }
+
+      if (FinampSettingsHelper.finampSettings.isOffline &&
+          queueInfo.currentTrack?.item
+                  .extras?["android.media.extra.DOWNLOAD_STATUS"] !=
+              2) {
+        // reset seek position, since the current track has changed
+        info.currentTrackSeek = 0;
       }
 
       await loadSavedQueue(
