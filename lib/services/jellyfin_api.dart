@@ -617,7 +617,11 @@ class JellyfinInterceptor implements Interceptor {
 }
 
 /// Interceptor for just the local address
-class JellyfinLocalInterceptor implements Interceptor {
+class JellyfinSpecificInterceptor implements Interceptor {
+  JellyfinSpecificInterceptor(this.url);
+
+  final String url;
+  
   @override
   FutureOr<Response<BodyType>> intercept<BodyType>(
       Chain<BodyType> chain) async {
@@ -627,7 +631,7 @@ class JellyfinLocalInterceptor implements Interceptor {
   Request updateRequest(Request request) {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
-    Uri baseUri = Uri.parse(finampUserHelper.currentUser!.homeAddress);
+    Uri baseUri = Uri.parse(url);
     baseUri = baseUri.replace(
         pathSegments:
             baseUri.pathSegments.followedBy(request.uri.pathSegments));

@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -834,18 +835,15 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.warning("User has completed logout.");
     }
   }
-
-  Future<bool> pingLocalServer() async {
-    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
-    if (user == null) return false;
-
+  Future<bool> _pingSpecificServer(String url) async {
     final client = ChopperClient(
-        baseUrl: Uri.tryParse(user.homeAddress),
+        baseUrl: Uri.tryParse(url),
         client: http.IOClient(HttpClient()
               ..connectionTimeout = const Duration(
                   seconds: 3)),
         interceptors: [
-          jellyfin_api.JellyfinLocalInterceptor()
+          jellyfin_api.JellyfinSpecificInterceptor(url),
+          HttpAggregateLoggingInterceptor()
         ],
         converter: JsonConverter()
     );
@@ -867,6 +865,17 @@ class JellyfinApiHelper {
       Logger("Ayoo").severe(e);
       return false;
     }
+  }
+
+  Future<bool> pingLocalServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+    return await _pingSpecificServer(user.homeAddress);
+  }
+  Future<bool> pingPublicServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+    return await _pingSpecificServer(user.publicAddress);
   }
 
   Future<bool> pingActiveServer() async {

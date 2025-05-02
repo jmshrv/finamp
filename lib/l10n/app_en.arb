@@ -2146,13 +2146,9 @@
   "@testConnectionButtonLabel": {
     "description": "Button to test the public and local url inside the network settings tab"
   },
-  "pingSuccessful": "{address}: Server connection successful!",
-  "@pingSuccessful": {
-    "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings and the server is reachable."
-  },
-  "pingFailed": "{address}: FAILED to reach the server!",
-  "@pingFailed": {
-    "description": "Snackbar message when the user uses the \"Test connection\" button inside the network settings but the server can't be reached."
+  "ping": "{status, select, true_true{Both reachable} true_false{FAILED to reach local address} false_true{FAILED to reach public address} false_false{FAILED to reach both} other{unknown}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
   },
   "autoReloadQueueTitle": "Automatically Reload Queue",
   "@autoReloadQueueTitle": {

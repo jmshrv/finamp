@@ -43,26 +43,13 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
           TextButton(
             onPressed: () async {
               final user = GetIt.instance<FinampUserHelper>().currentUser!;
-              final active = user.baseURL;
-              final local = user.homeAddress;
-              await GetIt.instance<JellyfinApiHelper>().pingActiveServer()
-                .then((available) {
-                  if (available) {
-                    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingSuccessful(active));
-                  } else {
-                    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingFailed(active));
-                  }
-                });
-              if (active != local) {
-                await GetIt.instance<JellyfinApiHelper>().pingLocalServer()
-                  .then((available) {
-                    if (available) {
-                      GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingSuccessful(local));
-                    } else {
-                      GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingFailed(local));
-                    }
-                  });
-              }
+
+              final [public, private] = await Future.wait([
+                GetIt.instance<JellyfinApiHelper>().pingPublicServer(),
+                GetIt.instance<JellyfinApiHelper>().pingLocalServer()
+              ]);
+
+              GlobalSnackbar.message((context) => AppLocalizations.of(context)!.ping("${public.toString()}_${private.toString()}"));
             },
             child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel))
         ],

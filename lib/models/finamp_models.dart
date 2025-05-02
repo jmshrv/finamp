@@ -62,13 +62,13 @@ class FinampUser {
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
 
-  @HiveField(6, defaultValue: DefaultSettings.homeNetworkAddress)
+  @HiveField(7, defaultValue: DefaultSettings.homeNetworkAddress)
   String homeAddress;
 
-  @HiveField(7, defaultValue: DefaultSettings.isLocal)
+  @HiveField(8, defaultValue: DefaultSettings.isLocal)
   bool isLocal;
 
-  @HiveField(8, defaultValue: DefaultSettings.preferHomeNetwork)
+  @HiveField(9, defaultValue: DefaultSettings.preferHomeNetwork)
   bool preferHomeNetwork;
 
   // We only need 1 user, the current user

@@ -94,7 +94,7 @@ Future<void> _onConnectivityChange(
   _networkAutomationLogger.finest(
       "Network Change: ${connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
   connections ??= await Connectivity().checkConnectivity();
-  final [_, baseUrlChanged] = await Future.wait([
+  final [offlineModeActive, baseUrlChanged] = await Future.wait([
     _setOfflineMode(connections),
     changeTargetUrl()
   ]);
@@ -112,11 +112,11 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   // skip when feature not enabled
   if (FinampSettingsHelper.finampSettings.autoOffline ==
       AutoOfflineOption.disabled) {
-    return false;
+    return FinampSettingsHelper.finampSettings.isOffline;
   }
   // skip when user overwrote offline mode
   if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
-    return false;
+    return true;
   }
 
   bool state = _shouldBeOffline(connections);
@@ -130,7 +130,7 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   state = _shouldBeOffline(await Connectivity().checkConnectivity());
 
   // skip if nothing changed
-  if (FinampSettingsHelper.finampSettings.isOffline == state) return false;
+  if (FinampSettingsHelper.finampSettings.isOffline == state) return state;
 
   GlobalSnackbar.message((context) => AppLocalizations.of(context)!
       .autoOfflineNotification(state ? "enabled" : "disabled"));
@@ -139,7 +139,7 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
       .info("Automatically ${state ? "Enabled" : "Disabled"} Offline Mode");
 
   FinampSetters.setIsOffline(state);
-  return false;
+  return state;
 }
 
 bool _shouldBeOffline(List<ConnectivityResult> connections) {
@@ -223,38 +223,3 @@ void reconnectPlayOnService(List<ConnectivityResult> connections) async {
     await playOnService.startReconnectionLoop();
   }
 }
-
-
-/// Changes the base URL based on the current connectivity and user settings
-/// Returns true if the URL was changed
-// Future<bool> changeTargetUrlNetworkBased({bool? isLocal}) async {
-//   FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
-//   if (user == null) return false;
-
-//   if (isLocal != null && isLocal != user.isLocal) {
-//     _networKSwitcherLogger.info(
-//         "Changed active network to ${isLocal ? "home" : "public"} address");
-//     GetIt.instance<FinampUserHelper>().currentUser?.update(newIsLocal: isLocal);
-//     return true;
-//   }
-//   // this avoids an infinite loop... again :)
-//   if (isLocal != null) {
-//     return false;
-//   }
-
-//   // Disable this feature
-//   if (!user.preferHomeNetwork) return changeTargetUrlNetworkBased(isLocal: false);
-
-//   // Avoid Further Calculation when no network name is set
-//   String targetWifi = user.homeNetworkName;
-//   if (targetWifi.isEmpty) return changeTargetUrlNetworkBased(isLocal: false);
-
-//   String? currentWifi = await NetworkInfo().getWifiName();
-//   if (currentWifi == null) return changeTargetUrlNetworkBased(isLocal: false);
-
-//   // Android returns wifi name with quotes
-//   currentWifi = currentWifi.replaceAll("\"", "");
-//   _networkAutomationLogger.finest("Wifi Name detected: $currentWifi");
-
-//   return await changeTargetUrlNetworkBased(isLocal: currentWifi == targetWifi);
-// }
