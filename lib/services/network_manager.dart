@@ -7,15 +7,15 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/playon_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
-
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 part 'network_manager.g.dart';
 
 // this is to avoid an infinite loop.
@@ -34,6 +34,24 @@ final BehaviorSubject<String> baseUrlChangeStream =
 
 final StreamSubscription<List<ConnectivityResult>> _listener =
     Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
+
+// ignore: unused_element
+final _lifecycle = AppLifecycleListener(
+  onRestart: () {
+    if (_lastState ?? false) {
+      _autoOfflineLogger.finer("Lifecycle restarted automation");
+      _listener.resume();
+    } else {
+      _autoOfflineLogger.finer("Lifecycle kept automation paused");
+    }
+  },
+  onPause: () {
+    _listener.pause();
+    _autoOfflineLogger.finer("Lifecycle paused automation");
+  }
+);
+
+
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
@@ -76,9 +94,9 @@ Future<void> _onConnectivityChange(
   _networkAutomationLogger.finest(
       "Network Change: ${connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
   connections ??= await Connectivity().checkConnectivity();
-  final [offlineModeActive, baseUrlChanged] = await Future.wait([
+  final [_, baseUrlChanged] = await Future.wait([
     _setOfflineMode(connections),
-    changeTargetUrl(),
+    changeTargetUrl()
   ]);
   notifyOfPausedDownloads(connections);
   final activeBaseUrl = GetIt.instance<FinampUserHelper>().currentUser!.baseURL;
@@ -89,12 +107,12 @@ Future<void> _onConnectivityChange(
 }
 
 /// Sets the offline mode based on the current connectivity and user settings
-/// Returns true if offline mode is now enabled
+/// Always returns false for proper typing in the above Future.wait
 Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   // skip when feature not enabled
   if (FinampSettingsHelper.finampSettings.autoOffline ==
       AutoOfflineOption.disabled) {
-    return FinampSettingsHelper.finampSettings.isOffline;
+    return false;
   }
   // skip when user overwrote offline mode
   if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
@@ -112,7 +130,7 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   state = _shouldBeOffline(await Connectivity().checkConnectivity());
 
   // skip if nothing changed
-  if (FinampSettingsHelper.finampSettings.isOffline == state) return state;
+  if (FinampSettingsHelper.finampSettings.isOffline == state) return false;
 
   GlobalSnackbar.message((context) => AppLocalizations.of(context)!
       .autoOfflineNotification(state ? "enabled" : "disabled"));
@@ -121,7 +139,7 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
       .info("Automatically ${state ? "Enabled" : "Disabled"} Offline Mode");
 
   FinampSetters.setIsOffline(state);
-  return state;
+  return false;
 }
 
 bool _shouldBeOffline(List<ConnectivityResult> connections) {
@@ -138,8 +156,6 @@ bool _shouldBeOffline(List<ConnectivityResult> connections) {
   }
 }
 
-/// Changes the base URL based on the current connectivity and user settings
-/// Returns true if the URL was changed
 Future<bool> changeTargetUrl({bool? isLocal}) async {
   FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
   if (user == null) return false;
@@ -157,19 +173,9 @@ Future<bool> changeTargetUrl({bool? isLocal}) async {
 
   // Disable this feature
   if (!user.preferHomeNetwork) return changeTargetUrl(isLocal: false);
-
-  // Avoid Further Calculation when no network name is set
-  String targetWifi = user.homeNetworkName;
-  if (targetWifi.isEmpty) return changeTargetUrl(isLocal: false);
-
-  String? currentWifi = await NetworkInfo().getWifiName();
-  if (currentWifi == null) return changeTargetUrl(isLocal: false);
-
-  // Android returns wifi name with quotes
-  currentWifi = currentWifi.replaceAll("\"", "");
-  _networkAutomationLogger.finest("Wifi Name detected: $currentWifi");
-
-  return await changeTargetUrl(isLocal: currentWifi == targetWifi);
+  
+  bool reachable = await GetIt.instance<JellyfinApiHelper>().pingLocalServer();
+  return await changeTargetUrl(isLocal: reachable);
 }
 
 int _getDownloads() {
@@ -217,3 +223,38 @@ void reconnectPlayOnService(List<ConnectivityResult> connections) async {
     await playOnService.startReconnectionLoop();
   }
 }
+
+
+/// Changes the base URL based on the current connectivity and user settings
+/// Returns true if the URL was changed
+// Future<bool> changeTargetUrlNetworkBased({bool? isLocal}) async {
+//   FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+//   if (user == null) return false;
+
+//   if (isLocal != null && isLocal != user.isLocal) {
+//     _networKSwitcherLogger.info(
+//         "Changed active network to ${isLocal ? "home" : "public"} address");
+//     GetIt.instance<FinampUserHelper>().currentUser?.update(newIsLocal: isLocal);
+//     return true;
+//   }
+//   // this avoids an infinite loop... again :)
+//   if (isLocal != null) {
+//     return false;
+//   }
+
+//   // Disable this feature
+//   if (!user.preferHomeNetwork) return changeTargetUrlNetworkBased(isLocal: false);
+
+//   // Avoid Further Calculation when no network name is set
+//   String targetWifi = user.homeNetworkName;
+//   if (targetWifi.isEmpty) return changeTargetUrlNetworkBased(isLocal: false);
+
+//   String? currentWifi = await NetworkInfo().getWifiName();
+//   if (currentWifi == null) return changeTargetUrlNetworkBased(isLocal: false);
+
+//   // Android returns wifi name with quotes
+//   currentWifi = currentWifi.replaceAll("\"", "");
+//   _networkAutomationLogger.finest("Wifi Name detected: $currentWifi");
+
+//   return await changeTargetUrlNetworkBased(isLocal: currentWifi == targetWifi);
+// }

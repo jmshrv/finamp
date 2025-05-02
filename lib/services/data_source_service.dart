@@ -1,23 +1,17 @@
 import 'dart:async';
 import 'dart:core';
-import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/network_manager.dart';
-import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 part 'data_source_service.g.dart';
 
 Logger _dataSourceServiceLogger = Logger("Data Source Service");

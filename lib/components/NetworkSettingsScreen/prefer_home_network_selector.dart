@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:finamp/components/ensure_location_permission_prompt.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/network_manager.dart';
@@ -22,9 +21,6 @@ class HomeNetworkSelector extends ConsumerWidget {
       subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkEnableSwitchDescription),
       value: preferLocalNetwork,
       onChanged: (value) async {
-        if (value) {
-          value = await ensureLocationPermissions(context);
-        }
         GetIt.instance<FinampUserHelper>().currentUser?.update(newPreferHomeNetwork: value);
         await changeTargetUrl();
       },

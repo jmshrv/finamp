@@ -616,6 +616,32 @@ class JellyfinInterceptor implements Interceptor {
   }
 }
 
+/// Interceptor for just the local address
+class JellyfinLocalInterceptor implements Interceptor {
+  @override
+  FutureOr<Response<BodyType>> intercept<BodyType>(
+      Chain<BodyType> chain) async {
+    return await chain.proceed(updateRequest(chain.request));
+  }
+
+  Request updateRequest(Request request) {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+    Uri baseUri = Uri.parse(finampUserHelper.currentUser!.homeAddress);
+    baseUri = baseUri.replace(
+        pathSegments:
+            baseUri.pathSegments.followedBy(request.uri.pathSegments));
+
+    return request.copyWith(
+      uri: baseUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": finampUserHelper.authorizationHeader,
+      },
+    );
+  }
+}
+
 /// Creates the X-Emby-Authorization header
 Future<String> getAuthHeader() async {
   final notAsciiRegex = RegExp(r'[^\x00-\x7F]+');

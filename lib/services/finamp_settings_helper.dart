@@ -275,7 +275,6 @@ class FinampSettingsHelper {
     GetIt.instance<FinampUserHelper>().currentUser?.update(
       newIsLocal: DefaultSettings.isLocal,
       newHomeAddress: DefaultSettings.homeNetworkAddress,
-      newHomeNetworkName: DefaultSettings.homeNetworkName,
       newPreferHomeNetwork: DefaultSettings.preferHomeNetwork,
     );
     FinampSetters.setAutoOffline(DefaultSettings.autoOffline);

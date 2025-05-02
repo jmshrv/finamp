@@ -3,21 +3,15 @@ import 'dart:io';
 import 'package:finamp/components/NetworkSettingsScreen/active_network_display.dart';
 import 'package:finamp/components/NetworkSettingsScreen/auto_offline_selector.dart';
 import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_address_selector.dart';
-import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_name_selector.dart';
 import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_selector.dart';
 import 'package:finamp/components/NetworkSettingsScreen/public_address_selector.dart';
-import 'package:finamp/components/ensure_location_permission_prompt.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/services/jellyfin_api.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/services/network_manager.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 
 class NetworkSettingsScreen extends StatefulWidget {
   const NetworkSettingsScreen({super.key});
@@ -44,45 +38,31 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
           Divider(),
           ActiveNetworkDisplay(),
           PublicAddressSelector(),
-          if (Platform.isAndroid || Platform.isIOS)
-            ListTile(
-              leading: Icon(Icons.info_outline),
-              subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkInfoBox),
-            ),
           HomeNetworkSelector(),
-          HomeNetworkNameSelector(),
-          TextButton(
-              onPressed: () async {
-                bool allowed = await ensureLocationPermissions(context);
-                if (!allowed) return;
-
-                // Get the current network name
-                String? network = await NetworkInfo().getWifiName();
-                if (network == null) {
-                  GlobalSnackbar.message((context) => AppLocalizations.of(context)!.preferHomeNetworkFailedToReadNetworkNameError);
-                  return;
-                }
-
-                // android returns the network name with quotes
-                GetIt
-                  .instance<FinampUserHelper>()
-                  .currentUser
-                  ?.update(
-                    newHomeNetworkName: network.replaceAll("\"", ""));
-                await changeTargetUrl();
-              },
-              child: Text(AppLocalizations.of(context)!.preferHomeNetworkGetNetworkNameButton)),
           HomeNetworkAddressSelector(),
           TextButton(
             onPressed: () async {
-              await GetIt.instance<JellyfinApiHelper>().pingServer()
+              final user = GetIt.instance<FinampUserHelper>().currentUser!;
+              final active = user.baseURL;
+              final local = user.homeAddress;
+              await GetIt.instance<JellyfinApiHelper>().pingActiveServer()
                 .then((available) {
                   if (available) {
-                    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingSuccessful);
+                    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingSuccessful(active));
                   } else {
-                    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingFailed);
+                    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingFailed(active));
                   }
                 });
+              if (active != local) {
+                await GetIt.instance<JellyfinApiHelper>().pingLocalServer()
+                  .then((available) {
+                    if (available) {
+                      GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingSuccessful(local));
+                    } else {
+                      GlobalSnackbar.message((context) => AppLocalizations.of(context)!.pingFailed(local));
+                    }
+                  });
+              }
             },
             child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel))
         ],

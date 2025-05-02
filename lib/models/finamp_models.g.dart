@@ -19,10 +19,10 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
     return FinampUser(
       id: fields[0] as String,
       publicAddress: fields[1] as String,
-      homeAddress: fields[7] as String,
-      homeNetworkName: fields[8] as String,
-      preferHomeNetwork: fields[10] as bool,
-      isLocal: fields[9] as bool,
+      homeAddress:
+          fields[6] == null ? 'http://0.0.0.0:8096' : fields[6] as String,
+      preferHomeNetwork: fields[8] == null ? false : fields[8] as bool,
+      isLocal: fields[7] == null ? false : fields[7] as bool,
       accessToken: fields[2] as String,
       serverId: fields[3] as String,
       currentViewId: fields[4] as BaseItemId?,
@@ -35,7 +35,7 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
   @override
   void write(BinaryWriter writer, FinampUser obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -48,13 +48,11 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       ..write(obj.currentViewId)
       ..writeByte(5)
       ..write(obj.views)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.homeAddress)
-      ..writeByte(8)
-      ..write(obj.homeNetworkName)
-      ..writeByte(9)
+      ..writeByte(7)
       ..write(obj.isLocal)
-      ..writeByte(10)
+      ..writeByte(8)
       ..write(obj.preferHomeNetwork);
   }
 
@@ -2309,33 +2307,28 @@ const FinampUserSchema = CollectionSchema(
       name: r'homeAddress',
       type: IsarType.string,
     ),
-    r'homeNetworkName': PropertySchema(
-      id: 5,
-      name: r'homeNetworkName',
-      type: IsarType.string,
-    ),
     r'id': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'id',
       type: IsarType.string,
     ),
     r'isLocal': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'isLocal',
       type: IsarType.bool,
     ),
     r'isarViews': PropertySchema(
-      id: 8,
+      id: 7,
       name: r'isarViews',
       type: IsarType.string,
     ),
     r'preferHomeNetwork': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'preferHomeNetwork',
       type: IsarType.bool,
     ),
     r'serverId': PropertySchema(
-      id: 10,
+      id: 9,
       name: r'serverId',
       type: IsarType.string,
     )
@@ -2370,7 +2363,6 @@ int _finampUserEstimateSize(
     }
   }
   bytesCount += 3 + object.homeAddress.length * 3;
-  bytesCount += 3 + object.homeNetworkName.length * 3;
   bytesCount += 3 + object.id.length * 3;
   bytesCount += 3 + object.isarViews.length * 3;
   bytesCount += 3 + object.serverId.length * 3;
@@ -2388,12 +2380,11 @@ void _finampUserSerialize(
   writer.writeString(offsets[2], object.publicAddress);
   writer.writeString(offsets[3], object.isarCurrentViewId);
   writer.writeString(offsets[4], object.homeAddress);
-  writer.writeString(offsets[5], object.homeNetworkName);
-  writer.writeString(offsets[6], object.id);
-  writer.writeBool(offsets[7], object.isLocal);
-  writer.writeString(offsets[8], object.isarViews);
-  writer.writeBool(offsets[9], object.preferHomeNetwork);
-  writer.writeString(offsets[10], object.serverId);
+  writer.writeString(offsets[5], object.id);
+  writer.writeBool(offsets[6], object.isLocal);
+  writer.writeString(offsets[7], object.isarViews);
+  writer.writeBool(offsets[8], object.preferHomeNetwork);
+  writer.writeString(offsets[9], object.serverId);
 }
 
 FinampUser _finampUserDeserialize(
@@ -2406,14 +2397,13 @@ FinampUser _finampUserDeserialize(
     accessToken: reader.readString(offsets[0]),
     publicAddress: reader.readString(offsets[2]),
     homeAddress: reader.readString(offsets[4]),
-    homeNetworkName: reader.readString(offsets[5]),
-    id: reader.readString(offsets[6]),
-    isLocal: reader.readBool(offsets[7]),
-    preferHomeNetwork: reader.readBool(offsets[9]),
-    serverId: reader.readString(offsets[10]),
+    id: reader.readString(offsets[5]),
+    isLocal: reader.readBool(offsets[6]),
+    preferHomeNetwork: reader.readBool(offsets[8]),
+    serverId: reader.readString(offsets[9]),
   );
   object.isarCurrentViewId = reader.readStringOrNull(offsets[3]);
-  object.isarViews = reader.readString(offsets[8]);
+  object.isarViews = reader.readString(offsets[7]);
   return object;
 }
 
@@ -2437,14 +2427,12 @@ P _finampUserDeserializeProp<P>(
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 7:
-      return (reader.readBool(offset)) as P;
-    case 8:
       return (reader.readString(offset)) as P;
-    case 9:
+    case 8:
       return (reader.readBool(offset)) as P;
-    case 10:
+    case 9:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3238,142 +3226,6 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'homeNetworkName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'homeNetworkName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'homeNetworkName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'homeNetworkName',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'homeNetworkName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'homeNetworkName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'homeNetworkName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'homeNetworkName',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'homeNetworkName',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      homeNetworkNameIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'homeNetworkName',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> idEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -3915,19 +3767,6 @@ extension FinampUserQuerySortBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByHomeNetworkName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'homeNetworkName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy>
-      sortByHomeNetworkNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'homeNetworkName', Sort.desc);
-    });
-  }
-
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -4053,19 +3892,6 @@ extension FinampUserQuerySortThenBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByHomeNetworkName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'homeNetworkName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy>
-      thenByHomeNetworkNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'homeNetworkName', Sort.desc);
-    });
-  }
-
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -4178,14 +4004,6 @@ extension FinampUserQueryWhereDistinct
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByHomeNetworkName(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'homeNetworkName',
-          caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<FinampUser, FinampUser, QDistinct> distinctById(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -4257,12 +4075,6 @@ extension FinampUserQueryProperty
   QueryBuilder<FinampUser, String, QQueryOperations> homeAddressProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'homeAddress');
-    });
-  }
-
-  QueryBuilder<FinampUser, String, QQueryOperations> homeNetworkNameProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'homeNetworkName');
     });
   }
 

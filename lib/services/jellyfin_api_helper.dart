@@ -18,6 +18,7 @@ import 'downloads_service.dart';
 import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
+import 'package:http/io_client.dart' as http;
 import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
@@ -453,7 +454,6 @@ class JellyfinApiHelper {
       id: newUserAuthenticationResult.user!.id,
       publicAddress: baseUrlTemp!.toString(),
       homeAddress: DefaultSettings.homeNetworkAddress,
-      homeNetworkName: DefaultSettings.homeNetworkName,
       isLocal: false,
       preferHomeNetwork: DefaultSettings.preferHomeNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
@@ -488,7 +488,6 @@ class JellyfinApiHelper {
       id: newUserAuthenticationResult.user!.id,
       publicAddress: baseUrlTemp!.toString(),
       homeAddress: DefaultSettings.homeNetworkAddress,
-      homeNetworkName: DefaultSettings.homeNetworkName,
       isLocal: false,
       preferHomeNetwork: DefaultSettings.preferHomeNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
@@ -835,8 +834,42 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.warning("User has completed logout.");
     }
   }
-  
-  Future<bool> pingServer() async {
+
+  Future<bool> pingLocalServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+
+    final client = ChopperClient(
+        baseUrl: Uri.tryParse(user.homeAddress),
+        client: http.IOClient(HttpClient()
+              ..connectionTimeout = const Duration(
+                  seconds: 3)),
+        interceptors: [
+          jellyfin_api.JellyfinLocalInterceptor()
+        ],
+        converter: JsonConverter()
+    );
+
+    final Request $request = Request(
+      'GET',
+      Uri.parse("/System/Endpoint"),
+      client.baseUrl,
+    );
+
+    try {
+      Response<dynamic> response = await client.send<dynamic, dynamic>($request);
+      if (response.statusCode != 200) return false;
+      final body = response.bodyOrThrow as Map<String, dynamic>;
+      // If IsInNetwork doesn't exist -> catch
+      // because then its not a jellyfin server
+      return body["IsInNetwork"] as bool;
+    } catch (e) {
+      Logger("Ayoo").severe(e);
+      return false;
+    }
+  }
+
+  Future<bool> pingActiveServer() async {
     try {
       Response<dynamic>? response = await jellyfinApi
           .pingServer()

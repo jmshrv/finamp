@@ -28,7 +28,6 @@ class FinampUser {
     required this.id,
     required this.publicAddress,
     required this.homeAddress,
-    required this.homeNetworkName,
     required this.preferHomeNetwork,
     required this.isLocal,
     required this.accessToken,
@@ -63,16 +62,13 @@ class FinampUser {
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
 
-  @HiveField(7, defaultValue: DefaultSettings.homeNetworkAddress)
+  @HiveField(6, defaultValue: DefaultSettings.homeNetworkAddress)
   String homeAddress;
 
-  @HiveField(8, defaultValue: DefaultSettings.homeNetworkName)
-  String homeNetworkName;
-
-  @HiveField(9, defaultValue: DefaultSettings.isLocal)
+  @HiveField(7, defaultValue: DefaultSettings.isLocal)
   bool isLocal;
 
-  @HiveField(10, defaultValue: DefaultSettings.preferHomeNetwork)
+  @HiveField(8, defaultValue: DefaultSettings.preferHomeNetwork)
   bool preferHomeNetwork;
 
   // We only need 1 user, the current user
@@ -85,11 +81,10 @@ class FinampUser {
   @ignore
   BaseItemDto? get currentView => views[currentViewId];
 
-  void update({bool? newIsLocal, String? newHomeAddress, String? newPublicAddress, String? newHomeNetworkName, bool? newPreferHomeNetwork}) {
+  void update({bool? newIsLocal, String? newHomeAddress, String? newPublicAddress, bool? newPreferHomeNetwork}) {
     isLocal = newIsLocal ?? isLocal;
     homeAddress = newHomeAddress ?? homeAddress;
     publicAddress = newPublicAddress ?? publicAddress; 
-    homeNetworkName = newHomeNetworkName ?? homeNetworkName;
     preferHomeNetwork = newPreferHomeNetwork ?? preferHomeNetwork;
     GetIt.instance<FinampUserHelper>().saveUser(this);
   }
@@ -196,7 +191,6 @@ class DefaultSettings {
   static const artistListType = ArtistType.albumartist;
   static const isLocal = false;
   static const preferHomeNetwork = false;
-  static const homeNetworkName = "";
   static const homeNetworkAddress = "http://0.0.0.0:8096";
   static const autoReloadQueue = false;
 }
