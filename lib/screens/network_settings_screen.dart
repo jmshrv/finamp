@@ -42,8 +42,6 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
           HomeNetworkAddressSelector(),
           TextButton(
             onPressed: () async {
-              final user = GetIt.instance<FinampUserHelper>().currentUser!;
-
               final [public, private] = await Future.wait([
                 GetIt.instance<JellyfinApiHelper>().pingPublicServer(),
                 GetIt.instance<JellyfinApiHelper>().pingLocalServer()
