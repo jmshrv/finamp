@@ -1533,7 +1533,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1547,11 +1547,15 @@
       "size": {
         "type": "String",
         "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
       }
     },
     "description": "Track info line in downloads screen lists"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1565,6 +1569,10 @@
       "size": {
         "type": "String",
         "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
       }
     },
     "description": "Collection info line in downloads screen lists"

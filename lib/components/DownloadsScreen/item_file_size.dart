@@ -1,11 +1,12 @@
 import 'package:file_sizes/file_sizes.dart';
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
 import '../../services/downloads_service.dart';
+import '../../services/finamp_settings_helper.dart';
 
 class ItemFileSize extends ConsumerWidget {
   const ItemFileSize({super.key, required this.stub});
@@ -46,7 +47,14 @@ class ItemFileSize extends ConsumerWidget {
             }
             return isarDownloader.getFileSize(item).then((value) =>
                 AppLocalizations.of(context)!.downloadInfo(
-                    bitrate, codec.toUpperCase(), FileSize.getSize(value)));
+                    bitrate,
+                    codec.toUpperCase(),
+                    FileSize.getSize(value),
+                    FinampSettingsHelper
+                            .finampSettings
+                            .downloadLocationsMap[item.fileDownloadLocation?.id]
+                            ?.name ??
+                        "null"));
           } else {
             var profile =
                 item.userTranscodingProfile ?? item.syncTranscodingProfile;
@@ -60,7 +68,12 @@ class ItemFileSize extends ConsumerWidget {
                 AppLocalizations.of(context)!.collectionDownloadInfo(
                     profile?.bitrateKbps ?? "null",
                     codec.toUpperCase(),
-                    FileSize.getSize(value)));
+                    FileSize.getSize(value),
+                    FinampSettingsHelper
+                            .finampSettings
+                            .downloadLocationsMap[item.syncDownloadLocation?.id]
+                            ?.name ??
+                        "null"));
           }
         case DownloadItemState.downloading:
         case DownloadItemState.enqueued:
