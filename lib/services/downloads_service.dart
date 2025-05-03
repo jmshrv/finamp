@@ -1403,6 +1403,22 @@ class DownloadsService {
         .findAll();
   }
 
+  /// Get all user downloaded items in a specific download location.  If checkFiles
+  /// is false, only return user downloaded items, otherwise also include all items
+  /// with files in the location.
+  List<DownloadStub> getDownloadsForLocation(
+      String downloadLocationId, bool checkFiles) {
+    return _isar.downloadItems
+        .filter()
+        .userTranscodingProfile(
+            (q) => q.downloadLocationIdEqualTo(downloadLocationId))
+        .optional(
+            checkFiles,
+            (q) => q.or().fileTranscodingProfile(
+                (q) => q.downloadLocationIdEqualTo(downloadLocationId)))
+        .findAllSync();
+  }
+
   /// Get all downloaded collections.  Used for non-tracks tabs on music screen and
   /// on artist/genre screens.  Can have one or more filters applied:
   /// + nameFilter - only return collections containing nameFilter in their name, case insensitive.
