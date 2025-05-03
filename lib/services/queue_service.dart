@@ -404,7 +404,6 @@ class QueueService {
       }
 
       if (loadedTracks > 0) {
-        var currentIndex = items["previous"]!.length;
         await _replaceWholeQueue(
             itemList: items["previous"]! + items["current"]! + items["queue"]!,
             initialIndex:

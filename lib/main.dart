@@ -342,7 +342,8 @@ Future<void> _setupPlaybackServices() async {
         androidNotificationIcon: "mipmap/white",
         androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
         // notificationColor: TODO use the theme color for older versions of Android,
-        preloadArtwork: true,
+        // Preloading art does not work on android due to use of content:// scheme.
+        preloadArtwork: !Platform.isAndroid,
         androidBrowsableRootExtras: <String, dynamic>{
           // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
           "android.media.browse.SEARCH_SUPPORTED": true,
