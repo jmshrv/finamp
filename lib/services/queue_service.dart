@@ -404,9 +404,13 @@ class QueueService {
       }
 
       if (loadedTracks > 0) {
+        var currentIndex = items["previous"]!.length;
         await _replaceWholeQueue(
             itemList: items["previous"]! + items["current"]! + items["queue"]!,
-            initialIndex: items["previous"]!.length,
+            initialIndex:
+                items["current"]!.isNotEmpty || items["queue"]!.isNotEmpty
+                    ? items["previous"]!.length
+                    : 0,
             beginPlaying:
                 _audioHandler.playbackState.valueOrNull?.playing ?? false,
             source: info.source ??
@@ -417,7 +421,8 @@ class QueueService {
                     id: "savedqueue"));
 
         Future<void> seekFuture = Future.value();
-        if ((info.currentTrackSeek ?? 0) > 500) {
+        if ((info.currentTrackSeek ?? 0) > 500 &&
+            items["current"]!.isNotEmpty) {
           seekFuture = _audioHandler
               .seek(Duration(milliseconds: info.currentTrackSeek ?? 0));
         }
