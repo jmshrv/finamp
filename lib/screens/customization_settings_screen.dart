@@ -13,12 +13,10 @@ class CustomizationSettingsScreen extends StatefulWidget {
   static const routeName = "/settings/customization";
 
   @override
-  State<CustomizationSettingsScreen> createState() =>
-      _CustomizationSettingsScreenState();
+  State<CustomizationSettingsScreen> createState() => _CustomizationSettingsScreenState();
 }
 
-class _CustomizationSettingsScreenState
-    extends State<CustomizationSettingsScreen> {
+class _CustomizationSettingsScreenState extends State<CustomizationSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +48,7 @@ class OneLineMarqueeTextSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.oneLineMarqueeTextButton),
-      subtitle:
-          Text(AppLocalizations.of(context)!.oneLineMarqueeTextButtonSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.oneLineMarqueeTextButtonSubtitle),
       value: ref.watch(finampSettingsProvider.oneLineMarqueeTextButton),
       onChanged: FinampSetters.setOneLineMarqueeTextButton,
     );
@@ -64,12 +61,9 @@ class ShowStopButtonOnMediaNotificationToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(
-          AppLocalizations.of(context)!.showStopButtonOnMediaNotificationTitle),
-      subtitle: Text(AppLocalizations.of(context)!
-          .showStopButtonOnMediaNotificationSubtitle),
-      value:
-          ref.watch(finampSettingsProvider.showStopButtonOnMediaNotification),
+      title: Text(AppLocalizations.of(context)!.showStopButtonOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showStopButtonOnMediaNotificationSubtitle),
+      value: ref.watch(finampSettingsProvider.showStopButtonOnMediaNotification),
       onChanged: FinampSetters.setShowStopButtonOnMediaNotification,
     );
   }
@@ -81,12 +75,9 @@ class ShowSeekControlsOnMediaNotificationToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!
-          .showSeekControlsOnMediaNotificationTitle),
-      subtitle: Text(AppLocalizations.of(context)!
-          .showSeekControlsOnMediaNotificationSubtitle),
-      value:
-          ref.watch(finampSettingsProvider.showSeekControlsOnMediaNotification),
+      title: Text(AppLocalizations.of(context)!.showSeekControlsOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showSeekControlsOnMediaNotificationSubtitle),
+      value: ref.watch(finampSettingsProvider.showSeekControlsOnMediaNotification),
       onChanged: FinampSetters.setShowSeekControlsOnMediaNotification,
     );
   }
@@ -98,12 +89,9 @@ class ShowAlbumReleaseDateOnPlayerScreenToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!
-          .showAlbumReleaseDateOnPlayerScreenTitle),
-      subtitle: Text(AppLocalizations.of(context)!
-          .showAlbumReleaseDateOnPlayerScreenSubtitle),
-      value:
-          ref.watch(finampSettingsProvider.showAlbumReleaseDateOnPlayerScreen),
+      title: Text(AppLocalizations.of(context)!.showAlbumReleaseDateOnPlayerScreenTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showAlbumReleaseDateOnPlayerScreenSubtitle),
+      value: ref.watch(finampSettingsProvider.showAlbumReleaseDateOnPlayerScreen),
       onChanged: FinampSetters.setShowAlbumReleaseDateOnPlayerScreen,
     );
   }

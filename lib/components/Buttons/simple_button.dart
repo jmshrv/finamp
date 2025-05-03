@@ -44,9 +44,8 @@ class SimpleButton extends StatelessWidget {
       Text(
         text,
         style: TextStyle(
-          color: (disabled || inactive)
-              ? Theme.of(context).disabledColor
-              : Theme.of(context).textTheme.bodyMedium!.color!,
+          color:
+              (disabled || inactive) ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyMedium!.color!,
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),
@@ -82,9 +81,7 @@ class SimpleButton extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             alignment: WrapAlignment.center,
             spacing: 6.0,
-            children: iconPosition == IconPosition.start
-                ? contents
-                : contents.reversed.toList(),
+            children: iconPosition == IconPosition.start ? contents : contents.reversed.toList(),
           ),
         ),
       ),

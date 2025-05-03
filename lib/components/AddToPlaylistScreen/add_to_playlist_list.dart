@@ -38,8 +38,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
   @override
   void initState() {
     super.initState();
-    playlistsFuture = widget.playlistsFuture.then(
-        (value) => value.map((e) => (e, false, null as String?)).toList());
+    playlistsFuture = widget.playlistsFuture.then((value) => value.map((e) => (e, false, null as String?)).toList());
   }
 
   // playlist, isLoading, playlistItemId
@@ -57,13 +56,9 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
               if (index == snapshot.data!.length) {
                 return createNewPlaylistButton(context);
               }
-              final (playlist, isLoading, playListItemId) =
-                  snapshot.data![index];
+              final (playlist, isLoading, playListItemId) = snapshot.data![index];
               return AddToPlaylistTile(
-                  playlist: playlist,
-                  track: widget.itemToAdd,
-                  playlistItemId: playListItemId,
-                  isLoading: isLoading);
+                  playlist: playlist, track: widget.itemToAdd, playlistItemId: playListItemId, isLoading: isLoading);
             },
             childCount: snapshot.data!.length + 1,
           ));
@@ -102,25 +97,17 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
             icon: TablerIcons.plus,
             //accentColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
-              var dialogResult =
-                  await showDialog<(Future<BaseItemId>, String?)?>(
+              var dialogResult = await showDialog<(Future<BaseItemId>, String?)?>(
                 context: context,
-                builder: (context) =>
-                    NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
+                builder: (context) => NewPlaylistDialog(itemToAdd: widget.itemToAdd.id),
               );
               if (dialogResult != null) {
                 var oldFuture = playlistsFuture;
                 setState(() {
                   var loadingItem = [
-                    (
-                      BaseItemDto(
-                          id: BaseItemId("pending"), name: dialogResult.$2),
-                      true,
-                      null as String?
-                    )
+                    (BaseItemDto(id: BaseItemId("pending"), name: dialogResult.$2), true, null as String?)
                   ];
-                  playlistsFuture =
-                      oldFuture.then((value) => value + loadingItem);
+                  playlistsFuture = oldFuture.then((value) => value + loadingItem);
                 });
                 try {
                   var newId = await dialogResult.$1;
@@ -130,14 +117,9 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                   var playlist = await jellyfinApiHelper.getItemById(newId);
 
                   String? trackId;
-                  if (BaseItemDtoType.fromItem(widget.itemToAdd) ==
-                      BaseItemDtoType.track) {
-                    var playlistItems = await jellyfinApiHelper.getItems(
-                        parentItem: playlist, fields: "");
-                    trackId = playlistItems
-                        ?.firstWhere(
-                            (element) => element.id == widget.itemToAdd.id)
-                        .playlistItemId;
+                  if (BaseItemDtoType.fromItem(widget.itemToAdd) == BaseItemDtoType.track) {
+                    var playlistItems = await jellyfinApiHelper.getItems(parentItem: playlist, fields: "");
+                    trackId = playlistItems?.firstWhere((element) => element.id == widget.itemToAdd.id).playlistItemId;
                   } else {
                     // Provide a fake playlist id for playlists created with a non-track initial item.  It
                     // will not be used as non-tracks cannot be removed.
@@ -146,8 +128,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                   if (!context.mounted) return;
                   setState(() {
                     var newItem = [(playlist, false, trackId)];
-                    playlistsFuture =
-                        oldFuture.then((value) => value + newItem);
+                    playlistsFuture = oldFuture.then((value) => value + newItem);
                   });
                 } catch (e) {
                   GlobalSnackbar.error(e);
@@ -163,11 +144,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
 
 class AddToPlaylistTile extends ConsumerStatefulWidget {
   const AddToPlaylistTile(
-      {super.key,
-      required this.playlist,
-      this.playlistItemId,
-      required this.track,
-      this.isLoading = false});
+      {super.key, required this.playlist, this.playlistItemId, required this.track, this.isLoading = false});
 
   final BaseItemDto playlist;
   final BaseItemDto track;
@@ -203,8 +180,7 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
         itemIsIncluded = true;
       } else {
         final downloadsService = GetIt.instance<DownloadsService>();
-        itemIsIncluded =
-            downloadsService.checkIfInCollection(widget.playlist, widget.track);
+        itemIsIncluded = downloadsService.checkIfInCollection(widget.playlist, widget.track);
       }
     }
   }
@@ -232,12 +208,9 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
           // If playlistItemId is null, we need to fetch from the server before we can remove
           if (playlistItemId == null) {
             final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-            var newItems = await jellyfinApiHelper.getItems(
-                parentItem: widget.playlist, fields: "");
+            var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
 
-            playlistItemId = newItems
-                ?.firstWhereOrNull((x) => x.id == widget.track.id)
-                ?.playlistItemId;
+            playlistItemId = newItems?.firstWhereOrNull((x) => x.id == widget.track.id)?.playlistItemId;
             if (playlistItemId == null) {
               // We were already not part of the playlist,. so removal is complete
               setState(() {
@@ -251,9 +224,8 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
             }
           }
           // part of playlist, remove
-          bool removed = await removeFromPlaylist(
-              context, widget.track, widget.playlist, playlistItemId!,
-              confirm: false);
+          bool removed =
+              await removeFromPlaylist(context, widget.track, widget.playlist, playlistItemId!, confirm: false);
           if (removed) {
             setState(() {
               childCount = childCount == null ? null : childCount! - 1;
@@ -276,28 +248,21 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
                 context: context,
                 builder: (context) => ConfirmationPromptDialog(
                       promptText: AppLocalizations.of(context)!
-                          .confirmAddAlbumToPlaylist(
-                              itemType, widget.track.name ?? "Unknown"),
-                      confirmButtonText:
-                          AppLocalizations.of(context)!.addButtonLabel,
-                      abortButtonText:
-                          MaterialLocalizations.of(context).cancelButtonLabel,
+                          .confirmAddAlbumToPlaylist(itemType, widget.track.name ?? "Unknown"),
+                      confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
+                      abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
                       onConfirmed: () => confirmed = true,
                       onAborted: () {},
                     ));
             if (!confirmed || !context.mounted) return false;
           }
-          bool added =
-              await addItemToPlaylist(context, widget.track, widget.playlist);
+          bool added = await addItemToPlaylist(context, widget.track, widget.playlist);
           if (added) {
             final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-            var newItems = await jellyfinApiHelper.getItems(
-                parentItem: widget.playlist, fields: "");
+            var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
             setState(() {
               childCount = newItems?.length ?? 0;
-              playlistItemId = newItems
-                  ?.firstWhereOrNull((x) => x.id == widget.track.id)
-                  ?.playlistItemId;
+              playlistItemId = newItems?.firstWhereOrNull((x) => x.id == widget.track.id)?.playlistItemId;
               itemIsIncluded = true;
             });
             return true; // this is called before the state is updated

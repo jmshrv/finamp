@@ -72,16 +72,14 @@ class IsFavoriteFamily extends Family<bool> {
   static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
 
   @override
   String? get name => r'isFavoriteProvider';
 }
 
 /// See also [IsFavorite].
-class IsFavoriteProvider
-    extends AutoDisposeNotifierProviderImpl<IsFavorite, bool> {
+class IsFavoriteProvider extends AutoDisposeNotifierProviderImpl<IsFavorite, bool> {
   /// See also [IsFavorite].
   IsFavoriteProvider(
     BaseItemDto? item,
@@ -89,13 +87,9 @@ class IsFavoriteProvider
           () => IsFavorite()..item = item,
           from: isFavoriteProvider,
           name: r'isFavoriteProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$isFavoriteHash,
+          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$isFavoriteHash,
           dependencies: IsFavoriteFamily._dependencies,
-          allTransitiveDependencies:
-              IsFavoriteFamily._allTransitiveDependencies,
+          allTransitiveDependencies: IsFavoriteFamily._allTransitiveDependencies,
           item: item,
         );
 
@@ -162,9 +156,7 @@ mixin IsFavoriteRef on AutoDisposeNotifierProviderRef<bool> {
   BaseItemDto? get item;
 }
 
-class _IsFavoriteProviderElement
-    extends AutoDisposeNotifierProviderElement<IsFavorite, bool>
-    with IsFavoriteRef {
+class _IsFavoriteProviderElement extends AutoDisposeNotifierProviderElement<IsFavorite, bool> with IsFavoriteRef {
   _IsFavoriteProviderElement(super.provider);
 
   @override

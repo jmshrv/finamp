@@ -64,8 +64,7 @@ class ArtistItemFamily extends Family<AsyncValue<BaseItemDto>> {
   static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
 
   @override
   String? get name => r'artistItemProvider';
@@ -83,13 +82,9 @@ class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
           ),
           from: artistItemProvider,
           name: r'artistItemProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$artistItemHash,
+          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$artistItemHash,
           dependencies: ArtistItemFamily._dependencies,
-          allTransitiveDependencies:
-              ArtistItemFamily._allTransitiveDependencies,
+          allTransitiveDependencies: ArtistItemFamily._allTransitiveDependencies,
           id: id,
         );
 
@@ -149,8 +144,7 @@ mixin ArtistItemRef on AutoDisposeFutureProviderRef<BaseItemDto> {
   BaseItemId get id;
 }
 
-class _ArtistItemProviderElement
-    extends AutoDisposeFutureProviderElement<BaseItemDto> with ArtistItemRef {
+class _ArtistItemProviderElement extends AutoDisposeFutureProviderElement<BaseItemDto> with ArtistItemRef {
   _ArtistItemProviderElement(super.provider);
 
   @override

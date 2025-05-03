@@ -33,17 +33,14 @@ class FinampUserHelper {
 
   /// Loads the FinampUser with the id from CurrentUserId. Returns null if no
   /// user exists.
-  FinampUser? get currentUser =>
-      _currentUserCache ??= _isar.finampUsers.getSync(0);
+  FinampUser? get currentUser => _currentUserCache ??= _isar.finampUsers.getSync(0);
   FinampUser? _currentUserCache;
 
-  Iterable<FinampUser> get finampUsers =>
-      _isar.finampUsers.where().findAllSync();
+  Iterable<FinampUser> get finampUsers => _isar.finampUsers.where().findAllSync();
 
   late String authorizationHeader;
 
-  static final AutoDisposeStreamProvider<FinampUser?>
-      finampCurrentUserProvider = StreamProvider.autoDispose((ref) {
+  static final AutoDisposeStreamProvider<FinampUser?> finampCurrentUserProvider = StreamProvider.autoDispose((ref) {
     final isar = GetIt.instance<Isar>();
     return isar.finampUsers.watchObject(0, fireImmediately: true);
   });
@@ -85,8 +82,7 @@ class FinampUserHelper {
   void setCurrentUserViews(List<BaseItemDto> newViews) {
     FinampUser currentUserTemp = currentUser!;
 
-    currentUserTemp.views = Map<BaseItemId, BaseItemDto>.fromEntries(
-        newViews.map((e) => MapEntry(e.id, e)));
+    currentUserTemp.views = Map<BaseItemId, BaseItemDto>.fromEntries(newViews.map((e) => MapEntry(e.id, e)));
     currentUserTemp.currentViewId = currentUserTemp.views.keys.first;
 
     _isar.writeTxnSync(() {

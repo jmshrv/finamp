@@ -88,20 +88,14 @@ class _AlbumItemCardText extends StatelessWidget {
                   item.name ?? "Unknown Name",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
                 ),
                 if (subtitle != null)
                   Text(
                     subtitle,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.white.withOpacity(0.7)),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white.withOpacity(0.7)),
                   )
               ],
             ),

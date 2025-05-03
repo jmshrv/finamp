@@ -47,9 +47,7 @@ class PaddedCustomScrollview extends CustomScrollView {
             data: strippedMediaQuery,
             child: x,
           )),
-      SliverPadding(
-          padding: EdgeInsets.only(
-              bottom: mediaQuery.padding.bottom + bottomPadding))
+      SliverPadding(padding: EdgeInsets.only(bottom: mediaQuery.padding.bottom + bottomPadding))
     ];
   }
 }

@@ -9,8 +9,7 @@ class DownloadLocationList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var locations = ref.watch(finampSettingsProvider
-        .select((x) => x.requireValue.downloadLocationsMap.values));
+    var locations = ref.watch(finampSettingsProvider.select((x) => x.requireValue.downloadLocationsMap.values));
     return ListView.builder(
       itemCount: locations.length,
       itemBuilder: (context, index) {

@@ -84,10 +84,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
 
       final downloadsService = GetIt.instance<DownloadsService>();
       final bool isDownloadRequired = downloadsService
-          .getStatus(
-              DownloadStub.fromItem(
-                  type: DownloadItemType.collection, item: widget.item),
-              null)
+          .getStatus(DownloadStub.fromItem(type: DownloadItemType.collection, item: widget.item), null)
           .isRequired;
       final bool isFav = ref.watch(isFavoriteProvider(widget.item));
 
@@ -187,8 +184,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
                   value: AlbumListTileMenuItems.delete,
                   child: ListTile(
                     leading: const Icon(Icons.delete),
-                    title: Text(AppLocalizations.of(context)!
-                        .deleteFromTargetConfirmButton("")),
+                    title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
                   ),
                 )
               : PopupMenuItem<AlbumListTileMenuItems>(
@@ -208,22 +204,17 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
         type: QueueItemSourceType.nextUpAlbum,
         name: QueueItemSourceName(
             type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: widget.item.name ??
-                AppLocalizations.of(context)!.placeholderSource),
+            pretranslatedName: widget.item.name ?? AppLocalizations.of(context)!.placeholderSource),
         id: widget.item.id,
         item: widget.item,
       );
 
       switch (selection) {
         case AlbumListTileMenuItems.addFavourite:
-          ref
-              .read(isFavoriteProvider(widget.item).notifier)
-              .updateFavorite(true);
+          ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(true);
           break;
         case AlbumListTileMenuItems.removeFavourite:
-          ref
-              .read(isFavoriteProvider(widget.item).notifier)
-              .updateFavorite(false);
+          ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(false);
           break;
         case AlbumListTileMenuItems.addToMixList:
           try {
@@ -250,17 +241,13 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
             );
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad("album"));
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad("album"));
               return;
             }
 
-            await _queueService.addNext(
-                items: albumTracks, source: queueSource);
+            await _queueService.addNext(items: albumTracks, source: queueSource);
 
-            GlobalSnackbar.message(
-                (scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
+            GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
                 isConfirmation: true);
 
             setState(() {});
@@ -277,17 +264,13 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
             );
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad("album"));
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad("album"));
               return;
             }
 
-            await _queueService.addToNextUp(
-                items: albumTracks, source: queueSource);
+            await _queueService.addToNextUp(items: albumTracks, source: queueSource);
 
-            GlobalSnackbar.message(
-                (scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"),
+            GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("album"),
                 isConfirmation: true);
 
             setState(() {});
@@ -304,17 +287,13 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
             );
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad("album"));
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad("album"));
               return;
             }
 
-            await _queueService.addNext(
-                items: albumTracks, source: queueSource);
+            await _queueService.addNext(items: albumTracks, source: queueSource);
 
-            GlobalSnackbar.message(
-                (scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
+            GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("album"),
                 isConfirmation: true);
 
             setState(() {});
@@ -332,17 +311,13 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
             );
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad("album"));
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad("album"));
               return;
             }
 
-            await _queueService.addToNextUp(
-                items: albumTracks, source: queueSource);
+            await _queueService.addToNextUp(items: albumTracks, source: queueSource);
 
-            GlobalSnackbar.message(
-                (scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+            GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
                 isConfirmation: true);
 
             setState(() {});
@@ -359,17 +334,13 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
             );
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad("album"));
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad("album"));
               return;
             }
 
-            await _queueService.addToQueue(
-                items: albumTracks, source: queueSource);
+            await _queueService.addToQueue(items: albumTracks, source: queueSource);
 
-            GlobalSnackbar.message(
-                (scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"),
+            GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("album"),
                 isConfirmation: true);
 
             setState(() {});
@@ -386,17 +357,13 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
             );
 
             if (albumTracks == null) {
-              GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!.couldNotLoad("album"));
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad("album"));
               return;
             }
 
-            await _queueService.addToQueue(
-                items: albumTracks, source: queueSource);
+            await _queueService.addToQueue(items: albumTracks, source: queueSource);
 
-            GlobalSnackbar.message(
-                (scaffold) =>
-                    AppLocalizations.of(scaffold)!.confirmAddToQueue("album"),
+            GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("album"),
                 isConfirmation: true);
 
             setState(() {});
@@ -405,12 +372,10 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
           }
           break;
         case AlbumListTileMenuItems.download:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.item);
+          var item = DownloadStub.fromItem(type: DownloadItemType.collection, item: widget.item);
           await DownloadDialog.show(context, item, null);
         case AlbumListTileMenuItems.delete:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.item);
+          var item = DownloadStub.fromItem(type: DownloadItemType.collection, item: widget.item);
           await downloadsService.deleteDownload(stub: item);
         default:
           break;
@@ -423,8 +388,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
         text: TextSpan(
           children: [
             TextSpan(
-              text:
-                  widget.item.name ?? AppLocalizations.of(context)!.unknownName,
+              text: widget.item.name ?? AppLocalizations.of(context)!.unknownName,
             ),
           ],
           style: Theme.of(context).textTheme.titleMedium,
@@ -437,8 +401,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
               child: Transform.translate(
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
-                  item: DownloadStub.fromItem(
-                      type: DownloadItemType.collection, item: widget.item),
+                  item: DownloadStub.fromItem(type: DownloadItemType.collection, item: widget.item),
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),
@@ -446,12 +409,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
             ),
             TextSpan(
               text: ReleaseDateHelper.autoFormat(widget.item),
-              style: TextStyle(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.color
-                      ?.withOpacity(0.7)),
+              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
             ),
             TextSpan(
               text: " · ${printDuration(widget.item.runTimeTicksDuration())}",
@@ -466,18 +424,15 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
         onlyIfFav: true,
       ),
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(AlbumScreen.routeName, arguments: widget.item);
+        Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: widget.item);
       },
     );
 
     return GestureDetector(
-        onLongPressStart: (details) => menuCallback(
-            localPosition: details.localPosition,
-            globalPosition: details.globalPosition),
-        onSecondaryTapDown: (details) => menuCallback(
-            localPosition: details.localPosition,
-            globalPosition: details.globalPosition),
+        onLongPressStart: (details) =>
+            menuCallback(localPosition: details.localPosition, globalPosition: details.globalPosition),
+        onSecondaryTapDown: (details) =>
+            menuCallback(localPosition: details.localPosition, globalPosition: details.globalPosition),
         child: listTile);
   }
 }

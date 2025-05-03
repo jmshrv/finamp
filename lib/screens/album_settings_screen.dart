@@ -18,8 +18,7 @@ class _AlbumSettingsScreenState extends State<AlbumSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.albumScreen),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetAlbumSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetAlbumSettings)
         ],
       ),
       body: ListView(
@@ -38,8 +37,7 @@ class ShowCoversOnAlbumScreenToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.showCoversOnAlbumScreenTitle),
-      subtitle:
-          Text(AppLocalizations.of(context)!.showCoversOnAlbumScreenSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.showCoversOnAlbumScreenSubtitle),
       value: ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
       onChanged: FinampSetters.setShowCoversOnAlbumScreen,
     );

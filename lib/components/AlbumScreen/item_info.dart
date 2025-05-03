@@ -45,11 +45,9 @@ class ItemInfo extends ConsumerWidget {
         IconAndText(
             iconData: Icons.music_note,
             textSpan: TextSpan(
-              text: (itemTracks == (item.childCount ?? itemTracks) ||
-                      !ref.watch(finampSettingsProvider.isOffline))
+              text: (itemTracks == (item.childCount ?? itemTracks) || !ref.watch(finampSettingsProvider.isOffline))
                   ? AppLocalizations.of(context)!.trackCount(itemTracks)
-                  : AppLocalizations.of(context)!
-                      .offlineTrackCount(item.childCount!, itemTracks),
+                  : AppLocalizations.of(context)!.offlineTrackCount(item.childCount!, itemTracks),
             )),
         IconAndText(
           iconData: Icons.timer,

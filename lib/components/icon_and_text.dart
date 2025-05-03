@@ -22,8 +22,10 @@ class IconAndText extends StatelessWidget {
             // Inactive icons have an opacity of 50% with dark theme and 38%
             // with bright theme
             // https://material.io/design/iconography/system-icons.html#color
-            color: Theme.of(context).iconTheme.color?.withOpacity(
-                Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5),
+            color: Theme.of(context)
+                .iconTheme
+                .color
+                ?.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5),
           ),
           const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
           Expanded(

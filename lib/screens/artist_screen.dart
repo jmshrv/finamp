@@ -17,8 +17,7 @@ class ArtistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto artist = widgetArtist ??
-        ModalRoute.of(context)!.settings.arguments as BaseItemDto;
+    final BaseItemDto artist = widgetArtist ?? ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
       extendBody: true,

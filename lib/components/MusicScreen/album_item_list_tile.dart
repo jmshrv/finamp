@@ -44,17 +44,13 @@ class AlbumItemListTile extends StatelessWidget {
               child: Transform.translate(
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
-                  item: DownloadStub.fromItem(
-                      item: item, type: DownloadItemType.collection),
+                  item: DownloadStub.fromItem(item: item, type: DownloadItemType.collection),
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),
               alignment: PlaceholderAlignment.top,
             ),
-            if (subtitle != null)
-              TextSpan(
-                  text: subtitle,
-                  style: TextStyle(color: Theme.of(context).disabledColor))
+            if (subtitle != null) TextSpan(text: subtitle, style: TextStyle(color: Theme.of(context).disabledColor))
           ]),
           overflow: TextOverflow.ellipsis,
         ),

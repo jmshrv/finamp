@@ -39,8 +39,7 @@ extension AtContrast on Color {
           maxLightness = hslColor.lightness;
         }
 
-        final lightDiff =
-            lighter ? maxLightness - minLightness : minLightness - maxLightness;
+        final lightDiff = lighter ? maxLightness - minLightness : minLightness - maxLightness;
 
         hslColor = hslColor.withLightness(hslColor.lightness + lightDiff / 2);
       }

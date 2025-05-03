@@ -109,16 +109,12 @@ class TrackListTile extends ConsumerWidget {
                     : QueueItemSourceType.album,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: ((isInPlaylist || isOnArtistScreen)
-                        ? parentItem?.name
-                        : item.album) ??
+                pretranslatedName: ((isInPlaylist || isOnArtistScreen) ? parentItem?.name : item.album) ??
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem?.id.raw ?? "",
             item: parentItem,
             // we're playing from an album, so we should use the album's normalization gain.
-            contextNormalizationGain: (isInPlaylist || isOnArtistScreen)
-                ? null
-                : parentItem?.normalizationGain,
+            contextNormalizationGain: (isInPlaylist || isOnArtistScreen) ? null : parentItem?.normalizationGain,
           ),
         );
       } else {
@@ -135,25 +131,20 @@ class TrackListTile extends ConsumerWidget {
             // nameFilter: widget.searchTerm,
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-            onlyFavorites:
-                settings.onlyShowFavourites && settings.trackOfflineFavorites,
+            onlyFavorites: settings.onlyShowFavourites && settings.trackOfflineFavorites,
           );
 
           var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
 
-          items = sortItems(items, settings.tabSortBy[TabContentType.tracks],
-              settings.tabSortOrder[TabContentType.tracks]);
+          items =
+              sortItems(items, settings.tabSortBy[TabContentType.tracks], settings.tabSortOrder[TabContentType.tracks]);
 
           await queueService.startPlayback(
             items: items,
-            startingIndex: isShownInSearch
-                ? items.indexWhere((element) => element.id == item.id)
-                : await index,
+            startingIndex: isShownInSearch ? items.indexWhere((element) => element.id == item.id) : await index,
             source: QueueItemSource(
               name: QueueItemSourceName(
-                type: item.name != null
-                    ? QueueItemSourceNameType.mix
-                    : QueueItemSourceNameType.instantMix,
+                type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
                 localizationParameter: item.name ?? "",
               ),
               type: QueueItemSourceType.allTracks,
@@ -161,16 +152,13 @@ class TrackListTile extends ConsumerWidget {
             ),
           );
         } else {
-          if (FinampSettingsHelper
-              .finampSettings.startInstantMixForIndividualTracks) {
+          if (FinampSettingsHelper.finampSettings.startInstantMixForIndividualTracks) {
             await audioServiceHelper.startInstantMixForItem(item);
           } else {
             await queueService.startPlayback(
               items: [item],
               source: QueueItemSource(
-                name: QueueItemSourceName(
-                    type: QueueItemSourceNameType.preTranslated,
-                    pretranslatedName: item.name),
+                name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: item.name),
                 type: QueueItemSourceType.track,
                 id: item.id,
               ),
@@ -200,8 +188,7 @@ class TrackListTile extends ConsumerWidget {
                 item: parentItem,
               )));
           GlobalSnackbar.message(
-            (scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
             isConfirmation: true,
           );
           break;
@@ -217,8 +204,7 @@ class TrackListTile extends ConsumerWidget {
                 item: parentItem,
               )));
           GlobalSnackbar.message(
-            (scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
             isConfirmation: true,
           );
           break;
@@ -234,8 +220,7 @@ class TrackListTile extends ConsumerWidget {
                 item: parentItem,
               )));
           GlobalSnackbar.message(
-            (scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
             isConfirmation: true,
           );
           break;
@@ -270,16 +255,13 @@ class TrackListTile extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                getSwipeActionIcon(ref
-                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)),
+                getSwipeActionIcon(ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight)),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
               const SizedBox(width: 4.0),
               Text(
-                ref
-                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)
-                    .toLocalisedString(context),
+                ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight).toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -290,17 +272,14 @@ class TrackListTile extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                ref
-                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)
-                    .toLocalisedString(context),
+                ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft).toLocalisedString(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
               const SizedBox(width: 4.0),
               Icon(
-                getSwipeActionIcon(ref
-                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)),
+                getSwipeActionIcon(ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft)),
                 color: Theme.of(context).colorScheme.secondary,
                 size: 40,
               ),
@@ -431,8 +410,7 @@ class TrackListItem extends ConsumerStatefulWidget {
   ConsumerState<TrackListItem> createState() => TrackListItemState();
 }
 
-class TrackListItemState extends ConsumerState<TrackListItem>
-    with SingleTickerProviderStateMixin {
+class TrackListItemState extends ConsumerState<TrackListItem> with SingleTickerProviderStateMixin {
   @override
   Widget build(
     BuildContext context,
@@ -440,8 +418,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     bool playable;
     if (ref.watch(finampSettingsProvider.isOffline)) {
       playable = ref.watch(GetIt.instance<DownloadsService>()
-          .stateProvider(DownloadStub.fromItem(
-              type: DownloadItemType.track, item: widget.baseItem))
+          .stateProvider(DownloadStub.fromItem(type: DownloadItemType.track, item: widget.baseItem))
           .select((value) => value.value?.isComplete ?? false));
     } else {
       playable = true;
@@ -449,9 +426,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
 
     final bool showAlbum = widget.baseItem.albumId != widget.parentItem?.id;
 
-    final isCurrentlyPlaying = ref.watch(currentTrackProvider.select(
-        (queueItem) =>
-            queueItem.valueOrNull?.baseItemId == widget.baseItem.id));
+    final isCurrentlyPlaying =
+        ref.watch(currentTrackProvider.select((queueItem) => queueItem.valueOrNull?.baseItemId == widget.baseItem.id));
 
     var listItem = Opacity(
       opacity: playable ? 1.0 : 0.5,
@@ -495,12 +471,9 @@ class TrackListItemState extends ConsumerState<TrackListItem>
         }
       }
 
-      final swipeLeftEnabled =
-          ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) !=
-              ItemSwipeActions.nothing;
+      final swipeLeftEnabled = ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing;
       final swipeRightEnabled =
-          ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) !=
-              ItemSwipeActions.nothing;
+          ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing;
       final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
           ? DismissDirection.horizontal
           : swipeLeftEnabled
@@ -512,8 +485,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
       return GestureDetector(
         onTapDown: (_) {
           // Begin precalculating theme for song menu
-          ref.listenManual(
-              finampThemeProvider(ThemeInfo(widget.baseItem)), (_, __) {});
+          ref.listenManual(finampThemeProvider(ThemeInfo(widget.baseItem)), (_, __) {});
         },
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),
@@ -521,14 +493,10 @@ class TrackListItemState extends ConsumerState<TrackListItem>
             ? listItem
             : Dismissible(
                 key: Key(widget.listIndex.toString()),
-                direction: ref.watch(finampSettingsProvider.disableGesture) ||
-                        !widget.allowDismiss
+                direction: ref.watch(finampSettingsProvider.disableGesture) || !widget.allowDismiss
                     ? DismissDirection.none
                     : allowedDismissDirection,
-                dismissThresholds: const {
-                  DismissDirection.startToEnd: 0.65,
-                  DismissDirection.endToStart: 0.65
-                },
+                dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
                 // no background, dismissing really dismisses here
                 confirmDismiss: widget.confirmDismiss,
                 background: widget.dismissBackground,
@@ -544,20 +512,14 @@ class TrackListItemState extends ConsumerState<TrackListItem>
               return imageTheme.copyWith(
                   colorScheme: imageTheme.colorScheme.copyWith(
                       surfaceContainer: imageTheme.colorScheme.primary
-                          .withOpacity(imageTheme.brightness == Brightness.dark
-                              ? 0.35
-                              : 0.3)),
+                          .withOpacity(imageTheme.brightness == Brightness.dark ? 0.35 : 0.3)),
                   textTheme: imageTheme.textTheme.copyWith(
                     bodyLarge: imageTheme.textTheme.bodyLarge?.copyWith(
                         color: Color.alphaBlend(
-                            (imageTheme.colorScheme.secondary.withOpacity(
-                                imageTheme.brightness == Brightness.light
-                                    ? 0.5
-                                    : 0.1)),
+                            (imageTheme.colorScheme.secondary
+                                .withOpacity(imageTheme.brightness == Brightness.light ? 0.5 : 0.1)),
                             imageTheme.textTheme.bodyLarge?.color ??
-                                (imageTheme.brightness == Brightness.light
-                                    ? Colors.black
-                                    : Colors.white))),
+                                (imageTheme.brightness == Brightness.light ? Colors.black : Colors.white))),
                   ));
             },
             child: unthemedItem)
@@ -604,12 +566,9 @@ class TrackListItemTile extends StatelessWidget {
 
     final bool secondRowNeeded = showArtists || showAlbum || showPlayCount;
 
-    final durationLabelFullHours =
-        (baseItem.runTimeTicksDuration()?.inHours ?? 0);
-    final durationLabelFullMinutes =
-        (baseItem.runTimeTicksDuration()?.inMinutes ?? 0) % 60;
-    final durationLabelSeconds =
-        (baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60;
+    final durationLabelFullHours = (baseItem.runTimeTicksDuration()?.inHours ?? 0);
+    final durationLabelFullMinutes = (baseItem.runTimeTicksDuration()?.inMinutes ?? 0) % 60;
+    final durationLabelSeconds = (baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60;
     final durationLabelString =
         "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
 
@@ -618,9 +577,7 @@ class TrackListItemTile extends StatelessWidget {
         : baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist;
 
     return ListTileTheme(
-      tileColor: highlightTrack
-          ? Theme.of(context).colorScheme.surfaceContainer
-          : Colors.transparent,
+      tileColor: highlightTrack ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
       child: ListTile(
         visualDensity: const VisualDensity(
           horizontal: 0.0,
@@ -628,8 +585,7 @@ class TrackListItemTile extends StatelessWidget {
         ),
         minVerticalPadding: 0.0,
         horizontalTitleGap: defaultTitleGap,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
         // tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
         leading: Row(
           mainAxisSize: MainAxisSize.min,
@@ -660,9 +616,7 @@ class TrackListItemTile extends StatelessWidget {
             if (showCover)
               AlbumImage(
                 item: baseItem,
-                borderRadius: highlightTrack
-                    ? BorderRadius.zero
-                    : BorderRadius.circular(8.0),
+                borderRadius: highlightTrack ? BorderRadius.zero : BorderRadius.circular(8.0),
               ),
           ],
         ),
@@ -703,13 +657,8 @@ class TrackListItemTile extends StatelessWidget {
                         child: Transform.translate(
                           offset: const Offset(-1.5, 2.5),
                           child: DownloadedIndicator(
-                            item: DownloadStub.fromItem(
-                                item: baseItem, type: DownloadItemType.track),
-                            size: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .fontSize! +
-                                1,
+                            item: DownloadStub.fromItem(item: baseItem, type: DownloadItemType.track),
+                            size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
                           ),
                         ),
                       ),
@@ -723,11 +672,7 @@ class TrackListItemTile extends StatelessWidget {
                               offset: const Offset(-1.5, 2.5),
                               child: Icon(
                                 TablerIcons.microphone_2,
-                                size: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .fontSize! +
-                                    1,
+                                size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
                               )),
                         ),
                         alignment: PlaceholderAlignment.top,
@@ -736,11 +681,7 @@ class TrackListItemTile extends StatelessWidget {
                       TextSpan(
                         text: artistsString,
                         style: TextStyle(
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .color!
-                                .withOpacity(0.75),
+                            color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
                             overflow: TextOverflow.ellipsis),
@@ -752,42 +693,27 @@ class TrackListItemTile extends StatelessWidget {
                             baseItem.albumArtist ??
                             AppLocalizations.of(context)!.unknownArtist,
                         style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.6),
+                          color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.6),
                           fontSize: 13,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
-                    if (showArtists)
-                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showArtists) const WidgetSpan(child: SizedBox(width: 10.0)),
                     if (showAlbum)
                       TextSpan(
                         text: baseItem.album,
                         style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.6),
+                          color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.6),
                           fontSize: 13,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
-                    if (showAlbum)
-                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showAlbum) const WidgetSpan(child: SizedBox(width: 10.0)),
                     if (showPlayCount)
                       TextSpan(
-                        text: AppLocalizations.of(context)!
-                            .playCountValue(baseItem.userData?.playCount ?? 0),
+                        text: AppLocalizations.of(context)!.playCountValue(baseItem.userData?.playCount ?? 0),
                         style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.6),
+                          color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.6),
                           fontSize: 13,
                           fontWeight: FontWeight.w300,
                         ),
@@ -807,8 +733,7 @@ class TrackListItemTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                printDuration(baseItem.runTimeTicksDuration(),
-                    leadingZeroes: false),
+                printDuration(baseItem.runTimeTicksDuration(), leadingZeroes: false),
                 semanticsLabel: durationLabelString,
                 textAlign: TextAlign.end,
                 style: TextStyle(
@@ -836,9 +761,7 @@ class TrackListItemTile extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 6.0),
                           child: Icon(
                             TablerIcons.grip_horizontal,
-                            color:
-                                Theme.of(context).textTheme.bodyMedium?.color ??
-                                    Colors.white,
+                            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                             size: 28.0,
                             weight: 1.5,
                           ),

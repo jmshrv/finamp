@@ -34,8 +34,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto parent = widget.parent ??
-        ModalRoute.of(context)!.settings.arguments as BaseItemDto;
+    final BaseItemDto parent = widget.parent ?? ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
       extendBody: true,
@@ -66,15 +65,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
           return FutureBuilder<List<List<BaseItemDto>?>>(
             future: albumScreenContentFuture,
             builder: (context, snapshot) {
-              if (snapshot.data
-                  case [
-                    List<BaseItemDto> items,
-                    List<BaseItemDto> playableItems
-                  ]) {
-                return AlbumScreenContent(
-                    parent: parent,
-                    displayChildren: items,
-                    queueChildren: playableItems);
+              if (snapshot.data case [List<BaseItemDto> items, List<BaseItemDto> playableItems]) {
+                return AlbumScreenContent(parent: parent, displayChildren: items, queueChildren: playableItems);
               } else if (snapshot.hasError) {
                 return PaddedCustomScrollview(
                   physics: const NeverScrollableScrollPhysics(),
@@ -94,8 +86,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   slivers: [
                     SliverAppBar(
-                      title: Text(parent.name ??
-                          AppLocalizations.of(context)!.unknownName),
+                      title: Text(parent.name ?? AppLocalizations.of(context)!.unknownName),
                     ),
                     const SliverFillRemaining(
                       child: Center(

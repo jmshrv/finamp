@@ -66,18 +66,13 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
       margin: EdgeInsets.only(
         bottom: MediaQuery.paddingOf(context).bottom + _bottomPadding / 2,
       ),
-      decoration: ref.watch(finampSettingsProvider.contentViewType) ==
-              ContentViewType.grid
+      decoration: ref.watch(finampSettingsProvider.contentViewType) == ContentViewType.grid
           ? BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
-              color:
-                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.75),
+              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.75),
             )
           : null,
-      padding: EdgeInsets.only(
-          top: 10,
-          bottom: _bottomPadding / 2,
-          right: 3 + MediaQuery.paddingOf(context).right),
+      padding: EdgeInsets.only(top: 10, bottom: _bottomPadding / 2, right: 3 + MediaQuery.paddingOf(context).right),
       child: LayoutBuilder(builder: (context, constraints) {
         _letterHeight = constraints.maxHeight / alphabet.length;
         return Listener(
@@ -86,8 +81,7 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
           onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
           behavior: HitTestBehavior.opaque,
           child: Semantics(
-            excludeSemantics:
-                true, // replace child semantics with custom semantics
+            excludeSemantics: true, // replace child semantics with custom semantics
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -151,9 +145,7 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
                       decoration: BoxDecoration(
                           color: Theme.of(context).cardColor.withOpacity(0.85),
                           borderRadius: BorderRadius.circular(20)),
-                      child: FittedBox(
-                          child: Text(_currentSelected!,
-                              style: const TextStyle(fontSize: 120))),
+                      child: FittedBox(child: Text(_currentSelected!, style: const TextStyle(fontSize: 120))),
                     ),
                   ),
                 ),
@@ -180,8 +172,7 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
   void updateSelected(Offset position, Drag state) {
     String previousToBeSelected = _toBeSelected ?? '';
     if (position.dx > -20) {
-      _toBeSelected = alphabet[
-          (position.dy / _letterHeight).floor().clamp(0, alphabet.length - 1)];
+      _toBeSelected = alphabet[(position.dy / _letterHeight).floor().clamp(0, alphabet.length - 1)];
       if (previousToBeSelected != _toBeSelected) {
         FeedbackHelper.feedback(FeedbackType.light);
       }
@@ -220,8 +211,6 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
   }
 
   void orderTheList(List<String> list) {
-    widget.sortOrder == SortOrder.ascending
-        ? list.sort()
-        : list.sort((a, b) => b.compareTo(a));
+    widget.sortOrder == SortOrder.ascending ? list.sort() : list.sort((a, b) => b.compareTo(a));
   }
 }

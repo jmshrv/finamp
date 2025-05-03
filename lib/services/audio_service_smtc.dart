@@ -40,8 +40,7 @@ class AudioServiceSMTC extends AudioServicePlatform {
             case PressedButton.next:
               await _handlerCallbacks!.skipToNext(const SkipToNextRequest());
             case PressedButton.previous:
-              await _handlerCallbacks!
-                  .skipToPrevious(const SkipToPreviousRequest());
+              await _handlerCallbacks!.skipToPrevious(const SkipToPreviousRequest());
             case PressedButton.stop:
               await _handlerCallbacks!.stop(const StopRequest());
             case PressedButton.fastForward:
@@ -61,14 +60,10 @@ class AudioServiceSMTC extends AudioServicePlatform {
   @override
   Future<void> setState(SetStateRequest request) async {
     if (request.state.playing && !smtc.enabled) {
-      await smtc
-          .enableSmtc()
-          .then((value) => smtc.setPlaybackStatus(PlaybackStatus.playing));
+      await smtc.enableSmtc().then((value) => smtc.setPlaybackStatus(PlaybackStatus.playing));
     } else {
       await smtc.setPosition(request.state.updatePosition);
-      await smtc.setPlaybackStatus(request.state.playing
-          ? PlaybackStatus.playing
-          : PlaybackStatus.paused);
+      await smtc.setPlaybackStatus(request.state.playing ? PlaybackStatus.playing : PlaybackStatus.paused);
 
       await smtc.setRepeatMode(switch (request.state.repeatMode) {
         AudioServiceRepeatModeMessage.none => RepeatMode.none,
@@ -116,10 +111,8 @@ class AudioServiceSMTC extends AudioServicePlatform {
   }
 
   @override
-  Future<void> notifyChildrenChanged(
-      NotifyChildrenChangedRequest request) async {
-    throw UnimplementedError(
-        'notifyChildrenChanged() has not been implemented.');
+  Future<void> notifyChildrenChanged(NotifyChildrenChangedRequest request) async {
+    throw UnimplementedError('notifyChildrenChanged() has not been implemented.');
   }
 
   @override

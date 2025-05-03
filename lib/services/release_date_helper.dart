@@ -9,9 +9,7 @@ class ReleaseDateHelper {
   static String? autoFormat(BaseItemDto? baseItem) {
     final format = FinampSettingsHelper.finampSettings.releaseDateFormat;
 
-    final premiereDate = baseItem?.premiereDate != null
-        ? DateTime.parse(baseItem!.premiereDate!)
-        : null;
+    final premiereDate = baseItem?.premiereDate != null ? DateTime.parse(baseItem!.premiereDate!) : null;
     if (premiereDate == null) {
       return null;
     }

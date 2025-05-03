@@ -20,10 +20,7 @@ typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
 class AlbumScreenContent extends ConsumerStatefulWidget {
   const AlbumScreenContent(
-      {super.key,
-      required this.parent,
-      required this.displayChildren,
-      required this.queueChildren});
+      {super.key, required this.parent, required this.displayChildren, required this.queueChildren});
 
   final BaseItemDto parent;
   final List<BaseItemDto> displayChildren;
@@ -45,8 +42,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final downloadStub = DownloadStub.fromItem(
-        type: DownloadItemType.collection, item: widget.parent);
+    final downloadStub = DownloadStub.fromItem(type: DownloadItemType.collection, item: widget.parent);
 
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but
@@ -72,8 +68,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
         widget.displayChildren[0].parentIndexNumber != null) {
       int? lastDiscNumber;
       for (var child in widget.displayChildren) {
-        if (child.parentIndexNumber != null &&
-            child.parentIndexNumber != lastDiscNumber) {
+        if (child.parentIndexNumber != null && child.parentIndexNumber != lastDiscNumber) {
           lastDiscNumber = child.parentIndexNumber;
           childrenPerDisc.add([]);
         }
@@ -84,8 +79,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     return PaddedCustomScrollview(
       slivers: [
         SliverAppBar(
-          title: Text(
-              widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
+          title: Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
           // 125 + 64 is the total height of the widget we use as a
           // FlexibleSpaceBar. We add the toolbar height since the widget
           // should appear below the appbar.
@@ -99,8 +93,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             items: widget.queueChildren,
           ),
           actions: [
-            if (widget.parent.type == "Playlist" &&
-                !ref.watch(finampSettingsProvider.isOffline))
+            if (widget.parent.type == "Playlist" && !ref.watch(finampSettingsProvider.isOffline))
               PlaylistNameEditButton(playlist: widget.parent),
             FavoriteButton(item: widget.parent),
             DownloadButton(
@@ -109,9 +102,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             ),
           ],
         ),
-        if (widget.displayChildren.length > 1 &&
-            childrenPerDisc.length >
-                1) // show headers only for multi disc albums
+        if (widget.displayChildren.length > 1 && childrenPerDisc.length > 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc)
             SliverStickyHeader(
               header: Container(
@@ -121,8 +112,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 ),
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Text(
-                  AppLocalizations.of(context)!
-                      .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                  AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
                   style: const TextStyle(fontSize: 20.0),
                 ),
               ),
@@ -168,8 +158,7 @@ class TracksSliverList extends ConsumerStatefulWidget {
 }
 
 class _TracksSliverListState extends ConsumerState<TracksSliverList> {
-  final GlobalKey<SliverAnimatedListState> sliverListKey =
-      GlobalKey<SliverAnimatedListState>();
+  final GlobalKey<SliverAnimatedListState> sliverListKey = GlobalKey<SliverAnimatedListState>();
 
   @override
   void initState() {
@@ -191,8 +180,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
       );
     }
     return SliverFixedExtentList(
-      itemExtent: TrackListItemTile.defaultTileHeight +
-          TrackListItemTile.defaultTitleGap,
+      itemExtent: TrackListItemTile.defaultTileHeight + TrackListItemTile.defaultTitleGap,
       // return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -200,8 +188,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
           // incorrect and track with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth track on correct disc.
           final indexOffset = widget.childrenForQueue.then((childrenForQueue) =>
-              childrenForQueue.indexWhere(
-                  (element) => element.id == widget.childrenForList[index].id));
+              childrenForQueue.indexWhere((element) => element.id == widget.childrenForList[index].id));
 
           final BaseItemDto item = widget.childrenForList[index];
 
@@ -220,8 +207,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
             children: widget.childrenForQueue,
             index: indexOffset,
             showIndex: item.albumId == widget.parent.id,
-            showCover: item.albumId != widget.parent.id ||
-                ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
+            showCover: item.albumId != widget.parent.id || ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
             parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();

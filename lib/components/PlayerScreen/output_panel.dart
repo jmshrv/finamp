@@ -53,23 +53,17 @@ Future<void> showOutputMenu({
           //   item: item,
           //   useThemeImage: usePlayerTheme,
           // ),
-          Consumer(
-            builder: (context, ref, child) {
+          Consumer(builder: (context, ref, child) {
             return VolumeSlider(
-              initialValue:
-                  (ref.watch(finampSettingsProvider.currentVolume) * 100)
-                          .floor() /
-                      100.0,
+              initialValue: (ref.watch(finampSettingsProvider.currentVolume) * 100).floor() / 100.0,
               onChange: (double currentValue) async {
-                final audioHandler =
-                    GetIt.instance<MusicPlayerBackgroundTask>();
+                final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
                 audioHandler.setVolume(currentValue);
                 outputPanelLogger.fine("Volume set to $currentValue");
               },
               forceLoading: true,
-              );
-            }
-          ),
+            );
+          }),
           const SizedBox(height: 10),
         ];
 
@@ -88,8 +82,7 @@ Future<void> showOutputMenu({
                       child: Text(AppLocalizations.of(context)!.outputMenuTitle,
                           // AppLocalizations.of(context)!.outputMenuTitle,
                           style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color!,
+                              color: Theme.of(context).textTheme.bodyLarge!.color!,
                               fontSize: 18,
                               fontWeight: FontWeight.w400)),
                     ),
@@ -101,12 +94,10 @@ Future<void> showOutputMenu({
                           switchOutCurve: const Threshold(0.0),
                           child: Consumer(builder: (context, ref, child) {
                             return AirPlayRoutePickerView(
-                              key: ValueKey(
-                                  ref.watch(localThemeProvider).primary),
+                              key: ValueKey(ref.watch(localThemeProvider).primary),
                               tintColor: ref.watch(localThemeProvider).primary,
                               activeTintColor: jellyfinBlueColor,
-                              onShowPickerView: () => FeedbackHelper.feedback(
-                                  FeedbackType.selection),
+                              onShowPickerView: () => FeedbackHelper.feedback(FeedbackType.selection),
                             );
                           }),
                         ),
@@ -115,16 +106,14 @@ Future<void> showOutputMenu({
                       IconButton(
                         icon: Icon(TablerIcons.cast),
                         onPressed: () {
-                          final audioHandler =
-                              GetIt.instance<MusicPlayerBackgroundTask>();
+                          final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
                           audioHandler.getRoutes();
                           // audioHandler.setOutputToDeviceSpeaker();
                           // audioHandler.setOutputToBluetoothDevice();
                           audioHandler.showOutputSwitcherDialog();
                         },
                       ),
-                    if (!Platform.isAndroid && !Platform.isIOS)
-                      SizedBox(width: 32, height: 8),
+                    if (!Platform.isAndroid && !Platform.isIOS) SizedBox(width: 32, height: 8),
                   ],
                 ),
               ),
@@ -133,10 +122,8 @@ Future<void> showOutputMenu({
               )),
           SliverStickyHeader(
             header: Padding(
-              padding: const EdgeInsets.only(
-                  top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text(
-                  AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
+              padding: const EdgeInsets.only(top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
+              child: Text(AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
                   // AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
@@ -150,10 +137,8 @@ Future<void> showOutputMenu({
           if (Platform.isAndroid)
             SliverStickyHeader(
               header: Padding(
-                padding: const EdgeInsets.only(
-                    top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-                child: Text(
-                    AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
+                padding: const EdgeInsets.only(top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
+                child: Text(AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
                     // AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
                     style: Theme.of(context).textTheme.titleMedium),
               ),
@@ -164,8 +149,7 @@ Future<void> showOutputMenu({
             ),
         ];
         // TODO better estimate, how to deal with lag getting playlists?
-        var stackHeight = MediaQuery.sizeOf(context).height *
-            (Platform.isAndroid ? 0.65 : 0.4);
+        var stackHeight = MediaQuery.sizeOf(context).height * (Platform.isAndroid ? 0.65 : 0.4);
         return (stackHeight, menu);
       });
 }
@@ -235,8 +219,7 @@ class _OutputTargetListState extends State<OutputTargetList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CTAMedium(
-            text: AppLocalizations.of(context)!
-                .outputMenuOpenConnectionSettingsButtonTitle,
+            text: AppLocalizations.of(context)!.outputMenuOpenConnectionSettingsButtonTitle,
             icon: TablerIcons.cast,
             //accentColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
@@ -252,11 +235,7 @@ class _OutputTargetListState extends State<OutputTargetList> {
 }
 
 class OutputSelectorTile extends StatelessWidget {
-  const OutputSelectorTile(
-      {super.key,
-      required this.routeInfo,
-      this.isLoading = false,
-      this.onSelect});
+  const OutputSelectorTile({super.key, required this.routeInfo, this.isLoading = false, this.onSelect});
 
   final FinampOutputRoute routeInfo;
   final bool isLoading;
@@ -341,8 +320,7 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
     var themeColor = Theme.of(context).colorScheme.primary;
     double sliderHeight = 56.0;
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
       child: Container(
           decoration: ShapeDecoration(
             color: themeColor.withOpacity(0.3),
@@ -373,27 +351,27 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
                     inactiveTrackColor: themeColor.withOpacity(0.3),
                     overlayShape: SliderComponentShape.noOverlay,
                   ),
-              child: Slider(
-                value: currentValue,
-                onChanged: (value) {
-                  setState(() {
+                  child: Slider(
+                    value: currentValue,
+                    onChanged: (value) {
+                      setState(() {
                         currentValue = value;
-                  });
+                      });
                       if (debounce?.isActive ?? false) debounce!.cancel();
                       debounce = Timer(const Duration(milliseconds: 100), () {
                         widget.onChange(value);
                       });
-                },
-                onChangeEnd: (value) async {
-                  unawaited(widget.onChange(value));
-                  if (widget.feedback) {
-                    FeedbackHelper.feedback(FeedbackType.selection);
-                  }
-                  setState(() {
-                    currentValue = value;
-                  });
-                },
-              ),
+                    },
+                    onChangeEnd: (value) async {
+                      unawaited(widget.onChange(value));
+                      if (widget.feedback) {
+                        FeedbackHelper.feedback(FeedbackType.selection);
+                      }
+                      setState(() {
+                        currentValue = value;
+                      });
+                    },
+                  ),
                 )),
             Positioned(
               top: 0,
@@ -426,8 +404,7 @@ class RoundedRectangleTrackShape extends RoundedRectSliderTrackShape {
   }) {
     final double trackHeight = sliderTheme.trackHeight ?? 0;
     final double trackLeft = offset.dx;
-    final double trackTop =
-        offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
     final double trackWidth = parentBox.size.width;
 
     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
@@ -460,8 +437,7 @@ class RoundedRectangleTrackShape extends RoundedRectSliderTrackShape {
     final activeRect = Rect.fromLTRB(
       trackRect.left,
       trackRect.top,
-      thumbCenter.dx +
-          sliderTheme.thumbShape!.getPreferredSize(isEnabled, isDiscrete).width,
+      thumbCenter.dx + sliderTheme.thumbShape!.getPreferredSize(isEnabled, isDiscrete).width,
       trackRect.bottom,
     );
 
@@ -474,8 +450,7 @@ class RoundedRectangleTrackShape extends RoundedRectSliderTrackShape {
     );
 
     final Paint activePaint = Paint()..color = sliderTheme.activeTrackColor!;
-    final Paint inactivePaint = Paint()
-      ..color = sliderTheme.inactiveTrackColor!;
+    final Paint inactivePaint = Paint()..color = sliderTheme.inactiveTrackColor!;
 
     final radius = Radius.circular(12.0);
 

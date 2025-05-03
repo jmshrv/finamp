@@ -7,6 +7,5 @@ class FinampSetterIgnore {
   final String message;
   const FinampSetterIgnore(this.message);
   @override
-  String toString() =>
-      "Excluded from automatic sub-provider/setter generation: $message";
+  String toString() => "Excluded from automatic sub-provider/setter generation: $message";
 }

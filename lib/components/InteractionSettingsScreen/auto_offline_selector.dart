@@ -14,8 +14,7 @@ class AutoOfflineSelector extends ConsumerWidget {
 
     return ListTile(
       title: Text(AppLocalizations.of(context)!.autoOfflineSettingTitle),
-      subtitle:
-          Text(AppLocalizations.of(context)!.autoOfflineSettingDescription),
+      subtitle: Text(AppLocalizations.of(context)!.autoOfflineSettingDescription),
       trailing: DropdownButton<AutoOfflineOption>(
         value: option,
         items: AutoOfflineOption.values

@@ -11,8 +11,7 @@ class ShowArtistsTopTracksSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.showArtistsTopTracks),
-      subtitle:
-          Text(AppLocalizations.of(context)!.showArtistsTopTracksSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.showArtistsTopTracksSubtitle),
       value: ref.watch(finampSettingsProvider.showArtistsTopTracks),
       onChanged: (value) => FinampSetters.setShowArtistsTopTracks(value),
     );

@@ -11,33 +11,24 @@ import 'package:get_it/get_it.dart';
 
 import '../models/jellyfin_models.dart';
 
-Future<void> askBeforeDeleteDownloadFromDevice(
-    BuildContext context, DownloadStub stub,
-    {VoidCallback? refresh}) async {
+Future<void> askBeforeDeleteDownloadFromDevice(BuildContext context, DownloadStub stub, {VoidCallback? refresh}) async {
   String type = stub.baseItemType.name;
   await showDialog(
       context: context,
       builder: (context) => ConfirmationPromptDialog(
-          promptText: AppLocalizations.of(context)!
-              .deleteFromTargetDialogText("", "device", type),
-          confirmButtonText: AppLocalizations.of(context)!
-              .deleteFromTargetConfirmButton("device"),
+          promptText: AppLocalizations.of(context)!.deleteFromTargetDialogText("", "device", type),
+          confirmButtonText: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("device"),
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
           onConfirmed: () async {
             try {
-              await GetIt.instance<DownloadsService>()
-                  .deleteDownload(stub: stub);
-              GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!
-                      .itemDeletedSnackbar("device", type));
+              await GetIt.instance<DownloadsService>().deleteDownload(stub: stub);
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.itemDeletedSnackbar("device", type));
 
-              if (context.mounted &&
-                  FinampSettingsHelper.finampSettings.isOffline) {
+              if (context.mounted && FinampSettingsHelper.finampSettings.isOffline) {
                 Navigator.of(context).popUntil((route) {
                   return route.settings.name != null // unnamed dialog
                       &&
-                      route.settings.name !=
-                          AlbumScreen.routeName; // albums screen
+                      route.settings.name != AlbumScreen.routeName; // albums screen
                 });
               }
             } catch (err) {
@@ -50,11 +41,9 @@ Future<void> askBeforeDeleteDownloadFromDevice(
           centerText: true));
 }
 
-Future<void> askBeforeDeleteFromServerAndDevice(
-    BuildContext context, DownloadStub stub,
+Future<void> askBeforeDeleteFromServerAndDevice(BuildContext context, DownloadStub stub,
     {VoidCallback? refresh, bool popIt = false}) async {
-  DownloadItemStatus status =
-      GetIt.instance<DownloadsService>().getStatus(stub, null);
+  DownloadItemStatus status = GetIt.instance<DownloadsService>().getStatus(stub, null);
   String type = stub.baseItemType.name;
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -65,23 +54,18 @@ Future<void> askBeforeDeleteFromServerAndDevice(
   await showDialog(
       context: context,
       builder: (_) => ConfirmationPromptDialog(
-          promptText: AppLocalizations.of(context)!
-              .deleteFromTargetDialogText(deleteType.textForm, "server", type),
-          confirmButtonText: AppLocalizations.of(context)!
-              .deleteFromTargetConfirmButton("server"),
+          promptText: AppLocalizations.of(context)!.deleteFromTargetDialogText(deleteType.textForm, "server", type),
+          confirmButtonText: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
           abortButtonText: AppLocalizations.of(context)!.genericCancel,
           onConfirmed: () async {
             try {
               await jellyfinApiHelper.deleteItem(BaseItemId(stub.id));
-              GlobalSnackbar.message((scaffold) =>
-                  AppLocalizations.of(scaffold)!
-                      .itemDeletedSnackbar("server", type));
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.itemDeletedSnackbar("server", type));
 
               if (status.isRequired) {
                 await downloadsService.deleteDownload(stub: stub);
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(scaffold)!
-                        .itemDeletedSnackbar("device", type));
+                GlobalSnackbar.message(
+                    (scaffold) => AppLocalizations.of(scaffold)!.itemDeletedSnackbar("device", type));
               }
 
               if (context.mounted) {
@@ -89,8 +73,7 @@ Future<void> askBeforeDeleteFromServerAndDevice(
                   Navigator.of(context).popUntil((route) {
                     return route.settings.name != null // unnamed dialog
                         &&
-                        route.settings.name !=
-                            AlbumScreen.routeName; // albums screen
+                        route.settings.name != AlbumScreen.routeName; // albums screen
                   });
                 }
               }

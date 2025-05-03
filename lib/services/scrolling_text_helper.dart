@@ -17,8 +17,7 @@ class ScrollingTextHelper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveStyle =
-        (style ?? Theme.of(context).textTheme.bodyMedium)?.copyWith(
+    final effectiveStyle = (style ?? Theme.of(context).textTheme.bodyMedium)?.copyWith(
       height: 1.0, // Force single line height
     );
 

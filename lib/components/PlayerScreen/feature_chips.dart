@@ -42,29 +42,22 @@ class FeatureState {
       "sampleRate: $sampleRate, "
       "bitDepth: $bitDepth";
 
-  FinampFeatureChipsConfiguration get configuration =>
-      settings.featureChipsConfiguration;
+  FinampFeatureChipsConfiguration get configuration => settings.featureChipsConfiguration;
 
   bool get isDownloaded => metadata?.isDownloaded ?? false;
-  bool get isTranscoding =>
-      !isDownloaded &&
-      (currentTrack?.item.extras?["shouldTranscode"] as bool? ?? false);
-  String get container => isTranscoding
-      ? settings.transcodingStreamingFormat.codec
-      : metadata?.mediaSourceInfo.container ?? "";
+  bool get isTranscoding => !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] as bool? ?? false);
+  String get container =>
+      isTranscoding ? settings.transcodingStreamingFormat.codec : metadata?.mediaSourceInfo.container ?? "";
   int? get size => isTranscoding ? null : metadata?.mediaSourceInfo.size;
   MediaStream? get audioStream => isTranscoding
       ? null
-      : metadata?.mediaSourceInfo.mediaStreams
-          .firstWhereOrNull((stream) => stream.type == "Audio");
+      : metadata?.mediaSourceInfo.mediaStreams.firstWhereOrNull((stream) => stream.type == "Audio");
   // Transcoded downloads will not have a valid MediaStream, but will have
   // the target transcode bitrate set for the mediasource bitrate.  Other items
   // should have a valid mediaStream, so use that audio-only bitrate instead of the
   // whole-file bitrate.
   int? get bitrate => isTranscoding
-      ? (settings.transcodingStreamingFormat.codec == 'flac'
-          ? null
-          : settings.transcodeBitrate)
+      ? (settings.transcodingStreamingFormat.codec == 'flac' ? null : settings.transcodeBitrate)
       : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;
@@ -77,8 +70,7 @@ class FeatureState {
     if (queueService.playbackSpeed != 1.0) {
       features.add(
         FeatureProperties(
-          text: AppLocalizations.of(context)!
-              .playbackSpeedFeatureText(queueService.playbackSpeed),
+          text: AppLocalizations.of(context)!.playbackSpeedFeatureText(queueService.playbackSpeed),
         ),
       );
     }
@@ -86,28 +78,24 @@ class FeatureState {
     if (FinampSettingsHelper.finampSettings.currentVolume != 1.0) {
       features.add(
         FeatureProperties(
-          text: AppLocalizations.of(context)!.currentVolumeFeatureText(
-              (FinampSettingsHelper.finampSettings.currentVolume * 100)
-                  .floor()),
+          text: AppLocalizations.of(context)!
+              .currentVolumeFeatureText((FinampSettingsHelper.finampSettings.currentVolume * 100).floor()),
         ),
       );
     }
 
     for (var feature in configuration.features) {
       // TODO this will likely be extremely outdated if offline, hide?
-      if (feature == FinampFeatureChipType.playCount &&
-          currentTrack?.baseItem?.userData?.playCount != null) {
+      if (feature == FinampFeatureChipType.playCount && currentTrack?.baseItem?.userData?.playCount != null) {
         features.add(
           FeatureProperties(
             type: feature,
-            text: AppLocalizations.of(context)!.playCountValue(
-                currentTrack!.baseItem!.userData?.playCount ?? 0),
+            text: AppLocalizations.of(context)!.playCountValue(currentTrack!.baseItem!.userData?.playCount ?? 0),
           ),
         );
       }
 
-      if (feature == FinampFeatureChipType.additionalPeople &&
-          (currentTrack?.baseItem?.people?.isNotEmpty ?? false)) {
+      if (feature == FinampFeatureChipType.additionalPeople && (currentTrack?.baseItem?.people?.isNotEmpty ?? false)) {
         currentTrack?.baseItem?.people?.forEach((person) {
           features.add(
             FeatureProperties(
@@ -150,8 +138,7 @@ class FeatureState {
       }
 
       if (metadata?.mediaSourceInfo != null) {
-        if (feature == FinampFeatureChipType.codec ||
-            feature == FinampFeatureChipType.bitRate) {
+        if (feature == FinampFeatureChipType.codec || feature == FinampFeatureChipType.bitRate) {
           // only add this feature the first time
           if (!features.any((f) => f.type == FinampFeatureChipType.codec)) {
             features.add(
@@ -177,8 +164,7 @@ class FeatureState {
           features.add(
             FeatureProperties(
               type: feature,
-              text: AppLocalizations.of(context)!
-                  .numberAsKiloHertz(sampleRate! / 1000.0),
+              text: AppLocalizations.of(context)!.numberAsKiloHertz(sampleRate! / 1000.0),
             ),
           );
         }
@@ -195,14 +181,12 @@ class FeatureState {
 
       if (feature == FinampFeatureChipType.normalizationGain &&
           FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
-        double? effectiveGainChange =
-            getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
+        double? effectiveGainChange = getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
         if (effectiveGainChange != null) {
           features.add(
             FeatureProperties(
               type: feature,
-              text: AppLocalizations.of(context)!.numberAsDecibel(
-                  double.parse(effectiveGainChange.toStringAsFixed(1))),
+              text: AppLocalizations.of(context)!.numberAsDecibel(double.parse(effectiveGainChange.toStringAsFixed(1))),
             ),
           );
         }
@@ -250,21 +234,17 @@ class FeatureChips extends ConsumerWidget {
 
           // log feature state for debugging
           //TODO if feature chips are disabled, this won't be logged, but is super useful for debugging. Ideally, move the whole metadata stuff into the metadata provider and log it there, and then use the generated values to create the feature chips if needed
-          featureLogger
-              .finer("Current track features: ${featureState.properties}");
+          featureLogger.finer("Current track features: ${featureState.properties}");
 
           return Padding(
             padding: const EdgeInsets.only(left: 32.0, right: 32.0),
             child: ScrollConfiguration(
               // Allow drag scrolling on desktop
-              behavior: ScrollConfiguration.of(context)
-                  .copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: PointerDeviceKind.values.toSet()),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Features(
-                  backgroundColor:
-                      IconTheme.of(context).color?.withOpacity(0.1) ??
-                          _defaultBackgroundColour,
+                  backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ?? _defaultBackgroundColour,
                   features: featureState,
                 ),
               ),
@@ -296,8 +276,7 @@ class Features extends StatelessWidget {
         final feature = featureList[index];
 
         return _FeatureContent(
-          backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
-              _defaultBackgroundColour,
+          backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ?? _defaultBackgroundColour,
           feature: feature,
           color: color,
         );
@@ -328,10 +307,10 @@ class _FeatureContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
       child: Text(
         feature.text,
-        style: Theme.of(context).textTheme.displaySmall!.copyWith(
-            fontSize: 11,
-            fontWeight: FontWeight.w300,
-            overflow: TextOverflow.ellipsis),
+        style: Theme.of(context)
+            .textTheme
+            .displaySmall!
+            .copyWith(fontSize: 11, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),
         softWrap: false,
         overflow: TextOverflow.ellipsis,
       ),

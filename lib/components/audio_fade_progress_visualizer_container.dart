@@ -24,12 +24,10 @@ class AudioFadeProgressVisualizerContainer extends StatefulWidget {
   final double? height;
 
   @override
-  State<AudioFadeProgressVisualizerContainer> createState() =>
-      _AudioFadeProgressVisualizerContainerState();
+  State<AudioFadeProgressVisualizerContainer> createState() => _AudioFadeProgressVisualizerContainerState();
 }
 
-class _AudioFadeProgressVisualizerContainerState
-    extends State<AudioFadeProgressVisualizerContainer>
+class _AudioFadeProgressVisualizerContainerState extends State<AudioFadeProgressVisualizerContainer>
     with SingleTickerProviderStateMixin {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
@@ -43,12 +41,10 @@ class _AudioFadeProgressVisualizerContainerState
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-        duration: FinampSettingsHelper.finampSettings.audioFadeInDuration,
-        vsync: this);
+    _controller = AnimationController(duration: FinampSettingsHelper.finampSettings.audioFadeInDuration, vsync: this);
 
-    _animation = Tween<double>(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _animation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     resetFade();
 
@@ -89,14 +85,12 @@ class _AudioFadeProgressVisualizerContainerState
   }
 
   void startFadeIn({double? from}) {
-    _controller.duration =
-        FinampSettingsHelper.finampSettings.audioFadeInDuration;
+    _controller.duration = FinampSettingsHelper.finampSettings.audioFadeInDuration;
     _controller.forward(from: from ?? 0.0);
   }
 
   void startFadeOut({double? from}) {
-    _controller.duration =
-        FinampSettingsHelper.finampSettings.audioFadeOutDuration;
+    _controller.duration = FinampSettingsHelper.finampSettings.audioFadeOutDuration;
     _controller.reverse(from: from ?? 1.0);
   }
 
@@ -133,8 +127,7 @@ class _AudioFadeProgressVisualizerContainerState
                 height: widget.height,
                 decoration: BoxDecoration(
                   borderRadius: widget.borderRadius,
-                  border: _controller.status == AnimationStatus.forward ||
-                          _controller.status == AnimationStatus.reverse
+                  border: _controller.status == AnimationStatus.forward || _controller.status == AnimationStatus.reverse
                       ? ProgressBorder.all(
                           color: IconTheme.of(context).color!.withAlpha(128),
                           width: 4,

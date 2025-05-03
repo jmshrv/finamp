@@ -17,8 +17,7 @@ import 'jellyfin_api_helper.dart';
 
 part 'jellyfin_api.chopper.dart';
 
-const String defaultFields =
-    "ChildCount,DateCreated,DateLastMediaAdded,Etag,Genres,ParentId,ProviderIds,Tags";
+const String defaultFields = "ChildCount,DateCreated,DateLastMediaAdded,Etag,Genres,ParentId,ProviderIds,Tags";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
@@ -64,16 +63,14 @@ abstract class JellyfinApi extends ChopperService {
     response: JsonConverter.responseFactory,
   )
   @Post(path: "/Users/AuthenticateWithQuickConnect")
-  Future<dynamic> authenticateWithQuickConnect(
-      @Body() Map<String, String> quickConnectInfo);
+  Future<dynamic> authenticateWithQuickConnect(@Body() Map<String, String> quickConnectInfo);
 
   @FactoryConverter(
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,
   )
   @Post(path: "/Users/AuthenticateByName")
-  Future<dynamic> authenticateViaName(
-      @Body() Map<String, String> usernameAndPassword);
+  Future<dynamic> authenticateViaName(@Body() Map<String, String> usernameAndPassword);
 
   @FactoryConverter(
     request: JsonConverter.requestFactory,
@@ -283,7 +280,6 @@ abstract class JellyfinApi extends ChopperService {
     @Query() required bool supportsPersistentIdentifier,
   });
 
-
   @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Sessions/Capabilities/Full")
   Future<dynamic> updateCapabilitiesFull(
@@ -293,18 +289,15 @@ abstract class JellyfinApi extends ChopperService {
 
   @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Sessions/Playing")
-  Future<dynamic> startPlayback(
-      @Body() PlaybackProgressInfo playbackProgressInfo);
+  Future<dynamic> startPlayback(@Body() PlaybackProgressInfo playbackProgressInfo);
 
   @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Sessions/Playing/Progress")
-  Future<dynamic> playbackStatusUpdate(
-      @Body() PlaybackProgressInfo playbackProgressInfo);
+  Future<dynamic> playbackStatusUpdate(@Body() PlaybackProgressInfo playbackProgressInfo);
 
   @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Sessions/Playing/Stopped")
-  Future<dynamic> playbackStatusStopped(
-      @Body() PlaybackProgressInfo playbackProgressInfo);
+  Future<dynamic> playbackStatusStopped(@Body() PlaybackProgressInfo playbackProgressInfo);
 
   @FactoryConverter(
     request: JsonConverter.requestFactory,
@@ -544,8 +537,7 @@ abstract class JellyfinApi extends ChopperService {
   Future<Response<dynamic>> logout();
 
   static JellyfinApi create(bool inForeground) {
-    final chopperHttpLogLevel = Level
-        .body; //TODO allow changing the log level in settings (and a debug config file?)
+    final chopperHttpLogLevel = Level.body; //TODO allow changing the log level in settings (and a debug config file?)
 
     final client = ChopperClient(
       client: http.IOClient(HttpClient()
@@ -578,8 +570,7 @@ class JellyfinInterceptor implements Interceptor {
   final bool inForeground;
 
   @override
-  FutureOr<Response<BodyType>> intercept<BodyType>(
-      Chain<BodyType> chain) async {
+  FutureOr<Response<BodyType>> intercept<BodyType>(Chain<BodyType> chain) async {
     return await chain.proceed(updateRequest(chain.request));
   }
 
@@ -595,13 +586,10 @@ class JellyfinInterceptor implements Interceptor {
 
     // If baseUrlTemp is null, use the baseUrl of the current user.
     // If baseUrlTemp is set, we're setting up a new user and should use it instead.
-    Uri baseUri =
-        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
+    Uri baseUri = baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
 
     // Add the request path on to the baseUrl
-    baseUri = baseUri.replace(
-        pathSegments:
-            baseUri.pathSegments.followedBy(request.uri.pathSegments));
+    baseUri = baseUri.replace(pathSegments: baseUri.pathSegments.followedBy(request.uri.pathSegments));
 
     return request.copyWith(
       uri: baseUri,
@@ -626,15 +614,13 @@ Future<String> getAuthHeader() async {
   }
 
   if (finampUserHelper.currentUser?.accessToken != null) {
-    authHeader =
-        '${authHeader}Token="${finampUserHelper.currentUser!.accessToken}", ';
+    authHeader = '${authHeader}Token="${finampUserHelper.currentUser!.accessToken}", ';
   }
 
   authHeader = '${authHeader}Client="Finamp", ';
 
   final deviceInfo = await getDeviceInfo();
-  authHeader =
-      '${authHeader}Device="${deviceInfo.name}",DeviceId="${deviceInfo.id}", ';
+  authHeader = '${authHeader}Device="${deviceInfo.name}",DeviceId="${deviceInfo.id}", ';
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   authHeader = '${authHeader}Version="${packageInfo.version}"';

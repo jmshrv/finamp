@@ -15,9 +15,8 @@ class SleepTimerDialog extends StatefulWidget {
 class _SleepTimerDialogState extends State<SleepTimerDialog> {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
-  final _textController = TextEditingController(
-      text: (FinampSettingsHelper.finampSettings.sleepTimerSeconds ~/ 60)
-          .toString());
+  final _textController =
+      TextEditingController(text: (FinampSettingsHelper.finampSettings.sleepTimerSeconds ~/ 60).toString());
 
   final _formKey = GlobalKey<FormState>();
 
@@ -32,11 +31,9 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
             Expanded(
               child: TextFormField(
                 controller: _textController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.minutes),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.minutes),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return AppLocalizations.of(context)!.required;
@@ -51,8 +48,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
                   final valueDouble = double.parse(value!);
                   final durationInSeconds = (valueDouble * 60).round();
 
-                  _audioHandler
-                      .setSleepTimer(Duration(seconds: durationInSeconds));
+                  _audioHandler.setSleepTimer(Duration(seconds: durationInSeconds));
                   FinampSetters.setSleepTimerSeconds(durationInSeconds);
                 },
               ),

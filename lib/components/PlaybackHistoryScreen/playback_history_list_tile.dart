@@ -27,16 +27,14 @@ class PlaybackHistoryListTile extends ConsumerStatefulWidget {
   final void Function() onTap;
 
   @override
-  ConsumerState<PlaybackHistoryListTile> createState() =>
-      _PlaybackHistoryListTileState();
+  ConsumerState<PlaybackHistoryListTile> createState() => _PlaybackHistoryListTileState();
 }
 
-class _PlaybackHistoryListTileState
-    extends ConsumerState<PlaybackHistoryListTile> {
+class _PlaybackHistoryListTileState extends ConsumerState<PlaybackHistoryListTile> {
   @override
   Widget build(BuildContext context) {
-    final baseItem = jellyfin_models.BaseItemDto.fromJson(
-        widget.item.item.item.extras?["itemJson"] as Map<String, dynamic>);
+    final baseItem =
+        jellyfin_models.BaseItemDto.fromJson(widget.item.item.item.extras?["itemJson"] as Map<String, dynamic>);
 
     void menuCallback() async {
       unawaited(Feedback.forLongPress(context));
@@ -46,8 +44,7 @@ class _PlaybackHistoryListTileState
     return GestureDetector(
         onTapDown: (_) {
           // Begin precalculating theme for song menu
-          ref.listenManual(
-              finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
+          ref.listenManual(finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
         },
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),
@@ -64,9 +61,7 @@ class _PlaybackHistoryListTileState
               horizontalTitleGap: 10.0,
               contentPadding: const EdgeInsets.only(right: 4.0),
               leading: AlbumImage(
-                item: widget.item.item.item.extras?["itemJson"] == null
-                    ? null
-                    : baseItem,
+                item: widget.item.item.item.extras?["itemJson"] == null ? null : baseItem,
               ),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

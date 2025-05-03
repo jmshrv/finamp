@@ -30,14 +30,11 @@ class DownloadButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    DownloadItemStatus? status = ref
-        .watch(downloadsService.statusProvider((item, children?.length)))
-        .value;
+    DownloadItemStatus? status = ref.watch(downloadsService.statusProvider((item, children?.length))).value;
     var isOffline = ref.watch(finampSettingsProvider.isOffline);
     bool canDeleteFromServer = false;
     if (item.type.requiresItem) {
-      canDeleteFromServer = ref.watch(GetIt.instance<JellyfinApiHelper>()
-          .canDeleteFromServerProvider(item.baseItem!));
+      canDeleteFromServer = ref.watch(GetIt.instance<JellyfinApiHelper>().canDeleteFromServerProvider(item.baseItem!));
     }
     String? parentTooltip;
     if (status == null) {
@@ -46,10 +43,8 @@ class DownloadButton extends ConsumerWidget {
     if (status.isIncidental) {
       var parent = downloadsService.getFirstRequiringItem(item);
       if (parent != null) {
-        var parentName = AppLocalizations.of(context)!
-            .itemTypeSubtitle(parent.baseItemType.name, parent.name);
-        parentTooltip =
-            AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
+        var parentName = AppLocalizations.of(context)!.itemTypeSubtitle(parent.baseItemType.name, parent.name);
+        parentTooltip = AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
       }
     }
     BaseItemId viewId;
@@ -69,27 +64,21 @@ class DownloadButton extends ConsumerWidget {
           await showDialog(
               context: context,
               builder: (context) => ConfirmationPromptDialog(
-                    promptText: AppLocalizations.of(context)!
-                        .downloadLibraryPrompt(item.name),
-                    confirmButtonText:
-                        AppLocalizations.of(context)!.addButtonLabel,
-                    abortButtonText:
-                        MaterialLocalizations.of(context).cancelButtonLabel,
-                    onConfirmed: () =>
-                        DownloadDialog.show(context, item, viewId),
+                    promptText: AppLocalizations.of(context)!.downloadLibraryPrompt(item.name),
+                    confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
+                    abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
+                    onConfirmed: () => DownloadDialog.show(context, item, viewId),
                     onAborted: () {},
                   ));
         } else {
           int? trackCount = switch (item.baseItemType) {
-            BaseItemDtoType.album ||
-            BaseItemDtoType.playlist =>
-              children?.length,
-            BaseItemDtoType.artist || BaseItemDtoType.genre => children
-                ?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
+            BaseItemDtoType.album || BaseItemDtoType.playlist => children?.length,
+            BaseItemDtoType.artist ||
+            BaseItemDtoType.genre =>
+              children?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
             _ => null
           };
-          await DownloadDialog.show(context, item, viewId,
-              trackCount: trackCount);
+          await DownloadDialog.show(context, item, viewId, trackCount: trackCount);
         }
       },
       tooltip: parentTooltip,
@@ -111,13 +100,10 @@ class DownloadButton extends ConsumerWidget {
     );
     var serverDeleteButton = IconButton(
       icon: const Icon(Icons.delete_forever),
-      tooltip:
-          AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
+      tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
       onPressed: () {
         askBeforeDeleteFromServerAndDevice(context, item,
-            popIt: true,
-            refresh: () => musicScreenRefreshStream
-                .add(null)); // trigger a refresh of the music screen
+            popIt: true, refresh: () => musicScreenRefreshStream.add(null)); // trigger a refresh of the music screen
       },
     );
 
@@ -131,8 +117,7 @@ class DownloadButton extends ConsumerWidget {
               value: null,
               child: ListTile(
                   leading: Icon(Icons.delete_outline),
-                  title: Text(AppLocalizations.of(context)!
-                      .deleteFromTargetConfirmButton("")),
+                  title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
                   enabled: true,
                   onTap: () {
                     askBeforeDeleteDownloadFromDevice(context, item);
@@ -141,14 +126,12 @@ class DownloadButton extends ConsumerWidget {
               value: null,
               child: ListTile(
                   leading: Icon(Icons.delete_forever),
-                  title: Text(AppLocalizations.of(context)!
-                      .deleteFromTargetConfirmButton("server")),
+                  title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
                   enabled: true,
                   onTap: () {
                     askBeforeDeleteFromServerAndDevice(context, item,
                         popIt: true,
-                        refresh: () => musicScreenRefreshStream.add(
-                            null)); // trigger a refresh of the music screen
+                        refresh: () => musicScreenRefreshStream.add(null)); // trigger a refresh of the music screen
                   }))
         ];
       },

@@ -137,8 +137,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
 
   bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
     if (queueItem != null) {
-      final baseItem = BaseItemDto.fromJson(
-          queueItem.item.extras!["itemJson"] as Map<String, dynamic>);
+      final baseItem = BaseItemDto.fromJson(queueItem.item.extras!["itemJson"] as Map<String, dynamic>);
       return baseItem.id == queueItem.id;
     }
     return false;
@@ -154,27 +153,22 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     FeedbackHelper.feedback(FeedbackType.selection);
   }
 
-  bool shouldShowSpeedControls(
-      double currentSpeed, MetadataProvider? metadata) {
+  bool shouldShowSpeedControls(double currentSpeed, MetadataProvider? metadata) {
     if (currentSpeed != 1.0 ||
-        FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
-            PlaybackSpeedVisibility.visible) {
+        FinampSettingsHelper.finampSettings.playbackSpeedVisibility == PlaybackSpeedVisibility.visible) {
       return true;
     }
 
-    if (FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
-        PlaybackSpeedVisibility.automatic) {
+    if (FinampSettingsHelper.finampSettings.playbackSpeedVisibility == PlaybackSpeedVisibility.automatic) {
       return metadata?.qualifiesForPlaybackSpeedControl ?? false;
     }
 
     return false;
   }
 
-  void scrollToExtent(
-      DraggableScrollableController scrollController, double? percentage) {
+  void scrollToExtent(DraggableScrollableController scrollController, double? percentage) {
     var currentSize = scrollController.size;
-    if ((percentage != null && currentSize < percentage) ||
-        scrollController.size == inputStep) {
+    if ((percentage != null && currentSize < percentage) || scrollController.size == inputStep) {
       scrollController.animateTo(
         percentage ?? oldExtent,
         duration: trackMenuDefaultAnimationDuration,
@@ -188,29 +182,23 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   Widget build(BuildContext context) {
     final menuEntries = _menuEntries(context);
     var stackHeight = widget.showPlaybackControls ? 255.0 : 155.0;
-    stackHeight += menuEntries
-            .where((element) =>
-                switch (element) { Visibility e => e.visible, _ => true })
-            .length *
-        56;
+    stackHeight +=
+        menuEntries.where((element) => switch (element) { Visibility e => e.visible, _ => true }).length * 56;
 
     return Consumer(builder: (context, ref, child) {
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
-      return widget.childBuilder(
-          stackHeight, menu(context, menuEntries, metadata.value));
+      return widget.childBuilder(stackHeight, menu(context, menuEntries, metadata.value));
     });
   }
 
   // Normal track menu entries, excluding headers
   List<Widget> _menuEntries(BuildContext context) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item),
-        null);
+    final downloadStatus =
+        downloadsService.getStatus(DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item), null);
     var iconColor = Theme.of(context).colorScheme.primary;
 
-    final isInCurrentPlaylist =
-        widget.isInPlaylist && widget.parentItem != null;
+    final isInCurrentPlaylist = widget.isInPlaylist && widget.parentItem != null;
 
     final currentTrack = _queueService.getCurrentTrack();
     FinampQueueItem? queueItem;
@@ -220,13 +208,11 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
 
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
-      var parent = downloadsService.getFirstRequiringItem(DownloadStub.fromItem(
-          type: DownloadItemType.track, item: widget.item));
+      var parent = downloadsService
+          .getFirstRequiringItem(DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item));
       if (parent != null) {
-        var parentName = AppLocalizations.of(context)!
-            .itemTypeSubtitle(parent.baseItemType.name, parent.name);
-        parentTooltip =
-            AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
+        var parentName = AppLocalizations.of(context)!.itemTypeSubtitle(parent.baseItemType.name, parent.name);
+        parentTooltip = AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
       }
     }
 
@@ -266,15 +252,12 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 items: [widget.item],
                 source: QueueItemSource(
                     type: QueueItemSourceType.nextUp,
-                    name: const QueueItemSourceName(
-                        type: QueueItemSourceNameType.nextUp),
+                    name: const QueueItemSourceName(type: QueueItemSourceNameType.nextUp),
                     id: widget.item.id));
 
             if (!context.mounted) return;
 
-            GlobalSnackbar.message(
-                (context) =>
-                    AppLocalizations.of(context)!.confirmPlayNext("track"),
+            GlobalSnackbar.message((context) => AppLocalizations.of(context)!.confirmPlayNext("track"),
                 isConfirmation: true);
             Navigator.pop(context);
           },
@@ -291,15 +274,12 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               items: [widget.item],
               source: QueueItemSource(
                   type: QueueItemSourceType.nextUp,
-                  name: const QueueItemSourceName(
-                      type: QueueItemSourceNameType.nextUp),
+                  name: const QueueItemSourceName(type: QueueItemSourceNameType.nextUp),
                   id: widget.item.id));
 
           if (!context.mounted) return;
 
-          GlobalSnackbar.message(
-              (context) =>
-                  AppLocalizations.of(context)!.confirmAddToNextUp("track"),
+          GlobalSnackbar.message((context) => AppLocalizations.of(context)!.confirmAddToNextUp("track"),
               isConfirmation: true);
           Navigator.pop(context);
         },
@@ -322,9 +302,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
 
           if (!context.mounted) return;
 
-          GlobalSnackbar.message(
-              (context) => AppLocalizations.of(context)!.addedToQueue,
-              isConfirmation: true);
+          GlobalSnackbar.message((context) => AppLocalizations.of(context)!.addedToQueue, isConfirmation: true);
           Navigator.pop(context);
         },
       ),
@@ -336,12 +314,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.removeFromPlaylistTitle),
-          enabled: widget.isInPlaylist &&
-              widget.parentItem != null &&
-              !widget.isOffline,
+          enabled: widget.isInPlaylist && widget.parentItem != null && !widget.isOffline,
           onTap: () async {
-            var removed = await removeFromPlaylist(context, widget.item,
-                widget.parentItem!, widget.item.playlistItemId!,
+            var removed = await removeFromPlaylist(
+                context, widget.item, widget.parentItem!, widget.item.playlistItemId!,
                 confirm: widget.confirmPlaylistRemoval);
             if (removed) {
               if (widget.onRemoveFromList != null) {
@@ -368,9 +344,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
 
             if (!context.mounted) return;
 
-            GlobalSnackbar.message(
-                (context) => AppLocalizations.of(context)!.startingInstantMix,
-                isConfirmation: true);
+            GlobalSnackbar.message((context) => AppLocalizations.of(context)!.startingInstantMix, isConfirmation: true);
             Navigator.pop(context);
           },
         ),
@@ -382,12 +356,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 Icons.delete_outlined,
                 color: iconColor,
               ),
-              title: Text(AppLocalizations.of(context)!
-                  .deleteFromTargetConfirmButton("")),
+              title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
               enabled: downloadStatus.isRequired,
               onTap: () async {
-                var item = DownloadStub.fromItem(
-                    type: DownloadItemType.track, item: widget.item);
+                var item = DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item);
                 await askBeforeDeleteDownloadFromDevice(context, item);
               })),
       Visibility(
@@ -398,11 +370,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.downloadItem),
-          enabled: !widget.isOffline &&
-              downloadStatus == DownloadItemStatus.notNeeded,
+          enabled: !widget.isOffline && downloadStatus == DownloadItemStatus.notNeeded,
           onTap: () async {
-            var item = DownloadStub.fromItem(
-                type: DownloadItemType.track, item: widget.item);
+            var item = DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item);
             await DownloadDialog.show(context, item, null);
             if (context.mounted) {
               Navigator.pop(context);
@@ -422,8 +392,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             title: Text(AppLocalizations.of(context)!.lockDownload),
             enabled: !widget.isOffline && downloadStatus.isIncidental,
             onTap: () async {
-              var item = DownloadStub.fromItem(
-                  type: DownloadItemType.track, item: widget.item);
+              var item = DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item);
               await DownloadDialog.show(context, item, null);
               if (context.mounted) {
                 Navigator.pop(context);
@@ -440,23 +409,16 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             leading: isFav
                 ? Icon(
                     Icons.favorite,
-                    color: widget.isOffline
-                        ? iconColor.withOpacity(0.3)
-                        : iconColor,
+                    color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
                   )
                 : Icon(
                     Icons.favorite_border,
-                    color: widget.isOffline
-                        ? iconColor.withOpacity(0.3)
-                        : iconColor,
+                    color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
                   ),
-            title: Text(isFav
-                ? AppLocalizations.of(context)!.removeFavourite
-                : AppLocalizations.of(context)!.addFavourite),
+            title: Text(
+                isFav ? AppLocalizations.of(context)!.removeFavourite : AppLocalizations.of(context)!.addFavourite),
             onTap: () async {
-              ref
-                  .read(isFavoriteProvider(widget.item).notifier)
-                  .updateFavorite(!isFav);
+              ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(!isFav);
               if (context.mounted) Navigator.pop(context);
             },
           );
@@ -476,12 +438,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             try {
               if (FinampSettingsHelper.finampSettings.isOffline) {
                 final downloadsService = GetIt.instance<DownloadsService>();
-                album = (await downloadsService.getCollectionInfo(
-                        id: widget.item.albumId!))!
-                    .baseItem!;
+                album = (await downloadsService.getCollectionInfo(id: widget.item.albumId!))!.baseItem!;
               } else {
-                album =
-                    await _jellyfinApiHelper.getItemById(widget.item.albumId!);
+                album = await _jellyfinApiHelper.getItemById(widget.item.albumId!);
               }
             } catch (e) {
               GlobalSnackbar.error(e);
@@ -489,8 +448,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             }
             if (context.mounted) {
               Navigator.pop(context);
-              await Navigator.of(context)
-                  .pushNamed(AlbumScreen.routeName, arguments: album);
+              await Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album);
             }
           },
         ),
@@ -509,12 +467,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             try {
               if (FinampSettingsHelper.finampSettings.isOffline) {
                 final downloadsService = GetIt.instance<DownloadsService>();
-                artist = (await downloadsService.getCollectionInfo(
-                        id: widget.item.artistItems!.first.id))!
-                    .baseItem!;
+                artist = (await downloadsService.getCollectionInfo(id: widget.item.artistItems!.first.id))!.baseItem!;
               } else {
-                artist = await _jellyfinApiHelper
-                    .getItemById(widget.item.artistItems!.first.id);
+                artist = await _jellyfinApiHelper.getItemById(widget.item.artistItems!.first.id);
               }
             } catch (e) {
               GlobalSnackbar.error(e);
@@ -522,8 +477,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             }
             if (context.mounted) {
               Navigator.pop(context);
-              await Navigator.of(context)
-                  .pushNamed(ArtistScreen.routeName, arguments: artist);
+              await Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist);
             }
           },
         ),
@@ -542,12 +496,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             try {
               if (FinampSettingsHelper.finampSettings.isOffline) {
                 final downloadsService = GetIt.instance<DownloadsService>();
-                genre = (await downloadsService.getCollectionInfo(
-                        id: widget.item.genreItems!.first.id))!
-                    .baseItem!;
+                genre = (await downloadsService.getCollectionInfo(id: widget.item.genreItems!.first.id))!.baseItem!;
               } else {
-                genre = await _jellyfinApiHelper
-                    .getItemById(widget.item.genreItems!.first.id);
+                genre = await _jellyfinApiHelper.getItemById(widget.item.genreItems!.first.id);
               }
             } catch (e) {
               GlobalSnackbar.error(e);
@@ -555,15 +506,13 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             }
             if (context.mounted) {
               Navigator.pop(context);
-              await Navigator.of(context)
-                  .pushNamed(ArtistScreen.routeName, arguments: genre);
+              await Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: genre);
             }
           },
         ),
       ),
       Consumer(builder: (context, ref, _) {
-        var canDelete = ref
-            .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
+        var canDelete = ref.watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
         return Visibility(
             visible: canDelete,
             child: ListTile(
@@ -571,12 +520,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 Icons.delete_forever,
                 color: iconColor,
               ),
-              title: Text(AppLocalizations.of(context)!
-                  .deleteFromTargetConfirmButton("server")),
+              title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
               enabled: canDelete,
               onTap: () async {
-                var item = DownloadStub.fromItem(
-                    type: DownloadItemType.track, item: widget.item);
+                var item = DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item);
                 await askBeforeDeleteFromServerAndDevice(context, item);
                 Navigator.pop(context); // close popup
                 musicScreenRefreshStream.add(null);
@@ -587,8 +534,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   }
 
   // All track menu slivers, including headers
-  List<Widget> menu(BuildContext context, List<Widget> menuEntries,
-      MetadataProvider? metadata) {
+  List<Widget> menu(BuildContext context, List<Widget> menuEntries, MetadataProvider? metadata) {
     var iconColor = Theme.of(context).colorScheme.primary;
     return [
       SliverPersistentHeader(
@@ -601,11 +547,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         MenuMask(
             height: 135.0,
             child: StreamBuilder<PlaybackBehaviorInfo>(
-              stream: Rx.combineLatest3(
-                  _queueService.getPlaybackOrderStream(),
-                  _queueService.getLoopModeStream(),
-                  _queueService.getPlaybackSpeedStream(),
-                  (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
+              stream: Rx.combineLatest3(_queueService.getPlaybackOrderStream(), _queueService.getLoopModeStream(),
+                  _queueService.getPlaybackSpeedStream(), (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const SliverToBoxAdapter();
@@ -617,12 +560,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                   FinampPlaybackOrder.shuffled: TablerIcons.arrows_shuffle,
                 };
                 final playbackOrderTooltips = {
-                  FinampPlaybackOrder.linear: AppLocalizations.of(context)
-                          ?.playbackOrderLinearButtonLabel ??
-                      "Playing in order",
-                  FinampPlaybackOrder.shuffled: AppLocalizations.of(context)
-                          ?.playbackOrderShuffledButtonLabel ??
-                      "Shuffling",
+                  FinampPlaybackOrder.linear:
+                      AppLocalizations.of(context)?.playbackOrderLinearButtonLabel ?? "Playing in order",
+                  FinampPlaybackOrder.shuffled:
+                      AppLocalizations.of(context)?.playbackOrderShuffledButtonLabel ?? "Shuffling",
                 };
                 const loopModeIcons = {
                   FinampLoopMode.none: TablerIcons.repeat,
@@ -630,15 +571,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                   FinampLoopMode.all: TablerIcons.repeat,
                 };
                 final loopModeTooltips = {
-                  FinampLoopMode.none:
-                      AppLocalizations.of(context)?.loopModeNoneButtonLabel ??
-                          "Not looping",
-                  FinampLoopMode.one:
-                      AppLocalizations.of(context)?.loopModeOneButtonLabel ??
-                          "Looping this track",
-                  FinampLoopMode.all:
-                      AppLocalizations.of(context)?.loopModeAllButtonLabel ??
-                          "Looping all",
+                  FinampLoopMode.none: AppLocalizations.of(context)?.loopModeNoneButtonLabel ?? "Not looping",
+                  FinampLoopMode.one: AppLocalizations.of(context)?.loopModeOneButtonLabel ?? "Looping this track",
+                  FinampLoopMode.all: AppLocalizations.of(context)?.loopModeAllButtonLabel ?? "Looping all",
                 };
 
                 var sliverArray = [
@@ -648,28 +583,21 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                       _queueService.togglePlaybackOrder();
                     },
                     tooltip: playbackOrderTooltips[playbackBehavior.order]!,
-                    iconColor:
-                        playbackBehavior.order == FinampPlaybackOrder.shuffled
-                            ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
+                    iconColor: playbackBehavior.order == FinampPlaybackOrder.shuffled
+                        ? iconColor
+                        : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                   ),
                   ValueListenableBuilder<Timer?>(
                     valueListenable: _audioHandler.sleepTimer,
                     builder: (context, timerValue, child) {
-                      final remainingMinutes =
-                          (_audioHandler.sleepTimerRemaining.inSeconds / 60.0)
-                              .ceil();
+                      final remainingMinutes = (_audioHandler.sleepTimerRemaining.inSeconds / 60.0).ceil();
                       return PlaybackAction(
-                        icon: timerValue != null
-                            ? TablerIcons.hourglass_high
-                            : TablerIcons.hourglass_empty,
+                        icon: timerValue != null ? TablerIcons.hourglass_high : TablerIcons.hourglass_empty,
                         onPressed: () async {
                           if (timerValue != null) {
                             await showDialog(
                               context: context,
-                              builder: (context) =>
-                                  const SleepTimerCancelDialog(),
+                              builder: (context) => const SleepTimerCancelDialog(),
                             );
                           } else {
                             await showDialog(
@@ -679,15 +607,12 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                           }
                         },
                         tooltip: timerValue != null
-                            ? AppLocalizations.of(context)
-                                    ?.sleepTimerRemainingTime(
-                                        remainingMinutes) ??
+                            ? AppLocalizations.of(context)?.sleepTimerRemainingTime(remainingMinutes) ??
                                 "Sleeping in $remainingMinutes minutes"
                             : AppLocalizations.of(context)!.sleepTimerTooltip,
                         iconColor: timerValue != null
                             ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
+                            : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                       );
                     },
                   ),
@@ -699,8 +624,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                     },
                     tooltip: loopModeTooltips[playbackBehavior.loop]!,
                     iconColor: playbackBehavior.loop == FinampLoopMode.none
-                        ? Theme.of(context).textTheme.bodyMedium?.color ??
-                            Colors.white
+                        ? Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white
                         : iconColor,
                   ),
                 ];
@@ -710,16 +634,13 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                   onPressed: () {
                     toggleSpeedMenu();
                   },
-                  tooltip: AppLocalizations.of(context)!
-                      .playbackSpeedButtonLabel(playbackBehavior.speed),
+                  tooltip: AppLocalizations.of(context)!.playbackSpeedButtonLabel(playbackBehavior.speed),
                   iconColor: playbackBehavior.speed == 1.0
-                      ? Theme.of(context).textTheme.bodyMedium?.color ??
-                          Colors.white
+                      ? Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white
                       : iconColor,
                 );
 
-                if (speedWidgetWasVisible ||
-                    shouldShowSpeedControls(playbackBehavior.speed, metadata)) {
+                if (speedWidgetWasVisible || shouldShowSpeedControls(playbackBehavior.speed, metadata)) {
                   speedWidgetWasVisible = true;
                   sliverArray.insertAll(2, [speedWidget]);
                 }
@@ -761,8 +682,7 @@ class TrackMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return TrackInfo(
       item: item,
     );
@@ -775,8 +695,7 @@ class TrackMenuSliverAppBar extends SliverPersistentHeaderDelegate {
   double get minExtent => 150;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
 }
 
 class TrackInfo extends ConsumerStatefulWidget {
@@ -804,8 +723,7 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
       color: Colors.transparent,
       child: Center(
         child: Container(
-          margin:
-              EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
+          margin: EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
           height: widget.condensed ? 80 : 120,
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
@@ -835,15 +753,12 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        widget.item.name ??
-                            AppLocalizations.of(context)!.unknownName,
+                        widget.item.name ?? AppLocalizations.of(context)!.unknownName,
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontSize: widget.condensed ? 16 : 18,
                           height: 1.2,
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
+                          color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                         ),
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
@@ -855,27 +770,19 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
                             : const EdgeInsets.symmetric(vertical: 4.0),
                         child: ArtistChips(
                           baseItem: widget.item,
-                          backgroundColor: IconTheme.of(context)
-                                  .color
-                                  ?.withOpacity(0.1) ??
+                          backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
                               Theme.of(context).textTheme.bodyMedium?.color ??
                               Colors.white,
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
+                          color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                         ),
                       ),
                       if (!widget.condensed)
                         AlbumChips(
                           baseItem: widget.item,
-                          backgroundColor: IconTheme.of(context)
-                                  .color
-                                  ?.withOpacity(0.1) ??
+                          backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
                               Theme.of(context).textTheme.bodyMedium?.color ??
                               Colors.white,
-                          key: widget.item.album == null
-                              ? null
-                              : ValueKey("${widget.item.album}-album"),
+                          key: widget.item.album == null ? null : ValueKey("${widget.item.album}-album"),
                         )
                     ],
                   ),
@@ -942,8 +849,7 @@ class PlaybackAction extends StatelessWidget {
           onPressed();
         },
         visualDensity: VisualDensity.compact,
-        padding: const EdgeInsets.only(
-            top: 12.0, left: 12.0, right: 12.0, bottom: 16.0),
+        padding: const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0, bottom: 16.0),
         tooltip: tooltip,
       ),
     );

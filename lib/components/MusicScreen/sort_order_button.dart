@@ -13,13 +13,10 @@ class SortOrderButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var order = ref.watch(finampSettingsProvider
-        .select((x) => x.requireValue.getSortOrder(tabType)));
+    var order = ref.watch(finampSettingsProvider.select((x) => x.requireValue.getSortOrder(tabType)));
     return IconButton(
       tooltip: AppLocalizations.of(context)!.sortOrder,
-      icon: order == SortOrder.ascending
-          ? const Icon(Icons.arrow_downward)
-          : const Icon(Icons.arrow_upward),
+      icon: order == SortOrder.ascending ? const Icon(Icons.arrow_downward) : const Icon(Icons.arrow_upward),
       onPressed: () {
         if (order == SortOrder.ascending) {
           FinampSettingsHelper.setSortOrder(tabType, SortOrder.descending);

@@ -42,8 +42,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
-              decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.name),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.name),
               textInputAction: TextInputAction.done,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -74,8 +73,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: () =>
-              Navigator.of(context).pop<(Future<BaseItemId>, String?)?>(null),
+          onPressed: () => Navigator.of(context).pop<(Future<BaseItemId>, String?)?>(null),
           child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
         ),
         TextButton(
@@ -110,9 +108,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
 
           final downloadsService = GetIt.instance<DownloadsService>();
           unawaited(downloadsService.resync(
-              DownloadStub.fromFinampCollection(
-                  FinampCollection(type: FinampCollectionType.allPlaylists)),
-              null,
+              DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.allPlaylists)), null,
               keepSlow: true));
           return newId.id!;
         }),

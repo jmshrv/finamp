@@ -87,25 +87,18 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
     int localRefreshCount = refreshCount;
     try {
-      final sortOrder =
-          settings.tabSortOrder[widget.tabContentType]?.toString() ??
-              SortOrder.ascending.toString();
+      final sortOrder = settings.tabSortOrder[widget.tabContentType]?.toString() ?? SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
         // starting with Jellyfin 10.9, only automatically created playlists will have a specific library as parent. user-created playlists will not be returned anymore
         // this condition fixes this by not providing a parentId when fetching playlists
-        parentItem: widget.tabContentType.itemType == BaseItemDtoType.playlist
-            ? null
-            : widget.view,
+        parentItem: widget.tabContentType.itemType == BaseItemDtoType.playlist ? null : widget.view,
         includeItemTypes: widget.tabContentType.itemType.idString,
 
         // If we're on the tracks tab, sort by "Album,SortName". This is what the
         // Jellyfin web client does. If this isn't the case, sort by "SortName".
         // If widget.sortBy is set, it is used instead.
-        sortBy: settings.tabSortBy[widget.tabContentType]
-                ?.jellyfinName(widget.tabContentType) ??
-            (widget.tabContentType == TabContentType.tracks
-                ? "Album,SortName"
-                : "SortName"),
+        sortBy: settings.tabSortBy[widget.tabContentType]?.jellyfinName(widget.tabContentType) ??
+            (widget.tabContentType == TabContentType.tracks ? "Album,SortName" : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
         filters: settings.onlyShowFavourites ? "IsFavorite" : null,
@@ -137,9 +130,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
     int localRefreshCount = refreshCount;
-    var artistInfoForType = (settings.artistListType == ArtistType.albumartist)
-        ? BaseItemDtoType.album
-        : BaseItemDtoType.track;
+    var artistInfoForType =
+        (settings.artistListType == ArtistType.albumartist) ? BaseItemDtoType.album : BaseItemDtoType.track;
 
     List<DownloadStub> offlineItems;
     if (widget.tabContentType == TabContentType.tracks) {
@@ -149,34 +141,26 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           nameFilter: widget.searchTerm,
           viewFilter: widget.view?.id,
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-          onlyFavorites:
-              settings.onlyShowFavourites && settings.trackOfflineFavorites);
+          onlyFavorites: settings.onlyShowFavourites && settings.trackOfflineFavorites);
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
         nameFilter: widget.searchTerm,
         baseTypeFilter: widget.tabContentType.itemType,
         fullyDownloaded: settings.onlyShowFullyDownloaded,
-        viewFilter: widget.tabContentType == TabContentType.albums
-            ? widget.view?.id
-            : null,
-        childViewFilter: (widget.tabContentType != TabContentType.albums &&
-                widget.tabContentType != TabContentType.playlists)
-            ? widget.view?.id
-            : null,
-        nullableViewFilters: widget.tabContentType == TabContentType.albums &&
-            settings.showDownloadsWithUnknownLibrary,
-        onlyFavorites:
-            settings.onlyShowFavourites && settings.trackOfflineFavorites,
-        infoForType: (widget.tabContentType == TabContentType.artists)
-            ? artistInfoForType
-            : null,
+        viewFilter: widget.tabContentType == TabContentType.albums ? widget.view?.id : null,
+        childViewFilter:
+            (widget.tabContentType != TabContentType.albums && widget.tabContentType != TabContentType.playlists)
+                ? widget.view?.id
+                : null,
+        nullableViewFilters: widget.tabContentType == TabContentType.albums && settings.showDownloadsWithUnknownLibrary,
+        onlyFavorites: settings.onlyShowFavourites && settings.trackOfflineFavorites,
+        infoForType: (widget.tabContentType == TabContentType.artists) ? artistInfoForType : null,
       );
     }
 
     var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
 
-    items = sortItems(items, settings.tabSortBy[widget.tabContentType],
-        settings.tabSortOrder[widget.tabContentType]);
+    items = sortItems(items, settings.tabSortBy[widget.tabContentType], settings.tabSortOrder[widget.tabContentType]);
 
     // Skip appending page if a refresh triggered while processing
     if (localRefreshCount == refreshCount && mounted) {
@@ -195,15 +179,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     });
     controller = AutoScrollController(
         suggestedRowHeight: 72,
-        viewportBoundaryGetter: () =>
-            Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
         axis: Axis.vertical);
-    _musicScreenRefreshStreamSubscription =
-        musicScreenRefreshStream.stream.listen((_) {
+    _musicScreenRefreshStreamSubscription = musicScreenRefreshStream.stream.listen((_) {
       _refresh();
     });
-    _downloadsRefreshStreamSubscription =
-        _isarDownloader.offlineDeletesStream.listen((event) {
+    _downloadsRefreshStreamSubscription = _isarDownloader.offlineDeletesStream.listen((event) {
       _refresh();
     });
     super.initState();
@@ -227,20 +208,15 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
 
     //TODO use binary search to improve performance for already loaded pages
-    bool reversed = FinampSettingsHelper
-            .finampSettings.tabSortOrder[widget.tabContentType] ==
-        SortOrder.descending;
+    bool reversed = FinampSettingsHelper.finampSettings.tabSortOrder[widget.tabContentType] == SortOrder.descending;
     for (var i = 0; i < _pagingController.itemList!.length; i++) {
-      int itemCodePoint = _pagingController.itemList![i].nameForSorting!
-          .toLowerCase()
-          .codeUnitAt(0);
+      int itemCodePoint = _pagingController.itemList![i].nameForSorting!.toLowerCase().codeUnitAt(0);
       if (itemCodePoint <= maxCodePoint) {
         final comparisonResult = itemCodePoint - codePointToScrollTo;
         if (comparisonResult == 0) {
           timer?.cancel();
           await controller.scrollToIndex(i,
-              duration: _getAnimationDurationForOffsetToIndex(i),
-              preferPosition: AutoScrollPosition.begin);
+              duration: _getAnimationDurationForOffsetToIndex(i), preferPosition: AutoScrollPosition.begin);
 
           letterToSearch = null;
           return;
@@ -248,8 +224,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
           // scroll to the previous item instead
           timer?.cancel();
-          await controller.scrollToIndex(
-              (i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
+          await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
               // duration: scrollDuration,
               duration: _getAnimationDurationForOffsetToIndex(i),
               preferPosition: AutoScrollPosition.middle);
@@ -269,8 +244,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         letterToSearch = null;
       });
 
-      _pagingController
-          .notifyPageRequestListeners(_pagingController.nextPageKey!);
+      _pagingController.notifyPageRequestListeners(_pagingController.nextPageKey!);
     }
     await controller.animateTo(controller.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500), curve: Curves.ease);
@@ -281,8 +255,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
 
     final duration = Duration(
-      milliseconds:
-          ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
+      milliseconds: ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
     );
     return duration;
   }
@@ -336,8 +309,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           }
 
           final emptyListIndicator = Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
             child: Column(
               children: [
                 Text(
@@ -360,34 +332,27 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                   icon: TablerIcons.filter_x,
                   text: AppLocalizations.of(context)!.resetFiltersButton,
                   onPressed: () {
-                    FinampSetters.setOnlyShowFavourites(
-                        DefaultSettings.onlyShowFavourites);
-                    FinampSetters.setOnlyShowFullyDownloaded(
-                        DefaultSettings.onlyShowFullyDownloaded);
+                    FinampSetters.setOnlyShowFavourites(DefaultSettings.onlyShowFavourites);
+                    FinampSetters.setOnlyShowFullyDownloaded(DefaultSettings.onlyShowFullyDownloaded);
                   },
                 )
               ],
             ),
           );
 
-          var tabContent = box.get("FinampSettings")!.contentViewType ==
-                      ContentViewType.list ||
+          var tabContent = box.get("FinampSettings")!.contentViewType == ContentViewType.list ||
                   widget.tabContentType == TabContentType.tracks
               ? PagedListView<int, BaseItemDto>.separated(
                   pagingController: _pagingController,
                   scrollController: controller,
-                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(
-                      tabState: this),
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
                     itemBuilder: (context, item, index) {
                       // Use right padding inherited from fast scroller minus
                       // built-in icon padding
                       return Padding(
-                        padding: EdgeInsets.only(
-                            right: max(
-                                0, MediaQuery.paddingOf(context).right - 20)),
+                        padding: EdgeInsets.only(right: max(0, MediaQuery.paddingOf(context).right - 20)),
                         child: AutoScrollTag(
                           key: ValueKey(index),
                           controller: controller,
@@ -404,27 +369,22 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                               : AlbumItem(
                                   key: ValueKey(item.id),
                                   album: item,
-                                  isPlaylist: widget.tabContentType ==
-                                      TabContentType.playlists,
+                                  isPlaylist: widget.tabContentType == TabContentType.playlists,
                                 ),
                         ),
                       );
                     },
-                    firstPageProgressIndicatorBuilder: (_) =>
-                        const FirstPageProgressIndicator(),
-                    newPageProgressIndicatorBuilder: (_) =>
-                        const NewPageProgressIndicator(),
+                    firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
+                    newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
                     noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
                   ),
                   separatorBuilder: (context, index) => const SizedBox.shrink(),
                 )
               : PagedGridView(
                   pagingController: _pagingController,
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   scrollController: controller,
-                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(
-                      tabState: this),
+                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
                   builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
                     itemBuilder: (context, item, index) {
                       return AutoScrollTag(
@@ -434,31 +394,22 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         child: AlbumItem(
                           key: ValueKey(item.id),
                           album: item,
-                          isPlaylist:
-                              widget.tabContentType == TabContentType.playlists,
+                          isPlaylist: widget.tabContentType == TabContentType.playlists,
                           isGrid: true,
                         ),
                       );
                     },
-                    firstPageProgressIndicatorBuilder: (_) =>
-                        const FirstPageProgressIndicator(),
-                    newPageProgressIndicatorBuilder: (_) =>
-                        const NewPageProgressIndicator(),
+                    firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
+                    newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
                     noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
                   ),
-                  gridDelegate: FinampSettingsHelper
-                          .finampSettings.useFixedSizeGridTiles
+                  gridDelegate: FinampSettingsHelper.finampSettings.useFixedSizeGridTiles
                       ? SliverGridDelegateWithFixedSizeTiles(
-                          gridTileSize: FinampSettingsHelper
-                              .finampSettings.fixedGridTileSize
-                              .toDouble())
+                          gridTileSize: FinampSettingsHelper.finampSettings.fixedGridTileSize.toDouble())
                       : SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: MediaQuery.of(context).size.width >
-                                  MediaQuery.of(context).size.height
-                              ? FinampSettingsHelper.finampSettings
-                                  .contentGridViewCrossAxisCountLandscape
-                              : FinampSettingsHelper.finampSettings
-                                  .contentGridViewCrossAxisCountPortrait,
+                          crossAxisCount: MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
+                              ? FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountLandscape
+                              : FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountPortrait,
                         ),
                 );
 
@@ -469,8 +420,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                 ? AlphabetList(
                     callback: scrollToLetter,
                     scrollController: controller,
-                    sortOrder: settings.tabSortOrder[widget.tabContentType] ??
-                        SortOrder.ascending,
+                    sortOrder: settings.tabSortOrder[widget.tabContentType] ?? SortOrder.ascending,
                     child: tabContent)
                 : tabContent,
           );
@@ -496,8 +446,7 @@ class SliverGridDelegateWithFixedSizeTiles extends SliverGridDelegate {
     // Ensure a minimum count of 1, can be zero and result in an infinite extent
     // below when the window size is 0.
     crossAxisCount = max(1, crossAxisCount);
-    final double crossAxisSpacing =
-        (constraints.crossAxisExtent / crossAxisCount);
+    final double crossAxisSpacing = (constraints.crossAxisExtent / crossAxisCount);
     return SliverGridRegularTileLayout(
       crossAxisCount: crossAxisCount,
       mainAxisStride: gridTileSize,
@@ -514,23 +463,18 @@ class SliverGridDelegateWithFixedSizeTiles extends SliverGridDelegate {
   }
 }
 
-class _DeferredLoadingAlwaysScrollableScrollPhysics
-    extends AlwaysScrollableScrollPhysics {
-  const _DeferredLoadingAlwaysScrollableScrollPhysics(
-      {super.parent, required this.tabState});
+class _DeferredLoadingAlwaysScrollableScrollPhysics extends AlwaysScrollableScrollPhysics {
+  const _DeferredLoadingAlwaysScrollableScrollPhysics({super.parent, required this.tabState});
 
   final _MusicScreenTabViewState tabState;
 
   @override
-  _DeferredLoadingAlwaysScrollableScrollPhysics applyTo(
-      ScrollPhysics? ancestor) {
-    return _DeferredLoadingAlwaysScrollableScrollPhysics(
-        parent: buildParent(ancestor), tabState: tabState);
+  _DeferredLoadingAlwaysScrollableScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return _DeferredLoadingAlwaysScrollableScrollPhysics(parent: buildParent(ancestor), tabState: tabState);
   }
 
   @override
-  bool recommendDeferredLoading(
-      double velocity, ScrollMetrics metrics, BuildContext context) {
+  bool recommendDeferredLoading(double velocity, ScrollMetrics metrics, BuildContext context) {
     if (tabState.letterToSearch != null) {
       return true;
     }
@@ -538,8 +482,7 @@ class _DeferredLoadingAlwaysScrollableScrollPhysics
   }
 }
 
-List<BaseItemDto> sortItems(
-    List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
+List<BaseItemDto> sortItems(List<BaseItemDto> itemsToSort, SortBy? sortBy, SortOrder? sortOrder) {
   if (sortBy == SortBy.random) {
     itemsToSort.shuffle();
   } else {
@@ -595,7 +538,5 @@ List<BaseItemDto> sortItems(
     });
   }
 
-  return sortOrder == SortOrder.descending
-      ? itemsToSort.reversed.toList()
-      : itemsToSort;
+  return sortOrder == SortOrder.descending ? itemsToSort.reversed.toList() : itemsToSort;
 }

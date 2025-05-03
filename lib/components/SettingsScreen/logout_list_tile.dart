@@ -44,38 +44,30 @@ class LogoutListTile extends ConsumerWidget {
             title: Text(AppLocalizations.of(context)!.areYouSure),
             actions: [
               TextButton(
-                child:
-                    Text(MaterialLocalizations.of(context).cancelButtonLabel),
+                child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               TextButton(
                 child: Text(MaterialLocalizations.of(context).okButtonLabel),
                 onPressed: () async {
                   try {
-                    final audioHandler =
-                        GetIt.instance<MusicPlayerBackgroundTask>();
+                    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
                     final queueService = GetIt.instance<QueueService>();
 
                     // We don't want audio to be playing after we log out.
                     // We check if the audio service is running on iOS because
                     // stop() never completes if the service is not running.
-                    if (!Platform.isIOS ||
-                        (audioHandler.playbackState.valueOrNull?.playing ??
-                            false)) {
+                    if (!Platform.isIOS || (audioHandler.playbackState.valueOrNull?.playing ?? false)) {
                       await queueService.stopPlayback();
                     }
 
-                    final jellyfinApiHelper =
-                        GetIt.instance<JellyfinApiHelper>();
+                    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-                    await jellyfinApiHelper
-                        .logoutCurrentUser()
-                        .onError((_, __) {});
+                    await jellyfinApiHelper.logoutCurrentUser().onError((_, __) {});
 
                     if (!context.mounted) return;
 
-                    await Navigator.of(context).pushNamedAndRemoveUntil(
-                        SplashScreen.routeName, (route) => false);
+                    await Navigator.of(context).pushNamedAndRemoveUntil(SplashScreen.routeName, (route) => false);
                   } catch (e) {
                     GlobalSnackbar.error(e);
                     return;

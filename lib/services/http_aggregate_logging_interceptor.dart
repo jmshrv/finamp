@@ -8,15 +8,12 @@ final aggregateLogger = ChopperAggregateLogger();
 /// A HttpLoggingInterceptor that aggregates the request and
 /// response logs from Chopper, using the [ChopperAggregateLogger].
 class HttpAggregateLoggingInterceptor extends HttpLoggingInterceptor {
-  HttpAggregateLoggingInterceptor({super.level = Level.body})
-      : super(logger: aggregateLogger);
+  HttpAggregateLoggingInterceptor({super.level = Level.body}) : super(logger: aggregateLogger);
 
   @override
-  FutureOr<Response<BodyType>> intercept<BodyType>(
-      Chain<BodyType> chain) async {
+  FutureOr<Response<BodyType>> intercept<BodyType>(Chain<BodyType> chain) async {
     aggregateLogger.onStartRequest(chain.request);
-    final Response<BodyType> response =
-        await super.intercept(HttpAggregateLoggingChain(chain));
+    final Response<BodyType> response = await super.intercept(HttpAggregateLoggingChain(chain));
     // Request info isn't printed until after response completes
     aggregateLogger.onEndRequest(chain.request);
     aggregateLogger.onEndResponse(response);

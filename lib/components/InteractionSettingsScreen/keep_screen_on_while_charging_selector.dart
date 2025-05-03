@@ -11,8 +11,7 @@ class KeepScreenOnWhilePluggedInSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.keepScreenOnWhilePluggedIn),
-      subtitle: Text(
-          AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
       value: ref.watch(finampSettingsProvider.keepScreenOnWhilePluggedIn),
       onChanged: (value) {
         FinampSetters.setKeepScreenOnWhilePluggedIn(value);

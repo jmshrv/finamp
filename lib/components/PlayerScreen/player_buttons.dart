@@ -26,8 +26,8 @@ class PlayerButtons extends StatelessWidget {
 
     return StreamBuilder<MediaState>(
         stream: mediaStateStream,
-        initialData: MediaState(audioHandler.mediaItem.valueOrNull,
-            audioHandler.playbackState.value, audioHandler.fadeState.value),
+        initialData: MediaState(
+            audioHandler.mediaItem.valueOrNull, audioHandler.playbackState.value, audioHandler.fadeState.value),
         builder: (context, snapshot) {
           final mediaState = snapshot.data!;
           final playbackState = mediaState.playbackState;
@@ -38,12 +38,10 @@ class PlayerButtons extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             textDirection: TextDirection.ltr,
             children: [
-              if (controller.shouldShow(PlayerHideable.loopShuffleButtons))
-                PlayerButtonsRepeating(),
+              if (controller.shouldShow(PlayerHideable.loopShuffleButtons)) PlayerButtonsRepeating(),
               Semantics.fromProperties(
                 properties: SemanticsProperties(
-                  label: AppLocalizations.of(context)!
-                      .skipToPreviousTrackButtonTooltip,
+                  label: AppLocalizations.of(context)!.skipToPreviousTrackButtonTooltip,
                   button: true,
                 ),
                 container: true,
@@ -58,38 +56,26 @@ class PlayerButtons extends StatelessWidget {
               ),
               Semantics.fromProperties(
                 properties: SemanticsProperties(
-                  label:
-                      AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
+                  label: AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
                   button: true,
                 ),
                 container: true,
                 excludeSemantics: true,
                 child: _RoundedIconButton(
-                    width: controller.shouldShow(PlayerHideable.bigPlayButton)
-                        ? 62
-                        : 48,
-                    height: controller.shouldShow(PlayerHideable.bigPlayButton)
-                        ? 62
-                        : 48,
-                    borderRadius: BorderRadius.circular(
-                        controller.shouldShow(PlayerHideable.bigPlayButton)
-                            ? 16
-                            : 12),
+                    width: controller.shouldShow(PlayerHideable.bigPlayButton) ? 62 : 48,
+                    height: controller.shouldShow(PlayerHideable.bigPlayButton) ? 62 : 48,
+                    borderRadius: BorderRadius.circular(controller.shouldShow(PlayerHideable.bigPlayButton) ? 16 : 12),
                     onTap: () {
                       FeedbackHelper.feedback(FeedbackType.light);
                       unawaited(audioHandler.togglePlayback());
                     },
                     icon: AudioFadeProgressVisualizerContainer(
-                        key: const Key(
-                            "PlayerButtonAudioFadeProgressVisualizer"),
-                        borderRadius: BorderRadius.all(Radius.circular(
-                            controller.shouldShow(PlayerHideable.bigPlayButton)
-                                ? 16
-                                : 12)),
+                        key: const Key("PlayerButtonAudioFadeProgressVisualizer"),
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(controller.shouldShow(PlayerHideable.bigPlayButton) ? 16 : 12)),
                         child: Icon(
                             playbackState.playing
-                                ? fadeState.fadeDirection !=
-                                        FadeDirection.fadeOut
+                                ? fadeState.fadeDirection != FadeDirection.fadeOut
                                     ? TablerIcons.player_pause
                                     : TablerIcons.player_play
                                 : TablerIcons.player_play,
@@ -97,8 +83,7 @@ class PlayerButtons extends StatelessWidget {
               ),
               Semantics.fromProperties(
                 properties: SemanticsProperties(
-                  label: AppLocalizations.of(context)!
-                      .skipToNextTrackButtonTooltip,
+                  label: AppLocalizations.of(context)!.skipToNextTrackButtonTooltip,
                   button: true,
                 ),
                 container: true,
@@ -111,8 +96,7 @@ class PlayerButtons extends StatelessWidget {
                   },
                 ),
               ),
-              if (controller.shouldShow(PlayerHideable.loopShuffleButtons))
-                PlayerButtonsShuffle()
+              if (controller.shouldShow(PlayerHideable.loopShuffleButtons)) PlayerButtonsShuffle()
             ],
           );
         });
@@ -148,8 +132,7 @@ class _RoundedIconButton extends StatelessWidget {
             BoxShadow(
               blurRadius: 2,
               offset: const Offset(0, 2),
-              color: (icon.color ?? IconTheme.of(context).color)!
-                  .withOpacity(0.25),
+              color: (icon.color ?? IconTheme.of(context).color)!.withOpacity(0.25),
             )
           ],
     );
@@ -158,8 +141,7 @@ class _RoundedIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final actualBorderRadius = borderRadius ?? BorderRadius.circular(height);
-    final actualIcon =
-        icon is Icon ? _addDropShadow(icon as Icon, context) : icon;
+    final actualIcon = icon is Icon ? _addDropShadow(icon as Icon, context) : icon;
     return SizedBox(
       width: width,
       height: height,

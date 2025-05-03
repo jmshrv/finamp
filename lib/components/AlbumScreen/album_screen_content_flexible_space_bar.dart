@@ -47,17 +47,13 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
         items: items,
         source: QueueItemSource(
-          type: isPlaylist
-              ? QueueItemSourceType.playlist
-              : QueueItemSourceType.album,
+          type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextNormalizationGain:
-              isPlaylist ? null : parentItem.normalizationGain,
+          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
         ),
         order: FinampPlaybackOrder.linear,
       );
@@ -67,17 +63,13 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
         items: items,
         source: QueueItemSource(
-          type: isPlaylist
-              ? QueueItemSourceType.playlist
-              : QueueItemSourceType.album,
+          type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextNormalizationGain:
-              isPlaylist ? null : parentItem.normalizationGain,
+          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
         ),
         order: FinampPlaybackOrder.shuffled,
       );
@@ -87,22 +79,17 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToNextUp(
         items: items,
         source: QueueItemSource(
-          type: isPlaylist
-              ? QueueItemSourceType.nextUpPlaylist
-              : QueueItemSourceType.nextUpAlbum,
+          type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
-          contextNormalizationGain:
-              isPlaylist ? null : parentItem.normalizationGain,
+          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
         ),
       );
       GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmAddToNextUp(isPlaylist ? "playlist" : "album"),
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp(isPlaylist ? "playlist" : "album"),
           isConfirmation: true);
     }
 
@@ -110,21 +97,16 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
           items: items,
           source: QueueItemSource(
-            type: isPlaylist
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.nextUpAlbum,
+            type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
+                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextNormalizationGain:
-                isPlaylist ? null : parentItem.normalizationGain,
+            contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
           ));
       GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmPlayNext(isPlaylist ? "playlist" : "album"),
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(isPlaylist ? "playlist" : "album"),
           isConfirmation: true);
     }
 
@@ -135,21 +117,15 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToNextUp(
           items: clonedItems,
           source: QueueItemSource(
-            type: isPlaylist
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.nextUpAlbum,
+            type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
+                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextNormalizationGain:
-                isPlaylist ? null : parentItem.normalizationGain,
+            contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
           ));
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
     }
 
     void shuffleAlbumNext() {
@@ -159,41 +135,31 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
           items: clonedItems,
           source: QueueItemSource(
-            type: isPlaylist
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.nextUpAlbum,
+            type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
+                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
-            contextNormalizationGain:
-                isPlaylist ? null : parentItem.normalizationGain,
+            contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
           ));
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
     }
 
     void addAlbumToQueue() {
       queueService.addToQueue(
         items: items,
         source: QueueItemSource(
-          type: isPlaylist
-              ? QueueItemSourceType.playlist
-              : QueueItemSourceType.album,
+          type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
       );
       GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmAddToQueue(isPlaylist ? "playlist" : "album"),
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue(isPlaylist ? "playlist" : "album"),
           isConfirmation: true);
     }
 
@@ -204,19 +170,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToQueue(
           items: clonedItems,
           source: QueueItemSource(
-            type: isPlaylist
-                ? QueueItemSourceType.playlist
-                : QueueItemSourceType.album,
+            type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
+                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           ));
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
     }
 
     return FlexibleSpaceBar(
@@ -250,182 +211,146 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CTAMedium(
-                                text: AppLocalizations.of(context)!
-                                    .playButtonLabel
-                                    .toUpperCase(),
-                                icon: TablerIcons.player_play,
-                                onPressed: () => playAlbum(),
-                                // set the minimum width as 25% of the screen width,
-                                minWidth:
-                                    MediaQuery.of(context).size.width * 0.25,
-                              ),
-                              PopupMenuButton<AlbumMenuItems>(
-                                enableFeedback: true,
-                                icon: const Icon(TablerIcons.dots_vertical),
-                                onOpened: () =>
-                                    FeedbackHelper.feedback(FeedbackType.light),
-                                itemBuilder: (context) {
-                                  final queueService =
-                                      GetIt.instance<QueueService>();
-                                  return <PopupMenuEntry<AlbumMenuItems>>[
-                                    if (queueService
-                                        .getQueue()
-                                        .nextUp
-                                        .isNotEmpty)
-                                      PopupMenuItem<AlbumMenuItems>(
-                                        value: AlbumMenuItems.playNext,
-                                        child: ListTile(
-                                          leading: const Icon(
-                                              TablerIcons.corner_right_down),
-                                          title: Text(
-                                              AppLocalizations.of(context)!
-                                                  .playNext),
-                                        ),
-                                      ),
-                                    PopupMenuItem<AlbumMenuItems>(
-                                      value: AlbumMenuItems.addToNextUp,
-                                      child: ListTile(
-                                        leading: const Icon(TablerIcons
-                                            .corner_right_down_double),
-                                        title: Text(
-                                            AppLocalizations.of(context)!
-                                                .addToNextUp),
-                                      ),
-                                    ),
-                                    PopupMenuItem<AlbumMenuItems>(
-                                      value: AlbumMenuItems.addToQueue,
-                                      child: ListTile(
-                                        leading:
-                                            const Icon(TablerIcons.playlist),
-                                        title: Text(
-                                            AppLocalizations.of(context)!
-                                                .addToQueue),
-                                      ),
-                                    ),
-                                  ];
-                                },
-                                onSelected: (AlbumMenuItems selection) async {
-                                  switch (selection) {
-                                    case AlbumMenuItems.playNext:
-                                      addAlbumNext();
-                                      break;
-                                    case AlbumMenuItems.addToNextUp:
-                                      addAlbumToNextUp();
-                                      break;
-                                    case AlbumMenuItems.shuffleNext:
-                                      shuffleAlbumNext();
-                                      break;
-                                    case AlbumMenuItems.shuffleToNextUp:
-                                      shuffleAlbumToNextUp();
-                                      break;
-                                    case AlbumMenuItems.addToQueue:
-                                      addAlbumToQueue();
-                                      break;
-                                    case AlbumMenuItems.shuffleToQueue:
-                                      shuffleAlbumToQueue();
-                                      break;
-                                    default:
-                                      break;
-                                  }
-                                },
-                              ),
-                            ],
+                          CTAMedium(
+                            text: AppLocalizations.of(context)!.playButtonLabel.toUpperCase(),
+                            icon: TablerIcons.player_play,
+                            onPressed: () => playAlbum(),
+                            // set the minimum width as 25% of the screen width,
+                            minWidth: MediaQuery.of(context).size.width * 0.25,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CTAMedium(
-                                text: AppLocalizations.of(context)!
-                                    .shuffleButtonLabel
-                                    .toUpperCase(),
-                                icon: TablerIcons.arrows_shuffle,
-                                onPressed: () => shuffleAlbum(),
-                                // set the minimum width as 25% of the screen width,
-                                minWidth:
-                                    MediaQuery.of(context).size.width * 0.25,
-                              ),
-                              PopupMenuButton<AlbumMenuItems>(
-                                enableFeedback: true,
-                                icon: const Icon(TablerIcons.dots_vertical),
-                                onOpened: () =>
-                                    FeedbackHelper.feedback(FeedbackType.light),
-                                itemBuilder: (context) {
-                                  final queueService =
-                                      GetIt.instance<QueueService>();
-                                  return <PopupMenuEntry<AlbumMenuItems>>[
-                                    if (queueService
-                                        .getQueue()
-                                        .nextUp
-                                        .isNotEmpty)
-                                      PopupMenuItem<AlbumMenuItems>(
-                                        value: AlbumMenuItems.shuffleNext,
-                                        child: ListTile(
-                                          leading: const Icon(
-                                              TablerIcons.corner_right_down),
-                                          title: Text(
-                                              AppLocalizations.of(context)!
-                                                  .shuffleNext),
-                                        ),
-                                      ),
-                                    PopupMenuItem<AlbumMenuItems>(
-                                      value: AlbumMenuItems.shuffleToNextUp,
-                                      child: ListTile(
-                                        leading: const Icon(TablerIcons
-                                            .corner_right_down_double),
-                                        title: Text(
-                                            AppLocalizations.of(context)!
-                                                .shuffleToNextUp),
-                                      ),
+                          PopupMenuButton<AlbumMenuItems>(
+                            enableFeedback: true,
+                            icon: const Icon(TablerIcons.dots_vertical),
+                            onOpened: () => FeedbackHelper.feedback(FeedbackType.light),
+                            itemBuilder: (context) {
+                              final queueService = GetIt.instance<QueueService>();
+                              return <PopupMenuEntry<AlbumMenuItems>>[
+                                if (queueService.getQueue().nextUp.isNotEmpty)
+                                  PopupMenuItem<AlbumMenuItems>(
+                                    value: AlbumMenuItems.playNext,
+                                    child: ListTile(
+                                      leading: const Icon(TablerIcons.corner_right_down),
+                                      title: Text(AppLocalizations.of(context)!.playNext),
                                     ),
-                                    PopupMenuItem<AlbumMenuItems>(
-                                      value: AlbumMenuItems.shuffleToQueue,
-                                      child: ListTile(
-                                        leading:
-                                            const Icon(TablerIcons.playlist),
-                                        title: Text(
-                                            AppLocalizations.of(context)!
-                                                .shuffleToQueue),
-                                      ),
-                                    ),
-                                  ];
-                                },
-                                onSelected: (AlbumMenuItems selection) async {
-                                  switch (selection) {
-                                    case AlbumMenuItems.playNext:
-                                      addAlbumNext();
-                                      break;
-                                    case AlbumMenuItems.addToNextUp:
-                                      addAlbumToNextUp();
-                                      break;
-                                    case AlbumMenuItems.shuffleNext:
-                                      shuffleAlbumNext();
-                                      break;
-                                    case AlbumMenuItems.shuffleToNextUp:
-                                      shuffleAlbumToNextUp();
-                                      break;
-                                    case AlbumMenuItems.addToQueue:
-                                      addAlbumToQueue();
-                                      break;
-                                    case AlbumMenuItems.shuffleToQueue:
-                                      shuffleAlbumToQueue();
-                                      break;
-                                    default:
-                                      break;
-                                  }
-                                },
-                              ),
-                            ],
+                                  ),
+                                PopupMenuItem<AlbumMenuItems>(
+                                  value: AlbumMenuItems.addToNextUp,
+                                  child: ListTile(
+                                    leading: const Icon(TablerIcons.corner_right_down_double),
+                                    title: Text(AppLocalizations.of(context)!.addToNextUp),
+                                  ),
+                                ),
+                                PopupMenuItem<AlbumMenuItems>(
+                                  value: AlbumMenuItems.addToQueue,
+                                  child: ListTile(
+                                    leading: const Icon(TablerIcons.playlist),
+                                    title: Text(AppLocalizations.of(context)!.addToQueue),
+                                  ),
+                                ),
+                              ];
+                            },
+                            onSelected: (AlbumMenuItems selection) async {
+                              switch (selection) {
+                                case AlbumMenuItems.playNext:
+                                  addAlbumNext();
+                                  break;
+                                case AlbumMenuItems.addToNextUp:
+                                  addAlbumToNextUp();
+                                  break;
+                                case AlbumMenuItems.shuffleNext:
+                                  shuffleAlbumNext();
+                                  break;
+                                case AlbumMenuItems.shuffleToNextUp:
+                                  shuffleAlbumToNextUp();
+                                  break;
+                                case AlbumMenuItems.addToQueue:
+                                  addAlbumToQueue();
+                                  break;
+                                case AlbumMenuItems.shuffleToQueue:
+                                  shuffleAlbumToQueue();
+                                  break;
+                                default:
+                                  break;
+                              }
+                            },
                           ),
-                        ]),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CTAMedium(
+                            text: AppLocalizations.of(context)!.shuffleButtonLabel.toUpperCase(),
+                            icon: TablerIcons.arrows_shuffle,
+                            onPressed: () => shuffleAlbum(),
+                            // set the minimum width as 25% of the screen width,
+                            minWidth: MediaQuery.of(context).size.width * 0.25,
+                          ),
+                          PopupMenuButton<AlbumMenuItems>(
+                            enableFeedback: true,
+                            icon: const Icon(TablerIcons.dots_vertical),
+                            onOpened: () => FeedbackHelper.feedback(FeedbackType.light),
+                            itemBuilder: (context) {
+                              final queueService = GetIt.instance<QueueService>();
+                              return <PopupMenuEntry<AlbumMenuItems>>[
+                                if (queueService.getQueue().nextUp.isNotEmpty)
+                                  PopupMenuItem<AlbumMenuItems>(
+                                    value: AlbumMenuItems.shuffleNext,
+                                    child: ListTile(
+                                      leading: const Icon(TablerIcons.corner_right_down),
+                                      title: Text(AppLocalizations.of(context)!.shuffleNext),
+                                    ),
+                                  ),
+                                PopupMenuItem<AlbumMenuItems>(
+                                  value: AlbumMenuItems.shuffleToNextUp,
+                                  child: ListTile(
+                                    leading: const Icon(TablerIcons.corner_right_down_double),
+                                    title: Text(AppLocalizations.of(context)!.shuffleToNextUp),
+                                  ),
+                                ),
+                                PopupMenuItem<AlbumMenuItems>(
+                                  value: AlbumMenuItems.shuffleToQueue,
+                                  child: ListTile(
+                                    leading: const Icon(TablerIcons.playlist),
+                                    title: Text(AppLocalizations.of(context)!.shuffleToQueue),
+                                  ),
+                                ),
+                              ];
+                            },
+                            onSelected: (AlbumMenuItems selection) async {
+                              switch (selection) {
+                                case AlbumMenuItems.playNext:
+                                  addAlbumNext();
+                                  break;
+                                case AlbumMenuItems.addToNextUp:
+                                  addAlbumToNextUp();
+                                  break;
+                                case AlbumMenuItems.shuffleNext:
+                                  shuffleAlbumNext();
+                                  break;
+                                case AlbumMenuItems.shuffleToNextUp:
+                                  shuffleAlbumToNextUp();
+                                  break;
+                                case AlbumMenuItems.addToQueue:
+                                  addAlbumToQueue();
+                                  break;
+                                case AlbumMenuItems.shuffleToQueue:
+                                  shuffleAlbumToQueue();
+                                  break;
+                                default:
+                                  break;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ]),
                   ),
                 )
               ],

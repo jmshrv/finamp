@@ -32,8 +32,7 @@ class MusicScreen extends ConsumerStatefulWidget {
   ConsumerState<MusicScreen> createState() => _MusicScreenState();
 }
 
-class _MusicScreenState extends ConsumerState<MusicScreen>
-    with TickerProviderStateMixin {
+class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderStateMixin {
   bool isSearching = false;
   bool _showShuffleFab = false;
   TextEditingController textEditingController = TextEditingController();
@@ -60,9 +59,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         .elementAt(_tabController!.index)
         .key;
     if (_tabController != null &&
-        (tabKey == TabContentType.tracks ||
-            tabKey == TabContentType.artists ||
-            tabKey == TabContentType.albums)) {
+        (tabKey == TabContentType.tracks || tabKey == TabContentType.artists || tabKey == TabContentType.albums)) {
       setState(() {
         _showShuffleFab = true;
       });
@@ -79,9 +76,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     _tabController?.removeListener(_tabIndexCallback);
 
     _tabController = TabController(
-      length: FinampSettingsHelper.finampSettings.showTabs.entries
-          .where((element) => element.value)
-          .length,
+      length: FinampSettingsHelper.finampSettings.showTabs.entries.where((element) => element.value).length,
       vsync: this,
       initialIndex: ModalRoute.of(context)?.settings.arguments as int? ?? 0,
     );
@@ -95,34 +90,29 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     super.dispose();
   }
 
-  FloatingActionButton? getFloatingActionButton(
-      List<TabContentType> sortedTabs) {
+  FloatingActionButton? getFloatingActionButton(List<TabContentType> sortedTabs) {
     // Show the floating action button only on the albums, artists, generes and tracks tab.
     if (_tabController!.index == sortedTabs.indexOf(TabContentType.tracks)) {
       return FloatingActionButton(
         tooltip: AppLocalizations.of(context)!.shuffleAll,
         onPressed: () async {
           try {
-            await _audioServiceHelper.shuffleAll(
-                ref.watch(finampSettingsProvider.onlyShowFavourites));
+            await _audioServiceHelper.shuffleAll(ref.watch(finampSettingsProvider.onlyShowFavourites));
           } catch (e) {
             GlobalSnackbar.error(e);
           }
         },
         child: const Icon(Icons.shuffle),
       );
-    } else if (_tabController!.index ==
-        sortedTabs.indexOf(TabContentType.artists)) {
+    } else if (_tabController!.index == sortedTabs.indexOf(TabContentType.artists)) {
       return FloatingActionButton(
           tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixArtists.isEmpty) {
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoTracksArtist);
+                GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.startMixNoTracksArtist);
               } else {
-                await _audioServiceHelper.startInstantMixForArtists(
-                    _jellyfinApiHelper.selectedMixArtists);
+                await _audioServiceHelper.startInstantMixForArtists(_jellyfinApiHelper.selectedMixArtists);
                 _jellyfinApiHelper.clearArtistMixBuilderList();
               }
             } catch (e) {
@@ -130,36 +120,30 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
             }
           },
           child: const Icon(Icons.explore));
-    } else if (_tabController!.index ==
-        sortedTabs.indexOf(TabContentType.albums)) {
+    } else if (_tabController!.index == sortedTabs.indexOf(TabContentType.albums)) {
       return FloatingActionButton(
           tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixAlbums.isEmpty) {
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoTracksAlbum);
+                GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.startMixNoTracksAlbum);
               } else {
-                await _audioServiceHelper.startInstantMixForAlbums(
-                    _jellyfinApiHelper.selectedMixAlbums);
+                await _audioServiceHelper.startInstantMixForAlbums(_jellyfinApiHelper.selectedMixAlbums);
               }
             } catch (e) {
               GlobalSnackbar.error(e);
             }
           },
           child: const Icon(Icons.explore));
-    } else if (_tabController!.index ==
-        sortedTabs.indexOf(TabContentType.genres)) {
+    } else if (_tabController!.index == sortedTabs.indexOf(TabContentType.genres)) {
       return FloatingActionButton(
           tooltip: AppLocalizations.of(context)!.startMix,
           onPressed: () async {
             try {
               if (_jellyfinApiHelper.selectedMixGenres.isEmpty) {
-                GlobalSnackbar.message((scaffold) =>
-                    AppLocalizations.of(context)!.startMixNoTracksGenre);
+                GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.startMixNoTracksGenre);
               } else {
-                await _audioServiceHelper.startInstantMixForGenres(
-                    _jellyfinApiHelper.selectedMixGenres);
+                await _audioServiceHelper.startInstantMixForGenres(_jellyfinApiHelper.selectedMixGenres);
               }
             } catch (e) {
               GlobalSnackbar.error(e);
@@ -185,16 +169,12 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     // include enabled tabs
     final sortedTabs = ref
         .watch(finampSettingsProvider.tabOrder)
-        .where((e) =>
-        ref.watch(finampSettingsProvider
-            .select((value) => value.value?.showTabs[e])) ??
-        false);
-    refreshMap[sortedTabs.elementAt(_tabController!.index)] =
-        MusicRefreshCallback();
+        .where((e) => ref.watch(finampSettingsProvider.select((value) => value.value?.showTabs[e])) ?? false);
+    refreshMap[sortedTabs.elementAt(_tabController!.index)] = MusicRefreshCallback();
 
     if (sortedTabs.length != _tabController?.length) {
-      _musicScreenLogger.info(
-          "Rebuilding MusicScreen tab controller (${sortedTabs.length} != ${_tabController?.length})");
+      _musicScreenLogger
+          .info("Rebuilding MusicScreen tab controller (${sortedTabs.length} != ${_tabController?.length})");
       _buildTabController();
     }
 
@@ -215,8 +195,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
               ? TextField(
                   controller: textEditingController,
                   autocorrect: false, // avoid autocorrect
-                  enableSuggestions:
-                      true, // keep suggestions which can be manually selected
+                  enableSuggestions: true, // keep suggestions which can be manually selected
                   autofocus: true,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.search,
@@ -233,12 +212,10 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   }),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText:
-                        MaterialLocalizations.of(context).searchFieldLabel,
+                    hintText: MaterialLocalizations.of(context).searchFieldLabel,
                   ),
                 )
-              : Text(_finampUserHelper.currentUser?.currentView?.name ??
-                  AppLocalizations.of(context)!.music),
+              : Text(_finampUserHelper.currentUser?.currentView?.name ?? AppLocalizations.of(context)!.music),
           bottom: TabBar(
             controller: _tabController,
             tabs: sortedTabs
@@ -282,8 +259,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                     IconButton(
                         icon: const Icon(Icons.refresh),
                         onPressed: () {
-                          refreshMap[
-                              sortedTabs.elementAt(_tabController!.index)]!();
+                          refreshMap[sortedTabs.elementAt(_tabController!.index)]!();
                         }),
                   SortOrderButton(
                     sortedTabs.elementAt(_tabController!.index),
@@ -293,17 +269,14 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   ),
                   if (ref.watch(finampSettingsProvider.isOffline))
                     IconButton(
-                      icon: ref.watch(
-                              finampSettingsProvider.onlyShowFullyDownloaded)
+                      icon: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded)
                           ? const Icon(Icons.download)
                           : const Icon(Icons.download_outlined),
                       onPressed: ref.watch(finampSettingsProvider.isOffline)
                           ? () => FinampSetters.setOnlyShowFullyDownloaded(
-                              !ref.watch(finampSettingsProvider
-                                  .onlyShowFullyDownloaded))
+                              !ref.watch(finampSettingsProvider.onlyShowFullyDownloaded))
                           : null,
-                      tooltip:
-                          AppLocalizations.of(context)!.onlyShowFullyDownloaded,
+                      tooltip: AppLocalizations.of(context)!.onlyShowFullyDownloaded,
                     ),
                   if (!ref.watch(finampSettingsProvider.isOffline) ||
                       ref.watch(finampSettingsProvider.trackOfflineFavorites))
@@ -311,8 +284,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       icon: ref.watch(finampSettingsProvider.onlyShowFavourites)
                           ? const Icon(Icons.favorite)
                           : const Icon(Icons.favorite_outline),
-                      onPressed: () => FinampSetters.setOnlyShowFavourites(!ref
-                          .watch(finampSettingsProvider.onlyShowFavourites)),
+                      onPressed: () =>
+                          FinampSetters.setOnlyShowFavourites(!ref.watch(finampSettingsProvider.onlyShowFavourites)),
                       tooltip: AppLocalizations.of(context)!.favourites,
                     ),
                   IconButton(
@@ -327,10 +300,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         bottomNavigationBar: const NowPlayingBar(),
         drawer: const MusicScreenDrawer(),
         floatingActionButton: Padding(
-          padding: EdgeInsets.only(
-              right: ref.watch(finampSettingsProvider.showFastScroller)
-                  ? 24.0
-                  : 8.0),
+          padding: EdgeInsets.only(right: ref.watch(finampSettingsProvider.showFastScroller) ? 24.0 : 8.0),
           child: getFloatingActionButton(sortedTabs.toList()),
         ),
         body: Builder(builder: (context) {
@@ -344,10 +314,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
               return Column(
                 children: [
                   buildArtistTypeSelectionRow(
-                      context,
-                      tabType,
-                      ref.watch(finampSettingsProvider.artistListType),
-                      refreshTab),
+                      context, tabType, ref.watch(finampSettingsProvider.artistListType), refreshTab),
                   Expanded(
                     child: MusicScreenTabView(
                       tabContentType: tabType,
@@ -364,8 +331,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           if (Platform.isAndroid) {
             return TransparentRightSwipeDetector(
               action: () {
-                if (_tabController?.index == 0 &&
-                    !ref.watch(finampSettingsProvider.disableGesture)) {
+                if (_tabController?.index == 0 && !ref.watch(finampSettingsProvider.disableGesture)) {
                   Scaffold.of(context).openDrawer();
                 }
               },
@@ -398,20 +364,17 @@ class _TransparentSwipeRecognizer extends HorizontalDragGestureRecognizer {
 // but using _TransparentSwipeRecognizer instead of HorizontalDragGestureRecognizer
 // to allow both it and the TabBarView to process the same gestures.
 class TransparentRightSwipeDetector extends StatefulWidget {
-  const TransparentRightSwipeDetector(
-      {super.key, this.child, required this.action});
+  const TransparentRightSwipeDetector({super.key, this.child, required this.action});
 
   final Widget? child;
 
   final void Function() action;
 
   @override
-  State<TransparentRightSwipeDetector> createState() =>
-      _TransparentRightSwipeDetectorState();
+  State<TransparentRightSwipeDetector> createState() => _TransparentRightSwipeDetectorState();
 }
 
-class _TransparentRightSwipeDetectorState
-    extends State<TransparentRightSwipeDetector> {
+class _TransparentRightSwipeDetectorState extends State<TransparentRightSwipeDetector> {
   @override
   Widget build(BuildContext context) {
     /// Device types that scrollables should accept drag gestures from by default.
@@ -424,12 +387,9 @@ class _TransparentRightSwipeDetectorState
       // scrollables.
       PointerDeviceKind.unknown,
     };
-    final Map<Type, GestureRecognizerFactory> gestures =
-        <Type, GestureRecognizerFactory>{};
-    gestures[_TransparentSwipeRecognizer] =
-        GestureRecognizerFactoryWithHandlers<_TransparentSwipeRecognizer>(
-      () => _TransparentSwipeRecognizer(
-          debugOwner: this, supportedDevices: supportedDevices),
+    final Map<Type, GestureRecognizerFactory> gestures = <Type, GestureRecognizerFactory>{};
+    gestures[_TransparentSwipeRecognizer] = GestureRecognizerFactoryWithHandlers<_TransparentSwipeRecognizer>(
+      () => _TransparentSwipeRecognizer(debugOwner: this, supportedDevices: supportedDevices),
       (_TransparentSwipeRecognizer instance) {
         instance
           ..onStart = _onHorizontalDragStart

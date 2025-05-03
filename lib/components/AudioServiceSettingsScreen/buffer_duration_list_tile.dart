@@ -11,9 +11,7 @@ class BufferDurationListTile extends StatefulWidget {
 }
 
 class _BufferDurationListTileState extends State<BufferDurationListTile> {
-  final _controller = TextEditingController(
-      text:
-          FinampSettingsHelper.finampSettings.bufferDurationSeconds.toString());
+  final _controller = TextEditingController(text: FinampSettingsHelper.finampSettings.bufferDurationSeconds.toString());
 
   @override
   Widget build(BuildContext context) {

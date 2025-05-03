@@ -51,9 +51,7 @@ class _ViewSelectorState extends State<ViewSelector> {
               // Finamp only supports music libraries. We used to allow people to
               // select unsupported libraries, but some people selected "general"
               // libraries and thought Finamp was broken.
-              if (snapshot.data!.isEmpty ||
-                  !snapshot.data!
-                      .any((element) => element.collectionType == "music")) {
+              if (snapshot.data!.isEmpty || !snapshot.data!.any((element) => element.collectionType == "music")) {
                 return NoMusicLibrariesMessage(
                   onRefresh: () {
                     setState(() {
@@ -71,8 +69,7 @@ class _ViewSelectorState extends State<ViewSelector> {
 
                 // If only one music library is available and user doesn't have a
                 // view saved (assuming setup is in progress), skip the selector.
-                if (_views.values.where((element) => element == true).length ==
-                        1 &&
+                if (_views.values.where((element) => element == true).length == 1 &&
                     _finampUserHelper.currentUser!.currentView == null) {
                   _submitChoice();
                 } else {
@@ -93,8 +90,7 @@ class _ViewSelectorState extends State<ViewSelector> {
                   return CheckboxListTile(
                     value: isSelected,
                     enabled: view.collectionType == "music",
-                    title: Text(_views.keys.elementAt(index).name ??
-                        AppLocalizations.of(context)!.unknownName),
+                    title: Text(_views.keys.elementAt(index).name ?? AppLocalizations.of(context)!.unknownName),
                     onChanged: (value) {
                       setState(() {
                         _views[_views.keys.elementAt(index)] = value!;
@@ -110,8 +106,7 @@ class _ViewSelectorState extends State<ViewSelector> {
                 child: ListView(padding: EdgeInsets.only(top: 20), children: [
                   ListTile(
                     leading: Icon(Icons.error),
-                    title:
-                        Text(AppLocalizations.of(context)!.librarySelectError),
+                    title: Text(AppLocalizations.of(context)!.librarySelectError),
                   ),
                   ListTile(
                     leading: Icon(Icons.refresh),
@@ -124,17 +119,13 @@ class _ViewSelectorState extends State<ViewSelector> {
                     leading: Icon(Icons.logout),
                     title: Text(AppLocalizations.of(context)!.logOut),
                     onTap: () async {
-                      final jellyfinApiHelper =
-                          GetIt.instance<JellyfinApiHelper>();
+                      final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-                      await jellyfinApiHelper
-                          .logoutCurrentUser()
-                          .onError((_, __) {});
+                      await jellyfinApiHelper.logoutCurrentUser().onError((_, __) {});
 
                       if (!context.mounted) return;
 
-                      await Navigator.of(context).pushNamedAndRemoveUntil(
-                          SplashScreen.routeName, (route) => false);
+                      await Navigator.of(context).pushNamedAndRemoveUntil(SplashScreen.routeName, (route) => false);
                     },
                   )
                 ]),
@@ -153,14 +144,11 @@ class _ViewSelectorState extends State<ViewSelector> {
       return;
     } else {
       try {
-        _finampUserHelper.setCurrentUserViews(_views.entries
-            .where((element) => element.value == true)
-            .map((e) => e.key)
-            .toList());
+        _finampUserHelper
+            .setCurrentUserViews(_views.entries.where((element) => element.value == true).map((e) => e.key).toList());
         // allow calling _submitChoice() while selector is being built by delaying
         // navigation changes
-        Future.microtask(() => Navigator.of(context)
-            .pushNamedAndRemoveUntil(MusicScreen.routeName, (route) => false));
+        Future.microtask(() => Navigator.of(context).pushNamedAndRemoveUntil(MusicScreen.routeName, (route) => false));
       } catch (e) {
         GlobalSnackbar.error(e);
       }

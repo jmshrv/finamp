@@ -39,8 +39,5 @@ class ThemeModeAdapter extends TypeAdapter<ThemeMode> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ThemeModeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is ThemeModeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

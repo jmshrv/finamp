@@ -13,9 +13,7 @@ class SortByMenuButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sortOptions = tabType == TabContentType.tracks
-        ? SortBy.trackSortOptions
-        : SortBy.defaults;
+    final sortOptions = tabType == TabContentType.tracks ? SortBy.trackSortOptions : SortBy.defaults;
 
     return PopupMenuButton<SortBy>(
       icon: const Icon(Icons.sort),
@@ -27,8 +25,7 @@ class SortByMenuButton extends ConsumerWidget {
             child: Text(
               sortBy.toLocalisedString(context),
               style: TextStyle(
-                color: ref.watch(finampSettingsProvider.select(
-                        (x) => x.requireValue.getTabSortBy(tabType) == sortBy))
+                color: ref.watch(finampSettingsProvider.select((x) => x.requireValue.getTabSortBy(tabType) == sortBy))
                     ? Theme.of(context).colorScheme.secondary
                     : null,
               ),

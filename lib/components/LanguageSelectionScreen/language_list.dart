@@ -73,8 +73,7 @@ class LanguageListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RadioListTile<Locale?>(
-      title: Text(locale?.nativeDisplayLanguageScript ??
-          AppLocalizations.of(context)!.system),
+      title: Text(locale?.nativeDisplayLanguageScript ?? AppLocalizations.of(context)!.system),
       subtitle: locale != null
           ? Text(
               LocaleHelper.locale != null

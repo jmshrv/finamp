@@ -48,8 +48,7 @@ class KeepScreenOnHelper {
   }
 
   void setKeepScreenOn() {
-    if (FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn &&
-        !_isPluggedIn) {
+    if (FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn && !_isPluggedIn) {
       _turnOff();
     } else {
       switch (FinampSettingsHelper.finampSettings.keepScreenOnOption) {
@@ -80,8 +79,7 @@ class KeepScreenOnHelper {
         "keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
   }
 
-  void setCondition(
-      {bool? isPlaying, bool? isLyricsShowing, BatteryState? batteryState}) {
+  void setCondition({bool? isPlaying, bool? isLyricsShowing, BatteryState? batteryState}) {
     if (isPlaying != null) _isPlaying = isPlaying;
     if (isLyricsShowing != null) _isLyricsShowing = isLyricsShowing;
     if (batteryState != null) {
@@ -121,8 +119,7 @@ class KeepScreenOnHelper {
 }
 
 class KeepScreenOnObserver extends NavigatorObserver {
-  final KeepScreenOnHelper keepScreenOnHelper =
-      GetIt.instance<KeepScreenOnHelper>();
+  final KeepScreenOnHelper keepScreenOnHelper = GetIt.instance<KeepScreenOnHelper>();
 
   static final _lyricsCheck = ModalRoute.withName(LyricsScreen.routeName);
   @override

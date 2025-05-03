@@ -56,50 +56,38 @@ class _LoginFlowState extends State<LoginFlow> {
 
           Route createRoute(Widget page) => PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) => page,
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  final pushingNext =
-                      secondaryAnimation.status == AnimationStatus.forward;
-                  final poppingNext =
-                      secondaryAnimation.status == AnimationStatus.reverse;
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  final pushingNext = secondaryAnimation.status == AnimationStatus.forward;
+                  final poppingNext = secondaryAnimation.status == AnimationStatus.reverse;
                   final pushingOrPoppingNext = pushingNext || poppingNext;
                   late final Tween<Offset> offsetTween = pushingOrPoppingNext
-                      ? Tween<Offset>(
-                          begin: const Offset(0.0, 0.0),
-                          end: const Offset(-1.0, 0.0))
-                      : Tween<Offset>(
-                          begin: const Offset(1.0, 0.0),
-                          end: const Offset(0.0, 0.0));
+                      ? Tween<Offset>(begin: const Offset(0.0, 0.0), end: const Offset(-1.0, 0.0))
+                      : Tween<Offset>(begin: const Offset(1.0, 0.0), end: const Offset(0.0, 0.0));
 
-                  final curveOffsetTween =
-                      offsetTween.chain(CurveTween(curve: Curves.ease));
+                  final curveOffsetTween = offsetTween.chain(CurveTween(curve: Curves.ease));
 
-                  late final Animation<Offset> slidingAnimation =
-                      pushingOrPoppingNext
-                          ? curveOffsetTween.animate(secondaryAnimation)
-                          : curveOffsetTween.animate(animation);
-                  return SlideTransition(
-                      position: slidingAnimation, child: child);
+                  late final Animation<Offset> slidingAnimation = pushingOrPoppingNext
+                      ? curveOffsetTween.animate(secondaryAnimation)
+                      : curveOffsetTween.animate(animation);
+                  return SlideTransition(position: slidingAnimation, child: child);
                 },
               );
 
           switch (settings.name) {
             case LoginSplashPage.routeName:
               route = createRoute(LoginSplashPage(
-                onGetStartedPressed: () => loginNavigatorKey.currentState!
-                    .pushNamed(LoginServerSelectionPage.routeName),
+                onGetStartedPressed: () =>
+                    loginNavigatorKey.currentState!.pushNamed(LoginServerSelectionPage.routeName),
               ));
               break;
             case LoginServerSelectionPage.routeName:
               route = createRoute(LoginServerSelectionPage(
                 serverState: serverState,
-                onServerSelected:
-                    (PublicSystemInfoResult server, String baseUrl) {
+                onServerSelected: (PublicSystemInfoResult server, String baseUrl) {
                   serverState.selectedServer = server;
                   serverState.baseUrl = baseUrl;
                   serverState.clientDiscoveryHandler.dispose();
-                  loginNavigatorKey.currentState!
-                      .pushNamed(LoginUserSelectionPage.routeName);
+                  loginNavigatorKey.currentState!.pushNamed(LoginUserSelectionPage.routeName);
                 },
               ));
               break;
@@ -109,8 +97,7 @@ class _LoginFlowState extends State<LoginFlow> {
                 connectionState: connectionState,
                 onUserSelected: (UserDto? user) {
                   connectionState.selectedUser = user;
-                  loginNavigatorKey.currentState!
-                      .pushNamed(LoginAuthenticationPage.routeName);
+                  loginNavigatorKey.currentState!.pushNamed(LoginAuthenticationPage.routeName);
                 },
                 onAuthenticated: () {
                   Navigator.of(context).popAndPushNamed(ViewSelector.routeName);
@@ -127,7 +114,51 @@ class _LoginFlowState extends State<LoginFlow> {
                     supportsMediaControl: true,
                     supportsPersistentIdentifier: true,
                     playableMediaTypes: ["Audio"],
-                    supportedCommands: ["MoveUp", "MoveDown", "MoveLeft", "MoveRight", "PageUp", "PageDown", "PreviousLetter", "NextLetter", "ToggleOsd", "ToggleContextMenu", "Select", "Back", "TakeScreenshot", "SendKey", "SendString", "GoHome", "GoToSettings", "VolumeUp", "VolumeDown", "Mute", "Unmute", "ToggleMute", "SetVolume", "SetAudioStreamIndex", "SetSubtitleStreamIndex", "ToggleFullscreen", "DisplayContent", "GoToSearch", "DisplayMessage", "SetRepeatMode", "ChannelUp", "ChannelDown", "Guide", "ToggleStats", "PlayMediaSource", "PlayTrailers", "SetShuffleQueue", "PlayState", "PlayNext", "ToggleOsdMenu", "Play", "SetMaxStreamingBitrate", "SetPlaybackOrder"],
+                    supportedCommands: [
+                      "MoveUp",
+                      "MoveDown",
+                      "MoveLeft",
+                      "MoveRight",
+                      "PageUp",
+                      "PageDown",
+                      "PreviousLetter",
+                      "NextLetter",
+                      "ToggleOsd",
+                      "ToggleContextMenu",
+                      "Select",
+                      "Back",
+                      "TakeScreenshot",
+                      "SendKey",
+                      "SendString",
+                      "GoHome",
+                      "GoToSettings",
+                      "VolumeUp",
+                      "VolumeDown",
+                      "Mute",
+                      "Unmute",
+                      "ToggleMute",
+                      "SetVolume",
+                      "SetAudioStreamIndex",
+                      "SetSubtitleStreamIndex",
+                      "ToggleFullscreen",
+                      "DisplayContent",
+                      "GoToSearch",
+                      "DisplayMessage",
+                      "SetRepeatMode",
+                      "ChannelUp",
+                      "ChannelDown",
+                      "Guide",
+                      "ToggleStats",
+                      "PlayMediaSource",
+                      "PlayTrailers",
+                      "SetShuffleQueue",
+                      "PlayState",
+                      "PlayNext",
+                      "ToggleOsdMenu",
+                      "Play",
+                      "SetMaxStreamingBitrate",
+                      "SetPlaybackOrder"
+                    ],
                   ));
                 },
               ));
@@ -168,8 +199,7 @@ class ServerState {
     if (connectionTestDebounceTimer?.isActive ?? false) {
       connectionTestDebounceTimer?.cancel();
     }
-    connectionTestDebounceTimer =
-        Timer(const Duration(milliseconds: 500), () async {
+    connectionTestDebounceTimer = Timer(const Duration(milliseconds: 500), () async {
       updateCallback?.call();
       try {
         baseUrlToTest = baseUrl;
@@ -193,8 +223,7 @@ class ServerState {
       // We trim the base url in case the user accidentally added some trailing whitespace
       baseUrlToTest = baseUrlToTest.trim();
 
-      if (!(baseUrlToTest.startsWith("http://") ||
-          baseUrlToTest.startsWith("https://"))) {
+      if (!(baseUrlToTest.startsWith("http://") || baseUrlToTest.startsWith("https://"))) {
         // use https by default
         baseUrlToTest = "https://$baseUrlToTest";
         unspecifiedProtocol = true;
@@ -283,8 +312,7 @@ class JellyfinServerClientDiscovery {
   RawDatagramSocket? _socket;
   bool _isDisposed = false;
 
-  void discoverServers(
-      void Function(ClientDiscoveryResponse response) onServerFound) async {
+  void discoverServers(void Function(ClientDiscoveryResponse response) onServerFound) async {
     _isDisposed = false;
 
     _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
@@ -292,18 +320,16 @@ class JellyfinServerClientDiscovery {
     // We have to use ? throughout since _socket isn't final, although at this
     // point in the code it should never be null
 
-    _socket?.broadcastEnabled =
-        true; // important to allow sending to broadcast address
+    _socket?.broadcastEnabled = true; // important to allow sending to broadcast address
     _socket?.multicastHops = 5; // to account for weird network setups
 
     _socket?.listen((event) {
       if (event == RawSocketEvent.read) {
         final datagram = _socket?.receive();
         if (datagram != null) {
-          _clientDiscoveryLogger
-              .finest("Received datagram: ${utf8.decode(datagram.data)}");
-          final response = ClientDiscoveryResponse.fromJson(
-              jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>);
+          _clientDiscoveryLogger.finest("Received datagram: ${utf8.decode(datagram.data)}");
+          final response =
+              ClientDiscoveryResponse.fromJson(jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>);
           onServerFound(response);
         }
       }
@@ -311,8 +337,7 @@ class JellyfinServerClientDiscovery {
 
     const message =
         "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
-    final broadcastAddress =
-        InternetAddress("255.255.255.255"); // UDP broadcast address
+    final broadcastAddress = InternetAddress("255.255.255.255"); // UDP broadcast address
     const destinationPort = 7359; // Jellyfin client discovery port
 
     // Send discovery message repeatedly to scan for local servers (because UDP is unreliable)

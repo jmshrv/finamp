@@ -26,9 +26,7 @@ class NoMusicLibrariesMessage extends StatelessWidget {
                 AppLocalizations.of(context)!.noMusicLibrariesBody,
                 textAlign: TextAlign.center,
               ),
-              ElevatedButton(
-                  onPressed: onRefresh,
-                  child: Text(AppLocalizations.of(context)!.refresh))
+              ElevatedButton(onPressed: onRefresh, child: Text(AppLocalizations.of(context)!.refresh))
             ],
           ),
         ),

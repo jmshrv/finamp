@@ -39,21 +39,15 @@ class PlayerScreenTheme extends StatelessWidget {
   final Duration? themeTransitionDuration;
   final ThemeData Function(ThemeData)? themeOverride;
 
-  const PlayerScreenTheme(
-      {super.key,
-      required this.child,
-      this.themeTransitionDuration,
-      this.themeOverride});
+  const PlayerScreenTheme({super.key, required this.child, this.themeTransitionDuration, this.themeOverride});
 
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
         overrides: [
-          localImageProvider
-              .overrideWith((ref) => ref.watch(currentAlbumImageProvider)),
+          localImageProvider.overrideWith((ref) => ref.watch(currentAlbumImageProvider)),
           localThemeInfoProvider.overrideWith((ref) {
-            var item = ref.watch(currentTrackProvider
-                .select((queueItem) => queueItem.valueOrNull?.baseItem));
+            var item = ref.watch(currentTrackProvider.select((queueItem) => queueItem.valueOrNull?.baseItem));
             if (item == null) {
               return null;
             }
@@ -71,10 +65,7 @@ class PlayerScreenTheme extends StatelessWidget {
                 theme = themeOverride!(theme);
               }
               return AnimatedTheme(
-                  duration: themeTransitionDuration ??
-                      getThemeTransitionDuration(context),
-                  data: theme,
-                  child: child!);
+                  duration: themeTransitionDuration ?? getThemeTransitionDuration(context), data: theme, child: child!);
             },
             child: child));
   }
@@ -87,19 +78,12 @@ class ItemTheme extends StatelessWidget {
   final ThemeData Function(ThemeData)? themeOverride;
 
   const ItemTheme(
-      {super.key,
-      required this.item,
-      required this.child,
-      this.themeTransitionDuration,
-      this.themeOverride});
+      {super.key, required this.item, required this.child, this.themeTransitionDuration, this.themeOverride});
 
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-        overrides: [
-          localThemeInfoProvider
-              .overrideWithValue(ThemeInfo(item, useIsolate: false))
-        ],
+        overrides: [localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false))],
         child: Consumer(
             builder: (context, ref, child) {
               var theme = ThemeData(
@@ -111,17 +95,13 @@ class ItemTheme extends StatelessWidget {
                 theme = themeOverride!(theme);
               }
               return AnimatedTheme(
-                  duration: themeTransitionDuration ??
-                      getThemeTransitionDuration(context),
-                  data: theme,
-                  child: child!);
+                  duration: themeTransitionDuration ?? getThemeTransitionDuration(context), data: theme, child: child!);
             },
             child: child));
   }
 }
 
-final Provider<ThemeInfo?> localThemeInfoProvider =
-    Provider((ref) => null, dependencies: const []);
+final Provider<ThemeInfo?> localThemeInfoProvider = Provider((ref) => null, dependencies: const []);
 
 final Provider<ThemeImage> localImageProvider = Provider((ref) {
   var item = ref.watch(localThemeInfoProvider);
@@ -133,15 +113,13 @@ final Provider<ThemeImage> localImageProvider = Provider((ref) {
 
 final Provider<ColorScheme> localThemeProvider = Provider((ref) {
   var image = ref.watch(localImageProvider);
-  return ref.watch(finampThemeFromImageProvider(
-      ThemeRequestFromImage(image.image, image.useIsolate)));
+  return ref.watch(finampThemeFromImageProvider(ThemeRequestFromImage(image.image, image.useIsolate)));
 }, dependencies: [localImageProvider]);
 
 @riverpod
 ColorScheme finampTheme(Ref ref, ThemeInfo request) {
   var image = ref.watch(themeImageProvider(request));
-  return ref.watch(finampThemeFromImageProvider(
-      ThemeRequestFromImage(image.image, request.useIsolate)));
+  return ref.watch(finampThemeFromImageProvider(ThemeRequestFromImage(image.image, request.useIsolate)));
 }
 
 @riverpod
@@ -160,8 +138,7 @@ ThemeImage themeImage(Ref ref, ThemeInfo request) {
     if (item.blurHash != null) {
       image = BlurHashImage(item.blurHash!);
     } else if (item.imageId != null) {
-      image = ref.watch(albumImageProvider(
-          AlbumImageRequest(item: item, maxHeight: 100, maxWidth: 100)));
+      image = ref.watch(albumImageProvider(AlbumImageRequest(item: item, maxHeight: 100, maxWidth: 100)));
     }
   }
   return ThemeImage(image, item.blurHash, useIsolate: request.useIsolate);
@@ -180,8 +157,7 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
       if (image == null) {
         return getDefaultTheme(brightness);
       }
-      var scheme =
-          await _getColorSchemeForImage(image, brightness, request.useIsolate);
+      var scheme = await _getColorSchemeForImage(image, brightness, request.useIsolate);
       if (scheme == null) {
         return getDefaultTheme(brightness);
       }
@@ -191,8 +167,7 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
   }
 
   Future<ImageInfo?> _fetchImage(ImageProvider image) {
-    ImageStream stream =
-        image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
+    ImageStream stream = image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
     ImageStreamListener? listener;
     Completer<ImageInfo?> completer = Completer();
 
@@ -214,13 +189,11 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
     return completer.future;
   }
 
-  Future<ColorScheme?> _getColorSchemeForImage(
-      ImageInfo image, Brightness brightness, bool useIsolate) async {
+  Future<ColorScheme?> _getColorSchemeForImage(ImageInfo image, Brightness brightness, bool useIsolate) async {
     // Use fromImage instead of fromImageProvider to better handle error case
     final PaletteGenerator palette;
     try {
-      palette =
-          await PaletteGenerator.fromImage(image.image, useIsolate: useIsolate);
+      palette = await PaletteGenerator.fromImage(image.image, useIsolate: useIsolate);
     } catch (e, stack) {
       themeProviderLogger.severe(e, e, stack);
       return null;
@@ -228,19 +201,15 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
       image.dispose();
     }
 
-    Color accent = palette.vibrantColor?.color ??
-        palette.dominantColor?.color ??
-        const Color.fromARGB(255, 0, 164, 220);
+    Color accent =
+        palette.vibrantColor?.color ?? palette.dominantColor?.color ?? const Color.fromARGB(255, 0, 164, 220);
 
     themeProviderLogger.finest("Accent color: $accent");
 
     final lighter = brightness == Brightness.dark;
 
-    final background = Color.alphaBlend(
-        lighter
-            ? Colors.black.withOpacity(0.675)
-            : Colors.white.withOpacity(0.675),
-        accent);
+    final background =
+        Color.alphaBlend(lighter ? Colors.black.withOpacity(0.675) : Colors.white.withOpacity(0.675), accent);
 
     accent = accent.atContrast(4.5, background, lighter);
     return ColorScheme.fromSwatch(
@@ -253,9 +222,8 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
 }
 
 ColorScheme getGreyTheme(Brightness brightness) {
-  Color accent = brightness == Brightness.dark
-      ? const Color.fromARGB(255, 133, 133, 133)
-      : const Color.fromARGB(255, 61, 61, 61);
+  Color accent =
+      brightness == Brightness.dark ? const Color.fromARGB(255, 133, 133, 133) : const Color.fromARGB(255, 61, 61, 61);
 
   return ColorScheme.fromSwatch(
     primarySwatch: generateMaterialColor(accent),
@@ -264,13 +232,11 @@ ColorScheme getGreyTheme(Brightness brightness) {
   );
 }
 
-final defaultThemeDark = ColorScheme.fromSeed(
-    seedColor: const Color.fromARGB(255, 0, 164, 220),
-    brightness: Brightness.dark);
+final defaultThemeDark =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 164, 220), brightness: Brightness.dark);
 
-final defaultThemeLight = ColorScheme.fromSeed(
-    seedColor: const Color.fromARGB(255, 0, 164, 220),
-    brightness: Brightness.light);
+final defaultThemeLight =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 164, 220), brightness: Brightness.light);
 
 ColorScheme getDefaultTheme(Brightness brightness) =>
     brightness == Brightness.dark ? defaultThemeDark : defaultThemeLight;
@@ -290,23 +256,15 @@ MaterialColor generateMaterialColor(Color color) {
   });
 }
 
-int tintValue(int value, double factor) =>
-    max(0, min((value + ((255 - value) * factor)).round(), 255));
+int tintValue(int value, double factor) => max(0, min((value + ((255 - value) * factor)).round(), 255));
 
-Color tintColor(Color color, double factor) => Color.fromRGBO(
-    tintValue(color.red, factor),
-    tintValue(color.green, factor),
-    tintValue(color.blue, factor),
-    1);
+Color tintColor(Color color, double factor) =>
+    Color.fromRGBO(tintValue(color.red, factor), tintValue(color.green, factor), tintValue(color.blue, factor), 1);
 
-int shadeValue(int value, double factor) =>
-    max(0, min(value - (value * factor).round(), 255));
+int shadeValue(int value, double factor) => max(0, min(value - (value * factor).round(), 255));
 
-Color shadeColor(Color color, double factor) => Color.fromRGBO(
-    shadeValue(color.red, factor),
-    shadeValue(color.green, factor),
-    shadeValue(color.blue, factor),
-    1);
+Color shadeColor(Color color, double factor) =>
+    Color.fromRGBO(shadeValue(color.red, factor), shadeValue(color.green, factor), shadeValue(color.blue, factor), 1);
 
 class ThemeInfo {
   ThemeInfo(this.item, {this.useIsolate = true, this.largeThemeImage = false});
@@ -347,8 +305,7 @@ class ThemeRequestFromImage {
 _ThemeTransitionCalculator? _calculator;
 
 Duration getThemeTransitionDuration(BuildContext context) =>
-    (_calculator ??= _ThemeTransitionCalculator())
-        .getThemeTransitionDuration(context);
+    (_calculator ??= _ThemeTransitionCalculator()).getThemeTransitionDuration(context);
 
 /// Skip track change transition animations if app or route is in background
 class _ThemeTransitionCalculator {
@@ -370,8 +327,6 @@ class _ThemeTransitionCalculator {
     if (_skipAllTransitions) {
       return const Duration(milliseconds: 0);
     }
-    return context.mounted
-        ? const Duration(milliseconds: 1000)
-        : const Duration(milliseconds: 0);
+    return context.mounted ? const Duration(milliseconds: 1000) : const Duration(milliseconds: 0);
   }
 }

@@ -7,13 +7,11 @@ import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../screens/artist_screen.dart';
 
-List<TextSpan> getArtistsTextSpans(
-    BaseItemDto item, BuildContext context, bool popRoutes) {
+List<TextSpan> getArtistsTextSpans(BaseItemDto item, BuildContext context, bool popRoutes) {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   List<TextSpan> separatedArtistTextSpans = [];
 
-  List<NameIdPair>? artists =
-      item.type == "MusicAlbum" ? item.albumArtists : item.artistItems;
+  List<NameIdPair>? artists = item.type == "MusicAlbum" ? item.albumArtists : item.artistItems;
 
   if (artists?.isEmpty ?? true) {
     separatedArtistTextSpans = [
@@ -33,11 +31,8 @@ List<TextSpan> getArtistsTextSpans(
                 if (FinampSettingsHelper.finampSettings.isOffline) return;
 
                 jellyfinApiHelper.getItemById(e.id).then((artist) => popRoutes
-                    ? Navigator.of(context).popAndPushNamed(
-                        ArtistScreen.routeName,
-                        arguments: artist)
-                    : Navigator.of(context)
-                        .pushNamed(ArtistScreen.routeName, arguments: artist));
+                    ? Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
+                    : Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist));
               }))
         .forEach((artistTextSpan) {
       separatedArtistTextSpans.add(artistTextSpan);

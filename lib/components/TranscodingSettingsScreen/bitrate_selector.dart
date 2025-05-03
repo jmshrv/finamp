@@ -25,15 +25,13 @@ class BitrateSelector extends ConsumerWidget {
               max: 320,
               value: (bitrate / 1000).clamp(64, 320),
               divisions: 8,
-              label: AppLocalizations.of(context)!
-                  .kiloBitsPerSecondLabel(bitrate ~/ 1000),
+              label: AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate ~/ 1000),
               onChanged: (value) {
                 FinampSetters.setTranscodeBitrate((value * 1000).toInt());
               },
             ),
             Text(
-              AppLocalizations.of(context)!
-                  .kiloBitsPerSecondLabel(bitrate ~/ 1000),
+              AppLocalizations.of(context)!.kiloBitsPerSecondLabel(bitrate ~/ 1000),
               style: Theme.of(context).textTheme.titleLarge,
             )
           ],

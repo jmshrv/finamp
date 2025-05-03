@@ -32,8 +32,7 @@ class ArtistItemInfo extends ConsumerWidget {
             iconData: Icons.music_note,
             textSpan: TextSpan(
               text: ref.watch(finampSettingsProvider.isOffline)
-                  ? AppLocalizations.of(context)!
-                      .offlineTrackCountArtist(itemTracks)
+                  ? AppLocalizations.of(context)!.offlineTrackCountArtist(itemTracks)
                   : AppLocalizations.of(context)!.trackCount(itemTracks),
             )),
         IconAndText(
@@ -41,9 +40,7 @@ class ArtistItemInfo extends ConsumerWidget {
             textSpan: TextSpan(
               text: AppLocalizations.of(context)!.albumCount(itemAlbums),
             )),
-        if (item.type != "MusicGenre" &&
-            item.genreItems != null &&
-            item.genreItems!.isNotEmpty)
+        if (item.type != "MusicGenre" && item.genreItems != null && item.genreItems!.isNotEmpty)
           _GenreIconAndText(genres: item.genreItems!)
       ],
     );
@@ -60,9 +57,9 @@ class _GenreIconAndText extends StatelessWidget {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     return GestureDetector(
-      onTap: () => jellyfinApiHelper.getItemById(genres.first.id).then(
-          (artist) => Navigator.of(context)
-              .pushNamed(ArtistScreen.routeName, arguments: artist)),
+      onTap: () => jellyfinApiHelper
+          .getItemById(genres.first.id)
+          .then((artist) => Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist)),
       child: IconAndText(
         iconData: Icons.album,
         textSpan: TextSpan(

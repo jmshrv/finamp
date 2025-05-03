@@ -51,13 +51,11 @@ class _SpeedSliderState extends State<SpeedSlider> {
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24 / 2.0),
         trackHeight: 24.0,
         inactiveTrackColor: widget.iconColor.withOpacity(0.3),
-        activeTrackColor:
-            FinampSettingsHelper.finampSettings.playbackSpeed > speedSliderMax
-                ? widget.iconColor.withOpacity(0.4)
-                : widget.iconColor.withOpacity(0.6),
+        activeTrackColor: FinampSettingsHelper.finampSettings.playbackSpeed > speedSliderMax
+            ? widget.iconColor.withOpacity(0.4)
+            : widget.iconColor.withOpacity(0.6),
         showValueIndicator: ShowValueIndicator.always,
-        valueIndicatorColor:
-            Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
+        valueIndicatorColor: Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
         valueIndicatorTextStyle: Theme.of(context).textTheme.labelLarge,
         valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
         tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 1.5),
@@ -69,8 +67,7 @@ class _SpeedSliderState extends State<SpeedSlider> {
           min: speedSliderMin,
           max: speedSliderMax,
           value: _dragValue ??
-              clampDouble(FinampSettingsHelper.finampSettings.playbackSpeed,
-                  speedSliderMin, speedSliderMax),
+              clampDouble(FinampSettingsHelper.finampSettings.playbackSpeed, speedSliderMin, speedSliderMax),
           // divisions: ((speedSliderMax - speedSliderMin) / speedSliderStep / 2).round(),
           onChanged: (value) {
             value = ((value / speedSliderStep).round() * speedSliderStep);
@@ -97,9 +94,7 @@ class _SpeedSliderState extends State<SpeedSlider> {
             widget.saveSpeedInput(value);
             FeedbackHelper.feedback(FeedbackType.selection);
           },
-          label:
-              (_dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed)
-                  .toStringAsFixed(2),
+          label: (_dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed).toStringAsFixed(2),
         ),
       ),
     );
@@ -121,15 +116,13 @@ class SpeedMenu extends StatefulWidget {
 }
 
 class _SpeedMenuState extends State<SpeedMenu> {
-  final _textController = TextEditingController(
-      text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
+  final _textController = TextEditingController(text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
 
   InputDecoration inputFieldDecoration() {
     return InputDecoration(
       filled: true,
       fillColor: widget.iconColor.withValues(alpha: 0.1),
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       label: Center(child: Text(AppLocalizations.of(context)!.speed)),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       constraints: const BoxConstraints(
@@ -154,8 +147,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
   }
 
   void refreshInputText() {
-    _textController.text =
-        FinampSettingsHelper.finampSettings.playbackSpeed.toString();
+    _textController.text = FinampSettingsHelper.finampSettings.playbackSpeed.toString();
   }
 
   @override
@@ -170,8 +162,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
         padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
         child: Consumer(
           builder: (BuildContext builder, ref, _) {
-            _textController.text =
-                ref.watch(finampSettingsProvider.playbackSpeed).toString();
+            _textController.text = ref.watch(finampSettingsProvider.playbackSpeed).toString();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -181,68 +172,56 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       type: PresetTypes.speed,
                       mainColour: widget.iconColor,
                       values: presets,
-                      activeValue:
-                          ref.watch(finampSettingsProvider.playbackSpeed),
+                      activeValue: ref.watch(finampSettingsProvider.playbackSpeed),
                     )),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8.0, left: 12.0, right: 12.0, bottom: 2.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            TablerIcons.minus,
-                            color: widget.iconColor,
-                          ),
-                          onPressed: () {
-                            final currentSpeed = FinampSettingsHelper
-                                .finampSettings.playbackSpeed;
+                  padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12.0, bottom: 2.0),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    IconButton(
+                      icon: Icon(
+                        TablerIcons.minus,
+                        color: widget.iconColor,
+                      ),
+                      onPressed: () {
+                        final currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
 
-                            if (currentSpeed > speedSliderMin) {
-                              FeedbackHelper.feedback(FeedbackType.selection);
-                              _queueService.playbackSpeed = max(
-                                  speedSliderMin,
-                                  double.parse((currentSpeed - speedButtonStep)
-                                      .toStringAsFixed(2)));
-                            } else {
-                              FeedbackHelper.feedback(FeedbackType.error);
-                            }
-                          },
-                          visualDensity: VisualDensity.compact,
-                          tooltip: AppLocalizations.of(context)!
-                              .playbackSpeedDecreaseLabel,
-                        ),
-                        Expanded(
-                          child: SpeedSlider(
-                            iconColor: widget.iconColor,
-                            saveSpeedInput: saveSpeedInput,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            TablerIcons.plus,
-                            color: widget.iconColor,
-                          ),
-                          onPressed: () {
-                            final currentSpeed = FinampSettingsHelper
-                                .finampSettings.playbackSpeed;
+                        if (currentSpeed > speedSliderMin) {
+                          FeedbackHelper.feedback(FeedbackType.selection);
+                          _queueService.playbackSpeed =
+                              max(speedSliderMin, double.parse((currentSpeed - speedButtonStep).toStringAsFixed(2)));
+                        } else {
+                          FeedbackHelper.feedback(FeedbackType.error);
+                        }
+                      },
+                      visualDensity: VisualDensity.compact,
+                      tooltip: AppLocalizations.of(context)!.playbackSpeedDecreaseLabel,
+                    ),
+                    Expanded(
+                      child: SpeedSlider(
+                        iconColor: widget.iconColor,
+                        saveSpeedInput: saveSpeedInput,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        TablerIcons.plus,
+                        color: widget.iconColor,
+                      ),
+                      onPressed: () {
+                        final currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
 
-                            if (currentSpeed < speedSliderMax) {
-                              FeedbackHelper.feedback(FeedbackType.selection);
-                              _queueService.playbackSpeed = min(
-                                  speedSliderMax,
-                                  double.parse((currentSpeed + speedButtonStep)
-                                      .toStringAsFixed(2)));
-                            } else {
-                              FeedbackHelper.feedback(FeedbackType.error);
-                            }
-                          },
-                          visualDensity: VisualDensity.compact,
-                          tooltip: AppLocalizations.of(context)!
-                              .playbackSpeedIncreaseLabel,
-                        ),
-                      ]),
+                        if (currentSpeed < speedSliderMax) {
+                          FeedbackHelper.feedback(FeedbackType.selection);
+                          _queueService.playbackSpeed =
+                              min(speedSliderMax, double.parse((currentSpeed + speedButtonStep).toStringAsFixed(2)));
+                        } else {
+                          FeedbackHelper.feedback(FeedbackType.error);
+                        }
+                      },
+                      visualDensity: VisualDensity.compact,
+                      tooltip: AppLocalizations.of(context)!.playbackSpeedIncreaseLabel,
+                    ),
+                  ]),
                 ),
               ],
             );

@@ -47,13 +47,10 @@ class _PresetChipsState extends State<PresetChips> {
 
   void scrollToActivePreset(double currentValue, double maxWidth) {
     if (_controller != null && !_controller!.hasClients) return;
-    var offset = widget.chipWidth * widget.values.indexOf(currentValue) +
-        widget.chipWidth / 2 -
-        maxWidth / 2 -
-        _spacing / 2;
+    var offset =
+        widget.chipWidth * widget.values.indexOf(currentValue) + widget.chipWidth / 2 - maxWidth / 2 - _spacing / 2;
 
-    offset = min(max(0, offset),
-        widget.chipWidth * (widget.values.length) - maxWidth - _spacing);
+    offset = min(max(0, offset), widget.chipWidth * (widget.values.length) - maxWidth - _spacing);
 
     if (_controller == null) {
       _controller = ScrollController(initialScrollOffset: offset);
@@ -76,12 +73,11 @@ class _PresetChipsState extends State<PresetChips> {
 
     return PresetChip(
       value: stringValue,
-      backgroundColour:
-          widget.mainColour?.withOpacity(value == widget.activeValue
-              ? 0.6
-              : (value == 1.0)
-                  ? 0.3
-                  : 0.1),
+      backgroundColour: widget.mainColour?.withOpacity(value == widget.activeValue
+          ? 0.6
+          : (value == 1.0)
+              ? 0.3
+              : 0.1),
       isSelected: value == widget.activeValue,
       isPresetDefault: value == 1.0,
       width: widget.chipWidth,
@@ -99,13 +95,11 @@ class _PresetChipsState extends State<PresetChips> {
     return LayoutBuilder(builder: (context, constraints) {
       // Create preset list to before scrollView to allow the scrollController
       // initial offset to be calculated first.
-      var list = List.generate(widget.values.length,
-          (index) => generatePresetChip(widget.values[index], constraints));
+      var list = List.generate(widget.values.length, (index) => generatePresetChip(widget.values[index], constraints));
       assert(_controller != null);
       // Allow drag scrolling on desktop
       return ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context)
-              .copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+          behavior: ScrollConfiguration.of(context).copyWith(dragDevices: PointerDeviceKind.values.toSet()),
           child: SingleChildScrollView(
             controller: _controller,
             scrollDirection: Axis.horizontal,

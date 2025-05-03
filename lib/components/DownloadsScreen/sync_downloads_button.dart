@@ -11,12 +11,10 @@ class SyncDownloadsButton extends ConsumerStatefulWidget {
   const SyncDownloadsButton({super.key});
 
   @override
-  ConsumerState<SyncDownloadsButton> createState() =>
-      _SyncDownloadedPlaylistsButtonState();
+  ConsumerState<SyncDownloadsButton> createState() => _SyncDownloadedPlaylistsButtonState();
 }
 
-class _SyncDownloadedPlaylistsButtonState
-    extends ConsumerState<SyncDownloadsButton> {
+class _SyncDownloadedPlaylistsButtonState extends ConsumerState<SyncDownloadsButton> {
   bool _enabled = true;
 
   @override
@@ -31,8 +29,7 @@ class _SyncDownloadedPlaylistsButtonState
 
               await GetIt.instance<DownloadsService>().resyncAll();
 
-              GlobalSnackbar.message(
-                  (scaffold) => AppLocalizations.of(scaffold)!.syncComplete);
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.syncComplete);
 
               if (!mounted) return;
               setState(() {

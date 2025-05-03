@@ -18,8 +18,7 @@ class AlbumsSliverList extends StatefulWidget {
 }
 
 class _AlbumsSliverListState extends State<AlbumsSliverList> {
-  final GlobalKey<SliverAnimatedListState> sliverListKey =
-      GlobalKey<SliverAnimatedListState>();
+  final GlobalKey<SliverAnimatedListState> sliverListKey = GlobalKey<SliverAnimatedListState>();
 
   @override
   void initState() {

@@ -7,22 +7,17 @@ class TrackShuffleItemCountEditor extends StatefulWidget {
   const TrackShuffleItemCountEditor({super.key});
 
   @override
-  State<TrackShuffleItemCountEditor> createState() =>
-      _TrackShuffleItemCountEditorState();
+  State<TrackShuffleItemCountEditor> createState() => _TrackShuffleItemCountEditorState();
 }
 
-class _TrackShuffleItemCountEditorState
-    extends State<TrackShuffleItemCountEditor> {
-  final _controller = TextEditingController(
-      text:
-          FinampSettingsHelper.finampSettings.trackShuffleItemCount.toString());
+class _TrackShuffleItemCountEditorState extends State<TrackShuffleItemCountEditor> {
+  final _controller = TextEditingController(text: FinampSettingsHelper.finampSettings.trackShuffleItemCount.toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.shuffleAllTrackCount),
-      subtitle:
-          Text(AppLocalizations.of(context)!.shuffleAllTrackCountSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.shuffleAllTrackCountSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

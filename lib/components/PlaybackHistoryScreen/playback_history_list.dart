@@ -25,8 +25,7 @@ class PlaybackHistoryList extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             history = snapshot.data;
-            groupedHistory =
-                playbackHistoryService.getHistoryGroupedDynamically();
+            groupedHistory = playbackHistoryService.getHistoryGroupedDynamically();
 
             return PaddedCustomScrollview(
               // use nested SliverList.builder()s to show history items grouped by date
@@ -41,8 +40,7 @@ class PlaybackHistoryList extends StatelessWidget {
                       final historyItem = TrackListTile(
                         index: Future.value(actualIndex),
                         item: group.value[actualIndex].item.baseItem!,
-                        highlightCurrentTrack: groupIndex == 0 &&
-                            index == 0, // only highlight first track
+                        highlightCurrentTrack: groupIndex == 0 && index == 0, // only highlight first track
                       );
 
                       final now = DateTime.now();
@@ -53,31 +51,21 @@ class PlaybackHistoryList extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 16.0, top: 8.0, bottom: 4.0),
+                                  padding: const EdgeInsets.only(left: 16.0, top: 8.0, bottom: 4.0),
                                   child: Text(
                                     (group.key.year == now.year &&
                                             group.key.month == now.month &&
                                             group.key.day == now.day)
                                         ? (group.key.hour == now.hour
-                                            ? DateFormat.jm(localeString)
-                                                .format(group.key)
+                                            ? DateFormat.jm(localeString).format(group.key)
                                             : ( // handle 24h clocks by appending ":00" if the time doesn't contain AM/PM
-                                                DateFormat(DateFormat.j(
-                                                                localeString)
-                                                            .format(group.key))
+                                                DateFormat(DateFormat.j(localeString).format(group.key))
                                                         .toString()
                                                         .toLowerCase()
-                                                        .contains(RegExp(
-                                                            r'am|pm',
-                                                            caseSensitive:
-                                                                false))
-                                                    ? DateFormat.jm(
-                                                            localeString)
-                                                        .format(group.key)
+                                                        .contains(RegExp(r'am|pm', caseSensitive: false))
+                                                    ? DateFormat.jm(localeString).format(group.key)
                                                     : "${DateFormat.jm(localeString).format(group.key)}:00"))
-                                        : DateFormat.MMMMd(localeString)
-                                            .format(group.key),
+                                        : DateFormat.MMMMd(localeString).format(group.key),
                                     style: const TextStyle(
                                       fontSize: 16.0,
                                     ),

@@ -38,11 +38,9 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
         final currentTrack = snapshot.data!.currentTrack;
 
         return Semantics(
-          label: AppLocalizations.of(context)!.playerAlbumArtworkTooltip(
-              currentTrack?.item.title ??
-                  AppLocalizations.of(context)!.unknownName),
-          excludeSemantics:
-              true, // replace child semantics with custom semantics
+          label: AppLocalizations.of(context)!
+              .playerAlbumArtworkTooltip(currentTrack?.item.title ?? AppLocalizations.of(context)!.unknownName),
+          excludeSemantics: true, // replace child semantics with custom semantics
           container: true,
           child: GestureDetector(
             onSecondaryTapDown: (_) async {
@@ -67,11 +65,8 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
               },
               onDoubleTap: () {
                 final currentTrack = queueService.getCurrentTrack();
-                if (currentTrack?.baseItem != null &&
-                    !FinampSettingsHelper.finampSettings.isOffline) {
-                  ref
-                      .read(isFavoriteProvider(currentTrack!.baseItem).notifier)
-                      .toggleFavorite();
+                if (currentTrack?.baseItem != null && !FinampSettingsHelper.finampSettings.isOffline) {
+                  ref.read(isFavoriteProvider(currentTrack!.baseItem).notifier).toggleFavorite();
                 }
               },
               onHorizontalSwipe: (direction) {
@@ -90,12 +85,9 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
               child: LayoutBuilder(builder: (context, constraints) {
                 //print(
                 //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
-                final minPadding = ref.watch(
-                    finampSettingsProvider.playerScreenCoverMinimumPadding);
-                final horizontalPadding =
-                    constraints.maxWidth * (minPadding / 100.0);
-                final verticalPadding =
-                    constraints.maxHeight * (minPadding / 100.0);
+                final minPadding = ref.watch(finampSettingsProvider.playerScreenCoverMinimumPadding);
+                final horizontalPadding = constraints.maxWidth * (minPadding / 100.0);
+                final verticalPadding = constraints.maxHeight * (minPadding / 100.0);
                 return Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: horizontalPadding,

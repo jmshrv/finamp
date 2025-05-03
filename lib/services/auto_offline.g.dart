@@ -10,12 +10,10 @@ String _$autoOfflineHash() => r'ba8159fdd1c7d37be20bd6fe3e2697ae6ff81672';
 
 /// See also [AutoOffline].
 @ProviderFor(AutoOffline)
-final autoOfflineProvider =
-    AutoDisposeNotifierProvider<AutoOffline, void>.internal(
+final autoOfflineProvider = AutoDisposeNotifierProvider<AutoOffline, void>.internal(
   AutoOffline.new,
   name: r'autoOfflineProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$autoOfflineHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$autoOfflineHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

@@ -33,28 +33,23 @@ class AlbumChips extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Wrap(
-            spacing: 4.0,
-            runSpacing: 4.0,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              AlbumChip(
-                key: const ValueKey(null),
-                backgroundColor: backgroundColor,
-                color: color,
-                item: baseItem,
-              ),
-              if (((includeReleaseDate ?? false) ||
-                      (includeReleaseDate == null &&
-                          ref.watch(finampSettingsProvider
-                              .showAlbumReleaseDateOnPlayerScreen))) &&
-                  ReleaseDateHelper.autoFormat(baseItem) != null)
-                _ReleaseDateChip(
-                  baseItem: baseItem,
-                  backgroundColor: backgroundColor,
-                  color: color,
-                )
-            ]),
+        child: Wrap(spacing: 4.0, runSpacing: 4.0, crossAxisAlignment: WrapCrossAlignment.center, children: [
+          AlbumChip(
+            key: const ValueKey(null),
+            backgroundColor: backgroundColor,
+            color: color,
+            item: baseItem,
+          ),
+          if (((includeReleaseDate ?? false) ||
+                  (includeReleaseDate == null &&
+                      ref.watch(finampSettingsProvider.showAlbumReleaseDateOnPlayerScreen))) &&
+              ReleaseDateHelper.autoFormat(baseItem) != null)
+            _ReleaseDateChip(
+              baseItem: baseItem,
+              backgroundColor: backgroundColor,
+              color: color,
+            )
+        ]),
       ),
     );
   }
@@ -133,9 +128,7 @@ class _ReleaseDateChip extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             softWrap: false,
             style: TextStyle(
-              color: color ??
-                  Theme.of(context).textTheme.bodySmall!.color ??
-                  Colors.white,
+              color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
             ),
           ),
         ),
@@ -175,13 +168,12 @@ class _AlbumChipContent extends StatelessWidget {
         child: InkWell(
           borderRadius: _borderRadius,
           onTap: FinampSettingsHelper.finampSettings.isOffline
-              ? () => isarDownloader.getCollectionInfo(id: item.albumId!).then(
-                  (album) => Navigator.of(context).pushNamed(
-                      AlbumScreen.routeName,
-                      arguments: album!.baseItem!))
-              : () => jellyfinApiHelper.getItemById(item.albumId!).then(
-                  (album) => Navigator.of(context)
-                      .pushNamed(AlbumScreen.routeName, arguments: album)),
+              ? () => isarDownloader
+                  .getCollectionInfo(id: item.albumId!)
+                  .then((album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album!.baseItem!))
+              : () => jellyfinApiHelper
+                  .getItemById(item.albumId!)
+                  .then((album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album)),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(
@@ -189,9 +181,7 @@ class _AlbumChipContent extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               softWrap: false,
               style: TextStyle(
-                color: color ??
-                    Theme.of(context).textTheme.bodySmall!.color ??
-                    Colors.white,
+                color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
               ),
             ),
           ),

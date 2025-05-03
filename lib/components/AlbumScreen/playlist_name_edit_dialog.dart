@@ -39,8 +39,7 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
         key: _formKey,
         child: TextFormField(
           initialValue: _name,
-          decoration:
-              InputDecoration(labelText: AppLocalizations.of(context)!.name),
+          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.name),
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {

@@ -15,12 +15,10 @@ class AddDownloadLocationScreen extends StatefulWidget {
   static const routeName = "/settings/downloadlocations/add";
 
   @override
-  State<AddDownloadLocationScreen> createState() =>
-      _AddDownloadLocationScreenState();
+  State<AddDownloadLocationScreen> createState() => _AddDownloadLocationScreenState();
 }
 
-class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
-    with SingleTickerProviderStateMixin {
+class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen> with SingleTickerProviderStateMixin {
   final customLocationFormKey = GlobalKey<FormState>();
   final appDirectoryFormKey = GlobalKey<FormState>();
 
@@ -31,8 +29,7 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
     super.initState();
     // Since we can't initialise tabs before initState we need to awkwardly
     // provide the length directly
-    _tabController =
-        TabController(vsync: this, length: Platform.isAndroid ? 2 : 1);
+    _tabController = TabController(vsync: this, length: Platform.isAndroid ? 2 : 1);
   }
 
   @override
@@ -83,15 +80,13 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
                   customLocationFormKey.currentState!.save();
                   // If we're saving to a custom location, we want to use human readable names.
                   // With app dir locations, we don't use human readable names.
-                  context.read<NewDownloadLocation>().baseDirectory =
-                      DownloadLocationType.custom;
+                  context.read<NewDownloadLocation>().baseDirectory = DownloadLocationType.custom;
                   isValidated = true;
                 }
               } else {
                 if (appDirectoryFormKey.currentState?.validate() ?? false) {
                   appDirectoryFormKey.currentState!.save();
-                  context.read<NewDownloadLocation>().baseDirectory =
-                      DownloadLocationType.external;
+                  context.read<NewDownloadLocation>().baseDirectory = DownloadLocationType.external;
                   isValidated = true;
                 }
               }
@@ -130,8 +125,7 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen>
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child:
-                        AppDirectoryLocationForm(formKey: appDirectoryFormKey),
+                    child: AppDirectoryLocationForm(formKey: appDirectoryFormKey),
                   ),
                 ),
             ],

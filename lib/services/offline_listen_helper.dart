@@ -18,13 +18,10 @@ class OfflineListenLogHelper {
 
   Future<Directory> get _logDirectory async {
     if (!Platform.isAndroid) {
-      return Platform.isIOS
-          ? await getApplicationDocumentsDirectory()
-          : await getApplicationSupportDirectory();
+      return Platform.isIOS ? await getApplicationDocumentsDirectory() : await getApplicationSupportDirectory();
     }
 
-    final List<Directory>? dirs =
-        await getExternalStorageDirectories(type: StorageDirectory.documents);
+    final List<Directory>? dirs = await getExternalStorageDirectories(type: StorageDirectory.documents);
     return dirs?.first ?? await getApplicationDocumentsDirectory();
   }
 
@@ -62,10 +59,7 @@ class OfflineListenLogHelper {
   /// and marks the time the track was stopped.
   Future<void> _logOfflineListen(OfflineListen listen) {
     _logger.info("Storing offline listen for ${listen.name}");
-    return Future.wait([
-      Hive.box<OfflineListen>("OfflineListens").add(listen),
-      _exportOfflineListenToFile(listen)
-    ]);
+    return Future.wait([Hive.box<OfflineListen>("OfflineListens").add(listen), _exportOfflineListenToFile(listen)]);
   }
 
   Future<void> _exportOfflineListenToFile(OfflineListen listen) async {

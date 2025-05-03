@@ -20,6 +20,5 @@ Stream<MediaState> get mediaStateStream {
       audioHandler.mediaItem,
       audioHandler.playbackState,
       audioHandler.fadeState,
-      (mediaItem, playbackState, fadeState) =>
-          MediaState(mediaItem, playbackState, fadeState));
+      (mediaItem, playbackState, fadeState) => MediaState(mediaItem, playbackState, fadeState));
 }

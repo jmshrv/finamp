@@ -6,8 +6,7 @@ import '../../services/process_artist.dart';
 import '../album_image.dart';
 
 class DownloadErrorListTile extends StatelessWidget {
-  const DownloadErrorListTile(
-      {super.key, required this.downloadTask, required this.showType});
+  const DownloadErrorListTile({super.key, required this.downloadTask, required this.showType});
 
   final DownloadStub downloadTask;
   final bool showType;
@@ -18,8 +17,7 @@ class DownloadErrorListTile extends StatelessWidget {
       leading: AlbumImage(item: downloadTask.baseItem),
       title: Text(downloadTask.name),
       subtitle: Text(showType
-          ? AppLocalizations.of(context)!
-              .itemTypeSubtitle(downloadTask.baseItemType.name, "")
+          ? AppLocalizations.of(context)!.itemTypeSubtitle(downloadTask.baseItemType.name, "")
           : processArtist(downloadTask.baseItem?.albumArtist, context)),
       // trailing: IconButton(
       //   icon: Icon(Icons.refresh),

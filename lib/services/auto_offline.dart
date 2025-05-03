@@ -18,17 +18,13 @@ final _autoOfflineLogger = Logger("AutoOffline");
 class AutoOffline extends _$AutoOffline {
   @override
   void build() {
-    var listener = Connectivity()
-        .onConnectivityChanged
-        .listen((List<ConnectivityResult> result) {
+    var listener = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
       _setOfflineMode(result);
     });
 
-    bool featureEnabled = ref.watch(finampSettingsProvider.autoOffline) !=
-        AutoOfflineOption.disabled;
+    bool featureEnabled = ref.watch(finampSettingsProvider.autoOffline) != AutoOfflineOption.disabled;
     // false = user overwrote offline mode
-    bool featureActive =
-        ref.watch(finampSettingsProvider.autoOfflineListenerActive);
+    bool featureActive = ref.watch(finampSettingsProvider.autoOfflineListenerActive);
 
     if (featureEnabled && featureActive) {
       _autoOfflineLogger.info("Resumed Automation");
@@ -45,8 +41,7 @@ class AutoOffline extends _$AutoOffline {
 
 Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
   // skip when feature not enabled
-  if (FinampSettingsHelper.finampSettings.autoOffline ==
-      AutoOfflineOption.disabled) return;
+  if (FinampSettingsHelper.finampSettings.autoOffline == AutoOfflineOption.disabled) return;
   // skip when user overwrote offline mode
   if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) return;
 
@@ -61,12 +56,10 @@ Future<void> _setOfflineMode(List<ConnectivityResult>? connections) async {
   // skip if nothing changed
   if (FinampSettingsHelper.finampSettings.isOffline == state) return;
 
-  GlobalSnackbar.message((context) => AppLocalizations.of(context)!
-      .autoOfflineNotification(state ? "enabled" : "disabled"));
+  GlobalSnackbar.message(
+      (context) => AppLocalizations.of(context)!.autoOfflineNotification(state ? "enabled" : "disabled"));
 
-  Logger("AutoOffline").info(state
-      ? "Automatically Enabled Offline Mode"
-      : "Automatically Disabled Offline Mode");
+  Logger("AutoOffline").info(state ? "Automatically Enabled Offline Mode" : "Automatically Disabled Offline Mode");
 
   FinampSetters.setIsOffline(state);
 }
@@ -79,8 +72,7 @@ Future<bool> _shouldBeOffline(List<ConnectivityResult>? connections) async {
           !connections.contains(ConnectivityResult.ethernet) &&
           !connections.contains(ConnectivityResult.wifi);
     case AutoOfflineOption.network:
-      return !connections.contains(ConnectivityResult.ethernet) &&
-          !connections.contains(ConnectivityResult.wifi);
+      return !connections.contains(ConnectivityResult.ethernet) && !connections.contains(ConnectivityResult.wifi);
     default:
       return false;
   }
