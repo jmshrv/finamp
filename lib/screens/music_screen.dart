@@ -29,6 +29,9 @@ class MusicScreen extends ConsumerStatefulWidget {
     super.key,
     this.genreFilter,
     this.tabTypeFilter,
+    this.sortByOverrideInit,
+    this.sortOrderOverrideInit,
+    this.isFavoriteOverrideInit = false,
   });
 
   static const routeName = "/music";
@@ -36,6 +39,9 @@ class MusicScreen extends ConsumerStatefulWidget {
   // Optional parameters for genre and tab filtering
   final BaseItemDto? genreFilter;
   final TabContentType? tabTypeFilter;
+  final SortBy? sortByOverrideInit;
+  final SortOrder? sortOrderOverrideInit;
+  final bool isFavoriteOverrideInit;
 
   @override
   ConsumerState<MusicScreen> createState() => _MusicScreenState();
@@ -48,6 +54,9 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   TextEditingController textEditingController = TextEditingController();
   String? searchQuery;
   final Map<TabContentType, MusicRefreshCallback> refreshMap = {};
+  SortBy? sortByOverride;
+  SortOrder? sortOrderOverride;
+  bool isFavoriteOverride = false;
 
   TabController? _tabController;
 
@@ -84,27 +93,34 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     }
   }
 
-void _buildTabController() {
-  _tabController?.removeListener(_tabIndexCallback);
+  void _buildTabController() {
+    _tabController?.removeListener(_tabIndexCallback);
 
-  final tabs = widget.tabTypeFilter != null
-      ? [widget.tabTypeFilter!]
-      : ref
-            .watch(finampSettingsProvider.tabOrder)
-            .where((e) =>
-            ref.watch(finampSettingsProvider
-                .select((value) => value.value?.showTabs[e])) ??
-            false);
+    final tabs = widget.tabTypeFilter != null
+        ? [widget.tabTypeFilter!]
+        : ref
+              .watch(finampSettingsProvider.tabOrder)
+              .where((e) =>
+              ref.watch(finampSettingsProvider
+                  .select((value) => value.value?.showTabs[e])) ??
+              false);
 
-  _tabController = TabController(
-    length: tabs.length,
-    vsync: this,
-    initialIndex: 0,
-  );
+    _tabController = TabController(
+      length: tabs.length,
+      vsync: this,
+      initialIndex: 0,
+    );
 
-  _tabController!.addListener(_tabIndexCallback);
-}
+    _tabController!.addListener(_tabIndexCallback);
+  }
 
+  @override
+  void initState() {
+    super.initState();
+    sortByOverride = widget.sortByOverrideInit;
+    sortOrderOverride = widget.sortOrderOverrideInit;
+    isFavoriteOverride = widget.isFavoriteOverrideInit;
+  }
 
   @override
   void dispose() {
@@ -121,7 +137,7 @@ void _buildTabController() {
         onPressed: () async {
           try {
             await _audioServiceHelper.shuffleAll(
-                ref.watch(finampSettingsProvider.onlyShowFavourites));
+                (ref.watch(finampSettingsProvider.onlyShowFavourites) || isFavoriteOverride));
           } catch (e) {
             GlobalSnackbar.error(e);
           }
@@ -198,7 +214,7 @@ void _buildTabController() {
       _buildTabController();
     }
     ref.watch(FinampUserHelper.finampCurrentUserProvider);
-// Get the filtered tab or the tabs from the user's tab order,
+    // Get the filtered tab or the tabs from the user's tab order,
     // and filter them to only include enabled tabs
     final sortedTabs = widget.tabTypeFilter != null
         ? [widget.tabTypeFilter!]
@@ -260,42 +276,7 @@ void _buildTabController() {
                     widget.tabTypeFilter?.toLocalisedString(context) ??
                         _finampUserHelper.currentUser?.currentView?.name ??
                         AppLocalizations.of(context)!.music,
-                ),/*
-                // Alternative Design Choice:
-                widget.tabTypeFilter != null
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (widget.genreFilter != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 2.0, left: 2.0),
-                          child: Text(
-                            widget.genreFilter?.name ?? "Unknown Genre",
-                            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary),
-                          ),
-                        ),
-                      Text(
-                        widget.tabTypeFilter!.toLocalisedString(context)
-                      ),
-                    ],
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                     if (widget.genreFilter != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 2.0, left: 2.0),
-                          child: Text(
-                            widget.genreFilter?.name ?? "Unknown Genre",
-                            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary),
-                          ),
-                        ),
-                      Text(_finampUserHelper.currentUser?.currentView?.name ??
-                        AppLocalizations.of(context)!.music
-                      ),
-                    ],
-                  ),*/
+                ),
           bottom: widget.genreFilter == null
             ? TabBar(
               controller: _tabController,
@@ -306,10 +287,6 @@ void _buildTabController() {
                         alignment: Alignment.center,
                         child: Text(
                           tabType.toLocalisedString(context).toUpperCase(),
-                          // style: TextStyle(
-                          //   fontSize: 12,
-                          //   fontWeight: FontWeight.bold,
-                          // ),
                         ),
                       )))
                   .toList(),
@@ -318,8 +295,6 @@ void _buildTabController() {
             )
             : PreferredSize(
                 preferredSize: const Size.fromHeight(36),
-                // Alternative Design Choice:
-                // child: const Divider(height: 1),
                 child: Container(
                   alignment: Alignment.centerLeft,
                   width: double.infinity,
@@ -371,10 +346,18 @@ void _buildTabController() {
                               sortedTabs.elementAt(_tabController!.index)]!();
                         }),
                   SortOrderButton(
-                    sortedTabs.elementAt(_tabController!.index),
+                    tabType: sortedTabs.elementAt(_tabController!.index),
+                    sortOrderOverride: sortOrderOverride,
+                    onOverrideUsed: () => setState(() {
+                      sortOrderOverride = null;
+                    }),
                   ),
                   SortByMenuButton(
-                    sortedTabs.elementAt(_tabController!.index),
+                    tabType: sortedTabs.elementAt(_tabController!.index),
+                    sortByOverride: sortByOverride,
+                    onOverrideUsed: () => setState(() {
+                      sortByOverride = null;
+                    }),
                   ),
                   if (ref.watch(finampSettingsProvider.isOffline))
                     IconButton(
@@ -393,11 +376,25 @@ void _buildTabController() {
                   if (!ref.watch(finampSettingsProvider.isOffline) ||
                       ref.watch(finampSettingsProvider.trackOfflineFavorites))
                     IconButton(
-                      icon: ref.watch(finampSettingsProvider.onlyShowFavourites)
+                      icon: (ref.watch(finampSettingsProvider.onlyShowFavourites) || isFavoriteOverride)
                           ? const Icon(Icons.favorite)
                           : const Icon(Icons.favorite_outline),
-                      onPressed: () => FinampSetters.setOnlyShowFavourites(!ref
-                          .watch(finampSettingsProvider.onlyShowFavourites)),
+                      onPressed: () {
+                        if (isFavoriteOverride) {
+                          if (ref.watch(finampSettingsProvider.onlyShowFavourites)) {
+                            FinampSetters.setOnlyShowFavourites(
+                            !ref.watch(finampSettingsProvider.onlyShowFavourites),
+                          );
+                          }
+                          setState(() {
+                            isFavoriteOverride = false;
+                          });
+                        } else {
+                          FinampSetters.setOnlyShowFavourites(
+                            !ref.watch(finampSettingsProvider.onlyShowFavourites),
+                          );
+                        }
+                      },
                       tooltip: AppLocalizations.of(context)!.favourites,
                     ),
                   IconButton(
@@ -448,6 +445,9 @@ void _buildTabController() {
                           ? widget.genreFilter
                           : null,
                       tabBarFiltered: (widget.tabTypeFilter != null),
+                      sortByOverride: sortByOverride,
+                      sortOrderOverride: sortOrderOverride,
+                      isFavoriteOverride: isFavoriteOverride,
                     ),
                   ),
                 ],

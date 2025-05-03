@@ -206,11 +206,37 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
   }
 
   void openSeeAll(TabContentType tabContentType) {
+    bool isFavoriteOverride = false;
+    SortBy? sortByOverride;
+    SortOrder? sortOrderOverride;
+
+    if (ref.watch(finampSettingsProvider.genreListsInheritSorting)) {
+      switch (ref.watch(finampSettingsProvider.genreCuratedItemSelectionType)) {
+        case GenreCuratedItemSelectionType.mostPlayed:
+          // Not yet implemented on MusicScreen
+          // sortByOverride = SortBy.playCount;
+          // sortOrderOverride = SortOrder.descending;
+        case GenreCuratedItemSelectionType.favorites:
+          sortByOverride = SortBy.random;
+          isFavoriteOverride = true;
+        case GenreCuratedItemSelectionType.random:
+          sortByOverride = SortBy.random;
+        case GenreCuratedItemSelectionType.latestReleases:
+          sortByOverride = SortBy.premiereDate;
+          sortOrderOverride = SortOrder.descending;
+        case GenreCuratedItemSelectionType.recentlyAdded:
+          sortByOverride = SortBy.dateCreated;
+          sortOrderOverride = SortOrder.descending;
+      }
+    }
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MusicScreen(
           genreFilter: widget.parent,
           tabTypeFilter: tabContentType,
+          sortByOverrideInit: sortByOverride,
+          sortOrderOverrideInit: sortOrderOverride,
+          isFavoriteOverrideInit: isFavoriteOverride,
         ),
       ),
     );

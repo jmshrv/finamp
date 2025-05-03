@@ -1211,9 +1211,17 @@
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "genreFilterArtistScreensSubtitle": "When activated, Artist Screens (that get accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter from an Artist Screen to reveal all tracks and albums.)",
+  "genreFilterArtistScreensSubtitle": "When enabled, Artist Screens (accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks and albums.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Full Lists Sorting Inheritance",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "When enabled, the \"See All\" lists will inherit the sorting and filtering from the Genre Screen. If disabled, settings from the corresponding library tab will be used instead.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {

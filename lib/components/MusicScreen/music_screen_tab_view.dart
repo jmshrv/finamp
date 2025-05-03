@@ -36,6 +36,9 @@ class MusicScreenTabView extends StatefulWidget {
     this.refresh,
     this.genreFilter,
     this.tabBarFiltered = false,
+    this.sortByOverride,
+    this.sortOrderOverride,
+    this.isFavoriteOverride = false,
   });
 
   final TabContentType tabContentType;
@@ -44,6 +47,9 @@ class MusicScreenTabView extends StatefulWidget {
   final MusicRefreshCallback? refresh;
   final BaseItemDto? genreFilter; 
   final bool tabBarFiltered;
+  final SortBy? sortByOverride;
+  final SortOrder? sortOrderOverride;
+  final bool isFavoriteOverride;
 
   @override
   State<MusicScreenTabView> createState() => _MusicScreenTabViewState();
@@ -92,7 +98,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     int localRefreshCount = refreshCount;
     try {
       final sortOrder =
-          settings.tabSortOrder[widget.tabContentType]?.toString() ??
+          (widget.sortOrderOverride ?? settings.tabSortOrder[widget.tabContentType])
+              ?.toString() ??
               SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
         // starting with Jellyfin 10.9, only automatically created playlists will have a specific library as parent. user-created playlists will not be returned anymore
@@ -105,14 +112,15 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         // If we're on the tracks tab, sort by "Album,SortName". This is what the
         // Jellyfin web client does. If this isn't the case, sort by "SortName".
         // If widget.sortBy is set, it is used instead.
-        sortBy: settings.tabSortBy[widget.tabContentType]
-                ?.jellyfinName(widget.tabContentType) ??
+        sortBy: (widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType])
+            ?.jellyfinName(widget.tabContentType) ??
             (widget.tabContentType == TabContentType.tracks
                 ? "Album,SortName"
                 : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
-        filters: settings.onlyShowFavourites ? "IsFavorite" : null,
+        filters: (settings.onlyShowFavourites || widget.isFavoriteOverride) 
+            ? "IsFavorite" : null,
         startIndex: pageKey,
         limit: _pageSize,
         artistType: settings.artistListType,
@@ -155,7 +163,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           viewFilter: widget.view?.id,
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
           onlyFavorites:
-              settings.onlyShowFavourites && settings.trackOfflineFavorites,
+              (settings.onlyShowFavourites || widget.isFavoriteOverride) && settings.trackOfflineFavorites,
           genreFilter: widget.genreFilter
       );
     } else {
@@ -173,7 +181,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         nullableViewFilters: widget.tabContentType == TabContentType.albums &&
             settings.showDownloadsWithUnknownLibrary,
         onlyFavorites:
-            settings.onlyShowFavourites && settings.trackOfflineFavorites,
+            (settings.onlyShowFavourites || widget.isFavoriteOverride) && settings.trackOfflineFavorites,
         infoForType: (widget.tabContentType == TabContentType.artists)
             ? artistInfoForType
             : null,
@@ -182,9 +190,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
 
     var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
-
-    items = sortItems(items, settings.tabSortBy[widget.tabContentType],
-        settings.tabSortOrder[widget.tabContentType]);
+    final sortBy = widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType];
+    final sortOrder = widget.sortOrderOverride ?? settings.tabSortOrder[widget.tabContentType];
+    items = sortItems(items, sortBy, sortOrder);
 
     // Skip appending page if a refresh triggered while processing
     if (localRefreshCount == refreshCount && mounted) {

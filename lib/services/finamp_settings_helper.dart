@@ -150,6 +150,8 @@ class FinampSettingsHelper {
         DefaultSettings.genreItemSectionsOrder;
     finampSettingsTemp.genreFilterArtistScreens =
         DefaultSettings.genreFilterArtistScreens;
+    finampSettingsTemp.genreListsInheritSorting =
+        DefaultSettings.genreListsInheritSorting;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);

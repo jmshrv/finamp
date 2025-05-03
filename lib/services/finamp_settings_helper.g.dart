@@ -697,6 +697,13 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setGenreListsInheritSorting(bool newGenreListsInheritSorting) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreListsInheritSorting = newGenreListsInheritSorting;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -933,6 +940,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get genreFilterArtistScreens =>
       finampSettingsProvider
           .select((value) => value.requireValue.genreFilterArtistScreens);
+  ProviderListenable<bool> get genreListsInheritSorting =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.genreListsInheritSorting);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

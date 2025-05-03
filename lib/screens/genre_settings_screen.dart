@@ -33,6 +33,12 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
               value: ref.watch(finampSettingsProvider.genreFilterArtistScreens),
               onChanged: FinampSetters.setGenreFilterArtistScreens,
             ),
+            SwitchListTile.adaptive(
+              title: Text(AppLocalizations.of(context)!.genreListsInheritSorting),
+              subtitle: Text(AppLocalizations.of(context)!.genreListsInheritSortingSubtitle),
+              value: ref.watch(finampSettingsProvider.genreListsInheritSorting),
+              onChanged: FinampSetters.setGenreListsInheritSorting,
+            ),
             ListTile(
               title: Text(AppLocalizations.of(context)!.genreItemSectionsOrder),
               subtitle: Text(AppLocalizations.of(context)!.genreItemSectionsOrderSubtitle),
