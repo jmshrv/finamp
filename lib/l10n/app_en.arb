@@ -2158,9 +2158,14 @@
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
   },
-  "autoReloadPrompt": "Reload queue to apply new network settings",
+  "autoReloadPrompt": "Reload queue to apply new {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",
   "@autoReloadPrompt": {
-    "description": "Prompt shown when the queue needs to be reloaded after changing network settings"
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
   },
   "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} will be removed from the queue because they aren't downloaded.",
   "@autoReloadPromptMissingTracks": {
