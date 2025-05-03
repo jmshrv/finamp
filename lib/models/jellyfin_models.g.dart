@@ -8,7 +8,7 @@ part of 'jellyfin_models.dart';
 
 class UserDtoAdapter extends TypeAdapter<UserDto> {
   @override
-  final int typeId = 9;
+  final typeId = 9;
 
   @override
   UserDto read(BinaryReader reader) {
@@ -81,7 +81,7 @@ class UserDtoAdapter extends TypeAdapter<UserDto> {
 
 class UserConfigurationAdapter extends TypeAdapter<UserConfiguration> {
   @override
-  final int typeId = 11;
+  final typeId = 11;
 
   @override
   UserConfiguration read(BinaryReader reader) {
@@ -157,7 +157,7 @@ class UserConfigurationAdapter extends TypeAdapter<UserConfiguration> {
 
 class UserPolicyAdapter extends TypeAdapter<UserPolicy> {
   @override
-  final int typeId = 12;
+  final typeId = 12;
 
   @override
   UserPolicy read(BinaryReader reader) {
@@ -305,7 +305,7 @@ class UserPolicyAdapter extends TypeAdapter<UserPolicy> {
 
 class AccessScheduleAdapter extends TypeAdapter<AccessSchedule> {
   @override
-  final int typeId = 13;
+  final typeId = 13;
 
   @override
   AccessSchedule read(BinaryReader reader) {
@@ -351,7 +351,7 @@ class AccessScheduleAdapter extends TypeAdapter<AccessSchedule> {
 
 class AuthenticationResultAdapter extends TypeAdapter<AuthenticationResult> {
   @override
-  final int typeId = 7;
+  final typeId = 7;
 
   @override
   AuthenticationResult read(BinaryReader reader) {
@@ -394,7 +394,7 @@ class AuthenticationResultAdapter extends TypeAdapter<AuthenticationResult> {
 
 class SessionInfoAdapter extends TypeAdapter<SessionInfo> {
   @override
-  final int typeId = 10;
+  final typeId = 10;
 
   @override
   SessionInfo read(BinaryReader reader) {
@@ -509,7 +509,7 @@ class SessionInfoAdapter extends TypeAdapter<SessionInfo> {
 
 class PlayerStateInfoAdapter extends TypeAdapter<PlayerStateInfo> {
   @override
-  final int typeId = 14;
+  final typeId = 14;
 
   @override
   PlayerStateInfo read(BinaryReader reader) {
@@ -570,7 +570,7 @@ class PlayerStateInfoAdapter extends TypeAdapter<PlayerStateInfo> {
 
 class SessionUserInfoAdapter extends TypeAdapter<SessionUserInfo> {
   @override
-  final int typeId = 15;
+  final typeId = 15;
 
   @override
   SessionUserInfo read(BinaryReader reader) {
@@ -607,7 +607,7 @@ class SessionUserInfoAdapter extends TypeAdapter<SessionUserInfo> {
 
 class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
   @override
-  final int typeId = 16;
+  final typeId = 16;
 
   @override
   ClientCapabilities read(BinaryReader reader) {
@@ -659,7 +659,7 @@ class ClientCapabilitiesAdapter extends TypeAdapter<ClientCapabilities> {
 
 class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
   @override
-  final int typeId = 17;
+  final typeId = 17;
 
   @override
   DeviceProfile read(BinaryReader reader) {
@@ -807,7 +807,7 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
 
 class DeviceIdentificationAdapter extends TypeAdapter<DeviceIdentification> {
   @override
-  final int typeId = 18;
+  final typeId = 18;
 
   @override
   DeviceIdentification read(BinaryReader reader) {
@@ -865,7 +865,7 @@ class DeviceIdentificationAdapter extends TypeAdapter<DeviceIdentification> {
 
 class HttpHeaderInfoAdapter extends TypeAdapter<HttpHeaderInfo> {
   @override
-  final int typeId = 19;
+  final typeId = 19;
 
   @override
   HttpHeaderInfo read(BinaryReader reader) {
@@ -905,7 +905,7 @@ class HttpHeaderInfoAdapter extends TypeAdapter<HttpHeaderInfo> {
 
 class XmlAttributeAdapter extends TypeAdapter<XmlAttribute> {
   @override
-  final int typeId = 20;
+  final typeId = 20;
 
   @override
   XmlAttribute read(BinaryReader reader) {
@@ -942,7 +942,7 @@ class XmlAttributeAdapter extends TypeAdapter<XmlAttribute> {
 
 class DirectPlayProfileAdapter extends TypeAdapter<DirectPlayProfile> {
   @override
-  final int typeId = 21;
+  final typeId = 21;
 
   @override
   DirectPlayProfile read(BinaryReader reader) {
@@ -985,7 +985,7 @@ class DirectPlayProfileAdapter extends TypeAdapter<DirectPlayProfile> {
 
 class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
   @override
-  final int typeId = 22;
+  final typeId = 22;
 
   @override
   TranscodingProfile read(BinaryReader reader) {
@@ -1061,7 +1061,7 @@ class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
 
 class ContainerProfileAdapter extends TypeAdapter<ContainerProfile> {
   @override
-  final int typeId = 23;
+  final typeId = 23;
 
   @override
   ContainerProfile read(BinaryReader reader) {
@@ -1101,7 +1101,7 @@ class ContainerProfileAdapter extends TypeAdapter<ContainerProfile> {
 
 class ProfileConditionAdapter extends TypeAdapter<ProfileCondition> {
   @override
-  final int typeId = 24;
+  final typeId = 24;
 
   @override
   ProfileCondition read(BinaryReader reader) {
@@ -1144,7 +1144,7 @@ class ProfileConditionAdapter extends TypeAdapter<ProfileCondition> {
 
 class CodecProfileAdapter extends TypeAdapter<CodecProfile> {
   @override
-  final int typeId = 25;
+  final typeId = 25;
 
   @override
   CodecProfile read(BinaryReader reader) {
@@ -1190,7 +1190,7 @@ class CodecProfileAdapter extends TypeAdapter<CodecProfile> {
 
 class ResponseProfileAdapter extends TypeAdapter<ResponseProfile> {
   @override
-  final int typeId = 26;
+  final typeId = 26;
 
   @override
   ResponseProfile read(BinaryReader reader) {
@@ -1242,7 +1242,7 @@ class ResponseProfileAdapter extends TypeAdapter<ResponseProfile> {
 
 class SubtitleProfileAdapter extends TypeAdapter<SubtitleProfile> {
   @override
-  final int typeId = 27;
+  final typeId = 27;
 
   @override
   SubtitleProfile read(BinaryReader reader) {
@@ -1288,7 +1288,7 @@ class SubtitleProfileAdapter extends TypeAdapter<SubtitleProfile> {
 
 class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
   @override
-  final int typeId = 0;
+  final typeId = 0;
 
   @override
   BaseItemDto read(BinaryReader reader) {
@@ -1778,7 +1778,7 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
 
 class ExternalUrlAdapter extends TypeAdapter<ExternalUrl> {
   @override
-  final int typeId = 29;
+  final typeId = 29;
 
   @override
   ExternalUrl read(BinaryReader reader) {
@@ -1815,7 +1815,7 @@ class ExternalUrlAdapter extends TypeAdapter<ExternalUrl> {
 
 class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
   @override
-  final int typeId = 5;
+  final typeId = 5;
 
   @override
   MediaSourceInfo read(BinaryReader reader) {
@@ -1972,7 +1972,7 @@ class MediaSourceInfoAdapter extends TypeAdapter<MediaSourceInfo> {
 
 class MediaStreamAdapter extends TypeAdapter<MediaStream> {
   @override
-  final int typeId = 6;
+  final typeId = 6;
 
   @override
   MediaStream read(BinaryReader reader) {
@@ -2144,7 +2144,7 @@ class MediaStreamAdapter extends TypeAdapter<MediaStream> {
 
 class MediaUrlAdapter extends TypeAdapter<MediaUrl> {
   @override
-  final int typeId = 47;
+  final typeId = 47;
 
   @override
   MediaUrl read(BinaryReader reader) {
@@ -2173,7 +2173,7 @@ class MediaUrlAdapter extends TypeAdapter<MediaUrl> {
 
 class BaseItemPersonAdapter extends TypeAdapter<BaseItemPerson> {
   @override
-  final int typeId = 48;
+  final typeId = 48;
 
   @override
   BaseItemPerson read(BinaryReader reader) {
@@ -2202,7 +2202,7 @@ class BaseItemPersonAdapter extends TypeAdapter<BaseItemPerson> {
 
 class NameLongIdPairAdapter extends TypeAdapter<NameLongIdPair> {
   @override
-  final int typeId = 30;
+  final typeId = 30;
 
   @override
   NameLongIdPair read(BinaryReader reader) {
@@ -2239,7 +2239,7 @@ class NameLongIdPairAdapter extends TypeAdapter<NameLongIdPair> {
 
 class UserItemDataDtoAdapter extends TypeAdapter<UserItemDataDto> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   UserItemDataDto read(BinaryReader reader) {
@@ -2303,7 +2303,7 @@ class UserItemDataDtoAdapter extends TypeAdapter<UserItemDataDto> {
 
 class NameIdPairAdapter extends TypeAdapter<NameIdPair> {
   @override
-  final int typeId = 2;
+  final typeId = 2;
 
   @override
   NameIdPair read(BinaryReader reader) {
@@ -2340,7 +2340,7 @@ class NameIdPairAdapter extends TypeAdapter<NameIdPair> {
 
 class ImageBlurHashesAdapter extends TypeAdapter<ImageBlurHashes> {
   @override
-  final int typeId = 32;
+  final typeId = 32;
 
   @override
   ImageBlurHashes read(BinaryReader reader) {
@@ -2410,7 +2410,7 @@ class ImageBlurHashesAdapter extends TypeAdapter<ImageBlurHashes> {
 
 class MediaAttachmentAdapter extends TypeAdapter<MediaAttachment> {
   @override
-  final int typeId = 33;
+  final typeId = 33;
 
   @override
   MediaAttachment read(BinaryReader reader) {
@@ -2462,7 +2462,7 @@ class MediaAttachmentAdapter extends TypeAdapter<MediaAttachment> {
 
 class BaseItemAdapter extends TypeAdapter<BaseItem> {
   @override
-  final int typeId = 34;
+  final typeId = 34;
 
   @override
   BaseItem read(BinaryReader reader) {
@@ -2526,7 +2526,7 @@ class BaseItemAdapter extends TypeAdapter<BaseItem> {
 
 class QueueItemAdapter extends TypeAdapter<QueueItem> {
   @override
-  final int typeId = 35;
+  final typeId = 35;
 
   @override
   QueueItem read(BinaryReader reader) {
@@ -2563,7 +2563,7 @@ class QueueItemAdapter extends TypeAdapter<QueueItem> {
 
 class LyricMetadataAdapter extends TypeAdapter<LyricMetadata> {
   @override
-  final int typeId = 44;
+  final typeId = 44;
 
   @override
   LyricMetadata read(BinaryReader reader) {
@@ -2624,7 +2624,7 @@ class LyricMetadataAdapter extends TypeAdapter<LyricMetadata> {
 
 class LyricLineAdapter extends TypeAdapter<LyricLine> {
   @override
-  final int typeId = 45;
+  final typeId = 45;
 
   @override
   LyricLine read(BinaryReader reader) {
@@ -2661,7 +2661,7 @@ class LyricLineAdapter extends TypeAdapter<LyricLine> {
 
 class LyricDtoAdapter extends TypeAdapter<LyricDto> {
   @override
-  final int typeId = 46;
+  final typeId = 46;
 
   @override
   LyricDto read(BinaryReader reader) {
@@ -2698,7 +2698,7 @@ class LyricDtoAdapter extends TypeAdapter<LyricDto> {
 
 class SortByAdapter extends TypeAdapter<SortBy> {
   @override
-  final int typeId = 37;
+  final typeId = 37;
 
   @override
   SortBy read(BinaryReader reader) {
@@ -2787,7 +2787,7 @@ class SortByAdapter extends TypeAdapter<SortBy> {
 
 class SortOrderAdapter extends TypeAdapter<SortOrder> {
   @override
-  final int typeId = 38;
+  final typeId = 38;
 
   @override
   SortOrder read(BinaryReader reader) {

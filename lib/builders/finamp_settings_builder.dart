@@ -43,7 +43,7 @@ class _FinampSettingsGenerator extends Generator {
     var selectorsCode = "";
     for (var property in settings.accessors) {
       if (!property.hasDeprecated &&
-          TypeChecker.fromRuntime(FinampSetterIgnore)
+          TypeChecker.fromRuntime(SettingsHelperIgnore)
                   .firstAnnotationOfExact(property.nonSynthetic) ==
               null) {
         if (property.isSetter) {

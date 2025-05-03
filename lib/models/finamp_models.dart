@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
@@ -15,6 +16,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+
 import '../builders/annotations.dart';
 import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
@@ -86,10 +88,12 @@ class FinampUser {
       {bool? newIsLocal,
       String? newHomeAddress,
       String? newPublicAddress,
+      String? newHomeNetworkName,
       bool? newPreferHomeNetwork}) {
     isLocal = newIsLocal ?? isLocal;
     homeAddress = newHomeAddress ?? homeAddress;
     publicAddress = newPublicAddress ?? publicAddress;
+    homeNetworkName = newHomeNetworkName ?? homeNetworkName;
     preferHomeNetwork = newPreferHomeNetwork ?? preferHomeNetwork;
     GetIt.instance<FinampUserHelper>().saveUser(this);
   }
@@ -296,10 +300,6 @@ class FinampSettings {
         DefaultSettings.showLyricsScreenAlbumPrelude,
     this.showStopButtonOnMediaNotification =
         DefaultSettings.showStopButtonOnMediaNotification,
-    this.showShuffleButtonOnMediaNotification =
-        DefaultSettings.showShuffleButtonOnMediaNotification,
-    this.showFavoriteButtonOnMediaNotification =
-        DefaultSettings.showFavoriteButtonOnMediaNotification,
     this.showSeekControlsOnMediaNotification =
         DefaultSettings.showSeekControlsOnMediaNotification,
     this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
@@ -337,8 +337,9 @@ class FinampSettings {
 
   @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
+
   @HiveField(5)
-  @FinampSetterIgnore(
+  @SettingsHelperIgnore(
       "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<TabContentType, bool> showTabs;
 
@@ -387,7 +388,7 @@ class FinampSettings {
   int sleepTimerSeconds;
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
-  @FinampSetterIgnore(
+  @SettingsHelperIgnore(
       "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<String, DownloadLocation> downloadLocationsMap;
 
@@ -402,12 +403,12 @@ class FinampSettings {
   bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: <TabContentType, SortBy>{})
-  @FinampSetterIgnore(
+  @SettingsHelperIgnore(
       "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<TabContentType, SortBy> tabSortBy;
 
   @HiveField(21, defaultValue: <TabContentType, SortOrder>{})
-  @FinampSetterIgnore(
+  @SettingsHelperIgnore(
       "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<TabContentType, SortOrder> tabSortOrder;
 
@@ -1983,7 +1984,7 @@ class FinampQueueInfo {
   Duration get totalDuration {
     var total = 0;
     for (var item in fullQueue) {
-      total += item?.item.duration?.inMicroseconds ?? 0;
+      total += item.item.duration?.inMicroseconds ?? 0;
     }
     return Duration(microseconds: total);
   }

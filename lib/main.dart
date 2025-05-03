@@ -23,12 +23,14 @@ import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
+import 'package:finamp/services/data_source_service.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_logs_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/keep_screen_on_helper.dart';
+import 'package:finamp/services/network_manager.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/playon_service.dart';
@@ -112,6 +114,8 @@ void main() async {
     _mainLog.info("Setup PlayOnService");
     await _setupPlaybackServices();
     _mainLog.info("Setup audio player");
+    _setupProviders();
+    _mainLog.info("Setup providers");
     await _setupKeepScreenOnHelper();
     _mainLog.info("Setup KeepScreenOnHelper");
   } catch (error, trace) {
@@ -272,14 +276,23 @@ Future<void> setupHive() async {
   GetIt.instance.registerSingleton(isar);
 }
 
+void _setupProviders() {
+  var container = ProviderContainer();
+  GetIt.instance.registerSingleton<ProviderContainer>(container);
+  container.listen(finampSettingsProvider, (_, __) {});
+
+  DataSourceService.create();
+  AutoOffline.startWatching();
+}
+
 Future<void> _setupOSIntegration() async {
   // set up window manager on desktop, mainly to restrict minimum size
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
-      size: Size(1200, 800),
-      center: true,
+      //size: Size(1200, 800),
+      //center: true,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
@@ -449,7 +462,8 @@ class _FinampState extends State<Finamp> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
+    return UncontrolledProviderScope(
+      container: GetIt.instance<ProviderContainer>(),
       child: GestureDetector(
         onTap: () {
           // Never rebuild FinampApp context, it breaks ProviderScope
