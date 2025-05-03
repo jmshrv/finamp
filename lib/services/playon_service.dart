@@ -37,8 +37,9 @@ class PlayOnService {
   SocketState socketState = SocketState.disconnected;
   // If a remote client is controlling the session
   bool isControlled = false;
-
+  // If pending connections should be cancelled and the socket closed
   bool abortConnect = false;
+  // If the connection retry loop is currently running
   bool retryActive = false;
 
   Future<void> initialize() async {
@@ -162,7 +163,7 @@ class PlayOnService {
           socketState = SocketState.disconnected;
           return;
         }
-        await connectWebsocket();
+        await _connectWebsocket();
       }
     } catch (e) {
       _playOnServiceLogger.severe("Error starting PlayOn listener: $e");
@@ -213,7 +214,7 @@ class PlayOnService {
     }
   }
 
-  Future<void> connectWebsocket() async {
+  Future<void> _connectWebsocket() async {
     assert(socketState == SocketState.connecting);
     final url =
         "${_finampUserHelper.currentUser!.baseURL}/socket?api_key=${_finampUserHelper.currentUser!.accessToken}";
@@ -233,7 +234,7 @@ class PlayOnService {
     _channel.sink.add('{"MessageType":"KeepAlive"}');
 
     _channel.stream.listen(
-      handleMessage,
+      _handleMessage,
       onDone: () {
         _keepaliveSubscription?.cancel();
         socketState = SocketState.disconnected;
@@ -276,7 +277,7 @@ class PlayOnService {
     }
   }
 
-  Future<void> handleMessage(dynamic value) async {
+  Future<void> _handleMessage(dynamic value) async {
     try {
       _playOnServiceLogger.finest("Received message: $value");
 
