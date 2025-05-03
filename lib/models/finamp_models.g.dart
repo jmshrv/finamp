@@ -21,9 +21,8 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       publicAddress: fields[1] as String,
       homeAddress:
           fields[7] == null ? 'http://0.0.0.0:8096' : fields[7] as String,
-      homeNetworkName: fields[8] == null ? '' : fields[8] as String,
-      preferHomeNetwork: fields[10] == null ? false : fields[10] as bool,
-      isLocal: fields[9] == null ? false : fields[9] as bool,
+      preferHomeNetwork: fields[9] == null ? false : fields[9] as bool,
+      isLocal: fields[8] == null ? false : fields[8] as bool,
       accessToken: fields[2] as String,
       serverId: fields[3] as String,
       currentViewId: fields[4] as BaseItemId?,

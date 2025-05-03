@@ -9,10 +9,10 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/playon_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models/finamp_models.dart';
@@ -54,6 +54,18 @@ class AutoOffline extends _$AutoOffline {
         _networkAutomationLogger.info("Paused Automation");
         _listener.pause();
       }
+    });
+
+    AppLifecycleListener(onRestart: () {
+      if (GetIt.instance<ProviderContainer>().read(autoOfflineProvider)) {
+        _autoOfflineLogger.finer("Lifecycle restarted automation");
+        _listener.resume();
+      } else {
+        _autoOfflineLogger.finer("Lifecycle kept automation paused");
+      }
+    }, onPause: () {
+      _listener.pause();
+      _autoOfflineLogger.finer("Lifecycle paused automation");
     });
   }
 

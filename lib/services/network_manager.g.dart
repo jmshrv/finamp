@@ -6,7 +6,7 @@ part of 'network_manager.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$autoOfflineHash() => r'7247f5a7958880bb90815a7dfd6e9c6b1dfd2c36';
+String _$autoOfflineHash() => r'fb1341622d098a50a475caa104505c99df623dc3';
 
 /// See also [AutoOffline].
 @ProviderFor(AutoOffline)

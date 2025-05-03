@@ -10,6 +10,7 @@ import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/io_client.dart' as http;
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,7 +21,6 @@ import 'downloads_service.dart';
 import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
-import 'package:http/io_client.dart' as http;
 import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
@@ -861,7 +861,50 @@ class JellyfinApiHelper {
     }
   }
 
-  Future<bool> pingServer() async {
+  Future<bool> _pingSpecificServer(String url) async {
+    final client = ChopperClient(
+        baseUrl: Uri.tryParse(url),
+        client: http.IOClient(
+            HttpClient()..connectionTimeout = const Duration(seconds: 3)),
+        interceptors: [
+          jellyfin_api.JellyfinSpecificInterceptor(url),
+          HttpAggregateLoggingInterceptor()
+        ],
+        converter: JsonConverter());
+
+    final Request $request = Request(
+      'GET',
+      Uri.parse("/System/Endpoint"),
+      client.baseUrl,
+    );
+
+    try {
+      Response<dynamic> response =
+          await client.send<dynamic, dynamic>($request);
+      if (response.statusCode != 200) return false;
+      final body = response.bodyOrThrow as Map<String, dynamic>;
+      // If IsInNetwork doesn't exist -> catch
+      // because then its not a jellyfin server
+      return body["IsInNetwork"] as bool;
+    } catch (e) {
+      Logger("Ayoo").severe(e);
+      return false;
+    }
+  }
+
+  Future<bool> pingLocalServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+    return await _pingSpecificServer(user.homeAddress);
+  }
+
+  Future<bool> pingPublicServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+    return await _pingSpecificServer(user.publicAddress);
+  }
+
+  Future<bool> pingActiveServer() async {
     try {
       Response<dynamic>? response = await jellyfinApi
           .pingServer()

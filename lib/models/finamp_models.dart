@@ -88,7 +88,6 @@ class FinampUser {
       {bool? newIsLocal,
       String? newHomeAddress,
       String? newPublicAddress,
-      String? newHomeNetworkName,
       bool? newPreferHomeNetwork}) {
     isLocal = newIsLocal ?? isLocal;
     homeAddress = newHomeAddress ?? homeAddress;
