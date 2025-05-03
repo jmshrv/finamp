@@ -72,6 +72,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(ReleaseDateFormatAdapter());
     registerAdapter(ResponseProfileAdapter());
     registerAdapter(SavedQueueStateAdapter());
+    registerAdapter(ScreenSizeAdapter());
     registerAdapter(SessionInfoAdapter());
     registerAdapter(SessionUserInfoAdapter());
     registerAdapter(SortByAdapter());
@@ -155,6 +156,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(ReleaseDateFormatAdapter());
     registerAdapter(ResponseProfileAdapter());
     registerAdapter(SavedQueueStateAdapter());
+    registerAdapter(ScreenSizeAdapter());
     registerAdapter(SessionInfoAdapter());
     registerAdapter(SessionUserInfoAdapter());
     registerAdapter(SortByAdapter());

@@ -288,11 +288,12 @@ void _setupProviders() {
 Future<void> _setupOSIntegration() async {
   // set up window manager on desktop, mainly to restrict minimum size
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    final screenSize = FinampSettingsHelper.finampSettings.screenSize;
     WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
-    WindowOptions windowOptions = const WindowOptions(
-      //size: Size(1200, 800),
-      //center: true,
+    WindowOptions windowOptions = WindowOptions(
+      size: screenSize?.size ?? Size(1200, 800),
+      center: screenSize == null,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
@@ -300,6 +301,9 @@ Future<void> _setupOSIntegration() async {
     );
     unawaited(
         WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+      if (screenSize != null) {
+        await windowManager.setPosition(screenSize.location);
+      }
       await windowManager.show();
       await windowManager.focus();
     }));
@@ -631,9 +635,16 @@ class _FinampState extends State<Finamp> with WindowListener {
   }
 
   @override
-  void onWindowEvent(String eventName) {
+  void onWindowEvent(String eventName) async {
     if (eventName == "move" || eventName == "resize") return;
+
     windowManagerLogger.finer("[WindowManager] onWindowEvent: $eventName");
+
+    if (eventName == "moved" || eventName == "resized") {
+      FinampSetters.setScreenSize(ScreenSize.from(
+          await windowManager.getSize(), await windowManager.getPosition()));
+      windowManagerLogger.finer("Saved window size and position");
+    }
   }
 
   @override

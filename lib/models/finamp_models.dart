@@ -321,6 +321,7 @@ class FinampSettings {
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
     this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
     this.autoReloadQueue = DefaultSettings.autoReloadQueue,
+    this.screenSize,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -644,13 +645,8 @@ class FinampSettings {
   @HiveField(97, defaultValue: DefaultSettings.autoReloadQueue)
   bool autoReloadQueue;
 
-  @HiveField(98,
-      defaultValue: DefaultSettings.showShuffleButtonOnMediaNotification)
-  bool showShuffleButtonOnMediaNotification;
-
-  @HiveField(99,
-      defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
-  bool showFavoriteButtonOnMediaNotification;
+  @HiveField(98)
+  ScreenSize? screenSize;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2906,4 +2902,31 @@ class FinampOutputRoute {
   String toString() {
     return jsonEncode(toJson());
   }
+}
+
+@HiveType(typeId: 94)
+class ScreenSize {
+  ScreenSize(this.sizeX, this.sizeY, this.locationX, this.locationY);
+
+  ScreenSize.from(Size size, Offset location)
+      : sizeX = size.width,
+        sizeY = size.height,
+        locationX = location.dx,
+        locationY = location.dy;
+
+  Size get size => Size(sizeX, sizeY);
+
+  Offset get location => Offset(locationX, locationY);
+
+  @HiveField(1)
+  double sizeX;
+
+  @HiveField(2)
+  double sizeY;
+
+  @HiveField(3)
+  double locationX;
+
+  @HiveField(4)
+  double locationY;
 }

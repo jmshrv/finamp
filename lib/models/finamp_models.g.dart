@@ -246,6 +246,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
       autoReloadQueue: fields[97] == null ? false : fields[97] as bool,
+      screenSize: fields[98] as ScreenSize?,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -256,7 +257,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(94)
+      ..writeByte(93)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -442,9 +443,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(97)
       ..write(obj.autoReloadQueue)
       ..writeByte(98)
-      ..write(obj.showShuffleButtonOnMediaNotification)
-      ..writeByte(99)
-      ..write(obj.showFavoriteButtonOnMediaNotification);
+      ..write(obj.screenSize);
   }
 
   @override
@@ -1142,6 +1141,49 @@ class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DeviceInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ScreenSizeAdapter extends TypeAdapter<ScreenSize> {
+  @override
+  final typeId = 94;
+
+  @override
+  ScreenSize read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ScreenSize(
+      (fields[1] as num).toDouble(),
+      (fields[2] as num).toDouble(),
+      (fields[3] as num).toDouble(),
+      (fields[4] as num).toDouble(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ScreenSize obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(1)
+      ..write(obj.sizeX)
+      ..writeByte(2)
+      ..write(obj.sizeY)
+      ..writeByte(3)
+      ..write(obj.locationX)
+      ..writeByte(4)
+      ..write(obj.locationY);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScreenSizeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
