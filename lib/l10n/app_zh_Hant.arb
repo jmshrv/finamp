@@ -118,7 +118,7 @@
       }
     }
   },
-  "dlComplete": "{count} 完成",
+  "dlComplete": "已完成 {count} 個",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -126,7 +126,7 @@
       }
     }
   },
-  "dlFailed": "{count} 失敗",
+  "dlFailed": "失敗了 {count} 個",
   "@dlFailed": {
     "placeholders": {
       "count": {
@@ -134,7 +134,7 @@
       }
     }
   },
-  "dlEnqueued": "{count} 已入隊",
+  "dlEnqueued": "已入隊 {count} 個",
   "@dlEnqueued": {
     "placeholders": {
       "count": {
@@ -142,7 +142,7 @@
       }
     }
   },
-  "dlRunning": "{count} 運行中",
+  "dlRunning": "{count} 個運行中",
   "@dlRunning": {
     "placeholders": {
       "count": {
@@ -1609,7 +1609,7 @@
     },
     "description": "Dropdown option to download original version of tracks"
   },
-  "deleteDownloadsPrompt": "你確定要將 {itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{風格} track{音軌} library{媒體庫} other{物品}} 「{itemName}」從此裝置上刪除嗎？",
+  "deleteDownloadsPrompt": "你確定要刪除所選項目嗎?",
   "@deleteDownloadsPrompt": {
     "placeholders": {
       "itemName": {
@@ -2085,5 +2085,19 @@
   "libraryDownloads": "媒體庫下載",
   "@libraryDownloads": {
     "description": "Title for the library downloads section on the downloads screen."
+  },
+  "startupErrorCallToAction": "請在網站 github.com/jmshrv/finamp 提交問題描述並附上程式日誌檔(!) (可使用下方按鈕) 以及現在畫面的截圖, 以讓我們盡快修正此問題.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "exportLogs": "儲存程式日誌檔案",
+  "@exportLogs": {},
+  "startupErrorTitle": "啟動時發生了一些錯誤!\n不好意思...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorWorkaround": "一種可行的修復方式是清除程式的資料以進行重設. 注意到這也會同時清除你現在的設定以及之前下載的內容.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   }
 }
