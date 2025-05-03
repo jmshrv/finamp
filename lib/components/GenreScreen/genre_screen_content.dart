@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
+import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/music_screen.dart';
 import 'package:flutter/material.dart';
@@ -237,6 +238,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             AppLocalizations.of(context)!.unknownName),
         pinned: true,
         actions: [
+          FavoriteButton(item: widget.parent),
           if (!isLoading)
             DownloadButton(
                 item: DownloadStub.fromItem(
