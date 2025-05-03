@@ -43,6 +43,34 @@ class DataSourceService {
           isOffline ? SourceChangeType.toOffline : SourceChangeType.toOnline);
     });
 
+    ref.listen(finampSettingsProvider.shouldTranscode, (_, shouldTranscode) {
+      if (shouldTranscode) {
+        _dataSourceServiceLogger.info("Transcoding Enabled");
+      } else {
+        _dataSourceServiceLogger.info("Transcoding Disabled");
+      }
+      _onDataSourceChange(shouldTranscode
+          ? SourceChangeType.toTranscoding
+          : SourceChangeType.toDirectPlay);
+    });
+
+    ref.listen(finampSettingsProvider.transcodingStreamingFormat,
+        (_, transcodingStreamingFormat) {
+      if (FinampSettingsHelper.finampSettings.shouldTranscode) {
+        _dataSourceServiceLogger.info(
+            "Transcoding Streaming Format Changed: $transcodingStreamingFormat");
+        _onDataSourceChange(SourceChangeType.toTranscoding);
+      }
+    });
+
+    ref.listen(finampSettingsProvider.transcodeBitrate, (_, transcodeBitrate) {
+      if (FinampSettingsHelper.finampSettings.shouldTranscode) {
+        _dataSourceServiceLogger
+            .info("Transcoding Bitrate Changed: $transcodeBitrate");
+        _onDataSourceChange(SourceChangeType.toTranscoding);
+      }
+    });
+
     ref.listen(
         FinampUserHelper.finampCurrentUserProvider
             .select((user) => user.value?.baseURL), (_, newUrl) {
@@ -72,8 +100,8 @@ class DataSourceService {
             } else {
               GlobalSnackbar.message(
                 (context) {
-                  final reloadPrompt =
-                      AppLocalizations.of(context)!.autoReloadPrompt;
+                  final reloadPrompt = AppLocalizations.of(context)!
+                      .autoReloadPrompt(SourceChangeGenericType.network.name);
                   final reloadPromptMissingTracks =
                       AppLocalizations.of(context)!
                           .autoReloadPromptMissingTracks(
@@ -103,6 +131,32 @@ class DataSourceService {
           break;
         case SourceChangeType.toOnline:
           // nop, queue won't change since Finamp prefers downloaded data anyway
+          break;
+        case SourceChangeType.toDirectPlay:
+        case SourceChangeType.toTranscoding:
+          final queueInfo = queueService.getQueue();
+          final transcodingItemsExist = queueInfo.fullQueue
+              .any((item) => item.item.extras?["shouldTranscode"] == true);
+          if (event == SourceChangeType.toTranscoding ||
+              transcodingItemsExist) {
+            if (FinampSettingsHelper.finampSettings.autoReloadQueue) {
+              await queueService.reloadQueue();
+            } else {
+              GlobalSnackbar.message(
+                (context) => AppLocalizations.of(context)!
+                    .autoReloadPrompt(SourceChangeGenericType.transcoding.name),
+                action: (context) => SnackBarAction(
+                  label: AppLocalizations.of(context)!
+                      .autoReloadPromptReloadButton,
+                  onPressed: () {
+                    queueService.reloadQueue(archiveQueue: false);
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  },
+                ),
+                isConfirmation: false,
+              );
+            }
+          }
           break;
       }
     }
