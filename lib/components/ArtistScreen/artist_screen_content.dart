@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +21,46 @@ import 'artist_screen_content_flexible_space_bar.dart';
 part 'artist_screen_content.g.dart';
 
 @riverpod
-Future<(List<BaseItemDto>, List<BaseItemDto>, List<BaseItemDto>, List<BaseItemDto>)> getArtistItems(
+Future<List<BaseItemDto>> getArtistTopTracks(
+  Ref ref,
+  BaseItemDto parent,
+  BaseItemDto? genreFilter,
+) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+
+  // Get Items
+  if (isOffline) {
+    // In Offline Mode
+    // We already fetch all tracks for the playback, 
+    // and as in offline mode this is much faster, we can just
+    // sort and filter them.
+    final List<BaseItemDto> allArtistTracks = await ref.watch(
+      getAllTracksProvider(parent, genreFilter).future,
+    );
+    var items = sortItems(allArtistTracks, SortBy.playCount, SortOrder.descending);
+    items = items.take(5).toList();
+    return items;
+  } else {
+    // In Online Mode
+    // Get Top 5 Tracks sorted by Play Count
+      final List<BaseItemDto>? topTracks = 
+        (ref.watch(finampSettingsProvider.showArtistsTopTracks))
+        ? await jellyfinApiHelper.getItems(
+            parentItem: parent,
+            genreFilter: genreFilter,
+            sortBy: "PlayCount,SortName",
+            sortOrder: "Descending",
+            limit: 5,
+            includeItemTypes: "Audio",
+          )
+        : [];
+    return topTracks?? [];
+  }
+}
+
+@riverpod
+Future<List<BaseItemDto>> getArtistAlbums(
   Ref ref,
   BaseItemDto parent,
   BaseItemDto? genreFilter,
@@ -43,7 +82,34 @@ Future<(List<BaseItemDto>, List<BaseItemDto>, List<BaseItemDto>, List<BaseItemDt
     fetchArtistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
         .compareTo(b.baseItem!.premiereDate ?? ""));
     final List<BaseItemDto> artistAlbums = fetchArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
-      
+    return artistAlbums;
+  } else {
+    // In Online Mode
+    // Get Albums where artist is Album Artist sorted by Premiere Date
+    final List<BaseItemDto>? artistAlbums = 
+      await jellyfinApiHelper.getItems(
+          parentItem: parent,
+          genreFilter: genreFilter,
+          sortBy: "PremiereDate,SortName",
+          includeItemTypes: "MusicAlbum",
+          artistType: ArtistType.albumartist);
+    return artistAlbums?? [];
+  }
+}
+
+@riverpod
+Future<List<BaseItemDto>> getPerformingArtistAlbums(
+  Ref ref,
+  BaseItemDto parent,
+  BaseItemDto? genreFilter,
+) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+
+  // Get Items
+  if (isOffline) {
+    // In Offline Mode
     // Get Albums where artist is Performing Artist sorted by Premiere Date
     final List<DownloadStub> fetchPerformingArtistAlbums =
       await downloadsService.getAllCollections(
@@ -54,50 +120,52 @@ Future<(List<BaseItemDto>, List<BaseItemDto>, List<BaseItemDto>, List<BaseItemDt
     fetchPerformingArtistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
         .compareTo(b.baseItem!.premiereDate ?? ""));
     final List<BaseItemDto> performingArtistAlbums = fetchPerformingArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
-    return (<BaseItemDto>[], artistAlbums, performingArtistAlbums, <BaseItemDto>[]);
+    return performingArtistAlbums;
   } else {
     // In Online Mode
-    // Get Top 5 Tracks sorted by Play Count
-      final List<BaseItemDto>? topTracks = 
-        (ref.watch(finampSettingsProvider.showArtistsTopTracks))
-        ? await jellyfinApiHelper.getItems(
-            parentItem: parent,
-            genreFilter: genreFilter,
-            sortBy: "PlayCount,SortName",
-            sortOrder: "Descending",
-            limit: 5,
-            includeItemTypes: "Audio",
-          )
-        : [];
-      // Get Albums where artist is Album Artist sorted by Premiere Date
-      final List<BaseItemDto>? artistAlbums = 
-        await jellyfinApiHelper.getItems(
-          parentItem: parent,
-          genreFilter: genreFilter,
-          sortBy: "PremiereDate,SortName",
-          includeItemTypes: "MusicAlbum",
-          artistType: ArtistType.albumartist);
-      // Get Albums where artist is Performing Artist sorted by Premiere Date
-      final List<BaseItemDto>? performingArtistAlbums = 
-        await jellyfinApiHelper.getItems(
-          parentItem: parent,
-          genreFilter: genreFilter,
-          sortBy: "PremiereDate,SortName",
-          includeItemTypes: "MusicAlbum",
-          artistType: ArtistType.artist,
-        );
-      // Now we fetch every performing artist track
-      // (this has to happen here, because otherwise we will
-      // get the correct childrenCount for the Download Status too late)
-      final List<BaseItemDto>? allPerformingArtistTracks = 
-        await jellyfinApiHelper.getItems(
-          parentItem: parent,
-          genreFilter: genreFilter,
-          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-          includeItemTypes: "Audio",
-          artistType: ArtistType.artist,
-        );
-    return (topTracks?? [], artistAlbums?? [], performingArtistAlbums?? [], allPerformingArtistTracks ?? []);
+    // Get Albums where artist is Performing Artist sorted by Premiere Date
+    final List<BaseItemDto>? performingArtistAlbums = 
+      await jellyfinApiHelper.getItems(
+        parentItem: parent,
+        genreFilter: genreFilter,
+        sortBy: "PremiereDate,SortName",
+        includeItemTypes: "MusicAlbum",
+        artistType: ArtistType.artist,
+      );
+    return performingArtistAlbums?? [];
+  }
+}
+
+@riverpod
+Future<List<BaseItemDto>> getPerformingArtistTracks(
+  Ref ref,
+  BaseItemDto parent,
+  BaseItemDto? genreFilter,
+) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+
+  // Get Items
+  if (isOffline) {
+    // In Offline Mode
+    // In Offline Mode, we are getting the Performaning Artist Tracks
+    // directly in the other provider
+    return <BaseItemDto>[];
+  } else {
+    // In Online Mode
+    // Now we fetch every performing artist track
+    // (this has to happen here, because otherwise we will
+    // get the correct childrenCount for the Download Status too late)
+    final List<BaseItemDto>? allPerformingArtistTracks = 
+      await jellyfinApiHelper.getItems(
+        parentItem: parent,
+        genreFilter: genreFilter,
+        sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+        includeItemTypes: "Audio",
+        artistType: ArtistType.artist,
+      );
+    return allPerformingArtistTracks ?? [];
   }
 }
 
@@ -166,10 +234,9 @@ Future<List<BaseItemDto>> getAllTracks(
   } else {
     // Online Mode
     // Get all performing artist tracks from other provider
-    final artistItemsTuple = await ref.watch(
-      getArtistItemsProvider(parent, genreFilter).future,
+    final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(
+      getPerformingArtistTracksProvider(parent, genreFilter).future,
     );
-    final List<BaseItemDto> allPerformingArtistTracks = artistItemsTuple.$4;
     // Fetch every album artist track
     final allAlbumArtistTracksResponse = await jellyfinApiHelper.getItems(
       parentItem: parent,
@@ -195,9 +262,6 @@ Future<List<BaseItemDto>> getAllTracks(
     return combinedTracks;
   }
 }
-
-
-
 
 class ArtistScreenContent extends ConsumerStatefulWidget {
   const ArtistScreenContent({
@@ -238,21 +302,31 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
     List<BaseItemDto> allChildren = [];
 
-    final artistItems = ref.watch(
-        getArtistItemsProvider(widget.parent, widget.genreFilter),
-      ).valueOrNull;
-    final allTracks = ref.watch(
+    final topTracksAsync = ref.watch(
+        getArtistTopTracksProvider(widget.parent, widget.genreFilter));
+    final albumArtistAlbumsAsync = ref.watch(
+        getArtistAlbumsProvider(widget.parent, widget.genreFilter));
+    final performingArtistAlbumsAsync = ref.watch(
+        getPerformingArtistAlbumsProvider(widget.parent, widget.genreFilter));
+    final allPerformingArtistTracksAsync = ref.watch(
+        getPerformingArtistTracksProvider(widget.parent, widget.genreFilter));
+        final allTracks = ref.watch(
         getAllTracksProvider(widget.parent, widget.genreFilter).future,
       );
 
-    final isLoading = artistItems == null;
-    final topTracks = artistItems?.$1 ?? [];
-    final albumArtistAlbums = artistItems?.$2 ?? [];
-    final performingArtistAlbums = artistItems?.$3 ?? [];
-    final allPerformingArtistTracks = artistItems?.$4 ?? [];
+    final isLoading = [
+      topTracksAsync,
+      albumArtistAlbumsAsync,
+      performingArtistAlbumsAsync,
+      allPerformingArtistTracksAsync
+    ].any((e) => e.isLoading || e.hasError);
+
+    final topTracks = topTracksAsync.valueOrNull ?? [];
+    final albumArtistAlbums = albumArtistAlbumsAsync.valueOrNull ?? [];
+    final performingArtistAlbums = performingArtistAlbumsAsync.valueOrNull ?? [];
+    final allPerformingArtistTracks = allPerformingArtistTracksAsync.valueOrNull ?? [];
 
     var appearsOnAlbums = performingArtistAlbums
         .where((a) => !albumArtistAlbums.any((b) => b.id == a.id))
@@ -295,7 +369,6 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         ],
       ),
       if (!isLoading &&
-          !isOffline &&
           topTracks.isNotEmpty &&
           ref.watch(finampSettingsProvider.showArtistsTopTracks))
         TracksSection(
@@ -303,12 +376,12 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             tracks: filteredTopTracks,
             childrenForQueue: Future.value(filteredTopTracks),
             tracksText: AppLocalizations.of(context)!.topTracks),
-      if (albumArtistAlbums.isNotEmpty)
+      if (!isLoading && albumArtistAlbums.isNotEmpty)
         AlbumSection(
             parent: widget.parent,
             albumsText: AppLocalizations.of(context)!.albums,
             albums: albumArtistAlbums),
-      if (appearsOnAlbums.isNotEmpty)
+      if (!isLoading && appearsOnAlbums.isNotEmpty)
         AlbumSection(
             parent: widget.parent,
             albumsText: AppLocalizations.of(context)!.appearsOnAlbums,
