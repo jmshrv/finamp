@@ -1208,7 +1208,7 @@
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "showSeekControlsOnMediaNotificationTitle": "Zobrazit ovládání posunu v oznámení médií",
+  "showSeekControlsOnMediaNotificationTitle": "Umožnit ovládání posunu v oznámení médií",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1657,7 +1657,7 @@
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít kromě tlačítka pro pozastavení také tlačítko pro zastavení. To umožňuje zastavit přehrávání bez otevření aplikace.",
+  "showStopButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko pro zastavení. To umožňuje zastavit přehrávání bez otevření aplikace.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -2097,5 +2097,21 @@
     "description": "The subtitle for how to manually recover from a startup error"
   },
   "exportLogs": "Uložit protokoly",
-  "@exportLogs": {}
+  "@exportLogs": {},
+  "showFavoriteButtonOnMediaNotificationTitle": "Zobrazit tlačítko Oblíbené v oznámení médií",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko Oblíbené. To umožňuje označit aktuální skladbu jako oblíbenou bez otevření aplikace.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko pro náhodné přehrávání. To umožňuje zamíchat / zrušit zamíchání přehrávání bez otevření aplikace.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "Zobrazit tlačítko náhodného přehrávání v oznámení médií",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  }
 }
