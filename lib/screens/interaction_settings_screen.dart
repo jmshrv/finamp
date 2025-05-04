@@ -1,4 +1,3 @@
-import 'package:finamp/components/InteractionSettingsScreen/auto_offline_selector.dart';
 import 'package:finamp/components/InteractionSettingsScreen/item_swipe_action_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
@@ -40,8 +39,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           DisableGestureSelector(),
           DisableVibrationSelector(),
           KeepScreenOnDropdownListTile(),
-          KeepScreenOnWhilePluggedInSelector(),
-          AutoOfflineSelector(),
+          KeepScreenOnWhilePluggedInSelector()
         ],
       ),
     );

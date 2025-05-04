@@ -1,11 +1,12 @@
 import 'dart:ui';
 
+import 'package:finamp/services/data_source_service.dart';
 import 'package:finamp/services/theme_mode_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce/hive.dart';
 
-import 'auto_offline.dart';
+import 'network_manager.dart';
 import 'finamp_settings_helper.dart';
 
 final displayFeaturesProvider = StateProvider<List<DisplayFeature>>((ref) {
@@ -43,6 +44,7 @@ class _FinampProviderBuilderState extends ConsumerState<FinampProviderBuilder>
     ThemeModeHelper.themeModeListener.addListener(didChangePlatformBrightness);
     ref.listenManual(finampSettingsProvider, (_, __) {});
     ref.listenManual(autoOfflineProvider, (_, __) {});
+    ref.listenManual(dataSourceServiceProvider, (_, __) {});
     Future.microtask(() {
       didChangePlatformBrightness();
       didChangeMetrics();

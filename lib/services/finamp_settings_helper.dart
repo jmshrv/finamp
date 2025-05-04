@@ -1,10 +1,12 @@
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/locale_helper.dart';
 import 'package:finamp/services/theme_mode_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -234,6 +236,8 @@ class FinampSettingsHelper {
         seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
     FinampSetters.setAutoloadLastQueueOnStartup(
         DefaultSettings.autoLoadLastQueueOnStartup);
+    FinampSetters.setAutoReloadQueue(
+      DefaultSettings.autoReloadQueue);
   }
 
   static void resetPlaybackReportingSettings() {
@@ -281,7 +285,17 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
-  
+
+  static void resetNetworkSettings() {
+    GetIt.instance<FinampUserHelper>().currentUser?.update(
+      newIsLocal: DefaultSettings.isLocal,
+      newHomeAddress: DefaultSettings.homeNetworkAddress,
+      newPreferHomeNetwork: DefaultSettings.preferHomeNetwork,
+    );
+    FinampSetters.setAutoOffline(DefaultSettings.autoOffline);
+    
+  }
+
   static void resetAllSettings() {
     resetTranscodingSettings();
     resetDownloadSettings();
@@ -296,6 +310,7 @@ class FinampSettingsHelper {
     resetAlbumSettings();
     resetGenreSettings();
     resetTabsSettings();
+    resetNetworkSettings();
 
     LocaleHelper.setLocale(null); // Reset to System Language
   }

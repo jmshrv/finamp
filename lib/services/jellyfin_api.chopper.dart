@@ -749,4 +749,15 @@ final class _$JellyfinApi extends JellyfinApi {
       requestConverter: JsonConverter.requestFactory,
     );
   }
+
+  @override
+  Future<Response<dynamic>> pingServer() {
+    final Uri $url = Uri.parse('/System/Endpoint');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

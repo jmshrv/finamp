@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -18,6 +19,7 @@ import 'downloads_service.dart';
 import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
+import 'package:http/io_client.dart' as http;
 import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
@@ -534,13 +536,18 @@ class JellyfinApiHelper {
 
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
-      baseUrl: baseUrlTemp!.toString(),
+      publicAddress: baseUrlTemp!.toString(),
+      homeAddress: DefaultSettings.homeNetworkAddress,
+      isLocal: false,
+      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
     );
 
     await _finampUserHelper.saveUser(newUser);
+    baseUrlTemp =
+        null; // Clear the temporary base URL after authentication, since this has priority over the regular URL
   }
 
   /// Authenticates a user and saves the login details
@@ -563,13 +570,18 @@ class JellyfinApiHelper {
 
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
-      baseUrl: baseUrlTemp!.toString(),
+      publicAddress: baseUrlTemp!.toString(),
+      homeAddress: DefaultSettings.homeNetworkAddress,
+      isLocal: false,
+      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
     );
 
     await _finampUserHelper.saveUser(newUser);
+    baseUrlTemp =
+        null; // Clear the temporary base URL after authentication, since this has priority over the regular URL
   }
 
   /// Gets all the user's views.
@@ -906,6 +918,61 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.warning("User has completed logout.");
     }
   }
+  Future<bool> _pingSpecificServer(String url) async {
+    final client = ChopperClient(
+        baseUrl: Uri.tryParse(url),
+        client: http.IOClient(HttpClient()
+              ..connectionTimeout = const Duration(
+                  seconds: 3)),
+        interceptors: [
+          jellyfin_api.JellyfinSpecificInterceptor(url),
+          HttpAggregateLoggingInterceptor()
+        ],
+        converter: JsonConverter()
+    );
+
+    final Request $request = Request(
+      'GET',
+      Uri.parse("/System/Endpoint"),
+      client.baseUrl,
+    );
+
+    try {
+      Response<dynamic> response = await client.send<dynamic, dynamic>($request);
+      if (response.statusCode != 200) return false;
+      final body = response.bodyOrThrow as Map<String, dynamic>;
+      // If IsInNetwork doesn't exist -> catch
+      // because then its not a jellyfin server
+      return body["IsInNetwork"] as bool;
+    } catch (e) {
+      Logger("Ayoo").severe(e);
+      return false;
+    }
+  }
+
+  Future<bool> pingLocalServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+    return await _pingSpecificServer(user.homeAddress);
+  }
+  Future<bool> pingPublicServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+    return await _pingSpecificServer(user.publicAddress);
+  }
+
+  Future<bool> pingActiveServer() async {
+    try {
+      Response<dynamic>? response = await jellyfinApi
+          .pingServer()
+          .then((e) => e as Response<dynamic>?)
+          .timeout(Duration(seconds: 3));
+      return response?.statusCode == 200;
+    } catch (e) {
+      _jellyfinApiHelperLogger.severe(e);
+      return false;
+    }
+  }
 
   /// Returns the correct image URL for the given item, or null if there is no
   /// image. Uses [getImageId] to get the actual id. [maxWidth] and [maxHeight]
@@ -922,7 +989,7 @@ class JellyfinApiHelper {
       return null;
     }
 
-    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseURL);
     List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
     builtPath.addAll([
       "Items",
@@ -982,7 +1049,7 @@ class JellyfinApiHelper {
     required BaseItemDto item,
     required DownloadProfile? transcodingProfile,
   }) {
-    Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseURL);
 
     if (transcodingProfile != null &&
         transcodingProfile.codec != FinampTranscodingCodec.original) {

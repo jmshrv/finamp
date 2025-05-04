@@ -1084,37 +1084,47 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         MediaControl.skipToPrevious,
         if (_player.playing) MediaControl.pause else MediaControl.play,
         MediaControl.skipToNext,
-        MediaControl.custom(
-          name: CustomPlaybackActions.toggleFavorite.name,
-          androidIcon: isFavorite
-              ? "drawable/baseline_heart_filled_24"
-              : "drawable/baseline_heart_24",
-          label: isFavorite
-              ? (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
-                  ? AppLocalizations.of(GlobalSnackbar
-                          .materialAppScaffoldKey.currentContext!)!
-                      .removeFavourite
-                  : "Remove favorite")
-              : (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
-                  ? AppLocalizations.of(GlobalSnackbar
-                          .materialAppScaffoldKey.currentContext!)!
-                      .addFavourite
-                  : "Add favorite"),
-        ),
-        //!!! Android Auto adds a shuffle toggle button automatically, adding it here would result in a duplicate button
-        // MediaControl.custom(
-        //     name: CustomPlaybackActions.shuffle.name,
-        //     androidIcon: _player.shuffleModeEnabled
-        //         ? "drawable/baseline_shuffle_on_24"
-        //         : "drawable/baseline_shuffle_24",
-        //     label: _player.shuffleModeEnabled ?
-        //       (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderShuffledButtonLabel : "Shuffle enabled") :
-        //       (GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.playbackOrderLinearButtonLabel : "Shuffle disabled"),
-        // ),
+        if (FinampSettingsHelper
+            .finampSettings.showFavoriteButtonOnMediaNotification)
+          MediaControl.custom(
+            name: CustomPlaybackActions.toggleFavorite.name,
+            androidIcon: isFavorite
+                ? "drawable/baseline_heart_filled_24"
+                : "drawable/baseline_heart_24",
+            label: isFavorite
+                ? (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
+                    ? AppLocalizations.of(GlobalSnackbar
+                            .materialAppScaffoldKey.currentContext!)!
+                        .removeFavourite
+                    : "Remove favorite")
+                : (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
+                    ? AppLocalizations.of(GlobalSnackbar
+                            .materialAppScaffoldKey.currentContext!)!
+                        .addFavourite
+                    : "Add favorite"),
+          ),
+        if (FinampSettingsHelper
+            .finampSettings.showShuffleButtonOnMediaNotification)
+          MediaControl.custom(
+            name: CustomPlaybackActions.shuffle.name,
+            androidIcon: _player.shuffleModeEnabled
+                ? "drawable/baseline_shuffle_on_24"
+                : "drawable/baseline_shuffle_24",
+            label: _player.shuffleModeEnabled
+                ? (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
+                    ? AppLocalizations.of(GlobalSnackbar
+                            .materialAppScaffoldKey.currentContext!)!
+                        .playbackOrderShuffledButtonLabel
+                    : "Shuffle enabled")
+                : (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
+                    ? AppLocalizations.of(GlobalSnackbar
+                            .materialAppScaffoldKey.currentContext!)!
+                        .playbackOrderLinearButtonLabel
+                    : "Shuffle disabled"),
+          ),
         if (FinampSettingsHelper
             .finampSettings.showStopButtonOnMediaNotification)
           MediaControl.stop.copyWith(androidIcon: "drawable/baseline_stop_24"),
-        // MediaControl.stop,
       ],
       systemActions: FinampSettingsHelper
               .finampSettings.showSeekControlsOnMediaNotification

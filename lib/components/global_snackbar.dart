@@ -66,11 +66,16 @@ class GlobalSnackbar {
   static void message(
     String Function(BuildContext scaffold) message, {
     bool isConfirmation = false,
+    SnackBarAction Function(BuildContext scaffold)? action,
   }) =>
-      _enqueue(() => _message(message, isConfirmation));
+      _enqueue(() => _message(message, isConfirmation, action));
   static void _message(
-      String Function(BuildContext scaffold) message, bool isConfirmation) {
-    var text = message(materialAppNavigatorKey.currentContext!);
+    String Function(BuildContext scaffold) message,
+    bool isConfirmation,
+    SnackBarAction Function(BuildContext scaffold)? action,
+  ) {
+    BuildContext context = materialAppNavigatorKey.currentContext!;
+    var text = message(context);
     _logger.info("Displaying message: $text");
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
@@ -78,6 +83,7 @@ class GlobalSnackbar {
         duration: isConfirmation
             ? const Duration(milliseconds: 1500)
             : const Duration(seconds: 4),
+        action: action?.call(context),
       ),
     );
   }
@@ -128,4 +134,5 @@ class GlobalSnackbar {
       ),
     );
   }
+
 }

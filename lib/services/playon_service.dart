@@ -182,7 +182,7 @@ class PlayOnService {
 
   Future<void> connectWebsocket() async {
     final url =
-        "${_finampUserHelper.currentUser!.baseUrl}/socket?api_key=${_finampUserHelper.currentUser!.accessToken}";
+        "${_finampUserHelper.currentUser!.baseURL}/socket?api_key=${_finampUserHelper.currentUser!.accessToken}";
     final parsedUrl = Uri.parse(url);
     final wsUrl =
         parsedUrl.replace(scheme: parsedUrl.scheme == "https" ? "wss" : "ws");

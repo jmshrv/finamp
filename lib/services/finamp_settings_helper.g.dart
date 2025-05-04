@@ -673,6 +673,31 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAutoReloadQueue(bool newAutoReloadQueue) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoReloadQueue = newAutoReloadQueue;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setShowShuffleButtonOnMediaNotification(
+      bool newShowShuffleButtonOnMediaNotification) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showShuffleButtonOnMediaNotification =
+        newShowShuffleButtonOnMediaNotification;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setShowFavoriteButtonOnMediaNotification(
+      bool newShowFavoriteButtonOnMediaNotification) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showFavoriteButtonOnMediaNotification =
+        newShowFavoriteButtonOnMediaNotification;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setGenreCuratedItemSelectionType(
       GenreCuratedItemSelectionType newGenreCuratedItemSelectionType) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
@@ -931,6 +956,14 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       .select((value) => value.requireValue.playOnReconnectionDelay);
   ProviderListenable<bool> get enablePlayon =>
       finampSettingsProvider.select((value) => value.requireValue.enablePlayon);
+  ProviderListenable<bool> get autoReloadQueue => finampSettingsProvider
+      .select((value) => value.requireValue.autoReloadQueue);
+  ProviderListenable<bool> get showShuffleButtonOnMediaNotification =>
+      finampSettingsProvider.select(
+          (value) => value.requireValue.showShuffleButtonOnMediaNotification);
+  ProviderListenable<bool> get showFavoriteButtonOnMediaNotification =>
+      finampSettingsProvider.select(
+          (value) => value.requireValue.showFavoriteButtonOnMediaNotification);
   ProviderListenable<GenreCuratedItemSelectionType>
       get genreCuratedItemSelectionType => finampSettingsProvider
           .select((value) => value.requireValue.genreCuratedItemSelectionType);
