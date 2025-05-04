@@ -1619,11 +1619,11 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
-  "showStopButtonOnMediaNotificationTitle": "Показувати кнопку зупинення у медіа сповіщеннях",
+  "showStopButtonOnMediaNotificationTitle": "Показувати кнопку «Зупинити» у сповіщенні про медіа",
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "showSeekControlsOnMediaNotificationTitle": "Показати індикатор керування прогресом в медіа сповіщенні",
+  "showSeekControlsOnMediaNotificationTitle": "Дозволити пошук у сповіщенні про медіа",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1647,7 +1647,7 @@
   "@showLyricsTimestampsTitle": {
     "description": "Title for the setting that controls if timestamps are shown for lyrics"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Керує тим, чи показувати кнопку зупинки разом із кнопкою павзи. Це дозволить зупинити відтворення без потреби відкривати застосунок.",
+  "showStopButtonOnMediaNotificationSubtitle": "Контролює, чи має медіасповіщення кнопку зупинки. Це дозволяє зупинити відтворення, не відкриваючи програму.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -2099,5 +2099,21 @@
     "description": "The subtitle for how to manually recover from a startup error"
   },
   "exportLogs": "Зберегти журнали",
-  "@exportLogs": {}
+  "@exportLogs": {},
+  "showShuffleButtonOnMediaNotificationTitle": "Показувати кнопку випадкового відтворення в сповіщенні про медіафайли",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Контролює, чи має медіасповіщення кнопку перемішування. Це дозволяє перемішувати/відтворювати без відкривання програми.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Показувати кнопку «Улюблене» у сповіщенні про медіа",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Контролює, чи має медіасповіщення кнопку обраного. Це дозволяє додавати/вилучати поточну композицію з обраного, не відкриваючи програму.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  }
 }
