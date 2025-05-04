@@ -246,7 +246,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
       autoReloadQueue: fields[97] == null ? false : fields[97] as bool,
-      screenSize: fields[98] as ScreenSize?,
+      screenSize: fields[100] as ScreenSize?,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -257,7 +257,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(93)
+      ..writeByte(95)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -443,6 +443,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(97)
       ..write(obj.autoReloadQueue)
       ..writeByte(98)
+      ..write(obj.showShuffleButtonOnMediaNotification)
+      ..writeByte(99)
+      ..write(obj.showFavoriteButtonOnMediaNotification)
+      ..writeByte(100)
       ..write(obj.screenSize);
   }
 

@@ -680,6 +680,24 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setShowShuffleButtonOnMediaNotification(
+      bool newShowShuffleButtonOnMediaNotification) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showShuffleButtonOnMediaNotification =
+        newShowShuffleButtonOnMediaNotification;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setShowFavoriteButtonOnMediaNotification(
+      bool newShowFavoriteButtonOnMediaNotification) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showFavoriteButtonOnMediaNotification =
+        newShowFavoriteButtonOnMediaNotification;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setScreenSize(ScreenSize? newScreenSize) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.screenSize = newScreenSize;
@@ -916,6 +934,12 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.enablePlayon);
   ProviderListenable<bool> get autoReloadQueue => finampSettingsProvider
       .select((value) => value.requireValue.autoReloadQueue);
+  ProviderListenable<bool> get showShuffleButtonOnMediaNotification =>
+      finampSettingsProvider.select(
+          (value) => value.requireValue.showShuffleButtonOnMediaNotification);
+  ProviderListenable<bool> get showFavoriteButtonOnMediaNotification =>
+      finampSettingsProvider.select(
+          (value) => value.requireValue.showFavoriteButtonOnMediaNotification);
   ProviderListenable<ScreenSize?> get screenSize =>
       finampSettingsProvider.select((value) => value.requireValue.screenSize);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
