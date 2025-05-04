@@ -1965,7 +1965,7 @@
   "@swipeRightToLeftAction": {},
   "swipeRightToLeftActionSubtitle": "从右向左滑动列表中的音轨时触发的动作.",
   "@swipeRightToLeftActionSubtitle": {},
-  "autoOfflineOptionNetwork": "网络",
+  "autoOfflineOptionNetwork": "本地网络",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -1973,7 +1973,7 @@
   "@transcodingStreamingFormatTitle": {
     "description": "Title for the dropdown that selects the format for transcoded streams"
   },
-  "autoOfflineSettingDescription": "自动启用脱机模式.\n已禁用:不会自动开启离线模式,可节省电池.\n网络: 在未连接到wifi或以太网时打开脱机模式.\n断开连接: 在未连接任何设备时打开脱机模式.\n您可以随时手动开启离线模式,它会暂停自动化,直到您再次关闭离线模式",
+  "autoOfflineSettingDescription": "自动启用脱机模式.\n已禁用:不会自动开启离线模式,可节省电池.\n本地网络: 在未连接到wifi或以太网时打开脱机模式.\n断开连接: 在未连接任何设备时打开脱机模式.\n您可以随时手动开启离线模式,它会暂停自动化,直到您再次关闭离线模式",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2113,5 +2113,43 @@
     "description": "The subtitle for how to manually recover from a startup error"
   },
   "exportLogs": "保存日志",
-  "@exportLogs": {}
+  "@exportLogs": {},
+  "testConnectionButtonLabel": "测试两个连接",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "preferHomeNetworkActiveAddressInfoText": "活动地址",
+  "@preferHomeNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "家庭网络地址",
+  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "家庭网络内的 Jellyfin 服务器的目标地址",
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
+  "preferHomeNetworkEnableSwitchTitle": "首选家庭网络",
+  "@preferHomeNetworkEnableSwitchTitle": {},
+  "preferHomeNetworkEnableSwitchDescription": "在家时是否使用其他地址",
+  "@preferHomeNetworkEnableSwitchDescription": {},
+  "preferHomeNetworkPublicAddressSettingDescription": "用于连接 Jellyfin 服务器的主要地址",
+  "@preferHomeNetworkPublicAddressSettingDescription": {},
+  "networkSettingsTitle": "网络",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "downloadPaused": "由于设备未连接到 WiFi，下载暂停",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "missingSchemaError": "Url 需要以 http(s):// 开头",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "autoReloadQueueTitle": "自动重新加载队列",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "当源更改（例如启用离线模式或切换服务器地址）时自动重新加载队列。如果禁用，Finamp 将提示您。",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  }
 }
