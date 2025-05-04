@@ -673,6 +673,24 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setShowShuffleButtonOnMediaNotification(
+      bool newShowShuffleButtonOnMediaNotification) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showShuffleButtonOnMediaNotification =
+        newShowShuffleButtonOnMediaNotification;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setShowFavoriteButtonOnMediaNotification(
+      bool newShowFavoriteButtonOnMediaNotification) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showFavoriteButtonOnMediaNotification =
+        newShowFavoriteButtonOnMediaNotification;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -900,6 +918,12 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       .select((value) => value.requireValue.playOnReconnectionDelay);
   ProviderListenable<bool> get enablePlayon =>
       finampSettingsProvider.select((value) => value.requireValue.enablePlayon);
+  ProviderListenable<bool> get showShuffleButtonOnMediaNotification =>
+      finampSettingsProvider.select(
+          (value) => value.requireValue.showShuffleButtonOnMediaNotification);
+  ProviderListenable<bool> get showFavoriteButtonOnMediaNotification =>
+      finampSettingsProvider.select(
+          (value) => value.requireValue.showFavoriteButtonOnMediaNotification);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);
