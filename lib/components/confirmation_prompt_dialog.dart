@@ -11,7 +11,7 @@ class ConfirmationPromptDialog extends AlertDialog {
       this.centerText = false});
   final String promptText;
   final String confirmButtonText;
-  final String abortButtonText;
+  final String? abortButtonText;
   final void Function()? onConfirmed;
   final void Function()? onAborted;
   final bool centerText;
@@ -32,21 +32,22 @@ class ConfirmationPromptDialog extends AlertDialog {
         textAlign: centerText ? TextAlign.center : null,
       ),
       actions: [
-        Container(
-          constraints: const BoxConstraints(
-            maxWidth: 150.0,
-          ),
-          child: TextButton(
-            child: Text(
-              abortButtonText,
-              textAlign: TextAlign.center,
+        if (abortButtonText != null)
+          Container(
+            constraints: const BoxConstraints(
+              maxWidth: 150.0,
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-              onAborted?.call();
-            },
+            child: TextButton(
+              child: Text(
+                abortButtonText!,
+                textAlign: TextAlign.center,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                onAborted?.call();
+              },
+            ),
           ),
-        ),
         Container(
           constraints: const BoxConstraints(
             maxWidth: 150.0,
