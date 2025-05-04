@@ -210,10 +210,10 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     SortBy? sortByOverride;
     SortOrder? sortOrderOverride;
 
-    if (ref.watch(finampSettingsProvider.genreListsInheritSorting)) {
-      switch (ref.watch(finampSettingsProvider.genreCuratedItemSelectionType)) {
+    if (ref.read(finampSettingsProvider.genreListsInheritSorting)) {
+      switch (ref.read(finampSettingsProvider.genreCuratedItemSelectionType)) {
         case GenreCuratedItemSelectionType.mostPlayed:
-          // Not yet implemented on MusicScreen
+          // Not yet implemented on MusicScreen, but it would be:
           // sortByOverride = SortBy.playCount;
           // sortOrderOverride = SortOrder.descending;
         case GenreCuratedItemSelectionType.favorites:

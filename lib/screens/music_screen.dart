@@ -137,7 +137,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         onPressed: () async {
           try {
             await _audioServiceHelper.shuffleAll(
-                (ref.watch(finampSettingsProvider.onlyShowFavourites) || isFavoriteOverride));
+                (ref.read(finampSettingsProvider.onlyShowFavourites) || isFavoriteOverride));
           } catch (e) {
             GlobalSnackbar.error(e);
           }
@@ -365,9 +365,9 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                               finampSettingsProvider.onlyShowFullyDownloaded)
                           ? const Icon(Icons.download)
                           : const Icon(Icons.download_outlined),
-                      onPressed: ref.watch(finampSettingsProvider.isOffline)
+                      onPressed: ref.read(finampSettingsProvider.isOffline)
                           ? () => FinampSetters.setOnlyShowFullyDownloaded(
-                              !ref.watch(finampSettingsProvider
+                              !ref.read(finampSettingsProvider
                                   .onlyShowFullyDownloaded))
                           : null,
                       tooltip:
@@ -381,9 +381,9 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                           : const Icon(Icons.favorite_outline),
                       onPressed: () {
                         if (isFavoriteOverride) {
-                          if (ref.watch(finampSettingsProvider.onlyShowFavourites)) {
+                          if (ref.read(finampSettingsProvider.onlyShowFavourites)) {
                             FinampSetters.setOnlyShowFavourites(
-                            !ref.watch(finampSettingsProvider.onlyShowFavourites),
+                            !ref.read(finampSettingsProvider.onlyShowFavourites),
                           );
                           }
                           setState(() {
