@@ -591,7 +591,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.showClearQueue,
         child: ListTile(
           leading: Icon(
-            Icons.clear_all,
+            TablerIcons.clear_all,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.stopAndClearQueue),
