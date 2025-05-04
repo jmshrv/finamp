@@ -125,6 +125,8 @@ class DefaultSettings {
   static const lyricsFontSize = LyricsFontSize.medium;
   static const showLyricsScreenAlbumPrelude = true;
   static const showStopButtonOnMediaNotification = false;
+  static const showShuffleButtonOnMediaNotification = true;
+  static const showFavoriteButtonOnMediaNotification = true;
   static const showSeekControlsOnMediaNotification = true;
   static const keepScreenOnOption = KeepScreenOnOption.whileLyrics;
   static const keepScreenOnWhilePluggedIn = true;
@@ -259,6 +261,10 @@ class FinampSettings {
           DefaultSettings.showLyricsScreenAlbumPrelude,
       this.showStopButtonOnMediaNotification =
           DefaultSettings.showStopButtonOnMediaNotification,
+      this.showShuffleButtonOnMediaNotification =
+          DefaultSettings.showShuffleButtonOnMediaNotification,
+      this.showFavoriteButtonOnMediaNotification =
+          DefaultSettings.showFavoriteButtonOnMediaNotification,
       this.showSeekControlsOnMediaNotification =
           DefaultSettings.showSeekControlsOnMediaNotification,
       this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
@@ -601,6 +607,14 @@ class FinampSettings {
 
   @HiveField(96, defaultValue: DefaultSettings.enablePlayon)
   bool enablePlayon;
+
+  @HiveField(98,
+      defaultValue: DefaultSettings.showShuffleButtonOnMediaNotification)
+  bool showShuffleButtonOnMediaNotification;
+
+  @HiveField(99,
+      defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
+  bool showFavoriteButtonOnMediaNotification;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

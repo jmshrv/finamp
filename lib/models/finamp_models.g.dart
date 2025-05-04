@@ -195,6 +195,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[71] == null ? true : fields[71] as bool,
       showStopButtonOnMediaNotification:
           fields[68] == null ? false : fields[68] as bool,
+      showShuffleButtonOnMediaNotification:
+          fields[98] == null ? true : fields[98] as bool,
+      showFavoriteButtonOnMediaNotification:
+          fields[99] == null ? true : fields[99] as bool,
       showSeekControlsOnMediaNotification:
           fields[69] == null ? true : fields[69] as bool,
       keepScreenOnOption: fields[72] == null
@@ -241,7 +245,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(91)
+      ..writeByte(93)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -423,7 +427,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(95)
       ..write(obj.playOnReconnectionDelay)
       ..writeByte(96)
-      ..write(obj.enablePlayon);
+      ..write(obj.enablePlayon)
+      ..writeByte(98)
+      ..write(obj.showShuffleButtonOnMediaNotification)
+      ..writeByte(99)
+      ..write(obj.showFavoriteButtonOnMediaNotification);
   }
 
   @override

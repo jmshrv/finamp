@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:finamp/components/LayoutSettingsScreen/CustomizationSettingsScreen/playback_speed_control_visibility_dropdown_list_tile.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 
 class CustomizationSettingsScreen extends StatefulWidget {
   const CustomizationSettingsScreen({super.key});
@@ -33,6 +35,10 @@ class _CustomizationSettingsScreenState
         children: [
           const PlaybackSpeedControlVisibilityDropdownListTile(),
           if (!Platform.isIOS) const ShowStopButtonOnMediaNotificationToggle(),
+          if (!Platform.isIOS)
+            const ShowShuffleButtonOnMediaNotificationToggle(),
+          if (!Platform.isIOS)
+            const ShowFavoriteButtonOnMediaNotificationToggle(),
           const ShowSeekControlsOnMediaNotificationToggle(),
           const OneLineMarqueeTextSwitch(),
           const ReleaseDateFormatDropdownListTile(),
@@ -70,7 +76,53 @@ class ShowStopButtonOnMediaNotificationToggle extends ConsumerWidget {
           .showStopButtonOnMediaNotificationSubtitle),
       value:
           ref.watch(finampSettingsProvider.showStopButtonOnMediaNotification),
-      onChanged: FinampSetters.setShowStopButtonOnMediaNotification,
+      onChanged: (value) {
+        FinampSetters.setShowStopButtonOnMediaNotification(value);
+        GetIt.instance<MusicPlayerBackgroundTask>()
+            .refreshPlaybackStateAndMediaNotification();
+      },
+    );
+  }
+}
+
+class ShowShuffleButtonOnMediaNotificationToggle extends ConsumerWidget {
+  const ShowShuffleButtonOnMediaNotificationToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!
+          .showShuffleButtonOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!
+          .showShuffleButtonOnMediaNotificationSubtitle),
+      value: ref
+          .watch(finampSettingsProvider.showShuffleButtonOnMediaNotification),
+      onChanged: (value) {
+        FinampSetters.setShowShuffleButtonOnMediaNotification(value);
+        GetIt.instance<MusicPlayerBackgroundTask>()
+            .refreshPlaybackStateAndMediaNotification();
+      },
+    );
+  }
+}
+
+class ShowFavoriteButtonOnMediaNotificationToggle extends ConsumerWidget {
+  const ShowFavoriteButtonOnMediaNotificationToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!
+          .showFavoriteButtonOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!
+          .showFavoriteButtonOnMediaNotificationSubtitle),
+      value: ref
+          .watch(finampSettingsProvider.showFavoriteButtonOnMediaNotification),
+      onChanged: (value) {
+        FinampSetters.setShowFavoriteButtonOnMediaNotification(value);
+        GetIt.instance<MusicPlayerBackgroundTask>()
+            .refreshPlaybackStateAndMediaNotification();
+      },
     );
   }
 }
@@ -87,7 +139,11 @@ class ShowSeekControlsOnMediaNotificationToggle extends ConsumerWidget {
           .showSeekControlsOnMediaNotificationSubtitle),
       value:
           ref.watch(finampSettingsProvider.showSeekControlsOnMediaNotification),
-      onChanged: FinampSetters.setShowSeekControlsOnMediaNotification,
+      onChanged: (value) {
+        FinampSetters.setShowSeekControlsOnMediaNotification(value);
+        GetIt.instance<MusicPlayerBackgroundTask>()
+            .refreshPlaybackStateAndMediaNotification();
+      },
     );
   }
 }
