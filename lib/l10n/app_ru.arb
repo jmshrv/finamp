@@ -366,7 +366,7 @@
   },
   "enterLowPriorityStateOnPause": "Использовать режим низкого приоритета на паузе",
   "@enterLowPriorityStateOnPause": {},
-  "bitrateSubtitle": "Высокий битрейт обеспечивает лучшее качество звука за счет большего потребления трафика.",
+  "bitrateSubtitle": "Высокий битрейт обеспечивает лучшее качество звука за счет большего потребления трафика. Не распространяется на форматы без потерь, например FLAC",
   "@bitrateSubtitle": {},
   "shuffleAllTrackCount": "Количество композиций случайного проигрывания",
   "@shuffleAllTrackCount": {},
@@ -863,7 +863,7 @@
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "playingFromType": "Воспроизведение из {source, select, album{альбома} playlist{плейлиста} trackMix{микса композиций} artistMix{микса исполнителей} albumMix{микса альбомов} genreMix{микса жанров} favorites{избранного} allTracks{всех композиций} filteredList{композиций} genre{жанра} artist{исполнителя} track{композиции} nextUpAlbum{альбома в следующих} nextUpPlaylist{плейлиста в следующих} nextUpArtist{исполнителя в следующих} other{}}",
+  "playingFromType": "Воспроизведение из {source, select, album{альбома} playlist{плейлиста} trackMix{микса композиций} artistMix{микса исполнителей} albumMix{микса альбомов} genreMix{микса жанров} favorites{избранного} allTracks{всех композиций} filteredList{композиций} genre{жанра} artist{исполнителя} track{композиции} nextUpAlbum{альбома в следующих} nextUpPlaylist{плейлиста в следующих} nextUpArtist{исполнителя в следующих} remoteClient{удаленного клиента} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1170,7 +1170,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Если включено, Finamp будет отправлять текущую очередь на сервер. В настоящее время от этого нет особой пользы и это увеличивает сетевой трафик.",
+  "reportQueueToServerSubtitle": "Если включено, Finamp будет отправлять текущую очередь на сервер. Это может помочь с удаленным управлением и позволит восстанавливать очередь с сервера. Всегда включено, если включена функция «Play on».",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1254,7 +1254,7 @@
       }
     }
   },
-  "missingDownloadSize": "Удаляется...",
+  "missingDownloadSize": "Удаляется…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1411,7 +1411,7 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Частота обновлений сессии воспроизведения",
+  "periodicPlaybackSessionUpdateFrequency": "Частота Обновлений Сессии Воспроизведения",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1496,11 +1496,11 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "activeDownloadSize": "Загружается...",
+  "activeDownloadSize": "Загружается…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "syncingDownloadSize": "Синхронизируется...",
+  "syncingDownloadSize": "Синхронизируется…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1938,5 +1938,81 @@
   "downloadSizeWarningCutoffSubtitle": "При одновременной загрузке более чем этого количества композиций будет показано предупреждение.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
-  }
+  },
+  "playbackReporting": "Отчет о воспроизведении",
+  "@playbackReporting": {},
+  "playbackReportingSettingsTitle": "Отчет о воспроизведении & Play On",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "libraryDownloads": "Загрузки библиотек",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "swipeLeftToRightAction": "Действие при смахе вправо",
+  "@swipeLeftToRightAction": {},
+  "transcodingStreamingFormatTitle": "Выберите Формат Транскодирования",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "startupErrorTitle": "Что-то пошло не так во время запуска приложения!\nИзвините...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Пожалуйста, сообщите о проблеме на github.com/jmshrv/finamp прикреплив логи(!) и скриншот этой страницы, чтобы мы могли исправить её как можно быстрее.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "currentVolumeFeatureText": "громкость {volume}%",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "noItemsDownloaded": "Ничего не скачано.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "specialDownloads": "Особые загрузки",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "exportLogs": "Сохранить логи",
+  "@exportLogs": {},
+  "playOnStaleDelay": "Время Работы Сессии «Play on»",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "Как долго сессия «Play On» считается активной после получения команды. Когда сессия считается активной, отчеты о воспроизведении отправляются чаще, что может привести к увеличению использования трафика.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Включить Поддержку «Play On»",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "Интервал попыток переподключения сессии «Play On»",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelaySubtitle": "Управляет задержкой между попытками переподключения к websocket PlayOn когда он отключается (в секундах). Низкая задержка использует больше трафика.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "swipeLeftToRightActionSubtitle": "Действие, выполняемое при смахе трека из списка слева направо.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "albumArtists": "Исполнители альбома",
+  "@albumArtists": {},
+  "swipeRightToLeftActionSubtitle": "Действие, выполняемое при смахе трека из списка справа налево.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "enablePlayonSubtitle": "Включает функцию Jellyfin «Play On» (удаленное управление Finamp с другого клиента). Отключите это если ваш reverse proxy или сервер не поддерживает websockets.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "swipeRightToLeftAction": "Действие при смахе влево",
+  "@swipeRightToLeftAction": {}
 }
