@@ -704,9 +704,10 @@ class _CurrentTrackState extends State<CurrentTrack> {
           _queueService.getQueueStream(),
           (a, b) => _QueueListStreamState(a, b)),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          currentTrack = snapshot.data!.queueInfo?.currentTrack;
-          mediaState = snapshot.data!.mediaState;
+        var data = snapshot.data;
+        currentTrack = data?.queueInfo?.currentTrack;
+        if (data != null && currentTrack != null) {
+          mediaState = data.mediaState;
 
           final currentTrackBaseItem = jellyfin_models.BaseItemDto.fromJson(
               currentTrack!.item.extras?["itemJson"] as Map<String, dynamic>);
