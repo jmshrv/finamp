@@ -45,12 +45,6 @@
 	</array>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Required for debugging</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
-	<key>NSLocationUsageDescription</key>
-	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>I don't know why this permission is being requested, you should probably deny it. If you can, create a GitHub issue with a screenshot of this message.</string>
 	<key>UIBackgroundModes</key>

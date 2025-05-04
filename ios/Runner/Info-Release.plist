@@ -41,13 +41,7 @@
 	<string>Finamp can use your media library to store downloaded songs. If you don't want this, Finamp can also download songs to the app's internal directory, which doesn't use any permissions.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>I don't know why this permission is being requested, you should probably deny it. If you can, create a GitHub issue with a screenshot of this message.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
-	<key>NSLocationUsageDescription</key>
-	<string>In order to use the auto-switching feature, Finamp needs precise location permission so it can read the current WiFi network's name</string>
-	<key>NSPhotoLibraryUsageDescription</key>
+    <key>NSPhotoLibraryUsageDescription</key>
 	<string>I don't know why this permission is being requested, you should probably deny it. If you can, create a GitHub issue with a screenshot of this message.</string>
 	<key>UIBackgroundModes</key>
 	<array>
