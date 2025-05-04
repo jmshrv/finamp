@@ -594,7 +594,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             Icons.clear_all,
             color: iconColor,
           ),
-          title: Text(AppLocalizations.of(context)!.clearQueue),
+          title: Text(AppLocalizations.of(context)!.stopAndClearQueue),
           onTap: () async {
             if (context.mounted) Navigator.pop(context);
             await _queueService.stopPlayback();
