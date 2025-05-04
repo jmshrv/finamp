@@ -320,7 +320,6 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
       topTracksAsync,
       albumArtistAlbumsAsync,
       performingArtistAlbumsAsync,
-      allPerformingArtistTracksAsync
     ].any((e) => e.isLoading || e.hasError);
 
     final topTracks = topTracksAsync.valueOrNull ?? [];
