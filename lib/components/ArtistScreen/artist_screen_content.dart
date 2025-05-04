@@ -20,6 +20,7 @@ import 'artist_screen_content_flexible_space_bar.dart';
 
 part 'artist_screen_content.g.dart';
 
+// Get the Top Tracks of an artist
 @riverpod
 Future<List<BaseItemDto>> getArtistTopTracks(
   Ref ref,
@@ -28,13 +29,12 @@ Future<List<BaseItemDto>> getArtistTopTracks(
 ) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-
   // Get Items
   if (isOffline) {
-    // In Offline Mode
+    // In Offline Mode:
     // We already fetch all tracks for the playback, 
-    // and as in offline mode this is much faster, we can just
-    // sort and filter them.
+    // and as in offline mode this is much faster, 
+    // we just sort them and only return the first 5 items.
     final List<BaseItemDto> allArtistTracks = await ref.watch(
       getAllTracksProvider(parent, genreFilter).future,
     );
@@ -42,7 +42,7 @@ Future<List<BaseItemDto>> getArtistTopTracks(
     items = items.take(5).toList();
     return items;
   } else {
-    // In Online Mode
+    // In Online Mode:
     // Get Top 5 Tracks sorted by Play Count
       final List<BaseItemDto>? topTracks = 
         (ref.watch(finampSettingsProvider.showArtistsTopTracks))
@@ -59,6 +59,7 @@ Future<List<BaseItemDto>> getArtistTopTracks(
   }
 }
 
+// Get Albums where the artist is an album artist
 @riverpod
 Future<List<BaseItemDto>> getArtistAlbums(
   Ref ref,
@@ -68,10 +69,9 @@ Future<List<BaseItemDto>> getArtistAlbums(
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-
   // Get Items
   if (isOffline) {
-    // In Offline Mode
+    // In Offline Mode:
     // Get Albums where artist is Album Artist sorted by Premiere Date
     final List<DownloadStub> fetchArtistAlbums =
       await downloadsService.getAllCollections(
@@ -84,7 +84,7 @@ Future<List<BaseItemDto>> getArtistAlbums(
     final List<BaseItemDto> artistAlbums = fetchArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
     return artistAlbums;
   } else {
-    // In Online Mode
+    // In Online Mode:
     // Get Albums where artist is Album Artist sorted by Premiere Date
     final List<BaseItemDto>? artistAlbums = 
       await jellyfinApiHelper.getItems(
@@ -97,6 +97,9 @@ Future<List<BaseItemDto>> getArtistAlbums(
   }
 }
 
+// Get Albums with tracks in it on which the artist is a performing artist
+// (note that this also might include albums where the artist is album artist as well,
+// so we have to filter this list later for the appears on section to exclude those)
 @riverpod
 Future<List<BaseItemDto>> getPerformingArtistAlbums(
   Ref ref,
@@ -106,10 +109,9 @@ Future<List<BaseItemDto>> getPerformingArtistAlbums(
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-
   // Get Items
   if (isOffline) {
-    // In Offline Mode
+    // In Offline Mode:
     // Get Albums where artist is Performing Artist sorted by Premiere Date
     final List<DownloadStub> fetchPerformingArtistAlbums =
       await downloadsService.getAllCollections(
@@ -122,7 +124,7 @@ Future<List<BaseItemDto>> getPerformingArtistAlbums(
     final List<BaseItemDto> performingArtistAlbums = fetchPerformingArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
     return performingArtistAlbums;
   } else {
-    // In Online Mode
+    // In Online Mode:
     // Get Albums where artist is Performing Artist sorted by Premiere Date
     final List<BaseItemDto>? performingArtistAlbums = 
       await jellyfinApiHelper.getItems(
@@ -136,6 +138,9 @@ Future<List<BaseItemDto>> getPerformingArtistAlbums(
   }
 }
 
+// Fetch every performing artist track 
+// (note that this intentionally also includes tracks
+// where the artist is also an album artist)
 @riverpod
 Future<List<BaseItemDto>> getPerformingArtistTracks(
   Ref ref,
@@ -148,15 +153,27 @@ Future<List<BaseItemDto>> getPerformingArtistTracks(
 
   // Get Items
   if (isOffline) {
-    // In Offline Mode
-    // In Offline Mode, we are getting the Performaning Artist Tracks
-    // directly in the other provider
-    return <BaseItemDto>[];
+    // In Offline Mode:
+    final List<BaseItemDto> performingArtistTracks = [];
+    // Fetch every album where the artist is a performing artist
+    final List<BaseItemDto> allPerformingArtistAlbums = await ref.watch(
+      getPerformingArtistAlbumsProvider(parent, genreFilter).future,
+    );
+    // Loop through the albums and add the tracks
+    for (var album in allPerformingArtistAlbums) {
+      final performingArtistAlbumTracks = await downloadsService.getCollectionTracks(
+        album, playable: true,
+      );
+      // Now we remove every track where the artist is NOT an performing artist...
+      final filteredPerformingArtistTracks = performingArtistAlbumTracks.where((track) {
+        return track.artistItems?.any((artist) => artist.id == parent.id) ?? false;
+      });
+      // and add the tracks to the list
+      performingArtistTracks.addAll(filteredPerformingArtistTracks);
+    }
+    return performingArtistTracks;
   } else {
-    // In Online Mode
-    // Now we fetch every performing artist track
-    // (this has to happen here, because otherwise we will
-    // get the correct childrenCount for the Download Status too late)
+    // In Online Mode:
     final List<BaseItemDto>? allPerformingArtistTracks = 
       await jellyfinApiHelper.getItems(
         parentItem: parent,
@@ -179,64 +196,36 @@ Future<List<BaseItemDto>> getAllTracks(
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
   final isOffline = ref.watch(finampSettingsProvider.isOffline);
-
+  // Get Items
   if (isOffline) {
+    // In Offline Mode:
     // First fetch every album of the album artist
-    final List<DownloadStub> albumArtistAlbums =
-        await downloadsService.getAllCollections(
-          baseTypeFilter: BaseItemDtoType.album,
-          relatedTo: parent,
-          artistType: ArtistType.albumartist,
-          genreFilter: genreFilter,
-        );
-    albumArtistAlbums.sort((a, b) => a.name.compareTo(b.name));
+    final List<BaseItemDto> allAlbumArtistAlbums = await ref.watch(
+      getArtistAlbumsProvider(parent, genreFilter).future,
+    );
     // Then add the tracks of every album
     final List<BaseItemDto> sortedTracks = [];
-    for (var album in albumArtistAlbums) {
+    for (var album in allAlbumArtistAlbums) {
       sortedTracks.addAll(await downloadsService.getCollectionTracks(
-        album.baseItem!,
+        album,
         playable: true,
       ));
     }
-    // Fetch every album where the artist is a performing artist
-    final List<DownloadStub> performingArtistAlbums =
-        await downloadsService.getAllCollections(
-          baseTypeFilter: BaseItemDtoType.album,
-          relatedTo: parent,
-          artistType: ArtistType.artist,
-          genreFilter: genreFilter,
-        );
-    performingArtistAlbums.sort((a, b) => a.name.compareTo(b.name));
-    // Filter out albums already fetched in the albumArtistAlbums query
-    final List<DownloadStub> filteredPerformingArtistAlbums =
-        performingArtistAlbums.where((performingAlbum) {
-      return !albumArtistAlbums.any((albumArtistAlbum) =>
-          albumArtistAlbum.id == performingAlbum.id);
-    }).toList();
-    // Again add the tracks of every album,
-    // but this time only the tracks where the artist is a performing artist
-    final List<BaseItemDto> sortedTracksIncludingAppearsOn = [];
-    for (var album in filteredPerformingArtistAlbums) {
-      final performingArtistAlbumTracks = await downloadsService.getCollectionTracks(
-        album.baseItem!, playable: true,
-      );
-      final filteredPerformingArtistTracks = performingArtistAlbumTracks.where((track) {
-        return track.artistItems?.any((artist) => artist.id == parent.id) ?? false;
-      });
-      sortedTracks.addAll(filteredPerformingArtistTracks);
-    }
-    // Combine the results and return
-    final combinedTracks = [
-      ...sortedTracks,
-      ...sortedTracksIncludingAppearsOn
-    ];
-    return combinedTracks;
-  } else {
-    // Online Mode
-    // Get all performing artist tracks from other provider
+    // Fetch every performing artist track
     final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(
       getPerformingArtistTracksProvider(parent, genreFilter).future,
     );
+    // Filter out the tracks already added through album artist albums
+    final existingIds = sortedTracks.map((t) => t.id).toSet();
+    final List<BaseItemDto> allPerformingArtistTracksFiltered = allPerformingArtistTracks
+        .where((track) => !existingIds.contains(track.id))
+        .toList();
+    // Add the remaining tracks
+    sortedTracks.addAll(allPerformingArtistTracksFiltered);
+    // And return the tracks
+    return sortedTracks;
+  } else {
+    // In Online Mode:
     // Fetch every album artist track
     final allAlbumArtistTracksResponse = await jellyfinApiHelper.getItems(
       parentItem: parent,
@@ -245,9 +234,13 @@ Future<List<BaseItemDto>> getAllTracks(
       includeItemTypes: "Audio",
       artistType: ArtistType.albumartist,
     );
+    // Get all performing artist tracks
+    final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(
+      getPerformingArtistTracksProvider(parent, genreFilter).future,
+    );
     // We now remove albumartist tracks from performance artist tracks to avoid duplicates
     final allAlbumArtistTracks = allAlbumArtistTracksResponse ?? [];
-    final allPerformingTracks = allPerformingArtistTracks ?? [];
+    final allPerformingTracks = allPerformingArtistTracks;
     final albumArtistTrackIds =
         allAlbumArtistTracks.map((item) => item.id).toSet();
     final filteredPerformingTracks = allPerformingTracks
@@ -368,7 +361,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         ],
       ),
       if (!isLoading &&
-          topTracks.isNotEmpty &&
+          filteredTopTracks.isNotEmpty &&
           ref.watch(finampSettingsProvider.showArtistsTopTracks))
         TracksSection(
             parent: widget.parent,
