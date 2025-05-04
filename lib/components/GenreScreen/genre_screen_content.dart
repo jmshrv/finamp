@@ -313,42 +313,52 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         ),
       ),
       SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: GenreCuratedItemSelectionType.values.asMap().entries.expand((entry) {
-                final int index = entry.key;
-                final type = entry.value;
-                final bool isSelected = genreCuratedItemSelectionType == type;
-                final colorScheme = Theme.of(context).colorScheme;
-                double leftPadding = index == 0 ? 8.0 : 0.0;
-                double rightPadding = index == GenreCuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
-                return [
-                  Padding(
-                    padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
-                    child: FilterChip(
-                      label: Text(type.toLocalisedString(context)),
-                      onSelected: (_) {
-                          FinampSetters.setGenreCuratedItemSelectionType(type);
-                      },
-                      selected: isSelected,
-                      showCheckmark: false,
-                      selectedColor: colorScheme.primary,
-                      backgroundColor: colorScheme.surface,
-                      labelStyle: TextStyle(
-                        color: isSelected
-                            ? colorScheme.onPrimary
-                            : colorScheme.onSurface,
-                      ),
-                      shape: StadiumBorder(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                  child: IntrinsicWidth(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: GenreCuratedItemSelectionType.values.asMap().entries.expand((entry) {
+                        final int index = entry.key;
+                        final type = entry.value;
+                        final bool isSelected = genreCuratedItemSelectionType == type;
+                        final colorScheme = Theme.of(context).colorScheme;
+                        double leftPadding = index == 0 ? 8.0 : 0.0;
+                        double rightPadding = index == GenreCuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
+                        return [
+                          Padding(
+                            padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
+                            child: FilterChip(
+                              label: Text(type.toLocalisedString(context)),
+                              onSelected: (_) {
+                                FinampSetters.setGenreCuratedItemSelectionType(type);
+                              },
+                              selected: isSelected,
+                              showCheckmark: false,
+                              selectedColor: colorScheme.primary,
+                              backgroundColor: colorScheme.surface,
+                              labelStyle: TextStyle(
+                                color: isSelected
+                                    ? colorScheme.onPrimary
+                                    : colorScheme.onSurface,
+                              ),
+                              shape: StadiumBorder(),
+                            ),
+                          ),
+                        ];
+                      }).toList(),
                     ),
                   ),
-                ];
-              }).toList(),
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         ),
       ),
       if (!isLoading)
