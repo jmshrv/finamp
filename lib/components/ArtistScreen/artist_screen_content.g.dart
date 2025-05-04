@@ -484,7 +484,7 @@ class _GetPerformingArtistAlbumsProviderElement
 }
 
 String _$getPerformingArtistTracksHash() =>
-    r'7e60c5c447935c7251392ef0f0816ecbadb96819';
+    r'4e95a967fdc93add3c4684e77b0b1d410f482b40';
 
 /// See also [getPerformingArtistTracks].
 @ProviderFor(getPerformingArtistTracks)
@@ -638,7 +638,7 @@ class _GetPerformingArtistTracksProviderElement
       (origin as GetPerformingArtistTracksProvider).genreFilter;
 }
 
-String _$getAllTracksHash() => r'210acf3ebaf5feaea8ce531ac988569ed1aa3783';
+String _$getAllTracksHash() => r'7658eb4192e7e8a767ce22f68352bfae319295fe';
 
 /// See also [getAllTracks].
 @ProviderFor(getAllTracks)
