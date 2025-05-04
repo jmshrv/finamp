@@ -107,7 +107,6 @@ Future<void> _onConnectivityChange(
 }
 
 /// Sets the offline mode based on the current connectivity and user settings
-/// Always returns false for proper typing in the above Future.wait
 Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   // skip when feature not enabled
   if (FinampSettingsHelper.finampSettings.autoOffline ==
