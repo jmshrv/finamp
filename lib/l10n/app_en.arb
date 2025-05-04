@@ -1760,15 +1760,31 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
-  "showStopButtonOnMediaNotificationTitle": "Show stop button on media notification",
+  "showStopButtonOnMediaNotificationTitle": "Show Stop Button on Media Notification",
   "@showStopButtonOnMediaNotificationTitle": {
-    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+    "description": "Title for the setting that controls if the media notification has a stop button."
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Controls if the media notification has a stop button in addition to the pause button. This lets you stop playback without opening the app.",
+  "showStopButtonOnMediaNotificationSubtitle": "Controls if the media notification has a stop button. This lets you stop playback without opening the app.",
   "@showStopButtonOnMediaNotificationSubtitle": {
-    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+    "description": "Subtitle for the setting that controls if the media notification has a stop button."
   },
-  "showSeekControlsOnMediaNotificationTitle": "Show seek controls on media notification",
+  "showShuffleButtonOnMediaNotificationTitle": "Show Shuffle Button on Media Notification",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Controls if the media notification has a shuffle button. This lets you shuffle/unshuffle playback without opening the app.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Show Favorite Button on Media Notification",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Controls if the media notification has a favorite button. This lets you favorite/unfavorite the current track without opening the app.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Allow Seeking on Media Notification",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },

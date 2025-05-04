@@ -135,7 +135,7 @@ dev_dependencies:
       url: https://github.com/callumw-k/isar.git
       ref: ad574f60ed6f39d2995cd16fc7dc3de9a646ef30
       path: packages/isar_generator
-  msix: ^3.16.7
+  msix: ^3.16.9
 
 dependency_overrides:
   # force isar_generator community fork to accept baseline isar.

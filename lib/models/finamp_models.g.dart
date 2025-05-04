@@ -20,9 +20,9 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       id: fields[0] as String,
       publicAddress: fields[1] as String,
       homeAddress:
-          fields[6] == null ? 'http://0.0.0.0:8096' : fields[6] as String,
-      preferHomeNetwork: fields[8] == null ? false : fields[8] as bool,
-      isLocal: fields[7] == null ? false : fields[7] as bool,
+          fields[7] == null ? 'http://0.0.0.0:8096' : fields[7] as String,
+      preferHomeNetwork: fields[9] == null ? false : fields[9] as bool,
+      isLocal: fields[8] == null ? false : fields[8] as bool,
       accessToken: fields[2] as String,
       serverId: fields[3] as String,
       currentViewId: fields[4] as BaseItemId?,
@@ -48,11 +48,11 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       ..write(obj.currentViewId)
       ..writeByte(5)
       ..write(obj.views)
-      ..writeByte(6)
-      ..write(obj.homeAddress)
       ..writeByte(7)
-      ..write(obj.isLocal)
+      ..write(obj.homeAddress)
       ..writeByte(8)
+      ..write(obj.isLocal)
+      ..writeByte(9)
       ..write(obj.preferHomeNetwork);
   }
 
@@ -205,6 +205,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[71] == null ? true : fields[71] as bool,
       showStopButtonOnMediaNotification:
           fields[68] == null ? false : fields[68] as bool,
+      showShuffleButtonOnMediaNotification:
+          fields[98] == null ? true : fields[98] as bool,
+      showFavoriteButtonOnMediaNotification:
+          fields[99] == null ? true : fields[99] as bool,
       showSeekControlsOnMediaNotification:
           fields[69] == null ? true : fields[69] as bool,
       keepScreenOnOption: fields[72] == null
@@ -252,7 +256,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(92)
+      ..writeByte(94)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -436,7 +440,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(96)
       ..write(obj.enablePlayon)
       ..writeByte(97)
-      ..write(obj.autoReloadQueue);
+      ..write(obj.autoReloadQueue)
+      ..writeByte(98)
+      ..write(obj.showShuffleButtonOnMediaNotification)
+      ..writeByte(99)
+      ..write(obj.showFavoriteButtonOnMediaNotification);
   }
 
   @override
