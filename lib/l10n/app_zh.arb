@@ -1432,11 +1432,11 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "控制媒体通知除了暂停按钮外是否还有停止按钮。这可以让你在不打开应用的情况下停止播放。",
+  "showStopButtonOnMediaNotificationSubtitle": "控制媒体通知是否包含停止按钮。这样无需打开应用即可停止播放。",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "showSeekControlsOnMediaNotificationTitle": "在媒体通知上显示拖动控件",
+  "showSeekControlsOnMediaNotificationTitle": "允许在媒体通知中搜索",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -2074,5 +2074,44 @@
   "outputMenuOpenConnectionSettingsButtonTitle": "连接到设备",
   "@outputMenuOpenConnectionSettingsButtonTitle": {
     "description": "Button title for connecting to a device from the output menu"
-  }
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "在媒体通知上显示随机播放按钮",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "控制媒体通知是否包含随机播放按钮。这样，您无需打开应用即可随机/取消随机播放。",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "在媒体通知上显示收藏按钮",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "startupErrorCallToAction": "请在 github.com/jmshrv/finamp 上创建一个问题，并附上日志（！）（使用下面的按钮）和此页面的屏幕截图，以便我们尽快修复它。",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "deviceType": "{type, select, speaker{设备 扬声器} tv{电视} bluetooth{蓝牙} other{未知}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "startupErrorTitle": "应用启动时出错了！\n很抱歉……",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "控制媒体通知是否包含收藏按钮。这样，您无需打开应用即可收藏/取消收藏当前曲目。",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "startupErrorWorkaround": "解决方法是，您可以清除应用数据来重置应用。请注意，此操作会导致您的所有设置和下载内容被删除。",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "exportLogs": "保存日志",
+  "@exportLogs": {}
 }
