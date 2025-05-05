@@ -227,7 +227,7 @@ Future<void> _setupDownloadsHelper() async {
 Future<void> _setupPlayOnService() async {
   final playOnService = PlayOnService();
   GetIt.instance.registerSingleton(playOnService);
-  unawaited(playOnService.initialize());
+  GetIt.instance<FinampUserHelper>().runUserHook(playOnService.initialize);
 }
 
 Future<void> _setupKeepScreenOnHelper() async {
