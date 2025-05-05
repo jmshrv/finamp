@@ -1,13 +1,11 @@
+import 'package:finamp/components/PlayerScreen/genre_chip.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../icon_and_text.dart';
 
 class ArtistItemInfo extends ConsumerWidget {
@@ -73,42 +71,48 @@ class _GenreIconAndText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    
-    final genreNames = genreFilter?.name ?? genres.map((g) => g.name).join(", ");
     final bool hasFilter = genreFilter != null;
     final theme = Theme.of(context);
 
-    Widget content = IconAndText(
-      iconData: TablerIcons.color_swatch,
-      textSpan: TextSpan(
-        text: genreNames,
-        style: hasFilter
-            ? TextStyle(color: Theme.of(context).colorScheme.onPrimary)
-            : null,
-      ),
-      iconColor: hasFilter
-            ? theme.colorScheme.onPrimary
-            : null,
-    );
-
-    if (hasFilter) {
-      return Container(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.primary,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 1),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: content),
+    return Container(
+      decoration: hasFilter
+          ? BoxDecoration(
+              color: theme.colorScheme.primary,
+              borderRadius: BorderRadius.circular(6),
+            )
+          : null,
+      padding: const EdgeInsets.symmetric(horizontal: 1),
+      child: Row(
+        children: [
+          Icon(
+            TablerIcons.color_swatch,
+            color: hasFilter
+                ? theme.colorScheme.onPrimary
+                : theme.iconTheme.color?.withOpacity(
+                    theme.brightness == Brightness.light ? 0.38 : 0.5,
+                  ),
+          ),
+          const SizedBox(width: 4),
+          Expanded(
+            child: hasFilter
+                ? Text(
+                    genreFilter?.name ?? "Unknown Genre",
+                    style: TextStyle(color: theme.colorScheme.onPrimary),
+                    overflow: TextOverflow.ellipsis,
+                  )
+                : GenreChips(
+                    genres: genres,
+                    backgroundColor:
+                      IconTheme.of(context).color!.withOpacity(0.1),
+                  ),
+          ),
+          if (hasFilter)
             GestureDetector(
               onTap: () {
                 resetGenreFilter();
               },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 1),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4, right: 2),
                 child: Icon(
                   Icons.close,
                   size: 18,
@@ -116,17 +120,8 @@ class _GenreIconAndText extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
-      );
-    } else {
-      return GestureDetector(
-        onTap: () => jellyfinApiHelper
-            .getItemById(genres.first.id)
-            .then((genre) => Navigator.of(context)
-                .pushNamed(GenreScreen.routeName, arguments: genre)),
-        child: content,
-      );
-    }
+        ],
+      ),
+    );
   }
 }

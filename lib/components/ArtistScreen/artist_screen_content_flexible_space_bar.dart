@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
@@ -411,54 +413,52 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                       (ArtistMenuItems selection) async {
                                     switch (selection) {
                                       case ArtistMenuItems.playNext:
-                                        allTracks.then((items) =>
-                                            addArtistNext(items ?? []));
+                                        unawaited(allTracks.then((items) =>
+                                            addArtistNext(items ?? [])));
                                         break;
                                       case ArtistMenuItems.addToNextUp:
-                                        allTracks.then((items) =>
-                                            addArtistToNextUp(items ?? []));
+                                        unawaited(allTracks.then((items) =>
+                                            addArtistToNextUp(items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleNext:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAllFromArtistNext(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleToNextUp:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAllFromArtistToNextUp(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.addToQueue:
-                                        allTracks.then((items) =>
-                                            addArtistToQueue(items ?? []));
+                                        unawaited(allTracks.then((items) =>
+                                            addArtistToQueue(items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleToQueue:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAllFromArtistToQueue(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleAlbums:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAlbumsFromArtist(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleAlbumsNext:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAlbumsFromArtistNext(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems
                                             .shuffleAlbumsToNextUp:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAlbumsFromArtistToNextUp(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleAlbumsToQueue:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAlbumsFromArtistToQueue(
-                                                items ?? []));
-                                        break;
-                                      default:
+                                                items ?? [])));
                                         break;
                                     }
                                   },
@@ -575,52 +575,52 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                       (ArtistMenuItems selection) async {
                                     switch (selection) {
                                       case ArtistMenuItems.playNext:
-                                        allTracks.then((items) =>
-                                            addArtistNext(items ?? []));
+                                        unawaited(allTracks.then((items) =>
+                                            addArtistNext(items ?? [])));
                                         break;
                                       case ArtistMenuItems.addToNextUp:
-                                        allTracks.then((items) =>
-                                            addArtistToNextUp(items ?? []));
+                                        unawaited(allTracks.then((items) =>
+                                            addArtistToNextUp(items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleNext:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAllFromArtistNext(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleToNextUp:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAllFromArtistToNextUp(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.addToQueue:
-                                        allTracks.then((items) =>
-                                            addArtistToQueue(items ?? []));
+                                        unawaited(allTracks.then((items) =>
+                                            addArtistToQueue(items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleToQueue:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAllFromArtistToQueue(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleAlbums:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAlbumsFromArtist(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleAlbumsNext:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAlbumsFromArtistNext(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems
                                             .shuffleAlbumsToNextUp:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAlbumsFromArtistToNextUp(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       case ArtistMenuItems.shuffleAlbumsToQueue:
-                                        allTracks.then((items) =>
+                                        unawaited(allTracks.then((items) =>
                                             shuffleAlbumsFromArtistToQueue(
-                                                items ?? []));
+                                                items ?? [])));
                                         break;
                                       default:
                                         break;

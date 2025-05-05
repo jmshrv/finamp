@@ -7,7 +7,7 @@ part of 'artist_screen_content.dart';
 // **************************************************************************
 
 String _$getArtistTopTracksHash() =>
-    r'39f7bf6f04f96c2cfcb0aba4fc6ceaf45323f92c';
+    r'8547dc55a092625fe0c9d66b18c8b95e7b0692e3';
 
 /// Copied from Dart SDK
 class _SystemHash {
