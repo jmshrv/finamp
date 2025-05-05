@@ -2026,6 +2026,18 @@
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
   },
+  "artistScreen": "Artist Screen",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "artistGenreChipsApplyFilterTitle": "Apply Filter Instead of Opening Genre",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  },
+  "artistGenreChipsApplyFilterSubtitle": "Normally, tapping a genre opens its dedicated screen. When enabled, this option filters the artist by the tapped genre instead — showing only matching tracks and albums.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  },
   "genreScreen": "Genre Screen",
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"

@@ -265,12 +265,12 @@ class ArtistScreenContent extends ConsumerStatefulWidget {
     super.key,
     required this.parent,
     this.genreFilter,
-    required this.resetGenreFilter,
+    required this.updateGenreFilter,
   });
 
   final BaseItemDto parent;
   final BaseItemDto? genreFilter;
-  final VoidCallback resetGenreFilter;
+  final void Function(BaseItemDto?) updateGenreFilter;
 
   @override
   ConsumerState<ArtistScreenContent> createState() =>
@@ -351,7 +351,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           allTracks: allTracks,
           albumCount: albumArtistAlbums.length,
           genreFilter: widget.genreFilter,
-          resetGenreFilter: widget.resetGenreFilter,
+          updateGenreFilter: widget.updateGenreFilter,
         ),
         actions: [
           FavoriteButton(item: widget.parent),

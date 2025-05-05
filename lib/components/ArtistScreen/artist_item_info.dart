@@ -15,14 +15,14 @@ class ArtistItemInfo extends ConsumerWidget {
     required this.itemTracks,
     required this.itemAlbums,
     this.genreFilter,
-    this.resetGenreFilter,
+    this.updateGenreFilter,
   });
 
   final BaseItemDto item;
   final int itemTracks;
   final int itemAlbums;
   final BaseItemDto? genreFilter;
-  final VoidCallback? resetGenreFilter;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
@@ -45,13 +45,13 @@ class ArtistItemInfo extends ConsumerWidget {
               text: AppLocalizations.of(context)!.albumCount(itemAlbums),
             )),
         if (item.type != "MusicGenre" &&
-            resetGenreFilter != null &&
+            updateGenreFilter != null &&
             ((item.genreItems != null && item.genreItems!.isNotEmpty) ||
             genreFilter != null))
           _GenreIconAndText(
               genres: item.genreItems!,
               genreFilter: genreFilter,
-              resetGenreFilter: resetGenreFilter!
+              updateGenreFilter: updateGenreFilter!
           )
       ],
     );
@@ -62,12 +62,12 @@ class _GenreIconAndText extends StatelessWidget {
   const _GenreIconAndText({
     required this.genres,
     this.genreFilter,
-    required this.resetGenreFilter
+    required this.updateGenreFilter
   });
 
   final List<NameLongIdPair> genres;
   final BaseItemDto? genreFilter;
-  final VoidCallback resetGenreFilter;
+  final void Function(BaseItemDto?) updateGenreFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -95,21 +95,25 @@ class _GenreIconAndText extends StatelessWidget {
           const SizedBox(width: 4),
           Expanded(
             child: hasFilter
-                ? Text(
-                    genreFilter?.name ?? "Unknown Genre",
-                    style: TextStyle(color: theme.colorScheme.onPrimary),
-                    overflow: TextOverflow.ellipsis,
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Text(
+                      genreFilter?.name ?? "Unknown Genre",
+                      style: TextStyle(color: theme.colorScheme.onPrimary),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   )
                 : GenreChips(
                     genres: genres,
                     backgroundColor:
                       IconTheme.of(context).color!.withOpacity(0.1),
+                    updateGenreFilter: updateGenreFilter,
                   ),
           ),
           if (hasFilter)
             GestureDetector(
               onTap: () {
-                resetGenreFilter();
+                updateGenreFilter(null);
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 4, right: 2),

@@ -18,11 +18,13 @@ class GenreChips extends ConsumerWidget {
     required this.genres,
     this.backgroundColor,
     this.color,
+    this.updateGenreFilter,
   });
 
   final List<NameLongIdPair> genres;
   final Color? backgroundColor;
   final Color? color;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,6 +42,7 @@ class GenreChips extends ConsumerWidget {
                 backgroundColor: backgroundColor,
                 color: color,
                 genre: genre,
+                updateGenreFilter: updateGenreFilter,
               );
             }).toList(),
         ),
@@ -54,11 +57,13 @@ class GenreChip extends StatelessWidget {
     required this.genre,
     this.backgroundColor,
     this.color,
+    this.updateGenreFilter,
   });
 
   final NameLongIdPair genre;
   final Color? backgroundColor;
   final Color? color;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -68,25 +73,60 @@ class GenreChip extends StatelessWidget {
           genre: genre,
           color: color,
           backgroundColor: backgroundColor,
+          updateGenreFilter: updateGenreFilter,
         ));
   }
 }
 
-class _GenreChipContent extends StatelessWidget {
+class _GenreChipContent extends ConsumerWidget {
   const _GenreChipContent({
     required this.genre,
     this.backgroundColor,
     this.color,
+    this.updateGenreFilter,
   });
 
   final NameLongIdPair genre;
   final Color? backgroundColor;
   final Color? color;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
-  @override
-  Widget build(BuildContext context) {
+  void _handleGenreTap(BuildContext context, WidgetRef ref) {
+    final isOffline = ref.watch(finampSettingsProvider.isOffline);
+    final artistGenreChipsApplyFilter = ref.watch(finampSettingsProvider.artistGenreChipsApplyFilter);
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final isarDownloader = GetIt.instance<DownloadsService>();
+    
+    if (isOffline) {
+      isarDownloader.getCollectionInfo(id: genre.id!).then((genreItem) {
+        if (genreItem?.baseItem != null) {
+          if (artistGenreChipsApplyFilter && updateGenreFilter != null) {
+            return updateGenreFilter!(genreItem!.baseItem!);
+          } else {
+            Navigator.of(context).pushNamed(
+              GenreScreen.routeName,
+              arguments: genreItem!.baseItem!,
+            );
+          }
+        }
+      });
+    } else {
+      jellyfinApiHelper.getItemById(genre.id!).then((genreItem) {
+        if (artistGenreChipsApplyFilter && updateGenreFilter != null) {
+            return updateGenreFilter!(genreItem);
+          } else {
+            Navigator.of(context).pushNamed(
+              GenreScreen.routeName,
+              arguments: genreItem,
+            );
+          }
+      });
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final genreName = genre.name ?? "";
 
     return Semantics.fromProperties(
@@ -101,14 +141,7 @@ class _GenreChipContent extends StatelessWidget {
         borderRadius: _borderRadius,
         child: InkWell(
           borderRadius: _borderRadius,
-          onTap: FinampSettingsHelper.finampSettings.isOffline
-              ? () => isarDownloader.getCollectionInfo(id: genre.id!).then(
-                  (genreItem) => Navigator.of(context).pushNamed(
-                      GenreScreen.routeName,
-                      arguments: genreItem!.baseItem!))
-              : () => jellyfinApiHelper.getItemById(genre.id!).then(
-                  (genreItem) => Navigator.of(context)
-                      .pushNamed(GenreScreen.routeName, arguments: genreItem)),
+          onTap: () => _handleGenreTap(context, ref),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(

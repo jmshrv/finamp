@@ -33,10 +33,11 @@ class _ArtistScreenState extends State<ArtistScreen> {
     currentGenreFilter = widget.genreFilter;
   }
 
-  // Function to reset the genre filter and refresh the screen
-  void resetGenreFilter() {
+  // Function to update the genre filter and refresh the screen
+  // Pass null in order to reset the filter
+  void updateGenreFilter(BaseItemDto? genre) {
     setState(() {
-      currentGenreFilter = null;  // Reset the genre filter
+      currentGenreFilter = genre;
     });
   }
 
@@ -51,7 +52,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
         child: ArtistScreenContent(
           parent: artist,
           genreFilter: currentGenreFilter,
-          resetGenreFilter: resetGenreFilter,
+          updateGenreFilter: updateGenreFilter,
         ),
       ),
       bottomNavigationBar: const NowPlayingBar(),

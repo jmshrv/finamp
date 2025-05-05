@@ -145,6 +145,16 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void resetArtistSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    
+    finampSettingsTemp.artistGenreChipsApplyFilter =
+        DefaultSettings.artistGenreChipsApplyFilter;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void resetGenreSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
     
@@ -310,6 +320,7 @@ class FinampSettingsHelper {
     resetPlayerScreenSettings();
     resetLyricsSettings();
     resetAlbumSettings();
+    resetArtistSettings();
     resetGenreSettings();
     resetTabsSettings();
     resetNetworkSettings();

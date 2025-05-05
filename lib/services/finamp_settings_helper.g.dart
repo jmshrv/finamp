@@ -738,6 +738,15 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setArtistGenreChipsApplyFilter(
+      bool newArtistGenreChipsApplyFilter) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.artistGenreChipsApplyFilter =
+        newArtistGenreChipsApplyFilter;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -988,6 +997,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<GenreCuratedItemSelectionType>
       get genreMostPlayedOfflineFallback => finampSettingsProvider
           .select((value) => value.requireValue.genreMostPlayedOfflineFallback);
+  ProviderListenable<bool> get artistGenreChipsApplyFilter =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.artistGenreChipsApplyFilter);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

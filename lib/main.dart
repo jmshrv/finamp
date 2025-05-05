@@ -12,6 +12,7 @@ import 'package:finamp/hive_registrar.g.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/locale_adapter.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
+import 'package:finamp/screens/artist_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
 import 'package:finamp/screens/genre_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
@@ -537,6 +538,8 @@ class _FinampState extends State<Finamp> with WindowListener {
                                 const LanguageSelectionScreen(),
                             AlbumSettingsScreen.routeName: (context) =>
                                 const AlbumSettingsScreen(),
+                            ArtistSettingsScreen.routeName: (context) =>
+                                const ArtistSettingsScreen(),
                             GenreSettingsScreen.routeName: (context) =>
                                 const GenreSettingsScreen(),
                             NetworkSettingsScreen.routeName: (context) =>
