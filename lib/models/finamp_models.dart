@@ -92,7 +92,6 @@ class FinampUser {
     isLocal = newIsLocal ?? isLocal;
     homeAddress = newHomeAddress ?? homeAddress;
     publicAddress = newPublicAddress ?? publicAddress;
-    homeNetworkName = newHomeNetworkName ?? homeNetworkName;
     preferHomeNetwork = newPreferHomeNetwork ?? preferHomeNetwork;
     GetIt.instance<FinampUserHelper>().saveUser(this);
   }
@@ -299,6 +298,10 @@ class FinampSettings {
         DefaultSettings.showLyricsScreenAlbumPrelude,
     this.showStopButtonOnMediaNotification =
         DefaultSettings.showStopButtonOnMediaNotification,
+    this.showShuffleButtonOnMediaNotification =
+        DefaultSettings.showShuffleButtonOnMediaNotification,
+    this.showFavoriteButtonOnMediaNotification =
+        DefaultSettings.showFavoriteButtonOnMediaNotification,
     this.showSeekControlsOnMediaNotification =
         DefaultSettings.showSeekControlsOnMediaNotification,
     this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
@@ -645,7 +648,15 @@ class FinampSettings {
   @HiveField(97, defaultValue: DefaultSettings.autoReloadQueue)
   bool autoReloadQueue;
 
-  @HiveField(98)
+  @HiveField(98,
+      defaultValue: DefaultSettings.showShuffleButtonOnMediaNotification)
+  bool showShuffleButtonOnMediaNotification;
+
+  @HiveField(99,
+      defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
+  bool showFavoriteButtonOnMediaNotification;
+
+  @HiveField(100)
   ScreenSize? screenSize;
 
   static Future<FinampSettings> create() async {
