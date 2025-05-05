@@ -28,7 +28,7 @@ class ItemInfo extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // if (item.type != "Playlist") IconAndText(
-        //   iconData: Icons.person,
+        //   iconData: TablerIcons.user,
         //   textSpan: TextSpan(
         //     children: getArtistsTextSpans(
         //       item,

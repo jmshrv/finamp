@@ -291,7 +291,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             PopupMenuItem<_AlbumListTileMenuItems>(
               value: _AlbumListTileMenuItems.goToArtist,
               child: ListTile(
-                leading: const Icon(Icons.person),
+                leading: const Icon(TablerIcons.user),
                 title: Text(AppLocalizations.of(context)!.goToArtist),
               ),
             ),

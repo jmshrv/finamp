@@ -467,7 +467,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToAlbum,
         child: ListTile(
           leading: Icon(
-            Icons.album,
+            TablerIcons.disc,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToAlbum),
@@ -500,7 +500,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToArtist,
         child: ListTile(
           leading: Icon(
-            Icons.person,
+            TablerIcons.user,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToArtist),
