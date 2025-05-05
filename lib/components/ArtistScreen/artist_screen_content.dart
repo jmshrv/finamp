@@ -32,15 +32,19 @@ Future<List<BaseItemDto>> getArtistTopTracks(
   // Get Items
   if (isOffline) {
     // In Offline Mode:
+    // As the offline PlayCount might not be accurate, we currently
+    // just hide the section. Therefore we return an empty list
+    return <BaseItemDto>[];
+    // However, if we want to implement it later, it would look like this:
     // We already fetch all tracks for the playback, 
     // and as in offline mode this is much faster, 
     // we just sort them and only return the first 5 items.
-    final List<BaseItemDto> allArtistTracks = await ref.watch(
+    /*final List<BaseItemDto> allArtistTracks = await ref.watch(
       getAllTracksProvider(parent, genreFilter).future,
     );
     var items = sortItems(allArtistTracks, SortBy.playCount, SortOrder.descending);
     items = items.take(5).toList();
-    return items;
+    return items;*/
   } else {
     // In Online Mode:
     // Get Top 5 Tracks sorted by Play Count
