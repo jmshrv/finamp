@@ -103,12 +103,12 @@ class _GenreChipContent extends StatelessWidget {
           borderRadius: _borderRadius,
           onTap: FinampSettingsHelper.finampSettings.isOffline
               ? () => isarDownloader.getCollectionInfo(id: genre.id!).then(
-                  (album) => Navigator.of(context).pushNamed(
+                  (genreItem) => Navigator.of(context).pushNamed(
                       GenreScreen.routeName,
-                      arguments: album!.baseItem!))
+                      arguments: genreItem!.baseItem!))
               : () => jellyfinApiHelper.getItemById(genre.id!).then(
-                  (album) => Navigator.of(context)
-                      .pushNamed(GenreScreen.routeName, arguments: album)),
+                  (genreItem) => Navigator.of(context)
+                      .pushNamed(GenreScreen.routeName, arguments: genreItem)),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(
