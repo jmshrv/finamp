@@ -1975,7 +1975,7 @@
   },
   "transcodingStreamingFormatSubtitle": "Vyberte formát, který se má použít při streamování překódovaného zvuku. Skladby, které jsou již ve frontě, nebudou ovlivněny.",
   "@transcodingStreamingFormatSubtitle": {},
-  "autoOfflineOptionNetwork": "Síť",
+  "autoOfflineOptionNetwork": "Místní síť",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -1993,7 +1993,7 @@
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nSíť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
+  "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nMístní síť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2113,5 +2113,75 @@
   "showShuffleButtonOnMediaNotificationTitle": "Zobrazit tlačítko náhodného přehrávání v oznámení médií",
   "@showShuffleButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "networkSettingsTitle": "Síť",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "downloadPaused": "Stahování pozastaveno, protože zařízení není připojeno k síti Wi-Fi",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "preferHomeNetworkActiveAddressInfoText": "Aktivní adresa",
+  "@preferHomeNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "Adresa domácí sítě",
+  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "Cílová adresa serveru Jellyfin uvnitř vaší domácí sítě",
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
+  "preferHomeNetworkEnableSwitchTitle": "Upřednostňovat domácí síť",
+  "@preferHomeNetworkEnableSwitchTitle": {},
+  "preferHomeNetworkEnableSwitchDescription": "Zda používat jinou adresu, když jste doma",
+  "@preferHomeNetworkEnableSwitchDescription": {},
+  "preferHomeNetworkPublicAddressSettingTitle": "Veřejná adresa",
+  "@preferHomeNetworkPublicAddressSettingTitle": {},
+  "preferHomeNetworkPublicAddressSettingDescription": "Primární adresa používaná k připojení k vašemu serveru Jellyfin",
+  "@preferHomeNetworkPublicAddressSettingDescription": {},
+  "preferHomeNetworkInfoBox": "Tato funkce vyžaduje oprávnění k poloze (a zapnuté polohové služby) pro přečtení názvu sítě.",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "missingSchemaError": "Adresa musí začínat textem http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "testConnectionButtonLabel": "Otestovat obě spojení",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "autoReloadQueueTitle": "Automaticky znovu načíst frontu",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "Automaticky znovu načíst frontu při změně zdroje (např. povolený offline režim nebo přepnutí adresy serveru). Pokud je zakázáno, Finamp se vás nejprve zeptá.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadPrompt": "Znovu načíst frontu pro použití nového {type, select, network{nastavení sítě} transcoding{nastavení kódování} other{nastavení}}",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} bude odstraněno z fronty, protože nebyly staženy.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "autoReloadPromptReloadButton": "Znovu načíst",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  },
+  "ping": "{status, select, true_true{Obě dosažitelná} true_false{NEPODAŘILO se dosáhnout místní adresy} false_true{NEPODAŘILO se dosáhnout veřejné adresy} false_false{NEPODAŘILO se dosáhnout obou} other{neznámé}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
   }
 }
