@@ -35,7 +35,7 @@ Future<List<BaseItemDto>> getArtistTopTracks(
     // As the offline PlayCount might not be accurate, we currently
     // just hide the section. Therefore we return an empty list
     return <BaseItemDto>[];
-    // However, if we want to implement it later, it would look like this:
+    // However, if we want to implement it later, it could look like this:
     // We already fetch all tracks for the playback, 
     // and as in offline mode this is much faster, 
     // we just sort them and only return the first 5 items.
