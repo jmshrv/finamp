@@ -74,57 +74,57 @@ class _GenreIconAndText extends StatelessWidget {
     final bool hasFilter = genreFilter != null;
     final theme = Theme.of(context);
 
-    return Container(
-      decoration: hasFilter
-          ? BoxDecoration(
-              color: theme.colorScheme.primary,
-              borderRadius: BorderRadius.circular(6),
-            )
-          : null,
-      padding: const EdgeInsets.symmetric(horizontal: 1),
-      child: Row(
-        children: [
-          Icon(
-            TablerIcons.color_swatch,
-            color: hasFilter
-                ? theme.colorScheme.onPrimary
-                : theme.iconTheme.color?.withOpacity(
-                    theme.brightness == Brightness.light ? 0.38 : 0.5,
-                  ),
-          ),
-          const SizedBox(width: 4),
-          Expanded(
-            child: hasFilter
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Text(
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: hasFilter ? 4 : 0),
+      child: Container(
+        decoration: hasFilter
+            ? BoxDecoration(
+                color: theme.colorScheme.primary,
+                borderRadius: BorderRadius.circular(6),
+              )
+            : null,
+        padding: EdgeInsets.symmetric(horizontal: 1),
+        child: Row(
+          children: [
+            Icon(
+              TablerIcons.color_swatch,
+              color: hasFilter
+                  ? theme.colorScheme.onPrimary
+                  : theme.iconTheme.color?.withOpacity(
+                      theme.brightness == Brightness.light ? 0.38 : 0.5,
+                    ),
+            ),
+            const SizedBox(width: 4),
+            Expanded(
+              child: hasFilter
+                  ? Text(
                       genreFilter?.name ?? "Unknown Genre",
                       style: TextStyle(color: theme.colorScheme.onPrimary),
                       overflow: TextOverflow.ellipsis,
+                    )
+                  : GenreChips(
+                      genres: genres,
+                      backgroundColor:
+                        IconTheme.of(context).color!.withOpacity(0.1),
+                      updateGenreFilter: updateGenreFilter,
                     ),
-                  )
-                : GenreChips(
-                    genres: genres,
-                    backgroundColor:
-                      IconTheme.of(context).color!.withOpacity(0.1),
-                    updateGenreFilter: updateGenreFilter,
+            ),
+            if (hasFilter)
+              GestureDetector(
+                onTap: () {
+                  updateGenreFilter(null);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 2),
+                  child: Icon(
+                    Icons.close,
+                    size: 18,
+                    color: theme.colorScheme.onPrimary,
                   ),
-          ),
-          if (hasFilter)
-            GestureDetector(
-              onTap: () {
-                updateGenreFilter(null);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 4, right: 2),
-                child: Icon(
-                  Icons.close,
-                  size: 18,
-                  color: theme.colorScheme.onPrimary,
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
