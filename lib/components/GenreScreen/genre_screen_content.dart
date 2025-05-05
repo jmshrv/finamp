@@ -37,10 +37,15 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
   int? itemCount;
 
   if (isOffline) {
+    // If "Most Played" is selected when Offline Mode is enabled, we switch to a fallback option
+    // as the PlayCount data might not be an accurate representation of the online state
+    final offlineSelectionType = (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed)
+        ? ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
+        : genreCuratedItemSelectionType;
     final result = await getCuratedItemsOffline(
       ref: ref,
       parent: parent,
-      genreCuratedItemSelectionType: genreCuratedItemSelectionType,
+      genreCuratedItemSelectionType: offlineSelectionType,
       baseItemType: baseItemType,
       artistInfoForType: (baseItemType == BaseItemDtoType.artist)
           ? artistInfoForType
@@ -127,6 +132,9 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOffline({
   required BaseItemDtoType baseItemType,
   BaseItemDtoType? artistInfoForType,
 }) async {
+  // The "Most Played" functionality is still here, just in case we find a solution on
+  // how we can integrate it properly. But as in the current implementation it might return
+  // outdated data, getCuratedItemsOffline currently never gets called with mostPlayed
   final downloadsService = GetIt.instance<DownloadsService>();
   final sortBy = switch (genreCuratedItemSelectionType) {
     GenreCuratedItemSelectionType.mostPlayed => SortBy.playCount,
@@ -244,8 +252,13 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final genreCuratedItemSelectionType =
+    final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+    final genreCuratedItemSelectionTypeSetting =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionType);
+    final genreCuratedItemSelectionType = 
+        (isOffline && genreCuratedItemSelectionTypeSetting == GenreCuratedItemSelectionType.mostPlayed)
+            ? ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
+            : genreCuratedItemSelectionTypeSetting;
     final genreItemSectionsOrder =
         ref.watch(finampSettingsProvider.genreItemSectionsOrder);
 
@@ -327,7 +340,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                       children: GenreCuratedItemSelectionType.values.asMap().entries.expand((entry) {
                         final int index = entry.key;
                         final type = entry.value;
-                        final bool isSelected = genreCuratedItemSelectionType == type;
+                        final bool isSelected = (genreCuratedItemSelectionType == type);
                         final colorScheme = Theme.of(context).colorScheme;
                         double leftPadding = index == 0 ? 8.0 : 0.0;
                         double rightPadding = index == GenreCuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
@@ -336,10 +349,15 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                             padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
                             child: FilterChip(
                               label: Text(type.toLocalisedString(context)),
-                              onSelected: (_) {
-                                FinampSetters.setGenreCuratedItemSelectionType(type);
-                              },
+                              onSelected: (isOffline && type == GenreCuratedItemSelectionType.mostPlayed)
+                                ? null
+                                : (_) {
+                                  FinampSetters.setGenreCuratedItemSelectionType(type);
+                                },
                               selected: isSelected,
+                              tooltip: (isOffline && type == GenreCuratedItemSelectionType.mostPlayed)
+                                  ? AppLocalizations.of(context)!.genreMostPlayedOfflineTooltip
+                                  : null,
                               showCheckmark: false,
                               selectedColor: colorScheme.primary,
                               backgroundColor: colorScheme.surface,

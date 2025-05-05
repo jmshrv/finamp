@@ -1223,6 +1223,18 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
+   "genreMostPlayedOfflineFallback": "\"Most Played\" Offline Fallback",
+  "@genreMostPlayedOfflineFallback": {
+    "description": "Label for the setting that controls the offline fallback sorting option for the Most Played option."
+  },
+  "genreMostPlayedOfflineFallbackSubtitle": "\"Most Played\" isn't available in Offline Mode. If it was selected while online, the app will temporarily use the option you choose here instead.",
+  "@genreMostPlayedOfflineFallbackSubtitle": {
+    "description": "Description of the setting that controls the offline fallback sorting option for the Most Played option."
+  },
+  "genreMostPlayedOfflineTooltip": "Not available in Offline Mode.",
+  "@genreMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on GenreScreen in Offline Mode."
+  },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {

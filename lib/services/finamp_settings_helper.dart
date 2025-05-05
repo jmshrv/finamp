@@ -154,6 +154,8 @@ class FinampSettingsHelper {
         DefaultSettings.genreFilterArtistScreens;
     finampSettingsTemp.genreListsInheritSorting =
         DefaultSettings.genreListsInheritSorting;
+    finampSettingsTemp.genreMostPlayedOfflineFallback =
+        DefaultSettings.genreMostPlayedOfflineFallback;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);

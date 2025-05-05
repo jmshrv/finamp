@@ -260,6 +260,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[102] == null ? true : fields[102] as bool,
       genreListsInheritSorting:
           fields[103] == null ? false : fields[103] as bool,
+      genreMostPlayedOfflineFallback: fields[104] == null
+          ? GenreCuratedItemSelectionType.favorites
+          : fields[104] as GenreCuratedItemSelectionType,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -270,7 +273,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(98)
+      ..writeByte(99)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -466,7 +469,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(102)
       ..write(obj.genreFilterArtistScreens)
       ..writeByte(103)
-      ..write(obj.genreListsInheritSorting);
+      ..write(obj.genreListsInheritSorting)
+      ..writeByte(104)
+      ..write(obj.genreMostPlayedOfflineFallback);
   }
 
   @override

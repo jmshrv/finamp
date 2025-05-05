@@ -204,6 +204,7 @@ class DefaultSettings {
   static const genreItemSectionsOrder = GenreItemSections.values;
   static const genreFilterArtistScreens = true;
   static const genreListsInheritSorting = false;
+  static const genreMostPlayedOfflineFallback = GenreCuratedItemSelectionType.favorites;
 }
 
 @HiveType(typeId: 28)
@@ -330,6 +331,7 @@ class FinampSettings {
     this.genreItemSectionsOrder = DefaultSettings.genreItemSectionsOrder,
     this.genreFilterArtistScreens = DefaultSettings.genreFilterArtistScreens,
     this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
+    this.genreMostPlayedOfflineFallback = DefaultSettings.genreMostPlayedOfflineFallback,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -671,6 +673,10 @@ class FinampSettings {
 
   @HiveField(103, defaultValue: DefaultSettings.genreListsInheritSorting)
   bool genreListsInheritSorting;
+
+  @HiveField(104, defaultValue: DefaultSettings.genreMostPlayedOfflineFallback)
+  GenreCuratedItemSelectionType genreMostPlayedOfflineFallback;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: DownloadLocation.internalStorageName,
