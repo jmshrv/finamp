@@ -27,19 +27,6 @@ Logger _networKSwitcherLogger = Logger("Network Switcher");
 final StreamSubscription<List<ConnectivityResult>> _listener =
     Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
 
-// ignore: unused_element
-final _lifecycle = AppLifecycleListener(onRestart: () {
-  if (_lastState ?? false) {
-    _autoOfflineLogger.finer("Lifecycle restarted automation");
-    _listener.resume();
-  } else {
-    _autoOfflineLogger.finer("Lifecycle kept automation paused");
-  }
-}, onPause: () {
-  _listener.pause();
-  _autoOfflineLogger.finer("Lifecycle paused automation");
-});
-
 @riverpod
 class AutoOffline extends _$AutoOffline {
   static void startWatching() {
@@ -93,8 +80,10 @@ Future<void> _onConnectivityChange(
   _networkAutomationLogger.finest(
       "Network Change: ${connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
   connections ??= await Connectivity().checkConnectivity();
-  final [offlineModeActive, baseUrlChanged] =
-      await Future.wait([_setOfflineMode(connections), changeTargetUrl()]);
+  final [offlineModeActive, baseUrlChanged] = await Future.wait([
+    _setOfflineMode(connections),
+    changeTargetUrl(),
+  ]);
   _notifyOfPausedDownloads(connections);
   if (baseUrlChanged) {
     _reconnectPlayOnService(connections);

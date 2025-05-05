@@ -410,8 +410,8 @@ class QueueService {
                 items["current"]!.isNotEmpty || items["queue"]!.isNotEmpty
                     ? items["previous"]!.length
                     : 0,
-            beginPlaying:
-                _audioHandler.playbackState.valueOrNull?.playing ?? false,
+            beginPlaying: isReload &&
+                (_audioHandler.playbackState.valueOrNull?.playing ?? false),
             source: info.source ??
                 QueueItemSource.rawId(
                     type: QueueItemSourceType.unknown,
@@ -420,7 +420,7 @@ class QueueService {
                     id: "savedqueue"));
 
         Future<void> seekFuture = Future.value();
-        if ((info.currentTrackSeek ?? 0) > 500 &&
+        if ((info.currentTrackSeek ?? 0) > (isReload ? 500 : 5000) &&
             items["current"]!.isNotEmpty) {
           seekFuture = _audioHandler
               .seek(Duration(milliseconds: info.currentTrackSeek ?? 0));
@@ -603,14 +603,6 @@ class QueueService {
             existingItems[item.baseItemId] = item.baseItem!;
           }
         }
-      }
-
-      if (FinampSettingsHelper.finampSettings.isOffline &&
-          queueInfo.currentTrack?.item
-                  .extras?["android.media.extra.DOWNLOAD_STATUS"] !=
-              2) {
-        // reset seek position, since the current track has changed
-        info.currentTrackSeek = 0;
       }
 
       await loadSavedQueue(
