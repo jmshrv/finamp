@@ -710,7 +710,7 @@ class DownloadsService {
           .findAllSync();
       for (var item in itemsWithChildren) {
         syncItemState(item);
-        syncItemDownloadSettings(item);
+        syncItemDownloadSettings(item, syncImages: true);
       }
     });
     _isar.writeTxnSync(() {
@@ -721,7 +721,7 @@ class DownloadsService {
           .typeEqualTo(DownloadItemType.image)
           .findAllSync();
       for (var item in itemsWithFiles) {
-        syncItemDownloadSettings(item);
+        syncItemDownloadSettings(item, syncImages: true);
       }
     });
     markOutdatedTranscodes();
@@ -970,30 +970,48 @@ class DownloadsService {
 
   /// Sync the downloadLocationId and transcodingProfile to match those of the items
   /// parent.  If there are multiple required parents with different values, the download
-  /// location and transcode settings with the highest quality are selected.
+  /// location and transcode settings with the highest quality are selected.  If syncImages
+  /// is true, update info along info links to validate download locations for images.
+  /// Otherwise, only update required items.
   /// This should only be called inside an isar write transaction.
-  void syncItemDownloadSettings(DownloadItem item) {
+  void syncItemDownloadSettings(DownloadItem item, {bool syncImages = false}) {
     var transcodeProfiles =
         item.requiredBy.filter().syncTranscodingProfileProperty().findAllSync();
-    if (transcodeProfiles.isEmpty) {
-      _downloadsLogger.severe(
-          "Attempting to sync download settings for non-required item ${item.name}");
-      return;
-    }
+    bool requireProfile = true;
     transcodeProfiles.add(item.userTranscodingProfile);
     if (transcodeProfiles.nonNulls.isEmpty) {
-      _downloadsLogger
-          .severe("No valid download profiles for required item ${item.name}");
-      return;
+      if (syncImages) {
+        transcodeProfiles = item.infoFor
+            .filter()
+            .syncTranscodingProfileProperty()
+            .findAllSync();
+        requireProfile = false;
+      } else {
+        _downloadsLogger.severe(
+            "Attempting to sync download settings for non-required item ${item.name}");
+        return;
+      }
+    }
+    bool? doNullUpdate;
+    if (transcodeProfiles.nonNulls.isEmpty) {
+      if (requireProfile) {
+        _downloadsLogger.severe(
+            "No valid download profiles for required item ${item.name}");
+        return;
+      } else {
+        doNullUpdate = item.syncDownloadLocation != null;
+      }
     }
 
     // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    DownloadProfile bestProfile = transcodeProfiles.nonNulls
+    DownloadProfile? bestProfile = transcodeProfiles.nonNulls
         .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
-        .first;
-    if (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
-        (bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000) &&
-            item.type != DownloadItemType.image)) {
+        .firstOrNull;
+    if (doNullUpdate ??
+        (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
+            (bestProfile!.quality >
+                    (item.syncTranscodingProfile!.quality + 2000) &&
+                item.type != DownloadItemType.image))) {
       _downloadsLogger.finest("Updating download settings for ${item.name}");
       item.syncTranscodingProfile = bestProfile;
       if ((item.state == DownloadItemState.enqueued ||
@@ -1012,8 +1030,15 @@ class DownloadsService {
       } else {
         _isar.downloadItems.putSync(item);
       }
-      for (var child in item.requires.filter().findAllSync()) {
-        syncItemDownloadSettings(child);
+      var children = item.requires.filter().findAllSync();
+      if (syncImages) {
+        children = children
+            .toSet()
+            .union(item.info.filter().findAllSync().toSet())
+            .toList();
+      }
+      for (var child in children) {
+        syncItemDownloadSettings(child, syncImages: syncImages);
       }
     }
   }
@@ -1034,7 +1059,11 @@ class DownloadsService {
           .findAllSync();
       for (var item in items) {
         if (item.fileTranscodingProfile != item.syncTranscodingProfile) {
-          updateItemState(item, DownloadItemState.needsRedownload);
+          if (item.state == DownloadItemState.complete) {
+            updateItemState(item, DownloadItemState.needsRedownloadComplete);
+          } else {
+            updateItemState(item, DownloadItemState.needsRedownload);
+          }
         }
       }
     });
@@ -1414,8 +1443,11 @@ class DownloadsService {
             (q) => q.downloadLocationIdEqualTo(downloadLocationId))
         .optional(
             checkFiles,
-            (q) => q.or().fileTranscodingProfile(
-                (q) => q.downloadLocationIdEqualTo(downloadLocationId)))
+            (q) => q.or().group((q) => q
+                .fileTranscodingProfile(
+                    (q) => q.downloadLocationIdEqualTo(downloadLocationId))
+                .not()
+                .stateEqualTo(DownloadItemState.notDownloaded)))
         .findAllSync();
   }
 
