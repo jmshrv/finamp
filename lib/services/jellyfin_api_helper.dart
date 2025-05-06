@@ -317,6 +317,7 @@ class JellyfinApiHelper {
           // includeItemTypes: includeItemTypes,
           sortBy: sortBy,
           sortOrder: sortOrder,
+          isFavorite: isFavorite,
           searchTerm: searchTerm,
           startIndex: startIndex,
           limit: limit,

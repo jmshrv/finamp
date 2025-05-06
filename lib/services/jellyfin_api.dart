@@ -513,6 +513,9 @@ abstract class JellyfinApi extends ChopperService {
     /// Sort Order - Ascending,Descending.
     @Query("SortOrder") String? sortOrder,
 
+    /// Optional filter by items that are marked as favorite, or not.
+    @Query("isFavorite") bool? isFavorite,
+
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
 

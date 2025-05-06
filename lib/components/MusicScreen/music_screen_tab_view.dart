@@ -121,6 +121,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         searchTerm: widget.searchTerm?.trim(),
         filters: (settings.onlyShowFavourites || widget.isFavoriteOverride) 
             ? "IsFavorite" : null,
+        // "filters" are not implemented in the Jellyfin API Endpoint for Genres
+        // but the bool "isFavorite" is, so we use it instead (but don't set it
+        // to "false", because then it will actually exclude all favorites)
+        isFavorite: (widget.tabContentType.itemType == BaseItemDtoType.genre &&
+            (settings.onlyShowFavourites || widget.isFavoriteOverride))
+            ? true : null,
         startIndex: pageKey,
         limit: _pageSize,
         artistType: settings.artistListType,
