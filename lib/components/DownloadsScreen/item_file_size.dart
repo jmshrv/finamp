@@ -50,10 +50,15 @@ class ItemFileSize extends ConsumerWidget {
                     bitrate,
                     codec.toUpperCase(),
                     FileSize.getSize(value),
-                    FinampSettingsHelper
+                    // only show name if there is more than one location
+                    (FinampSettingsHelper.finampSettings.downloadLocationsMap
+                                    .length >
+                                1
+                            ? FinampSettingsHelper
                             .finampSettings
                             .downloadLocationsMap[item.fileDownloadLocation?.id]
-                            ?.name ??
+                                ?.name
+                            : null) ??
                         "null"));
           } else {
             var profile =
@@ -69,10 +74,16 @@ class ItemFileSize extends ConsumerWidget {
                     profile?.bitrateKbps ?? "null",
                     codec.toUpperCase(),
                     FileSize.getSize(value),
-                    FinampSettingsHelper
-                            .finampSettings
-                            .downloadLocationsMap[item.syncDownloadLocation?.id]
-                            ?.name ??
+                    // only show name if there is more than one location
+                    (FinampSettingsHelper.finampSettings.downloadLocationsMap
+                                    .length >
+                                1
+                            ? FinampSettingsHelper
+                                .finampSettings
+                                .downloadLocationsMap[
+                                    item.syncDownloadLocation?.id]
+                                ?.name
+                            : null) ??
                         "null"));
           }
         case DownloadItemState.downloading:
