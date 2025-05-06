@@ -108,14 +108,14 @@ void main() async {
     _mainLog.info("Setup offline listen tracking");
     await _setupDownloadsHelper();
     _mainLog.info("Setup downloads service");
+    _setupProviders();
+    _mainLog.info("Setup providers");
     await _setupOSIntegration();
     _mainLog.info("Setup os integrations");
     await _setupPlayOnService();
     _mainLog.info("Setup PlayOnService");
     await _setupPlaybackServices();
     _mainLog.info("Setup audio player");
-    _setupProviders();
-    _mainLog.info("Setup providers");
     await _setupKeepScreenOnHelper();
     _mainLog.info("Setup KeepScreenOnHelper");
   } catch (error, trace) {
@@ -304,6 +304,10 @@ Future<void> _setupOSIntegration() async {
       if (screenSize != null) {
         await windowManager.setPosition(screenSize.location);
       }
+      GetIt.instance<ProviderContainer>()
+          .listen(brightnessProvider, fireImmediately: true, (_, brightness) {
+        windowManager.setBrightness(brightness);
+      });
       await windowManager.show();
       await windowManager.focus();
     }));

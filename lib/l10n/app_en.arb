@@ -43,9 +43,15 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Welcome to",
+  "loginFlowWelcomeHeading": "Welcome to {styledName}",
   "@loginFlowWelcomeHeading": {
-    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+    "description": "Greeting shown on the login screen.",
+    "placeholders": {
+      "styledName": {
+        "type": "String",
+        "example": "Finamp"
+      }
+    }
   },
   "loginFlowSlogan": "Your music, the way you want it.",
   "@loginFlowSlogan": {

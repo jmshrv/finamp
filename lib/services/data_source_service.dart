@@ -83,6 +83,7 @@ class DataSourceService {
   }
 
   static Future<void> _onDataSourceChange(SourceChangeType event) async {
+    if (!GetIt.instance.isRegistered<QueueService>()) return;
     final QueueService queueService = GetIt.instance<QueueService>();
     _dataSourceServiceLogger
         .finest("Connectivity Change Triggered, event is '$event'");
