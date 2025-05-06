@@ -2185,5 +2185,9 @@
   "ping": "{status, select, true_true{Обидва доступні} true_false{НЕ ВДАЛОСЯ ЗВ’ЯЗАТИСЯ З МЕСТОВОЮ АДРЕСОЮ} false_true{НЕ ВДАЛОСЯ ДОСТУПИТИ ДО ОБЩОЇ АДРЕСИ} false_false{НЕ ВІДБУЛОСЯ зв'язатися з обома} other{невідомий}}",
   "@ping": {
     "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "stopAndClearQueue": "Зупинити відтворення та очистити чергу",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
   }
 }
