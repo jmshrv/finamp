@@ -100,7 +100,7 @@ class FinampLogsHelper {
   Future<void> exportLogs() async {
     await FilePicker.platform.saveFile(
         fileName: "finamp-logs.txt",
-        // This is ignored on desktop
+        // initialDirectory is ignored on mobile
         initialDirectory: (await getApplicationDocumentsDirectory()).path,
         bytes: utf8.encode(await getFullLogs()));
   }
