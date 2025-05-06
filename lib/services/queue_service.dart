@@ -394,7 +394,8 @@ class QueueService {
         "next": info.nextUp.map((e) => idMap[e]).nonNulls.toList(),
         "queue": info.queue.map((e) => idMap[e]).nonNulls.toList(),
       };
-      int sumLengths(int sum, Iterable val) => val.length + sum;
+      int sumLengths(int sum, Iterable<jellyfin_models.BaseItemDto> val) =>
+          val.length + sum;
       int loadedTracks = items.values.fold(0, sumLengths);
       int droppedTracks = info.trackCount - loadedTracks;
 
@@ -608,6 +609,7 @@ class QueueService {
       await loadSavedQueue(
         info,
         existingItems: existingItems,
+        isReload: true,
       );
     }
   }
