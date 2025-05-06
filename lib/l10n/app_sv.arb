@@ -1427,7 +1427,7 @@
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Styr ifall medianotisen har en stoppknapp utöver pausknappen. Detta låter dig stoppa uppspelningen utan att öppna appen.",
+  "showStopButtonOnMediaNotificationSubtitle": "Styr ifall medianotisen har en stoppknapp. Detta låter dig stoppa uppspelningen utan att öppna appen.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1831,7 +1831,7 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
-  "showSeekControlsOnMediaNotificationTitle": "Visa sökkontroller på medianotis",
+  "showSeekControlsOnMediaNotificationTitle": "Tillåt sökning på medianotis",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1991,7 +1991,7 @@
   "@autoOfflineNotification": {
     "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
   },
-  "autoOfflineOptionNetwork": "Nätverk",
+  "autoOfflineOptionNetwork": "Lokalt nätverk",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -1999,7 +1999,7 @@
   "@autoOfflineOptionOff": {
     "description": "This is shown when the autoOffline feature is turned off and has no effects"
   },
-  "autoOfflineSettingDescription": "Sätt automatiskt igång offline-läge.\nAvstängd: Kommer inte att sätta igång offline-läget. Kan spara på batteriet.\nNätverk: Sätt igång offline-läget när du inte är uppkopplad mot Wi-Fi eller fast anslutning.\nFrånkopplad: Sätt igång offline-läget när du inte är uppkopplad mot någonting.\nDu kan alltid sätta igång offline-läget manuellt, vilket pausar automatisering tills dess du stänger av offline-läget igen",
+  "autoOfflineSettingDescription": "Sätt automatiskt igång offline-läge.\nAvstängd: Kommer inte att sätta igång offline-läget. Kan spara på batteriet.\nLokalt nätverk: Sätt igång offline-läget när du inte är uppkopplad mot Wi-Fi eller fast anslutning.\nFrånkopplad: Sätt igång offline-läget när du inte är uppkopplad mot någonting.\nDu kan alltid sätta igång offline-läget manuellt, vilket pausar automatisering tills dess du stänger av offline-läget igen",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2085,5 +2085,109 @@
   "desktopShuffleWarning": "Shuffle är för närvarande inte tillgänglig på PC.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
-  }
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Styr ifall medianotisen har en shufflingsknapp. Detta låter dig shuffla/avshuffla uppspelningen utan att öppna appen.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "Visa shufflingsknapp på medianotis",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Visa favoritknapp på medianotis",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Styr ifall medianotisen har en favoritknapp. Detta låter dig lägga till/ta bort det nuvarande spåret från dina favoriter utan att öppna appen.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "preferHomeNetworkActiveAddressInfoText": "Aktiv adress",
+  "@preferHomeNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkEnableSwitchTitle": "Föredra hemmanätverk",
+  "@preferHomeNetworkEnableSwitchTitle": {},
+  "preferHomeNetworkPublicAddressSettingDescription": "Den huvudsakliga adressen för att koppla upp sig mot din Jellyfin-server",
+  "@preferHomeNetworkPublicAddressSettingDescription": {},
+  "networkSettingsTitle": "Nätverk",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "downloadPaused": "Nedladdning pausades för att enheten inte är uppkopplad mot WiFi",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "missingSchemaError": "URL måste börja med http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "preferHomeNetworkPublicAddressSettingTitle": "Publik adress",
+  "@preferHomeNetworkPublicAddressSettingTitle": {},
+  "autoReloadQueueTitle": "Hämta om spelkön automatiskt",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "Återställ spelkön automatiskt när källan ändras (t ex när offlineläge aktiveras eller vid byte av serveradress). Om funktionen är avstängd så frågar Finamp dig istället.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} komer att avlägsnas från spelkön eftersom de inte har laddats ned.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "autoReloadPromptReloadButton": "Hämta om",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  },
+  "startupErrorTitle": "Någonting gick fel vid appens uppstart!\nBer om ursäkt...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Vänligen skapa en issue på github.com/jmshrv/finamp med loggarna (!) (använd knappen nedan) och en skärmdump av den här sidan, så att vi kan fixa det så snabbt som möjligt.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "Som en tillfällig lösning kan du rensa appdatan för att återställa appen. Tänk på att i detta fall så kommer alla dina inställningar och nedladdningar att raderas.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "stopAndClearQueue": "Stoppa uppspelning och rensa spelkön",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "Måladress till Jellyfinservern inom ditt hemmanätverk",
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
+  "preferHomeNetworkEnableSwitchDescription": "Huruvida du vill använda en annan adress när du befinner dig hemma",
+  "@preferHomeNetworkEnableSwitchDescription": {},
+  "preferHomeNetworkInfoBox": "Den här funktionen kräver tillstånd för Plats (och plats måste vara aktiverat) för att läsa namnet på nätverket.",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "autoReloadPrompt": "Hämta om spelkön för att verkställa nya {type, select, network{nätverksinställningar} transcoding{transkodningsinställningar} other{inställningar}}",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "Hemmanätverksadress",
+  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
+  "testConnectionButtonLabel": "Testa båda uppkopplingar",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "ping": "{status, select, true_true{Båda nåbara} true_false{MISSLYCKADES med att nå lokal adress} false_true{MISSLYCKADES med att nå publik adress} false_false{MISSLYCKADES med att nå båda adresser} other{Okänt}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "exportLogs": "Spara loggar",
+  "@exportLogs": {}
 }
