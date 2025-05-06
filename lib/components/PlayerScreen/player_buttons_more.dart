@@ -44,6 +44,7 @@ class PlayerButtonsMore extends ConsumerWidget {
               showPlaybackControls: true, // show controls on player screen
               parentItem: inPlaylist ? queueItem!.source.item : null,
               isInPlaylist: inPlaylist,
+              showClearQueue: true,
             );
           },
         ),
