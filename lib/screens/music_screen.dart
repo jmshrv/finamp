@@ -31,7 +31,7 @@ class MusicScreen extends ConsumerStatefulWidget {
     this.tabTypeFilter,
     this.sortByOverrideInit,
     this.sortOrderOverrideInit,
-    this.isFavoriteOverrideInit = false,
+    this.isFavoriteOverrideInit,
   });
 
   static const routeName = "/music";
@@ -41,7 +41,7 @@ class MusicScreen extends ConsumerStatefulWidget {
   final TabContentType? tabTypeFilter;
   final SortBy? sortByOverrideInit;
   final SortOrder? sortOrderOverrideInit;
-  final bool isFavoriteOverrideInit;
+  final bool? isFavoriteOverrideInit;
 
   @override
   ConsumerState<MusicScreen> createState() => _MusicScreenState();
@@ -56,7 +56,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   final Map<TabContentType, MusicRefreshCallback> refreshMap = {};
   SortBy? sortByOverride;
   SortOrder? sortOrderOverride;
-  bool isFavoriteOverride = false;
+  bool? isFavoriteOverride;
 
   TabController? _tabController;
 
@@ -137,7 +137,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         onPressed: () async {
           try {
             await _audioServiceHelper.shuffleAll(
-                (ref.read(finampSettingsProvider.onlyShowFavourites) || isFavoriteOverride));
+                (isFavoriteOverride == true || ref.read(finampSettingsProvider.onlyShowFavourites)));
           } catch (e) {
             GlobalSnackbar.error(e);
           }
@@ -348,15 +348,15 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   SortOrderButton(
                     tabType: sortedTabs.elementAt(_tabController!.index),
                     sortOrderOverride: sortOrderOverride,
-                    onOverrideUsed: () => setState(() {
-                      sortOrderOverride = null;
+                    onOverrideChanged: (newOrder) => setState(() {
+                      sortOrderOverride = newOrder;
                     }),
                   ),
                   SortByMenuButton(
                     tabType: sortedTabs.elementAt(_tabController!.index),
                     sortByOverride: sortByOverride,
-                    onOverrideUsed: () => setState(() {
-                      sortByOverride = null;
+                    onOverrideChanged: (newSortBy) => setState(() {
+                      sortByOverride = newSortBy;
                     }),
                   ),
                   if (ref.watch(finampSettingsProvider.isOffline))
@@ -376,18 +376,14 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   if (!ref.watch(finampSettingsProvider.isOffline) ||
                       ref.watch(finampSettingsProvider.trackOfflineFavorites))
                     IconButton(
-                      icon: (ref.watch(finampSettingsProvider.onlyShowFavourites) || isFavoriteOverride)
+                      icon: (isFavoriteOverride == true || 
+                        (isFavoriteOverride == null && ref.watch(finampSettingsProvider.onlyShowFavourites)))
                           ? const Icon(Icons.favorite)
                           : const Icon(Icons.favorite_outline),
                       onPressed: () {
-                        if (isFavoriteOverride) {
-                          if (ref.read(finampSettingsProvider.onlyShowFavourites)) {
-                            FinampSetters.setOnlyShowFavourites(
-                            !ref.read(finampSettingsProvider.onlyShowFavourites),
-                          );
-                          }
+                        if (isFavoriteOverride != null) {
                           setState(() {
-                            isFavoriteOverride = false;
+                            isFavoriteOverride = !isFavoriteOverride!;
                           });
                         } else {
                           FinampSetters.setOnlyShowFavourites(

@@ -240,17 +240,26 @@ void openSeeAll(
           // Not yet implemented on MusicScreen, but it would be:
           // sortByOverride = SortBy.playCount;
           // sortOrderOverride = SortOrder.descending;
+          // Until implemented, we just return a normal alphabetical list:
+          sortByOverride = SortBy.sortName;
+          sortOrderOverride = SortOrder.ascending;
+          isFavoriteOverride = false;
         case GenreCuratedItemSelectionType.favorites:
-          sortByOverride = SortBy.random;
+          sortByOverride = SortBy.sortName;
+          sortOrderOverride = SortOrder.ascending;
           isFavoriteOverride = true;
         case GenreCuratedItemSelectionType.random:
           sortByOverride = SortBy.random;
+          sortOrderOverride = SortOrder.ascending;
+          isFavoriteOverride = false;
         case GenreCuratedItemSelectionType.latestReleases:
           sortByOverride = SortBy.premiereDate;
           sortOrderOverride = SortOrder.descending;
+          isFavoriteOverride = false;
         case GenreCuratedItemSelectionType.recentlyAdded:
           sortByOverride = SortBy.dateCreated;
           sortOrderOverride = SortOrder.descending;
+          isFavoriteOverride = false;
       }
     }
     Navigator.of(context).push(

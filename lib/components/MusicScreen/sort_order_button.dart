@@ -11,12 +11,12 @@ class SortOrderButton extends ConsumerWidget {
     super.key,
     required this.tabType,
     this.sortOrderOverride,
-    this.onOverrideUsed,
+    this.onOverrideChanged,
   });
 
   final TabContentType tabType;
   final SortOrder? sortOrderOverride;
-  final VoidCallback? onOverrideUsed;
+  final void Function(SortOrder newOrder)? onOverrideChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,15 +28,15 @@ class SortOrderButton extends ConsumerWidget {
           ? const Icon(Icons.arrow_downward)
           : const Icon(Icons.arrow_upward),
       onPressed: () {
-        if (order == SortOrder.ascending) {
-          FinampSettingsHelper.setSortOrder(tabType, SortOrder.descending);
+        final newOrder = order == SortOrder.ascending
+            ? SortOrder.descending
+            : SortOrder.ascending;
+        if (sortOrderOverride != null && onOverrideChanged != null) {
+          onOverrideChanged!(newOrder);
         } else {
-          FinampSettingsHelper.setSortOrder(tabType, SortOrder.ascending);
+          FinampSettingsHelper.setSortOrder(tabType, newOrder);
         }
-        if (sortOrderOverride != null && onOverrideUsed != null) {
-          onOverrideUsed!();
-        }
-      },
+      }
     );
   }
 }

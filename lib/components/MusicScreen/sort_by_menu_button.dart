@@ -11,12 +11,12 @@ class SortByMenuButton extends ConsumerWidget {
     super.key,
     required this.tabType,
     this.sortByOverride,
-    this.onOverrideUsed,
+    this.onOverrideChanged,
   });
 
   final TabContentType tabType;
   final SortBy? sortByOverride;
-  final VoidCallback? onOverrideUsed;
+  final void Function(SortBy newSortBy)? onOverrideChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,9 +46,10 @@ class SortByMenuButton extends ConsumerWidget {
           )
       ],
       onSelected: (value) {
-        FinampSettingsHelper.setSortBy(tabType, value);
-        if (sortByOverride != null && onOverrideUsed != null) {
-          onOverrideUsed!();
+        if (sortByOverride != null && onOverrideChanged != null) {
+          onOverrideChanged!(value);
+        } else {
+          FinampSettingsHelper.setSortBy(tabType, value);
         }
       },
     );
