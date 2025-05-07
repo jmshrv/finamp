@@ -203,7 +203,7 @@ class DefaultSettings {
   static const genreCuratedItemSelectionType = GenreCuratedItemSelectionType.mostPlayed;
   static const genreItemSectionsOrder = GenreItemSections.values;
   static const genreFilterArtistScreens = true;
-  static const genreListsInheritSorting = false;
+  static const genreListsInheritSorting = true;
   static const genreMostPlayedOfflineFallback = GenreCuratedItemSelectionType.favorites;
   static const artistGenreChipsApplyFilter = false;
 }

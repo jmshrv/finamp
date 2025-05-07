@@ -226,12 +226,15 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     super.dispose();
   }
 
-  void openSeeAll(TabContentType tabContentType) {
+void openSeeAll(
+    TabContentType tabContentType, {
+    bool doOverride = true,
+  }) {
     bool isFavoriteOverride = false;
     SortBy? sortByOverride;
     SortOrder? sortOrderOverride;
 
-    if (ref.read(finampSettingsProvider.genreListsInheritSorting)) {
+    if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting)) {
       switch (ref.read(finampSettingsProvider.genreCuratedItemSelectionType)) {
         case GenreCuratedItemSelectionType.mostPlayed:
           // Not yet implemented on MusicScreen, but it would be:
@@ -283,6 +286,11 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         widget.parent, BaseItemDtoType.artist, widget.library)).valueOrNull ?? (null, null);
 
     final isLoading = tracks == null || albums == null || artists == null;
+    
+    final countsTextColor = IconTheme.of(context).color;
+    final countsSubtitleColor = IconTheme.of(context).color!.withOpacity(0.6);
+    final countsBorderColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
+    final countsBackgroundColor = Theme.of(context).colorScheme.surface;
 
     return PaddedCustomScrollview(slivers: <Widget>[
       SliverAppBar(
@@ -306,32 +314,53 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
-                child: _buildCountColumn(
-                  count: albumCount,
-                  label: AppLocalizations.of(context)!.albums,
-                  onTap: () {
-                    openSeeAll(TabContentType.albums);
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: _buildCountColumn(
+                    count: albumCount,
+                    label: AppLocalizations.of(context)!.albums,
+                    onTap: () {
+                      openSeeAll(TabContentType.albums, doOverride: false);
+                    },
+                    textColor: countsTextColor,
+                    subtitleColor: countsSubtitleColor,
+                    borderColor: countsBorderColor,
+                    backgroundColor: countsBackgroundColor,
+                  ),
                 ),
               ),
               Expanded(
-                child: _buildCountColumn(
-                  count: trackCount,
-                  label: AppLocalizations.of(context)!.tracks,
-                  onTap: () {
-                    openSeeAll(TabContentType.tracks);
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: _buildCountColumn(
+                    count: trackCount,
+                    label: AppLocalizations.of(context)!.tracks,
+                    onTap: () {
+                      openSeeAll(TabContentType.tracks, doOverride: false);
+                    },
+                    textColor: countsTextColor,
+                    subtitleColor: countsSubtitleColor,
+                    borderColor: countsBorderColor,
+                    backgroundColor: countsBackgroundColor,
+                  ),
                 ),
               ),
               Expanded(
-                child: _buildCountColumn(
-                  count: artistCount,
-                  label: (ref.read(finampSettingsProvider.artistListType) == ArtistType.albumartist)
-                      ? AppLocalizations.of(context)!.albumArtists
-                      : AppLocalizations.of(context)!.performingArtists,
-                  onTap: () {
-                    openSeeAll(TabContentType.artists);
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: _buildCountColumn(
+                    count: artistCount,
+                    label: (ref.read(finampSettingsProvider.artistListType) == ArtistType.albumartist)
+                        ? AppLocalizations.of(context)!.albumArtists
+                        : AppLocalizations.of(context)!.performingArtists,
+                    onTap: () {
+                      openSeeAll(TabContentType.artists, doOverride: false);
+                    },
+                    textColor: countsTextColor,
+                    subtitleColor: countsSubtitleColor,
+                    borderColor: countsBorderColor,
+                    backgroundColor: countsBackgroundColor,
+                  ),
                 ),
               ),
             ],
@@ -449,22 +478,44 @@ Widget _buildCountColumn({
   required int? count,
   required String label,
   required VoidCallback onTap,
+  Color? textColor,
+  Color? subtitleColor,
+  Color? borderColor,
+  Color? backgroundColor,
 }) {
   return GestureDetector(
     onTap: onTap,
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          count?.toString() ?? '-',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(4), // Stadium shape
+        border: Border.all(
+          color: borderColor ?? Colors.black.withOpacity(0.2),
+          width: 1,
         ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
-        ),
-      ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            count?.toString() ?? '-',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: textColor ?? Colors.black,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: subtitleColor ?? Colors.grey
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }
