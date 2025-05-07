@@ -145,13 +145,13 @@
   "@location": {},
   "addButtonLabel": "加入",
   "@addButtonLabel": {},
-  "shareLogs": "分享所有紀錄檔",
+  "shareLogs": "分享所有記錄檔",
   "@shareLogs": {},
-  "logsCopied": "已複製所有紀錄。",
+  "logsCopied": "已複製所有記錄。",
   "@logsCopied": {},
   "stackTrace": "除錯資訊（Stack Trace）",
   "@stackTrace": {},
-  "applicationLegalese": "採用 Mozilla Public License 2.0 特許條款。原始碼：\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "採用 Mozilla Public License 2.0 特許條款。\n原始碼：{sourceCodeLink}。",
   "@applicationLegalese": {},
   "transcoding": "轉碼（Transcoding）",
   "@transcoding": {},
@@ -171,7 +171,7 @@
   "@enableTranscodingSubtitle": {},
   "bitrate": "位元速率（Bitrate）",
   "@bitrate": {},
-  "bitrateSubtitle": "越高的位元速率帶來越好的音質，但亦會使用更多的流量。",
+  "bitrateSubtitle": "越高的位元速率帶來越好的音質，但亦會使用更多的流量。不會套用至無損格式，例如 FLAC。",
   "@bitrateSubtitle": {},
   "addDownloadLocation": "添加下載位置",
   "@addDownloadLocation": {},
@@ -189,7 +189,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "隨機播放上限",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "使用「隨機播放全部」時，播放歌曲的數量上限。",
+  "shuffleAllTrackCountSubtitle": "隨機播放的歌曲數量上限。",
   "@shuffleAllTrackCountSubtitle": {},
   "message": "訊息",
   "@message": {},
@@ -363,13 +363,13 @@
   "@required": {},
   "addDownloads": "添加至下載",
   "@addDownloads": {},
-  "downloadsQueued": "已添加至下載。",
+  "downloadsQueued": "開始下載檔案。",
   "@downloadsQueued": {},
   "downloadedTracksWillNotBeDeleted": "已下載的歌曲並不會被刪除",
   "@downloadedTracksWillNotBeDeleted": {},
   "customLocation": "自訂位置",
   "@customLocation": {},
-  "customLocationsBuggy": "現時，自訂位置功能因權限問題而未能完全正常運作。如非必要，建議不要使用。",
+  "customLocationsBuggy": "自訂位置功能不保正得正常運作。如非必要，建議不要使用。使用系統的「音樂」資料夾會因權限問題而令專輯封面圖無法儲存。",
   "@customLocationsBuggy": {},
   "viewTypeSubtitle": "顯示資訊的方式",
   "@viewTypeSubtitle": {},
@@ -565,5 +565,124 @@
   "loginFlowQuickConnectInstructions": "打開 Jellyfin 應用程式或網頁，然後點擊用戶圖示，再選擇 Quick Connect。",
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "deleteDownloadsConfirmButtonText": "刪除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "usernameHint": "輸入您的用戶名稱",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "orDivider": "或",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} 首歌曲} other{{trackCount} 首歌曲}}, {imageCount,plural,=1{{imageCount} 張圖片} other{{imageCount} 張圖片}}\n{syncCount,plural,=1{{syncCount} 個節點同步中} other{{syncCount} 個節點同步中}}{repairing, plural, =0{} other{\n目前正在修復}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "albumArtists": "專輯歌手",
+  "@albumArtists": {},
+  "performingArtists": "參演歌手",
+  "@performingArtists": {},
+  "deleteDownloadsPrompt": "你確定要刪除 {itemType, select, album{專輯} playlist{播放清單} artist{歌手} genre{曲風} track{歌曲} library{媒體庫} other{項目}} '{itemName}' 嗎？",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "offlineTrackCountArtist": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}} 已下載",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryDownloads": "媒體庫下載",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "appearsOnAlbums": "出現在",
+  "@appearsOnAlbums": {},
+  "loginFlowQuickConnectDisabled": "伺服器停用了 Quick Connect 功能。",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "loginFlowSelectAUser": "揀選用戶",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "startMixNoTracksGenre": "在開始混音之前，長按曲風以添加至混音器或從混音器移除",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "title": "標題",
+  "@title": {},
+  "activeDownloads": "正在下載",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "正在下載",
+  "@activeDownloadsTitle": {},
+  "offlineTrackCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}，{downloads} 首已下載",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "specialDownloads": "特別下載",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "沒有任何項目。",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "usernameValidationMissingUsername": "用戶名稱不能漏空",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "請輸入你的密碼",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "登入",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "noActiveDownloads": "無正下載的項目。",
+  "@noActiveDownloads": {},
+  "exportLogs": "儲存記錄檔",
+  "@exportLogs": {},
+  "confirmDownloadStarted": "已開始下載",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
   }
 }
