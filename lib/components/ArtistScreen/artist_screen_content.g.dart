@@ -7,7 +7,7 @@ part of 'artist_screen_content.dart';
 // **************************************************************************
 
 String _$getArtistTopTracksHash() =>
-    r'8547dc55a092625fe0c9d66b18c8b95e7b0692e3';
+    r'2c63f018cbd7bf010b07e09fddee5c3a1e7ba7cb';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -42,10 +42,12 @@ class GetArtistTopTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
   /// See also [getArtistTopTracks].
   GetArtistTopTracksProvider call(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) {
     return GetArtistTopTracksProvider(
       parent,
+      library,
       genreFilter,
     );
   }
@@ -56,6 +58,7 @@ class GetArtistTopTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
   ) {
     return call(
       provider.parent,
+      provider.library,
       provider.genreFilter,
     );
   }
@@ -81,11 +84,13 @@ class GetArtistTopTracksProvider
   /// See also [getArtistTopTracks].
   GetArtistTopTracksProvider(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) : this._internal(
           (ref) => getArtistTopTracks(
             ref as GetArtistTopTracksRef,
             parent,
+            library,
             genreFilter,
           ),
           from: getArtistTopTracksProvider,
@@ -98,6 +103,7 @@ class GetArtistTopTracksProvider
           allTransitiveDependencies:
               GetArtistTopTracksFamily._allTransitiveDependencies,
           parent: parent,
+          library: library,
           genreFilter: genreFilter,
         );
 
@@ -109,10 +115,12 @@ class GetArtistTopTracksProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.parent,
+    required this.library,
     required this.genreFilter,
   }) : super.internal();
 
   final BaseItemDto parent;
+  final BaseItemDto? library;
   final BaseItemDto? genreFilter;
 
   @override
@@ -129,6 +137,7 @@ class GetArtistTopTracksProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         parent: parent,
+        library: library,
         genreFilter: genreFilter,
       ),
     );
@@ -143,6 +152,7 @@ class GetArtistTopTracksProvider
   bool operator ==(Object other) {
     return other is GetArtistTopTracksProvider &&
         other.parent == parent &&
+        other.library == library &&
         other.genreFilter == genreFilter;
   }
 
@@ -150,6 +160,7 @@ class GetArtistTopTracksProvider
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parent.hashCode);
+    hash = _SystemHash.combine(hash, library.hashCode);
     hash = _SystemHash.combine(hash, genreFilter.hashCode);
 
     return _SystemHash.finish(hash);
@@ -161,6 +172,9 @@ class GetArtistTopTracksProvider
 mixin GetArtistTopTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
+
+  /// The parameter `library` of this provider.
+  BaseItemDto? get library;
 
   /// The parameter `genreFilter` of this provider.
   BaseItemDto? get genreFilter;
@@ -174,11 +188,13 @@ class _GetArtistTopTracksProviderElement
   @override
   BaseItemDto get parent => (origin as GetArtistTopTracksProvider).parent;
   @override
+  BaseItemDto? get library => (origin as GetArtistTopTracksProvider).library;
+  @override
   BaseItemDto? get genreFilter =>
       (origin as GetArtistTopTracksProvider).genreFilter;
 }
 
-String _$getArtistAlbumsHash() => r'e0b6c493e54b8b721ef228639d1fa96d180b602e';
+String _$getArtistAlbumsHash() => r'9bf92fb4a34f6f34263364e3a901681aac4ca5a2';
 
 /// See also [getArtistAlbums].
 @ProviderFor(getArtistAlbums)
@@ -192,10 +208,12 @@ class GetArtistAlbumsFamily extends Family<AsyncValue<List<BaseItemDto>>> {
   /// See also [getArtistAlbums].
   GetArtistAlbumsProvider call(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) {
     return GetArtistAlbumsProvider(
       parent,
+      library,
       genreFilter,
     );
   }
@@ -206,6 +224,7 @@ class GetArtistAlbumsFamily extends Family<AsyncValue<List<BaseItemDto>>> {
   ) {
     return call(
       provider.parent,
+      provider.library,
       provider.genreFilter,
     );
   }
@@ -231,11 +250,13 @@ class GetArtistAlbumsProvider
   /// See also [getArtistAlbums].
   GetArtistAlbumsProvider(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) : this._internal(
           (ref) => getArtistAlbums(
             ref as GetArtistAlbumsRef,
             parent,
+            library,
             genreFilter,
           ),
           from: getArtistAlbumsProvider,
@@ -248,6 +269,7 @@ class GetArtistAlbumsProvider
           allTransitiveDependencies:
               GetArtistAlbumsFamily._allTransitiveDependencies,
           parent: parent,
+          library: library,
           genreFilter: genreFilter,
         );
 
@@ -259,10 +281,12 @@ class GetArtistAlbumsProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.parent,
+    required this.library,
     required this.genreFilter,
   }) : super.internal();
 
   final BaseItemDto parent;
+  final BaseItemDto? library;
   final BaseItemDto? genreFilter;
 
   @override
@@ -279,6 +303,7 @@ class GetArtistAlbumsProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         parent: parent,
+        library: library,
         genreFilter: genreFilter,
       ),
     );
@@ -293,6 +318,7 @@ class GetArtistAlbumsProvider
   bool operator ==(Object other) {
     return other is GetArtistAlbumsProvider &&
         other.parent == parent &&
+        other.library == library &&
         other.genreFilter == genreFilter;
   }
 
@@ -300,6 +326,7 @@ class GetArtistAlbumsProvider
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parent.hashCode);
+    hash = _SystemHash.combine(hash, library.hashCode);
     hash = _SystemHash.combine(hash, genreFilter.hashCode);
 
     return _SystemHash.finish(hash);
@@ -311,6 +338,9 @@ class GetArtistAlbumsProvider
 mixin GetArtistAlbumsRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
+
+  /// The parameter `library` of this provider.
+  BaseItemDto? get library;
 
   /// The parameter `genreFilter` of this provider.
   BaseItemDto? get genreFilter;
@@ -324,12 +354,14 @@ class _GetArtistAlbumsProviderElement
   @override
   BaseItemDto get parent => (origin as GetArtistAlbumsProvider).parent;
   @override
+  BaseItemDto? get library => (origin as GetArtistAlbumsProvider).library;
+  @override
   BaseItemDto? get genreFilter =>
       (origin as GetArtistAlbumsProvider).genreFilter;
 }
 
 String _$getPerformingArtistAlbumsHash() =>
-    r'd48e28af7f2bab5138f08cf59f40fc66e73edc8e';
+    r'd8b18b955cbfa1f36e4e78c1ef5c21188d3fb5f4';
 
 /// See also [getPerformingArtistAlbums].
 @ProviderFor(getPerformingArtistAlbums)
@@ -344,10 +376,12 @@ class GetPerformingArtistAlbumsFamily
   /// See also [getPerformingArtistAlbums].
   GetPerformingArtistAlbumsProvider call(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) {
     return GetPerformingArtistAlbumsProvider(
       parent,
+      library,
       genreFilter,
     );
   }
@@ -358,6 +392,7 @@ class GetPerformingArtistAlbumsFamily
   ) {
     return call(
       provider.parent,
+      provider.library,
       provider.genreFilter,
     );
   }
@@ -383,11 +418,13 @@ class GetPerformingArtistAlbumsProvider
   /// See also [getPerformingArtistAlbums].
   GetPerformingArtistAlbumsProvider(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) : this._internal(
           (ref) => getPerformingArtistAlbums(
             ref as GetPerformingArtistAlbumsRef,
             parent,
+            library,
             genreFilter,
           ),
           from: getPerformingArtistAlbumsProvider,
@@ -400,6 +437,7 @@ class GetPerformingArtistAlbumsProvider
           allTransitiveDependencies:
               GetPerformingArtistAlbumsFamily._allTransitiveDependencies,
           parent: parent,
+          library: library,
           genreFilter: genreFilter,
         );
 
@@ -411,10 +449,12 @@ class GetPerformingArtistAlbumsProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.parent,
+    required this.library,
     required this.genreFilter,
   }) : super.internal();
 
   final BaseItemDto parent;
+  final BaseItemDto? library;
   final BaseItemDto? genreFilter;
 
   @override
@@ -432,6 +472,7 @@ class GetPerformingArtistAlbumsProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         parent: parent,
+        library: library,
         genreFilter: genreFilter,
       ),
     );
@@ -446,6 +487,7 @@ class GetPerformingArtistAlbumsProvider
   bool operator ==(Object other) {
     return other is GetPerformingArtistAlbumsProvider &&
         other.parent == parent &&
+        other.library == library &&
         other.genreFilter == genreFilter;
   }
 
@@ -453,6 +495,7 @@ class GetPerformingArtistAlbumsProvider
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parent.hashCode);
+    hash = _SystemHash.combine(hash, library.hashCode);
     hash = _SystemHash.combine(hash, genreFilter.hashCode);
 
     return _SystemHash.finish(hash);
@@ -465,6 +508,9 @@ mixin GetPerformingArtistAlbumsRef
     on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
+
+  /// The parameter `library` of this provider.
+  BaseItemDto? get library;
 
   /// The parameter `genreFilter` of this provider.
   BaseItemDto? get genreFilter;
@@ -479,12 +525,15 @@ class _GetPerformingArtistAlbumsProviderElement
   BaseItemDto get parent =>
       (origin as GetPerformingArtistAlbumsProvider).parent;
   @override
+  BaseItemDto? get library =>
+      (origin as GetPerformingArtistAlbumsProvider).library;
+  @override
   BaseItemDto? get genreFilter =>
       (origin as GetPerformingArtistAlbumsProvider).genreFilter;
 }
 
 String _$getPerformingArtistTracksHash() =>
-    r'4e95a967fdc93add3c4684e77b0b1d410f482b40';
+    r'b271060903e43479eee5d5976ed4a6f327ac441c';
 
 /// See also [getPerformingArtistTracks].
 @ProviderFor(getPerformingArtistTracks)
@@ -499,10 +548,12 @@ class GetPerformingArtistTracksFamily
   /// See also [getPerformingArtistTracks].
   GetPerformingArtistTracksProvider call(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) {
     return GetPerformingArtistTracksProvider(
       parent,
+      library,
       genreFilter,
     );
   }
@@ -513,6 +564,7 @@ class GetPerformingArtistTracksFamily
   ) {
     return call(
       provider.parent,
+      provider.library,
       provider.genreFilter,
     );
   }
@@ -538,11 +590,13 @@ class GetPerformingArtistTracksProvider
   /// See also [getPerformingArtistTracks].
   GetPerformingArtistTracksProvider(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) : this._internal(
           (ref) => getPerformingArtistTracks(
             ref as GetPerformingArtistTracksRef,
             parent,
+            library,
             genreFilter,
           ),
           from: getPerformingArtistTracksProvider,
@@ -555,6 +609,7 @@ class GetPerformingArtistTracksProvider
           allTransitiveDependencies:
               GetPerformingArtistTracksFamily._allTransitiveDependencies,
           parent: parent,
+          library: library,
           genreFilter: genreFilter,
         );
 
@@ -566,10 +621,12 @@ class GetPerformingArtistTracksProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.parent,
+    required this.library,
     required this.genreFilter,
   }) : super.internal();
 
   final BaseItemDto parent;
+  final BaseItemDto? library;
   final BaseItemDto? genreFilter;
 
   @override
@@ -587,6 +644,7 @@ class GetPerformingArtistTracksProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         parent: parent,
+        library: library,
         genreFilter: genreFilter,
       ),
     );
@@ -601,6 +659,7 @@ class GetPerformingArtistTracksProvider
   bool operator ==(Object other) {
     return other is GetPerformingArtistTracksProvider &&
         other.parent == parent &&
+        other.library == library &&
         other.genreFilter == genreFilter;
   }
 
@@ -608,6 +667,7 @@ class GetPerformingArtistTracksProvider
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parent.hashCode);
+    hash = _SystemHash.combine(hash, library.hashCode);
     hash = _SystemHash.combine(hash, genreFilter.hashCode);
 
     return _SystemHash.finish(hash);
@@ -620,6 +680,9 @@ mixin GetPerformingArtistTracksRef
     on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
+
+  /// The parameter `library` of this provider.
+  BaseItemDto? get library;
 
   /// The parameter `genreFilter` of this provider.
   BaseItemDto? get genreFilter;
@@ -634,11 +697,14 @@ class _GetPerformingArtistTracksProviderElement
   BaseItemDto get parent =>
       (origin as GetPerformingArtistTracksProvider).parent;
   @override
+  BaseItemDto? get library =>
+      (origin as GetPerformingArtistTracksProvider).library;
+  @override
   BaseItemDto? get genreFilter =>
       (origin as GetPerformingArtistTracksProvider).genreFilter;
 }
 
-String _$getAllTracksHash() => r'7658eb4192e7e8a767ce22f68352bfae319295fe';
+String _$getAllTracksHash() => r'591790c959e8be536bbb35b16c0eb1b1dbee12bd';
 
 /// See also [getAllTracks].
 @ProviderFor(getAllTracks)
@@ -652,10 +718,12 @@ class GetAllTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
   /// See also [getAllTracks].
   GetAllTracksProvider call(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) {
     return GetAllTracksProvider(
       parent,
+      library,
       genreFilter,
     );
   }
@@ -666,6 +734,7 @@ class GetAllTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
   ) {
     return call(
       provider.parent,
+      provider.library,
       provider.genreFilter,
     );
   }
@@ -691,11 +760,13 @@ class GetAllTracksProvider
   /// See also [getAllTracks].
   GetAllTracksProvider(
     BaseItemDto parent,
+    BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) : this._internal(
           (ref) => getAllTracks(
             ref as GetAllTracksRef,
             parent,
+            library,
             genreFilter,
           ),
           from: getAllTracksProvider,
@@ -708,6 +779,7 @@ class GetAllTracksProvider
           allTransitiveDependencies:
               GetAllTracksFamily._allTransitiveDependencies,
           parent: parent,
+          library: library,
           genreFilter: genreFilter,
         );
 
@@ -719,10 +791,12 @@ class GetAllTracksProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.parent,
+    required this.library,
     required this.genreFilter,
   }) : super.internal();
 
   final BaseItemDto parent;
+  final BaseItemDto? library;
   final BaseItemDto? genreFilter;
 
   @override
@@ -739,6 +813,7 @@ class GetAllTracksProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         parent: parent,
+        library: library,
         genreFilter: genreFilter,
       ),
     );
@@ -753,6 +828,7 @@ class GetAllTracksProvider
   bool operator ==(Object other) {
     return other is GetAllTracksProvider &&
         other.parent == parent &&
+        other.library == library &&
         other.genreFilter == genreFilter;
   }
 
@@ -760,6 +836,7 @@ class GetAllTracksProvider
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parent.hashCode);
+    hash = _SystemHash.combine(hash, library.hashCode);
     hash = _SystemHash.combine(hash, genreFilter.hashCode);
 
     return _SystemHash.finish(hash);
@@ -772,6 +849,9 @@ mixin GetAllTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
 
+  /// The parameter `library` of this provider.
+  BaseItemDto? get library;
+
   /// The parameter `genreFilter` of this provider.
   BaseItemDto? get genreFilter;
 }
@@ -783,6 +863,8 @@ class _GetAllTracksProviderElement
 
   @override
   BaseItemDto get parent => (origin as GetAllTracksProvider).parent;
+  @override
+  BaseItemDto? get library => (origin as GetAllTracksProvider).library;
   @override
   BaseItemDto? get genreFilter => (origin as GetAllTracksProvider).genreFilter;
 }

@@ -1,4 +1,6 @@
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../components/GenreScreen/genre_screen_content.dart';
 import '../components/now_playing_bar.dart';
@@ -21,6 +23,7 @@ class GenreScreen extends StatefulWidget {
 }
 
 class _GenreScreenState extends State<GenreScreen> {
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,7 @@ class _GenreScreenState extends State<GenreScreen> {
       body: SafeArea(
         child: GenreScreenContent(
           parent: genre,
+          library: _finampUserHelper.currentUser?.currentView,
         ),
       ),
       bottomNavigationBar: const NowPlayingBar(),

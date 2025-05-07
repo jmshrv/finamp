@@ -110,6 +110,7 @@ class JellyfinApiHelper {
 
   Future<List<BaseItemDto>?> getItems({
     BaseItemDto? parentItem,
+    BaseItemDto? parentArtistItem,
     String? includeItemTypes,
     String? sortBy,
     String? sortOrder,
@@ -131,6 +132,7 @@ class JellyfinApiHelper {
   }) async {
     final response = await _fetchGetItemsResponse(
       parentItem: parentItem,
+      parentArtistItem: parentArtistItem,
       includeItemTypes: includeItemTypes,
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -150,6 +152,7 @@ class JellyfinApiHelper {
 
   Future<QueryResult_BaseItemDto> getItemsWithTotalRecordCount({
     BaseItemDto? parentItem,
+    BaseItemDto? parentArtistItem,
     String? includeItemTypes,
     String? sortBy,
     String? sortOrder,
@@ -166,6 +169,7 @@ class JellyfinApiHelper {
   }) async {
     final response = await _fetchGetItemsResponse(
       parentItem: parentItem,
+      parentArtistItem: parentArtistItem,
       includeItemTypes: includeItemTypes,
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -185,6 +189,7 @@ class JellyfinApiHelper {
 
   Future<QueryResult_BaseItemDto> _fetchGetItemsResponse ({
     BaseItemDto? parentItem,
+    BaseItemDto? parentArtistItem,
     String? includeItemTypes,
     String? sortBy,
     String? sortOrder,
@@ -272,14 +277,18 @@ class JellyfinApiHelper {
             isFavorite: isFavorite,
           );
         }
-      } else if (parentItem?.type == "MusicArtist") {
+      } else if (parentArtistItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use
         // artistIDs or albumArtistIds instead of parentId
+        // also, in order to only get the items from within one library
+        // we have to use arentArtistItem instead of the parentItem,
+        // because parentItem has to be the current library
         if (artistType == ArtistType.albumartist || artistType == null) {
           // Albums of Album Artists
           response = await api.getItems(
             userId: currentUserId,
-            albumArtistIds: parentItem?.id.raw,
+            parentId: parentItem?.id,
+            albumArtistIds: parentArtistItem?.id.raw,
             includeItemTypes: includeItemTypes,
             recursive: recursive,
             sortBy: sortBy,
@@ -297,7 +306,8 @@ class JellyfinApiHelper {
           // Performing Artists
           response = await api.getItems(
             userId: currentUserId,
-            artistIds: parentItem?.id.raw,
+            parentId: parentItem?.id,
+            artistIds: parentArtistItem?.id.raw,
             includeItemTypes: includeItemTypes,
             recursive: recursive,
             sortBy: sortBy,

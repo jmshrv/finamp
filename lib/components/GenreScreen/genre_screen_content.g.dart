@@ -6,7 +6,7 @@ part of 'genre_screen_content.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$genreCuratedItemsHash() => r'7a619f45a26e8f8bf41ca6a3350d067aa30db7a6';
+String _$genreCuratedItemsHash() => r'a467b1288610318b3420e7e58ca16b0c4117b240';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -43,10 +43,12 @@ class GenreCuratedItemsFamily
   GenreCuratedItemsProvider call(
     BaseItemDto parent,
     BaseItemDtoType baseItemType,
+    BaseItemDto? library,
   ) {
     return GenreCuratedItemsProvider(
       parent,
       baseItemType,
+      library,
     );
   }
 
@@ -57,6 +59,7 @@ class GenreCuratedItemsFamily
     return call(
       provider.parent,
       provider.baseItemType,
+      provider.library,
     );
   }
 
@@ -82,11 +85,13 @@ class GenreCuratedItemsProvider
   GenreCuratedItemsProvider(
     BaseItemDto parent,
     BaseItemDtoType baseItemType,
+    BaseItemDto? library,
   ) : this._internal(
           (ref) => genreCuratedItems(
             ref as GenreCuratedItemsRef,
             parent,
             baseItemType,
+            library,
           ),
           from: genreCuratedItemsProvider,
           name: r'genreCuratedItemsProvider',
@@ -99,6 +104,7 @@ class GenreCuratedItemsProvider
               GenreCuratedItemsFamily._allTransitiveDependencies,
           parent: parent,
           baseItemType: baseItemType,
+          library: library,
         );
 
   GenreCuratedItemsProvider._internal(
@@ -110,10 +116,12 @@ class GenreCuratedItemsProvider
     required super.from,
     required this.parent,
     required this.baseItemType,
+    required this.library,
   }) : super.internal();
 
   final BaseItemDto parent;
   final BaseItemDtoType baseItemType;
+  final BaseItemDto? library;
 
   @override
   Override overrideWith(
@@ -131,6 +139,7 @@ class GenreCuratedItemsProvider
         debugGetCreateSourceHash: null,
         parent: parent,
         baseItemType: baseItemType,
+        library: library,
       ),
     );
   }
@@ -144,7 +153,8 @@ class GenreCuratedItemsProvider
   bool operator ==(Object other) {
     return other is GenreCuratedItemsProvider &&
         other.parent == parent &&
-        other.baseItemType == baseItemType;
+        other.baseItemType == baseItemType &&
+        other.library == library;
   }
 
   @override
@@ -152,6 +162,7 @@ class GenreCuratedItemsProvider
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parent.hashCode);
     hash = _SystemHash.combine(hash, baseItemType.hashCode);
+    hash = _SystemHash.combine(hash, library.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -166,6 +177,9 @@ mixin GenreCuratedItemsRef
 
   /// The parameter `baseItemType` of this provider.
   BaseItemDtoType get baseItemType;
+
+  /// The parameter `library` of this provider.
+  BaseItemDto? get library;
 }
 
 class _GenreCuratedItemsProviderElement
@@ -178,6 +192,8 @@ class _GenreCuratedItemsProviderElement
   @override
   BaseItemDtoType get baseItemType =>
       (origin as GenreCuratedItemsProvider).baseItemType;
+  @override
+  BaseItemDto? get library => (origin as GenreCuratedItemsProvider).library;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,4 +1,6 @@
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../components/ArtistScreen/artist_screen_content.dart';
 import '../components/now_playing_bar.dart';
@@ -24,6 +26,7 @@ class ArtistScreen extends StatefulWidget {
 }
 
 class _ArtistScreenState extends State<ArtistScreen> {
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
   BaseItemDto? currentGenreFilter;
 
   @override
@@ -51,6 +54,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
       body: SafeArea(
         child: ArtistScreenContent(
           parent: artist,
+          library: _finampUserHelper.currentUser?.currentView,
           genreFilter: currentGenreFilter,
           updateGenreFilter: updateGenreFilter,
         ),
