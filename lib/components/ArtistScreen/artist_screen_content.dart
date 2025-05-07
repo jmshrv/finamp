@@ -71,8 +71,8 @@ Future<List<BaseItemDto>> getArtistTopTracks(
     // Get Top 5 Tracks sorted by Play Count
       final List<BaseItemDto>? topTracks = 
         await jellyfinApiHelper.getItems(
-            parentItem: library,
-            parentArtistItem: parent,
+            libraryFilter: library,
+            parentItem: parent,
             genreFilter: genreFilter,
             sortBy: "$sortByMain,SortName",
             sortOrder: "Descending",
@@ -118,8 +118,8 @@ Future<List<BaseItemDto>> getArtistAlbums(
     // Get Albums where artist is Album Artist sorted by Premiere Date
     final List<BaseItemDto>? artistAlbums = 
       await jellyfinApiHelper.getItems(
-          parentItem: library,
-          parentArtistItem: parent,
+          libraryFilter: library,
+          parentItem: parent,
           genreFilter: genreFilter,
           sortBy: "PremiereDate,SortName",
           includeItemTypes: "MusicAlbum",
@@ -163,8 +163,8 @@ Future<List<BaseItemDto>> getPerformingArtistAlbums(
     // Get Albums where artist is Performing Artist sorted by Premiere Date
     final List<BaseItemDto>? performingArtistAlbums = 
       await jellyfinApiHelper.getItems(
-        parentItem: library,
-        parentArtistItem: parent,
+        libraryFilter: library,
+        parentItem: parent,
         genreFilter: genreFilter,
         sortBy: "PremiereDate,SortName",
         includeItemTypes: "MusicAlbum",
@@ -216,8 +216,8 @@ Future<List<BaseItemDto>> getPerformingArtistTracks(
     // In Online Mode:
     final List<BaseItemDto>? allPerformingArtistTracks = 
       await jellyfinApiHelper.getItems(
-        parentItem: library,
-        parentArtistItem: parent,
+        libraryFilter: library,
+        parentItem: parent,
         genreFilter: genreFilter,
         sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
         includeItemTypes: "Audio",
@@ -272,8 +272,8 @@ Future<List<BaseItemDto>> getAllTracks(
     // In Online Mode:
     // Fetch every album artist track
     final allAlbumArtistTracksResponse = await jellyfinApiHelper.getItems(
-      parentItem: library,
-      parentArtistItem: parent,
+      libraryFilter: library,
+      parentItem: parent,
       genreFilter: genreFilter,
       sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
       includeItemTypes: "Audio",
