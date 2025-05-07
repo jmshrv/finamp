@@ -1329,7 +1329,14 @@ class DownloadsService {
   /// album/playlist screen.  Can return all tracks in the album/playlist or
   /// just fully downloaded ones.
   Future<List<BaseItemDto>> getCollectionTracks(BaseItemDto item,
-      {bool playable = true, BaseItemDto? genreFilter}) async {
+      {bool playable = true,
+        BaseItemDto? genreFilter,
+        bool onlyFavorites = false,
+      }) async {
+    List<int> favoriteIds = [];
+    if (onlyFavorites) {
+      favoriteIds = _getFavoriteIds() ?? [];
+    }
     var stub =
         DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
 
@@ -1345,6 +1352,8 @@ class DownloadsService {
                 .stateEqualTo(DownloadItemState.complete)
                 .or()
                 .stateEqualTo(DownloadItemState.needsRedownloadComplete)))
+        .optional(onlyFavorites,
+            (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         // Returns items that have a certain genreId assigned
         .optional(
             genreFilter != null,

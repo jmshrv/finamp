@@ -150,6 +150,10 @@ class FinampSettingsHelper {
     
     finampSettingsTemp.artistGenreChipsApplyFilter =
         DefaultSettings.artistGenreChipsApplyFilter;
+    finampSettingsTemp.artistCuratedItemSelectionType =
+        DefaultSettings.artistCuratedItemSelectionType;
+    finampSettingsTemp.artistMostPlayedOfflineFallback =
+        DefaultSettings.artistMostPlayedOfflineFallback;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);

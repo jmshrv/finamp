@@ -747,6 +747,24 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setArtistCuratedItemSelectionType(
+      CuratedItemSelectionType newArtistCuratedItemSelectionType) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.artistCuratedItemSelectionType =
+        newArtistCuratedItemSelectionType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setArtistMostPlayedOfflineFallback(
+      CuratedItemSelectionType newArtistMostPlayedOfflineFallback) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.artistMostPlayedOfflineFallback =
+        newArtistMostPlayedOfflineFallback;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1000,6 +1018,12 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get artistGenreChipsApplyFilter =>
       finampSettingsProvider
           .select((value) => value.requireValue.artistGenreChipsApplyFilter);
+  ProviderListenable<CuratedItemSelectionType>
+      get artistCuratedItemSelectionType => finampSettingsProvider
+          .select((value) => value.requireValue.artistCuratedItemSelectionType);
+  ProviderListenable<CuratedItemSelectionType>
+      get artistMostPlayedOfflineFallback => finampSettingsProvider.select(
+          (value) => value.requireValue.artistMostPlayedOfflineFallback);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

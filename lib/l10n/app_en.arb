@@ -1235,6 +1235,22 @@
   "@genreMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on GenreScreen in Offline Mode."
   },
+  "artistCuratedItemSelectionTypeTitle": "Track Curation Type",
+  "@artistCuratedItemSelectionTypeTitle": {
+    "description": "Label for the setting that controls the Track Curation Type for the ArtistScreen."
+  },
+  "artistCuratedItemSelectionTypeSubtitle": "You can choose how the five selected tracks displayed on the Artist Screen are curated.",
+  "@artistCuratedItemSelectionTypeSubtitle": {
+    "description": "Description of the setting that controls the Track Curation Type for the ArtistScreen"
+  },
+  "artistMostPlayedOfflineFallbackTitle": "\"Most Played\" Offline Fallback",
+  "@artistMostPlayedOfflineFallbackTitle": {
+    "description": "Label for the setting that controls the offline fallback sorting option for the Most Played option on ArtistScreen."
+  },
+  "artistMostPlayedOfflineFallbackSubtitle": "\"Most Played\" isn't available in Offline Mode. When you are in Offline Mode, the app will temporarily use the option you choose here instead.",
+  "@artistMostPlayedOfflineFallbackSubtitle": {
+    "description": "Description of the setting that controls the offline fallback sorting option for the Most Played option on ArtistScreen."
+  },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {

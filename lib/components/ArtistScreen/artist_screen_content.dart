@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,37 +30,57 @@ Future<List<BaseItemDto>> getArtistTopTracks(
 ) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  final CuratedItemSelectionType artistCuratedItemSelectionType = 
+      ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
+  // If Top Tracks are disabled, we return an empty list
+  if (!ref.watch(finampSettingsProvider.showArtistsTopTracks)) {
+    return <BaseItemDto>[];
+  }
   // Get Items
   if (isOffline) {
     // In Offline Mode:
-    // As the offline PlayCount might not be accurate, we currently
-    // just hide the section. Therefore we return an empty list
-    return <BaseItemDto>[];
-    // However, if we want to implement it later, it could look like this:
+    final artistCuratedItemSelectionTypeOffline = 
+        (artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
+            ? ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
+            : artistCuratedItemSelectionType;
     // We already fetch all tracks for the playback, 
     // and as in offline mode this is much faster, 
     // we just sort them and only return the first 5 items.
-    /*final List<BaseItemDto> allArtistTracks = await ref.watch(
-      getAllTracksProvider(parent, library, genreFilter).future,
+    final sortBy = switch (artistCuratedItemSelectionTypeOffline) {
+      // Offline Play Count not implemented yet
+      // CuratedItemSelectionType.mostPlayed => SortBy.playCount,
+      CuratedItemSelectionType.recentlyAdded => SortBy.dateCreated,
+      CuratedItemSelectionType.latestReleases => SortBy.premiereDate,
+      _ => SortBy.random, // for Favorites and Random
+    };
+    final onlyFavorites = (artistCuratedItemSelectionTypeOffline == CuratedItemSelectionType.favorites);
+    final List<BaseItemDto> allArtistTracks = await ref.watch(
+      getAllTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
     );
-    var items = sortItems(allArtistTracks, SortBy.playCount, SortOrder.descending);
+    var items = sortItems(allArtistTracks, sortBy, SortOrder.descending);
     items = items.take(5).toList();
-    return items;*/
+    return items;
   } else {
     // In Online Mode:
+    final sortByMain = switch (artistCuratedItemSelectionType) {
+      CuratedItemSelectionType.mostPlayed => "PlayCount",
+      CuratedItemSelectionType.recentlyAdded => "DateCreated",
+      CuratedItemSelectionType.latestReleases => "PremiereDate",
+      _ => "Random", // for Favorites and Random
+    };
     // Get Top 5 Tracks sorted by Play Count
       final List<BaseItemDto>? topTracks = 
-        (ref.watch(finampSettingsProvider.showArtistsTopTracks))
-        ? await jellyfinApiHelper.getItems(
+        await jellyfinApiHelper.getItems(
             parentItem: library,
             parentArtistItem: parent,
             genreFilter: genreFilter,
-            sortBy: "PlayCount,SortName",
+            sortBy: "$sortByMain,SortName",
             sortOrder: "Descending",
+            isFavorite: (artistCuratedItemSelectionType == CuratedItemSelectionType.favorites) 
+                ? true : null,
             limit: 5,
             includeItemTypes: "Audio",
-          )
-        : [];
+          );
     return topTracks?? [];
   }
 }
@@ -162,6 +183,7 @@ Future<List<BaseItemDto>> getPerformingArtistTracks(
   BaseItemDto parent,
   BaseItemDto? library,
   BaseItemDto? genreFilter,
+  {bool onlyFavorites = false,}
 ) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
@@ -178,7 +200,9 @@ Future<List<BaseItemDto>> getPerformingArtistTracks(
     // Loop through the albums and add the tracks
     for (var album in allPerformingArtistAlbums) {
       final performingArtistAlbumTracks = await downloadsService.getCollectionTracks(
-        album, playable: true,
+        album, 
+        playable: true,
+        onlyFavorites: onlyFavorites,
       );
       // Now we remove every track where the artist is NOT an performing artist...
       final filteredPerformingArtistTracks = performingArtistAlbumTracks.where((track) {
@@ -210,6 +234,7 @@ Future<List<BaseItemDto>> getAllTracks(
   BaseItemDto parent,
   BaseItemDto? library,
   BaseItemDto? genreFilter,
+  {bool onlyFavorites = false,}
 ) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final downloadsService = GetIt.instance<DownloadsService>();
@@ -227,11 +252,12 @@ Future<List<BaseItemDto>> getAllTracks(
       sortedTracks.addAll(await downloadsService.getCollectionTracks(
         album,
         playable: true,
+        onlyFavorites: onlyFavorites,
       ));
     }
     // Fetch every performing artist track
     final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(
-      getPerformingArtistTracksProvider(parent, library, genreFilter).future,
+      getPerformingArtistTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
     );
     // Filter out the tracks already added through album artist albums
     final existingIds = sortedTracks.map((t) => t.id).toSet();
@@ -255,7 +281,7 @@ Future<List<BaseItemDto>> getAllTracks(
     );
     // Get all performing artist tracks
     final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(
-      getPerformingArtistTracksProvider(parent, library, genreFilter).future,
+      getPerformingArtistTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
     );
     // We now remove albumartist tracks from performance artist tracks to avoid duplicates
     final allAlbumArtistTracks = allAlbumArtistTracksResponse ?? [];
@@ -317,7 +343,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   @override
   Widget build(BuildContext context) {
     List<BaseItemDto> allChildren = [];
-
+    final isOffline = ref.watch(finampSettingsProvider.isOffline);
+  
     final topTracksAsync = ref.watch(
         getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter));
     final albumArtistAlbumsAsync = ref.watch(
@@ -341,13 +368,30 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     final performingArtistAlbums = performingArtistAlbumsAsync.valueOrNull ?? [];
     final allPerformingArtistTracks = allPerformingArtistTracksAsync.valueOrNull ?? [];
 
+    final artistCuratedItemSelectionTypeSetting = 
+        ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
+    final artistCuratedItemSelectionType = (isOffline)
+      ? ((artistCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
+          ? ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
+          : artistCuratedItemSelectionTypeSetting)
+      : artistCuratedItemSelectionTypeSetting;
+
+    final topTracksText = (artistCuratedItemSelectionType == CuratedItemSelectionType.random)
+        ? AppLocalizations.of(context)!.randomTracks
+        : artistCuratedItemSelectionType
+                      .toLocalisedSectionTitle(context, BaseItemDtoType.track);
+
     var appearsOnAlbums = performingArtistAlbums
         .where((a) => !albumArtistAlbums.any((b) => b.id == a.id))
         .toList();
-    var filteredTopTracks = topTracks
-        .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
-        .take(5)
-        .toList();
+    var filteredTopTracks = (artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
+        ? topTracks
+          .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+          .take(5)
+          .toList()
+        : topTracks
+          .take(5)
+          .toList();
 
     // Combine Children to get correct ChildrenCount
     // for the Download Status Sync Display for Artists
@@ -388,7 +432,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             parent: widget.parent,
             tracks: filteredTopTracks,
             childrenForQueue: Future.value(filteredTopTracks),
-            tracksText: AppLocalizations.of(context)!.topTracks),
+            tracksText: topTracksText,
+        ),
       if (!isLoading && albumArtistAlbums.isNotEmpty)
         AlbumSection(
             parent: widget.parent,

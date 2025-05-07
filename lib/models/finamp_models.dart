@@ -206,6 +206,8 @@ class DefaultSettings {
   static const genreListsInheritSorting = false;
   static const genreMostPlayedOfflineFallback = CuratedItemSelectionType.favorites;
   static const artistGenreChipsApplyFilter = false;
+  static const artistCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
+  static const artistMostPlayedOfflineFallback = CuratedItemSelectionType.favorites;
 }
 
 @HiveType(typeId: 28)
@@ -334,6 +336,8 @@ class FinampSettings {
     this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
     this.genreMostPlayedOfflineFallback = DefaultSettings.genreMostPlayedOfflineFallback,
     this.artistGenreChipsApplyFilter = DefaultSettings.artistGenreChipsApplyFilter,
+    this.artistCuratedItemSelectionType = DefaultSettings.artistCuratedItemSelectionType,
+    this.artistMostPlayedOfflineFallback = DefaultSettings.artistMostPlayedOfflineFallback,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -681,6 +685,12 @@ class FinampSettings {
 
   @HiveField(105, defaultValue: DefaultSettings.artistGenreChipsApplyFilter)
   bool artistGenreChipsApplyFilter;
+
+  @HiveField(106, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
+  CuratedItemSelectionType artistCuratedItemSelectionType;
+
+  @HiveField(107, defaultValue: DefaultSettings.artistMostPlayedOfflineFallback)
+  CuratedItemSelectionType artistMostPlayedOfflineFallback;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

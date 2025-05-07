@@ -265,6 +265,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : fields[104] as CuratedItemSelectionType,
       artistGenreChipsApplyFilter:
           fields[105] == null ? false : fields[105] as bool,
+      artistCuratedItemSelectionType: fields[106] == null
+          ? CuratedItemSelectionType.mostPlayed
+          : fields[106] as CuratedItemSelectionType,
+      artistMostPlayedOfflineFallback: fields[107] == null
+          ? CuratedItemSelectionType.favorites
+          : fields[107] as CuratedItemSelectionType,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -275,7 +281,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(100)
+      ..writeByte(102)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -475,7 +481,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(104)
       ..write(obj.genreMostPlayedOfflineFallback)
       ..writeByte(105)
-      ..write(obj.artistGenreChipsApplyFilter);
+      ..write(obj.artistGenreChipsApplyFilter)
+      ..writeByte(106)
+      ..write(obj.artistCuratedItemSelectionType)
+      ..writeByte(107)
+      ..write(obj.artistMostPlayedOfflineFallback);
   }
 
   @override

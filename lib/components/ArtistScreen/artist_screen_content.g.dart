@@ -7,7 +7,7 @@ part of 'artist_screen_content.dart';
 // **************************************************************************
 
 String _$getArtistTopTracksHash() =>
-    r'378e54011b60c6401905fd12973a4d83fe5f2c9c';
+    r'c9d80536d81842edbf2321181a84dded3e9ca9da';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -533,7 +533,7 @@ class _GetPerformingArtistAlbumsProviderElement
 }
 
 String _$getPerformingArtistTracksHash() =>
-    r'fee2a6c6734fc7df21e6bed5356cb9cb3122d359';
+    r'8d684b78d4c515b25907bdc99069fe44bfa47133';
 
 /// See also [getPerformingArtistTracks].
 @ProviderFor(getPerformingArtistTracks)
@@ -549,12 +549,14 @@ class GetPerformingArtistTracksFamily
   GetPerformingArtistTracksProvider call(
     BaseItemDto parent,
     BaseItemDto? library,
-    BaseItemDto? genreFilter,
-  ) {
+    BaseItemDto? genreFilter, {
+    bool onlyFavorites = false,
+  }) {
     return GetPerformingArtistTracksProvider(
       parent,
       library,
       genreFilter,
+      onlyFavorites: onlyFavorites,
     );
   }
 
@@ -566,6 +568,7 @@ class GetPerformingArtistTracksFamily
       provider.parent,
       provider.library,
       provider.genreFilter,
+      onlyFavorites: provider.onlyFavorites,
     );
   }
 
@@ -591,13 +594,15 @@ class GetPerformingArtistTracksProvider
   GetPerformingArtistTracksProvider(
     BaseItemDto parent,
     BaseItemDto? library,
-    BaseItemDto? genreFilter,
-  ) : this._internal(
+    BaseItemDto? genreFilter, {
+    bool onlyFavorites = false,
+  }) : this._internal(
           (ref) => getPerformingArtistTracks(
             ref as GetPerformingArtistTracksRef,
             parent,
             library,
             genreFilter,
+            onlyFavorites: onlyFavorites,
           ),
           from: getPerformingArtistTracksProvider,
           name: r'getPerformingArtistTracksProvider',
@@ -611,6 +616,7 @@ class GetPerformingArtistTracksProvider
           parent: parent,
           library: library,
           genreFilter: genreFilter,
+          onlyFavorites: onlyFavorites,
         );
 
   GetPerformingArtistTracksProvider._internal(
@@ -623,11 +629,13 @@ class GetPerformingArtistTracksProvider
     required this.parent,
     required this.library,
     required this.genreFilter,
+    required this.onlyFavorites,
   }) : super.internal();
 
   final BaseItemDto parent;
   final BaseItemDto? library;
   final BaseItemDto? genreFilter;
+  final bool onlyFavorites;
 
   @override
   Override overrideWith(
@@ -646,6 +654,7 @@ class GetPerformingArtistTracksProvider
         parent: parent,
         library: library,
         genreFilter: genreFilter,
+        onlyFavorites: onlyFavorites,
       ),
     );
   }
@@ -660,7 +669,8 @@ class GetPerformingArtistTracksProvider
     return other is GetPerformingArtistTracksProvider &&
         other.parent == parent &&
         other.library == library &&
-        other.genreFilter == genreFilter;
+        other.genreFilter == genreFilter &&
+        other.onlyFavorites == onlyFavorites;
   }
 
   @override
@@ -669,6 +679,7 @@ class GetPerformingArtistTracksProvider
     hash = _SystemHash.combine(hash, parent.hashCode);
     hash = _SystemHash.combine(hash, library.hashCode);
     hash = _SystemHash.combine(hash, genreFilter.hashCode);
+    hash = _SystemHash.combine(hash, onlyFavorites.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -686,6 +697,9 @@ mixin GetPerformingArtistTracksRef
 
   /// The parameter `genreFilter` of this provider.
   BaseItemDto? get genreFilter;
+
+  /// The parameter `onlyFavorites` of this provider.
+  bool get onlyFavorites;
 }
 
 class _GetPerformingArtistTracksProviderElement
@@ -702,9 +716,12 @@ class _GetPerformingArtistTracksProviderElement
   @override
   BaseItemDto? get genreFilter =>
       (origin as GetPerformingArtistTracksProvider).genreFilter;
+  @override
+  bool get onlyFavorites =>
+      (origin as GetPerformingArtistTracksProvider).onlyFavorites;
 }
 
-String _$getAllTracksHash() => r'd8999fece4231555773e8de0ac3e898fa5808345';
+String _$getAllTracksHash() => r'59ac30d477e822149e1e6826bf6dd24115f18c47';
 
 /// See also [getAllTracks].
 @ProviderFor(getAllTracks)
@@ -719,12 +736,14 @@ class GetAllTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
   GetAllTracksProvider call(
     BaseItemDto parent,
     BaseItemDto? library,
-    BaseItemDto? genreFilter,
-  ) {
+    BaseItemDto? genreFilter, {
+    bool onlyFavorites = false,
+  }) {
     return GetAllTracksProvider(
       parent,
       library,
       genreFilter,
+      onlyFavorites: onlyFavorites,
     );
   }
 
@@ -736,6 +755,7 @@ class GetAllTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
       provider.parent,
       provider.library,
       provider.genreFilter,
+      onlyFavorites: provider.onlyFavorites,
     );
   }
 
@@ -761,13 +781,15 @@ class GetAllTracksProvider
   GetAllTracksProvider(
     BaseItemDto parent,
     BaseItemDto? library,
-    BaseItemDto? genreFilter,
-  ) : this._internal(
+    BaseItemDto? genreFilter, {
+    bool onlyFavorites = false,
+  }) : this._internal(
           (ref) => getAllTracks(
             ref as GetAllTracksRef,
             parent,
             library,
             genreFilter,
+            onlyFavorites: onlyFavorites,
           ),
           from: getAllTracksProvider,
           name: r'getAllTracksProvider',
@@ -781,6 +803,7 @@ class GetAllTracksProvider
           parent: parent,
           library: library,
           genreFilter: genreFilter,
+          onlyFavorites: onlyFavorites,
         );
 
   GetAllTracksProvider._internal(
@@ -793,11 +816,13 @@ class GetAllTracksProvider
     required this.parent,
     required this.library,
     required this.genreFilter,
+    required this.onlyFavorites,
   }) : super.internal();
 
   final BaseItemDto parent;
   final BaseItemDto? library;
   final BaseItemDto? genreFilter;
+  final bool onlyFavorites;
 
   @override
   Override overrideWith(
@@ -815,6 +840,7 @@ class GetAllTracksProvider
         parent: parent,
         library: library,
         genreFilter: genreFilter,
+        onlyFavorites: onlyFavorites,
       ),
     );
   }
@@ -829,7 +855,8 @@ class GetAllTracksProvider
     return other is GetAllTracksProvider &&
         other.parent == parent &&
         other.library == library &&
-        other.genreFilter == genreFilter;
+        other.genreFilter == genreFilter &&
+        other.onlyFavorites == onlyFavorites;
   }
 
   @override
@@ -838,6 +865,7 @@ class GetAllTracksProvider
     hash = _SystemHash.combine(hash, parent.hashCode);
     hash = _SystemHash.combine(hash, library.hashCode);
     hash = _SystemHash.combine(hash, genreFilter.hashCode);
+    hash = _SystemHash.combine(hash, onlyFavorites.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -854,6 +882,9 @@ mixin GetAllTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
 
   /// The parameter `genreFilter` of this provider.
   BaseItemDto? get genreFilter;
+
+  /// The parameter `onlyFavorites` of this provider.
+  bool get onlyFavorites;
 }
 
 class _GetAllTracksProviderElement
@@ -867,6 +898,8 @@ class _GetAllTracksProviderElement
   BaseItemDto? get library => (origin as GetAllTracksProvider).library;
   @override
   BaseItemDto? get genreFilter => (origin as GetAllTracksProvider).genreFilter;
+  @override
+  bool get onlyFavorites => (origin as GetAllTracksProvider).onlyFavorites;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
