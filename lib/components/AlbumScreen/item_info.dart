@@ -65,7 +65,7 @@ class ItemInfo extends ConsumerWidget {
             text: printDuration(item.runTimeTicksDuration()),
           ),
         ),*/
-        if (item.type != "Playlist")
+        if (item.type != "Playlist" && item.premiereDate != null)
           IconAndText(
               iconData: Icons.event,
               textSpan: TextSpan(
