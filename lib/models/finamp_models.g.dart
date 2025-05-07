@@ -247,8 +247,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[87] == null ? Duration.zero : fields[87] as Duration,
       autoReloadQueue: fields[97] == null ? false : fields[97] as bool,
       genreCuratedItemSelectionType: fields[100] == null
-          ? GenreCuratedItemSelectionType.mostPlayed
-          : fields[100] as GenreCuratedItemSelectionType,
+          ? CuratedItemSelectionType.mostPlayed
+          : fields[100] as CuratedItemSelectionType,
       genreItemSectionsOrder: fields[101] == null
           ? [
               GenreItemSections.tracks,
@@ -261,8 +261,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       genreListsInheritSorting:
           fields[103] == null ? false : fields[103] as bool,
       genreMostPlayedOfflineFallback: fields[104] == null
-          ? GenreCuratedItemSelectionType.favorites
-          : fields[104] as GenreCuratedItemSelectionType,
+          ? CuratedItemSelectionType.favorites
+          : fields[104] as CuratedItemSelectionType,
       artistGenreChipsApplyFilter:
           fields[105] == null ? false : fields[105] as bool,
     )
@@ -2306,41 +2306,41 @@ class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
           typeId == other.typeId;
 }
 
-class GenreCuratedItemSelectionTypeAdapter
-    extends TypeAdapter<GenreCuratedItemSelectionType> {
+class CuratedItemSelectionTypeAdapter
+    extends TypeAdapter<CuratedItemSelectionType> {
   @override
   final int typeId = 94;
 
   @override
-  GenreCuratedItemSelectionType read(BinaryReader reader) {
+  CuratedItemSelectionType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return GenreCuratedItemSelectionType.mostPlayed;
+        return CuratedItemSelectionType.mostPlayed;
       case 1:
-        return GenreCuratedItemSelectionType.favorites;
+        return CuratedItemSelectionType.favorites;
       case 2:
-        return GenreCuratedItemSelectionType.random;
+        return CuratedItemSelectionType.random;
       case 3:
-        return GenreCuratedItemSelectionType.latestReleases;
+        return CuratedItemSelectionType.latestReleases;
       case 4:
-        return GenreCuratedItemSelectionType.recentlyAdded;
+        return CuratedItemSelectionType.recentlyAdded;
       default:
-        return GenreCuratedItemSelectionType.mostPlayed;
+        return CuratedItemSelectionType.mostPlayed;
     }
   }
 
   @override
-  void write(BinaryWriter writer, GenreCuratedItemSelectionType obj) {
+  void write(BinaryWriter writer, CuratedItemSelectionType obj) {
     switch (obj) {
-      case GenreCuratedItemSelectionType.mostPlayed:
+      case CuratedItemSelectionType.mostPlayed:
         writer.writeByte(0);
-      case GenreCuratedItemSelectionType.favorites:
+      case CuratedItemSelectionType.favorites:
         writer.writeByte(1);
-      case GenreCuratedItemSelectionType.random:
+      case CuratedItemSelectionType.random:
         writer.writeByte(2);
-      case GenreCuratedItemSelectionType.latestReleases:
+      case CuratedItemSelectionType.latestReleases:
         writer.writeByte(3);
-      case GenreCuratedItemSelectionType.recentlyAdded:
+      case CuratedItemSelectionType.recentlyAdded:
         writer.writeByte(4);
     }
   }
@@ -2351,7 +2351,7 @@ class GenreCuratedItemSelectionTypeAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GenreCuratedItemSelectionTypeAdapter &&
+      other is CuratedItemSelectionTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -40,7 +40,7 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
   if (isOffline) {
     // If "Most Played" is selected when Offline Mode is enabled, we switch to a fallback option
     // as the PlayCount data might not be an accurate representation of the online state
-    final offlineSelectionType = (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.mostPlayed)
+    final offlineSelectionType = (genreCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
         ? ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
         : genreCuratedItemSelectionType;
     final result = await getCuratedItemsOffline(
@@ -76,7 +76,7 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
 
 Future<(List<BaseItemDto>,int)> getCuratedItemsOnline({
   required BaseItemDto parent,
-  required GenreCuratedItemSelectionType genreCuratedItemSelectionType,
+  required CuratedItemSelectionType genreCuratedItemSelectionType,
   required BaseItemDtoType baseItemType,
   BaseItemDto? library,
   String? sortBySecondary,
@@ -84,9 +84,9 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOnline({
 }) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final sortByMain = switch (genreCuratedItemSelectionType) {
-    GenreCuratedItemSelectionType.mostPlayed => "PlayCount",
-    GenreCuratedItemSelectionType.recentlyAdded => "DateCreated",
-    GenreCuratedItemSelectionType.latestReleases => "PremiereDate",
+    CuratedItemSelectionType.mostPlayed => "PlayCount",
+    CuratedItemSelectionType.recentlyAdded => "DateCreated",
+    CuratedItemSelectionType.latestReleases => "PremiereDate",
     _ => "Random", // for Favorites and Random
   };
   final sortBy = 
@@ -99,7 +99,7 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOnline({
     genreFilter: parent, 
     sortBy: sortBy,
     sortOrder: "Descending",
-    isFavorite: (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) 
+    isFavorite: (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites) 
         ? true : null,
     limit: 5,
     includeItemTypes: baseItemType.idString,
@@ -107,7 +107,7 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOnline({
         ? artistListType : null,
   );
   // Set the Item Count
-  if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) {
+  if (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites) {
     // When we filter the favorites, we have to make an additional request to get the correct number
     // otherwise we would only get the totalRecordCount of Favorites of that genre
     final fetchedItemCountWithoutFavorites = await jellyfinApiHelper.getItemsWithTotalRecordCount(
@@ -128,7 +128,7 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOnline({
 Future<(List<BaseItemDto>,int)> getCuratedItemsOffline({
   required Ref ref,
   required BaseItemDto parent,
-  required GenreCuratedItemSelectionType genreCuratedItemSelectionType,
+  required CuratedItemSelectionType genreCuratedItemSelectionType,
   required BaseItemDtoType baseItemType,
   BaseItemDto? library,
   BaseItemDtoType? artistInfoForType,
@@ -138,9 +138,9 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOffline({
   // outdated data, getCuratedItemsOffline currently never gets called with mostPlayed
   final downloadsService = GetIt.instance<DownloadsService>();
   final sortBy = switch (genreCuratedItemSelectionType) {
-    GenreCuratedItemSelectionType.mostPlayed => SortBy.playCount,
-    GenreCuratedItemSelectionType.recentlyAdded => SortBy.dateCreated,
-    GenreCuratedItemSelectionType.latestReleases => SortBy.premiereDate,
+    CuratedItemSelectionType.mostPlayed => SortBy.playCount,
+    CuratedItemSelectionType.recentlyAdded => SortBy.dateCreated,
+    CuratedItemSelectionType.latestReleases => SortBy.premiereDate,
     _ => SortBy.random, // for Favorites and Random
   };
 
@@ -153,7 +153,7 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOffline({
     ? await downloadsService.getAllTracks(
           viewFilter: library?.id,
           nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-          onlyFavorites: (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) 
+          onlyFavorites: (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites) 
             ? ref.watch(finampSettingsProvider.trackOfflineFavorites) : false,
           genreFilter: parent)
     : await downloadsService.getAllCollections(
@@ -168,7 +168,7 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOffline({
               : null,
           nullableViewFilters: (baseItemType == BaseItemDtoType.album) &&
               ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-          onlyFavorites: (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) 
+          onlyFavorites: (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites) 
             ? ref.watch(finampSettingsProvider.trackOfflineFavorites) : false,
           infoForType: (baseItemType == BaseItemDtoType.artist)
             ? artistInfoForType : null,
@@ -179,7 +179,7 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOffline({
   items = items.take(5).toList();
   // When we filter the favorites, we have to make an additional request to get the correct number
   // otherwise we would only get the count of Favorites of that genre
-  if (genreCuratedItemSelectionType == GenreCuratedItemSelectionType.favorites) {
+  if (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites) {
     final List<DownloadStub> allFetchedItems = (baseItemType == BaseItemDtoType.track)
     ? await downloadsService.getAllTracks(
           nullableViewFilters: ref.read(finampSettingsProvider.showDownloadsWithUnknownLibrary),
@@ -236,7 +236,7 @@ void openSeeAll(
 
     if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting)) {
       switch (ref.read(finampSettingsProvider.genreCuratedItemSelectionType)) {
-        case GenreCuratedItemSelectionType.mostPlayed:
+        case CuratedItemSelectionType.mostPlayed:
           // Not yet implemented on MusicScreen, but it would be:
           // sortByOverride = SortBy.playCount;
           // sortOrderOverride = SortOrder.descending;
@@ -244,19 +244,19 @@ void openSeeAll(
           sortByOverride = SortBy.sortName;
           sortOrderOverride = SortOrder.ascending;
           isFavoriteOverride = false;
-        case GenreCuratedItemSelectionType.favorites:
+        case CuratedItemSelectionType.favorites:
           sortByOverride = SortBy.sortName;
           sortOrderOverride = SortOrder.ascending;
           isFavoriteOverride = true;
-        case GenreCuratedItemSelectionType.random:
+        case CuratedItemSelectionType.random:
           sortByOverride = SortBy.random;
           sortOrderOverride = SortOrder.ascending;
           isFavoriteOverride = false;
-        case GenreCuratedItemSelectionType.latestReleases:
+        case CuratedItemSelectionType.latestReleases:
           sortByOverride = SortBy.premiereDate;
           sortOrderOverride = SortOrder.descending;
           isFavoriteOverride = false;
-        case GenreCuratedItemSelectionType.recentlyAdded:
+        case CuratedItemSelectionType.recentlyAdded:
           sortByOverride = SortBy.dateCreated;
           sortOrderOverride = SortOrder.descending;
           isFavoriteOverride = false;
@@ -281,7 +281,7 @@ void openSeeAll(
     final genreCuratedItemSelectionTypeSetting =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionType);
     final genreCuratedItemSelectionType = 
-        (isOffline && genreCuratedItemSelectionTypeSetting == GenreCuratedItemSelectionType.mostPlayed)
+        (isOffline && genreCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
             ? ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
             : genreCuratedItemSelectionTypeSetting;
     final genreItemSectionsOrder =
@@ -388,25 +388,25 @@ void openSeeAll(
                   child: IntrinsicWidth(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: GenreCuratedItemSelectionType.values.asMap().entries.expand((entry) {
+                      children: CuratedItemSelectionType.values.asMap().entries.expand((entry) {
                         final int index = entry.key;
                         final type = entry.value;
                         final bool isSelected = (genreCuratedItemSelectionType == type);
                         final colorScheme = Theme.of(context).colorScheme;
                         double leftPadding = index == 0 ? 8.0 : 0.0;
-                        double rightPadding = index == GenreCuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
+                        double rightPadding = index == CuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
                         return [
                           Padding(
                             padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
                             child: FilterChip(
                               label: Text(type.toLocalisedString(context)),
-                              onSelected: (isOffline && type == GenreCuratedItemSelectionType.mostPlayed)
+                              onSelected: (isOffline && type == CuratedItemSelectionType.mostPlayed)
                                 ? null
                                 : (_) {
                                   FinampSetters.setGenreCuratedItemSelectionType(type);
                                 },
                               selected: isSelected,
-                              tooltip: (isOffline && type == GenreCuratedItemSelectionType.mostPlayed)
+                              tooltip: (isOffline && type == CuratedItemSelectionType.mostPlayed)
                                   ? AppLocalizations.of(context)!.genreMostPlayedOfflineTooltip
                                   : null,
                               showCheckmark: false,

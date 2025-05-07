@@ -7,7 +7,7 @@ part of 'artist_screen_content.dart';
 // **************************************************************************
 
 String _$getArtistTopTracksHash() =>
-    r'2c63f018cbd7bf010b07e09fddee5c3a1e7ba7cb';
+    r'378e54011b60c6401905fd12973a4d83fe5f2c9c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -194,7 +194,7 @@ class _GetArtistTopTracksProviderElement
       (origin as GetArtistTopTracksProvider).genreFilter;
 }
 
-String _$getArtistAlbumsHash() => r'9bf92fb4a34f6f34263364e3a901681aac4ca5a2';
+String _$getArtistAlbumsHash() => r'b176239d03a9bc5e1a292090d9941fe3ac0171b5';
 
 /// See also [getArtistAlbums].
 @ProviderFor(getArtistAlbums)
@@ -361,7 +361,7 @@ class _GetArtistAlbumsProviderElement
 }
 
 String _$getPerformingArtistAlbumsHash() =>
-    r'd8b18b955cbfa1f36e4e78c1ef5c21188d3fb5f4';
+    r'73a4c52721ef5517b4724e26bcc3659b78ba210e';
 
 /// See also [getPerformingArtistAlbums].
 @ProviderFor(getPerformingArtistAlbums)
@@ -533,7 +533,7 @@ class _GetPerformingArtistAlbumsProviderElement
 }
 
 String _$getPerformingArtistTracksHash() =>
-    r'b271060903e43479eee5d5976ed4a6f327ac441c';
+    r'fee2a6c6734fc7df21e6bed5356cb9cb3122d359';
 
 /// See also [getPerformingArtistTracks].
 @ProviderFor(getPerformingArtistTracks)
@@ -704,7 +704,7 @@ class _GetPerformingArtistTracksProviderElement
       (origin as GetPerformingArtistTracksProvider).genreFilter;
 }
 
-String _$getAllTracksHash() => r'591790c959e8be536bbb35b16c0eb1b1dbee12bd';
+String _$getAllTracksHash() => r'd8999fece4231555773e8de0ac3e898fa5808345';
 
 /// See also [getAllTracks].
 @ProviderFor(getAllTracks)

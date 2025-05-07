@@ -200,11 +200,11 @@ class DefaultSettings {
   static const preferHomeNetwork = false;
   static const homeNetworkAddress = "http://0.0.0.0:8096";
   static const autoReloadQueue = false;
-  static const genreCuratedItemSelectionType = GenreCuratedItemSelectionType.mostPlayed;
+  static const genreCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
   static const genreItemSectionsOrder = GenreItemSections.values;
   static const genreFilterArtistScreens = true;
-  static const genreListsInheritSorting = true;
-  static const genreMostPlayedOfflineFallback = GenreCuratedItemSelectionType.favorites;
+  static const genreListsInheritSorting = false;
+  static const genreMostPlayedOfflineFallback = CuratedItemSelectionType.favorites;
   static const artistGenreChipsApplyFilter = false;
 }
 
@@ -665,7 +665,7 @@ class FinampSettings {
   bool showFavoriteButtonOnMediaNotification;
 
   @HiveField(100, defaultValue: DefaultSettings.genreCuratedItemSelectionType)
-  GenreCuratedItemSelectionType genreCuratedItemSelectionType;
+  CuratedItemSelectionType genreCuratedItemSelectionType;
 
   @HiveField(101, defaultValue: DefaultSettings.genreItemSectionsOrder)
   List<GenreItemSections> genreItemSectionsOrder;
@@ -677,7 +677,7 @@ class FinampSettings {
   bool genreListsInheritSorting;
 
   @HiveField(104, defaultValue: DefaultSettings.genreMostPlayedOfflineFallback)
-  GenreCuratedItemSelectionType genreMostPlayedOfflineFallback;
+  CuratedItemSelectionType genreMostPlayedOfflineFallback;
 
   @HiveField(105, defaultValue: DefaultSettings.artistGenreChipsApplyFilter)
   bool artistGenreChipsApplyFilter;
@@ -2939,7 +2939,7 @@ class FinampOutputRoute {
 }
 
 @HiveType(typeId: 94)
-enum GenreCuratedItemSelectionType {
+enum CuratedItemSelectionType {
   @HiveField(0)
   mostPlayed,
   @HiveField(1)
@@ -2963,40 +2963,40 @@ enum GenreCuratedItemSelectionType {
       _toLocalisedSectionTitle(this, context, baseType);
 
   String _humanReadableName(
-      GenreCuratedItemSelectionType genreCuratedItemSelectionType) {
-    switch (genreCuratedItemSelectionType) {
-      case GenreCuratedItemSelectionType.mostPlayed:
+      CuratedItemSelectionType curatedItemSelectionType) {
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
         return "Most Played";    
-      case GenreCuratedItemSelectionType.favorites:
+      case CuratedItemSelectionType.favorites:
         return "Favorites";
-      case GenreCuratedItemSelectionType.random:
+      case CuratedItemSelectionType.random:
         return "Random";
-      case GenreCuratedItemSelectionType.latestReleases:
+      case CuratedItemSelectionType.latestReleases:
         return "Latest Releases";
-      case GenreCuratedItemSelectionType.recentlyAdded:
+      case CuratedItemSelectionType.recentlyAdded:
         return "Recently Added";
     }
   }
 
   String _humanReadableLocalisedName(
-      GenreCuratedItemSelectionType genreCuratedItemSelectionType,
+      CuratedItemSelectionType curatedItemSelectionType,
       BuildContext context) {
-    switch (genreCuratedItemSelectionType) {
-      case GenreCuratedItemSelectionType.mostPlayed:
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
         return AppLocalizations.of(context)!.mostPlayed;
-      case GenreCuratedItemSelectionType.favorites:
+      case CuratedItemSelectionType.favorites:
         return AppLocalizations.of(context)!.favorites;
-      case GenreCuratedItemSelectionType.random:
+      case CuratedItemSelectionType.random:
         return AppLocalizations.of(context)!.random;
-      case GenreCuratedItemSelectionType.latestReleases:
+      case CuratedItemSelectionType.latestReleases:
         return AppLocalizations.of(context)!.latestReleases;
-      case GenreCuratedItemSelectionType.recentlyAdded:
+      case CuratedItemSelectionType.recentlyAdded:
         return AppLocalizations.of(context)!.recentlyAdded;
     }
   }
 
   String _toLocalisedSectionTitle(
-      GenreCuratedItemSelectionType genreCuratedItemSelectionType,
+      CuratedItemSelectionType curatedItemSelectionType,
       BuildContext context,
       BaseItemDtoType baseType) {
     final loc = AppLocalizations.of(context)!;
@@ -3014,16 +3014,16 @@ enum GenreCuratedItemSelectionType {
       }
     }
 
-    switch (genreCuratedItemSelectionType) {
-      case GenreCuratedItemSelectionType.mostPlayed:
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
         return getTitle(loc.topTracks, loc.topAlbums, loc.topArtists) ?? "Unsupported Type";
-      case GenreCuratedItemSelectionType.favorites:
+      case CuratedItemSelectionType.favorites:
         return getTitle(loc.favoriteTracks, loc.favoriteAlbums, loc.favoriteArtists) ?? "Unsupported Type";
-      case GenreCuratedItemSelectionType.random:
+      case CuratedItemSelectionType.random:
         return getTitle(loc.tracks, loc.albums, loc.artists) ?? "Unsupported Type";
-      case GenreCuratedItemSelectionType.latestReleases:
+      case CuratedItemSelectionType.latestReleases:
         return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
-      case GenreCuratedItemSelectionType.recentlyAdded:
+      case CuratedItemSelectionType.recentlyAdded:
         return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
     }
   }

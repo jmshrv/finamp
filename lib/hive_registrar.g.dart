@@ -19,6 +19,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(CodecProfileAdapter());
     registerAdapter(ContainerProfileAdapter());
     registerAdapter(ContentViewTypeAdapter());
+    registerAdapter(CuratedItemSelectionTypeAdapter());
     registerAdapter(DeviceIdentificationAdapter());
     registerAdapter(DeviceInfoAdapter());
     registerAdapter(DeviceProfileAdapter());
@@ -42,7 +43,6 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(FinampTranscodingCodecAdapter());
     registerAdapter(FinampTranscodingStreamingFormatAdapter());
     registerAdapter(FinampUserAdapter());
-    registerAdapter(GenreCuratedItemSelectionTypeAdapter());
     registerAdapter(GenreItemSectionsAdapter());
     registerAdapter(HttpHeaderInfoAdapter());
     registerAdapter(ImageBlurHashesAdapter());

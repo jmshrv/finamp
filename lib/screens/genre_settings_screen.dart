@@ -81,11 +81,11 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
               title: Text(AppLocalizations.of(context)!.genreMostPlayedOfflineFallback),
               subtitle:
                   Text(AppLocalizations.of(context)!.genreMostPlayedOfflineFallbackSubtitle),
-              trailing: DropdownButton<GenreCuratedItemSelectionType>(
+              trailing: DropdownButton<CuratedItemSelectionType>(
                   value: genreMostPlayedOfflineFallbackValue,
-                  items: GenreCuratedItemSelectionType.values
-                      .where((e) => e != GenreCuratedItemSelectionType.mostPlayed)
-                      .map((e) => DropdownMenuItem<GenreCuratedItemSelectionType>(
+                  items: CuratedItemSelectionType.values
+                      .where((e) => e != CuratedItemSelectionType.mostPlayed)
+                      .map((e) => DropdownMenuItem<CuratedItemSelectionType>(
                             value: e,
                             child: Text(e.toLocalisedString(context)),
                           ))

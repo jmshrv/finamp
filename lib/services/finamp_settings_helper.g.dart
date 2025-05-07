@@ -699,7 +699,7 @@ extension FinampSetters on FinampSettingsHelper {
   }
 
   static void setGenreCuratedItemSelectionType(
-      GenreCuratedItemSelectionType newGenreCuratedItemSelectionType) {
+      CuratedItemSelectionType newGenreCuratedItemSelectionType) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.genreCuratedItemSelectionType =
         newGenreCuratedItemSelectionType;
@@ -730,7 +730,7 @@ extension FinampSetters on FinampSettingsHelper {
   }
 
   static void setGenreMostPlayedOfflineFallback(
-      GenreCuratedItemSelectionType newGenreMostPlayedOfflineFallback) {
+      CuratedItemSelectionType newGenreMostPlayedOfflineFallback) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.genreMostPlayedOfflineFallback =
         newGenreMostPlayedOfflineFallback;
@@ -982,7 +982,7 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get showFavoriteButtonOnMediaNotification =>
       finampSettingsProvider.select(
           (value) => value.requireValue.showFavoriteButtonOnMediaNotification);
-  ProviderListenable<GenreCuratedItemSelectionType>
+  ProviderListenable<CuratedItemSelectionType>
       get genreCuratedItemSelectionType => finampSettingsProvider
           .select((value) => value.requireValue.genreCuratedItemSelectionType);
   ProviderListenable<List<GenreItemSections>> get genreItemSectionsOrder =>
@@ -994,7 +994,7 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get genreListsInheritSorting =>
       finampSettingsProvider
           .select((value) => value.requireValue.genreListsInheritSorting);
-  ProviderListenable<GenreCuratedItemSelectionType>
+  ProviderListenable<CuratedItemSelectionType>
       get genreMostPlayedOfflineFallback => finampSettingsProvider
           .select((value) => value.requireValue.genreMostPlayedOfflineFallback);
   ProviderListenable<bool> get artistGenreChipsApplyFilter =>
