@@ -4569,8 +4569,8 @@ Map<String, dynamic> _$QueueItemToJson(QueueItem instance) => <String, dynamic>{
 
 NewPlaylist _$NewPlaylistFromJson(Map json) => NewPlaylist(
       name: json['Name'] as String?,
-      ids: (json['Ids'] as List<dynamic>)
-          .map((e) => const BaseItemIdConverter().fromJson(e as String))
+      ids: (json['Ids'] as List<dynamic>?)
+          ?.map((e) => const BaseItemIdConverter().fromJson(e as String))
           .toList(),
       userId: json['UserId'] as String?,
       mediaType: json['MediaType'] as String?,
@@ -4580,7 +4580,7 @@ NewPlaylist _$NewPlaylistFromJson(Map json) => NewPlaylist(
 Map<String, dynamic> _$NewPlaylistToJson(NewPlaylist instance) =>
     <String, dynamic>{
       'Name': instance.name,
-      'Ids': instance.ids.map(const BaseItemIdConverter().toJson).toList(),
+      'Ids': instance.ids?.map(const BaseItemIdConverter().toJson).toList(),
       'UserId': instance.userId,
       'MediaType': instance.mediaType,
       'IsPublic': instance.isPublic,

@@ -283,7 +283,6 @@ abstract class JellyfinApi extends ChopperService {
     @Query() required bool supportsPersistentIdentifier,
   });
 
-
   @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Sessions/Capabilities/Full")
   Future<dynamic> updateCapabilitiesFull(
@@ -354,6 +353,14 @@ abstract class JellyfinApi extends ChopperService {
 
     /// Item id, comma delimited.
     @Query() String? entryIds,
+  });
+
+  /// updates or gets propertys of a Playlist
+  @FactoryConverter(request: JsonConverter.requestFactory)
+  @Post(path: "/Playlists/{playlistId}")
+  Future<dynamic> updatePlaylist({
+    @Path() required BaseItemId playlistId,
+    @Body() required NewPlaylist playlist,
   });
 
   @FactoryConverter(

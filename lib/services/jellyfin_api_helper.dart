@@ -662,7 +662,7 @@ class JellyfinApiHelper {
     );
   }
 
-  /// Remove items to a playlist.
+  /// Remove items from a playlist.
   Future<void> removeItemsFromPlaylist({
     /// The playlist id.
     required BaseItemId playlistId,
@@ -697,6 +697,23 @@ class JellyfinApiHelper {
   }) async {
     final response =
         await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
+    if (response.toString().isNotEmpty) {
+      throw response as Object;
+    }
+  }
+
+  /// Updates playlist
+  Future<void> updatePlaylist({
+    /// The item id.
+    required BaseItemId itemId,
+
+    /// What to update the item with. You should give a BaseItemDto with only
+    /// changed values.
+    required NewPlaylist newPlaylist
+  }) async {
+    
+    final response =
+        await jellyfinApi.updatePlaylist(playlistId: itemId, playlist: newPlaylist);
     if (response.toString().isNotEmpty) {
       throw response as Object;
     }
