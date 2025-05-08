@@ -4,12 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-class BitrateSelector extends ConsumerWidget {
+class BitrateSelector extends ConsumerStatefulWidget {
   const BitrateSelector({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var bitrate = ref.watch(finampSettingsProvider.transcodeBitrate);
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _BitrateSelectorState();
+  }
+}
+
+class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
+  int currentBitrate = FinampSettingsHelper.finampSettings.transcodeBitrate;
+
+  @override
+  Widget build(BuildContext context) {
+    ref.watch(finampSettingsProvider.transcodeBitrate);
     return Column(
       children: [
         ListTile(
@@ -23,17 +32,22 @@ class BitrateSelector extends ConsumerWidget {
             Slider(
               min: 64,
               max: 320,
-              value: (bitrate / 1000).clamp(64, 320),
+              value: (currentBitrate / 1000).clamp(64, 320),
               divisions: 8,
               label: AppLocalizations.of(context)!
-                  .kiloBitsPerSecondLabel(bitrate ~/ 1000),
+                  .kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
               onChanged: (value) {
+                setState(() {
+                  currentBitrate = (value * 1000).toInt();
+                });
+              },
+              onChangeEnd: (value) {
                 FinampSetters.setTranscodeBitrate((value * 1000).toInt());
               },
             ),
             Text(
               AppLocalizations.of(context)!
-                  .kiloBitsPerSecondLabel(bitrate ~/ 1000),
+                  .kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
               style: Theme.of(context).textTheme.titleLarge,
             )
           ],
@@ -41,4 +55,5 @@ class BitrateSelector extends ConsumerWidget {
       ],
     );
   }
+
 }

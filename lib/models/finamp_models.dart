@@ -1,20 +1,20 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
-
 import '../builders/annotations.dart';
 import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
@@ -26,7 +26,10 @@ part 'finamp_models.g.dart';
 class FinampUser {
   FinampUser({
     required this.id,
-    required this.baseUrl,
+    required this.publicAddress,
+    required this.homeAddress,
+    required this.preferHomeNetwork,
+    required this.isLocal,
     required this.accessToken,
     required this.serverId,
     this.currentViewId,
@@ -35,8 +38,16 @@ class FinampUser {
 
   @HiveField(0)
   String id;
+
+  // @HiveField(1)
+  // String baseUrl;
   @HiveField(1)
-  String baseUrl;
+  @Name("baseUrl")
+  String publicAddress;
+
+  String get baseURL =>
+      isLocal && preferHomeNetwork ? homeAddress : publicAddress;
+
   @HiveField(2)
   String accessToken;
   @HiveField(3)
@@ -52,6 +63,15 @@ class FinampUser {
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
 
+  @HiveField(7, defaultValue: DefaultSettings.homeNetworkAddress)
+  String homeAddress;
+
+  @HiveField(8, defaultValue: DefaultSettings.isLocal)
+  bool isLocal;
+
+  @HiveField(9, defaultValue: DefaultSettings.preferHomeNetwork)
+  bool preferHomeNetwork;
+
   // We only need 1 user, the current user
   final Id isarId = 0;
   String get isarViews => jsonEncode(views);
@@ -61,6 +81,18 @@ class FinampUser {
 
   @ignore
   BaseItemDto? get currentView => views[currentViewId];
+
+  void update(
+      {bool? newIsLocal,
+      String? newHomeAddress,
+      String? newPublicAddress,
+      bool? newPreferHomeNetwork}) {
+    isLocal = newIsLocal ?? isLocal;
+    homeAddress = newHomeAddress ?? homeAddress;
+    publicAddress = newPublicAddress ?? publicAddress;
+    preferHomeNetwork = newPreferHomeNetwork ?? preferHomeNetwork;
+    GetIt.instance<FinampUserHelper>().saveUser(this);
+  }
 }
 
 class DefaultSettings {
@@ -125,6 +157,8 @@ class DefaultSettings {
   static const lyricsFontSize = LyricsFontSize.medium;
   static const showLyricsScreenAlbumPrelude = true;
   static const showStopButtonOnMediaNotification = false;
+  static const showShuffleButtonOnMediaNotification = true;
+  static const showFavoriteButtonOnMediaNotification = true;
   static const showSeekControlsOnMediaNotification = true;
   static const keepScreenOnOption = KeepScreenOnOption.whileLyrics;
   static const keepScreenOnWhilePluggedIn = true;
@@ -162,128 +196,133 @@ class DefaultSettings {
   static const audioFadeOutDuration = Duration(milliseconds: 0);
   static const audioFadeInDuration = Duration(milliseconds: 0);
   static const artistListType = ArtistType.albumartist;
+  static const isLocal = false;
+  static const preferHomeNetwork = false;
+  static const homeNetworkAddress = "http://0.0.0.0:8096";
+  static const autoReloadQueue = false;
 }
 
 @HiveType(typeId: 28)
 class FinampSettings {
-  FinampSettings(
-      {this.isOffline = DefaultSettings.isOffline,
-      this.shouldTranscode = DefaultSettings.shouldTranscode,
-      this.transcodeBitrate = DefaultSettings.transcodeBitrate,
-      // downloadLocations is required since the other values can be created with
-      // default values. create() is used to return a FinampSettings with
-      // downloadLocations.
-      required this.downloadLocations,
-      this.androidStopForegroundOnPause =
-          DefaultSettings.androidStopForegroundOnPause,
-      required this.showTabs,
-      this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
-      this.sortBy = SortBy.sortName,
-      this.sortOrder = SortOrder.ascending,
-      this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
-      this.volumeNormalizationActive =
-          DefaultSettings.volumeNormalizationActive,
-      this.volumeNormalizationIOSBaseGain =
-          DefaultSettings.volumeNormalizationIOSBaseGain,
-      this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
-      this.contentViewType = DefaultSettings.contentViewType,
-      this.playbackSpeedVisibility = DefaultSettings.playbackSpeedVisibility,
-      this.contentGridViewCrossAxisCountPortrait =
-          DefaultSettings.contentGridViewCrossAxisCountPortrait,
-      this.contentGridViewCrossAxisCountLandscape =
-          DefaultSettings.contentGridViewCrossAxisCountLandscape,
-      this.showTextOnGridView = DefaultSettings.showTextOnGridView,
-      this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
-      required this.downloadLocationsMap,
-      this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
-      this.playerScreenCoverMinimumPadding =
-          DefaultSettings.playerScreenCoverMinimumPadding,
-      this.showArtistsTopTracks = DefaultSettings.showArtistsTopTracks,
-      this.bufferDisableSizeConstraints =
-          DefaultSettings.bufferDisableSizeConstraints,
-      this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
-      this.bufferSizeMegabytes = DefaultSettings.bufferSizeMegabytes,
-      required this.tabSortBy,
-      required this.tabSortOrder,
-      this.loopMode = DefaultSettings.loopMode,
-      this.playbackSpeed = DefaultSettings.playbackSpeed,
-      this.tabOrder = DefaultSettings.tabOrder,
-      this.autoloadLastQueueOnStartup =
-          DefaultSettings.autoLoadLastQueueOnStartup,
-      this.hasCompletedDownloadsServiceMigration =
-          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-      this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
-      this.onlyShowFullyDownloaded = DefaultSettings.onlyShowFullyDownloaded,
-      this.showDownloadsWithUnknownLibrary =
-          DefaultSettings.showDownloadsWithUnknownLibrary,
-      this.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads,
-      this.downloadWorkers = DefaultSettings.downloadWorkers,
-      this.resyncOnStartup = DefaultSettings.resyncOnStartup,
-      this.preferQuickSyncs = DefaultSettings.preferQuickSyncs,
-      this.hasCompletedIsarUserMigration =
-          true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
-      this.downloadTranscodingCodec,
-      this.downloadTranscodeBitrate,
-      this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
-      this.shouldRedownloadTranscodes =
-          DefaultSettings.shouldRedownloadTranscodes,
-      this.itemSwipeActionLeftToRight =
-          DefaultSettings.itemSwipeActionLeftToRight,
-      this.itemSwipeActionRightToLeft =
-          DefaultSettings.itemSwipeActionRightToLeft,
-      this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
-      this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
-      this.allowSplitScreen = DefaultSettings.allowSplitScreen,
-      this.splitScreenPlayerWidth = DefaultSettings.splitScreenPlayerWidth,
-      this.enableVibration = DefaultSettings.enableVibration,
-      this.prioritizeCoverFactor = DefaultSettings.prioritizeCoverFactor,
-      this.suppressPlayerPadding = DefaultSettings.suppressPlayerPadding,
-      this.hidePlayerBottomActions = DefaultSettings.hidePlayerBottomActions,
-      this.reportQueueToServer = DefaultSettings.reportQueueToServer,
-      this.periodicPlaybackSessionUpdateFrequencySeconds =
-          DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
-      this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
-      this.playOnReconnectionDelay = DefaultSettings.playOnReconnectionDelay,
-      this.enablePlayon = DefaultSettings.enablePlayon,
-      this.currentVolume = DefaultSettings.currentVolume,
-      this.showArtistChipImage = DefaultSettings.showArtistChipImage,
-      this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
-      this.showProgressOnNowPlayingBar =
-          DefaultSettings.showProgressOnNowPlayingBar,
-      this.startInstantMixForIndividualTracks =
-          DefaultSettings.startInstantMixForIndividualTracks,
-      this.showLyricsTimestamps = DefaultSettings.showLyricsTimestamps,
-      this.lyricsAlignment = DefaultSettings.lyricsAlignment,
-      this.lyricsFontSize = DefaultSettings.lyricsFontSize,
-      this.showLyricsScreenAlbumPrelude =
-          DefaultSettings.showLyricsScreenAlbumPrelude,
-      this.showStopButtonOnMediaNotification =
-          DefaultSettings.showStopButtonOnMediaNotification,
-      this.showSeekControlsOnMediaNotification =
-          DefaultSettings.showSeekControlsOnMediaNotification,
-      this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
-      this.keepScreenOnWhilePluggedIn =
-          DefaultSettings.keepScreenOnWhilePluggedIn,
-      this.featureChipsConfiguration =
-          DefaultSettings.featureChipsConfiguration,
-      this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
-      this.hasDownloadedPlaylistInfo =
-          DefaultSettings.hasDownloadedPlaylistInfo,
-      this.transcodingStreamingFormat =
-          DefaultSettings.transcodingStreamingFormat,
-      this.downloadSizeWarningCutoff =
-          DefaultSettings.downloadSizeWarningCutoff,
-      this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
-      this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
-      this.showAlbumReleaseDateOnPlayerScreen =
-          DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
-      this.releaseDateFormat = DefaultSettings.releaseDateFormat,
-      this.artistListType = DefaultSettings.artistListType,
-      this.autoOffline = DefaultSettings.autoOffline,
-      this.autoOfflineListenerActive =
-          DefaultSettings.autoOfflineListenerActive,
-      this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
-      this.audioFadeInDuration = DefaultSettings.audioFadeInDuration});
+  FinampSettings({
+    this.isOffline = DefaultSettings.isOffline,
+    this.shouldTranscode = DefaultSettings.shouldTranscode,
+    this.transcodeBitrate = DefaultSettings.transcodeBitrate,
+    // downloadLocations is required since the other values can be created with
+    // default values. create() is used to return a FinampSettings with
+    // downloadLocations.
+    required this.downloadLocations,
+    this.androidStopForegroundOnPause =
+        DefaultSettings.androidStopForegroundOnPause,
+    required this.showTabs,
+    this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
+    this.sortBy = SortBy.sortName,
+    this.sortOrder = SortOrder.ascending,
+    this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
+    this.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive,
+    this.volumeNormalizationIOSBaseGain =
+        DefaultSettings.volumeNormalizationIOSBaseGain,
+    this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
+    this.contentViewType = DefaultSettings.contentViewType,
+    this.playbackSpeedVisibility = DefaultSettings.playbackSpeedVisibility,
+    this.contentGridViewCrossAxisCountPortrait =
+        DefaultSettings.contentGridViewCrossAxisCountPortrait,
+    this.contentGridViewCrossAxisCountLandscape =
+        DefaultSettings.contentGridViewCrossAxisCountLandscape,
+    this.showTextOnGridView = DefaultSettings.showTextOnGridView,
+    this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
+    required this.downloadLocationsMap,
+    this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
+    this.playerScreenCoverMinimumPadding =
+        DefaultSettings.playerScreenCoverMinimumPadding,
+    this.showArtistsTopTracks = DefaultSettings.showArtistsTopTracks,
+    this.bufferDisableSizeConstraints =
+        DefaultSettings.bufferDisableSizeConstraints,
+    this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
+    this.bufferSizeMegabytes = DefaultSettings.bufferSizeMegabytes,
+    required this.tabSortBy,
+    required this.tabSortOrder,
+    this.loopMode = DefaultSettings.loopMode,
+    this.playbackSpeed = DefaultSettings.playbackSpeed,
+    this.tabOrder = DefaultSettings.tabOrder,
+    this.autoloadLastQueueOnStartup =
+        DefaultSettings.autoLoadLastQueueOnStartup,
+    this.hasCompletedDownloadsServiceMigration =
+        true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+    this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
+    this.onlyShowFullyDownloaded = DefaultSettings.onlyShowFullyDownloaded,
+    this.showDownloadsWithUnknownLibrary =
+        DefaultSettings.showDownloadsWithUnknownLibrary,
+    this.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads,
+    this.downloadWorkers = DefaultSettings.downloadWorkers,
+    this.resyncOnStartup = DefaultSettings.resyncOnStartup,
+    this.preferQuickSyncs = DefaultSettings.preferQuickSyncs,
+    this.hasCompletedIsarUserMigration =
+        true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
+    this.downloadTranscodingCodec,
+    this.downloadTranscodeBitrate,
+    this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
+    this.shouldRedownloadTranscodes =
+        DefaultSettings.shouldRedownloadTranscodes,
+    this.itemSwipeActionLeftToRight =
+        DefaultSettings.itemSwipeActionLeftToRight,
+    this.itemSwipeActionRightToLeft =
+        DefaultSettings.itemSwipeActionRightToLeft,
+    this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
+    this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
+    this.allowSplitScreen = DefaultSettings.allowSplitScreen,
+    this.splitScreenPlayerWidth = DefaultSettings.splitScreenPlayerWidth,
+    this.enableVibration = DefaultSettings.enableVibration,
+    this.prioritizeCoverFactor = DefaultSettings.prioritizeCoverFactor,
+    this.suppressPlayerPadding = DefaultSettings.suppressPlayerPadding,
+    this.hidePlayerBottomActions = DefaultSettings.hidePlayerBottomActions,
+    this.reportQueueToServer = DefaultSettings.reportQueueToServer,
+    this.periodicPlaybackSessionUpdateFrequencySeconds =
+        DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+    this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
+    this.playOnReconnectionDelay = DefaultSettings.playOnReconnectionDelay,
+    this.enablePlayon = DefaultSettings.enablePlayon,
+    this.currentVolume = DefaultSettings.currentVolume,
+    this.showArtistChipImage = DefaultSettings.showArtistChipImage,
+    this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
+    this.showProgressOnNowPlayingBar =
+        DefaultSettings.showProgressOnNowPlayingBar,
+    this.startInstantMixForIndividualTracks =
+        DefaultSettings.startInstantMixForIndividualTracks,
+    this.showLyricsTimestamps = DefaultSettings.showLyricsTimestamps,
+    this.lyricsAlignment = DefaultSettings.lyricsAlignment,
+    this.lyricsFontSize = DefaultSettings.lyricsFontSize,
+    this.showLyricsScreenAlbumPrelude =
+        DefaultSettings.showLyricsScreenAlbumPrelude,
+    this.showStopButtonOnMediaNotification =
+        DefaultSettings.showStopButtonOnMediaNotification,
+    this.showShuffleButtonOnMediaNotification =
+        DefaultSettings.showShuffleButtonOnMediaNotification,
+    this.showFavoriteButtonOnMediaNotification =
+        DefaultSettings.showFavoriteButtonOnMediaNotification,
+    this.showSeekControlsOnMediaNotification =
+        DefaultSettings.showSeekControlsOnMediaNotification,
+    this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
+    this.keepScreenOnWhilePluggedIn =
+        DefaultSettings.keepScreenOnWhilePluggedIn,
+    this.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration,
+    this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
+    this.hasDownloadedPlaylistInfo = DefaultSettings.hasDownloadedPlaylistInfo,
+    this.transcodingStreamingFormat =
+        DefaultSettings.transcodingStreamingFormat,
+    this.downloadSizeWarningCutoff = DefaultSettings.downloadSizeWarningCutoff,
+    this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
+    this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
+    this.showAlbumReleaseDateOnPlayerScreen =
+        DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
+    this.releaseDateFormat = DefaultSettings.releaseDateFormat,
+    this.artistListType = DefaultSettings.artistListType,
+    this.autoOffline = DefaultSettings.autoOffline,
+    this.autoOfflineListenerActive = DefaultSettings.autoOfflineListenerActive,
+    this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
+    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
+    this.autoReloadQueue = DefaultSettings.autoReloadQueue,
+  });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
   bool isOffline;
@@ -299,6 +338,8 @@ class FinampSettings {
   @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
   @HiveField(5)
+  @FinampSetterIgnore(
+      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<TabContentType, bool> showTabs;
 
   /// Used to remember if the user has set their music screen to favourites
@@ -346,7 +387,8 @@ class FinampSettings {
   int sleepTimerSeconds;
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
-  @FinampSetterIgnore()
+  @FinampSetterIgnore(
+      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
@@ -360,11 +402,13 @@ class FinampSettings {
   bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: <TabContentType, SortBy>{})
-  @FinampSetterIgnore()
+  @FinampSetterIgnore(
+      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<TabContentType, SortBy> tabSortBy;
 
   @HiveField(21, defaultValue: <TabContentType, SortOrder>{})
-  @FinampSetterIgnore()
+  @FinampSetterIgnore(
+      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<TabContentType, SortOrder> tabSortOrder;
 
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)
@@ -596,6 +640,17 @@ class FinampSettings {
 
   @HiveField(96, defaultValue: DefaultSettings.enablePlayon)
   bool enablePlayon;
+
+  @HiveField(97, defaultValue: DefaultSettings.autoReloadQueue)
+  bool autoReloadQueue;
+
+  @HiveField(98,
+      defaultValue: DefaultSettings.showShuffleButtonOnMediaNotification)
+  bool showShuffleButtonOnMediaNotification;
+
+  @HiveField(99,
+      defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
+  bool showFavoriteButtonOnMediaNotification;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1909,6 +1964,12 @@ class FinampQueueInfo {
       previousTracks.length + (currentTrack == null ? 0 : 1);
   int get remainingTrackCount => nextUp.length + queue.length;
   int get trackCount => currentTrackIndex + remainingTrackCount;
+  List<FinampQueueItem> get fullQueue => CombinedIterableView([
+        previousTracks,
+        currentTrack != null ? [currentTrack!] : <FinampQueueItem>[],
+        nextUp,
+        queue
+      ]).toList(growable: false);
 
   /// Remaining duration of queue.  Does not consider position in current track.
   Duration get remainingDuration {
@@ -1921,15 +1982,17 @@ class FinampQueueInfo {
 
   Duration get totalDuration {
     var total = 0;
-    for (var item in CombinedIterableView([
-      previousTracks,
-      [currentTrack],
-      nextUp,
-      queue
-    ])) {
+    for (var item in fullQueue) {
       total += item?.item.duration?.inMicroseconds ?? 0;
     }
     return Duration(microseconds: total);
+  }
+
+  int get undownloadedTracks {
+    return fullQueue
+        .where(
+            (e) => e.item.extras?["android.media.extra.DOWNLOAD_STATUS"] != 2)
+        .length;
   }
 }
 

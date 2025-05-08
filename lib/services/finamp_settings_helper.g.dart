@@ -50,13 +50,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setShowTabs(Map<TabContentType, bool> newShowTabs) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.showTabs = newShowTabs;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setOnlyShowFavourites(bool newOnlyShowFavourites) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.onlyShowFavourites = newOnlyShowFavourites;
@@ -680,6 +673,31 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAutoReloadQueue(bool newAutoReloadQueue) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoReloadQueue = newAutoReloadQueue;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setShowShuffleButtonOnMediaNotification(
+      bool newShowShuffleButtonOnMediaNotification) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showShuffleButtonOnMediaNotification =
+        newShowShuffleButtonOnMediaNotification;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setShowFavoriteButtonOnMediaNotification(
+      bool newShowFavoriteButtonOnMediaNotification) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showFavoriteButtonOnMediaNotification =
+        newShowFavoriteButtonOnMediaNotification;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -702,8 +720,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get androidStopForegroundOnPause =>
       finampSettingsProvider
           .select((value) => value.requireValue.androidStopForegroundOnPause);
-  ProviderListenable<Map<TabContentType, bool>> get showTabs =>
-      finampSettingsProvider.select((value) => value.requireValue.showTabs);
   ProviderListenable<bool> get onlyShowFavourites => finampSettingsProvider
       .select((value) => value.requireValue.onlyShowFavourites);
   ProviderListenable<SortBy> get sortBy =>
@@ -909,6 +925,14 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       .select((value) => value.requireValue.playOnReconnectionDelay);
   ProviderListenable<bool> get enablePlayon =>
       finampSettingsProvider.select((value) => value.requireValue.enablePlayon);
+  ProviderListenable<bool> get autoReloadQueue => finampSettingsProvider
+      .select((value) => value.requireValue.autoReloadQueue);
+  ProviderListenable<bool> get showShuffleButtonOnMediaNotification =>
+      finampSettingsProvider.select(
+          (value) => value.requireValue.showShuffleButtonOnMediaNotification);
+  ProviderListenable<bool> get showFavoriteButtonOnMediaNotification =>
+      finampSettingsProvider.select(
+          (value) => value.requireValue.showFavoriteButtonOnMediaNotification);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

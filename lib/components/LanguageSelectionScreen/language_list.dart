@@ -19,7 +19,7 @@ class _LanguageListState extends State<LanguageList> {
   // (sorts locales without having to copy them into a list first)
   final locales = SplayTreeMap<String?, Locale>.fromIterable(
     AppLocalizations.supportedLocales,
-    key: (element) => (element as Locale).defaultDisplayLanguage,
+    key: (element) => (element as Locale).toLanguageTag(),
     value: (element) => element as Locale,
   );
 
@@ -73,13 +73,13 @@ class LanguageListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RadioListTile<Locale?>(
-      title: Text(locale?.nativeDisplayLanguage ??
+      title: Text(locale?.nativeDisplayLanguageScript ??
           AppLocalizations.of(context)!.system),
       subtitle: locale != null
           ? Text(
               LocaleHelper.locale != null
-                  ? locale!.displayLanguageIn(LocaleHelper.locale!)
-                  : locale!.defaultDisplayLanguage,
+                  ? "${locale!.displayLanguageScriptIn(LocaleHelper.locale!)}${locale!.countryCode != null ? " (${locale!.displayCountryIn(LocaleHelper.locale!)})" : ""}"
+                  : "${locale!.defaultDisplayLanguageScript}${locale!.countryCode != null ? " (${locale!.defaultDisplayCountry})" : ""}",
             )
           : null,
       value: locale,

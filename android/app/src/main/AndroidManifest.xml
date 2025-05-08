@@ -15,6 +15,7 @@
     android:name="${applicationName}"
     android:label="@string/app_name"
     android:icon="@mipmap/ic_launcher"
+    android:localeConfig="@xml/locales_config"
     android:appCategory="audio"
     android:usesCleartextTraffic="true"
     android:requestLegacyExternalStorage="true"
