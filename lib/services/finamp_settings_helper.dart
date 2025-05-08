@@ -51,27 +51,6 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setShowTab(TabContentType tabContentType, bool value) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showTabs[tabContentType] = value;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setSortBy(TabContentType tabType, SortBy sortBy) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.tabSortBy[tabType] = sortBy;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setSortOrder(TabContentType tabType, SortOrder sortOrder) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.tabSortOrder[tabType] = sortOrder;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void overwriteFinampSettings(FinampSettings newFinampSettings) {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", newFinampSettings);
@@ -221,8 +200,7 @@ class FinampSettingsHelper {
         seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
     FinampSetters.setAutoloadLastQueueOnStartup(
         DefaultSettings.autoLoadLastQueueOnStartup);
-    FinampSetters.setAutoReloadQueue(
-      DefaultSettings.autoReloadQueue);
+    FinampSetters.setAutoReloadQueue(DefaultSettings.autoReloadQueue);
   }
 
   static void resetPlaybackReportingSettings() {
@@ -273,12 +251,11 @@ class FinampSettingsHelper {
 
   static void resetNetworkSettings() {
     GetIt.instance<FinampUserHelper>().currentUser?.update(
-      newIsLocal: DefaultSettings.isLocal,
-      newHomeAddress: DefaultSettings.homeNetworkAddress,
-      newPreferHomeNetwork: DefaultSettings.preferHomeNetwork,
-    );
+          newIsLocal: DefaultSettings.isLocal,
+          newHomeAddress: DefaultSettings.homeNetworkAddress,
+          newPreferHomeNetwork: DefaultSettings.preferHomeNetwork,
+        );
     FinampSetters.setAutoOffline(DefaultSettings.autoOffline);
-    
   }
 
   static void resetAllSettings() {

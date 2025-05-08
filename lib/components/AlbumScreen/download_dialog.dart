@@ -89,6 +89,9 @@ class DownloadDialog extends ConsumerStatefulWidget {
       );
       trackCount = artistChildren?.fold<int>(
           0, (count, item) => count + (item.childCount ?? 0));
+    } else if (item.baseItemType == BaseItemDtoType.track) {
+      children = [await jellyfinApiHelper.getItemById(BaseItemId(item.id))];
+      trackCount = 1;
     }
 
     if (!needTranscode &&

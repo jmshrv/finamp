@@ -323,15 +323,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // Propagate all events from the audio player to AudioService clients.
     int? replayQueueIndex;
     _player.playbackEventStream.listen((event) async {
-      if (_player.sequenceState?.sequence != null) {
+      if (!(_player.sequenceState?.sequence.isEmpty ?? true)) {
         if (event.currentIndex != replayQueueIndex) {
           replayQueueIndex = event.currentIndex;
           if (replayQueueIndex != null) {
             var queueItem =
                 // event.currentIndex is based on the original sequence, not the effectiveSequence
                 _player.sequenceState?.sequence[replayQueueIndex!].tag
-                    as FinampQueueItem;
-            _applyVolumeNormalization(queueItem.item);
+                    as FinampQueueItem?;
+            if (queueItem != null) {
+              _applyVolumeNormalization(queueItem.item);
+            }
           }
         }
       }

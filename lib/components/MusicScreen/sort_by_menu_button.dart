@@ -27,15 +27,15 @@ class SortByMenuButton extends ConsumerWidget {
             child: Text(
               sortBy.toLocalisedString(context),
               style: TextStyle(
-                color: ref.watch(finampSettingsProvider.select(
-                        (x) => x.requireValue.getTabSortBy(tabType) == sortBy))
+                color: ref.watch(finampSettingsProvider.tabSortBy(tabType)) ==
+                        sortBy
                     ? Theme.of(context).colorScheme.secondary
                     : null,
               ),
             ),
           )
       ],
-      onSelected: (value) => FinampSettingsHelper.setSortBy(tabType, value),
+      onSelected: (value) => FinampSetters.setTabSortBy(tabType, value),
     );
   }
 }

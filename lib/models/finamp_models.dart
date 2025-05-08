@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
@@ -15,6 +16,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+
 import '../builders/annotations.dart';
 import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
@@ -322,6 +324,7 @@ class FinampSettings {
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
     this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
     this.autoReloadQueue = DefaultSettings.autoReloadQueue,
+    this.screenSize,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -337,9 +340,9 @@ class FinampSettings {
 
   @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
+
   @HiveField(5)
-  @FinampSetterIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "value")
   Map<TabContentType, bool> showTabs;
 
   /// Used to remember if the user has set their music screen to favourites
@@ -387,7 +390,7 @@ class FinampSettings {
   int sleepTimerSeconds;
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
-  @FinampSetterIgnore(
+  @SettingsHelperIgnore(
       "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<String, DownloadLocation> downloadLocationsMap;
 
@@ -402,13 +405,11 @@ class FinampSettings {
   bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: <TabContentType, SortBy>{})
-  @FinampSetterIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "sortBy")
   Map<TabContentType, SortBy> tabSortBy;
 
   @HiveField(21, defaultValue: <TabContentType, SortOrder>{})
-  @FinampSetterIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "sortOrder")
   Map<TabContentType, SortOrder> tabSortOrder;
 
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)
@@ -651,6 +652,9 @@ class FinampSettings {
   @HiveField(99,
       defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
   bool showFavoriteButtonOnMediaNotification;
+
+  @HiveField(100)
+  ScreenSize? screenSize;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1983,7 +1987,7 @@ class FinampQueueInfo {
   Duration get totalDuration {
     var total = 0;
     for (var item in fullQueue) {
-      total += item?.item.duration?.inMicroseconds ?? 0;
+      total += item.item.duration?.inMicroseconds ?? 0;
     }
     return Duration(microseconds: total);
   }
@@ -2906,4 +2910,31 @@ class FinampOutputRoute {
   String toString() {
     return jsonEncode(toJson());
   }
+}
+
+@HiveType(typeId: 94)
+class ScreenSize {
+  ScreenSize(this.sizeX, this.sizeY, this.locationX, this.locationY);
+
+  ScreenSize.from(Size size, Offset location)
+      : sizeX = size.width,
+        sizeY = size.height,
+        locationX = location.dx,
+        locationY = location.dy;
+
+  Size get size => Size(sizeX, sizeY);
+
+  Offset get location => Offset(locationX, locationY);
+
+  @HiveField(1)
+  double sizeX;
+
+  @HiveField(2)
+  double sizeY;
+
+  @HiveField(3)
+  double locationX;
+
+  @HiveField(4)
+  double locationY;
 }

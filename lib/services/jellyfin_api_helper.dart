@@ -4,11 +4,13 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
+import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/io_client.dart' as http;
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,7 +21,6 @@ import 'downloads_service.dart';
 import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
-import 'package:http/io_client.dart' as http;
 import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
@@ -108,6 +109,26 @@ class JellyfinApiHelper {
     throw output as Object;
   }
 
+  // Keeping this code in the main getItems function causes unsendable items to be captured by the background lambda
+  // due to a limitation of dart's context analysis
+  Future<List<BaseItemDto>> _getItemsSliced(
+      List<BaseItemId> itemIds, String fields) async {
+    List<BaseItemDto> output = [];
+    // Limit itemIds per request to 200.  Execute up to 10 requests in parallel.
+    for (final slice in itemIds.slices(2000)) {
+      final futures = slice
+          .slices(200)
+          .map((subSlice) => getItems(itemIds: subSlice, fields: fields));
+      final results = await Future.wait(futures);
+      for (var subSliceResult in results) {
+        if (subSliceResult != null) {
+          output.addAll(subSliceResult);
+        }
+      }
+    }
+    return output;
+  }
+
   Future<List<BaseItemDto>?> getItems({
     BaseItemDto? parentItem,
     String? includeItemTypes,
@@ -141,6 +162,10 @@ class JellyfinApiHelper {
     fields ??=
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     recursive ??= true;
+
+    if ((itemIds?.length ?? 0) > 200) {
+      return _getItemsSliced(itemIds!, fields);
+    }
 
     if (parentItem != null) {
       _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
@@ -606,8 +631,8 @@ class JellyfinApiHelper {
     _getItemByIdBatchedFuture ??=
         Future.delayed(const Duration(milliseconds: 250), () async {
       _getItemByIdBatchedFuture = null;
-      var ids = _getItemByIdBatchedRequests.take(200).toList();
-      _getItemByIdBatchedRequests.removeAll(ids);
+      var ids = _getItemByIdBatchedRequests.toList();
+      _getItemByIdBatchedRequests.clear();
       var items = await getItems(itemIds: ids, fields: fields) ?? [];
       return Map.fromIterable(items, key: (e) => (e as BaseItemDto).id);
     });
@@ -835,18 +860,17 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.warning("User has completed logout.");
     }
   }
+
   Future<bool> _pingSpecificServer(String url) async {
     final client = ChopperClient(
         baseUrl: Uri.tryParse(url),
-        client: http.IOClient(HttpClient()
-              ..connectionTimeout = const Duration(
-                  seconds: 3)),
+        client: http.IOClient(
+            HttpClient()..connectionTimeout = const Duration(seconds: 3)),
         interceptors: [
           jellyfin_api.JellyfinSpecificInterceptor(url),
           HttpAggregateLoggingInterceptor()
         ],
-        converter: JsonConverter()
-    );
+        converter: JsonConverter());
 
     final Request $request = Request(
       'GET',
@@ -855,7 +879,8 @@ class JellyfinApiHelper {
     );
 
     try {
-      Response<dynamic> response = await client.send<dynamic, dynamic>($request);
+      Response<dynamic> response =
+          await client.send<dynamic, dynamic>($request);
       if (response.statusCode != 200) return false;
       final body = response.bodyOrThrow as Map<String, dynamic>;
       // If IsInNetwork doesn't exist -> catch
@@ -872,6 +897,7 @@ class JellyfinApiHelper {
     if (user == null) return false;
     return await _pingSpecificServer(user.homeAddress);
   }
+
   Future<bool> pingPublicServer() async {
     FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
     if (user == null) return false;

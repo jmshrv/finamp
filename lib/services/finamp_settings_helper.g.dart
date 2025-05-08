@@ -33,14 +33,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setDownloadLocations(
-      List<DownloadLocation> newDownloadLocations) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.downloadLocations = newDownloadLocations;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setAndroidStopForegroundOnPause(
       bool newAndroidStopForegroundOnPause) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
@@ -50,23 +42,16 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setShowTabs(TabContentType tabContentType, bool value) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.showTabs[tabContentType] = value;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setOnlyShowFavourites(bool newOnlyShowFavourites) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.onlyShowFavourites = newOnlyShowFavourites;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setSortBy(SortBy newSortBy) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.sortBy = newSortBy;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setSortOrder(SortOrder newSortOrder) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.sortOrder = newSortOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -134,6 +119,21 @@ extension FinampSetters on FinampSettingsHelper {
   static void setDisableGesture(bool newDisableGesture) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.disableGesture = newDisableGesture;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setTabSortBy(TabContentType tabContentType, SortBy sortBy) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.tabSortBy[tabContentType] = sortBy;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setTabSortOrder(
+      TabContentType tabContentType, SortOrder sortOrder) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.tabSortOrder[tabContentType] = sortOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -698,6 +698,13 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setScreenSize(ScreenSize? newScreenSize) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.screenSize = newScreenSize;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -714,18 +721,14 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       .select((value) => value.requireValue.shouldTranscode);
   ProviderListenable<int> get transcodeBitrate => finampSettingsProvider
       .select((value) => value.requireValue.transcodeBitrate);
-  ProviderListenable<List<DownloadLocation>> get downloadLocations =>
-      finampSettingsProvider
-          .select((value) => value.requireValue.downloadLocations);
   ProviderListenable<bool> get androidStopForegroundOnPause =>
       finampSettingsProvider
           .select((value) => value.requireValue.androidStopForegroundOnPause);
+  ProviderListenable<bool?> showTabs(TabContentType tabContentType) =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.showTabs[tabContentType]);
   ProviderListenable<bool> get onlyShowFavourites => finampSettingsProvider
       .select((value) => value.requireValue.onlyShowFavourites);
-  ProviderListenable<SortBy> get sortBy =>
-      finampSettingsProvider.select((value) => value.requireValue.sortBy);
-  ProviderListenable<SortOrder> get sortOrder =>
-      finampSettingsProvider.select((value) => value.requireValue.sortOrder);
   ProviderListenable<int> get trackShuffleItemCount => finampSettingsProvider
       .select((value) => value.requireValue.trackShuffleItemCount);
   ProviderListenable<ContentViewType> get contentViewType =>
@@ -747,6 +750,12 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       .select((value) => value.requireValue.bufferDurationSeconds);
   ProviderListenable<bool> get disableGesture => finampSettingsProvider
       .select((value) => value.requireValue.disableGesture);
+  ProviderListenable<SortBy?> tabSortBy(TabContentType tabContentType) =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.tabSortBy[tabContentType]);
+  ProviderListenable<SortOrder?> tabSortOrder(TabContentType tabContentType) =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.tabSortOrder[tabContentType]);
   ProviderListenable<List<TabContentType>> get tabOrder =>
       finampSettingsProvider.select((value) => value.requireValue.tabOrder);
   ProviderListenable<bool> get showFastScroller => finampSettingsProvider
@@ -933,6 +942,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get showFavoriteButtonOnMediaNotification =>
       finampSettingsProvider.select(
           (value) => value.requireValue.showFavoriteButtonOnMediaNotification);
+  ProviderListenable<ScreenSize?> get screenSize =>
+      finampSettingsProvider.select((value) => value.requireValue.screenSize);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);
