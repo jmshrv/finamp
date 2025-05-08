@@ -543,6 +543,9 @@ abstract class JellyfinApi extends ChopperService {
   @Post(path: "/Sessions/Logout", optionalBody: true)
   Future<Response<dynamic>> logout();
 
+  @Get(path: "/System/Endpoint", optionalBody: true)
+  Future<Response<dynamic>> pingServer();
+
   static JellyfinApi create(bool inForeground) {
     final chopperHttpLogLevel = Level
         .body; //TODO allow changing the log level in settings (and a debug config file?)
@@ -596,7 +599,7 @@ class JellyfinInterceptor implements Interceptor {
     // If baseUrlTemp is null, use the baseUrl of the current user.
     // If baseUrlTemp is set, we're setting up a new user and should use it instead.
     Uri baseUri =
-        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
+        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseURL);
 
     // Add the request path on to the baseUrl
     baseUri = baseUri.replace(
@@ -608,6 +611,36 @@ class JellyfinInterceptor implements Interceptor {
       headers: {
         "Content-Type": "application/json",
         "Authorization": authHeader,
+      },
+    );
+  }
+}
+
+/// Interceptor for just the local address
+class JellyfinSpecificInterceptor implements Interceptor {
+  JellyfinSpecificInterceptor(this.url);
+
+  final String url;
+  
+  @override
+  FutureOr<Response<BodyType>> intercept<BodyType>(
+      Chain<BodyType> chain) async {
+    return await chain.proceed(updateRequest(chain.request));
+  }
+
+  Request updateRequest(Request request) {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+    Uri baseUri = Uri.parse(url);
+    baseUri = baseUri.replace(
+        pathSegments:
+            baseUri.pathSegments.followedBy(request.uri.pathSegments));
+
+    return request.copyWith(
+      uri: baseUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": finampUserHelper.authorizationHeader,
       },
     );
   }

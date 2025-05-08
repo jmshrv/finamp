@@ -48,6 +48,7 @@ class _AudioServiceSettingsScreenState
           BufferDurationListTile(key: _updateChildren),
           BufferDisableSizeConstraintsSelector(key: _updateChildren),
           const LoadQueueOnStartupSelector(),
+          const AutoReloadQueueToggle(),
         ],
       ),
     );
@@ -190,6 +191,20 @@ class _AudioFadeOutDurationListTileState
           },
         ),
       ),
+    );
+  }
+}
+
+class AutoReloadQueueToggle extends ConsumerWidget {
+  const AutoReloadQueueToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.autoReloadQueueTitle),
+      subtitle: Text(AppLocalizations.of(context)!.autoReloadQueueSubtitle),
+      value: ref.watch(finampSettingsProvider.autoReloadQueue),
+      onChanged: FinampSetters.setAutoReloadQueue,
     );
   }
 }

@@ -8,7 +8,7 @@ part of 'finamp_models.dart';
 
 class FinampUserAdapter extends TypeAdapter<FinampUser> {
   @override
-  final int typeId = 8;
+  final typeId = 8;
 
   @override
   FinampUser read(BinaryReader reader) {
@@ -18,7 +18,11 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
     };
     return FinampUser(
       id: fields[0] as String,
-      baseUrl: fields[1] as String,
+      publicAddress: fields[1] as String,
+      homeAddress:
+          fields[7] == null ? 'http://0.0.0.0:8096' : fields[7] as String,
+      preferHomeNetwork: fields[9] == null ? false : fields[9] as bool,
+      isLocal: fields[8] == null ? false : fields[8] as bool,
       accessToken: fields[2] as String,
       serverId: fields[3] as String,
       currentViewId: fields[4] as BaseItemId?,
@@ -31,11 +35,11 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
   @override
   void write(BinaryWriter writer, FinampUser obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.baseUrl)
+      ..write(obj.publicAddress)
       ..writeByte(2)
       ..write(obj.accessToken)
       ..writeByte(3)
@@ -43,7 +47,13 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
       ..writeByte(4)
       ..write(obj.currentViewId)
       ..writeByte(5)
-      ..write(obj.views);
+      ..write(obj.views)
+      ..writeByte(7)
+      ..write(obj.homeAddress)
+      ..writeByte(8)
+      ..write(obj.isLocal)
+      ..writeByte(9)
+      ..write(obj.preferHomeNetwork);
   }
 
   @override
@@ -59,7 +69,7 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
 
 class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
-  final int typeId = 28;
+  final typeId = 28;
 
   @override
   FinampSettings read(BinaryReader reader) {
@@ -195,6 +205,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[71] == null ? true : fields[71] as bool,
       showStopButtonOnMediaNotification:
           fields[68] == null ? false : fields[68] as bool,
+      showShuffleButtonOnMediaNotification:
+          fields[98] == null ? true : fields[98] as bool,
+      showFavoriteButtonOnMediaNotification:
+          fields[99] == null ? true : fields[99] as bool,
       showSeekControlsOnMediaNotification:
           fields[69] == null ? true : fields[69] as bool,
       keepScreenOnOption: fields[72] == null
@@ -231,6 +245,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[86] == null ? Duration.zero : fields[86] as Duration,
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
+      autoReloadQueue: fields[97] == null ? false : fields[97] as bool,
+      screenSize: fields[100] as ScreenSize?,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -241,7 +257,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(91)
+      ..writeByte(95)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -423,7 +439,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(95)
       ..write(obj.playOnReconnectionDelay)
       ..writeByte(96)
-      ..write(obj.enablePlayon);
+      ..write(obj.enablePlayon)
+      ..writeByte(97)
+      ..write(obj.autoReloadQueue)
+      ..writeByte(98)
+      ..write(obj.showShuffleButtonOnMediaNotification)
+      ..writeByte(99)
+      ..write(obj.showFavoriteButtonOnMediaNotification)
+      ..writeByte(100)
+      ..write(obj.screenSize);
   }
 
   @override
@@ -439,7 +463,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
 
 class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
   @override
-  final int typeId = 31;
+  final typeId = 31;
 
   @override
   DownloadLocation read(BinaryReader reader) {
@@ -490,7 +514,7 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
 
 class DownloadedTrackAdapter extends TypeAdapter<DownloadedTrack> {
   @override
-  final int typeId = 3;
+  final typeId = 3;
 
   @override
   DownloadedTrack read(BinaryReader reader) {
@@ -548,7 +572,7 @@ class DownloadedTrackAdapter extends TypeAdapter<DownloadedTrack> {
 
 class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
   @override
-  final int typeId = 4;
+  final typeId = 4;
 
   @override
   DownloadedParent read(BinaryReader reader) {
@@ -588,7 +612,7 @@ class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
 
 class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
   @override
-  final int typeId = 40;
+  final typeId = 40;
 
   @override
   DownloadedImage read(BinaryReader reader) {
@@ -634,7 +658,7 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
 
 class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
   @override
-  final int typeId = 43;
+  final typeId = 43;
 
   @override
   OfflineListen read(BinaryReader reader) {
@@ -689,7 +713,7 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
 
 class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
   @override
-  final int typeId = 54;
+  final typeId = 54;
 
   @override
   QueueItemSource read(BinaryReader reader) {
@@ -735,7 +759,7 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
 
 class QueueItemSourceNameAdapter extends TypeAdapter<QueueItemSourceName> {
   @override
-  final int typeId = 56;
+  final typeId = 56;
 
   @override
   QueueItemSourceName read(BinaryReader reader) {
@@ -775,7 +799,7 @@ class QueueItemSourceNameAdapter extends TypeAdapter<QueueItemSourceName> {
 
 class FinampQueueItemAdapter extends TypeAdapter<FinampQueueItem> {
   @override
-  final int typeId = 57;
+  final typeId = 57;
 
   @override
   FinampQueueItem read(BinaryReader reader) {
@@ -819,7 +843,7 @@ class FinampQueueItemAdapter extends TypeAdapter<FinampQueueItem> {
 
 class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
   @override
-  final int typeId = 58;
+  final typeId = 58;
 
   @override
   FinampQueueOrder read(BinaryReader reader) {
@@ -864,7 +888,7 @@ class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
 
 class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
   @override
-  final int typeId = 59;
+  final typeId = 59;
 
   @override
   FinampQueueInfo read(BinaryReader reader) {
@@ -916,7 +940,7 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
 
 class FinampHistoryItemAdapter extends TypeAdapter<FinampHistoryItem> {
   @override
-  final int typeId = 60;
+  final typeId = 60;
 
   @override
   FinampHistoryItem read(BinaryReader reader) {
@@ -957,7 +981,7 @@ class FinampHistoryItemAdapter extends TypeAdapter<FinampHistoryItem> {
 class FinampStorableQueueInfoAdapter
     extends TypeAdapter<FinampStorableQueueInfo> {
   @override
-  final int typeId = 61;
+  final typeId = 61;
 
   @override
   FinampStorableQueueInfo read(BinaryReader reader) {
@@ -1009,7 +1033,7 @@ class FinampStorableQueueInfoAdapter
 
 class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
   @override
-  final int typeId = 69;
+  final typeId = 69;
 
   @override
   MediaItemId read(BinaryReader reader) {
@@ -1053,7 +1077,7 @@ class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
 class FinampFeatureChipsConfigurationAdapter
     extends TypeAdapter<FinampFeatureChipsConfiguration> {
   @override
-  final int typeId = 75;
+  final typeId = 75;
 
   @override
   FinampFeatureChipsConfiguration read(BinaryReader reader) {
@@ -1090,7 +1114,7 @@ class FinampFeatureChipsConfigurationAdapter
 
 class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
   @override
-  final int typeId = 76;
+  final typeId = 76;
 
   @override
   DeviceInfo read(BinaryReader reader) {
@@ -1125,9 +1149,52 @@ class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
           typeId == other.typeId;
 }
 
+class ScreenSizeAdapter extends TypeAdapter<ScreenSize> {
+  @override
+  final typeId = 94;
+
+  @override
+  ScreenSize read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ScreenSize(
+      (fields[1] as num).toDouble(),
+      (fields[2] as num).toDouble(),
+      (fields[3] as num).toDouble(),
+      (fields[4] as num).toDouble(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ScreenSize obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(1)
+      ..write(obj.sizeX)
+      ..writeByte(2)
+      ..write(obj.sizeY)
+      ..writeByte(3)
+      ..write(obj.locationX)
+      ..writeByte(4)
+      ..write(obj.locationY);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScreenSizeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
   @override
-  final int typeId = 36;
+  final typeId = 36;
 
   @override
   TabContentType read(BinaryReader reader) {
@@ -1176,7 +1243,7 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
 
 class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
   @override
-  final int typeId = 39;
+  final typeId = 39;
 
   @override
   ContentViewType read(BinaryReader reader) {
@@ -1213,7 +1280,7 @@ class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
 
 class FinampPlaybackOrderAdapter extends TypeAdapter<FinampPlaybackOrder> {
   @override
-  final int typeId = 50;
+  final typeId = 50;
 
   @override
   FinampPlaybackOrder read(BinaryReader reader) {
@@ -1250,7 +1317,7 @@ class FinampPlaybackOrderAdapter extends TypeAdapter<FinampPlaybackOrder> {
 
 class FinampLoopModeAdapter extends TypeAdapter<FinampLoopMode> {
   @override
-  final int typeId = 51;
+  final typeId = 51;
 
   @override
   FinampLoopMode read(BinaryReader reader) {
@@ -1291,7 +1358,7 @@ class FinampLoopModeAdapter extends TypeAdapter<FinampLoopMode> {
 
 class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
   @override
-  final int typeId = 52;
+  final typeId = 52;
 
   @override
   QueueItemSourceType read(BinaryReader reader) {
@@ -1408,7 +1475,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
 
 class QueueItemQueueTypeAdapter extends TypeAdapter<QueueItemQueueType> {
   @override
-  final int typeId = 53;
+  final typeId = 53;
 
   @override
   QueueItemQueueType read(BinaryReader reader) {
@@ -1454,7 +1521,7 @@ class QueueItemQueueTypeAdapter extends TypeAdapter<QueueItemQueueType> {
 class QueueItemSourceNameTypeAdapter
     extends TypeAdapter<QueueItemSourceNameType> {
   @override
-  final int typeId = 55;
+  final typeId = 55;
 
   @override
   QueueItemSourceNameType read(BinaryReader reader) {
@@ -1523,7 +1590,7 @@ class QueueItemSourceNameTypeAdapter
 
 class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
   @override
-  final int typeId = 62;
+  final typeId = 62;
 
   @override
   SavedQueueState read(BinaryReader reader) {
@@ -1577,7 +1644,7 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
 class VolumeNormalizationModeAdapter
     extends TypeAdapter<VolumeNormalizationMode> {
   @override
-  final int typeId = 63;
+  final typeId = 63;
 
   @override
   VolumeNormalizationMode read(BinaryReader reader) {
@@ -1618,7 +1685,7 @@ class VolumeNormalizationModeAdapter
 
 class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
   @override
-  final int typeId = 64;
+  final typeId = 64;
 
   @override
   DownloadLocationType read(BinaryReader reader) {
@@ -1676,7 +1743,7 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
 class FinampTranscodingCodecAdapter
     extends TypeAdapter<FinampTranscodingCodec> {
   @override
-  final int typeId = 65;
+  final typeId = 65;
 
   @override
   FinampTranscodingCodec read(BinaryReader reader) {
@@ -1722,7 +1789,7 @@ class FinampTranscodingCodecAdapter
 class TranscodeDownloadsSettingAdapter
     extends TypeAdapter<TranscodeDownloadsSetting> {
   @override
-  final int typeId = 66;
+  final typeId = 66;
 
   @override
   TranscodeDownloadsSetting read(BinaryReader reader) {
@@ -1764,7 +1831,7 @@ class TranscodeDownloadsSettingAdapter
 class PlaybackSpeedVisibilityAdapter
     extends TypeAdapter<PlaybackSpeedVisibility> {
   @override
-  final int typeId = 67;
+  final typeId = 67;
 
   @override
   PlaybackSpeedVisibility read(BinaryReader reader) {
@@ -1805,7 +1872,7 @@ class PlaybackSpeedVisibilityAdapter
 
 class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
   @override
-  final int typeId = 68;
+  final typeId = 68;
 
   @override
   MediaItemParentType read(BinaryReader reader) {
@@ -1846,7 +1913,7 @@ class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
 
 class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
   @override
-  final int typeId = 70;
+  final typeId = 70;
 
   @override
   LyricsAlignment read(BinaryReader reader) {
@@ -1887,7 +1954,7 @@ class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
 
 class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
   @override
-  final int typeId = 71;
+  final typeId = 71;
 
   @override
   LyricsFontSize read(BinaryReader reader) {
@@ -1928,7 +1995,7 @@ class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
 
 class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
   @override
-  final int typeId = 72;
+  final typeId = 72;
 
   @override
   KeepScreenOnOption read(BinaryReader reader) {
@@ -1974,7 +2041,7 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
 class FinampTranscodingStreamingFormatAdapter
     extends TypeAdapter<FinampTranscodingStreamingFormat> {
   @override
-  final int typeId = 73;
+  final typeId = 73;
 
   @override
   FinampTranscodingStreamingFormat read(BinaryReader reader) {
@@ -2027,7 +2094,7 @@ class FinampTranscodingStreamingFormatAdapter
 
 class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
   @override
-  final int typeId = 74;
+  final typeId = 74;
 
   @override
   FinampFeatureChipType read(BinaryReader reader) {
@@ -2092,7 +2159,7 @@ class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
 
 class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
   @override
-  final int typeId = 77;
+  final typeId = 77;
 
   @override
   ReleaseDateFormat read(BinaryReader reader) {
@@ -2137,7 +2204,7 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
 
 class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
   @override
-  final int typeId = 78;
+  final typeId = 78;
 
   @override
   AutoOfflineOption read(BinaryReader reader) {
@@ -2178,7 +2245,7 @@ class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
 
 class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
   @override
-  final int typeId = 92;
+  final typeId = 92;
 
   @override
   ItemSwipeActions read(BinaryReader reader) {
@@ -2223,7 +2290,7 @@ class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
 
 class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
   @override
-  final int typeId = 93;
+  final typeId = 93;
 
   @override
   ArtistType read(BinaryReader reader) {
@@ -2278,28 +2345,48 @@ const FinampUserSchema = CollectionSchema(
       name: r'accessToken',
       type: IsarType.string,
     ),
-    r'baseUrl': PropertySchema(
+    r'baseURL': PropertySchema(
       id: 1,
+      name: r'baseURL',
+      type: IsarType.string,
+    ),
+    r'baseUrl': PropertySchema(
+      id: 2,
       name: r'baseUrl',
       type: IsarType.string,
     ),
     r'currentViewId': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'currentViewId',
       type: IsarType.string,
     ),
+    r'homeAddress': PropertySchema(
+      id: 4,
+      name: r'homeAddress',
+      type: IsarType.string,
+    ),
     r'id': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'id',
       type: IsarType.string,
     ),
+    r'isLocal': PropertySchema(
+      id: 6,
+      name: r'isLocal',
+      type: IsarType.bool,
+    ),
     r'isarViews': PropertySchema(
-      id: 4,
+      id: 7,
       name: r'isarViews',
       type: IsarType.string,
     ),
+    r'preferHomeNetwork': PropertySchema(
+      id: 8,
+      name: r'preferHomeNetwork',
+      type: IsarType.bool,
+    ),
     r'serverId': PropertySchema(
-      id: 5,
+      id: 9,
       name: r'serverId',
       type: IsarType.string,
     )
@@ -2325,13 +2412,15 @@ int _finampUserEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.accessToken.length * 3;
-  bytesCount += 3 + object.baseUrl.length * 3;
+  bytesCount += 3 + object.baseURL.length * 3;
+  bytesCount += 3 + object.publicAddress.length * 3;
   {
     final value = object.isarCurrentViewId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.homeAddress.length * 3;
   bytesCount += 3 + object.id.length * 3;
   bytesCount += 3 + object.isarViews.length * 3;
   bytesCount += 3 + object.serverId.length * 3;
@@ -2345,11 +2434,15 @@ void _finampUserSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.accessToken);
-  writer.writeString(offsets[1], object.baseUrl);
-  writer.writeString(offsets[2], object.isarCurrentViewId);
-  writer.writeString(offsets[3], object.id);
-  writer.writeString(offsets[4], object.isarViews);
-  writer.writeString(offsets[5], object.serverId);
+  writer.writeString(offsets[1], object.baseURL);
+  writer.writeString(offsets[2], object.publicAddress);
+  writer.writeString(offsets[3], object.isarCurrentViewId);
+  writer.writeString(offsets[4], object.homeAddress);
+  writer.writeString(offsets[5], object.id);
+  writer.writeBool(offsets[6], object.isLocal);
+  writer.writeString(offsets[7], object.isarViews);
+  writer.writeBool(offsets[8], object.preferHomeNetwork);
+  writer.writeString(offsets[9], object.serverId);
 }
 
 FinampUser _finampUserDeserialize(
@@ -2360,12 +2453,15 @@ FinampUser _finampUserDeserialize(
 ) {
   final object = FinampUser(
     accessToken: reader.readString(offsets[0]),
-    baseUrl: reader.readString(offsets[1]),
-    id: reader.readString(offsets[3]),
-    serverId: reader.readString(offsets[5]),
+    publicAddress: reader.readString(offsets[2]),
+    homeAddress: reader.readString(offsets[4]),
+    id: reader.readString(offsets[5]),
+    isLocal: reader.readBool(offsets[6]),
+    preferHomeNetwork: reader.readBool(offsets[8]),
+    serverId: reader.readString(offsets[9]),
   );
-  object.isarCurrentViewId = reader.readStringOrNull(offsets[2]);
-  object.isarViews = reader.readString(offsets[4]);
+  object.isarCurrentViewId = reader.readStringOrNull(offsets[3]);
+  object.isarViews = reader.readString(offsets[7]);
   return object;
 }
 
@@ -2381,12 +2477,20 @@ P _finampUserDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
-    case 3:
       return (reader.readString(offset)) as P;
+    case 3:
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readString(offset)) as P;
     case 5:
+      return (reader.readString(offset)) as P;
+    case 6:
+      return (reader.readBool(offset)) as P;
+    case 7:
+      return (reader.readString(offset)) as P;
+    case 8:
+      return (reader.readBool(offset)) as P;
+    case 9:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2622,7 +2726,140 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlEqualTo(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      baseURLGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'baseURL',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'baseURL',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'baseURL',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseURLIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'baseURL',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      baseURLIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'baseURL',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2636,7 +2873,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      baseUrlGreaterThan(
+      publicAddressGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2651,7 +2888,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlLessThan(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2666,7 +2904,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlBetween(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -2685,7 +2924,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlStartsWith(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2698,7 +2938,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlEndsWith(
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2711,9 +2952,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'baseUrl',
@@ -2723,9 +2963,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'baseUrl',
@@ -2735,7 +2974,8 @@ extension FinampUserQueryFilter
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> baseUrlIsEmpty() {
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      publicAddressIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'baseUrl',
@@ -2745,7 +2985,7 @@ extension FinampUserQueryFilter
   }
 
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
-      baseUrlIsNotEmpty() {
+      publicAddressIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'baseUrl',
@@ -2908,6 +3148,142 @@ extension FinampUserQueryFilter
     });
   }
 
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'homeAddress',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'homeAddress',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'homeAddress',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'homeAddress',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'homeAddress',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'homeAddress',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'homeAddress',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'homeAddress',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'homeAddress',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      homeAddressIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'homeAddress',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> idEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -3034,6 +3410,16 @@ extension FinampUserQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'id',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> isLocalEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isLocal',
+        value: value,
       ));
     });
   }
@@ -3225,6 +3611,16 @@ extension FinampUserQueryFilter
     });
   }
 
+  QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition>
+      preferHomeNetworkEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'preferHomeNetwork',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<FinampUser, FinampUser, QAfterFilterCondition> serverIdEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -3380,13 +3776,25 @@ extension FinampUserQuerySortBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByBaseUrl() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByBaseURL() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseURL', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByBaseURLDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseURL', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByPublicAddress() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'baseUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByBaseUrlDesc() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByPublicAddressDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'baseUrl', Sort.desc);
     });
@@ -3405,6 +3813,18 @@ extension FinampUserQuerySortBy
     });
   }
 
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByHomeAddress() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'homeAddress', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByHomeAddressDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'homeAddress', Sort.desc);
+    });
+  }
+
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -3417,6 +3837,18 @@ extension FinampUserQuerySortBy
     });
   }
 
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByIsLocal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isLocal', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByIsLocalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isLocal', Sort.desc);
+    });
+  }
+
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByIsarViews() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarViews', Sort.asc);
@@ -3426,6 +3858,19 @@ extension FinampUserQuerySortBy
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByIsarViewsDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isarViews', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> sortByPreferHomeNetwork() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'preferHomeNetwork', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy>
+      sortByPreferHomeNetworkDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'preferHomeNetwork', Sort.desc);
     });
   }
 
@@ -3456,13 +3901,25 @@ extension FinampUserQuerySortThenBy
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByBaseUrl() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByBaseURL() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseURL', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByBaseURLDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'baseURL', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByPublicAddress() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'baseUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByBaseUrlDesc() {
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByPublicAddressDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'baseUrl', Sort.desc);
     });
@@ -3481,6 +3938,18 @@ extension FinampUserQuerySortThenBy
     });
   }
 
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByHomeAddress() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'homeAddress', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByHomeAddressDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'homeAddress', Sort.desc);
+    });
+  }
+
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -3490,6 +3959,18 @@ extension FinampUserQuerySortThenBy
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByIsLocal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isLocal', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByIsLocalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isLocal', Sort.desc);
     });
   }
 
@@ -3517,6 +3998,19 @@ extension FinampUserQuerySortThenBy
     });
   }
 
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByPreferHomeNetwork() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'preferHomeNetwork', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QAfterSortBy>
+      thenByPreferHomeNetworkDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'preferHomeNetwork', Sort.desc);
+    });
+  }
+
   QueryBuilder<FinampUser, FinampUser, QAfterSortBy> thenByServerId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'serverId', Sort.asc);
@@ -3539,7 +4033,14 @@ extension FinampUserQueryWhereDistinct
     });
   }
 
-  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByBaseUrl(
+  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByBaseURL(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'baseURL', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByPublicAddress(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'baseUrl', caseSensitive: caseSensitive);
@@ -3554,6 +4055,13 @@ extension FinampUserQueryWhereDistinct
     });
   }
 
+  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByHomeAddress(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'homeAddress', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<FinampUser, FinampUser, QDistinct> distinctById(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -3561,10 +4069,23 @@ extension FinampUserQueryWhereDistinct
     });
   }
 
+  QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByIsLocal() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isLocal');
+    });
+  }
+
   QueryBuilder<FinampUser, FinampUser, QDistinct> distinctByIsarViews(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isarViews', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<FinampUser, FinampUser, QDistinct>
+      distinctByPreferHomeNetwork() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'preferHomeNetwork');
     });
   }
 
@@ -3590,7 +4111,13 @@ extension FinampUserQueryProperty
     });
   }
 
-  QueryBuilder<FinampUser, String, QQueryOperations> baseUrlProperty() {
+  QueryBuilder<FinampUser, String, QQueryOperations> baseURLProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'baseURL');
+    });
+  }
+
+  QueryBuilder<FinampUser, String, QQueryOperations> publicAddressProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'baseUrl');
     });
@@ -3603,15 +4130,33 @@ extension FinampUserQueryProperty
     });
   }
 
+  QueryBuilder<FinampUser, String, QQueryOperations> homeAddressProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'homeAddress');
+    });
+  }
+
   QueryBuilder<FinampUser, String, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
+  QueryBuilder<FinampUser, bool, QQueryOperations> isLocalProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isLocal');
+    });
+  }
+
   QueryBuilder<FinampUser, String, QQueryOperations> isarViewsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isarViews');
+    });
+  }
+
+  QueryBuilder<FinampUser, bool, QQueryOperations> preferHomeNetworkProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'preferHomeNetwork');
     });
   }
 

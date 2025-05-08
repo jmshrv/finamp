@@ -1,17 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auto_offline.dart';
+part of 'network_manager.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$autoOfflineHash() => r'ba8159fdd1c7d37be20bd6fe3e2697ae6ff81672';
+String _$autoOfflineHash() => r'fb1341622d098a50a475caa104505c99df623dc3';
 
 /// See also [AutoOffline].
 @ProviderFor(AutoOffline)
 final autoOfflineProvider =
-    AutoDisposeNotifierProvider<AutoOffline, void>.internal(
+    AutoDisposeNotifierProvider<AutoOffline, bool>.internal(
   AutoOffline.new,
   name: r'autoOfflineProvider',
   debugGetCreateSourceHash:
@@ -20,6 +20,6 @@ final autoOfflineProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$AutoOffline = AutoDisposeNotifier<void>;
+typedef _$AutoOffline = AutoDisposeNotifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,8 +1,8 @@
 import 'package:finamp/components/Buttons/cta_large.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 
 class LoginSplashPage extends StatelessWidget {
   static const routeName = "login/splash";
@@ -16,6 +16,10 @@ class LoginSplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final placeholder = "FINAMP_PLACEHOLDER";
+    final welcomeString = AppLocalizations.of(context)!
+        .loginFlowWelcomeHeading(placeholder)
+        .split(placeholder);
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -35,18 +39,21 @@ class LoginSplashPage extends StatelessWidget {
               ),
               RichText(
                 text: TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.loginFlowWelcomeHeading} ",
                   style: Theme.of(context).textTheme.headlineMedium,
                   children: [
+                    TextSpan(text: welcomeString[0]),
                     TextSpan(
-                      text: AppLocalizations.of(context)!.finamp,
-                      style:
-                          Theme.of(context).textTheme.headlineMedium!.copyWith(
-                                // color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                    ),
+                        text: "Finamp",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              // color: Theme.of(context).colorScheme.secondary,
+                              fontWeight: FontWeight.w600,
+                            )),
+                    TextSpan(
+                        // Avoid crashing on incorrect translations without placeholder
+                        text: welcomeString.length > 1 ? welcomeString[1] : "")
                   ],
                 ),
               ),

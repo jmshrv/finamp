@@ -8,6 +8,7 @@ import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
@@ -16,7 +17,6 @@ import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
@@ -49,6 +49,7 @@ Future<void> showModalTrackMenu({
   BaseItemDto? parentItem,
   Function? onRemoveFromList,
   bool confirmPlaylistRemoval = true,
+  bool showClearQueue = false,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final canGoToAlbum = item.parentId != null;
@@ -72,6 +73,7 @@ Future<void> showModalTrackMenu({
           canGoToGenre: canGoToGenre,
           onRemoveFromList: onRemoveFromList,
           confirmPlaylistRemoval: confirmPlaylistRemoval,
+          showClearQueue: showClearQueue,
           childBuilder: childBuilder,
           dragController: dragController,
         );
@@ -92,6 +94,7 @@ class TrackMenu extends ConsumerStatefulWidget {
     required this.canGoToGenre,
     required this.onRemoveFromList,
     required this.confirmPlaylistRemoval,
+    required this.showClearQueue,
     this.parentItem,
     required this.childBuilder,
     required this.dragController,
@@ -107,6 +110,7 @@ class TrackMenu extends ConsumerStatefulWidget {
   final bool canGoToGenre;
   final Function? onRemoveFromList;
   final bool confirmPlaylistRemoval;
+  final bool showClearQueue;
   final ScrollBuilder childBuilder;
   final DraggableScrollableController dragController;
 
@@ -584,6 +588,20 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               },
             ));
       }),
+      Visibility(
+        visible: widget.showClearQueue,
+        child: ListTile(
+          leading: Icon(
+            TablerIcons.clear_all,
+            color: iconColor,
+          ),
+          title: Text(AppLocalizations.of(context)!.stopAndClearQueue),
+          onTap: () async {
+            if (context.mounted) Navigator.pop(context);
+            await _queueService.stopPlayback();
+          },
+        ),
+      ),
     ];
   }
 

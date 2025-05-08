@@ -42,10 +42,13 @@ class _FinampSettingsGenerator extends Generator {
     var settersCode = "";
     var selectorsCode = "";
     for (var property in settings.accessors) {
-      if (!property.hasDeprecated &&
-          TypeChecker.fromRuntime(FinampSetterIgnore)
+      if (!property.nonSynthetic.hasDeprecated &&
+          TypeChecker.fromRuntime(SettingsHelperIgnore)
                   .firstAnnotationOfExact(property.nonSynthetic) ==
               null) {
+        final mapAnnotationObj = TypeChecker.fromRuntime(SettingsHelperMap)
+            .firstAnnotationOfExact(property.nonSynthetic);
+
         if (property.isSetter) {
           if (property.parameters.length != 1) {
             log.warning(
@@ -56,19 +59,49 @@ class _FinampSettingsGenerator extends Generator {
           var paramName =
               "${property.displayName.substring(0, 1).toUpperCase()}${property.displayName.substring(1)}";
 
-          settersCode += '''static void set$paramName($typeArg new$paramName){
+          if (mapAnnotationObj != null) {
+            final mapAnnotation = SettingsHelperMap(
+                mapAnnotationObj.getField("keyName")!.toStringValue()!,
+                mapAnnotationObj.getField("valueName")!.toStringValue()!);
+            final mapType = property.parameters.first.type as ParameterizedType;
+            final keyType = _typeName(mapType.typeArguments[0]);
+            final valueType = _typeName(mapType.typeArguments[1]);
+            settersCode +=
+                '''static void set$paramName($keyType ${mapAnnotation.keyName}, $valueType ${mapAnnotation.valueName}){
+          FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+          finampSettingsTemp.${property.displayName}[${mapAnnotation.keyName}]=${mapAnnotation.valueName};
+          Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
+        }
+        ''';
+          } else {
+            settersCode += '''static void set$paramName($typeArg new$paramName){
           FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
           finampSettingsTemp.${property.displayName}=new$paramName;
           Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
         }
         ''';
+          }
         }
 
         if (property.isGetter) {
-          selectorsCode +=
-              '''ProviderListenable<${_typeName(property.returnType)}> get ${property.displayName} => 
+          if (mapAnnotationObj != null) {
+            final mapAnnotation = SettingsHelperMap(
+                mapAnnotationObj.getField("keyName")!.toStringValue()!,
+                mapAnnotationObj.getField("valueName")!.toStringValue()!);
+            final mapType = property.returnType as ParameterizedType;
+            final keyType = _typeName(mapType.typeArguments[0]);
+            final valueType = _typeName(mapType.typeArguments[1]);
+            final returnSuffix = valueType.endsWith("?") ? "" : "?";
+            selectorsCode +=
+                '''ProviderListenable<$valueType$returnSuffix> ${property.displayName}($keyType ${mapAnnotation.keyName}) => 
+            finampSettingsProvider.select((value) => value.requireValue.${property.displayName}[${mapAnnotation.keyName}]);
+        ''';
+          } else {
+            selectorsCode +=
+                '''ProviderListenable<${_typeName(property.returnType)}> get ${property.displayName} => 
             finampSettingsProvider.select((value) => value.requireValue.${property.displayName});
         ''';
+          }
         }
       }
     }
