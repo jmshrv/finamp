@@ -403,7 +403,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                 ],
         ),
         bottomNavigationBar: const NowPlayingBar(),
-        drawer: const MusicScreenDrawer(),
+        drawerEnableOpenDragGesture: widget.genreFilter == null,
+        drawer: widget.genreFilter == null ? const MusicScreenDrawer() : null,
         floatingActionButton: Padding(
           padding: EdgeInsets.only(
               right: ref.watch(finampSettingsProvider.showFastScroller)
