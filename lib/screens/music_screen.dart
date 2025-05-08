@@ -183,10 +183,9 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     ref.watch(FinampUserHelper.finampCurrentUserProvider);
     // Get the tabs from the user's tab order, and filter them to only
     // include enabled tabs
-    final sortedTabs = ref.watch(finampSettingsProvider.tabOrder).where((e) =>
-        ref.watch(finampSettingsProvider
-            .select((value) => value.value?.showTabs[e])) ??
-        false);
+    final sortedTabs = ref
+        .watch(finampSettingsProvider.tabOrder)
+        .where((e) => ref.watch(finampSettingsProvider.showTabs(e)) ?? false);
     refreshMap[sortedTabs.elementAt(_tabController!.index)] =
         MusicRefreshCallback();
 

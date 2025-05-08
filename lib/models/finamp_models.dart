@@ -342,8 +342,7 @@ class FinampSettings {
   bool androidStopForegroundOnPause;
 
   @HiveField(5)
-  @SettingsHelperIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "value")
   Map<TabContentType, bool> showTabs;
 
   /// Used to remember if the user has set their music screen to favourites
@@ -406,13 +405,11 @@ class FinampSettings {
   bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: <TabContentType, SortBy>{})
-  @SettingsHelperIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "sortBy")
   Map<TabContentType, SortBy> tabSortBy;
 
   @HiveField(21, defaultValue: <TabContentType, SortOrder>{})
-  @SettingsHelperIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "sortOrder")
   Map<TabContentType, SortOrder> tabSortOrder;
 
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)

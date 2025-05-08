@@ -37,6 +37,7 @@ import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:finamp/services/widget_bindings_observer_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -54,6 +55,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'components/Buttons/simple_button.dart';
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
 import 'components/PlayerScreen/player_split_screen_scaffold.dart';
@@ -738,6 +740,23 @@ class ErrorScreen extends StatelessWidget {
                         color: Colors.red,
                       ),
                     ),
+                    if (error is HiveError && kDebugMode)
+                      WidgetSpan(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: SimpleButton(
+                          text: 'Delete FinampSettings',
+                          icon: Icons.delete,
+                          onPressed: () async {
+                            final dir = (Platform.isAndroid || Platform.isIOS)
+                                ? await getApplicationDocumentsDirectory()
+                                : await getApplicationSupportDirectory();
+
+                            await Hive.deleteBoxFromDisk("FinampSettings",
+                                path: dir.path);
+                          },
+                        ),
+                      )),
                     TextSpan(
                       text:
                           "\n\n${AppLocalizations.of(context)!.startupErrorCallToAction}",
