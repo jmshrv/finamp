@@ -183,9 +183,9 @@
   "@selectDirectory": {},
   "appDirectory": "應用程式資料夾",
   "@appDirectory": {},
-  "enterLowPriorityStateOnPause": "暫停播放時會進入「低優先」狀態",
+  "enterLowPriorityStateOnPause": "暫停播放時進入「低優先」狀態",
   "@enterLowPriorityStateOnPause": {},
-  "enterLowPriorityStateOnPauseSubtitle": "在停止播放時，允許本程式的「通知」能被掃走及關閉應用程式（適用於 Android 裝置）。",
+  "enterLowPriorityStateOnPauseSubtitle": "停止播放時，允許本程式的「通知」能被掃走及關閉應用程式（適用於 Android 裝置）。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "隨機播放上限",
   "@shuffleAllTrackCount": {},
@@ -369,7 +369,7 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "customLocation": "自訂位置",
   "@customLocation": {},
-  "customLocationsBuggy": "自訂位置功能不保正得正常運作。如非必要，建議不要使用。使用系統的「音樂」資料夾會因權限問題而令專輯封面圖無法儲存。",
+  "customLocationsBuggy": "自訂位置功能並不保證可正常運作。如非必要，建議不要使用。使用系統的「音樂」資料夾會因權限問題而令專輯封面圖無法儲存。",
   "@customLocationsBuggy": {},
   "viewTypeSubtitle": "顯示資訊的方式",
   "@viewTypeSubtitle": {},
@@ -684,5 +684,41 @@
   "confirmDownloadStarted": "已開始下載",
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "playbackSpeedControlSettingSubtitle": "播放速度控制是否顯示在播放介面的選單中",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "automatic": "自動",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "customizationSettingsTitle": "自訂",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "apply": "套用",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "reset": "重設",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "playbackSpeedControlSetting": "速度控制顯示",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "shown": "顯示",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "速度",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "hidden": "隱藏",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
   }
 }
