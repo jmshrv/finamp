@@ -2380,7 +2380,8 @@ enum FinampCollectionType {
   allPlaylists(true),
   latest5Albums(true),
   libraryImages(false),
-  allPlaylistsMetadata(false);
+  allPlaylistsMetadata(false),
+  collectionWithLibraryFilter(true);
 
   const FinampCollectionType(this.hasAudio);
 
@@ -2394,13 +2395,20 @@ enum FinampCollectionType {
   includeIfNull: false,
 )
 class FinampCollection {
-  FinampCollection({required this.type, this.library}) {
-    assert(type == FinampCollectionType.libraryImages || library == null);
-    assert(type != FinampCollectionType.libraryImages || library != null);
+  FinampCollection({required this.type, this.library, this.item}) {
+    assert(
+      (type == FinampCollectionType.libraryImages && library != null && item == null) ||
+      (type == FinampCollectionType.collectionWithLibraryFilter && library != null && item != null) ||
+      (type != FinampCollectionType.libraryImages &&
+       type != FinampCollectionType.collectionWithLibraryFilter &&
+       item == null),
+      'Invalid combination of type, library, and item for FinampCollection.'
+    );
   }
 
   final FinampCollectionType type;
   final BaseItemDto? library;
+  final BaseItemDto? item;
 
   String get id => switch (type) {
         FinampCollectionType.favorites => "Favorites",
@@ -2409,6 +2417,7 @@ class FinampCollection {
         FinampCollectionType.libraryImages =>
           "Cache Library Images:${library!.id}",
         FinampCollectionType.allPlaylistsMetadata => "All Playlists Metadata",
+        FinampCollectionType.collectionWithLibraryFilter => "Collection with Library Filter",
       };
 
   String getName(BuildContext context) => switch (type) {
@@ -2423,6 +2432,9 @@ class FinampCollection {
         FinampCollectionType.allPlaylistsMetadata =>
           AppLocalizations.of(context)!
               .finampCollectionNames("allPlaylistsMetadata"),
+        FinampCollectionType.collectionWithLibraryFilter =>
+          AppLocalizations.of(context)!
+              .finampCollectionNames("collectionWithLibraryFilter"),
       };
 
   factory FinampCollection.fromJson(Map<String, dynamic> json) =>

@@ -1358,6 +1358,7 @@ class DownloadsSyncService {
             DownloadStub.fromItem(type: DownloadItemType.track, item: e));
         childStubs.addAll(trackChildStubs);
       }
+      // LEGACY - ARTISTS AND GENRES ARE NOW FINAMP COLLECTIONS
       // If we are an artist, we also need to add the tracks where the artist
       // only is a performing artist, but not an album artist
       // We might get some overlap because we often see albumartist = performingartist,
@@ -1395,6 +1396,7 @@ class DownloadsSyncService {
       DownloadStub parent) async {
     assert(parent.type == DownloadItemType.finampCollection);
     FinampCollection collection = parent.finampCollection!;
+    var item = collection.item!;
     final String fields =
         "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName";
     try {
@@ -1458,6 +1460,37 @@ class DownloadsSyncService {
               []);
           outputItems.removeWhere((element) => element.imageId == null);
           typeOverride = DownloadItemType.image;
+        case FinampCollectionType.collectionWithLibraryFilter:
+          outputItems = await _jellyfinApiData.getItems(
+                parentItem: (parent.baseItemType == BaseItemDtoType.genre)
+                    ? collection.library!
+                    : item,
+                libraryFilter: (parent.baseItemType == BaseItemDtoType.artist)
+                    ? collection.library!
+                    : null,
+                genreFilter: (parent.baseItemType == BaseItemDtoType.genre)
+                    ? item
+                    : null,
+                includeItemTypes: BaseItemDtoType.album.idString,
+                fields: fields
+              ) ??
+              [];
+          // If we are an artist, we also need to add the tracks where the artist
+          // only is a performing artist, but not an album artist
+          // We might get some overlap because we often see albumartist = performingartist,
+          // but they will get filtered out later
+          if (parent.baseItemType == BaseItemDtoType.artist) {
+                outputItems.addAll(await _jellyfinApiData.getItems(
+                  parentItem: item,
+                  libraryFilter: collection.library!,
+                  includeItemTypes: BaseItemDtoType.track.idString,
+                  filters: "Artist=${parent.name}",
+                  artistType: ArtistType.artist,
+                  fields:
+                      "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName"
+                  ) ??
+                []);
+          }
       }
       _downloadsService.resetConnectionErrors();
       var stubList = outputItems

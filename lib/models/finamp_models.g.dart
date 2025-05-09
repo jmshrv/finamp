@@ -7980,12 +7980,17 @@ FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
           ? null
           : BaseItemDto.fromJson(
               Map<String, dynamic>.from(json['Library'] as Map)),
+      item: json['Item'] == null
+          ? null
+          : BaseItemDto.fromJson(
+              Map<String, dynamic>.from(json['Item'] as Map)),
     );
 
 Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) =>
     <String, dynamic>{
       'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
       if (instance.library?.toJson() case final value?) 'Library': value,
+      if (instance.item?.toJson() case final value?) 'Item': value,
     };
 
 const _$FinampCollectionTypeEnumMap = {
@@ -7994,6 +7999,8 @@ const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.latest5Albums: 'latest5Albums',
   FinampCollectionType.libraryImages: 'libraryImages',
   FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
+  FinampCollectionType.collectionWithLibraryFilter:
+      'collectionWithLibraryFilter',
 };
 
 MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(

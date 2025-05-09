@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -342,8 +343,10 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    List<BaseItemDto> allChildren = [];
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    final library = finampUserHelper.currentUser?.currentView;
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
+    List<BaseItemDto> allChildren = [];
   
     final topTracksAsync = ref.watch(
         getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter));
@@ -397,6 +400,13 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     // for the Download Status Sync Display for Artists
     allChildren = [...albumArtistAlbums, ...allPerformingArtistTracks];
 
+    // Finamp Collection
+    final finampCollection = FinampCollection(
+        type: FinampCollectionType.collectionWithLibraryFilter,
+        library: library,
+        item: widget.parent,
+      );
+
     return PaddedCustomScrollview(slivers: <Widget>[
       SliverAppBar(
         title: Text(widget.parent.name ??
@@ -418,9 +428,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           FavoriteButton(item: widget.parent),
           if (!isLoading && widget.genreFilter == null)
             DownloadButton(
-                item: DownloadStub.fromItem(
-                    item: widget.parent,
-                    type: DownloadItemType.collection),
+                item: DownloadStub.fromFinampCollection(finampCollection),
                 children: allChildren
             )
         ],
