@@ -6,7 +6,7 @@ part of 'genre_screen_content.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$genreCuratedItemsHash() => r'f5a16c5d31abb0739ce729a63f566abc56d8f415';
+String _$genreCuratedItemsHash() => r'5267bea5e2554e0c8ea5cd527be5284b044d7b32';
 
 /// Copied from Dart SDK
 class _SystemHash {

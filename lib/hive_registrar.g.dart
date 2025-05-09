@@ -105,6 +105,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(CodecProfileAdapter());
     registerAdapter(ContainerProfileAdapter());
     registerAdapter(ContentViewTypeAdapter());
+    registerAdapter(CuratedItemSelectionTypeAdapter());
     registerAdapter(DeviceIdentificationAdapter());
     registerAdapter(DeviceInfoAdapter());
     registerAdapter(DeviceProfileAdapter());
@@ -128,6 +129,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(FinampTranscodingCodecAdapter());
     registerAdapter(FinampTranscodingStreamingFormatAdapter());
     registerAdapter(FinampUserAdapter());
+    registerAdapter(GenreItemSectionsAdapter());
     registerAdapter(HttpHeaderInfoAdapter());
     registerAdapter(ImageBlurHashesAdapter());
     registerAdapter(ItemSwipeActionsAdapter());
