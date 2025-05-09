@@ -139,16 +139,31 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
           ? SliverMainAxisGroup(slivers: [
               if (widget.includeGenreFilters)
                 buildGenreItemFilterList(ref, BaseItemDtoType.track),
-              TracksSliverList(
-                childrenForList: widget.tracks!,
-                childrenForQueue: widget.childrenForQueue!,
-                showPlayCount: true,
-                isOnArtistScreen: true,
-                parent: widget.parent,
-              ),
+              if (widget.tracks != null && widget.tracks!.isNotEmpty)
+                TracksSliverList(
+                  childrenForList: widget.tracks!,
+                  childrenForQueue: widget.childrenForQueue!,
+                  showPlayCount: true,
+                  isOnArtistScreen: true,
+                  parent: widget.parent,
+                )
+              else
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.emptyFilteredListTitle,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  ),
+                ),
               SliverToBoxAdapter(
                   child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
+                      height: (widget.parent.type != "MusicGenre") ? 14 : 0
+                  )
+              ),
             ])
           : SliverToBoxAdapter(child: SizedBox.shrink()),
     );
@@ -284,11 +299,24 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
               slivers: [
                 if (widget.includeGenreFiltersFor != null)
                   buildGenreItemFilterList(ref, widget.includeGenreFiltersFor!),
-                AlbumsSliverList(
-                  childrenForList: widget.albums!,
-                  parent: widget.parent,
-                  genreFilter: widget.genreFilter,
-                ),
+                if (widget.albums != null && widget.albums!.isNotEmpty)
+                  AlbumsSliverList(
+                    childrenForList: widget.albums!,
+                    parent: widget.parent,
+                    genreFilter: widget.genreFilter,
+                  )
+                else
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Center(
+                          child: Text(
+                            AppLocalizations.of(context)!.emptyFilteredListTitle,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                      ),
+                    ),
+                  ),
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: (widget.parent.type != "MusicGenre") ? 14 : 0,
