@@ -888,22 +888,35 @@ class DownloadsSyncService {
       Set<int> requireCompleted,
       Set<int> infoCompleted,
       BaseItemId? viewId) async {
-    if (parent.type == DownloadItemType.image ||
-        parent.type == DownloadItemType.anchor) {
-      asRequired = true; // Always download images, don't process twice.
-    }
-    if (parent.type == DownloadItemType.collection) {
-      if (parent.baseItemType == BaseItemDtoType.playlist) {
-        // Playlists show in all libraries, do not apply library info
+
+    switch (parent.type) {
+      case DownloadItemType.collection:
+        switch (parent.baseItemType) {
+          case BaseItemDtoType.playlist:
+          case BaseItemDtoType.artist:
+          case BaseItemDtoType.genre:
+            viewId = null;
+          case BaseItemDtoType.library:
+            viewId = BaseItemId(parent.id);
+          case _:
+            break;
+        }
+      case DownloadItemType.track:
+        break;
+      case DownloadItemType.image:
+      case DownloadItemType.anchor:
         viewId = null;
-      } else if (parent.baseItemType == BaseItemDtoType.library) {
-        // Update view id for children of downloaded library
-        viewId = BaseItemId(parent.id);
-      }
-    } else if (parent.type == DownloadItemType.finampCollection) {
-      if (parent.finampCollection!.type != FinampCollectionType.collectionWithLibraryFilter) {
-        viewId = null;
-      }
+      case DownloadItemType.finampCollection:
+        switch (parent.finampCollection!.type) {
+          case FinampCollectionType.favorites:
+          case FinampCollectionType.allPlaylists:
+          case FinampCollectionType.latest5Albums:
+          case FinampCollectionType.allPlaylistsMetadata:
+            viewId = null;
+          case FinampCollectionType.libraryImages:
+          case FinampCollectionType.collectionWithLibraryFilter:
+            viewId = parent.finampCollection!.library!.id;
+        }
     }
     if (requireCompleted.contains(parent.isarId)) {
       return;

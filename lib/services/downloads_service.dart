@@ -154,21 +154,51 @@ class DownloadsService {
 
   /// Provider for user-downloaded items of a specific category.
   /// Used to show and group downloaded items on the downloads screen.
-  late final userDownloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, type) {
-    return _isar.downloadItems
-        .where()
-        .typeEqualTo(type.type)
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .optional(
-          type.baseItemType != null,
-          (q) => q.baseItemTypeEqualTo(type.baseItemType!),
-        )
-        .sortByName()
-        .build()
-        .watch(fireImmediately: true);
+late final userDownloadedItemsProvider =
+    StreamProvider.family.autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) {
+  final query = _isar.downloadItems
+      .where()
+      .filter()
+      .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+      .sortByName()
+      .build()
+      .watch(fireImmediately: true);
+
+  return query.map((allItems) {
+    switch (category) {
+      case DownloadsScreenCategory.special:
+        return allItems.where((item) {
+          return (item.type == category.type) &&
+              item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter;
+        }).toList();
+
+      case DownloadsScreenCategory.artists:
+        return allItems.where((item) {
+          return (item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType)) ||
+              (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+              item.finampCollection?.item?.type == BaseItemDtoType.artist.idString);
+        }).toList();
+
+      case DownloadsScreenCategory.genres:
+        return allItems.where((item) {
+          return (item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType)) ||
+              (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+              item.finampCollection?.item?.type == BaseItemDtoType.genre.idString);
+        }).toList();
+
+      default:
+        return allItems.where((item) {
+          return item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType);
+        }).toList();
+    }
   });
+});
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
