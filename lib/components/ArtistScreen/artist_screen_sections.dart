@@ -51,7 +51,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
     final hasTracks = widget.tracks != null && widget.tracks!.isNotEmpty;
     final hasQueue = widget.childrenForQueue != null;
 
-    if (hasTracks && hasQueue) {
+    if ((hasTracks && hasQueue) || widget.includeGenreFilters) {
       if (!_showTracks || !_isExpandable) {
         setState(() {
           _showTracks = true;
@@ -135,22 +135,20 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
           ),
         ),
       ),
-      sliver: (widget.includeGenreFilters || _showTracks)
+      sliver: _showTracks
           ? SliverMainAxisGroup(slivers: [
               if (widget.includeGenreFilters)
                 buildGenreItemFilterList(ref, BaseItemDtoType.track),
-              if (_showTracks)
-                TracksSliverList(
-                  childrenForList: widget.tracks!,
-                  childrenForQueue: widget.childrenForQueue!,
-                  showPlayCount: true,
-                  isOnArtistScreen: true,
-                  parent: widget.parent,
-                ),
-              if (_showTracks)
-                SliverToBoxAdapter(
-                    child: SizedBox(
-                        height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
+              TracksSliverList(
+                childrenForList: widget.tracks!,
+                childrenForQueue: widget.childrenForQueue!,
+                showPlayCount: true,
+                isOnArtistScreen: true,
+                parent: widget.parent,
+              ),
+              SliverToBoxAdapter(
+                  child: SizedBox(
+                      height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
             ])
           : SliverToBoxAdapter(child: SizedBox.shrink()),
     );
@@ -197,7 +195,7 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
   void _evaluateAlbumVisibility() {
     final hasAlbums = widget.albums != null && widget.albums!.isNotEmpty;
 
-    if (hasAlbums) {
+    if (hasAlbums || widget.includeGenreFiltersFor != null) {
       if (!_showAlbums || !_isExpandable) {
         setState(() {
           _showAlbums = true;
@@ -281,23 +279,21 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
           ),
         ),
       ),
-      sliver: (widget.includeGenreFiltersFor != null || _showAlbums)
+      sliver: _showAlbums
           ? SliverMainAxisGroup(
               slivers: [
                 if (widget.includeGenreFiltersFor != null)
                   buildGenreItemFilterList(ref, widget.includeGenreFiltersFor!),
-                if (_showAlbums)
-                  AlbumsSliverList(
-                    childrenForList: widget.albums!,
-                    parent: widget.parent,
-                    genreFilter: widget.genreFilter,
+                AlbumsSliverList(
+                  childrenForList: widget.albums!,
+                  parent: widget.parent,
+                  genreFilter: widget.genreFilter,
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: (widget.parent.type != "MusicGenre") ? 14 : 0,
                   ),
-                if (_showAlbums)
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0,
-                    ),
-                  ),
+                ),
               ],
           )
           : const SliverToBoxAdapter(child: SizedBox.shrink()),
