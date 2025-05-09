@@ -6,6 +6,7 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/item_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -31,28 +32,16 @@ class AddToQueueMenuEntry extends ConsumerWidget {
       icon: TablerIcons.playlist,
       title: AppLocalizations.of(context)!.addToQueue,
       onTap: () async {
-        List<BaseItemDto>? albumTracks;
         try {
           FeedbackHelper.feedback(FeedbackType.selection);
-          if (ref.watch(finampSettingsProvider.isOffline)) {
-            albumTracks = await downloadsService.getCollectionTracks(baseItem,
-                playable: true);
-          } else {
-            albumTracks = await jellyfinApiHelper.getItems(
-              parentItem: baseItem,
-              sortBy: "ParentIndexNumber,IndexNumber,SortName",
-              includeItemTypes: "Audio",
-            );
-          }
-
-          if (albumTracks == null) {
-            GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-                .couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
-            return;
-          }
 
           await queueService.addToQueue(
-              items: albumTracks,
+              items: ref
+                      .watch(loadChildTracksProvider(
+                        baseItem: baseItem,
+                      ))
+                      .value ??
+                  [],
               source: QueueItemSource(
                 type: QueueItemSourceType.nextUpAlbum,
                 name: QueueItemSourceName(
