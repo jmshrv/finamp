@@ -400,13 +400,6 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     // for the Download Status Sync Display for Artists
     allChildren = [...albumArtistAlbums, ...allPerformingArtistTracks];
 
-    // Finamp Collection
-    final finampCollection = FinampCollection(
-        type: FinampCollectionType.collectionWithLibraryFilter,
-        library: library,
-        item: widget.parent,
-      );
-
     return PaddedCustomScrollview(slivers: <Widget>[
       SliverAppBar(
         title: Text(widget.parent.name ??
@@ -428,7 +421,13 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           FavoriteButton(item: widget.parent),
           if (!isLoading && widget.genreFilter == null)
             DownloadButton(
-                item: DownloadStub.fromFinampCollection(finampCollection),
+                item: DownloadStub.fromFinampCollection(
+                  FinampCollection(
+                      type: FinampCollectionType.collectionWithLibraryFilter,
+                      library: library,
+                      item: widget.parent,
+                  )
+                ),
                 children: allChildren
             )
         ],

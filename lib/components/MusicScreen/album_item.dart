@@ -6,6 +6,7 @@ import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -89,6 +90,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
   late BaseItemDto mutableAlbum;
 
   QueueService get _queueService => GetIt.instance<QueueService>();
+  final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   late Function() onTap;
   late AppLocalizations local;
@@ -127,6 +129,23 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
     local = AppLocalizations.of(context)!;
 
     final screenSize = MediaQuery.of(context).size;
+    final library = finampUserHelper.currentUser?.currentView;
+
+    final itemType = BaseItemDtoType.fromItem(widget.album);
+    final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
+            itemType == BaseItemDtoType.genre);
+    final itemDownloadStub = isArtistOrGenre
+          ? DownloadStub.fromFinampCollection(
+                FinampCollection(
+                  type: FinampCollectionType.collectionWithLibraryFilter,
+                  library: library,
+                  item: widget.album
+                )
+            )
+          : DownloadStub.fromItem(
+                type: DownloadItemType.collection,
+                item: widget.album
+            );
 
     void menuCallback({
       required Offset localPosition,
@@ -646,17 +665,11 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case null:
           break;
         case _AlbumListTileMenuItems.download:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.album);
-          await DownloadDialog.show(context, item, null);
+          await DownloadDialog.show(context, itemDownloadStub, null);
         case _AlbumListTileMenuItems.deleteFromDevice:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteDownloadFromDevice(context, item);
+          await askBeforeDeleteDownloadFromDevice(context, itemDownloadStub);
         case _AlbumListTileMenuItems.deleteFromServer:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteFromServerAndDevice(context, item,
+          await askBeforeDeleteFromServerAndDevice(context, itemDownloadStub,
               refresh: () => musicScreenRefreshStream
                   .add(null)); // trigger a refresh of the music screen
         case _AlbumListTileMenuItems.addToPlaylist:

@@ -901,7 +901,9 @@ class DownloadsSyncService {
         viewId = BaseItemId(parent.id);
       }
     } else if (parent.type == DownloadItemType.finampCollection) {
-      viewId = null;
+      if (parent.finampCollection!.type != FinampCollectionType.collectionWithLibraryFilter) {
+        viewId = null;
+      }
     }
     if (requireCompleted.contains(parent.isarId)) {
       return;
@@ -1480,7 +1482,7 @@ class DownloadsSyncService {
           // only is a performing artist, but not an album artist
           // We might get some overlap because we often see albumartist = performingartist,
           // but they will get filtered out later
-          if (parent.baseItemType == BaseItemDtoType.artist) {
+          if (baseItemType == BaseItemDtoType.artist) {
                 outputItems.addAll(await _jellyfinApiData.getItems(
                   parentItem: item,
                   libraryFilter: collection.library!,

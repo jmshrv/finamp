@@ -6,6 +6,7 @@ import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/music_screen.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -292,6 +293,8 @@ void openSeeAll(
 
   @override
   Widget build(BuildContext context) {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    final library = finampUserHelper.currentUser?.currentView;
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
     final genreCuratedItemSelectionTypeTracksSetting =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks);
@@ -329,9 +332,13 @@ void openSeeAll(
           FavoriteButton(item: widget.parent),
           if (!isLoading)
             DownloadButton(
-                item: DownloadStub.fromItem(
-                    item: widget.parent,
-                    type: DownloadItemType.collection),
+                item: DownloadStub.fromFinampCollection(
+                  FinampCollection(
+                      type: FinampCollectionType.collectionWithLibraryFilter,
+                      library: library,
+                      item: widget.parent,
+                  )
+                ),
                 childrenCount: albumCount)
         ],
       ),
