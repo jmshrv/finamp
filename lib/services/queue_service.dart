@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -382,12 +381,10 @@ class QueueService {
           }
         }
       } else {
-        for (var slice in missingIds.slices(200)) {
-          List<jellyfin_models.BaseItemDto> itemList =
-              await _jellyfinApiHelper.getItems(itemIds: slice) ?? [];
-          for (var d2 in itemList) {
-            idMap[d2.id] = d2;
-          }
+        List<jellyfin_models.BaseItemDto> itemList =
+            await _jellyfinApiHelper.getItems(itemIds: missingIds) ?? [];
+        for (var d2 in itemList) {
+          idMap[d2.id] = d2;
         }
       }
 
@@ -397,7 +394,8 @@ class QueueService {
         "next": info.nextUp.map((e) => idMap[e]).nonNulls.toList(),
         "queue": info.queue.map((e) => idMap[e]).nonNulls.toList(),
       };
-      int sumLengths(int sum, Iterable val) => val.length + sum;
+      int sumLengths(int sum, Iterable<jellyfin_models.BaseItemDto> val) =>
+          val.length + sum;
       int loadedTracks = items.values.fold(0, sumLengths);
       int droppedTracks = info.trackCount - loadedTracks;
 
@@ -406,26 +404,32 @@ class QueueService {
         return Future.error("Loading of saved Queue was interrupted.");
       }
 
-      await _replaceWholeQueue(
-          itemList: items["previous"]! + items["current"]! + items["queue"]!,
-          initialIndex: items["previous"]!.length,
-          beginPlaying: isReload &&
-              (_audioHandler.playbackState.valueOrNull?.playing ?? false),
-          source: info.source ??
-              QueueItemSource.rawId(
-                  type: QueueItemSourceType.unknown,
-                  name: const QueueItemSourceName(
-                      type: QueueItemSourceNameType.savedQueue),
-                  id: "savedqueue"));
+      if (loadedTracks > 0) {
+        await _replaceWholeQueue(
+            itemList: items["previous"]! + items["current"]! + items["queue"]!,
+            initialIndex:
+                items["current"]!.isNotEmpty || items["queue"]!.isNotEmpty
+                    ? items["previous"]!.length
+                    : 0,
+            beginPlaying: isReload &&
+                (_audioHandler.playbackState.valueOrNull?.playing ?? false),
+            source: info.source ??
+                QueueItemSource.rawId(
+                    type: QueueItemSourceType.unknown,
+                    name: const QueueItemSourceName(
+                        type: QueueItemSourceNameType.savedQueue),
+                    id: "savedqueue"));
 
-      Future<void> seekFuture = Future.value();
-      if ((info.currentTrackSeek ?? 0) > (isReload ? 500 : 5000)) {
-        seekFuture = _audioHandler
-            .seek(Duration(milliseconds: info.currentTrackSeek ?? 0));
+        Future<void> seekFuture = Future.value();
+        if ((info.currentTrackSeek ?? 0) > (isReload ? 500 : 5000) &&
+            items["current"]!.isNotEmpty) {
+          seekFuture = _audioHandler
+              .seek(Duration(milliseconds: info.currentTrackSeek ?? 0));
+        }
+
+        await addToNextUp(items: items["next"]!);
+        await seekFuture;
       }
-
-      await addToNextUp(items: items["next"]!);
-      await seekFuture;
       _queueServiceLogger.info("Loaded saved queue.");
       if (loadedTracks == 0 && info.trackCount > 0) {
         finalState = SavedQueueState.failed;
@@ -490,7 +494,7 @@ class QueueService {
       FinampPlaybackOrder? order,
       bool beginPlaying = true}) async {
     try {
-      if (initialIndex > itemList.length) {
+      if (initialIndex >= itemList.length) {
         return Future.error(
             "initialIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
@@ -602,17 +606,10 @@ class QueueService {
         }
       }
 
-      if (FinampSettingsHelper.finampSettings.isOffline &&
-          queueInfo.currentTrack?.item
-                  .extras?["android.media.extra.DOWNLOAD_STATUS"] !=
-              2) {
-        // reset seek position, since the current track has changed
-        info.currentTrackSeek = 0;
-      }
-
       await loadSavedQueue(
         info,
         existingItems: existingItems,
+        isReload: true,
       );
     }
   }

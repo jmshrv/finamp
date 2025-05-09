@@ -219,11 +219,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
     final sortedTabs = widget.tabTypeFilter != null
         ? [widget.tabTypeFilter!]
         : ref
-            .watch(finampSettingsProvider.tabOrder)
-            .where((e) =>
-            ref.watch(finampSettingsProvider
-                .select((value) => value.value?.showTabs[e])) ??
-            false);
+        .watch(finampSettingsProvider.tabOrder)
+        .where((e) => ref.watch(finampSettingsProvider.showTabs(e)) ?? false);
     refreshMap[sortedTabs.elementAt(_tabController!.index)] =
         MusicRefreshCallback();
 

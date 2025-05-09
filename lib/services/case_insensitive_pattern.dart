@@ -9,11 +9,13 @@ class CaseInsensitivePattern implements Pattern {
 
   @override
   Iterable<Match> allMatches(String string, [int start = 0]) {
+    if (matcher.isEmpty) return [];
     return matcher.allMatches(string.toLowerCase(), start);
   }
 
   @override
   Match? matchAsPrefix(String string, [int start = 0]) {
+    if (matcher.isEmpty) return null;
     return matcher.matchAsPrefix(string.toLowerCase(), start);
   }
 }

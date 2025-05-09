@@ -34,13 +34,10 @@ class SortByMenuButton extends ConsumerWidget {
             child: Text(
               sortBy.toLocalisedString(context),
               style: TextStyle(
-                color: (sortByOverride ?? 
-                      ref.watch(finampSettingsProvider.select(
-                        (x) => x.requireValue.getTabSortBy(tabType)
-                      ))
-                  ) == sortBy
-                  ? Theme.of(context).colorScheme.secondary
-                  : null,
+                color: (sortByOverride ?? (ref.watch(finampSettingsProvider.select(
+                        (x) => x.requireValue.getTabSortBy(tabType) == sortBy))))
+                    ? Theme.of(context).colorScheme.secondary
+                    : null,
               ),
             ),
           )
@@ -51,7 +48,7 @@ class SortByMenuButton extends ConsumerWidget {
         } else {
           FinampSettingsHelper.setSortBy(tabType, value);
         }
-      },
+      }
     );
   }
 }

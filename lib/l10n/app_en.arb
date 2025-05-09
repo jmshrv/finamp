@@ -43,9 +43,15 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Welcome to",
+  "loginFlowWelcomeHeading": "Welcome to {styledName}",
   "@loginFlowWelcomeHeading": {
-    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+    "description": "Greeting shown on the login screen.",
+    "placeholders": {
+      "styledName": {
+        "type": "String",
+        "example": "Finamp"
+      }
+    }
   },
   "loginFlowSlogan": "Your music, the way you want it.",
   "@loginFlowSlogan": {
@@ -879,6 +885,10 @@
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
+  "stopAndClearQueue": "Stop playback and clear queue",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
   "playingFrom": "Playing from",
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
@@ -1631,7 +1641,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1645,11 +1655,15 @@
       "size": {
         "type": "String",
         "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
       }
     },
     "description": "Track info line in downloads screen lists"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1663,6 +1677,10 @@
       "size": {
         "type": "String",
         "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
       }
     },
     "description": "Collection info line in downloads screen lists"

@@ -20,8 +20,7 @@ class SortOrderButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var order = sortOrderOverride ?? ref.watch(finampSettingsProvider
-        .select((x) => x.requireValue.getSortOrder(tabType)));
+    var order = sortOrderOverride ?? ref.watch(finampSettingsProvider.tabSortOrder(tabType));
     return IconButton(
       tooltip: AppLocalizations.of(context)!.sortOrder,
       icon: order == SortOrder.ascending
@@ -34,7 +33,7 @@ class SortOrderButton extends ConsumerWidget {
         if (sortOrderOverride != null && onOverrideChanged != null) {
           onOverrideChanged!(newOrder);
         } else {
-          FinampSettingsHelper.setSortOrder(tabType, newOrder);
+          FinampSetters.setTabSortOrder(tabType, newOrder);
         }
       }
     );
