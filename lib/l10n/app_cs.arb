@@ -532,7 +532,7 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Vítejte v aplikaci",
+  "loginFlowWelcomeHeading": "Vítejte v aplikaci {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -1055,7 +1055,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} překódováno}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} překódováno}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1073,7 +1073,7 @@
     },
     "description": "Track info line in downloads screen lists"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ jako {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ jako {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
