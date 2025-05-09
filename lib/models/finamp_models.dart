@@ -1782,6 +1782,43 @@ class QueueItemSource {
     this.contextNormalizationGain,
   });
 
+  factory QueueItemSource.fromBaseItem(
+    BaseItemDto baseItem, {
+    QueueItemSourceType? type,
+    QueueItemSourceNameType? nameType,
+  }) {
+    final type = switch (BaseItemDtoType.fromItem(baseItem)) {
+      BaseItemDtoType.album => QueueItemSourceType.album,
+      BaseItemDtoType.playlist => QueueItemSourceType.playlist,
+      BaseItemDtoType.artist => QueueItemSourceType.artist,
+      BaseItemDtoType.genre => QueueItemSourceType.genre,
+      BaseItemDtoType.track => QueueItemSourceType.track,
+      _ => QueueItemSourceType.unknown
+    };
+
+    final gain = switch (BaseItemDtoType.fromItem(baseItem)) {
+      BaseItemDtoType.playlist => null,
+      BaseItemDtoType.artist => null,
+      _ => baseItem.normalizationGain
+    };
+
+    return QueueItemSource(
+      type: type,
+      name: nameType != null
+          ? QueueItemSourceName(
+              type: nameType, localizationParameter: baseItem.name ?? "")
+          : QueueItemSourceName(
+              type: QueueItemSourceNameType.preTranslated,
+              pretranslatedName: baseItem.name ??
+                  AppLocalizations.of(GlobalSnackbar
+                          .materialAppScaffoldKey.currentContext!)!
+                      .placeholderSource),
+      id: baseItem.id,
+      item: baseItem,
+      contextNormalizationGain: gain,
+    );
+  }
+
   QueueItemSource({
     required this.type,
     required this.name,
@@ -1804,6 +1841,7 @@ class QueueItemSource {
 
   @HiveField(4)
   double? contextNormalizationGain;
+
 }
 
 @HiveType(typeId: 55)
