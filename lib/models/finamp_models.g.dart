@@ -246,31 +246,37 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
       autoReloadQueue: fields[97] == null ? false : fields[97] as bool,
-      genreCuratedItemSelectionType: fields[100] == null
+      genreCuratedItemSelectionTypeTracks: fields[100] == null
           ? CuratedItemSelectionType.mostPlayed
           : fields[100] as CuratedItemSelectionType,
-      genreItemSectionsOrder: fields[101] == null
+      genreCuratedItemSelectionTypeAlbums: fields[101] == null
+          ? CuratedItemSelectionType.latestReleases
+          : fields[101] as CuratedItemSelectionType,
+      genreCuratedItemSelectionTypeArtists: fields[102] == null
+          ? CuratedItemSelectionType.favorites
+          : fields[102] as CuratedItemSelectionType,
+      genreItemSectionsOrder: fields[103] == null
           ? [
               GenreItemSections.tracks,
               GenreItemSections.albums,
               GenreItemSections.artists
             ]
-          : (fields[101] as List).cast<GenreItemSections>(),
+          : (fields[103] as List).cast<GenreItemSections>(),
       genreFilterArtistScreens:
-          fields[102] == null ? true : fields[102] as bool,
+          fields[104] == null ? true : fields[104] as bool,
       genreListsInheritSorting:
-          fields[103] == null ? false : fields[103] as bool,
-      genreMostPlayedOfflineFallback: fields[104] == null
-          ? CuratedItemSelectionType.favorites
-          : fields[104] as CuratedItemSelectionType,
-      artistGenreChipsApplyFilter:
           fields[105] == null ? false : fields[105] as bool,
-      artistCuratedItemSelectionType: fields[106] == null
-          ? CuratedItemSelectionType.mostPlayed
-          : fields[106] as CuratedItemSelectionType,
-      artistMostPlayedOfflineFallback: fields[107] == null
+      genreMostPlayedOfflineFallback: fields[106] == null
           ? CuratedItemSelectionType.favorites
-          : fields[107] as CuratedItemSelectionType,
+          : fields[106] as CuratedItemSelectionType,
+      artistGenreChipsApplyFilter:
+          fields[107] == null ? false : fields[107] as bool,
+      artistCuratedItemSelectionType: fields[108] == null
+          ? CuratedItemSelectionType.mostPlayed
+          : fields[108] as CuratedItemSelectionType,
+      artistMostPlayedOfflineFallback: fields[109] == null
+          ? CuratedItemSelectionType.favorites
+          : fields[109] as CuratedItemSelectionType,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -281,7 +287,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(102)
+      ..writeByte(104)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -471,20 +477,24 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(99)
       ..write(obj.showFavoriteButtonOnMediaNotification)
       ..writeByte(100)
-      ..write(obj.genreCuratedItemSelectionType)
+      ..write(obj.genreCuratedItemSelectionTypeTracks)
       ..writeByte(101)
-      ..write(obj.genreItemSectionsOrder)
+      ..write(obj.genreCuratedItemSelectionTypeAlbums)
       ..writeByte(102)
-      ..write(obj.genreFilterArtistScreens)
+      ..write(obj.genreCuratedItemSelectionTypeArtists)
       ..writeByte(103)
-      ..write(obj.genreListsInheritSorting)
+      ..write(obj.genreItemSectionsOrder)
       ..writeByte(104)
-      ..write(obj.genreMostPlayedOfflineFallback)
+      ..write(obj.genreFilterArtistScreens)
       ..writeByte(105)
-      ..write(obj.artistGenreChipsApplyFilter)
+      ..write(obj.genreListsInheritSorting)
       ..writeByte(106)
-      ..write(obj.artistCuratedItemSelectionType)
+      ..write(obj.genreMostPlayedOfflineFallback)
       ..writeByte(107)
+      ..write(obj.artistGenreChipsApplyFilter)
+      ..writeByte(108)
+      ..write(obj.artistCuratedItemSelectionType)
+      ..writeByte(109)
       ..write(obj.artistMostPlayedOfflineFallback);
   }
 

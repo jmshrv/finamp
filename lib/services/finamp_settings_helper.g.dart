@@ -698,11 +698,29 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setGenreCuratedItemSelectionType(
-      CuratedItemSelectionType newGenreCuratedItemSelectionType) {
+  static void setGenreCuratedItemSelectionTypeTracks(
+      CuratedItemSelectionType newGenreCuratedItemSelectionTypeTracks) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.genreCuratedItemSelectionType =
-        newGenreCuratedItemSelectionType;
+    finampSettingsTemp.genreCuratedItemSelectionTypeTracks =
+        newGenreCuratedItemSelectionTypeTracks;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreCuratedItemSelectionTypeAlbums(
+      CuratedItemSelectionType newGenreCuratedItemSelectionTypeAlbums) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreCuratedItemSelectionTypeAlbums =
+        newGenreCuratedItemSelectionTypeAlbums;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreCuratedItemSelectionTypeArtists(
+      CuratedItemSelectionType newGenreCuratedItemSelectionTypeArtists) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreCuratedItemSelectionTypeArtists =
+        newGenreCuratedItemSelectionTypeArtists;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -1001,8 +1019,14 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select(
           (value) => value.requireValue.showFavoriteButtonOnMediaNotification);
   ProviderListenable<CuratedItemSelectionType>
-      get genreCuratedItemSelectionType => finampSettingsProvider
-          .select((value) => value.requireValue.genreCuratedItemSelectionType);
+      get genreCuratedItemSelectionTypeTracks => finampSettingsProvider.select(
+          (value) => value.requireValue.genreCuratedItemSelectionTypeTracks);
+  ProviderListenable<CuratedItemSelectionType>
+      get genreCuratedItemSelectionTypeAlbums => finampSettingsProvider.select(
+          (value) => value.requireValue.genreCuratedItemSelectionTypeAlbums);
+  ProviderListenable<CuratedItemSelectionType>
+      get genreCuratedItemSelectionTypeArtists => finampSettingsProvider.select(
+          (value) => value.requireValue.genreCuratedItemSelectionTypeArtists);
   ProviderListenable<List<GenreItemSections>> get genreItemSectionsOrder =>
       finampSettingsProvider
           .select((value) => value.requireValue.genreItemSectionsOrder);

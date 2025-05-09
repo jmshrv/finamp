@@ -200,10 +200,12 @@ class DefaultSettings {
   static const preferHomeNetwork = false;
   static const homeNetworkAddress = "http://0.0.0.0:8096";
   static const autoReloadQueue = false;
-  static const genreCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
+  static const genreCuratedItemSelectionTypeTracks = CuratedItemSelectionType.mostPlayed;
+  static const genreCuratedItemSelectionTypeAlbums = CuratedItemSelectionType.latestReleases;
+  static const genreCuratedItemSelectionTypeArtists = CuratedItemSelectionType.favorites;
   static const genreItemSectionsOrder = GenreItemSections.values;
   static const genreFilterArtistScreens = true;
-  static const genreListsInheritSorting = false;
+  static const genreListsInheritSorting = true;
   static const genreMostPlayedOfflineFallback = CuratedItemSelectionType.favorites;
   static const artistGenreChipsApplyFilter = false;
   static const artistCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
@@ -330,7 +332,9 @@ class FinampSettings {
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
     this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
     this.autoReloadQueue = DefaultSettings.autoReloadQueue,
-    this.genreCuratedItemSelectionType = DefaultSettings.genreCuratedItemSelectionType,
+    this.genreCuratedItemSelectionTypeTracks = DefaultSettings.genreCuratedItemSelectionTypeTracks,
+    this.genreCuratedItemSelectionTypeAlbums = DefaultSettings.genreCuratedItemSelectionTypeAlbums,
+    this.genreCuratedItemSelectionTypeArtists = DefaultSettings.genreCuratedItemSelectionTypeArtists,
     this.genreItemSectionsOrder = DefaultSettings.genreItemSectionsOrder,
     this.genreFilterArtistScreens = DefaultSettings.genreFilterArtistScreens,
     this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
@@ -668,28 +672,34 @@ class FinampSettings {
       defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
   bool showFavoriteButtonOnMediaNotification;
 
-  @HiveField(100, defaultValue: DefaultSettings.genreCuratedItemSelectionType)
-  CuratedItemSelectionType genreCuratedItemSelectionType;
+  @HiveField(100, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeTracks)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeTracks;
 
-  @HiveField(101, defaultValue: DefaultSettings.genreItemSectionsOrder)
+  @HiveField(101, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeAlbums)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeAlbums;
+
+  @HiveField(102, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeArtists)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeArtists;
+
+  @HiveField(103, defaultValue: DefaultSettings.genreItemSectionsOrder)
   List<GenreItemSections> genreItemSectionsOrder;
 
-  @HiveField(102, defaultValue: DefaultSettings.genreFilterArtistScreens)
+  @HiveField(104, defaultValue: DefaultSettings.genreFilterArtistScreens)
   bool genreFilterArtistScreens;
 
-  @HiveField(103, defaultValue: DefaultSettings.genreListsInheritSorting)
+  @HiveField(105, defaultValue: DefaultSettings.genreListsInheritSorting)
   bool genreListsInheritSorting;
 
-  @HiveField(104, defaultValue: DefaultSettings.genreMostPlayedOfflineFallback)
+  @HiveField(106, defaultValue: DefaultSettings.genreMostPlayedOfflineFallback)
   CuratedItemSelectionType genreMostPlayedOfflineFallback;
 
-  @HiveField(105, defaultValue: DefaultSettings.artistGenreChipsApplyFilter)
+  @HiveField(107, defaultValue: DefaultSettings.artistGenreChipsApplyFilter)
   bool artistGenreChipsApplyFilter;
 
-  @HiveField(106, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
+  @HiveField(108, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
   CuratedItemSelectionType artistCuratedItemSelectionType;
 
-  @HiveField(107, defaultValue: DefaultSettings.artistMostPlayedOfflineFallback)
+  @HiveField(109, defaultValue: DefaultSettings.artistMostPlayedOfflineFallback)
   CuratedItemSelectionType artistMostPlayedOfflineFallback;
 
   static Future<FinampSettings> create() async {

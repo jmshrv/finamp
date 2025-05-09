@@ -1,19 +1,23 @@
 import 'dart:math' as math;
 
 import 'package:finamp/components/AlbumScreen/album_screen_content.dart';
+import 'package:finamp/components/GenreScreen/genre_filter_row.dart';
 import 'package:finamp/components/albums_sliver_list.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
-class TracksSection extends StatefulWidget {
+class TracksSection extends ConsumerStatefulWidget {
   const TracksSection({
     required this.parent,
     this.tracks,
     this.childrenForQueue,
     required this.tracksText,
     this.seeAllCallbackFunction,
+    this.includeGenreFilters = false,
   });
 
   final BaseItemDto parent;
@@ -21,12 +25,13 @@ class TracksSection extends StatefulWidget {
   final Future<List<BaseItemDto>>? childrenForQueue;
   final String tracksText;
   final VoidCallback? seeAllCallbackFunction;
+  final bool includeGenreFilters;
 
   @override
-  State<TracksSection> createState() => _TracksSectionState();
+  ConsumerState<TracksSection> createState() => _TracksSectionState();
 }
 
-class _TracksSectionState extends State<TracksSection> {
+class _TracksSectionState extends ConsumerState<TracksSection> {
   bool _showTracks = true;
   bool _isExpandable = true;
 
@@ -130,31 +135,36 @@ class _TracksSectionState extends State<TracksSection> {
           ),
         ),
       ),
-      sliver: _showTracks
+      sliver: (widget.includeGenreFilters || _showTracks)
           ? SliverMainAxisGroup(slivers: [
-              TracksSliverList(
-                childrenForList: widget.tracks!,
-                childrenForQueue: widget.childrenForQueue!,
-                showPlayCount: true,
-                isOnArtistScreen: true,
-                parent: widget.parent,
-              ),
-              SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
+              if (widget.includeGenreFilters)
+                buildGenreItemFilterList(ref, BaseItemDtoType.track),
+              if (_showTracks)
+                TracksSliverList(
+                  childrenForList: widget.tracks!,
+                  childrenForQueue: widget.childrenForQueue!,
+                  showPlayCount: true,
+                  isOnArtistScreen: true,
+                  parent: widget.parent,
+                ),
+              if (_showTracks)
+                SliverToBoxAdapter(
+                    child: SizedBox(
+                        height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
             ])
           : SliverToBoxAdapter(child: SizedBox.shrink()),
     );
   }
 }
 
-class AlbumSection extends StatefulWidget {
+class AlbumSection extends ConsumerStatefulWidget {
   const AlbumSection({
     required this.parent,
     required this.albumsText,
     this.albums,
     this.seeAllCallbackFunction,
     this.genreFilter,
+    this.includeGenreFiltersFor,
   });
 
   final BaseItemDto parent;
@@ -162,12 +172,13 @@ class AlbumSection extends StatefulWidget {
   final List<BaseItemDto>? albums;
   final VoidCallback? seeAllCallbackFunction;
   final BaseItemDto? genreFilter;
+  final BaseItemDtoType? includeGenreFiltersFor;
 
   @override
-  State<AlbumSection> createState() => _AlbumSectionState();
+  ConsumerState<AlbumSection> createState() => _AlbumSectionState();
 }
 
-class _AlbumSectionState extends State<AlbumSection> {
+class _AlbumSectionState extends ConsumerState<AlbumSection> {
   bool _showAlbums = true;
   bool _isExpandable = true;
 
@@ -270,18 +281,26 @@ class _AlbumSectionState extends State<AlbumSection> {
           ),
         ),
       ),
-      sliver: _showAlbums
-          ? SliverMainAxisGroup(slivers: [
-              AlbumsSliverList(
-                childrenForList: widget.albums!,
-                parent: widget.parent,
-                genreFilter: widget.genreFilter,
-              ),
-              SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
-            ])
-          : SliverToBoxAdapter(child: SizedBox.shrink()),
+      sliver: (widget.includeGenreFiltersFor != null || _showAlbums)
+          ? SliverMainAxisGroup(
+              slivers: [
+                if (widget.includeGenreFiltersFor != null)
+                  buildGenreItemFilterList(ref, widget.includeGenreFiltersFor!),
+                if (_showAlbums)
+                  AlbumsSliverList(
+                    childrenForList: widget.albums!,
+                    parent: widget.parent,
+                    genreFilter: widget.genreFilter,
+                  ),
+                if (_showAlbums)
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: (widget.parent.type != "MusicGenre") ? 14 : 0,
+                    ),
+                  ),
+              ],
+          )
+          : const SliverToBoxAdapter(child: SizedBox.shrink()),
     );
   }
 }

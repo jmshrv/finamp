@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
+import 'package:finamp/components/GenreScreen/genre_count_column.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -28,7 +29,11 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
   BaseItemDto? library,
 ) async {
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-  final genreCuratedItemSelectionType = ref.watch(finampSettingsProvider.genreCuratedItemSelectionType);
+  final genreCuratedItemSelectionType = (baseItemType == BaseItemDtoType.artist)
+      ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
+      : (baseItemType == BaseItemDtoType.album)
+          ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums)
+          : ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks);
   final artistListType = ref.watch(finampSettingsProvider.artistListType);
   final artistInfoForType = (artistListType == ArtistType.albumartist)
         ? BaseItemDtoType.album
@@ -234,8 +239,18 @@ void openSeeAll(
     SortBy? sortByOverride;
     SortOrder? sortOrderOverride;
 
+    final genreCuratedItemSelectionTypeSetting = (tabContentType == TabContentType.artists)
+        ? ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
+        : ((tabContentType == TabContentType.albums)
+            ? ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums)
+            : ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeTracks));
+    final genreCuratedItemSelectionType = (ref.watch(finampSettingsProvider.isOffline) && 
+        genreCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
+          ? ref.read(finampSettingsProvider.genreMostPlayedOfflineFallback)
+          : genreCuratedItemSelectionTypeSetting;
+
     if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting)) {
-      switch (ref.read(finampSettingsProvider.genreCuratedItemSelectionType)) {
+      switch (genreCuratedItemSelectionType) {
         case CuratedItemSelectionType.mostPlayed:
           // Not yet implemented on MusicScreen, but it would be:
           // sortByOverride = SortBy.playCount;
@@ -278,12 +293,16 @@ void openSeeAll(
   @override
   Widget build(BuildContext context) {
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-    final genreCuratedItemSelectionTypeSetting =
-        ref.watch(finampSettingsProvider.genreCuratedItemSelectionType);
-    final genreCuratedItemSelectionType = 
-        (isOffline && genreCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
+    final genreCuratedItemSelectionTypeTracksSetting =
+        ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks);
+    final genreCuratedItemSelectionTypeTracks = 
+        (isOffline && genreCuratedItemSelectionTypeTracksSetting == CuratedItemSelectionType.mostPlayed)
             ? ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
-            : genreCuratedItemSelectionTypeSetting;
+            : genreCuratedItemSelectionTypeTracksSetting;
+    final genreCuratedItemSelectionTypeAlbums =
+        ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums);
+    final genreCuratedItemSelectionTypeArtists =
+        ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists);
     final genreItemSectionsOrder =
         ref.watch(finampSettingsProvider.genreItemSectionsOrder);
 
@@ -325,7 +344,7 @@ void openSeeAll(
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 4),
-                  child: _buildCountColumn(
+                  child: buildCountColumn(
                     count: albumCount,
                     label: AppLocalizations.of(context)!.albums,
                     onTap: () {
@@ -341,7 +360,7 @@ void openSeeAll(
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: _buildCountColumn(
+                  child: buildCountColumn(
                     count: trackCount,
                     label: AppLocalizations.of(context)!.tracks,
                     onTap: () {
@@ -357,7 +376,7 @@ void openSeeAll(
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4),
-                  child: _buildCountColumn(
+                  child: buildCountColumn(
                     count: artistCount,
                     label: (ref.read(finampSettingsProvider.artistListType) == ArtistType.albumartist)
                         ? AppLocalizations.of(context)!.albumArtists
@@ -376,60 +395,6 @@ void openSeeAll(
           ),
         ),
       ),
-      SliverToBoxAdapter(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                  child: IntrinsicWidth(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: CuratedItemSelectionType.values.asMap().entries.expand((entry) {
-                        final int index = entry.key;
-                        final type = entry.value;
-                        final bool isSelected = (genreCuratedItemSelectionType == type);
-                        final colorScheme = Theme.of(context).colorScheme;
-                        double leftPadding = index == 0 ? 8.0 : 0.0;
-                        double rightPadding = index == CuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
-                        return [
-                          Padding(
-                            padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
-                            child: FilterChip(
-                              label: Text(type.toLocalisedString(context)),
-                              onSelected: (isOffline && type == CuratedItemSelectionType.mostPlayed)
-                                ? null
-                                : (_) {
-                                  FinampSetters.setGenreCuratedItemSelectionType(type);
-                                },
-                              selected: isSelected,
-                              tooltip: (isOffline && type == CuratedItemSelectionType.mostPlayed)
-                                  ? AppLocalizations.of(context)!.genreMostPlayedOfflineTooltip
-                                  : null,
-                              showCheckmark: false,
-                              selectedColor: colorScheme.primary,
-                              backgroundColor: colorScheme.surface,
-                              labelStyle: TextStyle(
-                                color: isSelected
-                                    ? colorScheme.onPrimary
-                                    : colorScheme.onSurface,
-                              ),
-                              shape: StadiumBorder(),
-                            ),
-                          ),
-                        ];
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
       if (!isLoading)
         ...genreItemSectionsOrder.map((type) {
           switch (type) {
@@ -440,9 +405,10 @@ void openSeeAll(
                   parent: widget.parent,
                   tracks: tracks,
                   childrenForQueue: Future.value(tracks),
-                  tracksText: genreCuratedItemSelectionType
+                  tracksText: genreCuratedItemSelectionTypeTracks
                       .toLocalisedSectionTitle(context, BaseItemDtoType.track),
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.tracks),
+                  includeGenreFilters: true,
                 ),
               );
             case GenreItemSections.albums:
@@ -450,10 +416,11 @@ void openSeeAll(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 sliver: AlbumSection(
                   parent: widget.parent,
-                  albumsText: genreCuratedItemSelectionType
+                  albumsText: genreCuratedItemSelectionTypeAlbums
                       .toLocalisedSectionTitle(context, BaseItemDtoType.album),
                   albums: albums,
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.albums),
+                  includeGenreFiltersFor: BaseItemDtoType.album,
                 ),
               );
             case GenreItemSections.artists:
@@ -461,11 +428,12 @@ void openSeeAll(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 sliver: AlbumSection(
                   parent: widget.parent,
-                  albumsText: genreCuratedItemSelectionType
+                  albumsText: genreCuratedItemSelectionTypeArtists
                       .toLocalisedSectionTitle(context, BaseItemDtoType.artist),
                   albums: artists,
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.artists),
                   genreFilter: widget.parent,
+                  includeGenreFiltersFor: BaseItemDtoType.artist,
                 ),
               );
           }
@@ -481,50 +449,4 @@ void openSeeAll(
         )
     ]);
   }
-}
-
-Widget _buildCountColumn({
-  required int? count,
-  required String label,
-  required VoidCallback onTap,
-  Color? textColor,
-  Color? subtitleColor,
-  Color? borderColor,
-  Color? backgroundColor,
-}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(4), // Stadium shape
-        border: Border.all(
-          color: borderColor ?? Colors.black.withOpacity(0.2),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            count?.toString() ?? '-',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: textColor ?? Colors.black,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: subtitleColor ?? Colors.grey
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
 }
