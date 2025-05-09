@@ -518,7 +518,7 @@
   "@aboutTranslations": {
     "description": "Link to the translation project, shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "欢迎来到",
+  "loginFlowWelcomeHeading": "欢迎来到 {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -2151,5 +2151,26 @@
   "autoReloadQueueSubtitle": "当源更改（例如启用离线模式或切换服务器地址）时自动重新加载队列。如果禁用，Finamp 将提示您。",
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "stopAndClearQueue": "停止播放并清除队列",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "autoReloadPromptReloadButton": "重新加载",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  },
+  "preferHomeNetworkInfoBox": "此功能需要位置权限（并且需要启用位置）才能读取网络名称。",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} 将从队列中删除，因为它们尚未下载。",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
   }
 }
