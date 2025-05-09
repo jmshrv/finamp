@@ -1427,7 +1427,7 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "reportQueueToServerSubtitle": "Kun valittu, Finamp lähettää nykyisen jonon palvelimelle. Tämä voi parantaa kauko-ohjausta ja sallii jonon palauttamisen palvelimen puolella. Aina päällä, kun 'Play On'-ominaisuus on käytössä.",
+  "reportQueueToServerSubtitle": "Kun valittu, Finamp lähettää nykyisen jonon palvelimelle. Tämä voi parantaa kauko-ohjausta ja sallii jonon palauttamisen palvelimen puolella. Aina päällä, kun 'Toista laitteella'-ominaisuus on käytössä.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -2029,19 +2029,19 @@
       }
     }
   },
-  "enablePlayonTitle": "Kytke 'Play On'-tuki päälle",
+  "enablePlayonTitle": "Kytke 'Toista laitteella'-tuki päälle",
   "@enablePlayonTitle": {
     "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "enablePlayonSubtitle": "Kytkee Jellyfinin 'Play On'-ominaisuuden päälle. (Finampin etäohjaus toisella laitteella). Poista käytöstä, jos käänteinen välityspalvelin tai palvelin ei tue WebSocketteja.",
+  "enablePlayonSubtitle": "Kytkee Jellyfinin 'Toista laitteella'-ominaisuuden päälle. (Finampin etäohjaus toisella laitteella). Poista käytöstä, jos käänteinen välityspalvelin tai palvelin ei tue WebSocketteja.",
   "@enablePlayonSubtitle": {
     "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "playOnReconnectionDelay": "'Play On'-istunnon uudelleenyhdistämisen viive",
+  "playOnReconnectionDelay": "'Toista laitteella'-istunnon uudelleenyhdistämisen viive",
   "@playOnReconnectionDelay": {
     "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
-  "playbackReportingSettingsTitle": "Toiston raportointi & Play On",
+  "playbackReportingSettingsTitle": "Toiston raportointi & Toista laitteella",
   "@playbackReportingSettingsTitle": {
     "description": "Title for the playback reporting settings screen"
   },
@@ -2074,15 +2074,15 @@
   "@outputMenuTitle": {
     "description": "Title for the output menu that allows the user to change the audio output device and volume"
   },
-  "playOnStaleDelay": "'Play On'-istunnon aikakatkaisu",
+  "playOnStaleDelay": "'Toista laitteella'-istunnon aikakatkaisu",
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   },
-  "playOnStaleDelaySubtitle": "Kuinka kauan 'Play On'-istunto katsotaan aktiiviseksi komennon vastaanottamisen jälkeen. Aktiivisessa tilassa toisto raportoidaan useammin, mikä voi johtaa suurempaan kaistan käyttöön.",
+  "playOnStaleDelaySubtitle": "Kuinka kauan 'Toista laitteella'-istunto katsotaan aktiiviseksi komennon vastaanottamisen jälkeen. Aktiivisessa tilassa toisto raportoidaan useammin, mikä voi johtaa suurempaan kaistan käyttöön.",
   "@playOnStaleDelaySubtitle": {
     "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
   },
-  "playOnReconnectionDelaySubtitle": "Säätää uudelleenyhdistämisyritysten välistä viivettä (sekunneissa), kun yhteys 'Play On'- websocketiin katkeaa. Matalampi viive lisää kaistan käyttöä.",
+  "playOnReconnectionDelaySubtitle": "Säätää uudelleenyhdistämisyritysten välistä viivettä (sekunneissa), kun yhteys 'Toista laitteella'- websocketiin katkeaa. Matalampi viive lisää kaistan käyttöä.",
   "@playOnReconnectionDelaySubtitle": {
     "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
