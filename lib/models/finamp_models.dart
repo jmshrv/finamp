@@ -2401,7 +2401,7 @@ class FinampCollection {
       (type == FinampCollectionType.collectionWithLibraryFilter && library != null && item != null) ||
       (type != FinampCollectionType.libraryImages &&
        type != FinampCollectionType.collectionWithLibraryFilter &&
-       item == null),
+       item == null && library == null),
       'Invalid combination of type, library, and item for FinampCollection.'
     );
   }
@@ -2417,7 +2417,8 @@ class FinampCollection {
         FinampCollectionType.libraryImages =>
           "Cache Library Images:${library!.id}",
         FinampCollectionType.allPlaylistsMetadata => "All Playlists Metadata",
-        FinampCollectionType.collectionWithLibraryFilter => "Collection with Library Filter",
+        FinampCollectionType.collectionWithLibraryFilter =>
+          "Collection with Library Filter:${library!.id}:${item!.id}",
       };
 
   String getName(BuildContext context) => switch (type) {
@@ -2433,8 +2434,7 @@ class FinampCollection {
           AppLocalizations.of(context)!
               .finampCollectionNames("allPlaylistsMetadata"),
         FinampCollectionType.collectionWithLibraryFilter =>
-          AppLocalizations.of(context)!
-              .finampCollectionNames("collectionWithLibraryFilter"),
+          item!.name?? "Unkown Item",
       };
 
   factory FinampCollection.fromJson(Map<String, dynamic> json) =>

@@ -350,6 +350,7 @@ class JellyfinApiHelper {
         );
       } else if (parentItem?.type == "MusicGenre") {
         response = await api.getItems(
+          parentId: libraryFilter?.id,
           userId: currentUserId,
           genreIds: parentItem?.id.raw,
           includeItemTypes: includeItemTypes,

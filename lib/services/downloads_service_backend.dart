@@ -1396,7 +1396,6 @@ class DownloadsSyncService {
       DownloadStub parent) async {
     assert(parent.type == DownloadItemType.finampCollection);
     FinampCollection collection = parent.finampCollection!;
-    var item = collection.item!;
     final String fields =
         "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName";
     try {
@@ -1461,14 +1460,16 @@ class DownloadsSyncService {
           outputItems.removeWhere((element) => element.imageId == null);
           typeOverride = DownloadItemType.image;
         case FinampCollectionType.collectionWithLibraryFilter:
+          var item = collection.item!;
+          var baseItemType = BaseItemDtoType.fromItem(collection.item!);
           outputItems = await _jellyfinApiData.getItems(
-                parentItem: (parent.baseItemType == BaseItemDtoType.genre)
+                parentItem: (baseItemType == BaseItemDtoType.genre)
                     ? collection.library!
                     : item,
-                libraryFilter: (parent.baseItemType == BaseItemDtoType.artist)
+                libraryFilter: (baseItemType == BaseItemDtoType.artist)
                     ? collection.library!
                     : null,
-                genreFilter: (parent.baseItemType == BaseItemDtoType.genre)
+                genreFilter: (baseItemType == BaseItemDtoType.genre)
                     ? item
                     : null,
                 includeItemTypes: BaseItemDtoType.album.idString,
@@ -1486,8 +1487,7 @@ class DownloadsSyncService {
                   includeItemTypes: BaseItemDtoType.track.idString,
                   filters: "Artist=${parent.name}",
                   artistType: ArtistType.artist,
-                  fields:
-                      "${_jellyfinApiData.defaultFields},MediaSources,MediaStreams,SortName"
+                  fields: fields
                   ) ??
                 []);
           }
