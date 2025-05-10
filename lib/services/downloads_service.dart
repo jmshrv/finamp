@@ -178,7 +178,7 @@ late final userDownloadedItemsProvider =
               (category.baseItemType == null ||
               item.baseItemType == category.baseItemType)) ||
               (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-              item.finampCollection?.item?.type == BaseItemDtoType.artist.idString);
+              BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist);
         }).toList();
 
       case DownloadsScreenCategory.genres:
@@ -187,7 +187,7 @@ late final userDownloadedItemsProvider =
               (category.baseItemType == null ||
               item.baseItemType == category.baseItemType)) ||
               (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-              item.finampCollection?.item?.type == BaseItemDtoType.genre.idString);
+              BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre);
         }).toList();
 
       default:

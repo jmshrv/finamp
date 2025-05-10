@@ -183,6 +183,10 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
+  "allLibraries": "All Libraries",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
   "unknownName": "Unknown Name",
   "@unknownName": {},
   "tracks": "Tracks",

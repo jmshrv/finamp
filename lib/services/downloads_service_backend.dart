@@ -906,6 +906,7 @@ class DownloadsSyncService {
       case DownloadItemType.image:
       case DownloadItemType.anchor:
         viewId = null;
+        asRequired = true;
       case DownloadItemType.finampCollection:
         switch (parent.finampCollection!.type) {
           case FinampCollectionType.favorites:
