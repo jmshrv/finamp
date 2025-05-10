@@ -123,7 +123,7 @@ class DefaultSettings {
   static const sleepTimerSeconds = 1800; // 30 Minutes
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
-  static const showArtistsTopTracks = true;
+  static const showArtistsTracksSection = true;
   static const disableGesture = false;
   static const showFastScroller = true;
   static const bufferDisableSizeConstraints = false;
@@ -247,7 +247,7 @@ class FinampSettings {
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
     this.playerScreenCoverMinimumPadding =
         DefaultSettings.playerScreenCoverMinimumPadding,
-    this.showArtistsTopTracks = DefaultSettings.showArtistsTopTracks,
+    this.showArtistsTracksSection = DefaultSettings.showArtistsTracksSection,
     this.bufferDisableSizeConstraints =
         DefaultSettings.bufferDisableSizeConstraints,
     this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
@@ -523,8 +523,8 @@ class FinampSettings {
           DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
-  @HiveField(54, defaultValue: DefaultSettings.showArtistsTopTracks)
-  bool showArtistsTopTracks = DefaultSettings.showArtistsTopTracks;
+  @HiveField(54, defaultValue: DefaultSettings.showArtistsTracksSection)
+  bool showArtistsTracksSection = DefaultSettings.showArtistsTracksSection;
 
   @HiveField(55, defaultValue: DefaultSettings.showArtistChipImage)
   bool showArtistChipImage;

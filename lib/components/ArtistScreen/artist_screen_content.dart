@@ -34,7 +34,7 @@ Future<List<BaseItemDto>> getArtistTopTracks(
   final CuratedItemSelectionType artistCuratedItemSelectionType = 
       ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
   // If Top Tracks are disabled, we return an empty list
-  if (!ref.watch(finampSettingsProvider.showArtistsTopTracks)) {
+  if (!ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
     return <BaseItemDto>[];
   }
   // Get Items
@@ -434,7 +434,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
       ),
       if (!isLoading &&
           filteredTopTracks.isNotEmpty &&
-          ref.watch(finampSettingsProvider.showArtistsTopTracks))
+          ref.watch(finampSettingsProvider.showArtistsTracksSection))
         TracksSection(
             parent: widget.parent,
             tracks: filteredTopTracks,

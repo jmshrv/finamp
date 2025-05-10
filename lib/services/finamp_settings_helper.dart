@@ -129,6 +129,8 @@ class FinampSettingsHelper {
     
     finampSettingsTemp.artistGenreChipsApplyFilter =
         DefaultSettings.artistGenreChipsApplyFilter;
+    finampSettingsTemp.showArtistsTracksSection =
+        DefaultSettings.showArtistsTracksSection;
     finampSettingsTemp.artistCuratedItemSelectionType =
         DefaultSettings.artistCuratedItemSelectionType;
     finampSettingsTemp.artistMostPlayedOfflineFallback =
@@ -170,8 +172,6 @@ class FinampSettingsHelper {
     FinampSetters.setUseCoverAsBackground(DefaultSettings.useCoverAsBackground);
     finampSettingsTemp.showArtistChipImage =
         DefaultSettings.showArtistChipImage;
-    finampSettingsTemp.showArtistsTopTracks =
-        DefaultSettings.showArtistsTopTracks;
     finampSettingsTemp.allowSplitScreen = DefaultSettings.allowSplitScreen;
     finampSettingsTemp.showProgressOnNowPlayingBar =
         DefaultSettings.showProgressOnNowPlayingBar;

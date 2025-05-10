@@ -15,6 +15,7 @@ class ArtistSettingsScreen extends ConsumerStatefulWidget {
 class _ArtistSettingsScreenState extends ConsumerState<ArtistSettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final showArtistsTracksSection = ref.watch(finampSettingsProvider.showArtistsTracksSection);
     var artistCuratedItemSelectionTypeValue = ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
     var artistMostPlayedOfflineFallbackValue = ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback);
     return Scaffold(
@@ -35,28 +36,40 @@ class _ArtistSettingsScreenState extends ConsumerState<ArtistSettingsScreen> {
             onChanged: FinampSetters.setArtistGenreChipsApplyFilter,
           ),
           SizedBox(height: 8),
-          ListTile(
-              title: Text(AppLocalizations.of(context)!.artistCuratedItemSelectionTypeTitle),
-              subtitle:
-                  Text(AppLocalizations.of(context)!.artistCuratedItemSelectionTypeSubtitle),
-              trailing: DropdownButton<CuratedItemSelectionType>(
-                  value: artistCuratedItemSelectionTypeValue,
-                  items: CuratedItemSelectionType.values
-                      .map((e) => DropdownMenuItem<CuratedItemSelectionType>(
-                            value: e,
-                            child: Text(e.toLocalisedString(context)),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      FinampSetters.setArtistCuratedItemSelectionType(value);
-                    }
-                  },
-                ),
-            ),
-          if (artistCuratedItemSelectionTypeValue == CuratedItemSelectionType.mostPlayed)
+          SwitchListTile.adaptive(
+            title: Text(AppLocalizations.of(context)!.showArtistsTracksSection),
+            subtitle:
+                Text(AppLocalizations.of(context)!.showArtistsTracksSectionSubtitle),
+            value: showArtistsTracksSection,
+            onChanged: (value) => FinampSetters.setShowArtistsTracksSection(value),
+          ),
+          if (showArtistsTracksSection)
             SizedBox(height: 8),
-          if (artistCuratedItemSelectionTypeValue == CuratedItemSelectionType.mostPlayed)
+          if (showArtistsTracksSection)
+            ListTile(
+                title: Text(AppLocalizations.of(context)!.artistCuratedItemSelectionTypeTitle),
+                subtitle:
+                    Text(AppLocalizations.of(context)!.artistCuratedItemSelectionTypeSubtitle),
+                trailing: DropdownButton<CuratedItemSelectionType>(
+                    value: artistCuratedItemSelectionTypeValue,
+                    items: CuratedItemSelectionType.values
+                        .map((e) => DropdownMenuItem<CuratedItemSelectionType>(
+                              value: e,
+                              child: Text(e.toLocalisedString(context)),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        FinampSetters.setArtistCuratedItemSelectionType(value);
+                      }
+                    },
+                  ),
+              ),
+          if (showArtistsTracksSection && 
+              artistCuratedItemSelectionTypeValue == CuratedItemSelectionType.mostPlayed)
+            SizedBox(height: 8),
+          if (showArtistsTracksSection && 
+              artistCuratedItemSelectionTypeValue == CuratedItemSelectionType.mostPlayed)
             ListTile(
               title: Text(AppLocalizations.of(context)!.artistMostPlayedOfflineFallbackTitle),
               subtitle:

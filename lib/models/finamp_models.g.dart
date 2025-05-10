@@ -116,7 +116,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : (fields[48] as num).toDouble(),
-      showArtistsTopTracks: fields[54] == null ? true : fields[54] as bool,
+      showArtistsTracksSection: fields[54] == null ? true : fields[54] as bool,
       bufferDisableSizeConstraints:
           fields[78] == null ? false : fields[78] as bool,
       bufferDurationSeconds:
@@ -386,7 +386,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(53)
       ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds)
       ..writeByte(54)
-      ..write(obj.showArtistsTopTracks)
+      ..write(obj.showArtistsTracksSection)
       ..writeByte(55)
       ..write(obj.showArtistChipImage)
       ..writeByte(56)

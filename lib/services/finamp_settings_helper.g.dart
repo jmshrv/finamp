@@ -346,9 +346,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setShowArtistsTopTracks(bool newShowArtistsTopTracks) {
+  static void setShowArtistsTracksSection(bool newShowArtistsTracksSection) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.showArtistsTopTracks = newShowArtistsTopTracks;
+    finampSettingsTemp.showArtistsTracksSection = newShowArtistsTracksSection;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -908,8 +908,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<int> get periodicPlaybackSessionUpdateFrequencySeconds =>
       finampSettingsProvider.select((value) =>
           value.requireValue.periodicPlaybackSessionUpdateFrequencySeconds);
-  ProviderListenable<bool> get showArtistsTopTracks => finampSettingsProvider
-      .select((value) => value.requireValue.showArtistsTopTracks);
+  ProviderListenable<bool> get showArtistsTracksSection =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.showArtistsTracksSection);
   ProviderListenable<bool> get showArtistChipImage => finampSettingsProvider
       .select((value) => value.requireValue.showArtistChipImage);
   ProviderListenable<double> get playbackSpeed => finampSettingsProvider
