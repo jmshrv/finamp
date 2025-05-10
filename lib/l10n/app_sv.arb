@@ -474,7 +474,7 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Välkommen till",
+  "loginFlowWelcomeHeading": "Välkommen till {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -1525,7 +1525,7 @@
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} transkodad}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} transkodades}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1561,7 +1561,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ som {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ som {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
