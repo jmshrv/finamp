@@ -48,8 +48,6 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-
     return ref
         .watch(_downloadsService.userDownloadedItemsProvider(widget.type))
         .when(
@@ -63,11 +61,8 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                         leading: (stub.type == DownloadItemType.finampCollection)
                             ? AlbumImage(item: stub.finampCollection?.item)
                             : AlbumImage(item: stub.baseItem),
-                        title: Text(
-                            (stub.baseItem?.name ?? stub.name) +
-                                (isLegacyAllLibrariesDownload(stub) ? " (${localizations.allLibraries})" : ''),
-                        ),
-                        subtitle: ItemFileSize(stub: stub),
+                        title: Text(stub.baseItem?.name ?? stub.name),
+                        subtitle: buildDownloadedItemSubtitle(context, stub),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -200,8 +195,39 @@ class _DownloadedChildrenListState
   }
 }
 
-bool isLegacyAllLibrariesDownload(DownloadStub stub) {
-  return stub.type == DownloadItemType.collection &&
+Column buildDownloadedItemSubtitle(BuildContext context, DownloadStub stub) {
+  String? libraryName;
+  final isLegacyAllLibrariesDownload = stub.type == DownloadItemType.collection &&
       (BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.artist ||
-       BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.genre);
+        BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.genre);
+
+  final isCollectionWithLibraryFilter = !isLegacyAllLibrariesDownload && 
+          (stub.type == DownloadItemType.finampCollection &&
+          stub.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+          (BaseItemDtoType.fromItem(stub.finampCollection!.item!) == BaseItemDtoType.artist ||
+            BaseItemDtoType.fromItem(stub.finampCollection!.item!) == BaseItemDtoType.genre));
+  
+  final showLibraryName = isLegacyAllLibrariesDownload || isCollectionWithLibraryFilter;
+  
+  if (showLibraryName && isLegacyAllLibrariesDownload) {
+    libraryName = AppLocalizations.of(context)!.allLibraries;
+  } else if (showLibraryName) {
+    libraryName = stub.finampCollection?.library?.name;
+  }
+  
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      if (showLibraryName && libraryName != null)
+        Text(
+          libraryName,
+          style: TextStyle(
+            color: isLegacyAllLibrariesDownload 
+                ? Colors.orange
+                : Theme.of(context).textTheme.bodyMedium?.color,
+          ),
+        ),
+      ItemFileSize(stub: stub),
+    ]
+  );
 }
