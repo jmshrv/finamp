@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:finamp/menus/artist_menu.dart';
+import 'package:finamp/menus/components/overflow_menu_button.dart';
 import 'package:finamp/menus/genre_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/menus/components/overflow_menu_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -366,9 +366,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                           OverflowMenuButton(
                             onPressed: () => isGenre
                                 ? showModalGenreMenu(
-                                    context: context, item: parentItem)
+                                    context: context, baseItem: parentItem)
                                 : showModalArtistMenu(
-                                    context: context, item: parentItem),
+                                    context: context, baseItem: parentItem),
                             label:
                                 AppLocalizations.of(context)!.menuButtonLabel,
                           ),

@@ -123,13 +123,13 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
 
       switch (BaseItemDtoType.fromItem(mutableAlbum)) {
         case BaseItemDtoType.artist:
-          await showModalArtistMenu(context: context, item: mutableAlbum);
+          await showModalArtistMenu(context: context, baseItem: mutableAlbum);
           break;
         case BaseItemDtoType.genre:
-          await showModalGenreMenu(context: context, item: mutableAlbum);
+          await showModalGenreMenu(context: context, baseItem: mutableAlbum);
           break;
         case BaseItemDtoType.playlist:
-          await showModalPlaylistMenu(context: context, item: mutableAlbum);
+          await showModalPlaylistMenu(context: context, baseItem: mutableAlbum);
           break;
         default:
           await showModalAlbumMenu(context: context, baseItem: mutableAlbum);

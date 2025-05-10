@@ -1,6 +1,6 @@
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/components/menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
@@ -14,10 +14,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-class GoToArtistMenuEntry extends ConsumerWidget {
+class GoToGenreMenuEntry extends ConsumerWidget {
   final BaseItemDto baseItem;
 
-  const GoToArtistMenuEntry({
+  const GoToGenreMenuEntry({
     super.key,
     required this.baseItem,
   });
@@ -28,24 +28,24 @@ class GoToArtistMenuEntry extends ConsumerWidget {
     final downloadsService = GetIt.instance<DownloadsService>();
     final queueService = GetIt.instance<QueueService>();
 
-    final canGoToArtist = (baseItem.artistItems?.isNotEmpty ?? false);
+    final canGoToGenre = (baseItem.genreItems?.isNotEmpty ?? false);
 
     return Visibility(
-      visible: canGoToArtist,
+      visible: canGoToGenre,
       child: MenuEntry(
-        icon: TablerIcons.user,
-        title: AppLocalizations.of(context)!.goToArtist,
+        icon: TablerIcons.color_swatch,
+        title: AppLocalizations.of(context)!.goToGenre,
         onTap: () async {
-          late BaseItemDto artist;
+          late BaseItemDto genre;
           try {
             if (FinampSettingsHelper.finampSettings.isOffline) {
               final downloadsService = GetIt.instance<DownloadsService>();
-              artist = (await downloadsService.getCollectionInfo(
-                      id: baseItem.artistItems!.first.id))!
+              genre = (await downloadsService.getCollectionInfo(
+                      id: baseItem.genreItems!.first.id))!
                   .baseItem!;
             } else {
-              artist = await jellyfinApiHelper
-                  .getItemById(baseItem.artistItems!.first.id);
+              genre = await jellyfinApiHelper
+                  .getItemById(baseItem.genreItems!.first.id);
             }
           } catch (e) {
             GlobalSnackbar.error(e);
@@ -54,7 +54,7 @@ class GoToArtistMenuEntry extends ConsumerWidget {
           if (context.mounted) {
             Navigator.pop(context);
             await Navigator.of(context)
-                .pushNamed(ArtistScreen.routeName, arguments: artist);
+                .pushNamed(ArtistScreen.routeName, arguments: genre);
           }
         },
       ),

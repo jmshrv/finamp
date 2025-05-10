@@ -2,7 +2,7 @@ import 'package:finamp/components/AlbumScreen/download_dialog.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/components/menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';

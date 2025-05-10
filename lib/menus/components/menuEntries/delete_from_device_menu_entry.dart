@@ -1,8 +1,7 @@
-import 'package:finamp/components/AlbumScreen/download_dialog.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/components/menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
@@ -16,10 +15,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-class DownloadMenuEntry extends ConsumerWidget {
+class DeleteFromDeviceMenuEntry extends ConsumerWidget {
   final BaseItemDto baseItem;
 
-  const DownloadMenuEntry({
+  const DeleteFromDeviceMenuEntry({
     super.key,
     required this.baseItem,
   });
@@ -37,18 +36,15 @@ class DownloadMenuEntry extends ConsumerWidget {
         null);
 
     return Visibility(
-        visible: !ref.watch(finampSettingsProvider.isOffline) &&
-            downloadStatus == DownloadItemStatus.notNeeded,
+        visible: downloadStatus.isRequired,
         child: MenuEntry(
-            icon: Icons.file_download_outlined,
-            title: AppLocalizations.of(context)!.downloadItem,
+            icon: Icons.delete_outlined,
+            title: AppLocalizations.of(context)!
+                .deleteFromTargetConfirmButton("device"),
             onTap: () async {
               var item = DownloadStub.fromItem(
                   type: DownloadItemType.collection, item: baseItem);
-              await DownloadDialog.show(context, item, null);
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
+              await askBeforeDeleteDownloadFromDevice(context, item);
             }));
   }
 }

@@ -1,11 +1,13 @@
+import 'package:finamp/components/AlbumScreen/download_dialog.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/components/menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/downloads_service.dart';
+import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
@@ -15,10 +17,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-class DeleteFromDeviceMenuEntry extends ConsumerWidget {
+class ToggleFavoriteMenuEntry extends ConsumerWidget {
   final BaseItemDto baseItem;
 
-  const DeleteFromDeviceMenuEntry({
+  const ToggleFavoriteMenuEntry({
     super.key,
     required this.baseItem,
   });
@@ -30,21 +32,20 @@ class DeleteFromDeviceMenuEntry extends ConsumerWidget {
     final queueService = GetIt.instance<QueueService>();
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
-    final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(
-            type: DownloadItemType.collection, item: baseItem),
-        null);
+    bool isFav = ref.watch(isFavoriteProvider(baseItem));
 
     return Visibility(
-        visible: downloadStatus.isRequired,
+        visible: !ref.watch(finampSettingsProvider.isOffline),
         child: MenuEntry(
-            icon: Icons.delete_outlined,
-            title: AppLocalizations.of(context)!
-                .deleteFromTargetConfirmButton("device"),
+            icon: isFav ? TablerIcons.heart_filled : TablerIcons.heart,
+            title: isFav
+                ? AppLocalizations.of(context)!.removeFavourite
+                : AppLocalizations.of(context)!.addFavourite,
             onTap: () async {
-              var item = DownloadStub.fromItem(
-                  type: DownloadItemType.collection, item: baseItem);
-              await askBeforeDeleteDownloadFromDevice(context, item);
+              ref
+                  .read(isFavoriteProvider(baseItem).notifier)
+                  .updateFavorite(!isFav);
+              if (context.mounted) Navigator.pop(context);
             }));
   }
 }

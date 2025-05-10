@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:finamp/menus/components/menu_item_info_header.dart';
-import 'package:finamp/menus/components/playback_action.dart';
+import 'package:finamp/menus/components/menuEntries/menu_item_info_header.dart';
+import 'package:finamp/menus/components/playbackActions/playback_action.dart';
 import 'package:finamp/menus/components/speed_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
@@ -241,7 +241,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: !widget.isOffline,
         child: ListTile(
           leading: Icon(
-            Icons.playlist_add,
+            TablerIcons.playlist_add,
             color: iconColor,
           ),
           title: Text(isInCurrentPlaylist
