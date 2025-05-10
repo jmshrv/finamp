@@ -668,5 +668,15 @@
     "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
   },
   "albumArtists": "アルバムアーティスト",
-  "@albumArtists": {}
+  "@albumArtists": {},
+  "loginFlowWelcomeHeading": "{styledName}へようこそ",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen.",
+    "placeholders": {
+      "styledName": {
+        "type": "String",
+        "example": "Finamp"
+      }
+    }
+  }
 }
