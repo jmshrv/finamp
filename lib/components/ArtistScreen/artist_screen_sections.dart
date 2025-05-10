@@ -34,6 +34,7 @@ class TracksSection extends ConsumerStatefulWidget {
 class _TracksSectionState extends ConsumerState<TracksSection> {
   bool _showTracks = true;
   bool _isExpandable = true;
+  bool _manuallyClosed = false;
 
   @override
   void initState() {
@@ -54,7 +55,9 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
     if ((hasTracks && hasQueue) || widget.includeGenreFilters) {
       if (!_showTracks || !_isExpandable) {
         setState(() {
-          _showTracks = true;
+          if (!_manuallyClosed) {
+            _showTracks = true;
+          }
           _isExpandable = true;
         });
       }
@@ -79,6 +82,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
           onTap: () {
             if (_isExpandable) {
               setState(() {
+                _manuallyClosed = _showTracks;
                 _showTracks = !_showTracks;
               });
             }
@@ -194,6 +198,7 @@ class AlbumSection extends ConsumerStatefulWidget {
 class _AlbumSectionState extends ConsumerState<AlbumSection> {
   bool _showAlbums = true;
   bool _isExpandable = true;
+  bool _manuallyClosed = false;
 
   @override
   void initState() {
@@ -213,7 +218,9 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
     if (hasAlbums || widget.includeGenreFiltersFor != null) {
       if (!_showAlbums || !_isExpandable) {
         setState(() {
-          _showAlbums = true;
+          if (!_manuallyClosed) {
+            _showAlbums = true;
+          }
           _isExpandable = true;
         });
       }
@@ -238,6 +245,7 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
           onTap: () {
             if (_isExpandable) {
               setState(() {
+                _manuallyClosed = _showAlbums;
                 _showAlbums = !_showAlbums;
               });
             }
