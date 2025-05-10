@@ -6,6 +6,7 @@ import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,7 @@ import 'package:get_it/get_it.dart';
 import '../../models/jellyfin_models.dart';
 import '../../screens/album_screen.dart';
 import '../../screens/artist_screen.dart';
+import '../../screens/genre_screen.dart';
 import '../../services/downloads_service.dart';
 import '../../services/favorite_provider.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -54,6 +56,7 @@ class AlbumItem extends ConsumerStatefulWidget {
     this.parentType,
     this.onTap,
     this.isGrid = false,
+    this.genreFilter,
   });
 
   /// The album (or item, I just used to call items albums before Finamp
@@ -75,6 +78,10 @@ class AlbumItem extends ConsumerStatefulWidget {
   /// this widget in a grid view.
   final bool isGrid;
 
+  /// If a genre filter is specified, it will propagate down to for example the ArtistScreen,
+  /// showing only tracks and albums of that artist that match the genre filter
+  final BaseItemDto? genreFilter;
+
   @override
   ConsumerState<AlbumItem> createState() => _AlbumItemState();
 }
@@ -83,6 +90,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
   late BaseItemDto mutableAlbum;
 
   QueueService get _queueService => GetIt.instance<QueueService>();
+  final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   late Function() onTap;
   late AppLocalizations local;
@@ -95,10 +103,18 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
     // this is jank lol
     onTap = widget.onTap ??
         () {
-          if (mutableAlbum.type == "MusicArtist" ||
-              mutableAlbum.type == "MusicGenre") {
+          if (mutableAlbum.type == "MusicArtist") {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ArtistScreen(
+                  widgetArtist: mutableAlbum,
+                  genreFilter: (ref.watch(finampSettingsProvider.genreFilterArtistScreens)) ? widget.genreFilter : null,
+                ),
+              ),
+            );
+          } else if (mutableAlbum.type == "MusicGenre") {
             Navigator.of(context)
-                .pushNamed(ArtistScreen.routeName, arguments: mutableAlbum);
+                .pushNamed(GenreScreen.routeName, arguments: mutableAlbum);
           } else {
             Navigator.of(context)
                 .pushNamed(AlbumScreen.routeName, arguments: mutableAlbum);
@@ -113,6 +129,23 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
     local = AppLocalizations.of(context)!;
 
     final screenSize = MediaQuery.of(context).size;
+    final library = finampUserHelper.currentUser?.currentView;
+
+    final itemType = BaseItemDtoType.fromItem(widget.album);
+    final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
+            itemType == BaseItemDtoType.genre);
+    final itemDownloadStub = isArtistOrGenre
+          ? DownloadStub.fromFinampCollection(
+                FinampCollection(
+                  type: FinampCollectionType.collectionWithLibraryFilter,
+                  library: library,
+                  item: widget.album
+                )
+            )
+          : DownloadStub.fromItem(
+                type: DownloadItemType.collection,
+                item: widget.album
+            );
 
     void menuCallback({
       required Offset localPosition,
@@ -125,8 +158,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.album));
       final isOffline = ref.watch(finampSettingsProvider.isOffline);
       final downloadStatus = downloadsService.getStatus(
-          DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.album),
+          itemDownloadStub,
           null);
       final albumArtistId = widget.album.albumArtists?.firstOrNull?.id ??
           widget.album.artistItems?.firstOrNull?.id;
@@ -277,7 +309,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             PopupMenuItem<_AlbumListTileMenuItems>(
               value: _AlbumListTileMenuItems.goToArtist,
               child: ListTile(
-                leading: const Icon(Icons.person),
+                leading: const Icon(TablerIcons.user),
                 title: Text(AppLocalizations.of(context)!.goToArtist),
               ),
             ),
@@ -632,17 +664,11 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case null:
           break;
         case _AlbumListTileMenuItems.download:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.album);
-          await DownloadDialog.show(context, item, null);
+          await DownloadDialog.show(context, itemDownloadStub, null);
         case _AlbumListTileMenuItems.deleteFromDevice:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteDownloadFromDevice(context, item);
+          await askBeforeDeleteDownloadFromDevice(context, itemDownloadStub);
         case _AlbumListTileMenuItems.deleteFromServer:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.album);
-          await askBeforeDeleteFromServerAndDevice(context, item,
+          await askBeforeDeleteFromServerAndDevice(context, itemDownloadStub,
               refresh: () => musicScreenRefreshStream
                   .add(null)); // trigger a refresh of the music screen
         case _AlbumListTileMenuItems.addToPlaylist:

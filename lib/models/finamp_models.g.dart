@@ -116,7 +116,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : (fields[48] as num).toDouble(),
-      showArtistsTopTracks: fields[54] == null ? true : fields[54] as bool,
+      showArtistsTracksSection: fields[54] == null ? true : fields[54] as bool,
       bufferDisableSizeConstraints:
           fields[78] == null ? false : fields[78] as bool,
       bufferDurationSeconds:
@@ -247,6 +247,37 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[87] == null ? Duration.zero : fields[87] as Duration,
       autoReloadQueue: fields[97] == null ? false : fields[97] as bool,
       screenSize: fields[100] as ScreenSize?,
+      genreCuratedItemSelectionTypeTracks: fields[101] == null
+          ? CuratedItemSelectionType.mostPlayed
+          : fields[101] as CuratedItemSelectionType,
+      genreCuratedItemSelectionTypeAlbums: fields[102] == null
+          ? CuratedItemSelectionType.latestReleases
+          : fields[102] as CuratedItemSelectionType,
+      genreCuratedItemSelectionTypeArtists: fields[103] == null
+          ? CuratedItemSelectionType.favorites
+          : fields[103] as CuratedItemSelectionType,
+      genreItemSectionsOrder: fields[104] == null
+          ? [
+              GenreItemSections.tracks,
+              GenreItemSections.albums,
+              GenreItemSections.artists
+            ]
+          : (fields[104] as List).cast<GenreItemSections>(),
+      genreFilterArtistScreens:
+          fields[105] == null ? true : fields[105] as bool,
+      genreListsInheritSorting:
+          fields[106] == null ? true : fields[106] as bool,
+      genreMostPlayedOfflineFallback: fields[107] == null
+          ? CuratedItemSelectionType.favorites
+          : fields[107] as CuratedItemSelectionType,
+      artistGenreChipsApplyFilter:
+          fields[108] == null ? false : fields[108] as bool,
+      artistCuratedItemSelectionType: fields[109] == null
+          ? CuratedItemSelectionType.mostPlayed
+          : fields[109] as CuratedItemSelectionType,
+      artistMostPlayedOfflineFallback: fields[110] == null
+          ? CuratedItemSelectionType.favorites
+          : fields[110] as CuratedItemSelectionType,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -257,7 +288,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(95)
+      ..writeByte(105)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -355,7 +386,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(53)
       ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds)
       ..writeByte(54)
-      ..write(obj.showArtistsTopTracks)
+      ..write(obj.showArtistsTracksSection)
       ..writeByte(55)
       ..write(obj.showArtistChipImage)
       ..writeByte(56)
@@ -447,7 +478,27 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(99)
       ..write(obj.showFavoriteButtonOnMediaNotification)
       ..writeByte(100)
-      ..write(obj.screenSize);
+      ..write(obj.screenSize)
+      ..writeByte(101)
+      ..write(obj.genreCuratedItemSelectionTypeTracks)
+      ..writeByte(102)
+      ..write(obj.genreCuratedItemSelectionTypeAlbums)
+      ..writeByte(103)
+      ..write(obj.genreCuratedItemSelectionTypeArtists)
+      ..writeByte(104)
+      ..write(obj.genreItemSectionsOrder)
+      ..writeByte(105)
+      ..write(obj.genreFilterArtistScreens)
+      ..writeByte(106)
+      ..write(obj.genreListsInheritSorting)
+      ..writeByte(107)
+      ..write(obj.genreMostPlayedOfflineFallback)
+      ..writeByte(108)
+      ..write(obj.artistGenreChipsApplyFilter)
+      ..writeByte(109)
+      ..write(obj.artistCuratedItemSelectionType)
+      ..writeByte(110)
+      ..write(obj.artistMostPlayedOfflineFallback);
   }
 
   @override
@@ -2317,6 +2368,97 @@ class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ArtistTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class CuratedItemSelectionTypeAdapter
+    extends TypeAdapter<CuratedItemSelectionType> {
+  @override
+  final typeId = 95;
+
+  @override
+  CuratedItemSelectionType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return CuratedItemSelectionType.mostPlayed;
+      case 1:
+        return CuratedItemSelectionType.favorites;
+      case 2:
+        return CuratedItemSelectionType.random;
+      case 3:
+        return CuratedItemSelectionType.latestReleases;
+      case 4:
+        return CuratedItemSelectionType.recentlyAdded;
+      default:
+        return CuratedItemSelectionType.mostPlayed;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, CuratedItemSelectionType obj) {
+    switch (obj) {
+      case CuratedItemSelectionType.mostPlayed:
+        writer.writeByte(0);
+      case CuratedItemSelectionType.favorites:
+        writer.writeByte(1);
+      case CuratedItemSelectionType.random:
+        writer.writeByte(2);
+      case CuratedItemSelectionType.latestReleases:
+        writer.writeByte(3);
+      case CuratedItemSelectionType.recentlyAdded:
+        writer.writeByte(4);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CuratedItemSelectionTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class GenreItemSectionsAdapter extends TypeAdapter<GenreItemSections> {
+  @override
+  final typeId = 96;
+
+  @override
+  GenreItemSections read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return GenreItemSections.tracks;
+      case 1:
+        return GenreItemSections.albums;
+      case 2:
+        return GenreItemSections.artists;
+      default:
+        return GenreItemSections.tracks;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, GenreItemSections obj) {
+    switch (obj) {
+      case GenreItemSections.tracks:
+        writer.writeByte(0);
+      case GenreItemSections.albums:
+        writer.writeByte(1);
+      case GenreItemSections.artists:
+        writer.writeByte(2);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GenreItemSectionsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -7838,12 +7980,17 @@ FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
           ? null
           : BaseItemDto.fromJson(
               Map<String, dynamic>.from(json['Library'] as Map)),
+      item: json['Item'] == null
+          ? null
+          : BaseItemDto.fromJson(
+              Map<String, dynamic>.from(json['Item'] as Map)),
     );
 
 Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) =>
     <String, dynamic>{
       'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
       if (instance.library?.toJson() case final value?) 'Library': value,
+      if (instance.item?.toJson() case final value?) 'Item': value,
     };
 
 const _$FinampCollectionTypeEnumMap = {
@@ -7852,6 +7999,8 @@ const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.latest5Albums: 'latest5Albums',
   FinampCollectionType.libraryImages: 'libraryImages',
   FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
+  FinampCollectionType.collectionWithLibraryFilter:
+      'collectionWithLibraryFilter',
 };
 
 MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(

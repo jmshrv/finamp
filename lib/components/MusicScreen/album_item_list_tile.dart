@@ -1,4 +1,5 @@
 import 'package:finamp/components/favourite_button.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -27,7 +28,24 @@ class AlbumItemListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final subtitle = generateSubtitle(item, parentType, context);
+    final library = finampUserHelper.currentUser?.currentView;
+    final itemType = BaseItemDtoType.fromItem(item);
+    final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
+            itemType == BaseItemDtoType.genre);
+    final itemDownloadStub = isArtistOrGenre
+          ? DownloadStub.fromFinampCollection(
+                FinampCollection(
+                  type: FinampCollectionType.collectionWithLibraryFilter,
+                  library: library,
+                  item: item
+                )
+            )
+          : DownloadStub.fromItem(
+                type: DownloadItemType.collection,
+                item: item
+            );
 
     return ListTile(
         // This widget is used on the add to playlist screen, so we allow a custom
@@ -44,8 +62,7 @@ class AlbumItemListTile extends StatelessWidget {
               child: Transform.translate(
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
-                  item: DownloadStub.fromItem(
-                      item: item, type: DownloadItemType.collection),
+                  item: itemDownloadStub,
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),

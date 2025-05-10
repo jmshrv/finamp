@@ -1,5 +1,6 @@
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,9 +58,11 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                       DownloadStub stub = items.elementAt(index);
                       return ExpansionTile(
                         key: PageStorageKey(stub.id),
-                        leading: AlbumImage(item: stub.baseItem),
+                        leading: (stub.type == DownloadItemType.finampCollection)
+                            ? AlbumImage(item: stub.finampCollection?.item)
+                            : AlbumImage(item: stub.baseItem),
                         title: Text(stub.baseItem?.name ?? stub.name),
-                        subtitle: ItemFileSize(stub: stub),
+                        subtitle: buildDownloadedItemSubtitle(context, stub),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -136,6 +139,32 @@ class _DownloadedChildrenListState
   @override
   Widget build(BuildContext context) {
     var items = _downloadsService.getVisibleChildren(widget.parent);
+
+    // If we're displaying an artist, we have to filter out tracks that are
+    // children of albums we already have in the list
+    if ((widget.parent.type == DownloadItemType.collection 
+        && widget.parent.baseItemType == BaseItemDtoType.artist) ||
+      (widget.parent.type == DownloadItemType.finampCollection 
+        && BaseItemDtoType.fromItem(widget.parent.finampCollection!.item!) == BaseItemDtoType.artist)) {
+      // Collect album names
+      final albumIds = <BaseItemId>{};
+      for (var stub in items) {
+        if (BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.album) {
+          final albumId = stub.baseItem?.id;
+          if (albumId != null) albumIds.add(albumId);
+        }
+      }
+      // Filter out tracks with matching album id
+      items = items.where((stub) {
+        final type = BaseItemDtoType.fromItem(stub.baseItem!);
+        if (type == BaseItemDtoType.track) {
+          final albumId = stub.baseItem?.albumId;
+          return !albumIds.contains(albumId);
+        }
+        return true;
+      }).toList();
+    }
+    
     return Container(
       color: Theme.of(context).colorScheme.surfaceVariant,
       child: Column(children: [
@@ -164,4 +193,39 @@ class _DownloadedChildrenListState
       ]),
     );
   }
+}
+
+Column buildDownloadedItemSubtitle(BuildContext context, DownloadStub stub) {
+  String? libraryName;
+  final isLegacyAllLibrariesDownload = stub.type == DownloadItemType.collection &&
+      (BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.artist ||
+        BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.genre);
+
+  final isCollectionWithLibraryFilter = !isLegacyAllLibrariesDownload && 
+          (stub.type == DownloadItemType.finampCollection &&
+          stub.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter);
+  
+  final showLibraryName = isLegacyAllLibrariesDownload || isCollectionWithLibraryFilter;
+  
+  if (showLibraryName && isLegacyAllLibrariesDownload) {
+    libraryName = AppLocalizations.of(context)!.allLibraries;
+  } else if (showLibraryName) {
+    libraryName = stub.finampCollection?.library?.name;
+  }
+  
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      if (showLibraryName && libraryName != null)
+        Text(
+          libraryName,
+          style: TextStyle(
+            color: isLegacyAllLibrariesDownload 
+                ? Colors.orange
+                : Theme.of(context).textTheme.bodyMedium?.color,
+          ),
+        ),
+      ItemFileSize(stub: stub),
+    ]
+  );
 }

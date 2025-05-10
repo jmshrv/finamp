@@ -1,29 +1,320 @@
 import 'dart:async';
-import 'dart:math' as math;
 
-import 'package:collection/collection.dart';
+import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
-import '../AlbumScreen/album_screen_content.dart';
 import '../AlbumScreen/download_button.dart';
-import '../albums_sliver_list.dart';
 import '../favourite_button.dart';
 import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 
+part 'artist_screen_content.g.dart';
+
+// Get the Top Tracks of an artist
+@riverpod
+Future<List<BaseItemDto>> getArtistTopTracks(
+  Ref ref,
+  BaseItemDto parent,
+  BaseItemDto? library,
+  BaseItemDto? genreFilter,
+) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  final CuratedItemSelectionType artistCuratedItemSelectionType = 
+      ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
+  // If Top Tracks are disabled, we return an empty list
+  if (!ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
+    return <BaseItemDto>[];
+  }
+  // Get Items
+  if (isOffline) {
+    // In Offline Mode:
+    final artistCuratedItemSelectionTypeOffline = 
+        (artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
+            ? ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
+            : artistCuratedItemSelectionType;
+    // We already fetch all tracks for the playback, 
+    // and as in offline mode this is much faster, 
+    // we just sort them and only return the first 5 items.
+    final sortBy = switch (artistCuratedItemSelectionTypeOffline) {
+      // Offline Play Count not implemented yet
+      // CuratedItemSelectionType.mostPlayed => SortBy.playCount,
+      CuratedItemSelectionType.recentlyAdded => SortBy.dateCreated,
+      CuratedItemSelectionType.latestReleases => SortBy.premiereDate,
+      _ => SortBy.random, // for Favorites and Random
+    };
+    final onlyFavorites = (artistCuratedItemSelectionTypeOffline == CuratedItemSelectionType.favorites);
+    final List<BaseItemDto> allArtistTracks = await ref.watch(
+      getAllTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
+    );
+    var items = sortItems(allArtistTracks, sortBy, SortOrder.descending);
+    items = items.take(5).toList();
+    return items;
+  } else {
+    // In Online Mode:
+    final sortByMain = switch (artistCuratedItemSelectionType) {
+      CuratedItemSelectionType.mostPlayed => "PlayCount",
+      CuratedItemSelectionType.recentlyAdded => "DateCreated",
+      CuratedItemSelectionType.latestReleases => "PremiereDate",
+      _ => "Random", // for Favorites and Random
+    };
+    // Get Top 5 Tracks sorted by Play Count
+      final List<BaseItemDto>? topTracks = 
+        await jellyfinApiHelper.getItems(
+            libraryFilter: library,
+            parentItem: parent,
+            genreFilter: genreFilter,
+            sortBy: "$sortByMain,SortName",
+            sortOrder: "Descending",
+            isFavorite: (artistCuratedItemSelectionType == CuratedItemSelectionType.favorites) 
+                ? true : null,
+            limit: 5,
+            includeItemTypes: "Audio",
+          );
+    return topTracks?? [];
+  }
+}
+
+// Get Albums where the artist is an album artist
+@riverpod
+Future<List<BaseItemDto>> getArtistAlbums(
+  Ref ref,
+  BaseItemDto parent,
+  BaseItemDto? library,
+  BaseItemDto? genreFilter,
+) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  // Get Items
+  if (isOffline) {
+    // In Offline Mode:
+    // Get Albums where artist is Album Artist sorted by Premiere Date
+    final List<DownloadStub> fetchArtistAlbums =
+      await downloadsService.getAllCollections(
+          viewFilter: library?.id,
+          childViewFilter: null,
+          nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+          baseTypeFilter: BaseItemDtoType.album,
+          relatedTo: parent,
+          artistType: ArtistType.albumartist,
+          genreFilter: genreFilter);
+    fetchArtistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
+        .compareTo(b.baseItem!.premiereDate ?? ""));
+    final List<BaseItemDto> artistAlbums = fetchArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
+    return artistAlbums;
+  } else {
+    // In Online Mode:
+    // Get Albums where artist is Album Artist sorted by Premiere Date
+    final List<BaseItemDto>? artistAlbums = 
+      await jellyfinApiHelper.getItems(
+          libraryFilter: library,
+          parentItem: parent,
+          genreFilter: genreFilter,
+          sortBy: "PremiereDate,SortName",
+          includeItemTypes: "MusicAlbum",
+          artistType: ArtistType.albumartist);
+    return artistAlbums?? [];
+  }
+}
+
+// Get Albums with tracks in it on which the artist is a performing artist
+// (note that this also might include albums where the artist is album artist as well,
+// so we have to filter this list later for the appears on section to exclude those)
+@riverpod
+Future<List<BaseItemDto>> getPerformingArtistAlbums(
+  Ref ref,
+  BaseItemDto parent,
+  BaseItemDto? library,
+  BaseItemDto? genreFilter,
+) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  // Get Items
+  if (isOffline) {
+    // In Offline Mode:
+    // Get Albums where artist is Performing Artist sorted by Premiere Date
+    final List<DownloadStub> fetchPerformingArtistAlbums =
+      await downloadsService.getAllCollections(
+          viewFilter: library?.id,
+          childViewFilter: null,
+          nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+          baseTypeFilter: BaseItemDtoType.album,
+          relatedTo: parent,
+          artistType: ArtistType.artist,
+          genreFilter: genreFilter);
+    fetchPerformingArtistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
+        .compareTo(b.baseItem!.premiereDate ?? ""));
+    final List<BaseItemDto> performingArtistAlbums = fetchPerformingArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
+    return performingArtistAlbums;
+  } else {
+    // In Online Mode:
+    // Get Albums where artist is Performing Artist sorted by Premiere Date
+    final List<BaseItemDto>? performingArtistAlbums = 
+      await jellyfinApiHelper.getItems(
+        libraryFilter: library,
+        parentItem: parent,
+        genreFilter: genreFilter,
+        sortBy: "PremiereDate,SortName",
+        includeItemTypes: "MusicAlbum",
+        artistType: ArtistType.artist,
+      );
+    return performingArtistAlbums?? [];
+  }
+}
+
+// Fetch every performing artist track 
+// (note that this intentionally also includes tracks
+// where the artist is also an album artist)
+@riverpod
+Future<List<BaseItemDto>> getPerformingArtistTracks(
+  Ref ref,
+  BaseItemDto parent,
+  BaseItemDto? library,
+  BaseItemDto? genreFilter,
+  {bool onlyFavorites = false,}
+) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+
+  // Get Items
+  if (isOffline) {
+    // In Offline Mode:
+    final List<BaseItemDto> performingArtistTracks = [];
+    // Fetch every album where the artist is a performing artist
+    final List<BaseItemDto> allPerformingArtistAlbums = await ref.watch(
+      getPerformingArtistAlbumsProvider(parent, library, genreFilter).future,
+    );
+    // Loop through the albums and add the tracks
+    for (var album in allPerformingArtistAlbums) {
+      final performingArtistAlbumTracks = await downloadsService.getCollectionTracks(
+        album, 
+        playable: true,
+        onlyFavorites: onlyFavorites,
+      );
+      // Now we remove every track where the artist is NOT an performing artist...
+      final filteredPerformingArtistTracks = performingArtistAlbumTracks.where((track) {
+        return track.artistItems?.any((artist) => artist.id == parent.id) ?? false;
+      });
+      // and add the tracks to the list
+      performingArtistTracks.addAll(filteredPerformingArtistTracks);
+    }
+    return performingArtistTracks;
+  } else {
+    // In Online Mode:
+    final List<BaseItemDto>? allPerformingArtistTracks = 
+      await jellyfinApiHelper.getItems(
+        libraryFilter: library,
+        parentItem: parent,
+        genreFilter: genreFilter,
+        sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+        includeItemTypes: "Audio",
+        artistType: ArtistType.artist,
+      );
+    return allPerformingArtistTracks ?? [];
+  }
+}
+
+// Get all Tracks for playback
+@riverpod
+Future<List<BaseItemDto>> getAllTracks(
+  Ref ref,
+  BaseItemDto parent,
+  BaseItemDto? library,
+  BaseItemDto? genreFilter,
+  {bool onlyFavorites = false,}
+) async {
+  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final downloadsService = GetIt.instance<DownloadsService>();
+  final isOffline = ref.watch(finampSettingsProvider.isOffline);
+  // Get Items
+  if (isOffline) {
+    // In Offline Mode:
+    // First fetch every album of the album artist
+    final List<BaseItemDto> allAlbumArtistAlbums = await ref.watch(
+      getArtistAlbumsProvider(parent, library, genreFilter).future,
+    );
+    // Then add the tracks of every album
+    final List<BaseItemDto> sortedTracks = [];
+    for (var album in allAlbumArtistAlbums) {
+      sortedTracks.addAll(await downloadsService.getCollectionTracks(
+        album,
+        playable: true,
+        onlyFavorites: onlyFavorites,
+      ));
+    }
+    // Fetch every performing artist track
+    final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(
+      getPerformingArtistTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
+    );
+    // Filter out the tracks already added through album artist albums
+    final existingIds = sortedTracks.map((t) => t.id).toSet();
+    final List<BaseItemDto> allPerformingArtistTracksFiltered = allPerformingArtistTracks
+        .where((track) => !existingIds.contains(track.id))
+        .toList();
+    // Add the remaining tracks
+    sortedTracks.addAll(allPerformingArtistTracksFiltered);
+    // And return the tracks
+    return sortedTracks;
+  } else {
+    // In Online Mode:
+    // Fetch every album artist track
+    final allAlbumArtistTracksResponse = await jellyfinApiHelper.getItems(
+      libraryFilter: library,
+      parentItem: parent,
+      genreFilter: genreFilter,
+      sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+      includeItemTypes: "Audio",
+      artistType: ArtistType.albumartist,
+    );
+    // Get all performing artist tracks
+    final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(
+      getPerformingArtistTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
+    );
+    // We now remove albumartist tracks from performance artist tracks to avoid duplicates
+    final allAlbumArtistTracks = allAlbumArtistTracksResponse ?? [];
+    final allPerformingTracks = allPerformingArtistTracks;
+    final albumArtistTrackIds =
+        allAlbumArtistTracks.map((item) => item.id).toSet();
+    final filteredPerformingTracks = allPerformingTracks
+        .where((performingTrack) =>
+            !albumArtistTrackIds.contains(performingTrack.id))
+        .toList();
+    // combine and return
+    final combinedTracks = [
+      ...allAlbumArtistTracks,
+      ...filteredPerformingTracks
+    ];
+    return combinedTracks;
+  }
+}
+
 class ArtistScreenContent extends ConsumerStatefulWidget {
-  const ArtistScreenContent({super.key, required this.parent});
+  const ArtistScreenContent({
+    super.key,
+    required this.parent,
+    this.library,
+    this.genreFilter,
+    required this.updateGenreFilter,
+  });
 
   final BaseItemDto parent;
+  final BaseItemDto? library;
+  final BaseItemDto? genreFilter;
+  final void Function(BaseItemDto?) updateGenreFilter;
 
   @override
   ConsumerState<ArtistScreenContent> createState() =>
@@ -33,7 +324,6 @@ class ArtistScreenContent extends ConsumerStatefulWidget {
 class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsService = GetIt.instance<DownloadsService>();
-  bool _isLoading = true;
 
   StreamSubscription<void>? _refreshStream;
 
@@ -53,416 +343,141 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final Future<List<List<BaseItemDto>?>> futures;
-    final Future<List<BaseItemDto>?> allTracks;
-    final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    final library = finampUserHelper.currentUser?.currentView;
+    final isOffline = ref.watch(finampSettingsProvider.isOffline);
     List<BaseItemDto> allChildren = [];
+  
+    final topTracksAsync = ref.watch(
+        getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter));
+    final albumArtistAlbumsAsync = ref.watch(
+        getArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter));
+    final performingArtistAlbumsAsync = ref.watch(
+        getPerformingArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter));
+    final allPerformingArtistTracksAsync = ref.watch(
+        getPerformingArtistTracksProvider(widget.parent, widget.library, widget.genreFilter));
+        final allTracks = ref.watch(
+        getAllTracksProvider(widget.parent, widget.library, widget.genreFilter).future,
+      );
 
-    // Get Items
-    if (isOffline) {
-      // In Offline Mode
-      futures = Future.wait([
-        Future.value(
-            <BaseItemDto>[]), // Play count tracking is not implemented offline
-        // Get Albums for Genre or where artist is Album Artist sorted by Premiere Date
-        Future.sync(() async {
-          final List<DownloadStub> artistAlbums =
-              await _downloadsService.getAllCollections(
-                  baseTypeFilter: BaseItemDtoType.album,
-                  relatedTo: widget.parent,
-                  artistType: (widget.parent.type == "MusicGenre")
-                      ? null
-                      : ArtistType.albumartist);
-          artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
-              .compareTo(b.baseItem!.premiereDate ?? ""));
-          return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
-        }),
-        // Get Albums where artist is Performing Artist sorted by Premiere Date
-        Future.sync(() async {
-          final List<DownloadStub> artistAlbums =
-              await _downloadsService.getAllCollections(
-                  baseTypeFilter: BaseItemDtoType.album,
-                  relatedTo: widget.parent,
-                  artistType: (widget.parent.type == "MusicGenre")
-                      ? null
-                      : ArtistType.artist);
-          artistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
-              .compareTo(b.baseItem!.premiereDate ?? ""));
-          return artistAlbums.map((e) => e.baseItem).nonNulls.toList();
-        })
-      ]);
+    final isLoading = [
+      topTracksAsync,
+      albumArtistAlbumsAsync,
+      performingArtistAlbumsAsync,
+    ].any((e) => e.isLoading || e.hasError);
 
-      // Get All Tracks for Track Count and Playback
-      allTracks = Future.sync(() async {
-        // First fetch every album of the album artist or genre
-        final List<DownloadStub> albumArtistAlbums =
-            await _downloadsService.getAllCollections(
-                baseTypeFilter: BaseItemDtoType.album,
-                relatedTo: widget.parent,
-                artistType: (widget.parent.type == "MusicGenre")
-                    ? null
-                    : ArtistType.albumartist);
-        albumArtistAlbums.sort((a, b) => (a.name).compareTo(b.name));
-        // Then add the tracks of every album
-        final List<BaseItemDto> sortedTracks = [];
-        for (var album in albumArtistAlbums) {
-          sortedTracks.addAll(await _downloadsService
-              .getCollectionTracks(album.baseItem!, playable: true));
-        }
-        // Genre is already ready
-        if (widget.parent.type == "MusicGenre") return sortedTracks;
-        // Fetch every album where the artist is a performing artist
-        final List<DownloadStub> performingArtistAlbums =
-            await _downloadsService.getAllCollections(
-                baseTypeFilter: BaseItemDtoType.album,
-                relatedTo: widget.parent,
-                artistType: (widget.parent.type == "MusicGenre")
-                    ? null
-                    : ArtistType.artist);
-        performingArtistAlbums.sort((a, b) => (a.name).compareTo(b.name));
-        // Filter out albums already fetched in the first query
-        final List<DownloadStub> filteredPerformingArtistAlbums =
-            performingArtistAlbums.where((performingAlbum) {
-          return !albumArtistAlbums.any(
-              (albumArtistAlbum) => albumArtistAlbum.id == performingAlbum.id);
-        }).toList();
-        // Again add the tracks of every album
-        final List<BaseItemDto> sortedTracksIncludingAppearsOn = [];
-        for (var album in filteredPerformingArtistAlbums) {
-          sortedTracks.addAll(await _downloadsService
-              .getCollectionTracks(album.baseItem!, playable: true));
-        }
-        // Combine the results and return
-        final combinedTracks = [
-          ...sortedTracks,
-          ...sortedTracksIncludingAppearsOn
-        ];
-        return combinedTracks;
-      });
-    } else {
-      // In Online Mode
-      futures = Future.wait([
-        // Get Tracks sorted by Play Count
-        if (ref.watch(finampSettingsProvider.showArtistsTopTracks))
-          jellyfinApiHelper.getItems(
-            parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
-            sortBy: "PlayCount,SortName",
-            sortOrder: "Descending",
-            limit: 5,
-            includeItemTypes: "Audio",
-          )
-        else
-          Future.value(null),
-        // Get Albums where artist is Album Artist sorted by Premiere Date
-        jellyfinApiHelper.getItems(
-            parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
-            sortBy: "PremiereDate,SortName",
-            includeItemTypes: "MusicAlbum",
-            artistType: (widget.parent.type == "MusicGenre")
-                ? null
-                : ArtistType.albumartist),
-        // Get Albums where artist is Performing Artist sorted by Premiere Date
-        jellyfinApiHelper.getItems(
-            parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
-            sortBy: "PremiereDate,SortName",
-            includeItemTypes: "MusicAlbum",
-            artistType: (widget.parent.type == "MusicGenre")
-                ? null
-                : ArtistType.artist),
-        // Now we fetch every performing artist track
-        // (this has to happen in Future.wait, because otherwise we will
-        // get the correct childrenCount for the Download Status too late)
-        if (widget.parent.type != "MusicGenre")
-          jellyfinApiHelper.getItems(
-            parentItem: widget.parent,
-            filters: "Artist=${widget.parent.name}",
-            sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-            includeItemTypes: "Audio",
-            artistType:
-                (widget.parent.type == "MusicGenre") ? null : ArtistType.artist,
-          )
-        else
-          Future.value(null)
-      ]);
+    final topTracks = topTracksAsync.valueOrNull ?? [];
+    final albumArtistAlbums = albumArtistAlbumsAsync.valueOrNull ?? [];
+    final performingArtistAlbums = performingArtistAlbumsAsync.valueOrNull ?? [];
+    final allPerformingArtistTracks = allPerformingArtistTracksAsync.valueOrNull ?? [];
 
-      // Get All Tracks for Track Count and Playback
-      allTracks = Future.sync(() async {
-        final previousResults = await futures;
-        final allPerformingTracksResponse = previousResults[3];
+    final artistCuratedItemSelectionTypeSetting = 
+        ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
+    final artistCuratedItemSelectionType = (isOffline)
+      ? ((artistCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
+          ? ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
+          : artistCuratedItemSelectionTypeSetting)
+      : artistCuratedItemSelectionTypeSetting;
 
-        // Fetch every genre or album artist track
-        final allAlbumArtistTracksResponse = await jellyfinApiHelper.getItems(
+    final topTracksText = (artistCuratedItemSelectionType == CuratedItemSelectionType.random)
+        ? AppLocalizations.of(context)!.randomTracks
+        : artistCuratedItemSelectionType
+                      .toLocalisedSectionTitle(context, BaseItemDtoType.track);
+
+    var appearsOnAlbums = performingArtistAlbums
+        .where((a) => !albumArtistAlbums.any((b) => b.id == a.id))
+        .toList();
+    var filteredTopTracks = (artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
+        ? topTracks
+          .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+          .take(5)
+          .toList()
+        : topTracks
+          .take(5)
+          .toList();
+
+    // Combine Children to get correct ChildrenCount
+    // for the Download Status Sync Display for Artists
+    allChildren = [...albumArtistAlbums, ...allPerformingArtistTracks];
+
+    return PaddedCustomScrollview(slivers: <Widget>[
+      SliverAppBar(
+        title: Text(widget.parent.name ??
+            AppLocalizations.of(context)!.unknownName),
+        // 125 + 116 is the total height of the widget we use as a
+        // FlexibleSpaceBar. We add the toolbar height since the widget
+        // should appear below the appbar.
+        expandedHeight: kToolbarHeight + 125 + 96,
+        pinned: true,
+        flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
           parentItem: widget.parent,
-          filters: "Artist=${widget.parent.name}",
-          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
-          includeItemTypes: "Audio",
-          artistType: (widget.parent.type == "MusicGenre")
-              ? null
-              : ArtistType.albumartist,
-        );
-
-        // Genre is already ready
-        if (widget.parent.type == "MusicGenre")
-          return allAlbumArtistTracksResponse;
-
-        // We exclude albumartist tracks from performance artist tracks
-        final allAlbumArtistTracks = allAlbumArtistTracksResponse ?? [];
-        final allPerformingTracks = allPerformingTracksResponse ?? [];
-        final albumArtistTrackIds =
-            allAlbumArtistTracks.map((item) => item.id).toSet();
-        final filteredPerformingTracks = allPerformingTracks
-            .where((performingTrack) =>
-                !albumArtistTrackIds.contains(performingTrack.id))
-            .toList();
-
-        // combine and return
-        final combinedTracks = [
-          ...allAlbumArtistTracks,
-          ...filteredPerformingTracks
-        ];
-        return combinedTracks;
-      });
-    }
-
-    return FutureBuilder(
-        future: futures,
-        builder: (context, snapshot) {
-          _isLoading = (snapshot.connectionState == ConnectionState.waiting);
-          var tracks = snapshot.data?.elementAtOrNull(0) ?? [];
-          var albums = snapshot.data?.elementAtOrNull(1) ?? [];
-          var albumsAsPerformingArtist =
-              snapshot.data?.elementAtOrNull(2) ?? [];
-          var allPerformingArtistTracks =
-              snapshot.data?.elementAtOrNull(3) ?? [];
-
-          var appearsOnAlbums = albumsAsPerformingArtist
-              .where((a) => !albums.any((b) => b.id == a.id))
-              .toList();
-          var topTracks = tracks
-              .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
-              .take(5)
-              .toList();
-
-          // Combine Children to get correct ChildrenCount
-          // for the Download Status Sync Display for Artists
-          allChildren = [...albums, ...allPerformingArtistTracks];
-
-          return PaddedCustomScrollview(slivers: <Widget>[
-            SliverAppBar(
-              title: Text(widget.parent.name ??
-                  AppLocalizations.of(context)!.unknownName),
-              // 125 + 116 is the total height of the widget we use as a
-              // FlexibleSpaceBar. We add the toolbar height since the widget
-              // should appear below the appbar.
-              // As genres don't have the buttons, we only add the 125 for them
-              // TODO: This height is affected by platform density.
-              expandedHeight: widget.parent.type != "MusicGenre"
-                  ? kToolbarHeight + 125 + 96
-                  : kToolbarHeight + 125 + 16,
-              pinned: true,
-              flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
-                parentItem: widget.parent,
-                isGenre: widget.parent.type == "MusicGenre",
-                allTracks: allTracks,
-                albumCount: albums.length,
-              ),
-              actions: [
-                // this screen is also used for genres, which can't be favorited
-                if (widget.parent.type != "MusicGenre")
-                  FavoriteButton(item: widget.parent),
-                if (!_isLoading)
-                  DownloadButton(
-                      item: DownloadStub.fromItem(
-                          item: widget.parent,
-                          type: DownloadItemType.collection),
-                      children: (widget.parent.type == "MusicGenre")
-                          ? albums
-                          : allChildren)
-              ],
-            ),
-            if (!_isLoading &&
-                !isOffline &&
-                ref.watch(finampSettingsProvider.showArtistsTopTracks))
-              TopTracksSection(
-                  parent: widget.parent,
-                  topTracks: topTracks,
-                  childrenForQueue: Future.value(tracks)),
-            if (albums.isNotEmpty)
-              AlbumSection(
-                  parent: widget.parent,
-                  albumsText: AppLocalizations.of(context)!.albums,
-                  albums: albums),
-            if (appearsOnAlbums.isNotEmpty)
-              AlbumSection(
-                  parent: widget.parent,
-                  albumsText: AppLocalizations.of(context)!.appearsOnAlbums,
-                  albums: appearsOnAlbums),
-            if (!_isLoading && (albums.isEmpty && appearsOnAlbums.isEmpty))
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(6, 12, 6,
-                    0), // Keeping horizontal and vertical padding the same
-                sliver: SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 2, vertical: 12), // Updated inner padding
-                    child: Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.emptyFilteredListTitle,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+          isGenre: false,
+          allTracks: allTracks,
+          albumCount: albumArtistAlbums.length,
+          genreFilter: widget.genreFilter,
+          updateGenreFilter: widget.updateGenreFilter,
+        ),
+        actions: [
+          FavoriteButton(item: widget.parent),
+          if (!isLoading && widget.genreFilter == null)
+            DownloadButton(
+                item: DownloadStub.fromFinampCollection(
+                  FinampCollection(
+                      type: FinampCollectionType.collectionWithLibraryFilter,
+                      library: library,
+                      item: widget.parent,
+                  )
                 ),
-              ),
-            if (_isLoading)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                  child: Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
-                ),
-              )
-          ]);
-        });
-  }
-}
-
-class TopTracksSection extends StatefulWidget {
-  const TopTracksSection({
-    required this.parent,
-    required this.topTracks,
-    required this.childrenForQueue,
-  });
-
-  final BaseItemDto parent;
-  final List<BaseItemDto> topTracks;
-  final Future<List<BaseItemDto>> childrenForQueue;
-
-  @override
-  State<TopTracksSection> createState() => _TopTracksSectionState();
-}
-
-class _TopTracksSectionState extends State<TopTracksSection> {
-  bool _showTopTracks = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverStickyHeader(
-      header: Container(
-        padding: EdgeInsets.fromLTRB(
-            6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              _showTopTracks = !_showTopTracks;
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Transform.rotate(
-                  angle: _showTopTracks ? 0 : -math.pi / 2,
-                  child: const Icon(Icons.arrow_drop_down, size: 24),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  AppLocalizations.of(context)!.topTracks,
+                children: allChildren
+            )
+        ],
+      ),
+      if (!isLoading &&
+          filteredTopTracks.isNotEmpty &&
+          ref.watch(finampSettingsProvider.showArtistsTracksSection))
+        TracksSection(
+            parent: widget.parent,
+            tracks: filteredTopTracks,
+            childrenForQueue: Future.value(filteredTopTracks),
+            tracksText: topTracksText,
+        ),
+      if (!isLoading && albumArtistAlbums.isNotEmpty)
+        AlbumSection(
+            parent: widget.parent,
+            albumsText: AppLocalizations.of(context)!.albums,
+            albums: albumArtistAlbums),
+      if (!isLoading && appearsOnAlbums.isNotEmpty)
+        AlbumSection(
+            parent: widget.parent,
+            albumsText: AppLocalizations.of(context)!.appearsOnAlbums,
+            albums: appearsOnAlbums),
+      if (!isLoading && (albumArtistAlbums.isEmpty && appearsOnAlbums.isEmpty))
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(6, 12, 6,
+              0),
+          sliver: SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 2, vertical: 12),
+              child: Center(
+                child: Text(
+                  AppLocalizations.of(context)!.emptyFilteredListTitle,
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
-      sliver: _showTopTracks
-          ? SliverMainAxisGroup(slivers: [
-              TracksSliverList(
-                childrenForList: widget.topTracks,
-                childrenForQueue: widget.childrenForQueue,
-                showPlayCount: true,
-                isOnArtistScreen: true,
-                parent: widget.parent,
-              ),
-              SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
-            ])
-          : SliverToBoxAdapter(child: SizedBox.shrink()),
-    );
-  }
-}
-
-class AlbumSection extends StatefulWidget {
-  const AlbumSection({
-    required this.parent,
-    required this.albumsText,
-    required this.albums,
-  });
-
-  final BaseItemDto parent;
-  final String albumsText;
-  final List<BaseItemDto> albums;
-
-  @override
-  State<AlbumSection> createState() => _AlbumSectionState();
-}
-
-class _AlbumSectionState extends State<AlbumSection> {
-  bool _showAlbums = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverStickyHeader(
-      header: Container(
-        padding: EdgeInsets.fromLTRB(
-            6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              _showAlbums = !_showAlbums;
-            });
-          },
+      if (isLoading)
+        SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Transform.rotate(
-                  angle: _showAlbums ? 0 : -math.pi / 2,
-                  child: const Icon(Icons.arrow_drop_down, size: 24),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  widget.albumsText,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            child: Center(
+              child: CircularProgressIndicator.adaptive(),
             ),
           ),
-        ),
-      ),
-      sliver: _showAlbums
-          ? SliverMainAxisGroup(slivers: [
-              AlbumsSliverList(
-                childrenForList: widget.albums,
-                parent: widget.parent,
-              ),
-              SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
-            ])
-          : SliverToBoxAdapter(child: SizedBox.shrink()),
-    );
+        )
+    ]);
   }
 }

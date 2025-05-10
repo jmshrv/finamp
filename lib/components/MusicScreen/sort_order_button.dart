@@ -7,25 +7,35 @@ import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class SortOrderButton extends ConsumerWidget {
-  const SortOrderButton(this.tabType, {super.key});
+  const SortOrderButton({
+    super.key,
+    required this.tabType,
+    this.sortOrderOverride,
+    this.onOverrideChanged,
+  });
 
   final TabContentType tabType;
+  final SortOrder? sortOrderOverride;
+  final void Function(SortOrder newOrder)? onOverrideChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var order = ref.watch(finampSettingsProvider.tabSortOrder(tabType));
+    var order = sortOrderOverride ?? ref.watch(finampSettingsProvider.tabSortOrder(tabType));
     return IconButton(
       tooltip: AppLocalizations.of(context)!.sortOrder,
       icon: order == SortOrder.ascending
           ? const Icon(Icons.arrow_downward)
           : const Icon(Icons.arrow_upward),
       onPressed: () {
-        if (order == SortOrder.ascending) {
-          FinampSetters.setTabSortOrder(tabType, SortOrder.descending);
+        final newOrder = order == SortOrder.ascending
+            ? SortOrder.descending
+            : SortOrder.ascending;
+        if (sortOrderOverride != null && onOverrideChanged != null) {
+          onOverrideChanged!(newOrder);
         } else {
-          FinampSetters.setTabSortOrder(tabType, SortOrder.ascending);
+          FinampSetters.setTabSortOrder(tabType, newOrder);
         }
-      },
+      }
     );
   }
 }
