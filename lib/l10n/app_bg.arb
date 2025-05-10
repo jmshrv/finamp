@@ -296,16 +296,6 @@
   "@removeFromMix": {},
   "addToMix": "Добави към микса",
   "@addToMix": {},
-  "startupError": "Нещо се обърка по време на стартиране на приложението. Грешката беше:{error}\n\nДокладвайте проблема, с екранна снимка, на github.com/UnicornsOnLSD/finamp, Ако проблемът продължава, изчистете кеша или преинсталирайте приложението.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "В случай, че искате да имате достъп до вашия Jellyfin сървър дистанционно, трябва да използвате външния си IP адрес.\n\nВ случай, че сървърът ви работи на HTTP порт (80/443), не е нужно да посочвате такъв. Например ако използвате обратно прокси.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."

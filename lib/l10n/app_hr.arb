@@ -1,16 +1,6 @@
 {
   "serverUrl": "URL servera",
   "@serverUrl": {},
-  "startupError": "Dogodila se greška prilikom pokretanja aplikacije. Greška: {error}\n\nPrijavi problem na github.com/UnicornsOnLSD/finamp sa snimkom ekrana ove stranice. Ako ovaj problem ustraje, izbriši svoje podatke aplikacije i resetiraj aplikaciju.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "sortOrder": "Redoslijed razvrstavanja",
   "@sortOrder": {},
   "selectMusicLibraries": "Odaberi fonoteke",
