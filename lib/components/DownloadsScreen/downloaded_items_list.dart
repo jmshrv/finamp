@@ -203,9 +203,7 @@ Column buildDownloadedItemSubtitle(BuildContext context, DownloadStub stub) {
 
   final isCollectionWithLibraryFilter = !isLegacyAllLibrariesDownload && 
           (stub.type == DownloadItemType.finampCollection &&
-          stub.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-          (BaseItemDtoType.fromItem(stub.finampCollection!.item!) == BaseItemDtoType.artist ||
-            BaseItemDtoType.fromItem(stub.finampCollection!.item!) == BaseItemDtoType.genre));
+          stub.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter);
   
   final showLibraryName = isLegacyAllLibrariesDownload || isCollectionWithLibraryFilter;
   
