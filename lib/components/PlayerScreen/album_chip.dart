@@ -49,7 +49,7 @@ class AlbumChips extends ConsumerWidget {
                           ref.watch(finampSettingsProvider
                               .showAlbumReleaseDateOnPlayerScreen))) &&
                   ReleaseDateHelper.autoFormat(baseItem) != null)
-                _ReleaseDateChip(
+                ReleaseDateChip(
                   baseItem: baseItem,
                   backgroundColor: backgroundColor,
                   color: color,
@@ -101,8 +101,8 @@ class _EmptyAlbumChip extends StatelessWidget {
   }
 }
 
-class _ReleaseDateChip extends StatelessWidget {
-  const _ReleaseDateChip({
+class ReleaseDateChip extends StatelessWidget {
+  const ReleaseDateChip({
     this.baseItem,
     this.backgroundColor,
     this.color,

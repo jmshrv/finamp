@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
-import 'package:finamp/components/AlbumScreen/track_menu.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';

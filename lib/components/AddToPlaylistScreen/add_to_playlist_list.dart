@@ -18,7 +18,7 @@ import '../../models/jellyfin_models.dart';
 import '../confirmation_prompt_dialog.dart';
 import '../global_snackbar.dart';
 import 'new_playlist_dialog.dart';
-import 'playlist_actions_menu.dart';
+import '../../menus/playlist_actions_menu.dart';
 
 class AddToPlaylistList extends StatefulWidget {
   const AddToPlaylistList({

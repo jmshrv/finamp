@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/speed_menu.dart';
+import 'package:finamp/menus/components/menuEntries/menu_item_info_header.dart';
+import 'package:finamp/menus/components/playbackActions/playback_action.dart';
+import 'package:finamp/menus/components/speed_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
@@ -21,20 +23,20 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../screens/album_screen.dart';
-import '../../services/audio_service_helper.dart';
-import '../../services/downloads_service.dart';
-import '../../services/favorite_provider.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../AddToPlaylistScreen/playlist_actions_menu.dart';
-import '../PlayerScreen/album_chip.dart';
-import '../PlayerScreen/artist_chip.dart';
-import '../PlayerScreen/queue_source_helper.dart';
-import '../album_image.dart';
-import '../global_snackbar.dart';
-import 'download_dialog.dart';
+import '../models/jellyfin_models.dart';
+import '../screens/album_screen.dart';
+import '../services/audio_service_helper.dart';
+import '../services/downloads_service.dart';
+import '../services/favorite_provider.dart';
+import '../services/finamp_settings_helper.dart';
+import '../services/jellyfin_api_helper.dart';
+import 'playlist_actions_menu.dart';
+import '../components/PlayerScreen/album_chip.dart';
+import '../components/PlayerScreen/artist_chip.dart';
+import '../components/PlayerScreen/queue_source_helper.dart';
+import '../components/album_image.dart';
+import '../components/global_snackbar.dart';
+import '../components/AlbumScreen/download_dialog.dart';
 
 const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 750);
 const Curve trackMenuDefaultInCurve = Curves.easeOutCubic;
@@ -239,7 +241,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: !widget.isOffline,
         child: ListTile(
           leading: Icon(
-            Icons.playlist_add,
+            TablerIcons.playlist_add,
             color: iconColor,
           ),
           title: Text(isInCurrentPlaylist
@@ -610,7 +612,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     var iconColor = Theme.of(context).colorScheme.primary;
     return [
       SliverPersistentHeader(
-        delegate: TrackMenuSliverAppBar(
+        delegate: MenuItemInfoHeader(
           item: widget.item,
         ),
         pinned: true,
@@ -660,17 +662,19 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 };
 
                 var sliverArray = [
-                  PlaybackAction(
-                    icon: playbackOrderIcons[playbackBehavior.order]!,
-                    onPressed: () async {
-                      _queueService.togglePlaybackOrder();
-                    },
-                    tooltip: playbackOrderTooltips[playbackBehavior.order]!,
-                    iconColor:
-                        playbackBehavior.order == FinampPlaybackOrder.shuffled
-                            ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
+                  SliverToBoxAdapter(
+                    child: PlaybackAction(
+                      icon: playbackOrderIcons[playbackBehavior.order]!,
+                      onPressed: (ref) async {
+                        _queueService.togglePlaybackOrder();
+                      },
+                      tooltip: playbackOrderTooltips[playbackBehavior.order]!,
+                      iconColor:
+                          playbackBehavior.order == FinampPlaybackOrder.shuffled
+                              ? iconColor
+                              : Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white,
+                    ),
                   ),
                   ValueListenableBuilder<Timer?>(
                     valueListenable: _audioHandler.sleepTimer,
@@ -678,62 +682,68 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                       final remainingMinutes =
                           (_audioHandler.sleepTimerRemaining.inSeconds / 60.0)
                               .ceil();
-                      return PlaybackAction(
-                        icon: timerValue != null
-                            ? TablerIcons.hourglass_high
-                            : TablerIcons.hourglass_empty,
-                        onPressed: () async {
-                          if (timerValue != null) {
-                            await showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  const SleepTimerCancelDialog(),
-                            );
-                          } else {
-                            await showDialog(
-                              context: context,
-                              builder: (context) => const SleepTimerDialog(),
-                            );
-                          }
-                        },
-                        tooltip: timerValue != null
-                            ? AppLocalizations.of(context)
-                                    ?.sleepTimerRemainingTime(
-                                        remainingMinutes) ??
-                                "Sleeping in $remainingMinutes minutes"
-                            : AppLocalizations.of(context)!.sleepTimerTooltip,
-                        iconColor: timerValue != null
-                            ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
+                      return SliverToBoxAdapter(
+                        child: PlaybackAction(
+                          icon: timerValue != null
+                              ? TablerIcons.hourglass_high
+                              : TablerIcons.hourglass_empty,
+                          onPressed: (ref) async {
+                            if (timerValue != null) {
+                              await showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    const SleepTimerCancelDialog(),
+                              );
+                            } else {
+                              await showDialog(
+                                context: context,
+                                builder: (context) => const SleepTimerDialog(),
+                              );
+                            }
+                          },
+                          tooltip: timerValue != null
+                              ? AppLocalizations.of(context)
+                                      ?.sleepTimerRemainingTime(
+                                          remainingMinutes) ??
+                                  "Sleeping in $remainingMinutes minutes"
+                              : AppLocalizations.of(context)!.sleepTimerTooltip,
+                          iconColor: timerValue != null
+                              ? iconColor
+                              : Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white,
+                        ),
                       );
                     },
                   ),
                   // [Playback speed widget will be added here if conditions are met]
-                  PlaybackAction(
-                    icon: loopModeIcons[playbackBehavior.loop]!,
-                    onPressed: () async {
-                      _queueService.toggleLoopMode();
+                  SliverToBoxAdapter(
+                    child: PlaybackAction(
+                      icon: loopModeIcons[playbackBehavior.loop]!,
+                      onPressed: (ref) async {
+                        _queueService.toggleLoopMode();
+                      },
+                      tooltip: loopModeTooltips[playbackBehavior.loop]!,
+                      iconColor: playbackBehavior.loop == FinampLoopMode.none
+                          ? Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white
+                          : iconColor,
+                    ),
+                  ),
+                ];
+
+                final speedWidget = SliverToBoxAdapter(
+                  child: PlaybackAction(
+                    icon: TablerIcons.brand_speedtest,
+                    onPressed: (ref) {
+                      toggleSpeedMenu();
                     },
-                    tooltip: loopModeTooltips[playbackBehavior.loop]!,
-                    iconColor: playbackBehavior.loop == FinampLoopMode.none
+                    tooltip: AppLocalizations.of(context)!
+                        .playbackSpeedButtonLabel(playbackBehavior.speed),
+                    iconColor: playbackBehavior.speed == 1.0
                         ? Theme.of(context).textTheme.bodyMedium?.color ??
                             Colors.white
                         : iconColor,
                   ),
-                ];
-
-                final speedWidget = PlaybackAction(
-                  icon: TablerIcons.brand_speedtest,
-                  onPressed: () {
-                    toggleSpeedMenu();
-                  },
-                  tooltip: AppLocalizations.of(context)!
-                      .playbackSpeedButtonLabel(playbackBehavior.speed),
-                  iconColor: playbackBehavior.speed == 1.0
-                      ? Theme.of(context).textTheme.bodyMedium?.color ??
-                          Colors.white
-                      : iconColor,
                 );
 
                 if (speedWidgetWasVisible ||
@@ -768,202 +778,5 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         ),
       )
     ];
-  }
-}
-
-class TrackMenuSliverAppBar extends SliverPersistentHeaderDelegate {
-  BaseItemDto item;
-
-  TrackMenuSliverAppBar({
-    required this.item,
-  });
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return TrackInfo(
-      item: item,
-    );
-  }
-
-  @override
-  double get maxExtent => 150;
-
-  @override
-  double get minExtent => 150;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
-}
-
-class TrackInfo extends ConsumerStatefulWidget {
-  const TrackInfo({
-    super.key,
-    required this.item,
-  }) : condensed = false;
-
-  const TrackInfo.condensed({
-    super.key,
-    required this.item,
-  }) : condensed = true;
-
-  final BaseItemDto item;
-  final bool condensed;
-
-  @override
-  ConsumerState createState() => _TrackInfoState();
-}
-
-class _TrackInfoState extends ConsumerState<TrackInfo> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      child: Center(
-        child: Container(
-          margin:
-              EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
-          height: widget.condensed ? 80 : 120,
-          clipBehavior: Clip.antiAlias,
-          decoration: ShapeDecoration(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.black.withOpacity(0.25)
-                : Colors.white.withOpacity(0.15),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AspectRatio(
-                aspectRatio: 1.0,
-                child: AlbumImage(
-                  item: widget.item,
-                  borderRadius: BorderRadius.zero,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        widget.item.name ??
-                            AppLocalizations.of(context)!.unknownName,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: widget.condensed ? 16 : 18,
-                          height: 1.2,
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                        maxLines: 2,
-                      ),
-                      Padding(
-                        padding: widget.condensed
-                            ? const EdgeInsets.only(top: 6.0)
-                            : const EdgeInsets.symmetric(vertical: 4.0),
-                        child: ArtistChips(
-                          baseItem: widget.item,
-                          backgroundColor: IconTheme.of(context)
-                                  .color
-                                  ?.withOpacity(0.1) ??
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                              Colors.white,
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
-                        ),
-                      ),
-                      if (!widget.condensed)
-                        AlbumChips(
-                          baseItem: widget.item,
-                          backgroundColor: IconTheme.of(context)
-                                  .color
-                                  ?.withOpacity(0.1) ??
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                              Colors.white,
-                          key: widget.item.album == null
-                              ? null
-                              : ValueKey("${widget.item.album}-album"),
-                        )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PlaybackAction extends StatelessWidget {
-  const PlaybackAction({
-    super.key,
-    required this.icon,
-    this.value,
-    required this.onPressed,
-    required this.tooltip,
-    required this.iconColor,
-  });
-
-  final IconData icon;
-  final String? value;
-  final Function() onPressed;
-  final String tooltip;
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: IconButton(
-        icon: Column(
-          children: [
-            Icon(
-              icon,
-              color: iconColor,
-              size: 35,
-              weight: 1.0,
-            ),
-            const SizedBox(height: 9),
-            SizedBox(
-              height: 2 * 12 * 1.4 + 2,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  tooltip,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.fade,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    height: 1.4,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        onPressed: () {
-          FeedbackHelper.feedback(FeedbackType.selection);
-          onPressed();
-        },
-        visualDensity: VisualDensity.compact,
-        padding: const EdgeInsets.only(
-            top: 12.0, left: 12.0, right: 12.0, bottom: 16.0),
-        tooltip: tooltip,
-      ),
-    );
   }
 }

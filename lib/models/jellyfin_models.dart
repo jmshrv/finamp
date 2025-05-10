@@ -3489,7 +3489,7 @@ enum SortBy {
       _humanReadableLocalisedName(this, context);
 
   /// Name used by Jellyfin in API requests.
-  String jellyfinName(TabContentType contentType) {
+  String jellyfinName(TabContentType? contentType) {
     switch (contentType) {
       case TabContentType.albums:
         return _jellyfinNameMusicAlbums(this);

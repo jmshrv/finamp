@@ -43,7 +43,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
               children: [
                 Text(
                   AppLocalizations.of(context)!
-                      .playingFromType(queueItem.source.type.toString()),
+                      .playingFromType(queueItem.source.type.name),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,

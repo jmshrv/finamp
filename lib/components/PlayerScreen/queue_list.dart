@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
-import 'package:finamp/components/AlbumScreen/track_menu.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/one_line_marquee_helper.dart';
 import 'package:finamp/components/print_duration.dart';

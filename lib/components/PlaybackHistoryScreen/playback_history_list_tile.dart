@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/track_menu.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/favourite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
