@@ -575,6 +575,21 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> getPlaylist({required BaseItemId playlistId}) async {
+    final Uri $url = Uri.parse('/Playlists/${playlistId}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
   Future<dynamic> getArtists({
     BaseItemId? parentId,
     String? sortBy,

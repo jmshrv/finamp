@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -21,6 +24,7 @@ class PlaylistNameEditDialog extends StatefulWidget {
 
 class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   String? _name;
+  BaseItemId? _id;
   bool _publicVisibility = false;
   bool _isUpdating = false;
 
@@ -31,6 +35,7 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   void initState() {
     super.initState();
     _name = widget.playlist.name;
+    _id = widget.playlist.id;
   }
 
   @override
@@ -60,6 +65,7 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
           ),
           FormField<bool>(
             builder: (state) {
+              _fetchPublicVisibility();
               return CheckboxListTile(
                 value: state.value,
                 title: Text(
@@ -91,6 +97,20 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
         ),
       ],
     );
+  }
+
+  Future<void> _fetchPublicVisibility() async {
+    final dynamic resultPlaylist = await _jellyfinApiHelper.getPlaylist(_id!);
+    final Map<String, dynamic> data =
+        jsonDecode(resultPlaylist as String) as Map<String, dynamic>;
+    // OpenAccess determines whether a playlist is publicly visible
+    try {
+      _publicVisibility = data['OpenAccess'] as bool;
+    } catch (e) {
+      // Just a silly idea to maybe make it a bit future proof
+      _publicVisibility = data['isPublic'] as bool;
+    }
+    print(_publicVisibility);
   }
 
   Future<void> _submit() async {

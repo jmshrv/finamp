@@ -614,6 +614,13 @@ class JellyfinApiHelper {
     return _getItemByIdBatchedFuture!.then((value) => value[itemId]);
   }
 
+  /// Gets a Playlist
+  Future<dynamic> getPlaylist(BaseItemId playlistId) async {
+    final response =
+        await jellyfinApi.getPlaylist(playlistId: playlistId);
+    return response;
+  }
+
   /// Creates a new playlist.
   Future<NewPlaylistResponse> createNewPlaylist(NewPlaylist newPlaylist) async {
     final response = await jellyfinApi.createNewPlaylist(
