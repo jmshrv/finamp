@@ -132,11 +132,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
       List<TabContentType> sortedTabs) {
     // Show the floating action button only on the albums, artists, generes and tracks tab.
     if (_tabController!.index == sortedTabs.indexOf(TabContentType.tracks)) {
-      //if (widget.genreFilter != null) {
-        // We hide the Shuffle All button for now, due to performance reasons
-        return null;
-      //}
-      /*return FloatingActionButton(
+      return FloatingActionButton(
         tooltip: AppLocalizations.of(context)!.shuffleAll,
         onPressed: () async {
           try {
@@ -150,7 +146,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           }
         },
         child: const Icon(Icons.shuffle),
-      );*/
+      );
     } else if (_tabController!.index ==
         sortedTabs.indexOf(TabContentType.artists)) {
       return FloatingActionButton(
