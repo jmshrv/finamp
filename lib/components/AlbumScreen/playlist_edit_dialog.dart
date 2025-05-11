@@ -2,7 +2,6 @@ import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -61,10 +60,9 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
               onSaved: (newValue) => _name = newValue,
             ),
           ),
-          FormField<bool>(
-            builder: (state) {
-              _fetchPublicVisibility();
-              return CheckboxListTile(
+          FormField<bool>(builder: (state) {
+            _fetchPublicVisibility();
+            return CheckboxListTile(
                 value: _publicVisibility ?? false,
                 title: Text(
                   AppLocalizations.of(context)!.publiclyVisiblePlaylist,
@@ -76,10 +74,8 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
                   setState(() {
                     _publicVisibility = value!;
                   });
-                }
-              );
-            }
-          ),
+                });
+          }),
         ],
       ),
       actions: [
@@ -95,13 +91,13 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
     );
   }
 
-Future<void> _fetchPublicVisibility() async {
-  if (_publicVisibility != null) return;
-  final resultPlaylist = await _jellyfinApiHelper.getPlaylist(widget.playlist.id!);
-  _publicVisibility = resultPlaylist['OpenAccess'] as bool;  
-  setState((){});
-}
-
+  Future<void> _fetchPublicVisibility() async {
+    if (_publicVisibility != null) return;
+    final resultPlaylist =
+        await _jellyfinApiHelper.getPlaylist(widget.playlist.id!);
+    _publicVisibility = resultPlaylist['OpenAccess'] as bool;
+    setState(() {});
+  }
 
   Future<void> _submit() async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
@@ -114,12 +110,13 @@ Future<void> _fetchPublicVisibility() async {
       try {
         BaseItemDto playlistTemp = widget.playlist;
         playlistTemp.name = _name;
-        await _jellyfinApiHelper.updatePlaylist(newPlaylist: NewPlaylist(
-          isPublic: _publicVisibility,
-          userId: GetIt.instance<FinampUserHelper>().currentUserId,
-          ids: null,          
-          name: _name
-        ), itemId: widget.playlist.id);
+        await _jellyfinApiHelper.updatePlaylist(
+            newPlaylist: NewPlaylist(
+                isPublic: _publicVisibility,
+                userId: GetIt.instance<FinampUserHelper>().currentUserId,
+                ids: null,
+                name: _name),
+            itemId: widget.playlist.id);
 
         if (!mounted) return;
 
