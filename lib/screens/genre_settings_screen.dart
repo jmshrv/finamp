@@ -15,7 +15,6 @@ class GenreSettingsScreen extends ConsumerStatefulWidget {
 class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    var genreMostPlayedOfflineFallbackValue = ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.genreScreen),
@@ -77,27 +76,40 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
               onChanged: FinampSetters.setGenreListsInheritSorting,
             ),
             SizedBox(height: 8),
-            ListTile(
-              title: Text(AppLocalizations.of(context)!.genreMostPlayedOfflineFallback),
-              subtitle:
-                  Text(AppLocalizations.of(context)!.genreMostPlayedOfflineFallbackSubtitle),
-              trailing: DropdownButton<CuratedItemSelectionType>(
-                  value: genreMostPlayedOfflineFallbackValue,
-                  items: CuratedItemSelectionType.values
-                      .where((e) => e != CuratedItemSelectionType.mostPlayed)
-                      .map((e) => DropdownMenuItem<CuratedItemSelectionType>(
-                            value: e,
-                            child: Text(e.toLocalisedString(context)),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      FinampSetters.setGenreMostPlayedOfflineFallback(value);
-                    }
-                  },
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.genreItemSectionFilterChipOrderTitle),
+                  subtitle: Text(AppLocalizations.of(context)!.genreItemSectionFilterChipOrderSubtitle),
                 ),
+                ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      key: ValueKey(FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder[index]),
+                      title: Text(FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder[index].toLocalisedString(context)),
+                      leading: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
+                    );
+                  },
+                  onReorder: (oldIndex, newIndex) {
+                    setState(() {
+                      if (oldIndex < newIndex) newIndex -= 1;
+                      final currentOrder = List.of(FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder);
+                      final movedItem = currentOrder.removeAt(oldIndex);
+                      currentOrder.insert(newIndex, movedItem);
+                      FinampSetters.setGenreItemSectionFilterChipOrder(currentOrder);
+                    });
+                  }
+                ),
+              ]
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 20),
           ]
         ),
       ),

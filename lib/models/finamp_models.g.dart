@@ -267,17 +267,29 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[105] == null ? true : fields[105] as bool,
       genreListsInheritSorting:
           fields[106] == null ? true : fields[106] as bool,
-      genreMostPlayedOfflineFallback: fields[107] == null
-          ? CuratedItemSelectionType.favorites
-          : fields[107] as CuratedItemSelectionType,
+      genreItemSectionFilterChipOrder: fields[107] == null
+          ? [
+              CuratedItemSelectionType.mostPlayed,
+              CuratedItemSelectionType.favorites,
+              CuratedItemSelectionType.random,
+              CuratedItemSelectionType.latestReleases,
+              CuratedItemSelectionType.recentlyAdded
+            ]
+          : (fields[107] as List).cast<CuratedItemSelectionType>(),
       artistGenreChipsApplyFilter:
           fields[108] == null ? false : fields[108] as bool,
       artistCuratedItemSelectionType: fields[109] == null
           ? CuratedItemSelectionType.mostPlayed
           : fields[109] as CuratedItemSelectionType,
-      artistMostPlayedOfflineFallback: fields[110] == null
-          ? CuratedItemSelectionType.favorites
-          : fields[110] as CuratedItemSelectionType,
+      artistItemSectionFilterChipOrder: fields[110] == null
+          ? [
+              CuratedItemSelectionType.mostPlayed,
+              CuratedItemSelectionType.favorites,
+              CuratedItemSelectionType.random,
+              CuratedItemSelectionType.latestReleases,
+              CuratedItemSelectionType.recentlyAdded
+            ]
+          : (fields[110] as List).cast<CuratedItemSelectionType>(),
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -492,13 +504,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(106)
       ..write(obj.genreListsInheritSorting)
       ..writeByte(107)
-      ..write(obj.genreMostPlayedOfflineFallback)
+      ..write(obj.genreItemSectionFilterChipOrder)
       ..writeByte(108)
       ..write(obj.artistGenreChipsApplyFilter)
       ..writeByte(109)
       ..write(obj.artistCuratedItemSelectionType)
       ..writeByte(110)
-      ..write(obj.artistMostPlayedOfflineFallback);
+      ..write(obj.artistItemSectionFilterChipOrder);
   }
 
   @override

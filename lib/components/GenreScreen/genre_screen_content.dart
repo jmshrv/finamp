@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
+import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/favourite_button.dart';
@@ -47,7 +47,7 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
     // If "Most Played" is selected when Offline Mode is enabled, we switch to a fallback option
     // as the PlayCount data might not be an accurate representation of the online state
     final offlineSelectionType = (genreCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
-        ? ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
+        ? CuratedItemSelectionType.favorites//ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
         : genreCuratedItemSelectionType;
     final result = await getCuratedItemsOffline(
       ref: ref,
@@ -247,7 +247,7 @@ void openSeeAll(
             : ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeTracks));
     final genreCuratedItemSelectionType = (ref.watch(finampSettingsProvider.isOffline) && 
         genreCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
-          ? ref.read(finampSettingsProvider.genreMostPlayedOfflineFallback)
+          ? CuratedItemSelectionType.favorites//ref.read(finampSettingsProvider.genreMostPlayedOfflineFallback)
           : genreCuratedItemSelectionTypeSetting;
 
     if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting)) {
@@ -296,7 +296,7 @@ void openSeeAll(
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks);
     final genreCuratedItemSelectionTypeTracks = 
         (isOffline && genreCuratedItemSelectionTypeTracksSetting == CuratedItemSelectionType.mostPlayed)
-            ? ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
+            ? CuratedItemSelectionType.favorites//ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
             : genreCuratedItemSelectionTypeTracksSetting;
     final genreCuratedItemSelectionTypeAlbums =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums);
@@ -304,6 +304,7 @@ void openSeeAll(
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists);
     final genreItemSectionsOrder =
         ref.watch(finampSettingsProvider.genreItemSectionsOrder);
+    final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
 
     final (tracks, trackCount) = ref.watch(genreCuratedItemsProvider(
         widget.parent, BaseItemDtoType.track, widget.library)).valueOrNull ?? (null, null);
@@ -411,7 +412,12 @@ void openSeeAll(
                   tracksText: genreCuratedItemSelectionTypeTracks
                       .toLocalisedSectionTitle(context, BaseItemDtoType.track),
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.tracks),
-                  includeGenreFilters: true,
+                  includeFilterRow: true,
+                  customFilterOrder: genreCuratedItemSectionFilterOrder,
+                  selectedFilter: genreCuratedItemSelectionTypeTracks,
+                  onFilterSelected: (type) {
+                     FinampSetters.setGenreCuratedItemSelectionTypeTracks(type);
+                  },
                 ),
               );
             case GenreItemSections.albums:
@@ -423,7 +429,12 @@ void openSeeAll(
                       .toLocalisedSectionTitle(context, BaseItemDtoType.album),
                   albums: albums,
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.albums),
-                  includeGenreFiltersFor: BaseItemDtoType.album,
+                  includeFilterRowFor: BaseItemDtoType.album,
+                  customFilterOrder: genreCuratedItemSectionFilterOrder,
+                  selectedFilter: genreCuratedItemSelectionTypeAlbums,
+                  onFilterSelected: (type) {
+                     FinampSetters.setGenreCuratedItemSelectionTypeAlbums(type);
+                  },
                 ),
               );
             case GenreItemSections.artists:
@@ -436,7 +447,12 @@ void openSeeAll(
                   albums: artists,
                   seeAllCallbackFunction: () => openSeeAll(TabContentType.artists),
                   genreFilter: widget.parent,
-                  includeGenreFiltersFor: BaseItemDtoType.artist,
+                  includeFilterRowFor: BaseItemDtoType.artist,
+                  customFilterOrder: genreCuratedItemSectionFilterOrder,
+                  selectedFilter: genreCuratedItemSelectionTypeArtists,
+                  onFilterSelected: (type) {
+                     FinampSetters.setGenreCuratedItemSelectionTypeArtists(type);
+                  },
                 ),
               );
           }

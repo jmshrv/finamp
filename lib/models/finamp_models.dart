@@ -208,10 +208,10 @@ class DefaultSettings {
   static const genreItemSectionsOrder = GenreItemSections.values;
   static const genreFilterArtistScreens = true;
   static const genreListsInheritSorting = true;
-  static const genreMostPlayedOfflineFallback = CuratedItemSelectionType.favorites;
+  static const genreItemSectionFilterChipOrder = CuratedItemSelectionType.values;
   static const artistGenreChipsApplyFilter = false;
   static const artistCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
-  static const artistMostPlayedOfflineFallback = CuratedItemSelectionType.favorites;
+  static const artistItemSectionFilterChipOrder = CuratedItemSelectionType.values;
 }
 
 @HiveType(typeId: 28)
@@ -341,10 +341,10 @@ class FinampSettings {
     this.genreItemSectionsOrder = DefaultSettings.genreItemSectionsOrder,
     this.genreFilterArtistScreens = DefaultSettings.genreFilterArtistScreens,
     this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
-    this.genreMostPlayedOfflineFallback = DefaultSettings.genreMostPlayedOfflineFallback,
+    this.genreItemSectionFilterChipOrder = DefaultSettings.genreItemSectionFilterChipOrder,
     this.artistGenreChipsApplyFilter = DefaultSettings.artistGenreChipsApplyFilter,
     this.artistCuratedItemSelectionType = DefaultSettings.artistCuratedItemSelectionType,
-    this.artistMostPlayedOfflineFallback = DefaultSettings.artistMostPlayedOfflineFallback,
+    this.artistItemSectionFilterChipOrder = DefaultSettings.artistItemSectionFilterChipOrder,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -694,8 +694,8 @@ class FinampSettings {
   @HiveField(106, defaultValue: DefaultSettings.genreListsInheritSorting)
   bool genreListsInheritSorting;
 
-  @HiveField(107, defaultValue: DefaultSettings.genreMostPlayedOfflineFallback)
-  CuratedItemSelectionType genreMostPlayedOfflineFallback;
+  @HiveField(107, defaultValue: DefaultSettings.genreItemSectionFilterChipOrder)
+  List<CuratedItemSelectionType> genreItemSectionFilterChipOrder;
 
   @HiveField(108, defaultValue: DefaultSettings.artistGenreChipsApplyFilter)
   bool artistGenreChipsApplyFilter;
@@ -703,8 +703,8 @@ class FinampSettings {
   @HiveField(109, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
   CuratedItemSelectionType artistCuratedItemSelectionType;
 
-  @HiveField(110, defaultValue: DefaultSettings.artistMostPlayedOfflineFallback)
-  CuratedItemSelectionType artistMostPlayedOfflineFallback;
+  @HiveField(110, defaultValue: DefaultSettings.artistItemSectionFilterChipOrder)
+  List<CuratedItemSelectionType> artistItemSectionFilterChipOrder;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

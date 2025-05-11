@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:finamp/components/AlbumScreen/album_screen_content.dart';
-import 'package:finamp/components/GenreScreen/genre_filter_row.dart';
+import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/components/albums_sliver_list.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -11,13 +11,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 class TracksSection extends ConsumerStatefulWidget {
-  const TracksSection({
+  const TracksSection({super.key, 
     required this.parent,
     this.tracks,
     this.childrenForQueue,
     required this.tracksText,
     this.seeAllCallbackFunction,
-    this.includeGenreFilters = false,
+    this.includeFilterRow = false,
+    this.customFilterOrder,
+    this.selectedFilter,
+    this.disabledFilters,
+    this.onFilterSelected,
   });
 
   final BaseItemDto parent;
@@ -25,7 +29,11 @@ class TracksSection extends ConsumerStatefulWidget {
   final Future<List<BaseItemDto>>? childrenForQueue;
   final String tracksText;
   final VoidCallback? seeAllCallbackFunction;
-  final bool includeGenreFilters;
+  final bool includeFilterRow;
+  final List<CuratedItemSelectionType>? customFilterOrder;
+  final CuratedItemSelectionType? selectedFilter;
+  final List<CuratedItemSelectionType>? disabledFilters;
+  final void Function(CuratedItemSelectionType type)? onFilterSelected;
 
   @override
   ConsumerState<TracksSection> createState() => _TracksSectionState();
@@ -52,7 +60,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
     final hasTracks = widget.tracks != null && widget.tracks!.isNotEmpty;
     final hasQueue = widget.childrenForQueue != null;
 
-    if ((hasTracks && hasQueue) || widget.includeGenreFilters) {
+    if ((hasTracks && hasQueue) || widget.includeFilterRow) {
       if (!_showTracks || !_isExpandable) {
         setState(() {
           if (!_manuallyClosed) {
@@ -141,8 +149,16 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
       ),
       sliver: _showTracks
           ? SliverMainAxisGroup(slivers: [
-              if (widget.includeGenreFilters)
-                buildGenreItemFilterList(ref, BaseItemDtoType.track),
+              if (widget.includeFilterRow)
+                buildCuratedItemFilterRow(
+                  ref: ref,
+                  parent: widget.parent, 
+                  filterListFor: BaseItemDtoType.track, 
+                  customFilterOrder: widget.customFilterOrder,
+                  selectedFilter: widget.selectedFilter,
+                  disabledfilters: widget.disabledFilters,
+                  onFilterSelected: widget.onFilterSelected,
+                ),
               if (widget.tracks != null && widget.tracks!.isNotEmpty)
                 TracksSliverList(
                   childrenForList: widget.tracks!,
@@ -175,13 +191,17 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
 }
 
 class AlbumSection extends ConsumerStatefulWidget {
-  const AlbumSection({
+  const AlbumSection({super.key, 
     required this.parent,
     required this.albumsText,
     this.albums,
     this.seeAllCallbackFunction,
     this.genreFilter,
-    this.includeGenreFiltersFor,
+    this.includeFilterRowFor,
+    this.customFilterOrder,
+    this.selectedFilter,
+    this.disabledFilters,
+    this.onFilterSelected, 
   });
 
   final BaseItemDto parent;
@@ -189,7 +209,11 @@ class AlbumSection extends ConsumerStatefulWidget {
   final List<BaseItemDto>? albums;
   final VoidCallback? seeAllCallbackFunction;
   final BaseItemDto? genreFilter;
-  final BaseItemDtoType? includeGenreFiltersFor;
+  final BaseItemDtoType? includeFilterRowFor;
+  final List<CuratedItemSelectionType>? customFilterOrder;
+  final CuratedItemSelectionType? selectedFilter;
+  final List<CuratedItemSelectionType>? disabledFilters;
+  final void Function(CuratedItemSelectionType type)? onFilterSelected;
 
   @override
   ConsumerState<AlbumSection> createState() => _AlbumSectionState();
@@ -215,7 +239,7 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
   void _evaluateAlbumVisibility() {
     final hasAlbums = widget.albums != null && widget.albums!.isNotEmpty;
 
-    if (hasAlbums || widget.includeGenreFiltersFor != null) {
+    if (hasAlbums || widget.includeFilterRowFor != null) {
       if (!_showAlbums || !_isExpandable) {
         setState(() {
           if (!_manuallyClosed) {
@@ -305,8 +329,16 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
       sliver: _showAlbums
           ? SliverMainAxisGroup(
               slivers: [
-                if (widget.includeGenreFiltersFor != null)
-                  buildGenreItemFilterList(ref, widget.includeGenreFiltersFor!),
+                if (widget.includeFilterRowFor != null)
+                  buildCuratedItemFilterRow(
+                    ref: ref, 
+                    parent: widget.parent,
+                    filterListFor: widget.includeFilterRowFor!,
+                    customFilterOrder: widget.customFilterOrder,
+                    selectedFilter: widget.selectedFilter,
+                    disabledfilters: widget.disabledFilters,
+                    onFilterSelected: widget.onFilterSelected,
+                  ),
                 if (widget.albums != null && widget.albums!.isNotEmpty)
                   AlbumsSliverList(
                     childrenForList: widget.albums!,

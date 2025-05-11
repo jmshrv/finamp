@@ -754,11 +754,11 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setGenreMostPlayedOfflineFallback(
-      CuratedItemSelectionType newGenreMostPlayedOfflineFallback) {
+  static void setGenreItemSectionFilterChipOrder(
+      List<CuratedItemSelectionType> newGenreItemSectionFilterChipOrder) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.genreMostPlayedOfflineFallback =
-        newGenreMostPlayedOfflineFallback;
+    finampSettingsTemp.genreItemSectionFilterChipOrder =
+        newGenreItemSectionFilterChipOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -781,11 +781,11 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setArtistMostPlayedOfflineFallback(
-      CuratedItemSelectionType newArtistMostPlayedOfflineFallback) {
+  static void setArtistItemSectionFilterChipOrder(
+      List<CuratedItemSelectionType> newArtistItemSectionFilterChipOrder) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.artistMostPlayedOfflineFallback =
-        newArtistMostPlayedOfflineFallback;
+    finampSettingsTemp.artistItemSectionFilterChipOrder =
+        newArtistItemSectionFilterChipOrder;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -1048,18 +1048,18 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get genreListsInheritSorting =>
       finampSettingsProvider
           .select((value) => value.requireValue.genreListsInheritSorting);
-  ProviderListenable<CuratedItemSelectionType>
-      get genreMostPlayedOfflineFallback => finampSettingsProvider
-          .select((value) => value.requireValue.genreMostPlayedOfflineFallback);
+  ProviderListenable<List<CuratedItemSelectionType>>
+      get genreItemSectionFilterChipOrder => finampSettingsProvider.select(
+          (value) => value.requireValue.genreItemSectionFilterChipOrder);
   ProviderListenable<bool> get artistGenreChipsApplyFilter =>
       finampSettingsProvider
           .select((value) => value.requireValue.artistGenreChipsApplyFilter);
   ProviderListenable<CuratedItemSelectionType>
       get artistCuratedItemSelectionType => finampSettingsProvider
           .select((value) => value.requireValue.artistCuratedItemSelectionType);
-  ProviderListenable<CuratedItemSelectionType>
-      get artistMostPlayedOfflineFallback => finampSettingsProvider.select(
-          (value) => value.requireValue.artistMostPlayedOfflineFallback);
+  ProviderListenable<List<CuratedItemSelectionType>>
+      get artistItemSectionFilterChipOrder => finampSettingsProvider.select(
+          (value) => value.requireValue.artistItemSectionFilterChipOrder);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

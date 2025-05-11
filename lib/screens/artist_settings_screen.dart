@@ -16,8 +16,6 @@ class _ArtistSettingsScreenState extends ConsumerState<ArtistSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final showArtistsTracksSection = ref.watch(finampSettingsProvider.showArtistsTracksSection);
-    var artistCuratedItemSelectionTypeValue = ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
-    var artistMostPlayedOfflineFallbackValue = ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.artistScreen),
@@ -43,54 +41,41 @@ class _ArtistSettingsScreenState extends ConsumerState<ArtistSettingsScreen> {
             value: showArtistsTracksSection,
             onChanged: (value) => FinampSetters.setShowArtistsTracksSection(value),
           ),
-          if (showArtistsTracksSection)
-            SizedBox(height: 8),
-          if (showArtistsTracksSection)
-            ListTile(
-                title: Text(AppLocalizations.of(context)!.artistCuratedItemSelectionTypeTitle),
-                subtitle:
-                    Text(AppLocalizations.of(context)!.artistCuratedItemSelectionTypeSubtitle),
-                trailing: DropdownButton<CuratedItemSelectionType>(
-                    value: artistCuratedItemSelectionTypeValue,
-                    items: CuratedItemSelectionType.values
-                        .map((e) => DropdownMenuItem<CuratedItemSelectionType>(
-                              value: e,
-                              child: Text(e.toLocalisedString(context)),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        FinampSetters.setArtistCuratedItemSelectionType(value);
-                      }
-                    },
-                  ),
+          SizedBox(height: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.artistItemSectionFilterChipOrderTitle),
+                subtitle: Text(AppLocalizations.of(context)!.artistItemSectionFilterChipOrderSubtitle),
               ),
-          if (showArtistsTracksSection && 
-              artistCuratedItemSelectionTypeValue == CuratedItemSelectionType.mostPlayed)
-            SizedBox(height: 8),
-          if (showArtistsTracksSection && 
-              artistCuratedItemSelectionTypeValue == CuratedItemSelectionType.mostPlayed)
-            ListTile(
-              title: Text(AppLocalizations.of(context)!.artistMostPlayedOfflineFallbackTitle),
-              subtitle:
-                  Text(AppLocalizations.of(context)!.artistMostPlayedOfflineFallbackSubtitle),
-              trailing: DropdownButton<CuratedItemSelectionType>(
-                  value: artistMostPlayedOfflineFallbackValue,
-                  items: CuratedItemSelectionType.values
-                      .where((e) => e != CuratedItemSelectionType.mostPlayed)
-                      .map((e) => DropdownMenuItem<CuratedItemSelectionType>(
-                            value: e,
-                            child: Text(e.toLocalisedString(context)),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      FinampSetters.setArtistMostPlayedOfflineFallback(value);
-                    }
-                  },
-                ),
-            ),
-          SizedBox(height: 16),
+              ReorderableListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: FinampSettingsHelper.finampSettings.artistItemSectionFilterChipOrder.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    key: ValueKey(FinampSettingsHelper.finampSettings.artistItemSectionFilterChipOrder[index]),
+                    title: Text(FinampSettingsHelper.finampSettings.artistItemSectionFilterChipOrder[index].toLocalisedString(context)),
+                    leading: ReorderableDragStartListener(
+                      index: index,
+                      child: const Icon(Icons.drag_handle),
+                    ),
+                  );
+                },
+                onReorder: (oldIndex, newIndex) {
+                  setState(() {
+                    if (oldIndex < newIndex) newIndex -= 1;
+                    final currentOrder = List.of(FinampSettingsHelper.finampSettings.artistItemSectionFilterChipOrder);
+                    final movedItem = currentOrder.removeAt(oldIndex);
+                    currentOrder.insert(newIndex, movedItem);
+                    FinampSetters.setArtistItemSectionFilterChipOrder(currentOrder);
+                  });
+                }
+              ),
+            ]
+          ),
+          SizedBox(height: 20),
         ]
       ),
     );

@@ -1,22 +1,25 @@
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/finamp_models.dart';
-import '../../services/finamp_settings_helper.dart';
+import '../models/finamp_models.dart';
+import '../services/finamp_settings_helper.dart';
 
 
-Widget buildGenreItemFilterList(WidgetRef ref, BaseItemDtoType filterListFor){
+Widget buildCuratedItemFilterRow({
+  required WidgetRef ref,
+  required BaseItemDto parent,
+  required BaseItemDtoType filterListFor,
+  List<CuratedItemSelectionType>? customFilterOrder,
+  CuratedItemSelectionType? selectedFilter,
+  List<CuratedItemSelectionType>? disabledfilters,
+  void Function(CuratedItemSelectionType type)? onFilterSelected,
+}){
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-  final genreCuratedItemSelectionTypeTracksSetting =
-        ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks);
-  final genreCuratedItemSelectionType = (filterListFor == BaseItemDtoType.artist)
-      ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
-      : ((filterListFor == BaseItemDtoType.album)
-          ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums)
-          : ((isOffline && genreCuratedItemSelectionTypeTracksSetting == CuratedItemSelectionType.mostPlayed)
-          ? ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
-          : genreCuratedItemSelectionTypeTracksSetting));
+
+  final filterOrder = _getAvailableSelectionTypes(filterListFor, customFilterOrder);
+  final currentSelectedFilter = (selectedFilter != null) ? selectedFilter : filterOrder.first;
 
   return SliverToBoxAdapter(
     child: LayoutBuilder(
@@ -30,10 +33,10 @@ Widget buildGenreItemFilterList(WidgetRef ref, BaseItemDtoType filterListFor){
               child: IntrinsicWidth(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: _getAvailableSelectionTypes(filterListFor).asMap().entries.expand((entry) {
+                  children: filterOrder.asMap().entries.expand((entry) {
                     final int index = entry.key;
                     final type = entry.value;
-                    final bool isSelected = (genreCuratedItemSelectionType == type);
+                    final bool isSelected = (currentSelectedFilter == type);
                     final colorScheme = Theme.of(context).colorScheme;
                     double leftPadding = index == 0 ? 8.0 : 0.0;
                     double rightPadding = index == CuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
@@ -45,12 +48,8 @@ Widget buildGenreItemFilterList(WidgetRef ref, BaseItemDtoType filterListFor){
                           onSelected: (isOffline && type == CuratedItemSelectionType.mostPlayed)
                             ? null
                             : (_) {
-                              if (filterListFor == BaseItemDtoType.track) {
-                                FinampSetters.setGenreCuratedItemSelectionTypeTracks(type);
-                              } else if (filterListFor == BaseItemDtoType.album) {
-                                FinampSetters.setGenreCuratedItemSelectionTypeAlbums(type);
-                              } else if (filterListFor == BaseItemDtoType.artist) {
-                                FinampSetters.setGenreCuratedItemSelectionTypeArtists(type);
+                              if (onFilterSelected != null) {
+                                onFilterSelected(type);
                               }
                             },
                           selected: isSelected,
@@ -80,19 +79,27 @@ Widget buildGenreItemFilterList(WidgetRef ref, BaseItemDtoType filterListFor){
   );
 }
 
-List<CuratedItemSelectionType> _getAvailableSelectionTypes(BaseItemDtoType filterListFor) {
+List<CuratedItemSelectionType> _getAvailableSelectionTypes(
+  BaseItemDtoType filterListFor, 
+  List<CuratedItemSelectionType>? customFilterOrder
+) {
+
+  var filteredList = (customFilterOrder != null)
+      ? customFilterOrder
+      : CuratedItemSelectionType.values;
+
   switch (filterListFor) {
     case BaseItemDtoType.album:
-      return CuratedItemSelectionType.values
+      return filteredList
           .where((type) => type != CuratedItemSelectionType.mostPlayed)
           .toList();
     case BaseItemDtoType.artist:
-      return CuratedItemSelectionType.values
+      return filteredList
           .where((type) =>
               type != CuratedItemSelectionType.mostPlayed &&
               type != CuratedItemSelectionType.latestReleases)
           .toList();
     default:
-      return CuratedItemSelectionType.values;
+      return filteredList;
   }
 }

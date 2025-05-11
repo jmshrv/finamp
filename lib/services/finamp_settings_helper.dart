@@ -131,10 +131,8 @@ class FinampSettingsHelper {
         DefaultSettings.artistGenreChipsApplyFilter;
     finampSettingsTemp.showArtistsTracksSection =
         DefaultSettings.showArtistsTracksSection;
-    finampSettingsTemp.artistCuratedItemSelectionType =
-        DefaultSettings.artistCuratedItemSelectionType;
-    finampSettingsTemp.artistMostPlayedOfflineFallback =
-        DefaultSettings.artistMostPlayedOfflineFallback;
+    finampSettingsTemp.artistItemSectionFilterChipOrder =
+        DefaultSettings.artistItemSectionFilterChipOrder;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -149,8 +147,8 @@ class FinampSettingsHelper {
         DefaultSettings.genreFilterArtistScreens;
     finampSettingsTemp.genreListsInheritSorting =
         DefaultSettings.genreListsInheritSorting;
-    finampSettingsTemp.genreMostPlayedOfflineFallback =
-        DefaultSettings.genreMostPlayedOfflineFallback;
+    finampSettingsTemp.genreItemSectionFilterChipOrder =
+        DefaultSettings.genreItemSectionFilterChipOrder;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);

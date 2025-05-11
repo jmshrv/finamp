@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/ArtistScreen/artist_screen_sections.dart';
+import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -42,7 +42,7 @@ Future<List<BaseItemDto>> getArtistTopTracks(
     // In Offline Mode:
     final artistCuratedItemSelectionTypeOffline = 
         (artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
-            ? ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
+            ? CuratedItemSelectionType.favorites//ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
             : artistCuratedItemSelectionType;
     // We already fetch all tracks for the playback, 
     // and as in offline mode this is much faster, 
@@ -346,36 +346,33 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
+    final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
     List<BaseItemDto> allChildren = [];
   
     final topTracksAsync = ref.watch(
-        getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter));
+        getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
     final albumArtistAlbumsAsync = ref.watch(
-        getArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter));
+        getArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
     final performingArtistAlbumsAsync = ref.watch(
-        getPerformingArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter));
+        getPerformingArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
     final allPerformingArtistTracksAsync = ref.watch(
-        getPerformingArtistTracksProvider(widget.parent, widget.library, widget.genreFilter));
+        getPerformingArtistTracksProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
         final allTracks = ref.watch(
         getAllTracksProvider(widget.parent, widget.library, widget.genreFilter).future,
       );
 
-    final isLoading = [
-      topTracksAsync,
-      albumArtistAlbumsAsync,
-      performingArtistAlbumsAsync,
-    ].any((e) => e.isLoading || e.hasError);
+    final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;
 
-    final topTracks = topTracksAsync.valueOrNull ?? [];
-    final albumArtistAlbums = albumArtistAlbumsAsync.valueOrNull ?? [];
-    final performingArtistAlbums = performingArtistAlbumsAsync.valueOrNull ?? [];
-    final allPerformingArtistTracks = allPerformingArtistTracksAsync.valueOrNull ?? [];
+    final topTracks = topTracksAsync ?? [];
+    final albumArtistAlbums = albumArtistAlbumsAsync ?? [];
+    final performingArtistAlbums = performingArtistAlbumsAsync ?? [];
+    final allPerformingArtistTracks = allPerformingArtistTracksAsync ?? [];
 
     final artistCuratedItemSelectionTypeSetting = 
         ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
     final artistCuratedItemSelectionType = (isOffline)
       ? ((artistCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
-          ? ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
+          ? CuratedItemSelectionType.favorites//ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
           : artistCuratedItemSelectionTypeSetting)
       : artistCuratedItemSelectionTypeSetting;
 
@@ -433,13 +430,18 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         ],
       ),
       if (!isLoading &&
-          filteredTopTracks.isNotEmpty &&
           ref.watch(finampSettingsProvider.showArtistsTracksSection))
         TracksSection(
             parent: widget.parent,
             tracks: filteredTopTracks,
             childrenForQueue: Future.value(filteredTopTracks),
             tracksText: topTracksText,
+            includeFilterRow: true,
+            customFilterOrder: artistCuratedItemSectionFilterOrder,
+            selectedFilter: artistCuratedItemSelectionType,
+            onFilterSelected: (type) {
+              FinampSetters.setArtistCuratedItemSelectionType(type);
+            },
         ),
       if (!isLoading && albumArtistAlbums.isNotEmpty)
         AlbumSection(
