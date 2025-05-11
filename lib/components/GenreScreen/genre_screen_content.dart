@@ -253,12 +253,8 @@ void openSeeAll(
     if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting)) {
       switch (genreCuratedItemSelectionType) {
         case CuratedItemSelectionType.mostPlayed:
-          // Not yet implemented on MusicScreen, but it would be:
-          // sortByOverride = SortBy.playCount;
-          // sortOrderOverride = SortOrder.descending;
-          // Until implemented, we just return a normal alphabetical list:
-          sortByOverride = SortBy.sortName;
-          sortOrderOverride = SortOrder.ascending;
+          sortByOverride = SortBy.playCount;
+          sortOrderOverride = SortOrder.descending;
           isFavoriteOverride = false;
         case CuratedItemSelectionType.favorites:
           sortByOverride = SortBy.sortName;
