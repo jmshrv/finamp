@@ -668,13 +668,13 @@ class JellyfinApiHelper {
     }
   }
 
-  /// Updates an item.
+  /// Updates an item. (Not for Playlists: use updatePlaylist for that)
+  /// You should give a BaseItemDto with only
+  /// changed values.
   Future<void> updateItem({
     /// The item id.
     required BaseItemId itemId,
-
-    /// What to update the item with. You should give a BaseItemDto with only
-    /// changed values.
+    /// the new Item.
     required BaseItemDto newItem,
   }) async {
     final response =
@@ -684,16 +684,13 @@ class JellyfinApiHelper {
     }
   }
 
-  /// Updates playlist
+  /// Updates playlist.
   Future<void> updatePlaylist({
     /// The item id.
     required BaseItemId itemId,
-
-    /// What to update the item with. You should give a BaseItemDto with only
-    /// changed values.
-    required NewPlaylist newPlaylist
+    /// The new Item.
+    required NewPlaylist newPlaylist    
   }) async {
-    
     final response =
         await jellyfinApi.updatePlaylist(playlistId: itemId, playlist: newPlaylist);
     if (response.toString().isNotEmpty) {
