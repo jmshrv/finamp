@@ -584,7 +584,7 @@ final class _$JellyfinApi extends JellyfinApi {
     );
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
-      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
     );
     return $response.bodyOrThrow;
   }

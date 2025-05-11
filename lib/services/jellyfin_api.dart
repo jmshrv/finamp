@@ -363,7 +363,7 @@ abstract class JellyfinApi extends ChopperService {
     @Body() required NewPlaylist playlist,
   });
 
-  @FactoryConverter(request: JsonConverter.requestFactory)
+  @FactoryConverter(response: JsonConverter.responseFactory)
   @Get(path: "/Playlists/{playlistId}")
   Future<dynamic> getPlaylist({
     @Path() required BaseItemId playlistId,

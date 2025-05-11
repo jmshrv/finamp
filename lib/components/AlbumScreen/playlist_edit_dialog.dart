@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
@@ -25,7 +23,7 @@ class PlaylistNameEditDialog extends StatefulWidget {
 class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   String? _name;
   BaseItemId? _id;
-  bool _publicVisibility = false;
+  bool? _publicVisibility;
   bool _isUpdating = false;
 
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -67,7 +65,7 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
             builder: (state) {
               _fetchPublicVisibility();
               return CheckboxListTile(
-                value: state.value,
+                value: _publicVisibility ?? false,
                 title: Text(
                   AppLocalizations.of(context)!.publiclyVisiblePlaylist,
                   textAlign: TextAlign.left,
@@ -78,11 +76,9 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
                   setState(() {
                     _publicVisibility = value!;
                   });
-                }                
+                }
               );
-            },
-            initialValue: _publicVisibility,            
-            onSaved: (newValue) => _publicVisibility = newValue!,            
+            }
           ),
         ],
       ),
@@ -99,19 +95,13 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
     );
   }
 
-  Future<void> _fetchPublicVisibility() async {
-    final dynamic resultPlaylist = await _jellyfinApiHelper.getPlaylist(_id!);
-    final Map<String, dynamic> data =
-        jsonDecode(resultPlaylist as String) as Map<String, dynamic>;
-    // OpenAccess determines whether a playlist is publicly visible
-    try {
-      _publicVisibility = data['OpenAccess'] as bool;
-    } catch (e) {
-      // Just a silly idea to maybe make it a bit future proof
-      _publicVisibility = data['isPublic'] as bool;
-    }
-    print(_publicVisibility);
-  }
+Future<void> _fetchPublicVisibility() async {
+  if (_publicVisibility != null) return;
+  final resultPlaylist = await _jellyfinApiHelper.getPlaylist(widget.playlist.id!);
+  _publicVisibility = resultPlaylist['OpenAccess'] as bool;  
+  setState((){});
+}
+
 
   Future<void> _submit() async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
