@@ -6,6 +6,7 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1531,8 +1532,28 @@ late final userDownloadedItemsProvider =
     BaseItemDto? genreFilter,
   }) {
     List<int> favoriteIds = [];
+    List<int> libraryFilteredIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
       favoriteIds = _getFavoriteIds() ?? [];
+    }
+    if (fullyDownloaded) {
+      final libraryId =
+          GetIt.instance<FinampUserHelper>().currentUser?.currentViewId;
+      libraryFilteredIds = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.finampCollection)
+          .filter()
+          .not()
+          .stateEqualTo(DownloadItemState.notDownloaded)
+          .findAllSync()
+          .where((collection) =>
+              collection.finampCollection!.type ==
+                  FinampCollectionType.collectionWithLibraryFilter &&
+              collection.finampCollection!.library?.id == libraryId)
+          .map((collection) => DownloadStub.getHash(
+              collection.finampCollection!.item!.id.raw,
+              DownloadItemType.collection))
+          .toList();
     }
 
     return _isar.downloadItems
@@ -1568,7 +1589,7 @@ late final userDownloadedItemsProvider =
                 DownloadStub.getHash(
                     genreFilter!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
-            (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
+            (q) => q.group((q) => q.not().stateEqualTo(DownloadItemState.notDownloaded).or().anyOf(libraryFilteredIds, (q, v) => q.isarIdEqualTo(v))))
         .optional(onlyFavorites,
             (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(
