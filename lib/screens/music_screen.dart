@@ -132,18 +132,25 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
       List<TabContentType> sortedTabs) {
     // Show the floating action button only on the albums, artists, generes and tracks tab.
     if (_tabController!.index == sortedTabs.indexOf(TabContentType.tracks)) {
-      return FloatingActionButton(
+      //if (widget.genreFilter != null) {
+        // We hide the Shuffle All button for now, due to performance reasons
+        return null;
+      //}
+      /*return FloatingActionButton(
         tooltip: AppLocalizations.of(context)!.shuffleAll,
         onPressed: () async {
           try {
             await _audioServiceHelper.shuffleAll(
-                (isFavoriteOverride == true || ref.read(finampSettingsProvider.onlyShowFavourites)));
+              onlyShowFavourites: (isFavoriteOverride == true || 
+                  (isFavoriteOverride == null && ref.read(finampSettingsProvider.onlyShowFavourites))),
+              genreFilter: widget.genreFilter,
+            );
           } catch (e) {
             GlobalSnackbar.error(e);
           }
         },
         child: const Icon(Icons.shuffle),
-      );
+      );*/
     } else if (_tabController!.index ==
         sortedTabs.indexOf(TabContentType.artists)) {
       return FloatingActionButton(
