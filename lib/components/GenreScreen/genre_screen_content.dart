@@ -30,6 +30,7 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
   BaseItemDto? library,
 ) async {
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
   final genreCuratedItemSelectionType = (baseItemType == BaseItemDtoType.artist)
       ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
       : (baseItemType == BaseItemDtoType.album)
@@ -42,12 +43,25 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
 
   List<BaseItemDto>? items;
   int? itemCount;
-
+  
   if (isOffline) {
     // If "Most Played" is selected when Offline Mode is enabled, we switch to a fallback option
     // as the PlayCount data might not be an accurate representation of the online state
     final offlineSelectionType = (genreCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
-        ? CuratedItemSelectionType.favorites//ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
+        ? (() {
+            final index = genreCuratedItemSectionFilterOrder
+                .indexOf(CuratedItemSelectionType.mostPlayed);
+            if (index != -1 &&
+                index + 1 < genreCuratedItemSectionFilterOrder.length) {
+              // Use the filter after mostPlayed
+              return genreCuratedItemSectionFilterOrder[index + 1];
+            } else {
+              // Use the first one that is not mostPlayed
+              return genreCuratedItemSectionFilterOrder.firstWhere(
+                  (type) => type != CuratedItemSelectionType.mostPlayed,
+                  orElse: () => CuratedItemSelectionType.favorites);
+            }
+          })()
         : genreCuratedItemSelectionType;
     final result = await getCuratedItemsOffline(
       ref: ref,
@@ -239,7 +253,7 @@ void openSeeAll(
     bool isFavoriteOverride = false;
     SortBy? sortByOverride;
     SortOrder? sortOrderOverride;
-
+    final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
     final genreCuratedItemSelectionTypeSetting = (tabContentType == TabContentType.artists)
         ? ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
         : ((tabContentType == TabContentType.albums)
@@ -247,7 +261,20 @@ void openSeeAll(
             : ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeTracks));
     final genreCuratedItemSelectionType = (ref.watch(finampSettingsProvider.isOffline) && 
         genreCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
-          ? CuratedItemSelectionType.favorites//ref.read(finampSettingsProvider.genreMostPlayedOfflineFallback)
+          ? (() {
+            final index = genreCuratedItemSectionFilterOrder
+                .indexOf(CuratedItemSelectionType.mostPlayed);
+            if (index != -1 &&
+                index + 1 < genreCuratedItemSectionFilterOrder.length) {
+              // Use the filter after mostPlayed
+              return genreCuratedItemSectionFilterOrder[index + 1];
+            } else {
+              // Use the first one that is not mostPlayed
+              return genreCuratedItemSectionFilterOrder.firstWhere(
+                  (type) => type != CuratedItemSelectionType.mostPlayed,
+                  orElse: () => CuratedItemSelectionType.favorites);
+            }
+          })()
           : genreCuratedItemSelectionTypeSetting;
 
     if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting)) {

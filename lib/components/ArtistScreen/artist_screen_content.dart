@@ -31,6 +31,7 @@ Future<List<BaseItemDto>> getArtistTopTracks(
 ) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
   final CuratedItemSelectionType artistCuratedItemSelectionType = 
       ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
   // If Top Tracks are disabled, we return an empty list
@@ -42,8 +43,21 @@ Future<List<BaseItemDto>> getArtistTopTracks(
     // In Offline Mode:
     final artistCuratedItemSelectionTypeOffline = 
         (artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
-            ? CuratedItemSelectionType.favorites//ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
-            : artistCuratedItemSelectionType;
+            ? (() {
+            final index = artistCuratedItemSectionFilterOrder
+                .indexOf(CuratedItemSelectionType.mostPlayed);
+            if (index != -1 &&
+                index + 1 < artistCuratedItemSectionFilterOrder.length) {
+              // Use the filter after mostPlayed
+              return artistCuratedItemSectionFilterOrder[index + 1];
+            } else {
+              // Use the first one that is not mostPlayed
+              return artistCuratedItemSectionFilterOrder.firstWhere(
+                  (type) => type != CuratedItemSelectionType.mostPlayed,
+                  orElse: () => CuratedItemSelectionType.favorites);
+            }
+          })()
+        : artistCuratedItemSelectionType;
     // We already fetch all tracks for the playback, 
     // and as in offline mode this is much faster, 
     // we just sort them and only return the first 5 items.
