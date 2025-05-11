@@ -13,13 +13,17 @@ Widget buildCuratedItemFilterRow({
   required BaseItemDtoType filterListFor,
   List<CuratedItemSelectionType>? customFilterOrder,
   CuratedItemSelectionType? selectedFilter,
-  List<CuratedItemSelectionType>? disabledfilters,
+  List<CuratedItemSelectionType>? disabledFilters,
   void Function(CuratedItemSelectionType type)? onFilterSelected,
 }){
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-
   final filterOrder = _getAvailableSelectionTypes(filterListFor, customFilterOrder);
   final currentSelectedFilter = (selectedFilter != null) ? selectedFilter : filterOrder.first;
+  List<CuratedItemSelectionType> disabledFiltersList = disabledFilters ?? [];
+  if (isOffline && !disabledFiltersList.contains(CuratedItemSelectionType.mostPlayed)) {
+    disabledFiltersList = List.from(disabledFiltersList)
+        ..add(CuratedItemSelectionType.mostPlayed);
+  }
 
   return SliverToBoxAdapter(
     child: LayoutBuilder(
@@ -45,7 +49,7 @@ Widget buildCuratedItemFilterRow({
                         padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
                         child: FilterChip(
                           label: Text(type.toLocalisedString(context)),
-                          onSelected: (isOffline && type == CuratedItemSelectionType.mostPlayed)
+                          onSelected: disabledFiltersList.contains(type)
                             ? null
                             : (_) {
                               if (onFilterSelected != null) {

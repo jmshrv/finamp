@@ -156,7 +156,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                   filterListFor: BaseItemDtoType.track, 
                   customFilterOrder: widget.customFilterOrder,
                   selectedFilter: widget.selectedFilter,
-                  disabledfilters: widget.disabledFilters,
+                  disabledFilters: widget.disabledFilters,
                   onFilterSelected: widget.onFilterSelected,
                 ),
               if (widget.tracks != null && widget.tracks!.isNotEmpty)
@@ -336,7 +336,7 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
                     filterListFor: widget.includeFilterRowFor!,
                     customFilterOrder: widget.customFilterOrder,
                     selectedFilter: widget.selectedFilter,
-                    disabledfilters: widget.disabledFilters,
+                    disabledFilters: widget.disabledFilters,
                     onFilterSelected: widget.onFilterSelected,
                   ),
                 if (widget.albums != null && widget.albums!.isNotEmpty)

@@ -370,11 +370,24 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
 
     final artistCuratedItemSelectionTypeSetting = 
         ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
-    final artistCuratedItemSelectionType = (isOffline)
-      ? ((artistCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
-          ? CuratedItemSelectionType.favorites//ref.watch(finampSettingsProvider.artistMostPlayedOfflineFallback)
-          : artistCuratedItemSelectionTypeSetting)
-      : artistCuratedItemSelectionTypeSetting;
+    final artistCuratedItemSelectionType = (isOffline &&
+        artistCuratedItemSelectionTypeSetting ==
+            CuratedItemSelectionType.mostPlayed)
+        ? (() {
+            final index = artistCuratedItemSectionFilterOrder
+                .indexOf(CuratedItemSelectionType.mostPlayed);
+            if (index != -1 &&
+                index + 1 < artistCuratedItemSectionFilterOrder.length) {
+              // Use the filter after mostPlayed
+              return artistCuratedItemSectionFilterOrder[index + 1];
+            } else {
+              // Use the first one that is not mostPlayed
+              return artistCuratedItemSectionFilterOrder.firstWhere(
+                  (type) => type != CuratedItemSelectionType.mostPlayed,
+                  orElse: () => CuratedItemSelectionType.favorites);
+            }
+          })()
+        : artistCuratedItemSelectionTypeSetting;
 
     final topTracksText = (artistCuratedItemSelectionType == CuratedItemSelectionType.random)
         ? AppLocalizations.of(context)!.randomTracks

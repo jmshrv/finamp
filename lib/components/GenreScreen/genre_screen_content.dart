@@ -292,19 +292,35 @@ void openSeeAll(
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+    final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
     final genreCuratedItemSelectionTypeTracksSetting =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks);
-    final genreCuratedItemSelectionTypeTracks = 
-        (isOffline && genreCuratedItemSelectionTypeTracksSetting == CuratedItemSelectionType.mostPlayed)
-            ? CuratedItemSelectionType.favorites//ref.watch(finampSettingsProvider.genreMostPlayedOfflineFallback)
-            : genreCuratedItemSelectionTypeTracksSetting;
+
+    final genreCuratedItemSelectionTypeTracks = (isOffline &&
+        genreCuratedItemSelectionTypeTracksSetting ==
+            CuratedItemSelectionType.mostPlayed)
+        ? (() {
+            final index = genreCuratedItemSectionFilterOrder
+                .indexOf(CuratedItemSelectionType.mostPlayed);
+            if (index != -1 &&
+                index + 1 < genreCuratedItemSectionFilterOrder.length) {
+              // Use the filter after mostPlayed
+              return genreCuratedItemSectionFilterOrder[index + 1];
+            } else {
+              // Use the first one that is not mostPlayed
+              return genreCuratedItemSectionFilterOrder.firstWhere(
+                  (type) => type != CuratedItemSelectionType.mostPlayed,
+                  orElse: () => CuratedItemSelectionType.favorites);
+            }
+          })()
+        : genreCuratedItemSelectionTypeTracksSetting;
+
     final genreCuratedItemSelectionTypeAlbums =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums);
     final genreCuratedItemSelectionTypeArtists =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists);
     final genreItemSectionsOrder =
         ref.watch(finampSettingsProvider.genreItemSectionsOrder);
-    final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
 
     final (tracks, trackCount) = ref.watch(genreCuratedItemsProvider(
         widget.parent, BaseItemDtoType.track, widget.library)).valueOrNull ?? (null, null);
