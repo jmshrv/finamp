@@ -526,6 +526,10 @@ class QueueService {
         }
       }
 
+      if (Platform.isIOS) {
+        // iOS will start playing the first queue index if we don't stop first
+        await _audioHandler.stopPlayback();
+      }
       await _queueAudioSource.clear();
 
       List<AudioSource> audioSources = [];
