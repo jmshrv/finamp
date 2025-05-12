@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/ArtistScreen/artist_screen_provider.dart';
+import 'package:finamp/services/artist_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/GenreScreen/genre_screen_provider.dart';
+import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
 import 'package:finamp/components/favourite_button.dart';

@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../models/finamp_models.dart';
-import '../../models/jellyfin_models.dart';
-import '../../services/downloads_service.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
+import '../models/finamp_models.dart';
+import '../models/jellyfin_models.dart';
+import 'downloads_service.dart';
+import 'finamp_settings_helper.dart';
+import 'jellyfin_api_helper.dart';
 
 part 'artist_screen_provider.g.dart';
 
