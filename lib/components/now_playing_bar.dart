@@ -30,7 +30,7 @@ import '../services/process_artist.dart';
 import 'PlayerScreen/player_split_screen_scaffold.dart';
 import 'album_image.dart';
 
-class NowPlayingBar extends ConsumerWidget {
+class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({
     super.key,
   });
@@ -599,11 +599,8 @@ class NowPlayingBar extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final queueService = GetIt.instance<QueueService>();
-
-    ref.listen(currentTrackMetadataProvider,
-        (metadataOrNull, metadata) {}); // keep provider alive
 
     return Hero(
         tag: "nowplaying",
@@ -612,28 +609,36 @@ class NowPlayingBar extends ConsumerWidget {
           // Scaffold ignores system elements padding if bottom bar is present, so we must
           // use SafeArea in all cases to include it in our height
           child: SafeArea(
-            child: StreamBuilder<FinampQueueInfo?>(
-                stream: queueService.getQueueStream(),
-                initialData: queueService.getQueue(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData &&
-                      snapshot.data!.saveState == SavedQueueState.loading &&
-                      !usingPlayerSplitScreen) {
-                    return buildLoadingQueueBar(ref, null);
-                  } else if (snapshot.hasData &&
-                      snapshot.data!.saveState == SavedQueueState.failed &&
-                      !usingPlayerSplitScreen) {
-                    return buildLoadingQueueBar(
-                        ref, queueService.retryQueueLoad);
-                  } else if (snapshot.hasData &&
-                      snapshot.data!.currentTrack != null &&
-                      !usingPlayerSplitScreen) {
-                    return buildNowPlayingBar(
-                        ref, snapshot.data!.currentTrack!);
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }),
+            // Use consumer inside PlayerScreenTheme to generate ref
+            child: Consumer(
+              builder: (context, ref, child) {
+                ref.listen(currentTrackMetadataProvider,
+                    (metadataOrNull, metadata) {}); // keep provider alive
+
+                return StreamBuilder<FinampQueueInfo?>(
+                    stream: queueService.getQueueStream(),
+                    initialData: queueService.getQueue(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data!.saveState == SavedQueueState.loading &&
+                          !usingPlayerSplitScreen) {
+                        return buildLoadingQueueBar(ref, null);
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.saveState == SavedQueueState.failed &&
+                          !usingPlayerSplitScreen) {
+                        return buildLoadingQueueBar(
+                            ref, queueService.retryQueueLoad);
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.currentTrack != null &&
+                          !usingPlayerSplitScreen) {
+                        return buildNowPlayingBar(
+                            ref, snapshot.data!.currentTrack!);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    });
+              },
+            ),
           ),
         ));
   }
