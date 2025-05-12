@@ -3156,7 +3156,7 @@ enum ArtistItemSections {
   String toLocalisedString(BuildContext context) =>
       _humanReadableLocalisedName(this, context);
 
-  String toLocalisedSectionTitle(BuildContext context, CuratedItemSelectionType curatedItemSelectionType) =>
+  String toLocalisedSectionTitle(BuildContext context, CuratedItemSelectionType? curatedItemSelectionType) =>
       _toLocalisedSectionTitle(this, context, curatedItemSelectionType);
 
   String _humanReadableName(
@@ -3187,7 +3187,7 @@ enum ArtistItemSections {
   String _toLocalisedSectionTitle(
       ArtistItemSections artistItemSection,
       BuildContext context,
-      CuratedItemSelectionType curatedItemSelectionType) {
+      CuratedItemSelectionType? curatedItemSelectionType) {
     final loc = AppLocalizations.of(context)!;
 
     String? getTitle(String tracks, String albums, String appearsOn) {
@@ -3212,6 +3212,8 @@ enum ArtistItemSections {
         return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
         return getTitle(loc.newTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case null:
+        return getTitle(loc.tracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
     }
   }
 }

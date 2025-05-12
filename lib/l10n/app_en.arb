@@ -628,7 +628,7 @@
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "showArtistsTracksSection": "Show Tracks Section",
   "@showArtistsTracksSection": {},
-  "showArtistsTracksSectionSubtitle": "Whether to show a section with up to five tracks above the album list. When enabled, you can choose between Most Played, Favorite, Random, Latest Releases and Recently Added Tracks.",
+  "showArtistsTracksSectionSubtitle": "Whether to show a section with up to five tracks. When enabled, you can choose between Most Played, Favorite, Random, Latest Releases and Recently Added Tracks.",
   "@showArtistsTracksSectionSubtitle": {},
   "disableGesture": "Disable gestures",
   "@disableGesture": {},
@@ -1247,14 +1247,6 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-   "genreMostPlayedOfflineFallback": "\"Most Played\" Offline Fallback",
-  "@genreMostPlayedOfflineFallback": {
-    "description": "Label for the setting that controls the offline fallback sorting option for the Most Played option."
-  },
-  "genreMostPlayedOfflineFallbackSubtitle": "\"Most Played\" isn't available in Offline Mode. If it was selected while online, the app will temporarily use the option you choose here instead.",
-  "@genreMostPlayedOfflineFallbackSubtitle": {
-    "description": "Description of the setting that controls the offline fallback sorting option for the Most Played option."
-  },
   "curatedItemsMostPlayedOfflineTooltip": "Not available in Offline Mode.",
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
@@ -1266,22 +1258,6 @@
   "curatedItemsFavoritesDisabledTooltip": "You have no favorites yet.",
   "@curatedItemsFavoritesDisabledTooltip": {
     "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
-  },
-  "artistCuratedItemSelectionTypeTitle": "Track Curation Type",
-  "@artistCuratedItemSelectionTypeTitle": {
-    "description": "Label for the setting that controls the Track Curation Type for the ArtistScreen."
-  },
-  "artistCuratedItemSelectionTypeSubtitle": "You can choose how the five selected tracks displayed on the Artist Screen are curated.",
-  "@artistCuratedItemSelectionTypeSubtitle": {
-    "description": "Description of the setting that controls the Track Curation Type for the ArtistScreen"
-  },
-  "artistMostPlayedOfflineFallbackTitle": "\"Most Played\" Offline Fallback",
-  "@artistMostPlayedOfflineFallbackTitle": {
-    "description": "Label for the setting that controls the offline fallback sorting option for the Most Played option on ArtistScreen."
-  },
-  "artistMostPlayedOfflineFallbackSubtitle": "\"Most Played\" isn't available in Offline Mode. When you are in Offline Mode, the app will temporarily use the option you choose here instead.",
-  "@artistMostPlayedOfflineFallbackSubtitle": {
-    "description": "Description of the setting that controls the offline fallback sorting option for the Most Played option on ArtistScreen."
   },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {

@@ -15,15 +15,16 @@ import '../../services/jellyfin_api_helper.dart';
 part 'genre_screen_provider.g.dart';
 
 @riverpod
-Future<(List<BaseItemDto>, int, CuratedItemSelectionType?)> genreCuratedItems(
+Future<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> genreCuratedItems(
   Ref ref,
   BaseItemDto parent,
   BaseItemDtoType baseItemType,
   BaseItemDto? library,
 ) async {
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  final Set<CuratedItemSelectionType> disabledFilters = {};
   final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
-  final initialSelectionType = handleMostPlayedFallbackOption(
+  CuratedItemSelectionType currentSelectionType = handleMostPlayedFallbackOption(
       isOffline: isOffline,
       currentFilter: (baseItemType == BaseItemDtoType.artist)
             ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
@@ -81,21 +82,33 @@ Future<(List<BaseItemDto>, int, CuratedItemSelectionType?)> genreCuratedItems(
     }
   }
 
-  final result = await fetchItems(initialSelectionType);
-  final filteredResult = filterResult(result.$1, initialSelectionType);
+  var result = await fetchItems(currentSelectionType);
+  var filteredResult = filterResult(result.$1, currentSelectionType);
 
-  if (filteredResult.isEmpty && (initialSelectionType == CuratedItemSelectionType.favorites
-      || initialSelectionType == CuratedItemSelectionType.mostPlayed)) {
-    // Get Fallback
-    CuratedItemSelectionType newSelectionType = getFavoriteFallbackFilterOption(
+  while (
+    filteredResult.isEmpty &&
+    (currentSelectionType == CuratedItemSelectionType.favorites ||
+    currentSelectionType == CuratedItemSelectionType.mostPlayed)
+  ) {
+    // Add the currentSelectionType to a Set of disabled types
+    disabledFilters.add(currentSelectionType);
+    // Get next Fallback
+    CuratedItemSelectionType newSelectionType = getFallbackFilterOption(
       isOffline: isOffline,
+      currentType: currentSelectionType,
       filterListFor: baseItemType,
       customFilterOrder: genreCuratedItemSectionFilterOrder,
+      disabledFilters: disabledFilters,
     );
-    return (filteredResult, result.$2, newSelectionType);
+    // Break if we are cycling without new options
+    if (newSelectionType == currentSelectionType) break;
+    // Call fetchItems again with the newSelectionType
+    currentSelectionType = newSelectionType;
+    result = await fetchItems(currentSelectionType);
+    filteredResult = filterResult(result.$1, currentSelectionType);
   }
 
-  return (filteredResult, result.$2, null);
+  return (filteredResult, result.$2, currentSelectionType, disabledFilters);
 }
 
 Future<(List<BaseItemDto>,int)> getCuratedItemsOnline({

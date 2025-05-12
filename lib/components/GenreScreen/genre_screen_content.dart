@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:finamp/components/GenreScreen/genre_screen_provider.dart';
-import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
 import 'package:finamp/components/favourite_button.dart';
@@ -102,18 +101,8 @@ void openSeeAll(
   Widget build(BuildContext context) {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
-    final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+    final loc = AppLocalizations.of(context)!;
     final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
-    final genreCuratedItemSelectionTypeTracks = handleMostPlayedFallbackOption(
-      isOffline: isOffline,
-      currentFilter: ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks),
-      filterListFor: BaseItemDtoType.track,
-      customFilterOrder: genreCuratedItemSectionFilterOrder,
-    );
-    final genreCuratedItemSelectionTypeAlbums =
-        ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums);
-    final genreCuratedItemSelectionTypeArtists =
-        ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists);
     final genreItemSectionsOrder =
         ref.watch(finampSettingsProvider.genreItemSectionsOrder);
 
@@ -121,29 +110,20 @@ void openSeeAll(
     final albumsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.album, widget.library));
     final artistsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.artist, widget.library));
 
-    final (tracks, trackCount, trackSelectionTypeOverride) = tracksAsync.valueOrNull ?? (null, null, null);
-    final (albums, albumCount, albumSelectionTypeOverride) = albumsAsync.valueOrNull ?? (null, null, null);
-    final (artists, artistCount, artistSelectionTypeOverride) = artistsAsync.valueOrNull ?? (null, null, null);
+    final (tracks, trackCount, genreCuratedItemSelectionTypeTracks, newDisabledTrackFilters) = tracksAsync.valueOrNull ?? (null, null, null, null);
+    final (albums, albumCount, genreCuratedItemSelectionTypeAlbums, newDisabledAlbumFilters) = albumsAsync.valueOrNull ?? (null, null, null, null);
+    final (artists, artistCount, genreCuratedItemSelectionTypeArtists, newDisabledArtistFilters) = artistsAsync.valueOrNull ?? (null, null, null, null);
 
     final isLoading = tracks == null || albums == null || artists == null;
 
-    if (!tracksAsync.isLoading && trackSelectionTypeOverride != null && 
-        (genreCuratedItemSelectionTypeTracks == CuratedItemSelectionType.favorites || 
-        genreCuratedItemSelectionTypeTracks == CuratedItemSelectionType.mostPlayed)) {
-      _disabledTrackFilters.add(genreCuratedItemSelectionTypeTracks);
-      FinampSetters.setGenreCuratedItemSelectionTypeTracks(trackSelectionTypeOverride);
+    if (newDisabledTrackFilters != null) {
+      _disabledTrackFilters.addAll(newDisabledTrackFilters.whereType<CuratedItemSelectionType>());
     }
-    if (!albumsAsync.isLoading && albumSelectionTypeOverride != null && 
-        (genreCuratedItemSelectionTypeAlbums == CuratedItemSelectionType.favorites || 
-        genreCuratedItemSelectionTypeAlbums == CuratedItemSelectionType.mostPlayed)) {
-      _disabledAlbumFilters.add(genreCuratedItemSelectionTypeAlbums);
-      FinampSetters.setGenreCuratedItemSelectionTypeAlbums(albumSelectionTypeOverride);
+    if (newDisabledAlbumFilters != null) {
+      _disabledAlbumFilters.addAll(newDisabledAlbumFilters.whereType<CuratedItemSelectionType>());
     }
-    if (!artistsAsync.isLoading && artistSelectionTypeOverride != null && 
-        (genreCuratedItemSelectionTypeArtists == CuratedItemSelectionType.favorites || 
-        genreCuratedItemSelectionTypeArtists == CuratedItemSelectionType.mostPlayed)) {
-      _disabledArtistFilters.add(genreCuratedItemSelectionTypeArtists);
-      FinampSetters.setGenreCuratedItemSelectionTypeArtists(artistSelectionTypeOverride);
+    if (newDisabledArtistFilters != null) {
+      _disabledArtistFilters.addAll(newDisabledArtistFilters.whereType<CuratedItemSelectionType>());
     }
     
     final countsTextColor = IconTheme.of(context).color;
@@ -240,8 +220,10 @@ void openSeeAll(
                   parent: widget.parent,
                   tracks: tracks,
                   childrenForQueue: Future.value(tracks),
-                  tracksText: genreCuratedItemSelectionTypeTracks
-                      .toLocalisedSectionTitle(context, BaseItemDtoType.track),
+                  tracksText: (genreCuratedItemSelectionTypeTracks != null) 
+                      ? genreCuratedItemSelectionTypeTracks
+                          .toLocalisedSectionTitle(context, BaseItemDtoType.track)
+                      : loc.tracks,
                   seeAllCallbackFunction: () => openSeeAll(
                     TabContentType.tracks,
                     itemSelectionType: genreCuratedItemSelectionTypeTracks,
@@ -260,8 +242,10 @@ void openSeeAll(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 sliver: AlbumSection(
                   parent: widget.parent,
-                  albumsText: genreCuratedItemSelectionTypeAlbums
-                      .toLocalisedSectionTitle(context, BaseItemDtoType.album),
+                  albumsText: (genreCuratedItemSelectionTypeAlbums != null) 
+                      ? genreCuratedItemSelectionTypeAlbums
+                          .toLocalisedSectionTitle(context, BaseItemDtoType.album)
+                      : loc.albums,
                   albums: albums,
                   seeAllCallbackFunction: () => openSeeAll(
                     TabContentType.albums, 
@@ -281,8 +265,10 @@ void openSeeAll(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 sliver: AlbumSection(
                   parent: widget.parent,
-                  albumsText: genreCuratedItemSelectionTypeArtists
-                      .toLocalisedSectionTitle(context, BaseItemDtoType.artist),
+                  albumsText:  (genreCuratedItemSelectionTypeArtists != null) 
+                      ? genreCuratedItemSelectionTypeArtists
+                          .toLocalisedSectionTitle(context, BaseItemDtoType.artist)
+                      : loc.artists,
                   albums: artists,
                   seeAllCallbackFunction: () => openSeeAll(
                     TabContentType.artists,

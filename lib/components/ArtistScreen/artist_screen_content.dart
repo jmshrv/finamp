@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:finamp/components/ArtistScreen/artist_screen_provider.dart';
-import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -63,20 +62,14 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   Widget build(BuildContext context) {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
-    final isOffline = ref.watch(finampSettingsProvider.isOffline);
     final artistItemSectionsOrder =
         ref.watch(finampSettingsProvider.artistItemSectionsOrder);
     final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
-    final artistCuratedItemSelectionType = handleMostPlayedFallbackOption(
-      isOffline: isOffline,
-      currentFilter: ref.watch(finampSettingsProvider.artistCuratedItemSelectionType),
-      filterListFor: BaseItemDtoType.track,
-      customFilterOrder: artistCuratedItemSectionFilterOrder,
-    );
+
     List<BaseItemDto> allChildren = [];
   
-    final (topTracksAsync, trackSelectionTypeOverride) = ref.watch(
-        getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull ?? (null, null);
+    final (topTracksAsync, artistCuratedItemSelectionType, newDisabledTrackFilters) = ref.watch(
+        getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull ?? (null, null, null);
     final albumArtistAlbumsAsync = ref.watch(
         getArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
     final performingArtistAlbumsAsync = ref.watch(
@@ -89,8 +82,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
 
     final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;
 
-    if (trackSelectionTypeOverride != null) {
-      _disabledTrackFilters.add(trackSelectionTypeOverride);
+    if (newDisabledTrackFilters != null) {
+      _disabledTrackFilters.addAll(newDisabledTrackFilters.whereType<CuratedItemSelectionType>());
     }
 
     final topTracks = topTracksAsync ?? [];

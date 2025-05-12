@@ -110,17 +110,22 @@ List<CuratedItemSelectionType> _getAvailableSelectionTypes(
   }
 }
 
-CuratedItemSelectionType getFavoriteFallbackFilterOption({
+CuratedItemSelectionType getFallbackFilterOption({
   required bool isOffline,
+  required CuratedItemSelectionType currentType,
   required BaseItemDtoType filterListFor,
   List<CuratedItemSelectionType>? customFilterOrder,
+  Set<CuratedItemSelectionType>? disabledFilters,
 }){
     final filterOrder = customFilterOrder ?? CuratedItemSelectionType.values;
-    final filteredFilterOrder = _getAvailableSelectionTypes(filterListFor, filterOrder);
+    final filteredFilterOrder = _getAvailableSelectionTypes(
+      filterListFor,
+      filterOrder.where((type) => !(disabledFilters?.contains(type) ?? false)).toList(),
+    );
     var fallbackOption = CuratedItemSelectionType.random;
 
     final index = filteredFilterOrder
-                  .indexOf(CuratedItemSelectionType.favorites);
+                  .indexOf(currentType);
     
     if (index != -1 &&
         index + 1 < filteredFilterOrder.length &&
@@ -130,7 +135,7 @@ CuratedItemSelectionType getFavoriteFallbackFilterOption({
     } else {
           // Use the first one that is not favorites (or most played in offline)
         fallbackOption = filteredFilterOrder.firstWhere(
-            (type) => type != CuratedItemSelectionType.favorites && 
+            (type) => type != currentType && 
             (!isOffline || type != CuratedItemSelectionType.mostPlayed),
             orElse: () => CuratedItemSelectionType.random);
     }

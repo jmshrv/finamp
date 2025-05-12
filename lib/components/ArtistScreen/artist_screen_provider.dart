@@ -16,7 +16,7 @@ part 'artist_screen_provider.g.dart';
 
 // Get the Top Tracks of an artist
 @riverpod
-Future<(List<BaseItemDto>, CuratedItemSelectionType?)> getArtistTopTracks(
+Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> getArtistTopTracks(
   Ref ref,
   BaseItemDto parent,
   BaseItemDto? library,
@@ -24,8 +24,9 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType?)> getArtistTopTracks(
 ) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  final Set<CuratedItemSelectionType> disabledFilters = {};
   final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
-  final CuratedItemSelectionType initialSelectionType = handleMostPlayedFallbackOption(
+  CuratedItemSelectionType currentSelectionType = handleMostPlayedFallbackOption(
       isOffline: isOffline,
       currentFilter: ref.watch(finampSettingsProvider.artistCuratedItemSelectionType),
       filterListFor: BaseItemDtoType.track,
@@ -33,7 +34,7 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType?)> getArtistTopTracks(
   );
   // If Top Tracks are disabled, we return an empty list
   if (!ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
-    return (<BaseItemDto>[], null);
+    return (<BaseItemDto>[], currentSelectionType, null);
   }
 
   // Get Items
@@ -118,22 +119,33 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType?)> getArtistTopTracks(
     }
   }
 
-  final result = await fetchItems(initialSelectionType);
-  final filteredResult = filterResult(result, initialSelectionType);
+  var result = await fetchItems(currentSelectionType);
+  var filteredResult = filterResult(result, currentSelectionType);
 
-  if (filteredResult.isEmpty && (initialSelectionType == CuratedItemSelectionType.favorites
-      || initialSelectionType == CuratedItemSelectionType.mostPlayed)) {
-    // Get Fallback
-    CuratedItemSelectionType newSelectionType = getFavoriteFallbackFilterOption(
+  while (
+    filteredResult.isEmpty &&
+    (currentSelectionType == CuratedItemSelectionType.favorites ||
+    currentSelectionType == CuratedItemSelectionType.mostPlayed)
+  ) {
+    // Add the currentSelectionType to a Set of disabled types
+    disabledFilters.add(currentSelectionType);
+    // Get next fallback
+    CuratedItemSelectionType newSelectionType = getFallbackFilterOption(
       isOffline: isOffline,
+      currentType: currentSelectionType,
       filterListFor: BaseItemDtoType.track,
       customFilterOrder: artistCuratedItemSectionFilterOrder,
+      disabledFilters: disabledFilters,
     );
-    FinampSetters.setArtistCuratedItemSelectionType(newSelectionType);
-    return (filteredResult, initialSelectionType);
+    // Break if we are cycling without new options
+    if (newSelectionType == currentSelectionType) break;
+    // Call fetchItems again with the newSelectionType
+    currentSelectionType = newSelectionType;
+    result = await fetchItems(currentSelectionType);
+    filteredResult = filterResult(result, currentSelectionType);
   }
 
-  return (filteredResult, null);
+  return (filteredResult, currentSelectionType, disabledFilters);
 }
 
 // Get Albums where the artist is an album artist
