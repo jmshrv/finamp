@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'artist_screen_content.dart';
+part of 'artist_screen_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
 String _$getArtistTopTracksHash() =>
-    r'2ecf075d12fdbfa354cbc7d1add255b4d2eab28b';
+    r'667897d5751f8e8502ab205b3ec00690e5cffd3b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -539,7 +539,7 @@ class _GetPerformingArtistAlbumsProviderElement
 }
 
 String _$getPerformingArtistTracksHash() =>
-    r'398bb6675dc62851e6939170d5c85eb551b064f6';
+    r'72b6d951306d5ea2540837ba23f032f93f49b5fe';
 
 /// See also [getPerformingArtistTracks].
 @ProviderFor(getPerformingArtistTracks)

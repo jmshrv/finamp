@@ -1,3 +1,4 @@
+import 'package:finamp/components/ArtistScreen/artist_screen_provider.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
