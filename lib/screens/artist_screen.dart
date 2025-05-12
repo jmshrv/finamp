@@ -54,6 +54,8 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
   // Pass null in order to reset the filter
   void updateGenreFilter(BaseItemDto? genre) {
     setState(() {
+      // We also rebuild the content so that the disabledFilters reset
+      _contentKey = UniqueKey();
       currentGenreFilter = genre;
     });
   }
