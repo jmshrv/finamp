@@ -272,8 +272,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       _pagingController
           .notifyPageRequestListeners(_pagingController.nextPageKey!);
     }
-    await controller.animateTo(controller.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    if (MediaQuery.of(context).disableAnimations) {
+      controller.jumpTo(controller.position.maxScrollExtent);
+    } else {
+      await controller.animateTo(controller.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    }
   }
 
   Duration _getAnimationDurationForOffsetToIndex(int index) {

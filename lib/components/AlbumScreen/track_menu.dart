@@ -179,11 +179,17 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     var currentSize = scrollController.size;
     if ((percentage != null && currentSize < percentage) ||
         scrollController.size == inputStep) {
-      scrollController.animateTo(
-        percentage ?? oldExtent,
-        duration: trackMenuDefaultAnimationDuration,
-        curve: trackMenuDefaultInCurve,
-      );
+      if (MediaQuery.of(context).disableAnimations) {
+        scrollController.jumpTo(
+          percentage ?? oldExtent,
+        );
+      } else {
+        scrollController.animateTo(
+          percentage ?? oldExtent,
+          duration: trackMenuDefaultAnimationDuration,
+          curve: trackMenuDefaultInCurve,
+        );
+      }
     }
     oldExtent = currentSize;
   }
@@ -753,6 +759,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
           switchInCurve: trackMenuDefaultInCurve,
           switchOutCurve: trackMenuDefaultOutCurve,
           transitionBuilder: (child, animation) {
+            if (MediaQuery.of(context).disableAnimations) {
+              return child;
+            }
             return SizeTransition(sizeFactor: animation, child: child);
           },
           child: showSpeedMenu ? SpeedMenu(iconColor: iconColor) : null,

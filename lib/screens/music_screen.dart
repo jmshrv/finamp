@@ -333,7 +333,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         body: Builder(builder: (context) {
           final child = TabBarView(
             controller: _tabController,
-            physics: ref.watch(finampSettingsProvider.disableGesture)
+            physics: ref.watch(finampSettingsProvider.disableGesture) ||
+                    MediaQuery.of(context).disableAnimations
                 ? const NeverScrollableScrollPhysics()
                 : const AlwaysScrollableScrollPhysics(),
             dragStartBehavior: DragStartBehavior.down,
