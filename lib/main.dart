@@ -493,6 +493,17 @@ class _FinampState extends State<Finamp> with WindowListener {
             child: ValueListenableBuilder(
                 valueListenable: LocaleHelper.localeListener,
                 builder: (_, __, ___) {
+
+                  final transitionBuilder = PageTransitionsTheme(
+                      // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
+                      builders: MediaQuery.of(context).disableAnimations
+                          ? TargetPlatform.values.fold(
+                              <TargetPlatform, PageTransitionsBuilder>{},
+                              (previousValue, element) => previousValue
+                                ..[element] =
+                                    const NoTransitionPageTransitionsBuilder())
+                          : {});
+
                   return ValueListenableBuilder<Box<ThemeMode>>(
                       valueListenable: ThemeModeHelper.themeModeListener,
                       builder: (context, box, __) {
@@ -592,17 +603,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               // ),
                               dismissDirection: DismissDirection.horizontal,
                             ),
-                            pageTransitionsTheme: PageTransitionsTheme(
-                                // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
-                                builders: MediaQuery.of(context)
-                                        .disableAnimations
-                                    ? TargetPlatform.values.fold(
-                                        <TargetPlatform,
-                                            PageTransitionsBuilder>{},
-                                        (previousValue, element) => previousValue
-                                          ..[element] =
-                                              const NoTransitionPageTransitionsBuilder())
-                                    : {}),
+                            pageTransitionsTheme: transitionBuilder,
                           ),
                           darkTheme: ThemeData(
                             brightness: Brightness.dark,
@@ -621,6 +622,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               // ),
                               dismissDirection: DismissDirection.horizontal,
                             ),
+                            pageTransitionsTheme: transitionBuilder,
                           ),
                           scrollBehavior: FinampScrollBehavior(),
                           themeMode: box.get("ThemeMode"),
