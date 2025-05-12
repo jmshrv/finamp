@@ -58,11 +58,17 @@ class _PresetChipsState extends State<PresetChips> {
     if (_controller == null) {
       _controller = ScrollController(initialScrollOffset: offset);
     } else {
-      _controller!.animateTo(
-        offset,
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOutCubic,
-      );
+      if (MediaQuery.of(context).disableAnimations) {
+        _controller!.jumpTo(
+          offset,
+        );
+      } else {
+        _controller!.animateTo(
+          offset,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeOutCubic,
+        );
+      }
     }
   }
 

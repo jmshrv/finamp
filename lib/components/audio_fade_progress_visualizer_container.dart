@@ -133,8 +133,9 @@ class _AudioFadeProgressVisualizerContainerState
                 height: widget.height,
                 decoration: BoxDecoration(
                   borderRadius: widget.borderRadius,
-                  border: _controller.status == AnimationStatus.forward ||
-                          _controller.status == AnimationStatus.reverse
+                  border: (_controller.status == AnimationStatus.forward ||
+                              _controller.status == AnimationStatus.reverse) &&
+                          !MediaQuery.of(context).disableAnimations
                       ? ProgressBorder.all(
                           color: IconTheme.of(context).color!.withAlpha(128),
                           width: 4,

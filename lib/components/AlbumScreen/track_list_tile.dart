@@ -542,7 +542,9 @@ class TrackListItemState extends ConsumerState<TrackListItem>
 
     return isCurrentlyPlaying && widget.highlightCurrentTrack
         ? PlayerScreenTheme(
-            themeTransitionDuration: const Duration(milliseconds: 500),
+            themeTransitionDuration: MediaQuery.of(context).disableAnimations
+                ? Duration.zero
+                : const Duration(milliseconds: 500),
             themeOverride: (imageTheme) {
               return imageTheme.copyWith(
                   colorScheme: imageTheme.colorScheme.copyWith(

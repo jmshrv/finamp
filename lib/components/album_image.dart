@@ -195,8 +195,12 @@ class BareAlbumImage extends ConsumerWidget {
         return OctoImage(
           image: image,
           filterQuality: FilterQuality.medium,
-          fadeOutDuration: const Duration(milliseconds: 300),
-          fadeInDuration: const Duration(milliseconds: 300),
+          fadeOutDuration: MediaQuery.of(context).disableAnimations
+              ? Duration.zero
+              : const Duration(milliseconds: 300),
+          fadeInDuration: MediaQuery.of(context).disableAnimations
+              ? Duration.zero
+              : const Duration(milliseconds: 300),
           fit: BoxFit.contain,
           placeholderBuilder: localPlaceholder,
           errorBuilder: errorBuilder,
