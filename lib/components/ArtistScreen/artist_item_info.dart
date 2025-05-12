@@ -46,8 +46,7 @@ class ArtistItemInfo extends ConsumerWidget {
             )),
         if (item.type != "MusicGenre" &&
             updateGenreFilter != null &&
-            ((item.genreItems != null && item.genreItems!.isNotEmpty) ||
-            genreFilter != null))
+            item.genreItems != null)
           _GenreIconAndText(
               genres: item.genreItems!,
               genreFilter: genreFilter,
@@ -102,12 +101,16 @@ class _GenreIconAndText extends StatelessWidget {
                       style: TextStyle(color: theme.colorScheme.onPrimary),
                       overflow: TextOverflow.ellipsis,
                     )
-                  : GenreChips(
-                      genres: genres,
-                      backgroundColor:
-                        IconTheme.of(context).color!.withOpacity(0.1),
-                      updateGenreFilter: updateGenreFilter,
-                    ),
+                  : (genres.isNotEmpty)
+                      ? GenreChips(
+                        genres: genres,
+                        backgroundColor:
+                          IconTheme.of(context).color!.withOpacity(0.1),
+                        updateGenreFilter: updateGenreFilter,
+                      )
+                    : Text(
+                        AppLocalizations.of(context)!.noGenres
+                      ),
             ),
             if (hasFilter)
               GestureDetector(

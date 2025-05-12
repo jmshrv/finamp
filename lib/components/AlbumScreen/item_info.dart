@@ -58,21 +58,13 @@ class ItemInfo extends ConsumerWidget {
             textSpan: TextSpan(
               text: trackDurationString,
             )),
-        /* Previously, we had the duration in one row
-        IconAndText(
-          iconData: Icons.timer,
-          textSpan: TextSpan(
-            text: printDuration(item.runTimeTicksDuration()),
-          ),
-        ),*/
         if (item.type != "Playlist" && item.premiereDate != null)
           IconAndText(
               iconData: Icons.event,
               textSpan: TextSpan(
                 text: ReleaseDateHelper.autoFormat(item),
               )),
-        if (item.type != "Playlist" &&
-            (item.genreItems != null && item.genreItems!.isNotEmpty))
+        if (item.type != "Playlist")
           Row(
             children: [
               Icon(
@@ -83,11 +75,15 @@ class ItemInfo extends ConsumerWidget {
               ),
               const SizedBox(width: 4),
               Expanded(
-                child: GenreChips(
-                        genres: item.genreItems!,
-                        backgroundColor:
-                          IconTheme.of(context).color!.withOpacity(0.1),
-                      ),
+                child: (item.genreItems != null && item.genreItems!.isNotEmpty)
+                  ? GenreChips(
+                      genres: item.genreItems!,
+                      backgroundColor:
+                        IconTheme.of(context).color!.withOpacity(0.1),
+                    )
+                  : Text(
+                      AppLocalizations.of(context)!.noGenres
+                    ),
               ),
             ],
           ),
