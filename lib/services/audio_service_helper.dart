@@ -57,9 +57,17 @@ class AudioServiceHelper {
     }
 
     if (items != null) {
-      await _queueService.startPlayback(
-        items: items,
-        source: QueueItemSource.rawId(
+      QueueItemSource source = (genreFilter != null)
+        ? QueueItemSource(
+          type: QueueItemSourceType.genre,
+          name: QueueItemSourceName(
+              type: QueueItemSourceNameType.preTranslated,
+              pretranslatedName: genreFilter.name
+          ),
+          id: genreFilter.id,
+          item: genreFilter,
+        )
+        : QueueItemSource.rawId(
           type: onlyShowFavourites
               ? QueueItemSourceType.favorites
               : QueueItemSourceType.allTracks,
@@ -69,7 +77,11 @@ class AudioServiceHelper {
                 : QueueItemSourceNameType.shuffleAll,
           ),
           id: "shuffleAll",
-        ),
+        );
+
+      await _queueService.startPlayback(
+        items: items,
+        source: source,
         order: FinampPlaybackOrder.shuffled,
       );
     }
