@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
@@ -23,7 +24,7 @@ import '../padded_custom_scrollview.dart';
 part 'genre_screen_content.g.dart';
 
 @riverpod
-Future<(List<BaseItemDto>, int)> genreCuratedItems(
+Future<(List<BaseItemDto>, int, CuratedItemSelectionType?)> genreCuratedItems(
   Ref ref,
   BaseItemDto parent,
   BaseItemDtoType baseItemType,
@@ -31,67 +32,80 @@ Future<(List<BaseItemDto>, int)> genreCuratedItems(
 ) async {
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
-  final genreCuratedItemSelectionType = (baseItemType == BaseItemDtoType.artist)
-      ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
-      : (baseItemType == BaseItemDtoType.album)
-          ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums)
-          : ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks);
+  final initialSelectionType = handleMostPlayedFallbackOption(
+      isOffline: isOffline,
+      currentFilter: (baseItemType == BaseItemDtoType.artist)
+            ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
+            : (baseItemType == BaseItemDtoType.album)
+                ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums)
+                : ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks),
+      filterListFor: baseItemType,
+      customFilterOrder: genreCuratedItemSectionFilterOrder,
+  );
   final artistListType = ref.watch(finampSettingsProvider.artistListType);
   final artistInfoForType = (artistListType == ArtistType.albumartist)
         ? BaseItemDtoType.album
         : BaseItemDtoType.track;
-
-  List<BaseItemDto>? items;
-  int? itemCount;
   
-  if (isOffline) {
-    // If "Most Played" is selected when Offline Mode is enabled, we switch to a fallback option
-    // as the PlayCount data might not be an accurate representation of the online state
-    final offlineSelectionType = (genreCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
-        ? (() {
-            final index = genreCuratedItemSectionFilterOrder
-                .indexOf(CuratedItemSelectionType.mostPlayed);
-            if (index != -1 &&
-                index + 1 < genreCuratedItemSectionFilterOrder.length) {
-              // Use the filter after mostPlayed
-              return genreCuratedItemSectionFilterOrder[index + 1];
-            } else {
-              // Use the first one that is not mostPlayed
-              return genreCuratedItemSectionFilterOrder.firstWhere(
-                  (type) => type != CuratedItemSelectionType.mostPlayed,
-                  orElse: () => CuratedItemSelectionType.favorites);
-            }
-          })()
-        : genreCuratedItemSelectionType;
-    final result = await getCuratedItemsOffline(
-      ref: ref,
-      parent: parent,
-      genreCuratedItemSelectionType: offlineSelectionType,
-      baseItemType: baseItemType,
-      library: library,
-      artistInfoForType: (baseItemType == BaseItemDtoType.artist)
-          ? artistInfoForType
-          : null,
-    );
-    items = result.$1;
-    itemCount = result.$2;
-  } else {
-    final result = await getCuratedItemsOnline(
-      parent: parent,
-      genreCuratedItemSelectionType: genreCuratedItemSelectionType,
-      baseItemType: baseItemType,
-      library: library,
-      sortBySecondary: (baseItemType == BaseItemDtoType.album)
-          ? "PremiereDate,SortName"
-          : "SortName",
-      artistListType: (baseItemType == BaseItemDtoType.artist)
-          ? artistListType
-          : null,
-    );
-    items = result.$1;
-    itemCount = result.$2;
+  Future<(List<BaseItemDto>, int)> fetchItems(CuratedItemSelectionType selectionType) async {
+    if (isOffline) {
+      final result = await getCuratedItemsOffline(
+        ref: ref,
+        parent: parent,
+        genreCuratedItemSelectionType: selectionType,
+        baseItemType: baseItemType,
+        library: library,
+        artistInfoForType: (baseItemType == BaseItemDtoType.artist)
+            ? artistInfoForType
+            : null,
+      );
+      return (result.$1, result.$2);
+    } else {
+      final result = await getCuratedItemsOnline(
+        parent: parent,
+        genreCuratedItemSelectionType: selectionType,
+        baseItemType: baseItemType,
+        library: library,
+        sortBySecondary: (baseItemType == BaseItemDtoType.album)
+            ? "PremiereDate,SortName"
+            : "SortName",
+        artistListType: (baseItemType == BaseItemDtoType.artist)
+            ? artistListType
+            : null,
+      );
+      return (result.$1, result.$2);
+    }
   }
-  return (items, itemCount);
+
+  List<BaseItemDto> filterResult(
+    List<BaseItemDto> result, CuratedItemSelectionType curatedItemType) {
+    if (curatedItemType == CuratedItemSelectionType.mostPlayed) {
+        return result.takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+          .take(5)
+          .toList();
+    } else {
+        return result
+          .take(5)
+          .toList();
+    }
+  }
+
+  CuratedItemSelectionType usedSelectionType = initialSelectionType;
+  final result = await fetchItems(usedSelectionType);
+  final filteredResult = filterResult(result.$1, usedSelectionType);
+
+  if (filteredResult.isEmpty && (usedSelectionType == CuratedItemSelectionType.favorites
+      || usedSelectionType == CuratedItemSelectionType.mostPlayed)) {
+    // Get Fallback
+    usedSelectionType = getFavoriteFallbackFilterOption(
+      isOffline: isOffline,
+      filterListFor: baseItemType,
+      customFilterOrder: genreCuratedItemSectionFilterOrder,
+    );
+    return (filteredResult, result.$2, usedSelectionType);
+  }
+
+  return (filteredResult, result.$2, null);
 }
 
 Future<(List<BaseItemDto>,int)> getCuratedItemsOnline({
@@ -234,6 +248,9 @@ class GenreScreenContent extends ConsumerStatefulWidget {
 class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   StreamSubscription<void>? _refreshStream;
+  final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
+  final Set<CuratedItemSelectionType> _disabledAlbumFilters = {};
+  final Set<CuratedItemSelectionType> _disabledArtistFilters = {};
 
   @override
   void initState() {
@@ -249,36 +266,14 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
 void openSeeAll(
     TabContentType tabContentType, {
     bool doOverride = true,
+    CuratedItemSelectionType? itemSelectionType,
   }) {
     bool isFavoriteOverride = false;
     SortBy? sortByOverride;
     SortOrder? sortOrderOverride;
-    final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
-    final genreCuratedItemSelectionTypeSetting = (tabContentType == TabContentType.artists)
-        ? ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
-        : ((tabContentType == TabContentType.albums)
-            ? ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums)
-            : ref.read(finampSettingsProvider.genreCuratedItemSelectionTypeTracks));
-    final genreCuratedItemSelectionType = (ref.watch(finampSettingsProvider.isOffline) && 
-        genreCuratedItemSelectionTypeSetting == CuratedItemSelectionType.mostPlayed)
-          ? (() {
-            final index = genreCuratedItemSectionFilterOrder
-                .indexOf(CuratedItemSelectionType.mostPlayed);
-            if (index != -1 &&
-                index + 1 < genreCuratedItemSectionFilterOrder.length) {
-              // Use the filter after mostPlayed
-              return genreCuratedItemSectionFilterOrder[index + 1];
-            } else {
-              // Use the first one that is not mostPlayed
-              return genreCuratedItemSectionFilterOrder.firstWhere(
-                  (type) => type != CuratedItemSelectionType.mostPlayed,
-                  orElse: () => CuratedItemSelectionType.favorites);
-            }
-          })()
-          : genreCuratedItemSelectionTypeSetting;
-
-    if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting)) {
-      switch (genreCuratedItemSelectionType) {
+   
+    if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting) && itemSelectionType != null) {
+      switch (itemSelectionType) {
         case CuratedItemSelectionType.mostPlayed:
           sortByOverride = SortBy.playCount;
           sortOrderOverride = SortOrder.descending;
@@ -320,28 +315,12 @@ void openSeeAll(
     final library = finampUserHelper.currentUser?.currentView;
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
     final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
-    final genreCuratedItemSelectionTypeTracksSetting =
-        ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks);
-
-    final genreCuratedItemSelectionTypeTracks = (isOffline &&
-        genreCuratedItemSelectionTypeTracksSetting ==
-            CuratedItemSelectionType.mostPlayed)
-        ? (() {
-            final index = genreCuratedItemSectionFilterOrder
-                .indexOf(CuratedItemSelectionType.mostPlayed);
-            if (index != -1 &&
-                index + 1 < genreCuratedItemSectionFilterOrder.length) {
-              // Use the filter after mostPlayed
-              return genreCuratedItemSectionFilterOrder[index + 1];
-            } else {
-              // Use the first one that is not mostPlayed
-              return genreCuratedItemSectionFilterOrder.firstWhere(
-                  (type) => type != CuratedItemSelectionType.mostPlayed,
-                  orElse: () => CuratedItemSelectionType.favorites);
-            }
-          })()
-        : genreCuratedItemSelectionTypeTracksSetting;
-
+    final genreCuratedItemSelectionTypeTracks = handleMostPlayedFallbackOption(
+      isOffline: isOffline,
+      currentFilter: ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks),
+      filterListFor: BaseItemDtoType.track,
+      customFilterOrder: genreCuratedItemSectionFilterOrder,
+    );
     final genreCuratedItemSelectionTypeAlbums =
         ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums);
     final genreCuratedItemSelectionTypeArtists =
@@ -349,14 +328,34 @@ void openSeeAll(
     final genreItemSectionsOrder =
         ref.watch(finampSettingsProvider.genreItemSectionsOrder);
 
-    final (tracks, trackCount) = ref.watch(genreCuratedItemsProvider(
-        widget.parent, BaseItemDtoType.track, widget.library)).valueOrNull ?? (null, null);
-    final (albums, albumCount) = ref.watch(genreCuratedItemsProvider(
-        widget.parent, BaseItemDtoType.album, widget.library)).valueOrNull ?? (null, null);
-    final (artists, artistCount) = ref.watch(genreCuratedItemsProvider(
-        widget.parent, BaseItemDtoType.artist, widget.library)).valueOrNull ?? (null, null);
+    final tracksAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.track, widget.library));
+    final albumsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.album, widget.library));
+    final artistsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.artist, widget.library));
+
+    final (tracks, trackCount, trackSelectionTypeOverride) = tracksAsync.valueOrNull ?? (null, null, null);
+    final (albums, albumCount, albumSelectionTypeOverride) = albumsAsync.valueOrNull ?? (null, null, null);
+    final (artists, artistCount, artistSelectionTypeOverride) = artistsAsync.valueOrNull ?? (null, null, null);
 
     final isLoading = tracks == null || albums == null || artists == null;
+
+    if (!tracksAsync.isLoading && trackSelectionTypeOverride != null && 
+        (genreCuratedItemSelectionTypeTracks == CuratedItemSelectionType.favorites || 
+        genreCuratedItemSelectionTypeTracks == CuratedItemSelectionType.mostPlayed)) {
+      _disabledTrackFilters.add(genreCuratedItemSelectionTypeTracks);
+      FinampSetters.setGenreCuratedItemSelectionTypeTracks(trackSelectionTypeOverride);
+    }
+    if (!albumsAsync.isLoading && albumSelectionTypeOverride != null && 
+        (genreCuratedItemSelectionTypeAlbums == CuratedItemSelectionType.favorites || 
+        genreCuratedItemSelectionTypeAlbums == CuratedItemSelectionType.mostPlayed)) {
+      _disabledAlbumFilters.add(genreCuratedItemSelectionTypeAlbums);
+      FinampSetters.setGenreCuratedItemSelectionTypeAlbums(albumSelectionTypeOverride);
+    }
+    if (!artistsAsync.isLoading && artistSelectionTypeOverride != null && 
+        (genreCuratedItemSelectionTypeArtists == CuratedItemSelectionType.favorites || 
+        genreCuratedItemSelectionTypeArtists == CuratedItemSelectionType.mostPlayed)) {
+      _disabledArtistFilters.add(genreCuratedItemSelectionTypeArtists);
+      FinampSetters.setGenreCuratedItemSelectionTypeArtists(artistSelectionTypeOverride);
+    }
     
     final countsTextColor = IconTheme.of(context).color;
     final countsSubtitleColor = IconTheme.of(context).color!.withOpacity(0.6);
@@ -454,10 +453,14 @@ void openSeeAll(
                   childrenForQueue: Future.value(tracks),
                   tracksText: genreCuratedItemSelectionTypeTracks
                       .toLocalisedSectionTitle(context, BaseItemDtoType.track),
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.tracks),
+                  seeAllCallbackFunction: () => openSeeAll(
+                    TabContentType.tracks,
+                    itemSelectionType: genreCuratedItemSelectionTypeTracks,
+                  ),
                   includeFilterRow: true,
                   customFilterOrder: genreCuratedItemSectionFilterOrder,
                   selectedFilter: genreCuratedItemSelectionTypeTracks,
+                  disabledFilters: _disabledTrackFilters.toList(),
                   onFilterSelected: (type) {
                      FinampSetters.setGenreCuratedItemSelectionTypeTracks(type);
                   },
@@ -471,10 +474,14 @@ void openSeeAll(
                   albumsText: genreCuratedItemSelectionTypeAlbums
                       .toLocalisedSectionTitle(context, BaseItemDtoType.album),
                   albums: albums,
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.albums),
+                  seeAllCallbackFunction: () => openSeeAll(
+                    TabContentType.albums, 
+                    itemSelectionType: genreCuratedItemSelectionTypeAlbums,
+                  ),
                   includeFilterRowFor: BaseItemDtoType.album,
                   customFilterOrder: genreCuratedItemSectionFilterOrder,
                   selectedFilter: genreCuratedItemSelectionTypeAlbums,
+                  disabledFilters: _disabledAlbumFilters.toList(),
                   onFilterSelected: (type) {
                      FinampSetters.setGenreCuratedItemSelectionTypeAlbums(type);
                   },
@@ -488,11 +495,15 @@ void openSeeAll(
                   albumsText: genreCuratedItemSelectionTypeArtists
                       .toLocalisedSectionTitle(context, BaseItemDtoType.artist),
                   albums: artists,
-                  seeAllCallbackFunction: () => openSeeAll(TabContentType.artists),
+                  seeAllCallbackFunction: () => openSeeAll(
+                    TabContentType.artists,
+                    itemSelectionType: genreCuratedItemSelectionTypeArtists,
+                  ),
                   genreFilter: widget.parent,
                   includeFilterRowFor: BaseItemDtoType.artist,
                   customFilterOrder: genreCuratedItemSectionFilterOrder,
                   selectedFilter: genreCuratedItemSelectionTypeArtists,
+                  disabledFilters: _disabledArtistFilters.toList(),
                   onFilterSelected: (type) {
                      FinampSetters.setGenreCuratedItemSelectionTypeArtists(type);
                   },

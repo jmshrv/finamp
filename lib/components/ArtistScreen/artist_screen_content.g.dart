@@ -7,7 +7,7 @@ part of 'artist_screen_content.dart';
 // **************************************************************************
 
 String _$getArtistTopTracksHash() =>
-    r'18be032f40de6a8282d64af8831efd0d4c571749';
+    r'2ecf075d12fdbfa354cbc7d1add255b4d2eab28b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -35,7 +35,8 @@ class _SystemHash {
 const getArtistTopTracksProvider = GetArtistTopTracksFamily();
 
 /// See also [getArtistTopTracks].
-class GetArtistTopTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
+class GetArtistTopTracksFamily
+    extends Family<AsyncValue<(List<BaseItemDto>, CuratedItemSelectionType?)>> {
   /// See also [getArtistTopTracks].
   const GetArtistTopTracksFamily();
 
@@ -79,8 +80,8 @@ class GetArtistTopTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
 }
 
 /// See also [getArtistTopTracks].
-class GetArtistTopTracksProvider
-    extends AutoDisposeFutureProvider<List<BaseItemDto>> {
+class GetArtistTopTracksProvider extends AutoDisposeFutureProvider<
+    (List<BaseItemDto>, CuratedItemSelectionType?)> {
   /// See also [getArtistTopTracks].
   GetArtistTopTracksProvider(
     BaseItemDto parent,
@@ -125,7 +126,9 @@ class GetArtistTopTracksProvider
 
   @override
   Override overrideWith(
-    FutureOr<List<BaseItemDto>> Function(GetArtistTopTracksRef provider) create,
+    FutureOr<(List<BaseItemDto>, CuratedItemSelectionType?)> Function(
+            GetArtistTopTracksRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -144,7 +147,8 @@ class GetArtistTopTracksProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<BaseItemDto>> createElement() {
+  AutoDisposeFutureProviderElement<
+      (List<BaseItemDto>, CuratedItemSelectionType?)> createElement() {
     return _GetArtistTopTracksProviderElement(this);
   }
 
@@ -169,7 +173,8 @@ class GetArtistTopTracksProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GetArtistTopTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
+mixin GetArtistTopTracksRef on AutoDisposeFutureProviderRef<
+    (List<BaseItemDto>, CuratedItemSelectionType?)> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
 
@@ -181,7 +186,8 @@ mixin GetArtistTopTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
 }
 
 class _GetArtistTopTracksProviderElement
-    extends AutoDisposeFutureProviderElement<List<BaseItemDto>>
+    extends AutoDisposeFutureProviderElement<
+        (List<BaseItemDto>, CuratedItemSelectionType?)>
     with GetArtistTopTracksRef {
   _GetArtistTopTracksProviderElement(super.provider);
 

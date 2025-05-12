@@ -25,9 +25,13 @@ class GenreScreen extends ConsumerStatefulWidget {
 
 class _GenreScreenState extends ConsumerState<GenreScreen> {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
+  Key _contentKey = UniqueKey();
 
   Future<void> _refresh() async {
     ref.invalidate(genreCuratedItemsProvider);
+     setState(() {
+      _contentKey = UniqueKey();
+    });
   }
 
   @override
@@ -41,6 +45,7 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
         child: RefreshIndicator(
           onRefresh: _refresh,
           child: GenreScreenContent(
+            key: _contentKey,
             parent: genre,
             library: _finampUserHelper.currentUser?.currentView,
           ),

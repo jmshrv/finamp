@@ -6,7 +6,7 @@ part of 'genre_screen_content.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$genreCuratedItemsHash() => r'715a18b985d20ac82e1051037f201194bd4f2eea';
+String _$genreCuratedItemsHash() => r'5c7238d06df48ffa35d49bf49cfd117d73576582';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,8 +34,8 @@ class _SystemHash {
 const genreCuratedItemsProvider = GenreCuratedItemsFamily();
 
 /// See also [genreCuratedItems].
-class GenreCuratedItemsFamily
-    extends Family<AsyncValue<(List<BaseItemDto>, int)>> {
+class GenreCuratedItemsFamily extends Family<
+    AsyncValue<(List<BaseItemDto>, int, CuratedItemSelectionType?)>> {
   /// See also [genreCuratedItems].
   const GenreCuratedItemsFamily();
 
@@ -79,8 +79,8 @@ class GenreCuratedItemsFamily
 }
 
 /// See also [genreCuratedItems].
-class GenreCuratedItemsProvider
-    extends AutoDisposeFutureProvider<(List<BaseItemDto>, int)> {
+class GenreCuratedItemsProvider extends AutoDisposeFutureProvider<
+    (List<BaseItemDto>, int, CuratedItemSelectionType?)> {
   /// See also [genreCuratedItems].
   GenreCuratedItemsProvider(
     BaseItemDto parent,
@@ -125,7 +125,8 @@ class GenreCuratedItemsProvider
 
   @override
   Override overrideWith(
-    FutureOr<(List<BaseItemDto>, int)> Function(GenreCuratedItemsRef provider)
+    FutureOr<(List<BaseItemDto>, int, CuratedItemSelectionType?)> Function(
+            GenreCuratedItemsRef provider)
         create,
   ) {
     return ProviderOverride(
@@ -145,7 +146,8 @@ class GenreCuratedItemsProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<(List<BaseItemDto>, int)> createElement() {
+  AutoDisposeFutureProviderElement<
+      (List<BaseItemDto>, int, CuratedItemSelectionType?)> createElement() {
     return _GenreCuratedItemsProviderElement(this);
   }
 
@@ -170,8 +172,8 @@ class GenreCuratedItemsProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GenreCuratedItemsRef
-    on AutoDisposeFutureProviderRef<(List<BaseItemDto>, int)> {
+mixin GenreCuratedItemsRef on AutoDisposeFutureProviderRef<
+    (List<BaseItemDto>, int, CuratedItemSelectionType?)> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
 
@@ -183,7 +185,8 @@ mixin GenreCuratedItemsRef
 }
 
 class _GenreCuratedItemsProviderElement
-    extends AutoDisposeFutureProviderElement<(List<BaseItemDto>, int)>
+    extends AutoDisposeFutureProviderElement<
+        (List<BaseItemDto>, int, CuratedItemSelectionType?)>
     with GenreCuratedItemsRef {
   _GenreCuratedItemsProviderElement(super.provider);
 

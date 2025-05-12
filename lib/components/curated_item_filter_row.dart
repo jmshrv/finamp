@@ -58,8 +58,12 @@ Widget buildCuratedItemFilterRow({
                             },
                           selected: isSelected,
                           tooltip: (isOffline && type == CuratedItemSelectionType.mostPlayed)
-                              ? AppLocalizations.of(context)!.genreMostPlayedOfflineTooltip
-                              : null,
+                              ? AppLocalizations.of(context)!.curatedItemsMostPlayedOfflineTooltip
+                              : ((disabledFiltersList.contains(type)) 
+                                  ? ((type == CuratedItemSelectionType.mostPlayed)
+                                      ? AppLocalizations.of(context)!.curatedItemsMostPlayedDisabledTooltip
+                                      : AppLocalizations.of(context)!.curatedItemsFavoritesDisabledTooltip)
+                                  : null),
                           showCheckmark: false,
                           selectedColor: colorScheme.primary,
                           backgroundColor: colorScheme.surface,
@@ -88,9 +92,7 @@ List<CuratedItemSelectionType> _getAvailableSelectionTypes(
   List<CuratedItemSelectionType>? customFilterOrder
 ) {
 
-  var filteredList = (customFilterOrder != null)
-      ? customFilterOrder
-      : CuratedItemSelectionType.values;
+  var filteredList = customFilterOrder ?? CuratedItemSelectionType.values;
 
   switch (filterListFor) {
     case BaseItemDtoType.album:
@@ -106,4 +108,60 @@ List<CuratedItemSelectionType> _getAvailableSelectionTypes(
     default:
       return filteredList;
   }
+}
+
+CuratedItemSelectionType getFavoriteFallbackFilterOption({
+  required bool isOffline,
+  required BaseItemDtoType filterListFor,
+  List<CuratedItemSelectionType>? customFilterOrder,
+}){
+    final filterOrder = customFilterOrder ?? CuratedItemSelectionType.values;
+    final filteredFilterOrder = _getAvailableSelectionTypes(filterListFor, filterOrder);
+    var fallbackOption = CuratedItemSelectionType.random;
+
+    final index = filteredFilterOrder
+                  .indexOf(CuratedItemSelectionType.favorites);
+    
+    if (index != -1 &&
+        index + 1 < filteredFilterOrder.length &&
+        (!isOffline || filteredFilterOrder[index + 1] != CuratedItemSelectionType.mostPlayed)) {
+      // Use the filter after favorites
+      fallbackOption = filteredFilterOrder[index + 1];
+    } else {
+          // Use the first one that is not favorites (or most played in offline)
+        fallbackOption = filteredFilterOrder.firstWhere(
+            (type) => type != CuratedItemSelectionType.favorites && 
+            (!isOffline || type != CuratedItemSelectionType.mostPlayed),
+            orElse: () => CuratedItemSelectionType.random);
+    }
+
+    return fallbackOption;
+}
+
+CuratedItemSelectionType handleMostPlayedFallbackOption({
+  required bool isOffline,
+  required CuratedItemSelectionType currentFilter,
+  required BaseItemDtoType filterListFor,
+  List<CuratedItemSelectionType>? customFilterOrder,
+}){
+    final filterOrder = customFilterOrder ?? CuratedItemSelectionType.values;
+    final filteredFilterOrder = _getAvailableSelectionTypes(filterListFor, filterOrder);
+    var newFilter = currentFilter;
+
+  if (isOffline && currentFilter == CuratedItemSelectionType.mostPlayed) {
+    final index = filteredFilterOrder
+        .indexOf(CuratedItemSelectionType.mostPlayed);
+    if (index != -1 && index + 1 < filteredFilterOrder.length) {
+      // Use the filter after mostPlayed
+      newFilter = filteredFilterOrder[index + 1];
+    } else {
+      // Use the first one that is not mostPlayed
+      newFilter = filteredFilterOrder.firstWhere(
+        (type) => type != CuratedItemSelectionType.mostPlayed,
+        orElse: () => CuratedItemSelectionType.random
+      );
+    }
+  }
+
+  return newFilter;
 }

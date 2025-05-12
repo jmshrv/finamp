@@ -1255,9 +1255,17 @@
   "@genreMostPlayedOfflineFallbackSubtitle": {
     "description": "Description of the setting that controls the offline fallback sorting option for the Most Played option."
   },
-  "genreMostPlayedOfflineTooltip": "Not available in Offline Mode.",
-  "@genreMostPlayedOfflineTooltip": {
-    "description": "Tooltip for Most Played on GenreScreen in Offline Mode."
+  "curatedItemsMostPlayedOfflineTooltip": "Not available in Offline Mode.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "curatedItemsMostPlayedDisabledTooltip": "You've not listened to any tracks yet.",
+  "@curatedItemsMostPlayedDisabledTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
+  },
+  "curatedItemsFavoritesDisabledTooltip": "You have no favorites yet.",
+  "@curatedItemsFavoritesDisabledTooltip": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
   },
   "artistCuratedItemSelectionTypeTitle": "Track Curation Type",
   "@artistCuratedItemSelectionTypeTitle": {

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -23,7 +24,7 @@ part 'artist_screen_content.g.dart';
 
 // Get the Top Tracks of an artist
 @riverpod
-Future<List<BaseItemDto>> getArtistTopTracks(
+Future<(List<BaseItemDto>, CuratedItemSelectionType?)> getArtistTopTracks(
   Ref ref,
   BaseItemDto parent,
   BaseItemDto? library,
@@ -32,72 +33,92 @@ Future<List<BaseItemDto>> getArtistTopTracks(
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
-  final CuratedItemSelectionType artistCuratedItemSelectionType = 
-      ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
+  final CuratedItemSelectionType initialSelectionType = handleMostPlayedFallbackOption(
+      isOffline: isOffline,
+      currentFilter: ref.watch(finampSettingsProvider.artistCuratedItemSelectionType),
+      filterListFor: BaseItemDtoType.track,
+      customFilterOrder: artistCuratedItemSectionFilterOrder,
+  );
   // If Top Tracks are disabled, we return an empty list
   if (!ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
-    return <BaseItemDto>[];
+    return (<BaseItemDto>[], null);
   }
+
   // Get Items
-  if (isOffline) {
-    // In Offline Mode:
-    final artistCuratedItemSelectionTypeOffline = 
-        (artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
-            ? (() {
-            final index = artistCuratedItemSectionFilterOrder
-                .indexOf(CuratedItemSelectionType.mostPlayed);
-            if (index != -1 &&
-                index + 1 < artistCuratedItemSectionFilterOrder.length) {
-              // Use the filter after mostPlayed
-              return artistCuratedItemSectionFilterOrder[index + 1];
-            } else {
-              // Use the first one that is not mostPlayed
-              return artistCuratedItemSectionFilterOrder.firstWhere(
-                  (type) => type != CuratedItemSelectionType.mostPlayed,
-                  orElse: () => CuratedItemSelectionType.favorites);
-            }
-          })()
-        : artistCuratedItemSelectionType;
-    // We already fetch all tracks for the playback, 
-    // and as in offline mode this is much faster, 
-    // we just sort them and only return the first 5 items.
-    final sortBy = switch (artistCuratedItemSelectionTypeOffline) {
-      // Offline Play Count not implemented yet
-      // CuratedItemSelectionType.mostPlayed => SortBy.playCount,
-      CuratedItemSelectionType.recentlyAdded => SortBy.dateCreated,
-      CuratedItemSelectionType.latestReleases => SortBy.premiereDate,
-      _ => SortBy.random, // for Favorites and Random
-    };
-    final onlyFavorites = (artistCuratedItemSelectionTypeOffline == CuratedItemSelectionType.favorites);
-    final List<BaseItemDto> allArtistTracks = await ref.watch(
-      getAllTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
-    );
-    var items = sortItems(allArtistTracks, sortBy, SortOrder.descending);
-    items = items.take(5).toList();
-    return items;
-  } else {
-    // In Online Mode:
-    final sortByMain = switch (artistCuratedItemSelectionType) {
-      CuratedItemSelectionType.mostPlayed => "PlayCount",
-      CuratedItemSelectionType.recentlyAdded => "DateCreated",
-      CuratedItemSelectionType.latestReleases => "PremiereDate",
-      _ => "Random", // for Favorites and Random
-    };
-    // Get Top 5 Tracks sorted by Play Count
-      final List<BaseItemDto>? topTracks = 
-        await jellyfinApiHelper.getItems(
-            libraryFilter: library,
-            parentItem: parent,
-            genreFilter: genreFilter,
-            sortBy: "$sortByMain,SortName",
-            sortOrder: "Descending",
-            isFavorite: (artistCuratedItemSelectionType == CuratedItemSelectionType.favorites) 
-                ? true : null,
-            limit: 5,
-            includeItemTypes: "Audio",
-          );
-    return topTracks?? [];
+  Future<List<BaseItemDto>> fetchItems(CuratedItemSelectionType selectionType) async {
+    if (isOffline) {
+      // In Offline Mode:
+      // We already fetch all tracks for the playback, 
+      // and as in offline mode this is much faster, 
+      // we just sort them and only return the first 5 items.
+      final sortBy = switch (selectionType) {
+        // Offline Play Count not implemented yet
+        // CuratedItemSelectionType.mostPlayed => SortBy.playCount,
+        CuratedItemSelectionType.recentlyAdded => SortBy.dateCreated,
+        CuratedItemSelectionType.latestReleases => SortBy.premiereDate,
+        _ => SortBy.random, // for Favorites and Random
+      };
+      final onlyFavorites = (selectionType == CuratedItemSelectionType.favorites);
+      final List<BaseItemDto> allArtistTracks = await ref.watch(
+        getAllTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
+      );
+      var items = sortItems(allArtistTracks, sortBy, SortOrder.descending);
+      items = items.take(5).toList();
+      return items;
+    } else {
+      // In Online Mode:
+      final sortByMain = switch (selectionType) {
+        CuratedItemSelectionType.mostPlayed => "PlayCount",
+        CuratedItemSelectionType.recentlyAdded => "DateCreated",
+        CuratedItemSelectionType.latestReleases => "PremiereDate",
+        _ => "Random", // for Favorites and Random
+      };
+      // Get Top 5 Tracks sorted by Play Count
+        final List<BaseItemDto>? topTracks = 
+          await jellyfinApiHelper.getItems(
+              libraryFilter: library,
+              parentItem: parent,
+              genreFilter: genreFilter,
+              sortBy: "$sortByMain,SortName",
+              sortOrder: "Descending",
+              isFavorite: (selectionType == CuratedItemSelectionType.favorites) 
+                  ? true : null,
+              limit: 5,
+              includeItemTypes: "Audio",
+            );
+      return topTracks?? [];
+    }
   }
+
+  List<BaseItemDto> filterResult(
+    List<BaseItemDto> result, CuratedItemSelectionType curatedItemType) {
+    if (curatedItemType == CuratedItemSelectionType.mostPlayed) {
+        return result.takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+          .take(5)
+          .toList();
+    } else {
+        return result
+          .take(5)
+          .toList();
+    }
+  }
+
+  CuratedItemSelectionType usedSelectionType = initialSelectionType;
+  final result = await fetchItems(initialSelectionType);
+  final filteredResult = filterResult(result, usedSelectionType);
+
+  if (filteredResult.isEmpty && (usedSelectionType == CuratedItemSelectionType.favorites
+      || usedSelectionType == CuratedItemSelectionType.mostPlayed)) {
+    // Get Fallback
+    usedSelectionType = getFavoriteFallbackFilterOption(
+      isOffline: isOffline,
+      filterListFor: BaseItemDtoType.track,
+      customFilterOrder: artistCuratedItemSectionFilterOrder,
+    );
+    return (filteredResult, usedSelectionType);
+  }
+
+  return (filteredResult, null);
 }
 
 // Get Albums where the artist is an album artist
@@ -338,6 +359,7 @@ class ArtistScreenContent extends ConsumerStatefulWidget {
 class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsService = GetIt.instance<DownloadsService>();
+  final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
 
   StreamSubscription<void>? _refreshStream;
 
@@ -361,10 +383,17 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     final library = finampUserHelper.currentUser?.currentView;
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
     final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
+    final artistCuratedItemSelectionType = handleMostPlayedFallbackOption(
+      isOffline: isOffline,
+      currentFilter: ref.watch(finampSettingsProvider.artistCuratedItemSelectionType),
+      filterListFor: BaseItemDtoType.track,
+      customFilterOrder: artistCuratedItemSectionFilterOrder,
+    );
     List<BaseItemDto> allChildren = [];
   
-    final topTracksAsync = ref.watch(
-        getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
+    final topTracksGroupAsync = ref.watch(
+        getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter));
+    final (topTracksAsync, trackSelectionTypeOverride) = topTracksGroupAsync.valueOrNull ?? (null, null);
     final albumArtistAlbumsAsync = ref.watch(
         getArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
     final performingArtistAlbumsAsync = ref.watch(
@@ -377,31 +406,17 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
 
     final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;
 
+    if (!topTracksGroupAsync.isLoading && trackSelectionTypeOverride != null && 
+          (artistCuratedItemSelectionType == CuratedItemSelectionType.favorites || 
+          artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)) {
+      _disabledTrackFilters.add(artistCuratedItemSelectionType);
+      FinampSetters.setArtistCuratedItemSelectionType(trackSelectionTypeOverride);
+    }
+
     final topTracks = topTracksAsync ?? [];
     final albumArtistAlbums = albumArtistAlbumsAsync ?? [];
     final performingArtistAlbums = performingArtistAlbumsAsync ?? [];
     final allPerformingArtistTracks = allPerformingArtistTracksAsync ?? [];
-
-    final artistCuratedItemSelectionTypeSetting = 
-        ref.watch(finampSettingsProvider.artistCuratedItemSelectionType);
-    final artistCuratedItemSelectionType = (isOffline &&
-        artistCuratedItemSelectionTypeSetting ==
-            CuratedItemSelectionType.mostPlayed)
-        ? (() {
-            final index = artistCuratedItemSectionFilterOrder
-                .indexOf(CuratedItemSelectionType.mostPlayed);
-            if (index != -1 &&
-                index + 1 < artistCuratedItemSectionFilterOrder.length) {
-              // Use the filter after mostPlayed
-              return artistCuratedItemSectionFilterOrder[index + 1];
-            } else {
-              // Use the first one that is not mostPlayed
-              return artistCuratedItemSectionFilterOrder.firstWhere(
-                  (type) => type != CuratedItemSelectionType.mostPlayed,
-                  orElse: () => CuratedItemSelectionType.favorites);
-            }
-          })()
-        : artistCuratedItemSelectionTypeSetting;
 
     final topTracksText = (artistCuratedItemSelectionType == CuratedItemSelectionType.random)
         ? AppLocalizations.of(context)!.randomTracks
@@ -411,14 +426,6 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     var appearsOnAlbums = performingArtistAlbums
         .where((a) => !albumArtistAlbums.any((b) => b.id == a.id))
         .toList();
-    var filteredTopTracks = (artistCuratedItemSelectionType == CuratedItemSelectionType.mostPlayed)
-        ? topTracks
-          .takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
-          .take(5)
-          .toList()
-        : topTracks
-          .take(5)
-          .toList();
 
     // Combine Children to get correct ChildrenCount
     // for the Download Status Sync Display for Artists
@@ -460,12 +467,13 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           ref.watch(finampSettingsProvider.showArtistsTracksSection))
         TracksSection(
             parent: widget.parent,
-            tracks: filteredTopTracks,
-            childrenForQueue: Future.value(filteredTopTracks),
+            tracks: topTracks,
+            childrenForQueue: Future.value(topTracks),
             tracksText: topTracksText,
             includeFilterRow: true,
             customFilterOrder: artistCuratedItemSectionFilterOrder,
             selectedFilter: artistCuratedItemSelectionType,
+            disabledFilters: _disabledTrackFilters.toList(),
             onFilterSelected: (type) {
               FinampSetters.setArtistCuratedItemSelectionType(type);
             },
