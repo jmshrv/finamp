@@ -64,6 +64,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
+    final artistItemSectionsOrder =
+        ref.watch(finampSettingsProvider.artistItemSectionsOrder);
     final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
     final artistCuratedItemSelectionType = handleMostPlayedFallbackOption(
       isOffline: isOffline,
@@ -95,11 +97,6 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     final albumArtistAlbums = albumArtistAlbumsAsync ?? [];
     final performingArtistAlbums = performingArtistAlbumsAsync ?? [];
     final allPerformingArtistTracks = allPerformingArtistTracksAsync ?? [];
-
-    final topTracksText = (artistCuratedItemSelectionType == CuratedItemSelectionType.random)
-        ? AppLocalizations.of(context)!.randomTracks
-        : artistCuratedItemSelectionType
-                      .toLocalisedSectionTitle(context, BaseItemDtoType.track);
 
     var appearsOnAlbums = performingArtistAlbums
         .where((a) => !albumArtistAlbums.any((b) => b.id == a.id))
@@ -141,31 +138,55 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             )
         ],
       ),
-      if (!isLoading &&
-          ref.watch(finampSettingsProvider.showArtistsTracksSection))
-        TracksSection(
-            parent: widget.parent,
-            tracks: topTracks,
-            childrenForQueue: Future.value(topTracks),
-            tracksText: topTracksText,
-            includeFilterRow: true,
-            customFilterOrder: artistCuratedItemSectionFilterOrder,
-            selectedFilter: artistCuratedItemSelectionType,
-            disabledFilters: _disabledTrackFilters.toList(),
-            onFilterSelected: (type) {
-              FinampSetters.setArtistCuratedItemSelectionType(type);
-            },
-        ),
-      if (!isLoading && albumArtistAlbums.isNotEmpty)
-        AlbumSection(
-            parent: widget.parent,
-            albumsText: AppLocalizations.of(context)!.albums,
-            albums: albumArtistAlbums),
-      if (!isLoading && appearsOnAlbums.isNotEmpty)
-        AlbumSection(
-            parent: widget.parent,
-            albumsText: AppLocalizations.of(context)!.appearsOnAlbums,
-            albums: appearsOnAlbums),
+      if (!isLoading)
+        ...artistItemSectionsOrder.map((type) {
+          switch (type) {
+            case ArtistItemSections.tracks:
+              if (ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
+                return SliverPadding(
+                  padding: const EdgeInsets.all(0),
+                  sliver: TracksSection(
+                    parent: widget.parent,
+                    tracks: topTracks,
+                    childrenForQueue: Future.value(topTracks),
+                    tracksText: type.toLocalisedSectionTitle(context, artistCuratedItemSelectionType),
+                    includeFilterRow: true,
+                    customFilterOrder: artistCuratedItemSectionFilterOrder,
+                    selectedFilter: artistCuratedItemSelectionType,
+                    disabledFilters: _disabledTrackFilters.toList(),
+                    onFilterSelected: (type) {
+                      FinampSetters.setArtistCuratedItemSelectionType(type);
+                    },
+                  ),
+                );
+              }
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            case ArtistItemSections.albums:
+              if (albumArtistAlbums.isNotEmpty) {
+                return SliverPadding(
+                  padding: const EdgeInsets.all(0),
+                  sliver: AlbumSection(
+                    parent: widget.parent,
+                    albumsText: AppLocalizations.of(context)!.albums,
+                    albums: albumArtistAlbums
+                  ),
+                );
+              }
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            case ArtistItemSections.appearsOn:
+              if (appearsOnAlbums.isNotEmpty) {
+                return SliverPadding(
+                  padding: const EdgeInsets.all(0),
+                  sliver: AlbumSection(
+                    parent: widget.parent,
+                    albumsText: AppLocalizations.of(context)!.appearsOnAlbums,
+                    albums: appearsOnAlbums
+                  ),
+                );
+              }
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+          }
+        }),
       if (!isLoading && (albumArtistAlbums.isEmpty && appearsOnAlbums.isEmpty))
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(6, 12, 6,

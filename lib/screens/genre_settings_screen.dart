@@ -32,8 +32,8 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
-                  title: Text(AppLocalizations.of(context)!.genreItemSectionsOrder),
-                  subtitle: Text(AppLocalizations.of(context)!.genreItemSectionsOrderSubtitle),
+                  title: Text(AppLocalizations.of(context)!.itemSectionsOrder),
+                  subtitle: Text(AppLocalizations.of(context)!.itemSectionsOrderSubtitle),
                 ),
                 ReorderableListView.builder(
                   shrinkWrap: true,

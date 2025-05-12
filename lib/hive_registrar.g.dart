@@ -9,6 +9,7 @@ import 'package:finamp/models/jellyfin_models.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AccessScheduleAdapter());
+    registerAdapter(ArtistItemSectionsAdapter());
     registerAdapter(ArtistTypeAdapter());
     registerAdapter(AuthenticationResultAdapter());
     registerAdapter(AutoOfflineOptionAdapter());
@@ -95,6 +96,7 @@ extension HiveRegistrar on HiveInterface {
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(AccessScheduleAdapter());
+    registerAdapter(ArtistItemSectionsAdapter());
     registerAdapter(ArtistTypeAdapter());
     registerAdapter(AuthenticationResultAdapter());
     registerAdapter(AutoOfflineOptionAdapter());

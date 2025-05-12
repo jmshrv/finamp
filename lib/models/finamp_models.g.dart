@@ -290,6 +290,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               CuratedItemSelectionType.recentlyAdded
             ]
           : (fields[110] as List).cast<CuratedItemSelectionType>(),
+      artistItemSectionsOrder: fields[111] == null
+          ? [
+              ArtistItemSections.tracks,
+              ArtistItemSections.albums,
+              ArtistItemSections.appearsOn
+            ]
+          : (fields[111] as List).cast<ArtistItemSections>(),
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -300,7 +307,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(105)
+      ..writeByte(106)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -510,7 +517,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(109)
       ..write(obj.artistCuratedItemSelectionType)
       ..writeByte(110)
-      ..write(obj.artistItemSectionFilterChipOrder);
+      ..write(obj.artistItemSectionFilterChipOrder)
+      ..writeByte(111)
+      ..write(obj.artistItemSectionsOrder);
   }
 
   @override
@@ -2471,6 +2480,47 @@ class GenreItemSectionsAdapter extends TypeAdapter<GenreItemSections> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is GenreItemSectionsAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ArtistItemSectionsAdapter extends TypeAdapter<ArtistItemSections> {
+  @override
+  final typeId = 97;
+
+  @override
+  ArtistItemSections read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ArtistItemSections.tracks;
+      case 1:
+        return ArtistItemSections.albums;
+      case 2:
+        return ArtistItemSections.appearsOn;
+      default:
+        return ArtistItemSections.tracks;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ArtistItemSections obj) {
+    switch (obj) {
+      case ArtistItemSections.tracks:
+        writer.writeByte(0);
+      case ArtistItemSections.albums:
+        writer.writeByte(1);
+      case ArtistItemSections.appearsOn:
+        writer.writeByte(2);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ArtistItemSectionsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

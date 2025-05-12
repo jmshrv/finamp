@@ -212,6 +212,7 @@ class DefaultSettings {
   static const artistGenreChipsApplyFilter = false;
   static const artistCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
   static const artistItemSectionFilterChipOrder = CuratedItemSelectionType.values;
+  static const artistItemSectionsOrder = ArtistItemSections.values;
 }
 
 @HiveType(typeId: 28)
@@ -345,6 +346,7 @@ class FinampSettings {
     this.artistGenreChipsApplyFilter = DefaultSettings.artistGenreChipsApplyFilter,
     this.artistCuratedItemSelectionType = DefaultSettings.artistCuratedItemSelectionType,
     this.artistItemSectionFilterChipOrder = DefaultSettings.artistItemSectionFilterChipOrder,
+    this.artistItemSectionsOrder = DefaultSettings.artistItemSectionsOrder,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -705,6 +707,9 @@ class FinampSettings {
 
   @HiveField(110, defaultValue: DefaultSettings.artistItemSectionFilterChipOrder)
   List<CuratedItemSelectionType> artistItemSectionFilterChipOrder;
+
+  @HiveField(111, defaultValue: DefaultSettings.artistItemSectionsOrder)
+  List<ArtistItemSections> artistItemSectionsOrder;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -3130,6 +3135,83 @@ enum GenreItemSections {
         return AppLocalizations.of(context)!.albums;
       case GenreItemSections.artists:
         return AppLocalizations.of(context)!.artists;
+    }
+  }
+}
+
+@HiveType(typeId: 97)
+enum ArtistItemSections {
+  @HiveField(0)
+  tracks,
+  @HiveField(1)
+  albums,
+  @HiveField(2)
+  appearsOn;
+
+/// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String toLocalisedSectionTitle(BuildContext context, CuratedItemSelectionType curatedItemSelectionType) =>
+      _toLocalisedSectionTitle(this, context, curatedItemSelectionType);
+
+  String _humanReadableName(
+      ArtistItemSections artistItemSection) {
+    switch (artistItemSection) {
+      case ArtistItemSections.tracks:
+        return "Tracks";    
+      case ArtistItemSections.albums:
+        return "Albums";
+      case ArtistItemSections.appearsOn:
+        return "Appears On";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ArtistItemSections artistItemSection,
+      BuildContext context) {
+    switch (artistItemSection) {
+      case ArtistItemSections.tracks:
+        return AppLocalizations.of(context)!.tracks;
+      case ArtistItemSections.albums:
+        return AppLocalizations.of(context)!.albums;
+      case ArtistItemSections.appearsOn:
+        return AppLocalizations.of(context)!.appearsOnAlbums;
+    }
+  }
+
+  String _toLocalisedSectionTitle(
+      ArtistItemSections artistItemSection,
+      BuildContext context,
+      CuratedItemSelectionType curatedItemSelectionType) {
+    final loc = AppLocalizations.of(context)!;
+
+    String? getTitle(String tracks, String albums, String appearsOn) {
+      switch (artistItemSection) {
+        case ArtistItemSections.tracks:
+          return tracks;
+        case ArtistItemSections.albums:
+          return albums;
+        case ArtistItemSections.appearsOn:
+          return appearsOn;
+      }
+    }
+
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return getTitle(loc.topTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.favorites:
+        return getTitle(loc.favoriteTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.random:
+        return getTitle(loc.randomTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.latestReleases:
+        return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyAdded:
+        return getTitle(loc.newTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
     }
   }
 }

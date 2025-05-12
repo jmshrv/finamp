@@ -1207,13 +1207,13 @@
   "@recentlyAdded": {},
   "latestReleases": "Latest Releases",
   "@latestReleases": {},
-  "genreItemSectionsOrder": "Item Sections Order",
-  "@genreItemSectionsOrder": {
-    "description": "Label for the setting that controls the order of item sections on the genre screen."
+  "itemSectionsOrder": "Item Sections Order",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
   },
-  "genreItemSectionsOrderSubtitle": "Controls the order of Item Sections on the Genre Screen.",
-  "@genreItemSectionsOrderSubtitle": {
-    "description": "Description of the setting that controls the order of item sections on the genre screen."
+  "itemSectionsOrderSubtitle": "Controls the order of Item Sections.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
   },
   "genreItemSectionFilterChipOrderTitle": "Item Sections Filter Order",
   "@genreItemSectionFilterChipOrderTitle": {

@@ -129,6 +129,8 @@ class FinampSettingsHelper {
     
     finampSettingsTemp.artistGenreChipsApplyFilter =
         DefaultSettings.artistGenreChipsApplyFilter;
+    finampSettingsTemp.artistItemSectionsOrder =
+        DefaultSettings.artistItemSectionsOrder;
     finampSettingsTemp.showArtistsTracksSection =
         DefaultSettings.showArtistsTracksSection;
     finampSettingsTemp.artistItemSectionFilterChipOrder =
