@@ -22,8 +22,11 @@ Future<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelecti
   BaseItemDto? library,
 ) async {
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  final bool autoSwitchItemCurationTypeEnabled = 
+      ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
   final Set<CuratedItemSelectionType> disabledFilters = {};
-  final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
+  final genreCuratedItemSectionFilterOrder = 
+      ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
   CuratedItemSelectionType currentSelectionType = handleMostPlayedFallbackOption(
       isOffline: isOffline,
       currentFilter: (baseItemType == BaseItemDtoType.artist)
@@ -86,7 +89,7 @@ Future<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelecti
   var filteredResult = filterResult(result.$1, currentSelectionType);
 
   while (
-    filteredResult.isEmpty &&
+    autoSwitchItemCurationTypeEnabled && filteredResult.isEmpty &&
     (currentSelectionType == CuratedItemSelectionType.favorites ||
     currentSelectionType == CuratedItemSelectionType.mostPlayed)
   ) {

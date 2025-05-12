@@ -96,6 +96,7 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
           const ShowArtistChipImageToggle(),
           const AllowSplitScreenSwitch(),
           const ShowProgressOnNowPlayingBarToggle(),
+          const AutoSwitchItemCurationTypeToggle(),
         ],
       ),
     );
@@ -165,6 +166,22 @@ class ShowProgressOnNowPlayingBarToggle extends ConsumerWidget {
           AppLocalizations.of(context)!.showProgressOnNowPlayingBarSubtitle),
       value: ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar),
       onChanged: FinampSetters.setShowProgressOnNowPlayingBar,
+    );
+  }
+}
+
+class AutoSwitchItemCurationTypeToggle extends ConsumerWidget {
+  const AutoSwitchItemCurationTypeToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title:
+          Text(AppLocalizations.of(context)!.autoSwitchItemCurationTypeTitle),
+      subtitle: Text(
+          AppLocalizations.of(context)!.autoSwitchItemCurationTypeSubtitle),
+      value: ref.watch(finampSettingsProvider.autoSwitchItemCurationType),
+      onChanged: FinampSetters.setAutoSwitchItemCurationType,
     );
   }
 }

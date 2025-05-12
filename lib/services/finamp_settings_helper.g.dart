@@ -798,6 +798,15 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAutoSwitchItemCurationType(
+      bool newAutoSwitchItemCurationType) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoSwitchItemCurationType =
+        newAutoSwitchItemCurationType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1071,6 +1080,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<List<ArtistItemSections>> get artistItemSectionsOrder =>
       finampSettingsProvider
           .select((value) => value.requireValue.artistItemSectionsOrder);
+  ProviderListenable<bool> get autoSwitchItemCurationType =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.autoSwitchItemCurationType);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

@@ -175,6 +175,8 @@ class FinampSettingsHelper {
     finampSettingsTemp.allowSplitScreen = DefaultSettings.allowSplitScreen;
     finampSettingsTemp.showProgressOnNowPlayingBar =
         DefaultSettings.showProgressOnNowPlayingBar;
+    finampSettingsTemp.autoSwitchItemCurationType = 
+        DefaultSettings.autoSwitchItemCurationType;
 
 
     Hive.box<FinampSettings>("FinampSettings")

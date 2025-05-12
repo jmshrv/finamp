@@ -24,6 +24,8 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
 ) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+  final bool autoSwitchItemCurationTypeEnabled = 
+      ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
   final Set<CuratedItemSelectionType> disabledFilters = {};
   final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
   CuratedItemSelectionType currentSelectionType = handleMostPlayedFallbackOption(
@@ -123,7 +125,7 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
   var filteredResult = filterResult(result, currentSelectionType);
 
   while (
-    filteredResult.isEmpty &&
+    autoSwitchItemCurationTypeEnabled && filteredResult.isEmpty &&
     (currentSelectionType == CuratedItemSelectionType.favorites ||
     currentSelectionType == CuratedItemSelectionType.mostPlayed)
   ) {
