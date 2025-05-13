@@ -2236,7 +2236,7 @@
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Зазвичай, натискання на жанр відкриває відповідний екран. Якщо цю опцію ввімкнено, виконавець фільтрується за вибраним жанром, показуючи лише відповідні треки та альбоми.",
+  "artistGenreChipsApplyFilterSubtitle": "Якщо цю функцію ввімкнено, натискання на жанр фільтруватиме виконавця за цим жанром. Ви все ще можете відкрити жанр довгим натисканням.",
   "@artistGenreChipsApplyFilterSubtitle": {},
   "randomTracks": "Треки (випадковий вибір)",
   "@randomTracks": {},
@@ -2309,5 +2309,17 @@
   "curatedItemsFavoritesDisabledTooltip": "У вас ще немає улюблених.",
   "@curatedItemsFavoritesDisabledTooltip": {
     "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
+  },
+  "artistGenreChipsApplyFilterPromptButton": "Відкрити жанр замість цього",
+  "@artistGenreChipsApplyFilterPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "artistGenreChipsApplyFilterPrompt": "Застосовано жанровий фільтр",
+  "@artistGenreChipsApplyFilterPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "noReleaseDate": "Без дати випуску",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an album has no release date set."
   }
 }
