@@ -1000,7 +1000,7 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Обране} allPlaylists{Усі списки відтворення} fiveLatestAlbums{5 Останніх альбомів} allPlaylistsMetadata{Метадані списку відтворення} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Улюблені} allPlaylists{Усі списки відтворення} fiveLatestAlbums{5 Найновіші альбоми} allPlaylistsMetadata{Метадані списку відтворення} collectionWithLibraryFilter{Колекція з фільтром бібліотеки} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -2185,5 +2185,129 @@
   "stopAndClearQueue": "Зупинити відтворення та очистити чергу",
   "@stopAndClearQueue": {
     "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "itemSectionsOrderSubtitle": "Контролює порядок розділів елементів.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "allLibraries": "Усі бібліотеки",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "latestArtists": "Найновіші виконавці",
+  "@latestArtists": {},
+  "favoriteAlbums": "Улюблені альбоми",
+  "@favoriteAlbums": {},
+  "favorites": "Улюблені",
+  "@favorites": {},
+  "genreItemSectionFilterChipOrderSubtitle": "Керує порядком доступних фільтрів для розділів елементів.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "randomAlbums": "Альбоми (випадковий вибір)",
+  "@randomAlbums": {},
+  "randomFavoritesFirst": "Випадково (спочатку уподобання)",
+  "@randomFavoritesFirst": {},
+  "showArtistsTracksSectionSubtitle": "Чи показувати розділ із максимум п’ятьма треками. Якщо цю опцію ввімкнено, можна вибрати між Найчастіше відтворюваними, Улюбленими, Випадковими, Найновішими релізами та Нещодавно доданими треками.",
+  "@showArtistsTracksSectionSubtitle": {},
+  "latestAlbums": "Найновіші альбоми",
+  "@latestAlbums": {},
+  "curatedItemsMostPlayedDisabledTooltip": "Ви ще не прослухали жодної композиції.",
+  "@curatedItemsMostPlayedDisabledTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
+  },
+  "recentlyAdded": "Нещодавно додані",
+  "@recentlyAdded": {},
+  "genreListsInheritSortingSubtitle": "Якщо цю опцію ввімкнено, списки «Переглянути всі» успадкують сортування та фільтрацію з екрана жанрів. Якщо вимкнено, замість цього будуть використані налаштування з відповідної вкладки бібліотеки. Натискання на кількість у верхній частині екрана жанру завжди відкриватиме повний список із налаштуваннями сортування з вкладки бібліотеки.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "noGenres": "Без жанрів",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "autoSwitchItemCurationTypeTitle": "Тип кураторства товарів з автоматичним перемиканням",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "autoSwitchItemCurationTypeSubtitle": "Якщо цю функцію ввімкнено, розділи елементів на екранах виконавців і жанрів автоматично перемикаються на інший тип кураторства, якщо елементи недоступні (наприклад, немає обраного для певного виконавця).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "showArtistsTracksSection": "Розділ «Показати треки»",
+  "@showArtistsTracksSection": {},
+  "genreItemSectionFilterChipOrderTitle": "Розділи елементів Порядок фільтра",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "artistGenreChipsApplyFilterSubtitle": "Зазвичай, натискання на жанр відкриває відповідний екран. Якщо цю опцію ввімкнено, виконавець фільтрується за вибраним жанром, показуючи лише відповідні треки та альбоми.",
+  "@artistGenreChipsApplyFilterSubtitle": {},
+  "randomTracks": "Треки (випадковий вибір)",
+  "@randomTracks": {},
+  "mostPlayed": "Найпопулярніші",
+  "@mostPlayed": {},
+  "artistScreen": "Екран виконавця",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "itemSectionsOrder": "Порядок розділів елемента",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Порядок фільтрів розділів треків",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistGenreChipsApplyFilterTitle": "Застосувати фільтр замість відкриття жанру",
+  "@artistGenreChipsApplyFilterTitle": {},
+  "seeAll": "Дивитися все",
+  "@seeAll": {
+    "description": ""
+  },
+  "newAlbums": "Нові альбоми",
+  "@newAlbums": {},
+  "genreFilterArtistScreensSubtitle": "Якщо цю функцію ввімкнено, на екранах виконавців (доступних через жанр) відображатимуться лише треки та альбоми, що відповідають жанру, який ви зараз переглядаєте. (Завжди можна вручну видалити фільтр жанрів, щоб відобразити всі треки та альбоми.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreScreen": "Екран жанру",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "favoriteTracks": "Улюблені треки",
+  "@favoriteTracks": {},
+  "favoriteArtists": "Улюблені виконавці",
+  "@favoriteArtists": {},
+  "curatedItemsMostPlayedOfflineTooltip": "Недоступно в автономному режимі.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "newTracks": "Нові треки",
+  "@newTracks": {},
+  "randomArtists": "Виконавці (випадковий вибір)",
+  "@randomArtists": {},
+  "onlineMode": "Онлайн-режим",
+  "@onlineMode": {},
+  "topAlbums": "Найкращі альбоми",
+  "@topAlbums": {},
+  "topArtists": "Найкращі виконавці",
+  "@topArtists": {},
+  "newArtists": "Нові виконавці",
+  "@newArtists": {},
+  "latestTracks": "Найновіші треки",
+  "@latestTracks": {},
+  "latestReleases": "Останні релізи",
+  "@latestReleases": {},
+  "artistItemSectionFilterChipOrderSubtitle": "Керує порядком доступних фільтрів для розділу треків.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreens": "Фільтрувати екрани виконавців",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Повні списки Сортування Успадкування",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsFavoritesDisabledTooltip": "У вас ще немає улюблених.",
+  "@curatedItemsFavoritesDisabledTooltip": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
   }
 }
